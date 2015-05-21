@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright (C) 2015 Akretion France (www.akretion.com)
+    @author: Alexis de Lattre <alexis.delattre@akretion.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+<data>
+
+<record id="ovh_invoice_get_form" model="ir.ui.view">
+    <field name="name">ovh_invoice_get.wizard.form</field>
+    <field name="model">ovh.invoice.get</field>
+    <field name="arch"  type="xml">
+        <form string="Get OVH Invoices">
+            <p class="oe_grey">
+                This wizard will download the invoices of OVH via it's SoAPI and automatically create the supplier invoices with the PDF as attachement.
+            </p>
+            <group name="main">
+                <field name="auto_validate"/>
+                <field name="from_date"/>
+            </group>
+            <footer>
+                <button type="object" name="get" string="Get Invoices" class="oe_highlight"/>
+                <button special="cancel" string="Cancel" class="oe_link"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+<record id="ovh_invoice_get_action" model="ir.actions.act_window">
+    <field name="name">Get OVH Invoices</field>
+    <field name="res_model">ovh.invoice.get</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+</record>
+
+<menuitem id="ovh_invoice_get_menu" parent="account.menu_finance_recurrent_entries"
+    action="ovh_invoice_get_action" sequence="100"/>
+
+</data>
+</openerp>
