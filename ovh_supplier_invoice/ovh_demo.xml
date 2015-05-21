@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data noupdate="1">
+
+<record id="ovh" model="res.partner">
+    <field name="name">OVH</field>
+    <field name="is_company" eval="1"/>
+    <field name="customer" eval="0"/>
+    <field name="supplier" eval="1"/>
+    <field name="street">2 rue kellermann</field>
+    <field name="street2">BP 80157</field>
+    <field name="zip">59053</field>
+    <field name="city">ROUBAIX CEDEX 1</field>
+    <field name="country_id" ref="base.fr"/>
+    <field name="email">support@ovh.com</field>
+    <field name="website">www.ovh.com</field>
+    <field name="vat">FR22424761419</field>
+</record>
+
+</data>
+</openerp>
