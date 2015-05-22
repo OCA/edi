@@ -32,7 +32,7 @@ class OvhAccount(models.Model):
     password = fields.Char(string='OVH Password')
     active = fields.Boolean(default=True)
     invoice_line_method = fields.Selection([
-        ('product', 'With Product'),
+        #('product', 'With Product'),  # TODO : implement this method
         ('no_product', 'Without Product'),
         ], string='Method for Invoice Line', required=True,
         default='no_product')
