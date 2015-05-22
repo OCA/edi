@@ -18,8 +18,9 @@
                 This wizard will download the invoices of OVH via it's SoAPI and automatically create the supplier invoices with the PDF as attachement.
             </p>
             <group name="main">
-                <field name="auto_validate"/>
                 <field name="from_date"/>
+                <field name="auto_validate"/>
+                <field name="attach_pdf"/>
             </group>
             <footer>
                 <button type="object" name="get" string="Get Invoices" class="oe_highlight"/>
