@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) 2015 Akretion (http://www.akretion.com/)
+    @author: Alexis de Lattre <alexis.delattre@akretion.com>
+    The licence is in the file __openerp__.py
+-->
+
+<openerp>
+<data>
+
+<record id="ovh_account_form" model="ir.ui.view">
+    <field name="name">ovh.account.form</field>
+    <field name="model">ovh.account</field>
+    <field name="arch"  type="xml">
+        <form string="OVH Account">
+            <group name="main">
+                <field name="login"/>
+                <field name="password" password="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active"/>
+            </group>
+            <group string="Accounting Parameters" name="accounting">
+                <field name="invoice_line_method"/>
+                <field name="account_id"
+                    attrs="{'invisible': [('invoice_line_method', '!=', 'no_product')], 'required': [('invoice_line_method', '=', 'no_product')]}"/>
+                <field name="account_analytic_id"
+                    attrs="{'invisible': [('invoice_line_method', '!=', 'no_product')]}"/>
+            </group>
+        </form>
+    </field>
+</record>
+
+<record id="ovh_account_tree" model="ir.ui.view">
+    <field name="name">ovh.account.tree</field>
+    <field name="model">ovh.account</field>
+    <field name="arch"  type="xml">
+        <tree string="OVH Accounts">
+            <field name="login"/>
+            <field name="company_id" groups="base.group_multi_company"/>
+            <field name="invoice_line_method"/>
+        </tree>
+    </field>
+</record>
+
+<record id="ovh_account_action" model="ir.actions.act_window">
+    <field name="name">OVH Account</field>
+    <field name="res_model">ovh.account</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem id="ovh_account_menu" parent="account.menu_configuration_misc"
+    action="ovh_account_action" sequence="100"/>
+
+</data>
+</openerp>

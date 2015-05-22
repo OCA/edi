@@ -32,6 +32,9 @@
     'depends': ['account'],
     'external_dependencies': {'python': ['requests', 'SOAPpy']},
     'data': [
+        'ovh_account_view.xml',
+        'security/ir.model.access.csv',
+        'security/ovh_security.xml',
         'wizard/ovh_invoice_get_view.xml',
     ],
     'demo': ['ovh_demo.xml'],
