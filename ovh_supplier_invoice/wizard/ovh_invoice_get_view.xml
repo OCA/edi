@@ -22,8 +22,17 @@
                 <field name="auto_validate"/>
                 <field name="attach_pdf"/>
             </group>
+            <group name="accounts" string="OVH Accounts">
+                <field name="account_ids" nolabel="1" colspan="2">
+                    <tree editable="bottom">
+                        <field name="ovh_account_id"/>
+                        <field name="password" password="1" required="1"/>
+                    </tree>
+                </field>
+            </group>
             <footer>
-                <button type="object" name="get" string="Get Invoices" class="oe_highlight"/>
+                <button type="object" name="get"
+                    string="Get Invoices" class="oe_highlight"/>
                 <button special="cancel" string="Cancel" class="oe_link"/>
             </footer>
         </form>
@@ -37,7 +46,8 @@
     <field name="target">new</field>
 </record>
 
-<menuitem id="ovh_invoice_get_menu" parent="account.menu_finance_recurrent_entries"
+<menuitem id="ovh_invoice_get_menu"
+    parent="account.menu_finance_recurrent_entries"
     action="ovh_invoice_get_action" sequence="100"/>
 
 </data>
