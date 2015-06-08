@@ -45,6 +45,22 @@ class OvhInvoiceGet(models.TransientModel):
     from_date = fields.Date(string='From Date', default=_default_from_date)
     attach_pdf = fields.Boolean(
         string='Attach PDF of OVH Invoice', default=True)
+    account_ids = fields.One2many(
+        'ovh.invoice.get.account', 'wizard_id', string='OVH Accounts')
+
+    @api.model
+    def default_get(self, fields):
+        res = super(OvhInvoiceGet, self).default_get(fields)
+        accounts = []
+        ovh_accounts = self.env['ovh.account'].search(
+            [('company_id', '=', self.env.user.company_id.id)])
+        for account in ovh_accounts:
+            accounts.append({
+                'ovh_account_id': account.id,
+                'password': account.password,
+            })
+        res.update(account_ids=accounts)
+        return res
 
     @api.model
     def _prepare_invoice_vals(
@@ -112,7 +128,7 @@ class OvhInvoiceGet(models.TransientModel):
                         break
                 if not product:
                     raise Warning(_(
-                        'No OVH product matching domain %s')
+                        "No OVH product matching domain '%s'")
                         % line.domain)
                 il_vals = il_fake.product_id_change(
                     product.id, product.uom_id.id, type='in_invoice',
@@ -211,15 +227,14 @@ class OvhInvoiceGet(models.TransientModel):
         ovh_partner = partner[0]
 
         invoices = aio.browse(False)
-        ovh_accounts = self.env['ovh.account'].search(
-            [('company_id', '=', user.company_id.id)])
-        for ovh_account in ovh_accounts:
+        for account in self.account_ids:
+            ovh_account = account.ovh_account_id
             logger.info(
                 'Opening SOAP session to OVH with account %s',
                 ovh_account.login)
             session = soap.login(
                 ovh_account.login,
-                ovh_account.password,
+                account.password,
                 country_code, 0)
             logger.info(
                 'Starting OVH soAPI query billingInvoiceList (account %s)',
@@ -252,7 +267,7 @@ class OvhInvoiceGet(models.TransientModel):
                     'Starting OVH soAPI query billingInvoiceInfo on OVH '
                     'invoice number %s', oinv_num)
                 res_iinfo = soap.billingInvoiceInfo(
-                    session, oinv_num, ovh_account.password, country_code)
+                    session, oinv_num, account.password, country_code)
                 vals = self._prepare_invoice_vals(
                     oinv_num, ovh_partner, ovh_account, res_iinfo)
                 invoice = aio.create(vals)
@@ -287,3 +302,13 @@ class OvhInvoiceGet(models.TransientModel):
             'nodestroy': False,
             })
         return action
+
+
+class OvhInvoiceGetAccount(models.TransientModel):
+    _name = 'ovh.invoice.get.account'
+    _description = 'OVH Invoice Get Account'
+
+    wizard_id = fields.Many2one('ovh.invoice.get', string='Wizard')
+    ovh_account_id = fields.Many2one(
+        'ovh.account', string='OVH Account', required=True)
+    password = fields.Char(string='OVH Password')

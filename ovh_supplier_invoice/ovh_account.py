@@ -29,7 +29,10 @@ class OvhAccount(models.Model):
     _rec_name = 'login'
 
     login = fields.Char(string='OVH NIC', required=True)
-    password = fields.Char(string='OVH Password')
+    password = fields.Char(
+        string='OVH Password',
+        help="You can leave this field empty and enter the password "
+        "at runtime.")
     active = fields.Boolean(default=True)
     invoice_line_method = fields.Selection([
         ('product', 'With Product'),
