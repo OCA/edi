@@ -48,13 +48,13 @@ class OvhInvoiceGet(models.TransientModel):
 
     @api.model
     def _prepare_invoice_vals(
-            self, ovh_invoice_number, ovh_partner_id, ovh_account, res_iinfo):
+            self, ovh_invoice_number, ovh_partner, ovh_account, res_iinfo):
         aio = self.env['account.invoice']
-        company_id = self.env.user.company_id.id
+        company = self.env.user.company_id
         vals = {
-            'partner_id': ovh_partner_id,
+            'partner_id': ovh_partner.id,
             'type': 'in_invoice',
-            'company_id': company_id,
+            'company_id': company.id,
             'supplier_invoice_number': ovh_invoice_number,
             'origin': 'OVH SoAPI %s' % ovh_account.login,
             'date_invoice': res_iinfo.date[:10],
@@ -64,31 +64,99 @@ class OvhInvoiceGet(models.TransientModel):
             'check_total': float(res_iinfo.finalprice),
             }
         vals.update(aio.onchange_partner_id(
-            'in_invoice', ovh_partner_id, company_id=company_id)['value'])
-        taxes = self.env['account.tax'].search([
-            ('type_tax_use', '=', 'purchase'),
-            ('amount', '=', float(res_iinfo.taxrate)),
-            ('type', '=', 'percent'),
-            ('price_include', '=', False),
-            ])
-        assert len(taxes) > 1, 'Could not find proper tax'
-        tax_id = taxes[0].id  # TODO Too bad
+            'in_invoice', ovh_partner.id, company_id=company.id)['value'])
+        taxrate = float(res_iinfo.taxrate)  # =0.2 for 20%
+        method = ovh_account.invoice_line_method
+        il_fake = self.env['account.invoice.line'].browse([])
+        if method == 'no_product':
+            taxes = self.env['account.tax'].search([
+                ('type_tax_use', '=', 'purchase'),
+                ('amount', '=', taxrate),
+                ('type', '=', 'percent'),
+                ('price_include', '=', False),
+                ])
+            if len(taxes) < 1:
+                raise Warning(_(
+                    "Could not find proper purchase tax in Odoo "
+                    "with a rate of %s %%") % (taxrate * 100))
+            # TODO: we take the first one, which correspond to the
+            # regular tax (the other ones are IMMO-20.0 & ACH_UE_ded.-20.0)
+            tax_id = taxes[0].id
+        elif method == 'product':
+            products = self.env['product.product'].search([
+                ('purchase_ok', '=', True),
+                ('default_code', 'like', 'OVH-%')])
+            if not products:
+                raise Warning(_("No OVH product found in Odoo"))
+            oproducts = {}
+            # key = start of domain
+            # value = product recordset
+            for product in products:
+                oproducts[product.default_code[4:]] = product
         for line in res_iinfo.details.item:
-            if line.start and line.end:
-                name = '%s du %s au %s' % (
-                    line.description, line.start, line.end)
-            else:
-                name = line.description
-            il_vals = {
+            if not line.baseprice:
+                continue
+            if method == 'no_product':
+                il_vals = {
+                    'account_id': ovh_account.account_id.id,
+                    'account_analytic_id':
+                    ovh_account.account_analytic_id.id or False,
+                    'invoice_line_tax_id': [(6, 0, [tax_id])],
+                    }
+            elif method == 'product':
+                assert line.domain, 'Missing domain on OVH invoice line'
+                product = False
+                for domain_start, oproduct in oproducts.iteritems():
+                    if line.domain.startswith(domain_start):
+                        product = oproduct
+                        break
+                if not product:
+                    raise Warning(_(
+                        'No OVH product matching domain %s')
+                        % line.domain)
+                il_vals = il_fake.product_id_change(
+                    product.id, product.uom_id.id, type='in_invoice',
+                    partner_id=ovh_partner.id,
+                    fposition_id=ovh_partner.property_account_position.id,
+                    currency_id=company.currency_id.id,
+                    company_id=company.id)['value']
+                if il_vals['invoice_line_tax_id']:
+                    tax = self.env['account.tax'].browse(
+                        il_vals['invoice_line_tax_id'][0])
+                    if tax.amount != taxrate:
+                        raise Warning(_(
+                            "The OVH product with internal code %s "
+                            "has a purchase tax '%s' (%s) with a rate %s "
+                            "which is different from the rate "
+                            "given by the OVH webservice (%s).") % (
+                            product.default_code,
+                            product.supplier_taxes_id[0].name,
+                            product.supplier_taxes_id[0].description,
+                            product.supplier_taxes_id[0].amount,
+                            taxrate))
+                il_vals.update({
+                    'invoice_line_tax_id':
+                    [(6, 0, il_vals['invoice_line_tax_id'])],
+                    'product_id': product.id,
+                    })
+            il_vals.update({
                 'quantity': float(line.quantity),
                 'price_unit': float(line.baseprice),
-                'invoice_line_tax_id': [(6, 0, [tax_id])],
-                'name': name,
-                }
-            if ovh_account.invoice_line_method == 'no_product':
-                il_vals['account_id'] = ovh_account.account_id.id
-                il_vals['account_analytic_id'] =\
-                    ovh_account.account_analytic_id.id or False
+                'name': line.description,
+                })
+            if line.start and line.end:
+                start_date_str = line.start[:10]
+                end_date_str = line.end[:10]
+                end_date_dt = fields.Date.from_string(end_date_str)
+                end_date_dt -= relativedelta(days=1)
+                end_date_str = fields.Date.to_string(end_date_dt)
+                il_vals['name'] = _('%s du %s au %s') % (
+                    line.description, start_date_str, end_date_str)
+                if (
+                        hasattr(il_fake, 'start_date') and
+                        hasattr(il_fake, 'end_date')):
+                    il_vals['start_date'] = start_date_str
+                    il_vals['end_date'] = end_date_str
             vals['invoice_line'].append((0, 0, il_vals))
         return vals
 
@@ -140,7 +208,7 @@ class OvhInvoiceGet(models.TransientModel):
             raise Warning(
                 _("Couldn't find the supplier OVH. Make sure you have "
                     "a supplier OVH with VAT number FR22424761419."))
-        ovh_partner_id = partner[0].id
+        ovh_partner = partner[0]
 
         invoices = aio.browse(False)
         ovh_accounts = self.env['ovh.account'].search(
@@ -172,7 +240,7 @@ class OvhInvoiceGet(models.TransientModel):
                 # Check if this invoice is not already in the system
                 existing_inv = aio.search([
                     ('type', '=', 'in_invoice'),
-                    ('partner_id', '=', ovh_partner_id),
+                    ('partner_id', '=', ovh_partner.id),
                     ('supplier_invoice_number', '=', oinv_num),
                     ])
                 if existing_inv:
@@ -186,7 +254,7 @@ class OvhInvoiceGet(models.TransientModel):
                 res_iinfo = soap.billingInvoiceInfo(
                     session, oinv_num, ovh_account.password, country_code)
                 vals = self._prepare_invoice_vals(
-                    oinv_num, ovh_partner_id, ovh_account, res_iinfo)
+                    oinv_num, ovh_partner, ovh_account, res_iinfo)
                 invoice = aio.create(vals)
                 invoice.button_reset_taxes()
                 invoices += invoice

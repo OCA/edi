@@ -23,7 +23,7 @@
 
 {
     'name': 'OVH Supplier Invoice',
-    'version': '0.1',
+    'version': '0.2',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
     'summary': 'Get OVH Invoice via the API',
