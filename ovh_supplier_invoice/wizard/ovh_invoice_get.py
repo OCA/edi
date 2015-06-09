@@ -218,7 +218,7 @@ class OvhInvoiceGet(models.TransientModel):
                 _('Missing country on company %s') % user.company_id.name)
         country_code = user.company_id.country_id.code.lower()
         partner = self.env['res.partner'].search([
-            ('vat', '=', 'FR22424761419'),
+            ('vat', 'ilike', 'FR22424761419'),
             ('supplier', '=', 'True')])
         if not partner:
             raise Warning(
