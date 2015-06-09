@@ -21,6 +21,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, workflow, _
+from openerp.tools import float_compare
 from openerp.exceptions import Warning
 from SOAPpy import WSDL
 import requests
@@ -64,7 +65,7 @@ class OvhInvoiceGet(models.TransientModel):
 
     @api.model
     def _prepare_invoice_line_vals(
-            self, line, ovh_account, ovh_partner, sorted_products,
+            self, line, ovh_account, ovh_partner, products,
             tax_id, taxrate):
         logger.debug('OVH invoice line=%s', line)
         il_fake = self.env['account.invoice.line'].browse([])
@@ -82,12 +83,12 @@ class OvhInvoiceGet(models.TransientModel):
         elif method == 'product':
             assert line.service, 'Missing service on OVH invoice line'
             product = False
-            for pentry in sorted_products:
+            for pentry in products:
                 if line.service.startswith(pentry['service']):
                     product = pentry['product']
                     break
             if not product:
-                logger.debug('OVH sorted_products=%s', sorted_products)
+                logger.debug('OVH products=%s', products)
                 raise Warning(_(
                     "No OVH product matching service '%s'")
                     % line.service)
@@ -142,7 +143,8 @@ class OvhInvoiceGet(models.TransientModel):
 
     @api.model
     def _prepare_invoice_vals(
-            self, ovh_invoice_number, ovh_partner, ovh_account, res_iinfo):
+            self, ovh_invoice_number, ovh_partner, ovh_account, res_iinfo,
+            products):
         aio = self.env['account.invoice']
         company = self.env.user.company_id
         vals = {
@@ -161,7 +163,6 @@ class OvhInvoiceGet(models.TransientModel):
             'in_invoice', ovh_partner.id, company_id=company.id)['value'])
         taxrate = float(res_iinfo.taxrate)  # =0.2 for 20%
         method = ovh_account.invoice_line_method
-        sorted_products = []
         tax_id = False
         if method == 'no_product':
             taxes = self.env['account.tax'].search([
@@ -177,25 +178,10 @@ class OvhInvoiceGet(models.TransientModel):
             # TODO: we take the first one, which correspond to the
             # regular tax (the other ones are IMMO-20.0 & ACH_UE_ded.-20.0)
             tax_id = taxes[0].id
-        elif method == 'product':
-            products = self.env['product.product'].search([
-                ('default_code', 'like', 'OVH-%')])
-            if not products:
-                raise Warning(_("No OVH product found in Odoo"))
-            unsorted_products = []
-            # [{'service': 'voip.sms.', 'product': product_recordset}]
-            for product in products:
-                unsorted_products.append(
-                    {'service': product.default_code[4:], 'product': product})
-            # sort by len of service prefix, so that the longest prefix
-            # match in priority
-            sorted_products = sorted(
-                unsorted_products,
-                key=lambda mydict: len(mydict['service']) * -1)
         if isinstance(res_iinfo.details.item, list):
             for line in res_iinfo.details.item:
                 il_vals = self._prepare_invoice_line_vals(
-                    line, ovh_account, ovh_partner, sorted_products,
+                    line, ovh_account, ovh_partner, products,
                     tax_id, taxrate)
                 if il_vals:
                     vals['invoice_line'].append((0, 0, il_vals))
@@ -203,7 +189,7 @@ class OvhInvoiceGet(models.TransientModel):
         else:
             il_vals = self._prepare_invoice_line_vals(
                 res_iinfo.details.item, ovh_account, ovh_partner,
-                sorted_products, tax_id, taxrate)
+                products, tax_id, taxrate)
             if il_vals:
                 vals['invoice_line'].append((0, 0, il_vals))
         return vals
@@ -239,6 +225,23 @@ class OvhInvoiceGet(models.TransientModel):
                 _('Failed to download the PDF file of the OVH '
                     'invoice (HTTP error %d') % rpdf.status_code)
 
+    def get_ovh_products(self):
+        products = self.env['product.product'].search([
+            ('default_code', 'like', 'OVH-%')])
+        unsorted_products = []
+        sorted_products = []
+        # [{'service': 'voip.sms.', 'product': product_recordset}]
+        for product in products:
+            unsorted_products.append(
+                {'service': product.default_code[4:], 'product': product})
+        # sort by len of service prefix, so that the longest prefix
+        # match in priority
+        if unsorted_products:
+            sorted_products = sorted(
+                unsorted_products,
+                key=lambda mydict: len(mydict['service']) * -1)
+        return sorted_products
+
     @api.multi
     def get(self):
         self.ensure_one()
@@ -257,6 +260,7 @@ class OvhInvoiceGet(models.TransientModel):
                 _("Couldn't find the supplier OVH. Make sure you have "
                     "a supplier OVH with VAT number FR22424761419."))
         ovh_partner = partner[0]
+        products = self.get_ovh_products()
 
         invoices = aio.browse(False)
         for account in self.account_ids:
@@ -317,9 +321,36 @@ class OvhInvoiceGet(models.TransientModel):
                     'Result billingInvoiceInfo for invoice %s: %s',
                     oinv_num, res_iinfo)
                 vals = self._prepare_invoice_vals(
-                    oinv_num, ovh_partner, ovh_account, res_iinfo)
+                    oinv_num, ovh_partner, ovh_account, res_iinfo, products)
                 invoice = aio.create(vals)
                 invoice.button_reset_taxes()
+                logger.debug(
+                    'res_iinfo.finalprice=%s ; invoice.amount_total=%s',
+                    res_iinfo.finalprice, invoice.amount_total)
+                pd = self.env['decimal.precision'].precision_get('Account')
+                if float_compare(
+                        float(res_iinfo.baseprice),
+                        invoice.amount_untaxed,
+                        precision_digits=pd) < 0:
+                    raise Warning(_(
+                        "On OVH invoice %s, the total untaxed amount is %.2f "
+                        "whereas the total untaxed amount in Odoo is %.2f.")
+                        % (oinv_num, res_iinfo.baseprice,
+                            invoice.amount_untaxed))
+
+                if float_compare(
+                        float(res_iinfo.finalprice),
+                        invoice.amount_total,
+                        precision_digits=pd) < 0:
+                    # we should force the VAT amount
+                    assert invoice.tax_line, 'Invoice has no tax line'
+                    native_vat_amount = invoice.tax_line[0].amount
+                    invoice.tax_line[0].amount = float(res_iinfo.tax)
+                    invoice.message_post(
+                        'The total tax amount has been forced to %.2f %s '
+                        '(initial amount: %.2f).'
+                        % (float(res_iinfo.tax), invoice.currency_id.symbol,
+                            native_vat_amount))
                 invoices += invoice
                 invoice.message_post(_(
                     '<p>This OVH invoice has been downloaded automatically '
