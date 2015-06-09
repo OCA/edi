@@ -100,16 +100,20 @@ class OvhInvoiceGet(models.TransientModel):
             if il_vals['invoice_line_tax_id']:
                 tax = self.env['account.tax'].browse(
                     il_vals['invoice_line_tax_id'][0])
-                if tax.amount != taxrate:
+                if not tax.amount:
+                    tax_amount = 0
+                else:
+                    tax_amount = tax.amount
+                if tax_amount != taxrate:
                     raise Warning(_(
                         "The OVH product with internal code %s "
                         "has a purchase tax '%s' (%s) with a rate %s "
                         "which is different from the rate "
                         "given by the OVH webservice (%s).") % (
                         product.default_code,
-                        product.supplier_taxes_id[0].name,
-                        product.supplier_taxes_id[0].description,
-                        product.supplier_taxes_id[0].amount,
+                        tax.name or 'None',
+                        tax.description or 'None',
+                        tax_amount,
                         taxrate))
             il_vals.update({
                 'invoice_line_tax_id':
@@ -268,18 +272,22 @@ class OvhInvoiceGet(models.TransientModel):
                 'Starting OVH soAPI query billingInvoiceList (account %s)',
                 ovh_account.login)
             res_ilist = soap.billingInvoiceList(session)
+            logger.debug('result billingInvoiceList=%s', res_ilist)
 
-            oinv_numbers = []
             for oinv in res_ilist.item:
+                oinv_num = oinv.billnum
                 if self.from_date:
                     oinv_date = oinv.date[:10]
                     if oinv_date < self.from_date:
                         continue
                 logger.info(
                     'billingInvoiceList: OVH invoice number %s (account %s)',
-                    oinv.billnum, ovh_account.login)
-                oinv_numbers.append(oinv.billnum)
-            for oinv_num in oinv_numbers:
+                    oinv_num, ovh_account.login)
+                if not oinv.totalPrice and not oinv.totalPriceWithVat:
+                    logger.info(
+                        'Skipping OVH invoice %s because the amount is 0',
+                        oinv_num)
+                    continue
                 # Check if this invoice is not already in the system
                 existing_inv = aio.search([
                     ('type', '=', 'in_invoice'),
@@ -296,7 +304,9 @@ class OvhInvoiceGet(models.TransientModel):
                     'invoice number %s', oinv_num)
                 res_iinfo = soap.billingInvoiceInfo(
                     session, oinv_num, account.password, country_code)
-                logger.debug('OVH invoice %s details %s', oinv_num, res_iinfo)
+                logger.debug(
+                    'Result billingInvoiceInfo for invoice %s: %s',
+                    oinv_num, res_iinfo)
                 vals = self._prepare_invoice_vals(
                     oinv_num, ovh_partner, ovh_account, res_iinfo)
                 invoice = aio.create(vals)
