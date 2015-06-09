@@ -264,10 +264,16 @@ class OvhInvoiceGet(models.TransientModel):
             logger.info(
                 'Opening SOAP session to OVH with account %s',
                 ovh_account.login)
-            session = soap.login(
-                ovh_account.login,
-                account.password,
-                country_code, 0)
+            try:
+                session = soap.login(
+                    ovh_account.login,
+                    account.password,
+                    country_code, 0)
+            except Exception, e:
+                raise Warning(_(
+                    "Cannot connect to the OVH SoAPI with login '%s'. "
+                    "The error message is '%s'.")
+                    % (ovh_account.login, unicode(e)))
             logger.info(
                 'Starting OVH soAPI query billingInvoiceList (account %s)',
                 ovh_account.login)
@@ -279,6 +285,9 @@ class OvhInvoiceGet(models.TransientModel):
                 if self.from_date:
                     oinv_date = oinv.date[:10]
                     if oinv_date < self.from_date:
+                        logger.info(
+                            'Skipping OVH invoice %s dated %s because too old',
+                            oinv_num, oinv_date)
                         continue
                 logger.info(
                     'billingInvoiceList: OVH invoice number %s (account %s)',
