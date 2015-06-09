@@ -100,7 +100,6 @@ class OvhInvoiceGet(models.TransientModel):
             tax_id = taxes[0].id
         elif method == 'product':
             products = self.env['product.product'].search([
-                ('purchase_ok', '=', True),
                 ('default_code', 'like', 'OVH-%')])
             if not products:
                 raise Warning(_("No OVH product found in Odoo"))
@@ -268,6 +267,7 @@ class OvhInvoiceGet(models.TransientModel):
                     'invoice number %s', oinv_num)
                 res_iinfo = soap.billingInvoiceInfo(
                     session, oinv_num, account.password, country_code)
+                logger.debug('OVH invoice %s details %s', oinv_num, res_iinfo)
                 vals = self._prepare_invoice_vals(
                     oinv_num, ovh_partner, ovh_account, res_iinfo)
                 invoice = aio.create(vals)
