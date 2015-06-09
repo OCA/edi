@@ -43,7 +43,7 @@
 </record>
 
 <record id="ovh_account_action" model="ir.actions.act_window">
-    <field name="name">OVH Account</field>
+    <field name="name">OVH Accounts</field>
     <field name="res_model">ovh.account</field>
     <field name="view_mode">tree,form</field>
 </record>
