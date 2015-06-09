@@ -293,6 +293,9 @@ class OvhInvoiceGet(models.TransientModel):
                         self._uid, aio._name, invoice.id,
                         'invoice_open', self._cr)
 
+        # delete the wizard entry, to avoid leaving passwords in DB
+        # in table ovh_invoice_get_account
+        self.unlink()
         action = self.env['ir.actions.act_window'].for_xml_id(
             'account', 'action_invoice_tree2')
         action.update({
@@ -308,7 +311,8 @@ class OvhInvoiceGetAccount(models.TransientModel):
     _name = 'ovh.invoice.get.account'
     _description = 'OVH Invoice Get Account'
 
-    wizard_id = fields.Many2one('ovh.invoice.get', string='Wizard')
+    wizard_id = fields.Many2one(
+        'ovh.invoice.get', string='Wizard', ondelete='cascade')
     ovh_account_id = fields.Many2one(
         'ovh.account', string='OVH Account', required=True)
     password = fields.Char(string='OVH Password')
