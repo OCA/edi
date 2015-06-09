@@ -63,6 +63,80 @@ class OvhInvoiceGet(models.TransientModel):
         return res
 
     @api.model
+    def _prepare_invoice_line_vals(
+            self, line, ovh_account, ovh_partner, sorted_products,
+            tax_id, taxrate):
+        logger.debug('OVH invoice line=%s', line)
+        il_fake = self.env['account.invoice.line'].browse([])
+        method = ovh_account.invoice_line_method
+        company = self.env.user.company_id
+        if not line.baseprice:
+            return False
+        if method == 'no_product':
+            il_vals = {
+                'account_id': ovh_account.account_id.id,
+                'account_analytic_id':
+                ovh_account.account_analytic_id.id or False,
+                'invoice_line_tax_id': [(6, 0, [tax_id])],
+                }
+        elif method == 'product':
+            assert line.service, 'Missing service on OVH invoice line'
+            product = False
+            for pentry in sorted_products:
+                if line.service.startswith(pentry['service']):
+                    product = pentry['product']
+                    break
+            if not product:
+                logger.debug('OVH sorted_products=%s', sorted_products)
+                raise Warning(_(
+                    "No OVH product matching service '%s'")
+                    % line.service)
+            il_vals = il_fake.product_id_change(
+                product.id, product.uom_id.id, type='in_invoice',
+                partner_id=ovh_partner.id,
+                fposition_id=ovh_partner.property_account_position.id,
+                currency_id=company.currency_id.id,
+                company_id=company.id)['value']
+            if il_vals['invoice_line_tax_id']:
+                tax = self.env['account.tax'].browse(
+                    il_vals['invoice_line_tax_id'][0])
+                if tax.amount != taxrate:
+                    raise Warning(_(
+                        "The OVH product with internal code %s "
+                        "has a purchase tax '%s' (%s) with a rate %s "
+                        "which is different from the rate "
+                        "given by the OVH webservice (%s).") % (
+                        product.default_code,
+                        product.supplier_taxes_id[0].name,
+                        product.supplier_taxes_id[0].description,
+                        product.supplier_taxes_id[0].amount,
+                        taxrate))
+            il_vals.update({
+                'invoice_line_tax_id':
+                [(6, 0, il_vals['invoice_line_tax_id'])],
+                'product_id': product.id,
+                })
+        il_vals.update({
+            'quantity': float(line.quantity),
+            'price_unit': float(line.baseprice),
+            'name': line.description,
+            })
+        if line.start and line.end:
+            start_date_str = line.start[:10]
+            end_date_str = line.end[:10]
+            end_date_dt = fields.Date.from_string(end_date_str)
+            end_date_dt -= relativedelta(days=1)
+            end_date_str = fields.Date.to_string(end_date_dt)
+            il_vals['name'] = _('%s du %s au %s') % (
+                line.description, start_date_str, end_date_str)
+            if (
+                    hasattr(il_fake, 'start_date') and
+                    hasattr(il_fake, 'end_date')):
+                il_vals['start_date'] = start_date_str
+                il_vals['end_date'] = end_date_str
+        return il_vals
+
+    @api.model
     def _prepare_invoice_vals(
             self, ovh_invoice_number, ovh_partner, ovh_account, res_iinfo):
         aio = self.env['account.invoice']
@@ -83,7 +157,8 @@ class OvhInvoiceGet(models.TransientModel):
             'in_invoice', ovh_partner.id, company_id=company.id)['value'])
         taxrate = float(res_iinfo.taxrate)  # =0.2 for 20%
         method = ovh_account.invoice_line_method
-        il_fake = self.env['account.invoice.line'].browse([])
+        sorted_products = []
+        tax_id = False
         if method == 'no_product':
             taxes = self.env['account.tax'].search([
                 ('type_tax_use', '=', 'purchase'),
@@ -103,76 +178,30 @@ class OvhInvoiceGet(models.TransientModel):
                 ('default_code', 'like', 'OVH-%')])
             if not products:
                 raise Warning(_("No OVH product found in Odoo"))
-            oproducts = {}
-            # key = start of domain
-            # value = product recordset
+            unsorted_products = []
+            # [{'service': 'voip.sms.', 'product': product_recordset}]
             for product in products:
-                oproducts[product.default_code[4:]] = product
-        for line in res_iinfo.details.item:
-            if not line.baseprice:
-                continue
-            if method == 'no_product':
-                il_vals = {
-                    'account_id': ovh_account.account_id.id,
-                    'account_analytic_id':
-                    ovh_account.account_analytic_id.id or False,
-                    'invoice_line_tax_id': [(6, 0, [tax_id])],
-                    }
-            elif method == 'product':
-                assert line.domain, 'Missing domain on OVH invoice line'
-                product = False
-                for domain_start, oproduct in oproducts.iteritems():
-                    if line.domain.startswith(domain_start):
-                        product = oproduct
-                        break
-                if not product:
-                    raise Warning(_(
-                        "No OVH product matching domain '%s'")
-                        % line.domain)
-                il_vals = il_fake.product_id_change(
-                    product.id, product.uom_id.id, type='in_invoice',
-                    partner_id=ovh_partner.id,
-                    fposition_id=ovh_partner.property_account_position.id,
-                    currency_id=company.currency_id.id,
-                    company_id=company.id)['value']
-                if il_vals['invoice_line_tax_id']:
-                    tax = self.env['account.tax'].browse(
-                        il_vals['invoice_line_tax_id'][0])
-                    if tax.amount != taxrate:
-                        raise Warning(_(
-                            "The OVH product with internal code %s "
-                            "has a purchase tax '%s' (%s) with a rate %s "
-                            "which is different from the rate "
-                            "given by the OVH webservice (%s).") % (
-                            product.default_code,
-                            product.supplier_taxes_id[0].name,
-                            product.supplier_taxes_id[0].description,
-                            product.supplier_taxes_id[0].amount,
-                            taxrate))
-                il_vals.update({
-                    'invoice_line_tax_id':
-                    [(6, 0, il_vals['invoice_line_tax_id'])],
-                    'product_id': product.id,
-                    })
-            il_vals.update({
-                'quantity': float(line.quantity),
-                'price_unit': float(line.baseprice),
-                'name': line.description,
-                })
-            if line.start and line.end:
-                start_date_str = line.start[:10]
-                end_date_str = line.end[:10]
-                end_date_dt = fields.Date.from_string(end_date_str)
-                end_date_dt -= relativedelta(days=1)
-                end_date_str = fields.Date.to_string(end_date_dt)
-                il_vals['name'] = _('%s du %s au %s') % (
-                    line.description, start_date_str, end_date_str)
-                if (
-                        hasattr(il_fake, 'start_date') and
-                        hasattr(il_fake, 'end_date')):
-                    il_vals['start_date'] = start_date_str
-                    il_vals['end_date'] = end_date_str
-            vals['invoice_line'].append((0, 0, il_vals))
+                unsorted_products.append(
+                    {'service': product.default_code[4:], 'product': product})
+            # sort by len of service prefix, so that the longest prefix
+            # match in priority
+            sorted_products = sorted(
+                unsorted_products,
+                key=lambda mydict: len(mydict['service']) * -1)
+        if isinstance(res_iinfo.details.item, list):
+            for line in res_iinfo.details.item:
+                il_vals = self._prepare_invoice_line_vals(
+                    line, ovh_account, ovh_partner, sorted_products,
+                    tax_id, taxrate)
+                if il_vals:
+                    vals['invoice_line'].append((0, 0, il_vals))
+        # When we have only 1 invoice line
+        else:
+            il_vals = self._prepare_invoice_line_vals(
+                res_iinfo.details.item, ovh_account, ovh_partner,
+                sorted_products, tax_id, taxrate)
+            if il_vals:
+                vals['invoice_line'].append((0, 0, il_vals))
         return vals
 
     def ovh_invoice_attach_pdf(
