@@ -50,3 +50,7 @@ class OvhAccount(models.Model):
     account_analytic_id = fields.Many2one(
         'account.analytic.account', string='Analytic Account',
         domain=[('type', '!=', 'view')])
+
+    _sql_constrains = [
+        ('login_unique', 'unique(login)', 'This OVH NIC already exists'),
+        ]
