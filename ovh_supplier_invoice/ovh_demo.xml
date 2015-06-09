@@ -20,7 +20,7 @@
 
 <record id="ovh_telephony_product" model="product.product">
     <field name="name">OVH Telephony</field>
-    <field name="default_code">OVH-0033</field>
+    <field name="default_code">OVH-voip.</field>
     <field name="categ_id" ref="product.product_category_5"/>
     <field name="sale_ok" eval="False"/>
     <field name="purchase_ok" eval="True"/>
@@ -29,9 +29,9 @@
     <field name="uom_po_id" ref="product.product_uom_unit"/>
 </record>
 
-<record id="ovh_telephony_pack_product" model="product.product">
-    <field name="name">OVH Telephony out-of-bundle usage</field>
-    <field name="default_code">OVH-vs</field>
+<record id="ovh_telephony_options_product" model="product.product">
+    <field name="name">OVH Telephony Options</field>
+    <field name="default_code">OVH-rebill.pack.voip.</field>
     <field name="categ_id" ref="product.product_category_5"/>
     <field name="sale_ok" eval="False"/>
     <field name="purchase_ok" eval="True"/>
@@ -42,7 +42,7 @@
 
 <record id="ovh_ip_product" model="product.product">
     <field name="name">OVH IPs</field>
-    <field name="default_code">OVH-ip-</field>
+    <field name="default_code">OVH-ip.</field>
     <field name="categ_id" ref="product.product_category_5"/>
     <field name="sale_ok" eval="False"/>
     <field name="purchase_ok" eval="True"/>
@@ -53,7 +53,7 @@
 
 <record id="ovh_sms_product" model="product.product">
     <field name="name">OVH SMS service</field>
-    <field name="default_code">OVH-sms-</field>
+    <field name="default_code">OVH-voip.sms.</field>
     <field name="categ_id" ref="product.product_category_5"/>
     <field name="sale_ok" eval="False"/>
     <field name="purchase_ok" eval="True"/>
@@ -62,9 +62,9 @@
     <field name="uom_po_id" ref="product.product_uom_unit"/>
 </record>
 
-<record id="ovh_adsl_product" model="product.product">
-    <field name="name">OVH ADSL</field>
-    <field name="default_code">OVH-packadsl-</field>
+<record id="ovh_sdsl_product" model="product.product">
+    <field name="name">OVH SDSL</field>
+    <field name="default_code">OVH-pack.sdsl.</field>
     <field name="categ_id" ref="product.product_category_5"/>
     <field name="sale_ok" eval="False"/>
     <field name="purchase_ok" eval="True"/>
@@ -72,6 +72,18 @@
     <field name="uom_id" ref="product.product_uom_unit"/>
     <field name="uom_po_id" ref="product.product_uom_unit"/>
 </record>
+
+<record id="ovh_domain_product" model="product.product">
+    <field name="name">OVH Domain Name</field>
+    <field name="default_code">OVH-dom.</field>
+    <field name="categ_id" ref="product.product_category_5"/>
+    <field name="sale_ok" eval="False"/>
+    <field name="purchase_ok" eval="True"/>
+    <field name="type">service</field>
+    <field name="uom_id" ref="product.product_uom_unit"/>
+    <field name="uom_po_id" ref="product.product_uom_unit"/>
+</record>
+
 
 
 </data>
