@@ -198,10 +198,11 @@ class OvhInvoiceGet(models.TransientModel):
             self, invoice, ovh_invoice_number, invoice_password):
         logger.info(
             'Starting to download PDF of OVH invoice %s', ovh_invoice_number)
-        rpdf = requests.get(
-            'https://www.ovh.com/cgi-bin/order/facture.pdf'
-            '?reference=%s&passwd=%s'
-            % (ovh_invoice_number, invoice_password))
+        url = 'https://www.ovh.com/cgi-bin/order/facture.pdf?'
+        url += 'reference=%s&passwd=%s' % (
+            ovh_invoice_number, invoice_password)
+        logger.debug('OVH invoice download url: %s', url)
+        rpdf = requests.get(url)
         logger.info(
             'OVH invoice PDF download HTTP code: %s', rpdf.status_code)
         if rpdf.status_code == 200:
