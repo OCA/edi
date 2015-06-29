@@ -267,8 +267,8 @@ class OvhInvoiceGet(models.TransientModel):
         for account in self.account_ids:
             ovh_account = account.ovh_account_id
             logger.info(
-                'Opening SOAP session to OVH with account %s',
-                ovh_account.login)
+                'Opening SOAP session to OVH (account %s, country %s)',
+                ovh_account.login, country_code)
             try:
                 session = soap.login(
                     ovh_account.login,
