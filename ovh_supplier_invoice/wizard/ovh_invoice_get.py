@@ -302,6 +302,11 @@ class OvhInvoiceGet(models.TransientModel):
                         'Skipping OVH invoice %s because the amount is 0',
                         oinv_num)
                     continue
+                if oinv_num and oinv_num.startswith('PP_'):
+                    logger.info(
+                        'Skipping OVH invoice %s because it is a fake '
+                        'invoice in loyalty points', oinv_num)
+                    continue
                 # Check if this invoice is not already in the system
                 existing_inv = aio.search([
                     ('type', '=', 'in_invoice'),
