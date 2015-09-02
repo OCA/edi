@@ -151,6 +151,14 @@ class OvhInvoiceGet(models.TransientModel):
                     hasattr(il_fake, 'end_date')):
                 il_vals['start_date'] = start_date_str
                 il_vals['end_date'] = end_date_str
+        if not il_vals.get('account_id'):
+            raise Warning(_(
+                "On OVH invoice '%s' dated %s related to account '%s', "
+                "the account is missing on the line with description '%s'.")
+                % (invoice_desc['number'],
+                    invoice_desc['date'],
+                    invoice_desc['account'].login,
+                    il_vals.get('name')))
         return il_vals
 
     @api.model
