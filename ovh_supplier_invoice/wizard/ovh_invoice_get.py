@@ -90,8 +90,9 @@ class OvhInvoiceGet(models.TransientModel):
             if not product:
                 logger.debug('OVH products=%s', products)
                 raise Warning(_(
-                    "No OVH product matching service '%s'")
-                    % line.service)
+                    "For OVH account '%s', there are no OVH product "
+                    "matching service '%s'.")
+                    % (ovh_account.login, line.service))
             il_vals = il_fake.product_id_change(
                 product.id, product.uom_id.id, type='in_invoice',
                 partner_id=ovh_partner.id,
@@ -107,10 +108,12 @@ class OvhInvoiceGet(models.TransientModel):
                     tax_amount = tax.amount
                 if tax_amount != taxrate:
                     raise Warning(_(
-                        "The OVH product with internal code %s "
+                        "For OVH account '%s', the OVH product with "
+                        "internal code %s "
                         "has a purchase tax '%s' (%s) with a rate %s "
                         "which is different from the rate "
                         "given by the OVH webservice (%s).") % (
+                        ovh_account.login,
                         product.default_code,
                         tax.name or 'None',
                         tax.description or 'None',
@@ -173,8 +176,10 @@ class OvhInvoiceGet(models.TransientModel):
                 ])
             if len(taxes) < 1:
                 raise Warning(_(
+                    "For OVH account '%s', "
                     "Could not find proper purchase tax in Odoo "
-                    "with a rate of %s %%") % (taxrate * 100))
+                    "with a rate of %s %%") % (
+                    ovh_account.login, taxrate * 100))
             # TODO: we take the first one, which correspond to the
             # regular tax (the other ones are IMMO-20.0 & ACH_UE_ded.-20.0)
             tax_id = taxes[0].id
@@ -339,9 +344,10 @@ class OvhInvoiceGet(models.TransientModel):
                         invoice.amount_untaxed,
                         precision_digits=pd) < 0:
                     raise Warning(_(
-                        "On OVH invoice %s, the total untaxed amount is %.2f "
+                        "For OVH account '%s', on OVH invoice '%s', "
+                        "the total untaxed amount is %.2f "
                         "whereas the total untaxed amount in Odoo is %.2f.")
-                        % (oinv_num, res_iinfo.baseprice,
+                        % (ovh_account.login, oinv_num, res_iinfo.baseprice,
                             invoice.amount_untaxed))
 
                 if float_compare(
