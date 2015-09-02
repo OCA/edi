@@ -65,19 +65,19 @@ class OvhInvoiceGet(models.TransientModel):
 
     @api.model
     def _prepare_invoice_line_vals(
-            self, line, ovh_account, ovh_partner, products,
-            tax_id, taxrate):
+            self, line, invoice_desc, ovh_partner,
+            products, tax_id, taxrate):
         logger.debug('OVH invoice line=%s', line)
         il_fake = self.env['account.invoice.line'].browse([])
-        method = ovh_account.invoice_line_method
+        method = invoice_desc['account'].invoice_line_method
         company = self.env.user.company_id
         if not line.baseprice:
             return False
         if method == 'no_product':
             il_vals = {
-                'account_id': ovh_account.account_id.id,
+                'account_id': invoice_desc['account'].account_id.id,
                 'account_analytic_id':
-                ovh_account.account_analytic_id.id or False,
+                invoice_desc['account'].account_analytic_id.id or False,
                 'invoice_line_tax_id': [(6, 0, [tax_id])],
                 }
         elif method == 'product':
@@ -90,9 +90,14 @@ class OvhInvoiceGet(models.TransientModel):
             if not product:
                 logger.debug('OVH products=%s', products)
                 raise Warning(_(
-                    "For OVH account '%s', there are no OVH product "
-                    "matching service '%s'.")
-                    % (ovh_account.login, line.service))
+                    "For OVH invoice '%s' dated %s related to account '%s', "
+                    "there are no OVH product matching service '%s' "
+                    "(product code: '%s').") % (
+                    invoice_desc['number'],
+                    invoice_desc['date'],
+                    invoice_desc['account'].login,
+                    line.description,
+                    line.service))
             il_vals = il_fake.product_id_change(
                 product.id, product.uom_id.id, type='in_invoice',
                 partner_id=ovh_partner.id,
@@ -108,12 +113,16 @@ class OvhInvoiceGet(models.TransientModel):
                     tax_amount = tax.amount
                 if tax_amount != taxrate:
                     raise Warning(_(
-                        "For OVH account '%s', the OVH product with "
+                        "For OVH invoice '%s' dated %s "
+                        "related to account '%s', "
+                        "the OVH product with "
                         "internal code %s "
                         "has a purchase tax '%s' (%s) with a rate %s "
                         "which is different from the rate "
                         "given by the OVH webservice (%s).") % (
-                        ovh_account.login,
+                        invoice_desc['number'],
+                        invoice_desc['date'],
+                        invoice_desc['account'].login,
                         product.default_code,
                         tax.name or 'None',
                         tax.description or 'None',
@@ -146,16 +155,15 @@ class OvhInvoiceGet(models.TransientModel):
 
     @api.model
     def _prepare_invoice_vals(
-            self, ovh_invoice_number, ovh_partner, ovh_account, res_iinfo,
-            products):
+            self, invoice_desc, ovh_partner, res_iinfo, products):
         aio = self.env['account.invoice']
         company = self.env.user.company_id
         vals = {
             'partner_id': ovh_partner.id,
             'type': 'in_invoice',
             'company_id': company.id,
-            'supplier_invoice_number': ovh_invoice_number,
-            'origin': 'OVH SoAPI %s' % ovh_account.login,
+            'supplier_invoice_number': invoice_desc['number'],
+            'origin': 'OVH SoAPI %s' % invoice_desc['account'].login,
             'date_invoice': res_iinfo.date[:10],
             'journal_id':
             aio.with_context(type='in_invoice')._default_journal().id,
@@ -165,7 +173,7 @@ class OvhInvoiceGet(models.TransientModel):
         vals.update(aio.onchange_partner_id(
             'in_invoice', ovh_partner.id, company_id=company.id)['value'])
         taxrate = float(res_iinfo.taxrate)  # =0.2 for 20%
-        method = ovh_account.invoice_line_method
+        method = invoice_desc['account'].invoice_line_method
         tax_id = False
         if method == 'no_product':
             taxes = self.env['account.tax'].search([
@@ -176,49 +184,52 @@ class OvhInvoiceGet(models.TransientModel):
                 ])
             if len(taxes) < 1:
                 raise Warning(_(
-                    "For OVH account '%s', "
-                    "Could not find proper purchase tax in Odoo "
+                    "For invoice '%s' dated %s related to account '%s', "
+                    "could not find proper purchase tax in Odoo "
                     "with a rate of %s %%") % (
-                    ovh_account.login, taxrate * 100))
+                    invoice_desc['number'], invoice_desc['date'],
+                    invoice_desc['account'].login, taxrate * 100))
             # TODO: we take the first one, which correspond to the
             # regular tax (the other ones are IMMO-20.0 & ACH_UE_ded.-20.0)
             tax_id = taxes[0].id
         if isinstance(res_iinfo.details.item, list):
             for line in res_iinfo.details.item:
                 il_vals = self._prepare_invoice_line_vals(
-                    line, ovh_account, ovh_partner, products,
-                    tax_id, taxrate)
+                    line, invoice_desc, ovh_partner,
+                    products, tax_id, taxrate)
                 if il_vals:
                     vals['invoice_line'].append((0, 0, il_vals))
         # When we have only 1 invoice line
         else:
             il_vals = self._prepare_invoice_line_vals(
-                res_iinfo.details.item, ovh_account, ovh_partner,
-                products, tax_id, taxrate)
+                res_iinfo.details.item, invoice_desc,
+                ovh_partner, products, tax_id, taxrate)
             if il_vals:
                 vals['invoice_line'].append((0, 0, il_vals))
         return vals
 
     def ovh_invoice_attach_pdf(
-            self, invoice, ovh_invoice_number, invoice_password):
+            self, invoice, invoice_desc, invoice_password):
         logger.info(
-            'Starting to download PDF of OVH invoice %s', ovh_invoice_number)
+            'Starting to download PDF of OVH invoice %s dated %s',
+            invoice_desc['number'], invoice_desc['date'])
         url = 'https://www.ovh.com/cgi-bin/order/facture.pdf?'
         url += 'reference=%s&passwd=%s' % (
-            ovh_invoice_number, invoice_password)
+            invoice_desc['number'], invoice_password)
         logger.debug('OVH invoice download url: %s', url)
         rpdf = requests.get(url)
         logger.info(
             'OVH invoice PDF download HTTP code: %s', rpdf.status_code)
         if rpdf.status_code == 200:
             self.env['ir.attachment'].create({
-                'name': 'OVH_invoice_%s.pdf' % ovh_invoice_number,
+                'name': 'OVH_invoice_%s.pdf' % invoice_desc['number'],
                 'res_id': invoice.id,
                 'res_model': 'account.invoice',
                 'datas': base64.encodestring(rpdf.content),
                 })
             logger.info(
-                'Attachement created on OVH invoice %s', ovh_invoice_number)
+                'Attachement created on OVH invoice %s dated %s',
+                invoice_desc['number'], invoice_desc['date'])
             invoice.message_post(_(
                 '<p>The PDF file of the OVH invoice has been '
                 'successfully downloaded. You can get it in '
@@ -226,7 +237,7 @@ class OvhInvoiceGet(models.TransientModel):
         else:
             logger.warning(
                 'Could not download the PDF of the OVH invoice %s. '
-                'HTTP error %d', ovh_invoice_number, rpdf.status_code)
+                'HTTP error %d', invoice_desc['number'], rpdf.status_code)
             invoice.message_post(
                 _('Failed to download the PDF file of the OVH '
                     'invoice (HTTP error %d') % rpdf.status_code)
@@ -292,25 +303,39 @@ class OvhInvoiceGet(models.TransientModel):
 
             for oinv in res_ilist.item:
                 oinv_num = oinv.billnum
+                oinv_date = oinv.date[:10]
+                invoice_desc = {
+                    'number': oinv_num,
+                    'date': oinv_date,
+                    'account': ovh_account,  # object
+                    }
                 if self.from_date:
-                    oinv_date = oinv.date[:10]
                     if oinv_date < self.from_date:
                         logger.info(
-                            'Skipping OVH invoice %s dated %s because too old',
-                            oinv_num, oinv_date)
+                            "Skipping OVH invoice %s dated %s related to "
+                            " account %s because too old",
+                            invoice_desc['number'], invoice_desc['date'],
+                            invoice_desc['account'].login)
                         continue
                 logger.info(
-                    'billingInvoiceList: OVH invoice number %s (account %s)',
-                    oinv_num, ovh_account.login)
+                    "billingInvoiceList: OVH invoice number %s dated %s "
+                    "related to account %s",
+                    invoice_desc['number'], invoice_desc['date'],
+                    invoice_desc['account'].login)
                 if not oinv.totalPrice and not oinv.totalPriceWithVat:
                     logger.info(
-                        'Skipping OVH invoice %s because the amount is 0',
-                        oinv_num)
+                        'Skipping OVH invoice %s dated %s related to '
+                        'account %s because the amount is 0',
+                        invoice_desc['number'], invoice_desc['date'],
+                        invoice_desc['account'].login)
                     continue
                 if oinv_num and oinv_num.startswith('PP_'):
                     logger.info(
-                        'Skipping OVH invoice %s because it is a fake '
-                        'invoice in loyalty points', oinv_num)
+                        'Skipping OVH invoice %s dated %s related to '
+                        'account %s because it is a '
+                        'special pre-paid invoice',
+                        invoice_desc['number'], invoice_desc['date'],
+                        invoice_desc['account'].login)
                     continue
                 # Check if this invoice is not already in the system
                 existing_inv = aio.search([
@@ -320,19 +345,21 @@ class OvhInvoiceGet(models.TransientModel):
                     ])
                 if existing_inv:
                     logger.warning(
-                        'The OVH invoice number %s already exists in Odoo',
-                        oinv_num)
+                        'The OVH invoice number %s dated %s already '
+                        'exists in Odoo',
+                        invoice_desc['number'], invoice_desc['date'])
                     continue
                 logger.info(
                     'Starting OVH soAPI query billingInvoiceInfo on OVH '
-                    'invoice number %s', oinv_num)
+                    'invoice number %s dated %s',
+                    invoice_desc['number'], invoice_desc['date'])
                 res_iinfo = soap.billingInvoiceInfo(
                     session, oinv_num, account.password, country_code)
                 logger.debug(
                     'Result billingInvoiceInfo for invoice %s: %s',
                     oinv_num, res_iinfo)
                 vals = self._prepare_invoice_vals(
-                    oinv_num, ovh_partner, ovh_account, res_iinfo, products)
+                    invoice_desc, ovh_partner, res_iinfo, products)
                 invoice = aio.create(vals)
                 invoice.button_reset_taxes()
                 logger.debug(
@@ -344,10 +371,12 @@ class OvhInvoiceGet(models.TransientModel):
                         invoice.amount_untaxed,
                         precision_digits=pd) < 0:
                     raise Warning(_(
-                        "For OVH account '%s', on OVH invoice '%s', "
+                        "For OVH invoice '%s' dated %s related to "
+                        "account '%s', "
                         "the total untaxed amount is %.2f "
                         "whereas the total untaxed amount in Odoo is %.2f.")
-                        % (ovh_account.login, oinv_num, res_iinfo.baseprice,
+                        % (invoice_desc['number'], invoice_desc['date'],
+                            invoice_desc['account'].login, res_iinfo.baseprice,
                             invoice.amount_untaxed))
 
                 if float_compare(
@@ -377,7 +406,7 @@ class OvhInvoiceGet(models.TransientModel):
                 # Attach PDF
                 if self.attach_pdf:
                     self.ovh_invoice_attach_pdf(
-                        invoice, oinv_num, res_iinfo.password)
+                        invoice, invoice_desc, res_iinfo.password)
                 # Validate invoice
                 if self.auto_validate:
                     workflow.trg_validate(
