@@ -20,7 +20,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api, _
+from openerp.exceptions import ValidationError
 
 
 class OvhAccount(models.Model):
@@ -54,3 +55,12 @@ class OvhAccount(models.Model):
     _sql_constrains = [
         ('login_unique', 'unique(login)', 'This OVH NIC already exists'),
         ]
+
+    @api.one
+    @api.constrains('invoice_line_method', 'account_id')
+    def _check_ovh_account(self):
+        if self.invoice_line_method == 'no_product' and not self.account_id:
+            raise ValidationError(_(
+                "Missing expense account on OVH account %s which "
+                "has a method 'Without Product'.")
+                % self.login)
