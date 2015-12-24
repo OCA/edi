@@ -1,75 +1,44 @@
 language: python
-sudo: false
-cache:
-  apt: true
-  directories:
-    - $HOME/.cache/pip
 
 python:
   - "2.7"
 
+sudo: false
+cache: pip
+
 addons:
   apt:
-# only add the two lines below if you need wkhtmltopdf for your tests
-#    sources:
-#      - pov-wkhtmltopdf
-#    Search your sources alias here:
-#      https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
     packages:
       - expect-dev  # provides unbuffer utility
-      - python-lxml  # because pip installation is slow
+      - python-lxml # because pip installation is slow
       - python-simplejson
       - python-serial
-      - python-yaml
-#     Search your packages here:
-#       https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
-#      - wkhtmltopdf  # only add if needed and check the before_install section below
-
-# set up an X server to run wkhtmltopdf.
-#before_install:
-#  - "export DISPLAY=:99.0"
-#  - "sh -e /etc/init.d/xvfb start"
 
 env:
   global:
   - VERSION="8.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
   - TRANSIFEX_USER='transbot@odoo-community.org'
-  # This line contains the encrypted transifex password
-  # To encrypt transifex password, install travis ruby utils with:
-  #   $ gem install travis --user-install
-  # and use:
-  #   $ travis encrypt TRANSIFEX_PASSWORD=your-password -r owner/project
-  # Secure list for current OCA projects is in https://github.com/OCA/maintainer-quality-tools/issues/194
-  - secure: PjP88tPSwimBv4tsgn3UcQAD1heK/wcuSaSfhi2xUt/jSrOaTmWzjaW2gH/eKM1ilxPXwlPGyAIShJ2JJdBiA97hQufOeiqxdkWDctnNVVEDx2Tk0BiG3PPYyhXPgUZ+FNOnjZFF3pNWvzXTQaB0Nvz8plqp93Ov/DEyhrCxHDs=
-  # Use the following lines if you need to manually change the transifex project slug or/and the transifex organization.
-  # The default project slug is owner-repo_name-version (with dash in the version string).
-  # The default organization is the owner of the repo.
-  # The default fill up resources (TM) is True.
-  # The default team is 23907. https://www.transifex.com/organization/oca/team/23907/
-  # - TRANSIFEX_PROJECT_SLUG=
-  # - TRANSIFEX_ORGANIZATION=
-  # - TRANSIFEX_FILL_UP_RESOURCES=
-  # - TRANSIFEX_TEAM=
+  - secure: "hyBSe2obvvpXtvIxYBoELvgy51tR36MUrUQ4HvOo+qoIjFc1u1YVvTzlgJrUXoAAtha0mJN/nQwEvkN18ipcZItpsoWWsGhHPIbz1NhalbZwpCbkoLZKvS3rAstMdzKkHKCvI9Sg4iQ2gpZr6UTchxu+RO1BFatLkQJiNrUjMjQ="
 
   matrix:
   - LINT_CHECK="1"
   - TRANSIFEX="1"
-  - TESTS="1" ODOO_REPO="odoo/odoo"
-  - TESTS="1" ODOO_REPO="OCA/OCB"
-# either use the two lines above or the two below. Don't change the default if
-# it's not necessary (it is only necessary if modules in your repository can't
-# be installed in the same database. And you get a huge speed penalty in your
-# tests)
-#  - TESTS="1.0" ODOO_REPO="odoo/odoo" UNIT_TEST="1"
-#  - TESTS="1.0" ODOO_REPO="OCA/OCB" UNIT_TEST="1"
+  - TESTS="1" ODOO_REPO="odoo/odoo" EXCLUDE="account_invoice_validation_workflow"
+  - TESTS="1" ODOO_REPO="OCA/OCB"   EXCLUDE="account_invoice_validation_workflow"
+  - TESTS="1" ODOO_REPO="odoo/odoo" INCLUDE="account_invoice_validation_workflow"
+  - TESTS="1" ODOO_REPO="OCA/OCB"   INCLUDE="account_invoice_validation_workflow"
 
 virtualenv:
   system_site_packages: true
 
 install:
-  - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+  - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+  - git clone https://github.com/OCA/bank-payment.git -b ${VERSION} ${HOME}/bank-payment
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
+  - pip install unidecode
   - travis_install_nightly
+  - pip install anybox.testing.openerp # needed to test account_invoice_line_sort
+  - pip install git+https://github.com/akretion/invoice2data.git@odoo-pdf-import # needed to test account_invoice_pdf_import
 
 script:
   - travis_run_tests
