@@ -29,7 +29,7 @@
     'summary': 'Get OVH Invoice via the API',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
-    'depends': ['account'],
+    'depends': ['account', 'base_vat_sanitized'],
     'external_dependencies': {'python': ['requests', 'SOAPpy']},
     'data': [
         'ovh_account_view.xml',
