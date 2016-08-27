@@ -1,15 +1,8 @@
-# List the OCA project dependencies, one per line
-# Add a repository url and branch if you need a forked version
-#
-# Examples
-# ========
-#
-# To depend on the standard version of sale-workflow, use:
-# sale-workflow
-#
-# To explicitely give the URL of a fork, and still use the version specified in
-# .travis.yml, use:
-# sale-workflow https://github.com/OCA/sale-workflow
-#
-# To provide both the URL and a branch, use:
-# sale-workflow https://github.com/OCA/sale-workflow branchname
+# list the OCA project dependencies, one per line
+# add a github url if you need a forked version
+server-tools
+stock-logistics-workflow
+sale-workflow
+partner-contact
+community-data-files
+https://github.com/akretion/account-invoicing -b 8.0-add-pdf-invoice-import
