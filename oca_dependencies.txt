@@ -1,5 +1,9 @@
-product-attribute
-bank-payment
-community-data-files
+stock-logistics-workflow
+stock-logistics-transport
+account-closing
+bank-statement-reconcile
+server-tools
+project
 partner-contact
-connector-telephony
+community-data-files
+https://github.com/akretion/account-invoicing -b 8.0-add-pdf-invoice-import
