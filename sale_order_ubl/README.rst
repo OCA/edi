@@ -6,7 +6,7 @@
 Sale Order UBL
 ==============
 
-This module adds support for UBL, the `Universal Business Language (UBL) <http://ubl.xml.org/>`_ standard, on sale orders. The UBL standard became the `ISO/IEC 19845 <http://www.iso.org/iso/catalogue_detail.htm?csnumber=66370>`_ standard in January 2016 (cf the `official announce <http://www.prweb.com/releases/2016/01/prweb13186919.htm>_`).
+This module adds support for UBL, the `Universal Business Language (UBL) <http://ubl.xml.org/>`_ standard, on sale orders. The UBL standard became the `ISO/IEC 19845 <http://www.iso.org/iso/catalogue_detail.htm?csnumber=66370>`_ standard in December 2015 (cf the `official announce <http://www.prweb.com/releases/2016/01/prweb13186919.htm>_`).
 
 With this module, when you generate the sale order report:
 
