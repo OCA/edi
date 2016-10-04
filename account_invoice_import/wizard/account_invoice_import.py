@@ -291,7 +291,7 @@ class AccountInvoiceImport(models.TransientModel):
         parsed_inv = {}
         filetype = mimetypes.guess_type(self.invoice_filename)
         logger.debug('Invoice mimetype: %s', filetype)
-        if filetype and filetype[0] in ['application/xml','text/xml']:
+        if filetype and filetype[0] in ['application/xml', 'text/xml']:
             try:
                 xml_root = etree.fromstring(file_data)
             except:
