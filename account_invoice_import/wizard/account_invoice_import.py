@@ -486,7 +486,7 @@ class AccountInvoiceImport(models.TransientModel):
                 'line': eline,
                 'price_unit': price_unit,
                 })
-        compare_res = self.compare_lines(
+        compare_res = self.env['business.document.import'].compare_lines(
             existing_lines, parsed_inv['lines'], chatter, seller=seller)
         for eline, cdict in compare_res['to_update'].iteritems():
             write_vals = {}
@@ -522,8 +522,7 @@ class AccountInvoiceImport(models.TransientModel):
             to_create_label = []
             for add in compare_res['to_add']:
                 line_vals = self._prepare_create_invoice_line(
-                    add['product'], add['uom'], add['import_line'])
-                line_vals['invoice_id'] = invoice.id
+                    add['product'], add['uom'], add['import_line'], invoice)
                 new_line = ailo.create(line_vals)
                 to_create_label.append('%s %s x %s' % (
                     new_line.quantity,
@@ -534,7 +533,7 @@ class AccountInvoiceImport(models.TransientModel):
         return True
 
     @api.model
-    def _prepare_create_order_line(self, product, uom, import_line, invoice):
+    def _prepare_create_invoice_line(self, product, uom, import_line, invoice):
         ailo = self.env['account.invoice.line']
         vals = ailo.product_id_change(
             product.id, uom.id, qty=import_line['qty'], type='in_invoice',
@@ -546,6 +545,7 @@ class AccountInvoiceImport(models.TransientModel):
             'product_id': product.id,
             'price_unit': import_line.get('price_unit'),
             'quantity': import_line['qty'],
+            'invoice_id': invoice.id,
             })
         return vals
 
