@@ -89,7 +89,7 @@ class PurchaseOrderImport(models.TransientModel):
         assert quote_filename, 'Missing quote filename'
         filetype = mimetypes.guess_type(quote_filename)[0]
         logger.debug('Quote file mimetype: %s', filetype)
-        if filetype == 'application/xml':
+        if filetype in ['application/xml','text/xml']:
             try:
                 xml_root = etree.fromstring(quote_file)
             except:
