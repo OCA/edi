@@ -1,8 +1,5 @@
-# list the OCA project dependencies, one per line
-# add a github url if you need a forked version
-server-tools
-stock-logistics-workflow
-sale-workflow
-partner-contact
+product-attribute
+bank-payment
 community-data-files
-account-invoicing https://github.com/akretion/account-invoicing 8.0-add-pdf-invoice-import
+partner-contact
+connector-telephony
