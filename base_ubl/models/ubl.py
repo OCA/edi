@@ -8,11 +8,14 @@ from openerp.tools import float_is_zero, float_round
 from lxml import etree
 from StringIO import StringIO
 from tempfile import NamedTemporaryFile
-import PyPDF2
 import mimetypes
 import logging
-
 logger = logging.getLogger(__name__)
+
+try:
+    import PyPDF2
+except ImportError:
+    logger.debug('Cannot import PyPDF2')
 
 
 class BaseUbl(models.AbstractModel):
@@ -459,10 +462,13 @@ class BaseUbl(models.AbstractModel):
             'cac:Contact/cbc:Telephone', namespaces=ns)
         fax_xpath = party_node.xpath(
             'cac:Contact/cbc:Telefax', namespaces=ns)
+        website_xpath = party_node.xpath(
+            'cbc:WebsiteURI', namespaces=ns)
         partner_dict = {
             'vat': vat_xpath and vat_xpath[0].text or False,
             'name': partner_name_xpath[0].text,
             'email': email_xpath and email_xpath[0].text or False,
+            'website': website_xpath and website_xpath[0].text or False,
             'phone': phone_xpath and phone_xpath[0].text or False,
             'fax': fax_xpath and fax_xpath[0].text or False,
             }
@@ -554,7 +560,7 @@ class BaseUbl(models.AbstractModel):
             xmlfiles = {}  # key = filename, value = PDF obj
             for embeddedfile in embeddedfiles[:-1]:
                 mime_res = mimetypes.guess_type(embeddedfile)
-                if mime_res and mime_res[0] in ['application/xml','text/xml']:
+                if mime_res and mime_res[0] in ['application/xml', 'text/xml']:
                     xmlfiles[embeddedfile] = embeddedfiles[i+1]
                 i += 1
             logger.debug('xmlfiles=%s', xmlfiles)
