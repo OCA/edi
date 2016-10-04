@@ -9,6 +9,7 @@ import PyPDF2
 from lxml import etree
 from StringIO import StringIO
 import mimetypes
+from urlparse import urlparse
 import logging
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,7 @@ class BusinessDocumentImport(models.AbstractModel):
             'state_code': False,
             'vat': 'FR12448890432',
             'email': 'roger.lemaire@akretion.com',
+            'website': 'www.akretion.com',
             'name': 'Akretion France',
             'ref': 'C1242',
             'phone': '01.41.98.12.42',
@@ -105,29 +107,42 @@ class BusinessDocumentImport(models.AbstractModel):
                     "%s VAT number. But there are no %s "
                     "with this VAT number in Odoo.")
                     % (vat, partner_type_label, partner_type_label))
+        website_domain = False
+        email_domain = False
         if partner_dict.get('email') and '@' in partner_dict['email']:
             partners = rpo.search(
                 domain + [('email', '=ilike', partner_dict['email'])])
             if partners:
                 return partners[0]
             else:
-                partner_domain_name = partner_dict['email'].split('@')[1]
-                if partner_domain_name:
-                    partners = rpo.search(
-                        domain +
-                        [('website', '=ilike', '%' + partner_domain_name)])
-                    # I can't search on email addresses with
-                    # partner_domain_name because of the emails such as
-                    # @gmail.com, @yahoo.com that may match random partners
-                    if partners:
-                        chatter_msg.append(_(
-                            "The %s has been identified by the domain name of "
-                            "the email address '%s', so please check "
-                            "carefully that the %s is correct.") % (
-                                partner_type_label,
-                                partner_dict['email'],
-                                partner_type_label))
-                        return partners[0]
+                email_domain = partner_dict['email'].split('@')[1]
+        if partner_dict.get('website'):
+            urlp = urlparse(partner_dict['website'])
+            netloc = urlp.netloc
+            if not urlp.scheme and not netloc:
+                netloc = urlp.path
+            if netloc and netloc.split('.') >= 2:
+                website_domain = '.'.join(netloc.split('.')[-2:])
+        if website_domain or email_domain:
+            partner_domain = website_domain or email_domain
+            partners = rpo.search(
+                domain +
+                [('website', '=ilike', '%' + partner_domain + '%')])
+            # I can't search on email addresses with
+            # email_domain because of the emails such as
+            # @gmail.com, @yahoo.com that may match random partners
+            if not partners and website_domain:
+                partners = rpo.search(
+                    domain +
+                    [('email', '=ilike', '%@' + website_domain)])
+            if partners:
+                chatter_msg.append(_(
+                    "The %s has been identified by the domain name '%s' "
+                    "so please check carefully that the %s is correct.") % (
+                        partner_type_label,
+                        partner_domain,
+                        partner_type_label))
+                return partners[0]
         if partner_dict.get('ref'):
             partners = rpo.search(
                 domain + [('ref', '=', partner_dict['ref'])])
@@ -145,6 +160,7 @@ class BusinessDocumentImport(models.AbstractModel):
             "State code: %s\n"
             "VAT number: %s\n"
             "E-mail: %s\n"
+            "Website: %s\n"
             "Reference: %s\n"
             "Name: %s\n")
             % (
@@ -153,6 +169,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 partner_dict.get('state_code'),
                 partner_dict.get('vat'),
                 partner_dict.get('email'),
+                partner_dict.get('website'),
                 partner_dict.get('ref'),
                 partner_dict.get('name')))
 
@@ -621,7 +638,7 @@ class BusinessDocumentImport(models.AbstractModel):
             xmlfiles = {}  # key = filename, value = PDF obj
             for embeddedfile in embeddedfiles[:-1]:
                 mime_res = mimetypes.guess_type(embeddedfile)
-                if mime_res and mime_res[0] in ['application/xml','text/xml']:
+                if mime_res and mime_res[0] in ['application/xml', 'text/xml']:
                     xmlfiles[embeddedfile] = embeddedfiles[i+1]
                 i += 1
             logger.debug('xmlfiles=%s', xmlfiles)
