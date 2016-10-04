@@ -56,7 +56,7 @@ class SaleOrderImport(models.TransientModel):
             if filetype and filetype[0] in ('text/csv', 'text/plain'):
                 self.csv_import = True
                 self.doc_type = False
-            elif filetype and filetype[0] == 'application/xml':
+            elif filetype and filetype[0] in ['application/xml','text/xml']:
                 self.csv_import = False
                 try:
                     xml_root = etree.fromstring(
@@ -228,7 +228,7 @@ class SaleOrderImport(models.TransientModel):
             if not partner:
                 raise UserError(_('Missing customer'))
             parsed_order = self.parse_csv_order(order_file, partner)
-        elif filetype == 'application/xml':
+        elif filetype in ['application/xml','text/xml']:
             try:
                 xml_root = etree.fromstring(order_file)
             except:
