@@ -41,7 +41,7 @@ class AccountInvoiceImport(models.TransientModel):
             'invoice2data local_templates_dir=%s', local_templates_dir)
         templates = []
         if local_templates_dir and os.path.isdir(local_templates_dir):
-            templates = read_templates(local_templates_dir)
+            templates += read_templates(local_templates_dir)
         exclude_built_in_templates = tools.config.get(
             'invoice2data_exclude_built_in_templates', False)
         if not exclude_built_in_templates:
@@ -70,6 +70,7 @@ class AccountInvoiceImport(models.TransientModel):
                 'vat': invoice2data_res.get('vat'),
                 'name': invoice2data_res.get('partner_name'),
                 'email': invoice2data_res.get('partner_email'),
+                'website': invoice2data_res.get('partner_website'),
                 'siren': invoice2data_res.get('siren'),
                 },
             'currency': {
