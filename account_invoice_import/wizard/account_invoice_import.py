@@ -119,6 +119,7 @@ class AccountInvoiceImport(models.TransientModel):
         aio = self.env['account.invoice']
         ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
+        rpo = self.env['res.partner']
         company = self.env.user.company_id
         assert parsed_inv.get('amount_total'), 'Missing amount_total'
         partner = bdio._match_partner(
@@ -146,28 +147,12 @@ class AccountInvoiceImport(models.TransientModel):
             vals['date_due'] = parsed_inv.get('date_due')
         # Bank info
         if parsed_inv.get('iban'):
-            iban = parsed_inv.get('iban').replace(' ', '')
-            self._cr.execute(
-                """SELECT id FROM res_partner_bank
-                WHERE replace(acc_number, ' ', '')=%s
-                AND state='iban'
-                AND partner_id=%s
-                """, (iban, vals['partner_id']))
-            rpb_res = self._cr.fetchall()
-            if rpb_res:
-                vals['partner_bank_id'] = rpb_res[0][0]
-            else:
-                partner_bank = self.env['res.partner.bank'].create({
-                    'partner_id': vals['partner_id'],
-                    'state': 'iban',
-                    'acc_number': parsed_inv['iban'],
-                    'bank_bic': parsed_inv.get('bic'),
-                    })
+            partner = rpo.browse(vals['partner_id'])
+            partner_bank = bdio._match_partner_bank(
+                partner, parsed_inv['iban'], parsed_inv.get('bic'),
+                parsed_inv['chatter_msg'], create_if_not_found=True)
+            if partner_bank:
                 vals['partner_bank_id'] = partner_bank.id
-                parsed_inv['chatter_msg'].append(_(
-                    "The bank account <b>IBAN %s</b> has been automatically "
-                    "added on the supplier <b>%s</b>") % (
-                    parsed_inv['iban'], partner.name))
         config = partner.invoice_import_id
         if config.invoice_line_method.startswith('1line'):
             if config.invoice_line_method == '1line_no_product':
@@ -550,7 +535,8 @@ class AccountInvoiceImport(models.TransientModel):
         return vals
 
     @api.model
-    def _prepare_update_invoice_vals(self, parsed_inv):
+    def _prepare_update_invoice_vals(self, parsed_inv, partner):
+        bdio = self.env['business.document.import']
         vals = {
             'supplier_invoice_number':
             parsed_inv.get('invoice_number'),
@@ -559,6 +545,12 @@ class AccountInvoiceImport(models.TransientModel):
         }
         if parsed_inv.get('date_due'):
             vals['date_due'] = parsed_inv['date_due']
+        if parsed_inv.get('iban'):
+            partner_bank = bdio._match_partner_bank(
+                partner, parsed_inv['iban'], parsed_inv.get('bic'),
+                parsed_inv['chatter_msg'], create_if_not_found=True)
+            if partner_bank:
+                vals['partner_bank_id'] = partner_bank.id
         return vals
 
     @api.multi
@@ -597,7 +589,7 @@ class AccountInvoiceImport(models.TransientModel):
                 currency.name, invoice.currency_id.name))
         # When invoice with embedded XML files will be more widely used,
         # we should also update invoice lines
-        vals = self._prepare_update_invoice_vals(parsed_inv)
+        vals = self._prepare_update_invoice_vals(parsed_inv, partner)
         logger.debug('Updating supplier invoice with vals=%s', vals)
         self.invoice_id.write(vals)
         if (
