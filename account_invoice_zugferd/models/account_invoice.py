@@ -8,15 +8,19 @@ from openerp.exceptions import Warning as UserError
 from openerp.tools import float_compare, float_is_zero, float_round
 from StringIO import StringIO
 from lxml import etree
-from PyPDF2 import PdfFileWriter, PdfFileReader
-from PyPDF2.generic import DictionaryObject, DecodedStreamObject,\
-    NameObject, createStringObject, ArrayObject
 from tempfile import NamedTemporaryFile
 from datetime import datetime
 import logging
-# from pprint import pprint
-
 logger = logging.getLogger(__name__)
+
+try:
+    from PyPDF2 import PdfFileWriter, PdfFileReader
+    from PyPDF2.generic import DictionaryObject, DecodedStreamObject,\
+        NameObject, createStringObject, ArrayObject
+except ImportError:
+    logger.warning('Cannot import PyPDF2')
+
+
 ZUGFERD_LEVEL = 'comfort'
 ZUGFERD_FILENAME = 'ZUGFeRD-invoice.xml'
 
