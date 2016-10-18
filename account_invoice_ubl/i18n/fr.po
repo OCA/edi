@@ -1,0 +1,65 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_invoice_ubl
+# 
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-12 13:36+0000\n"
+"PO-Revision-Date: 2016-11-12 13:36+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: account_invoice_ubl
+#: model:ir.model,name:account_invoice_ubl.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: field:res.company,embed_pdf_in_ubl_xml_invoice:0
+msgid "Embed PDF in UBL XML Invoice"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: view:account.invoice:account_invoice_ubl.invoice_form
+msgid "Generate UBL XML File"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: help:res.company,embed_pdf_in_ubl_xml_invoice:0
+msgid ""
+"If active, the standalone UBL Invoice XML file will include the PDF of the "
+"invoice in base64 under the node 'AdditionalDocumentReference'. For example,"
+" to be compliant with the e-fff standard used in Belgium, you should "
+"activate this option."
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model:ir.model,name:account_invoice_ubl.model_account_invoice
+msgid "Invoice"
+msgstr "Facture"
+
+#. module: account_invoice_ubl
+#: code:addons/account_invoice_ubl/models/account_invoice.py:180
+#, python-format
+msgid "Missing base code on tax line '%s'."
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model:ir.model,name:account_invoice_ubl.model_report
+msgid "Report"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: code:addons/account_invoice_ubl/models/account_invoice.py:185
+#, python-format
+msgid "The tax code '%s' is not linked to a tax."
+msgstr ""
