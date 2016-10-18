@@ -238,6 +238,36 @@ class BusinessDocumentImport(models.AbstractModel):
         return partner
 
     @api.model
+    def _match_partner_bank(
+            self, partner, iban, bic, chatter_msg, create_if_not_found=False):
+        assert iban, 'iban is a required arg'
+        assert partner, 'partner is a required arg'
+        partner = partner.commercial_partner_id
+        iban = iban.replace(' ', '')
+        rpbo = self.env['res.partner.bank']
+        self._cr.execute(
+            """SELECT id FROM res_partner_bank
+            WHERE replace(acc_number, ' ', '')=%s
+            AND state='iban'
+            AND partner_id=%s
+            """, (iban, partner.id))
+        rpb_res = self._cr.fetchall()
+        if rpb_res:
+            return rpbo.browse(rpb_res[0][0])
+        elif create_if_not_found and bic:
+            partner_bank = rpbo.create({
+                'partner_id': partner.id,
+                'state': 'iban',
+                'acc_number': iban,
+                'bank_bic': bic,
+                })
+            chatter_msg.append(_(
+                "The bank account <b>IBAN %s</b> has been automatically "
+                "added on the supplier <b>%s</b>") % (
+                iban, partner.name))
+            return partner_bank
+
+    @api.model
     def _match_product(self, product_dict, chatter_msg, seller=False):
         """Example:
         product_dict = {
