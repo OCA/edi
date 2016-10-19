@@ -18,7 +18,7 @@ try:
     from PyPDF2.generic import DictionaryObject, DecodedStreamObject,\
         NameObject, createStringObject, ArrayObject
 except ImportError:
-    logger.warning('Cannot import PyPDF2')
+    logger.debug('Cannot import PyPDF2')
 
 
 ZUGFERD_LEVEL = 'comfort'

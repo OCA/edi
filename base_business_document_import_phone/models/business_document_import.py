@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 try:
     import phonenumbers
 except ImportError:
-    logger.warning('Cannot import phonenumbers')
+    logger.debug('Cannot import phonenumbers')
 
 
 class BusinessDocumentImport(models.AbstractModel):

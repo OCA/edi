@@ -15,7 +15,7 @@ try:
     from invoice2data.template import read_templates
     from invoice2data.main import logger as loggeri2data
 except ImportError:
-    logger.warning('Cannot import invoice2data')
+    logger.debug('Cannot import invoice2data')
 
 
 class AccountInvoiceImport(models.TransientModel):

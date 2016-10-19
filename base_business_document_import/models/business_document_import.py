@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 try:
     import PyPDF2
 except ImportError:
-    logger.warning('Cannot import PyPDF2')
+    logger.debug('Cannot import PyPDF2')
 
 
 class BusinessDocumentImport(models.AbstractModel):

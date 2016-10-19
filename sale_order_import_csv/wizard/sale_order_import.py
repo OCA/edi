@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 try:
     import unicodecsv
 except ImportError:
-    logger.warning('Cannot import unicodecsv')
+    logger.debug('Cannot import unicodecsv')
 
 
 class SaleOrderImport(models.TransientModel):
