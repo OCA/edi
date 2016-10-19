@@ -6,10 +6,12 @@ from openerp import models, api, _
 from openerp.exceptions import Warning as UserError
 from openerp.tools import float_compare
 from tempfile import TemporaryFile
-import unicodecsv
 import logging
-
 logger = logging.getLogger(__name__)
+try:
+    import unicodecsv
+except ImportError:
+    logger.debug('Cannot import unicodecsv')
 
 
 class SaleOrderImport(models.TransientModel):
