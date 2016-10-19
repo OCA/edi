@@ -5,14 +5,17 @@
 from openerp import models, api, _
 from openerp.tools import float_compare
 from openerp.exceptions import Warning as UserError
-import PyPDF2
 from lxml import etree
 from StringIO import StringIO
 import mimetypes
 from urlparse import urlparse
 import logging
-
 logger = logging.getLogger(__name__)
+
+try:
+    import PyPDF2
+except ImportError:
+    logger.debug('Cannot import PyPDF2')
 
 
 class BusinessDocumentImport(models.AbstractModel):
