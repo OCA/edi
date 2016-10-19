@@ -8,11 +8,14 @@ from openerp.tools import float_is_zero, float_round
 from lxml import etree
 from StringIO import StringIO
 from tempfile import NamedTemporaryFile
-import PyPDF2
 import mimetypes
 import logging
-
 logger = logging.getLogger(__name__)
+
+try:
+    import PyPDF2
+except ImportError:
+    logger.debug('Cannot import PyPDF2')
 
 
 class BaseUbl(models.AbstractModel):
