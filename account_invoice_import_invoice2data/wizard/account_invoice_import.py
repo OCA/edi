@@ -6,13 +6,16 @@ from openerp import models, api, tools, _
 from openerp.exceptions import Warning as UserError
 import os
 from tempfile import mkstemp
-import logging
-from invoice2data.main import extract_data
-from invoice2data.template import read_templates
-from invoice2data.main import logger as loggeri2data
 import pkg_resources
-
+import logging
 logger = logging.getLogger(__name__)
+
+try:
+    from invoice2data.main import extract_data
+    from invoice2data.template import read_templates
+    from invoice2data.main import logger as loggeri2data
+except ImportError:
+    logger.debug('Cannot import invoice2data')
 
 
 class AccountInvoiceImport(models.TransientModel):
