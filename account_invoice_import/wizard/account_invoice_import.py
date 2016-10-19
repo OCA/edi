@@ -426,7 +426,6 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def post_process_invoice(self, parsed_inv, invoice):
-        self.ensure_one()
         invoice.button_reset_taxes()
         # Force tax amount if necessary
         prec = self.env['decimal.precision'].precision_get('Account')
