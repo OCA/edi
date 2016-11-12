@@ -12,5 +12,5 @@
     'website': 'http://www.akretion.com',
     'depends': ['account_invoice_import', 'base_zugferd'],
     'demo': ['demo/demo_data.xml'],
-    'installable': True,
+    'installable': False,
 }

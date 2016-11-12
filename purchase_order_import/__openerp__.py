@@ -15,5 +15,5 @@
         'wizard/purchase_order_import_view.xml',
         'views/purchase.xml',
     ],
-    'installable': True,
+    'installable': False,
 }

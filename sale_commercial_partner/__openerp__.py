@@ -15,5 +15,5 @@
         'views/sale.xml',
         'report/sale_report_view.xml',
     ],
-    'installable': True,
+    'installable': False,
 }

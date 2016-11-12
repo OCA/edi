@@ -16,5 +16,5 @@
         'base_vat_sanitized',
         ],
     'external_dependencies': {'python': ['PyPDF2']},
-    'installable': True,
+    'installable': False,
 }
