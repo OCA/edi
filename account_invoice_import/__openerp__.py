@@ -20,5 +20,5 @@
         'partner_view.xml',
     ],
     'images': ['images/sshot-wizard1.png'],
-    'installable': True,
+    'installable': False,
 }
