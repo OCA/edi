@@ -17,5 +17,5 @@
         'product_uom_unece',
         ],
     'external_dependencies': {'python': ['PyPDF2']},
-    'installable': True,
+    'installable': False,
 }
