@@ -3,26 +3,26 @@
 # * account_invoice_import
 # 
 # Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2016
+# Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-12 13:37+0000\n"
 "PO-Revision-Date: 2016-11-12 13:37+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
-"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2016\n"
+"Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: sl\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/account_invoice.py:22
 #, python-format
 msgid " Amount w/o tax: %s %s"
-msgstr " Montant HT: %s %s"
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:500
@@ -44,59 +44,59 @@ msgstr ""
 #. module: account_invoice_import
 #: view:account.invoice.import.config:account_invoice_import.account_invoice_import_config_form
 msgid "Account Invoice Import Configuration"
-msgstr "Configuration pour l'import des factures"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import.config:account_invoice_import.account_invoice_import_config_tree
 msgid "Account Invoice Import Configurations"
-msgstr "Configurations pour l'import des factures"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import.config:account_invoice_import.account_invoice_import_config_form
 msgid "Accounting Parameters"
-msgstr "Paramètres comptables"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,active:0
 msgid "Active"
-msgstr "Actif"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,account_analytic_id:0
 msgid "Analytic Account"
-msgstr "Compte analytique"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid "Cancel"
-msgstr "Annuler"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,company_id:0
 msgid "Company"
-msgstr "Société"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import_config
 msgid "Configuration for the import of Supplier Invoices"
-msgstr "Configuration pour l'import des factures fournisseurs"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid "Create New"
-msgstr "Créer une nouvelle"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,create_uid:0
 #: field:account.invoice.import.config,create_uid:0
 msgid "Created by"
-msgstr "Créé par"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,create_date:0
 #: field:account.invoice.import.config,create_date:0
 msgid "Created on"
-msgstr "Créé le"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
@@ -106,7 +106,7 @@ msgstr ""
 #. module: account_invoice_import
 #: field:account.invoice.import,currency_id:0
 msgid "Currency"
-msgstr "Devise"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,display_name:0
@@ -117,32 +117,32 @@ msgstr ""
 #. module: account_invoice_import
 #: field:account.invoice.import,invoice_id:0
 msgid "Draft Supplier Invoice to Update"
-msgstr "Facture fournisseur brouillon à mettre-à-jour"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,account_id:0
 msgid "Expense Account"
-msgstr "Compte de charge"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,invoice_filename:0
 msgid "Filename"
-msgstr "Nom du fichier"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,label:0
 msgid "Force Description"
-msgstr "Forcer la description"
+msgstr ""
 
 #. module: account_invoice_import
 #: help:account.invoice.import.config,label:0
 msgid "Force supplier invoice line description"
-msgstr "Forcer la description de la ligne de facture fournisseur"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,id:0 field:account.invoice.import.config,id:0
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
@@ -171,13 +171,13 @@ msgstr ""
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 #: selection:account.invoice.import,state:0
 msgid "Import"
-msgstr "Importer"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_action
 #: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_menu
 msgid "Import Invoice"
-msgstr "Import facture"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice:account_invoice_import.invoice_supplier_form
@@ -187,29 +187,29 @@ msgstr ""
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid "Import Supplier Invoice or Refund"
-msgstr "Importer une facture ou un avoir fournisseur"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_config_action
 #: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_config_menu
 msgid "Import Supplier Invoices"
-msgstr "Import des factures fournisseur"
+msgstr ""
 
 #. module: account_invoice_import
 #: selection:account.invoice.import,invoice_type:0
 #: model:ir.model,name:account_invoice_import.model_account_invoice
 msgid "Invoice"
-msgstr "Facture"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:res.partner,invoice_import_id:0
 msgid "Invoice Import Configuration"
-msgstr "Configuration de l'import de facture"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,invoice_type:0
 msgid "Invoice or Refund"
-msgstr "Facture ou avoir"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,__last_update:0
@@ -221,25 +221,25 @@ msgstr ""
 #: field:account.invoice.import,write_uid:0
 #: field:account.invoice.import.config,write_uid:0
 msgid "Last Updated by"
-msgstr "Dernière mise-à-jour par"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,write_date:0
 #: field:account.invoice.import.config,write_date:0
 msgid "Last Updated on"
-msgstr "Dernière mise-à-jour le"
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:180
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:225
 #, python-format
 msgid "MISSING DESCRIPTION"
-msgstr "DESCRIPTION MANQUANTE"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,invoice_line_method:0
 msgid "Method for Invoice Line"
-msgstr "Méthode pour les lignes de facture"
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:361
@@ -251,22 +251,22 @@ msgstr ""
 #. module: account_invoice_import
 #: selection:account.invoice.import.config,invoice_line_method:0
 msgid "Multi Line, Auto-selected Product"
-msgstr "Multi-ligne, Article auto-sélectionné"
+msgstr ""
 
 #. module: account_invoice_import
 #: selection:account.invoice.import.config,invoice_line_method:0
 msgid "Multi Line, No Product"
-msgstr "Multi-ligne, aucun article"
+msgstr ""
 
 #. module: account_invoice_import
 #: selection:account.invoice.import.config,invoice_line_method:0
 msgid "Multi Line, Static Product"
-msgstr "Multi-ligne, article statique"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,name:0
 msgid "Name"
-msgstr "Nom"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
@@ -279,33 +279,33 @@ msgstr ""
 #. module: account_invoice_import
 #: field:account.invoice.import,invoice_file:0
 msgid "PDF or XML Invoice"
-msgstr "Facture PDF ou XML"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_res_partner
 msgid "Partner"
-msgstr "Partenaire"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import.config:account_invoice_import.account_invoice_import_config_form
 #: field:account.invoice.import.config,partner_ids:0
 msgid "Partners"
-msgstr "Partenaires"
+msgstr ""
 
 #. module: account_invoice_import
 #: selection:account.invoice.import,invoice_type:0
 msgid "Refund"
-msgstr "Avoir"
+msgstr ""
 
 #. module: account_invoice_import
 #: selection:account.invoice.import.config,invoice_line_method:0
 msgid "Single Line, No Product"
-msgstr "Mono-ligne, aucun article"
+msgstr ""
 
 #. module: account_invoice_import
 #: selection:account.invoice.import.config,invoice_line_method:0
 msgid "Single Line, Static Product"
-msgstr "Mono-ligne, article statique"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
@@ -317,22 +317,16 @@ msgid ""
 "invoice date, supplier invoice number and attachment) or create a new draft "
 "invoice."
 msgstr ""
-"Une ou plusieurs factures/avoirs fournisseur brouillons ont été trouvées "
-"pour le même fournisseur que la facture PDF que vous importez ; l'une d"
-"'entre-elles pourrait correspondre à la facture PDF. Vous pouvez soit "
-"sélectionner une facture fournisseur brouillon à mettre à jour avec les "
-"données du PDF (les informations mises-à-jour sont la date et le numéro de "
-"facture ainsi que la pièce jointe) ou créer une nouvelle facture brouillon."
 
 #. module: account_invoice_import
 #: field:account.invoice.import,state:0
 msgid "State"
-msgstr "Etat"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,static_product_id:0
 msgid "Static Product"
-msgstr "Article statique"
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/account_invoice_import_config.py:56
@@ -341,19 +335,16 @@ msgid ""
 "Static Product must be set on the invoice import configuration of supplier "
 "'%s' that has a Method for Invoice Line set to 'Static Product'."
 msgstr ""
-"L'article statique doit être configuré sur la configuration de l'import de "
-"facture du fournisseur '%s' qui a une méthode pour les lignes de facture "
-"configuré sur 'Article statique'."
 
 #. module: account_invoice_import
 #: field:account.invoice.import,partner_id:0
 msgid "Supplier"
-msgstr "Supplier"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import.config,tax_ids:0
 msgid "Taxes"
-msgstr "Taxes"
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/account_invoice_import_config.py:64
@@ -362,9 +353,6 @@ msgid ""
 "The Expense Account must be set on the invoice import configuration of "
 "supplier '%s' that has a Method for Invoice Line set to 'Without product'."
 msgstr ""
-"Le compte de charge doit être renseigné sur la configuration de l'import de "
-"facture du fournisseur '%s' qui a une méthode pour les lignes de facture "
-"réglé sur 'aucun article'."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:585
@@ -381,10 +369,6 @@ msgid ""
 "embedded XML file. The 'Multi Line, Auto-selected Product' method will only "
 "work with ZUGFeRD invoices at Comfort or Extended level, not at Basic level."
 msgstr ""
-"Les méthodes multi-ligne ne fonctionneront que sur les factures PDF qui ont "
-"un fichier XML embarqué (ce qui n'est pas encore très répandu). La méthode "
-"'Multi-ligne, article auto-sélectionné' ne fonctionnera qu'avec les factures"
-" ZUGFeRD au niveau Comfort ou Extended, mais pas au niveau Basic."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:478
@@ -409,8 +393,6 @@ msgid ""
 "The total amount is different from the untaxed amount, but no tax has been "
 "configured !"
 msgstr ""
-"Le montant TTC est différent du montant HT, mais aucune taxe n'a été "
-"configurée !"
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:486
@@ -433,14 +415,12 @@ msgid ""
 "This invoice already exists in Odoo. It's Supplier Invoice Number is '%s' "
 "and it's Odoo number is '%s'"
 msgstr ""
-"Cette facture existe déjà dans Odoo. Son numéro de facture fournisseur est "
-"'%s' et son numéro Odoo est '%s'"
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:405
 #, python-format
 msgid "This invoice has been created automatically via file import"
-msgstr "Cette facture a été créé automatiquement par import de fichier"
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:608
@@ -467,12 +447,12 @@ msgstr ""
 #. module: account_invoice_import
 #: field:account.invoice.import,amount_total:0
 msgid "Total"
-msgstr "Total TTC"
+msgstr ""
 
 #. module: account_invoice_import
 #: field:account.invoice.import,amount_untaxed:0
 msgid "Total Untaxed"
-msgstr "Total HT"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
@@ -482,12 +462,12 @@ msgstr ""
 #. module: account_invoice_import
 #: selection:account.invoice.import,state:0
 msgid "Update"
-msgstr "Mettre à jour"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid "Update Existing"
-msgstr "Mettre à jour une existante"
+msgstr ""
 
 #. module: account_invoice_import
 #: selection:account.invoice.import,state:0
@@ -507,7 +487,7 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
-msgstr "Assistant pour importer les PDF de facture fournisseur"
+msgstr "Čarovnik za uvoz prejetih računov/dobropisov"
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:186
@@ -516,20 +496,17 @@ msgid ""
 "You have selected a Multi Line method for this import but Odoo could not "
 "extract/read any XML file inside the PDF invoice."
 msgstr ""
-"Vous avez sélectionné une méthode multi-ligne mais Odoo n'a pas pu "
-"extraire/lire de fichier XML embarqué dans la facture PDF."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:562
 #, python-format
 msgid "You must select a supplier invoice or refund to update"
 msgstr ""
-"Vous devez sélectionner une facture ou un avoir fournisseur à mettre à jour"
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid "ZUGFeRD"
-msgstr "ZUGFeRD"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
@@ -554,7 +531,7 @@ msgstr ""
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid "invoice2data"
-msgstr "invoice2data"
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
@@ -575,14 +552,11 @@ msgid ""
 "only if the invoice2data library has a template for the invoices of that "
 "supplier."
 msgstr ""
-"pour lire le texte contenu dans le PDF et extraire les informations. Cela ne"
-" fonctionnera que si la librairie invoice2data a un modèle pour ce "
-"fournisseur."
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid "specifications)."
-msgstr ")."
+msgstr ""
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
