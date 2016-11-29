@@ -1,0 +1,40 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_invoice_import_ubl
+# 
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-12 13:36+0000\n"
+"PO-Revision-Date: 2016-11-12 13:36+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: account_invoice_import_ubl
+#: model:account.tax,name:account_invoice_import_ubl.nl_vat_purchase_21
+msgid "Deutch VAT purchase 21.0%"
+msgstr ""
+
+#. module: account_invoice_import_ubl
+#: model:account.tax,name:account_invoice_import_ubl.nl_vat_purchase_6
+msgid "Deutch VAT purchase 6.0%"
+msgstr ""
+
+#. module: account_invoice_import_ubl
+#: code:addons/account_invoice_import_ubl/wizard/account_invoice_import.py:144
+#, python-format
+msgid "This UBL XML file is not an invoice/refund file (InvoiceTypeCode is %s"
+msgstr ""
+
+#. module: account_invoice_import_ubl
+#: model:ir.model,name:account_invoice_import_ubl.model_account_invoice_import
+msgid "Wizard to import supplier invoices/refunds"
+msgstr "Assistant pour importer les PDF de facture fournisseur"
