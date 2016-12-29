@@ -34,7 +34,7 @@ class AccountInvoiceImportConfig(models.Model):
             'account.invoice.import.config'))
     account_id = fields.Many2one(
         'account.account', string='Expense Account',
-        domain=[('type', 'not in', ('view', 'closed'))])
+        domain=[('deprecated', '=', False)])
     account_analytic_id = fields.Many2one(
         'account.analytic.account', string='Analytic Account',
         domain=[('type', '!=', 'view')])
