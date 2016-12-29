@@ -103,7 +103,7 @@ class AccountInvoiceImport(models.TransientModel):
         # 'note': 'Note embedded in the document',
         # 'lines': [{
         #       'product': {
-        #           'ean13': '4123456000021',
+        #           'barcode': '4123456000021',
         #           'code': 'GZ250',
         #           },
         #       'name': 'Gelierzucker Extra 250g',
@@ -117,7 +117,6 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _prepare_create_invoice_vals(self, parsed_inv):
         aio = self.env['account.invoice']
-        ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
         rpo = self.env['res.partner']
         company = self.env.user.company_id
@@ -132,16 +131,22 @@ class AccountInvoiceImport(models.TransientModel):
             'currency_id': currency.id,
             'type': parsed_inv['type'],
             'company_id': company.id,
-            'supplier_invoice_number':
-            parsed_inv.get('invoice_number'),
+            'reference': parsed_inv.get('invoice_number'),
             'date_invoice': parsed_inv.get('date'),
             'journal_id':
             aio.with_context(type='in_invoice')._default_journal().id,
-            'invoice_line': [],
-            'check_total': parsed_inv.get('amount_total'),
-            }
-        vals.update(aio.onchange_partner_id(
-            'in_invoice', partner.id, company_id=company.id)['value'])
+            'invoice_line_ids': [],
+        }
+        new_invoice = aio.new(vals)
+        new_invoice._onchange_partner_id()
+        vals.update({
+            f: aio._fields[f].convert_to_write(v)
+            if not isinstance(new_invoice._fields[f],
+                              fields._RelationalMulti)
+            else v.ids
+            for f, v in new_invoice._cache.iteritems()
+        })
+
         # Force due date of the invoice
         if parsed_inv.get('date_due'):
             vals['date_due'] = parsed_inv.get('date_due')
@@ -158,16 +163,15 @@ class AccountInvoiceImport(models.TransientModel):
             if config.invoice_line_method == '1line_no_product':
                 il_vals = {
                     'account_id': config.account_id.id,
-                    'invoice_line_tax_id': config.tax_ids.ids or False,
+                    'invoice_line_tax_ids': config.tax_ids.ids or False,
                     'price_unit': parsed_inv.get('amount_untaxed'),
                     }
             elif config.invoice_line_method == '1line_static_product':
                 product = config.static_product_id
-                il_vals = ailo.product_id_change(
-                    product.id, product.uom_id.id, type='in_invoice',
-                    partner_id=partner.id,
-                    fposition_id=partner.property_account_position.id,
-                    company_id=company.id)['value']
+                il_vals = self._amend_create_invoice_line_vals(
+                    product, 'in_invoice', partner,
+                    partner.property_account_position_id, company
+                )
                 il_vals.update({
                     'product_id': product.id,
                     'price_unit': parsed_inv.get('amount_untaxed'),
@@ -180,7 +184,7 @@ class AccountInvoiceImport(models.TransientModel):
                 il_vals['name'] = _('MISSING DESCRIPTION')
             self.set_1line_price_unit_and_quantity(il_vals, parsed_inv)
             self.set_1line_start_end_dates(il_vals, parsed_inv)
-            vals['invoice_line'].append((0, 0, il_vals))
+            vals['invoice_line_ids'].append((0, 0, il_vals))
         elif config.invoice_line_method.startswith('nline'):
             if not parsed_inv.get('lines'):
                 raise UserError(_(
@@ -193,11 +197,10 @@ class AccountInvoiceImport(models.TransientModel):
                     }
             elif config.invoice_line_method == 'nline_static_product':
                 sproduct = config.static_product_id
-                static_vals = ailo.product_id_change(
-                    sproduct.id, sproduct.uom_id.id, type='in_invoice',
-                    partner_id=partner.id,
-                    fposition_id=partner.property_account_position.id,
-                    company_id=company.id)['value']
+                static_vals = self._amend_create_invoice_line_vals(
+                    sproduct, 'in_invoice', partner,
+                    partner.property_account_position_id, company
+                )
                 static_vals['product_id'] = sproduct.id
             else:
                 static_vals = {}
@@ -207,18 +210,17 @@ class AccountInvoiceImport(models.TransientModel):
                     product = bdio._match_product(
                         line['product'], parsed_inv['chatter_msg'],
                         seller=partner)
-                    fposition_id = partner.property_account_position.id
                     il_vals.update(
-                        ailo.product_id_change(
-                            product.id, product.uom_id.id, type='in_invoice',
-                            partner_id=partner.id,
-                            fposition_id=fposition_id,
-                            company_id=company.id)['value'])
+                        self._amend_create_invoice_line_vals(
+                            product, 'in_invoice', partner,
+                            partner.property_account_position_id, company
+                        )
+                    )
                     il_vals['product_id'] = product.id
                 elif config.invoice_line_method == 'nline_no_product':
                     taxes = bdio._match_taxes(
                         line.get('taxes'), parsed_inv['chatter_msg'])
-                    il_vals['invoice_line_tax_id'] = taxes.ids
+                    il_vals['invoice_line_tax_ids'] = taxes.ids
                 if line.get('name'):
                     il_vals['name'] = line['name']
                 elif not il_vals.get('name'):
@@ -230,17 +232,43 @@ class AccountInvoiceImport(models.TransientModel):
                     'quantity': line['qty'],
                     'price_unit': line['price_unit'],  # TODO fix for tax incl
                     })
-                vals['invoice_line'].append((0, 0, il_vals))
+                vals['invoice_line_ids'].append((0, 0, il_vals))
         # Write analytic account + fix syntax for taxes
         aacount_id = config.account_analytic_id.id or False
-        for line in vals['invoice_line']:
+        for line in vals['invoice_line_ids']:
             line_dict = line[2]
-            if line_dict.get('invoice_line_tax_id'):
-                line_dict['invoice_line_tax_id'] = [
-                    (6, 0, line_dict['invoice_line_tax_id'])]
+            if line_dict.get('invoice_line_tax_ids'):
+                line_dict['invoice_line_tax_ids'] = [
+                    (6, 0, line_dict['invoice_line_tax_ids'])]
             if aacount_id:
                 line_dict['account_analytic_id'] = aacount_id
         return vals
+
+    @api.model
+    def _amend_create_invoice_line_vals(
+            self, product, invoice_type, partner, fposition, company
+    ):
+        new_invoice = self.env['account.invoice'].new({
+            'type': invoice_type,
+            'partner_id': partner,
+            'fiscal_position_id': fposition,
+            'company_id': company,
+        })
+        new_invoice._onchange_partner_id()
+        new_invoice_line = self.env['account.invoice.line'].new({
+            'invoice_id': new_invoice,
+            'product_id': product,
+            'uom_id': product.uom_id
+        })
+        new_invoice_line._onchange_product_id()
+        return {
+            f: new_invoice_line._fields[f].convert_to_write(v)
+            if not isinstance(new_invoice_line._fields[f],
+                              fields._RelationalMulti)
+            else v.ids
+            for f, v in new_invoice_line._cache.iteritems()
+            if f != 'invoice_id'
+        }
 
     @api.model
     def set_1line_price_unit_and_quantity(self, il_vals, parsed_inv):
@@ -248,9 +276,9 @@ class AccountInvoiceImport(models.TransientModel):
         option of the first tax"""
         il_vals['quantity'] = 1
         il_vals['price_unit'] = parsed_inv.get('amount_total')
-        if il_vals.get('invoice_line_tax_id'):
+        if il_vals.get('invoice_line_tax_ids'):
             first_tax = self.env['account.tax'].browse(
-                il_vals['invoice_line_tax_id'][0])
+                il_vals['invoice_line_tax_ids'][0])
             if not first_tax.price_include:
                 il_vals['price_unit'] = parsed_inv.get('amount_untaxed')
 
@@ -367,9 +395,8 @@ class AccountInvoiceImport(models.TransientModel):
         existing_invs = aio.search(
             domain +
             [(
-                'supplier_invoice_number',
-                '=ilike',
-                parsed_inv.get('invoice_number'))])
+                'reference', '=ilike', parsed_inv.get('invoice_number')
+            )])
         if existing_invs:
             raise UserError(_(
                 "This invoice already exists in Odoo. It's "
@@ -426,7 +453,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def post_process_invoice(self, parsed_inv, invoice):
-        invoice.button_reset_taxes()
+        invoice.compute_taxes()
         # Force tax amount if necessary
         prec = self.env['decimal.precision'].precision_get('Account')
         if (
@@ -436,14 +463,14 @@ class AccountInvoiceImport(models.TransientModel):
                     invoice.amount_total,
                     parsed_inv['amount_total'],
                     precision_digits=prec)):
-            if not invoice.tax_line:
+            if not invoice.tax_line_ids:
                 raise UserError(_(
                     "The total amount is different from the untaxed amount, "
                     "but no tax has been configured !"))
-            initial_tax_amount = invoice.tax_line[0].amount
+            initial_tax_amount = invoice.tax_line_ids[0].amount
             tax_amount = parsed_inv['amount_total'] -\
                 parsed_inv['amount_untaxed']
-            invoice.tax_line[0].amount = tax_amount
+            invoice.tax_line_ids[0].amount = tax_amount
             cur_symbol = invoice.currency_id.symbol
             invoice.message_post(
                 'The total tax amount has been forced to %s %s '
@@ -518,13 +545,19 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def _prepare_create_invoice_line(self, product, uom, import_line, invoice):
-        ailo = self.env['account.invoice.line']
-        vals = ailo.product_id_change(
-            product.id, uom.id, qty=import_line['qty'], type='in_invoice',
-            partner_id=invoice.partner_id.id,
-            fposition_id=invoice.fiscal_position.id or False,
-            currency_id=invoice.currency_id.id,
-            company_id=invoice.company_id.id)['value']
+        new_line = self.env['account.invoice.line'].new({
+            'invoice_id': invoice,
+            'qty': import_line['qty'],
+            'product_id': product,
+        })
+        new_line._onchange_product_id()
+        vals = {
+            f: new_line._fields[f].convert_to_write(v)
+            if not isinstance(new_line._fields[f],
+                              fields._RelationalMulti)
+            else v.ids
+            for f, v in new_line._cache.iteritems()
+        }
         vals.update({
             'product_id': product.id,
             'price_unit': import_line.get('price_unit'),
@@ -537,10 +570,8 @@ class AccountInvoiceImport(models.TransientModel):
     def _prepare_update_invoice_vals(self, parsed_inv, partner):
         bdio = self.env['business.document.import']
         vals = {
-            'supplier_invoice_number':
-            parsed_inv.get('invoice_number'),
+            'reference': parsed_inv.get('invoice_number'),
             'date_invoice': parsed_inv.get('date'),
-            'check_total': parsed_inv.get('amount_total'),
         }
         if parsed_inv.get('date_due'):
             vals['date_due'] = parsed_inv['date_due']

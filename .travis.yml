@@ -49,7 +49,8 @@ install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
-  - pip install invoice2data
+# use patched lib for now; that's okay to merge because nobody could use this before anyways
+  - pip install https://github.com/hbrunn/invoice2data/tarball/master-extract_lines#egg=invoice2data
   - wget -P /tmp http://public.akretion.com/pdftotext-3.04
   - sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
   - sudo chmod 755 /usr/local/bin/pdftotext

@@ -55,7 +55,7 @@ class AccountInvoiceImport(models.TransientModel):
             templates)
         try:
             invoice2data_res = extract_data(file_name, templates=templates)
-        except Exception, e:
+        except Exception as e:
             raise UserError(_(
                 "PDF Invoice parsing failed. Error message: %s") % e)
         if not invoice2data_res:

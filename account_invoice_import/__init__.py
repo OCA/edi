@@ -1,6 +1,3 @@
 # -*- coding: utf-8 -*-
-
-from . import partner
-from . import account_invoice_import_config
-from . import account_invoice
-from . import wizard
+from . import models
+from . import wizards

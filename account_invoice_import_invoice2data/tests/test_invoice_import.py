@@ -17,8 +17,14 @@ class TestInvoiceImport(TransactionCase):
             'description': 'FR-VAT-buy-20.0',
             'amount': 0.2,
             'type': 'percent',
-            'account_collected_id': self.env.ref('account.a_expense').id,
-            'account_paid_id': self.env.ref('account.a_expense').id,
+            'account_collected_id': self.env['account.account'].search([
+                ('user_type_id', '=',
+                 self.env.ref('account.data_account_type_expenses').id)
+            ], limit=1).id,
+            'account_paid_id': self.env['account.account'].search([
+                ('user_type_id', '=',
+                 self.env.ref('account.data_account_type_expenses').id)
+            ], limit=1).id,
             'base_sign': -1,
             'tax_sign': -1,
             'type_tax_use': 'purchase',
@@ -43,7 +49,7 @@ class TestInvoiceImport(TransactionCase):
         invoices = self.env['account.invoice'].search([
             ('state', '=', 'draft'),
             ('type', '=', 'in_invoice'),
-            ('supplier_invoice_number', '=', '562044387')
+            ('reference', '=', '562044387')
             ])
         self.assertEquals(len(invoices), 1)
         inv = invoices[0]
@@ -54,14 +60,12 @@ class TestInvoiceImport(TransactionCase):
             self.env.ref('account_invoice_import_invoice2data.free'))
         self.assertEquals(inv.journal_id.type, 'purchase')
         self.assertEquals(
-            float_compare(inv.check_total, 29.99, precision_digits=2), 0)
-        self.assertEquals(
             float_compare(inv.amount_total, 29.99, precision_digits=2), 0)
         self.assertEquals(
             float_compare(inv.amount_untaxed, 24.99, precision_digits=2), 0)
         self.assertEquals(
-            len(inv.invoice_line), 1)
-        iline = inv.invoice_line[0]
+            len(inv.invoice_line_ids), 1)
+        iline = inv.invoice_line_ids[0]
         self.assertEquals(iline.name, 'Fiber optic access at the main office')
         self.assertEquals(
             iline.product_id,
@@ -76,8 +80,7 @@ class TestInvoiceImport(TransactionCase):
         # (we re-use the invoice created by the first import !)
         inv.write({
             'date_invoice': False,
-            'supplier_invoice_number': False,
-            'check_total': False,
+            'reference': False,
             })
 
         # New import with update of an existing draft invoice
@@ -99,10 +102,8 @@ class TestInvoiceImport(TransactionCase):
         invoices = self.env['account.invoice'].search([
             ('state', '=', 'draft'),
             ('type', '=', 'in_invoice'),
-            ('supplier_invoice_number', '=', '562044387')
+            ('reference', '=', '562044387')
             ])
         self.assertEquals(len(invoices), 1)
         inv = invoices[0]
         self.assertEquals(inv.date_invoice, '2015-07-02')
-        self.assertEquals(
-            float_compare(inv.check_total, 29.99, precision_digits=2), 0)
