@@ -60,7 +60,7 @@
 </record>
 
 <menuitem id="account_invoice_import_config_menu"
-    parent="account.menu_configuration_misc"
+    parent="account.menu_finance_configuration"
     action="account_invoice_import_config_action" sequence="100"/>
 
 </data>

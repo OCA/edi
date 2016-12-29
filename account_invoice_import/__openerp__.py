@@ -4,7 +4,7 @@
 
 {
     'name': 'Account Invoice Import',
-    'version': '8.0.1.0.0',
+    'version': '9.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
     'summary': 'Import supplier invoices/refunds as PDF or XML files',
@@ -20,5 +20,5 @@
         'partner_view.xml',
     ],
     'images': ['images/sshot-wizard1.png'],
-    'installable': False,
+    'installable': True,
 }
