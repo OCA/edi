@@ -4,7 +4,7 @@
 
 {
     'name': 'Account Invoice Import Invoice2data',
-    'version': '8.0.1.0.0',
+    'version': '9.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
     'summary': 'Import supplier invoices using the invoice2data lib',
@@ -15,5 +15,5 @@
     'data': [],
     'demo': ['demo/demo_data.xml'],
     'images': ['images/sshot-wizard1.png'],
-    'installable': False,
+    'installable': True,
 }
