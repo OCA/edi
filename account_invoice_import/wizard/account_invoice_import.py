@@ -101,6 +101,7 @@ class AccountInvoiceImport(models.TransientModel):
         # 'attachments': {'file1.pdf': base64data1, 'file2.pdf': base64data2},
         # 'chatter_msg': ['Notes added in chatter of the invoice'],
         # 'note': 'Note embedded in the document',
+        # 'origin': 'Origin note',
         # 'lines': [{
         #       'product': {
         #           'ean13': '4123456000021',
@@ -134,6 +135,7 @@ class AccountInvoiceImport(models.TransientModel):
             'company_id': company.id,
             'supplier_invoice_number':
             parsed_inv.get('invoice_number'),
+            'origin': parsed_inv.get('origin'),
             'date_invoice': parsed_inv.get('date'),
             'journal_id':
             aio.with_context(type='in_invoice')._default_journal().id,
