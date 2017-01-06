@@ -5,7 +5,7 @@
 from openerp.tests.common import TransactionCase
 
 
-class TestFrIntrastatService(TransactionCase):
+class TestBaseBusinessDocumentImport(TransactionCase):
 
     def test_match_partner(self):
         partner1 = self.env['res.partner'].create({
