@@ -104,7 +104,7 @@ class AccountInvoiceImport(models.TransientModel):
         # 'origin': 'Origin note',
         # 'lines': [{
         #       'product': {
-        #           'ean13': '4123456000021',
+        #           'barcode': '4123456000021',
         #           'code': 'GZ250',
         #           },
         #       'name': 'Gelierzucker Extra 250g',
