@@ -465,7 +465,7 @@ class BusinessDocumentImport(models.AbstractModel):
             type_tax_use='purchase', price_include=False):
         """Example:
         tax_dict = {
-            'type': 'percent',  # required param, 'fixed' or 'percent'
+            'amount_type': 'percent',  # required param, 'fixed' or 'percent'
             'amount': 20.0,  # required
             'unece_type_code': 'VAT',
             'unece_categ_code': 'S',
@@ -491,9 +491,10 @@ class BusinessDocumentImport(models.AbstractModel):
             domain.append(('price_include', '=', True))
         # with the code abose, if you set price_include=None, it will
         # won't depend on the value of the price_include parameter
-        assert tax_dict.get('type') in ['fixed', 'percent'], 'bad tax type'
+        assert tax_dict.get('amount_type') in ['fixed', 'percent'],\
+            'bad tax type'
         assert 'amount' in tax_dict, 'Missing amount key in tax_dict'
-        domain.append(('type', '=', tax_dict['type']))
+        domain.append(('amount_type', '=', tax_dict['amount_type']))
         if tax_dict.get('unece_type_code'):
             domain.append(
                 ('unece_type_code', '=', tax_dict['unece_type_code']))
@@ -503,7 +504,7 @@ class BusinessDocumentImport(models.AbstractModel):
         taxes = ato.search(domain)
         for tax in taxes:
             tax_amount = tax.amount
-            if tax_dict['type'] == 'percent':
+            if tax_dict['amount_type'] == 'percent':
                 tax_amount *= 100
             if not float_compare(
                     tax_dict['amount'], tax_amount, precision_digits=prec):
@@ -520,7 +521,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 tax_dict.get('unece_type_code'),
                 tax_dict.get('unece_categ_code'),
                 tax_dict['amount'],
-                tax_dict['type'] == 'percent' and '%' or _('(fixed)')))
+                tax_dict['amount_type'] == 'percent' and '%' or _('(fixed)')))
 
     def compare_lines(
             self, existing_lines, import_lines, chatter_msg,
