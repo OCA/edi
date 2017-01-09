@@ -274,7 +274,7 @@ class BusinessDocumentImport(models.AbstractModel):
     def _match_product(self, product_dict, chatter_msg, seller=False):
         """Example:
         product_dict = {
-            'ean13': '5449000054227',
+            'barcode': '5449000054227',
             'code': 'COCA1L',
             }
         """
@@ -284,15 +284,15 @@ class BusinessDocumentImport(models.AbstractModel):
             return product_dict['recordset']
         if product_dict.get('id'):
             return ppo.browse(product_dict['id'])
-        if product_dict.get('ean13'):
+        if product_dict.get('barcode'):
             products = ppo.search([
-                ('ean13', '=', product_dict['ean13'])])
+                ('barcode', '=', product_dict['barcode'])])
             if products:
                 return products[0]
         if product_dict.get('code'):
             products = ppo.search([
                 '|',
-                ('ean13', '=', product_dict['code']),
+                ('barcode', '=', product_dict['code']),
                 ('default_code', '=', product_dict['code'])])
             if products:
                 return products[0]
@@ -316,7 +316,7 @@ class BusinessDocumentImport(models.AbstractModel):
             "EAN13: %s\n"
             "Product code: %s\n"
             "Supplier: %s\n") % (
-                product_dict.get('ean13'),
+                product_dict.get('barcode'),
                 product_dict.get('code'),
                 seller and seller.name or 'None'))
 
@@ -537,7 +537,7 @@ class BusinessDocumentImport(models.AbstractModel):
             }]
         import_lines = [{
             'product': {
-                'ean13': '2100002000003',
+                'barcode': '2100002000003',
                 'code': 'EAZY1',
                 },
             'quantity': 2,
