@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, tools, _
-from openerp.exceptions import Warning as UserError
-from openerp.tools import float_is_zero, float_round
+from odoo import models, api, tools, _
+from odoo.exceptions import UserError
+from odoo.tools import float_is_zero, float_round
 from lxml import etree
 from StringIO import StringIO
 from tempfile import NamedTemporaryFile
@@ -70,8 +70,18 @@ class BaseUbl(models.AbstractModel):
             logger.warning('UBL: missing country on partner %s', partner.name)
 
     @api.model
-    def _ubl_add_contact(self, partner, parent_node, ns, version='2.1'):
-        contact = etree.SubElement(parent_node, ns['cac'] + 'Contact')
+    def _ubl_get_contact_id(self, partner):
+        return False
+
+    @api.model
+    def _ubl_add_contact(
+            self, partner, parent_node, ns, node_name='Contact',
+            version='2.1'):
+        contact = etree.SubElement(parent_node, ns['cac'] + node_name)
+        contact_id_text = self._ubl_get_contact_id(partner)
+        if contact_id_text:
+            contact_id = etree.SubElement(contact, ns['cbc'] + 'ID')
+            contact_id.text = contact_id_text
         if partner.parent_id:
             contact_name = etree.SubElement(contact, ns['cbc'] + 'Name')
             contact_name.text = partner.name
@@ -102,14 +112,66 @@ class BaseUbl(models.AbstractModel):
         lang_code.text = lang.code
 
     @api.model
+    def _ubl_get_party_identification(self, commercial_partner):
+        '''This method is designed to be inherited in localisation modules
+        Should return a dict with key=SchemeName, value=Identifier'''
+        return {}
+
+    @api.model
     def _ubl_add_party_identification(
             self, commercial_partner, parent_node, ns, version='2.1'):
-        '''This method is designed to be inherited in localisation modules'''
+        id_dict = self._ubl_get_party_identification(commercial_partner)
+        if id_dict:
+            party_identification = etree.SubElement(
+                parent_node, ns['cac'] + 'PartyIdentification')
+            for scheme_name, party_id_text in id_dict.iteritems():
+                party_identification_id = etree.SubElement(
+                    party_identification, ns['cbc'] + 'ID',
+                    schemeName=scheme_name)
+                party_identification_id.text = party_id_text
         return
 
     @api.model
+    def _ubl_get_tax_scheme_dict_from_partner(self, commercial_partner):
+        tax_scheme_dict = {
+            'id': 'VAT',
+            'name': False,
+            'type_code': False,
+            }
+        return tax_scheme_dict
+
+    @api.model
+    def _ubl_add_party_tax_scheme(
+            self, commercial_partner, parent_node, ns, version='2.1'):
+        if commercial_partner.vat:
+            party_tax_scheme = etree.SubElement(
+                parent_node, ns['cac'] + 'PartyTaxScheme')
+            registration_name = etree.SubElement(
+                party_tax_scheme, ns['cbc'] + 'RegistrationName')
+            registration_name.text = commercial_partner.name
+            company_id = etree.SubElement(
+                party_tax_scheme, ns['cbc'] + 'CompanyID')
+            company_id.text = commercial_partner.sanitized_vat
+            tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_partner(
+                commercial_partner)
+            self._ubl_add_tax_scheme(
+                tax_scheme_dict, party_tax_scheme, ns, version=version)
+
+    @api.model
+    def _ubl_add_party_legal_entity(
+            self, commercial_partner, parent_node, ns, version='2.1'):
+        party_legal_entity = etree.SubElement(
+            parent_node, ns['cac'] + 'PartyLegalEntity')
+        registration_name = etree.SubElement(
+            party_legal_entity, ns['cbc'] + 'RegistrationName')
+        registration_name.text = commercial_partner.name
+        self._ubl_add_address(
+            commercial_partner, 'RegistrationAddress', party_legal_entity,
+            ns, version=version)
+
+    @api.model
     def _ubl_add_party(
-            self, partner, node_name, parent_node, ns, version='2.1'):
+            self, partner, company, node_name, parent_node, ns, version='2.1'):
         commercial_partner = partner.commercial_partner_id
         party = etree.SubElement(parent_node, ns['cac'] + node_name)
         if commercial_partner.website:
@@ -124,21 +186,11 @@ class BaseUbl(models.AbstractModel):
             self._ubl_add_language(partner.lang, party, ns, version=version)
         self._ubl_add_address(
             commercial_partner, 'PostalAddress', party, ns, version=version)
-        if commercial_partner.vat:
-            party_tax_scheme = etree.SubElement(
-                party, ns['cac'] + 'PartyTaxScheme')
-            registration_name = etree.SubElement(
-                party_tax_scheme, ns['cbc'] + 'RegistrationName')
-            registration_name.text = commercial_partner.name
-            company_id = etree.SubElement(
-                party_tax_scheme, ns['cbc'] + 'CompanyID')
-            company_id.text = commercial_partner.sanitized_vat
-            tax_scheme = etree.SubElement(
-                party_tax_scheme, ns['cac'] + 'TaxScheme')
-            tax_scheme_id = etree.SubElement(
-                tax_scheme, ns['cbc'] + 'ID', schemeID='UN/ECE 5153',
-                schemeAgencyID='6')
-            tax_scheme_id.text = 'VAT'
+        self._ubl_add_party_tax_scheme(
+            commercial_partner, party, ns, version=version)
+        if company:
+            self._ubl_add_party_legal_entity(
+                commercial_partner, party, ns, version='2.1')
         self._ubl_add_contact(partner, party, ns, version=version)
 
     @api.model
@@ -158,12 +210,19 @@ class BaseUbl(models.AbstractModel):
                 customer_party_root, ns['cbc'] + 'SupplierAssignedAccountID')
             customer_ref.text = partner.commercial_partner_id.ref
         self._ubl_add_party(
-            partner, 'Party', customer_party_root, ns, version=version)
+            partner, company, 'Party', customer_party_root, ns,
+            version=version)
+        # TODO: rewrite support for AccountingContact + add DeliveryContact
+        # Additionnal optional args
+        if partner and not company and partner.parent_id:
+            self._ubl_add_contact(
+                partner, customer_party_root, ns,
+                node_name='AccountingContact', version=version)
 
     @api.model
     def _ubl_add_supplier_party(
             self, partner, company, node_name, parent_node, ns, version='2.1'):
-        """The company argument has been added to property  handle the
+        """The company argument has been added to properly handle the
         'ref' field.
         In Odoo, we only have one ref field, in which we are supposed
         to enter the reference that our company gives to its
@@ -191,7 +250,8 @@ class BaseUbl(models.AbstractModel):
                 supplier_party_root, ns['cbc'] + 'CustomerAssignedAccountID')
             supplier_ref.text = partner.commercial_partner_id.ref
         self._ubl_add_party(
-            partner, 'Party', supplier_party_root, ns, version=version)
+            partner, company, 'Party', supplier_party_root, ns,
+            version=version)
 
     @api.model
     def _ubl_add_delivery(
@@ -203,7 +263,8 @@ class BaseUbl(models.AbstractModel):
             delivery_partner, 'Address', delivery_location, ns,
             version=version)
         self._ubl_add_party(
-            delivery_partner, 'DeliveryParty', delivery, ns, version=version)
+            delivery_partner, False, 'DeliveryParty', delivery, ns,
+            version=version)
 
     @api.model
     def _ubl_add_delivery_terms(
@@ -304,13 +365,25 @@ class BaseUbl(models.AbstractModel):
                 seller_identification, ns['cbc'] + 'ID')
             seller_identification_id.text = seller_code
         if product:
-            if product.ean13:
+            if product.barcode:
                 std_identification = etree.SubElement(
                     item, ns['cac'] + 'StandardItemIdentification')
                 std_identification_id = etree.SubElement(
                     std_identification, ns['cbc'] + 'ID',
                     schemeAgencyID='6', schemeID='GTIN')
-                std_identification_id.text = product.ean13
+                std_identification_id.text = product.barcode
+            # I'm not 100% sure, but it seems that ClassifiedTaxCategory
+            # contains the taxes of the product without taking into
+            # account the fiscal position
+            if type == 'sale':
+                taxes = product.taxes_id
+            else:
+                taxes = product.supplier_taxes_id
+            if taxes:
+                for tax in taxes:
+                    self._ubl_add_tax_category(
+                        tax, item, ns, node_name='ClassifiedTaxCategory',
+                        version=version)
             for attribute_value in product.attribute_value_ids:
                 item_property = etree.SubElement(
                     item, ns['cac'] + 'AdditionalItemProperty')
@@ -331,23 +404,24 @@ class BaseUbl(models.AbstractModel):
             taxable_amount_node = etree.SubElement(
                 tax_subtotal, ns['cbc'] + 'TaxableAmount',
                 currencyID=currency_code)
-            taxable_amount_node.text = unicode(taxable_amount)
+            taxable_amount_node.text = '%0.*f' % (prec, taxable_amount)
         tax_amount_node = etree.SubElement(
             tax_subtotal, ns['cbc'] + 'TaxAmount', currencyID=currency_code)
-        tax_amount_node.text = unicode(tax_amount)
+        tax_amount_node.text = '%0.*f' % (prec, tax_amount)
         if (
-                tax.type == 'percent' and
+                tax.amount_type == 'percent' and
                 not float_is_zero(tax.amount, precision_digits=prec+3)):
             percent = etree.SubElement(
                 tax_subtotal, ns['cbc'] + 'Percent')
             percent.text = unicode(
-                float_round(tax.amount * 100, precision_digits=2))
+                float_round(tax.amount, precision_digits=2))
         self._ubl_add_tax_category(tax, tax_subtotal, ns, version=version)
 
     @api.model
-    def _ubl_add_tax_category(self, tax, parent_node, ns, version='2.1'):
-        tax_category = etree.SubElement(
-            parent_node, ns['cac'] + 'TaxCategory')
+    def _ubl_add_tax_category(
+            self, tax, parent_node, ns, node_name='TaxCategory',
+            version='2.1'):
+        tax_category = etree.SubElement(parent_node, ns['cac'] + node_name)
         if not tax.unece_categ_id:
             raise UserError(_(
                 "Missing UNECE Tax Category on tax '%s'" % tax.name))
@@ -358,18 +432,42 @@ class BaseUbl(models.AbstractModel):
         tax_name = etree.SubElement(
             tax_category, ns['cbc'] + 'Name')
         tax_name.text = tax.name
-        self._ubl_add_tax_scheme(tax, tax_category, ns, version=version)
+        if tax.amount_type == 'percent':
+            tax_percent = etree.SubElement(
+                tax_category, ns['cbc'] + 'Percent')
+            tax_percent.text = unicode(tax.amount)
+        tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_tax(tax)
+        self._ubl_add_tax_scheme(
+            tax_scheme_dict, tax_category, ns, version=version)
 
     @api.model
-    def _ubl_add_tax_scheme(self, tax, parent_node, ns, version='2.1'):
-        tax_scheme = etree.SubElement(parent_node, ns['cac'] + 'TaxScheme')
+    def _ubl_get_tax_scheme_dict_from_tax(self, tax):
         if not tax.unece_type_id:
             raise UserError(_(
                 "Missing UNECE Tax Type on tax '%s'" % tax.name))
-        tax_scheme_id = etree.SubElement(
-            tax_scheme, ns['cbc'] + 'ID', schemeID='UN/ECE 5153',
-            schemeAgencyID='6')
-        tax_scheme_id.text = tax.unece_type_code
+        tax_scheme_dict = {
+            'id': tax.unece_type_code,
+            'name': False,
+            'type_code': False,
+            }
+        return tax_scheme_dict
+
+    @api.model
+    def _ubl_add_tax_scheme(
+            self, tax_scheme_dict, parent_node, ns, version='2.1'):
+        tax_scheme = etree.SubElement(parent_node, ns['cac'] + 'TaxScheme')
+        if tax_scheme_dict.get('id'):
+            tax_scheme_id = etree.SubElement(
+                tax_scheme, ns['cbc'] + 'ID', schemeID='UN/ECE 5153',
+                schemeAgencyID='6')
+            tax_scheme_id.text = tax_scheme_dict['id']
+        if tax_scheme_dict.get('name'):
+            tax_scheme_name = etree.SubElement(tax_scheme, ns['cbc'] + 'Name')
+            tax_scheme_name.text = tax_scheme_dict['name']
+        if tax_scheme_dict.get('type_code'):
+            tax_scheme_type_code = etree.SubElement(
+                tax_scheme, ns['cbc'] + 'TaxTypeCode')
+            tax_scheme_type_code.text = tax_scheme_dict['type_code']
 
     @api.model
     def _ubl_get_nsmap_namespace(self, doc_name, version='2.1'):
@@ -405,30 +503,50 @@ class BaseUbl(models.AbstractModel):
                 "The XML file is invalid against the XML Schema Definition")
             logger.warning(xml_string)
             logger.warning(e)
-            raise UserError(
-                _("The generated XML file is not valid against the official "
-                    "XML Schema Definition. The generated XML file and the "
-                    "full error have been written in the server logs. "
-                    "Here is the error, which may give you an idea on the "
-                    "cause of the problem : %s.")
+            raise UserError(_(
+                "The UBL XML file is not valid against the official "
+                "XML Schema Definition. The XML file and the "
+                "full error have been written in the server logs. "
+                "Here is the error, which may give you an idea on the "
+                "cause of the problem : %s.")
                 % unicode(e))
         return True
 
     @api.model
-    def embed_xml_in_pdf(self, xml_string, xml_filename, pdf_content):
+    def embed_xml_in_pdf(
+            self, xml_string, xml_filename, pdf_content=None, pdf_file=None):
+        """
+        2 possible uses:
+        a) use the pdf_content argument, which has the binary of the PDF
+        -> it will return the new PDF binary with the embedded XML
+        (used for qweb-pdf reports)
+        b) OR use the pdf_file argument, which has the path to the
+        original PDF file
+        -> it will re-write this file with the new PDF
+        (used for py3o reports, *_ubl_py3o modules in this repo)
+        """
+        assert pdf_content or pdf_file, 'Missing pdf_file or pdf_content'
         logger.debug('Starting to embed %s in PDF file', xml_filename)
-        original_pdf_file = StringIO(pdf_content)
+        if pdf_file:
+            original_pdf_file = pdf_file
+        elif pdf_content:
+            original_pdf_file = StringIO(pdf_content)
         original_pdf = PyPDF2.PdfFileReader(original_pdf_file)
         new_pdf_filestream = PyPDF2.PdfFileWriter()
         new_pdf_filestream.appendPagesFromReader(original_pdf)
         new_pdf_filestream.addAttachment(xml_filename, xml_string)
-        with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
+        if pdf_file:
+            f = open(pdf_file, 'w')
             new_pdf_filestream.write(f)
-            f.seek(0)
-            new_pdf_content = f.read()
             f.close()
-            logger.info('%s file added to PDF', xml_filename)
-        return new_pdf_content
+        elif pdf_content:
+            with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
+                new_pdf_filestream.write(f)
+                f.seek(0)
+                pdf_content = f.read()
+                f.close()
+        logger.info('%s file added to PDF', xml_filename)
+        return pdf_content
 
     # ==================== METHODS TO PARSE UBL files
 
@@ -529,13 +647,13 @@ class BaseUbl(models.AbstractModel):
         return {}
 
     def ubl_parse_product(self, line_node, ns):
-        ean13_xpath = line_node.xpath(
+        barcode_xpath = line_node.xpath(
             "cac:Item/cac:StandardItemIdentification/cbc:ID[@schemeID='GTIN']",
             namespaces=ns)
         code_xpath = line_node.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns)
         product_dict = {
-            'ean13': ean13_xpath and ean13_xpath[0].text or False,
+            'barcode': barcode_xpath and barcode_xpath[0].text or False,
             'code': code_xpath and code_xpath[0].text or False,
             }
         return product_dict
