@@ -14,5 +14,5 @@
     'data': [
         'wizard/sale_order_import_view.xml',
     ],
-    'installable': True,
+    'installable': False,
 }
