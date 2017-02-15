@@ -12,5 +12,5 @@
     'website': 'http://www.akretion.com',
     'depends': ['sale_order_import'],
     'external_dependencies': {'python': ['unicodecsv']},
-    'installable': True,
+    'installable': False,
 }
