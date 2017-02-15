@@ -14,5 +14,5 @@
         'account_payment_unece',
         'base_ubl',
         ],
-    'installable': True,
+    'installable': False,
 }
