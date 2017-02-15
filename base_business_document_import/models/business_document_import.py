@@ -2,9 +2,9 @@
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, _
-from openerp.tools import float_compare
-from openerp.exceptions import Warning as UserError
+from odoo import models, api, _
+from odoo.tools import float_compare
+from odoo.exceptions import UserError
 from lxml import etree
 from StringIO import StringIO
 import mimetypes
@@ -656,6 +656,84 @@ class BusinessDocumentImport(models.AbstractModel):
                 else:
                     res['to_remove'] = exiting_dict['line']
         return res
+
+    def _prepare_account_speed_dict(self):
+        res = self.env['account.account'].search_read([
+            ('company_id', '=', self.env.user.company_id.id),
+            ('deprecated', '=', False)], ['code'])
+        speed_dict = {}
+        for l in res:
+            speed_dict[l['code']] = l['id']
+        return speed_dict
+
+    @api.model
+    def _match_account(self, account_dict, chatter_msg, speed_dict=None):
+        """Example:
+        account_dict = {
+            'code': '411100',
+            }
+        speed_dict is usefull to gain performance when you have a lot of
+        accounts to match
+        """
+        if not account_dict:
+            account_dict = {}
+        aao = self.env['account.account']
+        if speed_dict is None:
+            speed_dict = self._prepare_account_speed_dict()
+        self._strip_cleanup_dict(account_dict)
+        if account_dict.get('recordset'):
+            return account_dict['recordset']
+        if account_dict.get('id'):
+            return aao.browse(account_dict['id'])
+        if account_dict.get('code'):
+            if account_dict['code'] in speed_dict:
+                return aao.browse(speed_dict[account_dict['code']])
+            for code, account_id in speed_dict.iteritems():
+                if code.startswith(account_dict['code']):
+                    chatter_msg.append(_(
+                        "Approximate match: account %s has been matched "
+                        "with account %s") % (account_dict['code'], code))
+                    return aao.browse(account_id)
+        raise UserError(_(
+            "Odoo couldn't find any account corresponding to the "
+            "following information extracted from the business document: "
+            "Account code: %s") % account_dict.get('code'))
+
+    def _prepare_journal_speed_dict(self):
+        res = self.env['account.journal'].search_read([
+            ('company_id', '=', self.env.user.company_id.id)], ['code'])
+        speed_dict = {}
+        for l in res:
+            speed_dict[l['code']] = l['id']
+        return speed_dict
+
+    @api.model
+    def _match_journal(self, journal_dict, chatter_msg, speed_dict=None):
+        """Example:
+        journal_dict = {
+            'code': 'MISC',
+            }
+        speed_dict is usefull to gain performance when you have a lot of
+        journals to match
+        """
+        if not journal_dict:
+            journal_dict = {}
+        ajo = self.env['account.account']
+        if speed_dict is None:
+            speed_dict = self._prepare_journal_speed_dict()
+        self._strip_cleanup_dict(journal_dict)
+        if journal_dict.get('recordset'):
+            return journal_dict['recordset']
+        if journal_dict.get('id'):
+            return ajo.browse(journal_dict['id'])
+        if journal_dict.get('code'):
+            if journal_dict['code'] in speed_dict:
+                return ajo.browse(speed_dict[journal_dict['code']])
+            # case insensitive
+        raise UserError(_(
+            "Odoo couldn't find any journal corresponding to the "
+            "following information extracted from the business document: "
+            "Journal code: %s") % journal_dict.get('code'))
 
     def get_xml_files_from_pdf(self, pdf_file):
         """Returns a dict with key = filename, value = XML file obj"""
