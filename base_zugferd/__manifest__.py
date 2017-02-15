@@ -16,5 +16,5 @@
         'account_payment_unece',
         ],
     'data': ['data/zugferd_codes.xml'],
-    'installable': True,
+    'installable': False,
 }
