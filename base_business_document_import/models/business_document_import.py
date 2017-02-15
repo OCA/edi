@@ -663,7 +663,7 @@ class BusinessDocumentImport(models.AbstractModel):
             ('deprecated', '=', False)], ['code'])
         speed_dict = {}
         for l in res:
-            speed_dict[l['code']] = l['id']
+            speed_dict[l['code'].upper()] = l['id']
         return speed_dict
 
     @api.model
@@ -686,10 +686,11 @@ class BusinessDocumentImport(models.AbstractModel):
         if account_dict.get('id'):
             return aao.browse(account_dict['id'])
         if account_dict.get('code'):
-            if account_dict['code'] in speed_dict:
-                return aao.browse(speed_dict[account_dict['code']])
+            acc_code = account_dict['code'].upper()
+            if acc_code in speed_dict:
+                return aao.browse(speed_dict[acc_code])
             for code, account_id in speed_dict.iteritems():
-                if code.startswith(account_dict['code']):
+                if code.startswith(acc_code):
                     chatter_msg.append(_(
                         "Approximate match: account %s has been matched "
                         "with account %s") % (account_dict['code'], code))
@@ -699,12 +700,51 @@ class BusinessDocumentImport(models.AbstractModel):
             "following information extracted from the business document: "
             "Account code: %s") % account_dict.get('code'))
 
+    def _prepare_analytic_account_speed_dict(self):
+        res = self.env['account.analytic.account'].search_read(
+            [('company_id', '=', self.env.user.company_id.id)],
+            ['code'])
+        speed_dict = {}
+        for l in res:
+            if l['code']:
+                speed_dict[l['code'].upper()] = l['id']
+        return speed_dict
+
+    @api.model
+    def _match_analytic_account(
+            self, aaccount_dict, chatter_msg, speed_dict=None):
+        """Example:
+        aaccount_dict = {
+            'code': '627',
+            }
+        speed_dict is usefull to gain performance when you have a lot of
+        analytic accounts to match
+        """
+        if not aaccount_dict:
+            aaccount_dict = {}
+        aaao = self.env['account.analytic.account']
+        if speed_dict is None:
+            speed_dict = self._prepare_analytic_account_speed_dict()
+        self._strip_cleanup_dict(aaccount_dict)
+        if aaccount_dict.get('recordset'):
+            return aaccount_dict['recordset']
+        if aaccount_dict.get('id'):
+            return aaao.browse(aaccount_dict['id'])
+        if aaccount_dict.get('code'):
+            aacode = aaccount_dict['code'].upper()
+            if aacode in speed_dict:
+                return aaao.browse(speed_dict[aacode])
+        raise UserError(_(
+            "Odoo couldn't find any analytic account corresponding to the "
+            "following information extracted from the business document: "
+            "Analytic account code: %s") % aaccount_dict.get('code'))
+
     def _prepare_journal_speed_dict(self):
         res = self.env['account.journal'].search_read([
             ('company_id', '=', self.env.user.company_id.id)], ['code'])
         speed_dict = {}
         for l in res:
-            speed_dict[l['code']] = l['id']
+            speed_dict[l['code'].upper()] = l['id']
         return speed_dict
 
     @api.model
@@ -727,8 +767,9 @@ class BusinessDocumentImport(models.AbstractModel):
         if journal_dict.get('id'):
             return ajo.browse(journal_dict['id'])
         if journal_dict.get('code'):
-            if journal_dict['code'] in speed_dict:
-                return ajo.browse(speed_dict[journal_dict['code']])
+            jcode = journal_dict['code'].upper()
+            if jcode in speed_dict:
+                return ajo.browse(speed_dict[jcode])
             # case insensitive
         raise UserError(_(
             "Odoo couldn't find any journal corresponding to the "
