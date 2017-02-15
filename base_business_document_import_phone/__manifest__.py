@@ -3,16 +3,18 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Base UBL Payment',
+    'name': 'Base Business Document Import Phone',
     'version': '8.0.1.0.0',
     'category': 'Hidden',
     'license': 'AGPL-3',
-    'summary': 'Payment-related code for Universal Business Language (UBL)',
+    'summary': 'Use phone numbers to match partners upon import of '
+               'business documents',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': [
-        'account_payment_unece',
-        'base_ubl',
+        'base_phone',
+        'base_business_document_import',
         ],
-    'installable': True,
+    'installable': False,
+    'auto_install': True,
 }

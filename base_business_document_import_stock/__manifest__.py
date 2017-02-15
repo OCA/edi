@@ -3,14 +3,17 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Account Invoice ZUGFeRD',
+    'name': 'Base Business Document Import Stock',
     'version': '8.0.1.0.0',
-    'category': 'Accounting & Finance',
+    'category': 'Hidden',
     'license': 'AGPL-3',
-    'summary': 'Generate ZUGFeRD customer invoices',
+    'summary': 'Match incoterms upon import of business documents',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
-    'depends': ['account_payment_partner', 'base_zugferd', 'base_vat'],
-    'external_dependencies': {'python': ['PyPDF2', 'lxml']},
-    'installable': True,
+    'depends': [
+        'stock',
+        'base_business_document_import',
+        ],
+    'installable': False,
+    'auto_install': True,
 }

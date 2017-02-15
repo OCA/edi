@@ -3,18 +3,14 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Base ZUGFeRD',
+    'name': 'Quotation Order UBL Import',
     'version': '8.0.1.0.0',
-    'category': 'Accounting & Finance',
+    'category': 'Purchase Management',
     'license': 'AGPL-3',
-    'summary': 'Base module for ZUGFeRD',
+    'summary': 'Import UBL XML quotation files',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
-    'depends': [
-        'product_uom_unece',
-        'account_tax_unece',
-        'account_payment_unece',
-        ],
-    'data': ['data/zugferd_codes.xml'],
-    'installable': True,
+    'depends': ['purchase_order_import', 'base_ubl'],
+    'demo': ['demo/demo_data.xml'],
+    'installable': False,
 }

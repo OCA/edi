@@ -3,14 +3,17 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Purchase Order UBL',
+    'name': 'Purchase Order Import',
     'version': '8.0.1.0.0',
     'category': 'Purchase Management',
     'license': 'AGPL-3',
-    'summary': 'Embed UBL XML file inside the PDF purchase order',
+    'summary': 'Update RFQ via the import of quotations from suppliers',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
-    'depends': ['purchase', 'base_ubl'],
-    'data': [],
-    'installable': True,
+    'depends': ['purchase', 'base_business_document_import_stock'],
+    'data': [
+        'wizard/purchase_order_import_view.xml',
+        'views/purchase.xml',
+    ],
+    'installable': False,
 }

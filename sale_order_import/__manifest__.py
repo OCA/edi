@@ -3,17 +3,16 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Purchase Order Import',
+    'name': 'Sale Order Import',
     'version': '8.0.1.0.0',
-    'category': 'Purchase Management',
+    'category': 'Sales Management',
     'license': 'AGPL-3',
-    'summary': 'Update RFQ via the import of quotations from suppliers',
+    'summary': 'Import RFQ or sale orders from files',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
-    'depends': ['purchase', 'base_business_document_import_stock'],
+    'depends': ['sale_commercial_partner', 'base_business_document_import'],
     'data': [
-        'wizard/purchase_order_import_view.xml',
-        'views/purchase.xml',
+        'wizard/sale_order_import_view.xml',
     ],
-    'installable': True,
+    'installable': False,
 }

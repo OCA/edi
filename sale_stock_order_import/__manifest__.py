@@ -3,14 +3,19 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Sale Order UBL Import',
+    'name': 'Sale Stock Order Import',
     'version': '8.0.1.0.0',
     'category': 'Sales Management',
     'license': 'AGPL-3',
-    'summary': 'Import UBL XML sale order files',
+    'summary': 'Glue module between sale_stock and sale_order_import',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
-    'depends': ['sale_order_import', 'base_ubl'],
-    'demo': ['demo/demo_data.xml'],
-    'installable': True,
+    'depends': [
+        'sale_stock',
+        'sale_order_import',
+        'base_business_document_import_stock',
+        ],
+    'data': [],
+    'installable': False,
+    'auto_install': True,
 }

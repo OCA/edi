@@ -3,17 +3,18 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Sale Commercial Partner',
+    'name': 'Base ZUGFeRD',
     'version': '8.0.1.0.0',
-    'category': 'Sales Management',
+    'category': 'Accounting & Finance',
     'license': 'AGPL-3',
-    'summary': "Add stored related field 'Commercial Customer' on sale orders",
+    'summary': 'Base module for ZUGFeRD',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
-    'depends': ['sale'],
-    'data': [
-        'views/sale.xml',
-        'report/sale_report_view.xml',
-    ],
-    'installable': True,
+    'depends': [
+        'product_uom_unece',
+        'account_tax_unece',
+        'account_payment_unece',
+        ],
+    'data': ['data/zugferd_codes.xml'],
+    'installable': False,
 }
