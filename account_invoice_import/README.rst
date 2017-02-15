@@ -41,11 +41,11 @@ Go to the form view of the suppliers and configure it with the following paramet
 Usage
 =====
 
-To use this module, go to the menu *Accounting > Suppliers > Import Invoices* and upload a PDF or XML invoice of your supplier.
+To use this module, go to the menu *Accounting > Purchases > Import Invoice* and upload a PDF or XML invoice of your supplier.
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/226/8.0
+   :target: https://runbot.odoo-community.org/runbot/226/10.0
 
 Known issues / Roadmap
 ======================
