@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 
-<openerp>
-<data>
+<odoo>
 
 
 <record id="invoice_supplier_form" model="ir.ui.view">
@@ -13,7 +12,7 @@
     <field name="model">account.invoice</field>
     <field name="inherit_id" ref="account.invoice_supplier_form"/>
     <field name="arch" type="xml">
-        <button name="invoice_cancel" position="before">
+        <button name="action_invoice_cancel" position="before">
             <button type="action" name="%(account_invoice_import_action)d"
                 string="Import Invoice File" states="draft"
                 context="{'default_state': 'update-from-invoice', 'default_invoice_id': id}"/>
@@ -22,5 +21,4 @@
 </record>
 
 
-</data>
-</openerp>
+</odoo>
