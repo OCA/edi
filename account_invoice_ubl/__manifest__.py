@@ -19,5 +19,5 @@
         'views/company.xml',
         'views/account_invoice.xml',
         ],
-    'installable': True,
+    'installable': False,
 }
