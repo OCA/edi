@@ -56,7 +56,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'name': u'Sébastien BEAU',
             'email': 'sebastien.beau@akretion.com',
             'use_parent_address': True,
-            'type': 'default',
+            'type': 'contact',
             })
         cpartner3 = rpo.create({
             'parent_id': partner1.id,
@@ -115,7 +115,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         ppo = self.env['product.product']
         product1 = ppo.create({
             'name': u'Test Product',
-            'ean13': '9782203121102',
+            'barcode': '9782203121102',
             'seller_ids': [
                 (0, 0, {
                     'name': self.env.ref('base.res_partner_2').id,
@@ -126,7 +126,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         product_dict = {'code': u'A2324 '}
         res = bdio._match_product(product_dict, [])
         self.assertEquals(res, self.env.ref('product.product_product_4b'))
-        product_dict = {'ean13': u'9782203121102'}
+        product_dict = {'barcode': u'9782203121102'}
         res = bdio._match_product(product_dict, [])
         self.assertEquals(res, product1)
         product_dict = {'code': 'TEST1242'}
@@ -169,7 +169,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'type_tax_use': 'purchase',
             'price_include': False,
             'amount': 0.18,
-            'type': 'percent',
+            'amount_type': 'percent',
             'unece_type_id': self.env.ref('account_tax_unece.tax_type_vat').id,
             'unece_categ_id': self.env.ref('account_tax_unece.tax_categ_s').id,
             })
@@ -179,13 +179,13 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'type_tax_use': 'purchase',
             'price_include': True,
             'amount': 0.18,
-            'type': 'percent',
+            'amount_type': 'percent',
             'unece_type_id': self.env.ref('account_tax_unece.tax_type_vat').id,
             'unece_categ_id': self.env.ref('account_tax_unece.tax_categ_s').id,
             })
         bdio = self.env['business.document.import']
         tax_dict = {
-            'type': 'percent',
+            'amount_type': 'percent',
             'amount': 18,
             'unece_type_code': 'VAT',
             'unece_categ_code': 'S',
