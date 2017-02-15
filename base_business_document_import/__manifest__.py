@@ -4,7 +4,7 @@
 
 {
     'name': 'Base Business Document Import',
-    'version': '9.0.1.0.0',
+    'version': '10.0.1.0.0',
     'category': 'Tools',
     'license': 'AGPL-3',
     'summary': 'Provides technical tools to import sale orders or supplier '
@@ -17,5 +17,5 @@
         'product_uom_unece',
         ],
     'external_dependencies': {'python': ['PyPDF2']},
-    'installable': False,
+    'installable': True,
 }
