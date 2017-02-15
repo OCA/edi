@@ -14,6 +14,6 @@
         'stock',
         'base_business_document_import',
         ],
-    'installable': True,
+    'installable': False,
     'auto_install': True,
 }
