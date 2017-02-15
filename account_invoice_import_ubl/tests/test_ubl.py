@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
-from openerp.tools import file_open, float_compare
+from odoo.tests.common import TransactionCase
+from odoo.tools import file_open, float_compare
 import base64
 
 
@@ -45,7 +45,7 @@ class TestUbl(TransactionCase):
             invoices = aio.search([
                 ('state', '=', 'draft'),
                 ('type', 'in', ('in_invoice', 'in_refund')),
-                ('supplier_invoice_number', '=', res_dict['invoice_number'])
+                ('reference', '=', res_dict['invoice_number'])
                 ])
             self.assertEquals(len(invoices), 1)
             inv = invoices[0]
@@ -58,11 +58,6 @@ class TestUbl(TransactionCase):
             self.assertEquals(
                 float_compare(
                     inv.amount_untaxed, res_dict['amount_untaxed'],
-                    precision_digits=precision),
-                0)
-            self.assertEquals(
-                float_compare(
-                    inv.check_total, res_dict['amount_total'],
                     precision_digits=precision),
                 0)
             self.assertEquals(
