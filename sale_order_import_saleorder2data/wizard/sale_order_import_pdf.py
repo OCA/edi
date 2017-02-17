@@ -28,14 +28,14 @@ except ImportError:
 class SaleOrderImport(models.TransientModel):
     _inherit = 'sale.order.import'
 
-    @api.model
+    @api.multi
     def fallback_parse_pdf_saleorder(self, file_data):
         '''This method must be inherited by additionnal modules with
         the same kind of logic as the account_bank_statement_import_*
         modules'''
         return self.saleorder2data_parse_saleorder(file_data)
 
-    @api.model
+    @api.multi
     def parse_pdf_order(self, file_data):
         logger.info('Trying to analyze PDF saleorder with invoice2data lib')
         fd, file_name = mkstemp()
@@ -73,7 +73,7 @@ class SaleOrderImport(models.TransientModel):
             'Result of invoice2data PDF extraction: %s', saleorder2data_res)
         return self.saleorder2data_to_parsed_inv(saleorder2data_res)
 
-    @api.model
+    @api.multi
     def saleorder2data_to_parsed_inv(self, saleorder2data_res):
         parsed_inv = {
             'partner': {
