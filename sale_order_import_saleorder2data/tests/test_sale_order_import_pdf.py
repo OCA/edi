@@ -19,21 +19,25 @@ except ImportError:
 
 class TestPDFOrderImport(TransactionCase):
 
-    def read_pdf_and_create_wizard(self, filename, partner):
+    def read_pdf_and_create_wizard(self, file_name, partner):
         soio = self.env['sale.order.import']
-        f = file_open(
-            'sale_order_import_saleorder2data/tests/files/' + filename, 'rb')
+
+        testspath = os.path.dirname(os.path.realpath(__file__))
+        templ_path = os.path.join(testspath, '../templates')
+        file_path = os.path.join(testspath, 'files', file_name)
+
+        f = file_open(file_path, 'rb')
         pdf_file = f.read()
         wiz = soio.create({
             'order_file': base64.b64encode(pdf_file),
-            'order_filename': filename,
+            'order_filename': file_name,
             'partner_id': partner.id,
         })
         f.close()
-        templates = read_templates('sale_order_import_saleorder2data/templates/')
-        get_data = soio.extract_data(pdf_file, templates)
+        templates = read_templates(templ_path)
+        get_data = extract_data(file_path, templates=templates)
         pdf_file_content = {}
-        f.seek(0)
+        # f.seek(0)
         for line in get_data:
             pdf_file_content[line[0]] = float(line[1])
 
@@ -54,7 +58,7 @@ class TestPDFOrderImport(TransactionCase):
         # create new quote
         filename = 'so1.pdf'
         partner = self.env.ref('base.res_partner_2')
-        pdf_file_content, wiz = self.read_csv_and_create_wizard(
+        pdf_file_content, wiz = self.read_pdf_and_create_wizard(
             filename, partner)
         action = wiz.import_order_button()
         so = self.env['sale.order'].browse(action['res_id'])
