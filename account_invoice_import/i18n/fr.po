@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-12 13:37+0000\n"
-"PO-Revision-Date: 2016-11-12 13:37+0000\n"
+"POT-Creation-Date: 2017-02-15 13:58+0000\n"
+"PO-Revision-Date: 2017-02-15 13:58+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -25,13 +25,13 @@ msgid " Amount w/o tax: %s %s"
 msgstr " Montant HT: %s %s"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:500
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:502
 #, python-format
 msgid "%d invoice line(s) deleted: %s"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:515
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:517
 #, python-format
 msgid "%d new invoice line(s) created: %s"
 msgstr ""
@@ -230,8 +230,8 @@ msgid "Last Updated on"
 msgstr "Dernière mise-à-jour le"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:180
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:225
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:182
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:227
 #, python-format
 msgid "MISSING DESCRIPTION"
 msgstr "DESCRIPTION MANQUANTE"
@@ -242,8 +242,8 @@ msgid "Method for Invoice Line"
 msgstr "Méthode pour les lignes de facture"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:361
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:579
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:363
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:581
 #, python-format
 msgid "Missing Invoice Import Configuration on partner '%s'."
 msgstr ""
@@ -367,7 +367,7 @@ msgstr ""
 "réglé sur 'aucun article'."
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:585
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:587
 #, python-format
 msgid ""
 "The currency of the imported invoice (%s) is different from the currency of "
@@ -387,7 +387,7 @@ msgstr ""
 " ZUGFeRD au niveau Comfort ou Extended, mais pas au niveau Basic."
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:478
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:480
 #, python-format
 msgid ""
 "The quantity has been updated on the invoice line with product '%s' from %s "
@@ -395,7 +395,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:573
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:575
 #, python-format
 msgid ""
 "The supplier of the imported invoice (%s) is different from the supplier of "
@@ -403,7 +403,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:440
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:442
 #, python-format
 msgid ""
 "The total amount is different from the untaxed amount, but no tax has been "
@@ -413,7 +413,7 @@ msgstr ""
 "configurée !"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:486
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:488
 #, python-format
 msgid ""
 "The unit price has been updated on the invoice line with product '%s' from "
@@ -421,13 +421,13 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:283
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:285
 #, python-format
 msgid "This XML file is not XML-compliant"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:374
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:376
 #, python-format
 msgid ""
 "This invoice already exists in Odoo. It's Supplier Invoice Number is '%s' "
@@ -437,13 +437,13 @@ msgstr ""
 "'%s' et son numéro Odoo est '%s'"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:405
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:407
 #, python-format
 msgid "This invoice has been created automatically via file import"
 msgstr "Cette facture a été créé automatiquement par import de fichier"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:608
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:610
 #, python-format
 msgid "This invoice has been updated automatically via the import of file %s"
 msgstr ""
@@ -510,7 +510,7 @@ msgid "Wizard to import supplier invoices/refunds"
 msgstr "Assistant pour importer les PDF de facture fournisseur"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:186
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:188
 #, python-format
 msgid ""
 "You have selected a Multi Line method for this import but Odoo could not "
@@ -520,7 +520,7 @@ msgstr ""
 "extraire/lire de fichier XML embarqué dans la facture PDF."
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:562
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:564
 #, python-format
 msgid "You must select a supplier invoice or refund to update"
 msgstr ""
