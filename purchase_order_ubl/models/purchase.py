@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 from lxml import etree
 import logging
 
@@ -15,11 +15,11 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def get_rfq_states(self):
-        return ['draft', 'sent', 'bid']
+        return ['draft', 'sent', 'to approve']
 
     @api.model
     def get_order_states(self):
-        return ['approved', 'except_picking', 'except_invoice', 'done']
+        return ['purchase', 'done']
 
     @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):
@@ -29,7 +29,7 @@ class PurchaseOrder(models.Model):
             time = now_utc[11:]
             currency_node_name = 'PricingCurrencyCode'
         elif doc_type == 'order':
-            date = self.date_approve
+            date = self.date_approve or self.date_order[:10]
             currency_node_name = 'DocumentCurrencyCode'
         ubl_version = etree.SubElement(
             parent_node, ns['cbc'] + 'UBLVersionID')
@@ -90,10 +90,14 @@ class PurchaseOrder(models.Model):
     @api.multi
     def get_delivery_partner(self):
         self.ensure_one()
-        if self.location_id.usage == 'customer':
+        if self.dest_address_id:
             partner = self.dest_address_id
+        elif (
+                self.picking_type_id.warehouse_id and
+                self.picking_type_id.warehouse_id.partner_id):
+            partner = self.picking_type_id.warehouse_id.partner_id
         else:
-            partner = self.location_id.partner_id or self.company_id.partner_id
+            partner = self.company_id.partner_id
         return partner
 
     @api.multi
@@ -205,6 +209,7 @@ class PurchaseOrder(models.Model):
 
     @api.multi
     def embed_ubl_xml_in_pdf(self, pdf_content):
+        print "embed_ubl_xml_in_pdf==================="
         self.ensure_one()
         doc_type = False
         if self.state in self.get_rfq_states():
