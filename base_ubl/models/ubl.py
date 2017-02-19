@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, tools, _
-from openerp.exceptions import Warning as UserError
-from openerp.tools import float_is_zero, float_round
+from odoo import models, api, tools, _
+from odoo.exceptions import UserError
+from odoo.tools import float_is_zero, float_round
 from lxml import etree
 from StringIO import StringIO
 from tempfile import NamedTemporaryFile
@@ -304,13 +304,13 @@ class BaseUbl(models.AbstractModel):
                 seller_identification, ns['cbc'] + 'ID')
             seller_identification_id.text = seller_code
         if product:
-            if product.ean13:
+            if product.barcode:
                 std_identification = etree.SubElement(
                     item, ns['cac'] + 'StandardItemIdentification')
                 std_identification_id = etree.SubElement(
                     std_identification, ns['cbc'] + 'ID',
                     schemeAgencyID='6', schemeID='GTIN')
-                std_identification_id.text = product.ean13
+                std_identification_id.text = product.barcode
             for attribute_value in product.attribute_value_ids:
                 item_property = etree.SubElement(
                     item, ns['cac'] + 'AdditionalItemProperty')
@@ -336,12 +336,12 @@ class BaseUbl(models.AbstractModel):
             tax_subtotal, ns['cbc'] + 'TaxAmount', currencyID=currency_code)
         tax_amount_node.text = unicode(tax_amount)
         if (
-                tax.type == 'percent' and
+                tax.amount_type == 'percent' and
                 not float_is_zero(tax.amount, precision_digits=prec+3)):
             percent = etree.SubElement(
                 tax_subtotal, ns['cbc'] + 'Percent')
             percent.text = unicode(
-                float_round(tax.amount * 100, precision_digits=2))
+                float_round(tax.amount, precision_digits=2))
         self._ubl_add_tax_category(tax, tax_subtotal, ns, version=version)
 
     @api.model
@@ -529,13 +529,13 @@ class BaseUbl(models.AbstractModel):
         return {}
 
     def ubl_parse_product(self, line_node, ns):
-        ean13_xpath = line_node.xpath(
+        barcode_xpath = line_node.xpath(
             "cac:Item/cac:StandardItemIdentification/cbc:ID[@schemeID='GTIN']",
             namespaces=ns)
         code_xpath = line_node.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns)
         product_dict = {
-            'ean13': ean13_xpath and ean13_xpath[0].text or False,
+            'barcode': barcode_xpath and barcode_xpath[0].text or False,
             'code': code_xpath and code_xpath[0].text or False,
             }
         return product_dict
