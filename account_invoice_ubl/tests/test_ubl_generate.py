@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
-from openerp import workflow
+from odoo.tests.common import TransactionCase
 
 
 class TestUblInvoice(TransactionCase):
@@ -15,9 +14,7 @@ class TestUblInvoice(TransactionCase):
             i += 1
             invoice = self.env.ref('account.invoice_%d' % i)
             # validate invoice
-            workflow.trg_validate(
-                self.uid, 'account.invoice', invoice.id, 'invoice_open',
-                self.cr)
+            invoice.action_invoice_open()
             if invoice.type not in ('out_invoice', 'out_refund'):
                 continue
             for version in ['2.0', '2.1']:
