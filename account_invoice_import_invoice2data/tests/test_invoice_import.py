@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion France (www.akretion.com)
+# © 2015-2017 Akretion France (www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
-# The licence is in the file __openerp__.py
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 import base64
-from openerp.tools import file_open, float_compare
+from odoo.tools import file_open, float_compare
 
 
 class TestInvoiceImport(TransactionCase):

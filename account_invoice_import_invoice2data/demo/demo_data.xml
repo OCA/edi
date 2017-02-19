@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
-<data noupdate="1">
+<odoo noupdate="1">
 
 <record id="internet_access" model="product.product">
     <field name="name">Internet Access</field>
@@ -33,5 +32,4 @@
     <field name="invoice_import_id" ref="free_import_config"/>
 </record>
 
-</data>
-</openerp>
+</odoo>
