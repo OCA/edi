@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, _
+from odoo import models, api
 from lxml import etree
-from openerp.tools import float_is_zero, float_round
-from openerp.exceptions import Warning as UserError
+from odoo.tools import float_is_zero, float_round
 import logging
 
 logger = logging.getLogger(__name__)
@@ -100,9 +99,9 @@ class AccountInvoice(models.Model):
         line_id = etree.SubElement(line_root, ns['cbc'] + 'ID')
         line_id.text = unicode(line_number)
         uom_unece_code = False
-        # on v8, uos_id is not a required field on account.invoice.line
-        if iline.uos_id and iline.uos_id.unece_code:
-            uom_unece_code = iline.uos_id.unece_code
+        # uom_id is not a required field on account.invoice.line
+        if iline.uom_id and iline.uom_id.unece_code:
+            uom_unece_code = iline.uom_id.unece_code
         if uom_unece_code:
             quantity = etree.SubElement(
                 line_root, ns['cbc'] + 'InvoicedQuantity',
@@ -146,11 +145,11 @@ class AccountInvoice(models.Model):
         prec = self.env['decimal.precision'].precision_get('Account')
         tax_total_node = etree.SubElement(parent_node, ns['cac'] + 'TaxTotal')
         price = iline.price_unit * (1 - (iline.discount or 0.0) / 100.0)
-        res_taxes = iline.invoice_line_tax_id.compute_all(
-            price, iline.quantity, product=iline.product_id,
+        res_taxes = iline.invoice_line_tax_ids.compute_all(
+            price, quantity=iline.quantity, product=iline.product_id,
             partner=self.partner_id)
         tax_total = float_round(
-            res_taxes['total_included'] - res_taxes['total'],
+            res_taxes['total_included'] - res_taxes['total_excluded'],
             precision_digits=prec)
         tax_amount_node = etree.SubElement(
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
@@ -175,20 +174,10 @@ class AccountInvoice(models.Model):
         tax_amount_node = etree.SubElement(
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
         tax_amount_node.text = unicode(self.amount_tax)
-        for tline in self.tax_line:
-            if not tline.base_code_id:
-                raise UserError(_(
-                    "Missing base code on tax line '%s'.") % tline.name)
-            taxes = self.env['account.tax'].search([
-                ('base_code_id', '=', tline.base_code_id.id)])
-            if not taxes:
-                raise UserError(_(
-                    "The tax code '%s' is not linked to a tax.")
-                    % tline.base_code_id.name)
-            tax = taxes[0]
+        for tline in self.tax_line_ids:
             self._ubl_add_tax_subtotal(
-                tline.base, tline.amount, tax, cur_name, tax_total_node, ns,
-                version=version)
+                tline.base, tline.amount, tline.tax_id, cur_name,
+                tax_total_node, ns, version=version)
 
     @api.multi
     def generate_invoice_ubl_xml_etree(self, version='2.1'):
@@ -208,14 +197,14 @@ class AccountInvoice(models.Model):
         self._ubl_add_payment_means(
             self.partner_bank_id, self.payment_mode_id, self.date_due,
             xml_root, ns, version=version)
-        if self.payment_term:
+        if self.payment_term_id:
             self._ubl_add_payment_terms(
-                self.payment_term, xml_root, ns, version=version)
+                self.payment_term_id, xml_root, ns, version=version)
         self._ubl_add_tax_total(xml_root, ns, version=version)
         self._ubl_add_legal_monetary_total(xml_root, ns, version=version)
 
         line_number = 0
-        for iline in self.invoice_line:
+        for iline in self.invoice_line_ids:
             line_number += 1
             self._ubl_add_invoice_line(
                 xml_root, iline, line_number, ns, version=version)
