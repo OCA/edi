@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 import PyPDF2
 from lxml import etree
 from StringIO import StringIO
@@ -14,14 +14,14 @@ class TestZUGFeRDInvoice(TransactionCase):
         aio = self.env['account.invoice']
         for i in range(5):
             invoice = self.env.ref('account.invoice_%d' % (i+1))
-            pdf_content = self.registry['report'].get_pdf(
-                self.cr, self.uid, [invoice.id], 'account.report_invoice')
+            pdf_content = self.env['report'].get_pdf(
+                [invoice.id], 'account.report_invoice')
             self.assertTrue(aio.pdf_is_zugferd(pdf_content))
 
     def test_deep_customer_invoice(self):
         invoice = self.env.ref('account.invoice_3')
-        pdf_content = self.registry['report'].get_pdf(
-            self.cr, self.uid, [invoice.id], 'account.report_invoice')
+        pdf_content = self.env['report'].get_pdf(
+            [invoice.id], 'account.report_invoice')
         fd = StringIO(pdf_content)
         pdf = PyPDF2.PdfFileReader(fd)
         pdf_root = pdf.trailer['/Root']

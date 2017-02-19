@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 from lxml import etree
 import logging
 
@@ -19,9 +19,7 @@ class SaleOrder(models.Model):
 
     @api.model
     def get_order_states(self):
-        return [
-            'waiting_date', 'progress', 'manual',
-            'shipping_except', 'invoice_except', 'done']
+        return ['sale', 'done']
 
     @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):
@@ -69,7 +67,7 @@ class SaleOrder(models.Model):
         line_root = etree.SubElement(
             parent_node, ns['cac'] + 'QuotationLine')
         dpo = self.env['decimal.precision']
-        qty_precision = dpo.precision_get('Product UoS')
+        qty_precision = dpo.precision_get('Product Unit of Measure')
         price_precision = dpo.precision_get('Product Price')
         self._ubl_add_line_item(
             line_number, oline.name, oline.product_id, 'sale',

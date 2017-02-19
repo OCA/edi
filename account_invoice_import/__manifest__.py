@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
     'name': 'Account Invoice Import',
-    'version': '9.0.1.0.0',
+    'version': '10.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
     'summary': 'Import supplier invoices/refunds as PDF or XML files',
@@ -20,5 +20,5 @@
         'partner_view.xml',
     ],
     'images': ['images/sshot-wizard1.png'],
-    'installable': False,
+    'installable': True,
 }

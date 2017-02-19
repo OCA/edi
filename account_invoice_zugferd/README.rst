@@ -35,7 +35,7 @@ On the form view of a customer invoice/refund, just click on the *Print* button 
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/226/8.0
+   :target: https://runbot.odoo-community.org/runbot/226/10.0
 
 Known issues / Roadmap
 ======================

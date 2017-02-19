@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (http://www.akretion.com)
+# © 2016-2017 Akretion (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import models, fields, api, tools, _
-from openerp.exceptions import Warning as UserError
-from openerp.tools import float_compare, float_is_zero, float_round
+from odoo import models, fields, api, tools, _
+from odoo.exceptions import UserError
+from odoo.tools import float_compare, float_is_zero, float_round
 from StringIO import StringIO
 from lxml import etree
 from tempfile import NamedTemporaryFile
@@ -184,7 +184,8 @@ class AccountInvoice(models.Model):
         payment_means_info = etree.SubElement(
             payment_means, ns['ram'] + 'Information')
         if self.payment_mode_id:
-            payment_means_code.text = self.payment_mode_id.type.unece_code
+            payment_means_code.text =\
+                self.payment_mode_id.payment_method_id.unece_code
             payment_means_info.text =\
                 self.payment_mode_id.note or self.payment_mode_id.name
         else:
@@ -197,15 +198,20 @@ class AccountInvoice(models.Model):
                 self.id)
         if payment_means_code.text in ['31', '42']:
             partner_bank = self.partner_bank_id
-            if not partner_bank and self.payment_mode_id:
-                partner_bank = self.payment_mode_id.bank_id
-            if partner_bank and partner_bank.state == 'iban':
+            if (
+                    not partner_bank and
+                    self.payment_mode_id and
+                    self.payment_mode_id.bank_account_link == 'fixed' and
+                    self.payment_mode_id.fixed_journal_id):
+                partner_bank =\
+                    self.payment_mode_id.fixed_journal_id.bank_account_id
+            if partner_bank and partner_bank.acc_type == 'iban':
                 payment_means_bank_account = etree.SubElement(
                     payment_means,
                     ns['ram'] + 'PayeePartyCreditorFinancialAccount')
                 iban = etree.SubElement(
                     payment_means_bank_account, ns['ram'] + 'IBANID')
-                iban.text = partner_bank.acc_number.replace(' ', '')
+                iban.text = partner_bank.sanitized_acc_number
                 if partner_bank.bank_bic:
                     payment_means_bank = etree.SubElement(
                         payment_means,
@@ -235,29 +241,21 @@ class AccountInvoice(models.Model):
         invoice_currency.text = inv_currency_name
         if (
                 self.payment_mode_id and
-                not self.payment_mode_id.type.unece_code):
+                not self.payment_mode_id.payment_method_id.unece_code):
             raise UserError(_(
                 "Missing UNECE code on payment export type '%s'")
-                % self.payment_mode_id.type.name)
+                % self.payment_mode_id.payment_method_id.name)
         if (
                 self.type == 'out_invoice' or
                 (self.payment_mode_id and
-                 self.payment_mode_id.type.unece_code not in [31, 42])):
+                 self.payment_mode_id.payment_method_id.unece_code
+                 not in [31, 42])):
             self._add_trade_settlement_payment_means_block(
                 trade_settlement, sign, ns)
         tax_basis_total = 0.0
-        if self.tax_line:
-            for tline in self.tax_line:
-                if not tline.base_code_id:
-                    raise UserError(_(
-                        "Missing base code on tax line '%s'.") % tline.name)
-                taxes = self.env['account.tax'].search([
-                    ('base_code_id', '=', tline.base_code_id.id)])
-                if not taxes:
-                    raise UserError(_(
-                        "The tax code '%s' is not linked to a tax.")
-                        % tline.base_code_id.name)
-                tax = taxes[0]
+        if self.tax_line_ids:
+            for tline in self.tax_line_ids:
+                tax = tline.tax_id
                 if not tax.unece_type_code:
                     raise UserError(_(
                         "Missing UNECE Tax Type on tax '%s'") % tax.name)
@@ -294,18 +292,18 @@ class AccountInvoice(models.Model):
                 tax_categ_code = etree.SubElement(
                     trade_tax, ns['ram'] + 'CategoryCode')
                 tax_categ_code.text = tax.unece_categ_code
-                if tax.type == 'percent':
+                if tax.amount_type == 'percent':
                     percent = etree.SubElement(
                         trade_tax, ns['ram'] + 'ApplicablePercent')
-                    percent.text = unicode(tax.amount * 100)
+                    percent.text = unicode(tax.amount)
         trade_payment_term = etree.SubElement(
             trade_settlement, ns['ram'] + 'SpecifiedTradePaymentTerms')
         trade_payment_term_desc = etree.SubElement(
             trade_payment_term, ns['ram'] + 'Description')
         # The 'Description' field of SpecifiedTradePaymentTerms
         # is a required field, so we must always give a value
-        if self.payment_term:
-            trade_payment_term_desc.text = self.payment_term.name
+        if self.payment_term_id:
+            trade_payment_term_desc.text = self.payment_term_id.name
         else:
             trade_payment_term_desc.text =\
                 _('No specific payment term selected')
@@ -367,9 +365,9 @@ class AccountInvoice(models.Model):
             line_item,
             ns['ram'] + 'SpecifiedSupplyChainTradeAgreement')
         # convert gross price_unit to tax_excluded value
-        taxres = iline.invoice_line_tax_id.compute_all(iline.price_unit, 1)
+        taxres = iline.invoice_line_tax_ids.compute_all(iline.price_unit)
         gross_price_val = float_round(
-            taxres['total'], precision_digits=pp_prec)
+            taxres['total_excluded'], precision_digits=pp_prec)
         # Use oline.price_subtotal/qty to compute net unit price to be sure
         # to get a *tax_excluded* net unit price
         if float_is_zero(iline.quantity, precision_digits=qty_prec):
@@ -413,11 +411,11 @@ class AccountInvoice(models.Model):
         net_price_amount.text = unicode(net_price_val)
         line_trade_delivery = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedSupplyChainTradeDelivery')
-        if iline.uos_id and iline.uos_id.unece_code:
-            unitCode = iline.uos_id.unece_code
+        if iline.uom_id and iline.uom_id.unece_code:
+            unitCode = iline.uom_id.unece_code
         else:
             unitCode = 'C62'
-            if not iline.uos_id:
+            if not iline.uom_id:
                 logger.warning(
                     "No unit of measure on invoice line '%s', "
                     "using C62 (piece) as fallback",
@@ -426,15 +424,15 @@ class AccountInvoice(models.Model):
                 logger.warning(
                     'Missing UNECE Code on unit of measure %s, '
                     'using C62 (piece) as fallback',
-                    iline.uos_id.name)
+                    iline.uom_id.name)
         billed_qty = etree.SubElement(
             line_trade_delivery, ns['ram'] + 'BilledQuantity',
             unitCode=unitCode)
         billed_qty.text = unicode(iline.quantity * sign)
         line_trade_settlement = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedSupplyChainTradeSettlement')
-        if iline.invoice_line_tax_id:
-            for tax in iline.invoice_line_tax_id:
+        if iline.invoice_line_tax_ids:
+            for tax in iline.invoice_line_tax_ids:
                 trade_tax = etree.SubElement(
                     line_trade_settlement,
                     ns['ram'] + 'ApplicableTradeTax')
@@ -452,10 +450,10 @@ class AccountInvoice(models.Model):
                         "Missing UNECE Tax Category on tax '%s'")
                         % tax.name)
                 trade_tax_categcode.text = tax.unece_categ_code
-                if tax.type == 'percent':
+                if tax.amount_type == 'percent':
                     trade_tax_percent = etree.SubElement(
                         trade_tax, ns['ram'] + 'ApplicablePercent')
-                    trade_tax_percent.text = unicode(tax.amount * 100)
+                    trade_tax_percent.text = unicode(tax.amount)
         subtotal = etree.SubElement(
             line_trade_settlement,
             ns['ram'] + 'SpecifiedTradeSettlementMonetarySummation')
@@ -466,11 +464,11 @@ class AccountInvoice(models.Model):
         trade_product = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedTradeProduct')
         if iline.product_id:
-            if iline.product_id.ean13:
-                ean13 = etree.SubElement(
+            if iline.product_id.barcode:
+                barcode = etree.SubElement(
                     trade_product, ns['ram'] + 'GlobalID', schemeID='0160')
                 # 0160 = GS1 Global Trade Item Number (GTIN, EAN)
-                ean13.text = iline.product_id.ean13
+                barcode.text = iline.product_id.barcode
             if iline.product_id.default_code:
                 product_code = etree.SubElement(
                     trade_product, ns['ram'] + 'SellerAssignedID')
@@ -518,7 +516,7 @@ class AccountInvoice(models.Model):
         self._add_trade_settlement_block(trade_transaction, sign, ns)
 
         line_number = 0
-        for iline in self.invoice_line:
+        for iline in self.invoice_line_ids:
             line_number += 1
             self._add_invoice_line_block(
                 trade_transaction, iline, line_number, sign, ns)
@@ -547,12 +545,12 @@ class AccountInvoice(models.Model):
                 "The XML file is invalid against the XML Schema Definition")
             logger.warning(xml_string)
             logger.warning(e)
-            raise UserError(
-                _("The generated XML file is not valid against the official "
-                    "XML Schema Definition. The generated XML file and the "
-                    "full error have been written in the server logs. "
-                    "Here is the error, which may give you an idea on the "
-                    "cause of the problem : %s.")
+            raise UserError(_(
+                "The generated XML file is not valid against the official "
+                "XML Schema Definition. The generated XML file and the "
+                "full error have been written in the server logs. "
+                "Here is the error, which may give you an idea on the "
+                "cause of the problem : %s.")
                 % unicode(e))
         return True
 
