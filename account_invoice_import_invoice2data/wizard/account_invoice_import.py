@@ -2,8 +2,8 @@
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, tools, _
-from openerp.exceptions import Warning as UserError
+from odoo import models, api, tools, _
+from odoo.exceptions import UserError
 import os
 from tempfile import mkstemp
 import pkg_resources
