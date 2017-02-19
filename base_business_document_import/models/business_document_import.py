@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, api, _
@@ -313,7 +313,7 @@ class BusinessDocumentImport(models.AbstractModel):
         raise UserError(_(
             "Odoo couldn't find any product corresponding to the "
             "following information extracted from the business document: "
-            "EAN13: %s\n"
+            "Barcode: %s\n"
             "Product code: %s\n"
             "Supplier: %s\n") % (
                 product_dict.get('barcode'),
