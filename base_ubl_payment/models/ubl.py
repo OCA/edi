@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, _
-from openerp.exceptions import Warning as UserError
+from odoo import models, api, _
+from odoo.exceptions import UserError
 from lxml import etree
 import logging
 
@@ -22,12 +22,12 @@ class BaseUbl(models.AbstractModel):
             pay_means, ns['cbc'] + 'PaymentMeansCode', listID="UN/ECE 4461")
         # Why not schemeAgencyID='6' + schemeID
         if payment_mode:  # type is a required field on payment_mode
-            if not payment_mode.type.unece_id:
+            if not payment_mode.payment_method_id.unece_id:
                 raise UserError(_(
                     "Missing 'UNECE Payment Mean' on payment type '%s' "
                     "used by the payment mode '%s'.") % (
-                    payment_mode.type.name, payment_mode.name))
-            pay_means_code.text = payment_mode.type.unece_code
+                    payment_mode.payment_method_id.name, payment_mode.name))
+            pay_means_code.text = payment_mode.payment_method_id.unece_code
         else:
             pay_means_code.text = '31'
             logger.warning(
@@ -39,15 +39,19 @@ class BaseUbl(models.AbstractModel):
                 pay_means, ns['cbc'] + 'PaymentDueDate')
             pay_due_date.text = date_due
         if pay_means_code.text in ['31', '42']:
-            if not partner_bank and payment_mode:
-                partner_bank = payment_mode.bank_id
-            if partner_bank and partner_bank.state == 'iban':
+            if (
+                    not partner_bank and
+                    payment_mode and
+                    payment_mode.bank_account_link == 'fixed' and
+                    payment_mode.fixed_journal_id):
+                partner_bank = payment_mode.fixed_journal_id.bank_account_id
+            if partner_bank and partner_bank.acc_type == 'iban':
                 payee_fin_account = etree.SubElement(
                     pay_means, ns['cac'] + 'PayeeFinancialAccount')
                 payee_fin_account_id = etree.SubElement(
                     payee_fin_account, ns['cbc'] + 'ID', schemeName='IBAN')
                 payee_fin_account_id.text =\
-                    partner_bank.acc_number.replace(' ', '')
+                    partner_bank.sanitized_acc_number
                 if partner_bank.bank_bic:
                     financial_inst_branch = etree.SubElement(
                         payee_fin_account,
