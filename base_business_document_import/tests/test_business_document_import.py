@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
@@ -48,14 +48,12 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'parent_id': partner1.id,
             'name': u'Alexis de Lattre',
             'email': 'alexis.delattre@akretion.com',
-            'use_parent_address': True,
             'type': 'delivery',
             })
         rpo.create({
             'parent_id': partner1.id,
             'name': u'Sébastien BEAU',
             'email': 'sebastien.beau@akretion.com',
-            'use_parent_address': True,
             'type': 'contact',
             })
         cpartner3 = rpo.create({
@@ -123,9 +121,9 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                 }),
                 ]
             })
-        product_dict = {'code': u'A2324 '}
+        product_dict = {'code': u'PROD_DEL '}
         res = bdio._match_product(product_dict, [])
-        self.assertEquals(res, self.env.ref('product.product_product_4b'))
+        self.assertEquals(res, self.env.ref('product.product_delivery_01'))
         product_dict = {'barcode': u'9782203121102'}
         res = bdio._match_product(product_dict, [])
         self.assertEquals(res, product1)
