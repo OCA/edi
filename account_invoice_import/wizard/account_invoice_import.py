@@ -2,13 +2,14 @@
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api, _
-import openerp.addons.decimal_precision as dp
-from openerp.tools import float_compare, float_round, float_is_zero
-from openerp.exceptions import Warning as UserError
+from odoo import models, fields, api, _
+import odoo.addons.decimal_precision as dp
+from odoo.tools import float_compare, float_round, float_is_zero
+from odoo.exceptions import UserError
 from lxml import etree
 import logging
 import mimetypes
+from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -135,15 +136,17 @@ class AccountInvoiceImport(models.TransientModel):
             'date_invoice': parsed_inv.get('date'),
             'journal_id':
             aio.with_context(type='in_invoice')._default_journal().id,
-            'invoice_line': [],
-            'check_total': parsed_inv.get('amount_total'),
+            'invoice_line_ids': [],
         }
         new_invoice = aio.new(vals)
         new_invoice._onchange_partner_id()
         vals.update({
-            f: aio._fields[f].convert_to_write(new_invoice)
+            f: aio._fields[f].convert_to_write(new_invoice[f], new_invoice)
             for f in new_invoice._cache
         })
+        print "AFTER convert_to_write"
+        vals['invoice_line_ids'] = []
+        pprint(vals)
         # Force due date of the invoice
         if parsed_inv.get('date_due'):
             vals['date_due'] = parsed_inv.get('date_due')
@@ -160,7 +163,7 @@ class AccountInvoiceImport(models.TransientModel):
             if config.invoice_line_method == '1line_no_product':
                 il_vals = {
                     'account_id': config.account_id.id,
-                    'invoice_line_tax_id': config.tax_ids.ids or False,
+                    'invoice_line_tax_ids': config.tax_ids.ids or False,
                     'price_unit': parsed_inv.get('amount_untaxed'),
                     }
             elif config.invoice_line_method == '1line_static_product':
@@ -181,7 +184,7 @@ class AccountInvoiceImport(models.TransientModel):
                 il_vals['name'] = _('MISSING DESCRIPTION')
             self.set_1line_price_unit_and_quantity(il_vals, parsed_inv)
             self.set_1line_start_end_dates(il_vals, parsed_inv)
-            vals['invoice_line'].append((0, 0, il_vals))
+            vals['invoice_line_ids'].append((0, 0, il_vals))
         elif config.invoice_line_method.startswith('nline'):
             if not parsed_inv.get('lines'):
                 raise UserError(_(
@@ -217,7 +220,7 @@ class AccountInvoiceImport(models.TransientModel):
                 elif config.invoice_line_method == 'nline_no_product':
                     taxes = bdio._match_taxes(
                         line.get('taxes'), parsed_inv['chatter_msg'])
-                    il_vals['invoice_line_tax_id'] = taxes.ids
+                    il_vals['invoice_line_tax_ids'] = taxes.ids
                 if line.get('name'):
                     il_vals['name'] = line['name']
                 elif not il_vals.get('name'):
@@ -229,16 +232,19 @@ class AccountInvoiceImport(models.TransientModel):
                     'quantity': line['qty'],
                     'price_unit': line['price_unit'],  # TODO fix for tax incl
                     })
-                vals['invoice_line'].append((0, 0, il_vals))
+                vals['invoice_line_ids'].append((0, 0, il_vals))
+        pprint(vals)
         # Write analytic account + fix syntax for taxes
         aacount_id = config.account_analytic_id.id or False
-        for line in vals['invoice_line']:
+        for line in vals['invoice_line_ids']:
+            print "line=", line
             line_dict = line[2]
-            if line_dict.get('invoice_line_tax_id'):
-                line_dict['invoice_line_tax_id'] = [
-                    (6, 0, line_dict['invoice_line_tax_id'])]
+            if line_dict.get('invoice_line_tax_ids'):
+                line_dict['invoice_line_tax_ids'] = [
+                    (6, 0, line_dict['invoice_line_tax_ids'])]
             if aacount_id:
                 line_dict['account_analytic_id'] = aacount_id
+
         return vals
 
     @api.model
@@ -256,10 +262,13 @@ class AccountInvoiceImport(models.TransientModel):
             'product_id': product,
             'uom_id': product.uom_id
         })
-        return {
-            f: new_invoice_line._fields[f].convert_to_write(new_invoice_line)
+        res = {
+            f: new_invoice_line._fields[f].convert_to_write(new_invoice_line[f], new_invoice_line)
             for f in new_invoice_line._cache
         }
+        print "_amend_create_invoice_line_vals==========="
+        pprint(res)
+        return res
 
     @api.model
     def set_1line_price_unit_and_quantity(self, il_vals, parsed_inv):
@@ -267,9 +276,9 @@ class AccountInvoiceImport(models.TransientModel):
         option of the first tax"""
         il_vals['quantity'] = 1
         il_vals['price_unit'] = parsed_inv.get('amount_total')
-        if il_vals.get('invoice_line_tax_id'):
+        if il_vals.get('invoice_line_tax_ids'):
             first_tax = self.env['account.tax'].browse(
-                il_vals['invoice_line_tax_id'][0])
+                il_vals['invoice_line_tax_ids'][0])
             if not first_tax.price_include:
                 il_vals['price_unit'] = parsed_inv.get('amount_untaxed')
 
@@ -444,7 +453,6 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def post_process_invoice(self, parsed_inv, invoice):
-        invoice.button_reset_taxes()
         # Force tax amount if necessary
         prec = self.env['decimal.precision'].precision_get('Account')
         if (
@@ -454,14 +462,14 @@ class AccountInvoiceImport(models.TransientModel):
                     invoice.amount_total,
                     parsed_inv['amount_total'],
                     precision_digits=prec)):
-            if not invoice.tax_line:
+            if not invoice.tax_line_ids:
                 raise UserError(_(
                     "The total amount is different from the untaxed amount, "
                     "but no tax has been configured !"))
-            initial_tax_amount = invoice.tax_line[0].amount
+            initial_tax_amount = invoice.tax_line_ids[0].amount
             tax_amount = parsed_inv['amount_total'] -\
                 parsed_inv['amount_untaxed']
-            invoice.tax_line[0].amount = tax_amount
+            invoice.tax_line_ids[0].amount = tax_amount
             cur_symbol = invoice.currency_id.symbol
             invoice.message_post(
                 'The total tax amount has been forced to %s %s '
@@ -475,7 +483,7 @@ class AccountInvoiceImport(models.TransientModel):
         dpo = self.env['decimal.precision']
         qty_prec = dpo.precision_get('Product Unit of Measure')
         existing_lines = []
-        for eline in invoice.invoice_line:
+        for eline in invoice.invoice_line_ids:
             price_unit = 0.0
             if not float_is_zero(
                     eline.quantity, precision_digits=qty_prec):
@@ -543,7 +551,7 @@ class AccountInvoiceImport(models.TransientModel):
         })
         new_line._onchange_product_id()
         vals = {
-            f: new_line._fields[f].convert_to_write(new_line)
+            f: new_line._fields[f].convert_to_write(new_line[f], new_line)
             for f in new_line._cache
         }
         vals.update({
