@@ -415,20 +415,40 @@ class BaseUbl(models.AbstractModel):
         return True
 
     @api.model
-    def embed_xml_in_pdf(self, xml_string, xml_filename, pdf_content):
+    def embed_xml_in_pdf(
+            self, xml_string, xml_filename, pdf_content=None, pdf_file=None):
+        """
+        2 possible uses:
+        a) use the pdf_content argument, which has the binary of the PDF
+        -> it will return the new PDF binary with the embedded XML
+        (used for qweb-pdf reports)
+        b) OR use the pdf_file argument, which has the path to the
+        original PDF file
+        -> it will re-write this file with the new PDF
+        (used for py3o reports, *_ubl_py3o modules in this repo)
+        """
+        assert pdf_content or pdf_file, 'Missing pdf_file or pdf_content'
         logger.debug('Starting to embed %s in PDF file', xml_filename)
-        original_pdf_file = StringIO(pdf_content)
+        if pdf_file:
+            original_pdf_file = pdf_file
+        elif pdf_content:
+            original_pdf_file = StringIO(pdf_content)
         original_pdf = PyPDF2.PdfFileReader(original_pdf_file)
         new_pdf_filestream = PyPDF2.PdfFileWriter()
         new_pdf_filestream.appendPagesFromReader(original_pdf)
         new_pdf_filestream.addAttachment(xml_filename, xml_string)
-        with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
+        if pdf_file:
+            f = open(pdf_file, 'w')
             new_pdf_filestream.write(f)
-            f.seek(0)
-            new_pdf_content = f.read()
             f.close()
-            logger.info('%s file added to PDF', xml_filename)
-        return new_pdf_content
+        elif pdf_content:
+            with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
+                new_pdf_filestream.write(f)
+                f.seek(0)
+                pdf_content = f.read()
+                f.close()
+        logger.info('%s file added to PDF', xml_filename)
+        return pdf_content
 
     # ==================== METHODS TO PARSE UBL files
 
