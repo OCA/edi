@@ -5,7 +5,7 @@
 {
     'name': 'Sale Order UBL',
     'version': '10.0.1.0.0',
-    'category': 'Sales Management',
+    'category': 'Sales',
     'license': 'AGPL-3',
     'summary': 'Embed UBL XML file inside the PDF quotation',
     'author': 'Akretion,Odoo Community Association (OCA)',
