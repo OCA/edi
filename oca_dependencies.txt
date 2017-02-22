@@ -3,3 +3,4 @@ bank-payment
 community-data-files
 partner-contact
 connector-telephony
+reporting-engine
