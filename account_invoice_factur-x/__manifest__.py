@@ -3,14 +3,14 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Sale Order UBL',
+    'name': 'Account Invoice Factur-X',
     'version': '10.0.1.0.0',
-    'category': 'Sales',
+    'category': 'Accounting & Finance',
     'license': 'AGPL-3',
-    'summary': 'Embed UBL XML file inside the PDF quotation',
+    'summary': 'Generate Factur-X/ZUGFeRD customer invoices',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
-    'depends': ['sale', 'base_ubl'],
-    'data': [],
+    'depends': ['account_payment_partner', 'base_zugferd', 'base_vat'],
+    'external_dependencies': {'python': ['PyPDF2', 'lxml']},
     'installable': True,
 }

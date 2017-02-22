@@ -177,7 +177,7 @@ class SaleOrder(models.Model):
         return self.partner_id.lang or 'en_US'
 
     @api.multi
-    def embed_ubl_xml_in_pdf(self, pdf_content):
+    def embed_ubl_xml_in_pdf(self, pdf_content=None, pdf_file=None):
         self.ensure_one()
         doc_type = False
         if self.state in self.get_quotation_states():
@@ -190,5 +190,6 @@ class SaleOrder(models.Model):
             xml_string = self.generate_ubl_xml_string(
                 doc_type, version=version)
             pdf_content = self.embed_xml_in_pdf(
-                xml_string, ubl_filename, pdf_content)
+                xml_string, ubl_filename,
+                pdf_content=pdf_content, pdf_file=pdf_file)
         return pdf_content

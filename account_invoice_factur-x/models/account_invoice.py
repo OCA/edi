@@ -524,7 +524,7 @@ class AccountInvoice(models.Model):
         xml_string = etree.tostring(
             root, pretty_print=True, encoding='UTF-8', xml_declaration=True)
         self._check_xml_schema(
-            xml_string, 'account_invoice_zugferd/data/ZUGFeRD1p0.xsd')
+            xml_string, 'account_invoice_factur-x/data/ZUGFeRD1p0.xsd')
         logger.debug(
             'ZUGFeRD XML file generated for invoice ID %d', self.id)
         logger.debug(xml_string)
@@ -595,7 +595,7 @@ class AccountInvoice(models.Model):
             '/Author': self.env.user.company_id.name,
             '/CreationDate': pdf_date,
             '/Creator':
-            u'Odoo module account_invoice_zugferd by Alexis de Lattre',
+            u'Odoo module account_invoice_factur-x by Alexis de Lattre',
             '/Keywords': u'ZUGFeRD, Invoice',
             '/ModDate': pdf_date,
             '/Subject': u'Invoice %s' % self.number or self.state,
@@ -659,13 +659,13 @@ class AccountInvoice(models.Model):
         creator = etree.SubElement(
             desc_xmp, ns_xmp + 'CreatorTool')
         creator.text =\
-            'Odoo module account_invoice_zugferd by Alexis de Lattre'
+            'Odoo module account_invoice_factur-x by Alexis de Lattre'
         timestamp = self._get_metadata_timestamp()
         etree.SubElement(desc_xmp, ns_xmp + 'CreateDate').text = timestamp
         etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = timestamp
 
         zugferd_ext_schema_root = etree.parse(tools.file_open(
-            'account_invoice_zugferd/data/ZUGFeRD_extension_schema.xmp'))
+            'account_invoice_factur-x/data/ZUGFeRD_extension_schema.xmp'))
         # The ZUGFeRD extension schema must be embedded into each PDF document
         zugferd_ext_schema_desc_xpath = zugferd_ext_schema_root.xpath(
             '//rdf:Description', namespaces=nsmap_rdf)
@@ -748,24 +748,43 @@ class AccountInvoice(models.Model):
         pdf_filestream.addMetadata(info_dict)
 
     @api.multi
-    def regular_pdf_invoice_to_zugferd_invoice(self, pdf_content):
-        """This method is independent from the reporting engine"""
+    def regular_pdf_invoice_to_facturx_invoice(
+            self, pdf_content=None, pdf_file=None):
+        """This method is independent from the reporting engine.
+        2 possible uses:
+        a) use the pdf_content argument, which has the binary of the PDF
+        -> it will return the new PDF binary with the embedded XML
+        (used for qweb-pdf invoices in this module, cf report.py)
+        b) OR use the pdf_file argument, which has the path to the
+        original PDF file
+        -> it will re-write this file with the new PDF
+        (used for py3o invoices, cf module account_invoice_factur-x_py3o)
+        """
         self.ensure_one()
+        assert pdf_content or pdf_file, 'Missing pdf_file or pdf_content'
         if not self.pdf_is_zugferd(pdf_content):
             if self.type in ('out_invoice', 'out_refund'):
                 zugferd_xml_str = self.generate_zugferd_xml()
                 # Generate a new PDF with XML file as attachment
-                original_pdf_file = StringIO(pdf_content)
+                if pdf_file:
+                    original_pdf_file = pdf_file
+                elif pdf_content:
+                    original_pdf_file = StringIO(pdf_content)
                 original_pdf = PdfFileReader(original_pdf_file)
                 new_pdf_filestream = PdfFileWriter()
                 new_pdf_filestream.appendPagesFromReader(original_pdf)
                 self.zugferd_update_metadata_add_attachment(
                     new_pdf_filestream, ZUGFERD_FILENAME, zugferd_xml_str)
                 prefix = 'odoo-invoice-zugferd-'
-                with NamedTemporaryFile(prefix=prefix, suffix='.pdf') as f:
+                if pdf_file:
+                    f = open(pdf_file, 'w')
                     new_pdf_filestream.write(f)
-                    f.seek(0)
-                    pdf_content = f.read()
                     f.close()
+                elif pdf_content:
+                    with NamedTemporaryFile(prefix=prefix, suffix='.pdf') as f:
+                        new_pdf_filestream.write(f)
+                        f.seek(0)
+                        pdf_content = f.read()
+                        f.close()
                 logger.info('%s file added to PDF invoice', ZUGFERD_FILENAME)
         return pdf_content

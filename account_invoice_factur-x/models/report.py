@@ -19,10 +19,13 @@ class Report(models.Model):
         This method is specific to QWeb"""
         pdf_content = super(Report, self).get_pdf(
             docids, report_name, html=html, data=data)
-        if report_name == 'account.report_invoice' and len(docids) == 1:
+        invoice_reports = [
+            'account.report_invoice',
+            'account.account_invoice_report_duplicate_main']
+        if report_name in invoice_reports and len(docids) == 1:
             invoice = self.env['account.invoice'].browse(docids[0])
-            pdf_content = invoice.regular_pdf_invoice_to_zugferd_invoice(
-                pdf_content)
+            pdf_content = invoice.regular_pdf_invoice_to_facturx_invoice(
+                pdf_content=pdf_content)
         return pdf_content
 
 # TODO : the PDF saved as attachment is NOT the good one...

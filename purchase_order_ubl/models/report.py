@@ -26,5 +26,5 @@ class Report(models.Model):
                 len(docids) == 1 and
                 not self._context.get('no_embedded_ubl_xml')):
             order = self.env['purchase.order'].browse(docids[0])
-            pdf_content = order.embed_ubl_xml_in_pdf(pdf_content)
+            pdf_content = order.embed_ubl_xml_in_pdf(pdf_content=pdf_content)
         return pdf_content

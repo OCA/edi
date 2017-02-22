@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-==============================
-Account Invoice Import ZUGFeRD
-==============================
+===============================
+Account Invoice Import Factur-X
+===============================
 
-This module is an extension of the module *account_invoice_import* to add the ability to import ZUGFeRD invoices. The `ZUGFeRD <http://www.pdflib.com/knowledge-base/pdfa/zugferd-invoices/>`_ standard is a standard based on `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`_ (Cross-Industry Invoice) for electronic invoicing. A ZUGFeRD invoice is a PDF invoice with an embedded XML file that carries structured information about the invoice.
+This module is an extension of the module *account_invoice_import* to add the ability to import ZUGFeRD and Factur-X invoices. The `ZUGFeRD <http://www.pdflib.com/knowledge-base/pdfa/zugferd-invoices/>`_ standard is a standard based on `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`_ (Cross-Industry Invoice) for electronic invoicing. Factur-X is an evolution of the ZUGFeRD standard for France and Germany (to be published in Q2 2017). A ZUGFeRD/Factur-X invoice is a PDF invoice with an embedded XML file that carries structured information about the invoice.
 
 Installation
 ============
