@@ -18,11 +18,14 @@ class Report(models.Model):
         This method is specific to QWeb"""
         pdf_content = super(Report, self).get_pdf(
             docids, report_name, html=html, data=data)
+        invoice_reports = [
+            'account.report_invoice',
+            'account.account_invoice_report_duplicate_main']
         if (
-                report_name == 'account.report_invoice' and
+                report_name in invoice_reports and
                 len(docids) == 1 and
                 not self._context.get('no_embedded_ubl_xml')):
             invoice = self.env['account.invoice'].with_context(
                 no_embedded_pdf=True).browse(docids[0])
-            pdf_content = invoice.embed_ubl_xml_in_pdf(pdf_content)
+            pdf_content = invoice.embed_ubl_xml_in_pdf(pdf_content=pdf_content)
         return pdf_content
