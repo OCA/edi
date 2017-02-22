@@ -154,12 +154,13 @@ class AccountInvoice(models.Model):
         tax_amount_node = etree.SubElement(
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
         tax_amount_node.text = unicode(tax_total)
-        for res_tax in res_taxes['taxes']:
-            tax = self.env['account.tax'].browse(res_tax['id'])
-            # we don't have the base amount in res_tax :-(
-            self._ubl_add_tax_subtotal(
-                False, res_tax['amount'], tax, cur_name, tax_total_node, ns,
-                version=version)
+        if not float_is_zero(tax_total, precision_digits=prec):
+            for res_tax in res_taxes['taxes']:
+                tax = self.env['account.tax'].browse(res_tax['id'])
+                # we don't have the base amount in res_tax :-(
+                self._ubl_add_tax_subtotal(
+                    False, res_tax['amount'], tax, cur_name, tax_total_node,
+                    ns, version=version)
 
     @api.multi
     def get_delivery_partner(self):
@@ -174,10 +175,12 @@ class AccountInvoice(models.Model):
         tax_amount_node = etree.SubElement(
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
         tax_amount_node.text = unicode(self.amount_tax)
-        for tline in self.tax_line_ids:
-            self._ubl_add_tax_subtotal(
-                tline.base, tline.amount, tline.tax_id, cur_name,
-                tax_total_node, ns, version=version)
+        prec = self.env['decimal.precision'].precision_get('Account')
+        if not float_is_zero(self.amount_tax, precision_digits=prec):
+            for tline in self.tax_line_ids:
+                self._ubl_add_tax_subtotal(
+                    tline.base, tline.amount, tline.tax_id, cur_name,
+                    tax_total_node, ns, version=version)
 
     @api.multi
     def generate_invoice_ubl_xml_etree(self, version='2.1'):
@@ -250,7 +253,7 @@ class AccountInvoice(models.Model):
         return self.partner_id.lang or 'en_US'
 
     @api.multi
-    def embed_ubl_xml_in_pdf(self, pdf_content):
+    def embed_ubl_xml_in_pdf(self, pdf_content=None, pdf_file=None):
         self.ensure_one()
         if (
                 self.type in ('out_invoice', 'out_refund') and
@@ -259,7 +262,8 @@ class AccountInvoice(models.Model):
             ubl_filename = self.get_ubl_filename(version=version)
             xml_string = self.generate_ubl_xml_string(version=version)
             pdf_content = self.embed_xml_in_pdf(
-                xml_string, ubl_filename, pdf_content)
+                xml_string, ubl_filename,
+                pdf_content=pdf_content, pdf_file=pdf_file)
         return pdf_content
 
     @api.multi
