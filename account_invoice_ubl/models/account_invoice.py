@@ -277,7 +277,7 @@ class AccountInvoice(models.Model):
         attach = self.env['ir.attachment'].create({
             'name': filename,
             'res_id': self.id,
-            'res_model': unicode(self._model),
+            'res_model': unicode(self._name),
             'datas': xml_string.encode('base64'),
             'datas_fname': filename,
             # I have default_type = 'out_invoice' in context, so 'type'
