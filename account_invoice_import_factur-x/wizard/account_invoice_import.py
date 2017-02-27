@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api, _
-from openerp.exceptions import Warning as UserError
-from openerp.tools import float_compare
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
+from odoo.tools import float_compare
 from datetime import datetime
 import logging
 
@@ -20,13 +20,13 @@ class AccountInvoiceImport(models.TransientModel):
                 xml_root.tag and
                 xml_root.tag.startswith(
                 '{urn:ferd:CrossIndustryDocument:invoice:1p0')):
-            return self.parse_zugferd_invoice(xml_root)
+            return self.parse_facturx_invoice(xml_root)
         else:
             return super(AccountInvoiceImport, self).parse_xml_invoice(
                 xml_root)
 
     @api.model
-    def parse_zugferd_taxes(self, taxes_xpath, namespaces):
+    def parse_facturx_taxes(self, taxes_xpath, namespaces):
         taxes = []
         for tax in taxes_xpath:
             type_code_xpath = tax.xpath("ram:TypeCode", namespaces=namespaces)
@@ -47,7 +47,7 @@ class AccountInvoiceImport(models.TransientModel):
                 })
         return taxes
 
-    def parse_zugferd_invoice_line(
+    def parse_facturx_invoice_line(
             self, iline, total_line_lines, global_taxes, namespaces):
         price_unit_xpath = iline.xpath(
             "ram:SpecifiedSupplyChainTradeAgreement"
@@ -90,7 +90,7 @@ class AccountInvoiceImport(models.TransientModel):
         taxes_xpath = iline.xpath(
             "ram:SpecifiedSupplyChainTradeSettlement"
             "//ram:ApplicableTradeTax", namespaces=namespaces)
-        taxes = self.parse_zugferd_taxes(taxes_xpath, namespaces)
+        taxes = self.parse_facturx_taxes(taxes_xpath, namespaces)
         vals = {
             'product': {
                 'ean13': ean13_xpath and ean13_xpath[0].text or False,
@@ -106,7 +106,7 @@ class AccountInvoiceImport(models.TransientModel):
         return vals
 
     @api.model
-    def parse_zugferd_invoice(self, xml_root):
+    def parse_facturx_invoice(self, xml_root):
         """Parse Cross Industry Invoice XML file"""
         namespaces = xml_root.nsmap
         prec = self.env['decimal.precision'].precision_get('Account')
@@ -116,7 +116,7 @@ class AccountInvoiceImport(models.TransientModel):
             namespaces=namespaces)
         if doc_type_xpath and doc_type_xpath[0].text != '380':
             raise UserError(_(
-                "The ZUGFeRD XML file is not an invoice/refund file "
+                "The Factur-X XML file is not an invoice/refund file "
                 "(TypeCode is %s") % doc_type_xpath[0].text)
         inv_number_xpath = xml_root.xpath(
             '//rsm:HeaderExchangedDocument/ram:ID', namespaces=namespaces)
@@ -143,7 +143,7 @@ class AccountInvoiceImport(models.TransientModel):
         if date_attrib and date_attrib.get('format') != '102':
             raise UserError(_(
                 "The date format of the invoice date should be 102 "
-                "in a ZUGFeRD XML file"))
+                "in a Factur-X XML file"))
         date_dt = datetime.strptime(date_xpath[0].text, '%Y%m%d')
         date_due_xpath = xml_root.xpath(
             "//ram:ApplicableSupplyChainTradeSettlement"
@@ -156,7 +156,7 @@ class AccountInvoiceImport(models.TransientModel):
             if date_due_attrib and date_due_attrib.get('format') != '102':
                 raise UserError(_(
                     "The date format of the due date should be 102 "
-                    "in a ZUGFeRD XML file"))
+                    "in a Factur-X XML file"))
             date_due_dt = datetime.strptime(date_due_xpath[0].text, '%Y%m%d')
             date_due_str = fields.Date.to_string(date_due_dt)
         currency_iso_xpath = xml_root.xpath(
@@ -221,7 +221,7 @@ class AccountInvoiceImport(models.TransientModel):
         global_taxes_xpath = xml_root.xpath(
             "//ram:ApplicableSupplyChainTradeSettlement"
             "/ram:ApplicableTradeTax", namespaces=namespaces)
-        global_taxes = self.parse_zugferd_taxes(
+        global_taxes = self.parse_facturx_taxes(
             global_taxes_xpath, namespaces)
         logger.debug('global_taxes=%s', global_taxes)
         res_lines = []
@@ -229,7 +229,7 @@ class AccountInvoiceImport(models.TransientModel):
         inv_line_xpath = xml_root.xpath(
             "//ram:IncludedSupplyChainTradeLineItem", namespaces=namespaces)
         for iline in inv_line_xpath:
-            line_vals = self.parse_zugferd_invoice_line(
+            line_vals = self.parse_facturx_invoice_line(
                 iline, total_line_lines, global_taxes, namespaces)
             if line_vals is False:
                 continue
@@ -257,7 +257,7 @@ class AccountInvoiceImport(models.TransientModel):
             total_charge_lines += price_unit
             taxes_xpath = chline.xpath(
                 "ram:AppliedTradeTax", namespaces=namespaces)
-            taxes = self.parse_zugferd_taxes(taxes_xpath, namespaces)
+            taxes = self.parse_facturx_taxes(taxes_xpath, namespaces)
             vals = {
                 'name': name,
                 'qty': 1,
@@ -279,7 +279,7 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(_(
                     "ChargeTotalAmount (%s) doesn't match the "
                     "total of the charge lines (%s). Maybe it is "
-                    "because the ZUGFeRD XML file is at BASIC level, "
+                    "because the Factur-X XML file is at BASIC level, "
                     "and we don't have the details of taxes for the "
                     "charge lines.")
                     % (total_charge, total_charge_lines))
@@ -302,7 +302,7 @@ class AccountInvoiceImport(models.TransientModel):
             total_tradeallowance_lines += price_unit
             taxes_xpath = alline.xpath(
                 "ram:CategoryTradeTax", namespaces=namespaces)
-            taxes = self.parse_zugferd_taxes(taxes_xpath, namespaces)
+            taxes = self.parse_facturx_taxes(taxes_xpath, namespaces)
             vals = {
                 'name': name,
                 'qty': tradeallowance_qty,
@@ -324,7 +324,7 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(_(
                     "AllowanceTotalAmount (%s) doesn't match the "
                     "total of the allowance lines (%s). Maybe it is "
-                    "because the ZUGFeRD XML file is at BASIC level, "
+                    "because the Factur-X XML file is at BASIC level, "
                     "and we don't have the details of taxes for the "
                     "allowance lines.")
                     % (abs(total_tradeallowance), total_tradeallowance_lines))
@@ -350,5 +350,5 @@ class AccountInvoiceImport(models.TransientModel):
             res['partner'].pop('vat')
             if not res['partner'].get('email'):
                 res['partner']['name'] = 'Lieferant GmbH'
-        logger.info('Result of ZUGFeRD XML parsing: %s', res)
+        logger.info('Result of Factur-X XML parsing: %s', res)
         return res
