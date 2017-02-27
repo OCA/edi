@@ -171,7 +171,7 @@ class PurchaseOrder(models.Model):
         # but the problem is that the error messages will also be in
         # that lang. But the error messages should almost never
         # happen except the first days of use, so it's probably
-        # not worth the additionnal code to handle the 2 langs
+        # not worth the additional code to handle the 2 langs
         if doc_type == 'order':
             xml_root = self.with_context(lang=lang).\
                 generate_order_ubl_xml_etree(version=version)

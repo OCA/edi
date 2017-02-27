@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
-from openerp.tools import file_open, float_compare
+from odoo.tests.common import TransactionCase
+from odoo.tools import file_open, float_compare
 import base64
 import unicodecsv
 
@@ -29,7 +29,8 @@ class TestCsvOrderImport(TransactionCase):
         return csv_file_content, wiz
 
     def check_sale_order(self, order, csv_file_content, partner):
-        precision = self.env['decimal.precision'].precision_get('Product UoS')
+        precision = self.env['decimal.precision'].precision_get(
+            'Product Unit of Measure')
         self.assertEqual(order.partner_id, partner)
         self.assertEqual(len(order.order_line), len(csv_file_content))
         for oline in order.order_line:
@@ -42,7 +43,11 @@ class TestCsvOrderImport(TransactionCase):
     def test_csv_order_import(self):
         # create new quote
         filename = 'order_file_test1.csv'
-        partner = self.env.ref('base.res_partner_2')
+        partner = self.env['res.partner'].create({
+            'name': 'Akretion',
+            'customer': True,
+            'is_company': True,
+            })
         csv_file_content, wiz = self.read_csv_and_create_wizard(
             filename, partner)
         action = wiz.import_order_button()
