@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
     'name': 'Account Invoice Import Factur-X',
-    'version': '8.0.1.0.0',
+    'version': '10.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
     'summary': 'Import ZUGFeRD and Factur-X supplier invoices/refunds',
@@ -12,5 +12,5 @@
     'website': 'http://www.akretion.com',
     'depends': ['account_invoice_import', 'base_zugferd'],
     'demo': ['demo/demo_data.xml'],
-    'installable': False,
+    'installable': True,
 }
