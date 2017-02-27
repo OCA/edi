@@ -46,7 +46,7 @@ If you want to use only your custom invoice templates and ignore the templates p
   invoice2data_templates_dir = /opt/invoice2data_local_templates
   invoice2data_exclude_built_in_templates = True
 
-French users should also install the module *l10n_fr_invoice_import* available in the `French localization <https://github.com/OCA/l10n-france/>`_, cf `this PR <https://github.com/OCA/l10n-france/pull/55>`_.
+French users should also install the module *l10n_fr_business_document_import* available in the `French localization <https://github.com/OCA/l10n-france/>`_.
 
 Configuration
 =============
