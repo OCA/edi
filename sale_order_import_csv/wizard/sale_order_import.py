@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, _
-from openerp.exceptions import Warning as UserError
-from openerp.tools import float_compare
+from odoo import models, api, _
+from odoo.exceptions import UserError
+from odoo.tools import float_compare
 from tempfile import TemporaryFile
 import logging
 logger = logging.getLogger(__name__)
@@ -33,7 +33,8 @@ class SaleOrderImport(models.TransientModel):
             'partner': {'recordset': partner},
             'lines': [],
             }
-        precision = self.env['decimal.precision'].precision_get('Product UoS')
+        precision = self.env['decimal.precision'].precision_get(
+            'Product Unit of Measure')
         for line in reader:
             logger.debug('csv line %d: %s', i, line)
             i += 1
