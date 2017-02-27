@@ -820,7 +820,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 self.env['ir.attachment'].create({
                     'name': filename,
                     'res_id': record.id,
-                    'res_model': unicode(record._model),
+                    'res_model': unicode(record._name),
                     'datas': data_base64,
                     'datas_fname': filename,
                     })
