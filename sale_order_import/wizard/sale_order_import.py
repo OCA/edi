@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api, _
+from odoo import models, fields, api, _
 # import openerp.addons.decimal_precision as dp
-from openerp.tools import float_compare, float_is_zero
-from openerp.exceptions import Warning as UserError
+from odoo.tools import float_compare, float_is_zero
+from odoo.exceptions import UserError
 import logging
 import mimetypes
 from lxml import etree
@@ -181,14 +181,13 @@ class SaleOrderImport(models.TransientModel):
                         parsed_order['order_ref'],
                         existing_orders[0].name,
                         existing_orders[0].state))
-        partner_change_res = soo.onchange_partner_id(partner.id)
-        assert 'value' in partner_change_res, 'Error in partner change'
+
         so_vals = {
             'partner_id': partner.id,
             'client_order_ref': parsed_order.get('order_ref'),
-            'order_line': []
             }
-        so_vals.update(partner_change_res['value'])
+        so_vals = soo.play_onchanges(so_vals, ['partner_id'])
+        so_vals['order_line'] = []
         if parsed_order.get('ship_to'):
             shipping_partner = bdio._match_shipping_partner(
                 parsed_order['ship_to'], partner, parsed_order['chatter_msg'])
@@ -204,7 +203,7 @@ class SaleOrderImport(models.TransientModel):
             line_vals = self._prepare_create_order_line(
                 product, uom, line, price_source)
             # product_id_change is played in the inherit of create()
-            # of sale.order.line cf odoo/addons/sale/sale.py
+            # of sale.order.line cf odoo/addons/sale/models/sale.py
             so_vals['order_line'].append((0, 0, line_vals))
         return so_vals
 
