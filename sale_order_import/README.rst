@@ -6,7 +6,7 @@
 Sale Order Import
 =================
 
-This module adds support for the import of electronic RFQ or orders. This module provides the base methods to import electronic orders ; it requires additionnal modules to support specific order formats:
+This module adds support for the import of electronic RFQ or orders. This module provides the base methods to import electronic orders ; it requires additional modules to support specific order formats:
 
 * module *sale_order_import_csv*: adds support for CSV orders,
 
@@ -23,7 +23,7 @@ No configuration is needed.
 Usage
 =====
 
-This module adds a wizard in the sale menu named *Import RFQ or Order*. This wizard will propose you to select the order or RFQ file. Depending on the format of the file (CSV, XML or PDF) and the type of file (RFQ or order), it may propose you additionnal options.
+This module adds a wizard in the sale menu named *Import RFQ or Order*. This wizard will propose you to select the order or RFQ file. Depending on the format of the file (CSV, XML or PDF) and the type of file (RFQ or order), it may propose you additional options.
 
 When you import an order, if there is a quotation in Odoo for the same customer, the wizard will propose you to either update the existing quotation or create a new order (in fact, it will create a new quotation, so that you are free to make some modifications before you click on the *Confirm Sale* button to convert the quotation to a sale order).
 
@@ -31,7 +31,7 @@ Once the RFQ/order is imported, you should read the messages in the chatter of t
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/226/8.0
+   :target: https://runbot.odoo-community.org/runbot/226/10.0
 
 Bug Tracker
 ===========
