@@ -109,7 +109,7 @@ class AccountInvoiceImport(models.TransientModel):
             else:
                 percentage = 0.0
             tax_dict = {
-                'type': 'percent',
+                'amount_type': 'percent',
                 'amount': percentage,
                 'unece_type_code': type_code,
                 'unece_categ_code': categ_code,
