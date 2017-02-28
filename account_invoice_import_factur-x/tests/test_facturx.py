@@ -136,7 +136,7 @@ class TestFacturx(TransactionCase):
         price_precision.digits = 4
         for (zugferd_file, res_dict) in zugferd_sample_files.iteritems():
             f = file_open(
-                'account_invoice_import_zugferd/tests/files/' +
+                'account_invoice_import_factur-x/tests/files/' +
                 zugferd_file, 'rb')
             pdf_file = f.read()
             f.close()
@@ -148,7 +148,7 @@ class TestFacturx(TransactionCase):
             invoices = aio.search([
                 ('state', '=', 'draft'),
                 ('type', 'in', ('in_invoice', 'in_refund')),
-                ('supplier_invoice_number', '=', res_dict['invoice_number'])
+                ('reference', '=', res_dict['invoice_number'])
                 ])
             self.assertEqual(len(invoices), 1)
             inv = invoices[0]
@@ -157,13 +157,10 @@ class TestFacturx(TransactionCase):
             if res_dict.get('date_due'):
                 self.assertEqual(inv.date_due, res_dict['date_due'])
             self.assertEqual(inv.partner_id, self.env.ref(
-                'account_invoice_import_zugferd.' +
+                'account_invoice_import_factur-x.' +
                 res_dict['partner_xmlid']))
             self.assertFalse(float_compare(
                 inv.amount_untaxed, res_dict['amount_untaxed'],
-                precision_digits=precision))
-            self.assertFalse(float_compare(
-                inv.check_total, res_dict['amount_total'],
                 precision_digits=precision))
             self.assertFalse(float_compare(
                 inv.amount_total, res_dict['amount_total'],
