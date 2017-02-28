@@ -17,6 +17,7 @@
         ],
     'data': [
         'views/account_invoice.xml',
+        'views/account_config_settings.xml',
         ],
     'installable': True,
 }
