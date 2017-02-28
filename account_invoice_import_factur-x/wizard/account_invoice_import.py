@@ -40,7 +40,7 @@ class AccountInvoiceImport(models.TransientModel):
             percentage = percent_xpath[0].text and\
                 float(percent_xpath[0].text) or 0.0
             taxes.append({
-                'type': 'percent',
+                'amount_type': 'percent',
                 'amount': percentage,
                 'unece_type_code': type_code,
                 'unece_categ_code': categ_code,
