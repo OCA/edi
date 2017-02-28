@@ -221,12 +221,8 @@ class AccountInvoiceImport(models.TransientModel):
         # Write analytic account + fix syntax for taxes
         aacount_id = config.account_analytic_id.id or False
         for line in vals['invoice_line_ids']:
-            line_dict = line[2]
-            #if line_dict.get('invoice_line_tax_ids'):
-            #   line_dict['invoice_line_tax_ids'] = [
-            #       (6, 0, line_dict['invoice_line_tax_ids'])]
             if aacount_id:
-                line_dict['account_analytic_id'] = aacount_id
+                line[2]['account_analytic_id'] = aacount_id
 
         return vals
 
