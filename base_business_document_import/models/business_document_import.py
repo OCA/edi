@@ -246,23 +246,32 @@ class BusinessDocumentImport(models.AbstractModel):
         assert iban, 'iban is a required arg'
         assert partner, 'partner is a required arg'
         partner = partner.commercial_partner_id
-        iban = iban.replace(' ', '')
+        iban = iban.replace(' ', '').upper()
         rpbo = self.env['res.partner.bank']
-        self._cr.execute(
-            """SELECT id FROM res_partner_bank
-            WHERE replace(acc_number, ' ', '')=%s
-            AND state='iban'
-            AND partner_id=%s
-            """, (iban, partner.id))
-        rpb_res = self._cr.fetchall()
-        if rpb_res:
-            return rpbo.browse(rpb_res[0][0])
-        elif create_if_not_found and bic:
+        rbo = self.env['res.bank']
+        bankaccounts = rpbo.search([
+            ('acc_type', '=', 'iban'),
+            ('sanitized_acc_number', '=', iban),
+            ('partner_id', '=', partner.id)])
+        if bankaccounts:
+            return bankaccounts[0]
+        elif create_if_not_found:
+            bank_id = False
+            if bic:
+                bic = bic.replace(' ', '').upper()
+                banks = rbo.search([('bic', '=', bic)])
+                if banks:
+                    bank_id = banks[0].id
+                else:
+                    bank = rbo.create({
+                        'bic': bic,
+                        'name': bic,  # TODO: see if we could do better
+                        })
+                    bank_id = bank.id
             partner_bank = rpbo.create({
                 'partner_id': partner.id,
-                'state': 'iban',
                 'acc_number': iban,
-                'bank_bic': bic,
+                'bank_id': bank_id,
                 })
             chatter_msg.append(_(
                 "The bank account <b>IBAN %s</b> has been automatically "
@@ -482,9 +491,9 @@ class BusinessDocumentImport(models.AbstractModel):
         prec = self.env['decimal.precision'].precision_get('Account')
         # we should not use the Account prec directly, but...
         if type_tax_use == 'purchase':
-            domain.append(('type_tax_use', 'in', ('purchase', 'all')))
+            domain.append(('type_tax_use', '=', 'purchase'))
         elif type_tax_use == 'sale':
-            domain.append(('type_tax_use', 'in', ('sale', 'all')))
+            domain.append(('type_tax_use', '=', 'sale'))
         if price_include is False:
             domain.append(('price_include', '=', False))
         elif price_include is True:
@@ -504,8 +513,6 @@ class BusinessDocumentImport(models.AbstractModel):
         taxes = ato.search(domain)
         for tax in taxes:
             tax_amount = tax.amount
-            if tax_dict['amount_type'] == 'percent':
-                tax_amount *= 100
             if not float_compare(
                     tax_dict['amount'], tax_amount, precision_digits=prec):
                 return tax
