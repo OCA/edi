@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api, _
-from openerp.exceptions import Warning as UserError
-from openerp.tools import float_compare
+from odoo import models, fields, api, _
+from odoo.exceptions import Warning as UserError
+from odoo.tools import float_compare
 from datetime import datetime
 import logging
 

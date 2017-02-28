@@ -15,7 +15,7 @@
     <field name="arch" type="xml">
         <field name="debit" position="after">
             <field name="invoice_import_id"
-                attrs="{'invisible': ['|', ('supplier', '=', False), ('is_company', '=', False)]}"
+                attrs="{'invisible': ['|', ('supplier', '=', False), ('parent_id', '!=', False)]}"
                 context="{'default_name': name}"/>
         </field>
     </field>

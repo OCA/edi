@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
-from openerp.tools import file_open, float_compare
+from odoo.tests.common import TransactionCase
+from odoo.tools import file_open, float_compare
 import base64
 
 
