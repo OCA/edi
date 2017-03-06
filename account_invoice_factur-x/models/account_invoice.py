@@ -276,13 +276,13 @@ class AccountInvoice(models.Model):
                 if (
                         tax.unece_categ_code != 'S' and
                         float_is_zero(tax.amount, precision_digits=prec) and
-                        self.fiscal_position and
-                        self.fiscal_position.note):
+                        self.fiscal_position_id and
+                        self.fiscal_position_id.note):
                     exemption_reason = etree.SubElement(
                         trade_tax, ns['ram'] + 'ExemptionReason')
                     exemption_reason.text = self.with_context(
                         lang=self.partner_id.lang or 'en_US').\
-                        fiscal_position.note
+                        fiscal_position_id.note
 
                 base = etree.SubElement(
                     trade_tax,
