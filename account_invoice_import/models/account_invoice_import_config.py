@@ -36,8 +36,7 @@ class AccountInvoiceImportConfig(models.Model):
         'account.account', string='Expense Account',
         domain=[('deprecated', '=', False)])
     account_analytic_id = fields.Many2one(
-        'account.analytic.account', string='Analytic Account',
-        domain=[('type', '!=', 'view')])
+        'account.analytic.account', string='Analytic Account')
     label = fields.Char(
         string='Force Description',
         help="Force supplier invoice line description")

@@ -156,9 +156,13 @@ class AccountInvoiceImport(models.TransientModel):
         config = partner.invoice_import_id
         if config.invoice_line_method.startswith('1line'):
             if config.invoice_line_method == '1line_no_product':
+                if config.tax_ids.ids:
+                    invoice_line_tax_ids = [(6, 0, config.tax_ids.ids)]
+                else:
+                    invoice_line_tax_ids = False
                 il_vals = {
                     'account_id': config.account_id.id,
-                    'invoice_line_tax_ids': config.tax_ids.ids or False,
+                    'invoice_line_tax_ids': invoice_line_tax_ids,
                     'price_unit': parsed_inv.get('amount_untaxed'),
                     }
             elif config.invoice_line_method == '1line_static_product':
@@ -234,9 +238,11 @@ class AccountInvoiceImport(models.TransientModel):
         option of the first tax"""
         il_vals['quantity'] = 1
         il_vals['price_unit'] = parsed_inv.get('amount_total')
-        if il_vals.get('invoice_line_tax_ids'):
+        if (
+                il_vals.get('invoice_line_tax_ids') and
+                il_vals['invoice_line_tax_ids'][0][0] == 6):
             first_tax = self.env['account.tax'].browse(
-                il_vals['invoice_line_tax_ids'][0])
+                il_vals['invoice_line_tax_ids'][0][2][0])
             if not first_tax.price_include:
                 il_vals['price_unit'] = parsed_inv.get('amount_untaxed')
 

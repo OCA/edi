@@ -19,10 +19,10 @@
     'data': [
         'security/ir.model.access.csv',
         'security/rule.xml',
-        'account_invoice_import_config_view.xml',
+        'views/account_invoice_import_config.xml',
         'wizard/account_invoice_import_view.xml',
         'views/account_invoice.xml',
-        'partner_view.xml',
+        'views/partner.xml',
     ],
     'images': ['images/sshot-wizard1.png'],
     'installable': True,
