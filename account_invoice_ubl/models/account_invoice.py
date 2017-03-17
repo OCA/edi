@@ -63,7 +63,7 @@ class AccountInvoice(models.Model):
         monetary_total = etree.SubElement(
             parent_node, ns['cac'] + 'LegalMonetaryTotal')
         cur_name = self.currency_id.name
-        prec = self.env['decimal.precision'].precision_get('Account')
+        prec = self.currency_id.decimal_places
         line_total = etree.SubElement(
             monetary_total, ns['cbc'] + 'LineExtensionAmount',
             currencyID=cur_name)
@@ -95,7 +95,7 @@ class AccountInvoice(models.Model):
         dpo = self.env['decimal.precision']
         qty_precision = dpo.precision_get('Product Unit of Measure')
         price_precision = dpo.precision_get('Product Price')
-        account_precision = dpo.precision_get('Account')
+        account_precision = self.currency_id.decimal_places
         line_id = etree.SubElement(line_root, ns['cbc'] + 'ID')
         line_id.text = unicode(line_number)
         uom_unece_code = False
@@ -142,7 +142,7 @@ class AccountInvoice(models.Model):
     def _ubl_add_invoice_line_tax_total(
             self, iline, parent_node, ns, version='2.1'):
         cur_name = self.currency_id.name
-        prec = self.env['decimal.precision'].precision_get('Account')
+        prec = self.currency_id.decimal_places
         tax_total_node = etree.SubElement(parent_node, ns['cac'] + 'TaxTotal')
         price = iline.price_unit * (1 - (iline.discount or 0.0) / 100.0)
         res_taxes = iline.invoice_line_tax_ids.compute_all(
@@ -175,7 +175,7 @@ class AccountInvoice(models.Model):
         tax_amount_node = etree.SubElement(
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
         tax_amount_node.text = unicode(self.amount_tax)
-        prec = self.env['decimal.precision'].precision_get('Account')
+        prec = self.currency_id.decimal_places
         if not float_is_zero(self.amount_tax, precision_digits=prec):
             for tline in self.tax_line_ids:
                 self._ubl_add_tax_subtotal(
