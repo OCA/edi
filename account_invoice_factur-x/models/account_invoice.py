@@ -228,8 +228,8 @@ class AccountInvoice(models.Model):
     @api.multi
     def _add_trade_settlement_block(self, trade_transaction, sign, ns):
         self.ensure_one()
-        prec = self.env['decimal.precision'].precision_get('Account')
         inv_currency_name = self.currency_id.name
+        prec = self.currency_id.decimal_places
         trade_settlement = etree.SubElement(
             trade_transaction,
             ns['ram'] + 'ApplicableSupplyChainTradeSettlement')
@@ -318,7 +318,7 @@ class AccountInvoice(models.Model):
             ns['ram'] + 'SpecifiedTradeSettlementMonetarySummation')
         line_total = etree.SubElement(
             sums, ns['ram'] + 'LineTotalAmount', currencyID=inv_currency_name)
-        line_total.text = unicode(self.amount_untaxed * sign)
+        line_total.text = '%0.*f' % (prec, self.amount_untaxed * sign)
         charge_total = etree.SubElement(
             sums, ns['ram'] + 'ChargeTotalAmount',
             currencyID=inv_currency_name)
@@ -330,20 +330,21 @@ class AccountInvoice(models.Model):
         tax_basis_total_amt = etree.SubElement(
             sums, ns['ram'] + 'TaxBasisTotalAmount',
             currencyID=inv_currency_name)
-        tax_basis_total_amt.text = unicode(tax_basis_total * sign)
+        tax_basis_total_amt.text = '%0.*f' % (prec, tax_basis_total * sign)
         tax_total = etree.SubElement(
             sums, ns['ram'] + 'TaxTotalAmount', currencyID=inv_currency_name)
-        tax_total.text = unicode(self.amount_tax * sign)
+        tax_total.text = '%0.*f' % (prec, self.amount_tax * sign)
         total = etree.SubElement(
             sums, ns['ram'] + 'GrandTotalAmount', currencyID=inv_currency_name)
-        total.text = unicode(self.amount_total * sign)
+        total.text = '%0.*f' % (prec, self.amount_total * sign)
         prepaid = etree.SubElement(
             sums, ns['ram'] + 'TotalPrepaidAmount',
             currencyID=inv_currency_name)
         residual = etree.SubElement(
             sums, ns['ram'] + 'DuePayableAmount', currencyID=inv_currency_name)
-        prepaid.text = unicode((self.amount_total - self.residual) * sign)
-        residual.text = unicode(self.residual * sign)
+        prepaid.text = '%0.*f' % (
+            prec, (self.amount_total - self.residual) * sign)
+        residual.text = '%0.*f' % (prec, self.residual * sign)
 
     @api.multi
     def _add_invoice_line_block(
