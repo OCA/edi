@@ -198,3 +198,38 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEquals(res, de_tax_21_ttc)
         res = bdio._match_taxes([tax_dict], [], type_tax_use='purchase')
         self.assertEquals(res, de_tax_21)
+
+    def test_match_account_exact(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 898999',
+            'code': '898999',
+            'user_type_id':
+            self.env.ref('account.data_account_type_expense').id,
+            })
+        res = bdio._match_account({'code': '898999'}, [])
+        self.assertEquals(acc, res)
+
+    def test_match_account_bigger_in(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 898999',
+            'code': '898999',
+            'user_type_id':
+            self.env.ref('account.data_account_type_expense').id,
+            })
+        res = bdio._match_account({'code': '89899900'}, [])
+        self.assertEquals(acc, res)
+
+    def test_match_account_smaller_in(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 89899910',
+            'code': '89899910',
+            'user_type_id':
+            self.env.ref('account.data_account_type_expense').id,
+            })
+        chatter = []
+        res = bdio._match_account({'code': '898999'}, chatter)
+        self.assertEquals(acc, res)
+        self.assertEquals(len(chatter), 1)
