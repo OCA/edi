@@ -7,6 +7,16 @@ from openerp.tests.common import TransactionCase
 
 class TestBaseBusinessDocumentImport(TransactionCase):
 
+    def setUp(self):
+        super(TestBaseBusinessDocumentImport, self).setUp()
+        self.test_root_account = self.env['account.account'].create({
+            'name': 'Test chart of accounts',
+            'code': '0TESTedi',
+            'type': 'view',
+            'user_type': self.env.ref('account.data_account_type_view').id,
+            'parent_id': False,
+            })
+
     def test_match_partner(self):
         partner1 = self.env['res.partner'].create({
             'name': 'Total SA',
@@ -200,3 +210,41 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEquals(res, de_tax_21_ttc)
         res = bdio._match_taxes([tax_dict], [], type_tax_use='purchase')
         self.assertEquals(res, de_tax_21)
+
+    def test_match_account_exact(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 898999',
+            'code': '898999',
+            'type': 'other',
+            'user_type': self.env.ref('account.data_account_type_expense').id,
+            'parent_id': self.test_root_account.id,
+            })
+        res = bdio._match_account({'code': '898999'}, [])
+        self.assertEquals(acc, res)
+
+    def test_match_account_bigger_in(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 898999',
+            'code': '898999',
+            'type': 'other',
+            'user_type': self.env.ref('account.data_account_type_expense').id,
+            'parent_id': self.test_root_account.id,
+            })
+        res = bdio._match_account({'code': '89899900'}, [])
+        self.assertEquals(acc, res)
+
+    def test_match_account_smaller_in(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 89899910',
+            'code': '89899910',
+            'type': 'other',
+            'user_type': self.env.ref('account.data_account_type_expense').id,
+            'parent_id': self.test_root_account.id,
+            })
+        chatter = []
+        res = bdio._match_account({'code': '898999'}, chatter)
+        self.assertEquals(acc, res)
+        self.assertEquals(len(chatter), 1)
