@@ -23,6 +23,14 @@ class BusinessDocumentImport(models.AbstractModel):
     _description = 'Common methods to import business documents'
 
     @api.model
+    def user_error_wrap(self, error_msg):
+        assert error_msg
+        prefix = self._context.get('error_prefix')
+        if prefix and isinstance(prefix, (str, unicode)):
+            error_msg = '%s\n%s' % (prefix, error_msg)
+        raise UserError(error_msg)
+
+    @api.model
     def _strip_cleanup_dict(self, match_dict):
         if match_dict:
             for key, value in match_dict.iteritems():
@@ -156,7 +164,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 domain + [('name', '=ilike', partner_dict['name'])])
             if partners:
                 return partners[0]
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any %s corresponding to the following "
             "information extracted from the business document:\n"
             "Country code: %s\n"
@@ -319,7 +327,7 @@ class BusinessDocumentImport(models.AbstractModel):
                         sinfo[0].product_tmpl_id.product_variant_ids) == 1
                         ):
                     return sinfo[0].product_tmpl_id.product_variant_ids[0]
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any product corresponding to the "
             "following information extracted from the business document: "
             "Barcode: %s\n"
@@ -353,7 +361,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if currencies:
                 return currencies[0]
             else:
-                raise UserError(_(
+                raise self.user_error_wrap(_(
                     "The analysis of the business document returned '%s' as "
                     "the currency ISO code. But there are no currency "
                     "with that code in Odoo.") % currency_iso)
@@ -376,7 +384,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if currencies:
                 return currencies[0]
             else:
-                raise UserError(_(
+                raise self.user_error_wrap(_(
                     "The analysis of the business document returned '%s' as "
                     "the currency symbol or ISO code. But there are no "
                     "currency with the symbol nor ISO code in Odoo.")
@@ -390,14 +398,14 @@ class BusinessDocumentImport(models.AbstractModel):
                 if country.currency_id:
                     return country.currency_id
                 else:
-                    raise UserError(_(
+                    raise self.user_error_wrap(_(
                         "The analysis of the business document returned '%s' "
                         "as the country code to find the related currency. "
                         "But the country '%s' doesn't have any related "
                         "currency configured in Odoo.")
                         % (country_code, country.name))
             else:
-                raise UserError(_(
+                raise self.user_error_wrap(_(
                     "The analysis of the business document returned '%s' "
                     "as the country code to find the related currency. "
                     "But there is no country with that code in Odoo.")
@@ -516,7 +524,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if not float_compare(
                     tax_dict['amount'], tax_amount, precision_digits=prec):
                 return tax
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any tax with 'Tax Application' = '%s' "
             "and 'Tax Included in Price' = '%s' which correspond to the "
             "following information extracted from the business document:\n"
@@ -696,13 +704,23 @@ class BusinessDocumentImport(models.AbstractModel):
             acc_code = account_dict['code'].upper()
             if acc_code in speed_dict:
                 return aao.browse(speed_dict[acc_code])
+            # Match when account_dict['code'] is longer than Odoo's account
+            # codes because of trailing '0'
+            # I don't think we need a warning for this kind of match
+            acc_code_tmp = acc_code
+            while acc_code_tmp and acc_code_tmp[-1] == '0':
+                acc_code_tmp = acc_code_tmp[:-1]
+                if acc_code_tmp and acc_code_tmp in speed_dict:
+                    return aao.browse(speed_dict[acc_code_tmp])
+            # Match when account_dict['code'] is shorter than Odoo's accounts
+            # -> warns the user about this
             for code, account_id in speed_dict.iteritems():
                 if code.startswith(acc_code):
                     chatter_msg.append(_(
                         "Approximate match: account %s has been matched "
                         "with account %s") % (account_dict['code'], code))
                     return aao.browse(account_id)
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any account corresponding to the "
             "following information extracted from the business document: "
             "Account code: %s") % account_dict.get('code'))
@@ -741,7 +759,7 @@ class BusinessDocumentImport(models.AbstractModel):
             aacode = aaccount_dict['code'].upper()
             if aacode in speed_dict:
                 return aaao.browse(speed_dict[aacode])
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any analytic account corresponding to the "
             "following information extracted from the business document: "
             "Analytic account code: %s") % aaccount_dict.get('code'))
@@ -778,7 +796,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if jcode in speed_dict:
                 return ajo.browse(speed_dict[jcode])
             # case insensitive
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any journal corresponding to the "
             "following information extracted from the business document: "
             "Journal code: %s") % journal_dict.get('code'))
