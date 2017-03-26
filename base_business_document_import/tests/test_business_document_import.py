@@ -205,7 +205,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'name': 'Test 898999',
             'code': '898999',
             'user_type_id':
-            self.env.ref('account.data_account_type_expense').id,
+            self.env.ref('account.data_account_type_expenses').id,
             })
         res = bdio._match_account({'code': '898999'}, [])
         self.assertEquals(acc, res)
@@ -216,7 +216,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'name': 'Test 898999',
             'code': '898999',
             'user_type_id':
-            self.env.ref('account.data_account_type_expense').id,
+            self.env.ref('account.data_account_type_expenses').id,
             })
         res = bdio._match_account({'code': '89899900'}, [])
         self.assertEquals(acc, res)
@@ -227,7 +227,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'name': 'Test 89899910',
             'code': '89899910',
             'user_type_id':
-            self.env.ref('account.data_account_type_expense').id,
+            self.env.ref('account.data_account_type_expenses').id,
             })
         chatter = []
         res = bdio._match_account({'code': '898999'}, chatter)
