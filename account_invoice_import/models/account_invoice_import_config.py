@@ -50,18 +50,20 @@ class AccountInvoiceImportConfig(models.Model):
     def _check_import_config(self):
         for config in self:
             if (
-                    config.invoice_line_method == 'static_product' and
+                    'static_product' in config.invoice_line_method and
                     not config.static_product_id):
                 raise ValidationError(_(
                     "Static Product must be set on the invoice import "
                     "configuration of supplier '%s' that has a Method "
-                    "for Invoice Line set to 'Static Product'.")
+                    "for Invoice Line set to 'Single Line, Static Product' "
+                    "or 'Multi Line, Static Product'.")
                     % config.partner_id.name)
             if (
-                    config.invoice_line_method == 'no_product' and
+                    'no_product' in config.invoice_line_method and
                     not config.account_id):
                 raise ValidationError(_(
                     "The Expense Account must be set on the invoice "
                     "import configuration of supplier '%s' that has a "
-                    "Method for Invoice Line set to 'Without product'.")
+                    "Method for Invoice Line set to 'Single Line, No Product' "
+                    "or 'Multi Line, No Product'.")
                     % config.partner_id.name)
