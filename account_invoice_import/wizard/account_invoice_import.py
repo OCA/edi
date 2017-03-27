@@ -115,8 +115,18 @@ class AccountInvoiceImport(models.TransientModel):
         #       }],
         # }
 
+        # IMPORT CONFIG
+        # {
+        # 'invoice_line_method': '1line_no_product',
+        # 'account_analytic': Analytic account recordset,
+        # 'account': Account recordset,
+        # 'taxes': taxes multi-recordset,
+        # 'label': 'Force invoice line description',
+        # 'product': product recordset,
+        # }
+
     @api.model
-    def _prepare_create_invoice_vals(self, parsed_inv):
+    def _prepare_create_invoice_vals(self, parsed_inv, import_config=False):
         aio = self.env['account.invoice']
         ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
@@ -155,28 +165,31 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv['chatter_msg'], create_if_not_found=True)
             if partner_bank:
                 vals['partner_bank_id'] = partner_bank.id
-        config = partner.invoice_import_id
-        if config.invoice_line_method.startswith('1line'):
-            if config.invoice_line_method == '1line_no_product':
-                if config.tax_ids.ids:
-                    invoice_line_tax_ids = [(6, 0, config.tax_ids.ids)]
+        config = import_config  # just to make variable name shorter
+        if not config:
+            config = partner.invoice_import2import_config()
+
+        if config['invoice_line_method'].startswith('1line'):
+            if config['invoice_line_method'] == '1line_no_product':
+                if config['taxes']:
+                    invoice_line_tax_ids = [(6, 0, config['taxes'].ids)]
                 else:
                     invoice_line_tax_ids = False
                 il_vals = {
-                    'account_id': config.account_id.id,
+                    'account_id': config['account'].id,
                     'invoice_line_tax_ids': invoice_line_tax_ids,
                     'price_unit': parsed_inv.get('amount_untaxed'),
                     }
-            elif config.invoice_line_method == '1line_static_product':
-                product = config.static_product_id
+            elif config['invoice_line_method'] == '1line_static_product':
+                product = config['product']
                 il_vals = {'product_id': product.id, 'invoice_id': vals}
                 il_vals = ailo.play_onchanges(il_vals, ['product_id'])
                 il_vals.pop('invoice_id')
                 il_vals.update({
                     'price_unit': parsed_inv.get('amount_untaxed'),
                     })
-            if config.label:
-                il_vals['name'] = config.label
+            if config.get('label'):
+                il_vals['name'] = config['label']
             elif parsed_inv.get('description'):
                 il_vals['name'] = parsed_inv['description']
             elif not il_vals.get('name'):
@@ -184,18 +197,18 @@ class AccountInvoiceImport(models.TransientModel):
             self.set_1line_price_unit_and_quantity(il_vals, parsed_inv)
             self.set_1line_start_end_dates(il_vals, parsed_inv)
             vals['invoice_line_ids'].append((0, 0, il_vals))
-        elif config.invoice_line_method.startswith('nline'):
+        elif config['invoice_line_method'].startswith('nline'):
             if not parsed_inv.get('lines'):
                 raise UserError(_(
                     "You have selected a Multi Line method for this import "
                     "but Odoo could not extract/read any XML file inside "
                     "the PDF invoice."))
-            if config.invoice_line_method == 'nline_no_product':
+            if config['invoice_line_method'] == 'nline_no_product':
                 static_vals = {
-                    'account_id': config.account_id.id,
+                    'account_id': config['account'].id,
                     }
-            elif config.invoice_line_method == 'nline_static_product':
-                sproduct = config.static_product_id
+            elif config['invoice_line_method'] == 'nline_static_product':
+                sproduct = config['product']
                 static_vals = {'product_id': sproduct.id, 'invoice_id': vals}
                 static_vals = ailo.play_onchanges(static_vals, ['product_id'])
                 static_vals.pop('invoice_id')
@@ -203,7 +216,7 @@ class AccountInvoiceImport(models.TransientModel):
                 static_vals = {}
             for line in parsed_inv['lines']:
                 il_vals = static_vals.copy()
-                if config.invoice_line_method == 'nline_auto_product':
+                if config['invoice_line_method'] == 'nline_auto_product':
                     product = bdio._match_product(
                         line['product'], parsed_inv['chatter_msg'],
                         seller=partner)
@@ -227,11 +240,11 @@ class AccountInvoiceImport(models.TransientModel):
                     })
                 vals['invoice_line_ids'].append((0, 0, il_vals))
         # Write analytic account + fix syntax for taxes
-        aacount_id = config.account_analytic_id.id or False
-        for line in vals['invoice_line_ids']:
-            if aacount_id:
+        aacount_id = config.get('account_analytic') and\
+            config['account_analytic'].id or False
+        if aacount_id:
+            for line in vals['invoice_line_ids']:
                 line[2]['account_analytic_id'] = aacount_id
-
         return vals
 
     @api.model
@@ -406,10 +419,11 @@ class AccountInvoiceImport(models.TransientModel):
         return action
 
     @api.model
-    def _create_invoice(self, parsed_inv):
+    def _create_invoice(self, parsed_inv, import_config=False):
         aio = self.env['account.invoice']
         bdio = self.env['business.document.import']
-        vals = self._prepare_create_invoice_vals(parsed_inv)
+        vals = self._prepare_create_invoice_vals(
+            parsed_inv, import_config=import_config)
         logger.debug('Invoice vals for creation: %s', vals)
         invoice = aio.create(vals)
         self.post_process_invoice(parsed_inv, invoice)
