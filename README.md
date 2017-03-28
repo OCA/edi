@@ -7,6 +7,7 @@
 EDI Modules
 
 [//]: # (addons)
+
 Unported addons
 ---------------
 addon | version | summary
