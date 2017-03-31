@@ -838,7 +838,7 @@ class BusinessDocumentImport(models.AbstractModel):
         return res
 
     @api.model
-    def post_create_or_update(self, parsed_dict, record):
+    def post_create_or_update(self, parsed_dict, record, doc_filename=None):
         if parsed_dict.get('attachments'):
             for filename, data_base64 in\
                     parsed_dict['attachments'].iteritems():
@@ -852,6 +852,9 @@ class BusinessDocumentImport(models.AbstractModel):
         for msg in parsed_dict['chatter_msg']:
             record.message_post(msg)
         if parsed_dict.get('note'):
-            record.message_post(_(
-                '<b>Notes in file %s:</b> %s')
-                % (filename, parsed_dict['note']))
+            if doc_filename:
+                msg = _('<b>Notes in file %s:</b>') % doc_filename
+            else:
+                msg = _('<b>Notes in imported document:</b>')
+            record.message_post(
+                '%s %s' % (msg, parsed_dict['note']))
