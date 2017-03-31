@@ -207,14 +207,24 @@ class SaleOrderImport(models.TransientModel):
         return so_vals
 
     @api.model
-    def create_order(self, parsed_order, price_source):
+    def create_order(self, parsed_order, price_source, order_filename=None):
         soo = self.env['sale.order']
         bdio = self.env['business.document.import']
         so_vals = self._prepare_order(parsed_order, price_source)
         order = soo.create(so_vals)
-        bdio.post_create_or_update(parsed_order, order)
+        bdio.post_create_or_update(
+            parsed_order, order, doc_filename=order_filename)
         logger.info('Sale Order ID %d created', order.id)
         return order
+
+    @api.model
+    def create_order_ws(self, parsed_order, price_source, order_filename=None):
+        """Same method as create_order() but callable via JSON-RPC
+        webservice. Returns an ID to avoid this error:
+        TypeError: sale.order(15,) is not JSON serializable"""
+        order = self.create_order(
+            parsed_order, price_source, order_filename=order_filename)
+        return order.id
 
     @api.model
     def parse_order(self, order_file, order_filename, partner=False):
@@ -288,7 +298,8 @@ class SaleOrderImport(models.TransientModel):
             action['res_id'] = self.id
             return action
         else:
-            return self.create_order_return_action(parsed_order)
+            return self.create_order_return_action(
+                parsed_order, self.order_filename)
 
     @api.multi
     def create_order_button(self):
@@ -296,12 +307,14 @@ class SaleOrderImport(models.TransientModel):
         parsed_order = self.parse_order(
             self.order_file.decode('base64'), self.order_filename,
             self.partner_id)
-        return self.create_order_return_action(parsed_order)
+        return self.create_order_return_action(
+            parsed_order, self.order_filename)
 
     @api.multi
-    def create_order_return_action(self, parsed_order):
+    def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
-        order = self.create_order(parsed_order, self.price_source)
+        order = self.create_order(
+            parsed_order, self.price_source, order_filename)
         order.message_post(_(
             "Created automatically via file import (%s).")
             % self.order_filename)
