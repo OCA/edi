@@ -12,7 +12,6 @@ from lxml import etree
 
 logger = logging.getLogger(__name__)
 
-
 class SaleOrderImport(models.TransientModel):
     _name = 'sale.order.import'
     _description = 'Sale Order Import from Files'
@@ -42,9 +41,9 @@ class SaleOrderImport(models.TransientModel):
         'res.partner', string='Customer', readonly=True)
     partner_shipping_id = fields.Many2one(
         'res.partner', string='Shipping Address', readonly=True)
-    # amount_untaxed = fields.Float(
-    #    string='Total Untaxed', digits=dp.get_precision('Account'),
-    #    readonly=True)
+    amount_untaxed = fields.Float(
+       string='Total Untaxed', digits=dp.get_precision('Account'),
+       readonly=True)
     sale_id = fields.Many2one(
         'sale.order', string='Quotation to Update')
 
@@ -197,10 +196,15 @@ class SaleOrderImport(models.TransientModel):
             so_vals['date_order'] = parsed_order['date']
         for line in parsed_order['lines']:
             # partner=False because we don't want to use product.supplierinfo
-            product = bdio._match_product(
-                line['product'], parsed_order['chatter_msg'], seller=False)
-            uom = bdio._match_uom(
-                line.get('uom'), parsed_order['chatter_msg'], product)
+            if line.get('code') or line.get('id'):
+                product = bdio._match_product(
+                    line, parsed_order['chatter_msg'], seller=False)
+            else:
+                product = self.env['product.product'].search([('name', '=', line['desc'])]) #TODO
+            if line.get('uom'):
+                uom = bdio._match_uom(line.get('uom'), parsed_order['chatter_msg'], product)
+            else:
+                uom = self.env['product.uom'].search([('id', '=', 1)]) #TODO
             line_vals = self._prepare_create_order_line(
                 product, uom, line, price_source)
             # product_id_change is played in the inherit of create()

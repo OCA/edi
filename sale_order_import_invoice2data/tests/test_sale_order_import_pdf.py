@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 try:
     from invoice2data.main import extract_data
     from invoice2data.template import read_templates
+    from invoice2data.pdftotext import to_text
     from invoice2data.main import logger as loggeri2data
 except ImportError:
     logger.debug('Cannot import invoice2data')
@@ -21,11 +22,9 @@ class TestPDFOrderImport(TransactionCase):
 
     def read_pdf_and_create_wizard(self, file_name, partner):
         soio = self.env['sale.order.import']
-
         testspath = os.path.dirname(os.path.realpath(__file__))
         templ_path = os.path.join(testspath, '../templates')
         file_path = os.path.join(testspath, 'files', file_name)
-
         f = file_open(file_path, 'rb')
         pdf_file = f.read()
         wiz = soio.create({
@@ -36,10 +35,12 @@ class TestPDFOrderImport(TransactionCase):
         f.close()
         templates = read_templates(templ_path)
         get_data = extract_data(file_path, templates=templates)
-        pdf_file_content = {}
+        # pdftext = to_text(file_path)
+        # pdf_file_content = {}
         # f.seek(0)
-        for line in get_data:
-            pdf_file_content[line[0]] = float(line[1])
+        # for line in get_data:
+        #     pdf_file_content[line[0]] = float(line[1])
+        pdf_file_content = get_data
 
         return pdf_file_content, wiz
 
@@ -56,19 +57,19 @@ class TestPDFOrderImport(TransactionCase):
 
     def test_pdf_order_import(self):
         # create new quote
+        # filename = 'inv.pdf'
         filename = 'so1.pdf'
         partner = self.env.ref('base.res_partner_2')
         pdf_file_content, wiz = self.read_pdf_and_create_wizard(
             filename, partner)
         action = wiz.import_order_button()
+        # action = wiz.create_order_return_action(pdf_file_content)
         so = self.env['sale.order'].browse(action['res_id'])
         self.check_sale_order(so, pdf_file_content, partner)
-
-        wiz = self.read_pdf_and_create_wizard(
-                filename, partner)
-        action = wiz.import_order_button()
-        so = self.env['sale.order'].browse(action['res_id'])
-
+        # wiz = self.read_pdf_and_create_wizard(
+        #         filename, partner)
+        # action = wiz.import_order_button()
+        # so = self.env['sale.order'].browse(action['res_id'])
         # update existing quote
         filename_up = 'so2.pdf'
         pdf_file_content_up, wiz_up = self.read_csv_and_create_wizard(

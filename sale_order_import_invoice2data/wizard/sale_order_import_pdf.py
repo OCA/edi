@@ -51,15 +51,20 @@ class SaleOrderImport(models.TransientModel):
             'invoice2data local_templates_dir=%s', local_templates_dir)
         templates = []
         if local_templates_dir and os.path.isdir(local_templates_dir):
+
             templates += read_templates(local_templates_dir)
         exclude_built_in_templates = tools.config.get(
             'invoice2data_exclude_built_in_templates', False)
-        if not exclude_built_in_templates:
-            templates += read_templates(
-                pkg_resources.resource_filename('invoice2data', 'templates'))
-        logger.debug(
-            'Calling invoice2data.extract_data with templates=%s',
-            templates)
+        # if not exclude_built_in_templates:
+        #     templates += read_templates(
+        #         pkg_resources.resource_filename('invoice2data', 'templates'))
+        # logger.debug(
+        #     'Calling invoice2data.extract_data with templates=%s',
+        #     templates)
+        testspath = os.path.dirname(os.path.realpath(__file__))
+        templ_path = os.path.join(testspath, '../templates')
+        file_path = os.path.join(testspath, 'files', file_name)
+        templates += read_templates(templ_path)
         try:
             saleorder2data_res = extract_data(file_name, templates=templates)
         except Exception, e:
@@ -78,7 +83,8 @@ class SaleOrderImport(models.TransientModel):
         parsed_inv = {
             'partner': {
                 'vat': saleorder2data_res.get('vat'),
-                'name': saleorder2data_res.get('partner_name'),
+                'name': saleorder2data_res.get('partner'),
+                # 'name': saleorder2data_res.get('partner_name'),
                 'email': saleorder2data_res.get('partner_email'),
                 'website': saleorder2data_res.get('partner_website'),
                 'siren': saleorder2data_res.get('siren'),
@@ -96,6 +102,8 @@ class SaleOrderImport(models.TransientModel):
         }
         if 'amount_untaxed' in saleorder2data_res:
             parsed_inv['amount_untaxed'] = saleorder2data_res['amount_untaxed']
+        if 'lines' in saleorder2data_res:
+            parsed_inv['lines'] = saleorder2data_res['lines']
         if 'amount_tax' in saleorder2data_res:
             parsed_inv['amount_tax'] = saleorder2data_res['amount_tax']
         return parsed_inv
