@@ -56,21 +56,18 @@ class TestPDFOrderImport(TransactionCase):
                     precision_digits=precision))
 
     def test_pdf_order_import(self):
-        # create new quote
-        # filename = 'inv.pdf'
+        # import first sale order
         filename = 'so1.pdf'
         partner = self.env.ref('base.res_partner_2')
         pdf_file_content, wiz = self.read_pdf_and_create_wizard(
             filename, partner)
         action = wiz.import_order_button()
         # action = wiz.create_order_return_action(pdf_file_content)
+
         so = self.env['sale.order'].browse(action['res_id'])
         self.check_sale_order(so, pdf_file_content, partner)
-        # wiz = self.read_pdf_and_create_wizard(
-        #         filename, partner)
-        # action = wiz.import_order_button()
-        # so = self.env['sale.order'].browse(action['res_id'])
-        # update existing quote
+
+        # update existing sale order
         filename_up = 'so2.pdf'
         pdf_file_content_up, wiz_up = self.read_csv_and_create_wizard(
             filename_up, partner)
