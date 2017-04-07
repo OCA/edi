@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+# © 2017 Sunflower IT
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from openerp import models, fields, api, _
-# import openerp.addons.decimal_precision as dp
+import openerp.addons.decimal_precision as dp
 from openerp.tools import float_compare, float_is_zero
 from openerp.exceptions import Warning as UserError
 import logging
