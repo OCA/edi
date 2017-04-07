@@ -92,12 +92,12 @@ Contributors
 
 * Tom Blauwendraat <info@sunflowerweb.nl>
 * Terence Nzaywa <terrence@sunflowerweb.nl>
+* Alexis de Lattre <alexis.delattre@akretion.com>
 
 Maintainer
 ----------
 
-This module is maintained by Sunflower IT.
-
+This module is maintained by Sunflower IT and Therp BV.
 
 
 
