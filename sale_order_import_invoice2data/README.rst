@@ -98,6 +98,3 @@ Maintainer
 ----------
 
 This module is maintained by Sunflower IT and Therp BV.
-
-
-
