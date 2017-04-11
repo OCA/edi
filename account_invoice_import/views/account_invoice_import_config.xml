@@ -74,14 +74,19 @@
 
 
 <record id="account_invoice_import_config_action" model="ir.actions.act_window">
-    <field name="name">Import Supplier Invoices</field>
+    <field name="name">Vendor Bills Configuration</field>
     <field name="res_model">account.invoice.import.config</field>
     <field name="view_mode">tree,form</field>
     <field name="context">{'invoice_import_config_main_view': True}</field>
 </record>
 
-<menuitem id="account_invoice_import_config_menu"
+<menuitem id="account_invoice_import_config_root"
+    name="Import Vendor Bills"
     parent="account.menu_finance_configuration"
-    action="account_invoice_import_config_action" sequence="100"/>
+    sequence="90"/>
+
+<menuitem id="account_invoice_import_config_menu"
+    parent="account_invoice_import_config_root"
+    action="account_invoice_import_config_action" sequence="10"/>
 
 </odoo>
