@@ -1,16 +1,16 @@
-issuer: Sunflower IT.
+issuer: Sunflower IT
 fields:
   amount: Total \s+(\d+.\d{2})
   date: \d\d/\d\d/\d\d\d\d\s\d\d:\d\d:\d\d
   invoice_number: SO\d+
-  static_partner: Agrolait
-  static_chatter_msg: Agrolait
+  static_partner_name: Axelor
+  static_chatter_msg: []
   amount_untaxed: Total Without Taxes \s+(\d+.\d+)
 lines:
   start: Price\s+
   end: Total
   fields:
-    desc: "[\\w'-][\\w\\s'-]+"
+    desc: "([\\w'-\\[\\]]+)(\\s[\\w\\'-\\[\\]]+)*"
     taxes: (\d+.\d+)
     qty: (\d+.\d+)
     unit_price: .{.70}

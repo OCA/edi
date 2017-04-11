@@ -9,6 +9,7 @@ from tempfile import mkstemp
 import base64
 import unicodecsv
 import os
+import re
 import pkg_resources
 import logging
 logger = logging.getLogger(__name__)
@@ -136,8 +137,15 @@ class BusinessDocumentExtend(models.AbstractModel):
             if products:
                 return products[0]
         if product_dict.get('desc'):
+            desc = product_dict['desc']
             products = ppo.search([
-                ('name', '=', product_dict['desc'])])
+                ('name', '=', desc)])
+            if not products:
+                # Also try the part outside brackets only
+                stripped_desc = re.sub(
+                    "[\(\[].*?[\)\]]", "", desc).strip()
+                products = ppo.search([
+                    ('name', '=', stripped_desc)])
             if products:
                 return products[0]
         if product_dict.get('code'):

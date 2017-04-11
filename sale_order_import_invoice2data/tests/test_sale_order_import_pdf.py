@@ -42,18 +42,19 @@ class TestPDFOrderImport(TransactionCase):
     def check_sale_order(self, order, pdf_file_content, partner):
         precision = self.env['decimal.precision'].precision_get('Product UoS')
         self.assertEqual(order.partner_id, partner)
-        self.assertEqual(len(order.order_line), len(pdf_file_content))
-        for oline in order.order_line:
+        self.assertEqual(len(order.order_line),
+            len(pdf_file_content['lines']))
+        for i, oline in enumerate(order.order_line):
             self.assertFalse(
                 float_compare(
-                    pdf_file_content[oline.product_id.default_code],
+                    float(pdf_file_content['lines'][i]['qty']),
                     oline.product_uom_qty,
                     precision_digits=precision))
 
     def test_pdf_order_import(self):
         # create new quote
-        filename = 'so3.pdf'
-        partner = self.env.ref('base.res_partner_2')
+        filename = 'so1.pdf'
+        partner = self.env.ref('base.res_partner_13')
         pdf_file_content, wiz = self.read_pdf_and_create_wizard(
             filename, partner)
         action = wiz.import_order_button()
@@ -62,8 +63,9 @@ class TestPDFOrderImport(TransactionCase):
 
         # update existing quote
         filename_up = 'so2.pdf'
-        pdf_file_content_up, wiz_up = self.read_csv_and_create_wizard(
-            filename_up, partner)
+        partner_up = self.env.ref('base.res_partner_2')
+        pdf_file_content_up, wiz_up = self.read_pdf_and_create_wizard(
+            filename_up, partner_up)
         action_up1 = wiz_up.import_order_button()
         self.assertEqual(action_up1['res_model'], 'sale.order.import')
         self.assertEqual(wiz_up.sale_id, so)
