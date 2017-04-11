@@ -64,7 +64,7 @@
 </record>
 
 <record id="account_invoice_import_action" model="ir.actions.act_window">
-    <field name="name">Import Invoice</field>
+    <field name="name">Import Vendor Bill</field>
     <field name="res_model">account.invoice.import</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
