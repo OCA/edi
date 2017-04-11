@@ -196,11 +196,9 @@ class SaleOrderImport(models.TransientModel):
             so_vals['date_order'] = parsed_order['date']
         for line in parsed_order['lines']:
             # partner=False because we don't want to use product.supplierinfo
-            if line.get('code') or line.get('id'):
+            if line.get('code') or line.get('id') or line.get('desc') or line.get('name'):
                 product = bdio._match_product(
-                    line, parsed_order['chatter_msg'], seller=False)
-            else:
-                product = self.env['product.product'].search([('name', '=', line['desc'])]) #TODO
+                    line, parsed_order['chatter_msg'], seller=False) #TODO
             if line.get('uom'):
                 uom = bdio._match_uom(line.get('uom'), parsed_order['chatter_msg'], product)
             else:

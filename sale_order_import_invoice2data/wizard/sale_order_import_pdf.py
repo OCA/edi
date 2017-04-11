@@ -107,3 +107,67 @@ class SaleOrderImport(models.TransientModel):
         if 'amount_tax' in saleorder2data_res:
             parsed_inv['amount_tax'] = saleorder2data_res['amount_tax']
         return parsed_inv
+#
+class BusinessDocumentExtend(models.AbstractModel):
+    _inherit = 'business.document.import'
+
+    @api.model
+    def _match_product(self, product_dict, chatter_msg, seller=False):
+        """Example:
+        product_dict = {
+            'ean13': '5449000054227',
+            'code': 'COCA1L',
+            }
+        """
+        ppo = self.env['product.product']
+        # self._strip_cleanup_dict(product_dict)
+        if product_dict.get('recordset'):
+            return product_dict['recordset']
+        if product_dict.get('id'):
+            return ppo.browse(product_dict['id'])
+        if product_dict.get('ean13'):
+            products = ppo.search([
+                ('ean13', '=', product_dict['ean13'])])
+            if products:
+                return products[0]
+        if product_dict.get('name'):
+            products = ppo.search([
+                ('name', '=', product_dict['name'])])
+            if products:
+                return products[0]
+        if product_dict.get('desc'):
+            products = ppo.search([
+                ('name', '=', product_dict['desc'])])
+            if products:
+                return products[0]
+        if product_dict.get('code'):
+            products = ppo.search([
+                '|',
+                ('ean13', '=', product_dict['code']),
+                ('default_code', '=', product_dict['code'])])
+            if products:
+                return products[0]
+            # WARNING: Won't work for multi-variant products
+            # because product.supplierinfo is attached to product template
+            if seller:
+                sinfo = self.env['product.supplierinfo'].search([
+                    ('name', '=', seller.id),
+                    ('product_code', '=', product_dict['code']),
+                    ])
+                if (
+                        sinfo and
+                        sinfo[0].product_tmpl_id.product_variant_ids and
+                        len(
+                        sinfo[0].product_tmpl_id.product_variant_ids) == 1
+                        ):
+                    return sinfo[0].product_tmpl_id.product_variant_ids[0]
+
+        raise UserError(_(
+            "Odoo couldn't find any product corresponding to the "
+            "following information extracted from the business document: "
+            "EAN13: %s\n"
+            "Product code: %s\n"
+            "Supplier: %s\n") % (
+                product_dict.get('ean13'),
+                product_dict.get('code'),
+                seller and seller.name or 'None'))
