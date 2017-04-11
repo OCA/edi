@@ -30,10 +30,10 @@ class ResPartner(models.Model):
             vals['taxes'] = config.tax_ids
             vals['label'] = config.label or False
         elif config.invoice_line_method == '1line_static_product':
-            vals['product'] = config.product_id
+            vals['product'] = config.static_product_id
             vals['label'] = config.label or False
         elif config.invoice_line_method == 'nline_no_product':
             vals['account'] = config.account_id
         elif config.invoice_line_method == 'nline_static_product':
-            vals['product'] = config.product_id
+            vals['product'] = config.static_product_id
         return vals
