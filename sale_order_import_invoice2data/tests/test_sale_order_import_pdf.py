@@ -35,6 +35,11 @@ class TestPDFOrderImport(TransactionCase):
         f.close()
         templates = read_templates(templ_path)
         get_data = extract_data(file_path, templates=templates)
+        # pdftext = to_text(file_path)
+        # pdf_file_content = {}
+        # f.seek(0)
+        # for line in get_data:
+        #     pdf_file_content[line[0]] = float(line[1])
         pdf_file_content = get_data
 
         return pdf_file_content, wiz
@@ -52,16 +57,21 @@ class TestPDFOrderImport(TransactionCase):
 
     def test_pdf_order_import(self):
         # create new quote
-        filename = 'so3.pdf'
+        # filename = 'inv.pdf'
+        filename = 'so1.pdf'
         partner = self.env.ref('base.res_partner_2')
         pdf_file_content, wiz = self.read_pdf_and_create_wizard(
             filename, partner)
         action = wiz.import_order_button()
+        # action = wiz.create_order_return_action(pdf_file_content)
         so = self.env['sale.order'].browse(action['res_id'])
         self.check_sale_order(so, pdf_file_content, partner)
-
+        # wiz = self.read_pdf_and_create_wizard(
+        #         filename, partner)
+        # action = wiz.import_order_button()
+        # so = self.env['sale.order'].browse(action['res_id'])
         # update existing quote
-        filename_up = 'so.pdf'
+        filename_up = 'so2.pdf'
         pdf_file_content_up, wiz_up = self.read_csv_and_create_wizard(
             filename_up, partner)
         action_up1 = wiz_up.import_order_button()
