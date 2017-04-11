@@ -28,13 +28,13 @@ except ImportError:
 class SaleOrderImport(models.TransientModel):
     _inherit = 'sale.order.import'
 
-    @api.model
-    def fallback_parse_pdf_saleorder(self, file_data):
-        '''This method must be inherited by additionnal modules with
-        the same kind of logic as the account_bank_statement_import_*
-        modules'''
-        return self.saleorder2data_parse_saleorder(file_data)
-
+    # @api.model
+    # def fallback_parse_pdf_saleorder(self, file_data):
+    #     '''This method must be inherited by additionnal modules with
+    #     the same kind of logic as the account_bank_statement_import_*
+    #     modules'''
+    #     return self.invoice2data_parse_saleorder(file_data)
+    #
     @api.model
     def parse_pdf_order(self, file_data, detect_doc_type=False):
         logger.info('Trying to analyze PDF saleorder with invoice2data lib')
@@ -66,48 +66,48 @@ class SaleOrderImport(models.TransientModel):
         file_path = os.path.join(testspath, 'files', file_name)
         templates += read_templates(templ_path)
         try:
-            saleorder2data_res = extract_data(file_name, templates=templates)
+            invoice2data_res = extract_data(file_name, templates=templates)
         except Exception, e:
             raise UserError(_(
                 "PDF saleorder parsing failed. Error message: %s") % e)
-        if not saleorder2data_res:
+        if not invoice2data_res:
             raise UserError(_(
                 "This PDF saleorder doesn't match a known template of "
                 "the invoice2data lib."))
         logger.info(
-            'Result of invoice2data PDF extraction: %s', saleorder2data_res)
-        return self.saleorder2data_to_parsed_inv(saleorder2data_res)
+            'Result of invoice2data PDF extraction: %s', invoice2data_res)
+        return self.invoice2data_to_parsed_inv(invoice2data_res)
 
     @api.model
-    def saleorder2data_to_parsed_inv(self, saleorder2data_res):
+    def invoice2data_to_parsed_inv(self, invoice2data_res):
         parsed_inv = {
             'partner': {
-                'vat': saleorder2data_res.get('vat'),
-                'name': saleorder2data_res.get('partner'),
-                # 'name': saleorder2data_res.get('partner_name'),
-                'email': saleorder2data_res.get('partner_email'),
-                'website': saleorder2data_res.get('partner_website'),
-                'siren': saleorder2data_res.get('siren'),
+                'vat': invoice2data_res.get('vat'),
+                #'name': invoice2data_res.get('partner'),
+                'name': invoice2data_res.get('partner_name'),
+                'email': invoice2data_res.get('partner_email'),
+                'website': invoice2data_res.get('partner_website'),
+                'siren': invoice2data_res.get('siren'),
             },
             'currency': {
-                'iso': saleorder2data_res.get('currency'),
+                'iso': invoice2data_res.get('currency'),
             },
-            'amount_total': saleorder2data_res.get('amount'),
-            'saleorder_number': saleorder2data_res.get('invoice_number'),
-            'date': saleorder2data_res.get('date'),
-            'date_due': saleorder2data_res.get('date_due'),
-            'date_start': saleorder2data_res.get('date_start'),
-            'date_end': saleorder2data_res.get('date_end'),
-            'description': saleorder2data_res.get('description'),
+            'amount_total': invoice2data_res.get('amount'),
+            'saleorder_number': invoice2data_res.get('invoice_number'),
+            'date': invoice2data_res.get('date'),
+            'date_due': invoice2data_res.get('date_due'),
+            'date_start': invoice2data_res.get('date_start'),
+            'date_end': invoice2data_res.get('date_end'),
+            'description': invoice2data_res.get('description'),
         }
-        if 'amount_untaxed' in saleorder2data_res:
-            parsed_inv['amount_untaxed'] = saleorder2data_res['amount_untaxed']
-        if 'lines' in saleorder2data_res:
-            parsed_inv['lines'] = saleorder2data_res['lines']
-        if 'amount_tax' in saleorder2data_res:
-            parsed_inv['amount_tax'] = saleorder2data_res['amount_tax']
+        if 'amount_untaxed' in invoice2data_res:
+            parsed_inv['amount_untaxed'] = invoice2data_res['amount_untaxed']
+        if 'lines' in invoice2data_res:
+            parsed_inv['lines'] = invoice2data_res['lines']
+        if 'amount_tax' in invoice2data_res:
+            parsed_inv['amount_tax'] = invoice2data_res['amount_tax']
         return parsed_inv
-#
+
 class BusinessDocumentExtend(models.AbstractModel):
     _inherit = 'business.document.import'
 

@@ -52,7 +52,7 @@ class BusinessDocumentImport(models.AbstractModel):
         base_phone_business_document_import
         """
         rpo = self.env['res.partner']
-        self._strip_cleanup_dict(partner_dict)
+        #self._strip_cleanup_dict(partner_dict)
         if partner_dict.get('recordset'):
             return partner_dict['recordset']
         if partner_dict.get('id'):

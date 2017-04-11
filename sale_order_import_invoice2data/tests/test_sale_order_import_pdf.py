@@ -57,7 +57,6 @@ class TestPDFOrderImport(TransactionCase):
         pdf_file_content, wiz = self.read_pdf_and_create_wizard(
             filename, partner)
         action = wiz.import_order_button()
-        # action = wiz.create_order_return_action(pdf_file_content)
         so = self.env['sale.order'].browse(action['res_id'])
         self.check_sale_order(so, pdf_file_content, partner)
 
