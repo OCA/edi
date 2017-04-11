@@ -185,9 +185,6 @@ class AccountInvoiceImport(models.TransientModel):
                 il_vals = {'product_id': product.id, 'invoice_id': vals}
                 il_vals = ailo.play_onchanges(il_vals, ['product_id'])
                 il_vals.pop('invoice_id')
-                il_vals.update({
-                    'price_unit': parsed_inv.get('amount_untaxed'),
-                    })
             if config.get('label'):
                 il_vals['name'] = config['label']
             elif parsed_inv.get('description'):
@@ -223,7 +220,7 @@ class AccountInvoiceImport(models.TransientModel):
                     il_vals = {'product_id': product.id, 'invoice_id': vals}
                     il_vals = ailo.play_onchanges(il_vals, ['product_id'])
                     il_vals.pop('invoice_id')
-                elif config.invoice_line_method == 'nline_no_product':
+                elif config['invoice_line_method'] == 'nline_no_product':
                     taxes = bdio._match_taxes(
                         line.get('taxes'), parsed_inv['chatter_msg'])
                     il_vals['invoice_line_tax_ids'] = [(6, 0, taxes.ids)]
@@ -253,13 +250,20 @@ class AccountInvoiceImport(models.TransientModel):
         option of the first tax"""
         il_vals['quantity'] = 1
         il_vals['price_unit'] = parsed_inv.get('amount_total')
-        if (
-                il_vals.get('invoice_line_tax_ids') and
-                il_vals['invoice_line_tax_ids'][0][0] == 6):
-            first_tax = self.env['account.tax'].browse(
-                il_vals['invoice_line_tax_ids'][0][2][0])
-            if not first_tax.price_include:
-                il_vals['price_unit'] = parsed_inv.get('amount_untaxed')
+        if il_vals.get('invoice_line_tax_ids'):
+            for tax_entry in il_vals['invoice_line_tax_ids']:
+                if tax_entry:
+                    tax_id = False
+                    if tax_entry[0] == 4:
+                        tax_id = tax_entry[1]
+                    elif tax_entry[0] == 6:
+                        tax_id = tax_entry[2][0]
+                    if tax_id:
+                        first_tax = self.env['account.tax'].browse(tax_id)
+                        if not first_tax.price_include:
+                            il_vals['price_unit'] = parsed_inv.get(
+                                'amount_untaxed')
+                            break
 
     @api.model
     def set_1line_start_end_dates(self, il_vals, parsed_inv):
