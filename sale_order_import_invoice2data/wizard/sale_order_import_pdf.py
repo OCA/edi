@@ -109,6 +109,26 @@ class SaleOrderImport(models.TransientModel):
             parsed_inv['amount_tax'] = invoice2data_res['amount_tax']
         return parsed_inv
 
+    @api.model
+    def create_order(self, parsed_order, price_source):
+        soo = self.env['sale.order']
+        bdio = self.env['business.document.import']
+        so_vals = self._prepare_order(parsed_order, price_source)
+        order = soo.create(so_vals)
+        # attach the PDF to the SO
+        if parsed_order['attachments']:
+            attachment_vals = {
+                'datas':parsed_order['attachments'].values()[0],
+                'datas_fname':parsed_order['attachments'].keys()[0],
+                'name':parsed_order['attachments'].keys()[0],
+                'res_id':order.id,
+                'res_model':'sale.order'
+            }
+            self.env['ir.attachment'].create(attachment_vals)
+        bdio.post_create_or_update(parsed_order, order)
+        logger.info('Sale Order ID %d created', order.id)
+        return order
+
 class BusinessDocumentExtend(models.AbstractModel):
     _inherit = 'business.document.import'
 
@@ -179,3 +199,139 @@ class BusinessDocumentExtend(models.AbstractModel):
                 product_dict.get('ean13'),
                 product_dict.get('code'),
                 seller and seller.name or 'None'))
+
+    def compare_lines(
+            self, existing_lines, import_lines, chatter_msg,
+            qty_precision=None, price_precision=None, seller=False):
+        """ Example:
+        existing_lines = [{
+            'product': odoo_recordset,
+            'name': 'USB Adapter',
+            'qty': 1.5,
+            'price_unit': 23.43,  # without taxes
+            'uom': uom,
+            'line': recordset,
+            # Add taxes
+            }]
+        import_lines = [{
+            'product': {
+                'ean13': '2100002000003',
+                'code': 'EAZY1',
+                },
+            'quantity': 2,
+            'price_unit': 12.42,  # without taxes
+            'uom': {'unece_code': 'C62'},
+            }]
+
+        Result of the method:
+        {
+            'to_remove': line_multirecordset,
+            'to_add': [
+                {
+                    'product': recordset1,
+                    'uom', recordset,
+                    'import_line': {import dict},
+                    # We provide product and uom as recordset to avoid the
+                    # need to compute a second match
+                ]
+            'to_update': {
+                'line1_recordset': {'qty': [1, 2], 'price_unit': [4.5, 4.6]},
+                # qty must be updated from 1 to 2
+                # price must be updated from 4.5 to 4.6
+                'line2_recordset': {'qty': [12, 13]},
+                # only qty must be updated
+                }
+        }
+
+        The check existing_currency == import_currency must be done before
+        the call to compare_lines()
+        """
+        dpo = self.env['decimal.precision']
+        if qty_precision is None:
+            qty_precision = dpo.precision_get('Product Unit of Measure')
+        if price_precision is None:
+            price_precision = dpo.precision_get('Product Price')
+        existing_lines_dict = {}
+        for eline in existing_lines:
+            if not eline.get('product'):
+                chatter_msg.append(_(
+                    "The existing line '%s' doesn't have any product, "
+                    "so <b>the lines haven't been updated</b>.")
+                    % eline.get('name'))
+                return False
+            if eline['product'] in existing_lines_dict:
+                chatter_msg.append(_(
+                    "The product '%s' is used on several existing "
+                    "lines, so <b>the lines haven't been updated</b>.")
+                    % eline['product'].name_get()[0][1])
+                return False
+            existing_lines_dict[eline['product']] = eline
+        unique_import_products = []
+        res = {
+            'to_remove': False,
+            'to_add': [],
+            'to_update': {},
+            }
+        for iline in import_lines:
+            # if not iline.get('product'):
+            #     chatter_msg.append(_(
+            #         "One of the imported lines doesn't have any product, "
+            #         "so <b>the lines haven't been updated</b>."))
+            #     return False
+            product = self._match_product(
+                iline, chatter_msg, seller=seller)
+            uom = self._match_uom(iline.get('uom'), chatter_msg, product)
+            if product in unique_import_products:
+                chatter_msg.append(_(
+                    "The product '%s' is used on several imported lines, "
+                    "so <b>the lines haven't been updated</b>.")
+                    % product.name_get()[0][1])
+                return False
+            unique_import_products.append(product)
+            if product in existing_lines_dict:
+                if uom != existing_lines_dict[product]['uom']:
+                    chatter_msg.append(_(
+                        "For product '%s', the unit of measure is %s on the "
+                        "existing line, but it is %s on the imported line. "
+                        "We don't support this scenario for the moment, so "
+                        "<b>the lines haven't been updated</b>.") % (
+                            product.name_get()[0][1],
+                            existing_lines_dict[product]['uom'].name,
+                            uom.name,
+                            ))
+                    return False
+                # used for to_remove
+                existing_lines_dict[product]['import'] = True
+                oline = existing_lines_dict[product]['line']
+                res['to_update'][oline] = {}
+                # if float_compare(
+                #         iline['qty'],
+                #         existing_lines_dict[product]['qty'],
+                #         precision_digits=qty_precision): #TODO
+                if iline['qty']:
+                    res['to_update'][oline]['qty'] = [
+                        existing_lines_dict[product]['qty'],
+                        iline['qty']]
+                # if (
+                #         'price_unit' in iline and
+                #         float_compare(
+                #             iline['price_unit'],
+                #             existing_lines_dict[product]['price_unit'],
+                #             precision_digits=price_precision)):
+                if ('price_unit' in iline and iline['price_unit']):
+                    res['to_update'][oline]['price_unit'] = [
+                        existing_lines_dict[product]['price_unit'],
+                        iline['price_unit']]
+            else:
+                res['to_add'].append({
+                    'product': product,
+                    'uom': uom,
+                    'import_line': iline,
+                    })
+        for exiting_dict in existing_lines_dict.itervalues():
+            if not exiting_dict.get('import'):
+                if res['to_remove']:
+                    res['to_remove'] += exiting_dict['line']
+                else:
+                    res['to_remove'] = exiting_dict['line']
+        return res

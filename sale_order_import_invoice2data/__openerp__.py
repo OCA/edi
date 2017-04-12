@@ -8,7 +8,8 @@
     'author': 'Sunflower IT',
     'website': 'http://sunflowerweb.nl',
     'depends': [
-        'sale_order_import'
+        'sale_order_import',
+        'document'
     ],
     'external_dependencies': {
         'python': [

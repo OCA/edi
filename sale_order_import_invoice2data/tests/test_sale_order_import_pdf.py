@@ -50,6 +50,9 @@ class TestPDFOrderImport(TransactionCase):
                     float(pdf_file_content['lines'][i]['qty']),
                     oline.product_uom_qty,
                     precision_digits=precision))
+        # check if attachment of created SO
+        attachment = self.env['ir.attachment'].search([('res_id', '=', order.id), ('res_name', 'like', order.name)])
+        self.assertTrue(attachment)
 
     def test_pdf_order_import(self):
         # create new quote
