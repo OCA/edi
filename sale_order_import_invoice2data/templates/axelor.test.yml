@@ -1,0 +1,36 @@
+issuer: Axelor
+fields:
+  amount: Total \s+(\d+.\d{2})
+  date: \d\d/\d\d/\d\d\d\d\s\d\d:\d\d:\d\d
+  invoice_number: SO\d+
+  static_partner_name: Axelor
+  static_chatter_msg: []
+lines:
+  start: Price\s+
+  end: Total
+  fields:
+    desc: ([\w'-\[\]]+)(\s[\w\'-\[\]]+)*
+    taxes: ([\w'%-.]+)(\s[\w\'%-.]+)*
+    qty: (\d+.\d+)
+    unit_price: (\d+.\d+)
+    price: (\d+.\d+\s€)
+  fields_order:
+    - desc
+    - taxes
+    - qty
+    - unit_price
+    - price
+  required_fields:
+    - desc
+keywords:
+- info@yourcompany.example.com
+options:
+  remove_whitespace: false
+  currency: EUR
+  decimal_separator: "."
+  line_separator: "\\n"
+  field_separator: "\\s{2,}"
+  date_formats:
+    - '%Y-%m-%d'
+
+
