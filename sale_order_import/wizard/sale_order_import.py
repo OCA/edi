@@ -182,8 +182,12 @@ class SaleOrderImport(models.TransientModel):
                         parsed_order['order_ref'],
                         existing_orders[0].name,
                         existing_orders[0].state))
-        partner_change_res = soo.onchange_partner(partner.id)
-        # partner_change_res = {'value': {'partner_invoice_id': 18, 'pricelist_id': 1, 'user_id': 1, 'partner_shipping_id': 18, 'payment_term': False}}
+        values = {'partner_id': partner.id}
+        fake_so = soo.new(values)
+        partner_change_res = fake_so.onchange({}, ['partner_id'], fake_so._onchange_spec())
+        # partner_change_res = fake_so.onchange(values, ['partner_id'], soo._onchange_spec())
+        # partner_change_res = soo.onchange_partner_id(partner.id)
+        # Expected results: partner_change_res = {'value': {'partner_invoice_id': 18, 'pricelist_id': 1, 'user_id': 1, 'partner_shipping_id': 18, 'payment_term': False}}
         assert 'value' in partner_change_res, 'Error in partner change'
         so_vals = {
             'partner_id': partner.id,
