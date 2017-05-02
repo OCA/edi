@@ -1,9 +1,9 @@
-issuer: Agrolait
+issuer: Camptocamp
 fields:
   amount: Total \s+(\d+.\d{2})
   date: \d\d/\d\d/\d\d\d\d\s\d\d:\d\d:\d\d
   invoice_number: SO\d+
-  static_partner_name: Axelor
+  static_partner_name: Camptocamp
   static_chatter_msg: []
 lines:
   start: Price\s+
