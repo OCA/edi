@@ -56,7 +56,7 @@ class TestPDFOrderImport(TransactionCase):
 
     def test_pdf_order_import(self):
         # create new quote
-        filename = 'so1.pdf'
+        filename = 'so2.pdf'
         partner = self.env.ref('base.res_partner_13')
         pdf_file_content, wiz = self.read_pdf_and_create_wizard(
             filename, partner)
@@ -65,7 +65,7 @@ class TestPDFOrderImport(TransactionCase):
         self.check_sale_order(so, pdf_file_content, partner)
 
         # update existing quote
-        filename_up = 'so2.pdf'
+        filename_up = 'so1.pdf'
         partner_up = self.env.ref('base.res_partner_2')
         pdf_file_content_up, wiz_up = self.read_pdf_and_create_wizard(
             filename_up, partner_up)

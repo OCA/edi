@@ -152,6 +152,7 @@ class SaleOrderImport(models.TransientModel):
     #    }]
 
     @api.model
+    @api.multi
     def _prepare_order(self, parsed_order, price_source):
         soo = self.env['sale.order']
         bdio = self.env['business.document.import']
@@ -181,7 +182,8 @@ class SaleOrderImport(models.TransientModel):
                         parsed_order['order_ref'],
                         existing_orders[0].name,
                         existing_orders[0].state))
-        partner_change_res = soo.onchange_partner_id(partner.id)
+        partner_change_res = soo.onchange_partner(partner.id)
+        # partner_change_res = {'value': {'partner_invoice_id': 18, 'pricelist_id': 1, 'user_id': 1, 'partner_shipping_id': 18, 'payment_term': False}}
         assert 'value' in partner_change_res, 'Error in partner change'
         so_vals = {
             'partner_id': partner.id,
