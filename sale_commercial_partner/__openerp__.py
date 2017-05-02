@@ -4,7 +4,7 @@
 
 {
     'name': 'Sale Commercial Partner',
-    'version': '8.0.1.0.0',
+    'version': '9.0.1.0.0',
     'category': 'Sales Management',
     'license': 'AGPL-3',
     'summary': "Add stored related field 'Commercial Customer' on sale orders",
@@ -15,5 +15,5 @@
         'views/sale.xml',
         'report/sale_report_view.xml',
     ],
-    'installable': False,
+    'installable': True,
 }

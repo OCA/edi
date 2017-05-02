@@ -11,12 +11,19 @@ class SaleReport(models.Model):
     commercial_partner_id = fields.Many2one(
         'res.partner', string='Commercial Customer', readonly=True)
 
-    def _select(self):
-        sql_str = super(SaleReport, self)._select()
-        sql_str += ', s.commercial_partner_id as commercial_partner_id'
-        return sql_str
+    # def _select(self):
+    #     sql_str = super(SaleReport, self)._select()
+    #     sql_str += ', s.commercial_partner_id as commercial_partner_id'
+    #     return sql_str
+    #
+    # def _group_by(self):
+    #     sql_str = super(SaleReport, self)._group_by()
+    #     sql_str += ', s.commercial_partner_id'
+    #     return sql_str
 
-    def _group_by(self):
-        sql_str = super(SaleReport, self)._group_by()
-        sql_str += ', s.commercial_partner_id'
-        return sql_str
+    # def _select(self):
+    #     return  super(SaleReport, self)._select() + ", s.commercial_partner_id as commercial_partner_id"
+    #
+    # def _group_by(self):
+    #     return super(SaleReport, self)._group_by() + ", s.commercial_partner_id"
+

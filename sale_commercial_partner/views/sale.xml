@@ -5,8 +5,6 @@
 -->
 
 <openerp>
-<data>
-
 
 <record id="view_order_form" model="ir.ui.view">
     <field name="name">commercial.partner.sale.order.form</field>
@@ -24,7 +22,7 @@
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="sale.view_sales_order_filter"/>
     <field name="arch" type="xml">
-        <filter string="Customer" position="before">
+        <filter position="before">
             <filter name="commercial_partner_groupby"
                 string="Commercial Customer"
                 context="{'group_by': 'commercial_partner_id'}"/>
@@ -32,6 +30,4 @@
     </field>
 </record>
 
-
-</data>
 </openerp>
