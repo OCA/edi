@@ -184,17 +184,18 @@ class SaleOrderImport(models.TransientModel):
                         existing_orders[0].state))
         values = {'partner_id': partner.id}
         fake_so = soo.new(values)
-        partner_change_res = fake_so.onchange({}, ['partner_id'], fake_so._onchange_spec())
-        # partner_change_res = fake_so.onchange(values, ['partner_id'], soo._onchange_spec())
-        # partner_change_res = soo.onchange_partner_id(partner.id)
-        # Expected results: partner_change_res = {'value': {'partner_invoice_id': 18, 'pricelist_id': 1, 'user_id': 1, 'partner_shipping_id': 18, 'payment_term': False}}
-        assert 'value' in partner_change_res, 'Error in partner change'
+        fake_so.onchange_partner_id()
+        partner_change_res = dict(
+            (key, value.id if not isinstance(value, int) else value)
+            for key, value in dict(fake_so._cache).iteritems()
+        )
+        assert len(partner_change_res) > 1, 'Error in partner change'
         so_vals = {
             'partner_id': partner.id,
             'client_order_ref': parsed_order.get('order_ref'),
             'order_line': []
-            }
-        so_vals.update(partner_change_res['value'])
+        }
+        so_vals.update(partner_change_res)
         if parsed_order.get('ship_to'):
             shipping_partner = bdio._match_shipping_partner(
                 parsed_order['ship_to'], partner, parsed_order['chatter_msg'])

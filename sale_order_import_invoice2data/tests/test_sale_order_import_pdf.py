@@ -20,7 +20,13 @@ except ImportError:
 
 class TestPDFOrderImport(TransactionCase):
 
-    def read_pdf_and_create_wizard(self, file_name, partner):
+    def setUp(self):
+        super(TestPDFOrderImport, self).setUp()
+        self.soio = self.env['sale.order.import']
+        self.camptocamp = self.env.ref('base.res_partner_12')
+
+    #def read_pdf_and_create_wizard(self, file_name, partner):
+    def read_pdf_and_create_wizard(self, file_name):
         soio = self.env['sale.order.import']
         testspath = os.path.dirname(os.path.realpath(__file__))
         templ_path = os.path.join(testspath, '../templates')
@@ -30,7 +36,7 @@ class TestPDFOrderImport(TransactionCase):
         wiz = soio.create({
             'order_file': base64.b64encode(pdf_file),
             'order_filename': file_name,
-            'partner_id': partner.id,
+            # 'partner_id': partner.id,
         })
         f.close()
         templates = read_templates(templ_path)
@@ -51,27 +57,38 @@ class TestPDFOrderImport(TransactionCase):
                     oline.product_uom_qty,
                     precision_digits=precision))
         # check if attachment of created SO
-        attachment = self.env['ir.attachment'].search([('res_id', '=', order.id), ('res_name', 'like', order.name)])
+        attachment = self.env['ir.attachment'].search([
+            ('res_id', '=', order.id),
+            ('res_name', 'like', order.name)
+        ])
         self.assertTrue(attachment)
 
     def test_pdf_order_import(self):
-        # create new quote
-        filename = 'so2.pdf'
-        partner = self.env.ref('base.res_partner_13')
-        pdf_file_content, wiz = self.read_pdf_and_create_wizard(
-            filename, partner)
+        # Import a sale order for a partner with no existing quotes
+        # (In the demo database, that is Camptocamp)
+        filename = 'so1.pdf'
+        pdf_file_content, wiz = self.read_pdf_and_create_wizard(filename)
         action = wiz.import_order_button()
-        so = self.env['sale.order'].browse(action['res_id'])
-        self.check_sale_order(so, pdf_file_content, partner)
+        self.assertEqual(action['res_model'], 'sale.order')
 
-        # update existing quote
-        filename_up = 'so1.pdf'
-        partner_up = self.env.ref('base.res_partner_2')
+        # Check if the quotation has been imported well
+        so = self.env['sale.order'].browse(action['res_id'])
+        self.check_sale_order(so, pdf_file_content, self.camptocamp)
+
+        # Update an existing quotation for the imported partner
+        # Again we use Camptocamp, which now has a quotation
+        filename_up = 'so2.pdf'
         pdf_file_content_up, wiz_up = self.read_pdf_and_create_wizard(
-            filename_up, partner_up)
+            filename_up)
         action_up1 = wiz_up.import_order_button()
+
+        # Check if we are getting the existing quotation to choose from
         self.assertEqual(action_up1['res_model'], 'sale.order.import')
         self.assertEqual(wiz_up.sale_id, so)
+
+        # Update the quotation
         action_up2 = wiz_up.update_order_button()
         self.assertEqual(action_up2['res_model'], 'sale.order')
-        self.check_sale_order(so, pdf_file_content_up, partner)
+
+        # Check if the quotation has been updated well
+        self.check_sale_order(so, pdf_file_content_up, self.camptocamp)
