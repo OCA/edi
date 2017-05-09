@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp import models, api, tools, _
 from openerp.exceptions import Warning as UserError
@@ -18,7 +21,7 @@ except ImportError:
     logger.debug('Cannot import PyPDF2')
 
 
-class BaseUbl(models.AbstractModel):
+class BaseUbl(models.TransientModel):
     _name = 'base.ubl'
     _description = 'Common methods to generate and parse UBL XML files'
 
@@ -287,7 +290,7 @@ class BaseUbl(models.AbstractModel):
                         product_name = sellers[0].product_name
                         seller_code = sellers[0].product_code
             if not seller_code:
-                seller_code = product.default_code
+                seller_code = product.barcode
             if not product_name:
                 variant = ", ".join(
                     [v.name for v in product.attribute_value_ids])
@@ -304,13 +307,13 @@ class BaseUbl(models.AbstractModel):
                 seller_identification, ns['cbc'] + 'ID')
             seller_identification_id.text = seller_code
         if product:
-            if product.ean13:
+            if product.barcode:
                 std_identification = etree.SubElement(
                     item, ns['cac'] + 'StandardItemIdentification')
                 std_identification_id = etree.SubElement(
                     std_identification, ns['cbc'] + 'ID',
                     schemeAgencyID='6', schemeID='GTIN')
-                std_identification_id.text = product.ean13
+                std_identification_id.text = product.barcode
             for attribute_value in product.attribute_value_ids:
                 item_property = etree.SubElement(
                     item, ns['cac'] + 'AdditionalItemProperty')
@@ -535,7 +538,7 @@ class BaseUbl(models.AbstractModel):
         code_xpath = line_node.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns)
         product_dict = {
-            'ean13': ean13_xpath and ean13_xpath[0].text or False,
+            'barcode': ean13_xpath and ean13_xpath[0].text or False,
             'code': code_xpath and code_xpath[0].text or False,
             }
         return product_dict
