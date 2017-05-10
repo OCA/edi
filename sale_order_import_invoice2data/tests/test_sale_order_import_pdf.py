@@ -2,14 +2,15 @@
 # © 2016 Sunflower IT (http://sunflowerweb.nl)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
-from openerp.tools import file_open, float_compare
-from tempfile import mkstemp
 import base64
 import os
 import logging
-logger = logging.getLogger(__name__)
+from tempfile import mkstemp
 
+from openerp.tests.common import TransactionCase
+from openerp.tools import file_open, float_compare
+
+logger = logging.getLogger(__name__)
 try:
     from invoice2data.main import extract_data
     from invoice2data.template import read_templates
@@ -26,7 +27,6 @@ class TestPDFOrderImport(TransactionCase):
         self.soio = self.env['sale.order.import']
         self.camptocamp = self.env.ref('base.res_partner_12')
 
-    # def read_pdf_and_create_wizard(self, file_name, partner):
     def read_pdf_and_create_wizard(self, file_name):
         soio = self.env['sale.order.import']
         testspath = os.path.dirname(os.path.realpath(__file__))
@@ -37,7 +37,6 @@ class TestPDFOrderImport(TransactionCase):
         wiz = soio.create({
             'order_file': base64.b64encode(pdf_file),
             'order_filename': file_name,
-            # 'partner_id': partner.id,
         })
         f.close()
         templates = read_templates(templ_path)

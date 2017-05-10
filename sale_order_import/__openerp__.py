@@ -8,7 +8,7 @@
     'category': 'Sales Management',
     'license': 'AGPL-3',
     'summary': 'Import RFQ or sale orders from files',
-    'author': 'Akretion,Sunflower IT,Odoo Community Association (OCA)',
+    'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['sale_commercial_partner', 'base_business_document_import'],
     'data': [

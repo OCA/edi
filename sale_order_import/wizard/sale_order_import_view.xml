@@ -14,7 +14,7 @@
             <group name="technical" invisible="1">
                 <field name="state"/>
             </group>
-            <group group="help-import" states="import">
+            <group name="help-import" states="import">
               <div>
                 <p>Upload below the customer order or request for quotation as CSV, XML or PDF file. When you click on the Import button:</p>
                 <ol>

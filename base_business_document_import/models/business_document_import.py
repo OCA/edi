@@ -302,22 +302,28 @@ class BusinessDocumentImport(models.AbstractModel):
                 sinfo = self.env['product.supplierinfo'].search([
                     ('name', '=', seller.id),
                     ('product_code', '=', product_dict['code']),
-                    ])
+                    ], limit=1)
                 if (
                         sinfo and
-                        sinfo[0].product_tmpl_id.product_variant_ids and
-                        len(
-                        sinfo[0].product_tmpl_id.product_variant_ids) == 1
+                        sinfo.product_tmpl_id.product_variant_ids and
+                        len(sinfo.product_tmpl_id.product_variant_ids) == 1
                         ):
-                    return sinfo[0].product_tmpl_id.product_variant_ids[0]
+                    return sinfo.product_tmpl_id.product_variant_ids[0]
+        if product_dict.get('desc'):
+            desc = product_dict['desc']
+            product = ppo.search([('name', '=', desc)], limit=1)
+            if product:
+                return product
         raise UserError(_(
             "Odoo couldn't find any product corresponding to the "
-            "following information extracted from the business document: "
+            "following information extracted from the business document:\n"
             "EAN13: %s\n"
             "Product code: %s\n"
+            "Product description: %s\n"
             "Supplier: %s\n") % (
                 product_dict.get('barcode'),
                 product_dict.get('code'),
+                product_dict.get('desc'),
                 seller and seller.name or 'None'))
 
     @api.model

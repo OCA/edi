@@ -8,18 +8,11 @@ fields:
 lines:
   start: Price\s+
   end: Total
-  fields:
-    desc: ([\w'-\[\]]+)(\s[\w\'-\[\]]+)*
-    taxes: ([\w'%-.]+)(\s[\w\'%-.]+)*
-    qty: (\d+.\d+)
-    unit_price: (\d+.\d+)
-    price: (\d+.\d+\s€)
-  fields_order:
-    - desc
-    - taxes
-    - qty
-    - unit_price
-    - price
+  line: (?P<desc>[\w\s]+)(?:\(.*\))?\s{2,}
+    (?P<taxes>[\w\s'%-.]+)\s{2,}
+    (?P<qty>\d+.\d+)\s{2,}
+    (?P<unit_price>\d+.\d+)\s{2,}
+    (?P<price>\d+.\d+)\s€
   required_fields:
     - desc
 keywords:
@@ -29,7 +22,6 @@ options:
   currency: EUR
   decimal_separator: "."
   line_separator: "\\n"
-  field_separator: "\\s{2,}"
   date_formats:
     - '%Y-%m-%d'
 
