@@ -26,6 +26,7 @@ try:
 except ImportError:
     logger.debug('Cannot import invoice2data')
 
+
 class SaleOrderImport(models.TransientModel):
     _inherit = 'sale.order.import'
 
@@ -150,6 +151,7 @@ class SaleOrderImport(models.TransientModel):
         bdio.post_create_or_update(parsed_order, order)
         logger.info('Sale Order ID %d created', order.id)
         return order
+
 
 class BusinessDocumentImport(models.AbstractModel):
     _inherit = 'business.document.import'

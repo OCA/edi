@@ -13,6 +13,17 @@ from lxml import etree
 logger = logging.getLogger(__name__)
 
 
+def get_values_for_create(instance):
+    """ Helper function to get values from object as dict """
+    return {
+        f: instance._fields[f].convert_to_write(v)
+        if not isinstance(instance._fields[f],
+                          fields._RelationalMulti)
+        else v.ids
+        for f, v in instance._cache.iteritems()
+    }
+
+
 class SaleOrderImport(models.TransientModel):
     _name = 'sale.order.import'
     _description = 'Sale Order Import from Files'
@@ -20,7 +31,7 @@ class SaleOrderImport(models.TransientModel):
     state = fields.Selection([
         ('import', 'Import'),
         ('update', 'Update'),
-        ], string='State', default="import")
+    ], string='State', default="import")
     partner_id = fields.Many2one(
         'res.partner', string='Customer', domain=[('customer', '=', True)])
     csv_import = fields.Boolean(default=False, readonly=True)
@@ -32,11 +43,11 @@ class SaleOrderImport(models.TransientModel):
     doc_type = fields.Selection([
         ('rfq', 'Request For Quotation'),
         ('order', 'Sale Order'),
-        ], string='Document Type', readonly=True)
+    ], string='Document Type', readonly=True)
     price_source = fields.Selection([
         ('pricelist', 'Pricelist'),
         ('order', 'Customer Order'),
-        ], string='Apply Prices From')
+    ], string='Apply Prices From')
     # for state = update
     commercial_partner_id = fields.Many2one(
         'res.partner', string='Customer', readonly=True)
@@ -77,7 +88,7 @@ class SaleOrderImport(models.TransientModel):
                         "This file '%s' is not recognised as a CSV, XML nor "
                         "PDF file. Please check the file and it's "
                         "extension.") % self.order_filename
-                    }}
+                }}
         else:
             self.csv_import = False
             self.doc_type = False
@@ -120,39 +131,7 @@ class SaleOrderImport(models.TransientModel):
             "This type of XML RFQ/order is not supported. Did you install "
             "the module to support this XML format?"))
 
-    # Format of parsed_order
-    # {
-    # 'partner': {
-    #     'vat': 'FR25499247138',
-    #     'name': 'Camptocamp',
-    #     'email': 'luc@camptocamp.com',
-    #     },
-    # 'ship_to': {
-    #    'partner': partner_dict,
-    #    'address': {
-    #       'country_code': 'FR',
-    #       'state_code': False,
-    #       'zip': False,
-    #       }
-    # 'date': '2016-08-16',  # order date
-    # 'order_ref': 'PO1242',  # Customer PO number
-    # 'currency': {'iso': 'EUR', 'symbol': u'€'},
-    # 'incoterm': 'EXW',
-    # 'note': 'order notes of the customer',
-    # 'chatter_msg': ['msg1', 'msg2']
-    # 'lines': [{
-    #           'product': {
-    #                'code': 'EA7821',
-    #                'ean13': '2100002000003',
-    #                },
-    #           'qty': 2.5,
-    #           'uom': {'unece_code': 'C62'},
-    #           'price_unit': 12.42,  # without taxes
-    # 'doc_type': 'rfq' or 'order',
-    #    }]
-
     @api.model
-    @api.multi
     def _prepare_order(self, parsed_order, price_source):
         soo = self.env['sale.order']
         bdio = self.env['business.document.import']
@@ -173,7 +152,7 @@ class SaleOrderImport(models.TransientModel):
                 ('client_order_ref', '=', parsed_order['order_ref']),
                 ('partner_id', '=', partner.id),
                 ('state', '!=', 'cancel'),
-                ])
+            ])
             if existing_orders:
                 raise UserError(_(
                     "An order of customer '%s' with reference '%s' "
@@ -185,11 +164,8 @@ class SaleOrderImport(models.TransientModel):
         values = {'partner_id': partner.id}
         fake_so = soo.new(values)
         fake_so.onchange_partner_id()
-        partner_change_res = dict(
-            (key, value.id if not isinstance(value, int) else value)
-            for key, value in dict(fake_so._cache).iteritems()
-        )
-        assert len(partner_change_res) > 1, 'Error in partner change'
+
+        partner_change_res = get_values_for_create(fake_so)
         so_vals = {
             'partner_id': partner.id,
             'client_order_ref': parsed_order.get('order_ref'),
@@ -291,7 +267,7 @@ class SaleOrderImport(models.TransientModel):
                 'state': 'update',
                 'sale_id': default_sale_id,
                 'doc_type': parsed_order.get('doc_type'),
-                })
+            })
             action = self.env['ir.actions.act_window'].for_xml_id(
                 'sale_order_import', 'sale_order_import_action')
             action['res_id'] = self.id
@@ -321,7 +297,7 @@ class SaleOrderImport(models.TransientModel):
             'views': False,
             'view_id': False,
             'res_id': order.id,
-            })
+        })
         return action
 
     @api.model
@@ -374,7 +350,7 @@ class SaleOrderImport(models.TransientModel):
                 'uom': oline.product_uom,
                 'line': oline,
                 'price_unit': price_unit,
-                })
+            })
         compare_res = bdio.compare_lines(
             existing_lines, parsed_order['lines'], chatter,
             qty_precision=qty_prec, seller=False)
@@ -470,5 +446,5 @@ class SaleOrderImport(models.TransientModel):
             'views': False,
             'view_id': False,
             'res_id': order.id,
-            })
+        })
         return action
