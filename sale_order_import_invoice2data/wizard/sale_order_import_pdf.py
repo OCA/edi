@@ -2,23 +2,18 @@
 # © 2016 Sunflower IT (http://sunflowerweb.nl)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import logging
+import os
+import pkg_resources
+from tempfile import mkstemp
+
 from openerp import models, api, tools, _
 from openerp.exceptions import Warning as UserError
+from openerp.modules.module import get_resource_path
 from openerp.tools import float_compare
-from tempfile import mkstemp
-import base64
-import unicodecsv
-import os
-import re
-import pkg_resources
-import logging
+from openerp.tools.misc import file_open
+
 logger = logging.getLogger(__name__)
-
-try:
-    import unicodecsv
-except ImportError:
-    logger.debug('Cannot import unicodecsv')
-
 try:
     from invoice2data.main import extract_data
     from invoice2data.template import read_templates
@@ -30,25 +25,9 @@ except ImportError:
 class SaleOrderImport(models.TransientModel):
     _inherit = 'sale.order.import'
 
-    # @api.model
-    # def fallback_parse_pdf_saleorder(self, file_data):
-    #     '''This method must be inherited by additionnal modules with
-    #     the same kind of logic as the account_bank_statement_import_*
-    #     modules'''
-    #     return self.invoice2data_parse_saleorder(file_data)
-    #
     @api.model
-    def parse_pdf_order(self, file_data, detect_doc_type=False):
-        logger.info('Trying to analyze PDF saleorder with invoice2data lib')
-        if detect_doc_type:
-            return 'rfq'
-        fd, file_name = mkstemp()
-        try:
-            os.write(fd, file_data)
-        finally:
-            os.close(fd)
-        # Transfer log level of Odoo to invoice2data
-        loggeri2data.setLevel(logger.getEffectiveLevel())
+    def collect_pdf_templates(self):
+        """ Create a collection of templates """
         local_templates_dir = tools.config.get(
             'invoice2data_templates_dir', False)
         logger.debug(
@@ -64,19 +43,55 @@ class SaleOrderImport(models.TransientModel):
         logger.debug(
             'Calling invoice2data.extract_data with templates=%s',
             templates)
-        testspath = os.path.dirname(os.path.realpath(__file__))
-        templ_path = os.path.join(testspath, '../templates')
-        file_path = os.path.join(testspath, 'files', file_name)
-        templates += read_templates(templ_path)
+
+        # Add (test) templates defined in this module
+        templates += read_templates(
+            get_resource_path('sale_order_import_invoice2data',
+                'templates'))
+        return templates
+
+    @api.model
+    def parse_pdf_order(self, file_data, detect_doc_type=False):
+        """ Parse Sale order PDF with invoice2data """
+        logger.info('Trying to analyze PDF saleorder with invoice2data lib')
+
+        # document type is RFQ
+        if detect_doc_type:
+            return 'rfq'
+
+        # Write PDF contents to temp file
+        fd, file_name = mkstemp()
+        try:
+            os.write(fd, file_data)
+        finally:
+            os.close(fd)
+
+        # Transfer log level of Odoo to invoice2data
+        loggeri2data.setLevel(logger.getEffectiveLevel())
+
+        # Try to use invoice2data to parse file
+        templates = self.collect_pdf_templates()
+        invoice2data_res = None
         try:
             invoice2data_res = extract_data(file_name, templates=templates)
-        except Exception, e:
-            raise UserError(_(
+            if not invoice2data_res:
+                logger.info(_(
+                    "This PDF saleorder doesn't match a known template of "
+                    "the invoice2data lib."))
+        except Exception as e:
+            logger.info(_(
                 "PDF saleorder parsing failed. Error message: %s") % e)
+
+        # Remove temp file
+        os.remove(file_name)
+
+        # Failure
         if not invoice2data_res:
-            raise UserError(_(
-                "This PDF saleorder doesn't match a known template of "
-                "the invoice2data lib."))
+            # Try other kinds of PDF parsing
+            return super(SaleOrderImport, self).parse_pdf_order(file_data,
+                                                                detect_doc_type)
+
+        # Success, return parsed sale order
         logger.info(
             'Result of invoice2data PDF extraction: %s', invoice2data_res)
         return self.invoice2data_to_parsed_order(invoice2data_res)
@@ -142,39 +157,3 @@ class SaleOrderImport(models.TransientModel):
         if 'amount_tax' in invoice2data_res:
             parsed_order['amount_tax'] = invoice2data_res['amount_tax']
         return parsed_order
-
-    @api.model
-    def create_order(self, parsed_order, price_source):
-        bdio = self.env['business.document.import']
-        so_vals = self._prepare_order(parsed_order, price_source)
-        order = self.env['sale.order'].create(so_vals)
-        bdio.post_create_or_update(parsed_order, order)
-        logger.info('Sale Order ID %d created', order.id)
-        return order
-
-
-class BusinessDocumentImport(models.AbstractModel):
-    _inherit = 'business.document.import'
-
-    @api.model
-    def _match_product(self, product_dict, chatter_msg, seller=False):
-        """
-        Extension to support product search on name
-        TODO: submit as a PR to business_document_import
-        """
-        ppo = self.env['product.product']
-        self._strip_cleanup_dict(product_dict)
-        if product_dict.get('desc'):
-            desc = product_dict['desc']
-            products = ppo.search([
-                ('name', '=', desc)])
-            if not products:
-                # Also try the part outside brackets only
-                stripped_desc = re.sub(
-                    "[\(\[].*?[\)\]]", "", desc).strip()
-                products = ppo.search([
-                    ('name', '=', stripped_desc)])
-            if products:
-                return products[0]
-        return super(BusinessDocumentImport, self)._match_product(
-            product_dict, chatter_msg, seller=seller)

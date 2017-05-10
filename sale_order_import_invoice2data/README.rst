@@ -11,23 +11,21 @@ To know the full story behind the development of this module, read this `blog po
 Installation
 ============
 
-This module requires the Python library *invoice2data* available on `Github <https://github.com/m3nu/invoice2data>`_.
+This module requires the Python library *invoice2data*.
 
-To install the right version of the library, run:
+To install it, run:
 
 .. code::
 
-  sudo pip install git+https://github.com/m3nu/invoice2data.git
+  sudo pip install invoice2data
 
 In order to use a recent version of invoice2data on Odoo v8, you need an Odoo v8 dated after January 29th 2016, so that it contains `this fix <https://github.com/odoo/odoo/commit/edeb5a8c0fb5c837364f1d92db731f89824bb28a>`_ which fixes `this bug <https://github.com/odoo/odoo/issues/10670>`_.
 
-The invoice2data library requires the latest version of the *pdftotext* utility, which is not yet packaged in Debian/Ubuntu. So you should download it from `the FTP server of Foolabs <ftp://ftp.foolabs.com/pub/xpdf/xpdfbin-linux-3.04.tar.gz>`_ then uncompress it and copy the file *bin64/pdftotext* to */usr/local/bin*.
-
-If you want the invoice2data library to fallback on OCR if the PDF doesn't contain text (only a very small minority of PDF invoices are image-based and require OCR), you should also install `Imagemagick <http://www.imagemagick.org/>`_ (to get the *convert* utility to convert PDF to TIFF) and `Tesseract OCR <https://github.com/tesseract-ocr/tesseract>`_ :
+The invoice2data library requires the *pdftotext* utility, which you can install on Debian/Ubuntu with:
 
 .. code::
 
-  sudo apt-get install imagemagick tesseract-ocr
+  sudo apt-get install poppler-utils
 
 If you want to use custom invoice templates for the invoice2data lib (in addition to the templates provided by the invoice2data lib), you should add a line in your Odoo server configuration file such as:
 
@@ -90,9 +88,10 @@ Credits
 Contributors
 ------------
 
-* Tom Blauwendraat <info@sunflowerweb.nl>
-* Terence Nzaywa <terrence@sunflowerweb.nl>
 * Alexis de Lattre <alexis.delattre@akretion.com>
+* Tom Blauwendraat <info@sunflowerweb.nl>
+* Holger Brunn <hbrunn@therp.nl>
+* Terence Nzaywa <terrence@sunflowerweb.nl>
 
 Maintainer
 ----------
