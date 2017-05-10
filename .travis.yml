@@ -24,6 +24,7 @@ addons:
 #     Search your packages here:
 #       https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
       - wkhtmltopdf  # only add if needed and check the before_install section below
+      - poppler-utils # for invoice2data
 
 # set up an X server to run wkhtmltopdf.
 before_install:
@@ -50,9 +51,6 @@ install:
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
   - pip install invoice2data
-  - wget -P /tmp http://public.akretion.com/pdftotext-3.04
-  - sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
-  - sudo chmod 755 /usr/local/bin/pdftotext
   - pip install PyPDF2  # needed for account_invoice*zugferd
   - pip install phonenumbers
 
