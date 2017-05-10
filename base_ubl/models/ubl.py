@@ -290,7 +290,7 @@ class BaseUbl(models.TransientModel):
                         product_name = sellers[0].product_name
                         seller_code = sellers[0].product_code
             if not seller_code:
-                seller_code = product.barcode
+                seller_code = product.default_code
             if not product_name:
                 variant = ", ".join(
                     [v.name for v in product.attribute_value_ids])
@@ -532,13 +532,13 @@ class BaseUbl(models.TransientModel):
         return {}
 
     def ubl_parse_product(self, line_node, ns):
-        ean13_xpath = line_node.xpath(
+        barcode_xpath = line_node.xpath(
             "cac:Item/cac:StandardItemIdentification/cbc:ID[@schemeID='GTIN']",
             namespaces=ns)
         code_xpath = line_node.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns)
         product_dict = {
-            'barcode': ean13_xpath and ean13_xpath[0].text or False,
+            'barcode': barcode_xpath and barcode_xpath[0].text or False,
             'code': code_xpath and code_xpath[0].text or False,
             }
         return product_dict
