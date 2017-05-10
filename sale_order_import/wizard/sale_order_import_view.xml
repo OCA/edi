@@ -18,7 +18,7 @@
                       <div>
                         <p>Upload below the customer order or request for quotation as CSV, XML or PDF file. When you click on the Import button:</p>
                         <ol>
-                          <li>If it is a CSV file, you will have to manually select the customer. The CSV file should have 2 columns: the product reference or EAN13 (1st col) and then the product quantity (2nd col). It shouldn't have any header line and use semi-colon as field separator. The quantity shouldn't use any thousand separator ; if it is a decimal value, it should use dot as the decimal separator.</li>
+                          <li>If it is a CSV file, you will have to manually select the customer. The CSV file should have 2 columns: the product reference or Barcode (1st col) and then the product quantity (2nd col). It shouldn't have any header line and use semi-colon as field separator. The quantity shouldn't use any thousand separator ; if it is a decimal value, it should use dot as the decimal separator.</li>
                           <li>If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed. For the <a href="http://ubl.xml.org/" target="_blank">Universal Business Language</a> format (UBL), you should install the module <em>sale_order_import_ubl</em>.</li>
                           <li>If it is a PDF file, Odoo will try to find an XML file in the attachments of the PDF file and then use this XML file to create the quotation.</li>
                         </ol>
