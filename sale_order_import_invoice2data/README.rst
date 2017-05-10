@@ -1,6 +1,6 @@
-===================================
-Sale Order Import Saleorder2data
-===================================
+==============================
+Sale Order Import Invoice2data
+==============================
 
 This module is an extension of the module *sale_order_import*: it adds support for regular PDF Sale Order i.e. PDF Sale Order that don't have an embedded XML file. It uses the `invoice2data library
 <https://github.com/m3nu/invoice2data>`_ which takes care of extracting the text of the PDF Sale Order, find an existing invoice template and execute the invoice template to extract the useful
@@ -97,4 +97,4 @@ Contributors
 Maintainer
 ----------
 
-This module is maintained by Sunflower IT and Therp BV.
+This module is maintained by the OCA.

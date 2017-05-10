@@ -18,6 +18,7 @@ try:
 except ImportError:
     logger.debug('Cannot import invoice2data')
 
+
 class TestPDFOrderImport(TransactionCase):
 
     def setUp(self):
@@ -25,7 +26,7 @@ class TestPDFOrderImport(TransactionCase):
         self.soio = self.env['sale.order.import']
         self.camptocamp = self.env.ref('base.res_partner_12')
 
-    #def read_pdf_and_create_wizard(self, file_name, partner):
+    # def read_pdf_and_create_wizard(self, file_name, partner):
     def read_pdf_and_create_wizard(self, file_name):
         soio = self.env['sale.order.import']
         testspath = os.path.dirname(os.path.realpath(__file__))
@@ -49,7 +50,7 @@ class TestPDFOrderImport(TransactionCase):
         precision = self.env['decimal.precision'].precision_get('Product UoS')
         self.assertEqual(order.partner_id, partner)
         self.assertEqual(len(order.order_line),
-            len(pdf_file_content['lines']))
+                         len(pdf_file_content['lines']))
         for i, oline in enumerate(order.order_line):
             self.assertFalse(
                 float_compare(
