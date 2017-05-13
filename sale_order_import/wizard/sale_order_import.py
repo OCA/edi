@@ -115,10 +115,10 @@ class SaleOrderImport(models.TransientModel):
         """
         Get PDF attachments, filter on XML files and call import_order_xml
         """
-        xml_files_dict = self.get_xml_files_from_pdf(order_file)
+        bdio = self.env['business.document.import']
+        xml_files_dict = bdio.get_xml_files_from_pdf(order_file)
         if not xml_files_dict:
-            raise UserError(_(
-                'There are no embedded XML file in this PDF file.'))
+            logger.info('There are no embedded XML file in this PDF file.')
         for xml_filename, xml_root in xml_files_dict.iteritems():
             logger.info('Trying to parse XML file %s', xml_filename)
             try:
@@ -128,8 +128,8 @@ class SaleOrderImport(models.TransientModel):
             except:
                 continue
         raise UserError(_(
-            "This type of XML RFQ/order is not supported. Did you install "
-            "the module to support this XML format?"))
+            "This type of PDF RFQ/order is not supported. Did you install "
+            "the module to support this PDF format?"))
 
     @api.model
     def _prepare_order(self, parsed_order, price_source):
