@@ -26,7 +26,7 @@ class TestCsvOrderImport(TransactionCase):
             'order_file': base64.b64encode(csv_file),
             'order_filename': filename,
             'partner_id': partner.id,
-        })
+        })  
         f.close()
         return csv_file_content, wiz
 

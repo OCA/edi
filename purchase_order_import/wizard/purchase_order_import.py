@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp import models, fields, api, _
 from openerp.tools import float_is_zero
@@ -8,6 +11,8 @@ from openerp.exceptions import Warning as UserError
 import logging
 import mimetypes
 from lxml import etree
+from time import strftime
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +81,7 @@ class PurchaseOrderImport(models.TransientModel):
     # 'lines': [{
     #           'product': {
     #                'code': 'EA7821',
-    #                'ean13': '2100002000003',
+    #                'barcode': '2100002000003',
     #                },
     #           'qty': 2.5,
     #           'uom': {'unece_code': 'C62'},
@@ -131,7 +136,7 @@ class PurchaseOrderImport(models.TransientModel):
 
     @api.model
     def _prepare_create_order_line(
-            self, product, qty, uom, price_unit, so_vals):
+            self, product, qty, uom, price_unit, vals):
         vals = {
             'product_id': product.id,
             'product_qty': qty,
@@ -161,7 +166,6 @@ class PurchaseOrderImport(models.TransientModel):
                 'price_unit': price_unit,
                 'line': oline,
                 })
-
         compare_res = bdio.compare_lines(
             existing_lines, parsed_quote['lines'], chatter,
             seller=order.partner_id.commercial_partner_id)
@@ -201,7 +205,6 @@ class PurchaseOrderImport(models.TransientModel):
                 line_vals = self._prepare_create_order_line(
                     add['product'], add['uom'], add['import_line'],
                     order)
-                line_vals['order_id'] = order.id
                 new_line = polo.create(line_vals)
                 to_create_label.append('%s %s x %s' % (
                     new_line.product_qty,
@@ -213,19 +216,51 @@ class PurchaseOrderImport(models.TransientModel):
 
     @api.model
     def _prepare_create_order_line(self, product, uom, import_line, order):
-        polo = self.env['purchase.order.line']
-        product_change_res = polo.onchange_product_id(
-            order.pricelist_id.id, product.id,
-            import_line['qty'], uom.id,
-            order.partner_id.id,
-            fiscal_position_id=order.fiscal_position.id or False,
-            price_unit=import_line['price_unit'])['value']
-        if product_change_res.get('taxes_id'):
-            product_change_res['taxes_id'] = [
-                (6, 0, product_change_res['taxes_id'])]
-        vals = product_change_res
-        vals['product_id'] = product.id
-        return vals
+        uom_qty = self.env['product.uom']._compute_qty_obj(
+            uom, import_line['qty'], product.uom_po_id)
+        seller = product._select_seller(
+            product,
+            partner_id=order.partner_id,
+            quantity=uom_qty,
+            date=order.date_order and order.date_order[:10],
+            uom_id=product.uom_po_id)
+        taxes = product.supplier_taxes_id
+        fpos = order.fiscal_position_id.id
+        taxes_id = fpos.map_tax(taxes) if fpos else taxes
+
+        if taxes_id:
+            taxes_id = taxes_id.filtered(
+                lambda x: x.company_id.id == self.company_id.id)
+
+        price_unit = self.env['account.tax']._fix_tax_included_price(
+            import_line['price_unit'], product.supplier_taxes_id, taxes_id
+            ) if seller else 0.0
+
+        if price_unit and seller and order.currency_id and\
+         seller.currency_id != order.currency_id:
+            price_unit = seller.currency_id.compute(
+                price_unit, order.currency_id)
+            
+        product_lang = product.with_context({
+            'lang': order.partner_id.lang,
+            'partner_id': order.partner_id.id,
+        })
+        name = product_lang.display_name
+        if product_lang.description_purchase:
+            name += '\n' + product_lang.description_purchase
+        date_planned = self.env['purchase.order.line']._get_date_planned(
+            seller, po=order).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+
+        return {
+            'name': name,
+            'product_qty': uom_qty,
+            'product_id': product.id,
+            'product_uom': uom.id,
+            'price_unit': price_unit,
+            'date_planned': date_planned,
+            'taxes_id': [(6, 0, taxes_id.ids)],
+            'order_id': order.id,
+        }
 
     @api.multi
     def update_rfq_button(self):

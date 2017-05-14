@@ -74,7 +74,7 @@
         </record>
 
         <record id="gbp_pricelist_item0" model="product.pricelist.item">
-            <field name="price_version_id" ref="gbp_pricelist"/>
+            <field name="pricelist_id" ref="gbp_pricelist"/>
             <field name="base">list_price</field>
         </record>
 
@@ -112,26 +112,26 @@
         </record>
 
         <!-- for tests/UBL-RequestForQuotation-2.0-Example.xml -->
-            <record id="terminus" model="res.partner">
-                <field name="name">The Terminus</field>
-                <field name="is_company" eval="True"/>
-                <field name="supplier" eval="False"/>
-                <field name="customer" eval="True"/>
-                <field name="email"></field>
-                <field name="street">56A Avon Way</field>
-                <field name="street2">Thereabouts</field>
-                <field name="zip">ZZ99 1ZZ</field>
-                <field name="city">Bridgtow</field>
-                <field name="country_id" ref="base.uk"/>
-            </record>
+        <record id="terminus" model="res.partner">
+            <field name="name">The Terminus</field>
+            <field name="is_company" eval="True"/>
+            <field name="supplier" eval="False"/>
+            <field name="customer" eval="True"/>
+            <field name="email"></field>
+            <field name="street">56A Avon Way</field>
+            <field name="street2">Thereabouts</field>
+            <field name="zip">ZZ99 1ZZ</field>
+            <field name="city">Bridgtow</field>
+            <field name="country_id" ref="base.uk"/>
+        </record>
 
-            <record id="s_massiah" model="res.partner">
-                <field name="parent_id" ref="terminus"/>
-                <field name="name">S Massiah</field>
-                <field name="email">smassiah@the-email.co.uk</field>
-                <field name="customer" eval="True"/>
-                <field name="use_parent_address" eval="True"/>
-            </record>
+        <record id="s_massiah" model="res.partner">
+            <field name="parent_id" ref="terminus"/>
+            <field name="name">S Massiah</field>
+            <field name="email">smassiah@the-email.co.uk</field>
+            <field name="customer" eval="True"/>
+            <field name="use_parent_address" eval="True"/>
+        </record>
 
         <!-- for tests/UBL-RequestForQuotation-2.1-Example.xml -->
 
