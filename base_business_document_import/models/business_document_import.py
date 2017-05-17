@@ -485,18 +485,18 @@ class BusinessDocumentImport(models.AbstractModel):
         prec = self.env['decimal.precision'].precision_get('Account')
         # we should not use the Account prec directly, but...
         if type_tax_use == 'purchase':
-            domain.append(('type_tax_use', 'in', ('purchase', 'all')))
+            domain.append(('type_tax_use', '=', 'purchase'))
         elif type_tax_use == 'sale':
-            domain.append(('type_tax_use', 'in', ('sale', 'all')))
+            domain.append(('type_tax_use', '=', 'sale'))
         if price_include is False:
             domain.append(('price_include', '=', False))
         elif price_include is True:
             domain.append(('price_include', '=', True))
         # with the code abose, if you set price_include=None, it will
         # won't depend on the value of the price_include parameter
-        assert tax_dict.get('type') in ['fixed', 'percent'], 'bad tax type'
+        assert tax_dict.get('amount_type') in ['fixed', 'percent'], 'bad tax type'
         assert 'amount' in tax_dict, 'Missing amount key in tax_dict'
-        domain.append(('type', '=', tax_dict['type']))
+        domain.append(('amount_type', '=', tax_dict['amount_type']))
         if tax_dict.get('unece_type_code'):
             domain.append(
                 ('unece_type_code', '=', tax_dict['unece_type_code']))
@@ -506,7 +506,7 @@ class BusinessDocumentImport(models.AbstractModel):
         taxes = ato.search(domain)
         for tax in taxes:
             tax_amount = tax.amount
-            if tax_dict['type'] == 'percent':
+            if tax_dict['amount_type'] == 'percent':
                 tax_amount *= 100
             if not float_compare(
                     tax_dict['amount'], tax_amount, precision_digits=prec):
@@ -523,7 +523,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 tax_dict.get('unece_type_code'),
                 tax_dict.get('unece_categ_code'),
                 tax_dict['amount'],
-                tax_dict['type'] == 'percent' and '%' or _('(fixed)')))
+                tax_dict['amount_type'] == 'percent' and '%' or _('(fixed)')))
 
     def compare_lines(
             self, existing_lines, import_lines, chatter_msg,

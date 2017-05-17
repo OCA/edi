@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 # © 2015-2016 Akretion France (www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#   (<http://www.serpentcs.com>)
 # The licence is in the file __openerp__.py
+
 
 from openerp.tests.common import TransactionCase
 import base64
@@ -16,7 +19,7 @@ class TestInvoiceImport(TransactionCase):
             'name': 'French VAT purchase 20.0%',
             'description': 'FR-VAT-buy-20.0',
             'amount': 0.2,
-            'type': 'percent',
+            'amount_type': 'percent',
             'account_collected_id': self.env.ref('account.a_expense').id,
             'account_paid_id': self.env.ref('account.a_expense').id,
             'base_sign': -1,
@@ -43,7 +46,7 @@ class TestInvoiceImport(TransactionCase):
         invoices = self.env['account.invoice'].search([
             ('state', '=', 'draft'),
             ('type', '=', 'in_invoice'),
-            ('supplier_invoice_number', '=', '562044387')
+            ('reference', '=', '562044387')
             ])
         self.assertEquals(len(invoices), 1)
         inv = invoices[0]
@@ -76,8 +79,7 @@ class TestInvoiceImport(TransactionCase):
         # (we re-use the invoice created by the first import !)
         inv.write({
             'date_invoice': False,
-            'supplier_invoice_number': False,
-            'check_total': False,
+            'reference': False,
             })
 
         # New import with update of an existing draft invoice
@@ -99,7 +101,7 @@ class TestInvoiceImport(TransactionCase):
         invoices = self.env['account.invoice'].search([
             ('state', '=', 'draft'),
             ('type', '=', 'in_invoice'),
-            ('supplier_invoice_number', '=', '562044387')
+            ('reference', '=', '562044387')
             ])
         self.assertEquals(len(invoices), 1)
         inv = invoices[0]

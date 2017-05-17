@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#   (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp import models, fields, api, _
 from openerp.exceptions import Warning as UserError
@@ -64,7 +67,7 @@ class AccountInvoiceImport(models.TransientModel):
         if qty_xpath[0].attrib and qty_xpath[0].attrib.get('unitCode'):
             unece_uom = qty_xpath[0].attrib['unitCode']
             uom = {'unece_code': unece_uom}
-        ean13_xpath = iline.xpath(
+        barcode_xpath = iline.xpath(
             "ram:SpecifiedTradeProduct/ram:GlobalID", namespaces=namespaces)
         # Check SchemeID ?
         product_code_xpath = iline.xpath(
@@ -93,7 +96,7 @@ class AccountInvoiceImport(models.TransientModel):
         taxes = self.parse_zugferd_taxes(taxes_xpath, namespaces)
         vals = {
             'product': {
-                'ean13': ean13_xpath and ean13_xpath[0].text or False,
+                'barcode': barcode_xpath and barcode_xpath[0].text or False,
                 'code':
                 product_code_xpath and product_code_xpath[0].text or False,
                 },
