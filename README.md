@@ -16,13 +16,13 @@ addon | version | summary
 [account_invoice_import_invoice2data](account_invoice_import_invoice2data/) | 9.0.1.0.0 | Import supplier invoices using the invoice2data lib
 [account_invoice_import_ubl](account_invoice_import_ubl/) | 9.0.1.0.0 | Import UBL XML supplier invoices/refunds
 [account_invoice_import_zugferd](account_invoice_import_zugferd/) | 9.0.1.0.0 | Import ZUGFeRD-compliant supplier invoices/refunds
-[account_invoice_ubl](account_invoice_ubl/) | 8.0.1.0.0 | Generate UBL XML file for customer invoices/refunds
-[account_invoice_zugferd](account_invoice_zugferd/) | 8.0.1.0.0 | Generate ZUGFeRD customer invoices
+[account_invoice_ubl](account_invoice_ubl/) | 9.0.1.0.0 | Generate UBL XML file for customer invoices/refunds
+[account_invoice_zugferd](account_invoice_zugferd/) | 9.0.1.0.0 | Generate ZUGFeRD customer invoices
 [base_business_document_import](base_business_document_import/) | 9.0.1.0.0 | Provides technical tools to import sale orders or supplier invoices
 [base_business_document_import_phone](base_business_document_import_phone/) | 9.0.1.0.0 | Use phone numbers to match partners upon import of business documents
 [base_business_document_import_stock](base_business_document_import_stock/) | 9.0.1.0.0 | Match incoterms upon import of business documents
 [base_ubl](base_ubl/) | 9.0.1.0.0 | Base module for Universal Business Language (UBL)
-[base_ubl_payment](base_ubl_payment/) | 8.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
+[base_ubl_payment](base_ubl_payment/) | 9.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
 [base_zugferd](base_zugferd/) | 9.0.1.0.0 | Base module for ZUGFeRD
 [purchase_order_import](purchase_order_import/) | 9.0.1.0.0 | Update RFQ via the import of quotations from suppliers
 [purchase_order_import_ubl](purchase_order_import_ubl/) | 9.0.1.0.0 | Import UBL XML quotation files

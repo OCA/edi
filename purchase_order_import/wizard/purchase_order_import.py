@@ -30,7 +30,7 @@ class PurchaseOrderImport(models.TransientModel):
     quote_file = fields.Binary(
         string='XML or PDF Quotation', required=True,
         help="Upload a quotation file that you received from "
-        "your supplier. Supported formats: XML and PDF "
+        "your vendor. Supported formats: XML and PDF "
         "(PDF with an embeded XML file).")
     quote_filename = fields.Char(string='Filename')
     update_option = fields.Selection([
@@ -281,8 +281,8 @@ class PurchaseOrderImport(models.TransientModel):
                 partner.commercial_partner_id !=
                 order.partner_id.commercial_partner_id):
             raise UserError(_(
-                "The supplier of the imported quotation (%s) is different "
-                "from the supplier of the RFQ (%s)." % (
+                "The vendor of the imported quotation (%s) is different "
+                "from the vendor of the RFQ (%s)." % (
                     partner.commercial_partner_id.name,
                     order.partner_id.commercial_partner_id.name)))
         if currency != order.currency_id:

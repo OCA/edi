@@ -10,7 +10,7 @@
     'version': '9.0.1.0.0',
     'category': 'Purchase Management',
     'license': 'AGPL-3',
-    'summary': 'Update RFQ via the import of quotations from suppliers',
+    'summary': 'Update RFQ via the import of quotations from vendors',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['purchase', 'base_business_document_import_stock'],

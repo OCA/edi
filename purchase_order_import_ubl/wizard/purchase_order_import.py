@@ -69,9 +69,9 @@ class PurchaseOrderImport(models.TransientModel):
                 '//cbc:LineExtensionAmount', namespaces=ns)
             if currency_xpath:
                 currency_code = currency_xpath[0].attrib.get('currencyID')
-        supplier_xpath = xml_root.xpath(
+        vendor_xpath = xml_root.xpath(
             '/main:Quotation/cac:SellerSupplierParty', namespaces=ns)
-        supplier_dict = self.ubl_parse_supplier_party(supplier_xpath[0], ns)
+        vendor_dict = self.ubl_parse_supplier_party(vendor_xpath[0], ns)
         delivery_term_xpath = xml_root.xpath(
             "/main:Quotation/cac:DeliveryTerms", namespaces=ns)
         if delivery_term_xpath:
@@ -87,7 +87,7 @@ class PurchaseOrderImport(models.TransientModel):
             res_lines.append(self.parse_ubl_quote_line(line, ns))
         # TODO : add charges
         res = {
-            'partner': supplier_dict,
+            'partner': vendor_dict,
             'currency': {'iso': currency_code},
             'date': date_xpath[0].text,
             'incoterm': incoterm_dict,

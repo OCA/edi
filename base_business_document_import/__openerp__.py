@@ -9,7 +9,7 @@
     'version': '9.0.1.0.0',
     'category': 'Tools',
     'license': 'AGPL-3',
-    'summary': 'Provides technical tools to import sale orders or supplier '
+    'summary': 'Provides technical tools to import sale orders or vendor'
     'invoices',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',

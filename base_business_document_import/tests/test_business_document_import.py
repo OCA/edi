@@ -172,7 +172,7 @@ class TestFrIntrastatService(TransactionCase):
             'type_tax_use': 'purchase',
             'price_include': False,
             'amount': 0.18,
-            'type': 'percent',
+            'amount_type': 'percent',
             'unece_type_id': self.env.ref('account_tax_unece.tax_type_vat').id,
             'unece_categ_id': self.env.ref('account_tax_unece.tax_categ_s').id,
             })
@@ -182,13 +182,13 @@ class TestFrIntrastatService(TransactionCase):
             'type_tax_use': 'purchase',
             'price_include': True,
             'amount': 0.18,
-            'type': 'percent',
+            'amount_type': 'percent',
             'unece_type_id': self.env.ref('account_tax_unece.tax_type_vat').id,
             'unece_categ_id': self.env.ref('account_tax_unece.tax_categ_s').id,
             })
         bdio = self.env['business.document.import']
         tax_dict = {
-            'type': 'percent',
+            'amount_type': 'percent',
             'amount': 18,
             'unece_type_code': 'VAT',
             'unece_categ_code': 'S',

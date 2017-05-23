@@ -43,7 +43,7 @@ class AccountInvoiceImport(models.TransientModel):
             percentage = percent_xpath[0].text and\
                 float(percent_xpath[0].text) or 0.0
             taxes.append({
-                'type': 'percent',
+                'amount_type': 'percent',
                 'amount': percentage,
                 'unece_type_code': type_code,
                 'unece_categ_code': categ_code,
@@ -123,7 +123,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "(TypeCode is %s") % doc_type_xpath[0].text)
         inv_number_xpath = xml_root.xpath(
             '//rsm:HeaderExchangedDocument/ram:ID', namespaces=namespaces)
-        supplier_xpath = xml_root.xpath(
+        vendor_xpath = xml_root.xpath(
             '//ram:ApplicableSupplyChainTradeAgreement'
             '/ram:SellerTradeParty'
             '/ram:Name', namespaces=namespaces)
@@ -219,7 +219,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "//ram:SpecifiedTradeSettlementPaymentMeans"
                 "/ram:PayeeSpecifiedCreditorFinancialInstitution"
                 "/ram:BICID", namespaces=namespaces)
-        # global_taxes only used as fallback when taxes are not detailed
+        # global_taxes only used as fallback when taxes are not detailsiled
         # on invoice lines (which is the case at Basic level)
         global_taxes_xpath = xml_root.xpath(
             "//ram:ApplicableSupplyChainTradeSettlement"
@@ -335,7 +335,7 @@ class AccountInvoiceImport(models.TransientModel):
         res = {
             'partner': {
                 'vat': vat_xpath and vat_xpath[0].text or False,
-                'name': supplier_xpath[0].text,
+                'name': vendor_xpath[0].text,
                 'email': email_xpath and email_xpath[0].text or False,
                 },
             'invoice_number': inv_number_xpath[0].text,

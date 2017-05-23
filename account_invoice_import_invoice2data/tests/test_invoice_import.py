@@ -20,10 +20,8 @@ class TestInvoiceImport(TransactionCase):
             'description': 'FR-VAT-buy-20.0',
             'amount': 0.2,
             'amount_type': 'percent',
-            'account_collected_id': self.env.ref('account.a_expense').id,
-            'account_paid_id': self.env.ref('account.a_expense').id,
-            'base_sign': -1,
-            'tax_sign': -1,
+            'account_id': self.env.ref('l10n_generic_coa.conf_a_expense').id,
+            'refund_account_id': self.env.ref('l10n_generic_coa.conf_a_expense').id,
             'type_tax_use': 'purchase',
             })
         # Set this tax on Internet access product
@@ -57,14 +55,12 @@ class TestInvoiceImport(TransactionCase):
             self.env.ref('account_invoice_import_invoice2data.free'))
         self.assertEquals(inv.journal_id.type, 'purchase')
         self.assertEquals(
-            float_compare(inv.check_total, 29.99, precision_digits=2), 0)
-        self.assertEquals(
             float_compare(inv.amount_total, 29.99, precision_digits=2), 0)
         self.assertEquals(
             float_compare(inv.amount_untaxed, 24.99, precision_digits=2), 0)
         self.assertEquals(
-            len(inv.invoice_line), 1)
-        iline = inv.invoice_line[0]
+            len(inv.invoice_line_ids), 1)
+        iline = inv.invoice_line_ids[0]
         self.assertEquals(iline.name, 'Fiber optic access at the main office')
         self.assertEquals(
             iline.product_id,
@@ -106,5 +102,3 @@ class TestInvoiceImport(TransactionCase):
         self.assertEquals(len(invoices), 1)
         inv = invoices[0]
         self.assertEquals(inv.date_invoice, '2015-07-02')
-        self.assertEquals(
-            float_compare(inv.check_total, 29.99, precision_digits=2), 0)

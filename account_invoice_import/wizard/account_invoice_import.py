@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 class AccountInvoiceImport(models.TransientModel):
     _name = 'account.invoice.import'
-    _description = 'Wizard to import supplier invoices/refunds'
+    _description = 'Wizard to import vendor invoices/refunds'
 
     invoice_file = fields.Binary(
         string='PDF or XML Invoice', required=True)
@@ -29,7 +29,7 @@ class AccountInvoiceImport(models.TransientModel):
         ('update-from-invoice', 'Update From Invoice'),
     ], string='State', default="import")
     partner_id = fields.Many2one(
-        'res.partner', string="Supplier", readonly=True)
+        'res.partner', string="Vendor", readonly=True)
     currency_id = fields.Many2one(
         'res.currency', 'Currency', readonly=True)
     invoice_type = fields.Selection([
@@ -43,7 +43,7 @@ class AccountInvoiceImport(models.TransientModel):
         string='Total', digits=dp.get_precision('Account'),
         readonly=True)
     invoice_id = fields.Many2one(
-        'account.invoice', string='Draft Supplier Invoice to Update')
+        'account.invoice', string='Draft Vendor Invoice to Update')
 
     @api.model
     def parse_xml_invoice(self, xml_root):

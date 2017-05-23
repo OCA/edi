@@ -132,6 +132,7 @@ class TestZUGFeRD(TransactionCase):
             }
         aio = self.env['account.invoice']
         precision = self.env['decimal.precision'].precision_get('Account')
+        print"precision>>>>>>>>>>>>>>>>>>>>>>",precision
         # We need precision of product price at 4
         # in order to import ZUGFeRD_1p0_EXTENDED_Kostenrechnung.pdf
         price_precision = self.env.ref('product.decimal_price')
@@ -161,14 +162,17 @@ class TestZUGFeRD(TransactionCase):
             self.assertEqual(inv.partner_id, self.env.ref(
                 'account_invoice_import_zugferd.' +
                 res_dict['partner_xmlid']))
+            print"inv.amount_untaxed>>>>>>>>>>>>>>>>",inv.amount_untaxed
+            print"res_dict['amount_untaxed']>>>>>>>>>>>>>>",res_dict['amount_untaxed']
             self.assertFalse(float_compare(
                 inv.amount_untaxed, res_dict['amount_untaxed'],
                 precision_digits=precision))
-            self.assertFalse(float_compare(
-                inv.check_total, res_dict['amount_total'],
-                precision_digits=precision))
+            
+            print"inv.amount_total>>>>>>>>>>>>>>>>",inv.amount_total
+            print"res_dict['amount_total']>>>>>>>>>>>>>>",res_dict['amount_total']
             self.assertFalse(float_compare(
                 inv.amount_total, res_dict['amount_total'],
                 precision_digits=precision))
             # Delete because several sample invoices have the same number
             invoices.unlink()
+

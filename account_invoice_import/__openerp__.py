@@ -9,7 +9,7 @@
     'version': '9.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
-    'summary': 'Import supplier invoices/refunds as PDF or XML files',
+    'summary': 'Import vendor invoices/refunds as PDF or XML files',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['account', 'base_iban', 'base_business_document_import'],

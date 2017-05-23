@@ -4,7 +4,7 @@
         <record id="ketentest_import_config" model="account.invoice.import.config">
             <field name="name">UBL Ketentest BV</field>
             <field name="invoice_line_method">nline_no_product</field>
-            <field name="account_id" ref="account.a_expense"/>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
 
         <record id="ketentest" model="res.partner">
@@ -29,8 +29,8 @@
             <field name="type">percent</field>
             <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
             <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-            <field name="account_collected_id" ref="account.a_expense"/>
-            <field name="account_paid_id" ref="account.a_expense"/>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="refund_account_id" ref="l10n_generic_coa.conf_a_expense"/>
             <field name="base_sign">-1</field>
             <field name="tax_sign">-1</field>
         </record>
@@ -43,8 +43,8 @@
             <field name="type">percent</field>
             <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
             <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-            <field name="account_collected_id" ref="account.a_expense"/>
-            <field name="account_paid_id" ref="account.a_expense"/>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="refund_account_id" ref="l10n_generic_coa.conf_a_expense"/>
             <field name="base_sign">-1</field>
             <field name="tax_sign">-1</field>
         </record>
@@ -52,7 +52,7 @@
         <record id="exact_belgium_import_config" model="account.invoice.import.config">
             <field name="name">Exact Belgium</field>
             <field name="invoice_line_method">nline_no_product</field>
-            <field name="account_id" ref="account.a_expense"/>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
 
         <record id="exact_belgium" model="res.partner">

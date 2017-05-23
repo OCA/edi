@@ -10,10 +10,10 @@
             <field name="name">purchase.order.import.form</field>
             <field name="model">purchase.order.import</field>
             <field name="arch"  type="xml">
-                <form string="Import Quotations Files from Suppliers">
+                <form string="Import Quotations Files from Vendors">
                     <group name="help-import">
                       <div>
-                        <p>Upload below the quotation that you received from your supplier for this RFQ as XML or PDF file. When you click on the Update RFQ button:</p>
+                        <p>Upload below the quotation that you received from your vendor for this RFQ as XML or PDF file. When you click on the Update RFQ button:</p>
                         <ol>
                           <li>If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed. For the <a href="http://ubl.xml.org/" target="_blank">Universal Business Language</a> format (UBL), you should install the module <em>purchase_order_import_ubl</em>.</li>
                           <li>If it is a PDF file, Odoo will try to find an XML file in the attachments of the PDF file and then use this XML file.</li>

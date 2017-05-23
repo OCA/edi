@@ -62,6 +62,7 @@ class TestUblOrderImport(TransactionCase):
                 self.assertEqual(so.client_order_ref, res['client_order_ref'])
             if res.get('date_order'):
                 self.assertEqual(so.date_order[:10], res['date_order'])
+                
             # TO DO (Commented by Deepak)
             # if res.get('shipping_partner'):
             #     self.assertEqual(

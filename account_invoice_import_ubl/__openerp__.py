@@ -8,7 +8,7 @@
     'version': '9.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
-    'summary': 'Import UBL XML supplier invoices/refunds',
+    'summary': 'Import UBL XML vendor invoices/refunds',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['account_invoice_import', 'base_ubl'],

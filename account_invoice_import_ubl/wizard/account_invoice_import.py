@@ -149,11 +149,11 @@ class AccountInvoiceImport(models.TransientModel):
             if inv_type_code == '381':
                 sign = -1
         inv_number_xpath = xml_root.xpath('//cbc:ID', namespaces=namespaces)
-        supplier_xpath = xml_root.xpath(
+        vendor_xpath = xml_root.xpath(
             '/inv:Invoice/cac:AccountingSupplierParty',
             namespaces=namespaces)
-        supplier_dict = self.ubl_parse_supplier_party(
-            supplier_xpath[0], namespaces)
+        vendor_dict = self.ubl_parse_supplier_party(
+            vendor_xpath[0], namespaces)
         date_xpath = xml_root.xpath(
             '/inv:Invoice/cbc:IssueDate', namespaces=namespaces)
         date_dt = datetime.strptime(date_xpath[0].text, '%Y-%m-%d')
@@ -222,7 +222,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "rounded sum policies.", total_line, total_line_lines)
 
         res = {
-            'partner': supplier_dict,
+            'partner': vendor_dict,
             'invoice_number': inv_number_xpath[0].text,
             'date': fields.Date.to_string(date_dt),
             'date_due': date_due_str,

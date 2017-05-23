@@ -170,8 +170,8 @@ class BaseUbl(models.TransientModel):
         'ref' field.
         In Odoo, we only have one ref field, in which we are supposed
         to enter the reference that our company gives to its
-        customers/suppliers. We unfortunately don't have a native field to
-        enter the reference that our suppliers/customers give to us.
+        customers/vendors. We unfortunately don't have a native field to
+        enter the reference that our vendors/customers give to us.
         So, to set the fields CustomerAssignedAccountID and
         SupplierAssignedAccountID, I need to know if the partner for
         which we want to build the party block is our company or a
@@ -187,14 +187,14 @@ class BaseUbl(models.TransientModel):
                     'partner is wrong'
             else:
                 partner = company.partner_id
-        supplier_party_root = etree.SubElement(
+        vendor_party_root = etree.SubElement(
             parent_node, ns['cac'] + node_name)
         if not company and partner.commercial_partner_id.ref:
-            supplier_ref = etree.SubElement(
-                supplier_party_root, ns['cbc'] + 'CustomerAssignedAccountID')
-            supplier_ref.text = partner.commercial_partner_id.ref
+            vendor_ref = etree.SubElement(
+                vendor_party_root, ns['cbc'] + 'CustomerAssignedAccountID')
+            vendor_ref.text = partner.commercial_partner_id.ref
         self._ubl_add_party(
-            partner, 'Party', supplier_party_root, ns, version=version)
+            partner, 'Party', vendor_party_root, ns, version=version)
 
     @api.model
     def _ubl_add_delivery(
@@ -339,7 +339,7 @@ class BaseUbl(models.TransientModel):
             tax_subtotal, ns['cbc'] + 'TaxAmount', currencyID=currency_code)
         tax_amount_node.text = unicode(tax_amount)
         if (
-                tax.type == 'percent' and
+                tax.amount_type == 'percent' and
                 not float_is_zero(tax.amount, precision_digits=prec+3)):
             percent = etree.SubElement(
                 tax_subtotal, ns['cbc'] + 'Percent')

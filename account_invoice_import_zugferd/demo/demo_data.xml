@@ -4,7 +4,7 @@
         <record id="lieferant_import_config" model="account.invoice.import.config">
             <field name="name">Lieferant</field>
             <field name="invoice_line_method">nline_no_product</field>
-            <field name="account_id" ref="account.a_expense"/>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
 
         <record id="lieferant" model="res.partner">
@@ -22,12 +22,12 @@
         <record id="mvm_musterhafter_import_config" model="account.invoice.import.config">
             <field name="name">MVM Musterhafter</field>
             <field name="invoice_line_method">nline_no_product</field>
-            <field name="account_id" ref="account.a_expense"/>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
 
         <record id="mvm_musterhafter" model="res.partner">
             <field name="name">MVM Musterhafter
-        Versicherungsverein Musterstadt a.G.</field>
+Versicherungsverein Musterstadt a.G.</field>
             <field name="is_company" eval="True"/>
             <field name="supplier" eval="True"/>
             <field name="customer" eval="False"/>
@@ -41,7 +41,7 @@
         <record id="musterlieferant_import_config" model="account.invoice.import.config">
             <field name="name">MUSTERLIEFERANT</field>
             <field name="invoice_line_method">nline_no_product</field>
-            <field name="account_id" ref="account.a_expense"/>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
 
         <record id="musterlieferant" model="res.partner">
@@ -65,10 +65,8 @@
             <field name="type">percent</field>
             <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
             <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-            <field name="account_collected_id" ref="account.a_expense"/>
-            <field name="account_paid_id" ref="account.a_expense"/>
-            <field name="base_sign">-1</field>
-            <field name="tax_sign">-1</field>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="refund_account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
 
         <record id="de_vat_purchase_7" model="account.tax">
@@ -79,10 +77,8 @@
             <field name="type">percent</field>
             <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
             <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-            <field name="account_collected_id" ref="account.a_expense"/>
-            <field name="account_paid_id" ref="account.a_expense"/>
-            <field name="base_sign">-1</field>
-            <field name="tax_sign">-1</field>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="refund_account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
 
         <record id="de_insurance_purchase_19" model="account.tax">
@@ -93,10 +89,8 @@
             <field name="type">percent</field>
             <field name="unece_type_id" ref="base_zugferd.tax_type_zf_insurance_tax"/>
             <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-            <field name="account_collected_id" ref="account.a_expense"/>
-            <field name="account_paid_id" ref="account.a_expense"/>
-            <field name="base_sign">-1</field>
-            <field name="tax_sign">-1</field>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="refund_account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
 
         <record id="de_insurance_purchase_16_34" model="account.tax">
@@ -107,10 +101,8 @@
             <field name="type">percent</field>
             <field name="unece_type_id" ref="base_zugferd.tax_type_zf_insurance_tax"/>
             <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-            <field name="account_collected_id" ref="account.a_expense"/>
-            <field name="account_paid_id" ref="account.a_expense"/>
-            <field name="base_sign">-1</field>
-            <field name="tax_sign">-1</field>
+            <field name="account_id" ref="l10n_generic_coa.conf_a_expense"/>
+            <field name="refund_account_id" ref="l10n_generic_coa.conf_a_expense"/>
         </record>
     </data>
 </openerp>
