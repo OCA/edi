@@ -180,17 +180,19 @@ class AccountInvoice(models.Model):
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
         tax_amount_node.text = unicode(self.amount_tax)
         for tline in self.tax_line_ids:
-            # if not tline.base_code_id: # Commented By: Deepak
+            # account.tax have no base_code_id fields. so below domain
+            # not fullfil.
+            # if not tline.base_code_id:
             #     raise UserError(_(
             #         "Missing base code on tax line '%s'.") % tline.name)
             # taxes = self.env['account.tax'].search([
             #     ('base_code_id', '=', tline.base_code_id.id)])
-
-            taxes = self.env['account.tax'].search([])
-            # if not taxes: # Commentd By: Deepak
+            # if not taxes:
             #     raise UserError(_(
             #         "The tax code '%s' is not linked to a tax.")
             #         % tline.base_code_id.name)
+
+            taxes = self.env['account.tax'].search([])
             tax = taxes[0]
             self._ubl_add_tax_subtotal(
                 tline.base, tline.amount, tax, cur_name, tax_total_node, ns,
@@ -212,7 +214,7 @@ class AccountInvoice(models.Model):
         # self._ubl_add_delivery(delivery_partner, xml_root, ns)
         # Put paymentmeans block even when invoice is paid ?
 
-        # Commented By: Deepak Reason: Payment Not Work
+        # payment.order model not in version 9.
         # self._ubl_add_payment_means(
         #     self.partner_bank_id, self.payment_mode_id, self.date_due,
         #     xml_root, ns, version=version)

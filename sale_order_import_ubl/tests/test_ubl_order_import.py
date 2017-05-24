@@ -63,7 +63,7 @@ class TestUblOrderImport(TransactionCase):
             if res.get('date_order'):
                 self.assertEqual(so.date_order[:10], res['date_order'])
                 
-            # TO DO (Commented by Deepak)
+            # TO DO: Test file data not matched with sipping partner
             # if res.get('shipping_partner'):
             #     self.assertEqual(
             #         so.partner_shipping_id, res['shipping_partner'])

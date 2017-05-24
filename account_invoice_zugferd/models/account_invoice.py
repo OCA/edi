@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#   (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api, tools, _
@@ -515,8 +517,9 @@ class AccountInvoice(models.Model):
 
         self._add_trade_agreement_block(trade_transaction, ns)
         self._add_trade_delivery_block(trade_transaction, ns)
-        # TO DO : Commented BY: Deepak
-        # self._add_trade_settlement_block(trade_transaction, sign, ns)
+        
+        # TO DO : payment.order not in version 9. 
+        # self._add_trade_settlement_block(trade_transaction, sign, ns) DK
 
         # line_number = 0
         # for iline in self.invoice_line_ids:

@@ -58,7 +58,7 @@ class TestUbl(TransactionCase):
             self.assertEquals(
                 inv.partner_id, self.env.ref(res_dict['partner_xmlid']))
 
-            # Commented By: Deepak : TO DO
+            # TO DO : Test Document not matched.
             # self.assertEquals(
             #     float_compare(
             #         inv.amount_untaxed, res_dict['amount_untaxed'],
