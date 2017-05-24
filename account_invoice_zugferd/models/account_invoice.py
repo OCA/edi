@@ -294,7 +294,7 @@ class AccountInvoice(models.Model):
                 tax_categ_code = etree.SubElement(
                     trade_tax, ns['ram'] + 'CategoryCode')
                 tax_categ_code.text = tax.unece_categ_code
-                if tax.amount.type == 'percent':
+                if tax.amount_type == 'percent':
                     percent = etree.SubElement(
                         trade_tax, ns['ram'] + 'ApplicablePercent')
                     percent.text = unicode(tax.amount * 100)
@@ -516,7 +516,7 @@ class AccountInvoice(models.Model):
         self._add_trade_agreement_block(trade_transaction, ns)
         self._add_trade_delivery_block(trade_transaction, ns)
         # TO DO : Commented BY: Deepak
-        # self._add_trade_settlement_block(trade_transaction, sign, ns) DK
+        # self._add_trade_settlement_block(trade_transaction, sign, ns)
 
         # line_number = 0
         # for iline in self.invoice_line_ids:
