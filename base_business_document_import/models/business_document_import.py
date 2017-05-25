@@ -493,7 +493,8 @@ class BusinessDocumentImport(models.AbstractModel):
             domain.append(('price_include', '=', True))
         # with the code abose, if you set price_include=None, it will
         # won't depend on the value of the price_include parameter
-        assert tax_dict.get('amount_type') in ['fixed', 'percent'], 'bad tax type'
+        assert tax_dict.get(
+            'amount_type') in ['fixed', 'percent'], 'bad tax type'
         assert 'amount' in tax_dict, 'Missing amount key in tax_dict'
         domain.append(('amount_type', '=', tax_dict['amount_type']))
         if tax_dict.get('unece_type_code'):

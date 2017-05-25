@@ -10,8 +10,8 @@ from openerp.tools import float_is_zero
 from openerp.exceptions import Warning as UserError
 import logging
 import mimetypes
-from lxml import etree
 from time import strftime
+from lxml import etree
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ class PurchaseOrderImport(models.TransientModel):
     update_option = fields.Selection([
         ('price', 'Price'),
         ('all', 'Price and Quantity'),
-        ], default='price', string='Update Option', required=True)
+    ], default='price', string='Update Option', required=True)
     purchase_id = fields.Many2one(
         'purchase.order', string='RFQ to Update', default=_get_purchase_id,
         readonly=True)
@@ -165,7 +165,7 @@ class PurchaseOrderImport(models.TransientModel):
                 'uom': oline.product_uom,
                 'price_unit': price_unit,
                 'line': oline,
-                })
+            })
         compare_res = bdio.compare_lines(
             existing_lines, parsed_quote['lines'], chatter,
             seller=order.partner_id.commercial_partner_id)
@@ -234,13 +234,13 @@ class PurchaseOrderImport(models.TransientModel):
 
         price_unit = self.env['account.tax']._fix_tax_included_price(
             import_line['price_unit'], product.supplier_taxes_id, taxes_id
-            ) if seller else 0.0
+        ) if seller else 0.0
 
         if price_unit and seller and order.currency_id and\
-         seller.currency_id != order.currency_id:
+                seller.currency_id != order.currency_id:
             price_unit = seller.currency_id.compute(
                 price_unit, order.currency_id)
-            
+
         product_lang = product.with_context({
             'lang': order.partner_id.lang,
             'partner_id': order.partner_id.id,

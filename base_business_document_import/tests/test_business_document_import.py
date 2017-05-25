@@ -59,7 +59,7 @@ class TestFrIntrastatService(TransactionCase):
             'name': u'Sébastien BEAU',
             'email': 'sebastien.beau@akretion.com',
             'use_parent_address': True,
-            'type': 'default',
+            'type': 'contact',
             })
         cpartner3 = rpo.create({
             'parent_id': partner1.id,

@@ -490,7 +490,7 @@ class AccountInvoice(models.Model):
         self.ensure_one()
         assert self.type in ('out_invoice', 'out_refund'),\
             'only works for customer invoice and refunds'
-        sign = self.type == 'out_refund' and -1 or 1
+        # sign = self.type == 'out_refund' and -1 or 1
         nsmap = {
             'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
             'rsm': 'urn:ferd:CrossIndustryDocument:invoice:1p0',
@@ -517,8 +517,8 @@ class AccountInvoice(models.Model):
 
         self._add_trade_agreement_block(trade_transaction, ns)
         self._add_trade_delivery_block(trade_transaction, ns)
-        
-        # TO DO : payment.order not in version 9. 
+
+        # TO DO : payment.order not in version 9.
         # self._add_trade_settlement_block(trade_transaction, sign, ns) DK
 
         # line_number = 0

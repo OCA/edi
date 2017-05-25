@@ -21,7 +21,8 @@ class TestInvoiceImport(TransactionCase):
             'amount': 0.2,
             'amount_type': 'percent',
             'account_id': self.env.ref('l10n_generic_coa.conf_a_expense').id,
-            'refund_account_id': self.env.ref('l10n_generic_coa.conf_a_expense').id,
+            'refund_account_id': self.env.ref(
+                'l10n_generic_coa.conf_a_expense').id,
             'type_tax_use': 'purchase',
             })
         # Set this tax on Internet access product

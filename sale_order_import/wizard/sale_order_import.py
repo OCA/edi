@@ -391,7 +391,7 @@ class SaleOrderImport(models.TransientModel):
                 write_vals['product_uom_qty'] = cdict['qty'][1]
                 if self.price_source != 'order':
                     new_price_unit = order.pricelist_id.with_context(
-                        date=order.date_order, 
+                        date=order.date_order,
                         uom=oline.product_uom.id).price_get(
                             oline.product_id.id, write_vals['product_uom_qty'],
                             order.partner_id.id)[order.pricelist_id.id]

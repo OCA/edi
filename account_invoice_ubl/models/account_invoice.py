@@ -5,10 +5,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 
-from openerp import models, api, _
+# from openerp import models, api, _
+from openerp import models, api
 from lxml import etree
 from openerp.tools import float_is_zero, float_round
-from openerp.exceptions import Warning as UserError
+# from openerp.exceptions import Warning as UserError
 import logging
 
 logger = logging.getLogger(__name__)
@@ -151,7 +152,7 @@ class AccountInvoice(models.Model):
         price = iline.price_unit * (1 - (iline.discount or 0.0) / 100.0)
         res_taxes = iline.invoice_line_tax_ids.compute_all(
             price, self.currency_id, iline.quantity, iline.product_id,
-             self.partner_id)
+            self.partner_id)
         tax_total = float_round(
             res_taxes['total_included'] - res_taxes['base'],
             precision_digits=prec)
@@ -164,7 +165,7 @@ class AccountInvoice(models.Model):
             # we don't have the base amount in res_tax :-(
             self._ubl_add_tax_subtotal(
                 False, res_tax['amount'], tax, cur_name, tax_total_node, ns,
-                version=version) 
+                version=version)
 
     @api.multi
     def get_delivery_partner(self):
@@ -301,12 +302,12 @@ class AccountInvoice(models.Model):
             # I have default_type = 'out_invoice' in context, so 'type'
             # would take 'out_invoice' value by default !
             'type': 'binary',
-            })
+        })
         action = self.env['ir.actions.act_window'].for_xml_id(
             'base', 'action_attachment')
         action.update({
             'res_id': attach.id,
             'views': False,
             'view_mode': 'form,tree'
-            })
+        })
         return action

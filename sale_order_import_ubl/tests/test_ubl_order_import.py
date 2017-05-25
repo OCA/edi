@@ -54,16 +54,14 @@ class TestUblOrderImport(TransactionCase):
             action = wiz.import_order_button()
             so = self.env['sale.order'].browse(action['res_id'])
             self.assertEqual(
-                so.partner_id.commercial_partner_id,
-                res['partner'])
+                so.partner_id.commercial_partner_id, res['partner'])
             if res.get('currency'):
                 self.assertEqual(so.currency_id, res['currency'])
             if res.get('client_order_ref'):
                 self.assertEqual(so.client_order_ref, res['client_order_ref'])
             if res.get('date_order'):
                 self.assertEqual(so.date_order[:10], res['date_order'])
-                
-            # TO DO: Test file data not matched with sipping partner
+            # TO DO: Not matched
             # if res.get('shipping_partner'):
             #     self.assertEqual(
             #         so.partner_shipping_id, res['shipping_partner'])

@@ -2,6 +2,13 @@
 <openerp>
     <data noupdate="1">
         <!-- for tests/UBL-Order-2.1-Example.xml -->
+        <record id="base.SEK" model="res.currency">
+            <field name="name">SEK</field>
+            <field name="symbol">kr</field>
+            <field name="rounding">0.01</field>
+            <field name="active" eval="True"/>
+        </record>
+
         <record id="sek_pricelist" model="product.pricelist">
             <field name="name">SEK pricelist</field>
             <field name="currency_id" ref="base.SEK"/>
@@ -68,6 +75,15 @@
         </record>
 
         <!-- for tests/UBL-Order-2.0-Example.xml -->
+
+        <record id="base.GBP" model="res.currency">
+            <field name="name">GBP</field>
+            <field name="symbol">£</field>
+            <field name="rounding">0.01</field>
+            <field name="position">before</field>
+            <field name="active" eval="True"/>
+        </record>
+
         <record id="gbp_pricelist" model="product.pricelist">
             <field name="name">IYT pricelist</field>
             <field name="currency_id" ref="base.GBP"/>
@@ -134,6 +150,14 @@
         </record>
 
         <!-- for tests/UBL-RequestForQuotation-2.1-Example.xml -->
+
+        <record id="base.DKK" model="res.currency">
+            <field name="name">DKK</field>
+            <field name="symbol">kr</field>
+            <field name="rounding">0.01</field>
+            <field name="position">before</field>
+            <field name="active" eval="True"/>
+        </record>
 
         <record id="dkk_pricelist" model="product.pricelist">
             <field name="name">DKK pricelist</field>

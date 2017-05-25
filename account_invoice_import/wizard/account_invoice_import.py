@@ -121,7 +121,6 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _prepare_create_invoice_vals(self, parsed_inv):
         aio = self.env['account.invoice']
-        ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
         rpo = self.env['res.partner']
         company = self.env.user.company_id
@@ -207,7 +206,7 @@ class AccountInvoiceImport(models.TransientModel):
                         'uom_id': sproduct.uom_id.id,
                         'type': parsed_inv['type'],
                         'partner_id': partner.id,
-                        'company_id': company.id, 
+                        'company_id': company.id,
                     })
             else:
                 static_vals = {}
@@ -217,11 +216,10 @@ class AccountInvoiceImport(models.TransientModel):
                     product = bdio._match_product(
                         line['product'], parsed_inv['chatter_msg'],
                         seller=partner)
-                    fposition_id = partner.property_account_position_id.id
                     il_vals = ({
                             'product_id': product.id,
                             'uom_id': product.uom_id.id,
-                            'type':parsed_inv['type'],
+                            'type': parsed_inv['type'],
                             'company_id': company.id,
                         })
 
@@ -240,7 +238,7 @@ class AccountInvoiceImport(models.TransientModel):
                     'quantity': line['qty'],
                     'price_unit': line['price_unit'],  # TODO fix for tax incl
                     })
-                vals['invoice_line_ids'].append((0, 0, il_vals))                
+                vals['invoice_line_ids'].append((0, 0, il_vals))
         # Write analytic account + fix syntax for taxes
         aacount_id = config.account_analytic_id.id or False
         for line in vals['invoice_line_ids']:
@@ -531,16 +529,16 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _prepare_create_invoice_line(self, product, uom, import_line, invoice):
         vals = ({
-                'invoice_id': invoice.id,
-                'product_id': product.id,
-                'uom_id': uom.id,
-                'quantity': import_line['qty'],
-                'price_unit': import_line.get('price_unit'),
-                'partner_id': invoice.partner_id.id,
-                'type': 'in_invoice',
-                'currency_id': invoice.currency_id.id,
-                'company_id': invoice.company_id.id,
-            })
+                    'invoice_id': invoice.id,
+                    'product_id': product.id,
+                    'uom_id': uom.id,
+                    'quantity': import_line['qty'],
+                    'price_unit': import_line.get('price_unit'),
+                    'partner_id': invoice.partner_id.id,
+                    'type': 'in_invoice',
+                    'currency_id': invoice.currency_id.id,
+                    'company_id': invoice.company_id.id,
+                })
         return vals
 
     @api.model

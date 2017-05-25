@@ -13,9 +13,13 @@ class TestUblInvoice(TransactionCase):
     def test_ubl_generate(self):
         ro = self.registry['report']
         buo = self.env['base.ubl']
-        for i in range(5):
+        aio = self.env['account.invoice']
+        for i in range(2):
             i += 1
-            invoice = self.env.ref('account.invoice_%d' % i)
+            inv_id = ('demo_invoice_%d' % (i+1))
+            model_rec = self.env['ir.model.data'].search(
+                [('name', '=', inv_id)])
+            invoice = aio.browse(model_rec.res_id)
             # validate invoice
             workflow.trg_validate(
                 self.uid, 'account.invoice', invoice.id, 'invoice_open',
