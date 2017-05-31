@@ -26,7 +26,6 @@ addon | version | summary
 [purchase_order_import](purchase_order_import/) | 8.0.1.0.0 (unported) | Update RFQ via the import of quotations from suppliers
 [purchase_order_import_ubl](purchase_order_import_ubl/) | 8.0.1.0.0 (unported) | Import UBL XML quotation files
 [purchase_order_ubl](purchase_order_ubl/) | 8.0.1.0.0 (unported) | Embed UBL XML file inside the PDF purchase order
-[sale_commercial_partner](sale_commercial_partner/) | 8.0.1.0.0 (unported) | Add stored related field 'Commercial Customer' on sale orders
 [sale_order_import](sale_order_import/) | 8.0.1.0.0 (unported) | Import RFQ or sale orders from files
 [sale_order_import_csv](sale_order_import_csv/) | 8.0.1.0.0 (unported) | Import CSV sale order files
 [sale_order_import_ubl](sale_order_import_ubl/) | 8.0.1.0.0 (unported) | Import UBL XML sale order files
