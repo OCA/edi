@@ -257,7 +257,8 @@ class AccountInvoiceImport(models.TransientModel):
                     if tax_id:
                         first_tax = self.env['account.tax'].browse(tax_id)
                         if not first_tax.price_include:
-                            il_vals['price_unit'] = parsed_inv.get('amount_untaxed')
+                            il_vals['price_unit'] = parsed_inv.get(
+                                'amount_untaxed')
                             break
 
     @api.model
