@@ -4,3 +4,6 @@ community-data-files
 partner-contact
 connector-telephony
 reporting-engine
+server-tools
+sale-workflow
+purchase-workflow
