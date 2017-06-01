@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 from lxml import etree
 import logging
 
@@ -19,9 +19,7 @@ class SaleOrder(models.Model):
 
     @api.model
     def get_order_states(self):
-        return [
-            'waiting_date', 'progress', 'manual',
-            'shipping_except', 'invoice_except', 'done']
+        return ['sale', 'done']
 
     @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):
@@ -69,7 +67,7 @@ class SaleOrder(models.Model):
         line_root = etree.SubElement(
             parent_node, ns['cac'] + 'QuotationLine')
         dpo = self.env['decimal.precision']
-        qty_precision = dpo.precision_get('Product UoS')
+        qty_precision = dpo.precision_get('Product Unit of Measure')
         price_precision = dpo.precision_get('Product Price')
         self._ubl_add_line_item(
             line_number, oline.name, oline.product_id, 'sale',
@@ -142,7 +140,7 @@ class SaleOrder(models.Model):
         # but the problem is that the error messages will also be in
         # that lang. But the error messages should almost never
         # happen except the first days of use, so it's probably
-        # not worth the additionnal code to handle the 2 langs
+        # not worth the additional code to handle the 2 langs
         if doc_type == 'quotation':
             xml_root = self.with_context(lang=lang).\
                 generate_quotation_ubl_xml_etree(version=version)
@@ -179,7 +177,7 @@ class SaleOrder(models.Model):
         return self.partner_id.lang or 'en_US'
 
     @api.multi
-    def embed_ubl_xml_in_pdf(self, pdf_content):
+    def embed_ubl_xml_in_pdf(self, pdf_content=None, pdf_file=None):
         self.ensure_one()
         doc_type = False
         if self.state in self.get_quotation_states():
@@ -192,5 +190,6 @@ class SaleOrder(models.Model):
             xml_string = self.generate_ubl_xml_string(
                 doc_type, version=version)
             pdf_content = self.embed_xml_in_pdf(
-                xml_string, ubl_filename, pdf_content)
+                xml_string, ubl_filename,
+                pdf_content=pdf_content, pdf_file=pdf_file)
         return pdf_content

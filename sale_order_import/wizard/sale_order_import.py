@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api, _
-# import openerp.addons.decimal_precision as dp
-from openerp.tools import float_compare, float_is_zero
-from openerp.exceptions import Warning as UserError
+from odoo import models, fields, api, _
+from odoo.tools import float_compare, float_is_zero
+from odoo.exceptions import UserError
 import logging
 import mimetypes
 from lxml import etree
@@ -181,14 +180,13 @@ class SaleOrderImport(models.TransientModel):
                         parsed_order['order_ref'],
                         existing_orders[0].name,
                         existing_orders[0].state))
-        partner_change_res = soo.onchange_partner_id(partner.id)
-        assert 'value' in partner_change_res, 'Error in partner change'
+
         so_vals = {
             'partner_id': partner.id,
             'client_order_ref': parsed_order.get('order_ref'),
-            'order_line': []
             }
-        so_vals.update(partner_change_res['value'])
+        so_vals = soo.play_onchanges(so_vals, ['partner_id'])
+        so_vals['order_line'] = []
         if parsed_order.get('ship_to'):
             shipping_partner = bdio._match_shipping_partner(
                 parsed_order['ship_to'], partner, parsed_order['chatter_msg'])
@@ -204,19 +202,29 @@ class SaleOrderImport(models.TransientModel):
             line_vals = self._prepare_create_order_line(
                 product, uom, line, price_source)
             # product_id_change is played in the inherit of create()
-            # of sale.order.line cf odoo/addons/sale/sale.py
+            # of sale.order.line cf odoo/addons/sale/models/sale.py
             so_vals['order_line'].append((0, 0, line_vals))
         return so_vals
 
     @api.model
-    def create_order(self, parsed_order, price_source):
+    def create_order(self, parsed_order, price_source, order_filename=None):
         soo = self.env['sale.order']
         bdio = self.env['business.document.import']
         so_vals = self._prepare_order(parsed_order, price_source)
         order = soo.create(so_vals)
-        bdio.post_create_or_update(parsed_order, order)
+        bdio.post_create_or_update(
+            parsed_order, order, doc_filename=order_filename)
         logger.info('Sale Order ID %d created', order.id)
         return order
+
+    @api.model
+    def create_order_ws(self, parsed_order, price_source, order_filename=None):
+        """Same method as create_order() but callable via JSON-RPC
+        webservice. Returns an ID to avoid this error:
+        TypeError: sale.order(15,) is not JSON serializable"""
+        order = self.create_order(
+            parsed_order, price_source, order_filename=order_filename)
+        return order.id
 
     @api.model
     def parse_order(self, order_file, order_filename, partner=False):
@@ -290,7 +298,8 @@ class SaleOrderImport(models.TransientModel):
             action['res_id'] = self.id
             return action
         else:
-            return self.create_order_return_action(parsed_order)
+            return self.create_order_return_action(
+                parsed_order, self.order_filename)
 
     @api.multi
     def create_order_button(self):
@@ -298,12 +307,14 @@ class SaleOrderImport(models.TransientModel):
         parsed_order = self.parse_order(
             self.order_file.decode('base64'), self.order_filename,
             self.partner_id)
-        return self.create_order_return_action(parsed_order)
+        return self.create_order_return_action(
+            parsed_order, self.order_filename)
 
     @api.multi
-    def create_order_return_action(self, parsed_order):
+    def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
-        order = self.create_order(parsed_order, self.price_source)
+        order = self.create_order(
+            parsed_order, self.price_source, order_filename)
         order.message_post(_(
             "Created automatically via file import (%s).")
             % self.order_filename)

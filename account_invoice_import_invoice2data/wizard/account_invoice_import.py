@@ -2,8 +2,8 @@
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, tools, _
-from openerp.exceptions import Warning as UserError
+from odoo import models, api, tools, _
+from odoo.exceptions import UserError
 import os
 from tempfile import mkstemp
 import pkg_resources
@@ -23,7 +23,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def fallback_parse_pdf_invoice(self, file_data):
-        '''This method must be inherited by additionnal modules with
+        '''This method must be inherited by additional modules with
         the same kind of logic as the account_bank_statement_import_*
         modules'''
         return self.invoice2data_parse_invoice(file_data)

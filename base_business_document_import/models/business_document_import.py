@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, _
-from openerp.tools import float_compare
-from openerp.exceptions import Warning as UserError
+from odoo import models, api, _
+from odoo.tools import float_compare
+from odoo.exceptions import UserError
 from lxml import etree
 from StringIO import StringIO
 import mimetypes
@@ -21,6 +21,14 @@ except ImportError:
 class BusinessDocumentImport(models.AbstractModel):
     _name = 'business.document.import'
     _description = 'Common methods to import business documents'
+
+    @api.model
+    def user_error_wrap(self, error_msg):
+        assert error_msg
+        prefix = self._context.get('error_prefix')
+        if prefix and isinstance(prefix, (str, unicode)):
+            error_msg = '%s\n%s' % (prefix, error_msg)
+        raise UserError(error_msg)
 
     @api.model
     def _strip_cleanup_dict(self, match_dict):
@@ -156,7 +164,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 domain + [('name', '=ilike', partner_dict['name'])])
             if partners:
                 return partners[0]
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any %s corresponding to the following "
             "information extracted from the business document:\n"
             "Country code: %s\n"
@@ -246,23 +254,32 @@ class BusinessDocumentImport(models.AbstractModel):
         assert iban, 'iban is a required arg'
         assert partner, 'partner is a required arg'
         partner = partner.commercial_partner_id
-        iban = iban.replace(' ', '')
+        iban = iban.replace(' ', '').upper()
         rpbo = self.env['res.partner.bank']
-        self._cr.execute(
-            """SELECT id FROM res_partner_bank
-            WHERE replace(acc_number, ' ', '')=%s
-            AND state='iban'
-            AND partner_id=%s
-            """, (iban, partner.id))
-        rpb_res = self._cr.fetchall()
-        if rpb_res:
-            return rpbo.browse(rpb_res[0][0])
-        elif create_if_not_found and bic:
+        rbo = self.env['res.bank']
+        bankaccounts = rpbo.search([
+            ('acc_type', '=', 'iban'),
+            ('sanitized_acc_number', '=', iban),
+            ('partner_id', '=', partner.id)])
+        if bankaccounts:
+            return bankaccounts[0]
+        elif create_if_not_found:
+            bank_id = False
+            if bic:
+                bic = bic.replace(' ', '').upper()
+                banks = rbo.search([('bic', '=', bic)])
+                if banks:
+                    bank_id = banks[0].id
+                else:
+                    bank = rbo.create({
+                        'bic': bic,
+                        'name': bic,  # TODO: see if we could do better
+                        })
+                    bank_id = bank.id
             partner_bank = rpbo.create({
                 'partner_id': partner.id,
-                'state': 'iban',
                 'acc_number': iban,
-                'bank_bic': bic,
+                'bank_id': bank_id,
                 })
             chatter_msg.append(_(
                 "The bank account <b>IBAN %s</b> has been automatically "
@@ -274,7 +291,7 @@ class BusinessDocumentImport(models.AbstractModel):
     def _match_product(self, product_dict, chatter_msg, seller=False):
         """Example:
         product_dict = {
-            'ean13': '5449000054227',
+            'barcode': '5449000054227',
             'code': 'COCA1L',
             }
         """
@@ -284,15 +301,15 @@ class BusinessDocumentImport(models.AbstractModel):
             return product_dict['recordset']
         if product_dict.get('id'):
             return ppo.browse(product_dict['id'])
-        if product_dict.get('ean13'):
+        if product_dict.get('barcode'):
             products = ppo.search([
-                ('ean13', '=', product_dict['ean13'])])
+                ('barcode', '=', product_dict['barcode'])])
             if products:
                 return products[0]
         if product_dict.get('code'):
             products = ppo.search([
                 '|',
-                ('ean13', '=', product_dict['code']),
+                ('barcode', '=', product_dict['code']),
                 ('default_code', '=', product_dict['code'])])
             if products:
                 return products[0]
@@ -310,13 +327,13 @@ class BusinessDocumentImport(models.AbstractModel):
                         sinfo[0].product_tmpl_id.product_variant_ids) == 1
                         ):
                     return sinfo[0].product_tmpl_id.product_variant_ids[0]
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any product corresponding to the "
             "following information extracted from the business document: "
-            "EAN13: %s\n"
+            "Barcode: %s\n"
             "Product code: %s\n"
             "Supplier: %s\n") % (
-                product_dict.get('ean13'),
+                product_dict.get('barcode'),
                 product_dict.get('code'),
                 seller and seller.name or 'None'))
 
@@ -344,7 +361,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if currencies:
                 return currencies[0]
             else:
-                raise UserError(_(
+                raise self.user_error_wrap(_(
                     "The analysis of the business document returned '%s' as "
                     "the currency ISO code. But there are no currency "
                     "with that code in Odoo.") % currency_iso)
@@ -367,7 +384,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if currencies:
                 return currencies[0]
             else:
-                raise UserError(_(
+                raise self.user_error_wrap(_(
                     "The analysis of the business document returned '%s' as "
                     "the currency symbol or ISO code. But there are no "
                     "currency with the symbol nor ISO code in Odoo.")
@@ -381,14 +398,14 @@ class BusinessDocumentImport(models.AbstractModel):
                 if country.currency_id:
                     return country.currency_id
                 else:
-                    raise UserError(_(
+                    raise self.user_error_wrap(_(
                         "The analysis of the business document returned '%s' "
                         "as the country code to find the related currency. "
                         "But the country '%s' doesn't have any related "
                         "currency configured in Odoo.")
                         % (country_code, country.name))
             else:
-                raise UserError(_(
+                raise self.user_error_wrap(_(
                     "The analysis of the business document returned '%s' "
                     "as the country code to find the related currency. "
                     "But there is no country with that code in Odoo.")
@@ -465,7 +482,7 @@ class BusinessDocumentImport(models.AbstractModel):
             type_tax_use='purchase', price_include=False):
         """Example:
         tax_dict = {
-            'type': 'percent',  # required param, 'fixed' or 'percent'
+            'amount_type': 'percent',  # required param, 'fixed' or 'percent'
             'amount': 20.0,  # required
             'unece_type_code': 'VAT',
             'unece_categ_code': 'S',
@@ -482,18 +499,19 @@ class BusinessDocumentImport(models.AbstractModel):
         prec = self.env['decimal.precision'].precision_get('Account')
         # we should not use the Account prec directly, but...
         if type_tax_use == 'purchase':
-            domain.append(('type_tax_use', 'in', ('purchase', 'all')))
+            domain.append(('type_tax_use', '=', 'purchase'))
         elif type_tax_use == 'sale':
-            domain.append(('type_tax_use', 'in', ('sale', 'all')))
+            domain.append(('type_tax_use', '=', 'sale'))
         if price_include is False:
             domain.append(('price_include', '=', False))
         elif price_include is True:
             domain.append(('price_include', '=', True))
         # with the code abose, if you set price_include=None, it will
         # won't depend on the value of the price_include parameter
-        assert tax_dict.get('type') in ['fixed', 'percent'], 'bad tax type'
+        assert tax_dict.get('amount_type') in ['fixed', 'percent'],\
+            'bad tax type'
         assert 'amount' in tax_dict, 'Missing amount key in tax_dict'
-        domain.append(('type', '=', tax_dict['type']))
+        domain.append(('amount_type', '=', tax_dict['amount_type']))
         if tax_dict.get('unece_type_code'):
             domain.append(
                 ('unece_type_code', '=', tax_dict['unece_type_code']))
@@ -503,12 +521,10 @@ class BusinessDocumentImport(models.AbstractModel):
         taxes = ato.search(domain)
         for tax in taxes:
             tax_amount = tax.amount
-            if tax_dict['type'] == 'percent':
-                tax_amount *= 100
             if not float_compare(
                     tax_dict['amount'], tax_amount, precision_digits=prec):
                 return tax
-        raise UserError(_(
+        raise self.user_error_wrap(_(
             "Odoo couldn't find any tax with 'Tax Application' = '%s' "
             "and 'Tax Included in Price' = '%s' which correspond to the "
             "following information extracted from the business document:\n"
@@ -520,7 +536,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 tax_dict.get('unece_type_code'),
                 tax_dict.get('unece_categ_code'),
                 tax_dict['amount'],
-                tax_dict['type'] == 'percent' and '%' or _('(fixed)')))
+                tax_dict['amount_type'] == 'percent' and '%' or _('(fixed)')))
 
     def compare_lines(
             self, existing_lines, import_lines, chatter_msg,
@@ -537,7 +553,7 @@ class BusinessDocumentImport(models.AbstractModel):
             }]
         import_lines = [{
             'product': {
-                'ean13': '2100002000003',
+                'barcode': '2100002000003',
                 'code': 'EAZY1',
                 },
             'quantity': 2,
@@ -656,6 +672,135 @@ class BusinessDocumentImport(models.AbstractModel):
                     res['to_remove'] = exiting_dict['line']
         return res
 
+    def _prepare_account_speed_dict(self):
+        res = self.env['account.account'].search_read([
+            ('company_id', '=', self.env.user.company_id.id),
+            ('deprecated', '=', False)], ['code'])
+        speed_dict = {}
+        for l in res:
+            speed_dict[l['code'].upper()] = l['id']
+        return speed_dict
+
+    @api.model
+    def _match_account(self, account_dict, chatter_msg, speed_dict=None):
+        """Example:
+        account_dict = {
+            'code': '411100',
+            }
+        speed_dict is usefull to gain performance when you have a lot of
+        accounts to match
+        """
+        if not account_dict:
+            account_dict = {}
+        aao = self.env['account.account']
+        if speed_dict is None:
+            speed_dict = self._prepare_account_speed_dict()
+        self._strip_cleanup_dict(account_dict)
+        if account_dict.get('recordset'):
+            return account_dict['recordset']
+        if account_dict.get('id'):
+            return aao.browse(account_dict['id'])
+        if account_dict.get('code'):
+            acc_code = account_dict['code'].upper()
+            if acc_code in speed_dict:
+                return aao.browse(speed_dict[acc_code])
+            # Match when account_dict['code'] is longer than Odoo's account
+            # codes because of trailing '0'
+            # I don't think we need a warning for this kind of match
+            acc_code_tmp = acc_code
+            while acc_code_tmp and acc_code_tmp[-1] == '0':
+                acc_code_tmp = acc_code_tmp[:-1]
+                if acc_code_tmp and acc_code_tmp in speed_dict:
+                    return aao.browse(speed_dict[acc_code_tmp])
+            # Match when account_dict['code'] is shorter than Odoo's accounts
+            # -> warns the user about this
+            for code, account_id in speed_dict.iteritems():
+                if code.startswith(acc_code):
+                    chatter_msg.append(_(
+                        "Approximate match: account %s has been matched "
+                        "with account %s") % (account_dict['code'], code))
+                    return aao.browse(account_id)
+        raise self.user_error_wrap(_(
+            "Odoo couldn't find any account corresponding to the "
+            "following information extracted from the business document: "
+            "Account code: %s") % account_dict.get('code'))
+
+    def _prepare_analytic_account_speed_dict(self):
+        res = self.env['account.analytic.account'].search_read(
+            [('company_id', '=', self.env.user.company_id.id)],
+            ['code'])
+        speed_dict = {}
+        for l in res:
+            if l['code']:
+                speed_dict[l['code'].upper()] = l['id']
+        return speed_dict
+
+    @api.model
+    def _match_analytic_account(
+            self, aaccount_dict, chatter_msg, speed_dict=None):
+        """Example:
+        aaccount_dict = {
+            'code': '627',
+            }
+        speed_dict is usefull to gain performance when you have a lot of
+        analytic accounts to match
+        """
+        if not aaccount_dict:
+            aaccount_dict = {}
+        aaao = self.env['account.analytic.account']
+        if speed_dict is None:
+            speed_dict = self._prepare_analytic_account_speed_dict()
+        self._strip_cleanup_dict(aaccount_dict)
+        if aaccount_dict.get('recordset'):
+            return aaccount_dict['recordset']
+        if aaccount_dict.get('id'):
+            return aaao.browse(aaccount_dict['id'])
+        if aaccount_dict.get('code'):
+            aacode = aaccount_dict['code'].upper()
+            if aacode in speed_dict:
+                return aaao.browse(speed_dict[aacode])
+        raise self.user_error_wrap(_(
+            "Odoo couldn't find any analytic account corresponding to the "
+            "following information extracted from the business document: "
+            "Analytic account code: %s") % aaccount_dict.get('code'))
+
+    def _prepare_journal_speed_dict(self):
+        res = self.env['account.journal'].search_read([
+            ('company_id', '=', self.env.user.company_id.id)], ['code'])
+        speed_dict = {}
+        for l in res:
+            speed_dict[l['code'].upper()] = l['id']
+        return speed_dict
+
+    @api.model
+    def _match_journal(self, journal_dict, chatter_msg, speed_dict=None):
+        """Example:
+        journal_dict = {
+            'code': 'MISC',
+            }
+        speed_dict is usefull to gain performance when you have a lot of
+        journals to match
+        """
+        if not journal_dict:
+            journal_dict = {}
+        ajo = self.env['account.account']
+        if speed_dict is None:
+            speed_dict = self._prepare_journal_speed_dict()
+        self._strip_cleanup_dict(journal_dict)
+        if journal_dict.get('recordset'):
+            return journal_dict['recordset']
+        if journal_dict.get('id'):
+            return ajo.browse(journal_dict['id'])
+        if journal_dict.get('code'):
+            jcode = journal_dict['code'].upper()
+            if jcode in speed_dict:
+                return ajo.browse(speed_dict[jcode])
+            # case insensitive
+        raise self.user_error_wrap(_(
+            "Odoo couldn't find any journal corresponding to the "
+            "following information extracted from the business document: "
+            "Journal code: %s") % journal_dict.get('code'))
+
     def get_xml_files_from_pdf(self, pdf_file):
         """Returns a dict with key = filename, value = XML file obj"""
         logger.info('Trying to find an embedded XML file inside PDF')
@@ -693,20 +838,23 @@ class BusinessDocumentImport(models.AbstractModel):
         return res
 
     @api.model
-    def post_create_or_update(self, parsed_dict, record):
+    def post_create_or_update(self, parsed_dict, record, doc_filename=None):
         if parsed_dict.get('attachments'):
             for filename, data_base64 in\
                     parsed_dict['attachments'].iteritems():
                 self.env['ir.attachment'].create({
                     'name': filename,
                     'res_id': record.id,
-                    'res_model': unicode(record._model),
+                    'res_model': unicode(record._name),
                     'datas': data_base64,
                     'datas_fname': filename,
                     })
         for msg in parsed_dict['chatter_msg']:
             record.message_post(msg)
         if parsed_dict.get('note'):
-            record.message_post(_(
-                '<b>Notes in file %s:</b> %s')
-                % (filename, parsed_dict['note']))
+            if doc_filename:
+                msg = _('<b>Notes in file %s:</b>') % doc_filename
+            else:
+                msg = _('<b>Notes in imported document:</b>')
+            record.message_post(
+                '%s %s' % (msg, parsed_dict['note']))

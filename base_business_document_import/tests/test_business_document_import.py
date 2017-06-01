@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 
 
 class TestBaseBusinessDocumentImport(TransactionCase):
@@ -48,15 +48,13 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'parent_id': partner1.id,
             'name': u'Alexis de Lattre',
             'email': 'alexis.delattre@akretion.com',
-            'use_parent_address': True,
             'type': 'delivery',
             })
         rpo.create({
             'parent_id': partner1.id,
             'name': u'Sébastien BEAU',
             'email': 'sebastien.beau@akretion.com',
-            'use_parent_address': True,
-            'type': 'default',
+            'type': 'contact',
             })
         cpartner3 = rpo.create({
             'parent_id': partner1.id,
@@ -115,7 +113,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         ppo = self.env['product.product']
         product1 = ppo.create({
             'name': u'Test Product',
-            'ean13': '9782203121102',
+            'barcode': '9782203121102',
             'seller_ids': [
                 (0, 0, {
                     'name': self.env.ref('base.res_partner_2').id,
@@ -123,10 +121,10 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                 }),
                 ]
             })
-        product_dict = {'code': u'A2324 '}
+        product_dict = {'code': u'PROD_DEL '}
         res = bdio._match_product(product_dict, [])
-        self.assertEquals(res, self.env.ref('product.product_product_4b'))
-        product_dict = {'ean13': u'9782203121102'}
+        self.assertEquals(res, self.env.ref('product.product_delivery_01'))
+        product_dict = {'barcode': u'9782203121102'}
         res = bdio._match_product(product_dict, [])
         self.assertEquals(res, product1)
         product_dict = {'code': 'TEST1242'}
@@ -168,8 +166,8 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'description': 'DE-VAT-buy-18.0',
             'type_tax_use': 'purchase',
             'price_include': False,
-            'amount': 0.18,
-            'type': 'percent',
+            'amount': 18,
+            'amount_type': 'percent',
             'unece_type_id': self.env.ref('account_tax_unece.tax_type_vat').id,
             'unece_categ_id': self.env.ref('account_tax_unece.tax_categ_s').id,
             })
@@ -178,14 +176,14 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'description': 'DE-VAT-buy-18.0-TTC',
             'type_tax_use': 'purchase',
             'price_include': True,
-            'amount': 0.18,
-            'type': 'percent',
+            'amount': 18,
+            'amount_type': 'percent',
             'unece_type_id': self.env.ref('account_tax_unece.tax_type_vat').id,
             'unece_categ_id': self.env.ref('account_tax_unece.tax_categ_s').id,
             })
         bdio = self.env['business.document.import']
         tax_dict = {
-            'type': 'percent',
+            'amount_type': 'percent',
             'amount': 18,
             'unece_type_code': 'VAT',
             'unece_categ_code': 'S',
@@ -200,3 +198,38 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEquals(res, de_tax_21_ttc)
         res = bdio._match_taxes([tax_dict], [], type_tax_use='purchase')
         self.assertEquals(res, de_tax_21)
+
+    def test_match_account_exact(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 898999',
+            'code': '898999',
+            'user_type_id':
+            self.env.ref('account.data_account_type_expenses').id,
+            })
+        res = bdio._match_account({'code': '898999'}, [])
+        self.assertEquals(acc, res)
+
+    def test_match_account_bigger_in(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 898999',
+            'code': '898999',
+            'user_type_id':
+            self.env.ref('account.data_account_type_expenses').id,
+            })
+        res = bdio._match_account({'code': '89899900'}, [])
+        self.assertEquals(acc, res)
+
+    def test_match_account_smaller_in(self):
+        bdio = self.env['business.document.import']
+        acc = self.env['account.account'].create({
+            'name': 'Test 89899910',
+            'code': '89899910',
+            'user_type_id':
+            self.env.ref('account.data_account_type_expenses').id,
+            })
+        chatter = []
+        res = bdio._match_account({'code': '898999'}, chatter)
+        self.assertEquals(acc, res)
+        self.assertEquals(len(chatter), 1)

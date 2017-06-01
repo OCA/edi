@@ -15,15 +15,17 @@ Installation
 
 This module requires the Python library *invoice2data* available on `Github <https://github.com/m3nu/invoice2data>`_.
 
-To install the right version of the library, run:
+To install the library, run:
 
 .. code::
 
-  sudo pip install git+https://github.com/m3nu/invoice2data.git
+  sudo pip install invoice2data
 
-In order to use a recent version of invoice2data on Odoo v8, you need an Odoo v8 dated after January 29th 2016, so that it contains `this fix <https://github.com/odoo/odoo/commit/edeb5a8c0fb5c837364f1d92db731f89824bb28a>`_ which fixes `this bug <https://github.com/odoo/odoo/issues/10670>`_.
+If you use Ubuntu 16.04 LTS, you can use the pdftotext version 0.41.0 that is packaged in the distribution:
 
-The invoice2data library requires the latest version of the *pdftotext* utility, which is not yet packaged in Debian/Ubuntu. So you should download it from `the FTP server of Foolabs <ftp://ftp.foolabs.com/pub/xpdf/xpdfbin-linux-3.04.tar.gz>`_ then uncompress it and copy the file *bin64/pdftotext* to */usr/local/bin*.
+.. code::
+
+  sudo apt-get install poppler-utils
 
 If you want the invoice2data library to fallback on OCR if the PDF doesn't contain text (only a very small minority of PDF invoices are image-based and require OCR), you should also install `Imagemagick <http://www.imagemagick.org/>`_ (to get the *convert* utility to convert PDF to TIFF) and `Tesseract OCR <https://github.com/tesseract-ocr/tesseract>`_ :
 
@@ -46,7 +48,7 @@ If you want to use only your custom invoice templates and ignore the templates p
   invoice2data_templates_dir = /opt/invoice2data_local_templates
   invoice2data_exclude_built_in_templates = True
 
-French users should also install the module *l10n_fr_invoice_import* available in the `French localization <https://github.com/OCA/l10n-france/>`_, cf `this PR <https://github.com/OCA/l10n-france/pull/55>`_.
+French users should also install the module *l10n_fr_business_document_import* available in the `French localization <https://github.com/OCA/l10n-france/>`_.
 
 Configuration
 =============
@@ -90,7 +92,7 @@ Refer to the usage section of the module *account_invoice_import*.
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/226/8.0
+   :target: https://runbot.odoo-community.org/runbot/226/10.0
 
 Bug Tracker
 ===========

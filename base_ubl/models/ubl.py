@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, tools, _
-from openerp.exceptions import Warning as UserError
-from openerp.tools import float_is_zero, float_round
+from odoo import models, api, tools, _
+from odoo.exceptions import UserError
+from odoo.tools import float_is_zero, float_round
 from lxml import etree
 from StringIO import StringIO
 from tempfile import NamedTemporaryFile
@@ -304,13 +304,13 @@ class BaseUbl(models.AbstractModel):
                 seller_identification, ns['cbc'] + 'ID')
             seller_identification_id.text = seller_code
         if product:
-            if product.ean13:
+            if product.barcode:
                 std_identification = etree.SubElement(
                     item, ns['cac'] + 'StandardItemIdentification')
                 std_identification_id = etree.SubElement(
                     std_identification, ns['cbc'] + 'ID',
                     schemeAgencyID='6', schemeID='GTIN')
-                std_identification_id.text = product.ean13
+                std_identification_id.text = product.barcode
             for attribute_value in product.attribute_value_ids:
                 item_property = etree.SubElement(
                     item, ns['cac'] + 'AdditionalItemProperty')
@@ -336,12 +336,12 @@ class BaseUbl(models.AbstractModel):
             tax_subtotal, ns['cbc'] + 'TaxAmount', currencyID=currency_code)
         tax_amount_node.text = unicode(tax_amount)
         if (
-                tax.type == 'percent' and
+                tax.amount_type == 'percent' and
                 not float_is_zero(tax.amount, precision_digits=prec+3)):
             percent = etree.SubElement(
                 tax_subtotal, ns['cbc'] + 'Percent')
             percent.text = unicode(
-                float_round(tax.amount * 100, precision_digits=2))
+                float_round(tax.amount, precision_digits=2))
         self._ubl_add_tax_category(tax, tax_subtotal, ns, version=version)
 
     @api.model
@@ -415,20 +415,40 @@ class BaseUbl(models.AbstractModel):
         return True
 
     @api.model
-    def embed_xml_in_pdf(self, xml_string, xml_filename, pdf_content):
+    def embed_xml_in_pdf(
+            self, xml_string, xml_filename, pdf_content=None, pdf_file=None):
+        """
+        2 possible uses:
+        a) use the pdf_content argument, which has the binary of the PDF
+        -> it will return the new PDF binary with the embedded XML
+        (used for qweb-pdf reports)
+        b) OR use the pdf_file argument, which has the path to the
+        original PDF file
+        -> it will re-write this file with the new PDF
+        (used for py3o reports, *_ubl_py3o modules in this repo)
+        """
+        assert pdf_content or pdf_file, 'Missing pdf_file or pdf_content'
         logger.debug('Starting to embed %s in PDF file', xml_filename)
-        original_pdf_file = StringIO(pdf_content)
+        if pdf_file:
+            original_pdf_file = pdf_file
+        elif pdf_content:
+            original_pdf_file = StringIO(pdf_content)
         original_pdf = PyPDF2.PdfFileReader(original_pdf_file)
         new_pdf_filestream = PyPDF2.PdfFileWriter()
         new_pdf_filestream.appendPagesFromReader(original_pdf)
         new_pdf_filestream.addAttachment(xml_filename, xml_string)
-        with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
+        if pdf_file:
+            f = open(pdf_file, 'w')
             new_pdf_filestream.write(f)
-            f.seek(0)
-            new_pdf_content = f.read()
             f.close()
-            logger.info('%s file added to PDF', xml_filename)
-        return new_pdf_content
+        elif pdf_content:
+            with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
+                new_pdf_filestream.write(f)
+                f.seek(0)
+                pdf_content = f.read()
+                f.close()
+        logger.info('%s file added to PDF', xml_filename)
+        return pdf_content
 
     # ==================== METHODS TO PARSE UBL files
 
@@ -529,13 +549,13 @@ class BaseUbl(models.AbstractModel):
         return {}
 
     def ubl_parse_product(self, line_node, ns):
-        ean13_xpath = line_node.xpath(
+        barcode_xpath = line_node.xpath(
             "cac:Item/cac:StandardItemIdentification/cbc:ID[@schemeID='GTIN']",
             namespaces=ns)
         code_xpath = line_node.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns)
         product_dict = {
-            'ean13': ean13_xpath and ean13_xpath[0].text or False,
+            'barcode': barcode_xpath and barcode_xpath[0].text or False,
             'code': code_xpath and code_xpath[0].text or False,
             }
         return product_dict

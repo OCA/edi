@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, fields, api, _
-from openerp.tools import float_is_zero
-from openerp.exceptions import Warning as UserError
+from odoo import models, fields, api, _
+from odoo.tools import float_is_zero
+from odoo.exceptions import UserError
 import logging
 import mimetypes
 from lxml import etree
@@ -184,6 +184,7 @@ class PurchaseOrderImport(models.TransientModel):
                         oline.product_id.name_get()[0][1],
                         cdict['qty'][0], cdict['qty'][1],
                         oline.product_uom.name))
+                write_vals['product_qty'] = cdict['qty'][1]
             if write_vals:
                 oline.write(write_vals)
         if compare_res['to_remove']:  # we don't delete the lines, only warn
@@ -214,17 +215,9 @@ class PurchaseOrderImport(models.TransientModel):
     @api.model
     def _prepare_create_order_line(self, product, uom, import_line, order):
         polo = self.env['purchase.order.line']
-        product_change_res = polo.onchange_product_id(
-            order.pricelist_id.id, product.id,
-            import_line['qty'], uom.id,
-            order.partner_id.id,
-            fiscal_position_id=order.fiscal_position.id or False,
-            price_unit=import_line['price_unit'])['value']
-        if product_change_res.get('taxes_id'):
-            product_change_res['taxes_id'] = [
-                (6, 0, product_change_res['taxes_id'])]
-        vals = product_change_res
-        vals['product_id'] = product.id
+        vals = {'product_id': product.id, 'order_id': order}
+        vals = polo.play_onchanges(vals, ['product_id'])
+        vals.pop('order_id')
         return vals
 
     @api.multi

@@ -6,7 +6,7 @@
 Purchase Order Import
 =====================
 
-This module adds support for the import of electronic quotations. This module provides the base methods to import electronic quotations ; it requires additionnal modules to support specific order formats:
+This module adds support for the import of electronic quotations. This module provides the base methods to import electronic quotations ; it requires additional modules to support specific order formats:
 
 * module *purchase_order_import_ubl*: adds support for `Universal Business Language (UBL) <http://ubl.xml.org/>`_ quotations as:
 
@@ -38,7 +38,7 @@ Once the quotation file is imported, you should read the messages in the chatter
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/226/8.0
+   :target: https://runbot.odoo-community.org/runbot/226/10.0
 
 Bug Tracker
 ===========
