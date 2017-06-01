@@ -2,24 +2,17 @@
 # © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo.tests.common import TransactionCase
+from odoo.addons.account_payment_unece.tests.test_account_invoice import \
+    TestAccountInvoice
 import PyPDF2
 from lxml import etree
 from StringIO import StringIO
 
 
-class TestZUGFeRDInvoice(TransactionCase):
-
-    def test_print_demo_customer_invoice(self):
-        aio = self.env['account.invoice']
-        for i in range(5):
-            invoice = self.env.ref('account.invoice_%d' % (i+1))
-            pdf_content = self.env['report'].get_pdf(
-                [invoice.id], 'account.report_invoice')
-            self.assertTrue(aio.pdf_is_zugferd(pdf_content))
+class TestFacturXInvoice(TestAccountInvoice):
 
     def test_deep_customer_invoice(self):
-        invoice = self.env.ref('account.invoice_3')
+        invoice = self.test_only_create_invoice()
         pdf_content = self.env['report'].get_pdf(
             [invoice.id], 'account.report_invoice')
         fd = StringIO(pdf_content)
