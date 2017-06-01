@@ -16,6 +16,7 @@ It shouldn't have any header line and use semi-colon as field separator. The CSV
 Example of an order CSV file:
 
 .. code::
+
   5410228193449;2
   5449000054227;10
   5449000111715;5
