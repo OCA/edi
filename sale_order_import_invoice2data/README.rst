@@ -69,11 +69,8 @@ Here are some hints to help you add a template for your supplier:
 
 On the output, you will get first the text of the PDF, then some debug info on the parsing of the invoice and the regexps, and, on the last line, you will have the dict that contain the result of the parsing.
 
-* if the VAT number of the supplier is present in the text of the PDF Sale Order, I think it's a good idea to use it as the keyword. It is a good practice to add 2 other keywoards: one for the
-language (for example, match on the word *Invoice* in the language of the invoice) and one for the currency, so as to match only the invoices of that supplier in this particular language and currency.
-
+* if the VAT number of the supplier is present in the text of the PDF Sale Order, I think it's a good idea to use it as the keyword. It is a good practice to add 2 other keywoards: one for the language (for example, match on the word *Invoice* in the language of the invoice) and one for the currency, so as to match only the invoices of that supplier in this particular language and currency.
 * the list of *fields* should contain the following entries:
-
   * 'vat' with the VAT number of the supplier (if the VAT number of the supplier is not in the text of PDF file, add a 'partner_name' key, or, if the supplier is French and the module *l10n_fr_invoice_pdf_import* is installed, add a 'siren' key)
   * 'amount' ('amount' is the total amount with taxes)
   * 'amount_untaxed' or 'amount_tax' (one or the other, no need for both)

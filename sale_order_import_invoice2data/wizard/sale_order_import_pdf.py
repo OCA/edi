@@ -4,19 +4,15 @@
 
 import logging
 import os
-import pkg_resources
 from tempfile import mkstemp
 
-from openerp import models, api, tools, _
+from openerp import models, api, _
 from openerp.exceptions import Warning as UserError
-from openerp.modules.module import get_resource_path
 from openerp.tools import float_compare
-from openerp.tools.misc import file_open
 
 logger = logging.getLogger(__name__)
 try:
     from invoice2data.main import extract_data
-    from invoice2data.template import read_templates
     from invoice2data.main import logger as loggeri2data
 except ImportError:
     logger.debug('Cannot import invoice2data')
@@ -28,27 +24,7 @@ class SaleOrderImport(models.TransientModel):
     @api.model
     def collect_pdf_templates(self):
         """ Create a collection of templates """
-        local_templates_dir = tools.config.get(
-            'invoice2data_templates_dir', False)
-        logger.debug(
-            'invoice2data local_templates_dir=%s', local_templates_dir)
-        templates = []
-        if local_templates_dir and os.path.isdir(local_templates_dir):
-            templates += read_templates(local_templates_dir)
-        exclude_built_in_templates = tools.config.get(
-            'invoice2data_exclude_built_in_templates', False)
-        if not exclude_built_in_templates:
-            templates += read_templates(
-                pkg_resources.resource_filename('invoice2data', 'templates'))
-        logger.debug(
-            'Calling invoice2data.extract_data with templates=%s',
-            templates)
-
-        # Add (test) templates defined in this module
-        templates += read_templates(
-            get_resource_path('sale_order_import_invoice2data',
-                'templates'))
-        return templates
+        return self.env['invoice2data.template'].get_templates('sale_order')
 
     @api.model
     def parse_pdf_order(self, file_data, detect_doc_type=False):
@@ -88,8 +64,9 @@ class SaleOrderImport(models.TransientModel):
         # Failure
         if not invoice2data_res:
             # Try other kinds of PDF parsing
-            return super(SaleOrderImport, self).parse_pdf_order(file_data,
-                                                                detect_doc_type)
+            return super(
+                SaleOrderImport, self
+            ).parse_pdf_order(file_data, detect_doc_type)
 
         # Success, return parsed sale order
         logger.info(

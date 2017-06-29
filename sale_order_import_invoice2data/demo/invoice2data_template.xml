@@ -1,4 +1,10 @@
-issuer: Camptocamp
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="template_c2c" model="invoice2data.template">
+            <field name="name">Camptocamp</field>
+            <field name="template_type">sale_order</field>
+            <field name="template"><![CDATA[issuer: Camptocamp
 fields:
   amount: Total \s+(\d+.\d{2})
   date: \d\d/\d\d/\d\d\d\d\s\d\d:\d\d:\d\d
@@ -24,5 +30,7 @@ options:
   line_separator: "\\n"
   date_formats:
     - '%Y-%m-%d'
-
-
+]]></field>
+        </record>
+    </data>
+</openerp>

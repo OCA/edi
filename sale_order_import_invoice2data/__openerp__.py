@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Sale Order PDF Import',
-    'version': '8.0.1.0.0',
+    'version': '9.0.1.0.0',
     'category': 'Sales Management',
     'license': 'AGPL-3',
     'summary': 'Import PDF sale order files',
-    'author': 'Sunflower IT,Odoo Community Association (OCA)',
+    'author': 'Sunflower IT,Therp BV,Odoo Community Association (OCA)',
     'website': 'http://sunflowerweb.nl',
     'depends': [
         'sale_order_import',
-        'document'
+        'document',
+        'invoice2data_template',
     ],
-    'external_dependencies': {
-        'python': [
-            'invoice2data',
-        ]
-    },
+    'demo': [
+        'demo/invoice2data_template.xml',
+    ],
     'installable': True,
 }
