@@ -8,7 +8,6 @@ from tempfile import mkstemp
 
 from openerp import models, api, _
 from openerp.exceptions import Warning as UserError
-from openerp.tools import float_compare
 
 logger = logging.getLogger(__name__)
 try:
@@ -75,7 +74,6 @@ class SaleOrderImport(models.TransientModel):
 
     @api.model
     def invoice2data_to_parsed_order(self, invoice2data_res):
-        precision = self.env['decimal.precision'].precision_get('Product UoS')
         parsed_order = {
             'partner': {
                 'vat': invoice2data_res.get('vat'),
@@ -115,20 +113,16 @@ class SaleOrderImport(models.TransientModel):
                     # --------------
                     'taxes': line.get('taxes'),
                     'unit_price': line.get('unit_price'),
-                    'price': line.get('price'),
+                    'price': line.get('price', 0),
                 }
                 # Quantity
                 try:
-                    qty = float(line.get('qty'))
+                    qty = float(line.get('qty', 0))
                 except:
                     raise UserError(_(
                         "Error on PDF order line %d: The quantity should "
                         "use dot as decimal separator and shouldn't have any "
                         "thousand separator") % i)
-                if float_compare(qty, 0, precision_digits=precision) != 1:
-                    raise UserError(_(
-                        "Error on PDF order line %d: the quantity should "
-                        "be strictly positive") % i)
                 vals['qty'] = qty
                 parsed_order['lines'].append(vals)
         if 'amount_tax' in invoice2data_res:

@@ -324,7 +324,9 @@ class SaleOrderImport(models.TransientModel):
             'product_uom': uom.id,
         }
         if price_source == 'order':
-            vals['price_unit'] = import_line['price_unit']  # TODO : fix
+            vals['price_unit'] = import_line.get('price_unit', 0)  # TODO : fix
+        if 'desc' in import_line:
+            vals['name'] = import_line['desc']
         return vals
 
     @api.multi
