@@ -30,11 +30,11 @@
                             <field name="template_type" />
                         </group>
                         <field name="template" />
-                        <group name="preview_buttons" col="4">
+                        <group name="preview_buttons" col="4" class="oe_edit_only">
                             <field name="preview_file" placeholder="Upload file for preview" />
                             <button type="object" name="action_preview" string="Preview" class="oe_highlight" />
                         </group>
-                        <field name="preview" attrs="{'invisible': [('preview', '=', False)]}" />
+                        <field name="preview" attrs="{'invisible': [('preview', '=', False)]}" class="oe_edit_only" />
                     </sheet>
                 </form>
             </field>

@@ -17,7 +17,7 @@ class Invoice2dataTemplate(models.Model):
     name = fields.Char(required=True)
     template_type = fields.Selection([], 'Type', required=True)
     template = fields.Text(required=True)
-    preview = fields.Html()
+    preview = fields.Html(readonly=True)
     preview_file = fields.Binary('File')
 
     @api.multi
