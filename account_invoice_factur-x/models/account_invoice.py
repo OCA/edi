@@ -21,8 +21,8 @@ except ImportError:
     logger.debug('Cannot import PyPDF2')
 
 
-ZUGFERD_LEVEL = 'comfort'
-ZUGFERD_FILENAME = 'ZUGFeRD-invoice.xml'
+FACTURX_LEVEL = 'EN 16931'
+FACTURX_FILENAME = 'factur-x.xml'
 
 
 class AccountInvoice(models.Model):
@@ -85,7 +85,7 @@ class AccountInvoice(models.Model):
     def _add_document_context_block(self, root, nsmap, ns):
         self.ensure_one()
         doc_ctx = etree.SubElement(
-            root, ns['rsm'] + 'SpecifiedExchangedDocumentContext')
+            root, ns['rsm'] + 'ExchangedDocumentContext')
         if self.state not in ('open', 'paid'):
             test_indic = etree.SubElement(doc_ctx, ns['ram'] + 'TestIndicator')
             indic = etree.SubElement(test_indic, ns['udt'] + 'Indicator')
@@ -93,23 +93,19 @@ class AccountInvoice(models.Model):
         ctx_param = etree.SubElement(
             doc_ctx, ns['ram'] + 'GuidelineSpecifiedDocumentContextParameter')
         ctx_param_id = etree.SubElement(ctx_param, ns['ram'] + 'ID')
-        ctx_param_id.text = '%s:%s' % (nsmap['rsm'], ZUGFERD_LEVEL)
+        ctx_param_id.text = 'urn:cen.eu:en16931:compliant:factur-x.eu:1p0:'\
+                            '%s' % FACTURX_LEVEL.replace(' ', '').lower()
 
     @api.multi
     def _add_header_block(self, root, ns):
         self.ensure_one()
         header_doc = etree.SubElement(
-            root, ns['rsm'] + 'HeaderExchangedDocument')
+            root, ns['rsm'] + 'ExchangedDocument')
         header_doc_id = etree.SubElement(header_doc, ns['ram'] + 'ID')
         if self.state in ('open', 'paid'):
             header_doc_id.text = self.number
         else:
             header_doc_id.text = self.state
-        header_doc_name = etree.SubElement(header_doc, ns['ram'] + 'Name')
-        if self.type == 'out_refund':
-            header_doc_name.text = _('Refund')
-        else:
-            header_doc_name.text = _('Invoice')
         header_doc_typecode = etree.SubElement(
             header_doc, ns['ram'] + 'TypeCode')
         header_doc_typecode.text = '380'
@@ -127,7 +123,7 @@ class AccountInvoice(models.Model):
         self.ensure_one()
         trade_agreement = etree.SubElement(
             trade_transaction,
-            ns['ram'] + 'ApplicableSupplyChainTradeAgreement')
+            ns['ram'] + 'ApplicableHeaderTradeAgreement')
         company = self.company_id
         seller = etree.SubElement(
             trade_agreement, ns['ram'] + 'SellerTradeParty')
@@ -170,7 +166,7 @@ class AccountInvoice(models.Model):
         self.ensure_one()
         trade_agreement = etree.SubElement(
             trade_transaction,
-            ns['ram'] + 'ApplicableSupplyChainTradeDelivery')
+            ns['ram'] + 'ApplicableHeaderTradeDelivery')
         return trade_agreement
 
     @api.multi
@@ -232,7 +228,7 @@ class AccountInvoice(models.Model):
         prec = self.currency_id.decimal_places
         trade_settlement = etree.SubElement(
             trade_transaction,
-            ns['ram'] + 'ApplicableSupplyChainTradeSettlement')
+            ns['ram'] + 'ApplicableHeaderTradeSettlement')
         payment_ref = etree.SubElement(
             trade_settlement, ns['ram'] + 'PaymentReference')
         payment_ref.text = self.number or self.state
@@ -294,7 +290,7 @@ class AccountInvoice(models.Model):
                 tax_categ_code.text = tax.unece_categ_code
                 if tax.amount_type == 'percent':
                     percent = etree.SubElement(
-                        trade_tax, ns['ram'] + 'ApplicablePercent')
+                        trade_tax, ns['ram'] + 'RateApplicablePercent')
                     percent.text = unicode(tax.amount)
         trade_payment_term = etree.SubElement(
             trade_settlement, ns['ram'] + 'SpecifiedTradePaymentTerms')
@@ -315,7 +311,7 @@ class AccountInvoice(models.Model):
 
         sums = etree.SubElement(
             trade_settlement,
-            ns['ram'] + 'SpecifiedTradeSettlementMonetarySummation')
+            ns['ram'] + 'SpecifiedTradeSettlementHeaderMonetarySummation')
         line_total = etree.SubElement(
             sums, ns['ram'] + 'LineTotalAmount', currencyID=inv_currency_name)
         line_total.text = '%0.*f' % (prec, self.amount_untaxed * sign)
@@ -362,9 +358,30 @@ class AccountInvoice(models.Model):
             line_item, ns['ram'] + 'AssociatedDocumentLineDocument')
         etree.SubElement(
             line_doc, ns['ram'] + 'LineID').text = unicode(line_number)
+
+        trade_product = etree.SubElement(
+            line_item, ns['ram'] + 'SpecifiedTradeProduct')
+        if iline.product_id:
+            if iline.product_id.barcode:
+                barcode = etree.SubElement(
+                    trade_product, ns['ram'] + 'GlobalID', schemeID='0160')
+                # 0160 = GS1 Global Trade Item Number (GTIN, EAN)
+                barcode.text = iline.product_id.barcode
+            if iline.product_id.default_code:
+                product_code = etree.SubElement(
+                    trade_product, ns['ram'] + 'SellerAssignedID')
+                product_code.text = iline.product_id.default_code
+        product_name = etree.SubElement(
+            trade_product, ns['ram'] + 'Name')
+        product_name.text = iline.name
+        if iline.product_id and iline.product_id.description_sale:
+            product_desc = etree.SubElement(
+                trade_product, ns['ram'] + 'Description')
+            product_desc.text = iline.product_id.description_sale
+
         line_trade_agreement = etree.SubElement(
             line_item,
-            ns['ram'] + 'SpecifiedSupplyChainTradeAgreement')
+            ns['ram'] + 'SpecifiedLineTradeAgreement')
         # convert gross price_unit to tax_excluded value
         taxres = iline.invoice_line_tax_ids.compute_all(iline.price_unit)
         gross_price_val = float_round(
@@ -411,7 +428,7 @@ class AccountInvoice(models.Model):
             currencyID=inv_currency_name)
         net_price_amount.text = unicode(net_price_val)
         line_trade_delivery = etree.SubElement(
-            line_item, ns['ram'] + 'SpecifiedSupplyChainTradeDelivery')
+            line_item, ns['ram'] + 'SpecifiedLineTradeDelivery')
         if iline.uom_id and iline.uom_id.unece_code:
             unitCode = iline.uom_id.unece_code
         else:
@@ -431,7 +448,7 @@ class AccountInvoice(models.Model):
             unitCode=unitCode)
         billed_qty.text = unicode(iline.quantity * sign)
         line_trade_settlement = etree.SubElement(
-            line_item, ns['ram'] + 'SpecifiedSupplyChainTradeSettlement')
+            line_item, ns['ram'] + 'SpecifiedLineTradeSettlement')
         if iline.invoice_line_tax_ids:
             for tax in iline.invoice_line_tax_ids:
                 trade_tax = etree.SubElement(
@@ -453,68 +470,50 @@ class AccountInvoice(models.Model):
                 trade_tax_categcode.text = tax.unece_categ_code
                 if tax.amount_type == 'percent':
                     trade_tax_percent = etree.SubElement(
-                        trade_tax, ns['ram'] + 'ApplicablePercent')
+                        trade_tax, ns['ram'] + 'RateApplicablePercent')
                     trade_tax_percent.text = unicode(tax.amount)
         subtotal = etree.SubElement(
             line_trade_settlement,
-            ns['ram'] + 'SpecifiedTradeSettlementMonetarySummation')
+            ns['ram'] + 'SpecifiedTradeSettlementLineMonetarySummation')
         subtotal_amount = etree.SubElement(
             subtotal, ns['ram'] + 'LineTotalAmount',
             currencyID=inv_currency_name)
         subtotal_amount.text = unicode(iline.price_subtotal * sign)
-        trade_product = etree.SubElement(
-            line_item, ns['ram'] + 'SpecifiedTradeProduct')
-        if iline.product_id:
-            if iline.product_id.barcode:
-                barcode = etree.SubElement(
-                    trade_product, ns['ram'] + 'GlobalID', schemeID='0160')
-                # 0160 = GS1 Global Trade Item Number (GTIN, EAN)
-                barcode.text = iline.product_id.barcode
-            if iline.product_id.default_code:
-                product_code = etree.SubElement(
-                    trade_product, ns['ram'] + 'SellerAssignedID')
-                product_code.text = iline.product_id.default_code
-        product_name = etree.SubElement(
-            trade_product, ns['ram'] + 'Name')
-        product_name.text = iline.name
-        if iline.product_id and iline.product_id.description_sale:
-            product_desc = etree.SubElement(
-                trade_product, ns['ram'] + 'Description')
-            product_desc.text = iline.product_id.description_sale
 
     @api.multi
-    def generate_zugferd_xml(self):
+    def generate_facturx_xml(self):
         self.ensure_one()
         assert self.type in ('out_invoice', 'out_refund'),\
             'only works for customer invoice and refunds'
         sign = self.type == 'out_refund' and -1 or 1
         nsmap = {
             'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-            'rsm': 'urn:ferd:CrossIndustryDocument:invoice:1p0',
+            'rsm': 'urn:un:unece:uncefact:data:standard:'
+                   'CrossIndustryInvoice:100',
             'ram': 'urn:un:unece:uncefact:data:standard:'
-                   'ReusableAggregateBusinessInformationEntity:12',
+                   'ReusableAggregateBusinessInformationEntity:100',
+            'qdt': 'urn:un:unece:uncefact:data:standard:QualifiedDataType:100',
             'udt': 'urn:un:unece:uncefact:data:'
-                   'standard:UnqualifiedDataType:15',
+                   'standard:UnqualifiedDataType:100',
             }
         ns = {
-            'rsm': '{urn:ferd:CrossIndustryDocument:invoice:1p0}',
+            'rsm': '{urn:un:unece:uncefact:data:standard:'
+                   'CrossIndustryInvoice:100}',
             'ram': '{urn:un:unece:uncefact:data:standard:'
-                   'ReusableAggregateBusinessInformationEntity:12}',
+                   'ReusableAggregateBusinessInformationEntity:100}',
+            'qdt': '{urn:un:unece:uncefact:data:standard:'
+                   'QualifiedDataType:100}',
             'udt': '{urn:un:unece:uncefact:data:standard:'
-                   'UnqualifiedDataType:15}',
+                   'UnqualifiedDataType:100}',
             }
 
-        root = etree.Element(ns['rsm'] + 'CrossIndustryDocument', nsmap=nsmap)
+        root = etree.Element(ns['rsm'] + 'CrossIndustryInvoice', nsmap=nsmap)
 
         self._add_document_context_block(root, nsmap, ns)
         self._add_header_block(root, ns)
 
         trade_transaction = etree.SubElement(
-            root, ns['rsm'] + 'SpecifiedSupplyChainTradeTransaction')
-
-        self._add_trade_agreement_block(trade_transaction, ns)
-        self._add_trade_delivery_block(trade_transaction, ns)
-        self._add_trade_settlement_block(trade_transaction, sign, ns)
+            root, ns['rsm'] + 'SupplyChainTradeTransaction')
 
         line_number = 0
         for iline in self.invoice_line_ids:
@@ -522,12 +521,16 @@ class AccountInvoice(models.Model):
             self._add_invoice_line_block(
                 trade_transaction, iline, line_number, sign, ns)
 
+        self._add_trade_agreement_block(trade_transaction, ns)
+        self._add_trade_delivery_block(trade_transaction, ns)
+        self._add_trade_settlement_block(trade_transaction, sign, ns)
+
         xml_string = etree.tostring(
             root, pretty_print=True, encoding='UTF-8', xml_declaration=True)
         self._check_xml_schema(
-            xml_string, 'account_invoice_factur-x/data/ZUGFeRD1p0.xsd')
+            xml_string, 'account_invoice_factur-x/data/Factur-X_EN16931.xsd')
         logger.debug(
-            'ZUGFeRD XML file generated for invoice ID %d', self.id)
+            'Factur-X XML file generated for invoice ID %d', self.id)
         logger.debug(xml_string)
         return xml_string
 
@@ -556,8 +559,8 @@ class AccountInvoice(models.Model):
         return True
 
     @api.model
-    def pdf_is_zugferd(self, pdf_content):
-        is_zugferd = False
+    def pdf_is_facturx(self, pdf_content):
+        is_facturx = False
         try:
             fd = StringIO(pdf_content)
             pdf = PdfFileReader(fd)
@@ -565,13 +568,13 @@ class AccountInvoice(models.Model):
             logger.debug('pdf_root=%s', pdf_root)
             embeddedfiles = pdf_root['/Names']['/EmbeddedFiles']['/Names']
             for embeddedfile in embeddedfiles:
-                if embeddedfile == ZUGFERD_FILENAME:
-                    is_zugferd = True
+                if embeddedfile in (FACTURX_FILENAME, 'ZUGFeRD-invoice.xml'):
+                    is_facturx = True
                     break
         except:
             pass
-        logger.debug('pdf_is_zugferd returns %s', is_zugferd)
-        return is_zugferd
+        logger.debug('pdf_is_facturx returns %s', is_facturx)
+        return is_facturx
 
     @api.model
     def _get_pdf_timestamp(self):
@@ -597,7 +600,7 @@ class AccountInvoice(models.Model):
             '/CreationDate': pdf_date,
             '/Creator':
             u'Odoo module account_invoice_factur-x by Alexis de Lattre',
-            '/Keywords': u'ZUGFeRD, Invoice',
+            '/Keywords': u'Factur-X, Invoice',
             '/ModDate': pdf_date,
             '/Subject': u'Invoice %s' % self.number or self.state,
             '/Title': u'Invoice %s' % self.number or self.state,
@@ -612,13 +615,14 @@ class AccountInvoice(models.Model):
         nsmap_pdf = {'pdf': 'http://ns.adobe.com/pdf/1.3/'}
         nsmap_xmp = {'xmp': 'http://ns.adobe.com/xap/1.0/'}
         nsmap_pdfaid = {'pdfaid': 'http://www.aiim.org/pdfa/ns/id/'}
-        nsmap_zf = {'zf': 'urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#'}
+        nsmap_fx = {
+            'fx': 'urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#'}
         ns_dc = '{%s}' % nsmap_dc['dc']
         ns_rdf = '{%s}' % nsmap_rdf['rdf']
         ns_pdf = '{%s}' % nsmap_pdf['pdf']
         ns_xmp = '{%s}' % nsmap_xmp['xmp']
         ns_pdfaid = '{%s}' % nsmap_pdfaid['pdfaid']
-        ns_zf = '{%s}' % nsmap_zf['zf']
+        ns_fx = '{%s}' % nsmap_fx['fx']
         ns_xml = '{http://www.w3.org/XML/1998/namespace}'
 
         root = etree.Element(ns_rdf + 'RDF', nsmap=nsmap_rdf)
@@ -636,7 +640,7 @@ class AccountInvoice(models.Model):
         dc_title_alt = etree.SubElement(dc_title, ns_rdf + 'Alt')
         dc_title_alt_li = etree.SubElement(
             dc_title_alt, ns_rdf + 'li')
-        dc_title_alt_li.text = 'ZUGFeRD Invoice'
+        dc_title_alt_li.text = 'Factur-X Invoice'
         dc_title_alt_li.set(ns_xml + 'lang', 'x-default')
         dc_creator = etree.SubElement(desc_dc, ns_dc + 'creator')
         dc_creator_seq = etree.SubElement(dc_creator, ns_rdf + 'Seq')
@@ -665,20 +669,20 @@ class AccountInvoice(models.Model):
         etree.SubElement(desc_xmp, ns_xmp + 'CreateDate').text = timestamp
         etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = timestamp
 
-        zugferd_ext_schema_root = etree.parse(tools.file_open(
+        facturx_ext_schema_root = etree.parse(tools.file_open(
             'account_invoice_factur-x/data/ZUGFeRD_extension_schema.xmp'))
-        # The ZUGFeRD extension schema must be embedded into each PDF document
-        zugferd_ext_schema_desc_xpath = zugferd_ext_schema_root.xpath(
+        # The Factur-X extension schema must be embedded into each PDF document
+        facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath(
             '//rdf:Description', namespaces=nsmap_rdf)
-        root.append(zugferd_ext_schema_desc_xpath[1])
-        # Now is the ZUGFeRD description tag
-        zugferd_desc = etree.SubElement(
-            root, ns_rdf + 'Description', nsmap=nsmap_zf)
-        zugferd_desc.set(ns_rdf + 'about', '')
-        zugferd_desc.set(ns_zf + 'ConformanceLevel', ZUGFERD_LEVEL.upper())
-        zugferd_desc.set(ns_zf + 'DocumentFileName', ZUGFERD_FILENAME)
-        zugferd_desc.set(ns_zf + 'DocumentType', 'INVOICE')
-        zugferd_desc.set(ns_zf + 'Version', '1.0')
+        root.append(facturx_ext_schema_desc_xpath[1])
+        # Now is the Factur-X description tag
+        facturx_desc = etree.SubElement(
+            root, ns_rdf + 'Description', nsmap=nsmap_fx)
+        facturx_desc.set(ns_rdf + 'about', '')
+        facturx_desc.set(ns_fx + 'ConformanceLevel', FACTURX_LEVEL.upper())
+        facturx_desc.set(ns_fx + 'DocumentFileName', FACTURX_FILENAME)
+        facturx_desc.set(ns_fx + 'DocumentType', 'INVOICE')
+        facturx_desc.set(ns_fx + 'Version', '1.0')
 
         xml_str = etree.tostring(
             root, pretty_print=True, encoding="UTF-8", xml_declaration=False)
@@ -687,7 +691,7 @@ class AccountInvoice(models.Model):
         return xml_str
 
     @api.model
-    def zugferd_update_metadata_add_attachment(
+    def facturx_update_metadata_add_attachment(
             self, pdf_filestream, fname, fdata):
         '''This method is inspired from the code of the addAttachment()
         method of the PyPDF2 lib'''
@@ -716,7 +720,7 @@ class AccountInvoice(models.Model):
         filespec = DictionaryObject()
         filespec.update({
             NameObject("/AFRelationship"): NameObject("/Alternative"),
-            NameObject("/Desc"): createStringObject("ZUGFeRD Invoice"),
+            NameObject("/Desc"): createStringObject("Factur-X Invoice"),
             NameObject("/Type"): NameObject("/Filespec"),
             NameObject("/F"): fname_obj,
             NameObject("/EF"): efEntry,
@@ -763,9 +767,9 @@ class AccountInvoice(models.Model):
         """
         self.ensure_one()
         assert pdf_content or pdf_file, 'Missing pdf_file or pdf_content'
-        if not self.pdf_is_zugferd(pdf_content):
+        if not self.pdf_is_facturx(pdf_content):
             if self.type in ('out_invoice', 'out_refund'):
-                zugferd_xml_str = self.generate_zugferd_xml()
+                facturx_xml_str = self.generate_facturx_xml()
                 # Generate a new PDF with XML file as attachment
                 if pdf_file:
                     original_pdf_file = pdf_file
@@ -774,9 +778,9 @@ class AccountInvoice(models.Model):
                 original_pdf = PdfFileReader(original_pdf_file)
                 new_pdf_filestream = PdfFileWriter()
                 new_pdf_filestream.appendPagesFromReader(original_pdf)
-                self.zugferd_update_metadata_add_attachment(
-                    new_pdf_filestream, ZUGFERD_FILENAME, zugferd_xml_str)
-                prefix = 'odoo-invoice-zugferd-'
+                self.facturx_update_metadata_add_attachment(
+                    new_pdf_filestream, FACTURX_FILENAME, facturx_xml_str)
+                prefix = 'odoo-invoice-facturx-'
                 if pdf_file:
                     f = open(pdf_file, 'w')
                     new_pdf_filestream.write(f)
@@ -787,5 +791,5 @@ class AccountInvoice(models.Model):
                         f.seek(0)
                         pdf_content = f.read()
                         f.close()
-                logger.info('%s file added to PDF invoice', ZUGFERD_FILENAME)
+                logger.info('%s file added to PDF invoice', FACTURX_FILENAME)
         return pdf_content
