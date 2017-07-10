@@ -19,10 +19,10 @@ class TestFacturXInvoice(TestAccountInvoice):
         pdf = PyPDF2.PdfFileReader(fd)
         pdf_root = pdf.trailer['/Root']
         embeddedfile = pdf_root['/Names']['/EmbeddedFiles']['/Names']
-        self.assertEquals(embeddedfile[0], 'ZUGFeRD-invoice.xml')
+        self.assertEquals(embeddedfile[0], 'factur-x.xml')
         zugferd_file_dict_obj = embeddedfile[1]
         zugferd_file_dict = zugferd_file_dict_obj.getObject()
         xml_string = zugferd_file_dict['/EF']['/F'].getData()
         xml_root = etree.fromstring(xml_string)
         self.assertTrue(xml_root.tag.startswith(
-            '{urn:ferd:CrossIndustryDocument:invoice:1p0'))
+            '{urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100'))
