@@ -81,7 +81,7 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="description">DE-VAT-buy-7.0</field>
     <field name="type_tax_use">purchase</field>
     <field name="amount">7</field>
-    <field name="type">percent</field>
+    <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
     <field name="account_id" ref="charge_account"/>
