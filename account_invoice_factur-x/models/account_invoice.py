@@ -670,7 +670,7 @@ class AccountInvoice(models.Model):
         etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = timestamp
 
         facturx_ext_schema_root = etree.parse(tools.file_open(
-            'account_invoice_factur-x/data/ZUGFeRD_extension_schema.xmp'))
+            'account_invoice_factur-x/data/Factur-X_extension_schema.xmp'))
         # The Factur-X extension schema must be embedded into each PDF document
         facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath(
             '//rdf:Description', namespaces=nsmap_rdf)
