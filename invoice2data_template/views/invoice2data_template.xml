@@ -34,7 +34,12 @@
                             <field name="preview_file" placeholder="Upload file for preview" />
                             <button type="object" name="action_preview" string="Preview" class="oe_highlight" />
                         </group>
+<<<<<<< HEAD
                         <field name="preview" attrs="{'invisible': [('preview', '=', False)]}" />
+=======
+                        <field name="preview" attrs="{'invisible': [('preview', '=', False)]}" class="oe_edit_only" />
+                        <field name="preview_text" attrs="{'invisible': [('preview', '=', False)]}" class="oe_edit_only" />
+>>>>>>> b64ebc0... [ADD] preview the text version too
                     </sheet>
                 </form>
             </field>
