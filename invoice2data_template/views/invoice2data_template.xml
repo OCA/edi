@@ -35,6 +35,7 @@
                             <button type="object" name="action_preview" string="Preview" class="oe_highlight" />
                         </group>
                         <field name="preview" attrs="{'invisible': [('preview', '=', False)]}" class="oe_edit_only" />
+                        <field name="preview_text" attrs="{'invisible': [('preview', '=', False)]}" class="oe_edit_only" />
                     </sheet>
                 </form>
             </field>
