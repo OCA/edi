@@ -87,14 +87,10 @@ class SaleOrderImport(models.TransientModel):
             },
             'amount_total': invoice2data_res.get('amount'),
             'saleorder_number': invoice2data_res.get('invoice_number'),
-            'date': invoice2data_res.get('date'),
-            'date_due': invoice2data_res.get('date_due'),
-            'date_start': invoice2data_res.get('date_start'),
-            'date_end': invoice2data_res.get('date_end'),
-            'description': invoice2data_res.get('description'),
         }
-        if 'amount_untaxed' in invoice2data_res:
-            parsed_order['amount_untaxed'] = invoice2data_res['amount_untaxed']
+        for key in invoice2data_res:
+            if key in self.env['sale.order']._fields:
+                parsed_order[key] = invoice2data_res[key]
         if 'lines' in invoice2data_res:
             parsed_order['lines'] = []
             for i, line in enumerate(invoice2data_res['lines']):
@@ -125,6 +121,4 @@ class SaleOrderImport(models.TransientModel):
                         "thousand separator") % i)
                 vals['qty'] = qty
                 parsed_order['lines'].append(vals)
-        if 'amount_tax' in invoice2data_res:
-            parsed_order['amount_tax'] = invoice2data_res['amount_tax']
         return parsed_order

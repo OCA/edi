@@ -189,6 +189,9 @@ class SaleOrderImport(models.TransientModel):
             # product_id_change is played in the inherit of create()
             # of sale.order.line cf odoo/addons/sale/sale.py
             so_vals['order_line'].append((0, 0, line_vals))
+        for key in parsed_order:
+            if key in self.env['sale.order']._fields:
+                so_vals[key] = parsed_order[key]
         return so_vals
 
     @api.model
