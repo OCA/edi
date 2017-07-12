@@ -22,6 +22,10 @@ class TestPDFOrderImport(TransactionCase):
         super(TestPDFOrderImport, self).setUp()
         self.soio = self.env['sale.order.import']
         self.camptocamp = self.env.ref('base.res_partner_12')
+        self.camptocamp.write({
+            'property_product_pricelist':
+            self.env.ref('product.list0').id,
+        })
 
     def read_pdf_and_create_wizard(self, file_name):
         soio = self.env['sale.order.import']
