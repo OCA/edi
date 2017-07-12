@@ -50,7 +50,7 @@ install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
-  - pip install invoice2data
+  - pip install git+https://github.com/hbrunn/invoice2data@master-extract_lines-only_line
   - pip install PyPDF2  # needed for account_invoice*zugferd
   - pip install phonenumbers
 
