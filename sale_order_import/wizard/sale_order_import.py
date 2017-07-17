@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from openerp import models, fields, api, _
@@ -143,7 +145,7 @@ class SaleOrderImport(models.TransientModel):
     # 'lines': [{
     #           'product': {
     #                'code': 'EA7821',
-    #                'ean13': '2100002000003',
+    #                'barcode': '2100002000003',
     #                },
     #           'qty': 2.5,
     #           'uom': {'unece_code': 'C62'},
@@ -181,20 +183,24 @@ class SaleOrderImport(models.TransientModel):
                         parsed_order['order_ref'],
                         existing_orders[0].name,
                         existing_orders[0].state))
-        partner_change_res = soo.onchange_partner_id(partner.id)
-        assert 'value' in partner_change_res, 'Error in partner change'
+
+        # commented By Deepak: here no need to partner onchange
+        # partner_change_res = soo.onchange_partner_id(partner.id)
+        # assert 'value' in partner_change_res, 'Error in partner change'
         so_vals = {
             'partner_id': partner.id,
             'client_order_ref': parsed_order.get('order_ref'),
             'order_line': []
             }
-        so_vals.update(partner_change_res['value'])
+        # so_vals.update(partner_change_res['value']) # Comment by :Deepak
         if parsed_order.get('ship_to'):
             shipping_partner = bdio._match_shipping_partner(
                 parsed_order['ship_to'], partner, parsed_order['chatter_msg'])
             so_vals['partner_shipping_id'] = shipping_partner.id
+
         if parsed_order.get('date'):
             so_vals['date_order'] = parsed_order['date']
+
         for line in parsed_order['lines']:
             # partner=False because we don't want to use product.supplierinfo
             product = bdio._match_product(
@@ -389,6 +395,7 @@ class SaleOrderImport(models.TransientModel):
                         uom=oline.product_uom.id).price_get(
                             oline.product_id.id, write_vals['product_uom_qty'],
                             order.partner_id.id)[order.pricelist_id.id]
+
                     if float_compare(
                             new_price_unit, oline.price_unit,
                             precision_digits=price_prec):

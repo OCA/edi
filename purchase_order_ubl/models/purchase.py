@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp import models, fields, api
 from lxml import etree
@@ -15,11 +18,11 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def get_rfq_states(self):
-        return ['draft', 'sent', 'bid']
+        return ['draft', 'sent']
 
     @api.model
     def get_order_states(self):
-        return ['approved', 'except_picking', 'except_invoice', 'done']
+        return ['purchase', 'done']
 
     @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):
@@ -90,10 +93,11 @@ class PurchaseOrder(models.Model):
     @api.multi
     def get_delivery_partner(self):
         self.ensure_one()
-        if self.location_id.usage == 'customer':
+        if self.picking_type_id.default_location_dest_id.usage == 'customer':
             partner = self.dest_address_id
         else:
-            partner = self.location_id.partner_id or self.company_id.partner_id
+            partner = self.picking_type_id.default_location_dest_id.partner_id\
+                or self.company_id.partner_id
         return partner
 
     @api.multi

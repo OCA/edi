@@ -8,7 +8,7 @@ Sale Order Import CSV
 
 This module adds support for the import of electronic RFQ or orders as CSV file. The structure of the CSV file is the same as for the `Dilicom <https://dilicom-prod.centprod.com>`_ plateform (the main plateform to order books in France). It contains 2 columns:
 
-* the 1st column contains the product code (EAN13 or any other product code),
+* the 1st column contains the product code (Barcode or any other product code),
 * the 2nd column contains the product quantity, using '.' (dot) as decimal separator and without any thousand separator.
 
 It shouldn't have any header line and use semi-colon as field separator. The CSV file is expected to use UTF-8 encoding ; but as product codes rarely use non-ASCII caracters, the file is identical to an ASCII-encoded file.
@@ -53,6 +53,7 @@ Contributors
 ------------
 
 * Alexis de Lattre <alexis.delattre@akretion.com>
+* Serpent Consulting Services Pvt. Ltd.<support@serpentcs.com>
 
 Maintainer
 ----------

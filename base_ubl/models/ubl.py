@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp import models, api, tools, _
 from openerp.exceptions import Warning as UserError
@@ -18,7 +21,7 @@ except ImportError:
     logger.debug('Cannot import PyPDF2')
 
 
-class BaseUbl(models.AbstractModel):
+class BaseUbl(models.TransientModel):
     _name = 'base.ubl'
     _description = 'Common methods to generate and parse UBL XML files'
 
@@ -167,8 +170,8 @@ class BaseUbl(models.AbstractModel):
         'ref' field.
         In Odoo, we only have one ref field, in which we are supposed
         to enter the reference that our company gives to its
-        customers/suppliers. We unfortunately don't have a native field to
-        enter the reference that our suppliers/customers give to us.
+        customers/vendors. We unfortunately don't have a native field to
+        enter the reference that our vendors/customers give to us.
         So, to set the fields CustomerAssignedAccountID and
         SupplierAssignedAccountID, I need to know if the partner for
         which we want to build the party block is our company or a
@@ -184,14 +187,14 @@ class BaseUbl(models.AbstractModel):
                     'partner is wrong'
             else:
                 partner = company.partner_id
-        supplier_party_root = etree.SubElement(
+        vendor_party_root = etree.SubElement(
             parent_node, ns['cac'] + node_name)
         if not company and partner.commercial_partner_id.ref:
-            supplier_ref = etree.SubElement(
-                supplier_party_root, ns['cbc'] + 'CustomerAssignedAccountID')
-            supplier_ref.text = partner.commercial_partner_id.ref
+            vendor_ref = etree.SubElement(
+                vendor_party_root, ns['cbc'] + 'CustomerAssignedAccountID')
+            vendor_ref.text = partner.commercial_partner_id.ref
         self._ubl_add_party(
-            partner, 'Party', supplier_party_root, ns, version=version)
+            partner, 'Party', vendor_party_root, ns, version=version)
 
     @api.model
     def _ubl_add_delivery(
@@ -304,13 +307,13 @@ class BaseUbl(models.AbstractModel):
                 seller_identification, ns['cbc'] + 'ID')
             seller_identification_id.text = seller_code
         if product:
-            if product.ean13:
+            if product.barcode:
                 std_identification = etree.SubElement(
                     item, ns['cac'] + 'StandardItemIdentification')
                 std_identification_id = etree.SubElement(
                     std_identification, ns['cbc'] + 'ID',
                     schemeAgencyID='6', schemeID='GTIN')
-                std_identification_id.text = product.ean13
+                std_identification_id.text = product.barcode
             for attribute_value in product.attribute_value_ids:
                 item_property = etree.SubElement(
                     item, ns['cac'] + 'AdditionalItemProperty')
@@ -336,7 +339,7 @@ class BaseUbl(models.AbstractModel):
             tax_subtotal, ns['cbc'] + 'TaxAmount', currencyID=currency_code)
         tax_amount_node.text = unicode(tax_amount)
         if (
-                tax.type == 'percent' and
+                tax.amount_type == 'percent' and
                 not float_is_zero(tax.amount, precision_digits=prec+3)):
             percent = etree.SubElement(
                 tax_subtotal, ns['cbc'] + 'Percent')
@@ -529,13 +532,13 @@ class BaseUbl(models.AbstractModel):
         return {}
 
     def ubl_parse_product(self, line_node, ns):
-        ean13_xpath = line_node.xpath(
+        barcode_xpath = line_node.xpath(
             "cac:Item/cac:StandardItemIdentification/cbc:ID[@schemeID='GTIN']",
             namespaces=ns)
         code_xpath = line_node.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns)
         product_dict = {
-            'ean13': ean13_xpath and ean13_xpath[0].text or False,
+            'barcode': barcode_xpath and barcode_xpath[0].text or False,
             'code': code_xpath and code_xpath[0].text or False,
             }
         return product_dict

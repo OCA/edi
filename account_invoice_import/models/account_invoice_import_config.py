@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
@@ -8,7 +11,7 @@ from openerp.exceptions import ValidationError
 
 class AccountInvoiceImportConfig(models.Model):
     _name = 'account.invoice.import.config'
-    _description = 'Configuration for the import of Supplier Invoices'
+    _description = 'Configuration for the import of Vendor Invoices'
 
     name = fields.Char(string='Name', required=True)
     partner_ids = fields.One2many(
@@ -21,7 +24,7 @@ class AccountInvoiceImportConfig(models.Model):
         ('nline_no_product', 'Multi Line, No Product'),
         ('nline_static_product', 'Multi Line, Static Product'),
         ('nline_auto_product', 'Multi Line, Auto-selected Product'),
-        ], string='Method for Invoice Line', required=True,
+    ], string='Method for Invoice Line', required=True,
         default='1line_no_product',
         help="The multi-line methods will not work for PDF invoices "
         "that don't have an embedded XML file. "
@@ -33,17 +36,16 @@ class AccountInvoiceImportConfig(models.Model):
         default=lambda self: self.env['res.company']._company_default_get(
             'account.invoice.import.config'))
     account_id = fields.Many2one(
-        'account.account', string='Expense Account',
-        domain=[('type', 'not in', ('view', 'closed'))])
+        'account.account', string='Expense Account', domain=[(
+            'deprecated', '=', False)])
     account_analytic_id = fields.Many2one(
-        'account.analytic.account', string='Analytic Account',
-        domain=[('type', '!=', 'view')])
+        'account.analytic.account', string='Analytic Account',)
     label = fields.Char(
         string='Force Description',
-        help="Force supplier invoice line description")
+        help="Force vendor invoice line description")
     tax_ids = fields.Many2many(
         'account.tax', string='Taxes',
-        domain=[('type_tax_use', 'in', ('all', 'purchase'))])
+        domain=[('type_tax_use', 'in', ('sale', 'purchase'))])
     static_product_id = fields.Many2one(
         'product.product', string='Static Product')
 
@@ -55,7 +57,7 @@ class AccountInvoiceImportConfig(models.Model):
                     not config.static_product_id):
                 raise ValidationError(_(
                     "Static Product must be set on the invoice import "
-                    "configuration of supplier '%s' that has a Method "
+                    "configuration of vendor '%s' that has a Method "
                     "for Invoice Line set to 'Static Product'.")
                     % config.partner_id.name)
             if (
@@ -63,6 +65,6 @@ class AccountInvoiceImportConfig(models.Model):
                     not config.account_id):
                 raise ValidationError(_(
                     "The Expense Account must be set on the invoice "
-                    "import configuration of supplier '%s' that has a "
+                    "import configuration of vendor '%s' that has a "
                     "Method for Invoice Line set to 'Without product'.")
                     % config.partner_id.name)

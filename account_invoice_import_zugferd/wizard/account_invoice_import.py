@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#   (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp import models, fields, api, _
 from openerp.exceptions import Warning as UserError
@@ -40,7 +43,7 @@ class AccountInvoiceImport(models.TransientModel):
             percentage = percent_xpath[0].text and\
                 float(percent_xpath[0].text) or 0.0
             taxes.append({
-                'type': 'percent',
+                'amount_type': 'percent',
                 'amount': percentage,
                 'unece_type_code': type_code,
                 'unece_categ_code': categ_code,
@@ -64,7 +67,7 @@ class AccountInvoiceImport(models.TransientModel):
         if qty_xpath[0].attrib and qty_xpath[0].attrib.get('unitCode'):
             unece_uom = qty_xpath[0].attrib['unitCode']
             uom = {'unece_code': unece_uom}
-        ean13_xpath = iline.xpath(
+        barcode_xpath = iline.xpath(
             "ram:SpecifiedTradeProduct/ram:GlobalID", namespaces=namespaces)
         # Check SchemeID ?
         product_code_xpath = iline.xpath(
@@ -93,7 +96,7 @@ class AccountInvoiceImport(models.TransientModel):
         taxes = self.parse_zugferd_taxes(taxes_xpath, namespaces)
         vals = {
             'product': {
-                'ean13': ean13_xpath and ean13_xpath[0].text or False,
+                'barcode': barcode_xpath and barcode_xpath[0].text or False,
                 'code':
                 product_code_xpath and product_code_xpath[0].text or False,
                 },
@@ -120,7 +123,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "(TypeCode is %s") % doc_type_xpath[0].text)
         inv_number_xpath = xml_root.xpath(
             '//rsm:HeaderExchangedDocument/ram:ID', namespaces=namespaces)
-        supplier_xpath = xml_root.xpath(
+        vendor_xpath = xml_root.xpath(
             '//ram:ApplicableSupplyChainTradeAgreement'
             '/ram:SellerTradeParty'
             '/ram:Name', namespaces=namespaces)
@@ -216,7 +219,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "//ram:SpecifiedTradeSettlementPaymentMeans"
                 "/ram:PayeeSpecifiedCreditorFinancialInstitution"
                 "/ram:BICID", namespaces=namespaces)
-        # global_taxes only used as fallback when taxes are not detailed
+        # global_taxes only used as fallback when taxes are not detailsiled
         # on invoice lines (which is the case at Basic level)
         global_taxes_xpath = xml_root.xpath(
             "//ram:ApplicableSupplyChainTradeSettlement"
@@ -332,7 +335,7 @@ class AccountInvoiceImport(models.TransientModel):
         res = {
             'partner': {
                 'vat': vat_xpath and vat_xpath[0].text or False,
-                'name': supplier_xpath[0].text,
+                'name': vendor_xpath[0].text,
                 'email': email_xpath and email_xpath[0].text or False,
                 },
             'invoice_number': inv_number_xpath[0].text,

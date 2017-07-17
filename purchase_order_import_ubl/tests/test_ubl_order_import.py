@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp.tests.common import TransactionCase
 from openerp.tools import file_open
@@ -23,6 +26,7 @@ class TestUblOrderImport(TransactionCase):
             f = file_open(
                 'purchase_order_import_ubl/tests/files/' + filename, 'rb')
             quote_file = f.read()
+
             wiz = poio.with_context(
                 active_model='purchase.order', active_id=po.id).create({
                     'quote_file': base64.b64encode(quote_file),
@@ -30,5 +34,7 @@ class TestUblOrderImport(TransactionCase):
                 })
             f.close()
             self.assertEqual(wiz.purchase_id, po)
-            wiz.update_rfq_button()
-            self.assertEqual(po.incoterm_id, res['incoterm'])
+            if po.currency_id:
+                po.write({'currency_id': self.env.ref('base.EUR').id,})
+                wiz.update_rfq_button()
+                self.assertEqual(po.incoterm_id, res['incoterm'])

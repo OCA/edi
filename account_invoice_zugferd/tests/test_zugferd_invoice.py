@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#   (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp.tests.common import TransactionCase
@@ -12,14 +14,19 @@ class TestZUGFeRDInvoice(TransactionCase):
 
     def test_print_demo_customer_invoice(self):
         aio = self.env['account.invoice']
-        for i in range(5):
-            invoice = self.env.ref('account.invoice_%d' % (i+1))
+        for i in range(3):
+            inv_id = ('demo_invoice_%d' % (i+1))
+            model_rec = self.env['ir.model.data'].search(
+                [('name', '=', inv_id)])
+            invoice = aio.browse(model_rec.res_id)
             pdf_content = self.registry['report'].get_pdf(
                 self.cr, self.uid, [invoice.id], 'account.report_invoice')
             self.assertTrue(aio.pdf_is_zugferd(pdf_content))
 
     def test_deep_customer_invoice(self):
-        invoice = self.env.ref('account.invoice_3')
+        model_rec = self.env['ir.model.data'].search(
+            [('name', '=', 'demo_invoice_3')])
+        invoice = self.env['account.invoice'].browse(model_rec.res_id)
         pdf_content = self.registry['report'].get_pdf(
             self.cr, self.uid, [invoice.id], 'account.report_invoice')
         fd = StringIO(pdf_content)

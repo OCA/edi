@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from openerp import models, api, _
 from openerp.tools import float_compare
@@ -246,27 +249,26 @@ class BusinessDocumentImport(models.AbstractModel):
         assert iban, 'iban is a required arg'
         assert partner, 'partner is a required arg'
         partner = partner.commercial_partner_id
+
         iban = iban.replace(' ', '')
         rpbo = self.env['res.partner.bank']
         self._cr.execute(
             """SELECT id FROM res_partner_bank
             WHERE replace(acc_number, ' ', '')=%s
-            AND state='iban'
             AND partner_id=%s
             """, (iban, partner.id))
         rpb_res = self._cr.fetchall()
         if rpb_res:
             return rpbo.browse(rpb_res[0][0])
-        elif create_if_not_found and bic:
+        if create_if_not_found and bic:
             partner_bank = rpbo.create({
                 'partner_id': partner.id,
-                'state': 'iban',
                 'acc_number': iban,
                 'bank_bic': bic,
                 })
             chatter_msg.append(_(
                 "The bank account <b>IBAN %s</b> has been automatically "
-                "added on the supplier <b>%s</b>") % (
+                "added on the vendor <b>%s</b>") % (
                 iban, partner.name))
             return partner_bank
 
@@ -274,7 +276,7 @@ class BusinessDocumentImport(models.AbstractModel):
     def _match_product(self, product_dict, chatter_msg, seller=False):
         """Example:
         product_dict = {
-            'ean13': '5449000054227',
+            'barcode': '5449000054227',
             'code': 'COCA1L',
             }
         """
@@ -284,15 +286,15 @@ class BusinessDocumentImport(models.AbstractModel):
             return product_dict['recordset']
         if product_dict.get('id'):
             return ppo.browse(product_dict['id'])
-        if product_dict.get('ean13'):
+        if product_dict.get('barcode'):
             products = ppo.search([
-                ('ean13', '=', product_dict['ean13'])])
+                ('barcode', '=', product_dict['barcode'])])
             if products:
                 return products[0]
         if product_dict.get('code'):
             products = ppo.search([
                 '|',
-                ('ean13', '=', product_dict['code']),
+                ('barcode', '=', product_dict['code']),
                 ('default_code', '=', product_dict['code'])])
             if products:
                 return products[0]
@@ -313,10 +315,10 @@ class BusinessDocumentImport(models.AbstractModel):
         raise UserError(_(
             "Odoo couldn't find any product corresponding to the "
             "following information extracted from the business document: "
-            "EAN13: %s\n"
+            "Barcode: %s\n"
             "Product code: %s\n"
-            "Supplier: %s\n") % (
-                product_dict.get('ean13'),
+            "Vendor: %s\n") % (
+                product_dict.get('barcode'),
                 product_dict.get('code'),
                 seller and seller.name or 'None'))
 
@@ -465,7 +467,7 @@ class BusinessDocumentImport(models.AbstractModel):
             type_tax_use='purchase', price_include=False):
         """Example:
         tax_dict = {
-            'type': 'percent',  # required param, 'fixed' or 'percent'
+            'amount_type': 'percent',  # required param, 'fixed' or 'percent'
             'amount': 20.0,  # required
             'unece_type_code': 'VAT',
             'unece_categ_code': 'S',
@@ -482,18 +484,19 @@ class BusinessDocumentImport(models.AbstractModel):
         prec = self.env['decimal.precision'].precision_get('Account')
         # we should not use the Account prec directly, but...
         if type_tax_use == 'purchase':
-            domain.append(('type_tax_use', 'in', ('purchase', 'all')))
+            domain.append(('type_tax_use', '=', 'purchase'))
         elif type_tax_use == 'sale':
-            domain.append(('type_tax_use', 'in', ('sale', 'all')))
+            domain.append(('type_tax_use', '=', 'sale'))
         if price_include is False:
             domain.append(('price_include', '=', False))
         elif price_include is True:
             domain.append(('price_include', '=', True))
         # with the code abose, if you set price_include=None, it will
         # won't depend on the value of the price_include parameter
-        assert tax_dict.get('type') in ['fixed', 'percent'], 'bad tax type'
+        assert tax_dict.get(
+            'amount_type') in ['fixed', 'percent'], 'bad tax type'
         assert 'amount' in tax_dict, 'Missing amount key in tax_dict'
-        domain.append(('type', '=', tax_dict['type']))
+        domain.append(('amount_type', '=', tax_dict['amount_type']))
         if tax_dict.get('unece_type_code'):
             domain.append(
                 ('unece_type_code', '=', tax_dict['unece_type_code']))
@@ -503,7 +506,7 @@ class BusinessDocumentImport(models.AbstractModel):
         taxes = ato.search(domain)
         for tax in taxes:
             tax_amount = tax.amount
-            if tax_dict['type'] == 'percent':
+            if tax_dict['amount_type'] == 'percent':
                 tax_amount *= 100
             if not float_compare(
                     tax_dict['amount'], tax_amount, precision_digits=prec):
@@ -520,7 +523,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 tax_dict.get('unece_type_code'),
                 tax_dict.get('unece_categ_code'),
                 tax_dict['amount'],
-                tax_dict['type'] == 'percent' and '%' or _('(fixed)')))
+                tax_dict['amount_type'] == 'percent' and '%' or _('(fixed)')))
 
     def compare_lines(
             self, existing_lines, import_lines, chatter_msg,
@@ -537,7 +540,7 @@ class BusinessDocumentImport(models.AbstractModel):
             }]
         import_lines = [{
             'product': {
-                'ean13': '2100002000003',
+                'barcode': '2100002000003',
                 'code': 'EAZY1',
                 },
             'quantity': 2,

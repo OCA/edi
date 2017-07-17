@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from openerp.tests.common import TransactionCase
@@ -42,13 +44,13 @@ class TestCsvOrderImport(TransactionCase):
     def test_csv_order_import(self):
         # create new quote
         filename = 'order_file_test1.csv'
-        partner = self.env.ref('base.res_partner_2')
+        partner = self.env.ref('base.res_partner_10')
         csv_file_content, wiz = self.read_csv_and_create_wizard(
             filename, partner)
         action = wiz.import_order_button()
         so = self.env['sale.order'].browse(action['res_id'])
         self.check_sale_order(so, csv_file_content, partner)
-        # update existing quote
+        # # update existing quote
         filename_up = 'order_file_test1_update.csv'
         csv_file_content_up, wiz_up = self.read_csv_and_create_wizard(
             filename_up, partner)

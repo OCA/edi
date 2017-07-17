@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from openerp import models, fields, api
@@ -19,9 +21,7 @@ class SaleOrder(models.Model):
 
     @api.model
     def get_order_states(self):
-        return [
-            'waiting_date', 'progress', 'manual',
-            'shipping_except', 'invoice_except', 'done']
+        return ['sale', 'done']
 
     @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):

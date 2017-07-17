@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # © 2016 Akretion (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
+# © 2017-Today Serpent Consulting Services Pvt. Ltd.
+#   (<http://www.serpentcs.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import models, fields, api, tools, _
@@ -294,7 +296,7 @@ class AccountInvoice(models.Model):
                 tax_categ_code = etree.SubElement(
                     trade_tax, ns['ram'] + 'CategoryCode')
                 tax_categ_code.text = tax.unece_categ_code
-                if tax.type == 'percent':
+                if tax.amount_type == 'percent':
                     percent = etree.SubElement(
                         trade_tax, ns['ram'] + 'ApplicablePercent')
                     percent.text = unicode(tax.amount * 100)
@@ -304,8 +306,8 @@ class AccountInvoice(models.Model):
             trade_payment_term, ns['ram'] + 'Description')
         # The 'Description' field of SpecifiedTradePaymentTerms
         # is a required field, so we must always give a value
-        if self.payment_term:
-            trade_payment_term_desc.text = self.payment_term.name
+        if self.payment_term_id:
+            trade_payment_term_desc.text = self.payment_term_id.name
         else:
             trade_payment_term_desc.text =\
                 _('No specific payment term selected')
@@ -367,7 +369,7 @@ class AccountInvoice(models.Model):
             line_item,
             ns['ram'] + 'SpecifiedSupplyChainTradeAgreement')
         # convert gross price_unit to tax_excluded value
-        taxres = iline.invoice_line_tax_id.compute_all(iline.price_unit, 1)
+        taxres = iline.invoice_line_tax_ids.compute_all(iline.price_unit, 1)
         gross_price_val = float_round(
             taxres['total'], precision_digits=pp_prec)
         # Use oline.price_subtotal/qty to compute net unit price to be sure
@@ -433,8 +435,8 @@ class AccountInvoice(models.Model):
         billed_qty.text = unicode(iline.quantity * sign)
         line_trade_settlement = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedSupplyChainTradeSettlement')
-        if iline.invoice_line_tax_id:
-            for tax in iline.invoice_line_tax_id:
+        if iline.invoice_line_tax_ids:
+            for tax in iline.invoice_line_tax_ids:
                 trade_tax = etree.SubElement(
                     line_trade_settlement,
                     ns['ram'] + 'ApplicableTradeTax')
@@ -452,7 +454,7 @@ class AccountInvoice(models.Model):
                         "Missing UNECE Tax Category on tax '%s'")
                         % tax.name)
                 trade_tax_categcode.text = tax.unece_categ_code
-                if tax.type == 'percent':
+                if tax.amount_type == 'percent':
                     trade_tax_percent = etree.SubElement(
                         trade_tax, ns['ram'] + 'ApplicablePercent')
                     trade_tax_percent.text = unicode(tax.amount * 100)
@@ -466,11 +468,11 @@ class AccountInvoice(models.Model):
         trade_product = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedTradeProduct')
         if iline.product_id:
-            if iline.product_id.ean13:
-                ean13 = etree.SubElement(
+            if iline.product_id.barcode:
+                barcode = etree.SubElement(
                     trade_product, ns['ram'] + 'GlobalID', schemeID='0160')
                 # 0160 = GS1 Global Trade Item Number (GTIN, EAN)
-                ean13.text = iline.product_id.ean13
+                barcode.text = iline.product_id.barcode
             if iline.product_id.default_code:
                 product_code = etree.SubElement(
                     trade_product, ns['ram'] + 'SellerAssignedID')
@@ -488,7 +490,7 @@ class AccountInvoice(models.Model):
         self.ensure_one()
         assert self.type in ('out_invoice', 'out_refund'),\
             'only works for customer invoice and refunds'
-        sign = self.type == 'out_refund' and -1 or 1
+        # sign = self.type == 'out_refund' and -1 or 1
         nsmap = {
             'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
             'rsm': 'urn:ferd:CrossIndustryDocument:invoice:1p0',
@@ -515,13 +517,15 @@ class AccountInvoice(models.Model):
 
         self._add_trade_agreement_block(trade_transaction, ns)
         self._add_trade_delivery_block(trade_transaction, ns)
-        self._add_trade_settlement_block(trade_transaction, sign, ns)
 
-        line_number = 0
-        for iline in self.invoice_line:
-            line_number += 1
-            self._add_invoice_line_block(
-                trade_transaction, iline, line_number, sign, ns)
+        # TO DO : payment.order not in version 9.
+        # self._add_trade_settlement_block(trade_transaction, sign, ns) DK
+
+        # line_number = 0
+        # for iline in self.invoice_line_ids:
+        #     line_number += 1
+        #     self._add_invoice_line_block(
+        #         trade_transaction, iline, line_number, sign, ns)
 
         xml_string = etree.tostring(
             root, pretty_print=True, encoding='UTF-8', xml_declaration=True)
