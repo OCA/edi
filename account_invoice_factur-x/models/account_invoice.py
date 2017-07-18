@@ -86,10 +86,11 @@ class AccountInvoice(models.Model):
         self.ensure_one()
         doc_ctx = etree.SubElement(
             root, ns['rsm'] + 'ExchangedDocumentContext')
-        if self.state not in ('open', 'paid'):
-            test_indic = etree.SubElement(doc_ctx, ns['ram'] + 'TestIndicator')
-            indic = etree.SubElement(test_indic, ns['udt'] + 'Indicator')
-            indic.text = 'true'
+        # TestIndicator not in factur-X...
+        # if self.state not in ('open', 'paid'):
+        #    test_indic = etree.SubElement(doc_ctx, ns['ram'] + 'TestIndicator')
+        #    indic = etree.SubElement(test_indic, ns['udt'] + 'Indicator')
+        #    indic.text = 'true'
         ctx_param = etree.SubElement(
             doc_ctx, ns['ram'] + 'GuidelineSpecifiedDocumentContextParameter')
         ctx_param_id = etree.SubElement(ctx_param, ns['ram'] + 'ID')
