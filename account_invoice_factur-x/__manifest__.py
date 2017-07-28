@@ -12,5 +12,6 @@
     'website': 'http://www.akretion.com',
     'depends': ['account_payment_partner', 'base_zugferd', 'base_vat'],
     'external_dependencies': {'python': ['PyPDF2', 'lxml']},
+    'data': ['views/res_partner.xml'],
     'installable': True,
 }
