@@ -422,6 +422,7 @@ class AccountInvoiceImport(models.TransientModel):
             })
         return action
 
+    # TODO: this method should be callable from webservices
     @api.model
     def _create_invoice(self, parsed_inv, import_config=False):
         aio = self.env['account.invoice']
