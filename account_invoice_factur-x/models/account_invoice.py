@@ -248,10 +248,6 @@ class AccountInvoice(models.Model):
                     payment_means_bic = etree.SubElement(
                         payment_means_bank, ns['ram'] + 'BICID')
                     payment_means_bic.text = partner_bank.bank_bic
-                    if partner_bank.bank_name:
-                        bank_name = etree.SubElement(
-                            payment_means_bank, ns['ram'] + 'Name')
-                        bank_name.text = partner_bank.bank_name
 
     @api.multi
     def _cii_add_trade_settlement_block(self, trade_transaction, sign, ns):
