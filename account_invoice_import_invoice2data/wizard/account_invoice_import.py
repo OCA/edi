@@ -71,14 +71,14 @@ class AccountInvoiceImport(models.TransientModel):
         processed_lines = []
         for line in lines:
             product_dict = {
-                'barcode': line['barcode'] if line.has_key('barcode') else False,
-                'code': line['code'] if line.has_key('code') else False,
+                'barcode': line['barcode'] if 'barcode' in line else False,
+                'code': line['code'] if 'code' in line else False,
             }
-            uom = {'unece_code': line['uom']} if line.has_key('uom') else {}
+            uom = {'unece_code': line['uom']} if 'uom' in line else {}
             taxes = []
             line_dict = {
-                'qty': line['qty'] if line.has_key('qty') else 1,
-                'name': line['name'] if line.has_key('name') else '-',
+                'qty': line['qty'] if 'qty' in line else 1,
+                'name': line['name'] if 'name' in line else '-',
                 'product': product_dict,
                 'uom': uom,
                 'taxes': taxes,
@@ -87,7 +87,6 @@ class AccountInvoiceImport(models.TransientModel):
 
             processed_lines.append(line_dict)
         return processed_lines
-
 
     @api.model
     def invoice2data_to_parsed_inv(self, invoice2data_res):
