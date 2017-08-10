@@ -10,8 +10,8 @@ from odoo.tools import float_compare
 
 class TestFacturx(TransactionCase):
 
-    def test_import_zugferd_invoice(self):
-        zugferd_sample_files = {
+    def test_import_facturx_invoice(self):
+        sample_files = {
             # BASIC
             'ZUGFeRD_1p0_BASIC_Einfach.pdf': {
                 'invoice_number': '471102',
@@ -105,13 +105,13 @@ class TestFacturx(TransactionCase):
                 },
             # EXTENDED
             # has AllowanceTotalAmount
-            'ZUGFeRD_1p0_EXTENDED_Kostenrechnung.pdf': {
-                'invoice_number': 'KR87654321012',
-                'amount_untaxed': 1056.05,
-                'amount_total': 1256.70,
-                'date_invoice': '2013-10-06',
-                'partner_xmlid': 'musterlieferant',
-                },
+            # 'ZUGFeRD_1p0_EXTENDED_Kostenrechnung.pdf': {
+            #    'invoice_number': 'KR87654321012',
+            #    'amount_untaxed': 1056.05,
+            #    'amount_total': 1256.70,
+            #    'date_invoice': '2013-10-06',
+            #    'partner_xmlid': 'musterlieferant',
+            #    },  # disable for a malformed date "20139102"
             'ZUGFeRD_1p0_EXTENDED_Rechnungskorrektur.pdf': {
                 'type': 'in_refund',
                 'invoice_number': 'RK21012345',
@@ -127,22 +127,36 @@ class TestFacturx(TransactionCase):
                 'date_invoice': '2013-08-06',
                 'partner_xmlid': 'musterlieferant',
                 },
+            'Factur-X_MINIMUM-1.xml': {
+                'invoice_number': 'INV-1242',
+                'amount_untaxed': 100.00,
+                'amount_total': 120.00,
+                'date_invoice': '2017-08-09',
+                'partner_xmlid': 'test_noline',
+                },
+            'Factur-X_BASIC-1.xml': {
+                'invoice_number': 'FA12421242',
+                'amount_untaxed': 100.00,
+                'amount_total': 120.00,
+                'date_invoice': '2017-08-09',
+                'partner_xmlid': 'test_line',
+                },
             }
         aio = self.env['account.invoice']
-        precision = self.env['decimal.precision'].precision_get('Account')
+        cur_prec = self.env.ref('base.EUR').rounding
         # We need precision of product price at 4
         # in order to import ZUGFeRD_1p0_EXTENDED_Kostenrechnung.pdf
         price_precision = self.env.ref('product.decimal_price')
         price_precision.digits = 4
-        for (zugferd_file, res_dict) in zugferd_sample_files.iteritems():
+        for (inv_file, res_dict) in sample_files.iteritems():
             f = file_open(
                 'account_invoice_import_factur-x/tests/files/' +
-                zugferd_file, 'rb')
+                inv_file, 'rb')
             pdf_file = f.read()
             f.close()
             wiz = self.env['account.invoice.import'].create({
                 'invoice_file': base64.b64encode(pdf_file),
-                'invoice_filename': zugferd_file,
+                'invoice_filename': inv_file,
                 })
             wiz.import_invoice()
             invoices = aio.search([
@@ -161,9 +175,9 @@ class TestFacturx(TransactionCase):
                 res_dict['partner_xmlid']))
             self.assertFalse(float_compare(
                 inv.amount_untaxed, res_dict['amount_untaxed'],
-                precision_digits=precision))
+                precision_rounding=cur_prec))
             self.assertFalse(float_compare(
                 inv.amount_total, res_dict['amount_total'],
-                precision_digits=precision))
+                precision_rounding=cur_prec))
             # Delete because several sample invoices have the same number
             invoices.unlink()
