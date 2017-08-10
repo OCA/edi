@@ -112,4 +112,51 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="refund_account_id" ref="charge_account"/>
 </record>
 
+<record id="fr_vat_purchase_20" model="account.tax">
+    <field name="name">FR VAT purchase 20.0%</field>
+    <field name="description">FR-VAT-buy-20.0</field>
+    <field name="type_tax_use">purchase</field>
+    <field name="amount">20</field>
+    <field name="amount_type">percent</field>
+    <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
+    <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
+    <field name="account_id" ref="charge_account"/>
+    <field name="refund_account_id" ref="charge_account"/>
+</record>
+
+<record id="test_noline_import_config" model="account.invoice.import.config">
+    <field name="name">Test noline</field>
+    <field name="invoice_line_method">1line_no_product</field>
+    <field name="account_id" ref="charge_account"/>
+    <field name="tax_ids" eval="[(4, ref('account_invoice_import_factur-x.fr_vat_purchase_20'))]"/>
+</record>
+
+<record id="test_noline" model="res.partner">
+    <field name="name">Test Supplier (noline)</field>
+    <field name="is_company" eval="True"/>
+    <field name="supplier" eval="True"/>
+    <field name="customer" eval="False"/>
+    <field name="country_id" ref="base.fr"/>
+    <field name="vat">FR11123456782</field>
+    <field name="invoice_import_id" ref="test_noline_import_config"/>
+</record>
+
+<record id="test_line_import_config" model="account.invoice.import.config">
+    <field name="name">Test line</field>
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account"/>
+    <field name="tax_ids" eval="[(4, ref('account_invoice_import_factur-x.fr_vat_purchase_20'))]"/>
+</record>
+
+<record id="test_line" model="res.partner">
+    <field name="name">Test Supplier (lines)</field>
+    <field name="is_company" eval="True"/>
+    <field name="supplier" eval="True"/>
+    <field name="customer" eval="False"/>
+    <field name="country_id" ref="base.fr"/>
+    <field name="vat">FR14987654324</field>
+    <field name="invoice_import_id" ref="test_line_import_config"/>
+</record>
+
+
 </odoo>
