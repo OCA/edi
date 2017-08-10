@@ -118,7 +118,11 @@ class AccountInvoice(models.Model):
         header_doc_typecode = etree.SubElement(
             header_doc, ns['ram'] + 'TypeCode')
         header_doc_typecode.text = '380'
-        # 380 = Commercial invoices (including refund)
+        # 2 options allowed in Factur-X :
+        # a) 380 = invoice & refunds ; negative amounts if refunds
+        # b) 381 = refunds, with positive amounts
+        # In ZUGFeRD samples, they used option a)
+        # For Chorus, they impose option b)
         date_invoice_dt = fields.Date.from_string(
             self.date_invoice or fields.Date.context_today(self))
         self._cii_add_date('IssueDateTime', date_invoice_dt, header_doc, ns)
