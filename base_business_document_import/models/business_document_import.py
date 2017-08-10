@@ -4,6 +4,7 @@
 
 from odoo import models, api, _
 from odoo.tools import float_compare
+from odoo.addons.base_iban.models.res_partner_bank import validate_iban
 from odoo.exceptions import UserError
 from lxml import etree
 from StringIO import StringIO
@@ -257,6 +258,12 @@ class BusinessDocumentImport(models.AbstractModel):
         iban = iban.replace(' ', '').upper()
         rpbo = self.env['res.partner.bank']
         rbo = self.env['res.bank']
+        try:
+            validate_iban(iban)
+        except:
+            chatter_msg.append(_(
+                "IBAN <b>%s</b> is not valid, so it has been ignored.") % iban)
+            return False
         bankaccounts = rpbo.search([
             ('acc_type', '=', 'iban'),
             ('sanitized_acc_number', '=', iban),
