@@ -8,6 +8,7 @@ from odoo.tools import float_compare, float_round, float_is_zero
 from odoo.exceptions import UserError
 from lxml import etree
 import logging
+from datetime import datetime
 import mimetypes
 
 logger = logging.getLogger(__name__)
@@ -112,6 +113,9 @@ class AccountInvoiceImport(models.TransientModel):
         #       'qty': -2.0,  # < 0 when it's a refund
         #       'uom': {'unece_code': 'C62'},
         #       'taxes': [list of tax_dict],
+        #       'date_start': '2015-10-01',
+        #       'date_end': '2015-10-31',
+        #       # date_start and date_end on lines override the global value
         #       }],
         # }
 
@@ -132,6 +136,8 @@ class AccountInvoiceImport(models.TransientModel):
         bdio = self.env['business.document.import']
         rpo = self.env['res.partner']
         company = self.env.user.company_id
+        start_end_dates_installed = hasattr(ailo, 'start_date') and\
+            hasattr(ailo, 'end_date')
         assert parsed_inv.get('amount_total'), 'Missing amount_total'
         partner = bdio._match_partner(
             parsed_inv['partner'], parsed_inv['chatter_msg'])
@@ -228,6 +234,11 @@ class AccountInvoiceImport(models.TransientModel):
                     il_vals['name'] = line['name']
                 elif not il_vals.get('name'):
                     il_vals['name'] = _('MISSING DESCRIPTION')
+                if start_end_dates_installed:
+                    il_vals['start_date'] =\
+                        line.get('date_start') or parsed_inv.get('date_start')
+                    il_vals['end_date'] =\
+                        line.get('date_end') or parsed_inv.get('date_end')
                 uom = bdio._match_uom(
                     line.get('uom'), parsed_inv['chatter_msg'])
                 il_vals['uom_id'] = uom.id
@@ -269,12 +280,12 @@ class AccountInvoiceImport(models.TransientModel):
     def set_1line_start_end_dates(self, il_vals, parsed_inv):
         """Only useful if you have installed the module account_cutoff_prepaid
         from https://github.com/OCA/account-closing"""
-        fakeiline = self.env['account.invoice.line'].browse(False)
+        ailo = self.env['account.invoice.line']
         if (
                 parsed_inv.get('date_start') and
                 parsed_inv.get('date_end') and
-                hasattr(fakeiline, 'start_date') and
-                hasattr(fakeiline, 'end_date')):
+                hasattr(ailo, 'start_date') and
+                hasattr(ailo, 'end_date')):
             il_vals['start_date'] = parsed_inv.get('date_start')
             il_vals['end_date'] = parsed_inv.get('date_end')
 
@@ -290,9 +301,9 @@ class AccountInvoiceImport(models.TransientModel):
         if filetype and filetype[0] in ['application/xml', 'text/xml']:
             try:
                 xml_root = etree.fromstring(file_data)
-            except:
+            except Exception, e:
                 raise UserError(_(
-                    "This XML file is not XML-compliant"))
+                    "This XML file is not XML-compliant. Error: %s") % e)
             pretty_xml_string = etree.tostring(
                 xml_root, pretty_print=True, encoding='UTF-8',
                 xml_declaration=True)
@@ -628,3 +639,52 @@ class AccountInvoiceImport(models.TransientModel):
             'res_id': invoice.id,
             })
         return action
+
+    def xpath_to_dict_helper(self, xml_root, xpath_dict, namespaces):
+        for key, value in xpath_dict.iteritems():
+            if isinstance(value, list):
+                isdate = isfloat = False
+                if 'date' in key:
+                    isdate = True
+                elif 'amount' in key:
+                    isfloat = True
+                xpath_dict[key] = self.multi_xpath_helper(
+                    xml_root, value, namespaces, isdate=isdate,
+                    isfloat=isfloat)
+                if not xpath_dict[key]:
+                    logger.debug('pb')
+            elif isinstance(value, dict):
+                xpath_dict[key] = self.xpath_to_dict_helper(
+                    xml_root, value, namespaces)
+        return xpath_dict
+        # TODO: think about blocking required fields
+
+    def multi_xpath_helper(
+            self, xml_root, xpath_list, namespaces, isdate=False,
+            isfloat=False):
+        assert isinstance(xpath_list, list)
+        for xpath in xpath_list:
+            xpath_res = xml_root.xpath(xpath, namespaces=namespaces)
+            if xpath_res and xpath_res[0].text:
+                if isdate:
+                    if (
+                            xpath_res[0].attrib and
+                            xpath_res[0].attrib.get('format') != '102'):
+                        raise UserError(_(
+                            "Only the date format 102 is supported "))
+                    date_dt = datetime.strptime(xpath_res[0].text, '%Y%m%d')
+                    date_str = fields.Date.to_string(date_dt)
+                    return date_str
+                elif isfloat:
+                    res_float = float(xpath_res[0].text)
+                    return res_float
+                else:
+                    return xpath_res[0].text
+        return False
+
+    def raw_multi_xpath_helper(self, xml_root, xpath_list, namespaces):
+        for xpath in xpath_list:
+            xpath_res = xml_root.xpath(xpath, namespaces=namespaces)
+            if xpath_res:
+                return xpath_res
+        return []
