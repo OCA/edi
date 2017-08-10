@@ -67,6 +67,29 @@ class AccountInvoiceImport(models.TransientModel):
         return self.invoice2data_to_parsed_inv(invoice2data_res)
 
     @api.model
+    def invoice2data_process_lines(self, lines):
+        processed_lines = []
+        for line in lines:
+            product_dict = {
+                'barcode': line['barcode'] if line.has_key('barcode') else False,
+                'code': line['code'] if line.has_key('code') else False,
+            }
+            uom = {'unece_code': line['uom']} if line.has_key('uom') else {}
+            taxes = []
+            line_dict = {
+                'qty': line['qty'] if line.has_key('qty') else 1,
+                'name': line['name'] if line.has_key('name') else '-',
+                'product': product_dict,
+                'uom': uom,
+                'taxes': taxes,
+                'price_unit': line['price_unit']
+            }
+
+            processed_lines.append(line_dict)
+        return processed_lines
+
+
+    @api.model
     def invoice2data_to_parsed_inv(self, invoice2data_res):
         parsed_inv = {
             'partner': {
@@ -79,6 +102,8 @@ class AccountInvoiceImport(models.TransientModel):
             'currency': {
                 'iso': invoice2data_res.get('currency'),
                 },
+            'lines': self.invoice2data_process_lines(
+                invoice2data_res.get('lines')),
             'amount_total': invoice2data_res.get('amount'),
             'invoice_number': invoice2data_res.get('invoice_number'),
             'date': invoice2data_res.get('date'),
