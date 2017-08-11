@@ -45,9 +45,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def parse_xml_invoice(self, xml_root):
-        raise UserError(_(
-            "This type of XML invoice is not supported. Did you install "
-            "the module to support this type of file?"))
+        return False
 
     @api.model
     def parse_pdf_invoice(self, file_data):
@@ -58,11 +56,9 @@ class AccountInvoiceImport(models.TransientModel):
         xml_files_dict = bdio.get_xml_files_from_pdf(file_data)
         for xml_filename, xml_root in xml_files_dict.iteritems():
             logger.info('Trying to parse XML file %s', xml_filename)
-            try:
-                parsed_inv = self.parse_xml_invoice(xml_root)
+            parsed_inv = self.parse_xml_invoice(xml_root)
+            if parsed_inv:
                 return parsed_inv
-            except:
-                continue
         parsed_inv = self.fallback_parse_pdf_invoice(file_data)
         if not parsed_inv:
             raise UserError(_(
@@ -310,6 +306,11 @@ class AccountInvoiceImport(models.TransientModel):
             logger.debug('Starting to import the following XML file:')
             logger.debug(pretty_xml_string)
             parsed_inv = self.parse_xml_invoice(xml_root)
+            if parsed_inv is False:
+                raise UserError(_(
+                    "This type of XML invoice is not supported. "
+                    "Did you install the module to support this type "
+                    "of file?"))
         # Fallback on PDF
         else:
             parsed_inv = self.parse_pdf_invoice(file_data)
