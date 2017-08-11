@@ -64,14 +64,14 @@ class AccountInvoiceImport(models.TransientModel):
             acline, ["ram:ChargeIndicator/udt:Indicator"], namespaces)
         if ch_indic == 'false':  # allowance
             acentry['qty'] = -1
-            if 'allowance' in counters:
-                counters['allowance'] += acentry['price_unit']
+            if 'allowances' in counters:
+                counters['allowances'] += acentry['price_unit']
             if not acentry.get('name'):
                 acentry['name'] = _('Misc Allowance')
         elif ch_indic == 'true':  # charge
             acentry['qty'] = 1
-            if 'charge' in counters:
-                counters['charge'] += acentry['price_unit']
+            if 'charges' in counters:
+                counters['charges'] += acentry['price_unit']
             if not acentry.get('name'):
                 acentry['name'] = _('Misc Charge')
         else:
@@ -90,7 +90,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def parse_facturx_invoice_line(
-            self, iline, total_line_lines, global_taxes, refund, namespaces):
+            self, iline, global_taxes, refund, counters, namespaces):
         xpath_dict = {
             'product': {
                 'barcode': ["ram:SpecifiedTradeProduct/ram:GlobalID"],
@@ -139,7 +139,7 @@ class AccountInvoiceImport(models.TransientModel):
             price_unit = float(price_unit_xpath[0].text)
         else:
             price_unit = price_subtotal / qty
-        total_line_lines += price_subtotal
+        counters['lines'] += price_subtotal
         # Reminder : ApplicableTradeTax not available on lines
         # at Basic level
         taxes_xpath = self.raw_multi_xpath_helper(
@@ -166,6 +166,7 @@ class AccountInvoiceImport(models.TransientModel):
             acentry = self.parse_facturx_allowance_charge(
                 ac_element, taxes or global_taxes, vals['name'],
                 namespaces, refund, {})
+            counters['lines'] += acentry['price_unit'] * acentry['qty']
             res.append(acentry)
         return res
 
@@ -383,23 +384,28 @@ class AccountInvoiceImport(models.TransientModel):
         global_taxes = self.parse_facturx_taxes(global_taxes_xpath, namespaces)
         logger.debug('global_taxes=%s', global_taxes)
         res_lines = []
-        total_line_lines = 0.0
+        counters = {
+            'allowances': 0.0,
+            'charges': 0.0,
+            'lines': 0.0,
+            }
+
         inv_line_xpath = self.raw_multi_xpath_helper(
             xml_root, ["//ram:IncludedSupplyChainTradeLineItem"], namespaces)
         for iline in inv_line_xpath:
             line_list = self.parse_facturx_invoice_line(
-                iline, total_line_lines, global_taxes, refund, namespaces)
+                iline, global_taxes, refund, counters, namespaces)
             if line_list is False:
                 continue
             res_lines += line_list
 
         if float_compare(
-                total_line, total_line_lines, precision_digits=prec):
+                total_line, counters['lines'], precision_digits=prec):
             logger.warning(
                 "The global LineTotalAmount (%s) doesn't match the "
                 "sum of the LineTotalAmount of each line (%s). It can "
                 "have a diff of a few cents due to sum of rounded values vs "
-                "rounded sum policies.", total_line, total_line_lines)
+                "rounded sum policies.", total_line, counters['lines'])
 
         # In Factur-X, "SpecifiedTradeAllowanceCharge" is used both for
         # charges (<ram:ChargeIndicator> = TRUE, counted in ChargeTotalAmount)
@@ -415,10 +421,6 @@ class AccountInvoiceImport(models.TransientModel):
              "//ram:ApplicableSupplyChainTradeSettlement"
              "/ram:SpecifiedTradeAllowanceCharge",  # ZUGFeRD
              ], namespaces)
-        counters = {
-            'allowance': 0.0,
-            'charge': 0.0,
-            }
         for ac_element in global_allowance_charge_xpath:
             acentry = self.parse_facturx_allowance_charge(
                 ac_element, global_taxes, _('Global'), namespaces, refund,
@@ -438,7 +440,7 @@ class AccountInvoiceImport(models.TransientModel):
                 or _("Logistics Service")
             price_unit = self.multi_xpath_helper(
                 chline, ["ram:AppliedAmount"], namespaces, isfloat=True)
-            counters['charge'] += price_unit
+            counters['charges'] += price_unit
             taxes_xpath = self.raw_multi_xpath_helper(
                 chline, ["ram:AppliedTradeTax"], namespaces)
             taxes = self.parse_facturx_taxes(taxes_xpath, namespaces)
@@ -451,10 +453,10 @@ class AccountInvoiceImport(models.TransientModel):
             res_lines.append(vals)
 
         if float_compare(
-                total_charge, counters['charge'], precision_digits=prec):
+                total_charge, counters['charges'], precision_digits=prec):
             if (
                     len(global_taxes) <= 1 and
-                    float_is_zero(counters['charge'], precision_digits=prec)):
+                    float_is_zero(counters['charges'], precision_digits=prec)):
                 res_lines.append({
                     'name': _("Misc Global Charge"),
                     'qty': 1,
@@ -468,15 +470,15 @@ class AccountInvoiceImport(models.TransientModel):
                     "because the Factur-X XML file is at BASIC level, "
                     "and we don't have the details of taxes for the "
                     "charge lines.")
-                    % (total_charge, counters['charge']))
+                    % (total_charge, counters['charges']))
 
         if float_compare(
-                abs(total_tradeallowance), counters['allowance'],
+                abs(total_tradeallowance), counters['allowances'],
                 precision_digits=prec):
             if (
                     len(global_taxes) <= 1 and
                     float_is_zero(
-                        counters['allowance'], precision_digits=prec)):
+                        counters['allowances'], precision_digits=prec)):
                 res_lines.append({
                     'name': _("Misc Global Allowance"),
                     'qty': 1,
@@ -490,7 +492,7 @@ class AccountInvoiceImport(models.TransientModel):
                     "because the Factur-X XML file is at BASIC level, "
                     "and we don't have the details of taxes for the "
                     "allowance lines.")
-                    % (abs(total_tradeallowance), counters['allowance']))
+                    % (abs(total_tradeallowance), counters['allowances']))
 
         res.update({
             'amount_total': amount_total,
