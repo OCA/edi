@@ -3,9 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning as UserError
+from odoo.exceptions import UserError
 from odoo.tools import float_compare
 from datetime import datetime
+from lxml import etree
 import logging
 
 logger = logging.getLogger(__name__)
@@ -130,10 +131,18 @@ class AccountInvoiceImport(models.TransientModel):
     def parse_ubl_invoice(self, xml_root):
         """Parse UBL Invoice XML file"""
         namespaces = xml_root.nsmap
-        prec = self.env['decimal.precision'].precision_get('Account')
-        logger.debug('XML file namespaces=%s', namespaces)
         inv_xmlns = namespaces.pop(None)
         namespaces['inv'] = inv_xmlns
+        logger.debug('XML file namespaces=%s', namespaces)
+        xml_string = etree.tostring(
+            xml_root, pretty_print=True, encoding='UTF-8',
+            xml_declaration=True)
+        ubl_version_xpath = xml_root.xpath(
+            "//cbc:UBLVersionID", namespaces=namespaces)
+        ubl_version = ubl_version_xpath and ubl_version_xpath[0].text or '2.1'
+        # Check XML schema to avoid headaches trying to import invalid files
+        self._ubl_check_xml_schema(xml_string, 'Invoice', version=ubl_version)
+        prec = self.env['decimal.precision'].precision_get('Account')
         doc_type_xpath = xml_root.xpath(
             "/inv:Invoice/cbc:InvoiceTypeCode[@listAgencyID='6']",
             namespaces=namespaces)
