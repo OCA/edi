@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-============
-Base ZUGFeRD
-============
+=========================
+Base Factur-X and ZUGFeRD
+=========================
 
-This is the base module for the implementation of the `ZUGFeRD <http://www.pdflib.com/knowledge-base/pdfa/zugferd-invoices/>`_ standard. It is a standard based on `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`_ (Cross-Industry Invoice) for electronic invoicing. The great idea of the ZUGFeRD standard is to embed an XML file inside the PDF invoice to carry structured information about the invoice.
+This is the base module for the implementation of the Factur-X and `ZUGFeRD <http://www.pdflib.com/knowledge-base/pdfa/zugferd-invoices/>`_ standards. It is a standard based on `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`_ (Cross-Industry Invoice) for electronic invoicing. The great idea of the Factur-X and ZUGFeRD standards is to embed an XML file inside the PDF invoice to carry structured information about the invoice.
 
 
 Configuration
