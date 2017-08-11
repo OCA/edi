@@ -26,7 +26,8 @@ FACTURX_FILENAME = 'factur-x.xml'
 
 
 class AccountInvoice(models.Model):
-    _inherit = 'account.invoice'
+    _name = 'account.invoice'
+    _inherit = ['account.invoice', 'base.facturx']
 
     @api.model
     def _cii_add_address_block(self, partner, parent_node, ns):
@@ -75,7 +76,7 @@ class AccountInvoice(models.Model):
             email_node = etree.SubElement(
                 trade_contact, ns['ram'] + 'EmailURIUniversalCommunication')
             email_uriid = etree.SubElement(
-                email_node, ns['ram'] + 'URIID')
+                email_node, ns['ram'] + 'URIID', schemeID='SMTP')
             email_uriid.text = partner.email
 
     @api.model
@@ -598,36 +599,11 @@ class AccountInvoice(models.Model):
 
         xml_string = etree.tostring(
             root, pretty_print=True, encoding='UTF-8', xml_declaration=True)
-        self._check_xml_schema(
-            xml_string, 'account_invoice_factur-x/data/Factur-X_EN16931.xsd')
+        self._cii_check_xml_schema(xml_string, 'factur-x')
         logger.debug(
             'Factur-X XML file generated for invoice ID %d', self.id)
         logger.debug(xml_string)
         return xml_string
-
-    @api.model
-    def _check_xml_schema(self, xml_string, xsd_file):
-        '''Validate the XML file against the XSD'''
-        xsd_etree_obj = etree.parse(tools.file_open(xsd_file))
-        official_schema = etree.XMLSchema(xsd_etree_obj)
-        try:
-            t = etree.parse(StringIO(xml_string))
-            official_schema.assertValid(t)
-        except Exception, e:
-            # if the validation of the XSD fails, we arrive here
-            logger = logging.getLogger(__name__)
-            logger.warning(
-                "The XML file is invalid against the XML Schema Definition")
-            logger.warning(xml_string)
-            logger.warning(e)
-            raise UserError(_(
-                "The generated XML file is not valid against the official "
-                "XML Schema Definition. The generated XML file and the "
-                "full error have been written in the server logs. "
-                "Here is the error, which may give you an idea on the "
-                "cause of the problem : %s.")
-                % unicode(e))
-        return True
 
     @api.model
     def pdf_is_facturx(self, pdf_content):
@@ -741,7 +717,7 @@ class AccountInvoice(models.Model):
         etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = timestamp
 
         facturx_ext_schema_root = etree.parse(tools.file_open(
-            'account_invoice_factur-x/data/Factur-X_extension_schema.xmp'))
+            'base_zugferd/data/xsd-factur-x/Factur-X_extension_schema.xmp'))
         # The Factur-X extension schema must be embedded into each PDF document
         facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath(
             '//rdf:Description', namespaces=nsmap_rdf)
