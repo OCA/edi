@@ -50,7 +50,7 @@ class AccountInvoiceImport(models.TransientModel):
         return attachments
 
     def parse_ubl_invoice_line(
-            self, iline, sign, total_line_lines, namespaces):
+            self, iline, sign, counters, namespaces):
         price_unit_xpath = iline.xpath(
             "cac:Price/cbc:PriceAmount", namespaces=namespaces)
         qty_xpath = iline.xpath(
@@ -80,7 +80,7 @@ class AccountInvoiceImport(models.TransientModel):
             price_unit = float(price_unit_xpath[0].text)
         else:
             price_unit = price_subtotal / qty
-        total_line_lines += price_subtotal
+        counters['lines'] += price_subtotal
         taxes_xpath = iline.xpath(
             "cac:Item/cac:ClassifiedTaxCategory", namespaces=namespaces)
         if not taxes_xpath:
@@ -210,23 +210,23 @@ class AccountInvoiceImport(models.TransientModel):
                 namespaces=namespaces)
         attachments = self.get_attachments(xml_root, namespaces)
         res_lines = []
-        total_line_lines = 0.0
+        counters = {'lines': 0.0}
         inv_line_xpath = xml_root.xpath(
             "/inv:Invoice/cac:InvoiceLine", namespaces=namespaces)
         for iline in inv_line_xpath:
             line_vals = self.parse_ubl_invoice_line(
-                iline, sign, total_line_lines, namespaces)
+                iline, sign, counters, namespaces)
             if line_vals is False:
                 continue
             res_lines.append(line_vals)
 
         if float_compare(
-                total_line, total_line_lines, precision_digits=prec):
+                total_line, counters['lines'], precision_digits=prec):
             logger.warning(
                 "The gloabl LineExtensionAmount (%s) doesn't match the "
                 "sum of the amounts of each line (%s). It can "
                 "have a diff of a few cents due to sum of rounded values vs "
-                "rounded sum policies.", total_line, total_line_lines)
+                "rounded sum policies.", total_line, counters['lines'])
 
         res = {
             'partner': supplier_dict,
