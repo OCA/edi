@@ -107,6 +107,7 @@ class AccountInvoiceImport(models.TransientModel):
         #       'name': 'Gelierzucker Extra 250g',
         #       'price_unit': 1.45, # price_unit without taxes always positive
         #       'qty': -2.0,  # < 0 when it's a refund
+        #       'price_subtotal': 2.90,
         #       'uom': {'unece_code': 'C62'},
         #       'taxes': [list of tax_dict],
         #       'date_start': '2015-10-01',
@@ -249,7 +250,7 @@ class AccountInvoiceImport(models.TransientModel):
         if aacount_id:
             for line in vals['invoice_line_ids']:
                 line[2]['account_analytic_id'] = aacount_id
-        return vals
+        return (vals, config)
 
     @api.model
     def set_1line_price_unit_and_quantity(self, il_vals, parsed_inv):
@@ -389,9 +390,7 @@ class AccountInvoiceImport(models.TransientModel):
             ('type', '=', parsed_inv['type'])]
         existing_invs = aio.search(
             domain +
-            [(
-                'reference', '=ilike', parsed_inv.get('invoice_number')
-            )])
+            [('reference', '=ilike', parsed_inv.get('invoice_number'))])
         if existing_invs:
             raise UserError(_(
                 "This invoice already exists in Odoo. It's "
@@ -415,14 +414,16 @@ class AccountInvoiceImport(models.TransientModel):
             action['res_id'] = self.id
             return action
         else:
-            action = self.create_invoice()
+            action = self.create_invoice(parsed_inv)
             return action
 
     @api.multi
-    def create_invoice(self):
+    def create_invoice(self, parsed_inv=None):
+        '''parsed_inv is not a required argument'''
         self.ensure_one()
         iaao = self.env['ir.actions.act_window']
-        parsed_inv = self.parse_invoice()
+        if parsed_inv is None:
+            parsed_inv = self.parse_invoice()
         invoice = self._create_invoice(parsed_inv)
         invoice.message_post(_(
             "This invoice has been created automatically via file import"))
@@ -439,26 +440,114 @@ class AccountInvoiceImport(models.TransientModel):
     def _create_invoice(self, parsed_inv, import_config=False):
         aio = self.env['account.invoice']
         bdio = self.env['business.document.import']
-        vals = self._prepare_create_invoice_vals(
+        (vals, import_config) = self._prepare_create_invoice_vals(
             parsed_inv, import_config=import_config)
         logger.debug('Invoice vals for creation: %s', vals)
         invoice = aio.create(vals)
-        self.post_process_invoice(parsed_inv, invoice)
+        self.post_process_invoice(parsed_inv, invoice, import_config)
         logger.info('Invoice ID %d created', invoice.id)
         bdio.post_create_or_update(parsed_inv, invoice)
         return invoice
 
     @api.model
-    def post_process_invoice(self, parsed_inv, invoice):
-        # Force tax amount if necessary
-        prec = self.env['decimal.precision'].precision_get('Account')
+    def _prepare_global_adjustment_line(
+            self, diff_amount, invoice, import_config):
+        ailo = self.env['account.invoice.line']
+        prec = invoice.currency_id.rounding
+        il_vals = {
+            'name': _('Adjustment'),
+            'quantity': 1,
+            'price_unit': diff_amount,
+            }
+        # no taxes nor product on such a global adjustment line
+        if import_config['invoice_line_method'] == 'nline_no_product':
+            il_vals['account_id'] = import_config['account'].id
+        elif import_config['invoice_line_method'] == 'nline_static_product':
+            account = ailo.get_invoice_line_account(
+                invoice.type, import_config['product'],
+                invoice.fiscal_position_id, invoice.company_id)
+            il_vals['account_id'] = account.id
+        elif import_config['invoice_line_method'] == 'nline_auto_product':
+            res_cmp = float_compare(diff_amount, 0, precision_rounding=prec)
+            company = invoice.company_id
+            if res_cmp > 0:
+                if not company.adjustment_debit_account_id:
+                    raise UserError(_(
+                        "You must configure the 'Adjustment Debit Account' "
+                        "on the Accounting Configuration page."))
+                il_vals['account_id'] = company.adjustment_debit_account_id.id
+            else:
+                if not company.adjustment_credit_account_id:
+                    raise UserError(_(
+                        "You must configure the 'Adjustment Credit Account' "
+                        "on the Accounting Configuration page."))
+                il_vals['account_id'] = company.adjustment_credit_account_id.id
+        logger.debug("Prepared global ajustment invoice line %s", il_vals)
+        return il_vals
+
+    @api.model
+    def post_process_invoice(self, parsed_inv, invoice, import_config):
+        prec = invoice.currency_id.rounding
+        # If untaxed amount is wrong, create adjustment lines
         if (
-                parsed_inv.get('amount_total') and
-                parsed_inv.get('amount_untaxed') and
+                import_config['invoice_line_method'].startswith('nline') and
                 float_compare(
-                    invoice.amount_total,
-                    parsed_inv['amount_total'],
-                    precision_digits=prec)):
+                    parsed_inv['amount_untaxed'], invoice.amount_untaxed,
+                    precision_rounding=prec)):
+            # Try to find the line that has a problem
+            # TODO : on invoice creation, the lines are in the same
+            # order, but not on invoice update...
+            for i in range(len(parsed_inv['lines'])):
+                iline = invoice.invoice_line_ids[i]
+                odoo_subtotal = iline.price_subtotal
+                parsed_subtotal = parsed_inv['lines'][i]['price_subtotal']
+                if float_compare(
+                        odoo_subtotal, parsed_subtotal,
+                        precision_rounding=prec):
+                    diff_amount = float_round(
+                        parsed_subtotal - odoo_subtotal,
+                        precision_rounding=prec)
+                    logger.info(
+                        'Price subtotal difference found on invoice line %d '
+                        '(source:%s, odoo:%s, diff:%s).',
+                        i + 1, parsed_subtotal, odoo_subtotal, diff_amount)
+                    copy_dict = {
+                        'name': _('Adjustment on %s') % iline.name,
+                        'quantity': 1,
+                        'price_unit': diff_amount,
+                        }
+                    if import_config['invoice_line_method'] ==\
+                            'nline_auto_product':
+                        copy_dict['product_id'] = False
+                    # Add the adjustment line
+                    iline.copy(copy_dict)
+                    logger.info('Adjustment invoice line created')
+        if float_compare(
+                parsed_inv['amount_untaxed'], invoice.amount_untaxed,
+                precision_rounding=prec):
+            # create global ajustment line
+            diff_amount = float_round(
+                parsed_inv['amount_untaxed'] - invoice.amount_untaxed,
+                precision_rounding=prec)
+            logger.info(
+                'Amount untaxed difference found '
+                '(source: %s, odoo:%s, diff:%s)',
+                parsed_inv['amount_untaxed'], invoice.amount_untaxed,
+                diff_amount)
+            il_vals = self._prepare_global_adjustment_line(
+                diff_amount, invoice, import_config)
+            il_vals['invoice_id'] = invoice.id
+            self.env['account.invoice.line'].create(il_vals)
+            logger.info('Global adjustment invoice line created')
+        # Invalidate cache
+        invoice = self.env['account.invoice'].browse(invoice.id)
+        assert not float_compare(
+            parsed_inv['amount_untaxed'], invoice.amount_untaxed,
+            precision_rounding=prec)
+        # Force tax amount if necessary
+        if float_compare(
+                invoice.amount_total, parsed_inv['amount_total'],
+                precision_rounding=prec):
             if not invoice.tax_line_ids:
                 raise UserError(_(
                     "The total amount is different from the untaxed amount, "
