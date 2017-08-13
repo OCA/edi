@@ -528,6 +528,11 @@ class AccountInvoice(models.Model):
                         "Missing UNECE Tax Category on tax '%s'")
                         % tax.name)
                 trade_tax_categcode.text = tax.unece_categ_code
+                if tax.unece_due_date_code:
+                    trade_tax_due_date = etree.SubElement(
+                        trade_tax, ns['ram'] + 'DueDateTypeCode')
+                    trade_tax_due_date.text = tax.unece_due_date_code
+                    # This field is not required, so no error if missing
                 if tax.amount_type == 'percent':
                     trade_tax_percent = etree.SubElement(
                         trade_tax, ns['ram'] + 'RateApplicablePercent')
