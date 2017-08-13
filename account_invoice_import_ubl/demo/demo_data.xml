@@ -71,5 +71,25 @@
     <field name="invoice_import_id" ref="exact_belgium_import_config"/>
 </record>
 
+<record id="multi_tank_import_config" model="account.invoice.import.config">
+    <field name="name">Multi Tank</field>
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account"/>
+</record>
+
+<record id="multi_tank" model="res.partner">
+    <field name="name">Multi Tank Card bv</field>
+    <field name="is_company" eval="True"/>
+    <field name="supplier" eval="True"/>
+    <field name="customer" eval="False"/>
+    <field name="street">Postbus</field>
+    <field name="zip">2130 KB</field>
+    <field name="city">Hoofddorp</field>
+    <field name="country_id" ref="base.nl"/>
+    <field name="vat">NL009276749B01</field>
+    <field name="invoice_import_id" ref="multi_tank_import_config"/>
+</record>
+
+
 
 </odoo>
