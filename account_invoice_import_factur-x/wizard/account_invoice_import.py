@@ -40,11 +40,16 @@ class AccountInvoiceImport(models.TransientModel):
                 ["ram:RateApplicablePercent",  # Factur-X
                  "ram:ApplicablePercent",  # ZUGFeRD
                  ], namespaces, isfloat=True) or 0.0
+            due_date_code = self.multi_xpath_helper(
+                tax, ["ram:DueDateTypeCode"], namespaces)
+            if due_date_code == '2':
+                due_date_code = 3
             taxes.append({
                 'amount_type': 'percent',
                 'amount': percentage,
                 'unece_type_code': type_code,
                 'unece_categ_code': categ_code,
+                'unece_due_date_code': due_date_code,
                 })
         return taxes
 
@@ -64,12 +69,14 @@ class AccountInvoiceImport(models.TransientModel):
             acline, ["ram:ChargeIndicator/udt:Indicator"], namespaces)
         if ch_indic == 'false':  # allowance
             acentry['qty'] = -1
+            acentry['product'] = {'code': 'EDI-ALLOWANCE'}
             if 'allowances' in counters:
                 counters['allowances'] += acentry['price_unit']
             if not acentry.get('name'):
                 acentry['name'] = _('Misc Allowance')
         elif ch_indic == 'true':  # charge
             acentry['qty'] = 1
+            acentry['product'] = {'code': 'EDI-CHARGE'}
             if 'charges' in counters:
                 counters['charges'] += acentry['price_unit']
             if not acentry.get('name'):
@@ -154,6 +161,7 @@ class AccountInvoiceImport(models.TransientModel):
             'qty': qty,
             'uom': uom,
             'price_unit': price_unit,
+            'price_subtotal': price_subtotal,
             'taxes': taxes or global_taxes,
             })
         iline_allowance_charge_xpath = self.raw_multi_xpath_helper(
