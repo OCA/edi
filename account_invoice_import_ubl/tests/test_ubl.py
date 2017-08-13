@@ -27,6 +27,13 @@ class TestUbl(TransactionCase):
                 'due_date': '2016-04-28',
                 'partner_xmlid': 'account_invoice_import_ubl.exact_belgium',
                 },
+            'UBLInvoice-multitankcard-line_adjust.xml': {
+                'invoice_number': '6311117',
+                'amount_untaxed': 75.01,
+                'amount_total': 90.77,
+                'date_invoice': '2017-03-07',
+                'partner_xmlid': 'account_invoice_import_ubl.multi_tank',
+                },
             }
         aio = self.env['account.invoice']
         aiio = self.env['account.invoice.import']

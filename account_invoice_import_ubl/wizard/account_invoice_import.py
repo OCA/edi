@@ -122,6 +122,7 @@ class AccountInvoiceImport(models.TransientModel):
             'qty': qty * sign,
             'uom': uom,
             'price_unit': price_unit,
+            'price_subtotal': price_subtotal,
             'name': name,
             'taxes': taxes,
             }
