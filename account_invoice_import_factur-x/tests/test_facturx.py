@@ -58,9 +58,7 @@ class TestFacturx(TransactionCase):
             'ZUGFeRD_1p0_COMFORT_Kraftfahrversicherung_'
             'Bruttopreise.pdf': {
                 'invoice_number': '00.123.456.7-2014-1',
-                'amount_untaxed': 184.88,
-                # XML says 184.87 because they seem to use rounded sum
-                # instead of the sum of rounded
+                'amount_untaxed': 184.87,
                 'amount_total': 220.0,
                 'date_invoice': '2014-03-11',
                 'date_due': '2014-04-01',
