@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+<record id="view_account_config_settings" model="ir.ui.view">
+    <field name="name">invoice_import.account.config.settings.form</field>
+    <field name="model">account.config.settings</field>
+    <field name="inherit_id" ref="account.view_account_config_settings" />
+    <field name="arch" type="xml">
+        <xpath expr="//div[@name='invoice_taxes']/.." position="after">
+            <group name="invoice_import" attrs="{'invisible': [('has_chart_of_accounts','=',False)]}">
+                <label for="id" string="Invoice Import"/>
+                <div name="invoice_import">
+                    <div>
+                        <label for="adjustment_debit_account_id"/>
+                        <field name="adjustment_debit_account_id" class="oe_inline"/>
+                    </div>
+                    <div>
+                        <label for="adjustment_credit_account_id"/>
+                        <field name="adjustment_credit_account_id" class="oe_inline"/>
+                    </div>
+                </div>
+            </group>
+        </xpath>
+    </field>
+</record>
+
+
+</odoo>
