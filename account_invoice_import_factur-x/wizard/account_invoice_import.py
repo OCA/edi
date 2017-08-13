@@ -411,9 +411,6 @@ class AccountInvoiceImport(models.TransientModel):
         # charges (<ram:ChargeIndicator> = TRUE, counted in ChargeTotalAmount)
         # and for allowance (<ram:ChargeIndicator> = False, counted in
         # AllowanceTotalAmount)
-        # This stuff is very annoying to parse, because each charge or
-        # allowance is not isolated in a dedicated XML sub-block
-        # So we can't have each "allowance line" via an xpath as usual
         global_allowance_charge_xpath = self.raw_multi_xpath_helper(
             xml_root,
             ["//ram:ApplicableHeaderTradeSettlement"
