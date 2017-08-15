@@ -52,7 +52,7 @@
                     class="oe_highlight" string="Import" states="import"/>
                 <button name="update_invoice" type="object"
                     class="oe_highlight" string="Update Existing" states="update"/>
-                <button name="create_invoice" type="object"
+                <button name="create_invoice_action" type="object"
                     class="oe_highlight" string="Create New" states="update"/>
                 <button name="update_invoice" type="object"
                     class="oe_highlight" string="Update Invoice"
