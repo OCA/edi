@@ -139,9 +139,13 @@ class AccountInvoiceImport(models.TransientModel):
         # 'label': 'Force invoice line description',
         # 'product': product recordset,
         # }
+        #
+        # Note: we also support importing customer invoices via
+        # create_invoice() but only with 'nline_*' invoice import methods.
 
     @api.model
     def _prepare_create_invoice_vals(self, parsed_inv, import_config=False):
+        assert parsed_inv.get('pre-processed'), 'pre-processing not done'
         aio = self.env['account.invoice']
         ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
@@ -149,7 +153,6 @@ class AccountInvoiceImport(models.TransientModel):
         company = self.env.user.company_id
         start_end_dates_installed = hasattr(ailo, 'start_date') and\
             hasattr(ailo, 'end_date')
-        assert parsed_inv.get('amount_total'), 'Missing amount_total'
         partner = bdio._match_partner(
             parsed_inv['partner'], parsed_inv['chatter_msg'])
         partner = partner.commercial_partner_id
@@ -339,6 +342,11 @@ class AccountInvoiceImport(models.TransientModel):
     def pre_process_parsed_inv(self, parsed_inv):
         if parsed_inv.get('pre-processed'):
             return parsed_inv
+        parsed_inv['pre-processed'] = True
+        if 'chatter_msg' not in parsed_inv:
+            parsed_inv['chatter_msg'] = []
+        if parsed_inv.get('type') in ('out_invoice', 'out_refund'):
+            return parsed_inv
         prec_ac = self.env['decimal.precision'].precision_get('Account')
         prec_pp = self.env['decimal.precision'].precision_get('Product Price')
         prec_uom = self.env['decimal.precision'].precision_get(
@@ -374,9 +382,6 @@ class AccountInvoiceImport(models.TransientModel):
             line['qty'] = float_round(line['qty'], precision_digits=prec_uom)
             line['price_unit'] = float_round(
                 line['price_unit'], precision_digits=prec_pp)
-        if 'chatter_msg' not in parsed_inv:
-            parsed_inv['chatter_msg'] = []
-        parsed_inv['pre-processed'] = True
         logger.debug('Result of invoice parsing parsed_inv=%s', parsed_inv)
         return parsed_inv
 
@@ -436,17 +441,17 @@ class AccountInvoiceImport(models.TransientModel):
             action['res_id'] = self.id
             return action
         else:
-            action = self.create_invoice(parsed_inv)
+            action = self.create_invoice_action(parsed_inv)
             return action
 
     @api.multi
-    def create_invoice(self, parsed_inv=None):
+    def create_invoice_action(self, parsed_inv=None):
         '''parsed_inv is not a required argument'''
         self.ensure_one()
         iaao = self.env['ir.actions.act_window']
         if parsed_inv is None:
             parsed_inv = self.parse_invoice()
-        invoice = self._create_invoice(parsed_inv)
+        invoice = self.create_invoice(parsed_inv)
         invoice.message_post(_(
             "This invoice has been created automatically via file import"))
         action = iaao.for_xml_id('account', 'action_invoice_tree2')
@@ -457,9 +462,8 @@ class AccountInvoiceImport(models.TransientModel):
             })
         return action
 
-    # TODO: this method should be callable from webservices
     @api.model
-    def _create_invoice(self, parsed_inv, import_config=False):
+    def create_invoice(self, parsed_inv, import_config=False):
         aio = self.env['account.invoice']
         bdio = self.env['business.document.import']
         parsed_inv = self.pre_process_parsed_inv(parsed_inv)
@@ -510,6 +514,8 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def post_process_invoice(self, parsed_inv, invoice, import_config):
+        if parsed_inv.get('type') in ('out_invoice', 'out_refund'):
+            return
         prec = invoice.currency_id.rounding
         # If untaxed amount is wrong, create adjustment lines
         if (
