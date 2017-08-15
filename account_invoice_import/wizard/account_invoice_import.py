@@ -74,7 +74,7 @@ class AccountInvoiceImport(models.TransientModel):
         '''
         return False
 
-        # INVOICE PIVOT format (parsed_inv)
+        # INVOICE PIVOT format ('parsed_inv' without pre-processing)
         # For refunds, we support 2 possibilities:
         # a) type = 'in_invoice' with negative amounts and qty
         # b) type = 'in_refund' with positive amounts and qty ("Odoo way")
@@ -117,7 +117,13 @@ class AccountInvoiceImport(models.TransientModel):
         #               to be able to generate adjustment lines when decimal
         #               precision is not high enough in Odoo
         #       'uom': {'unece_code': 'C62'},
-        #       'taxes': [list of tax_dict],
+        #       'taxes': [{
+        #           'amount_type': 'percent',
+        #           'amount': 20.0,
+        #           'unece_type_code': 'VAT',
+        #           'unece_categ_code': 'S',
+        #           'unece_due_date_code': '432',
+        #           }],
         #       'date_start': '2015-10-01',
         #       'date_end': '2015-10-31',
         #       # date_start and date_end on lines override the global value
@@ -326,11 +332,13 @@ class AccountInvoiceImport(models.TransientModel):
         if 'attachments' not in parsed_inv:
             parsed_inv['attachments'] = {}
         parsed_inv['attachments'][self.invoice_filename] = self.invoice_file
-        updated_parsed_inv = self.update_clean_parsed_inv(parsed_inv)
-        return updated_parsed_inv
+        pp_parsed_inv = self.pre_process_parsed_inv(parsed_inv)
+        return pp_parsed_inv
 
     @api.model
-    def update_clean_parsed_inv(self, parsed_inv):
+    def pre_process_parsed_inv(self, parsed_inv):
+        if parsed_inv.get('pre-processed'):
+            return parsed_inv
         prec_ac = self.env['decimal.precision'].precision_get('Account')
         prec_pp = self.env['decimal.precision'].precision_get('Product Price')
         prec_uom = self.env['decimal.precision'].precision_get(
@@ -368,6 +376,7 @@ class AccountInvoiceImport(models.TransientModel):
                 line['price_unit'], precision_digits=prec_pp)
         if 'chatter_msg' not in parsed_inv:
             parsed_inv['chatter_msg'] = []
+        parsed_inv['pre-processed'] = True
         logger.debug('Result of invoice parsing parsed_inv=%s', parsed_inv)
         return parsed_inv
 
@@ -453,6 +462,7 @@ class AccountInvoiceImport(models.TransientModel):
     def _create_invoice(self, parsed_inv, import_config=False):
         aio = self.env['account.invoice']
         bdio = self.env['business.document.import']
+        parsed_inv = self.pre_process_parsed_inv(parsed_inv)
         (vals, import_config) = self._prepare_create_invoice_vals(
             parsed_inv, import_config=import_config)
         logger.debug('Invoice vals for creation: %s', vals)
@@ -683,6 +693,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.multi
     def update_invoice(self):
+        '''Called by the button of the wizard (step 2)'''
         self.ensure_one()
         iaao = self.env['ir.actions.act_window']
         bdio = self.env['business.document.import']
