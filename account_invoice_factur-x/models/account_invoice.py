@@ -118,12 +118,16 @@ class AccountInvoice(models.Model):
             header_doc_id.text = self.state
         header_doc_typecode = etree.SubElement(
             header_doc, ns['ram'] + 'TypeCode')
-        header_doc_typecode.text = '380'
+        if self.type == 'out_invoice':
+            header_doc_typecode.text = '380'
+        elif self.type == 'out_refund':
+            header_doc_typecode.text = '381'
         # 2 options allowed in Factur-X :
-        # a) 380 = invoice & refunds ; negative amounts if refunds
-        # b) 381 = refunds, with positive amounts
-        # In ZUGFeRD samples, they used option a)
+        # a) invoice and refunds -> 380 ; negative amounts if refunds
+        # b) invoice -> 380 refunds -> 381, with positive amounts
+        # In ZUGFeRD samples, they use option a)
         # For Chorus, they impose option b)
+        # Until August 2017, I was using option a), now I use option b)
         date_invoice_dt = fields.Date.from_string(
             self.date_invoice or fields.Date.context_today(self))
         self._cii_add_date('IssueDateTime', date_invoice_dt, header_doc, ns)
@@ -207,7 +211,7 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def _cii_add_trade_settlement_payment_means_block(
-            self, trade_settlement, sign, ns):
+            self, trade_settlement, ns):
         payment_means = etree.SubElement(
             trade_settlement,
             ns['ram'] + 'SpecifiedTradeSettlementPaymentMeans')
@@ -255,7 +259,7 @@ class AccountInvoice(models.Model):
                     payment_means_bic.text = partner_bank.bank_bic
 
     @api.multi
-    def _cii_add_trade_settlement_block(self, trade_transaction, sign, ns):
+    def _cii_add_trade_settlement_block(self, trade_transaction, ns):
         self.ensure_one()
         inv_currency_name = self.currency_id.name
         prec = self.currency_id.decimal_places
@@ -280,7 +284,7 @@ class AccountInvoice(models.Model):
                  self.payment_mode_id.payment_method_id.unece_code
                  not in [31, 42])):
             self._cii_add_trade_settlement_payment_means_block(
-                trade_settlement, sign, ns)
+                trade_settlement, ns)
         tax_basis_total = 0.0
         if self.tax_line_ids:
             for tline in self.tax_line_ids:
@@ -297,7 +301,7 @@ class AccountInvoice(models.Model):
                 amount = etree.SubElement(
                     trade_tax, ns['ram'] + 'CalculatedAmount',
                     currencyID=inv_currency_name)
-                amount.text = unicode(tline.amount * sign)
+                amount.text = unicode(tline.amount)
                 tax_type = etree.SubElement(
                     trade_tax, ns['ram'] + 'TypeCode')
                 tax_type.text = tax.unece_type_code
@@ -316,7 +320,7 @@ class AccountInvoice(models.Model):
                 base = etree.SubElement(
                     trade_tax,
                     ns['ram'] + 'BasisAmount', currencyID=inv_currency_name)
-                base.text = unicode(tline.base * sign)
+                base.text = unicode(tline.base)
                 tax_basis_total += tline.base
                 tax_categ_code = etree.SubElement(
                     trade_tax, ns['ram'] + 'CategoryCode')
@@ -347,7 +351,7 @@ class AccountInvoice(models.Model):
             ns['ram'] + 'SpecifiedTradeSettlementHeaderMonetarySummation')
         line_total = etree.SubElement(
             sums, ns['ram'] + 'LineTotalAmount', currencyID=inv_currency_name)
-        line_total.text = '%0.*f' % (prec, self.amount_untaxed * sign)
+        line_total.text = '%0.*f' % (prec, self.amount_untaxed)
         # In Factur-X, charge total amount and allowance total are not required
         # charge_total = etree.SubElement(
         #    sums, ns['ram'] + 'ChargeTotalAmount',
@@ -360,21 +364,21 @@ class AccountInvoice(models.Model):
         tax_basis_total_amt = etree.SubElement(
             sums, ns['ram'] + 'TaxBasisTotalAmount',
             currencyID=inv_currency_name)
-        tax_basis_total_amt.text = '%0.*f' % (prec, tax_basis_total * sign)
+        tax_basis_total_amt.text = '%0.*f' % (prec, tax_basis_total)
         tax_total = etree.SubElement(
             sums, ns['ram'] + 'TaxTotalAmount', currencyID=inv_currency_name)
-        tax_total.text = '%0.*f' % (prec, self.amount_tax * sign)
+        tax_total.text = '%0.*f' % (prec, self.amount_tax)
         total = etree.SubElement(
             sums, ns['ram'] + 'GrandTotalAmount', currencyID=inv_currency_name)
-        total.text = '%0.*f' % (prec, self.amount_total * sign)
+        total.text = '%0.*f' % (prec, self.amount_total)
         prepaid = etree.SubElement(
             sums, ns['ram'] + 'TotalPrepaidAmount',
             currencyID=inv_currency_name)
         residual = etree.SubElement(
             sums, ns['ram'] + 'DuePayableAmount', currencyID=inv_currency_name)
         prepaid.text = '%0.*f' % (
-            prec, (self.amount_total - self.residual) * sign)
-        residual.text = '%0.*f' % (prec, self.residual * sign)
+            prec, (self.amount_total - self.residual))
+        residual.text = '%0.*f' % (prec, self.residual)
         if self.refund_invoice_id and self.refund_invoice_id.number:
             inv_ref_doc = etree.SubElement(
                 trade_settlement, ns['ram'] + 'InvoiceReferencedDocument')
@@ -389,7 +393,7 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def _cii_add_invoice_line_block(
-            self, trade_transaction, iline, line_number, sign, ns):
+            self, trade_transaction, iline, line_number, ns):
         self.ensure_one()
         dpo = self.env['decimal.precision']
         pp_prec = dpo.precision_get('Product Price')
@@ -505,7 +509,7 @@ class AccountInvoice(models.Model):
         billed_qty = etree.SubElement(
             line_trade_delivery, ns['ram'] + 'BilledQuantity',
             unitCode=unitCode)
-        billed_qty.text = unicode(iline.quantity * sign)
+        billed_qty.text = unicode(iline.quantity)
         line_trade_settlement = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedLineTradeSettlement')
 
@@ -555,14 +559,13 @@ class AccountInvoice(models.Model):
         subtotal_amount = etree.SubElement(
             subtotal, ns['ram'] + 'LineTotalAmount',
             currencyID=inv_currency_name)
-        subtotal_amount.text = unicode(iline.price_subtotal * sign)
+        subtotal_amount.text = unicode(iline.price_subtotal)
 
     @api.multi
     def generate_facturx_xml(self):
         self.ensure_one()
         assert self.type in ('out_invoice', 'out_refund'),\
             'only works for customer invoice and refunds'
-        sign = self.type == 'out_refund' and -1 or 1
         nsmap = {
             'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
             'rsm': 'urn:un:unece:uncefact:data:standard:'
@@ -596,11 +599,11 @@ class AccountInvoice(models.Model):
         for iline in self.invoice_line_ids:
             line_number += 1
             self._cii_add_invoice_line_block(
-                trade_transaction, iline, line_number, sign, ns)
+                trade_transaction, iline, line_number, ns)
 
         self._cii_add_trade_agreement_block(trade_transaction, ns)
         self._cii_add_trade_delivery_block(trade_transaction, ns)
-        self._cii_add_trade_settlement_block(trade_transaction, sign, ns)
+        self._cii_add_trade_settlement_block(trade_transaction, ns)
 
         xml_string = etree.tostring(
             root, pretty_print=True, encoding='UTF-8', xml_declaration=True)
