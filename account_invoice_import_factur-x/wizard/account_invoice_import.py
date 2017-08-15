@@ -55,8 +55,8 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def parse_facturx_allowance_charge(
-            self, acline, global_taxes, label_suffix, namespaces,
-            refund, counters):
+            self, acline, global_taxes, label_suffix, ac_qty_dict, counters,
+            namespaces):
         # This method is designed to work for global AND line charges/allowance
         acentry = {}
         reason = self.multi_xpath_helper(acline, ["ram:Reason"], namespaces)
@@ -68,14 +68,14 @@ class AccountInvoiceImport(models.TransientModel):
         ch_indic = self.multi_xpath_helper(
             acline, ["ram:ChargeIndicator/udt:Indicator"], namespaces)
         if ch_indic == 'false':  # allowance
-            acentry['qty'] = -1
+            acentry['qty'] = ac_qty_dict['allowances']
             acentry['product'] = {'code': 'EDI-ALLOWANCE'}
             if 'allowances' in counters:
                 counters['allowances'] += acentry['price_unit']
             if not acentry.get('name'):
                 acentry['name'] = _('Misc Allowance')
         elif ch_indic == 'true':  # charge
-            acentry['qty'] = 1
+            acentry['qty'] = ac_qty_dict['charges']
             acentry['product'] = {'code': 'EDI-CHARGE'}
             if 'charges' in counters:
                 counters['charges'] += acentry['price_unit']
@@ -83,8 +83,6 @@ class AccountInvoiceImport(models.TransientModel):
                 acentry['name'] = _('Misc Charge')
         else:
             raise UserError(_('Unknown ChargeIndicator %s', ch_indic))
-        if refund == 'negative':
-            acentry['qty'] *= -1
         acentry['name'] = u'%s (%s)' % (acentry['name'], label_suffix)
         taxes_xpath = self.raw_multi_xpath_helper(
             acline, ["ram:CategoryTradeTax"], namespaces)
@@ -97,7 +95,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def parse_facturx_invoice_line(
-            self, iline, global_taxes, refund, counters, namespaces):
+            self, iline, global_taxes, ac_qty_dict, counters, namespaces):
         xpath_dict = {
             'product': {
                 'barcode': ["ram:SpecifiedTradeProduct/ram:GlobalID"],
@@ -172,8 +170,8 @@ class AccountInvoiceImport(models.TransientModel):
         res = [vals]
         for ac_element in iline_allowance_charge_xpath:
             acentry = self.parse_facturx_allowance_charge(
-                ac_element, taxes or global_taxes, vals['name'],
-                namespaces, refund, {})
+                ac_element, taxes or global_taxes, vals['name'], ac_qty_dict,
+                {}, namespaces)
             counters['lines'] += acentry['price_unit'] * acentry['qty']
             res.append(acentry)
         return res
@@ -213,14 +211,17 @@ class AccountInvoiceImport(models.TransientModel):
             ['//rsm:ExchangedDocument/ram:TypeCode',  # Factur-X
              '//rsm:HeaderExchangedDocument/ram:TypeCode',  # ZUGFeRD
              ], namespaces)
-        # TODO add full support for 381
-        refund = False
-        if doc_type not in ('380', '381'):
-            raise UserError(_(
-                "The Factur-X XML file is not an invoice/refund file "
-                "(TypeCode is %s") % doc_type)
+        if doc_type == '380':
+            inv_type = 'in_invoice'
+            # Reminder: the module account_invoice_import supports
+            # refunds with type == 'in_invoice' and negative amounts and qty
+            # It will convert it to type = 'in_refund' and positive amounts/qty
         elif doc_type == '381':
-            refund = 'positive'
+            inv_type = 'in_refund'
+        else:
+            raise UserError(_(
+                "For the moment, in the Factur-X import, we only support "
+                "type code 380 and 381. (TypeCode is %s)") % doc_type)
 
         xpath_dict = {
             'partner': {
@@ -310,10 +311,15 @@ class AccountInvoiceImport(models.TransientModel):
             }
         res = self.xpath_to_dict_helper(xml_root, xpath_dict, namespaces)
         amount_total = res['amount_total']
+        ac_qty_dict = {
+            'charges': 1,
+            'allowances': -1}
         if (
                 float_compare(amount_total, 0, precision_digits=prec) < 0 and
-                doc_type == '380'):
-            refund = 'negative'
+                inv_type == 'in_invoice'):
+            ac_qty_dict = {
+                'charges': -1,
+                'allowances': 1}
 
         total_line = self.multi_xpath_helper(
             xml_root,
@@ -402,7 +408,7 @@ class AccountInvoiceImport(models.TransientModel):
             xml_root, ["//ram:IncludedSupplyChainTradeLineItem"], namespaces)
         for iline in inv_line_xpath:
             line_list = self.parse_facturx_invoice_line(
-                iline, global_taxes, refund, counters, namespaces)
+                iline, global_taxes, ac_qty_dict, counters, namespaces)
             if line_list is False:
                 continue
             res_lines += line_list
@@ -428,8 +434,8 @@ class AccountInvoiceImport(models.TransientModel):
              ], namespaces)
         for ac_element in global_allowance_charge_xpath:
             acentry = self.parse_facturx_allowance_charge(
-                ac_element, global_taxes, _('Global'), namespaces, refund,
-                counters)
+                ac_element, global_taxes, _('Global'), ac_qty_dict, counters,
+                namespaces)
             res_lines.append(acentry)
 
         # These LogisticsServiceCharge lines don't seem to exist in Factur-X
@@ -451,7 +457,7 @@ class AccountInvoiceImport(models.TransientModel):
             taxes = self.parse_facturx_taxes(taxes_xpath, namespaces)
             vals = {
                 'name': name,
-                'qty': 1,
+                'qty': ac_qty_dict['charges'],
                 'price_unit': price_unit,
                 'taxes': taxes or global_taxes,
                 }
@@ -464,7 +470,7 @@ class AccountInvoiceImport(models.TransientModel):
                     float_is_zero(counters['charges'], precision_digits=prec)):
                 res_lines.append({
                     'name': _("Misc Global Charge"),
-                    'qty': 1,
+                    'qty': ac_qty_dict['charges'],
                     'price_unit': total_charge,
                     'taxes': global_taxes,
                     })
@@ -486,7 +492,7 @@ class AccountInvoiceImport(models.TransientModel):
                         counters['allowances'], precision_digits=prec)):
                 res_lines.append({
                     'name': _("Misc Global Allowance"),
-                    'qty': 1,
+                    'qty': ac_qty_dict['allowances'],
                     'price_unit': total_tradeallowance,
                     'taxes': global_taxes,
                     })
@@ -500,6 +506,7 @@ class AccountInvoiceImport(models.TransientModel):
                     % (abs(total_tradeallowance), counters['allowances']))
 
         res.update({
+            'type': inv_type,
             'amount_total': amount_total,
             'amount_untaxed': amount_untaxed,
             'iban': iban,
