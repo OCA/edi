@@ -13,12 +13,14 @@ class TestInvoiceImport(TransactionCase):
         self.expense_account = self.env['account.account'].create({
             'code': '612AII',
             'name': 'expense account invoice import',
-            'user_type_id': self.env.ref('account.data_account_type_expenses').id,
+            'user_type_id':
+            self.env.ref('account.data_account_type_expenses').id,
             })
         self.income_account = self.env['account.account'].create({
             'code': '707AII',
             'name': 'revenue account invoice import',
-            'user_type_id': self.env.ref('account.data_account_type_revenue').id,
+            'user_type_id':
+            self.env.ref('account.data_account_type_revenue').id,
             })
         purchase_tax_vals = {
             'name': 'Test 1% VAT',
