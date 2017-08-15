@@ -49,8 +49,7 @@ class AccountInvoiceImport(models.TransientModel):
                 attachments[filename] = data_base64
         return attachments
 
-    def parse_ubl_invoice_line(
-            self, iline, sign, counters, namespaces):
+    def parse_ubl_invoice_line(self, iline, counters, namespaces):
         price_unit_xpath = iline.xpath(
             "cac:Price/cbc:PriceAmount", namespaces=namespaces)
         qty_xpath = iline.xpath(
@@ -119,7 +118,7 @@ class AccountInvoiceImport(models.TransientModel):
 
         vals = {
             'product': product_dict,
-            'qty': qty * sign,
+            'qty': qty,
             'uom': uom,
             'price_unit': price_unit,
             'price_subtotal': price_subtotal,
@@ -147,7 +146,7 @@ class AccountInvoiceImport(models.TransientModel):
         doc_type_xpath = xml_root.xpath(
             "/inv:Invoice/cbc:InvoiceTypeCode[@listAgencyID='6']",
             namespaces=namespaces)
-        sign = 1
+        inv_type = 'in_invoice'
         if doc_type_xpath:
             inv_type_code = doc_type_xpath[0].text
             if inv_type_code not in ['380', '381']:
@@ -155,7 +154,7 @@ class AccountInvoiceImport(models.TransientModel):
                     "This UBL XML file is not an invoice/refund file "
                     "(InvoiceTypeCode is %s") % inv_type_code)
             if inv_type_code == '381':
-                sign = -1
+                inv_type = 'in_refund'
         inv_number_xpath = xml_root.xpath('//cbc:ID', namespaces=namespaces)
         supplier_xpath = xml_root.xpath(
             '/inv:Invoice/cac:AccountingSupplierParty',
@@ -216,7 +215,7 @@ class AccountInvoiceImport(models.TransientModel):
             "/inv:Invoice/cac:InvoiceLine", namespaces=namespaces)
         for iline in inv_line_xpath:
             line_vals = self.parse_ubl_invoice_line(
-                iline, sign, counters, namespaces)
+                iline, counters, namespaces)
             if line_vals is False:
                 continue
             res_lines.append(line_vals)
@@ -230,13 +229,14 @@ class AccountInvoiceImport(models.TransientModel):
                 "rounded sum policies.", total_line, counters['lines'])
 
         res = {
+            'type': inv_type,
             'partner': supplier_dict,
             'invoice_number': inv_number_xpath[0].text,
             'date': fields.Date.to_string(date_dt),
             'date_due': date_due_str,
             'currency': {'iso': currency_iso_xpath[0].text},
-            'amount_total': amount_total * sign,
-            'amount_untaxed': amount_untaxed * sign,
+            'amount_total': amount_total,
+            'amount_untaxed': amount_untaxed,
             'iban': iban_xpath and iban_xpath[0].text or False,
             'bic': bic_xpath and bic_xpath[0].text or False,
             'lines': res_lines,
