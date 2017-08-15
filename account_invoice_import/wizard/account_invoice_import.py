@@ -75,7 +75,13 @@ class AccountInvoiceImport(models.TransientModel):
         return False
 
         # INVOICE PIVOT format (parsed_inv)
+        # For refunds, we support 2 possibilities:
+        # a) type = 'in_invoice' with negative amounts and qty
+        # b) type = 'in_refund' with positive amounts and qty ("Odoo way")
+        # That way, it simplifies the code in the format-specific import
+        # modules, which is what we want!
         # {
+        # 'type': 'in_invoice' or 'in_refund'  # 'in_invoice' by default
         # 'currency': {
         #    'iso': 'EUR',
         #    'currency_symbol': u'€',  # The one or the other
@@ -84,7 +90,7 @@ class AccountInvoiceImport(models.TransientModel):
         # 'date_due': '2015-11-07',
         # 'date_start': '2015-10-01',  # for services over a period of time
         # 'date_end': '2015-10-31',
-        # 'amount_untaxed': 10.0,  # < 0 for refunds
+        # 'amount_untaxed': 10.0,
         # 'amount_tax': 2.0,  # provide amount_untaxed OR amount_tax
         # 'amount_total': 12.0,  # Total with taxes, must always be provided
         # 'partner': {
@@ -105,9 +111,11 @@ class AccountInvoiceImport(models.TransientModel):
         #           'code': 'GZ250',
         #           },
         #       'name': 'Gelierzucker Extra 250g',
-        #       'price_unit': 1.45, # price_unit without taxes always positive
-        #       'qty': -2.0,  # < 0 when it's a refund
-        #       'price_subtotal': 2.90,
+        #       'price_unit': 1.45, # price_unit without taxes
+        #       'qty': 2.0,
+        #       'price_subtotal': 2.90,  # not required, but needed
+        #               to be able to generate adjustment lines when decimal
+        #               precision is not high enough in Odoo
         #       'uom': {'unece_code': 'C62'},
         #       'taxes': [list of tax_dict],
         #       'date_start': '2015-10-01',
@@ -335,27 +343,32 @@ class AccountInvoiceImport(models.TransientModel):
                 'amount_tax' not in parsed_inv):
             # For invoices that never have taxes
             parsed_inv['amount_untaxed'] = parsed_inv['amount_total']
-        if float_compare(
-                parsed_inv['amount_total'], 0, precision_digits=prec_ac) == -1:
+        # Support the 2 refund methods; if method a) is used, we convert to
+        # method b)
+        if not parsed_inv.get('type'):
+            parsed_inv['type'] = 'in_invoice'  # default value
+        if (
+                parsed_inv['type'] == 'in_invoice' and
+                float_compare(
+                parsed_inv['amount_total'], 0, precision_digits=prec_ac) < 0):
             parsed_inv['type'] = 'in_refund'
-        else:
-            parsed_inv['type'] = 'in_invoice'
+            for entry in ['amount_untaxed', 'amount_total']:
+                parsed_inv[entry] *= -1
+            for line in parsed_inv.get('lines', []):
+                line['qty'] *= -1
+                if 'price_subtotal' in line:
+                    line['price_subtotal'] *= -1
+        # Rounding work
         for entry in ['amount_untaxed', 'amount_total']:
             parsed_inv[entry] = float_round(
                 parsed_inv[entry], precision_digits=prec_ac)
-            if parsed_inv['type'] == 'in_refund':
-                parsed_inv[entry] *= -1
-        if parsed_inv.get('lines'):
-            for line in parsed_inv['lines']:
-                line['qty'] = float_round(
-                    line['qty'], precision_digits=prec_uom)
-                line['price_unit'] = float_round(
-                    line['price_unit'], precision_digits=prec_pp)
-                if parsed_inv['type'] == 'in_refund':
-                    line['qty'] *= -1
+        for line in parsed_inv.get('lines', []):
+            line['qty'] = float_round(line['qty'], precision_digits=prec_uom)
+            line['price_unit'] = float_round(
+                line['price_unit'], precision_digits=prec_pp)
         if 'chatter_msg' not in parsed_inv:
             parsed_inv['chatter_msg'] = []
-        logger.debug('Resulf of invoice parsing parsed_inv=%s', parsed_inv)
+        logger.debug('Result of invoice parsing parsed_inv=%s', parsed_inv)
         return parsed_inv
 
     @api.multi
@@ -498,6 +511,8 @@ class AccountInvoiceImport(models.TransientModel):
             # TODO : on invoice creation, the lines are in the same
             # order, but not on invoice update...
             for i in range(len(parsed_inv['lines'])):
+                if 'price_subtotal' not in parsed_inv['lines'][i]:
+                    continue
                 iline = invoice.invoice_line_ids[i]
                 odoo_subtotal = iline.price_subtotal
                 parsed_subtotal = parsed_inv['lines'][i]['price_subtotal']
