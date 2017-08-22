@@ -42,7 +42,7 @@ class BaseUbl(models.AbstractModel):
             if not partner_bank and payment_mode:
                 partner_bank = payment_mode.bank_id
             if partner_bank and partner_bank.state == 'iban':
-                # In the Chorus specs, they except 'IBAN' in PaymentChannelCode
+                # In the Chorus specs, they expect 'IBAN' in PaymentChannelCode
                 # I don't know if this usage is common or not
                 payment_channel_code = etree.SubElement(
                     pay_means, ns['cbc'] + 'PaymentChannelCode')
