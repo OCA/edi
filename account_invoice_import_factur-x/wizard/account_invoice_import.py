@@ -5,6 +5,7 @@
 from odoo import models, api, _
 from odoo.exceptions import UserError
 from odoo.tools import float_compare, float_is_zero
+from FacturX import GetFacturXFlavor
 from lxml import etree
 import logging
 
@@ -184,13 +185,11 @@ class AccountInvoiceImport(models.TransientModel):
         xml_string = etree.tostring(
             xml_root, pretty_print=True, encoding='UTF-8',
             xml_declaration=True)
-        if xml_root.tag.startswith('{urn:un:unece:uncefact:'):
-            flavor = 'factur-x'
-        elif xml_root.tag.startswith('{urn:ferd:'):
-            flavor = 'zugferd'
-        else:
+        try:
+            flavor = GetFacturXFlavor(xml_root)
+        except Exception:
             raise UserError(_(
-                "Could not deleted if the invoice is a Factur-X or ZUGFeRD "
+                "Could not detect if the invoice is a Factur-X or ZUGFeRD "
                 "invoice."))
         doc_id = self.multi_xpath_helper(
             xml_root,
