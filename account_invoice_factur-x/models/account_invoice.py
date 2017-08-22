@@ -14,11 +14,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from PyPDF2 import PdfFileWriter, PdfFileReader
-    from PyPDF2.generic import DictionaryObject, DecodedStreamObject,\
-        NameObject, createStringObject, ArrayObject
+    from FacturX import GenerateFacturX
+    from FacturX.facturx import logger as fxlogger
 except ImportError:
-    logger.debug('Cannot import PyPDF2')
+    logger.debug('Cannot import factur-x')
 
 
 FACTURX_LEVEL = 'EN 16931'
@@ -59,12 +58,21 @@ class AccountInvoice(models.Model):
         address_country.text = partner.country_id.code
 
     @api.model
+    def _cii_trade_contact_department_name(self, partner):
+        return None
+
+    @api.model
     def _cii_add_trade_contact_block(self, partner, parent_node, ns):
         trade_contact = etree.SubElement(
             parent_node, ns['ram'] + 'DefinedTradeContact')
         contact_name = etree.SubElement(
             trade_contact, ns['ram'] + 'PersonName')
         contact_name.text = partner.name
+        department = self._cii_trade_contact_department_name(partner)
+        if department:
+            department_name = etree.SubElement(
+                trade_contact, ns['ram'] + 'DepartmentName')
+            department_name.text = department
         phone = partner.phone or partner.mobile
         if phone:
             phone_node = etree.SubElement(
@@ -158,7 +166,6 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def _cii_add_trade_agreement_block(self, trade_transaction, ns):
-        # TODO: introduce generic methods for buyer and seller
         self.ensure_one()
         trade_agreement = etree.SubElement(
             trade_transaction,
@@ -200,6 +207,31 @@ class AccountInvoice(models.Model):
             buyer_tax_reg_id = etree.SubElement(
                 buyer_tax_reg, ns['ram'] + 'ID', schemeID='VA')
             buyer_tax_reg_id.text = self.commercial_partner_id.vat
+        self._cii_add_buyer_order_reference(trade_agreement, ns)
+        self._cii_add_contract_reference(trade_agreement, ns)
+
+    @api.multi
+    def _cii_add_buyer_order_reference(self, trade_agreement, ns):
+        self.ensure_one()
+        if self.name:
+            buyer_order_ref = etree.SubElement(
+                trade_agreement, ns['ram'] + 'BuyerOrderReferencedDocument')
+            buyer_order_id = etree.SubElement(
+                buyer_order_ref, ns['ram'] + 'IssuerAssignedID')
+            buyer_order_id.text = self.name
+
+    @api.multi
+    def _cii_add_contract_reference(self, trade_agreement, ns):
+        self.ensure_one()
+        if (
+                hasattr(self, 'sale_agreement_id') and
+                self.sale_agreement_id and
+                self.sale_agreement_id.code):
+            contract_ref = etree.SubElement(
+                trade_agreement, ns['ram'] + 'ContractReferencedDocument')
+            contract_id = etree.SubElement(
+                contract_ref, ns['ram'] + 'IssuerAssignedID')
+            contract_id.text = self.sale_agreement_id.code
 
     @api.multi
     def _cii_add_trade_delivery_block(self, trade_transaction, ns):
@@ -631,181 +663,26 @@ class AccountInvoice(models.Model):
         logger.debug('pdf_is_facturx returns %s', is_facturx)
         return is_facturx
 
-    @api.model
-    def _get_pdf_timestamp(self):
-        now_dt = datetime.now()
-        # example date format: "D:20141006161354+02'00'"
-        # TODO : add support for timezone ?
-        pdf_date = now_dt.strftime("D:%Y%m%d%H%M%S+00'00'")
-        return pdf_date
-
-    @api.model
-    def _get_metadata_timestamp(self):
-        now_dt = datetime.now()
-        # example format : 2014-07-25T14:01:22+02:00
-        meta_date = now_dt.strftime('%Y-%m-%dT%H:%M:%S+00:00')
-        return meta_date
-
-    @api.multi
-    def _prepare_pdf_info(self):
-        self.ensure_one()
-        pdf_date = self._get_pdf_timestamp()
-        info_dict = {
-            '/Author': self.env.user.company_id.name,
-            '/CreationDate': pdf_date,
-            '/Creator':
-            u'Odoo module account_invoice_factur-x by Alexis de Lattre',
-            '/Keywords': u'Factur-X, Invoice',
-            '/ModDate': pdf_date,
-            '/Subject': u'Invoice %s' % self.number or self.state,
-            '/Title': u'Invoice %s' % self.number or self.state,
-            }
-        return info_dict
-
     @api.multi
     def _prepare_pdf_metadata(self):
         self.ensure_one()
-        nsmap_rdf = {'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'}
-        nsmap_dc = {'dc': 'http://purl.org/dc/elements/1.1/'}
-        nsmap_pdf = {'pdf': 'http://ns.adobe.com/pdf/1.3/'}
-        nsmap_xmp = {'xmp': 'http://ns.adobe.com/xap/1.0/'}
-        nsmap_pdfaid = {'pdfaid': 'http://www.aiim.org/pdfa/ns/id/'}
-        nsmap_fx = {
-            'fx': 'urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#'}
-        ns_dc = '{%s}' % nsmap_dc['dc']
-        ns_rdf = '{%s}' % nsmap_rdf['rdf']
-        ns_pdf = '{%s}' % nsmap_pdf['pdf']
-        ns_xmp = '{%s}' % nsmap_xmp['xmp']
-        ns_pdfaid = '{%s}' % nsmap_pdfaid['pdfaid']
-        ns_fx = '{%s}' % nsmap_fx['fx']
-        ns_xml = '{http://www.w3.org/XML/1998/namespace}'
-
-        root = etree.Element(ns_rdf + 'RDF', nsmap=nsmap_rdf)
-        desc_pdfaid = etree.SubElement(
-            root, ns_rdf + 'Description', nsmap=nsmap_pdfaid)
-        desc_pdfaid.set(ns_rdf + 'about', '')
-        etree.SubElement(
-            desc_pdfaid, ns_pdfaid + 'part').text = '3'
-        etree.SubElement(
-            desc_pdfaid, ns_pdfaid + 'conformance').text = 'B'
-        desc_dc = etree.SubElement(
-            root, ns_rdf + 'Description', nsmap=nsmap_dc)
-        desc_dc.set(ns_rdf + 'about', '')
-        dc_title = etree.SubElement(desc_dc, ns_dc + 'title')
-        dc_title_alt = etree.SubElement(dc_title, ns_rdf + 'Alt')
-        dc_title_alt_li = etree.SubElement(
-            dc_title_alt, ns_rdf + 'li')
-        dc_title_alt_li.text = 'Factur-X Invoice'
-        dc_title_alt_li.set(ns_xml + 'lang', 'x-default')
-        dc_creator = etree.SubElement(desc_dc, ns_dc + 'creator')
-        dc_creator_seq = etree.SubElement(dc_creator, ns_rdf + 'Seq')
-        etree.SubElement(
-            dc_creator_seq, ns_rdf + 'li').text = self.company_id.name
-        dc_desc = etree.SubElement(desc_dc, ns_dc + 'description')
-        dc_desc_alt = etree.SubElement(dc_desc, ns_rdf + 'Alt')
-        dc_desc_alt_li = etree.SubElement(
-            dc_desc_alt, ns_rdf + 'li')
-        dc_desc_alt_li.text = 'Invoice %s' % self.number or self.status
-        dc_desc_alt_li.set(ns_xml + 'lang', 'x-default')
-        desc_adobe = etree.SubElement(
-            root, ns_rdf + 'Description', nsmap=nsmap_pdf)
-        desc_adobe.set(ns_rdf + 'about', '')
-        producer = etree.SubElement(
-            desc_adobe, ns_pdf + 'Producer')
-        producer.text = 'PyPDF2'
-        desc_xmp = etree.SubElement(
-            root, ns_rdf + 'Description', nsmap=nsmap_xmp)
-        desc_xmp.set(ns_rdf + 'about', '')
-        creator = etree.SubElement(
-            desc_xmp, ns_xmp + 'CreatorTool')
-        creator.text =\
-            'Odoo module account_invoice_factur-x by Alexis de Lattre'
-        timestamp = self._get_metadata_timestamp()
-        etree.SubElement(desc_xmp, ns_xmp + 'CreateDate').text = timestamp
-        etree.SubElement(desc_xmp, ns_xmp + 'ModifyDate').text = timestamp
-
-        facturx_ext_schema_root = etree.parse(tools.file_open(
-            'base_zugferd/data/xsd-factur-x/Factur-X_extension_schema.xmp'))
-        # The Factur-X extension schema must be embedded into each PDF document
-        facturx_ext_schema_desc_xpath = facturx_ext_schema_root.xpath(
-            '//rdf:Description', namespaces=nsmap_rdf)
-        root.append(facturx_ext_schema_desc_xpath[1])
-        # Now is the Factur-X description tag
-        facturx_desc = etree.SubElement(
-            root, ns_rdf + 'Description', nsmap=nsmap_fx)
-        facturx_desc.set(ns_rdf + 'about', '')
-        facturx_desc.set(ns_fx + 'ConformanceLevel', FACTURX_LEVEL.upper())
-        facturx_desc.set(ns_fx + 'DocumentFileName', FACTURX_FILENAME)
-        facturx_desc.set(ns_fx + 'DocumentType', 'INVOICE')
-        facturx_desc.set(ns_fx + 'Version', '1.0')
-
-        xml_str = etree.tostring(
-            root, pretty_print=True, encoding="UTF-8", xml_declaration=False)
-        logger.debug('metadata XML:')
-        logger.debug(xml_str)
-        return xml_str
-
-    @api.model
-    def facturx_update_metadata_add_attachment(
-            self, pdf_filestream, fname, fdata):
-        '''This method is inspired from the code of the addAttachment()
-        method of the PyPDF2 lib'''
-        # The entry for the file
-        moddate = DictionaryObject()
-        moddate.update({
-            NameObject('/ModDate'): createStringObject(
-                self._get_pdf_timestamp())})
-        file_entry = DecodedStreamObject()
-        file_entry.setData(fdata)
-        file_entry.update({
-            NameObject("/Type"): NameObject("/EmbeddedFile"),
-            NameObject("/Params"): moddate,
-            # 2F is '/' in hexadecimal
-            NameObject("/Subtype"): NameObject("/text#2Fxml"),
-            })
-        file_entry_obj = pdf_filestream._addObject(file_entry)
-        # The Filespec entry
-        efEntry = DictionaryObject()
-        efEntry.update({
-            NameObject("/F"): file_entry_obj,
-            NameObject('/UF'): file_entry_obj,
-            })
-
-        fname_obj = createStringObject(fname)
-        filespec = DictionaryObject()
-        filespec.update({
-            NameObject("/AFRelationship"): NameObject("/Alternative"),
-            NameObject("/Desc"): createStringObject("Factur-X Invoice"),
-            NameObject("/Type"): NameObject("/Filespec"),
-            NameObject("/F"): fname_obj,
-            NameObject("/EF"): efEntry,
-            NameObject("/UF"): fname_obj,
-            })
-        embeddedFilesNamesDictionary = DictionaryObject()
-        embeddedFilesNamesDictionary.update({
-            NameObject("/Names"): ArrayObject(
-                [fname_obj, pdf_filestream._addObject(filespec)])
-            })
-        # Then create the entry for the root, as it needs a
-        # reference to the Filespec
-        embeddedFilesDictionary = DictionaryObject()
-        embeddedFilesDictionary.update({
-            NameObject("/EmbeddedFiles"): embeddedFilesNamesDictionary
-            })
-        # Update the root
-        metadata_xml_str = self._prepare_pdf_metadata()
-        metadata_file_entry = DecodedStreamObject()
-        metadata_file_entry.setData(metadata_xml_str)
-        metadata_value = pdf_filestream._addObject(metadata_file_entry)
-        af_value = pdf_filestream._addObject(
-            ArrayObject([pdf_filestream._addObject(filespec)]))
-        pdf_filestream._root_object.update({
-            NameObject("/AF"): af_value,
-            NameObject("/Metadata"): metadata_value,
-            NameObject("/Names"): embeddedFilesDictionary,
-            })
-        info_dict = self._prepare_pdf_info()
-        pdf_filestream.addMetadata(info_dict)
+        company_name = self.company_id.name
+        inv_type = self.type == 'out_refund' and _('Refund') or _('Invoice')
+        pdf_metadata = {
+            'author': company_name,
+            'keywords': ', '.join([inv_type, _('Factur-X')]),
+            'title': _('%s: %s %s dated %s') % (
+                company_name,
+                inv_type,
+                self.number or self.state,
+                self.date_invoice or '(no date)'),
+            'subject': 'Factur-X %s %s dated %s issued by %s' % (
+                inv_type,
+                self.number or self.state,
+                self.date_invoice or '(no date)',
+                company_name),
+        }
+        return pdf_metadata
 
     @api.multi
     def regular_pdf_invoice_to_facturx_invoice(
@@ -825,26 +702,11 @@ class AccountInvoice(models.Model):
         if not self.pdf_is_facturx(pdf_content):
             if self.type in ('out_invoice', 'out_refund'):
                 facturx_xml_str = self.generate_facturx_xml()
+                pdf_metadata = self._prepare_pdf_metadata()
                 # Generate a new PDF with XML file as attachment
-                if pdf_file:
-                    original_pdf_file = pdf_file
-                elif pdf_content:
-                    original_pdf_file = StringIO(pdf_content)
-                original_pdf = PdfFileReader(original_pdf_file)
-                new_pdf_filestream = PdfFileWriter()
-                new_pdf_filestream.appendPagesFromReader(original_pdf)
-                self.facturx_update_metadata_add_attachment(
-                    new_pdf_filestream, FACTURX_FILENAME, facturx_xml_str)
-                prefix = 'odoo-invoice-facturx-'
-                if pdf_file:
-                    f = open(pdf_file, 'w')
-                    new_pdf_filestream.write(f)
-                    f.close()
-                elif pdf_content:
-                    with NamedTemporaryFile(prefix=prefix, suffix='.pdf') as f:
-                        new_pdf_filestream.write(f)
-                        f.seek(0)
-                        pdf_content = f.read()
-                        f.close()
+                pdf_content = GenerateFacturX(
+                    pdf_content or pdf_file, facturx_xml_str, check_xsd=False,
+                    facturx_level='en16931', pdf_metadata=pdf_metadata,
+                    output_pdf_file=pdf_file)
                 logger.info('%s file added to PDF invoice', FACTURX_FILENAME)
         return pdf_content
