@@ -3,19 +3,15 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api, tools, _
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from odoo.tools import float_compare, float_is_zero, float_round
-from StringIO import StringIO
 from lxml import etree
-from tempfile import NamedTemporaryFile
-from datetime import datetime
 import logging
 logger = logging.getLogger(__name__)
 
 try:
     from FacturX import GenerateFacturX
-    from FacturX.facturx import logger as fxlogger
 except ImportError:
     logger.debug('Cannot import factur-x')
 
@@ -645,24 +641,6 @@ class AccountInvoice(models.Model):
         logger.debug(xml_string)
         return xml_string
 
-    @api.model
-    def pdf_is_facturx(self, pdf_content):
-        is_facturx = False
-        try:
-            fd = StringIO(pdf_content)
-            pdf = PdfFileReader(fd)
-            pdf_root = pdf.trailer['/Root']
-            logger.debug('pdf_root=%s', pdf_root)
-            embeddedfiles = pdf_root['/Names']['/EmbeddedFiles']['/Names']
-            for embeddedfile in embeddedfiles:
-                if embeddedfile in (FACTURX_FILENAME, 'ZUGFeRD-invoice.xml'):
-                    is_facturx = True
-                    break
-        except:
-            pass
-        logger.debug('pdf_is_facturx returns %s', is_facturx)
-        return is_facturx
-
     @api.multi
     def _prepare_pdf_metadata(self):
         self.ensure_one()
@@ -699,14 +677,13 @@ class AccountInvoice(models.Model):
         """
         self.ensure_one()
         assert pdf_content or pdf_file, 'Missing pdf_file or pdf_content'
-        if not self.pdf_is_facturx(pdf_content):
-            if self.type in ('out_invoice', 'out_refund'):
-                facturx_xml_str = self.generate_facturx_xml()
-                pdf_metadata = self._prepare_pdf_metadata()
-                # Generate a new PDF with XML file as attachment
-                pdf_content = GenerateFacturX(
-                    pdf_content or pdf_file, facturx_xml_str, check_xsd=False,
-                    facturx_level='en16931', pdf_metadata=pdf_metadata,
-                    output_pdf_file=pdf_file)
-                logger.info('%s file added to PDF invoice', FACTURX_FILENAME)
+        if self.type in ('out_invoice', 'out_refund'):
+            facturx_xml_str = self.generate_facturx_xml()
+            pdf_metadata = self._prepare_pdf_metadata()
+            # Generate a new PDF with XML file as attachment
+            pdf_content = GenerateFacturX(
+                pdf_content or pdf_file, facturx_xml_str, check_xsd=False,
+                facturx_level='en16931', pdf_metadata=pdf_metadata,
+                output_pdf_file=pdf_file)
+            logger.info('%s file added to PDF invoice', FACTURX_FILENAME)
         return pdf_content
