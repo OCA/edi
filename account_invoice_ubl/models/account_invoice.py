@@ -37,6 +37,36 @@ class AccountInvoice(models.Model):
         doc_currency.text = self.currency_id.name
 
     @api.multi
+    def _ubl_add_order_reference(self, parent_node, ns, version='2.1'):
+        self.ensure_one()
+        if self.name:
+            order_ref = etree.SubElement(
+                parent_node, ns['cac'] + 'OrderReference')
+            order_ref_id = etree.SubElement(
+                order_ref, ns['cbc'] + 'ID')
+            order_ref_id.text = self.name
+
+    @api.multi
+    def _ubl_get_contract_document_reference_dict(self):
+        '''Result: dict with key = Doc Type Code, value = ID'''
+        self.ensure_one()
+        return {}
+
+    @api.multi
+    def _ubl_add_contract_document_reference(
+            self, parent_node, ns, version='2.1'):
+        self.ensure_one()
+        cdr_dict = self._ubl_get_contract_document_reference_dict()
+        for doc_type_code, doc_id in cdr_dict.iteritems():
+            cdr = etree.SubElement(
+                parent_node, ns['cac'] + 'ContractDocumentReference')
+            cdr_id = etree.SubElement(cdr, ns['cbc'] + 'ID')
+            cdr_id.text = doc_id
+            cdr_type_code = etree.SubElement(
+                cdr, ns['cbc'] + 'DocumentTypeCode')
+            cdr_type_code.text = doc_type_code
+
+    @api.multi
     def _ubl_add_attachments(self, parent_node, ns, version='2.1'):
         if (
                 self.company_id.embed_pdf_in_ubl_xml_invoice and
@@ -110,7 +140,7 @@ class AccountInvoice(models.Model):
             quantity = etree.SubElement(
                 line_root, ns['cbc'] + 'InvoicedQuantity')
         qty = iline.quantity
-        quantity.text = unicode(qty)
+        quantity.text = '%0.*f' % (qty_precision, qty)
         line_amount = etree.SubElement(
             line_root, ns['cbc'] + 'LineExtensionAmount',
             currencyID=cur_name)
@@ -130,14 +160,14 @@ class AccountInvoice(models.Model):
             price_unit = float_round(
                 iline.price_subtotal / float(qty),
                 precision_digits=price_precision)
-        price_amount.text = unicode(price_unit)
+        price_amount.text = '%0.*f' % (price_precision, price_unit)
         if uom_unece_code:
             base_qty = etree.SubElement(
                 price_node, ns['cbc'] + 'BaseQuantity',
                 unitCode=uom_unece_code)
         else:
             base_qty = etree.SubElement(price_node, ns['cbc'] + 'BaseQuantity')
-        base_qty.text = unicode(qty)
+        base_qty.text = '%0.*f' % (qty_precision, qty)
 
     def _ubl_add_invoice_line_tax_total(
             self, iline, parent_node, ns, version='2.1'):
@@ -153,7 +183,7 @@ class AccountInvoice(models.Model):
             precision_digits=prec)
         tax_amount_node = etree.SubElement(
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
-        tax_amount_node.text = unicode(tax_total)
+        tax_amount_node.text = '%0.*f' % (prec, tax_total)
         if not float_is_zero(tax_total, precision_digits=prec):
             for res_tax in res_taxes['taxes']:
                 tax = self.env['account.tax'].browse(res_tax['id'])
@@ -174,8 +204,8 @@ class AccountInvoice(models.Model):
         tax_total_node = etree.SubElement(xml_root, ns['cac'] + 'TaxTotal')
         tax_amount_node = etree.SubElement(
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
-        tax_amount_node.text = unicode(self.amount_tax)
         prec = self.currency_id.decimal_places
+        tax_amount_node.text = '%0.*f' % (prec, self.amount_tax)
         if not float_is_zero(self.amount_tax, precision_digits=prec):
             for tline in self.tax_line_ids:
                 self._ubl_add_tax_subtotal(
@@ -187,6 +217,9 @@ class AccountInvoice(models.Model):
         nsmap, ns = self._ubl_get_nsmap_namespace('Invoice-2', version=version)
         xml_root = etree.Element('Invoice', nsmap=nsmap)
         self._ubl_add_header(xml_root, ns, version=version)
+        self._ubl_add_order_reference(xml_root, ns, version=version)
+        self._ubl_add_contract_document_reference(
+            xml_root, ns, version=version)
         self._ubl_add_attachments(xml_root, ns, version=version)
         self._ubl_add_supplier_party(
             False, self.company_id, 'AccountingSupplierParty', xml_root, ns,
@@ -235,7 +268,7 @@ class AccountInvoice(models.Model):
         logger.debug(
             'Invoice UBL XML file generated for account invoice ID %d '
             '(state %s)', self.id, self.state)
-        logger.debug(xml_string)
+        logger.debug(xml_string.decode('utf-8'))
         return xml_string
 
     @api.multi
