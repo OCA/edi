@@ -46,6 +46,11 @@ class BaseUbl(models.AbstractModel):
                     payment_mode.fixed_journal_id):
                 partner_bank = payment_mode.fixed_journal_id.bank_account_id
             if partner_bank and partner_bank.acc_type == 'iban':
+                # In the Chorus specs, they except 'IBAN' in PaymentChannelCode
+                # I don't know if this usage is common or not
+                payment_channel_code = etree.SubElement(
+                    pay_means, ns['cbc'] + 'PaymentChannelCode')
+                payment_channel_code.text = 'IBAN'
                 payee_fin_account = etree.SubElement(
                     pay_means, ns['cac'] + 'PayeeFinancialAccount')
                 payee_fin_account_id = etree.SubElement(
