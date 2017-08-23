@@ -145,9 +145,9 @@ class BusinessDocumentImport(models.AbstractModel):
                 chatter_msg.append(_(
                     "The %s has been identified by the domain name '%s' "
                     "so please check carefully that the %s is correct.") % (
-                        partner_type_label,
-                        partner_domain,
-                        partner_type_label))
+                    partner_type_label,
+                    partner_domain,
+                    partner_type_label))
                 return partners[0]
         if partner_dict.get('ref'):
             partners = rpo.search(
@@ -265,7 +265,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 'partner_id': partner.id,
                 'acc_number': iban,
                 'bank_bic': bic,
-                })
+            })
             chatter_msg.append(_(
                 "The bank account <b>IBAN %s</b> has been automatically "
                 "added on the vendor <b>%s</b>") % (
@@ -304,13 +304,12 @@ class BusinessDocumentImport(models.AbstractModel):
                 sinfo = self.env['product.supplierinfo'].search([
                     ('name', '=', seller.id),
                     ('product_code', '=', product_dict['code']),
-                    ])
+                ])
                 if (
                         sinfo and
                         sinfo[0].product_tmpl_id.product_variant_ids and
                         len(
-                        sinfo[0].product_tmpl_id.product_variant_ids) == 1
-                        ):
+                        sinfo[0].product_tmpl_id.product_variant_ids) == 1):
                     return sinfo[0].product_tmpl_id.product_variant_ids[0]
         raise UserError(_(
             "Odoo couldn't find any product corresponding to the "
@@ -318,9 +317,9 @@ class BusinessDocumentImport(models.AbstractModel):
             "Barcode: %s\n"
             "Product code: %s\n"
             "Vendor: %s\n") % (
-                product_dict.get('barcode'),
-                product_dict.get('code'),
-                seller and seller.name or 'None'))
+            product_dict.get('barcode'),
+            product_dict.get('code'),
+            seller and seller.name or 'None'))
 
     @api.model
     def _match_currency(self, currency_dict, chatter_msg):
@@ -518,12 +517,12 @@ class BusinessDocumentImport(models.AbstractModel):
             "UNECE Tax Type code: %s\n"
             "UNECE Tax Category code: %s\n"
             "Tax amount: %s %s") % (
-                type_tax_use,
-                price_include,
-                tax_dict.get('unece_type_code'),
-                tax_dict.get('unece_categ_code'),
-                tax_dict['amount'],
-                tax_dict['amount_type'] == 'percent' and '%' or _('(fixed)')))
+            type_tax_use,
+            price_include,
+            tax_dict.get('unece_type_code'),
+            tax_dict.get('unece_categ_code'),
+            tax_dict['amount'],
+            tax_dict['amount_type'] == 'percent' and '%' or _('(fixed)')))
 
     def compare_lines(
             self, existing_lines, import_lines, chatter_msg,
@@ -596,7 +595,7 @@ class BusinessDocumentImport(models.AbstractModel):
             'to_remove': False,
             'to_add': [],
             'to_update': {},
-            }
+        }
         for iline in import_lines:
             if not iline.get('product'):
                 chatter_msg.append(_(
@@ -620,10 +619,9 @@ class BusinessDocumentImport(models.AbstractModel):
                         "existing line, but it is %s on the imported line. "
                         "We don't support this scenario for the moment, so "
                         "<b>the lines haven't been updated</b>.") % (
-                            product.name_get()[0][1],
-                            existing_lines_dict[product]['uom'].name,
-                            uom.name,
-                            ))
+                        product.name_get()[0][1],
+                        existing_lines_dict[product]['uom'].name,
+                        uom.name,))
                     return False
                 # used for to_remove
                 existing_lines_dict[product]['import'] = True

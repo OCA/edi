@@ -134,16 +134,16 @@ class PurchaseOrderImport(models.TransientModel):
             vals['incoterm_id'] = incoterm.id
         return vals
 
-    @api.model
-    def _prepare_create_order_line(
-            self, product, qty, uom, price_unit, vals):
-        vals = {
-            'product_id': product.id,
-            'product_qty': qty,
-            'product_uom': uom.id,
-            'price_unit': price_unit,  # TODO fix
-        }
-        return vals
+    # @api.model
+    # def _prepare_create_order_line(
+    #         self, product, qty, uom, price_unit, vals):
+    #     vals = {
+    #         'product_id': product.id,
+    #         'product_qty': qty,
+    #         'product_uom': uom.id,
+    #         'price_unit': price_unit,  # TODO fix
+    #     }
+    #     return vals
 
     @api.multi
     def update_order_lines(self, parsed_quote, order):
@@ -177,17 +177,17 @@ class PurchaseOrderImport(models.TransientModel):
                 chatter.append(_(
                     "The unit price has been updated on the RFQ line with "
                     "product '%s' from %s to %s %s.") % (
-                        oline.product_id.name_get()[0][1],
-                        cdict['price_unit'][0], cdict['price_unit'][1],
-                        order.currency_id.name))
+                    oline.product_id.name_get()[0][1],
+                    cdict['price_unit'][0], cdict['price_unit'][1],
+                    order.currency_id.name))
                 write_vals['price_unit'] = cdict['price_unit'][1]  # TODO
             if update_option == 'all' and cdict.get('qty'):
                 chatter.append(_(
                     "The quantity has been updated on the RFQ line with "
                     "product '%s' from %s to %s %s.") % (
-                        oline.product_id.name_get()[0][1],
-                        cdict['qty'][0], cdict['qty'][1],
-                        oline.product_uom.name))
+                    oline.product_id.name_get()[0][1],
+                    cdict['qty'][0], cdict['qty'][1],
+                    oline.product_uom.name))
             if write_vals:
                 oline.write(write_vals)
         if compare_res['to_remove']:  # we don't delete the lines, only warn
@@ -197,8 +197,8 @@ class PurchaseOrderImport(models.TransientModel):
                 for l in compare_res['to_remove']]
             chatter.append(_(
                 "%d order line(s) are not in the imported quotation: %s") % (
-                    len(compare_res['to_remove']),
-                    ', '.join(warn_label)))
+                len(compare_res['to_remove']),
+                ', '.join(warn_label)))
         if compare_res['to_add']:
             to_create_label = []
             for add in compare_res['to_add']:
