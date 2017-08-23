@@ -22,7 +22,7 @@ class SaleOrderImport(models.TransientModel):
     state = fields.Selection([
         ('import', 'Import'),
         ('update', 'Update'),
-        ], string='State', default="import")
+    ], string='State', default="import")
     partner_id = fields.Many2one(
         'res.partner', string='Customer', domain=[('customer', '=', True)])
     csv_import = fields.Boolean(default=False, readonly=True)
@@ -34,11 +34,11 @@ class SaleOrderImport(models.TransientModel):
     doc_type = fields.Selection([
         ('rfq', 'Request For Quotation'),
         ('order', 'Sale Order'),
-        ], string='Document Type', readonly=True)
+    ], string='Document Type', readonly=True)
     price_source = fields.Selection([
         ('pricelist', 'Pricelist'),
         ('order', 'Customer Order'),
-        ], string='Apply Prices From')
+    ], string='Apply Prices From')
     # for state = update
     commercial_partner_id = fields.Many2one(
         'res.partner', string='Customer', readonly=True)
@@ -79,7 +79,7 @@ class SaleOrderImport(models.TransientModel):
                         "This file '%s' is not recognised as a CSV, XML nor "
                         "PDF file. Please check the file and it's "
                         "extension.") % self.order_filename
-                    }}
+                }}
         else:
             self.csv_import = False
             self.doc_type = False
@@ -166,23 +166,23 @@ class SaleOrderImport(models.TransientModel):
             raise UserError(_(
                 "The customer '%s' has a pricelist '%s' but the "
                 "currency of this order is '%s'.") % (
-                    partner.name_get()[0][1],
-                    partner.property_product_pricelist.name_get()[0][1],
-                    currency.name))
+                partner.name_get()[0][1],
+                partner.property_product_pricelist.name_get()[0][1],
+                currency.name))
         if parsed_order.get('order_ref'):
             existing_orders = soo.search([
                 ('client_order_ref', '=', parsed_order['order_ref']),
                 ('partner_id', '=', partner.id),
                 ('state', '!=', 'cancel'),
-                ])
+            ])
             if existing_orders:
                 raise UserError(_(
                     "An order of customer '%s' with reference '%s' "
                     "already exists: %s (state: %s)") % (
-                        partner.name_get()[0][1],
-                        parsed_order['order_ref'],
-                        existing_orders[0].name,
-                        existing_orders[0].state))
+                    partner.name_get()[0][1],
+                    parsed_order['order_ref'],
+                    existing_orders[0].name,
+                    existing_orders[0].state))
 
         # commented By Deepak: here no need to partner onchange
         # partner_change_res = soo.onchange_partner_id(partner.id)
@@ -191,7 +191,7 @@ class SaleOrderImport(models.TransientModel):
             'partner_id': partner.id,
             'client_order_ref': parsed_order.get('order_ref'),
             'order_line': []
-            }
+        }
         # so_vals.update(partner_change_res['value']) # Comment by :Deepak
         if parsed_order.get('ship_to'):
             shipping_partner = bdio._match_shipping_partner(
@@ -290,7 +290,7 @@ class SaleOrderImport(models.TransientModel):
                 'state': 'update',
                 'sale_id': default_sale_id,
                 'doc_type': parsed_order.get('doc_type'),
-                })
+            })
             action = self.env['ir.actions.act_window'].for_xml_id(
                 'sale_order_import', 'sale_order_import_action')
             action['res_id'] = self.id
@@ -320,7 +320,7 @@ class SaleOrderImport(models.TransientModel):
             'views': False,
             'view_id': False,
             'res_id': order.id,
-            })
+        })
         return action
 
     @api.model
@@ -373,7 +373,7 @@ class SaleOrderImport(models.TransientModel):
                 'uom': oline.product_uom,
                 'line': oline,
                 'price_unit': price_unit,
-                })
+            })
         compare_res = bdio.compare_lines(
             existing_lines, parsed_order['lines'], chatter,
             qty_precision=qty_prec, seller=False)
@@ -385,16 +385,16 @@ class SaleOrderImport(models.TransientModel):
                 chatter.append(_(
                     "The quantity has been updated on the order line "
                     "with product '%s' from %s to %s %s") % (
-                        oline.product_id.name_get()[0][1],
-                        cdict['qty'][0], cdict['qty'][1],
-                        oline.product_uom.name))
+                    oline.product_id.name_get()[0][1],
+                    cdict['qty'][0], cdict['qty'][1],
+                    oline.product_uom.name))
                 write_vals['product_uom_qty'] = cdict['qty'][1]
                 if self.price_source != 'order':
                     new_price_unit = order.pricelist_id.with_context(
                         date=order.date_order,
                         uom=oline.product_uom.id).price_get(
-                            oline.product_id.id, write_vals['product_uom_qty'],
-                            order.partner_id.id)[order.pricelist_id.id]
+                        oline.product_id.id, write_vals['product_uom_qty'],
+                        order.partner_id.id)[order.pricelist_id.id]
 
                     if float_compare(
                             new_price_unit, oline.price_unit,
@@ -402,9 +402,9 @@ class SaleOrderImport(models.TransientModel):
                         chatter.append(_(
                             "The unit price has been updated on the order "
                             "line with product '%s' from %s to %s %s") % (
-                                oline.product_id.name_get()[0][1],
-                                oline.price_unit, new_price_unit,
-                                order.currency_id.name))
+                            oline.product_id.name_get()[0][1],
+                            oline.price_unit, new_price_unit,
+                            order.currency_id.name))
                         write_vals['price_unit'] = new_price_unit
             if write_vals:
                 oline.write(write_vals)
@@ -415,8 +415,8 @@ class SaleOrderImport(models.TransientModel):
                 for l in compare_res['to_remove']]
             chatter.append(_(
                 "%d order line(s) deleted: %s") % (
-                    len(compare_res['to_remove']),
-                    ', '.join(to_remove_label)))
+                len(compare_res['to_remove']),
+                ', '.join(to_remove_label)))
             compare_res['to_remove'].unlink()
         if compare_res['to_add']:
             to_create_label = []

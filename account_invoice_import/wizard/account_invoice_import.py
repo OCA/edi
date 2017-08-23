@@ -198,16 +198,16 @@ class AccountInvoiceImport(models.TransientModel):
             if config.invoice_line_method == 'nline_no_product':
                 static_vals = {
                     'account_id': config.account_id.id,
-                    }
+                }
             elif config.invoice_line_method == 'nline_static_product':
                 sproduct = config.static_product_id
                 static_vals = ({
-                        'product_id': sproduct.id,
-                        'uom_id': sproduct.uom_id.id,
-                        'type': parsed_inv['type'],
-                        'partner_id': partner.id,
-                        'company_id': company.id,
-                    })
+                    'product_id': sproduct.id,
+                    'uom_id': sproduct.uom_id.id,
+                    'type': parsed_inv['type'],
+                    'partner_id': partner.id,
+                    'company_id': company.id,
+                })
             else:
                 static_vals = {}
             for line in parsed_inv['lines']:
@@ -217,11 +217,11 @@ class AccountInvoiceImport(models.TransientModel):
                         line['product'], parsed_inv['chatter_msg'],
                         seller=partner)
                     il_vals = ({
-                            'product_id': product.id,
-                            'uom_id': product.uom_id.id,
-                            'type': parsed_inv['type'],
-                            'company_id': company.id,
-                        })
+                        'product_id': product.id,
+                        'uom_id': product.uom_id.id,
+                        'type': parsed_inv['type'],
+                        'company_id': company.id,
+                    })
 
                 elif config.invoice_line_method == 'nline_no_product':
                     taxes = bdio._match_taxes(
@@ -237,7 +237,7 @@ class AccountInvoiceImport(models.TransientModel):
                 il_vals.update({
                     'quantity': line['qty'],
                     'price_unit': line['price_unit'],  # TODO fix for tax incl
-                    })
+                })
                 vals['invoice_line_ids'].append((0, 0, il_vals))
         # Write analytic account + fix syntax for taxes
         aacount_id = config.account_analytic_id.id or False
@@ -487,17 +487,17 @@ class AccountInvoiceImport(models.TransientModel):
                 chatter.append(_(
                     "The quantity has been updated on the invoice line "
                     "with product '%s' from %s to %s %s") % (
-                        eline.product_id.name_get()[0][1],
-                        cdict['qty'][0], cdict['qty'][1],
-                        eline.uos_id.name))
+                    eline.product_id.name_get()[0][1],
+                    cdict['qty'][0], cdict['qty'][1],
+                    eline.uos_id.name))
                 write_vals['quantity'] = cdict['qty'][1]
             if cdict.get('price_unit'):
                 chatter.append(_(
                     "The unit price has been updated on the invoice "
                     "line with product '%s' from %s to %s %s") % (
-                        eline.product_id.name_get()[0][1],
-                        eline.price_unit, cdict['price_unit'][1],  # TODO fix
-                        invoice.currency_id.name))
+                    eline.product_id.name_get()[0][1],
+                    eline.price_unit, cdict['price_unit'][1],  # TODO fix
+                    invoice.currency_id.name))
                 write_vals['price_unit'] = cdict['price_unit'][1]
             if write_vals:
                 eline.write(write_vals)
@@ -509,8 +509,8 @@ class AccountInvoiceImport(models.TransientModel):
 
             chatter.append(_(
                 "%d invoice line(s) deleted: %s") % (
-                    len(compare_res['to_remove']),
-                    ', '.join(to_remove_label)))
+                len(compare_res['to_remove']),
+                ', '.join(to_remove_label)))
             compare_res['to_remove'].unlink()
         if compare_res['to_add']:
             to_create_label = []
@@ -529,16 +529,15 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _prepare_create_invoice_line(self, product, uom, import_line, invoice):
         vals = ({
-                    'invoice_id': invoice.id,
-                    'product_id': product.id,
-                    'uom_id': uom.id,
-                    'quantity': import_line['qty'],
-                    'price_unit': import_line.get('price_unit'),
-                    'partner_id': invoice.partner_id.id,
-                    'type': 'in_invoice',
-                    'currency_id': invoice.currency_id.id,
-                    'company_id': invoice.company_id.id,
-                })
+                'invoice_id': invoice.id,
+                'product_id': product.id,
+                'uom_id': uom.id,
+                'quantity': import_line['qty'],
+                'price_unit': import_line.get('price_unit'),
+                'partner_id': invoice.partner_id.id,
+                'type': 'in_invoice',
+                'currency_id': invoice.currency_id.id,
+                'company_id': invoice.company_id.id, })
         return vals
 
     @api.model
@@ -579,8 +578,8 @@ class AccountInvoiceImport(models.TransientModel):
             raise UserError(_(
                 "The vendor of the imported invoice (%s) is different from "
                 "the vendor of the invoice to update (%s).") % (
-                    partner.name,
-                    invoice.commercial_partner_id.name))
+                partner.name,
+                invoice.commercial_partner_id.name))
         if not partner.invoice_import_id:
             raise UserError(_(
                 "Missing Invoice Import Configuration on partner '%s'.")

@@ -10,6 +10,8 @@ from openerp import models, fields
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    commercial_partner_id = fields.Many2one(comodel_name='res.partner',
-        related='partner_id.commercial_partner_id', store=True,
+    commercial_partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        related='partner_id.commercial_partner_id',
+        store=True,
         string='Commercial Customer')
