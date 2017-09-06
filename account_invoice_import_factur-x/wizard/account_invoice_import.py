@@ -5,7 +5,7 @@
 from odoo import models, api, _
 from odoo.exceptions import UserError
 from odoo.tools import float_compare, float_is_zero
-from FacturX import GetFacturXFlavor
+from FacturX import get_facturx_flavor
 from lxml import etree
 import logging
 
@@ -186,7 +186,7 @@ class AccountInvoiceImport(models.TransientModel):
             xml_root, pretty_print=True, encoding='UTF-8',
             xml_declaration=True)
         try:
-            flavor = GetFacturXFlavor(xml_root)
+            flavor = get_facturx_flavor(xml_root)
         except Exception:
             raise UserError(_(
                 "Could not detect if the invoice is a Factur-X or ZUGFeRD "
