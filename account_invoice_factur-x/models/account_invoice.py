@@ -11,7 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from FacturX import GenerateFacturX
+    from FacturX import generate_facturx
 except ImportError:
     logger.debug('Cannot import factur-x')
 
@@ -681,7 +681,7 @@ class AccountInvoice(models.Model):
             facturx_xml_str = self.generate_facturx_xml()
             pdf_metadata = self._prepare_pdf_metadata()
             # Generate a new PDF with XML file as attachment
-            pdf_content = GenerateFacturX(
+            pdf_content = generate_facturx(
                 pdf_content or pdf_file, facturx_xml_str, check_xsd=False,
                 facturx_level='en16931', pdf_metadata=pdf_metadata,
                 output_pdf_file=pdf_file)
