@@ -11,7 +11,7 @@
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['account_payment_partner', 'base_zugferd', 'base_vat'],
-    'external_dependencies': {'python': ['factur-x']},
+    'external_dependencies': {'python': ['FacturX']},
     'data': ['views/res_partner.xml'],
     'installable': True,
 }
