@@ -220,14 +220,14 @@ class AccountInvoice(models.Model):
     def _cii_add_contract_reference(self, trade_agreement, ns):
         self.ensure_one()
         if (
-                hasattr(self, 'sale_agreement_id') and
-                self.sale_agreement_id and
-                self.sale_agreement_id.code):
+                hasattr(self, 'agreement_id') and
+                self.agreement_id and
+                self.agreement_id.code):
             contract_ref = etree.SubElement(
                 trade_agreement, ns['ram'] + 'ContractReferencedDocument')
             contract_id = etree.SubElement(
                 contract_ref, ns['ram'] + 'IssuerAssignedID')
-            contract_id.text = self.sale_agreement_id.code
+            contract_id.text = self.agreement_id.code
 
     @api.multi
     def _cii_add_trade_delivery_block(self, trade_transaction, ns):
