@@ -5,11 +5,15 @@
 from odoo import models, api, _
 from odoo.exceptions import UserError
 from odoo.tools import float_compare, float_is_zero
-from FacturX import get_facturx_flavor
 from lxml import etree
 import logging
 
 logger = logging.getLogger(__name__)
+
+try:
+    from facturx import get_facturx_flavor
+except ImportError:
+    logger.debug('Cannot import facturx')
 
 
 class AccountInvoiceImport(models.TransientModel):
