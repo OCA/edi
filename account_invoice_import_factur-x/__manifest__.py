@@ -11,7 +11,7 @@
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['account_invoice_import', 'base_zugferd'],
-    'external_dependencies': {'python': ['FacturX']},
+    'external_dependencies': {'python': ['facturx']},
     'demo': ['demo/demo_data.xml'],
     'installable': True,
 }
