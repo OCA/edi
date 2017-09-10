@@ -11,9 +11,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from FacturX import generate_facturx
+    from facturx import generate_facturx
 except ImportError:
-    logger.debug('Cannot import factur-x')
+    logger.debug('Cannot import facturx')
 
 
 FACTURX_LEVEL = 'EN 16931'
