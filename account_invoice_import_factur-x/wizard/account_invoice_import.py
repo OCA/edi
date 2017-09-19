@@ -47,8 +47,8 @@ class AccountInvoiceImport(models.TransientModel):
                  ], namespaces, isfloat=True) or 0.0
             due_date_code = self.multi_xpath_helper(
                 tax, ["ram:DueDateTypeCode"], namespaces)
-            if due_date_code == '2':
-                due_date_code = 3
+            if due_date_code == '29':
+                due_date_code = '5'
             taxes.append({
                 'amount_type': 'percent',
                 'amount': percentage,
