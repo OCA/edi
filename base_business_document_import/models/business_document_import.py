@@ -187,6 +187,22 @@ class BusinessDocumentImport(models.AbstractModel):
     @api.model
     def _hook_match_partner(
             self, partner_dict, chatter_msg, domain, partner_type_label):
+        # looking for the exact contact, we use email and contact name.
+        # if the email is a perfect hit we proceed with that, if not we use the
+        # partner name contained in all partners of our company
+        email =  partner_dict['email'].replace(' ', '')
+        if email:
+            partner = self.env['res.partner'].search(
+                domain + [('email' , '=', email)],limit=1
+            )
+            if partner:
+                return partner
+        name = partner_dict.get('name')
+        if name:
+            partner = self.env['res.partner'].search(
+                domain + [('name', 'ilike', name )], limit=1)
+            if partner:
+                return partner
         return False
 
     @api.model
