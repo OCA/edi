@@ -27,7 +27,13 @@ class TestFrIntrastatService(TransactionCase):
         self.assertEquals(res, partner1)
         self.assertTrue(warn)
         partner_dict = {'name': u'delta pc '}
+        # testing also our custom hook, then we skip it and test normal flow
+        # with he new matching it will not find 'Delta PC', but it will default
+        # to the first name 'Delta PC, Richard Ellis'
         res = bdio._match_partner(
+            partner_dict, [], partner_type='supplier')
+        self.assertEquals(res, self.env.ref('base.res_partner_address_7'))
+        res = bdio.with_context(skip_custom_match_hook=True)._match_partner(
             partner_dict, [], partner_type='supplier')
         self.assertEquals(res, self.env.ref('base.res_partner_4'))
         partner_dict = {'ref': u'TOTAL'}
