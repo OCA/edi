@@ -122,48 +122,48 @@ class AccountInvoice(models.Model):
             content_note = etree.SubElement(note, ns['ram'] + 'Content')
             content_note.text = self.comment
 
+    @api.model
+    def _cii_add_party(self, partner, company, parent_node, ns):
+        party_name = etree.SubElement(
+            parent_node, ns['ram'] + 'Name')
+        party_name.text = partner.commercial_partner_id.name
+        # Only with EXTENDED profile
+        # if self.commercial_partner_id != self.partner_id:
+        #    self._add_trade_contact_block(
+        #        self.partner_id, buyer, ns)
+        self._add_address_block(partner, parent_node, ns)
+        if partner.commercial_partner_id.vat:
+            partner_tax_reg = etree.SubElement(
+                parent_node, ns['ram'] + 'SpecifiedTaxRegistration')
+            partner_tax_reg_id = etree.SubElement(
+                partner_tax_reg, ns['ram'] + 'ID', schemeID='VA')
+            partner_tax_reg_id.text = partner.commercial_partner_id.vat
+
+    @api.model
+    def _cii_add_supplier_party(self, company, parent_node, ns):
+        seller = etree.SubElement(
+            parent_node, ns['ram'] + 'SellerTradeParty')
+        self._cii_add_party(company.partner_id, company, seller, ns)
+
+    @api.model
+    def _cii_add_customer_party(self, partner, parent_node, ns):
+        buyer = etree.SubElement(
+            parent_node, ns['ram'] + 'BuyerTradeParty')
+        if partner.commercial_partner_id.ref:
+            buyer_id = etree.SubElement(
+                buyer, ns['ram'] + 'ID')
+            buyer_id.text = partner.commercial_partner_id.ref
+        self._cii_add_party(partner, False, buyer, ns)
+
     @api.multi
     def _add_trade_agreement_block(self, trade_transaction, ns):
         self.ensure_one()
         trade_agreement = etree.SubElement(
             trade_transaction,
             ns['ram'] + 'ApplicableSupplyChainTradeAgreement')
-        company = self.company_id
-        seller = etree.SubElement(
-            trade_agreement, ns['ram'] + 'SellerTradeParty')
-        seller_name = etree.SubElement(
-            seller, ns['ram'] + 'Name')
-        seller_name.text = company.name
-        # Only with EXTENDED profile
-        # self._add_trade_contact_block(
-        #    self.user_id.partner_id or company.partner_id, seller, ns)
-        self._add_address_block(company.partner_id, seller, ns)
-        if company.vat:
-            seller_tax_reg = etree.SubElement(
-                seller, ns['ram'] + 'SpecifiedTaxRegistration')
-            seller_tax_reg_id = etree.SubElement(
-                seller_tax_reg, ns['ram'] + 'ID', schemeID='VA')
-            seller_tax_reg_id.text = company.vat
-        buyer = etree.SubElement(
-            trade_agreement, ns['ram'] + 'BuyerTradeParty')
-        if self.commercial_partner_id.ref:
-            buyer_id = etree.SubElement(
-                buyer, ns['ram'] + 'ID')
-            buyer_id.text = self.commercial_partner_id.ref
-        buyer_name = etree.SubElement(
-            buyer, ns['ram'] + 'Name')
-        buyer_name.text = self.commercial_partner_id.name
-        # Only with EXTENDED profile
-        # if self.commercial_partner_id != self.partner_id:
-        #    self._add_trade_contact_block(
-        #        self.partner_id, buyer, ns)
-        self._add_address_block(self.partner_id, buyer, ns)
-        if self.commercial_partner_id.vat:
-            buyer_tax_reg = etree.SubElement(
-                buyer, ns['ram'] + 'SpecifiedTaxRegistration')
-            buyer_tax_reg_id = etree.SubElement(
-                buyer_tax_reg, ns['ram'] + 'ID', schemeID='VA')
-            buyer_tax_reg_id.text = self.commercial_partner_id.vat
+        self._cii_add_supplier_party(
+            self.company_id, trade_agreement, ns)
+        self._cii_add_customer_party(self.partner_id, trade_agreement, ns)
 
     @api.multi
     def _add_trade_delivery_block(self, trade_transaction, ns):
@@ -320,7 +320,7 @@ class AccountInvoice(models.Model):
             ns['ram'] + 'SpecifiedTradeSettlementMonetarySummation')
         line_total = etree.SubElement(
             sums, ns['ram'] + 'LineTotalAmount', currencyID=inv_currency_name)
-        line_total.text = unicode(self.amount_untaxed * sign)
+        line_total.text = '%0.*f' % (prec, self.amount_untaxed * sign)
         charge_total = etree.SubElement(
             sums, ns['ram'] + 'ChargeTotalAmount',
             currencyID=inv_currency_name)
@@ -332,20 +332,21 @@ class AccountInvoice(models.Model):
         tax_basis_total_amt = etree.SubElement(
             sums, ns['ram'] + 'TaxBasisTotalAmount',
             currencyID=inv_currency_name)
-        tax_basis_total_amt.text = unicode(tax_basis_total * sign)
+        tax_basis_total_amt.text = '%0.*f' % (prec, tax_basis_total * sign)
         tax_total = etree.SubElement(
             sums, ns['ram'] + 'TaxTotalAmount', currencyID=inv_currency_name)
-        tax_total.text = unicode(self.amount_tax * sign)
+        tax_total.text = '%0.*f' % (prec, self.amount_tax * sign)
         total = etree.SubElement(
             sums, ns['ram'] + 'GrandTotalAmount', currencyID=inv_currency_name)
-        total.text = unicode(self.amount_total * sign)
+        total.text = '%0.*f' % (prec, self.amount_total * sign)
         prepaid = etree.SubElement(
             sums, ns['ram'] + 'TotalPrepaidAmount',
             currencyID=inv_currency_name)
         residual = etree.SubElement(
             sums, ns['ram'] + 'DuePayableAmount', currencyID=inv_currency_name)
-        prepaid.text = unicode((self.amount_total - self.residual) * sign)
-        residual.text = unicode(self.residual * sign)
+        prepaid.text = '%0.*f' % (
+            prec, (self.amount_total - self.residual) * sign)
+        residual.text = '%0.*f' % (prec, self.residual * sign)
 
     @api.multi
     def _add_invoice_line_block(
