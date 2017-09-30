@@ -18,6 +18,8 @@ except ImportError:
 
 FACTURX_LEVEL = 'EN 16931'
 FACTURX_FILENAME = 'factur-x.xml'
+DIRECT_DEBIT_CODES = ('49', '59')
+CREDIT_TRF_CODES = ('30', '31')
 
 
 class AccountInvoice(models.Model):
@@ -261,7 +263,7 @@ class AccountInvoice(models.Model):
                 'Using 31 (wire transfer) as UNECE code as fallback '
                 'for payment mean',
                 self.id)
-        if payment_means_code.text in ['30', '31', '42']:
+        if payment_means_code.text in CREDIT_TRF_CODES:
             partner_bank = self.partner_bank_id
             if (
                     not partner_bank and
@@ -285,6 +287,19 @@ class AccountInvoice(models.Model):
                     payment_means_bic = etree.SubElement(
                         payment_means_bank, ns['ram'] + 'BICID')
                     payment_means_bic.text = partner_bank.bank_bic
+        elif (
+                payment_means_code.text in DIRECT_DEBIT_CODES and
+                hasattr(self, 'mandate_id') and
+                self.mandate_id.partner_bank_id and
+                self.mandate_id.partner_bank_id.acc_type == 'iban' and
+                self.mandate_id.partner_bank_id.sanitized_acc_number):
+            debtor_acc = etree.SubElement(
+                payment_means,
+                ns['ram'] + 'PayerPartyDebtorFinancialAccount')
+            debtor_acc_iban = etree.SubElement(
+                debtor_acc, ns['ram'] + 'IBANID')
+            debtor_acc_iban.text =\
+                self.mandate_id.partner_bank_id.sanitized_acc_number
 
     @api.multi
     def _cii_add_trade_settlement_block(self, trade_transaction, ns):
@@ -294,6 +309,16 @@ class AccountInvoice(models.Model):
         trade_settlement = etree.SubElement(
             trade_transaction,
             ns['ram'] + 'ApplicableHeaderTradeSettlement')
+        # ICS
+        if (
+                self.payment_mode_id.payment_method_id.unece_code in
+                DIRECT_DEBIT_CODES and
+                hasattr(self.company_id, 'sepa_creditor_identifier') and
+                self.company_id.sepa_creditor_identifier):
+            ics = etree.SubElement(
+                trade_settlement, ns['ram'] + 'CreditorReferenceID')
+            ics.text = self.company_id.sepa_creditor_identifier
+
         payment_ref = etree.SubElement(
             trade_settlement, ns['ram'] + 'PaymentReference')
         payment_ref.text = self.number or self.state
@@ -373,6 +398,15 @@ class AccountInvoice(models.Model):
             date_due_dt = fields.Date.from_string(self.date_due)
             self._cii_add_date(
                 'DueDateDateTime', date_due_dt, trade_payment_term, ns)
+
+        # Direct debit Mandate
+        if (
+                self.payment_mode_id.payment_method_id.unece_code in
+                DIRECT_DEBIT_CODES and hasattr(self, 'mandate_id') and
+                self.mandate_id.unique_mandate_reference):
+            mandate = etree.SubElement(
+                trade_payment_term, ns['ram'] + 'DirectDebitMandateID')
+            mandate.text = self.mandate_id.unique_mandate_reference
 
         sums = etree.SubElement(
             trade_settlement,
@@ -681,9 +715,16 @@ class AccountInvoice(models.Model):
             facturx_xml_str = self.generate_facturx_xml()
             pdf_metadata = self._prepare_pdf_metadata()
             # Generate a new PDF with XML file as attachment
+            if pdf_file is None:
+                pdf_invoice = pdf_content
+            else:
+                # TODO : re-write, just a temp hack to make py3o work
+                x = open(pdf_file, 'rb')
+                pdf_invoice = x.read()
+                x.close()
             pdf_content = generate_facturx(
-                pdf_content or pdf_file, facturx_xml_str, check_xsd=False,
+                pdf_invoice, facturx_xml_str, check_xsd=False,
                 facturx_level='en16931', pdf_metadata=pdf_metadata,
-                output_pdf_file=pdf_file)
+                output_pdf_file=str(pdf_file))
             logger.info('%s file added to PDF invoice', FACTURX_FILENAME)
         return pdf_content
