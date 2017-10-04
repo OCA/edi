@@ -435,7 +435,7 @@ class BaseUbl(models.AbstractModel):
         if tax.amount_type == 'percent':
             tax_percent = etree.SubElement(
                 tax_category, ns['cbc'] + 'Percent')
-            tax_percent.text = unicode(tax.amount * 100)
+            tax_percent.text = unicode(tax.amount)
         tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_tax(tax)
         self._ubl_add_tax_scheme(
             tax_scheme_dict, tax_category, ns, version=version)
