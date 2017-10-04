@@ -445,6 +445,12 @@ class AccountInvoiceImport(models.TransientModel):
             return action
 
     @api.multi
+    def create_invoice_action_button(self):
+        '''Workaround for a v10 bug: if I call create_invoice_action()
+        directly from the button, I get the context in parsed_inv'''
+        return self.create_invoice_action()
+
+    @api.multi
     def create_invoice_action(self, parsed_inv=None):
         '''parsed_inv is not a required argument'''
         self.ensure_one()
@@ -725,6 +731,7 @@ class AccountInvoiceImport(models.TransientModel):
             raise UserError(_(
                 "Missing Invoice Import Configuration on partner '%s'.")
                 % partner.name)
+        import_config = partner.invoice_import2import_config()
         currency = bdio._match_currency(
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
         if currency != invoice.currency_id:
@@ -742,7 +749,7 @@ class AccountInvoiceImport(models.TransientModel):
                 partner.invoice_import_id.invoice_line_method ==
                 'nline_auto_product'):
             self.update_invoice_lines(parsed_inv, invoice, partner)
-        self.post_process_invoice(parsed_inv, invoice)
+        self.post_process_invoice(parsed_inv, invoice, import_config)
         if partner.invoice_import_id.account_analytic_id:
             invoice.invoice_line.write({
                 'account_analytic_id':
