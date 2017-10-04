@@ -724,7 +724,6 @@ class AccountInvoice(models.Model):
                 x.close()
             pdf_content = generate_facturx(
                 pdf_invoice, facturx_xml_str, check_xsd=False,
-                facturx_level='en16931', pdf_metadata=pdf_metadata,
-                output_pdf_file=str(pdf_file))
+                facturx_level='en16931', pdf_metadata=pdf_metadata)
             logger.info('%s file added to PDF invoice', FACTURX_FILENAME)
         return pdf_content
