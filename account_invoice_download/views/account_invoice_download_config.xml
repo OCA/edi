@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+<record id="account_invoice_download_config_form" model="ir.ui.view">
+    <field name="name">account.invoice.download.config.form</field>
+    <field name="model">account.invoice.download.config</field>
+    <field name="arch"  type="xml">
+        <form string="Invoice Download Configuration">
+            <header>
+                <button name="run" string="Run Now" type="object"/>
+            </header>
+            <div class="oe_button_box" name="button_box">
+                <button name="toggle_active" type="object"
+                        class="oe_stat_button" icon="fa-archive">
+                    <field name="active" widget="boolean_button"
+                        options='{"terminology": "archive"}'/>
+                </button>
+            </div>
+            <group name="main">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="invoice_import_id"/>
+            </group>
+            <group string="Download Method" name="method">
+                <field name="backend"/>
+                <field name="login"/>
+                <field name="password" password="1"/>
+            </group>
+            <group string="Download Parameters" name="params">
+                <field name="method" widget="radio"/>
+                <field name="last_run"/>
+                <field name="next_run" attrs="{'invisible': [('method', '!=', 'auto')]}"/>
+                <label string="Download Every" class="oe_inline" attrs="{'invisible': [('method', '!=', 'auto')]}"/>
+                <div name="freq" attrs="{'invisible': [('method', '!=', 'auto')]}">
+                    <field name="interval_number" class="oe_inline"/>
+                    <field name="interval_type" class="oe_inline"/>
+                </div>
+            </group>
+            <group name="logs" string="Logs">
+                <field name="logs" nolabel="1"/>
+            </group>
+        </form>
+    </field>
+</record>
+
+<record id="account_invoice_download_config_tree" model="ir.ui.view">
+    <field name="name">account.invoice.download.config.tree</field>
+    <field name="model">account.invoice.download.config</field>
+    <field name="arch"  type="xml">
+        <tree string="Invoice Download Configurations">
+            <field name="name"/>
+            <field name="company_id" groups="base.group_multi_company"/>
+            <field name="method"/>
+            <field name="backend"/>
+            <field name="last_run"/>
+            <field name="next_run"/>
+            <button name="run" string="Run Now" type="object" icon="fa-gear"/>
+        </tree>
+    </field>
+</record>
+
+<record id="account_invoice_download_config_search" model="ir.ui.view">
+    <field name="name">account.invoice.download.config.search</field>
+    <field name="model">account.invoice.download.config</field>
+    <field name="arch"  type="xml">
+        <search string="Search Invoice Download Configurations">
+            <field name="name"/>
+            <separator/>
+            <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+            <group string="Group By" name="groupby">
+                <filter name="method_groupby" context="{'group_by': 'method'}"/>
+                <filter name="backend_groupby" context="{'group_by': 'backend'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+
+<record id="account_invoice_download_config_action" model="ir.actions.act_window">
+    <field name="name">Download Bills</field>
+    <field name="res_model">account.invoice.download.config</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem id="account_invoice_download_config_menu"
+    parent="account_invoice_import.account_invoice_import_config_root"
+    action="account_invoice_download_config_action" sequence="20"/>
+
+</odoo>
