@@ -9,12 +9,6 @@
     <field name="description">ZUGFeRD Code (temporary)</field>
 </record>
 
-<record id="tax_type_aaj" model="unece.code.list">
-    <field name="type">tax_type</field>
-    <field name="code">AAJ</field>
-    <field name="name">Tax on replacement part</field>
-</record>
-
 <record id="tax_categ_ic" model="unece.code.list">
     <field name="type">tax_categ</field>
     <field name="code">IC</field>
