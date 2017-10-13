@@ -4,9 +4,8 @@
 
 from odoo.addons.account_payment_unece.tests.test_account_invoice import \
     TestAccountInvoice
-import PyPDF2
+from facturx import get_facturx_xml_from_pdf
 from lxml import etree
-from StringIO import StringIO
 
 
 class TestFacturXInvoice(TestAccountInvoice):
@@ -15,14 +14,8 @@ class TestFacturXInvoice(TestAccountInvoice):
         invoice = self.test_only_create_invoice()
         pdf_content = self.env['report'].get_pdf(
             [invoice.id], 'account.report_invoice')
-        fd = StringIO(pdf_content)
-        pdf = PyPDF2.PdfFileReader(fd)
-        pdf_root = pdf.trailer['/Root']
-        embeddedfile = pdf_root['/Names']['/EmbeddedFiles']['/Names']
-        self.assertEquals(embeddedfile[0], 'factur-x.xml')
-        zugferd_file_dict_obj = embeddedfile[1]
-        zugferd_file_dict = zugferd_file_dict_obj.getObject()
-        xml_string = zugferd_file_dict['/EF']['/F'].getData()
-        xml_root = etree.fromstring(xml_string)
+        res = get_facturx_xml_from_pdf(pdf_content, check_xsd=True)
+        self.assertTrue(res[0], 'factur-x.xml')
+        xml_root = etree.fromstring(res[1])
         self.assertTrue(xml_root.tag.startswith(
             '{urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100'))
