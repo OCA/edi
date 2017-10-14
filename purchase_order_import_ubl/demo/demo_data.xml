@@ -40,24 +40,6 @@
     <field name="country_id" ref="base.se"/>
 </record>
 
-<record id="product_red_paint" model="product.product">
-    <field name="name">Falu Rödfärg</field>
-    <field name="description_sale">Red paint</field>
-    <field name="default_code">SItemNo001</field>
-    <field name="list_price">55</field>
-    <field name="type">consu</field>
-    <field name="uom_id" ref="product.product_uom_litre"/>
-    <field name="uom_po_id" ref="product.product_uom_litre"/>
-</record>
-
-<record id="product_pencil" model="product.product">
-    <field name="name">Pensel 20 mm</field>
-    <field name="description_sale">Very good pencils for red paint</field>
-    <field name="default_code">SItemNo011</field>
-    <field name="list_price">18</field>
-    <field name="type">consu</field>
-</record>
-
 <!-- for tests/UBL-Order-2.0-Example.xml -->
 <record id="iyt" model="res.partner">
     <field name="name">IYT Corporation</field>
@@ -79,16 +61,6 @@
     <field name="email">fred@iytcorporation.gov.uk</field>
     <field name="customer" eval="True"/>
     <field name="type">contact</field>
-</record>
-
-<record id="product_beeswax" model="product.product">
-    <field name="name">Beeswax</field>
-    <field name="description_sale">Acme beeswax</field>
-    <field name="default_code">17589683</field>
-    <field name="list_price">42</field>
-    <field name="type">consu</field>
-    <field name="uom_id" ref="product.product_uom_kgm"/>
-    <field name="uom_po_id" ref="product.product_uom_kgm"/>
 </record>
 
 <!-- for tests/UBL-RequestForQuotation-2.0-Example.xml -->
