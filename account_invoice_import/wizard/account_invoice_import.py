@@ -153,8 +153,13 @@ class AccountInvoiceImport(models.TransientModel):
         company = self.env.user.company_id
         start_end_dates_installed = hasattr(ailo, 'start_date') and\
             hasattr(ailo, 'end_date')
+        if parsed_inv['type'] in ('out_invoice', 'out_refund'):
+            partner_type = 'customer'
+        else:
+            partner_type = 'supplier'
         partner = bdio._match_partner(
-            parsed_inv['partner'], parsed_inv['chatter_msg'])
+            parsed_inv['partner'], parsed_inv['chatter_msg'],
+            partner_type=partner_type)
         partner = partner.commercial_partner_id
         currency = bdio._match_currency(
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
