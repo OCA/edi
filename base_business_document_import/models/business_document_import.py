@@ -4,6 +4,7 @@
 
 from odoo import models, api, _
 from odoo.tools import float_compare
+from odoo.addons.base_iban.models.res_partner_bank import validate_iban
 from odoo.exceptions import UserError
 from lxml import etree
 from StringIO import StringIO
@@ -257,6 +258,12 @@ class BusinessDocumentImport(models.AbstractModel):
         iban = iban.replace(' ', '').upper()
         rpbo = self.env['res.partner.bank']
         rbo = self.env['res.bank']
+        try:
+            validate_iban(iban)
+        except:
+            chatter_msg.append(_(
+                "IBAN <b>%s</b> is not valid, so it has been ignored.") % iban)
+            return False
         bankaccounts = rpbo.search([
             ('acc_type', '=', 'iban'),
             ('sanitized_acc_number', '=', iban),
@@ -486,8 +493,8 @@ class BusinessDocumentImport(models.AbstractModel):
             'amount': 20.0,  # required
             'unece_type_code': 'VAT',
             'unece_categ_code': 'S',
+            'unece_due_date_code': '432',
             }
-        With l10n_fr, it will return 20% VAT tax.
         """
         ato = self.env['account.tax']
         self._strip_cleanup_dict(tax_dict)
@@ -506,7 +513,7 @@ class BusinessDocumentImport(models.AbstractModel):
             domain.append(('price_include', '=', False))
         elif price_include is True:
             domain.append(('price_include', '=', True))
-        # with the code abose, if you set price_include=None, it will
+        # with the code above, if you set price_include=None, it will
         # won't depend on the value of the price_include parameter
         assert tax_dict.get('amount_type') in ['fixed', 'percent'],\
             'bad tax type'
@@ -518,7 +525,12 @@ class BusinessDocumentImport(models.AbstractModel):
         if tax_dict.get('unece_categ_code'):
             domain.append(
                 ('unece_categ_code', '=', tax_dict['unece_categ_code']))
-        taxes = ato.search(domain)
+        if tax_dict.get('unece_due_date_code'):
+            domain += [
+                '|',
+                ('unece_due_date_code', '=', tax_dict['unece_due_date_code']),
+                ('unece_due_date_code', '=', False)]
+        taxes = ato.search(domain, order='unece_due_date_code')
         for tax in taxes:
             tax_amount = tax.amount
             if not float_compare(

@@ -3,11 +3,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Base ZUGFeRD',
+    'name': 'Base Factur-X/ZUGFeRD',
     'version': '10.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
-    'summary': 'Base module for ZUGFeRD',
+    'summary': 'Base module for Factur-X and ZUGFeRD',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': [

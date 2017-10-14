@@ -55,7 +55,7 @@ install:
   #- wget -P /tmp http://public.akretion.com/pdftotext-3.04
   #- sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
   #- sudo chmod 755 /usr/local/bin/pdftotext
-  - pip install PyPDF2  # needed for account_invoice*zugferd
+  - pip install git+https://github.com/akretion/factur-x
   - pip install phonenumbers
 
 script:

@@ -3,9 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning as UserError
+from odoo.exceptions import UserError
 from odoo.tools import float_compare
 from datetime import datetime
+from lxml import etree
 import logging
 
 logger = logging.getLogger(__name__)
@@ -48,8 +49,7 @@ class AccountInvoiceImport(models.TransientModel):
                 attachments[filename] = data_base64
         return attachments
 
-    def parse_ubl_invoice_line(
-            self, iline, sign, total_line_lines, namespaces):
+    def parse_ubl_invoice_line(self, iline, counters, namespaces):
         price_unit_xpath = iline.xpath(
             "cac:Price/cbc:PriceAmount", namespaces=namespaces)
         qty_xpath = iline.xpath(
@@ -79,7 +79,7 @@ class AccountInvoiceImport(models.TransientModel):
             price_unit = float(price_unit_xpath[0].text)
         else:
             price_unit = price_subtotal / qty
-        total_line_lines += price_subtotal
+        counters['lines'] += price_subtotal
         taxes_xpath = iline.xpath(
             "cac:Item/cac:ClassifiedTaxCategory", namespaces=namespaces)
         if not taxes_xpath:
@@ -118,9 +118,10 @@ class AccountInvoiceImport(models.TransientModel):
 
         vals = {
             'product': product_dict,
-            'qty': qty * sign,
+            'qty': qty,
             'uom': uom,
             'price_unit': price_unit,
+            'price_subtotal': price_subtotal,
             'name': name,
             'taxes': taxes,
             }
@@ -130,14 +131,22 @@ class AccountInvoiceImport(models.TransientModel):
     def parse_ubl_invoice(self, xml_root):
         """Parse UBL Invoice XML file"""
         namespaces = xml_root.nsmap
-        prec = self.env['decimal.precision'].precision_get('Account')
-        logger.debug('XML file namespaces=%s', namespaces)
         inv_xmlns = namespaces.pop(None)
         namespaces['inv'] = inv_xmlns
+        logger.debug('XML file namespaces=%s', namespaces)
+        xml_string = etree.tostring(
+            xml_root, pretty_print=True, encoding='UTF-8',
+            xml_declaration=True)
+        ubl_version_xpath = xml_root.xpath(
+            "//cbc:UBLVersionID", namespaces=namespaces)
+        ubl_version = ubl_version_xpath and ubl_version_xpath[0].text or '2.1'
+        # Check XML schema to avoid headaches trying to import invalid files
+        self._ubl_check_xml_schema(xml_string, 'Invoice', version=ubl_version)
+        prec = self.env['decimal.precision'].precision_get('Account')
         doc_type_xpath = xml_root.xpath(
             "/inv:Invoice/cbc:InvoiceTypeCode[@listAgencyID='6']",
             namespaces=namespaces)
-        sign = 1
+        inv_type = 'in_invoice'
         if doc_type_xpath:
             inv_type_code = doc_type_xpath[0].text
             if inv_type_code not in ['380', '381']:
@@ -145,7 +154,7 @@ class AccountInvoiceImport(models.TransientModel):
                     "This UBL XML file is not an invoice/refund file "
                     "(InvoiceTypeCode is %s") % inv_type_code)
             if inv_type_code == '381':
-                sign = -1
+                inv_type = 'in_refund'
         inv_number_xpath = xml_root.xpath('//cbc:ID', namespaces=namespaces)
         supplier_xpath = xml_root.xpath(
             '/inv:Invoice/cac:AccountingSupplierParty',
@@ -201,32 +210,33 @@ class AccountInvoiceImport(models.TransientModel):
                 namespaces=namespaces)
         attachments = self.get_attachments(xml_root, namespaces)
         res_lines = []
-        total_line_lines = 0.0
+        counters = {'lines': 0.0}
         inv_line_xpath = xml_root.xpath(
             "/inv:Invoice/cac:InvoiceLine", namespaces=namespaces)
         for iline in inv_line_xpath:
             line_vals = self.parse_ubl_invoice_line(
-                iline, sign, total_line_lines, namespaces)
+                iline, counters, namespaces)
             if line_vals is False:
                 continue
             res_lines.append(line_vals)
 
         if float_compare(
-                total_line, total_line_lines, precision_digits=prec):
+                total_line, counters['lines'], precision_digits=prec):
             logger.warning(
                 "The gloabl LineExtensionAmount (%s) doesn't match the "
                 "sum of the amounts of each line (%s). It can "
                 "have a diff of a few cents due to sum of rounded values vs "
-                "rounded sum policies.", total_line, total_line_lines)
+                "rounded sum policies.", total_line, counters['lines'])
 
         res = {
+            'type': inv_type,
             'partner': supplier_dict,
             'invoice_number': inv_number_xpath[0].text,
             'date': fields.Date.to_string(date_dt),
             'date_due': date_due_str,
             'currency': {'iso': currency_iso_xpath[0].text},
-            'amount_total': amount_total * sign,
-            'amount_untaxed': amount_untaxed * sign,
+            'amount_total': amount_total,
+            'amount_untaxed': amount_untaxed,
             'iban': iban_xpath and iban_xpath[0].text or False,
             'bic': bic_xpath and bic_xpath[0].text or False,
             'lines': res_lines,

@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-============
-Base ZUGFeRD
-============
+=========================
+Base Factur-X and ZUGFeRD
+=========================
 
-This is the base module for the implementation of the `ZUGFeRD <http://www.pdflib.com/knowledge-base/pdfa/zugferd-invoices/>`_ standard. It is a standard based on `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`_ (Cross-Industry Invoice) for electronic invoicing. The great idea of the ZUGFeRD standard is to embed an XML file inside the PDF invoice to carry structured information about the invoice.
+This is the base module for the implementation of the Factur-X and `ZUGFeRD <http://www.pdflib.com/knowledge-base/pdfa/zugferd-invoices/>`_ standards. It is a standard based on `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`_ (Cross-Industry Invoice) for electronic invoicing. The great idea of the Factur-X and ZUGFeRD standards is to embed an XML file inside the PDF invoice to carry structured information about the invoice.
 
 
 Configuration
@@ -23,13 +23,18 @@ Usage
 
 This module doesn't do anything by itself, but it is used by 2 other modules:
 
-* account_invoice_zugferd that generate ZUGFeRD customer invoices/refunds,
-* account_invoice_import_zugferd that imports ZUGFeRD supplier invoices/refunds.
+* account_invoice_factur-x that generate Factur-X/ZUGFeRD 2.0 customer invoices/refunds,
+* account_invoice_import_factur-x that imports ZUGFeRD 1.0 and Factur-X/ZUGFeRD 2.0 supplier invoices/refunds.
 
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
    :target: https://runbot.odoo-community.org/runbot/226/10.0
+
+Known issues / Roadmap
+======================
+
+* Rename this module to *base_factur-x* for Odoo 11 (we renamed all modules from *zugferd* to *factur-x* except this one in Odoo 10).
 
 Bug Tracker
 ===========

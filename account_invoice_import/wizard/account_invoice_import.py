@@ -8,6 +8,7 @@ from odoo.tools import float_compare, float_round, float_is_zero
 from odoo.exceptions import UserError
 from lxml import etree
 import logging
+from datetime import datetime
 import mimetypes
 
 logger = logging.getLogger(__name__)
@@ -44,9 +45,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def parse_xml_invoice(self, xml_root):
-        raise UserError(_(
-            "This type of XML invoice is not supported. Did you install "
-            "the module to support this type of file?"))
+        return False
 
     @api.model
     def parse_pdf_invoice(self, file_data):
@@ -57,11 +56,9 @@ class AccountInvoiceImport(models.TransientModel):
         xml_files_dict = bdio.get_xml_files_from_pdf(file_data)
         for xml_filename, xml_root in xml_files_dict.iteritems():
             logger.info('Trying to parse XML file %s', xml_filename)
-            try:
-                parsed_inv = self.parse_xml_invoice(xml_root)
+            parsed_inv = self.parse_xml_invoice(xml_root)
+            if parsed_inv:
                 return parsed_inv
-            except:
-                continue
         parsed_inv = self.fallback_parse_pdf_invoice(file_data)
         if not parsed_inv:
             raise UserError(_(
@@ -77,8 +74,14 @@ class AccountInvoiceImport(models.TransientModel):
         '''
         return False
 
-        # INVOICE PIVOT format (parsed_inv)
+        # INVOICE PIVOT format ('parsed_inv' without pre-processing)
+        # For refunds, we support 2 possibilities:
+        # a) type = 'in_invoice' with negative amounts and qty
+        # b) type = 'in_refund' with positive amounts and qty ("Odoo way")
+        # That way, it simplifies the code in the format-specific import
+        # modules, which is what we want!
         # {
+        # 'type': 'in_invoice' or 'in_refund'  # 'in_invoice' by default
         # 'currency': {
         #    'iso': 'EUR',
         #    'currency_symbol': u'€',  # The one or the other
@@ -87,7 +90,7 @@ class AccountInvoiceImport(models.TransientModel):
         # 'date_due': '2015-11-07',
         # 'date_start': '2015-10-01',  # for services over a period of time
         # 'date_end': '2015-10-31',
-        # 'amount_untaxed': 10.0,  # < 0 for refunds
+        # 'amount_untaxed': 10.0,
         # 'amount_tax': 2.0,  # provide amount_untaxed OR amount_tax
         # 'amount_total': 12.0,  # Total with taxes, must always be provided
         # 'partner': {
@@ -108,10 +111,22 @@ class AccountInvoiceImport(models.TransientModel):
         #           'code': 'GZ250',
         #           },
         #       'name': 'Gelierzucker Extra 250g',
-        #       'price_unit': 1.45, # price_unit without taxes always positive
-        #       'qty': -2.0,  # < 0 when it's a refund
+        #       'price_unit': 1.45, # price_unit without taxes
+        #       'qty': 2.0,
+        #       'price_subtotal': 2.90,  # not required, but needed
+        #               to be able to generate adjustment lines when decimal
+        #               precision is not high enough in Odoo
         #       'uom': {'unece_code': 'C62'},
-        #       'taxes': [list of tax_dict],
+        #       'taxes': [{
+        #           'amount_type': 'percent',
+        #           'amount': 20.0,
+        #           'unece_type_code': 'VAT',
+        #           'unece_categ_code': 'S',
+        #           'unece_due_date_code': '432',
+        #           }],
+        #       'date_start': '2015-10-01',
+        #       'date_end': '2015-10-31',
+        #       # date_start and date_end on lines override the global value
         #       }],
         # }
 
@@ -124,17 +139,27 @@ class AccountInvoiceImport(models.TransientModel):
         # 'label': 'Force invoice line description',
         # 'product': product recordset,
         # }
+        #
+        # Note: we also support importing customer invoices via
+        # create_invoice() but only with 'nline_*' invoice import methods.
 
     @api.model
     def _prepare_create_invoice_vals(self, parsed_inv, import_config=False):
+        assert parsed_inv.get('pre-processed'), 'pre-processing not done'
         aio = self.env['account.invoice']
         ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
         rpo = self.env['res.partner']
         company = self.env.user.company_id
-        assert parsed_inv.get('amount_total'), 'Missing amount_total'
+        start_end_dates_installed = hasattr(ailo, 'start_date') and\
+            hasattr(ailo, 'end_date')
+        if parsed_inv['type'] in ('out_invoice', 'out_refund'):
+            partner_type = 'customer'
+        else:
+            partner_type = 'supplier'
         partner = bdio._match_partner(
-            parsed_inv['partner'], parsed_inv['chatter_msg'])
+            parsed_inv['partner'], parsed_inv['chatter_msg'],
+            partner_type=partner_type)
         partner = partner.commercial_partner_id
         currency = bdio._match_currency(
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
@@ -226,6 +251,11 @@ class AccountInvoiceImport(models.TransientModel):
                     il_vals['name'] = line['name']
                 elif not il_vals.get('name'):
                     il_vals['name'] = _('MISSING DESCRIPTION')
+                if start_end_dates_installed:
+                    il_vals['start_date'] =\
+                        line.get('date_start') or parsed_inv.get('date_start')
+                    il_vals['end_date'] =\
+                        line.get('date_end') or parsed_inv.get('date_end')
                 uom = bdio._match_uom(
                     line.get('uom'), parsed_inv['chatter_msg'])
                 il_vals['uom_id'] = uom.id
@@ -240,7 +270,7 @@ class AccountInvoiceImport(models.TransientModel):
         if aacount_id:
             for line in vals['invoice_line_ids']:
                 line[2]['account_analytic_id'] = aacount_id
-        return vals
+        return (vals, config)
 
     @api.model
     def set_1line_price_unit_and_quantity(self, il_vals, parsed_inv):
@@ -267,12 +297,12 @@ class AccountInvoiceImport(models.TransientModel):
     def set_1line_start_end_dates(self, il_vals, parsed_inv):
         """Only useful if you have installed the module account_cutoff_prepaid
         from https://github.com/OCA/account-closing"""
-        fakeiline = self.env['account.invoice.line'].browse(False)
+        ailo = self.env['account.invoice.line']
         if (
                 parsed_inv.get('date_start') and
                 parsed_inv.get('date_end') and
-                hasattr(fakeiline, 'start_date') and
-                hasattr(fakeiline, 'end_date')):
+                hasattr(ailo, 'start_date') and
+                hasattr(ailo, 'end_date')):
             il_vals['start_date'] = parsed_inv.get('date_start')
             il_vals['end_date'] = parsed_inv.get('date_end')
 
@@ -288,26 +318,38 @@ class AccountInvoiceImport(models.TransientModel):
         if filetype and filetype[0] in ['application/xml', 'text/xml']:
             try:
                 xml_root = etree.fromstring(file_data)
-            except:
+            except Exception, e:
                 raise UserError(_(
-                    "This XML file is not XML-compliant"))
+                    "This XML file is not XML-compliant. Error: %s") % e)
             pretty_xml_string = etree.tostring(
                 xml_root, pretty_print=True, encoding='UTF-8',
                 xml_declaration=True)
             logger.debug('Starting to import the following XML file:')
             logger.debug(pretty_xml_string)
             parsed_inv = self.parse_xml_invoice(xml_root)
+            if parsed_inv is False:
+                raise UserError(_(
+                    "This type of XML invoice is not supported. "
+                    "Did you install the module to support this type "
+                    "of file?"))
         # Fallback on PDF
         else:
             parsed_inv = self.parse_pdf_invoice(file_data)
         if 'attachments' not in parsed_inv:
             parsed_inv['attachments'] = {}
         parsed_inv['attachments'][self.invoice_filename] = self.invoice_file
-        updated_parsed_inv = self.update_clean_parsed_inv(parsed_inv)
-        return updated_parsed_inv
+        pp_parsed_inv = self.pre_process_parsed_inv(parsed_inv)
+        return pp_parsed_inv
 
     @api.model
-    def update_clean_parsed_inv(self, parsed_inv):
+    def pre_process_parsed_inv(self, parsed_inv):
+        if parsed_inv.get('pre-processed'):
+            return parsed_inv
+        parsed_inv['pre-processed'] = True
+        if 'chatter_msg' not in parsed_inv:
+            parsed_inv['chatter_msg'] = []
+        if parsed_inv.get('type') in ('out_invoice', 'out_refund'):
+            return parsed_inv
         prec_ac = self.env['decimal.precision'].precision_get('Account')
         prec_pp = self.env['decimal.precision'].precision_get('Product Price')
         prec_uom = self.env['decimal.precision'].precision_get(
@@ -320,27 +362,30 @@ class AccountInvoiceImport(models.TransientModel):
                 'amount_tax' not in parsed_inv):
             # For invoices that never have taxes
             parsed_inv['amount_untaxed'] = parsed_inv['amount_total']
-        if float_compare(
-                parsed_inv['amount_total'], 0, precision_digits=prec_ac) == -1:
+        # Support the 2 refund methods; if method a) is used, we convert to
+        # method b)
+        if not parsed_inv.get('type'):
+            parsed_inv['type'] = 'in_invoice'  # default value
+        if (
+                parsed_inv['type'] == 'in_invoice' and
+                float_compare(
+                parsed_inv['amount_total'], 0, precision_digits=prec_ac) < 0):
             parsed_inv['type'] = 'in_refund'
-        else:
-            parsed_inv['type'] = 'in_invoice'
+            for entry in ['amount_untaxed', 'amount_total']:
+                parsed_inv[entry] *= -1
+            for line in parsed_inv.get('lines', []):
+                line['qty'] *= -1
+                if 'price_subtotal' in line:
+                    line['price_subtotal'] *= -1
+        # Rounding work
         for entry in ['amount_untaxed', 'amount_total']:
             parsed_inv[entry] = float_round(
                 parsed_inv[entry], precision_digits=prec_ac)
-            if parsed_inv['type'] == 'in_refund':
-                parsed_inv[entry] *= -1
-        if parsed_inv.get('lines'):
-            for line in parsed_inv['lines']:
-                line['qty'] = float_round(
-                    line['qty'], precision_digits=prec_uom)
-                line['price_unit'] = float_round(
-                    line['price_unit'], precision_digits=prec_pp)
-                if parsed_inv['type'] == 'in_refund':
-                    line['qty'] *= -1
-        if 'chatter_msg' not in parsed_inv:
-            parsed_inv['chatter_msg'] = []
-        logger.debug('Resulf of invoice parsing parsed_inv=%s', parsed_inv)
+        for line in parsed_inv.get('lines', []):
+            line['qty'] = float_round(line['qty'], precision_digits=prec_uom)
+            line['price_unit'] = float_round(
+                line['price_unit'], precision_digits=prec_pp)
+        logger.debug('Result of invoice parsing parsed_inv=%s', parsed_inv)
         return parsed_inv
 
     @api.multi
@@ -375,9 +420,7 @@ class AccountInvoiceImport(models.TransientModel):
             ('type', '=', parsed_inv['type'])]
         existing_invs = aio.search(
             domain +
-            [(
-                'reference', '=ilike', parsed_inv.get('invoice_number')
-            )])
+            [('reference', '=ilike', parsed_inv.get('invoice_number'))])
         if existing_invs:
             raise UserError(_(
                 "This invoice already exists in Odoo. It's "
@@ -401,15 +444,23 @@ class AccountInvoiceImport(models.TransientModel):
             action['res_id'] = self.id
             return action
         else:
-            action = self.create_invoice()
+            action = self.create_invoice_action(parsed_inv)
             return action
 
     @api.multi
-    def create_invoice(self):
+    def create_invoice_action_button(self):
+        '''Workaround for a v10 bug: if I call create_invoice_action()
+        directly from the button, I get the context in parsed_inv'''
+        return self.create_invoice_action()
+
+    @api.multi
+    def create_invoice_action(self, parsed_inv=None):
+        '''parsed_inv is not a required argument'''
         self.ensure_one()
         iaao = self.env['ir.actions.act_window']
-        parsed_inv = self.parse_invoice()
-        invoice = self._create_invoice(parsed_inv)
+        if parsed_inv is None:
+            parsed_inv = self.parse_invoice()
+        invoice = self.create_invoice(parsed_inv)
         invoice.message_post(_(
             "This invoice has been created automatically via file import"))
         action = iaao.for_xml_id('account', 'action_invoice_tree2')
@@ -421,29 +472,122 @@ class AccountInvoiceImport(models.TransientModel):
         return action
 
     @api.model
-    def _create_invoice(self, parsed_inv, import_config=False):
+    def create_invoice(self, parsed_inv, import_config=False):
         aio = self.env['account.invoice']
         bdio = self.env['business.document.import']
-        vals = self._prepare_create_invoice_vals(
+        parsed_inv = self.pre_process_parsed_inv(parsed_inv)
+        (vals, import_config) = self._prepare_create_invoice_vals(
             parsed_inv, import_config=import_config)
         logger.debug('Invoice vals for creation: %s', vals)
         invoice = aio.create(vals)
-        self.post_process_invoice(parsed_inv, invoice)
+        self.post_process_invoice(parsed_inv, invoice, import_config)
         logger.info('Invoice ID %d created', invoice.id)
         bdio.post_create_or_update(parsed_inv, invoice)
         return invoice
 
     @api.model
-    def post_process_invoice(self, parsed_inv, invoice):
-        # Force tax amount if necessary
-        prec = self.env['decimal.precision'].precision_get('Account')
+    def _prepare_global_adjustment_line(
+            self, diff_amount, invoice, import_config):
+        ailo = self.env['account.invoice.line']
+        prec = invoice.currency_id.rounding
+        il_vals = {
+            'name': _('Adjustment'),
+            'quantity': 1,
+            'price_unit': diff_amount,
+            }
+        # no taxes nor product on such a global adjustment line
+        if import_config['invoice_line_method'] == 'nline_no_product':
+            il_vals['account_id'] = import_config['account'].id
+        elif import_config['invoice_line_method'] == 'nline_static_product':
+            account = ailo.get_invoice_line_account(
+                invoice.type, import_config['product'],
+                invoice.fiscal_position_id, invoice.company_id)
+            il_vals['account_id'] = account.id
+        elif import_config['invoice_line_method'] == 'nline_auto_product':
+            res_cmp = float_compare(diff_amount, 0, precision_rounding=prec)
+            company = invoice.company_id
+            if res_cmp > 0:
+                if not company.adjustment_debit_account_id:
+                    raise UserError(_(
+                        "You must configure the 'Adjustment Debit Account' "
+                        "on the Accounting Configuration page."))
+                il_vals['account_id'] = company.adjustment_debit_account_id.id
+            else:
+                if not company.adjustment_credit_account_id:
+                    raise UserError(_(
+                        "You must configure the 'Adjustment Credit Account' "
+                        "on the Accounting Configuration page."))
+                il_vals['account_id'] = company.adjustment_credit_account_id.id
+        logger.debug("Prepared global ajustment invoice line %s", il_vals)
+        return il_vals
+
+    @api.model
+    def post_process_invoice(self, parsed_inv, invoice, import_config):
+        if parsed_inv.get('type') in ('out_invoice', 'out_refund'):
+            return
+        prec = invoice.currency_id.rounding
+        # If untaxed amount is wrong, create adjustment lines
         if (
-                parsed_inv.get('amount_total') and
-                parsed_inv.get('amount_untaxed') and
+                import_config['invoice_line_method'].startswith('nline') and
                 float_compare(
-                    invoice.amount_total,
-                    parsed_inv['amount_total'],
-                    precision_digits=prec)):
+                    parsed_inv['amount_untaxed'], invoice.amount_untaxed,
+                    precision_rounding=prec)):
+            # Try to find the line that has a problem
+            # TODO : on invoice creation, the lines are in the same
+            # order, but not on invoice update...
+            for i in range(len(parsed_inv['lines'])):
+                if 'price_subtotal' not in parsed_inv['lines'][i]:
+                    continue
+                iline = invoice.invoice_line_ids[i]
+                odoo_subtotal = iline.price_subtotal
+                parsed_subtotal = parsed_inv['lines'][i]['price_subtotal']
+                if float_compare(
+                        odoo_subtotal, parsed_subtotal,
+                        precision_rounding=prec):
+                    diff_amount = float_round(
+                        parsed_subtotal - odoo_subtotal,
+                        precision_rounding=prec)
+                    logger.info(
+                        'Price subtotal difference found on invoice line %d '
+                        '(source:%s, odoo:%s, diff:%s).',
+                        i + 1, parsed_subtotal, odoo_subtotal, diff_amount)
+                    copy_dict = {
+                        'name': _('Adjustment on %s') % iline.name,
+                        'quantity': 1,
+                        'price_unit': diff_amount,
+                        }
+                    if import_config['invoice_line_method'] ==\
+                            'nline_auto_product':
+                        copy_dict['product_id'] = False
+                    # Add the adjustment line
+                    iline.copy(copy_dict)
+                    logger.info('Adjustment invoice line created')
+        if float_compare(
+                parsed_inv['amount_untaxed'], invoice.amount_untaxed,
+                precision_rounding=prec):
+            # create global ajustment line
+            diff_amount = float_round(
+                parsed_inv['amount_untaxed'] - invoice.amount_untaxed,
+                precision_rounding=prec)
+            logger.info(
+                'Amount untaxed difference found '
+                '(source: %s, odoo:%s, diff:%s)',
+                parsed_inv['amount_untaxed'], invoice.amount_untaxed,
+                diff_amount)
+            il_vals = self._prepare_global_adjustment_line(
+                diff_amount, invoice, import_config)
+            il_vals['invoice_id'] = invoice.id
+            self.env['account.invoice.line'].create(il_vals)
+            logger.info('Global adjustment invoice line created')
+        # Invalidate cache
+        invoice = self.env['account.invoice'].browse(invoice.id)
+        assert not float_compare(
+            parsed_inv['amount_untaxed'], invoice.amount_untaxed,
+            precision_rounding=prec)
+        # Force tax amount if necessary
+        if float_compare(
+                invoice.amount_total, parsed_inv['amount_total'],
+                precision_rounding=prec):
             if not invoice.tax_line_ids:
                 raise UserError(_(
                     "The total amount is different from the untaxed amount, "
@@ -564,6 +708,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.multi
     def update_invoice(self):
+        '''Called by the button of the wizard (step 2)'''
         self.ensure_one()
         iaao = self.env['ir.actions.act_window']
         bdio = self.env['business.document.import']
@@ -589,6 +734,7 @@ class AccountInvoiceImport(models.TransientModel):
             raise UserError(_(
                 "Missing Invoice Import Configuration on partner '%s'.")
                 % partner.name)
+        import_config = partner.invoice_import2import_config()
         currency = bdio._match_currency(
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
         if currency != invoice.currency_id:
@@ -606,7 +752,7 @@ class AccountInvoiceImport(models.TransientModel):
                 partner.invoice_import_id.invoice_line_method ==
                 'nline_auto_product'):
             self.update_invoice_lines(parsed_inv, invoice, partner)
-        self.post_process_invoice(parsed_inv, invoice)
+        self.post_process_invoice(parsed_inv, invoice, import_config)
         if partner.invoice_import_id.account_analytic_id:
             invoice.invoice_line.write({
                 'account_analytic_id':
@@ -625,3 +771,52 @@ class AccountInvoiceImport(models.TransientModel):
             'res_id': invoice.id,
             })
         return action
+
+    def xpath_to_dict_helper(self, xml_root, xpath_dict, namespaces):
+        for key, value in xpath_dict.iteritems():
+            if isinstance(value, list):
+                isdate = isfloat = False
+                if 'date' in key:
+                    isdate = True
+                elif 'amount' in key:
+                    isfloat = True
+                xpath_dict[key] = self.multi_xpath_helper(
+                    xml_root, value, namespaces, isdate=isdate,
+                    isfloat=isfloat)
+                if not xpath_dict[key]:
+                    logger.debug('pb')
+            elif isinstance(value, dict):
+                xpath_dict[key] = self.xpath_to_dict_helper(
+                    xml_root, value, namespaces)
+        return xpath_dict
+        # TODO: think about blocking required fields
+
+    def multi_xpath_helper(
+            self, xml_root, xpath_list, namespaces, isdate=False,
+            isfloat=False):
+        assert isinstance(xpath_list, list)
+        for xpath in xpath_list:
+            xpath_res = xml_root.xpath(xpath, namespaces=namespaces)
+            if xpath_res and xpath_res[0].text:
+                if isdate:
+                    if (
+                            xpath_res[0].attrib and
+                            xpath_res[0].attrib.get('format') != '102'):
+                        raise UserError(_(
+                            "Only the date format 102 is supported "))
+                    date_dt = datetime.strptime(xpath_res[0].text, '%Y%m%d')
+                    date_str = fields.Date.to_string(date_dt)
+                    return date_str
+                elif isfloat:
+                    res_float = float(xpath_res[0].text)
+                    return res_float
+                else:
+                    return xpath_res[0].text
+        return False
+
+    def raw_multi_xpath_helper(self, xml_root, xpath_list, namespaces):
+        for xpath in xpath_list:
+            xpath_res = xml_root.xpath(xpath, namespaces=namespaces)
+            if xpath_res:
+                return xpath_res
+        return []
