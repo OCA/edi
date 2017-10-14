@@ -6,16 +6,16 @@
 Account Invoice Import Factur-X
 ===============================
 
-This module is an extension of the module *account_invoice_import* to add the ability to import ZUGFeRD and Factur-X invoices. The `ZUGFeRD <http://www.pdflib.com/knowledge-base/pdfa/zugferd-invoices/>`_ standard is a standard based on `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`_ (Cross-Industry Invoice) for electronic invoicing. Factur-X is an evolution of the ZUGFeRD standard for France and Germany (to be published in Q2 2017). A ZUGFeRD/Factur-X invoice is a PDF invoice with an embedded XML file that carries structured information about the invoice.
+This module is an extension of the module *account_invoice_import* to add the ability to import ZUGFeRD 1.0 and Factur-X/ZUGFeRD 2.0 invoices. The `ZUGFeRD <http://www.pdflib.com/knowledge-base/pdfa/zugferd-invoices/>`_ standard is a standard based on `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`_ (Cross-Industry Invoice) for electronic invoicing. Factur-X, also called ZUGFeRD 2.0 in Germany, is now the official e-invoicing standard in France and Germany. A Factur-X invoice is a PDF invoice with an embedded XML file that carries structured information about the invoice.
 
 Installation
 ============
 
-This module requires the Python library *PyPDF2*. To install it, run:
+This module requires the Python library *factur-x* developped by Akretion, which depends on PyPDF2. To install it, run:
 
 .. code::
 
-  sudo pip install PyPDF2
+  sudo pip install factur-x
 
 Configuration
 =============
