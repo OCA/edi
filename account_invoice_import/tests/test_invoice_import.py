@@ -82,9 +82,9 @@ class TestInvoiceImport(TransactionCase):
             'date_start': '2017-08-01',
             'date_end': '2017-08-31',
             'partner': {
-                'name': 'Agrolait',
+                'name': 'ASUSTeK',
                 },
-            'description': 'Daily milk for the kids',
+            'description': 'New hi-tech gadget',
             'lines': [{
                 'product': {'code': 'AII-TEST-PRODUCT'},
                 'name': 'Super test product',
