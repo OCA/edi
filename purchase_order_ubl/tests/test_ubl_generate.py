@@ -2,33 +2,28 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import HttpCase
 
 
-class TestUblOrder(TransactionCase):
+class TestUblOrder(HttpCase):
 
     def test_ubl_generate(self):
-        # ro = self.env['report']
+        ro = self.env['report']
         poo = self.env['purchase.order']
-        # buo = self.env['base.ubl']
+        buo = self.env['base.ubl']
         order_states = poo.get_order_states()
         rfq_states = poo.get_rfq_states()
         for i in range(7):
             i += 1
             order = self.env.ref('purchase.purchase_order_%d' % i)
             for version in ['2.0', '2.1']:
-                # get_pdf() doesn't work with Travis at the moment
-                # I don't know why! So I disable this test.
-                # pdf_file = ro.with_context(ubl_version=version).get_pdf(
-                #    order.ids, 'purchase.report_purchasequotation')
-                # res = buo.get_xml_files_from_pdf(pdf_file)
+                pdf_file = ro.with_context(ubl_version=version).get_pdf(
+                    order.ids, 'purchase.report_purchasequotation')
+                res = buo.get_xml_files_from_pdf(pdf_file)
                 if order.state in order_states:
-                    # filename = order.get_ubl_filename(
-                    #   'order', version=version)
-                    # self.assertTrue(filename in res)
-                    order.generate_order_ubl_xml_etree(version=version)
+                    filename = order.get_ubl_filename(
+                        'order', version=version)
+                    self.assertTrue(filename in res)
                 elif order.state in rfq_states:
-                    # filename = order.get_ubl_filename(
-                    #    'rfq', version=version)
-                    # self.assertTrue(filename in res)
-                    order.generate_rfq_ubl_xml_etree(version=version)
+                    filename = order.get_ubl_filename('rfq', version=version)
+                    self.assertTrue(filename in res)
