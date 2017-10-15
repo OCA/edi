@@ -9,15 +9,12 @@ from odoo.addons.account_payment_unece.tests.test_account_invoice import \
 class TestUblInvoice(TestAccountInvoice):
 
     def test_ubl_generate(self):
-        # ro = self.env['report']
-        # buo = self.env['base.ubl']
+        ro = self.env['report']
+        buo = self.env['base.ubl']
         invoice = self.test_only_create_invoice()
         for version in ['2.0', '2.1']:
-            # get_pdf() doesn't work in Travis and I don't know why
-            # So I disable it for the moment
-            # pdf_file = ro.with_context(ubl_version=version).get_pdf(
-            #    [invoice.id], 'account.report_invoice')
-            # res = buo.get_xml_files_from_pdf(pdf_file)
-            # invoice_filename = invoice.get_ubl_filename(version=version)
-            # self.assertTrue(invoice_filename in res)
-            invoice.generate_invoice_ubl_xml_etree(version=version)
+            pdf_file = ro.with_context(ubl_version=version).get_pdf(
+                [invoice.id], 'account.report_invoice')
+            res = buo.get_xml_files_from_pdf(pdf_file)
+            invoice_filename = invoice.get_ubl_filename(version=version)
+            self.assertTrue(invoice_filename in res)
