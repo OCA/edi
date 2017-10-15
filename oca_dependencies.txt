@@ -1,6 +1,6 @@
 product-attribute
 bank-payment
-community-data-files
+community-data-files https://github.com/akretion/community-data-files 10-httpcase-test
 partner-contact
 connector-telephony
 reporting-engine
