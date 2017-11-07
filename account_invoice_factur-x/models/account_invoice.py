@@ -11,7 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import generate_facturx
+    from facturx import generate_facturx_from_binary
 except ImportError:
     logger.debug('Cannot import facturx')
 
@@ -697,33 +697,15 @@ class AccountInvoice(models.Model):
         return pdf_metadata
 
     @api.multi
-    def regular_pdf_invoice_to_facturx_invoice(
-            self, pdf_content=None, pdf_file=None):
-        """This method is independent from the reporting engine.
-        2 possible uses:
-        a) use the pdf_content argument, which has the binary of the PDF
-        -> it will return the new PDF binary with the embedded XML
-        (used for qweb-pdf invoices in this module, cf report.py)
-        b) OR use the pdf_file argument, which has the path to the
-        original PDF file
-        -> it will re-write this file with the new PDF
-        (used for py3o invoices, cf module account_invoice_factur-x_py3o)
-        """
+    def regular_pdf_invoice_to_facturx_invoice(self, pdf_content):
         self.ensure_one()
-        assert pdf_content or pdf_file, 'Missing pdf_file or pdf_content'
+        assert pdf_content, 'Missing pdf_content'
         if self.type in ('out_invoice', 'out_refund'):
             facturx_xml_str = self.generate_facturx_xml()
             pdf_metadata = self._prepare_pdf_metadata()
             # Generate a new PDF with XML file as attachment
-            if pdf_file is None:
-                pdf_invoice = pdf_content
-            else:
-                # TODO : re-write, just a temp hack to make py3o work
-                x = open(pdf_file, 'rb')
-                pdf_invoice = x.read()
-                x.close()
-            pdf_content = generate_facturx(
-                pdf_invoice, facturx_xml_str, check_xsd=False,
+            pdf_content = generate_facturx_from_binary(
+                pdf_content, facturx_xml_str, check_xsd=False,
                 facturx_level='en16931', pdf_metadata=pdf_metadata)
             logger.info('%s file added to PDF invoice', FACTURX_FILENAME)
         return pdf_content
