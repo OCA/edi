@@ -11,5 +11,6 @@
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': ['account_invoice_factur-x', 'report_py3o'],
+    'external_dependencies': {'python': ['facturx']},
     'installable': True,
 }
