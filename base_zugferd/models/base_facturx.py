@@ -19,11 +19,11 @@ class BaseFacturX(models.AbstractModel):
         '''Validate the XML file against the XSD'''
         if flavor in ('factur-x', 'facturx'):
             facturx_level2xsd = {
-                'minimum': 'Factur-X_BASIC_WL.xsd',
-                'basicwl': 'Factur-X_BASIC_WL.xsd',
-                'basic': 'Factur-X_EN16931.xsd',
-                'en16931': 'Factur-X_EN16931.xsd',  # comfort
-                False: 'Factur-X_EN16931.xsd',
+                'minimum': 'FACTUR-X_BASIC-WL.xsd',
+                'basicwl': 'FACTUR-X_BASIC-WL.xsd',
+                'basic': 'FACTUR-X_EN16931.xsd',
+                'en16931': 'FACTUR-X_EN16931.xsd',  # comfort
+                False: 'FACTUR-X_EN16931.xsd',
                 }
             if level not in facturx_level2xsd:
                 raise UserError(_(
