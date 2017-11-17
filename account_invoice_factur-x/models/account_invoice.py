@@ -143,9 +143,7 @@ class AccountInvoice(models.Model):
         date_invoice_dt = fields.Date.from_string(
             self.date_invoice or fields.Date.context_today(self))
         self._cii_add_date('IssueDateTime', date_invoice_dt, header_doc, ns)
-        # TODO Bug in Factur-X specs or XSD
-        # if self.comment and ns['level'] != 'minimum':
-        if self.comment and ns['level'] in ('basic', 'en16931'):
+        if self.comment and ns['level'] != 'minimum':
             note = etree.SubElement(header_doc, ns['ram'] + 'IncludedNote')
             content_note = etree.SubElement(note, ns['ram'] + 'Content')
             content_note.text = self.comment
@@ -732,7 +730,8 @@ class AccountInvoice(models.Model):
             }
 
         root = etree.Element(ns['rsm'] + 'CrossIndustryInvoice', nsmap=nsmap)
-        self = self.with_context(lang=self.partner_id.lang or 'en_US')
+        self = self.with_context(
+            lang=self.partner_id.lang or self.env.user.lang or 'en_US')
         self._cii_add_document_context_block(root, nsmap, ns)
         self._cii_add_header_block(root, ns)
 
