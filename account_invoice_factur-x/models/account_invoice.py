@@ -143,7 +143,9 @@ class AccountInvoice(models.Model):
         date_invoice_dt = fields.Date.from_string(
             self.date_invoice or fields.Date.context_today(self))
         self._cii_add_date('IssueDateTime', date_invoice_dt, header_doc, ns)
-        if self.comment and ns['level'] != 'minimum':
+        # TODO Bug in Factur-X specs or XSD
+        # if self.comment and ns['level'] != 'minimum':
+        if self.comment and ns['level'] in ('basic', 'en16931'):
             note = etree.SubElement(header_doc, ns['ram'] + 'IncludedNote')
             content_note = etree.SubElement(note, ns['ram'] + 'Content')
             content_note.text = self.comment
@@ -583,20 +585,19 @@ class AccountInvoice(models.Model):
                 currencyID=ns['currency'])
             gross_price_amount.text = '%0.*f' % (
                 ns['price_prec'], gross_price_val)
-        fc_discount = float_compare(
-            iline.discount, 0.0, precision_digits=ns['disc_prec'])
-        if fc_discount in [-1, 1]:
-            trade_allowance = etree.SubElement(
-                gross_price, ns['ram'] + 'AppliedTradeAllowanceCharge')
-            charge_indic = etree.SubElement(
-                trade_allowance, ns['ram'] + 'ChargeIndicator')
-            indicator = etree.SubElement(
-                charge_indic, ns['udt'] + 'Indicator')
-            if fc_discount == 1:
-                indicator.text = 'false'
-            else:
-                indicator.text = 'true'
-            if ns['level'] == 'en16931':
+            fc_discount = float_compare(
+                iline.discount, 0.0, precision_digits=ns['disc_prec'])
+            if fc_discount in [-1, 1]:
+                trade_allowance = etree.SubElement(
+                    gross_price, ns['ram'] + 'AppliedTradeAllowanceCharge')
+                charge_indic = etree.SubElement(
+                    trade_allowance, ns['ram'] + 'ChargeIndicator')
+                indicator = etree.SubElement(
+                    charge_indic, ns['udt'] + 'Indicator')
+                if fc_discount == 1:
+                    indicator.text = 'false'
+                else:
+                    indicator.text = 'true'
                 disc_percent = etree.SubElement(
                     trade_allowance, ns['ram'] + 'CalculationPercent')
                 disc_percent.text = '%0.*f' % (ns['disc_prec'], iline.discount)
@@ -605,14 +606,14 @@ class AccountInvoice(models.Model):
                 base_discount_amt.text = '%0.*f' % (
                     ns['price_prec'],
                     iline.quantity * iline.price_unit * ns['sign'])
-            actual_amount = etree.SubElement(
-                trade_allowance, ns['ram'] + 'ActualAmount',
-                currencyID=ns['currency'])
-            actual_amount_val = float_round(
-                gross_price_val - net_price_val,
-                precision_digits=ns['price_prec'])
-            actual_amount.text = '%0.*f' % (
-                ns['price_prec'], actual_amount_val * ns['sign'])
+                actual_amount = etree.SubElement(
+                    trade_allowance, ns['ram'] + 'ActualAmount',
+                    currencyID=ns['currency'])
+                actual_amount_val = float_round(
+                    gross_price_val - net_price_val,
+                    precision_digits=ns['price_prec'])
+                actual_amount.text = '%0.*f' % (
+                    ns['price_prec'], actual_amount_val * ns['sign'])
 
         net_price = etree.SubElement(
             line_trade_agreement, ns['ram'] + 'NetPriceProductTradePrice')
@@ -731,7 +732,7 @@ class AccountInvoice(models.Model):
             }
 
         root = etree.Element(ns['rsm'] + 'CrossIndustryInvoice', nsmap=nsmap)
-
+        self = self.with_context(lang=self.partner_id.lang or 'en_US')
         self._cii_add_document_context_block(root, nsmap, ns)
         self._cii_add_header_block(root, ns)
 
