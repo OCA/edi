@@ -35,6 +35,13 @@
       <xs:element name="ID" type="udt:IDType"/>
       <xs:element name="TypeCode" type="qdt:DocumentCodeType" minOccurs="0"/>
       <xs:element name="IssueDateTime" type="udt:DateTimeType"/>
+      <xs:element name="IncludedNote" type="ram:NoteType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="NoteType">
+    <xs:sequence>
+      <xs:element name="Content" type="udt:TextType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="SubjectCode" type="udt:CodeType" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="HeaderTradeAgreementType">
