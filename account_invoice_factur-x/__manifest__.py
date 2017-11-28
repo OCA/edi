@@ -12,6 +12,9 @@
     'website': 'http://www.akretion.com',
     'depends': ['account_payment_partner', 'base_zugferd', 'base_vat'],
     'external_dependencies': {'python': ['facturx']},
-    'data': ['views/res_partner.xml'],
+    'data': [
+        'views/res_partner.xml',
+        'views/account_config_settings.xml',
+        ],
     'installable': True,
 }
