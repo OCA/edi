@@ -17,6 +17,8 @@ class Py3oReport(models.TransientModel):
         # but I'm not sure it's a better approach
         if (
                 self.ir_actions_report_xml_id.report_name in inv_reports and
+                self.ir_actions_report_xml_id.report_type == 'py3o' and
+                self.ir_actions_report_xml_id.py3o_filetype == 'pdf' and
                 res_id and
                 report_path):
             invoice = self.env['account.invoice'].with_context(

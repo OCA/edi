@@ -18,6 +18,8 @@ class Py3oReport(models.TransientModel):
         if (
                 self.ir_actions_report_xml_id.report_name
                 in purchase_reports and
+                self.ir_actions_report_xml_id.report_type == 'py3o' and
+                self.ir_actions_report_xml_id.py3o_filetype == 'pdf' and
                 res_id and
                 report_path):
             order = self.env['purchase.order'].browse(res_id)
