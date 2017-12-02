@@ -1,0 +1,67 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * base_ubl
+# 
+# Translators:
+# Armando Vulcano Junior <vulcano@uol.com.br>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-30 15:53+0000\n"
+"PO-Revision-Date: 2017-09-30 15:53+0000\n"
+"Last-Translator: Armando Vulcano Junior <vulcano@uol.com.br>, 2017\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/23907/pt_BR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: base_ubl
+#: model:ir.model,name:base_ubl.model_base_ubl
+msgid "Common methods to generate and parse UBL XML files"
+msgstr ""
+
+#. module: base_ubl
+#: field:base.ubl,display_name:0
+msgid "Display Name"
+msgstr "Mostrar Nome"
+
+#. module: base_ubl
+#: field:base.ubl,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: base_ubl
+#: field:base.ubl,__last_update:0
+msgid "Last Modified on"
+msgstr "Última Modificação em"
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:426
+#, python-format
+msgid "Missing UNECE Tax Category on tax '%s'"
+msgstr ""
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:446
+#, python-format
+msgid "Missing UNECE Tax Type on tax '%s'"
+msgstr ""
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:298
+#, python-format
+msgid "Missing UNECE code on unit of measure '%s'"
+msgstr ""
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:507
+#, python-format
+msgid ""
+"The generated XML file is not valid against the official XML Schema "
+"Definition. The generated XML file and the full error have been written in "
+"the server logs. Here is the error, which may give you an idea on the cause "
+"of the problem : %s."
+msgstr ""

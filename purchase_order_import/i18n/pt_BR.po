@@ -1,0 +1,286 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * purchase_order_import
+# 
+# Translators:
+# Armando Vulcano Junior <vulcano@uol.com.br>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-30 15:54+0000\n"
+"PO-Revision-Date: 2017-09-30 15:54+0000\n"
+"Last-Translator: Armando Vulcano Junior <vulcano@uol.com.br>, 2017\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/23907/pt_BR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:210
+#, python-format
+msgid "%d new order line(s) created: %s"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:194
+#, python-format
+msgid "%d order line(s) are not in the imported quotation: %s"
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: purchase_order_import
+#: field:purchase.order.import,create_uid:0
+msgid "Created by"
+msgstr "Criado por"
+
+#. module: purchase_order_import
+#: field:purchase.order.import,create_date:0
+msgid "Created on"
+msgstr "Criado em"
+
+#. module: purchase_order_import
+#: field:purchase.order.import,display_name:0
+msgid "Display Name"
+msgstr "Mostrar Nome"
+
+#. module: purchase_order_import
+#: field:purchase.order.import,quote_filename:0
+msgid "Filename"
+msgstr "Nome de Arquivo"
+
+#. module: purchase_order_import
+#: field:purchase.order.import,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid ""
+"If it is a PDF file, Odoo will try to find an XML file in the attachments of"
+" the PDF file and then use this XML file."
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid ""
+"If it is an XML file, Odoo will parse it if the module that adds support for"
+" this XML format is installed. For the"
+msgstr ""
+"Se for um arquivo XML, o Odoo irá analisá-lo se o módulo que adiciona "
+"suporte para este formato XML estiver instalado. Para o"
+
+#. module: purchase_order_import
+#: model:ir.actions.act_window,name:purchase_order_import.purchase_order_import_action
+msgid "Import Quotation"
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order:purchase_order_import.purchase_order_form
+msgid "Import Quotation File"
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid "Import Quotations Files from Suppliers"
+msgstr ""
+
+#. module: purchase_order_import
+#: field:purchase.order.import,__last_update:0
+msgid "Last Modified on"
+msgstr "Última Modificação em"
+
+#. module: purchase_order_import
+#: field:purchase.order.import,write_uid:0
+msgid "Last Updated by"
+msgstr "Última Atualizaçao por"
+
+#. module: purchase_order_import
+#: field:purchase.order.import,write_date:0
+msgid "Last Updated on"
+msgstr "Última Atualização em"
+
+#. module: purchase_order_import
+#: selection:purchase.order.import,update_option:0
+msgid "Price"
+msgstr ""
+
+#. module: purchase_order_import
+#: selection:purchase.order.import,update_option:0
+msgid "Price and Quantity"
+msgstr ""
+
+#. module: purchase_order_import
+#: model:ir.model,name:purchase_order_import.model_purchase_order_import
+msgid "Purchase Order Import from Files"
+msgstr ""
+
+#. module: purchase_order_import
+#: field:purchase.order.import,purchase_id:0
+msgid "RFQ to Update"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:254
+#, python-format
+msgid ""
+"The currency of the imported quotation (%s) is different from the currency "
+"of the RFQ (%s)"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:124
+#, python-format
+msgid ""
+"The incoterm has been updated from %s to %s upon import of the quotation "
+"file '%s'"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:181
+#, python-format
+msgid ""
+"The quantity has been updated on the RFQ line with product '%s' from %s to "
+"%s %s."
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:250
+#, python-format
+msgid ""
+"The supplier of the imported quotation (%s) is different from the supplier "
+"of the RFQ (%s)."
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:173
+#, python-format
+msgid ""
+"The unit price has been updated on the RFQ line with product '%s' from %s to"
+" %s %s."
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid "Then, Odoo will compare the imported quotation and the current RFQ:"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:52
+#, python-format
+msgid "There are no embedded XML file in this PDF file."
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:269
+#, python-format
+msgid ""
+"This RFQ has been updated automatically via the import of quotation file %s"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:96
+#, python-format
+msgid "This XML file is not XML-compliant"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:106
+#, python-format
+msgid ""
+"This file '%s' is not recognised as XML nor PDF file. Please check the file "
+"and it's extension."
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:262
+#, python-format
+msgid "This quotation doesn't have any line !"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:41
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:61
+#, python-format
+msgid ""
+"This type of XML quotation is not supported. Did you install the module to "
+"support this XML format?"
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid "Universal Business Language"
+msgstr "Linguagem de Negócio Universal"
+
+#. module: purchase_order_import
+#: field:purchase.order.import,update_option:0
+msgid "Update Option"
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid "Update RFQ"
+msgstr ""
+
+#. module: purchase_order_import
+#: help:purchase.order.import,quote_file:0
+msgid ""
+"Upload a quotation file that you received from your supplier. Supported "
+"formats: XML and PDF (PDF with an embeded XML file)."
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid ""
+"Upload below the quotation that you received from your supplier for this RFQ"
+" as XML or PDF file. When you click on the Update RFQ button:"
+msgstr ""
+
+#. module: purchase_order_import
+#: field:purchase.order.import,quote_file:0
+msgid "XML or PDF Quotation"
+msgstr ""
+
+#. module: purchase_order_import
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:237
+#, python-format
+msgid "You must select a quotation to update."
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid ""
+"for lines that are present both in the imported quotation and in the RFQ, "
+"Odoo will update the unit prices (and also the quantities, depending on the "
+"chosen option),"
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid ""
+"for the lines that are present only in the RFQ, Odoo will put a warning "
+"message in the chatter (it won't delete them automatically)."
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid ""
+"for the lines that are present only in the quotation (shipping costs for "
+"example), Odoo will add them to the RFQ,"
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid "format (UBL), you should install the module"
+msgstr ""
+
+#. module: purchase_order_import
+#: view:purchase.order.import:purchase_order_import.purchase_order_import_form
+msgid "purchase_order_import_ubl"
+msgstr ""
