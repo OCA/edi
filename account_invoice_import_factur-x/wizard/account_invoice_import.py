@@ -11,7 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import get_facturx_flavor
+    from facturx import get_facturx_flavor, get_facturx_level
 except ImportError:
     logger.debug('Cannot import facturx')
 
@@ -204,7 +204,10 @@ class AccountInvoiceImport(models.TransientModel):
              "/ram:GuidelineSpecifiedDocumentContextParameter"
              "/ram:ID",  # ZUGFeRD
              ], namespaces)
-        level = doc_id.split(':')[-1]
+        if flavor == 'factur-x':
+            level = get_facturx_level(xml_root)
+        else:
+            level = doc_id.split(':')[-1]
         # Check XML schema to avoid headaches trying to import invalid files
         self._cii_check_xml_schema(xml_string, flavor, level=level)
         prec = self.env['decimal.precision'].precision_get('Account')
