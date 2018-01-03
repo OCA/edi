@@ -211,7 +211,9 @@ class AccountInvoice(models.Model):
                 raise UserError(_(
                     "Missing base code on tax line '%s'.") % tline.name)
             taxes = self.env['account.tax'].search([
-                ('base_code_id', '=', tline.base_code_id.id)])
+                '|',
+                ('base_code_id', '=', tline.base_code_id.id),
+                ('ref_base_code_id', '=', tline.base_code_id.id)])
             if not taxes:
                 raise UserError(_(
                     "The tax code '%s' is not linked to a tax.")
