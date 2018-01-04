@@ -7,3 +7,4 @@ reporting-engine
 server-tools
 sale-workflow
 purchase-workflow
+queue
