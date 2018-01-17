@@ -12,6 +12,8 @@ class TestUblInvoice(TestAccountInvoice):
         ro = self.env['report']
         buo = self.env['base.ubl']
         invoice = self.test_only_create_invoice()
+        if invoice.company_id.xml_format_in_pdf_invoice != 'ubl':
+            invoice.company_id.xml_format_in_pdf_invoice = 'ubl'
         for version in ['2.0', '2.1']:
             pdf_file = ro.with_context(ubl_version=version).get_pdf(
                 [invoice.id], 'account.report_invoice')

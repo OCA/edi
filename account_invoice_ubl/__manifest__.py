@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2016-2018 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
@@ -11,7 +11,7 @@
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': [
-        'account',
+        'account_e-invoice_generate',
         'account_payment_partner',
         'base_ubl_payment',
         ],
@@ -19,5 +19,6 @@
         'views/account_invoice.xml',
         'views/account_config_settings.xml',
         ],
+    'post_init_hook': 'set_xml_format_in_pdf_invoice_to_ubl',
     'installable': True,
 }
