@@ -9,9 +9,9 @@
 <record id="view_account_config_settings" model="ir.ui.view">
     <field name="name">account_invoice_factur-x.account.config.settings</field>
     <field name="model">account.config.settings</field>
-    <field name="inherit_id" ref="account.view_account_config_settings"/>
+    <field name="inherit_id" ref="account_e-invoice_generate.view_account_config_settings"/>
     <field name="arch" type="xml">
-        <div name="customer_payments" position="after">
+        <div name="e-invoices" position="after">
             <label for="id" string="Factur-X Invoices"/>
             <div name="facturx">
                 <div name="facturx_level">
