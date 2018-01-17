@@ -13,8 +13,11 @@ class TestFacturXInvoice(TestAccountInvoice):
 
     def test_deep_customer_invoice(self):
         invoice = self.test_only_create_invoice()
+        company = invoice.company_id
+        if company.xml_format_in_pdf_invoice != 'factur-x':
+            company.xml_format_in_pdf_invoice = 'factur-x'
         for level in ['minimum', 'basicwl', 'basic', 'en16931']:
-            invoice.company_id.facturx_level = level
+            company.facturx_level = level
             pdf_content = self.env['report'].get_pdf(
                 [invoice.id], 'account.report_invoice')
             xml_filename, xml_string = get_facturx_xml_from_pdf(
