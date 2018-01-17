@@ -21,9 +21,13 @@ class Py3oReport(models.TransientModel):
                 self.ir_actions_report_xml_id.py3o_filetype == 'pdf' and
                 res_id and
                 report_path):
-            invoice = self.env['account.invoice'].with_context(
-                no_embedded_pdf=True).browse(res_id)
-            # re-write PDF on report_path
-            invoice.embed_ubl_xml_in_pdf(pdf_file=report_path)
+            invoice = self.env['account.invoice'].browse(res_id)
+            if (
+                    invoice.type in ('out_invoice', 'out_refund') and
+                    invoice.company_id.xml_format_in_pdf_invoice == 'ubl'):
+                # re-write PDF on report_path
+                invoice.with_context(
+                    no_embedded_pdf=True).embed_ubl_xml_in_pdf(
+                    pdf_file=report_path)
         return super(Py3oReport, self)._postprocess_report(
             report_path, res_id, save_in_attachment)
