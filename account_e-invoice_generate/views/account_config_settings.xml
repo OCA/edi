@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  © 2018 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+
+
+<record id="view_account_config_settings" model="ir.ui.view">
+    <field name="name">account_e-invoice_generate.account.config.settings</field>
+    <field name="model">account.config.settings</field>
+    <field name="inherit_id" ref="account.view_account_config_settings"/>
+    <field name="arch" type="xml">
+        <div name="customer_payments" position="after">
+            <label for="id" string="Electronic Invoices"/>
+            <div name="e-invoices">
+                <div name="xml_format_in_pdf_invoice">
+                    <label for="xml_format_in_pdf_invoice" />
+                    <field name="xml_format_in_pdf_invoice" class="oe_inline"/>
+                </div>
+            </div>
+        </div>
+    </field>
+</record>
+
+
+</odoo>
