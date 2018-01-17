@@ -31,7 +31,10 @@ class Py3oReport(models.TransientModel):
                 report_path):
             invoice = self.env['account.invoice'].browse(res_id)
             # re-write PDF on report_path
-            if invoice.type in ('out_invoice', 'out_refund'):
+            if (
+                    invoice.type in ('out_invoice', 'out_refund') and
+                    invoice.company_id.xml_format_in_pdf_invoice ==
+                    'factur-x'):
                 facturx_xml_str, level = invoice.generate_facturx_xml()
                 pdf_metadata = invoice._prepare_pdf_metadata()
                 generate_facturx_from_file(
