@@ -8,6 +8,9 @@ from odoo import fields, models
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
+    xml_format_in_pdf_invoice = fields.Selection(
+        selection_add=[('factur-x', 'Factur-X (CII)')],
+        default='factur-x')
     facturx_level = fields.Selection([
         ('minimum', 'Minimum'),
         ('basicwl', 'Basic without lines'),
