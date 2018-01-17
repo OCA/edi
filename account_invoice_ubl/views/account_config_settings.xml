@@ -9,9 +9,9 @@
 <record id="view_account_config_settings" model="ir.ui.view">
     <field name="name">account_invoice_ubl.account.config.settings</field>
     <field name="model">account.config.settings</field>
-    <field name="inherit_id" ref="account.view_account_config_settings"/>
+    <field name="inherit_id" ref="account_e-invoice_generate.view_account_config_settings"/>
     <field name="arch" type="xml">
-        <div name="customer_payments" position="inside">
+        <div name="e-invoices" position="inside">
             <div name="ubl_invoice">
                 <field name="embed_pdf_in_ubl_xml_invoice" class="oe_inline"/>
                 <label for="embed_pdf_in_ubl_xml_invoice"/>
