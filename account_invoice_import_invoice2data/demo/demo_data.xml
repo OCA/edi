@@ -11,13 +11,6 @@
     <field name="uom_po_id" ref="product.product_uom_unit"/>
 </record>
 
-<record id="free_import_config" model="account.invoice.import.config">
-    <field name="name">Free</field>
-    <field name="invoice_line_method">1line_static_product</field>
-    <field name="label">Fiber optic access at the main office</field>
-    <field name="static_product_id" ref="internet_access"/>
-</record>
-
 <record id="free" model="res.partner">
     <field name="name">Free SAS</field>
     <field name="is_company" eval="True"/>
@@ -29,7 +22,15 @@
     <field name="country_id" ref="base.fr"/>
     <field name="website">http://www.free.fr</field>
     <field name="vat">FR 604 219 388 61</field>
-    <field name="invoice_import_id" ref="free_import_config"/>
 </record>
+
+<record id="free_import_config" model="account.invoice.import.config">
+    <field name="name">Free</field>
+    <field name="partner_id" ref="free"/>
+    <field name="invoice_line_method">1line_static_product</field>
+    <field name="label">Fiber optic access at the main office</field>
+    <field name="static_product_id" ref="internet_access"/>
+</record>
+
 
 </odoo>
