@@ -8,12 +8,6 @@
     <field name="user_type_id" ref="account.data_account_type_expenses"/>
 </record>
 
-<record id="lieferant_import_config" model="account.invoice.import.config">
-    <field name="name">Lieferant</field>
-    <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account"/>
-</record>
-
 <record id="lieferant" model="res.partner">
     <field name="name">Lieferant GmbH</field>
     <field name="is_company" eval="True"/>
@@ -23,14 +17,15 @@
     <field name="zip">80333</field>
     <field name="city">München</field>
     <field name="country_id" ref="base.de"/>
-    <field name="invoice_import_id" ref="lieferant_import_config"/>
 </record>
 
-<record id="mvm_musterhafter_import_config" model="account.invoice.import.config">
-    <field name="name">MVM Musterhafter</field>
+<record id="lieferant_import_config" model="account.invoice.import.config">
+    <field name="name">Lieferant</field>
+    <field name="partner_id" ref="lieferant"/>
     <field name="invoice_line_method">nline_no_product</field>
     <field name="account_id" ref="charge_account"/>
 </record>
+
 
 <record id="mvm_musterhafter" model="res.partner">
     <field name="name">MVM Musterhafter
@@ -42,14 +37,15 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="zip">12345</field>
     <field name="city">Musterstadt</field>
     <field name="country_id" ref="base.de"/>
-    <field name="invoice_import_id" ref="mvm_musterhafter_import_config"/>
 </record>
 
-<record id="musterlieferant_import_config" model="account.invoice.import.config">
-    <field name="name">MUSTERLIEFERANT</field>
+<record id="mvm_musterhafter_import_config" model="account.invoice.import.config">
+    <field name="name">MVM Musterhafter</field>
+    <field name="partner_id" ref="mvm_musterhafter"/>
     <field name="invoice_line_method">nline_no_product</field>
     <field name="account_id" ref="charge_account"/>
 </record>
+
 
 <record id="musterlieferant" model="res.partner">
     <field name="name">MUSTERLIEFERANT GMBH</field>
@@ -61,8 +57,15 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="zip">99199</field>
     <field name="city">MUSTERHAUSEN</field>
     <field name="country_id" ref="base.de"/>
-    <field name="invoice_import_id" ref="musterlieferant_import_config"/>
 </record>
+
+<record id="musterlieferant_import_config" model="account.invoice.import.config">
+    <field name="name">MUSTERLIEFERANT</field>
+    <field name="partner_id" ref="musterlieferant"/>
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account"/>
+</record>
+
 
 <record id="de_vat_purchase_19" model="account.tax">
     <field name="name">German VAT purchase 19.0%</field>
