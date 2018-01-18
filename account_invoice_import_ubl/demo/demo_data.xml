@@ -8,12 +8,6 @@
     <field name="user_type_id" ref="account.data_account_type_expenses"/>
 </record>
 
-<record id="ketentest_import_config" model="account.invoice.import.config">
-    <field name="name">UBL Ketentest BV</field>
-    <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account"/>
-</record>
-
 <record id="ketentest" model="res.partner">
     <field name="name">UBL Ketentest BV</field>
     <field name="is_company" eval="True"/>
@@ -25,7 +19,13 @@
     <field name="zip">7742KD</field>
     <field name="city">Coevorden</field>
     <field name="country_id" ref="base.nl"/>
-    <field name="invoice_import_id" ref="ketentest_import_config"/>
+</record>
+
+<record id="ketentest_import_config" model="account.invoice.import.config">
+    <field name="name">UBL Ketentest BV</field>
+    <field name="partner_id" ref="ketentest"/>
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account"/>
 </record>
 
 <record id="nl_vat_purchase_21" model="account.tax">
@@ -52,12 +52,6 @@
     <field name="refund_account_id" ref="charge_account"/>
 </record>
 
-<record id="exact_belgium_import_config" model="account.invoice.import.config">
-    <field name="name">Exact Belgium</field>
-    <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account"/>
-</record>
-
 <record id="exact_belgium" model="res.partner">
     <field name="name">Exact Belgium II BVBA</field>
     <field name="is_company" eval="True"/>
@@ -68,11 +62,11 @@
     <field name="city">Wemmel</field>
     <field name="country_id" ref="base.be"/>
     <field name="vat">BE0505890632</field>
-    <field name="invoice_import_id" ref="exact_belgium_import_config"/>
 </record>
 
-<record id="multi_tank_import_config" model="account.invoice.import.config">
-    <field name="name">Multi Tank</field>
+<record id="exact_belgium_import_config" model="account.invoice.import.config">
+    <field name="name">Exact Belgium</field>
+    <field name="partner_id" ref="exact_belgium"/>
     <field name="invoice_line_method">nline_no_product</field>
     <field name="account_id" ref="charge_account"/>
 </record>
@@ -88,6 +82,13 @@
     <field name="country_id" ref="base.nl"/>
     <field name="vat">NL009276749B01</field>
     <field name="invoice_import_id" ref="multi_tank_import_config"/>
+</record>
+
+<record id="multi_tank_import_config" model="account.invoice.import.config">
+    <field name="name">Multi Tank</field>
+    <field name="partner_id" ref="multi_tank"/>
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account"/>
 </record>
 
 </odoo>
