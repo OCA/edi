@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  © 2015-2017 Akretion (http://www.akretion.com/)
+  © 2015-2018 Akretion (http://www.akretion.com/)
   @author: Alexis de Lattre <alexis.delattre@akretion.com>
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
@@ -9,15 +9,19 @@
 
 
 <record id="view_partner_property_form" model="ir.ui.view">
-    <field name="name">encres2.partner.form</field>
+    <field name="name">invoice.import.partner.form</field>
     <field name="model">res.partner</field>
     <field name="inherit_id" ref="account.view_partner_property_form"/>
     <field name="arch" type="xml">
-        <field name="debit" position="after">
-            <field name="invoice_import_id"
-                attrs="{'invisible': ['|', ('supplier', '=', False), ('parent_id', '!=', False)]}"
-                context="{'default_name': name}"/>
-        </field>
+        <group name="accounting_entries" position="inside">
+            <div name="invoice_import_configs">
+                <button type="action" class="btn-link"
+                    name="%(account_invoice_import_config_action)d"
+                    context="{'search_default_partner_id': active_id, 'default_partner_id': active_id, 'default_name': name}">
+                    <field name="invoice_import_count" string="Invoice Import Configurations" widget="statinfo"/>
+                </button>
+            </div>
+        </group>
     </field>
 </record>
 

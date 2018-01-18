@@ -11,9 +11,9 @@ class AccountInvoiceImportConfig(models.Model):
     _description = 'Configuration for the import of Supplier Invoices'
 
     name = fields.Char(string='Name', required=True)
-    partner_ids = fields.One2many(
-        'res.partner', 'invoice_import_id',
-        string='Partners')
+    partner_id = fields.Many2one(
+        'res.partner', string='Partner', ondelete='cascade',
+        domain=[('supplier', '=', True), ('parent_id', '=', False)])
     active = fields.Boolean(default=True)
     invoice_line_method = fields.Selection([
         ('1line_no_product', 'Single Line, No Product'),
