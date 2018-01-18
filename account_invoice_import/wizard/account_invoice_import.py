@@ -456,7 +456,7 @@ class AccountInvoiceImport(models.TransientModel):
             'amount_untaxed': parsed_inv['amount_untaxed'],
             'amount_total': parsed_inv['amount_total'],
             })
-        if not partner.invoice_import_id:
+        if not partner.invoice_import_ids:
             raise UserError(_(
                 "Missing Invoice Import Configuration on partner '%s'.")
                 % partner.name)
@@ -777,7 +777,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "the supplier of the invoice to update (%s).") % (
                     partner.name,
                     invoice.commercial_partner_id.name))
-        if not partner.invoice_import_id:
+        if not partner.invoice_import_ids:
             raise UserError(_(
                 "Missing Invoice Import Configuration on partner '%s'.")
                 % partner.name)
@@ -794,14 +794,15 @@ class AccountInvoiceImport(models.TransientModel):
         self.invoice_id.write(vals)
         if (
                 parsed_inv.get('lines') and
-                partner.invoice_import_id.invoice_line_method ==
+                partner.invoice_import_ids[0].invoice_line_method ==
                 'nline_auto_product'):
             self.update_invoice_lines(parsed_inv, invoice, partner)
         self.post_process_invoice(parsed_inv, invoice, import_config)
-        if partner.invoice_import_id.account_analytic_id:
+        # TODO FIX this
+        if partner.invoice_import_ids[0].account_analytic_id:
             invoice.invoice_line.write({
                 'account_analytic_id':
-                partner.invoice_import_id.account_analytic_id.id})
+                partner.invoice_import_ids[0].account_analytic_id.id})
         bdio.post_create_or_update(parsed_inv, invoice)
         logger.info(
             'Supplier invoice ID %d updated via import of file %s',
