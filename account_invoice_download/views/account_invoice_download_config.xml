@@ -25,6 +25,7 @@
                 <field name="name"/>
                 <field name="company_id" groups="base.group_multi_company"/>
                 <field name="invoice_import_id"/>
+                <field name="partner_id"/>
             </group>
             <group string="Download Method" name="method">
                 <field name="backend"/>
@@ -54,6 +55,7 @@
     <field name="arch"  type="xml">
         <tree string="Invoice Download Configurations">
             <field name="name"/>
+            <field name="invoice_import_id"/>
             <field name="company_id" groups="base.group_multi_company"/>
             <field name="method"/>
             <field name="backend"/>
@@ -73,6 +75,7 @@
             <separator/>
             <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
             <group string="Group By" name="groupby">
+                <filter name="partner_groupby" context="{'group_by': 'partner_id'}"/>
                 <filter name="method_groupby" context="{'group_by': 'method'}"/>
                 <filter name="backend_groupby" context="{'group_by': 'backend'}"/>
             </group>

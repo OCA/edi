@@ -22,7 +22,8 @@ class AccountInvoiceDownloadConfig(models.Model):
     invoice_import_id = fields.Many2one(
         'account.invoice.import.config',
         string='Invoice Import Configuration', required=True)
-    # partner_id = related field
+    partner_id = fields.Many2one(
+        related='invoice_import_id.partner_id', readonly=True, store=True)
     last_run = fields.Date(string='Last Download Date')
     # Don't set last_run as readonly because sometimes we need to
     # manually fool the system so that he starts downloading from
