@@ -2,26 +2,16 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-===================
-Account Invoice UBL
-===================
+=============================
+Electronic Invoice Generation
+=============================
 
-This module adds support for UBL, the `Universal Business Language (UBL) <http://ubl.xml.org/>`_ standard, on invoices. The UBL 2.1 standard became the `ISO/IEC 19845 <http://www.iso.org/iso/catalogue_detail.htm?csnumber=66370>`_ standard in December 2015 (cf the `official announce <http://www.prweb.com/releases/2016/01/prweb13186919.htm>_`).
-
-With this module, you can generate customer invoices/refunds:
-
-* in PDF format with an embedded UBL XML file
-* as an XML file with an optional embedded PDF file
-
-This module supports UBL version 2.1 (used by default) and 2.0.
+This is a technical module needed to ensure compatibility between the two electronic invoice generation modules: *account_invoice_ubl* and *account_invoice_factur-x*. These 2 modules are able to embed an XML file in the PDF invoice, but for the moment only one XML file can be embeded in the PDF. And it can be useful to have both modules installed, because, for example, you may need to generate Factur-X PDF invoices for some customers and UBL XML files for other customers. So it adds a configuration parameter to decide which XML format is embedded in the PDF.
 
 Configuration
 =============
 
-In the menu *Accounting > Configuration > Settings*, check the value of 2 options:
-
-* *XML Format embedded in PDF invoice* : if you want to have an UBL XML file embedded inside the PDF invoice, set it to *Universal Business Language (UBL)*
-* if you work directly with XML invoices and you want to have the PDF invoice in base64 inside the XML file, enable the *Embed PDF in UBL XML Invoice*.
+The new configuration parameter *XML Format embedded in PDF invoice* is available in the menu *Accounting > Configuration > Settings*.
 
 Usage
 =====
