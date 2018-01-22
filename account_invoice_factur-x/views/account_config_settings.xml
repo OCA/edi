@@ -16,11 +16,11 @@
             <div name="facturx">
                 <div name="facturx_level">
                     <label for="facturx_level" />
-                    <field name="facturx_level" class="oe_inline"/>
+                    <field name="facturx_level" class="oe_inline" attrs="{'required': [('xml_format_in_pdf_invoice', '=', 'factur-x')]}"/>
                 </div>
                 <div name="facturx_refund_type">
                     <label for="facturx_refund_type" />
-                    <field name="facturx_refund_type" class="oe_inline"/>
+                    <field name="facturx_refund_type" class="oe_inline" attrs="{'required': [('xml_format_in_pdf_invoice', '=', 'factur-x')]}"/>
                 </div>
             </div>
         </div>
