@@ -12,6 +12,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
+[account_e-invoice_generate](account_e-invoice_generate/) | 10.0.1.0.0 | Technical module to generate PDF invoices with embedded XML file
 [account_invoice_factur-x](account_invoice_factur-x/) | 10.0.1.0.0 | Generate Factur-X/ZUGFeRD customer invoices
 [account_invoice_factur-x_py3o](account_invoice_factur-x_py3o/) | 10.0.1.0.0 | Generate Factur-x invoices with Py3o reporting engine
 [account_invoice_import](account_invoice_import/) | 10.0.1.0.0 | Import supplier invoices/refunds as PDF or XML files
