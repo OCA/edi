@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -7,9 +6,9 @@ from odoo.tools import float_compare
 from odoo.addons.base_iban.models.res_partner_bank import validate_iban
 from odoo.exceptions import UserError
 from lxml import etree
-from StringIO import StringIO
+from io import BytesIO
 import mimetypes
-from urlparse import urlparse
+from urllib.parse import urlparse
 import logging
 logger = logging.getLogger(__name__)
 
@@ -27,15 +26,15 @@ class BusinessDocumentImport(models.AbstractModel):
     def user_error_wrap(self, error_msg):
         assert error_msg
         prefix = self._context.get('error_prefix')
-        if prefix and isinstance(prefix, (str, unicode)):
+        if prefix and isinstance(prefix, str):
             error_msg = '%s\n%s' % (prefix, error_msg)
         raise UserError(error_msg)
 
     @api.model
     def _strip_cleanup_dict(self, match_dict):
         if match_dict:
-            for key, value in match_dict.iteritems():
-                if value and isinstance(value, (str, unicode)):
+            for key, value in match_dict.items():
+                if value and isinstance(value, str):
                     match_dict[key] = value.strip()
             if match_dict.get('country_code'):
                 match_dict['country_code'] = match_dict['country_code'].upper()
@@ -55,9 +54,8 @@ class BusinessDocumentImport(models.AbstractModel):
             'name': 'Akretion France',
             'ref': 'C1242',
             'phone': '01.41.98.12.42',
-            'fax': '01.41.98.12.43',
             }
-        The keys 'phone' and 'fax' are used by the module
+        The keys 'phone' are used by the module
         base_phone_business_document_import
         """
         rpo = self.env['res.partner']
@@ -133,7 +131,7 @@ class BusinessDocumentImport(models.AbstractModel):
             netloc = urlp.netloc
             if not urlp.scheme and not netloc:
                 netloc = urlp.path
-            if netloc and netloc.split('.') >= 2:
+            if netloc and len(netloc.split('.')) >= 2:
                 website_domain = '.'.join(netloc.split('.')[-2:])
         if website_domain or email_domain:
             partner_domain = website_domain or email_domain
@@ -260,7 +258,7 @@ class BusinessDocumentImport(models.AbstractModel):
         rbo = self.env['res.bank']
         try:
             validate_iban(iban)
-        except:
+        except Exception as e:
             chatter_msg.append(_(
                 "IBAN <b>%s</b> is not valid, so it has been ignored.") % iban)
             return False
@@ -281,13 +279,13 @@ class BusinessDocumentImport(models.AbstractModel):
                     bank = rbo.create({
                         'bic': bic,
                         'name': bic,  # TODO: see if we could do better
-                        })
+                    })
                     bank_id = bank.id
             partner_bank = rpbo.create({
                 'partner_id': partner.id,
                 'acc_number': iban,
                 'bank_id': bank_id,
-                })
+            })
             chatter_msg.append(_(
                 "The bank account <b>IBAN %s</b> has been automatically "
                 "added on the supplier <b>%s</b>") % (
@@ -326,13 +324,13 @@ class BusinessDocumentImport(models.AbstractModel):
                 sinfo = self.env['product.supplierinfo'].search([
                     ('name', '=', seller.id),
                     ('product_code', '=', product_dict['code']),
-                    ])
+                ])
                 if (
                         sinfo and
                         sinfo[0].product_tmpl_id.product_variant_ids and
                         len(
                         sinfo[0].product_tmpl_id.product_variant_ids) == 1
-                        ):
+                ):
                     return sinfo[0].product_tmpl_id.product_variant_ids[0]
         raise self.user_error_wrap(_(
             "Odoo couldn't find any product corresponding to the "
@@ -621,7 +619,7 @@ class BusinessDocumentImport(models.AbstractModel):
             'to_remove': False,
             'to_add': [],
             'to_update': {},
-            }
+        }
         for iline in import_lines:
             if not iline.get('product'):
                 chatter_msg.append(_(
@@ -648,7 +646,7 @@ class BusinessDocumentImport(models.AbstractModel):
                             product.name_get()[0][1],
                             existing_lines_dict[product]['uom'].name,
                             uom.name,
-                            ))
+                    ))
                     return False
                 # used for to_remove
                 existing_lines_dict[product]['import'] = True
@@ -675,8 +673,8 @@ class BusinessDocumentImport(models.AbstractModel):
                     'product': product,
                     'uom': uom,
                     'import_line': iline,
-                    })
-        for exiting_dict in existing_lines_dict.itervalues():
+                })
+        for exiting_dict in existing_lines_dict.values():
             if not exiting_dict.get('import'):
                 if res['to_remove']:
                     res['to_remove'] += exiting_dict['line']
@@ -726,7 +724,7 @@ class BusinessDocumentImport(models.AbstractModel):
                     return aao.browse(speed_dict[acc_code_tmp])
             # Match when account_dict['code'] is shorter than Odoo's accounts
             # -> warns the user about this
-            for code, account_id in speed_dict.iteritems():
+            for code, account_id in speed_dict.items():
                 if code.startswith(acc_code):
                     chatter_msg.append(_(
                         "Approximate match: account %s has been matched "
@@ -818,7 +816,7 @@ class BusinessDocumentImport(models.AbstractModel):
         logger.info('Trying to find an embedded XML file inside PDF')
         res = {}
         try:
-            fd = StringIO(pdf_file)
+            fd = BytesIO(pdf_file)
             pdf = PyPDF2.PdfFileReader(fd)
             logger.debug('pdf.trailer=%s', pdf.trailer)
             pdf_root = pdf.trailer['/Root']
@@ -829,10 +827,10 @@ class BusinessDocumentImport(models.AbstractModel):
             for embeddedfile in embeddedfiles[:-1]:
                 mime_res = mimetypes.guess_type(embeddedfile)
                 if mime_res and mime_res[0] in ['application/xml', 'text/xml']:
-                    xmlfiles[embeddedfile] = embeddedfiles[i+1]
+                    xmlfiles[embeddedfile] = embeddedfiles[i + 1]
                 i += 1
             logger.debug('xmlfiles=%s', xmlfiles)
-            for filename, xml_file_dict_obj in xmlfiles.iteritems():
+            for filename, xml_file_dict_obj in xmlfiles.items():
                 try:
                     xml_file_dict = xml_file_dict_obj.getObject()
                     logger.debug('xml_file_dict=%s', xml_file_dict)
@@ -842,25 +840,25 @@ class BusinessDocumentImport(models.AbstractModel):
                         'A valid XML file %s has been found in the PDF file',
                         filename)
                     res[filename] = xml_root
-                except:
+                except Exception as e:
                     continue
-        except:
+        except Exception as e:
             pass
-        logger.info('Valid XML files found in PDF: %s', res.keys())
+        logger.info('Valid XML files found in PDF: %s', list(res.keys()))
         return res
 
     @api.model
     def post_create_or_update(self, parsed_dict, record, doc_filename=None):
         if parsed_dict.get('attachments'):
             for filename, data_base64 in\
-                    parsed_dict['attachments'].iteritems():
+                    parsed_dict['attachments'].items():
                 self.env['ir.attachment'].create({
                     'name': filename,
                     'res_id': record.id,
-                    'res_model': unicode(record._name),
+                    'res_model': str(record._name),
                     'datas': data_base64,
                     'datas_fname': filename,
-                    })
+                })
         for msg in parsed_dict['chatter_msg']:
             record.message_post(msg)
         if parsed_dict.get('note'):
@@ -868,5 +866,5 @@ class BusinessDocumentImport(models.AbstractModel):
                 msg = _('<b>Notes in file %s:</b>') % doc_filename
             else:
                 msg = _('<b>Notes in imported document:</b>')
-            record.message_post(
+            record.message_post(  # pylint: disable=translation-required
                 '%s %s' % (msg, parsed_dict['note']))
