@@ -22,7 +22,7 @@ Usage
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
-   :target: https://runbot.odoo-community.org/runbot/226/10.0
+   :target: https://runbot.odoo-community.org/runbot/226/11.0
 
 Bug Tracker
 ===========
@@ -39,6 +39,9 @@ Contributors
 ------------
 
 * Alexis de Lattre <alexis.delattre@akretion.com>
+* Nicolas JEUDY <https://github.com/njeudy>
+
+Do not contact contributors directly about support or help with technical issues.
 
 Maintainer
 ----------
