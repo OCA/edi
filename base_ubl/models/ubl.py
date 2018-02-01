@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import models, api, tools, _
+from odoo import models, api, _
 from odoo.exceptions import UserError
-from odoo.tools import float_is_zero, float_round
+from odoo.tools import float_is_zero, float_round, file_open
 from lxml import etree
-from StringIO import StringIO
+from io import BytesIO
 from tempfile import NamedTemporaryFile
 import mimetypes
 import logging
@@ -89,10 +88,6 @@ class BaseUbl(models.AbstractModel):
         if phone:
             telephone = etree.SubElement(contact, ns['cbc'] + 'Telephone')
             telephone.text = phone
-        fax = partner.fax or partner.commercial_partner_id.fax
-        if fax:
-            telefax = etree.SubElement(contact, ns['cbc'] + 'Telefax')
-            telefax.text = fax
         email = partner.email or partner.commercial_partner_id.email
         if email:
             electronicmail = etree.SubElement(
@@ -124,7 +119,7 @@ class BaseUbl(models.AbstractModel):
         if id_dict:
             party_identification = etree.SubElement(
                 parent_node, ns['cac'] + 'PartyIdentification')
-            for scheme_name, party_id_text in id_dict.iteritems():
+            for scheme_name, party_id_text in id_dict.items():
                 party_identification_id = etree.SubElement(
                     party_identification, ns['cbc'] + 'ID',
                     schemeName=scheme_name)
@@ -293,7 +288,7 @@ class BaseUbl(models.AbstractModel):
         line_item = etree.SubElement(
             parent_node, ns['cac'] + 'LineItem')
         line_item_id = etree.SubElement(line_item, ns['cbc'] + 'ID')
-        line_item_id.text = unicode(line_number)
+        line_item_id.text = str(line_number)
         if not uom.unece_code:
             raise UserError(_(
                 "Missing UNECE code on unit of measure '%s'")
@@ -301,12 +296,12 @@ class BaseUbl(models.AbstractModel):
         quantity_node = etree.SubElement(
             line_item, ns['cbc'] + 'Quantity',
             unitCode=uom.unece_code)
-        quantity_node.text = unicode(quantity)
+        quantity_node.text = str(quantity)
         if currency and price_subtotal:
             line_amount = etree.SubElement(
                 line_item, ns['cbc'] + 'LineExtensionAmount',
                 currencyID=currency.name)
-            line_amount.text = unicode(price_subtotal)
+            line_amount.text = str(price_subtotal)
             price_unit = 0.0
             # Use price_subtotal/qty to compute price_unit to be sure
             # to get a *tax_excluded* price unit
@@ -319,7 +314,7 @@ class BaseUbl(models.AbstractModel):
             price_amount = etree.SubElement(
                 price, ns['cbc'] + 'PriceAmount',
                 currencyID=currency.name)
-            price_amount.text = unicode(price_unit)
+            price_amount.text = str(price_unit)
             base_qty = etree.SubElement(
                 price, ns['cbc'] + 'BaseQuantity',
                 unitCode=uom.unece_code)
@@ -413,7 +408,7 @@ class BaseUbl(models.AbstractModel):
                 not float_is_zero(tax.amount, precision_digits=prec+3)):
             percent = etree.SubElement(
                 tax_subtotal, ns['cbc'] + 'Percent')
-            percent.text = unicode(
+            percent.text = str(
                 float_round(tax.amount, precision_digits=2))
         self._ubl_add_tax_category(tax, tax_subtotal, ns, version=version)
 
@@ -435,7 +430,7 @@ class BaseUbl(models.AbstractModel):
         if tax.amount_type == 'percent':
             tax_percent = etree.SubElement(
                 tax_category, ns['cbc'] + 'Percent')
-            tax_percent.text = unicode(tax.amount)
+            tax_percent.text = str(tax.amount)
         tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_tax(tax)
         self._ubl_add_tax_scheme(
             tax_scheme_dict, tax_category, ns, version=version)
@@ -491,12 +486,12 @@ class BaseUbl(models.AbstractModel):
         '''Validate the XML file against the XSD'''
         xsd_file = 'base_ubl/data/xsd-%s/maindoc/UBL-%s-%s.xsd' % (
             version, document, version)
-        xsd_etree_obj = etree.parse(tools.file_open(xsd_file))
+        xsd_etree_obj = etree.parse(file_open(xsd_file))
         official_schema = etree.XMLSchema(xsd_etree_obj)
         try:
-            t = etree.parse(StringIO(xml_string))
+            t = etree.parse(BytesIO(xml_string))
             official_schema.assertValid(t)
-        except Exception, e:
+        except Exception as e:
             # if the validation of the XSD fails, we arrive here
             logger = logging.getLogger(__name__)
             logger.warning(
@@ -509,7 +504,7 @@ class BaseUbl(models.AbstractModel):
                 "full error have been written in the server logs. "
                 "Here is the error, which may give you an idea on the "
                 "cause of the problem : %s.")
-                % unicode(e))
+                % str(e))
         return True
 
     @api.model
@@ -530,23 +525,26 @@ class BaseUbl(models.AbstractModel):
         if pdf_file:
             original_pdf_file = pdf_file
         elif pdf_content:
-            original_pdf_file = StringIO(pdf_content)
+            original_pdf_file = BytesIO(pdf_content[0])
         original_pdf = PyPDF2.PdfFileReader(original_pdf_file)
         new_pdf_filestream = PyPDF2.PdfFileWriter()
         new_pdf_filestream.appendPagesFromReader(original_pdf)
         new_pdf_filestream.addAttachment(xml_filename, xml_string)
+        new_pdf_content = None
         if pdf_file:
             f = open(pdf_file, 'w')
             new_pdf_filestream.write(f)
             f.close()
+            new_pdf_content = pdf_content
         elif pdf_content:
             with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
                 new_pdf_filestream.write(f)
                 f.seek(0)
-                pdf_content = f.read()
+                file_content = f.read()
+                new_pdf_content = (file_content, pdf_content[1])
                 f.close()
         logger.info('%s file added to PDF', xml_filename)
-        return pdf_content
+        return new_pdf_content
 
     # ==================== METHODS TO PARSE UBL files
 
@@ -578,8 +576,6 @@ class BaseUbl(models.AbstractModel):
             'cac:Contact/cbc:ElectronicMail', namespaces=ns)
         phone_xpath = party_node.xpath(
             'cac:Contact/cbc:Telephone', namespaces=ns)
-        fax_xpath = party_node.xpath(
-            'cac:Contact/cbc:Telefax', namespaces=ns)
         website_xpath = party_node.xpath(
             'cbc:WebsiteURI', namespaces=ns)
         partner_dict = {
@@ -588,7 +584,6 @@ class BaseUbl(models.AbstractModel):
             'email': email_xpath and email_xpath[0].text or False,
             'website': website_xpath and website_xpath[0].text or False,
             'phone': phone_xpath and phone_xpath[0].text or False,
-            'fax': fax_xpath and fax_xpath[0].text or False,
             }
         address_xpath = party_node.xpath('cac:PostalAddress', namespaces=ns)
         if address_xpath:
@@ -668,7 +663,7 @@ class BaseUbl(models.AbstractModel):
         logger.info('Trying to find an embedded XML file inside PDF')
         res = {}
         try:
-            fd = StringIO(pdf_file)
+            fd = BytesIO(pdf_file)
             pdf = PyPDF2.PdfFileReader(fd)
             logger.debug('pdf.trailer=%s', pdf.trailer)
             pdf_root = pdf.trailer['/Root']
@@ -682,7 +677,7 @@ class BaseUbl(models.AbstractModel):
                     xmlfiles[embeddedfile] = embeddedfiles[i+1]
                 i += 1
             logger.debug('xmlfiles=%s', xmlfiles)
-            for filename, xml_file_dict_obj in xmlfiles.iteritems():
+            for filename, xml_file_dict_obj in xmlfiles.items():
                 try:
                     xml_file_dict = xml_file_dict_obj.getObject()
                     logger.debug('xml_file_dict=%s', xml_file_dict)
@@ -692,9 +687,9 @@ class BaseUbl(models.AbstractModel):
                         'A valid XML file %s has been found in the PDF file',
                         filename)
                     res[filename] = xml_root
-                except:
+                except Exception as e:
                     continue
-        except:
+        except Exception as e:
             pass
-        logger.info('Valid XML files found in PDF: %s', res.keys())
+        logger.info('Valid XML files found in PDF: %s', list(res.keys()))
         return res
