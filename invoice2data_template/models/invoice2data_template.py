@@ -13,7 +13,7 @@ try:
     from invoice2data.template import InvoiceTemplate
     from invoice2data.in_pdftotext import to_text
 except ImportError:
-    logging.error('Failed to import invoice2data')
+    logging.debug('Failed to import invoice2data')
 
 
 def _fork_stdin(stdin, func):
