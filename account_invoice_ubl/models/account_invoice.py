@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
-# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# Copyright 2016-2017 Akretion (http://www.akretion.com)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+import base64
+from lxml import etree
+import logging
 
 from odoo import models, api
-from lxml import etree
 from odoo.tools import float_is_zero, float_round
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +59,7 @@ class AccountInvoice(models.Model):
             self, parent_node, ns, version='2.1'):
         self.ensure_one()
         cdr_dict = self._ubl_get_contract_document_reference_dict()
-        for doc_type_code, doc_id in cdr_dict.iteritems():
+        for doc_type_code, doc_id in cdr_dict.items():
             cdr = etree.SubElement(
                 parent_node, ns['cac'] + 'ContractDocumentReference')
             cdr_id = etree.SubElement(cdr, ns['cbc'] + 'ID')
@@ -81,12 +83,11 @@ class AccountInvoice(models.Model):
             binary_node = etree.SubElement(
                 attach_node, ns['cbc'] + 'EmbeddedDocumentBinaryObject',
                 mimeCode="application/pdf")
-            ctx = self._context.copy()
+            ctx = dict()
             ctx['no_embedded_ubl_xml'] = True
-            pdf_inv = self.pool['report'].get_pdf(
-                self._cr, self._uid, [self.id], 'account.report_invoice',
-                context=ctx)
-            binary_node.text = pdf_inv.encode('base64')
+            pdf_inv = self.with_context(ctx).env.ref(
+                'account.account_invoices').render_qweb_pdf(self.ids)[0]
+            binary_node.text = base64.b64encode(pdf_inv)
 
     @api.multi
     def _ubl_add_legal_monetary_total(self, parent_node, ns, version='2.1'):
@@ -127,7 +128,7 @@ class AccountInvoice(models.Model):
         price_precision = dpo.precision_get('Product Price')
         account_precision = self.currency_id.decimal_places
         line_id = etree.SubElement(line_root, ns['cbc'] + 'ID')
-        line_id.text = unicode(line_number)
+        line_id.text = str(line_number)
         uom_unece_code = False
         # uom_id is not a required field on account.invoice.line
         if iline.uom_id and iline.uom_id.unece_code:
@@ -307,11 +308,12 @@ class AccountInvoice(models.Model):
         version = self.get_ubl_version()
         xml_string = self.generate_ubl_xml_string(version=version)
         filename = self.get_ubl_filename(version=version)
-        attach = self.env['ir.attachment'].create({
+        ctx = {}
+        attach = self.env['ir.attachment'].with_context(ctx).create({
             'name': filename,
             'res_id': self.id,
-            'res_model': unicode(self._name),
-            'datas': xml_string.encode('base64'),
+            'res_model': str(self._name),
+            'datas': base64.b64encode(xml_string),
             'datas_fname': filename,
             # I have default_type = 'out_invoice' in context, so 'type'
             # would take 'out_invoice' value by default !
