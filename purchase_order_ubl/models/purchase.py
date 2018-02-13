@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api
 from lxml import etree
@@ -55,11 +54,11 @@ class PurchaseOrder(models.Model):
         line_total = etree.SubElement(
             monetary_total, ns['cbc'] + 'LineExtensionAmount',
             currencyID=self.currency_id.name)
-        line_total.text = unicode(self.amount_untaxed)
+        line_total.text = str(self.amount_untaxed)
         payable_amount = etree.SubElement(
             monetary_total, ns['cbc'] + 'PayableAmount',
             currencyID=self.currency_id.name)
-        payable_amount.text = unicode(self.amount_total)
+        payable_amount.text = str(self.amount_total)
 
     @api.multi
     def _ubl_add_rfq_line(
