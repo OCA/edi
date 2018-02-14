@@ -52,7 +52,7 @@
        <cac:PostalAddress>
           <cbc:StreetName>Spui</cbc:StreetName>
           <cbc:BuildingNumber>23</cbc:BuildingNumber>
-		  <cbc:Department>1a</cbc:Department>
+          <cbc:Department>1a</cbc:Department>
           <cbc:CityName>Den Haag</cbc:CityName>
           <cbc:PostalZone>2500 AA</cbc:PostalZone> 
              <cac:Country>
@@ -102,7 +102,7 @@
                               <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">VAT</cbc:ID>
                         </cac:TaxScheme>
                </cac:TaxCategory>
-        </cac:TaxSubtotal>		
+        </cac:TaxSubtotal>
  </cac:TaxTotal>
  
 <cac:LegalMonetaryTotal>
