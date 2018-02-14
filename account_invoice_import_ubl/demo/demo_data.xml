@@ -29,7 +29,7 @@
 </record>
 
 <record id="nl_vat_purchase_21" model="account.tax">
-    <field name="name">Deutch VAT purchase 21.0%</field>
+    <field name="name">Dutch VAT purchase 21.0%</field>
     <field name="description">NL-VAT-buy-21.0</field>
     <field name="type_tax_use">purchase</field>
     <field name="amount">21</field>
@@ -41,7 +41,7 @@
 </record>
 
 <record id="nl_vat_purchase_6" model="account.tax">
-    <field name="name">Deutch VAT purchase 6.0%</field>
+    <field name="name">Dutch VAT purchase 6.0%</field>
     <field name="description">NL-VAT-buy-6.0</field>
     <field name="type_tax_use">purchase</field>
     <field name="amount">6</field>
@@ -89,7 +89,5 @@
     <field name="vat">NL009276749B01</field>
     <field name="invoice_import_id" ref="multi_tank_import_config"/>
 </record>
-
-
 
 </odoo>
