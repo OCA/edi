@@ -3,38 +3,38 @@
 # * base_business_document_import
 # 
 # Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2018
+# Lukáš Spurný <lukasspurny8@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-22 03:40+0000\n"
 "PO-Revision-Date: 2018-02-22 03:40+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
-"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"Last-Translator: Lukáš Spurný <lukasspurny8@gmail.com>, 2018\n"
+"Language-Team: Czech (Czech Republic) (https://www.transifex.com/oca/teams/23907/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:549
 #, python-format
 msgid "(fixed)"
-msgstr ""
+msgstr "(Úprávy)"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:866
 #, python-format
 msgid "<b>Notes in file %s:</b>"
-msgstr ""
+msgstr "Poznámky v souboru %s:"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:868
 #, python-format
 msgid "<b>Notes in imported document:</b>"
-msgstr ""
+msgstr "Poznámky v importovaném dokumentu:"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:462
@@ -46,22 +46,25 @@ msgid ""
 "measure 'Unit(s)' has been used. <em>You may have to change it "
 "manually.</em></p>"
 msgstr ""
+"Společnost Odoo nemohla najít žádnou měrnou jednotku, která by odpovídala "
+"těmto informacím získaným z obchodního dokladu: Kód UNECE %s Náměrová "
+"jednotka: %s Je použita měrná jednotka 'Jednotky)' Musíte ji ručně změnit."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:729
 #, python-format
 msgid "Approximate match: account %s has been matched with account %s"
-msgstr ""
+msgstr "Přibližná shoda: účet %s byl přiřazen účtu %s"
 
 #. module: base_business_document_import
 #: model:ir.model,name:base_business_document_import.model_business_document_import
 msgid "Common methods to import business documents"
-msgstr ""
+msgstr "Společné metody importu obchodních dokumentů"
 
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Zobrazovaný název"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:641
@@ -71,12 +74,15 @@ msgid ""
 "%s on the imported line. We don't support this scenario for the moment, so "
 "<b>the lines haven't been updated</b>."
 msgstr ""
+"U produktu '%s' je měrnou jednotkou %s na existujícím řádku, ale na "
+"importované řádce je %s. Momentálně nepodporujeme tento scénář, takže 1 "
+"řádky nebyly aktualizovány."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:262
 #, python-format
 msgid "IBAN <b>%s</b> is not valid, so it has been ignored."
-msgstr ""
+msgstr "IBAN %s není platný, takže byl ignorován."
 
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import_id
@@ -86,13 +92,13 @@ msgstr "ID"
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Poslední změna dne"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:419
 #, python-format
 msgid "No currency specified, so Odoo used the company currency (%s)"
-msgstr ""
+msgstr "Není uvedena žádná měna, takže Odoo použil měnu společnosti (%s)"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:166
@@ -216,6 +222,8 @@ msgid ""
 "The analysis of the business document returned '%s' as the currency symbol "
 "or ISO code. But there are no currency with the symbol nor ISO code in Odoo."
 msgstr ""
+"Analýza obchodního dokladu vrátila hodnotu \"%s\" jako symbol měny nebo kód "
+"ISO. Neexistuje však žádná měna se symbolem ani kódem ISO v Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:379
@@ -224,6 +232,8 @@ msgid ""
 "The analysis of the business document returned '%s' as the currency symbol. "
 "But there are none or several currencies with that symbol in Odoo."
 msgstr ""
+"Analýza obchodního dokladu vrátila jako symbol měny symbol '%s'. Ale v Odoo "
+"neexistuje žádný nebo několik měn s tímto symbolem."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:449
@@ -233,6 +243,9 @@ msgid ""
 "UNECE code, but there is no unit of measure with that UNECE code in Odoo. "
 "Please check the configuration of the units of measures in Odoo."
 msgstr ""
+"Analýza obchodního dokladu vrátila \"%s\" jako měrnou jednotku UNECE, avšak "
+"s tímto kódem UNECE v Odoo neexistuje žádná měrná jednotka. Zkontrolujte "
+"prosím konfiguraci jednotek opatření v Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:289
@@ -240,7 +253,7 @@ msgstr ""
 msgid ""
 "The bank account <b>IBAN %s</b> has been automatically added on the supplier"
 " <b>%s</b>"
-msgstr ""
+msgstr "Bankovní účet 1IBAN %s  byl automaticky přidán na dodavatele %s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:605
@@ -249,6 +262,8 @@ msgid ""
 "The existing line '%s' doesn't have any product, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"Existující řádek '%s' nemá žádný produkt, takže 1 řádky nebyly "
+"aktualizovány."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:611
@@ -257,6 +272,8 @@ msgid ""
 "The product '%s' is used on several existing lines, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"Produkt '%s' se používá na několika existujících linkách, takže řádky nebyly"
+" aktualizovány."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:633
@@ -265,21 +282,23 @@ msgid ""
 "The product '%s' is used on several imported lines, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"Produkt '%s' se používá na několika importovaných řádcích, takže 1 řádky "
+"nebyly aktualizovány."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:72
 #, python-format
 msgid "customer"
-msgstr ""
+msgstr "zákazník"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:75
 #, python-format
 msgid "partner"
-msgstr ""
+msgstr "partner"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:69
 #, python-format
 msgid "supplier"
-msgstr ""
+msgstr "dodavatele"
