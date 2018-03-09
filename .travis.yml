@@ -49,13 +49,11 @@ install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
-  - pip install invoice2data
   # Invoice2data new requires a recent version of pdftotext from https://poppler.freedesktop.org/releases.html
   # and the version below doesn't work any more
   #- wget -P /tmp http://public.akretion.com/pdftotext-3.04
   #- sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
   #- sudo chmod 755 /usr/local/bin/pdftotext
-  - pip install git+https://github.com/akretion/factur-x
   - pip install phonenumbers
 
 script:
