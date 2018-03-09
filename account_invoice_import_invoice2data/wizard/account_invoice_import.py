@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 try:
     from invoice2data.main import extract_data
-    from invoice2data.template import read_templates
+    from invoice2data.extract.loader import read_templates
     from invoice2data.main import logger as loggeri2data
 except ImportError:
     logger.debug('Cannot import invoice2data')
@@ -48,8 +48,7 @@ class AccountInvoiceImport(models.TransientModel):
         exclude_built_in_templates = tools.config.get(
             'invoice2data_exclude_built_in_templates', False)
         if not exclude_built_in_templates:
-            templates += read_templates(
-                pkg_resources.resource_filename('invoice2data', 'templates'))
+            templates += read_templates()
         logger.debug(
             'Calling invoice2data.extract_data with templates=%s',
             templates)
