@@ -1,0 +1,2 @@
+invoice2data>=0.2.74
+factur-x>=0.3
