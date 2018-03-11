@@ -599,9 +599,9 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv['amount_untaxed']
             invoice.tax_line_ids[0].amount = tax_amount
             cur_symbol = invoice.currency_id.symbol
-            invoice.message_post(
+            invoice.message_post(_(
                 'The total tax amount has been forced to %s %s '
-                '(amount computed by Odoo was: %s %s).'
+                '(amount computed by Odoo was: %s %s).')
                 % (tax_amount, cur_symbol, initial_tax_amount, cur_symbol))
 
     @api.multi
