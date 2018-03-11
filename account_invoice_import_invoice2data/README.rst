@@ -13,13 +13,13 @@ To know the full story behind the development of this module, read this `blog po
 Installation
 ============
 
-This module requires the Python library *invoice2data* available on `Github <https://github.com/m3nu/invoice2data>`_.
+This module requires the Python library *invoice2data* available on `Github <https://github.com/m3nu/invoice2data>`_ with a version >= 0.2.74 (February 2018).
 
-To install the library, run:
+To install the latest version of this library, run:
 
 .. code::
 
-  sudo pip install invoice2data
+  sudo pip install --upgrade invoice2data
 
 If you use Ubuntu 16.04 LTS, you can use the pdftotext version 0.41.0 that is packaged in the distribution:
 
