@@ -103,10 +103,9 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         currency_dict = {'iso_or_symbol': u'€'}
         res = bdio._match_currency(currency_dict, [])
         self.assertEquals(res, self.env.ref('base.EUR'))
-        self.env.user.company_id.currency_id = self.env.ref('base.KRW')
         currency_dict = {}
         res = bdio._match_currency(currency_dict, [])
-        self.assertEquals(res, self.env.ref('base.KRW'))
+        self.assertEquals(res, self.env.user.company_id.currency_id)
 
     def test_match_product(self):
         bdio = self.env['business.document.import']

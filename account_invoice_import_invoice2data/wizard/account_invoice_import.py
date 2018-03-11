@@ -6,7 +6,6 @@ from odoo import models, api, tools, _
 from odoo.exceptions import UserError
 import os
 from tempfile import mkstemp
-import pkg_resources
 import logging
 logger = logging.getLogger(__name__)
 
