@@ -49,7 +49,7 @@
     <field name="name">Swedish trucking</field>
     <field name="is_company" eval="True"/>
     <field name="supplier" eval="False"/>
-    <field name="customer" eval="False"/>
+    <field name="customer" eval="True"/>
     <field name="email">bill@svetruck.se</field>
     <field name="street">5 Rådhusgatan</field>
     <field name="street2">2nd floor</field>
