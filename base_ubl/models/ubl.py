@@ -536,7 +536,7 @@ class BaseUbl(models.AbstractModel):
         new_pdf_filestream.appendPagesFromReader(original_pdf)
         new_pdf_filestream.addAttachment(xml_filename, xml_string)
         if pdf_file:
-            f = open(pdf_file, 'w')
+            f = open(pdf_file, 'wb')
             new_pdf_filestream.write(f)
             f.close()
         elif pdf_content:
