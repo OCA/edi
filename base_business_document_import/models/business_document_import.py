@@ -179,7 +179,32 @@ class BusinessDocumentImport(models.AbstractModel):
     @api.model
     def _hook_match_partner(
             self, partner_dict, chatter_msg, domain, partner_type_label):
-        return False
+        # looking for the exact contact, we use email and contact name.
+        # if the email is a perfect hit we proceed with that, if not we use
+        # partner name contained in all partners of our company
+        # this specific contact hook is completely incompatible with all tests,
+        # that need the main partner to identify suppliers, so we add a context
+        # key to skip if ran from tests.
+        # you can test also this hook by simply not specifying the key
+        partner = False
+        if self.env.context.get('skip_custom_match_hook'):
+            return partner
+        if partner_dict.get('email'):
+            email = partner_dict['email'].strip()
+            partner = self.env['res.partner'].search(
+                domain + [('email', '=', email)], limit=1
+            )
+            # we bypass it all with a perfect email hit.
+            if partner:
+                return partner
+        if partner_dict.get('name'):
+            partner_name = self.env['res.partner'].name_search(
+                partner_dict.get('name'), args=domain, limit=0
+            )
+            # name search does not return a recordset
+            if partner_name:
+                partner = self.env['res.partner'].browse(partner_name[-1][0])
+        return partner
 
     @api.model
     def _match_shipping_partner(self, shipping_dict, partner, chatter_msg):

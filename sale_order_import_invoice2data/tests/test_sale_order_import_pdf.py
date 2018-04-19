@@ -69,7 +69,8 @@ class TestPDFOrderImport(TransactionCase):
         # (In the demo database, that is Camptocamp)
         filename = 'so1.pdf'
         pdf_file_content, wiz = self.read_pdf_and_create_wizard(filename)
-        action = wiz.import_order_button()
+        action = wiz.with_context(
+            skip_custom_match_hook=True).import_order_button()
         self.assertEqual(action['res_model'], 'sale.order')
 
         # Check if the quotation has been imported well
@@ -81,14 +82,16 @@ class TestPDFOrderImport(TransactionCase):
         filename_up = 'so2.pdf'
         pdf_file_content_up, wiz_up = self.read_pdf_and_create_wizard(
             filename_up)
-        action_up1 = wiz_up.import_order_button()
+        action_up1 = wiz_up.with_context(
+            skip_custom_match_hook=True).import_order_button()
 
         # Check if we are getting the existing quotation to choose from
         self.assertEqual(action_up1['res_model'], 'sale.order.import')
         self.assertEqual(wiz_up.sale_id, so)
 
         # Update the quotation
-        action_up2 = wiz_up.update_order_button()
+        action_up2 = wiz_up.with_context(
+            skip_custom_match_hook=True).update_order_button()
         self.assertEqual(action_up2['res_model'], 'sale.order')
 
         # Check if the quotation has been updated well
