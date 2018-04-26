@@ -6,7 +6,7 @@ import base64
 from lxml import etree
 import logging
 
-from odoo import models, api
+from odoo import models
 from odoo.tools import float_is_zero, float_round
 
 logger = logging.getLogger(__name__)
@@ -16,7 +16,6 @@ class AccountInvoice(models.Model):
     _name = 'account.invoice'
     _inherit = ['account.invoice', 'base.ubl']
 
-    @api.multi
     def _ubl_add_header(self, parent_node, ns, version='2.1'):
         ubl_version = etree.SubElement(
             parent_node, ns['cbc'] + 'UBLVersionID')
@@ -38,7 +37,6 @@ class AccountInvoice(models.Model):
             parent_node, ns['cbc'] + 'DocumentCurrencyCode')
         doc_currency.text = self.currency_id.name
 
-    @api.multi
     def _ubl_add_order_reference(self, parent_node, ns, version='2.1'):
         self.ensure_one()
         if self.name:
@@ -48,13 +46,11 @@ class AccountInvoice(models.Model):
                 order_ref, ns['cbc'] + 'ID')
             order_ref_id.text = self.name
 
-    @api.multi
     def _ubl_get_contract_document_reference_dict(self):
         '''Result: dict with key = Doc Type Code, value = ID'''
         self.ensure_one()
         return {}
 
-    @api.multi
     def _ubl_add_contract_document_reference(
             self, parent_node, ns, version='2.1'):
         self.ensure_one()
@@ -68,7 +64,6 @@ class AccountInvoice(models.Model):
                 cdr, ns['cbc'] + 'DocumentTypeCode')
             cdr_type_code.text = doc_type_code
 
-    @api.multi
     def _ubl_add_attachments(self, parent_node, ns, version='2.1'):
         if (
                 self.company_id.embed_pdf_in_ubl_xml_invoice and
@@ -89,7 +84,6 @@ class AccountInvoice(models.Model):
                 'account.account_invoices').render_qweb_pdf(self.ids)[0]
             binary_node.text = base64.b64encode(pdf_inv)
 
-    @api.multi
     def _ubl_add_legal_monetary_total(self, parent_node, ns, version='2.1'):
         monetary_total = etree.SubElement(
             parent_node, ns['cac'] + 'LegalMonetaryTotal')
@@ -117,7 +111,6 @@ class AccountInvoice(models.Model):
             currencyID=cur_name)
         payable_amount.text = '%0.*f' % (prec, self.residual)
 
-    @api.multi
     def _ubl_add_invoice_line(
             self, parent_node, iline, line_number, ns, version='2.1'):
         cur_name = self.currency_id.name
@@ -207,7 +200,6 @@ class AccountInvoice(models.Model):
                     tline.base, tline.amount, tline.tax_id, cur_name,
                     tax_total_node, ns, version=version)
 
-    @api.multi
     def generate_invoice_ubl_xml_etree(self, version='2.1'):
         nsmap, ns = self._ubl_get_nsmap_namespace('Invoice-2', version=version)
         xml_root = etree.Element('Invoice', nsmap=nsmap)
@@ -244,7 +236,6 @@ class AccountInvoice(models.Model):
                 xml_root, iline, line_number, ns, version=version)
         return xml_root
 
-    @api.multi
     def generate_ubl_xml_string(self, version='2.1'):
         self.ensure_one()
         assert self.state in ('open', 'paid')
@@ -269,21 +260,17 @@ class AccountInvoice(models.Model):
         logger.debug(xml_string.decode('utf-8'))
         return xml_string
 
-    @api.multi
     def get_ubl_filename(self, version='2.1'):
         """This method is designed to be inherited"""
         return 'UBL-Invoice-%s.xml' % version
 
-    @api.multi
     def get_ubl_version(self):
         version = self._context.get('ubl_version') or '2.1'
         return version
 
-    @api.multi
     def get_ubl_lang(self):
         return self.partner_id.lang or 'en_US'
 
-    @api.multi
     def embed_ubl_xml_in_pdf(self, pdf_content=None, pdf_file=None):
         self.ensure_one()
         if (
@@ -297,7 +284,6 @@ class AccountInvoice(models.Model):
                 pdf_content=pdf_content, pdf_file=pdf_file)
         return pdf_content
 
-    @api.multi
     def attach_ubl_xml_file_button(self):
         self.ensure_one()
         assert self.type in ('out_invoice', 'out_refund')
