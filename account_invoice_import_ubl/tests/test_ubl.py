@@ -21,6 +21,7 @@ class TestUbl(TransactionCase):
                 },
             'efff_BE0505890632_160421_Inv_16117778.xml': {
                 'invoice_number': '16117778',
+                'origin': '59137222',
                 'amount_untaxed': 31.00,
                 'amount_total': 37.51,
                 'date_invoice': '2016-04-21',
@@ -58,6 +59,8 @@ class TestUbl(TransactionCase):
             inv = invoices[0]
             self.assertEquals(inv.type, res_dict.get('type', 'in_invoice'))
             self.assertEquals(inv.date_invoice, res_dict['date_invoice'])
+            if res_dict.get('origin'):
+                self.assertEquals(inv.origin, res_dict['origin'])
             if res_dict.get('date_due'):
                 self.assertEquals(inv.date_due, res_dict['date_due'])
             self.assertEquals(
