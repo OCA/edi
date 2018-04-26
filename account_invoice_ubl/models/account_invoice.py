@@ -193,12 +193,6 @@ class AccountInvoice(models.Model):
                     False, res_tax['amount'], tax, cur_name, tax_total_node,
                     ns, version=version)
 
-    @api.multi
-    def get_delivery_partner(self):
-        self.ensure_one()
-        # NON, car nécessite un lien vers sale
-
-    @api.multi
     def _ubl_add_tax_total(self, xml_root, ns, version='2.1'):
         self.ensure_one()
         cur_name = self.currency_id.name
@@ -228,12 +222,14 @@ class AccountInvoice(models.Model):
         self._ubl_add_customer_party(
             self.partner_id, False, 'AccountingCustomerParty', xml_root, ns,
             version=version)
-        # delivery_partner = self.get_delivery_partner()
-        # self._ubl_add_delivery(delivery_partner, xml_root, ns)
+        if hasattr(self, 'partner_shipping_id'):  # field defined in sale
+            self._ubl_add_delivery(self.partner_shipping_id, xml_root, ns)
         # Put paymentmeans block even when invoice is paid ?
+        payment_identifier = self.get_payment_identifier()
         self._ubl_add_payment_means(
             self.partner_bank_id, self.payment_mode_id, self.date_due,
-            xml_root, ns, version=version)
+            xml_root, ns, payment_identifier=payment_identifier,
+            version=version)
         if self.payment_term_id:
             self._ubl_add_payment_terms(
                 self.payment_term_id, xml_root, ns, version=version)
