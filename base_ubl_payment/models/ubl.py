@@ -16,7 +16,7 @@ class BaseUbl(models.AbstractModel):
     @api.model
     def _ubl_add_payment_means(
             self, partner_bank, payment_mode, date_due, parent_node, ns,
-            version='2.1'):
+            payment_identifier=None, version='2.1'):
         pay_means = etree.SubElement(parent_node, ns['cac'] + 'PaymentMeans')
         pay_means_code = etree.SubElement(
             pay_means, ns['cbc'] + 'PaymentMeansCode', listID="UN/ECE 4461")
@@ -38,7 +38,7 @@ class BaseUbl(models.AbstractModel):
             pay_due_date = etree.SubElement(
                 pay_means, ns['cbc'] + 'PaymentDueDate')
             pay_due_date.text = date_due
-        if pay_means_code.text in ['31', '42']:
+        if pay_means_code.text in ['30', '31', '42']:
             if (
                     not partner_bank and
                     payment_mode and
@@ -51,6 +51,10 @@ class BaseUbl(models.AbstractModel):
                 payment_channel_code = etree.SubElement(
                     pay_means, ns['cbc'] + 'PaymentChannelCode')
                 payment_channel_code.text = 'IBAN'
+                if payment_identifier:
+                    payment_id = etree.SubElement(
+                        pay_means, ns['cbc'] + 'PaymentID')
+                    payment_id.text = payment_identifier
                 payee_fin_account = etree.SubElement(
                     pay_means, ns['cac'] + 'PayeeFinancialAccount')
                 payee_fin_account_id = etree.SubElement(
