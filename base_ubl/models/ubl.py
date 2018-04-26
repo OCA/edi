@@ -655,7 +655,7 @@ class BaseUbl(models.AbstractModel):
 
     # ======================= METHODS only needed for testing
 
-    # Method copy-pasted from account-invoicing/base_business_document_import/
+    # Method copy-pasted from edi/base_business_document_import/
     # models/business_document_import.py
     # Because we don't depend on this module
     def get_xml_files_from_pdf(self, pdf_file):
