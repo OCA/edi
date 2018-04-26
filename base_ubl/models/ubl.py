@@ -532,7 +532,7 @@ class BaseUbl(models.AbstractModel):
         new_pdf_filestream.addAttachment(xml_filename, xml_string)
         new_pdf_content = None
         if pdf_file:
-            f = open(pdf_file, 'w')
+            f = open(pdf_file, 'wb')
             new_pdf_filestream.write(f)
             f.close()
             new_pdf_content = pdf_content
