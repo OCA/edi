@@ -12,7 +12,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    import PyPDF2
+    from PyPDF2 import PdfFileWriter, PdfFileReader
+    from PyPDF2.generic import NameObject
 except ImportError:
     logger.debug('Cannot import PyPDF2')
 
@@ -526,10 +527,14 @@ class BaseUbl(models.AbstractModel):
             original_pdf_file = pdf_file
         elif pdf_content:
             original_pdf_file = BytesIO(pdf_content[0])
-        original_pdf = PyPDF2.PdfFileReader(original_pdf_file)
-        new_pdf_filestream = PyPDF2.PdfFileWriter()
+        original_pdf = PdfFileReader(original_pdf_file)
+        new_pdf_filestream = PdfFileWriter()
         new_pdf_filestream.appendPagesFromReader(original_pdf)
         new_pdf_filestream.addAttachment(xml_filename, xml_string)
+        # show attachments when opening PDF
+        new_pdf_filestream._root_object.update({
+            NameObject("/PageMode"): NameObject("/UseAttachments"),
+        })
         new_pdf_content = None
         if pdf_file:
             f = open(pdf_file, 'wb')
@@ -664,7 +669,7 @@ class BaseUbl(models.AbstractModel):
         res = {}
         try:
             fd = BytesIO(pdf_file)
-            pdf = PyPDF2.PdfFileReader(fd)
+            pdf = PdfFileReader(fd)
             logger.debug('pdf.trailer=%s', pdf.trailer)
             pdf_root = pdf.trailer['/Root']
             logger.debug('pdf_root=%s', pdf_root)
