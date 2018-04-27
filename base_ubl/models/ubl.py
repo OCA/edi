@@ -13,7 +13,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    import PyPDF2
+    from PyPDF2 import PdfFileWriter, PdfFileReader
+    from PyPDF2.generic import NameObject
 except ImportError:
     logger.debug('Cannot import PyPDF2')
 
@@ -516,10 +517,14 @@ class BaseUbl(models.AbstractModel):
     def embed_xml_in_pdf(self, xml_string, xml_filename, pdf_content):
         logger.debug('Starting to embed %s in PDF file', xml_filename)
         original_pdf_file = StringIO(pdf_content)
-        original_pdf = PyPDF2.PdfFileReader(original_pdf_file)
-        new_pdf_filestream = PyPDF2.PdfFileWriter()
+        original_pdf = PdfFileReader(original_pdf_file)
+        new_pdf_filestream = PdfFileWriter()
         new_pdf_filestream.appendPagesFromReader(original_pdf)
         new_pdf_filestream.addAttachment(xml_filename, xml_string)
+        # show attachments when opening PDF
+        new_pdf_filestream._root_object.update({
+            NameObject("/PageMode"): NameObject("/UseAttachments"),
+        })
         with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
             new_pdf_filestream.write(f)
             f.seek(0)
@@ -653,7 +658,7 @@ class BaseUbl(models.AbstractModel):
         res = {}
         try:
             fd = StringIO(pdf_file)
-            pdf = PyPDF2.PdfFileReader(fd)
+            pdf = PdfFileReader(fd)
             logger.debug('pdf.trailer=%s', pdf.trailer)
             pdf_root = pdf.trailer['/Root']
             logger.debug('pdf_root=%s', pdf_root)
