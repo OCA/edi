@@ -269,7 +269,6 @@ class BusinessDocumentImport(models.AbstractModel):
                 "IBAN <b>%s</b> is not valid, so it has been ignored.") % iban)
             return False
         bankaccounts = rpbo.search([
-            ('acc_type', '=', 'iban'),
             ('sanitized_acc_number', '=', iban),
             ('partner_id', '=', partner.id)])
         if bankaccounts:
