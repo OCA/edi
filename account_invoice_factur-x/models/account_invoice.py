@@ -18,7 +18,7 @@ except ImportError:
 
 FACTURX_FILENAME = 'factur-x.xml'
 DIRECT_DEBIT_CODES = ('49', '59')
-CREDIT_TRF_CODES = ('30', '31')
+CREDIT_TRF_CODES = ('30', '31', '42')
 
 
 class AccountInvoice(models.Model):
