@@ -213,7 +213,8 @@ class AccountInvoice(models.Model):
             self.commercial_partner_id, buyer, ns)
         if (
                 ns['level'] == 'en16931' and
-                self.commercial_partner_id != self.partner_id):
+                self.commercial_partner_id != self.partner_id and
+                self.partner_id.name):
             self._cii_add_trade_contact_block(self.partner_id, buyer, ns)
         self._cii_add_address_block(self.partner_id, buyer, ns)
         if self.commercial_partner_id.vat:
