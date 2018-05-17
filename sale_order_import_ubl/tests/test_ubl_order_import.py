@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -40,7 +39,7 @@ class TestUblOrderImport(TransactionCase):
                     'sale_order_import_ubl.delivery_gentofte_kommune'),
                 },
             }
-        for filename, res in tests.iteritems():
+        for filename, res in tests.items():
             f = file_open(
                 'sale_order_import_ubl/tests/files/' + filename, 'rb')
             xml_file = f.read()
