@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -8,6 +7,7 @@ from odoo.exceptions import UserError
 import logging
 import mimetypes
 from lxml import etree
+from base64 import b64decode, b64encode
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ class SaleOrderImport(models.TransientModel):
                 self.csv_import = False
                 try:
                     xml_root = etree.fromstring(
-                        self.order_file.decode('base64'))
+                        b64decode(self.order_file))
                 except:
                     raise UserError(_("This XML file is not XML-compliant"))
                 doc_type = self.parse_xml_order(xml_root, detect_doc_type=True)
@@ -67,7 +67,7 @@ class SaleOrderImport(models.TransientModel):
             elif filetype and filetype[0] == 'application/pdf':
                 self.csv_import = False
                 doc_type = self.parse_pdf_order(
-                    self.order_file.decode('base64'), detect_doc_type=True)
+                    b64decode(self.order_file), detect_doc_type=True)
                 self.doc_type = doc_type
             else:
                 return {'warning': {
@@ -107,7 +107,7 @@ class SaleOrderImport(models.TransientModel):
         if not xml_files_dict:
             raise UserError(_(
                 'There are no embedded XML file in this PDF file.'))
-        for xml_filename, xml_root in xml_files_dict.iteritems():
+        for xml_filename, xml_root in xml_files_dict.items():
             logger.info('Trying to parse XML file %s', xml_filename)
             try:
                 parsed_order = self.parse_xml_order(
@@ -256,8 +256,8 @@ class SaleOrderImport(models.TransientModel):
         logger.debug('Result of order parsing: %s', parsed_order)
         if 'attachments' not in parsed_order:
             parsed_order['attachments'] = {}
-        parsed_order['attachments'][order_filename] =\
-            order_file.encode('base64')
+        parsed_order['attachments'][order_filename] = \
+            b64encode(order_file)
         if 'chatter_msg' not in parsed_order:
             parsed_order['chatter_msg'] = []
         return parsed_order
@@ -266,7 +266,7 @@ class SaleOrderImport(models.TransientModel):
     def import_order_button(self):
         self.ensure_one()
         bdio = self.env['business.document.import']
-        order_file_decoded = self.order_file.decode('base64')
+        order_file_decoded = b64decode(self.order_file)
         parsed_order = self.parse_order(
             order_file_decoded, self.order_filename, self.partner_id)
         if not parsed_order.get('lines'):
@@ -305,7 +305,7 @@ class SaleOrderImport(models.TransientModel):
     def create_order_button(self):
         self.ensure_one()
         parsed_order = self.parse_order(
-            self.order_file.decode('base64'), self.order_filename,
+            b64decode(self.order_file), self.order_filename,
             self.partner_id)
         return self.create_order_return_action(
             parsed_order, self.order_filename)
@@ -383,7 +383,7 @@ class SaleOrderImport(models.TransientModel):
             existing_lines, parsed_order['lines'], chatter,
             qty_precision=qty_prec, seller=False)
         # NOW, we start to write/delete/create the order lines
-        for oline, cdict in compare_res['to_update'].iteritems():
+        for oline, cdict in compare_res['to_update'].items():
             write_vals = {}
             # TODO: add support for price_source == order
             if cdict.get('qty'):
@@ -446,7 +446,7 @@ class SaleOrderImport(models.TransientModel):
         if not order:
             raise UserError(_('You must select a quotation to update.'))
         parsed_order = self.parse_order(
-            self.order_file.decode('base64'), self.order_filename,
+            b64decode(self.order_file), self.order_filename,
             self.partner_id)
         currency = bdio._match_currency(
             parsed_order.get('currency'), parsed_order['chatter_msg'])
