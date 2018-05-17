@@ -1,0 +1,1 @@
+Read the description of the *sale_order_import* module for a detailed usage description. If you want to test the import of an UBL order and your Odoo database is loaded with the demo data, you can import one of the sample files located in the directory *sale_order_import_ubl/tests/files/*.
