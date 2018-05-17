@@ -70,7 +70,7 @@
 </record>
 
 <menuitem id="sale_order_import_menu"
-    parent="sales_team.menu_sales"
+    parent="sale.sale_order_menu"
     action="sale_order_import_action" sequence="12"/>
 
 </odoo>
