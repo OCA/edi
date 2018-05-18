@@ -3,7 +3,7 @@
 
 {
     'name': 'Base Business Document Import',
-    'version': '11.0.1.0.0',
+    'version': '11.0.1.0.1',
     'category': 'Tools',
     'license': 'AGPL-3',
     'summary': 'Provides technical tools to import sale orders or supplier '
