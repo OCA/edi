@@ -55,9 +55,12 @@ class BusinessDocumentImport(models.AbstractModel):
             'ref': 'C1242',
             'phone': '01.41.98.12.42',
             }
-        The keys 'phone' are used by the module
+        The key 'phone' is used by the module
         base_phone_business_document_import
         """
+        company = self.env.user.company_id
+        if hasattr(self, 'company_id') and self.company_id:
+            company = self.company_id
         rpo = self.env['res.partner']
         self._strip_cleanup_dict(partner_dict)
         if partner_dict.get('recordset'):
@@ -108,7 +111,10 @@ class BusinessDocumentImport(models.AbstractModel):
             partners = rpo.search(
                 domain + [
                     ('parent_id', '=', False),
-                    ('sanitized_vat', '=', vat)])
+                    ('sanitized_vat', '=', vat),
+                    '|',
+                    ('company_id', '=', False),
+                    ('company_id', '=', company.id)])
             if partners:
                 return partners[0]
             else:
