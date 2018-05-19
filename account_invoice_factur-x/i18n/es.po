@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-12 01:43+0000\n"
-"PO-Revision-Date: 2018-03-12 01:43+0000\n"
+"POT-Creation-Date: 2018-05-15 07:39+0000\n"
+"PO-Revision-Date: 2018-05-15 07:39+0000\n"
 "Last-Translator: enjolras <yo@miguelrevilla.com>, 2018\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:768
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:769
 #, python-format
 msgid "%s: %s %s dated %s"
 msgstr "%s: %s %s fechado %s"
@@ -53,7 +53,7 @@ msgid "EN 16931 (Comfort)"
 msgstr "EN 16931 (Comfort)"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:767
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:768
 #, python-format
 msgid "Factur-X"
 msgstr "Factur-X"
@@ -81,7 +81,7 @@ msgid "Factur-X Refund Type"
 msgstr "Tipo de reembolso Factur-X"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:764
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:765
 #: model:ir.model,name:account_invoice_factur-x.model_account_invoice
 #, python-format
 msgid "Invoice"
@@ -98,33 +98,33 @@ msgid "Minimum"
 msgstr "Mínimo"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:373
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:661
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:374
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:662
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr ""
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:370
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:654
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:371
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:655
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
 msgstr ""
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:445
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:446
 #, python-format
 msgid "Missing UNECE code on payment export type '%s'"
 msgstr ""
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:345
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:346
 #, python-format
 msgid "No specific payment term selected"
 msgstr ""
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:764
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:765
 #, python-format
 msgid "Refund"
 msgstr "Reembolso"
@@ -135,7 +135,7 @@ msgid "Report"
 msgstr "Informe"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:560
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:561
 #, python-format
 msgid ""
 "The Factur-X standard specify that unit prices can't be negative. The unit "
@@ -162,7 +162,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:289
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:290
 #, python-format
 msgid "Wire transfer"
 msgstr "Transferencia bancaria"
