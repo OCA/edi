@@ -47,9 +47,8 @@ class AccountInvoiceImport(models.TransientModel):
         sign = xml_root.find(
             'ds:Signature', namespaces={'ds': xmlsig.constants.DSigNs}
         )
-        if sign is None:
-            raise ValidationError(_('Signature node cannot be found'))
-        xmlsig.SignatureContext().verify(sign)
+        if sign is not None:
+            xmlsig.SignatureContext().verify(sign)
         modality = xml_root.find('FileHeader/Modality').text
         if modality == 'L':
             raise ValidationError(_('System does not allow lots'))
