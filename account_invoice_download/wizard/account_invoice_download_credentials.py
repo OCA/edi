@@ -59,7 +59,7 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
             vals['download_config_id'])
         invoice_ids = download_config.download(credentials)
         download_config.last_run = fields.Date.context_today(self)
-        vals['invoice_ids'] = invoice_ids
+        vals['invoice_ids'] = invoice_ids or ''
         return super(AccountInvoiceDownloadCredentials, self).create(vals)
 
     def run(self):
