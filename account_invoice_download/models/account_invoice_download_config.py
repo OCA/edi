@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2017-2018 Akretion France
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, _
@@ -112,8 +113,9 @@ class AccountInvoiceDownloadConfig(models.Model):
                 })
                 return action
             else:
+                # Don't rolls-back the update of last_run...
+                self._cr.commit()
                 raise UserError(_('No invoice downloaded'))
-                # Problem: it rolls-back the update of last_run...
         else:
             credentials_wiz_action = iaao.for_xml_id(
                 'account_invoice_download',
