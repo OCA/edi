@@ -1,0 +1,56 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_e-invoice_generate
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_e-invoice_generate
+#: model:ir.model,name:account_e-invoice_generate.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: account_e-invoice_generate
+#: model:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
+msgid "Electronic Invoices"
+msgstr ""
+
+#. module: account_e-invoice_generate
+#: model:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
+msgid "Format"
+msgstr ""
+
+#. module: account_e-invoice_generate
+#: selection:res.company,xml_format_in_pdf_invoice:0
+msgid "None"
+msgstr ""
+
+#. module: account_e-invoice_generate
+#: model:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
+msgid "Select Format"
+msgstr ""
+
+#. module: account_e-invoice_generate
+#: model:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
+msgid "Select the format of your e-invoices."
+msgstr ""
+
+#. module: account_e-invoice_generate
+#: model:ir.model.fields,field_description:account_e-invoice_generate.field_res_company_xml_format_in_pdf_invoice
+#: model:ir.model.fields,field_description:account_e-invoice_generate.field_res_config_settings_xml_format_in_pdf_invoice
+msgid "XML Format embedded in PDF invoice"
+msgstr ""
+
+#. module: account_e-invoice_generate
+#: model:ir.model,name:account_e-invoice_generate.model_res_config_settings
+msgid "res.config.settings"
+msgstr ""
+
