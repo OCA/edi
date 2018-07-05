@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo11-addon-base_business_document_import',
+        'odoo11-addon-base_ubl',
     ],
     classifiers=[
         'Programming Language :: Python',
