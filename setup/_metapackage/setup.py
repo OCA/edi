@@ -8,8 +8,10 @@ setuptools.setup(
     description="Meta package for oca-edi Odoo addons",
     version=version,
     install_requires=[
+        'odoo11-addon-account_e-invoice_generate',
         'odoo11-addon-base_business_document_import',
         'odoo11-addon-base_ubl',
+        'odoo11-addon-base_ubl_payment',
     ],
     classifiers=[
         'Programming Language :: Python',
