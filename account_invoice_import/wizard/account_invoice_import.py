@@ -46,12 +46,11 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         res = super(AccountInvoiceImport, self).default_get(fields_list)
-        # I can't put 'default_state' in context because then it is transfered to the code
-        # and it causes problems when we create invoice lines
+        # I can't put 'default_state' in context because then it is transfered
+        # to the code and it causes problems when we create invoice lines
         if self._context.get('wizard_default_state'):
             res['state'] = self._context['wizard_default_state']
         return res
-
 
     @api.model
     def parse_xml_invoice(self, xml_root):
@@ -634,6 +633,8 @@ class AccountInvoiceImport(models.TransientModel):
                 })
         compare_res = self.env['business.document.import'].compare_lines(
             existing_lines, parsed_inv['lines'], chatter, seller=seller)
+        if not compare_res:
+            return
         for eline, cdict in compare_res['to_update'].iteritems():
             write_vals = {}
             if cdict.get('qty'):
