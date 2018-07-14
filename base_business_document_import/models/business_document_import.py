@@ -99,9 +99,6 @@ class BusinessDocumentImport(models.AbstractModel):
                     '|',
                     ('state_id', '=', False),
                     ('state_id', '=', states[0].id)]
-        # Hook to plug alternative matching methods
-        partner = self._hook_match_partner(
-            partner_dict, chatter_msg, domain, partner_type_label)
         if partner:
             return partner
         if partner_dict.get('vat'):
@@ -119,6 +116,9 @@ class BusinessDocumentImport(models.AbstractModel):
                     "%s VAT number. But there are no %s "
                     "with this VAT number in Odoo.")
                     % (vat, partner_type_label, partner_type_label))
+        # Hook to plug alternative matching methods
+        partner = self._hook_match_partner(
+            partner_dict, chatter_msg, domain, partner_type_label)
         website_domain = False
         email_domain = False
         if partner_dict.get('email') and '@' in partner_dict['email']:
@@ -168,22 +168,23 @@ class BusinessDocumentImport(models.AbstractModel):
         raise self.user_error_wrap(_(
             "Odoo couldn't find any %s corresponding to the following "
             "information extracted from the business document:\n"
-            "Country code: %s\n"
-            "State code: %s\n"
+            "Name: %s\n"
             "VAT number: %s\n"
+            "Reference: %s\n"
             "E-mail: %s\n"
             "Website: %s\n"
-            "Reference: %s\n"
-            "Name: %s\n")
+            "State code: %s\n"
+            "Country code: %s\n")
             % (
                 partner_type_label,
-                partner_dict.get('country_code'),
-                partner_dict.get('state_code'),
+                partner_dict.get('name'),
                 partner_dict.get('vat'),
+                partner_dict.get('ref'),
                 partner_dict.get('email'),
                 partner_dict.get('website'),
-                partner_dict.get('ref'),
-                partner_dict.get('name')))
+                partner_dict.get('state_code'),
+                partner_dict.get('country_code'),
+                ))
 
     @api.model
     def _hook_match_partner(

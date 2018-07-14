@@ -44,6 +44,16 @@ class AccountInvoiceImport(models.TransientModel):
         'account.invoice', string='Draft Supplier Invoice to Update')
 
     @api.model
+    def default_get(self, fields_list):
+        res = super(AccountInvoiceImport, self).default_get(fields_list)
+        # I can't put 'default_state' in context because then it is transfered to the code
+        # and it causes problems when we create invoice lines
+        if self._context.get('wizard_default_state'):
+            res['state'] = self._context['wizard_default_state']
+        return res
+
+
+    @api.model
     def parse_xml_invoice(self, xml_root):
         return False
 
@@ -666,6 +676,7 @@ class AccountInvoiceImport(models.TransientModel):
                     new_line.name))
             chatter.append(_("%d new invoice line(s) created: %s") % (
                 len(compare_res['to_add']), ', '.join(to_create_label)))
+        invoice.compute_taxes()
         return True
 
     @api.model
@@ -694,7 +705,6 @@ class AccountInvoiceImport(models.TransientModel):
         vals = {
             'reference': parsed_inv.get('invoice_number'),
             'date_invoice': parsed_inv.get('date'),
-            'check_total': parsed_inv.get('amount_total'),
         }
         if parsed_inv.get('date_due'):
             vals['date_due'] = parsed_inv['date_due']
@@ -742,8 +752,6 @@ class AccountInvoiceImport(models.TransientModel):
                 "The currency of the imported invoice (%s) is different from "
                 "the currency of the existing invoice (%s)") % (
                 currency.name, invoice.currency_id.name))
-        # When invoice with embedded XML files will be more widely used,
-        # we should also update invoice lines
         vals = self._prepare_update_invoice_vals(parsed_inv, partner)
         logger.debug('Updating supplier invoice with vals=%s', vals)
         self.invoice_id.write(vals)
