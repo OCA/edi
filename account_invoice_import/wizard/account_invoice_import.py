@@ -256,6 +256,13 @@ class AccountInvoiceImport(models.TransientModel):
                     taxes = bdio._match_taxes(
                         line.get('taxes'), parsed_inv['chatter_msg'])
                     il_vals['invoice_line_tax_ids'] = [(6, 0, taxes.ids)]
+                if not il_vals.get('account_id') and il_vals.get('product_id'):
+                    product = self.env['product.product'].browse(
+                        il_vals['product_id'])
+                    raise UserError(_(
+                        "Account missing on product '%s' or on it's related "
+                        "category '%s'.") % (product.display_name,
+                                             product.categ_id.display_name))
                 if line.get('name'):
                     il_vals['name'] = line['name']
                 elif not il_vals.get('name'):
@@ -314,6 +321,15 @@ class AccountInvoiceImport(models.TransientModel):
                 hasattr(ailo, 'end_date')):
             il_vals['start_date'] = parsed_inv.get('date_start')
             il_vals['end_date'] = parsed_inv.get('date_end')
+
+    def company_cannot_refund_vat(self):
+        vat_purchase_taxes = self.env['account.tax'].search([
+            ('company_id', '=', self.env.user.company_id.id),
+            ('amount_type', '=', 'percent'),
+            ('type_tax_use', '=', 'purchase')])
+        if not vat_purchase_taxes:
+            return True
+        return False
 
     @api.multi
     def parse_invoice(self):
@@ -386,6 +402,26 @@ class AccountInvoiceImport(models.TransientModel):
                 line['qty'] *= -1
                 if 'price_subtotal' in line:
                     line['price_subtotal'] *= -1
+        # Handle the case where we import an invoice with VAT in a company that
+        # cannot deduct VAT
+        if self.company_cannot_refund_vat():
+            parsed_inv['amount_tax'] = 0
+            parsed_inv['amount_untaxed'] = parsed_inv['amount_total']
+            for line in parsed_inv.get('lines', []):
+                if line.get('taxes'):
+                    if len(line['taxes']) > 1:
+                        raise UserError(_(
+                            "You are importing an invoice in a company that "
+                            "cannot deduct VAT and the imported invoice has "
+                            "several VAT taxes on the same line (%s). We do "
+                            "not support this scenario for the moment.")
+                            % line.get('name'))
+                    vat_rate = line['taxes'][0].get('amount')
+                    if not float_is_zero(vat_rate, precision_digits=2):
+                        line['price_unit'] = line['price_unit'] *\
+                            (1 + vat_rate/100.0)
+                        line.pop('price_subtotal')
+                        line['taxes'] = []
         # Rounding work
         for entry in ['amount_untaxed', 'amount_total']:
             parsed_inv[entry] = float_round(
