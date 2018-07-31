@@ -31,6 +31,95 @@ class AccountInvoiceImport(models.TransientModel):
             return super(AccountInvoiceImport, self).parse_xml_invoice(
                 xml_root)
 
+    def prepare_facturx_xpath_dict(self):
+        xpath_dict = {
+            'partner': {
+                'vat': [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:SpecifiedTaxRegistration"
+                    "/ram:ID[@schemeID='VA']",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:SpecifiedTaxRegistration"
+                    "/ram:ID[@schemeID='VA']",  # ZUGFeRD
+                    ],
+                'name': [
+                    '//ram:ApplicableHeaderTradeAgreement'
+                    '/ram:SellerTradeParty'
+                    '/ram:Name',  # Factur-X
+                    '//ram:ApplicableSupplyChainTradeAgreement'
+                    '/ram:SellerTradeParty'
+                    '/ram:Name',  # ZUGFeRD
+                    ],
+                'email': [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:DefinedTradeContact"
+                    "/ram:EmailURIUniversalCommunication"
+                    "/ram:URIID",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:DefinedTradeContact"
+                    "/ram:EmailURIUniversalCommunication"
+                    "/ram:URIID",  # ZUGFeRD
+                    ],
+                },
+            'invoice_number': [
+                '//rsm:ExchangedDocument/ram:ID',  # Factur-X
+                '//rsm:HeaderExchangedDocument/ram:ID',  # ZUGFeRD
+                ],
+            'date': [
+                '//rsm:ExchangedDocument'
+                '/ram:IssueDateTime/udt:DateTimeString',  # Factur-X
+                '//rsm:HeaderExchangedDocument'
+                '/ram:IssueDateTime/udt:DateTimeString',  # ZUGFeRD
+                ],
+            'date_due': [
+                "//ram:ApplicableHeaderTradeSettlement"
+                "/ram:SpecifiedTradePaymentTerms"
+                "/ram:DueDateDateTime"
+                "/udt:DateTimeString",  # Factur-X
+                "//ram:ApplicableSupplyChainTradeSettlement"
+                "/ram:SpecifiedTradePaymentTerms"
+                "/ram:DueDateDateTime"
+                "/udt:DateTimeString",  # ZUGFeRD
+                ],
+            'date_start': [
+                "//ram:ApplicableHeaderTradeSettlement"
+                "/ram:BillingSpecifiedPeriod"
+                "/ram:StartDateTime/udt:DateTimeString",
+                "//ram:ApplicableSupplyChainTradeSettlement"
+                "/ram:BillingSpecifiedPeriod"
+                "/ram:StartDateTime/udt:DateTimeString",
+                ],
+            'date_end': [
+                "//ram:ApplicableHeaderTradeSettlement"
+                "/ram:BillingSpecifiedPeriod"
+                "/ram:EndDateTime/udt:DateTimeString",
+                "//ram:ApplicableSupplyChainTradeSettlement"
+                "/ram:BillingSpecifiedPeriod"
+                "/ram:EndDateTime/udt:DateTimeString",
+                ],
+            'currency': {
+                'iso': [
+                    "//ram:ApplicableHeaderTradeSettlement"
+                    "/ram:InvoiceCurrencyCode",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeSettlement"
+                    "/ram:InvoiceCurrencyCode",  # ZUGFeRD
+                    ],
+                },
+            'amount_total': [
+                "//ram:ApplicableHeaderTradeSettlement"
+                "/ram:SpecifiedTradeSettlementHeaderMonetarySummation"
+                "/ram:GrandTotalAmount",  # Factur-X
+                "//ram:ApplicableSupplyChainTradeSettlement"
+                "/ram:SpecifiedTradeSettlementMonetarySummation"
+                "/ram:GrandTotalAmount",  # ZUGFeRD
+                ],
+            }
+        return xpath_dict
+
     @api.model
     def parse_facturx_taxes(self, taxes_xpath, namespaces):
         taxes = []
@@ -229,92 +318,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "For the moment, in the Factur-X import, we only support "
                 "type code 380 and 381. (TypeCode is %s)") % doc_type)
 
-        xpath_dict = {
-            'partner': {
-                'vat': [
-                    "//ram:ApplicableHeaderTradeAgreement"
-                    "/ram:SellerTradeParty"
-                    "/ram:SpecifiedTaxRegistration"
-                    "/ram:ID[@schemeID='VA']",  # Factur-X
-                    "//ram:ApplicableSupplyChainTradeAgreement"
-                    "/ram:SellerTradeParty"
-                    "/ram:SpecifiedTaxRegistration"
-                    "/ram:ID[@schemeID='VA']",  # ZUGFeRD
-                    ],
-                'name': [
-                    '//ram:ApplicableHeaderTradeAgreement'
-                    '/ram:SellerTradeParty'
-                    '/ram:Name',  # Factur-X
-                    '//ram:ApplicableSupplyChainTradeAgreement'
-                    '/ram:SellerTradeParty'
-                    '/ram:Name',  # ZUGFeRD
-                    ],
-                'email': [
-                    "//ram:ApplicableHeaderTradeAgreement"
-                    "/ram:SellerTradeParty"
-                    "/ram:DefinedTradeContact"
-                    "/ram:EmailURIUniversalCommunication"
-                    "/ram:URIID",  # Factur-X
-                    "//ram:ApplicableSupplyChainTradeAgreement"
-                    "/ram:SellerTradeParty"
-                    "/ram:DefinedTradeContact"
-                    "/ram:EmailURIUniversalCommunication"
-                    "/ram:URIID",  # ZUGFeRD
-                    ],
-                },
-            'invoice_number': [
-                '//rsm:ExchangedDocument/ram:ID',  # Factur-X
-                '//rsm:HeaderExchangedDocument/ram:ID',  # ZUGFeRD
-                ],
-            'date': [
-                '//rsm:ExchangedDocument'
-                '/ram:IssueDateTime/udt:DateTimeString',  # Factur-X
-                '//rsm:HeaderExchangedDocument'
-                '/ram:IssueDateTime/udt:DateTimeString',  # ZUGFeRD
-                ],
-            'date_due': [
-                "//ram:ApplicableHeaderTradeSettlement"
-                "/ram:SpecifiedTradePaymentTerms"
-                "/ram:DueDateDateTime"
-                "/udt:DateTimeString",  # Factur-X
-                "//ram:ApplicableSupplyChainTradeSettlement"
-                "/ram:SpecifiedTradePaymentTerms"
-                "/ram:DueDateDateTime"
-                "/udt:DateTimeString",  # ZUGFeRD
-                ],
-            'date_start': [
-                "//ram:ApplicableHeaderTradeSettlement"
-                "/ram:BillingSpecifiedPeriod"
-                "/ram:StartDateTime/udt:DateTimeString",
-                "//ram:ApplicableSupplyChainTradeSettlement"
-                "/ram:BillingSpecifiedPeriod"
-                "/ram:StartDateTime/udt:DateTimeString",
-                ],
-            'date_end': [
-                "//ram:ApplicableHeaderTradeSettlement"
-                "/ram:BillingSpecifiedPeriod"
-                "/ram:EndDateTime/udt:DateTimeString",
-                "//ram:ApplicableSupplyChainTradeSettlement"
-                "/ram:BillingSpecifiedPeriod"
-                "/ram:EndDateTime/udt:DateTimeString",
-                ],
-            'currency': {
-                'iso': [
-                    "//ram:ApplicableHeaderTradeSettlement"
-                    "/ram:InvoiceCurrencyCode",  # Factur-X
-                    "//ram:ApplicableSupplyChainTradeSettlement"
-                    "/ram:InvoiceCurrencyCode",  # ZUGFeRD
-                    ],
-                },
-            'amount_total': [
-                "//ram:ApplicableHeaderTradeSettlement"
-                "/ram:SpecifiedTradeSettlementHeaderMonetarySummation"
-                "/ram:GrandTotalAmount",  # Factur-X
-                "//ram:ApplicableSupplyChainTradeSettlement"
-                "/ram:SpecifiedTradeSettlementMonetarySummation"
-                "/ram:GrandTotalAmount",  # ZUGFeRD
-                ],
-            }
+        xpath_dict = self.prepare_facturx_xpath_dict()
         res = self.xpath_to_dict_helper(xml_root, xpath_dict, namespaces)
         amount_total = res['amount_total']
         ac_qty_dict = {
