@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * account_invoice_import
-# 
+#
 # Translators:
 # Matjaž Mozetič <m.mozetic@matmoz.si>, 2016
 msgid ""
@@ -12,67 +12,98 @@ msgstr ""
 "PO-Revision-Date: 2016-11-12 13:37+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>, 2016\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: sl\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3);\n"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/account_invoice.py:22
+#: code:addons/account_invoice_import/models/account_invoice.py:22
 #, python-format
 msgid " Amount w/o tax: %s %s"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:500
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:699
 #, python-format
 msgid "%d invoice line(s) deleted: %s"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:515
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:714
 #, python-format
 msgid "%d new invoice line(s) created: %s"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
-msgid "), you should install the module"
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "), you should install the module <em>account_invoice_import_ubl</em>."
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import.config:account_invoice_import.account_invoice_import_config_form
-msgid "Account Invoice Import Configuration"
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:262
+#, python-format
+msgid "Account missing on product '%s' or on it's related category '%s'."
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import.config:account_invoice_import.account_invoice_import_config_tree
-msgid "Account Invoice Import Configurations"
-msgstr ""
-
-#. module: account_invoice_import
-#: view:account.invoice.import.config:account_invoice_import.account_invoice_import_config_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_form
 msgid "Accounting Parameters"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,active:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_active
 msgid "Active"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,account_analytic_id:0
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:539
+#, python-format
+msgid "Adjustment"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_config_settings_adjustment_credit_account_id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company_adjustment_credit_account_id
+msgid "Adjustment Credit Account"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_config_settings_adjustment_debit_account_id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company_adjustment_debit_account_id
+msgid "Adjustment Debit Account"
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:600
+#, python-format
+msgid "Adjustment on %s"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_account_analytic_id
 msgid "Analytic Account"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Archived"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Cancel"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,company_id:0
+#: model:ir.model,name:account_invoice_import.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_company_id
 msgid "Company"
 msgstr ""
 
@@ -82,117 +113,133 @@ msgid "Configuration for the import of Supplier Invoices"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Create New"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,create_uid:0
-#: field:account.invoice.import.config,create_uid:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_create_uid
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,create_date:0
-#: field:account.invoice.import.config,create_date:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_create_date
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_create_date
 msgid "Created on"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Cross Industry Invoice"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,currency_id:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_currency_id
 msgid "Currency"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,display_name:0
-#: field:account.invoice.import.config,display_name:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,invoice_id:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_invoice_id
 msgid "Draft Supplier Invoice to Update"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,account_id:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_account_id
 msgid "Expense Account"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,invoice_filename:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_invoice_filename
 msgid "Filename"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,label:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_label
 msgid "Force Description"
 msgstr ""
 
 #. module: account_invoice_import
-#: help:account.invoice.import.config,label:0
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config_label
 msgid "Force supplier invoice line description"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,id:0 field:account.invoice.import.config,id:0
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Group By"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_id
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_id
 msgid "ID"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "ISO/IEC 19845"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
-msgid "If it is a PDF/A-3 file with an embedded XML file and the module"
-msgstr ""
-
-#. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
-"If it is a regular PDF file without any embedded XML file and the module"
+"If it is a PDF/A-3 file with an embedded XML file and the module "
+"<em>account_invoice_import_zugferd</em> is installed, Odoo will extract and "
+"parse the embedded XML file. It will work only if the invoice complies with "
+"the"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
-"If it is an XML file, Odoo will parse it if the module that adds support for"
-" this XML format is installed. For the"
+"If it is a regular PDF file without any embedded XML file and the module "
+"<em>account_invoice_import_invoice2data</em> is installed, Odoo will use the"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid ""
+"If it is an XML file, Odoo will parse it if the module that adds support for "
+"this XML format is installed. For the"
+msgstr ""
+
+#. module: account_invoice_import
 #: selection:account.invoice.import,state:0
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Import"
-msgstr ""
-
-#. module: account_invoice_import
-#: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_action
-#: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_menu
-msgid "Import Invoice"
-msgstr ""
-
-#. module: account_invoice_import
-#: view:account.invoice:account_invoice_import.invoice_supplier_form
-msgid "Import Invoice File"
-msgstr ""
-
-#. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
-msgid "Import Supplier Invoice or Refund"
 msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_config_action
 #: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_config_menu
-msgid "Import Supplier Invoices"
+msgid "Import Bills"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.ui.view,arch_db:account_invoice_import.invoice_supplier_form
+msgid "Import Invoice File"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Import Supplier Invoice or Refund"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_action
+#: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_menu
+msgid "Import Vendor Bill"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_config_root
+msgid "Import Vendor Bills"
 msgstr ""
 
 #. module: account_invoice_import
@@ -202,48 +249,61 @@ msgid "Invoice"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:res.partner,invoice_import_id:0
+#: model:ir.ui.view,arch_db:account_invoice_import.view_account_config_settings
+msgid "Invoice Import"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner_invoice_import_id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_users_invoice_import_id
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_form
 msgid "Invoice Import Configuration"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,invoice_type:0
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_tree
+msgid "Invoice Import Configurations"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_invoice_type
 msgid "Invoice or Refund"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,__last_update:0
-#: field:account.invoice.import.config,__last_update:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import___last_update
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config___last_update
 msgid "Last Modified on"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,write_uid:0
-#: field:account.invoice.import.config,write_uid:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_write_uid
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,write_date:0
-#: field:account.invoice.import.config,write_date:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_write_date
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_write_date
 msgid "Last Updated on"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:180
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:225
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:269
 #, python-format
 msgid "MISSING DESCRIPTION"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,invoice_line_method:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_invoice_line_method
 msgid "Method for Invoice Line"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:361
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:579
+#: code:addons/account_invoice_import/models/partner.py:20
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:460
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:781
 #, python-format
 msgid "Missing Invoice Import Configuration on partner '%s'."
 msgstr ""
@@ -264,20 +324,26 @@ msgid "Multi Line, Static Product"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,name:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_name
 msgid "Name"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
-"Odoo will create a draft supplier invoice or refund. If there is an existing"
-" draft invoice for that supplier, Odoo will propose you to update that draft"
-" invoice or create a new invoice."
+"Odoo will create a draft supplier invoice or refund. If there is an existing "
+"draft invoice for that supplier, Odoo will propose you to update that draft "
+"invoice or create a new invoice."
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,invoice_file:0
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:850
+#, python-format
+msgid "Only the date format 102 is supported "
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_invoice_file
 msgid "PDF or XML Invoice"
 msgstr ""
 
@@ -287,14 +353,19 @@ msgid "Partner"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import.config:account_invoice_import.account_invoice_import_config_form
-#: field:account.invoice.import.config,partner_ids:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_partner_ids
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_form
 msgid "Partners"
 msgstr ""
 
 #. module: account_invoice_import
 #: selection:account.invoice.import,invoice_type:0
 msgid "Refund"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Search Invoice Import Configurations"
 msgstr ""
 
 #. module: account_invoice_import
@@ -308,10 +379,10 @@ msgid "Single Line, Static Product"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
-"Some draft supplier invoices/refunds have been found for the supplier of the"
-" PDF invoice you are importing ; one of them may correspond to the PDF "
+"Some draft supplier invoices/refunds have been found for the supplier of the "
+"PDF invoice you are importing ; one of them may correspond to the PDF "
 "invoice. You can either select an existing draft supplier invoice to update "
 "with the information of the PDF (information that will be updated include "
 "invoice date, supplier invoice number and attachment) or create a new draft "
@@ -319,43 +390,45 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,state:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_state
 msgid "State"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,static_product_id:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_static_product_id
 msgid "Static Product"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/account_invoice_import_config.py:56
+#: code:addons/account_invoice_import/models/account_invoice_import_config.py:55
 #, python-format
 msgid ""
 "Static Product must be set on the invoice import configuration of supplier "
-"'%s' that has a Method for Invoice Line set to 'Static Product'."
+"'%s' that has a Method for Invoice Line set to 'Single Line, Static Product' "
+"or 'Multi Line, Static Product'."
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,partner_id:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_id
 msgid "Supplier"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import.config,tax_ids:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config_tax_ids
 msgid "Taxes"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/account_invoice_import_config.py:64
+#: code:addons/account_invoice_import/models/account_invoice_import_config.py:64
 #, python-format
 msgid ""
 "The Expense Account must be set on the invoice import configuration of "
-"supplier '%s' that has a Method for Invoice Line set to 'Without product'."
+"supplier '%s' that has a Method for Invoice Line set to 'Single Line, No "
+"Product' or 'Multi Line, No Product'."
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:585
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:788
 #, python-format
 msgid ""
 "The currency of the imported invoice (%s) is different from the currency of "
@@ -363,7 +436,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: help:account.invoice.import.config,invoice_line_method:0
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config_invoice_line_method
 msgid ""
 "The multi-line methods will not work for PDF invoices that don't have an "
 "embedded XML file. The 'Multi Line, Auto-selected Product' method will only "
@@ -371,7 +444,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:478
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:677
 #, python-format
 msgid ""
 "The quantity has been updated on the invoice line with product '%s' from %s "
@@ -379,7 +452,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:573
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:775
 #, python-format
 msgid ""
 "The supplier of the imported invoice (%s) is different from the supplier of "
@@ -387,7 +460,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:440
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:637
 #, python-format
 msgid ""
 "The total amount is different from the untaxed amount, but no tax has been "
@@ -395,7 +468,15 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:486
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:645
+#, python-format
+msgid ""
+"The total tax amount has been forced to %s %s (amount computed by Odoo was: "
+"%s %s)."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:685
 #, python-format
 msgid ""
 "The unit price has been updated on the invoice line with product '%s' from "
@@ -403,13 +484,13 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:283
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:347
 #, python-format
-msgid "This XML file is not XML-compliant"
+msgid "This XML file is not XML-compliant. Error: %s"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:374
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:470
 #, python-format
 msgid ""
 "This invoice already exists in Odoo. It's Supplier Invoice Number is '%s' "
@@ -417,19 +498,19 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:405
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:509
 #, python-format
 msgid "This invoice has been created automatically via file import"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:608
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:809
 #, python-format
 msgid "This invoice has been updated automatically via the import of file %s"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:67
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:73
 #, python-format
 msgid ""
 "This type of PDF invoice is not supported. Did you install the module to "
@@ -437,7 +518,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:47
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:356
 #, python-format
 msgid ""
 "This type of XML invoice is not supported. Did you install the module to "
@@ -445,17 +526,17 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,amount_total:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_amount_total
 msgid "Total"
 msgstr ""
 
 #. module: account_invoice_import
-#: field:account.invoice.import,amount_untaxed:0
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_amount_untaxed
 msgid "Total Untaxed"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Universal Business Language"
 msgstr ""
 
@@ -465,7 +546,7 @@ msgid "Update"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Update Existing"
 msgstr ""
 
@@ -475,12 +556,12 @@ msgid "Update From Invoice"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Update Invoice"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Upload below the supplier invoice or refund as PDF or XML file:"
 msgstr ""
 
@@ -490,7 +571,16 @@ msgid "Wizard to import supplier invoices/refunds"
 msgstr "Čarovnik za uvoz prejetih računov/dobropisov"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:186
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:413
+#, python-format
+msgid ""
+"You are importing an invoice in a company that cannot deduct VAT and the "
+"imported invoice has several VAT taxes on the same line (%s). We do not "
+"support this scenario for the moment."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:231
 #, python-format
 msgid ""
 "You have selected a Multi Line method for this import but Odoo could not "
@@ -500,53 +590,47 @@ msgstr ""
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:562
 #, python-format
+msgid ""
+"You must configure the 'Adjustment Credit Account' on the Accounting "
+"Configuration page."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:556
+#, python-format
+msgid ""
+"You must configure the 'Adjustment Debit Account' on the Accounting "
+"Configuration page."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:764
+#, python-format
 msgid "You must select a supplier invoice or refund to update"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "ZUGFeRD"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
-msgid "account_invoice_import_invoice2data"
+#: model:ir.model,name:account_invoice_import.model_account_config_settings
+msgid "account.config.settings"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
-msgid "account_invoice_import_ubl"
-msgstr ""
-
-#. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
-msgid "account_invoice_import_zugferd"
-msgstr ""
-
-#. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "format (UBL, also known as"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "invoice2data"
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
-msgid ""
-"is installed, Odoo will extract and parse the embedded XML file. It will "
-"work only if the invoice complies with the"
-msgstr ""
-
-#. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
-msgid "is installed, Odoo will use the"
-msgstr ""
-
-#. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
 "library to read the text of the PDF and get the information. It will work "
 "only if the invoice2data library has a template for the invoices of that "
@@ -554,11 +638,11 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "specifications)."
 msgstr ""
 
 #. module: account_invoice_import
-#: view:account.invoice.import:account_invoice_import.account_invoice_import_form
+#: model:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "standard (based on the"
 msgstr ""
