@@ -39,7 +39,6 @@ class BaseFacturX(models.AbstractModel):
             official_schema.assertValid(t)
         except Exception, e:
             # if the validation of the XSD fails, we arrive here
-            logger = logging.getLogger(__name__)
             logger.warning(
                 "The XML file is invalid against the XML Schema Definition")
             logger.warning(xml_string)
