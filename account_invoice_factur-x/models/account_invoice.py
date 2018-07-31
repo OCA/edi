@@ -377,8 +377,7 @@ class AccountInvoice(models.Model):
                 trade_tax = etree.SubElement(
                     trade_settlement, ns['ram'] + 'ApplicableTradeTax')
                 amount = etree.SubElement(
-                    trade_tax, ns['ram'] + 'CalculatedAmount',
-                    currencyID=ns['currency'])
+                    trade_tax, ns['ram'] + 'CalculatedAmount')
                 amount.text = '%0.*f' % (
                     ns['cur_prec'], tline.amount * ns['sign'])
                 tax_type = etree.SubElement(
@@ -398,8 +397,7 @@ class AccountInvoice(models.Model):
                         fiscal_position_id.note
 
                 base = etree.SubElement(
-                    trade_tax,
-                    ns['ram'] + 'BasisAmount', currencyID=ns['currency'])
+                    trade_tax, ns['ram'] + 'BasisAmount')
                 base.text = '%0.*f' % (
                     ns['cur_prec'], tline.base * ns['sign'])
                 tax_categ_code = etree.SubElement(
@@ -482,21 +480,18 @@ class AccountInvoice(models.Model):
             ns['ram'] + 'SpecifiedTradeSettlementHeaderMonetarySummation')
         if ns['level'] != 'minimum':
             line_total = etree.SubElement(
-                sums, ns['ram'] + 'LineTotalAmount', currencyID=ns['currency'])
+                sums, ns['ram'] + 'LineTotalAmount')
             line_total.text = '%0.*f' % (
                 ns['cur_prec'], self.amount_untaxed * ns['sign'])
         # In Factur-X, charge total amount and allowance total are not required
         # charge_total = etree.SubElement(
-        #    sums, ns['ram'] + 'ChargeTotalAmount',
-        #    currencyID=ns['currency'])
+        #    sums, ns['ram'] + 'ChargeTotalAmount')
         # charge_total.text = '0.00'
         # allowance_total = etree.SubElement(
-        #    sums, ns['ram'] + 'AllowanceTotalAmount',
-        #    currencyID=ns['currency'])
+        #    sums, ns['ram'] + 'AllowanceTotalAmount')
         # allowance_total.text = '0.00'
         tax_basis_total_amt = etree.SubElement(
-            sums, ns['ram'] + 'TaxBasisTotalAmount',
-            currencyID=ns['currency'])
+            sums, ns['ram'] + 'TaxBasisTotalAmount')
         tax_basis_total_amt.text = '%0.*f' % (
             ns['cur_prec'], tax_basis_total * ns['sign'])
         tax_total = etree.SubElement(
@@ -504,17 +499,16 @@ class AccountInvoice(models.Model):
         tax_total.text = '%0.*f' % (
             ns['cur_prec'], self.amount_tax * ns['sign'])
         total = etree.SubElement(
-            sums, ns['ram'] + 'GrandTotalAmount', currencyID=ns['currency'])
+            sums, ns['ram'] + 'GrandTotalAmount')
         total.text = '%0.*f' % (ns['cur_prec'], self.amount_total * ns['sign'])
         if ns['level'] != 'minimum':
             prepaid = etree.SubElement(
-                sums, ns['ram'] + 'TotalPrepaidAmount',
-                currencyID=ns['currency'])
+                sums, ns['ram'] + 'TotalPrepaidAmount')
             prepaid.text = '%0.*f' % (
                 ns['cur_prec'],
                 (self.amount_total - self.residual) * ns['sign'])
         residual = etree.SubElement(
-            sums, ns['ram'] + 'DuePayableAmount', currencyID=ns['currency'])
+            sums, ns['ram'] + 'DuePayableAmount')
         residual.text = '%0.*f' % (ns['cur_prec'], self.residual * ns['sign'])
 
     @api.multi
@@ -580,8 +574,7 @@ class AccountInvoice(models.Model):
                 line_trade_agreement,
                 ns['ram'] + 'GrossPriceProductTradePrice')
             gross_price_amount = etree.SubElement(
-                gross_price, ns['ram'] + 'ChargeAmount',
-                currencyID=ns['currency'])
+                gross_price, ns['ram'] + 'ChargeAmount')
             gross_price_amount.text = '%0.*f' % (
                 ns['price_prec'], gross_price_val)
             fc_discount = float_compare(
@@ -606,8 +599,7 @@ class AccountInvoice(models.Model):
                     ns['price_prec'],
                     iline.quantity * iline.price_unit * ns['sign'])
                 actual_amount = etree.SubElement(
-                    trade_allowance, ns['ram'] + 'ActualAmount',
-                    currencyID=ns['currency'])
+                    trade_allowance, ns['ram'] + 'ActualAmount')
                 actual_amount_val = float_round(
                     gross_price_val - net_price_val,
                     precision_digits=ns['price_prec'])
@@ -617,8 +609,7 @@ class AccountInvoice(models.Model):
         net_price = etree.SubElement(
             line_trade_agreement, ns['ram'] + 'NetPriceProductTradePrice')
         net_price_amount = etree.SubElement(
-            net_price, ns['ram'] + 'ChargeAmount',
-            currencyID=ns['currency'])
+            net_price, ns['ram'] + 'ChargeAmount')
         net_price_amount.text = '%0.*f' % (ns['price_prec'], net_price_val)
         line_trade_delivery = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedLineTradeDelivery')
@@ -685,8 +676,7 @@ class AccountInvoice(models.Model):
             line_trade_settlement,
             ns['ram'] + 'SpecifiedTradeSettlementLineMonetarySummation')
         subtotal_amount = etree.SubElement(
-            subtotal, ns['ram'] + 'LineTotalAmount',
-            currencyID=ns['currency'])
+            subtotal, ns['ram'] + 'LineTotalAmount')
         subtotal_amount.text = '%0.*f' % (
             ns['cur_prec'], iline.price_subtotal * ns['sign'])
 
