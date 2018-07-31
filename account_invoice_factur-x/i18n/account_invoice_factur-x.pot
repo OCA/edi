@@ -1,22 +1,17 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * account_invoice_factur-x
+#	* account_invoice_factur-x
 #
-# Translators:
-# Quentin THEURET <odoo@kerpeo.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 11:54+0000\n"
-"PO-Revision-Date: 2018-01-29 11:54+0000\n"
-"Last-Translator: Quentin THEURET <odoo@kerpeo.com>, 2018\n"
-"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
-"Language: fr\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: \n"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:759
@@ -37,14 +32,12 @@ msgstr ""
 #. module: account_invoice_factur-x
 #: model:ir.model,name:account_invoice_factur-x.model_res_company
 msgid "Companies"
-msgstr "Sociétés"
+msgstr ""
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:50
 #, python-format
-msgid ""
-"Country is not set on partner '%s'. In the Factur-X standard, the country is "
-"required for buyer and seller."
+msgid "Country is not set on partner '%s'. In the Factur-X standard, the country is required for buyer and seller."
 msgstr ""
 
 #. module: account_invoice_factur-x
@@ -137,10 +130,7 @@ msgstr ""
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:555
 #, python-format
-msgid ""
-"The Factur-X standard specify that unit prices can't be negative. The unit "
-"price of line '%s' is negative. You should generate a customer refund for "
-"that line."
+msgid "The Factur-X standard specify that unit prices can't be negative. The unit price of line '%s' is negative. You should generate a customer refund for that line."
 msgstr ""
 
 #. module: account_invoice_factur-x
@@ -156,9 +146,7 @@ msgstr ""
 #. module: account_invoice_factur-x
 #: model:ir.model.fields,help:account_invoice_factur-x.field_account_config_settings_facturx_level
 #: model:ir.model.fields,help:account_invoice_factur-x.field_res_company_facturx_level
-msgid ""
-"Unless if you have a good reason, you should always select 'EN 16931 "
-"(Comfort)', which is the default value."
+msgid "Unless if you have a good reason, you should always select 'EN 16931 (Comfort)', which is the default value."
 msgstr ""
 
 #. module: account_invoice_factur-x
@@ -170,4 +158,5 @@ msgstr ""
 #. module: account_invoice_factur-x
 #: model:ir.model,name:account_invoice_factur-x.model_account_config_settings
 msgid "account.config.settings"
-msgstr "account.config.settings"
+msgstr ""
+
