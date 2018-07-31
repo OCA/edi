@@ -1,0 +1,71 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sale_order_import_ubl
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_order_import_ubl
+#: model:product.product,description_sale:sale_order_import_ubl.product_beeswax
+#: model:product.template,description_sale:sale_order_import_ubl.product_beeswax_product_template
+msgid "Acme beeswax"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:product.product,name:sale_order_import_ubl.product_beeswax
+#: model:product.template,name:sale_order_import_ubl.product_beeswax_product_template
+msgid "Beeswax"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:product.pricelist,name:sale_order_import_ubl.dkk_pricelist
+msgid "DKK pricelist"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:product.product,name:sale_order_import_ubl.product_red_paint
+#: model:product.template,name:sale_order_import_ubl.product_red_paint_product_template
+msgid "Falu Rödfärg"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:product.pricelist,name:sale_order_import_ubl.gbp_pricelist
+msgid "IYT pricelist"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:product.product,name:sale_order_import_ubl.product_pencil
+#: model:product.template,name:sale_order_import_ubl.product_pencil_product_template
+msgid "Pensel 20 mm"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:product.product,description_sale:sale_order_import_ubl.product_red_paint
+#: model:product.template,description_sale:sale_order_import_ubl.product_red_paint_product_template
+msgid "Red paint"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:product.pricelist,name:sale_order_import_ubl.sek_pricelist
+msgid "SEK pricelist"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:ir.model,name:sale_order_import_ubl.model_sale_order_import
+msgid "Sale Order Import from Files"
+msgstr ""
+
+#. module: sale_order_import_ubl
+#: model:product.product,description_sale:sale_order_import_ubl.product_pencil
+#: model:product.template,description_sale:sale_order_import_ubl.product_pencil_product_template
+msgid "Very good pencils for red paint"
+msgstr ""
+
