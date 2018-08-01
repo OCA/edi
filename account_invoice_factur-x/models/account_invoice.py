@@ -590,14 +590,6 @@ class AccountInvoice(models.Model):
                     indicator.text = 'false'
                 else:
                     indicator.text = 'true'
-                disc_percent = etree.SubElement(
-                    trade_allowance, ns['ram'] + 'CalculationPercent')
-                disc_percent.text = '%0.*f' % (ns['disc_prec'], iline.discount)
-                base_discount_amt = etree.SubElement(
-                    trade_allowance, ns['ram'] + 'BasisAmount')
-                base_discount_amt.text = '%0.*f' % (
-                    ns['price_prec'],
-                    iline.quantity * iline.price_unit * ns['sign'])
                 actual_amount = etree.SubElement(
                     trade_allowance, ns['ram'] + 'ActualAmount')
                 actual_amount_val = float_round(
