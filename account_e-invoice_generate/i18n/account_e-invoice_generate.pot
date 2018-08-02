@@ -29,6 +29,11 @@ msgid "Format"
 msgstr ""
 
 #. module: account_e-invoice_generate
+#: model:ir.model,name:account_e-invoice_generate.model_account_invoice
+msgid "Invoice"
+msgstr ""
+
+#. module: account_e-invoice_generate
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "None"
 msgstr ""
@@ -41,6 +46,11 @@ msgstr ""
 #. module: account_e-invoice_generate
 #: model:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
 msgid "Select the format of your e-invoices."
+msgstr ""
+
+#. module: account_e-invoice_generate
+#: selection:res.company,xml_format_in_pdf_invoice:0
+msgid "Universal Business Language (UBL)"
 msgstr ""
 
 #. module: account_e-invoice_generate
