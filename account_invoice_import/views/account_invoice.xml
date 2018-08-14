@@ -15,7 +15,7 @@
         <button name="action_invoice_cancel" position="before">
             <button type="action" name="%(account_invoice_import_action)d"
                 string="Import Invoice File" states="draft"
-                context="{'wizard_default_state': 'update-from-invoice', 'default_invoice_id': id}"/>
+                context="{'wizard_default_state': 'update-from-invoice', 'default_invoice_id': id, 'default_partner_id': commercial_partner_id}"/>
         </button>
     </field>
 </record>
