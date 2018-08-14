@@ -531,7 +531,6 @@ class AccountInvoiceImport(models.TransientModel):
                 action['res_id'] = self.id
             else:
                 action = self.create_invoice_action(parsed_inv, import_config)
-        print "wiz_vals=", wiz_vals
         self.write(wiz_vals)
         return action
 
