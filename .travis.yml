@@ -55,6 +55,7 @@ install:
   #- sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
   #- sudo chmod 755 /usr/local/bin/pdftotext
   - pip install phonenumbers
+  - pip install weboob
 
 script:
   - travis_run_tests
