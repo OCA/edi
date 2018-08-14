@@ -127,13 +127,6 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="refund_account_id" ref="charge_account"/>
 </record>
 
-<record id="test_noline_import_config" model="account.invoice.import.config">
-    <field name="name">Test noline</field>
-    <field name="invoice_line_method">1line_no_product</field>
-    <field name="account_id" ref="charge_account"/>
-    <field name="tax_ids" eval="[(4, ref('account_invoice_import_factur-x.fr_vat_purchase_20'))]"/>
-</record>
-
 <record id="test_noline" model="res.partner">
     <field name="name">Test Supplier (noline)</field>
     <field name="is_company" eval="True"/>
@@ -141,12 +134,12 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="customer" eval="False"/>
     <field name="country_id" ref="base.fr"/>
     <field name="vat">FR11123456782</field>
-    <field name="invoice_import_id" ref="test_noline_import_config"/>
 </record>
 
-<record id="test_line_import_config" model="account.invoice.import.config">
-    <field name="name">Test line</field>
-    <field name="invoice_line_method">nline_no_product</field>
+<record id="test_noline_import_config" model="account.invoice.import.config">
+    <field name="name">Test noline</field>
+    <field name="partner_id" ref="test_noline"/>
+    <field name="invoice_line_method">1line_no_product</field>
     <field name="account_id" ref="charge_account"/>
     <field name="tax_ids" eval="[(4, ref('account_invoice_import_factur-x.fr_vat_purchase_20'))]"/>
 </record>
@@ -158,7 +151,14 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="customer" eval="False"/>
     <field name="country_id" ref="base.fr"/>
     <field name="vat">FR14987654324</field>
-    <field name="invoice_import_id" ref="test_line_import_config"/>
+</record>
+
+<record id="test_line_import_config" model="account.invoice.import.config">
+    <field name="name">Test line</field>
+    <field name="partner_id" ref="test_line"/>
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account"/>
+    <field name="tax_ids" eval="[(4, ref('account_invoice_import_factur-x.fr_vat_purchase_20'))]"/>
 </record>
 
 
