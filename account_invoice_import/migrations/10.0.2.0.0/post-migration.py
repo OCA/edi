@@ -31,3 +31,4 @@ def migrate(cr, version):
                 except:
                     continue
                 config.partner_id = partner_id
+                props.unlink()
