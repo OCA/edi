@@ -29,19 +29,23 @@
             </group>
             <group name="help-update" states="update">
                 <div>
-                    <p>Some draft supplier invoices/refunds have been found for the supplier of the PDF invoice you are importing ; one of them may correspond to the PDF invoice. You can either select an existing draft supplier invoice to update with the information of the PDF (information that will be updated include invoice date, supplier invoice number and attachment) or create a new draft invoice.</p>
+                    <p>Some draft supplier invoices/refunds have been found for the supplier of the PDF invoice you are importing ; one of them may correspond to the PDF invoice. You can either select an existing draft supplier invoice to update with the information of the PDF or create a new draft invoice.</p>
                 </div>
             </group>
             <group name="main">
                 <field name="invoice_file" filename="invoice_filename"
                     states="import,update-from-invoice"/>
                 <field name="invoice_filename" invisible="1"/>
-                <field name="partner_id" states="update"/>
-                <field name="invoice_type" states="update"/>
-                <field name="amount_untaxed" states="update"
+                <field name="partner_id" states="config,update,update-from-invoice"/>
+                <field name="invoice_type" states="config,update"/>
+                <field name="amount_untaxed" states="config,update"
                     widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                <field name="amount_total" states="update"
+                <field name="amount_total" states="config,update"
                     widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="import_config_id"
+                    states="config,update-from-invoice,update"
+                    domain="[('partner_id', '=', partner_id)]"
+                    attrs="{'required': [('state', 'in', ('config', 'update-from-invoice', 'update'))]}" />
                 <field name="invoice_id" states="update,update-from-invoice"
                     domain="[('state', '=', 'draft'), ('type', 'in', ('in_invoice', 'in_refund')), ('commercial_partner_id', '=', partner_id), ('type', '=', invoice_type)]"
                     context="{'invoice_show_amount': True}"
@@ -49,13 +53,13 @@
             </group>
             <footer>
                 <button name="import_invoice" type="object"
-                    class="oe_highlight" string="Import" states="import"/>
+                    class="btn-primary" string="Import" states="import,config"/>
                 <button name="update_invoice" type="object"
-                    class="oe_highlight" string="Update Existing" states="update"/>
+                    class="btn-primary" string="Update Existing" states="update"/>
                 <button name="create_invoice_action_button" type="object"
-                    class="oe_highlight" string="Create New" states="update"/>
+                    class="btn-primary" string="Create New" states="update"/>
                 <button name="update_invoice" type="object"
-                    class="oe_highlight" string="Update Invoice"
+                    class="btn-primary" string="Update Invoice"
                     states="update-from-invoice"/>
                 <button special="cancel" string="Cancel" class="oe_link"/>
             </footer>
