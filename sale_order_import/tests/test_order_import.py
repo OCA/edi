@@ -13,7 +13,6 @@ class TestOrderImport(TransactionCase):
             'partner': {'email': 'agrolait@yourcompany.example.com'},
             'date': '2018-08-14',
             'order_ref': 'TEST1242',
-            'currency': {'symbol': u'€'},
             'lines': [{
                 'product': {'code': 'PROD_DEL'},
                 'qty': 2,
@@ -34,7 +33,6 @@ class TestOrderImport(TransactionCase):
             'partner': {'email': 'agrolait@yourcompany.example.com'},
             'date': '2018-08-14',
             'order_ref': 'TEST1242',
-            'currency': {'symbol': u'€'},
             'lines': [{
                 'product': {'code': 'PROD_DEL'},
                 'qty': 3,
