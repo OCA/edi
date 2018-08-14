@@ -20,11 +20,12 @@ class AccountInvoiceDownloadConfig(models.Model):
         'res.company', string='Company', required=True,
         default=lambda self: self.env['res.company']._company_default_get(
             'account.invoice.download.config'))
-    invoice_import_id = fields.Many2one(
+    import_config_id = fields.Many2one(
         'account.invoice.import.config',
-        string='Invoice Import Configuration', required=True)
+        string='Invoice Import Configuration', required=True,
+        ondelete='restrict')
     partner_id = fields.Many2one(
-        related='invoice_import_id.partner_id', readonly=True, store=True)
+        related='import_config_id.partner_id', readonly=True, store=True)
     last_run = fields.Date(string='Last Download Date')
     # Don't set last_run as readonly because sometimes we need to
     # manually fool the system so that he starts downloading from
@@ -81,8 +82,8 @@ class AccountInvoiceDownloadConfig(models.Model):
                 'invoice_filename': invoice_filename,
             }
             wiz = self.env['account.invoice.import'].create(vals)
-            parsed_inv = wiz.parse_invoice()
-            wiz_action = wiz.create_invoice_action(parsed_inv)
+            import_config = self.import_config_id.convert_to_import_config()
+            wiz_action = wiz.create_invoice_action(import_config=import_config)
             if isinstance(wiz_action, dict) and wiz_action.get('res_id'):
                 invoice_id = wiz_action['res_id']
         except Exception as e:
