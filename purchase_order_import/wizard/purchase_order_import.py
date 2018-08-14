@@ -173,7 +173,7 @@ class PurchaseOrderImport(models.TransientModel):
                 chatter.append(_(
                     "The unit price has been updated on the RFQ line with "
                     "product '%s' from %s to %s %s.") % (
-                        oline.product_id.name_get()[0][1],
+                        oline.product_id.display_name,
                         cdict['price_unit'][0], cdict['price_unit'][1],
                         order.currency_id.name))
                 write_vals['price_unit'] = cdict['price_unit'][1]  # TODO
@@ -181,7 +181,7 @@ class PurchaseOrderImport(models.TransientModel):
                 chatter.append(_(
                     "The quantity has been updated on the RFQ line with "
                     "product '%s' from %s to %s %s.") % (
-                        oline.product_id.name_get()[0][1],
+                        oline.product_id.display_name,
                         cdict['qty'][0], cdict['qty'][1],
                         oline.product_uom.name))
                 write_vals['product_qty'] = cdict['qty'][1]
