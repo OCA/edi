@@ -81,7 +81,6 @@
     <field name="city">Hoofddorp</field>
     <field name="country_id" ref="base.nl"/>
     <field name="vat">NL009276749B01</field>
-    <field name="invoice_import_id" ref="multi_tank_import_config"/>
 </record>
 
 <record id="multi_tank_import_config" model="account.invoice.import.config">
