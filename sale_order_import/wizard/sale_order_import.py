@@ -163,8 +163,8 @@ class SaleOrderImport(models.TransientModel):
             raise UserError(_(
                 "The customer '%s' has a pricelist '%s' but the "
                 "currency of this order is '%s'.") % (
-                    partner.name_get()[0][1],
-                    partner.property_product_pricelist.name_get()[0][1],
+                    partner.display_name,
+                    partner.property_product_pricelist.display_name,
                     currency.name))
         if parsed_order.get('order_ref'):
             existing_orders = soo.search([
@@ -176,7 +176,7 @@ class SaleOrderImport(models.TransientModel):
                 raise UserError(_(
                     "An order of customer '%s' with reference '%s' "
                     "already exists: %s (state: %s)") % (
-                        partner.name_get()[0][1],
+                        partner.display_name,
                         parsed_order['order_ref'],
                         existing_orders[0].name,
                         existing_orders[0].state))
@@ -200,9 +200,7 @@ class SaleOrderImport(models.TransientModel):
             uom = bdio._match_uom(
                 line.get('uom'), parsed_order['chatter_msg'], product)
             line_vals = self._prepare_create_order_line(
-                product, uom, line, price_source)
-            # product_id_change is played in the inherit of create()
-            # of sale.order.line cf odoo/addons/sale/models/sale.py
+                product, uom, so_vals, line, price_source)
             so_vals['order_line'].append((0, 0, line_vals))
         return so_vals
 
@@ -262,7 +260,6 @@ class SaleOrderImport(models.TransientModel):
             parsed_order['chatter_msg'] = []
         return parsed_order
 
-    @api.multi
     def import_order_button(self):
         self.ensure_one()
         bdio = self.env['business.document.import']
@@ -301,7 +298,6 @@ class SaleOrderImport(models.TransientModel):
             return self.create_order_return_action(
                 parsed_order, self.order_filename)
 
-    @api.multi
     def create_order_button(self):
         self.ensure_one()
         parsed_order = self.parse_order(
@@ -310,7 +306,6 @@ class SaleOrderImport(models.TransientModel):
         return self.create_order_return_action(
             parsed_order, self.order_filename)
 
-    @api.multi
     def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
         order = self.create_order(
@@ -345,7 +340,10 @@ class SaleOrderImport(models.TransientModel):
 
     @api.model
     def _prepare_create_order_line(
-            self, product, uom, import_line, price_source):
+            self, product, uom, order, import_line, price_source):
+        """the 'order' arg can be a recordset (in case of an update of a sale order)
+        or a dict (in case of the creation of a new sale order)"""
+        solo = self.env['sale.order.line']
         vals = {
             'product_id': product.id,
             'product_uom_qty': import_line['qty'],
@@ -353,10 +351,18 @@ class SaleOrderImport(models.TransientModel):
         }
         if price_source == 'order':
             vals['price_unit'] = import_line['price_unit']  # TODO : fix
+        elif price_source == 'pricelist':
+            # product_id_change is played in the inherit of create()
+            # of sale.order.line cf odoo/addons/sale/models/sale.py
+            # but it is not enough: we also need to play _onchange_discount()
+            # to have the right discount for pricelist
+            vals['order_id'] = order
+            vals = solo.play_onchanges(vals, ['product_id'])
+            vals.pop('order_id')
         return vals
 
-    @api.multi
-    def update_order_lines(self, parsed_order, order):
+    @api.model
+    def update_order_lines(self, parsed_order, order, price_source):
         chatter = parsed_order['chatter_msg']
         solo = self.env['sale.order.line']
         dpo = self.env['decimal.precision']
@@ -390,11 +396,11 @@ class SaleOrderImport(models.TransientModel):
                 chatter.append(_(
                     "The quantity has been updated on the order line "
                     "with product '%s' from %s to %s %s") % (
-                        oline.product_id.name_get()[0][1],
+                        oline.product_id.display_name,
                         cdict['qty'][0], cdict['qty'][1],
                         oline.product_uom.name))
                 write_vals['product_uom_qty'] = cdict['qty'][1]
-                if self.price_source != 'order':
+                if price_source != 'order':
                     new_price_unit = order.pricelist_id.with_context(
                         date=order.date_order,
                         uom=oline.product_uom.id).price_get(
@@ -406,7 +412,7 @@ class SaleOrderImport(models.TransientModel):
                         chatter.append(_(
                             "The unit price has been updated on the order "
                             "line with product '%s' from %s to %s %s") % (
-                                oline.product_id.name_get()[0][1],
+                                oline.product_id.display_name,
                                 oline.price_unit, new_price_unit,
                                 order.currency_id.name))
                         write_vals['price_unit'] = new_price_unit
@@ -426,8 +432,8 @@ class SaleOrderImport(models.TransientModel):
             to_create_label = []
             for add in compare_res['to_add']:
                 line_vals = self._prepare_create_order_line(
-                    add['product'], add['uom'], add['import_line'],
-                    self.price_source)
+                    add['product'], add['uom'], order, add['import_line'],
+                    price_source)
                 line_vals['order_id'] = order.id
                 new_line = solo.create(line_vals)
                 to_create_label.append('%s %s x %s' % (
@@ -438,7 +444,6 @@ class SaleOrderImport(models.TransientModel):
                 len(compare_res['to_add']), ', '.join(to_create_label)))
         return True
 
-    @api.multi
     def update_order_button(self):
         self.ensure_one()
         bdio = self.env['business.document.import']
@@ -459,7 +464,7 @@ class SaleOrderImport(models.TransientModel):
             parsed_order, order, self.commercial_partner_id)
         if vals:
             order.write(vals)
-        self.update_order_lines(parsed_order, order)
+        self.update_order_lines(parsed_order, order, self.price_source)
         bdio.post_create_or_update(parsed_order, order)
         logger.info(
             'Quotation ID %d updated via import of file %s', order.id,
