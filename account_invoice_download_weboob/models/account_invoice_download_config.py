@@ -36,7 +36,7 @@ class AccountInvoiceDownloadConfig(models.Model):
         return super(AccountInvoiceDownloadConfig, self).download(credentials)
 
     def weboob_download(self, credentials):
-        logger.info('START weboob operations')
+        logger.info('START weboob operations with module %s', self.weboob_module)
         w = Weboob()
         invoice_ids = []
         back = w.build_backend(
