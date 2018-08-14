@@ -19,7 +19,7 @@ class ResPartner(models.Model):
         if not self.invoice_import_id:
             raise UserError(_(
                 "Missing Invoice Import Configuration on partner '%s'.")
-                % self.name_get()[0][1])
+                % self.display_name)
         config = self.invoice_import_id
         vals = {
             'invoice_line_method': config.invoice_line_method,
