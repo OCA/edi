@@ -12,11 +12,11 @@ class ResPartner(models.Model):
         'account.invoice.import.config', 'partner_id',
         string='Invoice Import Configuration')
     invoice_import_count = fields.Integer(
-        compute='compute_invoice_import_count',
+        compute='_compute_invoice_import_count',
         string='Number of Invoice Import Configurations',
         readonly=True)
 
-    def compute_invoice_import_count(self):
+    def _compute_invoice_import_count(self):
         config_data = self.env['account.invoice.import.config'].read_group(
             [('partner_id', 'in', self.ids)], ['partner_id'], ['partner_id'])
         mapped_data = dict([
