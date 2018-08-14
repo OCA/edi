@@ -24,7 +24,7 @@
             <group name="main">
                 <field name="name"/>
                 <field name="company_id" groups="base.group_multi_company"/>
-                <field name="invoice_import_id"/>
+                <field name="import_config_id"/>
                 <field name="partner_id"/>
             </group>
             <group string="Download Method" name="method">
@@ -55,7 +55,7 @@
     <field name="arch"  type="xml">
         <tree string="Invoice Download Configurations">
             <field name="name"/>
-            <field name="invoice_import_id"/>
+            <field name="import_config_id"/>
             <field name="company_id" groups="base.group_multi_company"/>
             <field name="method"/>
             <field name="backend"/>
