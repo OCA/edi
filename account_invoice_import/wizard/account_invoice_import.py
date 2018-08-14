@@ -679,7 +679,7 @@ class AccountInvoiceImport(models.TransientModel):
                 chatter.append(_(
                     "The quantity has been updated on the invoice line "
                     "with product '%s' from %s to %s %s") % (
-                        eline.product_id.name_get()[0][1],
+                        eline.product_id.display_name,
                         cdict['qty'][0], cdict['qty'][1],
                         eline.uom_id.name))
                 write_vals['quantity'] = cdict['qty'][1]
@@ -687,7 +687,7 @@ class AccountInvoiceImport(models.TransientModel):
                 chatter.append(_(
                     "The unit price has been updated on the invoice "
                     "line with product '%s' from %s to %s %s") % (
-                        eline.product_id.name_get()[0][1],
+                        eline.product_id.display_name,
                         eline.price_unit, cdict['price_unit'][1],  # TODO fix
                         invoice.currency_id.name))
                 write_vals['price_unit'] = cdict['price_unit'][1]
