@@ -59,14 +59,14 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
             vals['download_config_id'])
         invoice_ids = download_config.download(credentials)
         download_config.last_run = fields.Date.context_today(self)
-        vals['invoice_ids'] = invoice_ids or ''
+        if invoice_ids:
+            vals['invoice_ids'] = '[%s]' % ','.join([
+                str(inv_id) for inv_id in invoice_ids])
         return super(AccountInvoiceDownloadCredentials, self).create(vals)
 
     def run(self):
-        """We don't do anything here because everything is done in create()"""
+        """The real work is made in create(), not here!"""
         self.ensure_one()
-        # TODO: find a way to return an action with the downloaded invoices
-        # will probably need a Char field on the wizard set by create
         if self.invoice_ids:
             action = self.env['ir.actions.act_window'].for_xml_id(
                 'account', 'action_invoice_tree2')
