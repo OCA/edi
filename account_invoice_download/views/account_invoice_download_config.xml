@@ -24,8 +24,8 @@
             <group name="main">
                 <field name="name"/>
                 <field name="company_id" groups="base.group_multi_company"/>
-                <field name="import_config_id"/>
-                <field name="partner_id"/>
+                <field name="import_config_id" invisible="not context.get('download_config_main_view')"/>
+                <field name="partner_id" invisible="not context.get('download_config_main_view')"/>
             </group>
             <group string="Download Method" name="method">
                 <field name="backend"/>
@@ -55,7 +55,7 @@
     <field name="arch"  type="xml">
         <tree string="Invoice Download Configurations">
             <field name="name"/>
-            <field name="import_config_id"/>
+            <field name="import_config_id" invisible="not context.get('download_config_main_view')"/>
             <field name="company_id" groups="base.group_multi_company"/>
             <field name="method"/>
             <field name="backend"/>
@@ -88,6 +88,7 @@
     <field name="name">Download Bills</field>
     <field name="res_model">account.invoice.download.config</field>
     <field name="view_mode">tree,form</field>
+    <field name="context">{'download_config_main_view': True}</field>
 </record>
 
 <menuitem id="account_invoice_download_config_menu"

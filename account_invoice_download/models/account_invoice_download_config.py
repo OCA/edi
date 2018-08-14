@@ -22,8 +22,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             'account.invoice.download.config'))
     import_config_id = fields.Many2one(
         'account.invoice.import.config',
-        string='Invoice Import Configuration', required=True,
-        ondelete='restrict')
+        string='Invoice Import Configuration', ondelete='cascade')
     partner_id = fields.Many2one(
         related='import_config_id.partner_id', readonly=True, store=True)
     last_run = fields.Date(string='Last Download Date')
@@ -115,6 +114,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 return action
             else:
                 # Don't rolls-back the update of last_run...
+                # TODO: find another way to do the same thing without manual commit
                 self._cr.commit()
                 raise UserError(_('No invoice downloaded'))
         else:
