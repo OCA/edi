@@ -755,7 +755,7 @@ class AccountInvoiceImport(models.TransientModel):
             existing_lines, parsed_inv['lines'], chatter, seller=seller)
         if not compare_res:
             return
-        for eline, cdict in compare_res['to_update'].iteritems():
+        for eline, cdict in compare_res['to_update'].items():
             write_vals = {}
             if cdict.get('qty'):
                 chatter.append(_(
