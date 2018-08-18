@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+<record id="account_invoice_download_log_form" model="ir.ui.view">
+    <field name="name">account.invoice.download.log.form</field>
+    <field name="model">account.invoice.download.log</field>
+    <field name="arch"  type="xml">
+        <form string="Invoice Download Log">
+            <group name="main">
+                <field name="create_date" string="Date"/>
+                <field name="download_config_id" invisible="not context.get('download_log_main_view')"/>
+                <field name="import_config_id"/>
+                <field name="partner_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="result"/>
+                <field name="invoice_count"/>
+            </group>
+            <group name="message" string="Message">
+                <field name="message" nolabel="1"/>
+            </group>
+        </form>
+    </field>
+</record>
+
+<record id="account_invoice_download_log_tree" model="ir.ui.view">
+    <field name="name">account.invoice.download.log.tree</field>
+    <field name="model">account.invoice.download.log</field>
+    <field name="arch"  type="xml">
+        <tree string="Invoice Download Logs" decoration-success="result == 'success'" decoration-danger="result == 'failure'">
+            <field name="create_date" string="Date"/>
+            <field name="partner_id" invisible="not context.get('download_log_main_view')"/>
+            <field name="download_config_id" invisible="not context.get('download_log_main_view')"/>
+            <field name="message"/>
+            <field name="invoice_count" sum="1"/>
+            <field name="result"/>
+        </tree>
+    </field>
+</record>
+
+<record id="account_invoice_download_log_search" model="ir.ui.view">
+    <field name="name">account.invoice.download.log.search</field>
+    <field name="model">account.invoice.download.log</field>
+    <field name="arch"  type="xml">
+        <search string="Search Invoice Download Logs">
+            <field name="partner_id" string="Partner or Download Config" filter_domain="['|', ('download_config_id', 'ilike', self), ('partner_id', 'ilike', self)]"/>
+            <filter string="Success" name="success" domain="[('result', '=', 'success')]"/>
+            <filter string="Failure" name="failure" domain="[('result', '=', 'failure')]"/>
+            <group string="Group By" name="groupby">
+                <filter name="result_groupby" string="Result" context="{'group_by': 'result'}"/>
+                <filter name="date_groupby" string="Date" context="{'group_by': 'create_date'}"/>
+                <filter name="partner_groupby" string="Partner" context="{'group_by': 'partner_id'}"/>
+                <filter name="download_config_groupby" string="Download Config" context="{'group_by': 'download_config_id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+
+<record id="account_invoice_download_log_action" model="ir.actions.act_window">
+    <field name="name">Download Bills Logs</field>
+    <field name="res_model">account.invoice.download.log</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{'download_log_main_view': True}</field>
+</record>
+
+<menuitem id="account_invoice_download_log_menu"
+    parent="account_invoice_import.account_invoice_import_config_root"
+    action="account_invoice_download_log_action" sequence="30"/>
+
+</odoo>

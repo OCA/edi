@@ -20,9 +20,11 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
         related='download_config_id.backend', readonly=True)
     login = fields.Char()
     password = fields.Char()
-    invoice_ids = fields.Char(
+    invoice_ids_str = fields.Char(
         help='This field is a technical hack to be able to return '
         'the action with the created invoices')
+    log_id = fields.Many2one(
+        'account.invoice.download.log', string='Log')
 
     @api.model
     def default_get(self, fields_list):
@@ -57,24 +59,32 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
             raise UserError(_('Missing Invoice Download Config'))
         download_config = self.env['account.invoice.download.config'].browse(
             vals['download_config_id'])
-        invoice_ids = download_config.download(credentials)
+        invoice_ids, log_id = download_config.run(credentials)
         download_config.last_run = fields.Date.context_today(self)
+        vals['log_id'] = log_id
         if invoice_ids:
-            vals['invoice_ids'] = '[%s]' % ','.join([
+            vals['invoice_ids_str'] = '[%s]' % ','.join([
                 str(inv_id) for inv_id in invoice_ids])
         return super(AccountInvoiceDownloadCredentials, self).create(vals)
 
     def run(self):
         """The real work is made in create(), not here!"""
         self.ensure_one()
-        if self.invoice_ids:
-            action = self.env['ir.actions.act_window'].for_xml_id(
-                'account', 'action_invoice_tree2')
+        iaao = self.env['ir.actions.act_window']
+        if self.invoice_ids_str:
+            action = iaao.for_xml_id('account', 'action_invoice_tree2')
             action.update({
                 'views': False,
                 'view_id': False,
-                'domain': "[('id', 'in', %s)]" % self.invoice_ids,
+                'domain': "[('id', 'in', %s)]" % self.invoice_ids_str,
                 })
-            return action
         else:
-            raise UserError(_("No invoice downloaded"))
+            action = iaao.for_xml_id(
+                'account_invoice_download',
+                'account_invoice_download_log_action')
+            action.update({
+                'res_id': self.log_id.id,
+                'views': False,
+                'view_mode': 'form,tree',
+                })
+        return action
