@@ -353,14 +353,13 @@ class AccountInvoiceImport(models.TransientModel):
             return True
         return False
 
-    @api.multi
-    def parse_invoice(self):
-        self.ensure_one()
-        assert self.invoice_file, 'No invoice file'
-        logger.info('Starting to import invoice %s', self.invoice_filename)
-        file_data = self.invoice_file.decode('base64')
+    @api.model
+    def parse_invoice(self, invoice_file_b64, invoice_filename):
+        assert invoice_file_b64, 'No invoice file'
+        logger.info('Starting to import invoice %s', invoice_filename)
+        file_data = invoice_file_b64.decode('base64')
         parsed_inv = {}
-        filetype = mimetypes.guess_type(self.invoice_filename)
+        filetype = mimetypes.guess_type(invoice_filename)
         logger.debug('Invoice mimetype: %s', filetype)
         if filetype and filetype[0] in ['application/xml', 'text/xml']:
             try:
@@ -384,7 +383,9 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv = self.parse_pdf_invoice(file_data)
         if 'attachments' not in parsed_inv:
             parsed_inv['attachments'] = {}
-        parsed_inv['attachments'][self.invoice_filename] = self.invoice_file
+        parsed_inv['attachments'][invoice_filename] = invoice_file_b64
+        # pre_process_parsed_inv() will be called again a second time,
+        # but it's OK
         pp_parsed_inv = self.pre_process_parsed_inv(parsed_inv)
         return pp_parsed_inv
 
@@ -464,7 +465,8 @@ class AccountInvoiceImport(models.TransientModel):
         aiico = self.env['account.invoice.import.config']
         bdio = self.env['business.document.import']
         iaao = self.env['ir.actions.act_window']
-        parsed_inv = self.parse_invoice()
+        parsed_inv = self.parse_invoice(
+            self.invoice_file, self.invoice_filename)
         partner = bdio._match_partner(
             parsed_inv['partner'], parsed_inv['chatter_msg'])
         partner = partner.commercial_partner_id
@@ -548,7 +550,8 @@ class AccountInvoiceImport(models.TransientModel):
         self.ensure_one()
         iaao = self.env['ir.actions.act_window']
         if parsed_inv is None:
-            parsed_inv = self.parse_invoice()
+            parsed_inv = self.parse_invoice(
+                self.invoice_file, self.invoice_filename)
         if import_config is None:
             assert self.import_config_id
             import_config = self.import_config_id.convert_to_import_config()
@@ -811,7 +814,8 @@ class AccountInvoiceImport(models.TransientModel):
         if not invoice:
             raise UserError(_(
                 'You must select a supplier invoice or refund to update'))
-        parsed_inv = self.parse_invoice()
+        parsed_inv = self.parse_invoice(
+            self.invoice_file, self.invoice_filename)
         if self.partner_id:
             # True if state='update' ; False when state='update-from-invoice'
             parsed_inv['partner']['recordset'] = self.partner_id
