@@ -2,7 +2,7 @@
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, api, tools, _
+from odoo import api, fields, models, tools, _
 from odoo.exceptions import UserError
 import os
 from tempfile import mkstemp
@@ -89,4 +89,7 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv['amount_untaxed'] = invoice2data_res['amount_untaxed']
         if 'amount_tax' in invoice2data_res:
             parsed_inv['amount_tax'] = invoice2data_res['amount_tax']
+        for key, value in parsed_inv.items():
+            if key.startswith('date') and parsed_inv[key]:
+                parsed_inv[key] = fields.Date.to_string(parsed_inv[key])
         return parsed_inv
