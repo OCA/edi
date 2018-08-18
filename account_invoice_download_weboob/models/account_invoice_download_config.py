@@ -3,7 +3,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 import logging
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,8 @@ class AccountInvoiceDownloadConfig(models.Model):
 
     backend = fields.Selection(
         selection_add=[('weboob', 'Weboob')])
-    weboob_module = fields.Selection('_get_weboob_modules')
+    weboob_module = fields.Selection(
+        '_get_weboob_modules', string='Weboob Module')
     # TODO : add obj for additional params
 
     def download(self, credentials):
@@ -36,36 +37,52 @@ class AccountInvoiceDownloadConfig(models.Model):
         return super(AccountInvoiceDownloadConfig, self).download(credentials)
 
     def weboob_download(self, credentials):
-        logger.info('START weboob operations with module %s', self.weboob_module)
+        logger.info(
+            'Start weboob operations with module %s', self.weboob_module)
         w = Weboob()
-        invoice_ids = []
         back = w.build_backend(
             self.weboob_module, params=credentials, name='odoo')
 
         sub = back.iter_subscription().next()
 
         bills = back.iter_bills(sub)
-        last_run = self.last_run
-        invoice_ids = []
+        start_date = self.download_start_date
+        invoices = []
         for bill in bills:
             logger.debug('bill.id=%s, bill.fullid=%s', bill.id, bill.fullid)
             inv_details = bill.to_dict()
-            logger.debug('bill.to_dict=%s', inv_details)
+            logger.info('bill.to_dict=%s', inv_details)
+            # bill.to_dict=OrderedDict([
+            # ('id', u'60006530609_216421161'),
+            # ('url', u'https://api.bouyguestelecom.fr/comptes-facturat...'),
+            # ('date', date(2018, 7, 16)),
+            # ('format', u'pdf'),
+            # ('label', u'Juillet 2018'),
+            # ('type', u'bill'),
+            # ('transactions', []),
+            # ('price', Decimal('30.99')),
+            # ('currency', u'EUR'),
+            # ('vat', NotLoaded),
+            # ('duedate', NotLoaded), ('startdate', NotLoaded),
+            # ('finishdate', NotLoaded), ('income', False)])
+            # Do we have invoice number here ? NO
             logger.info("Found invoice dated %s", inv_details.get('date'))
             if (
-                    last_run and
+                    start_date and
                     inv_details.get('date') and
-                    fields.Date.to_string(inv_details['date']) < last_run):
+                    fields.Date.to_string(inv_details['date']) < start_date):
                 logger.info(
-                    'Skipping invoice %s dated %s dated before last_run %s',
-                    inv_details.get('label'), inv_details['date'], last_run)
+                    'Skipping invoice %s dated %s dated before '
+                    'download_start_date %s',
+                    inv_details.get('label'), inv_details['date'], start_date)
                 continue
 
             logger.info('Start to download bill with full ID %s', bill.fullid)
             pdf_inv = back.download_document(bill.id)
-            filename = 'invoice_%s_%s.pdf' % (
-                self.weboob_module, inv_details.get('label'))
-            invoice_id = self.binary_invoice2invoice_id(pdf_inv, filename)
-            if invoice_id:
-                invoice_ids.append(invoice_id)
-        return invoice_ids
+            filename = 'invoice_%s_%s.%s' % (
+                self.weboob_module,
+                inv_details.get('label') and
+                inv_details['label'].replace(' ', '_'),
+                inv_details.get('format', 'pdf'))
+            invoices.append((pdf_inv.encode('base64'), filename))
+        return invoices
