@@ -12,7 +12,7 @@
     <field name="arch"  type="xml">
         <form string="Invoice Download Configuration">
             <header>
-                <button name="run" string="Run Now" type="object"/>
+                <button name="run_button" string="Run Now" type="object"/>
             </header>
             <div class="oe_button_box" name="button_box">
                 <button name="toggle_active" type="object"
@@ -27,6 +27,7 @@
                 <field name="import_config_id" invisible="not context.get('download_config_main_view')"/>
                 <field name="partner_id" invisible="not context.get('download_config_main_view')"/>
             </group>
+            <group name="params">
             <group string="Download Method" name="method">
                 <field name="backend"/>
                 <field name="login"/>
@@ -35,15 +36,23 @@
             <group string="Download Parameters" name="params">
                 <field name="method" widget="radio"/>
                 <field name="last_run"/>
+                <label for="backward_days"/>
+                <div name="backward_days">
+                    <field name="backward_days" class="oe_inline"/>
+                    <label string=" days" class="oe_inline"/>
+                </div>
+                <field name="download_start_date"/>
                 <field name="next_run" attrs="{'invisible': [('method', '!=', 'auto')]}"/>
                 <label string="Download Every" class="oe_inline" attrs="{'invisible': [('method', '!=', 'auto')]}"/>
                 <div name="freq" attrs="{'invisible': [('method', '!=', 'auto')]}">
                     <field name="interval_number" class="oe_inline"/>
+                    <label string=" " class="oe_inline"/>
                     <field name="interval_type" class="oe_inline"/>
                 </div>
             </group>
+            </group>
             <group name="logs" string="Logs">
-                <field name="logs" nolabel="1"/>
+                <field name="log_ids" nolabel="1"/>
             </group>
         </form>
     </field>
@@ -73,7 +82,7 @@
         <search string="Search Invoice Download Configurations">
             <field name="name"/>
             <separator/>
-            <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+            <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
             <group string="Group By" name="groupby">
                 <filter name="partner_groupby" context="{'group_by': 'partner_id'}"/>
                 <filter name="method_groupby" context="{'group_by': 'method'}"/>

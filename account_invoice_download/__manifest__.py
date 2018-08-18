@@ -17,8 +17,10 @@
         'security/rule.xml',
         'security/ir.model.access.csv',
         'views/account_invoice_download_config.xml',
+        'views/account_invoice_download_log.xml',
         'views/account_invoice_import_config.xml',
         'wizard/account_invoice_download_credentials_view.xml',
+        'data/cron.xml',
     ],
     'installable': True,
 }
