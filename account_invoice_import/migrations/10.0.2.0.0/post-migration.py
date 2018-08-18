@@ -28,7 +28,7 @@ def migrate(cr, version):
                 res_id_split = props[0].res_id.split(',')
                 try:
                     partner_id = int(res_id_split[1])
-                except:
+                except Exception:
                     continue
                 config.partner_id = partner_id
                 props.unlink()
