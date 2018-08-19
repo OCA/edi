@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Akretion (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+<record id="weboob_module_update_form" model="ir.ui.view">
+    <field name="name">weboob.module.update.form</field>
+    <field name="model">weboob.module.update</field>
+    <field name="arch"  type="xml">
+        <form string="Update Weboob Modules List">
+            <group name="help">
+                <div>
+                    <p>Connect to https://updates.weboob.org/ to get the list of Weboob modules with Invoice API.</p>
+                </div>
+            </group>
+            <footer>
+                <button name="run" type="object"
+                    class="btn-primary" string="Update Module List"/>
+                <button special="cancel" string="Cancel" class="oe_link"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+<record id="weboob_module_update_action" model="ir.actions.act_window">
+    <field name="name">Update Weboob Modules List</field>
+    <field name="res_model">weboob.module.update</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+</record>
+
+<menuitem id="weboob_module_update_menu"
+    parent="account_invoice_import.account_invoice_import_config_root"
+    action="weboob_module_update_action" sequence="60"/>
+
+</odoo>

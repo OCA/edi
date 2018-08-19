@@ -3,12 +3,13 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 import logging
 
 logger = logging.getLogger(__name__)
 try:
     from weboob.core import Weboob
+    from weboob.exceptions import BrowserIncorrectPassword
 except ImportError:
     logger.debug('Cannot import weboob')
 
@@ -16,34 +17,68 @@ except ImportError:
 class AccountInvoiceDownloadConfig(models.Model):
     _inherit = 'account.invoice.download.config'
 
-    @api.model
-    def _get_weboob_modules(self):
-        w = Weboob()
-        res = []
-        weboob_modules = w.repositories.get_all_modules_info('CapDocument')
-        for name, info in weboob_modules.iteritems():
-            res.append((name, info.description))
-        return res
-
     backend = fields.Selection(
         selection_add=[('weboob', 'Weboob')])
-    weboob_module = fields.Selection(
-        '_get_weboob_modules', string='Weboob Module')
-    # TODO : add obj for additional params
+    weboob_module_id = fields.Many2one(
+        'weboob.module', string='Weboob Module', ondelete='restrict',
+        domain=[('state', '=', 'installed')])
+    weboob_has_parameter = fields.Boolean(
+        related='weboob_module_id.has_parameters', readonly=True)
+    weboob_parameter_ids = fields.One2many(
+        'weboob.parameter', 'download_config_id',
+        string='Weboob Additional Parameters')
 
-    def download(self, credentials):
+    @api.onchange('weboob_module_id')
+    def weboob_module_id_change(self):
+        if self.weboob_module_id and self.weboob_module_id.has_parameters:
+            w = Weboob()
+            bmod = w.modules_loader.get_or_load_module(
+                self.weboob_module_id.name)
+            new_params = self.env['weboob.parameter']
+            for key, value in bmod.config.iteritems():
+                if key not in ['login', 'password']:
+                    note = value.label or ''
+                    if value.choices:
+                        options = ', '.join([
+                            "'%s' (%s)" % (key_opt, help_opt)
+                            for (key_opt, help_opt) in value.choices.items()])
+                        note = _("%s. Possible values: %s.") % (note, options)
+                    param = new_params.new({
+                        'key': key,
+                        'note': note,
+                        })
+                    new_params += param
+            self.weboob_parameter_ids = new_params
+
+    def prepare_credentials(self):
+        credentials = super(
+            AccountInvoiceDownloadConfig, self).prepare_credentials()
+        if self.backend == 'weboob' and self.weboob_parameter_ids:
+            for param in self.weboob_parameter_ids:
+                if param.key and param.value:
+                    credentials[param.key.strip()] = param.value.strip()
+        return credentials
+
+    def download(self, credentials, logs):
         if self.backend == 'weboob':
-            return self.weboob_download(credentials)
-        return super(AccountInvoiceDownloadConfig, self).download(credentials)
+            return self.weboob_download(credentials, logs)
+        return super(AccountInvoiceDownloadConfig, self).download(
+            credentials, logs)
 
-    def weboob_download(self, credentials):
+    def weboob_download(self, credentials, logs):
         logger.info(
-            'Start weboob operations with module %s', self.weboob_module)
+            'Start weboob operations with module %s',
+            self.weboob_module_id.name)
         w = Weboob()
         back = w.build_backend(
-            self.weboob_module, params=credentials, name='odoo')
+            self.weboob_module_id.name, params=credentials, name='odoo')
 
-        sub = back.iter_subscription().next()
+        try:
+            sub = back.iter_subscription().next()
+        except BrowserIncorrectPassword:
+            logs['msg'].append(_('Wrong password.'))
+            logs['result'] = 'failure'
+            return []
 
         bills = back.iter_bills(sub)
         start_date = self.download_start_date
@@ -80,7 +115,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             logger.info('Start to download bill with full ID %s', bill.fullid)
             pdf_inv = back.download_document(bill.id)
             filename = 'invoice_%s_%s.%s' % (
-                self.weboob_module,
+                self.weboob_module_id.name,
                 inv_details.get('label') and
                 inv_details['label'].replace(' ', '_'),
                 inv_details.get('format', 'pdf'))

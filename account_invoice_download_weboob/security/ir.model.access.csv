@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_weboob_parameter_full,Full access on weboob.parameter to Account Manager,model_weboob_parameter,account.group_account_manager,1,1,1,1
+access_weboob_module_full,Full access on weboob.module to System group,model_weboob_module,base.group_system,1,1,1,1
+access_weboob_module_account_mgr,R+W+C on weboob.module to Accounting Mgr,model_weboob_module,account.group_account_manager,1,1,1,0
