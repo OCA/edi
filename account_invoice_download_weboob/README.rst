@@ -38,7 +38,7 @@ Usage
 Known issues / Roadmap
 ======================
 
-* Add support for additionnal parameters than login and password.
+* Add support for Captcha solving (via CapCaptchaSolver ?)
 
 Bug Tracker
 ===========
