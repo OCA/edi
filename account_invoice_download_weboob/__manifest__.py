@@ -16,6 +16,9 @@
     'external_dependencies': {'python': ['weboob']},
     'data': [
         'views/account_invoice_download_config.xml',
+        'views/weboob_module.xml',
+        'wizard/weboob_module_update_view.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
 }
