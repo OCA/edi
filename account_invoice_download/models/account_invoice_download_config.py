@@ -105,7 +105,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             }
         return credentials
 
-    def download(self, credentials):
+    def download(self, credentials, logs):
         '''Returns a list of either:
             - pivot dict (example: ovh backend)
             - tuple: (invoice_file_b64, invoice_filename) (example: weboob).
@@ -170,16 +170,18 @@ class AccountInvoiceDownloadConfig(models.Model):
                 'Missing invoice import config on invoice download %s',
                 self.name)
             return ([], False)
-        messages = []
-        result = 'success'
+        logs = {
+            'msg': [],
+            'result': 'success',
+            }
         invoice_ids = []
         invoices_dl = []
         try:
-            invoices_dl = self.download(credentials)
+            invoices_dl = self.download(credentials, logs)
         except Exception as e:
             logger.error('Failed to download invoice. Error: %s', e)
-            messages.append(_('Failed to download invoice. Error: %s.') % e)
-            result = 'failure'
+            logs['msg'].append(_('Failed to download invoice. Error: %s.') % e)
+            logs['result'] = 'failure'
         import_config = self.import_config_id.convert_to_import_config()
         existing_refs = {}  # key = invoice reference, value = inv ID
         existing_invs = aio.search_read([
@@ -208,7 +210,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                     'in Odoo (ID %d)',
                     parsed_inv['invoice_number'], parsed_inv.get('date'),
                     existing_refs[parsed_inv['invoice_number']])
-                messages.append(_(
+                logs['msg'].append(_(
                     'Skipping invoice %s dated %s because it already exists '
                     'in Odoo (ID %d).') % (
                     parsed_inv['invoice_number'], parsed_inv.get('date'),
@@ -217,24 +219,24 @@ class AccountInvoiceDownloadConfig(models.Model):
             try:
                 invoice = aiio.create_invoice(parsed_inv, import_config)
             except Exception as e:
-                messages.append(_(
+                logs['msg'].append(_(
                     'Failed to create invoice. Error: %s. (parsed_inv=%s '
                     'import_config=%s)') % (e, parsed_inv, import_config))
-                result = 'failure'
+                logs['result'] = 'failure'
                 continue
             invoice_ids.append(invoice.id)
-            messages.append(_(
+            logs['msg'].append(_(
                 'Invoice number %s dated %s created (ID %d).') % (
                 parsed_inv.get('invoice_number', 'none'),
                 parsed_inv.get('date', 'none'), invoice.id))
         self.last_run = fields.Date.context_today(self)
-        if not invoice_ids and result == 'success':
-            messages.append(_('No invoice downloaded.'))
+        if not invoice_ids and logs['result'] == 'success':
+            logs['msg'].append(_('No invoice downloaded.'))
         log = self.env['account.invoice.download.log'].create({
             'download_config_id': self.id,
-            'message': '\n'.join(messages),
+            'message': '\n'.join(logs['msg']),
             'invoice_count': len(invoice_ids),
-            'result': result,
+            'result': logs['result'],
             })
         logger.info(
             'End of invoice download %s (%s). IDs of created invoices: %s',
