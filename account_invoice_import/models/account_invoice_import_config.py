@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2015-2018 Akretion France
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, fields, api, _
+from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
@@ -42,7 +43,7 @@ class AccountInvoiceImportConfig(models.Model):
         help="Force supplier invoice line description")
     tax_ids = fields.Many2many(
         'account.tax', string='Taxes',
-        domain=[('type_tax_use', 'in', ('all', 'purchase'))])
+        domain=[('type_tax_use', '=', 'purchase')])
     static_product_id = fields.Many2one(
         'product.product', string='Static Product')
 
@@ -67,6 +68,15 @@ class AccountInvoiceImportConfig(models.Model):
                     "Method for Invoice Line set to 'Single Line, No Product' "
                     "or 'Multi Line, No Product'.")
                     % config.partner_id.name)
+
+    @api.onchange('invoice_line_method', 'account_id')
+    def invoice_line_method_change(self):
+        if (
+                self.invoice_line_method == '1line_no_product' and
+                self.account_id):
+            self.tax_ids = [(6, 0, self.account_id.tax_ids.ids)]
+        elif self.invoice_line_method != '1line_no_product':
+            self.tax_ids = [(6, 0, [])]
 
     def convert_to_import_config(self):
         self.ensure_one()
