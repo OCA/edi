@@ -14,7 +14,17 @@
     <field name="inherit_id" ref="account_invoice_download.account_invoice_download_config_form"/>
     <field name="arch"  type="xml">
         <field name="backend" position="after">
-            <field name="weboob_module" attrs="{'invisible': [('backend', '!=', 'weboob')], 'required': [('backend', '=', 'weboob')]}"/>
+            <field name="weboob_module_id" attrs="{'invisible': [('backend', '!=', 'weboob')], 'required': [('backend', '=', 'weboob')]}"/>
+            <field name="weboob_has_parameter" invisible="1"/>
+        </field>
+        <field name="password" position="after">
+            <field name="weboob_parameter_ids" attrs="{'invisible': ['|', ('backend', '!=', 'weboob'), ('weboob_has_parameter', '=', False)]}" string="Additional Parameters">
+                <tree editable="bottom">
+                    <field name="key"/>
+                    <field name="value"/>
+                    <field name="note"/>
+                </tree>
+            </field>
         </field>
     </field>
 </record>
