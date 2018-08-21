@@ -56,6 +56,7 @@ install:
   #- sudo chmod 755 /usr/local/bin/pdftotext
   - pip install phonenumbers
   - pip install weboob
+  - pip install ovh
 
 script:
   - travis_run_tests
