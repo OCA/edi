@@ -20,5 +20,6 @@
         'wizard/weboob_module_update_view.xml',
         'security/ir.model.access.csv',
     ],
+    'post_init_hook': 'initial_update_module_list',
     'installable': True,
 }
