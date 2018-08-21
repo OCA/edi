@@ -1,36 +1,43 @@
-OVH Supplier Invoice
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
+
+====================
+OVH Invoice Download
 ====================
 
-This module allows you to download the `OVH <http://www.ovh.com>` invoices via the `SoAPI <http://www.ovh.com/soapi/>` of OVH. When you start the wizard, it will get the invoices from OVH and create supplier invoices in Odoo with the PDF of the invoice as attachment.
-
-This module support multiple OVH accounts.
+This module adds an OVH backend to the *account_invoice_download* module. It allows you to auto-download `OVH <http://www.ovh.com>`_ invoices via the `OVH API <https://api.ovh.com/>`_.
 
 Installation
 ============
 
-Before installing the module, you need to install the `SOAPpy python lib <https://pypi.python.org/pypi/SOAPpy>` via the following command:
+Before installing the module, you need to install the `OVH python lib <https://github.com/ovh/python-ovh>`_ via the following command:
 
-sudo pip install SOAPpy
+.. code::
+
+  sudo pip install ovh
 
 Configuration
 =============
 
-To configure this module, you need to go to the menu *Accounting > Configuration > Miscellaneous > OVH Accounts* and create one entry per OVH Account. You are not obliged to enter the OVH password for each accounts ; you can enter the password at runtime.
+To configure this module, you need to go to the menu *Accounting > Configuration > Import Vendor Bills > Download Bills* and create one entry per OVH Account. Select *OVH* as *Backend*.
 
-For each account, you have the choice between 2 methods:
-
-* *Without Product* (the default method): the invoice lines created will not have a product and you must configure an expense account and an optional analytic account that will be used for all the OVH invoice lines.
-
-* *With Product*: this method is more complex because you have to create OVH products in Odoo for each product or each family of product that you have on your OVH invoices. These products must have an *Internal Reference* 'OVH-prefix' where *prefix* is the first caracters of the service field of OVH invoice lines. If you don't know the service of your OVH invoice lines, you can start the wizard to get OVH invoices and you will get an error message on each service that didn't find a match in Odoo product database. If you also want to set the analytic account, you can use the Odoo module *product_analytic_account* that allows you to configure analytic accounts on the product or on the product category, or use the official module *account_analytic_default*.
-
-You also need to have a partner OVH as supplier with the VAT number *FR22424761419*.
+If you don't already have the required parameters to access the OVH API (Application key, Application secret and Consumer key) with the right access level on the APIs used by this module, use the wizard *Generate OVH API Credentials* that will be proposed once you have selected OVH as Backend.
 
 Usage
 =====
 
-To start the wizard to download the OVH invoices, go to the menu *Accounting > Periodic Processing > Recurring Entries > Get OVH Invoices*. In the wizard options, you can delete the OVH accounts that you don't want to use and you must enter the passwords corresponding to the accounts if you didn't set the password in the accounts configuration. You can also set a *From Date* to exclude the OVH invoices older than this date.
+.. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
+   :alt: Try me on Runbot
+   :target: https://runbot.odoo-community.org/runbot/226/10.0
 
-Then click on the *Get Invoices* button and wait a few seconds. When the OVH invoices are created as supplier invoices in Odoo, it will display the list view of the supplier invoices created. If some OVH invoices are already present in the list of OVH supplier invoices in Odoo, they will be skipped.
+Bug Tracker
+===========
+
+Bugs are tracked on `GitHub Issues
+<https://github.com/OCA/edi/issues>`_. In case of trouble, please
+check there if your issue has already been reported. If you spotted it first,
+help us smashing it by providing a detailed and welcomed feedback.
 
 Credits
 =======
@@ -39,3 +46,18 @@ Contributors
 ------------
 
 * Alexis de Lattre <alexis.delattre@akretion.com>
+
+Maintainer
+----------
+
+.. image:: https://odoo-community.org/logo.png
+   :alt: Odoo Community Association
+   :target: https://odoo-community.org
+
+This module is maintained by the OCA.
+
+OCA, or the Odoo Community Association, is a nonprofit organization whose
+mission is to support the collaborative development of Odoo features and
+promote its widespread use.
+
+To contribute to this module, please visit https://odoo-community.org.
