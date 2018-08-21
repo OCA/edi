@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ovh_account_user,Read access on ovh.account for Accountant,model_ovh_account,account.group_account_user,1,0,0,0
+access_ovh_account_manager,Full access on ovh.account for Account Manager,model_ovh_account,account.group_account_manager,1,1,1,1
