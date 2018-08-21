@@ -28,8 +28,11 @@ class BusinessDocumentImport(models.AbstractModel):
             except:
                 pass
             logger.debug('_hook_match_partner fax_num_e164: %s', fax_num_e164)
+            domain = [
+                '|', ('company_id', '=', False),
+                ('company_id', '=', self.env.user.company_id.id)]
             if fax_num_e164:
-                partners = rpo.search([('fax', '=', fax_num_e164)])
+                partners = rpo.search(domain + [('fax', '=', fax_num_e164)])
                 if partners:
                     return partners[0]
         if partner_dict.get('country_code') and partner_dict.get('phone'):
@@ -45,7 +48,7 @@ class BusinessDocumentImport(models.AbstractModel):
             logger.debug(
                 '_hook_match_partner phone_num_e164: %s', phone_num_e164)
             if phone_num_e164:
-                partners = rpo.search([
+                partners = rpo.search(domain + [
                     '|',
                     ('phone', '=', phone_num_e164),
                     ('mobile', '=', phone_num_e164)])
