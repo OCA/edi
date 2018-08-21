@@ -66,14 +66,16 @@ class BusinessDocumentImport(models.AbstractModel):
             return partner_dict['recordset']
         if partner_dict.get('id'):
             return rpo.browse(partner_dict['id'])
+        domain = [
+            '|', ('company_id', '=', False),
+            ('company_id', '=', self.env.user.company_id.id)]
         if partner_type == 'supplier':
-            domain = [('supplier', '=', True)]
+            domain += [('supplier', '=', True)]
             partner_type_label = _('supplier')
         elif partner_type == 'customer':
-            domain = [('customer', '=', True)]
+            domain += [('customer', '=', True)]
             partner_type_label = _('customer')
         else:
-            domain = []
             partner_type_label = _('partner')
         country = False
         if partner_dict.get('country_code'):
@@ -211,7 +213,11 @@ class BusinessDocumentImport(models.AbstractModel):
         if shipping_dict.get('partner'):
             partner = self._match_partner(
                 shipping_dict['partner'], chatter_msg, partner_type=False)
-        domain = [('parent_id', '=', partner.id)]
+        domain = [
+            '|', ('company_id', '=', False),
+            ('company_id', '=', self.env.user.company_id.id),
+            ('parent_id', '=', partner.id),
+            ]
         address_dict = shipping_dict['address']
         self._strip_cleanup_dict(address_dict)
         country = False
@@ -266,8 +272,11 @@ class BusinessDocumentImport(models.AbstractModel):
                 "IBAN <b>%s</b> is not valid, so it has been ignored.") % iban)
             return False
         bankaccounts = rpbo.search([
+            '|', ('company_id', '=', False),
+            ('company_id', '=', self.env.user.company_id.id),
             ('sanitized_acc_number', '=', iban),
-            ('partner_id', '=', partner.id)])
+            ('partner_id', '=', partner.id),
+            ])
         if bankaccounts:
             return bankaccounts[0]
         elif create_if_not_found:
@@ -310,11 +319,15 @@ class BusinessDocumentImport(models.AbstractModel):
             return ppo.browse(product_dict['id'])
         if product_dict.get('barcode'):
             products = ppo.search([
+                '|', ('company_id', '=', False),
+                ('company_id', '=', self.env.user.company_id.id),
                 ('barcode', '=', product_dict['barcode'])])
             if products:
                 return products[0]
         if product_dict.get('code'):
             products = ppo.search([
+                '|', ('company_id', '=', False),
+                ('company_id', '=', self.env.user.company_id.id),
                 '|',
                 ('barcode', '=', product_dict['code']),
                 ('default_code', '=', product_dict['code'])])
@@ -324,6 +337,8 @@ class BusinessDocumentImport(models.AbstractModel):
             # because product.supplierinfo is attached to product template
             if seller:
                 sinfo = self.env['product.supplierinfo'].search([
+                    '|', ('company_id', '=', False),
+                    ('company_id', '=', self.env.user.company_id.id),
                     ('name', '=', seller.id),
                     ('product_code', '=', product_dict['code']),
                     ])
@@ -502,7 +517,7 @@ class BusinessDocumentImport(models.AbstractModel):
             return tax_dict['recordset']
         if tax_dict.get('id'):
             return ato.browse(tax_dict['id'])
-        domain = []
+        domain = [('company_id', '=', self.env.user.company_id.id)]
         prec = self.env['decimal.precision'].precision_get('Account')
         # we should not use the Account prec directly, but...
         if type_tax_use == 'purchase':
