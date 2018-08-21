@@ -26,7 +26,9 @@ class AccountInvoiceDownloadConfig(models.Model):
         ondelete='cascade')
     partner_id = fields.Many2one(
         related='import_config_id.partner_id', readonly=True, store=True)
-    last_run = fields.Date(string='Last Download Date')
+    last_run = fields.Date(
+        string='Last Download Date',
+        help="Date of the last successfull download")
     # Don't set last_run as readonly because sometimes we need to
     # manually fool the system
     backward_days = fields.Integer(
@@ -202,6 +204,8 @@ class AccountInvoiceDownloadConfig(models.Model):
                     'Technical error that should never happen: '
                     'inv_struc is a %s', type(inv_struc))
                 continue
+            # Get partner from invoice import config, not from invoice
+            parsed_inv['partner'] = {'recordset': self.partner_id}
             if (
                     parsed_inv.get('invoice_number') and
                     parsed_inv['invoice_number'] in existing_refs):
@@ -229,7 +233,8 @@ class AccountInvoiceDownloadConfig(models.Model):
                 'Invoice number %s dated %s created (ID %d).') % (
                 parsed_inv.get('invoice_number', 'none'),
                 parsed_inv.get('date', 'none'), invoice.id))
-        self.last_run = fields.Date.context_today(self)
+        if logs['result'] == 'success':
+            self.last_run = fields.Date.context_today(self)
         if not invoice_ids and logs['result'] == 'success':
             logs['msg'].append(_('No invoice downloaded.'))
         log = self.env['account.invoice.download.log'].create({
@@ -248,9 +253,13 @@ class AccountInvoiceDownloadConfig(models.Model):
         logger.info('Start cron that auto-download supplier invoices')
         today_str = fields.Date.context_today(self)
         today_dt = fields.Date.from_string(today_str)
+        # Due to limitations of account_invoice_import and
+        # base_business_document_import, we can only download invoices in the
+        # company of the cron user
         configs = self.search([
             ('next_run', '<=', today_str),
             ('method', '=', 'auto'),
+            ('company_id', '=', self.env.user.company_id.id),
             ])
         for config in configs:
             if config.credentials_stored():
