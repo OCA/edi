@@ -10,12 +10,14 @@ from odoo.exceptions import ValidationError
 class AccountInvoiceImportConfig(models.Model):
     _name = 'account.invoice.import.config'
     _description = 'Configuration for the import of Supplier Invoices'
+    _sequence = 'sequence'
 
     name = fields.Char(string='Name', required=True)
     partner_id = fields.Many2one(
         'res.partner', string='Partner', ondelete='cascade',
         domain=[('supplier', '=', True), ('parent_id', '=', False)])
     active = fields.Boolean(default=True)
+    sequence = fields.Integer()
     invoice_line_method = fields.Selection([
         ('1line_no_product', 'Single Line, No Product'),
         ('1line_static_product', 'Single Line, Static Product'),
