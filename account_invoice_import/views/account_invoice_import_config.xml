@@ -47,6 +47,7 @@
     <field name="model">account.invoice.import.config</field>
     <field name="arch"  type="xml">
         <tree string="Invoice Import Configurations">
+            <field name="sequence" widget="handle"/>
             <field name="partner_id"/>
             <field name="name"/>
             <field name="company_id" groups="base.group_multi_company"/>
