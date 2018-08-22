@@ -456,6 +456,15 @@ class AccountInvoiceImport(models.TransientModel):
         logger.debug('Result of invoice parsing parsed_inv=%s', parsed_inv)
         return parsed_inv
 
+    @api.model
+    def invoice_already_exists(self, commercial_partner, parsed_inv):
+        existing_inv = self.env['account.invoice'].search([
+            ('commercial_partner_id', '=', commercial_partner.id),
+            ('type', '=', parsed_inv['type']),
+            ('reference', '=ilike', parsed_inv.get('invoice_number'))],
+            limit=1)
+        return existing_inv
+
     @api.multi
     def import_invoice(self):
         """Method called by the button of the wizard
@@ -482,18 +491,13 @@ class AccountInvoiceImport(models.TransientModel):
             'amount_total': parsed_inv['amount_total'],
             }
 
-        domain = [
-            ('commercial_partner_id', '=', partner.id),
-            ('type', '=', parsed_inv['type'])]
-        existing_invs = aio.search(
-            domain +
-            [('reference', '=ilike', parsed_inv.get('invoice_number'))])
-        if existing_invs:
+        existing_inv = self.invoice_already_exists(partner, parsed_inv)
+        if existing_inv:
             raise UserError(_(
                 "This invoice already exists in Odoo. It's "
                 "Supplier Invoice Number is '%s' and it's Odoo number "
                 "is '%s'")
-                % (parsed_inv.get('invoice_number'), existing_invs[0].number))
+                % (parsed_inv.get('invoice_number'), existing_inv.number))
 
         if self.import_config_id:  # button called from 'config' step
             wiz_vals['import_config_id'] = self.import_config_id.id
@@ -521,8 +525,11 @@ class AccountInvoiceImport(models.TransientModel):
                 'account_invoice_import_action')
             action['res_id'] = self.id
         else:
-            draft_same_supplier_invs = aio.search(
-                domain + [('state', '=', 'draft')])
+            draft_same_supplier_invs = aio.search([
+                ('commercial_partner_id', '=', partner.id),
+                ('type', '=', parsed_inv['type']),
+                ('state', '=', 'draft'),
+                ])
             logger.debug(
                 'draft_same_supplier_invs=%s', draft_same_supplier_invs)
             if draft_same_supplier_invs:
@@ -914,3 +921,59 @@ class AccountInvoiceImport(models.TransientModel):
             if xpath_res:
                 return xpath_res
         return []
+
+    @api.model
+    def message_new(self, msg_dict, custom_values=None):
+        logger.info(
+            'New email received associated with account.invoice.import: '
+            'From: %s, Subject: %s, Date: %s, Message ID: %s',
+            msg_dict.get('email_from'), msg_dict.get('subject'),
+            msg_dict.get('date'), msg_dict.get('message_id'))
+        aiico = self.env['account.invoice.import.config']
+        bdio = self.env['business.document.import']
+        i = 0
+        if msg_dict.get('attachments'):
+            i += 1
+            for attach in msg_dict['attachments']:
+                logger.info(
+                    'Attachment %d: %s. Trying to import it as an invoice',
+                    i, attach.fname)
+                parsed_inv = self.parse_invoice(
+                    attach.content.encode('base64'), attach.fname)
+                partner = bdio._match_partner(
+                    parsed_inv['partner'], parsed_inv['chatter_msg'])
+
+                existing_inv = self.invoice_already_exists(partner, parsed_inv)
+                if existing_inv:
+                    logger.warning(
+                        "Mail import: this supplier invoice already exists "
+                        "in Odoo (ID %d number %s supplier number %s)",
+                        existing_inv.id, existing_inv.number,
+                        parsed_inv.get('invoice_number'))
+                    continue
+                import_configs = aiico.search([
+                    ('partner_id', '=', partner.id),
+                    ('company_id', '=', self.env.user.company_id.id)])
+                if not import_configs:
+                    logger.warning(
+                        "Mail import: missing Invoice Import Configuration "
+                        "for partner '%s'.", partner.display_name)
+                    continue
+                elif len(import_configs) == 1:
+                    import_config = import_configs.convert_to_import_config()
+                else:
+                    logger.info(
+                        "There are %d invoice import configs for partner %s. "
+                        "Using the first one '%s''", len(import_configs),
+                        partner.display_name, import_configs[0].name)
+                    import_config =\
+                        import_configs[0].convert_to_import_config()
+                invoice = self.create_invoice(parsed_inv, import_config)
+                logger.info('Invoice ID %d created from email', invoice.id)
+                invoice.message_post(_(
+                    "Invoice successfully imported from email sent by "
+                    "<b>%s</b> on %s with subject <i>%s</i>.") % (
+                        msg_dict.get('email_from'), msg_dict.get('date'),
+                        msg_dict.get('subject')))
+        else:
+            logger.info('The email has no attachments, skipped.')
