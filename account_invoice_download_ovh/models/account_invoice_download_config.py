@@ -62,7 +62,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                     self.ovh_consumer_key):
                 return True
             else:
-                raise UserError(_("You must enter all the OVH parameters."))
+                raise UserError(_("You must set all the OVH parameters."))
         return super(AccountInvoiceDownloadConfig, self).credentials_stored()
 
     def download(self, credentials, logs):
@@ -71,14 +71,13 @@ class AccountInvoiceDownloadConfig(models.Model):
         return super(AccountInvoiceDownloadConfig, self).download(
             credentials, logs)
 
-    def ovh_invoice_attach_pdf(
-            self, invoice_desc, invoice_password):
+    def ovh_invoice_attach_pdf(self, parsed_inv, invoice_password):
         logger.info(
             'Starting to download PDF of OVH invoice %s dated %s',
-            invoice_desc['number'], invoice_desc['date'])
+            parsed_inv['invoice_number'], parsed_inv['date'])
         url = 'https://www.ovh.com/cgi-bin/order/facture.pdf?'
         url += 'reference=%s&passwd=%s' % (
-            invoice_desc['number'], invoice_password)
+            parsed_inv['invoice_number'], invoice_password)
         logger.debug('OVH invoice download url: %s', url)
         rpdf = requests.get(url)
         logger.info(
@@ -87,22 +86,21 @@ class AccountInvoiceDownloadConfig(models.Model):
         if rpdf.status_code == 200:
             res = base64.encodestring(rpdf.content)
             logger.info(
-                'Successfull download of the PDF of the OVH invoice '
-                '%s dated %s', invoice_desc['number'], invoice_desc['date'])
+                'Successfull download of the PDF of the OVH invoice %s',
+                parsed_inv['invoice_number'])
         else:
             logger.warning(
-                'Could not download the PDF of the OVH invoice %s. '
-                'HTTP error %d', invoice_desc['number'], rpdf.status_code)
-        return res
+                'Could not download the PDF of the OVH invoice %s. HTTP '
+                'error %d', parsed_inv['invoice_number'], rpdf.status_code)
+        filename = 'OVH_invoice_%s.pdf' % parsed_inv['invoice_number']
+        parsed_inv['attachments'] = {filename: res}
+        return
 
     def ovh_download(self, credentials, logs):
-        # TODO: improve logs and errors handling
-        logger.info('Start to download OVH invoice')
         invoices = []
         logger.info(
-            'Opening client session to OVH API '
-            '(endpoint %s application_key %s)',
-            self.ovh_endpoint, self.ovh_application_key)
+            'Start to download OVH invoices with config %s and endpoint %s',
+            self.name, self.ovh_endpoint)
         try:
             client = ovh.Client(
                 endpoint=self.ovh_endpoint,
@@ -110,17 +108,14 @@ class AccountInvoiceDownloadConfig(models.Model):
                 application_secret=self.ovh_application_secret,
                 consumer_key=self.ovh_consumer_key)
         except Exception as e:
-            raise UserError(_(
-                "Cannot connect to the OVH API with the account '%s' "
-                "(endpoint '%s', application key '%s'). "
-                "The error message is '%s'.") % (
-                    self.name,
-                    self.ovh_endpoint,
-                    self.ovh_application_key,
-                    unicode(e)))
+            logs['msg'].append(_(
+                "Cannot connect to the OVH API with endpoint '%s'. "
+                "The error message is: '%s'.") % (
+                    self.ovh_endpoint, unicode(e)))
+            logs['result'] = 'failure'
+            return []
         logger.info(
-            'Starting OVH API query /me/bill (account %s)',
-            self.name)
+            'Starting OVH API query /me/bill (d/l config %s)', self.name)
         params = {}
         if self.download_start_date:
             params = {'date.from': self.download_start_date}
@@ -130,38 +125,24 @@ class AccountInvoiceDownloadConfig(models.Model):
 
         for oinv_num in res_ilist:
             logger.info(
-                'Starting OVH API query /me/bill/%s (account %s)',
+                'Starting OVH API query /me/bill/%s (d/l config %s)',
                 oinv_num, self.name)
             res_inv = client.get('/me/bill/%s' % oinv_num)
             logger.debug(
                 'Result of /me/bill/%s : %s',
                 oinv_num, json.dumps(res_inv))
             oinv_date = res_inv['date'][:10]
-            invoice_desc = {
-                'number': oinv_num,
-                'date': oinv_date,
-                }
-            logger.info(
-                "billingInvoiceList: OVH invoice number %s dated %s "
-                "related to account %s",
-                invoice_desc['number'], invoice_desc['date'],
-                self.name)
             if (
                     not res_inv['priceWithoutTax'].get('value') and
                     not res_inv['priceWithTax'].get('value')):
-                logger.info(
-                    'Skipping OVH invoice %s dated %s related to '
-                    'account %s because the amount is 0',
-                    invoice_desc['number'], invoice_desc['date'],
-                    self.name)
+                logs['msg'].append(_(
+                    'Skipping OVH invoice %s dated %s because '
+                    'the amount is 0') % (oinv_num, oinv_date))
                 continue
             if oinv_num and oinv_num.startswith('PP_'):
-                logger.info(
-                    'Skipping OVH invoice %s dated %s related to '
-                    'account %s because it is a '
-                    'special pre-paid invoice',
-                    invoice_desc['number'], invoice_desc['date'],
-                    self.name)
+                logs['msg'].append(_(
+                    'Skipping OVH invoice %s dated %s because it is a '
+                    'special pre-paid invoice') % (oinv_num, oinv_date))
                 continue
 
             currency_code = res_inv['priceWithoutTax']['currencyCode']
@@ -172,18 +153,15 @@ class AccountInvoiceDownloadConfig(models.Model):
                 'amount_untaxed': res_inv['priceWithoutTax'].get('value'),
                 'amount_total': res_inv['priceWithTax'].get('value'),
             }
-            attach_res = self.ovh_invoice_attach_pdf(
-                invoice_desc, res_inv['password'])
-            if attach_res:
-                filename = 'OVH_invoice_%s.pdf' % oinv_num
-                parsed_inv['attachments'] = {filename: attach_res}
+            self.ovh_invoice_attach_pdf(
+                parsed_inv, res_inv['password'])
 
             if self.import_config_id.invoice_line_method.startswith('nline'):
                 parsed_inv['lines'] = []
                 logger.info(
                     'Starting OVH API query /me/bill/%s/details '
                     'invoice number %s dated %s',
-                    oinv_num, invoice_desc['number'], invoice_desc['date'])
+                    oinv_num, parsed_inv['invoice_number'], parsed_inv['date'])
                 res_ilines = client.get('/me/bill/%s/details' % oinv_num)
                 logger.debug(
                     'Result /me/bill/%s/details: %s',
@@ -193,14 +171,16 @@ class AccountInvoiceDownloadConfig(models.Model):
                         'Starting OVH API query /me/bill/%s/details/%s '
                         'invoice number %s dated %s',
                         oinv_num, line,
-                        invoice_desc['number'], invoice_desc['date'])
+                        parsed_inv['invoice_number'], parsed_inv['date'])
                     res_iline = client.get(
                         '/me/bill/%s/details/%s' % (oinv_num, line))
                     logger.debug(
                         'Result /me/bill/%s/details/%s: %s',
                         oinv_num, line, json.dumps(res_iline))
                     line = {
-                        'product': {'code': 'TODO'},
+                        # We don't have accurate product code in the OVH API
+                        # We had a product code in the SoAPI...
+                        # 'product': {'code': 'xxx'},
                         'name': res_iline['description'],
                         'qty': int(res_iline['quantity']),
                         'price_unit': res_iline['unitPrice']['value'],
