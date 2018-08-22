@@ -275,6 +275,6 @@ class AccountInvoiceDownloadConfig(models.Model):
                     )
             else:
                 logger.warning(
-                    'Cannot run download config %s (%s) because of missing '
-                    'credentials', config.name, config.backend)
+                    'Cannot run download config %s because of missing '
+                    'credentials', config.display_name)
         logger.info('End of the cron that auto-download supplier invoices')
