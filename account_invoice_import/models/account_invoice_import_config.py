@@ -10,7 +10,7 @@ from odoo.exceptions import ValidationError
 class AccountInvoiceImportConfig(models.Model):
     _name = 'account.invoice.import.config'
     _description = 'Configuration for the import of Supplier Invoices'
-    _sequence = 'sequence'
+    _order = 'sequence'
 
     name = fields.Char(string='Name', required=True)
     partner_id = fields.Many2one(
