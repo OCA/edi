@@ -184,12 +184,16 @@ class AccountInvoiceDownloadConfig(models.Model):
             logger.error('Failed to download invoice. Error: %s', e)
             logs['msg'].append(_('Failed to download invoice. Error: %s.') % e)
             logs['result'] = 'failure'
+        company_id = self.company_id.id
+        assert self.import_config_id.company_id.id == company_id
         import_config = self.import_config_id.convert_to_import_config()
         existing_refs = {}  # key = invoice reference, value = inv ID
         existing_invs = aio.search_read([
             ('type', 'in', ('in_invoice', 'in_refund')),
             ('commercial_partner_id', '=', self.partner_id.id),
-            ('reference', '!=', False)], ['reference'])
+            ('company_id', '=', company_id),
+            ('reference', '!=', False)],
+            ['reference'])
         for existing_inv in existing_invs:
             existing_refs[existing_inv.get('reference')] = existing_inv['id']
         logger.debug('existing_refs=%s', existing_refs)
@@ -221,7 +225,9 @@ class AccountInvoiceDownloadConfig(models.Model):
                     existing_refs[parsed_inv['invoice_number']]))
                 continue
             try:
-                invoice = aiio.create_invoice(parsed_inv, import_config)
+                invoice = aiio.with_context(
+                    force_company=company_id).create_invoice(
+                        parsed_inv, import_config)
             except Exception as e:
                 logs['msg'].append(_(
                     'Failed to create invoice. Error: %s. (parsed_inv=%s '
@@ -250,16 +256,14 @@ class AccountInvoiceDownloadConfig(models.Model):
 
     @api.model
     def run_cron(self):
-        logger.info('Start cron that auto-download supplier invoices')
+        logger.info(
+            'Start cron that auto-download supplier invoices with '
+            'user %s ID %d', self.env.user.name, self.env.user.id)
         today_str = fields.Date.context_today(self)
         today_dt = fields.Date.from_string(today_str)
-        # Due to limitations of account_invoice_import and
-        # base_business_document_import, we can only download invoices in the
-        # company of the cron user
         configs = self.search([
             ('next_run', '<=', today_str),
             ('method', '=', 'auto'),
-            ('company_id', '=', self.env.user.company_id.id),
             ])
         for config in configs:
             if config.credentials_stored():
