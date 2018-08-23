@@ -173,7 +173,8 @@ class AccountInvoiceImport(models.TransientModel):
         ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
         rpo = self.env['res.partner']
-        company = self.env.user.company_id
+        company_id = self._context.get('force_company') or\
+            self.env.user.company_id.id
         start_end_dates_installed = hasattr(ailo, 'start_date') and\
             hasattr(ailo, 'end_date')
         if parsed_inv['type'] in ('out_invoice', 'out_refund'):
@@ -186,16 +187,17 @@ class AccountInvoiceImport(models.TransientModel):
         partner = partner.commercial_partner_id
         currency = bdio._match_currency(
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
+        journal_id = aio.with_context(
+            type=parsed_inv['type'], company_id=company_id)._default_journal().id
         vals = {
             'partner_id': partner.id,
             'currency_id': currency.id,
             'type': parsed_inv['type'],
-            'company_id': company.id,
+            'company_id': company_id,
             'origin': parsed_inv.get('origin'),
             'reference': parsed_inv.get('invoice_number'),
             'date_invoice': parsed_inv.get('date'),
-            'journal_id':
-            aio.with_context(type=parsed_inv['type'])._default_journal().id,
+            'journal_id': journal_id,
             'invoice_line_ids': [],
         }
         vals = aio.play_onchanges(vals, ['partner_id'])
@@ -343,8 +345,10 @@ class AccountInvoiceImport(models.TransientModel):
             il_vals['end_date'] = parsed_inv.get('date_end')
 
     def company_cannot_refund_vat(self):
+        company_id = self._context.get('force_company') or\
+            self.env.user.company_id.id
         vat_purchase_taxes = self.env['account.tax'].search([
-            ('company_id', '=', self.env.user.company_id.id),
+            ('company_id', '=', company_id),
             ('amount_type', '=', 'percent'),
             ('type_tax_use', '=', 'purchase')])
         if not vat_purchase_taxes:
@@ -456,11 +460,14 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def invoice_already_exists(self, commercial_partner, parsed_inv):
+        company_id = self._context.get('force_company') or\
+            self.env.user.company_id.id
         existing_inv = self.env['account.invoice'].search([
+            ('company_id', '=', company_id),
             ('commercial_partner_id', '=', commercial_partner.id),
             ('type', '=', parsed_inv['type']),
-            ('reference', '=ilike', parsed_inv.get('invoice_number'))],
-            limit=1)
+            ('reference', '=ilike', parsed_inv.get('invoice_number')),
+            ], limit=1)
         return existing_inv
 
     @api.multi
@@ -472,6 +479,8 @@ class AccountInvoiceImport(models.TransientModel):
         aiico = self.env['account.invoice.import.config']
         bdio = self.env['business.document.import']
         iaao = self.env['ir.actions.act_window']
+        company_id = self._context.get('force_company') or\
+            self.env.user.company_id.id
         parsed_inv = self.parse_invoice(
             self.invoice_file, self.invoice_filename)
         partner = bdio._match_partner(
@@ -503,7 +512,7 @@ class AccountInvoiceImport(models.TransientModel):
         else:  # button called from 'import' step
             import_configs = aiico.search([
                 ('partner_id', '=', partner.id),
-                ('company_id', '=', self.env.user.company_id.id)])
+                ('company_id', '=', company_id)])
             if not import_configs:
                 raise UserError(_(
                     "Missing Invoice Import Configuration on partner '%s'.")
@@ -949,6 +958,7 @@ class AccountInvoiceImport(models.TransientModel):
                         existing_inv.id, existing_inv.number,
                         parsed_inv.get('invoice_number'))
                     continue
+                # TODO: see how we handle multi-company in import from email
                 import_configs = aiico.search([
                     ('partner_id', '=', partner.id),
                     ('company_id', '=', self.env.user.company_id.id)])
