@@ -188,7 +188,8 @@ class AccountInvoiceImport(models.TransientModel):
         currency = bdio._match_currency(
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
         journal_id = aio.with_context(
-            type=parsed_inv['type'], company_id=company_id)._default_journal().id
+            type=parsed_inv['type'],
+            company_id=company_id)._default_journal().id
         vals = {
             'partner_id': partner.id,
             'currency_id': currency.id,
