@@ -936,9 +936,50 @@ class AccountInvoiceImport(models.TransientModel):
     def message_new(self, msg_dict, custom_values=None):
         logger.info(
             'New email received associated with account.invoice.import: '
-            'From: %s, Subject: %s, Date: %s, Message ID: %s',
+            'From: %s, Subject: %s, Date: %s, Message ID: %s. Executing '
+            'with user %s ID %d',
             msg_dict.get('email_from'), msg_dict.get('subject'),
-            msg_dict.get('date'), msg_dict.get('message_id'))
+            msg_dict.get('date'), msg_dict.get('message_id'),
+            self.env.user.name, self.env.user.id)
+        # It seems that the "Odoo-way" to handle multi-company in E-mail
+        # gateways is by using mail.aliases associated with users that
+        # don't switch company (I haven't found any other way), which
+        # is not convenient because you may have to create new users
+        # for that purpose only. So I implemented my own mechanism,
+        # based on the destination email address.
+        # This method is called (indirectly) by the fetchmail cron which
+        # is run by default as admin and retreive all incoming email in
+        # all email accounts. We want to keep this default behavior,
+        # and, in multi-company environnement, differentiate the company
+        # per destination email address
+        company_id = False
+        all_companies = self.env['res.company'].search_read(
+            [], ['invoice_import_email'])
+        if len(all_companies) > 1:  # multi-company setup
+            for company in all_companies:
+                if company['invoice_import_email']:
+                    company_dest_email = company['invoice_import_email']\
+                        .strip()
+                    if (
+                            company_dest_email in msg_dict.get('to', '') or
+                            company_dest_email in msg_dict.get('cc', '')):
+                        company_id = company['id']
+                        logger.info(
+                            'Matched with %s: importing invoices in company '
+                            'ID %d', company_dest_email, company_id)
+                        break
+            if not company_id:
+                logger.error(
+                    'Invoice import mail gateway in multi-company setup: '
+                    'invoice_import_email of the companies of this DB was '
+                    'not found as destination of this email (to: %s, cc: %s). '
+                    'Ignoring this email.',
+                    msg_dict['email_to'], msg_dict['cc'])
+                return
+        else:  # mono-company setup
+            company_id = all_companies[0]['id']
+
+        self = self.with_context(force_company=company_id)
         aiico = self.env['account.invoice.import.config']
         bdio = self.env['business.document.import']
         i = 0
@@ -961,10 +1002,9 @@ class AccountInvoiceImport(models.TransientModel):
                         existing_inv.id, existing_inv.number,
                         parsed_inv.get('invoice_number'))
                     continue
-                # TODO: see how we handle multi-company in import from email
                 import_configs = aiico.search([
                     ('partner_id', '=', partner.id),
-                    ('company_id', '=', self.env.user.company_id.id)])
+                    ('company_id', '=', company_id)])
                 if not import_configs:
                     logger.warning(
                         "Mail import: missing Invoice Import Configuration "
