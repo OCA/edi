@@ -15,13 +15,17 @@
             <group name="invoice_import" attrs="{'invisible': [('has_chart_of_accounts','=',False)]}">
                 <label for="id" string="Invoice Import"/>
                 <div name="invoice_import">
-                    <div>
+                    <div name="adjustment_debit_account_id">
                         <label for="adjustment_debit_account_id"/>
                         <field name="adjustment_debit_account_id" class="oe_inline"/>
                     </div>
-                    <div>
+                    <div name="adjustment_credit_account_id">
                         <label for="adjustment_credit_account_id"/>
                         <field name="adjustment_credit_account_id" class="oe_inline"/>
+                    </div>
+                    <div name="invoice_import_email">
+                        <label for="invoice_import_email"/>
+                        <field name="invoice_import_email" class="oe_inline"/>
                     </div>
                 </div>
             </group>
