@@ -65,6 +65,18 @@ class AccountInvoiceImport(models.TransientModel):
                     "/ram:URIID",  # ZUGFeRD
                     ],
                 },
+            'company': {
+                'vat': [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:BuyerTradeParty"
+                    "/ram:SpecifiedTaxRegistration"
+                    "/ram:ID[@schemeID='VA']",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:BuyerTradeParty"
+                    "/ram:SpecifiedTaxRegistration"
+                    "/ram:ID[@schemeID='VA']",  # ZUGFeRD
+                    ],
+                },
             'invoice_number': [
                 '//rsm:ExchangedDocument/ram:ID',  # Factur-X
                 '//rsm:HeaderExchangedDocument/ram:ID',  # ZUGFeRD
