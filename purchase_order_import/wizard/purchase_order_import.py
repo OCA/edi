@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2016-2018 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, fields, api, _
-from odoo.tools import float_is_zero
+from odoo import api, fields, models, _
+from odoo.tools import float_is_zero, config
 from odoo.exceptions import UserError
 import logging
 import mimetypes
@@ -69,6 +70,9 @@ class PurchaseOrderImport(models.TransientModel):
     #     'name': 'Camptocamp',
     #     'email': 'luc@camptocamp.com',
     #     },
+    # 'company': {'vat': 'FR12123456789'}, # Only used to check we are not
+    #                                      # importing the quote in the
+    #                                      # wrong company by mistake
     # 'currency': {'iso': 'EUR', 'symbol': u'€'},
     # 'incoterm': 'EXW',
     # 'note': 'some notes',
@@ -113,6 +117,12 @@ class PurchaseOrderImport(models.TransientModel):
             quote_file.encode('base64')
         if 'chatter_msg' not in parsed_quote:
             parsed_quote['chatter_msg'] = []
+        if (
+                parsed_quote.get('company') and
+                not config['test_enable'] and
+                not self._context.get('edi_skip_company_check')):
+            self.env['business.document.import']._check_company(
+                parsed_quote['company'], parsed_quote['chatter_msg'])
         return parsed_quote
 
     @api.model
