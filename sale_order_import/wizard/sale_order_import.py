@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, _
-from odoo.tools import float_compare, float_is_zero
+from odoo.tools import float_compare, float_is_zero, config
 from odoo.exceptions import UserError
 import logging
 import mimetypes
@@ -132,7 +132,10 @@ class SaleOrderImport(models.TransientModel):
     #       'country_code': 'FR',
     #       'state_code': False,
     #       'zip': False,
-    #       }
+    #       },
+    # 'company': {'vat': 'FR12123456789'},  # Only used to check we are not
+    #                                       # importing the order in the
+    #                                       # wrong company by mistake
     # 'date': '2016-08-16',  # order date
     # 'order_ref': 'PO1242',  # Customer PO number
     # 'currency': {'iso': 'EUR', 'symbol': u'€'},
@@ -258,6 +261,12 @@ class SaleOrderImport(models.TransientModel):
             b64encode(order_file)
         if 'chatter_msg' not in parsed_order:
             parsed_order['chatter_msg'] = []
+        if (
+                parsed_order.get('company') and
+                not config['test_enable'] and
+                not self._context.get('edi_skip_company_check')):
+            self.env['business.document.import']._check_company(
+                parsed_order['company'], parsed_order['chatter_msg'])
         return parsed_order
 
     def import_order_button(self):
