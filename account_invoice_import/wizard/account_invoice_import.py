@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2015-2018 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, fields, api, _
+from odoo import api, fields, models, _
 import odoo.addons.decimal_precision as dp
-from odoo.tools import float_compare, float_round, float_is_zero
+from odoo.tools import float_compare, float_round, float_is_zero, config
 from odoo.exceptions import UserError
 from lxml import etree
 import logging
@@ -119,7 +120,10 @@ class AccountInvoiceImport(models.TransientModel):
         #       'email': 'support@browserstack.com',
         #       'name': 'Capitaine Train',
         #       },
-        # 'partner': res.partner recordset,
+        # 'company': {'vat': 'FR12123456789'}, # Rarely set in invoices
+        #                                      # Only used to check we are not
+        #                                      # importing the invoice in the
+        #                                      # wrong company by mistake
         # 'invoice_number': 'I1501243',
         # 'description': 'TGV Paris-Lyon',
         # 'attachments': {'file1.pdf': base64data1, 'file2.pdf': base64data2},
@@ -459,6 +463,18 @@ class AccountInvoiceImport(models.TransientModel):
             line['price_unit'] = float_round(
                 line['price_unit'], precision_digits=prec_pp)
         logger.debug('Result of invoice parsing parsed_inv=%s', parsed_inv)
+        # the 'company' dict in parsed_inv is NOT used to auto-detect
+        # the company, but to check that we are not importing an
+        # invoice for another company by mistake
+        # The advantage of doing the check here is that it will be run
+        # in all scenarios (create/update/...), but it's not related
+        # to invoice parsing...
+        if (
+                parsed_inv.get('company') and
+                not config['test_enable'] and
+                not self._context.get('edi_skip_company_check')):
+            self.env['business.document.import']._check_company(
+                parsed_inv['company'], parsed_inv['chatter_msg'])
         return parsed_inv
 
     @api.model
