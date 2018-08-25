@@ -818,6 +818,33 @@ class BusinessDocumentImport(models.AbstractModel):
             "following information extracted from the business document: "
             "Journal code: %s") % journal_dict.get('code'))
 
+    @api.model
+    def _check_company(self, company_dict, chatter_msg):
+        if not company_dict:
+            company_dict = {}
+        rco = self.env['res.company']
+        if self._context.get('force_company'):
+            company = rco.browse(self._context['force_company'])
+        else:
+            company = self.env.user.company_id
+        if company_dict.get('vat'):
+            parsed_company_vat = company_dict['vat'].replace(
+                ' ', '').upper()
+            if company.partner_id.sanitized_vat:
+                if company.partner_id.sanitized_vat != parsed_company_vat:
+                    raise self.user_error_wrap(_(
+                        "The VAT number of the customer written in the "
+                        "business document (%s) doesn't match the VAT number "
+                        "of the company '%s' (%s) in which you are trying to "
+                        "import this document.") % (
+                            parsed_company_vat,
+                            company.display_name,
+                            company.partner_id.sanitized_vat))
+            else:
+                chatter_msg.append(_(
+                    "Missing VAT number on company '%s'")
+                    % company.display_name)
+
     def get_xml_files_from_pdf(self, pdf_file):
         """Returns a dict with key = filename, value = XML file obj"""
         logger.info('Trying to find an embedded XML file inside PDF')
