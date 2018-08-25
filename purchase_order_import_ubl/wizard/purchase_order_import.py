@@ -70,6 +70,13 @@ class PurchaseOrderImport(models.TransientModel):
         supplier_xpath = xml_root.xpath(
             '/main:Quotation/cac:SellerSupplierParty', namespaces=ns)
         supplier_dict = self.ubl_parse_supplier_party(supplier_xpath[0], ns)
+        customer_xpath_party = xml_root.xpath(
+            '/main:Quotation/cac:BuyerCustomerParty/cac:Party', namespaces=ns)
+        company_dict_full = self.ubl_parse_party(customer_xpath_party[0], ns)
+        company_dict = {}
+        # We only take the "official references" for company_dict
+        if company_dict_full.get('vat'):
+            company_dict = {'vat': company_dict_full['vat']}
         delivery_term_xpath = xml_root.xpath(
             "/main:Quotation/cac:DeliveryTerms", namespaces=ns)
         if delivery_term_xpath:
@@ -86,6 +93,7 @@ class PurchaseOrderImport(models.TransientModel):
         # TODO : add charges
         res = {
             'partner': supplier_dict,
+            'company': company_dict,
             'currency': {'iso': currency_code},
             'date': date_xpath[0].text,
             'incoterm': incoterm_dict,
