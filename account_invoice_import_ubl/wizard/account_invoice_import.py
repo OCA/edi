@@ -165,6 +165,15 @@ class AccountInvoiceImport(models.TransientModel):
             namespaces=namespaces)
         supplier_dict = self.ubl_parse_supplier_party(
             supplier_xpath[0], namespaces)
+        customer_xpath_party = xml_root.xpath(
+            '/inv:Invoice/cac:AccountingCustomerParty/cac:Party',
+            namespaces=namespaces)
+        company_dict_full = self.ubl_parse_party(
+            customer_xpath_party[0], namespaces)
+        company_dict = {}
+        # We only take the "official references" for company_dict
+        if company_dict_full.get('vat'):
+            company_dict = {'vat': company_dict_full['vat']}
         date_xpath = xml_root.xpath(
             '/inv:Invoice/cbc:IssueDate', namespaces=namespaces)
         date_dt = datetime.strptime(date_xpath[0].text, '%Y-%m-%d')
@@ -235,6 +244,7 @@ class AccountInvoiceImport(models.TransientModel):
         res = {
             'type': inv_type,
             'partner': supplier_dict,
+            'company': company_dict,
             'invoice_number': inv_number_xpath[0].text,
             'origin': origin,
             'date': fields.Date.to_string(date_dt),
