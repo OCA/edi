@@ -93,6 +93,13 @@ class SaleOrderImport(models.TransientModel):
             customer_xpath = xml_root.xpath(
                 '/%s/cac:OriginatorCustomerParty' % root_name, namespaces=ns)
         customer_dict = self.ubl_parse_customer_party(customer_xpath[0], ns)
+        supplier_xpath_party = xml_root.xpath(
+            '/%s/cac:SellerSupplierParty/cac:Party' % root_name, namespaces=ns)
+        company_dict_full = self.ubl_parse_party(supplier_xpath_party[0], ns)
+        company_dict = {}
+        # We only take the "official references" for company_dict
+        if company_dict_full.get('vat'):
+            company_dict = {'vat': company_dict_full['vat']}
         delivery_xpath = xml_root.xpath(
             '/%s/cac:Delivery' % root_name, namespaces=ns)
         shipping_dict = {}
@@ -117,6 +124,7 @@ class SaleOrderImport(models.TransientModel):
         # TODO : add charges
         res = {
             'partner': customer_dict,
+            'company': company_dict,
             'ship_to': shipping_dict,
             'currency': {'iso': currency_code},
             'date': date_xpath[0].text,
