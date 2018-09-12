@@ -4,6 +4,7 @@
 
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_compare
+from odoo.exceptions import UserError
 import base64
 
 
@@ -18,6 +19,7 @@ class TestUbl(TransactionCase):
                 'date_invoice': '2015-02-16',
                 'due_date': '2015-02-16',
                 'partner_xmlid': 'account_invoice_import_ubl.ketentest',
+                'vat': False,
                 },
             'efff_BE0505890632_160421_Inv_16117778.xml': {
                 'invoice_number': '16117778',
@@ -27,19 +29,23 @@ class TestUbl(TransactionCase):
                 'date_invoice': '2016-04-21',
                 'due_date': '2016-04-28',
                 'partner_xmlid': 'account_invoice_import_ubl.exact_belgium',
-                },
+                'vat': 'BE0882555389',
+            },
             'UBLInvoice-multitankcard-line_adjust.xml': {
                 'invoice_number': '6311117',
                 'amount_untaxed': 75.01,
                 'amount_total': 90.77,
                 'date_invoice': '2017-03-07',
                 'partner_xmlid': 'account_invoice_import_ubl.multi_tank',
+                'vat': 'NL123456782B90',
                 },
             }
         aio = self.env['account.invoice']
         aiio = self.env['account.invoice.import']
         precision = self.env['decimal.precision'].precision_get('Account')
+        company = self.env.user.company_id
         for (sample_file, res_dict) in sample_files.iteritems():
+            company.vat = res_dict['vat']
             f = file_open(
                 'account_invoice_import_ubl/tests/files/' + sample_file,
                 'rb')
@@ -76,3 +82,32 @@ class TestUbl(TransactionCase):
                     precision_digits=precision),
                 0)
             invoices.unlink()
+
+    def test_check_customer_info(self):
+        sample_files = {
+            'efff_BE0505890632_160421_Inv_16117778.xml': {
+                'invoice_number': '16117778',
+                'origin': '59137222',
+                'amount_untaxed': 31.00,
+                'amount_total': 37.51,
+                'date_invoice': '2016-04-21',
+                'due_date': '2016-04-28',
+                'partner_xmlid': 'account_invoice_import_ubl.exact_belgium',
+                'vat': False,
+                },
+            }
+        aiio = self.env['account.invoice.import']
+        company = self.env.user.company_id
+        for (sample_file, res_dict) in sample_files.iteritems():
+            company.vat = res_dict['vat']
+            f = file_open(
+                'account_invoice_import_ubl/tests/files/' + sample_file,
+                'rb')
+            pdf_file = f.read()
+            f.close()
+            wiz = aiio.create({
+                'invoice_file': base64.b64encode(pdf_file),
+                'invoice_filename': sample_file,
+                })
+            with self.assertRaises(UserError):
+                wiz.import_invoice()
