@@ -56,7 +56,7 @@ http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd">
         </cac:Country>
       </cac:PostalAddress>
       <cac:PartyTaxScheme>
-        <cbc:CompanyID schemeID="NL:VAT" schemeAgencyID="ZZZ">NL0043455636B01</cbc:CompanyID>
+        <cbc:CompanyID schemeID="NL:VAT" schemeAgencyID="ZZZ">NL123456782B90</cbc:CompanyID>
         <cac:TaxScheme>
           <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">VAT</cbc:ID>
         </cac:TaxScheme>
