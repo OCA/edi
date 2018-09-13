@@ -27,6 +27,22 @@ class AccountInvoiceImport(models.TransientModel):
             return super(AccountInvoiceImport, self).parse_xml_invoice(
                 xml_root)
 
+    def company_technical_user_sudo(self, customer_xpath, namespaces):
+        """
+        This method used for automatic import to get the correct technical
+        user based on company vat
+        """
+        customer_data = self.ubl_parse_customer_party(
+            customer_xpath, namespaces)
+        company = self.env['res.company'].search(
+            [('vat', '=', customer_data['vat'])], limit=1)
+        if company and company.user_tech_id:
+            return self.sudo(company.user_tech_id)
+        else:
+            raise UserError(
+                _("No company found with invoice customer VAT "
+                  "or no technical user defined"))
+
     def check_customer_data(self, customer_xpath, namespaces):
         customer_data = self.ubl_parse_customer_party(
             customer_xpath, namespaces)
@@ -157,6 +173,9 @@ class AccountInvoiceImport(models.TransientModel):
         customer_xpath = xml_root.xpath(
             '/inv:Invoice/cac:AccountingCustomerParty',
             namespaces=namespaces)
+        if self._context.get('job_uuid'):
+            self = self.company_technical_user_sudo(
+                customer_xpath[0], namespaces)
         self.check_customer_data(
             customer_xpath[0], namespaces)
         inv_type = 'in_invoice'

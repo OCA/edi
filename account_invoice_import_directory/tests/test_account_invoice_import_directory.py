@@ -43,17 +43,6 @@ class TestInvoiceImportDirectory(TransactionCase):
             'after_import': 'delete'}
         self.config = self.env['account.invoice.import.directory'].create(vals)
 
-    def test_import_from_directory_no_tech_user(self):
-        """
-            Test Case:
-            Try to import an invoice file with no technical user defined
-            on the related company
-        """
-        self.main_company.write({'user_tech_id': False})
-
-        with self.assertRaises(ValidationError):
-            self.config._iter_directory()
-
     def test_import_from_directory_wrong_path(self):
         """
             Test Case:
@@ -86,7 +75,7 @@ class TestInvoiceImportDirectory(TransactionCase):
 
         job_name = 'Import Vendor Invoice from file %s' % self.file_name
         qjob = self.env['queue.job'].search(
-            [('name', '=', job_name), ('user_id', '=', self.techuser.id)])
+            [('name', '=', job_name)])
         self.assertTrue(qjob)
 
     def test_import_from_directory_backup(self):
@@ -107,7 +96,7 @@ class TestInvoiceImportDirectory(TransactionCase):
 
         job_name = 'Import Vendor Invoice from file %s' % self.file_name
         qjob = self.env['queue.job'].search(
-            [('name', '=', job_name), ('user_id', '=', self.techuser.id)])
+            [('name', '=', job_name)])
         self.assertTrue(qjob)
 
     def test_action_batch_import(self):

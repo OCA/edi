@@ -103,11 +103,7 @@ class AccountInvoiceImportDirectory(models.Model):
                     as fileobj:
                 data = fileobj.read()
             description = 'Import Vendor Invoice from file %s' % file_imported
-            if not self.company_id.user_tech_id:
-                raise ValidationError(
-                    _('No technical user defined for company: %s'
-                      % self.company_id.name))
-            self.sudo(self.company_id.user_tech_id).with_delay(
+            self.with_delay(
                 description=description).action_batch_import(
                     file_imported, data.encode('base64'))
             self._after_import(file_imported, file_full_name)
