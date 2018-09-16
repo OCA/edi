@@ -14,6 +14,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_invoice_import_invoice2data
+#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+msgid "<b>regular PDF</b> file without any embedded XML file via the"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
 #: model:product.product,name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Internet Access"
@@ -34,5 +39,15 @@ msgstr ""
 #. module: account_invoice_import_invoice2data
 #: model:ir.model,name:account_invoice_import_invoice2data.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
+#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+msgid "invoice2data"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
+#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+msgid "library (reads the text of the PDF and get the information). It will work only if the invoice2data library has a template for the invoices of that supplier."
 msgstr ""
 
