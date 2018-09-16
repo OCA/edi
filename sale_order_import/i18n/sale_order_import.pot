@@ -20,19 +20,19 @@ msgid " Amount w/o tax: %s %s)"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:443
+#: code:addons/sale_order_import/wizard/sale_order_import.py:452
 #, python-format
 msgid "%d new order line(s) created: %s"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:426
+#: code:addons/sale_order_import/wizard/sale_order_import.py:435
 #, python-format
 msgid "%d order line(s) deleted: %s"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:176
+#: code:addons/sale_order_import/wizard/sale_order_import.py:179
 #, python-format
 msgid "An order of customer '%s' with reference '%s' already exists: %s (state: %s)"
 msgstr ""
@@ -53,7 +53,7 @@ msgid "Create New"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:313
+#: code:addons/sale_order_import/wizard/sale_order_import.py:322
 #, python-format
 msgid "Created automatically via file import (%s)."
 msgstr ""
@@ -152,7 +152,7 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:235
+#: code:addons/sale_order_import/wizard/sale_order_import.py:238
 #, python-format
 msgid "Missing customer"
 msgstr ""
@@ -208,25 +208,25 @@ msgid "State"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:459
+#: code:addons/sale_order_import/wizard/sale_order_import.py:468
 #, python-format
 msgid "The currency of the imported order (%s) is different from the currency of the existing order (%s)"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:163
+#: code:addons/sale_order_import/wizard/sale_order_import.py:166
 #, python-format
 msgid "The customer '%s' has a pricelist '%s' but the currency of this order is '%s'."
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:396
+#: code:addons/sale_order_import/wizard/sale_order_import.py:405
 #, python-format
 msgid "The quantity has been updated on the order line with product '%s' from %s to %s %s"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:412
+#: code:addons/sale_order_import/wizard/sale_order_import.py:421
 #, python-format
 msgid "The unit price has been updated on the order line with product '%s' from %s to %s %s"
 msgstr ""
@@ -239,26 +239,26 @@ msgstr ""
 
 #. module: sale_order_import
 #: code:addons/sale_order_import/wizard/sale_order_import.py:64
-#: code:addons/sale_order_import/wizard/sale_order_import.py:241
+#: code:addons/sale_order_import/wizard/sale_order_import.py:244
 #, python-format
 msgid "This XML file is not XML-compliant"
 msgstr ""
 
 #. module: sale_order_import
 #: code:addons/sale_order_import/wizard/sale_order_import.py:75
-#: code:addons/sale_order_import/wizard/sale_order_import.py:251
+#: code:addons/sale_order_import/wizard/sale_order_import.py:254
 #, python-format
 msgid "This file '%s' is not recognised as a CSV, XML nor PDF file. Please check the file and it's extension."
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:270
+#: code:addons/sale_order_import/wizard/sale_order_import.py:279
 #, python-format
 msgid "This order doesn't have any line !"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:472
+#: code:addons/sale_order_import/wizard/sale_order_import.py:481
 #, python-format
 msgid "This quotation has been updated automatically via the import of file %s"
 msgstr ""
@@ -308,7 +308,7 @@ msgid "Upload below the customer order or request for quotation as CSV, XML or P
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:452
+#: code:addons/sale_order_import/wizard/sale_order_import.py:461
 #, python-format
 msgid "You must select a quotation to update."
 msgstr ""
