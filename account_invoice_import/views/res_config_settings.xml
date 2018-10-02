@@ -32,6 +32,10 @@
                   <label class="o_form_label col-md-6 o_light_label" for="adjustment_credit_account_id"/>
                   <field name="adjustment_credit_account_id" class="oe_inline"/>
                 </div>
+                <div class="row">
+                  <label class="o_form_label col-md-6 o_light_label" for="invoice_import_email"/>
+                  <field name="invoice_import_email" class="oe_inline"/>
+                </div>
               </div>
             </div>
           </div>
