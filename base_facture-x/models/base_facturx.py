@@ -29,9 +29,9 @@ class BaseFacturX(models.AbstractModel):
                 raise UserError(_(
                     "Wrong level '%s' for Factur-X invoice.") % level)
             xsd_filename = facturx_level2xsd[level]
-            xsd_file = 'base_zugferd/data/xsd-factur-x/%s' % xsd_filename
+            xsd_file = 'base_factur-x/data/xsd-factur-x/%s' % xsd_filename
         elif flavor == 'zugferd':
-            xsd_file = 'base_zugferd/data/xsd-zugferd/ZUGFeRD1p0.xsd'
+            xsd_file = 'base_factur-x/data/xsd-zugferd/ZUGFeRD1p0.xsd'
         xsd_etree_obj = etree.parse(tools.file_open(xsd_file))
         official_schema = etree.XMLSchema(xsd_etree_obj)
         try:
