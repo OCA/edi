@@ -1,5 +1,4 @@
 #! /usr/bin/python
-# -*- coding: utf-8 -*-
 #  © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -93,7 +92,7 @@ def send_file(odoo, file_path):
                 logger.warning('Very strange: no res_id key in action')
                 fail_files.append(filename)
                 return 'failure'
-        except Exception, e:
+        except Exception as e:
             logger.warning(
                 'Odoo failed to import file %s. Reason: %s', filename, e)
             fail_files.append(filename)
@@ -177,7 +176,7 @@ def main(options, arguments):
         odoo = odoorpc.ODOO(options.server, proto, options.port)
         odoo.login(options.database, options.username, pwd)
         logger.info('Successfully connected to Odoo')
-    except Exception, e:
+    except Exception as e:
         logger.error("Failed to connect to Odoo. Error: %s", e)
         sys.exit(1)
 
