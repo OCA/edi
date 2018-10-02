@@ -49,11 +49,6 @@ This module doesn't do anything by itself, but it is used by 2 other modules:
 * account_invoice_factur-x that generate Factur-X/ZUGFeRD 2.0 customer invoices/refunds,
 * account_invoice_import_factur-x that imports ZUGFeRD 1.0 and Factur-X/ZUGFeRD 2.0 supplier invoices/refunds.
 
-Known issues / Roadmap
-======================
-
-* Rename this module to *base_factur-x* for Odoo 11 (we renamed all modules from *zugferd* to *factur-x* except this one in Odoo 10).
-
 Bug Tracker
 ===========
 
@@ -77,6 +72,8 @@ Contributors
 
 * Alexis de Lattre <alexis.delattre@akretion.com>
 * Shine IT <contact@openerp.cn>
+* Nicolas JEUDY <https://github.com/njeudy>
+* Yurdik Cervantes <ycervantes@elegosoft.com>
 
 Maintainers
 ~~~~~~~~~~~
