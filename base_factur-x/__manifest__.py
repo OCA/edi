@@ -10,7 +10,7 @@
     'author': 'Akretion, Odoo Community Association (OCA)',
     'website': 'http://www.akretion.com',
     'depends': [
-        'product_uom_unece',
+        'uom_unece',
         'account_tax_unece',
         'account_payment_unece',
     ],
