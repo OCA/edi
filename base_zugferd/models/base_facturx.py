@@ -5,7 +5,7 @@
 from odoo import models, api, tools, _
 from odoo.exceptions import UserError
 from lxml import etree
-from StringIO import StringIO
+from io import StringIO
 import logging
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class BaseFacturX(models.AbstractModel):
         try:
             t = etree.parse(StringIO(xml_string))
             official_schema.assertValid(t)
-        except Exception, e:
+        except Exception as e:
             # if the validation of the XSD fails, we arrive here
             logger.warning(
                 "The XML file is invalid against the XML Schema Definition")
@@ -49,5 +49,5 @@ class BaseFacturX(models.AbstractModel):
                 "full error have been written in the server logs. "
                 "Here is the error, which may give you an idea on the "
                 "cause of the problem : %s.")
-                % (flavor.capitalize(), unicode(e)))
+                % (flavor.capitalize(), str(e)))
         return True
