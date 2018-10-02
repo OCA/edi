@@ -12,7 +12,7 @@
     <field name="model">account.invoice</field>
     <field name="inherit_id" ref="account.invoice_supplier_form"/>
     <field name="arch" type="xml">
-        <button name="action_invoice_cancel" position="before">
+        <button name="action_invoice_draft" position="before">
             <button type="action" name="%(account_invoice_import_action)d"
                 string="Import Invoice File" states="draft"
                 context="{'wizard_default_state': 'update-from-invoice', 'default_invoice_id': id, 'default_partner_id': commercial_partner_id}"/>
