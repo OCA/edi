@@ -15,12 +15,15 @@
         'base_iban',
         'base_business_document_import',
         'onchange_helper',
+        # add bank_payment dependency to have commercial_partner_id on invoice
+        # PR in odoo will be create soon
+        'account_payment_partner',
         ],
     'data': [
         'security/ir.model.access.csv',
         'security/rule.xml',
         'views/account_invoice_import_config.xml',
-        'views/account_config_settings.xml',
+        'views/res_config_settings.xml',
         'wizard/account_invoice_import_view.xml',
         'views/account_invoice.xml',
         'views/partner.xml',
