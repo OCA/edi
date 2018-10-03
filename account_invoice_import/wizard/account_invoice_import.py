@@ -988,7 +988,7 @@ class AccountInvoiceImport(models.TransientModel):
                     'invoice_import_email of the companies of this DB was '
                     'not found as destination of this email (to: %s, cc: %s). '
                     'Ignoring this email.',
-                    msg_dict['email_to'], msg_dict['cc'])
+                    msg_dict.get('email_to'), msg_dict.get('cc'))
                 return
         else:  # mono-company setup
             company_id = all_companies[0]['id']
@@ -1016,13 +1016,14 @@ class AccountInvoiceImport(models.TransientModel):
                         existing_inv.id, existing_inv.number,
                         parsed_inv.get('invoice_number'))
                     continue
-                import_configs = aiico.search([
+                import_configs = aiico.sudo().search([
                     ('partner_id', '=', partner.id),
                     ('company_id', '=', company_id)])
                 if not import_configs:
                     logger.warning(
                         "Mail import: missing Invoice Import Configuration "
-                        "for partner '%s'.", partner.display_name)
+                        "for partner '%s' ID %d.",
+                        partner.display_name, partner.id)
                     continue
                 elif len(import_configs) == 1:
                     import_config = import_configs.convert_to_import_config()

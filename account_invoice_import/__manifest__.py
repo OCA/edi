@@ -24,6 +24,7 @@
         'wizard/account_invoice_import_view.xml',
         'views/account_invoice.xml',
         'views/partner.xml',
+        'views/account_journal_dashboard.xml',
     ],
     'images': ['images/sshot-wizard1.png'],
     'installable': True,
