@@ -9,30 +9,31 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-29 11:54+0000\n"
-"PO-Revision-Date: 2018-01-29 11:54+0000\n"
-"Last-Translator: Quentin THEURET <odoo@kerpeo.com>, 2018\n"
+"PO-Revision-Date: 2018-10-03 04:39+0000\n"
+"Last-Translator: William Olhasque <william.olhasque@scopea.fr>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.1.1\n"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:759
 #, python-format
 msgid "%s: %s %s dated %s"
-msgstr ""
+msgstr "%s : %s %s daté le %s"
 
 #. module: account_invoice_factur-x
 #: selection:res.company,facturx_level:0
 msgid "Basic"
-msgstr ""
+msgstr "Basique"
 
 #. module: account_invoice_factur-x
 #: selection:res.company,facturx_level:0
 msgid "Basic without lines"
-msgstr ""
+msgstr "Basique sans ligne"
 
 #. module: account_invoice_factur-x
 #: model:ir.model,name:account_invoice_factur-x.model_res_company
@@ -46,93 +47,95 @@ msgid ""
 "Country is not set on partner '%s'. In the Factur-X standard, the country is "
 "required for buyer and seller."
 msgstr ""
+"Le pays n'est pas présent sur le partenaire %s .\n"
+"Le standard Factur-X, le pays est requis pour le vendeur et l'acheteur."
 
 #. module: account_invoice_factur-x
 #: selection:res.company,facturx_level:0
 msgid "EN 16931 (Comfort)"
-msgstr ""
+msgstr "EN 16931 (Confort)"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:758
 #, python-format
 msgid "Factur-X"
-msgstr ""
+msgstr "Factur-X"
 
 #. module: account_invoice_factur-x
 #: model:ir.ui.view,arch_db:account_invoice_factur-x.view_account_config_settings
 msgid "Factur-X Invoices"
-msgstr ""
+msgstr "Factures Factur-X"
 
 #. module: account_invoice_factur-x
 #: model:ir.model.fields,field_description:account_invoice_factur-x.field_account_config_settings_facturx_level
 #: model:ir.model.fields,field_description:account_invoice_factur-x.field_res_company_facturx_level
 msgid "Factur-X Level"
-msgstr ""
+msgstr "Niveau Factur-X"
 
 #. module: account_invoice_factur-x
 #: model:ir.model.fields,field_description:account_invoice_factur-x.field_res_company_facturx_logo
 msgid "Factur-X Logo"
-msgstr ""
+msgstr "Logo Factur-X"
 
 #. module: account_invoice_factur-x
 #: model:ir.model.fields,field_description:account_invoice_factur-x.field_account_config_settings_facturx_refund_type
 #: model:ir.model.fields,field_description:account_invoice_factur-x.field_res_company_facturx_refund_type
 msgid "Factur-X Refund Type"
-msgstr ""
+msgstr "Type d'avoir Factur-X"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:755
 #: model:ir.model,name:account_invoice_factur-x.model_account_invoice
 #, python-format
 msgid "Invoice"
-msgstr ""
+msgstr "Facture"
 
 #. module: account_invoice_factur-x
 #: model:ir.model.fields,help:account_invoice_factur-x.field_res_company_facturx_logo
 msgid "Logo to include in the visible part of Factur-X invoices"
-msgstr ""
+msgstr "Logo à inclure dans la partie visible des factures Factur-X"
 
 #. module: account_invoice_factur-x
 #: selection:res.company,facturx_level:0
 msgid "Minimum"
-msgstr ""
+msgstr "Minimum"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:374
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:653
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr ""
+msgstr "Catégorie de taxe UNECE manquante sur la taxe %s"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:371
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:646
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr ""
+msgstr "Type de taxe UNECE manquante sur la taxe %s"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:444
 #, python-format
 msgid "Missing UNECE code on payment export type '%s'"
-msgstr ""
+msgstr "Code UNECE manquant sur le type d'export de paiement %s"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:346
 #, python-format
 msgid "No specific payment term selected"
-msgstr ""
+msgstr "Aucun terme de paiement spécifique sélectionné"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:755
 #, python-format
 msgid "Refund"
-msgstr ""
+msgstr "Avoir"
 
 #. module: account_invoice_factur-x
 #: model:ir.model,name:account_invoice_factur-x.model_report
 msgid "Report"
-msgstr ""
+msgstr "Rapport"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:555
@@ -142,16 +145,19 @@ msgid ""
 "price of line '%s' is negative. You should generate a customer refund for "
 "that line."
 msgstr ""
+"Le standard Factur-X précise que le prix unitaire ne peut être négatif. Le "
+"prix unitaire de la ligne %s est négatif. Vous devriez générer un avoir "
+"client pour cette ligne."
 
 #. module: account_invoice_factur-x
 #: selection:res.company,facturx_refund_type:0
 msgid "Type 380 with negative amounts"
-msgstr ""
+msgstr "Type 380 avec montants négatifs"
 
 #. module: account_invoice_factur-x
 #: selection:res.company,facturx_refund_type:0
 msgid "Type 381 with positive amounts"
-msgstr ""
+msgstr "Type 381 avec montants positifs"
 
 #. module: account_invoice_factur-x
 #: model:ir.model.fields,help:account_invoice_factur-x.field_account_config_settings_facturx_level
@@ -160,12 +166,14 @@ msgid ""
 "Unless if you have a good reason, you should always select 'EN 16931 "
 "(Comfort)', which is the default value."
 msgstr ""
+"Sauf cas particulier, vous devriez toujours choisir 'EN 16931 (Confort)', "
+"qui est la valeur par défaut."
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:290
 #, python-format
 msgid "Wire transfer"
-msgstr ""
+msgstr "Virement bancaire"
 
 #. module: account_invoice_factur-x
 #: model:ir.model,name:account_invoice_factur-x.model_account_config_settings
