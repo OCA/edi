@@ -11,7 +11,7 @@ This module adds a weboob backend to the *account_invoice_download* module. `Web
 Installation
 ============
 
-Install the weboob library:
+Install the weboob library (TODO: check that it works with the stable version weboob 1.3 and not just the development version weboob 1.4):
 
 .. code::
 
@@ -22,6 +22,12 @@ Some Weboob modules require additionnal Python libraries. For example, the `Webo
 .. code::
 
   sudo pip install python-jose
+
+Weboob requires `MuPDF <https://mupdf.com/>`_. If you use Debian/Ubuntu, run:
+
+.. code::
+
+  sudo apt install mupdf-tools
 
 Configuration
 =============

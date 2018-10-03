@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Akretion France
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+
+<record id="account_journal_dashboard_kanban_view" model="ir.ui.view">
+    <field name="name">account_invoice_import.journal.dashboard</field>
+    <field name="model">account.journal</field>
+    <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>
+    <field name="arch" type="xml">
+        <xpath expr="//t[@t-name='JournalBodySalePurchase']/div" position="inside">
+            <t t-if="journal_type == 'purchase'">
+                <br/>
+                <button type="action" name="%(account_invoice_import_action)d" class="btn btn-primary btn-sm">
+                    <span>Import Bill</span>
+                </button>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-name='JournalManage']//div[@class='col-xs-4 o_kanban_card_manage_section o_kanban_manage_new']//a[@name='action_create_new']" position="inside">
+            <a type="action" name="%(account_invoice_import_action)d">
+                <span t-if="journal_type == 'purchase'">Import Bill</span>
+            </a>
+        </xpath>
+    </field>
+</record>
+
+
+</odoo>
