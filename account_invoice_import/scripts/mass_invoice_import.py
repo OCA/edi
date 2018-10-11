@@ -1,12 +1,12 @@
 #! /usr/bin/python
 #  © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 """
 Mass import of PDF/XML invoice.
 The module OCA/edi/account_invoice_import must be installed on Odoo.
 """
-
+import base64
 import odoorpc
 import sys
 from optparse import OptionParser
@@ -73,7 +73,7 @@ def send_file(odoo, file_path):
         f.seek(0)
         invoice = f.read()
         f.close()
-        inv_b64 = invoice.encode('base64')
+        inv_b64 = base64.b64encode(invoice)
         wiz_id = odoo.execute(
             'account.invoice.import', 'create',
             {'invoice_file': inv_b64, 'invoice_filename': filename})

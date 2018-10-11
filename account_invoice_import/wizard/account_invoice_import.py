@@ -2,6 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import base64
 from odoo import api, fields, models, _
 import odoo.addons.decimal_precision as dp
 from odoo.tools import float_compare, float_round, float_is_zero, config
@@ -363,7 +364,7 @@ class AccountInvoiceImport(models.TransientModel):
     def parse_invoice(self, invoice_file_b64, invoice_filename):
         assert invoice_file_b64, 'No invoice file'
         logger.info('Starting to import invoice %s', invoice_filename)
-        file_data = invoice_file_b64.decode('base64')
+        file_data = base64.b64decode(invoice_file_b64)
         parsed_inv = {}
         filetype = mimetypes.guess_type(invoice_filename)
         logger.debug('Invoice mimetype: %s', filetype)
@@ -1003,7 +1004,7 @@ class AccountInvoiceImport(models.TransientModel):
                     'Attachment %d: %s. Trying to import it as an invoice',
                     i, attach.fname)
                 parsed_inv = self.parse_invoice(
-                    attach.content.encode('base64'), attach.fname)
+                    base64.b64encode(attach.content), attach.fname)
                 partner = bdio._match_partner(
                     parsed_inv['partner'], parsed_inv['chatter_msg'])
 
