@@ -48,6 +48,6 @@ class TestOrderImport(TransactionCase):
             'chatter_msg': [],
             'doc_type': 'rfq',
             }
-        soio.update_order_lines(parsed_order_up, order, 'pricelist')
+        soio.update_order_lines(parsed_order_up, order)
         self.assertEquals(len(order.order_line), 2)
         self.assertEquals(int(order.order_line[0].product_uom_qty), 3)
