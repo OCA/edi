@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, _
-from odoo.tools import float_compare, float_is_zero, config
+from odoo.tools import float_compare, float_is_zero
 from odoo.exceptions import UserError
 import logging
 import mimetypes
 from lxml import etree
+from base64 import b64decode, b64encode
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ class SaleOrderImport(models.TransientModel):
                 self.csv_import = False
                 try:
                     xml_root = etree.fromstring(
-                        self.order_file.decode('base64'))
+                        b64decode(self.order_file))
                 except:
                     raise UserError(_("This XML file is not XML-compliant"))
                 doc_type = self.parse_xml_order(xml_root, detect_doc_type=True)
@@ -67,7 +67,7 @@ class SaleOrderImport(models.TransientModel):
             elif filetype and filetype[0] == 'application/pdf':
                 self.csv_import = False
                 doc_type = self.parse_pdf_order(
-                    self.order_file.decode('base64'), detect_doc_type=True)
+                    b64decode(self.order_file), detect_doc_type=True)
                 self.doc_type = doc_type
             else:
                 return {'warning': {
@@ -107,7 +107,7 @@ class SaleOrderImport(models.TransientModel):
         if not xml_files_dict:
             raise UserError(_(
                 'There are no embedded XML file in this PDF file.'))
-        for xml_filename, xml_root in xml_files_dict.iteritems():
+        for xml_filename, xml_root in xml_files_dict.items():
             logger.info('Trying to parse XML file %s', xml_filename)
             try:
                 parsed_order = self.parse_xml_order(
@@ -132,10 +132,7 @@ class SaleOrderImport(models.TransientModel):
     #       'country_code': 'FR',
     #       'state_code': False,
     #       'zip': False,
-    #       },
-    # 'company': {'vat': 'FR12123456789'},  # Only used to check we are not
-    #                                       # importing the order in the
-    #                                       # wrong company by mistake
+    #       }
     # 'date': '2016-08-16',  # order date
     # 'order_ref': 'PO1242',  # Customer PO number
     # 'currency': {'iso': 'EUR', 'symbol': u'€'},
@@ -166,8 +163,8 @@ class SaleOrderImport(models.TransientModel):
             raise UserError(_(
                 "The customer '%s' has a pricelist '%s' but the "
                 "currency of this order is '%s'.") % (
-                    partner.display_name,
-                    partner.property_product_pricelist.display_name,
+                    partner.name_get()[0][1],
+                    partner.property_product_pricelist.name_get()[0][1],
                     currency.name))
         if parsed_order.get('order_ref'):
             existing_orders = soo.search([
@@ -179,7 +176,7 @@ class SaleOrderImport(models.TransientModel):
                 raise UserError(_(
                     "An order of customer '%s' with reference '%s' "
                     "already exists: %s (state: %s)") % (
-                        partner.display_name,
+                        partner.name_get()[0][1],
                         parsed_order['order_ref'],
                         existing_orders[0].name,
                         existing_orders[0].state))
@@ -203,7 +200,9 @@ class SaleOrderImport(models.TransientModel):
             uom = bdio._match_uom(
                 line.get('uom'), parsed_order['chatter_msg'], product)
             line_vals = self._prepare_create_order_line(
-                product, uom, so_vals, line, price_source)
+                product, uom, line, price_source)
+            # product_id_change is played in the inherit of create()
+            # of sale.order.line cf odoo/addons/sale/models/sale.py
             so_vals['order_line'].append((0, 0, line_vals))
         return so_vals
 
@@ -257,22 +256,17 @@ class SaleOrderImport(models.TransientModel):
         logger.debug('Result of order parsing: %s', parsed_order)
         if 'attachments' not in parsed_order:
             parsed_order['attachments'] = {}
-        parsed_order['attachments'][order_filename] =\
-            order_file.encode('base64')
+        parsed_order['attachments'][order_filename] = \
+            b64encode(order_file)
         if 'chatter_msg' not in parsed_order:
             parsed_order['chatter_msg'] = []
-        if (
-                parsed_order.get('company') and
-                not config['test_enable'] and
-                not self._context.get('edi_skip_company_check')):
-            self.env['business.document.import']._check_company(
-                parsed_order['company'], parsed_order['chatter_msg'])
         return parsed_order
 
+    @api.multi
     def import_order_button(self):
         self.ensure_one()
         bdio = self.env['business.document.import']
-        order_file_decoded = self.order_file.decode('base64')
+        order_file_decoded = b64decode(self.order_file)
         parsed_order = self.parse_order(
             order_file_decoded, self.order_filename, self.partner_id)
         if not parsed_order.get('lines'):
@@ -307,14 +301,16 @@ class SaleOrderImport(models.TransientModel):
             return self.create_order_return_action(
                 parsed_order, self.order_filename)
 
+    @api.multi
     def create_order_button(self):
         self.ensure_one()
         parsed_order = self.parse_order(
-            self.order_file.decode('base64'), self.order_filename,
+            b64decode(self.order_file), self.order_filename,
             self.partner_id)
         return self.create_order_return_action(
             parsed_order, self.order_filename)
 
+    @api.multi
     def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
         order = self.create_order(
@@ -349,10 +345,7 @@ class SaleOrderImport(models.TransientModel):
 
     @api.model
     def _prepare_create_order_line(
-            self, product, uom, order, import_line, price_source):
-        """the 'order' arg can be a recordset (in case of an update of a sale order)
-        or a dict (in case of the creation of a new sale order)"""
-        solo = self.env['sale.order.line']
+            self, product, uom, import_line, price_source):
         vals = {
             'product_id': product.id,
             'product_uom_qty': import_line['qty'],
@@ -360,18 +353,10 @@ class SaleOrderImport(models.TransientModel):
         }
         if price_source == 'order':
             vals['price_unit'] = import_line['price_unit']  # TODO : fix
-        elif price_source == 'pricelist':
-            # product_id_change is played in the inherit of create()
-            # of sale.order.line cf odoo/addons/sale/models/sale.py
-            # but it is not enough: we also need to play _onchange_discount()
-            # to have the right discount for pricelist
-            vals['order_id'] = order
-            vals = solo.play_onchanges(vals, ['product_id'])
-            vals.pop('order_id')
         return vals
 
-    @api.model
-    def update_order_lines(self, parsed_order, order, price_source):
+    @api.multi
+    def update_order_lines(self, parsed_order, order):
         chatter = parsed_order['chatter_msg']
         solo = self.env['sale.order.line']
         dpo = self.env['decimal.precision']
@@ -398,18 +383,18 @@ class SaleOrderImport(models.TransientModel):
             existing_lines, parsed_order['lines'], chatter,
             qty_precision=qty_prec, seller=False)
         # NOW, we start to write/delete/create the order lines
-        for oline, cdict in compare_res['to_update'].iteritems():
+        for oline, cdict in compare_res['to_update'].items():
             write_vals = {}
             # TODO: add support for price_source == order
             if cdict.get('qty'):
                 chatter.append(_(
                     "The quantity has been updated on the order line "
                     "with product '%s' from %s to %s %s") % (
-                        oline.product_id.display_name,
+                        oline.product_id.name_get()[0][1],
                         cdict['qty'][0], cdict['qty'][1],
                         oline.product_uom.name))
                 write_vals['product_uom_qty'] = cdict['qty'][1]
-                if price_source != 'order':
+                if self.price_source != 'order':
                     new_price_unit = order.pricelist_id.with_context(
                         date=order.date_order,
                         uom=oline.product_uom.id).price_get(
@@ -421,7 +406,7 @@ class SaleOrderImport(models.TransientModel):
                         chatter.append(_(
                             "The unit price has been updated on the order "
                             "line with product '%s' from %s to %s %s") % (
-                                oline.product_id.display_name,
+                                oline.product_id.name_get()[0][1],
                                 oline.price_unit, new_price_unit,
                                 order.currency_id.name))
                         write_vals['price_unit'] = new_price_unit
@@ -441,8 +426,8 @@ class SaleOrderImport(models.TransientModel):
             to_create_label = []
             for add in compare_res['to_add']:
                 line_vals = self._prepare_create_order_line(
-                    add['product'], add['uom'], order, add['import_line'],
-                    price_source)
+                    add['product'], add['uom'], add['import_line'],
+                    self.price_source)
                 line_vals['order_id'] = order.id
                 new_line = solo.create(line_vals)
                 to_create_label.append('%s %s x %s' % (
@@ -453,6 +438,7 @@ class SaleOrderImport(models.TransientModel):
                 len(compare_res['to_add']), ', '.join(to_create_label)))
         return True
 
+    @api.multi
     def update_order_button(self):
         self.ensure_one()
         bdio = self.env['business.document.import']
@@ -460,7 +446,7 @@ class SaleOrderImport(models.TransientModel):
         if not order:
             raise UserError(_('You must select a quotation to update.'))
         parsed_order = self.parse_order(
-            self.order_file.decode('base64'), self.order_filename,
+            b64decode(self.order_file), self.order_filename,
             self.partner_id)
         currency = bdio._match_currency(
             parsed_order.get('currency'), parsed_order['chatter_msg'])
@@ -473,7 +459,7 @@ class SaleOrderImport(models.TransientModel):
             parsed_order, order, self.commercial_partner_id)
         if vals:
             order.write(vals)
-        self.update_order_lines(parsed_order, order, self.price_source)
+        self.update_order_lines(parsed_order, order)
         bdio.post_create_or_update(parsed_order, order)
         logger.info(
             'Quotation ID %d updated via import of file %s', order.id,
