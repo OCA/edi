@@ -14,13 +14,13 @@ class TestInvoiceImport(TransactionCase):
             'name': 'expense account invoice import',
             'user_type_id':
             self.env.ref('account.data_account_type_expenses').id,
-            })
+        })
         self.income_account = self.env['account.account'].create({
             'code': '707AII',
             'name': 'revenue account invoice import',
             'user_type_id':
             self.env.ref('account.data_account_type_revenue').id,
-            })
+        })
         purchase_tax_vals = {
             'name': 'Test 1% VAT',
             'description': 'ZZ-VAT-buy-1.0',
@@ -31,13 +31,13 @@ class TestInvoiceImport(TransactionCase):
             'unece_categ_id': self.env.ref('account_tax_unece.tax_categ_s').id,
             'account_id': self.expense_account.id,
             'refund_account_id': self.expense_account.id,
-            }
+        }
         self.purchase_tax = self.env['account.tax'].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
         sale_tax_vals.update({
             'description': 'ZZ-VAT-sale-1.0',
             'type_tax_use': 'sale',
-            })
+        })
         self.sale_tax = self.env['account.tax'].create(sale_tax_vals)
         self.product = self.env['product.product'].create({
             'name': 'Expense product',
@@ -46,7 +46,7 @@ class TestInvoiceImport(TransactionCase):
             'supplier_taxes_id': [(6, 0, [self.purchase_tax.id])],
             'property_account_income_id': self.income_account.id,
             'property_account_expense_id': self.expense_account.id,
-            })
+        })
         self.all_import_config = [
             {
                 'invoice_line_method': '1line_no_product',
@@ -68,7 +68,7 @@ class TestInvoiceImport(TransactionCase):
             {
                 'invoice_line_method': 'nline_auto_product',
             }
-            ]
+        ]
 
     def test_import_in_invoice(self):
         parsed_inv = {
@@ -82,7 +82,7 @@ class TestInvoiceImport(TransactionCase):
             'date_end': '2017-08-31',
             'partner': {
                 'name': 'ASUSTeK',
-                },
+            },
             'description': 'New hi-tech gadget',
             'lines': [{
                 'product': {'code': 'AII-TEST-PRODUCT'},
@@ -94,9 +94,9 @@ class TestInvoiceImport(TransactionCase):
                     'amount': 1.0,
                     'unece_type_code': 'VAT',
                     'unece_categ_code': 'S',
-                    }],
-                }]
-            }
+                }],
+            }]
+        }
         for import_config in self.all_import_config:
             self.env['account.invoice.import'].create_invoice(
                 parsed_inv, import_config)
@@ -107,7 +107,7 @@ class TestInvoiceImport(TransactionCase):
             'date_invoice': '2017-08-16',
             'partner': {
                 'name': 'Agrolait',
-                },
+            },
             'lines': [{
                 'product': {'code': 'AII-TEST-PRODUCT'},
                 'name': 'Super product',
@@ -120,9 +120,9 @@ class TestInvoiceImport(TransactionCase):
                     'amount': 1.0,
                     'unece_type_code': 'VAT',
                     'unece_categ_code': 'S',
-                    }],
-                }]
-            }
+                }],
+            }]
+        }
         for import_config in self.all_import_config:
             if not import_config['invoice_line_method'].startswith('nline'):
                 continue
