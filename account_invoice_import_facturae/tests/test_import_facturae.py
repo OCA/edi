@@ -38,7 +38,7 @@ class TestImportFacturae(TransactionCase):
         country.ensure_one()
         partner = self.env['res.partner'].create({
             'name': 'Partner',
-            'invoice_import_id': self.config.id,
+            'invoice_import_ids': [(4, self.config.id)],
             'country_id': country.id,
             'vat': vals['vat'],
             'supplier': True,
