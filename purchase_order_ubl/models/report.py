@@ -18,9 +18,7 @@ class Report(models.Model):
         This method is specific to QWeb"""
         pdf_content = super(Report, self).get_pdf(
             docids, report_name, html=html, data=data)
-        purchase_reports = [
-            'purchase.report_purchaseorder',
-            'purchase.report_purchasequotation']
+        purchase_reports = self._get_purchase_order_ubl_reports()
         if (
                 report_name in purchase_reports and
                 len(docids) == 1 and
@@ -28,3 +26,8 @@ class Report(models.Model):
             order = self.env['purchase.order'].browse(docids[0])
             pdf_content = order.embed_ubl_xml_in_pdf(pdf_content=pdf_content)
         return pdf_content
+
+    def _get_purchase_order_ubl_reports(self):
+        return [
+            'purchase.report_purchaseorder',
+            'purchase.report_purchasequotation']
