@@ -16,16 +16,16 @@ try:
 except(ImportError, IOError) as err:
     logging.info(err)
 
-facturae_ns = 'http://www.facturae.es/Facturae/2009/v3.2/Facturae'
+facturae_ns = 'http://www.facturae.es/Facturae/2014/v3.2.1/Facturae'
 
 
 class AccountInvoiceImport(models.TransientModel):
     _inherit = 'account.invoice.import'
 
     @api.multi
-    def parse_invoice(self):
+    def parse_invoice(self, invoice_file_b64, invoice_filename):
         mimetypes.add_type('application/xml', '.xsig')
-        return super().parse_invoice()
+        return super().parse_invoice(invoice_file_b64, invoice_filename)
 
     @api.model
     def parse_xml_invoice(self, xml_root):
@@ -40,7 +40,7 @@ class AccountInvoiceImport(models.TransientModel):
     def parse_facturae_invoice(self, xml_root):
         facturae_schema = etree.XMLSchema(
             etree.parse(tools.file_open(
-                "Facturaev3_2.xsd",
+                "Facturaev3_2_1_wrapper.xsd",
                 subdir="addons/account_invoice_import_facturae/data"
             )))
         facturae_schema.assertValid(xml_root)
