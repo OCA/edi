@@ -39,7 +39,7 @@ class AccountInvoiceImport(models.TransientModel):
                 xml_root.tag.startswith('{%s}Facturae' % facturae_ns)
             ):
                 return self.parse_facturae_invoice(
-                    xml_root, FACTURAE_NS_MAP['facturae_ns'])
+                    xml_root, FACTURAE_NS_MAP[facturae_ns])
         return super().parse_xml_invoice(xml_root)
 
     @api.model
