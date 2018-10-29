@@ -33,13 +33,13 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def parse_xml_invoice(self, xml_root):
-		for facturae_ns in FACTURAE_NS_MAP:
-			if (
-				xml_root.tag and
-				xml_root.tag.startswith('{%s}Facturae' % facturae_ns)
-			):
-				return self.parse_facturae_invoice(
-				    xml_root, FACTURAE_NS_MAP['facturae_ns'])
+        for facturae_ns in FACTURAE_NS_MAP:
+            if (
+                xml_root.tag and
+                xml_root.tag.startswith('{%s}Facturae' % facturae_ns)
+            ):
+                return self.parse_facturae_invoice(
+                    xml_root, FACTURAE_NS_MAP['facturae_ns'])
         return super().parse_xml_invoice(xml_root)
 
     @api.model
