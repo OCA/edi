@@ -112,7 +112,7 @@ class AccountInvoice(models.Model):
         if ns['level'] == 'en16931':
             urn = 'urn:cen.eu:en16931:2017'
         elif ns['level'] == 'basic':
-            urn = 'urn:cen.eu:en16931:2017:compliant:factur-x.eu:1p0:basic'
+            urn = 'urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic'
         else:
             urn = 'urn:factur-x.eu:1p0:%s' % ns['level']
         ctx_param_id.text = urn
