@@ -32,6 +32,11 @@ msgid "%d new invoice line(s) created: %s"
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.ui.view,arch_db:account_invoice_import.account_journal_dashboard_kanban_view
+msgid "<span>Import Bill</span>"
+msgstr ""
+
+#. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:289
 #, python-format
 msgid "Account missing on product '%s' or on it's related category '%s'."
@@ -182,6 +187,11 @@ msgid "Import"
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.ui.view,arch_db:account_invoice_import.account_journal_dashboard_kanban_view
+msgid "Import Bill"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_config_action
 #: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_config_menu
 msgid "Import Bills"
@@ -239,7 +249,7 @@ msgid "Invoice or Refund"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:1038
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:1039
 #, python-format
 msgid "Invoice successfully imported from email sent by <b>%s</b> on %s with subject <i>%s</i>."
 msgstr ""
