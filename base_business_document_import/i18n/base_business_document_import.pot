@@ -20,13 +20,13 @@ msgid "(fixed)"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:873
+#: code:addons/base_business_document_import/models/business_document_import.py:900
 #, python-format
 msgid "<b>Notes in file %s:</b>"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:875
+#: code:addons/base_business_document_import/models/business_document_import.py:902
 #, python-format
 msgid "<b>Notes in imported document:</b>"
 msgstr ""
@@ -73,6 +73,12 @@ msgstr ""
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import___last_update
 msgid "Last Modified on"
+msgstr ""
+
+#. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:844
+#, python-format
+msgid "Missing VAT number on company '%s'"
 msgstr ""
 
 #. module: base_business_document_import
@@ -141,6 +147,12 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:155
 #, python-format
 msgid "The %s has been identified by the domain name '%s' so please check carefully that the %s is correct."
+msgstr ""
+
+#. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:835
+#, python-format
+msgid "The VAT number of the customer written in the business document (%s) doesn't match the VAT number of the company '%s' (%s) in which you are trying to import this document."
 msgstr ""
 
 #. module: base_business_document_import
