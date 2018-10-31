@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo11-addon-account_e-invoice_generate',
         'odoo11-addon-account_invoice_import',
+        'odoo11-addon-account_invoice_import_ubl',
         'odoo11-addon-account_invoice_ubl',
         'odoo11-addon-base_business_document_import',
         'odoo11-addon-base_ubl',
