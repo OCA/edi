@@ -14,6 +14,7 @@ setuptools.setup(
         'odoo11-addon-base_business_document_import',
         'odoo11-addon-base_ubl',
         'odoo11-addon-base_ubl_payment',
+        'odoo11-addon-purchase_order_ubl',
         'odoo11-addon-sale_order_ubl',
     ],
     classifiers=[
