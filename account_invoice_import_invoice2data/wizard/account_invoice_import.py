@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, tools, _
-from odoo.exceptions import UserError
+from odoo import models, api, tools, _
+from odoo.exceptions import Warning as UserError
 import os
 from tempfile import mkstemp
+import pkg_resources
 import logging
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def fallback_parse_pdf_invoice(self, file_data):
-        '''This method must be inherited by additional modules with
+        '''This method must be inherited by additionnal modules with
         the same kind of logic as the account_bank_statement_import_*
         modules'''
         return self.invoice2data_parse_invoice(file_data)
@@ -33,6 +33,8 @@ class AccountInvoiceImport(models.TransientModel):
         fd, file_name = mkstemp()
         try:
             os.write(fd, file_data)
+        except Exception as e:
+            pass
         finally:
             os.close(fd)
         # Transfer log level of Odoo to invoice2data
@@ -47,13 +49,14 @@ class AccountInvoiceImport(models.TransientModel):
         exclude_built_in_templates = tools.config.get(
             'invoice2data_exclude_built_in_templates', False)
         if not exclude_built_in_templates:
-            templates += read_templates()
+            invoice2data_folder = pkg_resources.resource_filename('invoice2data', 'extract/templates')
+            templates += read_templates(invoice2data_folder)
         logger.debug(
             'Calling invoice2data.extract_data with templates=%s',
             templates)
         try:
             invoice2data_res = extract_data(file_name, templates=templates)
-        except Exception, e:
+        except Exception as e:
             raise UserError(_(
                 "PDF Invoice parsing failed. Error message: %s") % e)
         if not invoice2data_res:
@@ -89,7 +92,4 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv['amount_untaxed'] = invoice2data_res['amount_untaxed']
         if 'amount_tax' in invoice2data_res:
             parsed_inv['amount_tax'] = invoice2data_res['amount_tax']
-        for key, value in parsed_inv.items():
-            if key.startswith('date') and parsed_inv[key]:
-                parsed_inv[key] = fields.Date.to_string(parsed_inv[key])
         return parsed_inv

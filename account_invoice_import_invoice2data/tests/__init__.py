@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # The test below works well, but the full installation of invoice2data
 # with the special version of the pdftotext binary is difficult
 # Invoice2data new requires a recent version of poppler-utils
