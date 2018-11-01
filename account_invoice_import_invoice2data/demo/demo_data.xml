@@ -29,7 +29,7 @@
     <field name="country_id" ref="base.fr"/>
     <field name="website">http://www.free.fr</field>
     <field name="vat">FR 604 219 388 61</field>
-    <field name="invoice_import_id" ref="free_import_config"/>
+    <field name="invoice_import_ids" eval="[(6,0,[ref('free_import_config')])]"/>
 </record>
 
 </odoo>
