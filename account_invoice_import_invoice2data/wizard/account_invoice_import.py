@@ -1,4 +1,5 @@
-# Copyright 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2015-2016 Akretion
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, api, tools, _
@@ -49,7 +50,8 @@ class AccountInvoiceImport(models.TransientModel):
         exclude_built_in_templates = tools.config.get(
             'invoice2data_exclude_built_in_templates', False)
         if not exclude_built_in_templates:
-            invoice2data_folder = pkg_resources.resource_filename('invoice2data', 'extract/templates')
+            invoice2data_folder = pkg_resources.resource_filename(
+                'invoice2data', 'extract/templates')
             templates += read_templates(invoice2data_folder)
         logger.debug(
             'Calling invoice2data.extract_data with templates=%s',
