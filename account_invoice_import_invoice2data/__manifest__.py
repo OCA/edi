@@ -12,7 +12,7 @@
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'https://github.com/OCA/edi',
     'depends': ['account_invoice_import'],
-    'external_dependencies': {'python': ['invoice2data']},
+    'external_dependencies': {'python': ['pdftotext', 'invoice2data']},
     'data': ['wizard/account_invoice_import_view.xml'],
     'demo': ['demo/demo_data.xml'],
     'images': ['images/sshot-wizard1.png'],
