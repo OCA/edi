@@ -20,6 +20,16 @@ msgstr ""
 "%100==4 ? 2 : 3);\n"
 
 #. module: account_invoice_import_ubl
+#: model:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
+msgid "(Universal Business Language, also known as"
+msgstr ""
+
+#. module: account_invoice_import_ubl
+#: model:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
+msgid "), either as XML file or as PDF file with an UBL XML attachment."
+msgstr ""
+
+#. module: account_invoice_import_ubl
 #: model:account.tax,name:account_invoice_import_ubl.nl_vat_purchase_21
 msgid "Deutch VAT purchase 21.0%"
 msgstr "Nemški nabavni DDV 21.0%"
@@ -28,6 +38,11 @@ msgstr "Nemški nabavni DDV 21.0%"
 #: model:account.tax,name:account_invoice_import_ubl.nl_vat_purchase_6
 msgid "Deutch VAT purchase 6.0%"
 msgstr "Nemški nabavni DDV 6.0%"
+
+#. module: account_invoice_import_ubl
+#: model:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
+msgid "ISO/IEC 19845"
+msgstr ""
 
 #. module: account_invoice_import_ubl
 #: model:account.tax,description:account_invoice_import_ubl.nl_vat_purchase_21
@@ -44,6 +59,11 @@ msgstr ""
 #, python-format
 msgid "This UBL XML file is not an invoice/refund file (InvoiceTypeCode is %s"
 msgstr "Ta UBL XML datoteka ni račun/dobropis (TypeCode računa je %s"
+
+#. module: account_invoice_import_ubl
+#: model:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
+msgid "UBL"
+msgstr ""
 
 #. module: account_invoice_import_ubl
 #: model:ir.model,name:account_invoice_import_ubl.model_account_invoice_import
