@@ -19,7 +19,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:510
+#: model:ir.ui.view,arch_db:account_invoice_import_factur-x.account_invoice_import_form
+msgid "(also called ZUGFeRD 2.0) and"
+msgstr ""
+
+#. module: account_invoice_import_factur-x
+#: model:ir.ui.view,arch_db:account_invoice_import_factur-x.account_invoice_import_form
+msgid ": PDF file with an XML attachment in CrossIndustryInvoice format."
+msgstr ""
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:522
 #, python-format
 msgid ""
 "AllowanceTotalAmount (%s) doesn't match the total of the allowance lines "
@@ -28,7 +38,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:488
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:500
 #, python-format
 msgid ""
 "ChargeTotalAmount (%s) doesn't match the total of the charge lines (%s). "
@@ -37,7 +47,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:284
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:296
 #, python-format
 msgid "Could not detect if the invoice is a Factur-X or ZUGFeRD invoice."
 msgstr ""
@@ -73,7 +83,12 @@ msgid "FR-VAT-buy-20.0"
 msgstr "FR-VAT-buy-20.0"
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:317
+#: model:ir.ui.view,arch_db:account_invoice_import_factur-x.account_invoice_import_form
+msgid "Factur-X"
+msgstr ""
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:329
 #, python-format
 msgid ""
 "For the moment, in the Factur-X import, we only support type code 380 and "
@@ -101,43 +116,43 @@ msgid "German VAT purchase 7.0%"
 msgstr ""
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:447
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:459
 #, python-format
 msgid "Global"
 msgstr "Global"
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:461
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:473
 #, python-format
 msgid "Logistics Service"
 msgstr "Servicio de logística"
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:170
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:182
 #, python-format
 msgid "Misc Allowance"
 msgstr ""
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:177
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:189
 #, python-format
 msgid "Misc Charge"
 msgstr ""
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:504
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:516
 #, python-format
 msgid "Misc Global Allowance"
 msgstr ""
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:482
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:494
 #, python-format
 msgid "Misc Global Charge"
 msgstr ""
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:376
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:388
 #, python-format
 msgid ""
 "The GrandTotalAmount is %s but the sum of the lines plus the total charge "
@@ -145,7 +160,7 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import_factur-x
-#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:179
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:191
 #, python-format
 msgid "Unknown ChargeIndicator %s"
 msgstr ""
@@ -153,4 +168,9 @@ msgstr ""
 #. module: account_invoice_import_factur-x
 #: model:ir.model,name:account_invoice_import_factur-x.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
+msgstr ""
+
+#. module: account_invoice_import_factur-x
+#: model:ir.ui.view,arch_db:account_invoice_import_factur-x.account_invoice_import_form
+msgid "ZUGFeRD 1.0"
 msgstr ""
