@@ -19,13 +19,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:211
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:221
 #, python-format
 msgid "%d new order line(s) created: %s"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:195
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:205
 #, python-format
 msgid "%d order line(s) are not in the imported quotation: %s"
 msgstr ""
@@ -125,7 +125,7 @@ msgid "RFQ to Update"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:247
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:257
 #, python-format
 msgid ""
 "The currency of the imported quotation (%s) is different from the currency "
@@ -133,7 +133,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:124
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:134
 #, python-format
 msgid ""
 "The incoterm has been updated from %s to %s upon import of the quotation "
@@ -141,7 +141,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:181
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:191
 #, python-format
 msgid ""
 "The quantity has been updated on the RFQ line with product '%s' from %s to "
@@ -149,7 +149,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:243
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:253
 #, python-format
 msgid ""
 "The supplier of the imported quotation (%s) is different from the supplier "
@@ -157,7 +157,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:173
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:183
 #, python-format
 msgid ""
 "The unit price has been updated on the RFQ line with product '%s' from %s to "
@@ -170,26 +170,26 @@ msgid "Then, Odoo will compare the imported quotation and the current RFQ:"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:52
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:53
 #, python-format
 msgid "There are no embedded XML file in this PDF file."
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:262
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:272
 #, python-format
 msgid ""
 "This RFQ has been updated automatically via the import of quotation file %s"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:96
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:100
 #, python-format
 msgid "This XML file is not XML-compliant"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:106
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:110
 #, python-format
 msgid ""
 "This file '%s' is not recognised as XML nor PDF file. Please check the file "
@@ -197,14 +197,14 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:255
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:265
 #, python-format
 msgid "This quotation doesn't have any line !"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:41
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:61
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:42
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:62
 #, python-format
 msgid ""
 "This type of XML quotation is not supported. Did you install the module to "
@@ -246,7 +246,7 @@ msgid "XML or PDF Quotation"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:230
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:240
 #, python-format
 msgid "You must select a quotation to update."
 msgstr ""
