@@ -6,21 +6,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2018-11-25 22:41+0000\n"
+"Last-Translator: Pedro Castro Silva <pedrocs@exo.pt>\n"
 "Language-Team: none\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.2.2\n"
 
 #. module: base_ubl_payment
 #: model:ir.model,name:base_ubl_payment.model_base_ubl
 msgid "Common methods to generate and parse UBL XML files"
-msgstr ""
+msgstr "Métodos comuns para gerar e analisar ficheiros XML UBL"
 
 #. module: base_ubl_payment
 #: code:addons/base_ubl_payment/models/ubl.py:26
 #, python-format
 msgid "Missing 'UNECE Payment Mean' on payment type '%s' used by the payment mode '%s'."
 msgstr ""
+"Meio de Pagamento UNECE em falta para o tipo de pagamento '%s' usado pelo "
+"modo de pagamento '%s'."
