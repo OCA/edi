@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:759
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:751
 #, python-format
 msgid "%s: %s %s dated %s"
 msgstr "%s: %s %s fechado %s"
@@ -53,7 +53,7 @@ msgid "EN 16931 (Comfort)"
 msgstr "EN 16931 (Comfort)"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:758
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:750
 #, python-format
 msgid "Factur-X"
 msgstr "Factur-X"
@@ -81,7 +81,7 @@ msgid "Factur-X Refund Type"
 msgstr "Tipo de reembolso Factur-X"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:755
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:747
 #: model:ir.model,name:account_invoice_factur-x.model_account_invoice
 #, python-format
 msgid "Invoice"
@@ -99,14 +99,14 @@ msgstr "Mínimo"
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:374
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:653
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:645
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr ""
 
 #. module: account_invoice_factur-x
 #: code:addons/account_invoice_factur-x/models/account_invoice.py:371
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:646
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:638
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
 msgstr ""
@@ -124,7 +124,7 @@ msgid "No specific payment term selected"
 msgstr ""
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:755
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:747
 #, python-format
 msgid "Refund"
 msgstr "Reembolso"
