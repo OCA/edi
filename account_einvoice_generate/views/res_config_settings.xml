@@ -14,14 +14,14 @@
                 <div class="col-xs-12 col-md-6 o_setting_box" id="e-invoices">
                     <div class="o_setting_left_pane"/>
                     <div class="o_setting_right_pane">
-                        <label string="Select Format"/>
+                        <label string="Select Format" for="xml_format_in_pdf_invoice"/>
                         <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
                         <div class="text-muted">
                             Select the format of your e-invoices.
                         </div>
                         <div class="content-group" name="xml_format_in_pdf_invoice">
                             <div class="row mt16">
-                                <label string="Format" class="col-md-3 o_light_label"/>
+                                <label string="Format" class="col-md-3 o_light_label" for="xml_format_in_pdf_invoice"/>
                                 <field name="xml_format_in_pdf_invoice"/>
                             </div>
                         </div>
