@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
 # © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, api, tools, _
 from odoo.exceptions import UserError
+from odoo.tools import ustr
 from lxml import etree
-from StringIO import StringIO
+from io import BytesIO
 import logging
 logger = logging.getLogger(__name__)
 
@@ -35,9 +35,9 @@ class BaseFacturX(models.AbstractModel):
         xsd_etree_obj = etree.parse(tools.file_open(xsd_file))
         official_schema = etree.XMLSchema(xsd_etree_obj)
         try:
-            t = etree.parse(StringIO(xml_string))
+            t = etree.parse(BytesIO(xml_string))
             official_schema.assertValid(t)
-        except Exception, e:
+        except Exception as e:
             # if the validation of the XSD fails, we arrive here
             logger.warning(
                 "The XML file is invalid against the XML Schema Definition")
@@ -49,5 +49,5 @@ class BaseFacturX(models.AbstractModel):
                 "full error have been written in the server logs. "
                 "Here is the error, which may give you an idea on the "
                 "cause of the problem : %s.")
-                % (flavor.capitalize(), unicode(e)))
+                % (flavor.capitalize(), ustr(e)))
         return True
