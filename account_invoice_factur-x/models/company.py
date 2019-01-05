@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 # © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models, tools
+import base64
 
 
 class ResCompany(models.Model):
@@ -24,11 +24,11 @@ class ResCompany(models.Model):
         ('381', 'Type 381 with positive amounts'),
         ], string='Factur-X Refund Type', default='381')
     facturx_logo = fields.Binary(
-        compute='compute_facturx_logo', string='Factur-X Logo',
+        compute='_compute_facturx_logo', string='Factur-X Logo',
         help='Logo to include in the visible part of Factur-X invoices',
         readonly=True)
 
-    def compute_facturx_logo(self):
+    def _compute_facturx_logo(self):
         level2logo = {
             'minimum': 'factur-x-minimum.png',
             'basicwl': 'factur-x-basicwl.png',
@@ -46,6 +46,5 @@ class ResCompany(models.Model):
                 f = tools.file_open(fname_path, 'rb')
                 f_binary = f.read()
                 if f_binary:
-                    facturx_logo = f_binary.encode('base64')
-
+                    facturx_logo = base64.b64encode(f_binary)
             company.facturx_logo = facturx_logo

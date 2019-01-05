@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Akretion (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-from odoo.tools import float_compare, float_is_zero, float_round
+from odoo.tools import float_compare, float_is_zero, float_round, pycompat
 from lxml import etree
 import logging
 logger = logging.getLogger(__name__)
@@ -161,7 +160,7 @@ class AccountInvoice(models.Model):
         if id_dict:
             party_identification = etree.SubElement(
                 parent_node, ns['ram'] + 'SpecifiedLegalOrganization')
-            for scheme_name, party_id_text in id_dict.iteritems():
+            for scheme_name, party_id_text in id_dict.items():
                 party_identification_id = etree.SubElement(
                     party_identification, ns['ram'] + 'ID',
                     schemeID=scheme_name)
@@ -521,7 +520,8 @@ class AccountInvoice(models.Model):
         line_doc = etree.SubElement(
             line_item, ns['ram'] + 'AssociatedDocumentLineDocument')
         etree.SubElement(
-            line_doc, ns['ram'] + 'LineID').text = unicode(line_number)
+            line_doc, ns['ram'] + 'LineID').text = pycompat.to_text(
+                line_number)
 
         # TODO: move in dedicated method ?
         trade_product = etree.SubElement(
@@ -738,6 +738,7 @@ class AccountInvoice(models.Model):
         logger.debug(
             'Factur-X XML file generated for invoice ID %d', self.id)
         logger.debug(xml_string)
+        xml_string = pycompat.to_text(xml_string)
         return (xml_string, level)
 
     @api.multi
