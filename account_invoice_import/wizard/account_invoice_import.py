@@ -177,8 +177,8 @@ class AccountInvoiceImport(models.TransientModel):
         ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
         rpo = self.env['res.partner']
-        company_id = self._context.get('force_company') or\
-            self.env.user.company_id.id
+        company = self.env['res.company'].browse(
+            self._context.get('force_company')) or self.env.user.company_id
         start_end_dates_installed = hasattr(ailo, 'start_date') and\
             hasattr(ailo, 'end_date')
         if parsed_inv['type'] in ('out_invoice', 'out_refund'):
@@ -193,12 +193,12 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
         journal_id = aio.with_context(
             type=parsed_inv['type'],
-            company_id=company_id)._default_journal().id
+            company_id=company.id)._default_journal().id
         vals = {
             'partner_id': partner.id,
             'currency_id': currency.id,
             'type': parsed_inv['type'],
-            'company_id': company_id,
+            'company_id': company.id,
             'origin': parsed_inv.get('origin'),
             'reference': parsed_inv.get('invoice_number'),
             'date_invoice': parsed_inv.get('date'),
@@ -215,7 +215,8 @@ class AccountInvoiceImport(models.TransientModel):
             partner = rpo.browse(vals['partner_id'])
             partner_bank = bdio._match_partner_bank(
                 partner, parsed_inv['iban'], parsed_inv.get('bic'),
-                parsed_inv['chatter_msg'], create_if_not_found=True)
+                parsed_inv['chatter_msg'],
+                create_if_not_found=company.invoice_import_create_bank_account)
             if partner_bank:
                 vals['partner_bank_id'] = partner_bank.id
         config = import_config  # just to make variable name shorter
@@ -819,7 +820,7 @@ class AccountInvoiceImport(models.TransientModel):
         return vals
 
     @api.model
-    def _prepare_update_invoice_vals(self, parsed_inv, partner):
+    def _prepare_update_invoice_vals(self, parsed_inv, invoice):
         bdio = self.env['business.document.import']
         vals = {
             'reference': parsed_inv.get('invoice_number'),
@@ -828,9 +829,11 @@ class AccountInvoiceImport(models.TransientModel):
         if parsed_inv.get('date_due'):
             vals['date_due'] = parsed_inv['date_due']
         if parsed_inv.get('iban'):
+            company = invoice.company_id
             partner_bank = bdio._match_partner_bank(
-                partner, parsed_inv['iban'], parsed_inv.get('bic'),
-                parsed_inv['chatter_msg'], create_if_not_found=True)
+                invoice.commercial_partner_id, parsed_inv['iban'],
+                parsed_inv.get('bic'), parsed_inv['chatter_msg'],
+                create_if_not_found=company.invoice_import_create_bank_account)
             if partner_bank:
                 vals['partner_bank_id'] = partner_bank.id
         return vals
@@ -871,7 +874,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "The currency of the imported invoice (%s) is different from "
                 "the currency of the existing invoice (%s)") % (
                 currency.name, invoice.currency_id.name))
-        vals = self._prepare_update_invoice_vals(parsed_inv, partner)
+        vals = self._prepare_update_invoice_vals(parsed_inv, invoice)
         logger.debug('Updating supplier invoice with vals=%s', vals)
         self.invoice_id.write(vals)
         if (
