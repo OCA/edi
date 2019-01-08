@@ -23,6 +23,10 @@
                         <label for="adjustment_credit_account_id"/>
                         <field name="adjustment_credit_account_id" class="oe_inline"/>
                     </div>
+                    <div name="invoice_import_create_bank_account">
+                        <field name="invoice_import_create_bank_account"/>
+                        <label for="invoice_import_create_bank_account" class="oe_inline"/>
+                    </div>
                     <div name="invoice_import_email">
                         <label for="invoice_import_email"/>
                         <field name="invoice_import_email" class="oe_inline"/>
