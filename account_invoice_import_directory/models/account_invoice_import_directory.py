@@ -121,5 +121,5 @@ class AccountInvoiceImportDirectory(models.Model):
             'invoice_file': file_content,
             'invoice_filename': file_name}
         wiz = self.env['account.invoice.import'].create(vals)
-        parsed_inv = wiz.parse_invoice()
+        parsed_inv = wiz.import_invoice()
         return wiz.create_invoice_action(parsed_inv)
