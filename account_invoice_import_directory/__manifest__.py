@@ -11,7 +11,6 @@
     'version': '10.0.1.0.0',
     'depends': [
         'account_invoice_import',
-        'base_technical_user',
         'queue_job'
     ],
     'author': 'ACSONE SA/NV, Odoo Community Association (OCA)',
