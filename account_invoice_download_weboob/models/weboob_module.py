@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2018 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -16,23 +15,46 @@ except ImportError:
 
 
 class WeboobModule(models.Model):
+
     _name = 'weboob.module'
     _description = 'Weboob module for account_invoice_download framework'
 
-    name = fields.Char(readonly=True, required=True)
-    active = fields.Boolean(default=True)
-    maintainer = fields.Char(readonly=True)
-    installed_version = fields.Char(string='Installed Version', readonly=True)
-    available_version = fields.Char(string='Available Version', readonly=True)
-    license = fields.Char(readonly=True)
-    description = fields.Char(readonly=True)
+    name = fields.Char(
+        readonly=True,
+        required=True
+    )
+    active = fields.Boolean(
+        default=True
+    )
+    maintainer = fields.Char(
+        readonly=True
+    )
+    installed_version = fields.Char(
+        readonly=True
+    )
+    available_version = fields.Char(
+        readonly=True
+    )
+    license = fields.Char(
+        readonly=True
+    )
+    description = fields.Char(
+        readonly=True
+    )
     has_parameters = fields.Boolean(
-        string='Has Additional Parameters', readonly=True)
+        string='Has Additional Parameters',
+        readonly=True
+    )
     state = fields.Selection([
         ('uninstalled', 'Not Installed'),
         ('installed', 'Installed'),
-        ], default='uninstalled', string='State', required=True, readonly=True)
+        ],
+        default='uninstalled',
+        required=True,
+        readonly=True
+    )
 
+    @api.multi
     @api.depends('name', 'description')
     def name_get(self):
         res = []
@@ -52,7 +74,7 @@ class WeboobModule(models.Model):
         module_name2obj = {}
         for module in self.search_read([], ['name']):
             module_name2obj[module['name']] = self.browse(module['id'])
-        for name, info in weboob_modules.iteritems():
+        for name, info in weboob_modules.items():
             vals = {
                 'name': name,
                 'maintainer': info.maintainer,
@@ -76,7 +98,7 @@ class WeboobModule(models.Model):
     def has_parameter(self, w, module_name):
         bmod = w.modules_loader.get_or_load_module(module_name)
         has_parameter = False
-        for key, value in bmod.config.iteritems():
+        for key, value in bmod.config.items():
             if key not in ['login', 'password']:
                 has_parameter = True
                 break

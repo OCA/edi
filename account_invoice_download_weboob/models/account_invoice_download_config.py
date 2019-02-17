@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017-2018 Akretion France
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -15,18 +14,27 @@ except ImportError:
 
 
 class AccountInvoiceDownloadConfig(models.Model):
+
     _inherit = 'account.invoice.download.config'
 
     backend = fields.Selection(
-        selection_add=[('weboob', 'Weboob')])
+        selection_add=[('weboob', 'Weboob')]
+    )
     weboob_module_id = fields.Many2one(
-        'weboob.module', string='Weboob Module', ondelete='restrict',
-        domain=[('state', '=', 'installed')])
+        'weboob.module',
+        string='Weboob Module',
+        ondelete='restrict',
+        domain=[('state', '=', 'installed')]
+    )
     weboob_has_parameter = fields.Boolean(
-        related='weboob_module_id.has_parameters', readonly=True)
+        related='weboob_module_id.has_parameters',
+        readonly=True
+    )
     weboob_parameter_ids = fields.One2many(
-        'weboob.parameter', 'download_config_id',
-        string='Weboob Additional Parameters')
+        'weboob.parameter',
+        'download_config_id',
+        string='Weboob Additional Parameters'
+    )
 
     @api.onchange('weboob_module_id')
     def weboob_module_id_change(self):
@@ -35,7 +43,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             bmod = w.modules_loader.get_or_load_module(
                 self.weboob_module_id.name)
             new_params = self.env['weboob.parameter']
-            for key, value in bmod.config.iteritems():
+            for key, value in bmod.config.items():
                 if key not in ['login', 'password']:
                     note = value.label or ''
                     if value.choices:
@@ -51,8 +59,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             self.weboob_parameter_ids = new_params
 
     def prepare_credentials(self):
-        credentials = super(
-            AccountInvoiceDownloadConfig, self).prepare_credentials()
+        credentials = super().prepare_credentials()
         if self.backend == 'weboob' and self.weboob_parameter_ids:
             for param in self.weboob_parameter_ids:
                 if param.key and param.value:
@@ -62,8 +69,7 @@ class AccountInvoiceDownloadConfig(models.Model):
     def download(self, credentials, logs):
         if self.backend == 'weboob':
             return self.weboob_download(credentials, logs)
-        return super(AccountInvoiceDownloadConfig, self).download(
-            credentials, logs)
+        return super().download(credentials, logs)
 
     def weboob_download(self, credentials, logs):
         logger.info(
@@ -74,7 +80,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             self.weboob_module_id.name, params=credentials, name='odoo')
 
         try:
-            sub = back.iter_subscription().next()
+            sub = back.iter_subscription()
         except BrowserIncorrectPassword:
             logs['msg'].append(_('Wrong password.'))
             logs['result'] = 'failure'
@@ -119,5 +125,5 @@ class AccountInvoiceDownloadConfig(models.Model):
                 inv_details.get('label') and
                 inv_details['label'].replace(' ', '_'),
                 inv_details.get('format', 'pdf'))
-            invoices.append((pdf_inv.encode('base64'), filename))
+            invoices.append((pdf_inv, filename))
         return invoices
