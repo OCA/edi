@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2016-2019 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
@@ -15,7 +15,7 @@ class TestPhonePartnerMatch(TransactionCase):
             'country_id': self.env.ref('base.fr').id,
             'supplier': True,
             'phone': '+33141981242',
-            'fax': '+33141981243',
+            'mobile': '+33699887766',
             })
         partner_dict = {
             'country_code': 'FR',
@@ -25,7 +25,7 @@ class TestPhonePartnerMatch(TransactionCase):
         self.assertEquals(res, partner)
         partner_dict = {
             'country_code': 'FR',
-            'fax': '(0)1-41-98-12-43',
+            'phone': '(0)6-99-88-77-66',
             }
         res = bdoo._match_partner(partner_dict, [], partner_type='supplier')
         self.assertEquals(res, partner)
