@@ -1,4 +1,5 @@
-# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2016-2019 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
@@ -15,17 +16,13 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'website': 'www.total.com',
         })
         bdio = self.env['business.document.import']
-        partner_dict = {'email': ' Agrolait@yourcompany.example.com'}
-        res = bdio._match_partner(
-            partner_dict, [], partner_type='customer')
-        self.assertEqual(res, self.env.ref('base.res_partner_2'))
         # match on domain extracted from email with warning
         partner_dict = {'email': 'alexis.delattre@total.com'}
         warn = []
         res = bdio._match_partner(partner_dict, warn, partner_type=False)
         self.assertEqual(res, partner1)
         self.assertTrue(warn)
-        partner_dict = {'name': 'delta pc '}
+        partner_dict = {'name': 'ready mat '}
         res = bdio._match_partner(
             partner_dict, [], partner_type='supplier')
         self.assertEqual(res, self.env.ref('base.res_partner_4'))
@@ -122,7 +119,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                 }),
             ]
         })
-        product_dict = {'code': 'PROD_DEL '}
+        product_dict = {'code': 'FURN_7777 '}
         res = bdio._match_product(product_dict, [])
         self.assertEqual(res, self.env.ref('product.product_delivery_01'))
         product_dict = {'barcode': '9782203121102'}
@@ -144,16 +141,16 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         bdio = self.env['business.document.import']
         uom_dict = {'unece_code': 'KGM'}
         res = bdio._match_uom(uom_dict, [])
-        self.assertEqual(res, self.env.ref('product.product_uom_kgm'))
+        self.assertEqual(res, self.env.ref('uom.product_uom_kgm'))
         uom_dict = {'unece_code': 'NIU'}
         res = bdio._match_uom(uom_dict, [])
-        self.assertEqual(res, self.env.ref('product.product_uom_unit'))
+        self.assertEqual(res, self.env.ref('uom.product_uom_unit'))
         uom_dict = {'name': 'day'}
         res = bdio._match_uom(uom_dict, [])
-        self.assertEqual(res, self.env.ref('product.product_uom_day'))
+        self.assertEqual(res, self.env.ref('uom.product_uom_day'))
         uom_dict = {'name': ' Liter '}
         res = bdio._match_uom(uom_dict, [])
-        self.assertEqual(res, self.env.ref('product.product_uom_litre'))
+        self.assertEqual(res, self.env.ref('uom.product_uom_litre'))
         uom_dict = {}
         product = self.env.ref('product.product_product_1')
         res = bdio._match_uom(uom_dict, [], product=product)
