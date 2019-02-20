@@ -839,7 +839,7 @@ class BusinessDocumentImport(models.AbstractModel):
         """
         if not journal_dict:
             journal_dict = {}
-        ajo = self.env['account.account']
+        ajo = self.env['account.journal']
         if speed_dict is None:
             speed_dict = self._prepare_journal_speed_dict()
         self._strip_cleanup_dict(journal_dict)
