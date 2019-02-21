@@ -57,6 +57,7 @@ install:
   - pip install phonenumbers
   - pip install weboob
   - pip install ovh
+  - pip install PyPDF2
 
 script:
   - travis_run_tests
