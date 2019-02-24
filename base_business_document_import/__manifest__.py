@@ -14,7 +14,7 @@
     'depends': [
         'base_vat_sanitized',
         'account_tax_unece',
-        'product_uom_unece',
+        'uom_unece',
     ],
     'external_dependencies': {'python': ['PyPDF2']},
 }
