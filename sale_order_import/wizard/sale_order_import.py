@@ -319,7 +319,7 @@ class SaleOrderImport(models.TransientModel):
         self.ensure_one()
         order = self.create_order(
             parsed_order, self.price_source, order_filename)
-        order.message_post(_(
+        order.message_post(body=_(
             "Created automatically via file import (%s).")
             % self.order_filename)
         action = self.env['ir.actions.act_window'].for_xml_id(
@@ -478,7 +478,7 @@ class SaleOrderImport(models.TransientModel):
         logger.info(
             'Quotation ID %d updated via import of file %s', order.id,
             self.order_filename)
-        order.message_post(_(
+        order.message_post(body=_(
             "This quotation has been updated automatically via the import of "
             "file %s") % self.order_filename)
         action = self.env['ir.actions.act_window'].for_xml_id(

@@ -933,11 +933,11 @@ class BusinessDocumentImport(models.AbstractModel):
                     'datas_fname': filename,
                     })
         for msg in parsed_dict['chatter_msg']:
-            record.message_post(msg)
+            record.message_post(body=msg)
         if parsed_dict.get('note'):
             if doc_filename:
                 msg = _('<b>Notes in file %s:</b>') % doc_filename
             else:
                 msg = _('<b>Notes in imported document:</b>')
             record.message_post(
-                '%s %s' % (msg, parsed_dict['note']))
+                body='%s %s' % (msg, parsed_dict['note']))

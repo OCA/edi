@@ -269,7 +269,7 @@ class PurchaseOrderImport(models.TransientModel):
         logger.info(
             'purchase.order ID %d updated via import of file %s', order.id,
             self.quote_filename)
-        order.message_post(_(
+        order.message_post(body=_(
             "This RFQ has been updated automatically via the import of "
             "quotation file %s") % self.quote_filename)
         return True

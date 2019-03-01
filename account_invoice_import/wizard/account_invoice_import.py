@@ -588,7 +588,7 @@ class AccountInvoiceImport(models.TransientModel):
             assert self.import_config_id
             import_config = self.import_config_id.convert_to_import_config()
         invoice = self.create_invoice(parsed_inv, import_config)
-        invoice.message_post(_(
+        invoice.message_post(body=_(
             "This invoice has been created automatically via file import"))
         action = iaao.for_xml_id('account', 'action_invoice_tree2')
         action.update({
@@ -725,7 +725,7 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv['amount_untaxed']
             invoice.tax_line_ids[0].amount = tax_amount
             cur_symbol = invoice.currency_id.symbol
-            invoice.message_post(_(
+            invoice.message_post(body=_(
                 'The total tax amount has been forced to %s %s '
                 '(amount computed by Odoo was: %s %s).')
                 % (tax_amount, cur_symbol, initial_tax_amount, cur_symbol))
@@ -889,7 +889,7 @@ class AccountInvoiceImport(models.TransientModel):
         logger.info(
             'Supplier invoice ID %d updated via import of file %s',
             invoice.id, self.invoice_filename)
-        invoice.message_post(_(
+        invoice.message_post(body=_(
             "This invoice has been updated automatically via the import "
             "of file %s") % self.invoice_filename)
         action = iaao.for_xml_id('account', 'action_invoice_tree2')
@@ -1039,7 +1039,7 @@ class AccountInvoiceImport(models.TransientModel):
                         import_configs[0].convert_to_import_config()
                 invoice = self.create_invoice(parsed_inv, import_config)
                 logger.info('Invoice ID %d created from email', invoice.id)
-                invoice.message_post(_(
+                invoice.message_post(body=_(
                     "Invoice successfully imported from email sent by "
                     "<b>%s</b> on %s with subject <i>%s</i>.") % (
                         msg_dict.get('email_from'), msg_dict.get('date'),
