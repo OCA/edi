@@ -78,13 +78,16 @@ class AccountInvoiceImport(models.TransientModel):
                 'iso': invoice2data_res.get('currency'),
                 },
             'amount_total': invoice2data_res.get('amount'),
-            'invoice_number': invoice2data_res.get('invoice_number'),
             'date': invoice2data_res.get('date'),
             'date_due': invoice2data_res.get('date_due'),
             'date_start': invoice2data_res.get('date_start'),
             'date_end': invoice2data_res.get('date_end'),
-            'description': invoice2data_res.get('description'),
             }
+        for field in ['invoice_number', 'description']:
+            if isinstance(invoice2data_res.get(field), list):
+                parsed_inv[field] = ' '.join(invoice2data_res[field])
+            else:
+                parsed_inv[field] = invoice2data_res.get(field)
         if 'amount_untaxed' in invoice2data_res:
             parsed_inv['amount_untaxed'] = invoice2data_res['amount_untaxed']
         if 'amount_tax' in invoice2data_res:
