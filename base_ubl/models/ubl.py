@@ -208,7 +208,7 @@ class BaseUbl(models.AbstractModel):
             partner, company, 'Party', customer_party_root, ns,
             version=version)
         # TODO: rewrite support for AccountingContact + add DeliveryContact
-        # Additionnal optional args
+        # Additional optional args
         if partner and not company and partner.parent_id:
             self._ubl_add_contact(
                 partner, customer_party_root, ns,
@@ -327,7 +327,7 @@ class BaseUbl(models.AbstractModel):
     def _ubl_add_item(
             self, name, product, parent_node, ns, type='purchase',
             seller=False, version='2.1'):
-        '''Beware that product may be False (in particular on invoices)'''
+        """Beware that product may be False (in particular on invoices)"""
         assert type in ('sale', 'purchase'), 'Wrong type param'
         assert name, 'name is a required arg'
         item = etree.SubElement(parent_node, ns['cac'] + 'Item')
@@ -483,7 +483,7 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def _ubl_check_xml_schema(self, xml_string, document, version='2.1'):
-        '''Validate the XML file against the XSD'''
+        """Validate the XML file against the XSD"""
         xsd_file = 'base_ubl/data/xsd-%s/maindoc/UBL-%s-%s.xsd' % (
             version, document, version)
         xsd_etree_obj = etree.parse(file_open(xsd_file))
@@ -649,7 +649,7 @@ class BaseUbl(models.AbstractModel):
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns)
         product_dict = {
             'barcode': barcode_xpath and barcode_xpath[0].text or False,
-            'code': code_xpath and code_xpath[0].text or False,
+            'default_code': code_xpath and code_xpath[0].text or False,
             }
         return product_dict
 
