@@ -24,17 +24,17 @@ msgid "Common methods to generate and parse UBL XML files"
 msgstr ""
 
 #. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl_display_name
+#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl_id
+#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__id
 msgid "ID"
 msgstr "ID"
 
 #. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl___last_update
+#: model:ir.model.fields,field_description:base_ubl.field_base_ubl____last_update
 msgid "Last Modified on"
 msgstr ""
 
