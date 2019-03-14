@@ -1,7 +1,7 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import models, api, _
+from odoo import api, models, _
 from odoo.exceptions import UserError
 from lxml import etree
 import logging
@@ -36,7 +36,7 @@ class BaseUbl(models.AbstractModel):
         if date_due:
             pay_due_date = etree.SubElement(
                 pay_means, ns['cbc'] + 'PaymentDueDate')
-            pay_due_date.text = date_due
+            pay_due_date.text = date_due.strftime('%Y-%m-%d')
         if pay_means_code.text in ['30', '31', '42']:
             if (
                     not partner_bank and
