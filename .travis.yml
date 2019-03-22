@@ -53,7 +53,7 @@ install:
   - pip install PyPDF2  # needed for account_invoice*zugferd
   - pip install phonenumbers
   - pip install pdftotext
-  - sudo chmod 755 /usr/local/bin/pdftotext
+  - sudo chmod 755 /usr/bin/pdftotext
 
 script:
   - travis_run_tests
