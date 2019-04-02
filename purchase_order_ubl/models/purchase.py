@@ -29,7 +29,7 @@ class PurchaseOrder(models.Model):
             currency_node_name = 'PricingCurrencyCode'
         elif doc_type == 'order':
             date = self.date_approve or self.date_order.date()
-            date = fields.Datetime.to_string(date)
+            date = fields.Date.to_string(date)
             currency_node_name = 'DocumentCurrencyCode'
         ubl_version = etree.SubElement(
             parent_node, ns['cbc'] + 'UBLVersionID')
