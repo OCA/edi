@@ -23,12 +23,13 @@ class PurchaseOrder(models.Model):
     @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):
         if doc_type == 'rfq':
-            now_utc = fields.Datetime.now()
+            now_utc = fields.Datetime.to_string(fields.Datetime.now())
             date = now_utc[:10]
             time = now_utc[11:]
             currency_node_name = 'PricingCurrencyCode'
         elif doc_type == 'order':
-            date = self.date_approve or self.date_order[:10]
+            date = self.date_approve or self.date_order.date()
+            date = fields.Datetime.to_string(date)
             currency_node_name = 'DocumentCurrencyCode'
         ubl_version = etree.SubElement(
             parent_node, ns['cbc'] + 'UBLVersionID')
