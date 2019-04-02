@@ -9,7 +9,7 @@
     'summary': 'Embed UBL XML file inside the PDF purchase order',
     'author': 'Akretion,Odoo Community Association (OCA)',
     'website': 'https://github.com/OCA/edi/',
-    'depends': ['purchase_stock', 'base_ubl'],
+    'depends': ['purchase', 'base_ubl'],
     'data': [],
     'installable': True,
 }
