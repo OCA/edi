@@ -91,14 +91,8 @@ class PurchaseOrder(models.Model):
     def get_delivery_partner(self):
         self.ensure_one()
         if self.dest_address_id:
-            partner = self.dest_address_id
-        elif (
-                self.picking_type_id.warehouse_id and
-                self.picking_type_id.warehouse_id.partner_id):
-            partner = self.picking_type_id.warehouse_id.partner_id
-        else:
-            partner = self.company_id.partner_id
-        return partner
+            return self.dest_address_id
+        return self.company_id.partner_id
 
     @api.multi
     def generate_rfq_ubl_xml_etree(self, version='2.1'):
