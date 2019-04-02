@@ -12,8 +12,7 @@ class IrActionsReport(models.Model):
         """We go through that method when the PDF is generated for the 1st
         time and also when it is read from the attachment.
         This method is specific to QWeb"""
-        pdf_content = super(IrActionsReport, self).render_qweb_pdf(
-            res_ids, data)
+        pdf_content = super().render_qweb_pdf(res_ids, data)
         if (
                 len(self) == 1 and
                 self.report_name == 'sale.report_saleorder' and
