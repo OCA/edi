@@ -4,7 +4,7 @@
 
 {
     'name': 'Account Invoice UBL',
-    'version': '11.0.1.0.0',
+    'version': '12.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
     'summary': 'Generate UBL XML file for customer invoices/refunds',
@@ -14,6 +14,7 @@
         'account_e-invoice_generate',
         'account_payment_partner',
         'base_ubl_payment',
+        'account_tax_unece',
         ],
     'data': [
         'views/account_invoice.xml',
