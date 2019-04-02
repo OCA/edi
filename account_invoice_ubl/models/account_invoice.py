@@ -6,7 +6,7 @@ import base64
 from lxml import etree
 import logging
 
-from odoo import models, api
+from odoo import api, models
 from odoo.tools import float_is_zero, float_round
 
 logger = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ class AccountInvoice(models.Model):
         doc_id = etree.SubElement(parent_node, ns['cbc'] + 'ID')
         doc_id.text = self.number
         issue_date = etree.SubElement(parent_node, ns['cbc'] + 'IssueDate')
-        issue_date.text = self.date_invoice
+        issue_date.text = self.date_invoice.strftime('%Y-%m-%d')
         type_code = etree.SubElement(
             parent_node, ns['cbc'] + 'InvoiceTypeCode')
         if self.type == 'out_invoice':
