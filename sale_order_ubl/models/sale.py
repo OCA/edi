@@ -22,7 +22,7 @@ class SaleOrder(models.Model):
 
     @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):
-        now_utc = fields.Datetime.now()
+        now_utc = fields.Datetime.to_string(fields.Datetime.now())
         date = now_utc[:10]
         time = now_utc[11:]
         ubl_version = etree.SubElement(
