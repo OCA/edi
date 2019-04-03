@@ -60,8 +60,8 @@
     <field name="default_code">SItemNo001</field>
     <field name="list_price">55</field>
     <field name="type">consu</field>
-    <field name="uom_id" ref="product.product_uom_litre"/>
-    <field name="uom_po_id" ref="product.product_uom_litre"/>
+    <field name="uom_id" ref="uom.product_uom_litre"/>
+    <field name="uom_po_id" ref="uom.product_uom_litre"/>
 </record>
 
 <record id="product_pencil" model="product.product">
@@ -116,8 +116,8 @@
     <field name="default_code">17589683</field>
     <field name="list_price">42</field>
     <field name="type">consu</field>
-    <field name="uom_id" ref="product.product_uom_kgm"/>
-    <field name="uom_po_id" ref="product.product_uom_kgm"/>
+    <field name="uom_id" ref="uom.product_uom_kgm"/>
+    <field name="uom_po_id" ref="uom.product_uom_kgm"/>
 </record>
 
 <!-- for tests/UBL-RequestForQuotation-2.0-Example.xml -->
