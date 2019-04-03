@@ -1,5 +1,5 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, _
 from odoo.tools import float_compare, float_is_zero, config
@@ -38,7 +38,7 @@ class SaleOrderImport(models.TransientModel):
         ], string='Apply Prices From')
     # for state = update
     commercial_partner_id = fields.Many2one(
-        'res.partner', string='Customer', readonly=True)
+        'res.partner', string='Commercial Entity', readonly=True)
     partner_shipping_id = fields.Many2one(
         'res.partner', string='Shipping Address', readonly=True)
     # amount_untaxed = fields.Float(
@@ -319,7 +319,7 @@ class SaleOrderImport(models.TransientModel):
         self.ensure_one()
         order = self.create_order(
             parsed_order, self.price_source, order_filename)
-        order.message_post(_(
+        order.message_post(body=_(
             "Created automatically via file import (%s).")
             % self.order_filename)
         action = self.env['ir.actions.act_window'].for_xml_id(
@@ -478,7 +478,7 @@ class SaleOrderImport(models.TransientModel):
         logger.info(
             'Quotation ID %d updated via import of file %s', order.id,
             self.order_filename)
-        order.message_post(_(
+        order.message_post(body=_(
             "This quotation has been updated automatically via the import of "
             "file %s") % self.order_filename)
         action = self.env['ir.actions.act_window'].for_xml_id(
