@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 # Copyright 2018 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
 
@@ -10,11 +9,11 @@ class TestOrderImport(TransactionCase):
     def test_order_import(self):
         soio = self.env['sale.order.import']
         parsed_order = {
-            'partner': {'email': 'agrolait@yourcompany.example.com'},
+            'partner': {'email': 'deco.addict82@example.com'},
             'date': '2018-08-14',
             'order_ref': 'TEST1242',
             'lines': [{
-                'product': {'code': 'PROD_DEL'},
+                'product': {'code': 'FURN_8888'},
                 'qty': 2,
                 'uom': {'unece_code': 'C62'},
                 'price_unit': 12.42,
@@ -34,13 +33,13 @@ class TestOrderImport(TransactionCase):
             'date': '2018-08-14',
             'order_ref': 'TEST1242',
             'lines': [{
-                'product': {'code': 'PROD_DEL'},
+                'product': {'code': 'FURN_8888'},
                 'qty': 3,
                 'uom': {'unece_code': 'C62'},
                 'price_unit': 12.42,
                 },
                 {
-                'product': {'code': 'PROD_DEL02'},
+                'product': {'code': 'FURN_9999'},
                 'qty': 1,
                 'uom': {'unece_code': 'C62'},
                 'price_unit': 1.42,
