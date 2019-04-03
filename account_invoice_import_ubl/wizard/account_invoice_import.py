@@ -23,8 +23,7 @@ class AccountInvoiceImport(models.TransientModel):
                 '{urn:oasis:names:specification:ubl:schema:xsd:Invoice')):
             return self.parse_ubl_invoice(xml_root)
         else:
-            return super(AccountInvoiceImport, self).parse_xml_invoice(
-                xml_root)
+            return super().parse_xml_invoice(xml_root)
 
     def get_attachments(self, xml_root, namespaces):
         attach_xpaths = xml_root.xpath(
