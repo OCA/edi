@@ -127,7 +127,7 @@
         <cbc:Description>Stationær computer</cbc:Description>
         <cbc:Name>Dell PrecisionTM  T3400</cbc:Name>
         <cac:SellersItemIdentification>
-            <cbc:ID>LAP-E5</cbc:ID>
+            <cbc:ID>FURN_6666</cbc:ID>
         </cac:SellersItemIdentification>
       </cac:Item>
     </cac:LineItem>
@@ -142,7 +142,7 @@
         <cbc:Description>Fladskærm</cbc:Description>
         <cbc:Name>FP/BL 1908WFP</cbc:Name>
         <cac:SellersItemIdentification>
-            <cbc:ID>CARD</cbc:ID>
+            <cbc:ID>FURN_0789</cbc:ID>
         </cac:SellersItemIdentification>
       </cac:Item>
     </cac:LineItem>
