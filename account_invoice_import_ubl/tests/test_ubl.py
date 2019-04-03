@@ -1,6 +1,7 @@
 # © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo import fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_compare
 import base64
@@ -57,7 +58,8 @@ class TestUbl(TransactionCase):
             self.assertEqual(len(invoices), 1)
             inv = invoices[0]
             self.assertEqual(inv.type, res_dict.get('type', 'in_invoice'))
-            self.assertEqual(inv.date_invoice, res_dict['date_invoice'])
+            str_date_invoice = fields.Date.to_string(inv.date_invoice)
+            self.assertEqual(str_date_invoice, res_dict['date_invoice'])
             if res_dict.get('origin'):
                 self.assertEqual(inv.origin, res_dict['origin'])
             if res_dict.get('date_due'):
