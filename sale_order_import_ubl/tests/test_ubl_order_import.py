@@ -1,6 +1,7 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo import fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open
 import base64
@@ -58,7 +59,8 @@ class TestUblOrderImport(TransactionCase):
             if res.get('client_order_ref'):
                 self.assertEqual(so.client_order_ref, res['client_order_ref'])
             if res.get('date_order'):
-                self.assertEqual(so.date_order[:10], res['date_order'])
+                date_order = fields.Datetime.to_string(so.date_order)
+                self.assertEqual(date_order[:10], res['date_order'])
             if res.get('shipping_partner'):
                 self.assertEqual(
                     so.partner_shipping_id, res['shipping_partner'])
