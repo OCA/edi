@@ -1,6 +1,8 @@
+account-invoicing
 community-data-files
 partner-contact
+queue
+reporting-engine
 sale-workflow
 server-tools
-account-invoicing
-queue
+stock-logistics-workflow
