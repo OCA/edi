@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="invoice_form" model="ir.ui.view">
+        <field name="name">account.invoice.form.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_send_to_voxel"
+                        type="object"
+                        string="Send to Voxel"
+                        attrs="{'invisible': [
+                            '|',
+                            ('type', 'not in', ['out_invoice', 'out_refund']),
+                            ('state', 'not in', ['open', 'paid']),
+                        ]}"/>
+            </header>
+            <notebook position="inside">
+                <field name="voxel_enabled" invisible="1"/>
+                <page string="Voxel"
+                      attrs="{'invisible': [('voxel_enabled', '!=', True)]}">
+                    <group>
+                        <field name="voxel_state"/>
+                    </group>
+                    <notebook>
+                        <page string="Voxel Jobs" name="page_voxel_jobs">
+                            <group name="group_voxel_jobs">
+                                <field name="voxel_job_ids"
+                                       options="{'reload_on_button': true}"
+                                       nolabel="1"
+                                       readonly="1">
+                                    <tree>
+                                        <field name="date_created"/>
+                                        <field name="eta"/>
+                                        <field name="date_done"/>
+                                        <field name="state"/>
+                                        <button type="object"
+                                                name="voxel_requeue_sudo"
+                                                string="Requeue"
+                                                class="oe_highlight"
+                                                attrs="{'invisible': [('state', '!=', 'failed')]}"/>
+                                        <button type="object"
+                                                name="voxel_cancel_now"
+                                                string="Cancel sending"
+                                                class="oe_highlight_cancel"
+                                                icon="fa-times-circle"
+                                                attrs="{'invisible': [('state', 'not in', ['pending','enqueued'])]}"/>
+                                        <button type="object"
+                                                name="voxel_do_now"
+                                                string="Send now"
+                                                class="oe_highlight"
+                                                icon="fa-fighter-jet"
+                                                attrs="{'invisible': ['|', ('state', '!=', 'pending'), ('eta', '=', False)]}"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Voxel XML report"
+                              name="page_voxel_report"
+                              attrs="{'invisible': [('voxel_xml_report', '=', False)]}">
+                            <group name="group_voxel_report">
+                                <field name="voxel_xml_report" widget="ace"
+                                       options="{'mode': 'xml'}"
+                                       nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="view_account_invoice_filter" model="ir.ui.view">
+        <field name="name">account.invoice.filter.voxel</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <filter name="unpaid" position="after">
+                <group string="Voxel filters">
+                    <separator/>
+                    <filter name="voxel_not_sent"
+                            string="Voxel report not sent"
+                            domain="[('voxel_state', '=', 'not_sent')]"/>
+                    <filter name="voxel_sent" string="Voxel report sent"
+                            domain="[('voxel_state', '=', 'sent')]"
+                            help="Already sent to Voxel"/>
+                    <filter name="voxel_send_failed"
+                            string="Voxel report failed"
+                            domain="[('voxel_state', '=', 'sent_errors')]"
+                            help="The last attemp to sent to Voxel has failed"/>
+                    <separator/>
+                    <filter name="voxel_cancelled" string="Voxel cancelled"
+                            domain="[('voxel_state', '=', 'cancelled')]"
+                            help="Cancelled Voxel reports"/>
+                    <separator/>
+                </group>
+            </filter>
+        </field>
+    </record>
+</odoo>
