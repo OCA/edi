@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2019 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="view_company_form" model="ir.ui.view">
+        <field name="name">res.company.voxel.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="voxel" string="Voxel">
+                    <group name="voxel_enabled">
+                        <field name="voxel_enabled"/>
+                    </group>
+                    <group
+                        attrs="{'invisible': [('voxel_enabled', '=', False)]}">
+                        <group name="voxel_config">
+                            <field name="voxel_send_mode"/>
+                            <field name='voxel_sent_time' widget='float_time'
+                                   attrs="{'invisible': [('voxel_send_mode', '!=', 'fixed')]}"/>
+                            <field name='voxel_delay_time' widget='float_time'
+                                   attrs="{'invisible': [('voxel_send_mode', '!=', 'delayed')]}"/>
+                        </group>
+                        <group name="voxel_config">
+                            <field name="voxel_api_url"/>
+                            <field name="voxel_api_user"/>
+                            <field name="voxel_api_password" password="True"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
