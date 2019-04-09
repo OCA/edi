@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="res.groups" id="group_voxel_manager">
+        <field name="name">Voxel manager</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+    </record>
+
+    <record id="queue_job_voxel_manager_rule" model="ir.rule">
+        <field name="name">Queue job Voxel visibility</field>
+        <field name="model_id" ref="queue_job.model_queue_job"/>
+        <field name="domain_force">[('channel', '=', 'root.voxel')]</field>
+        <field name="groups" eval="[(4, ref('group_voxel_manager'))]"/>
+    </record>
+
+    <record id="queue_job_manager_rule" model="ir.rule">
+        <field name="name">Queue job manager</field>
+        <field name="model_id" ref="queue_job.model_queue_job"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups"
+               eval="[(4, ref('queue_job.group_queue_job_manager'))]"/>
+    </record>
+
+</odoo>
