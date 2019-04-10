@@ -59,6 +59,11 @@ msgid "Select the format of your e-invoices."
 msgstr ""
 
 #. module: account_e-invoice_generate
+#: selection:res.company,xml_format_in_pdf_invoice:0
+msgid "Universal Business Language (UBL)"
+msgstr ""
+
+#. module: account_e-invoice_generate
 #: model:ir.model.fields,field_description:account_e-invoice_generate.field_res_company__xml_format_in_pdf_invoice
 #: model:ir.model.fields,field_description:account_e-invoice_generate.field_res_config_settings__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
