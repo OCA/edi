@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo12-addon-account_e-invoice_generate',
         'odoo12-addon-base_ubl',
+        'odoo12-addon-base_ubl_payment',
     ],
     classifiers=[
         'Programming Language :: Python',
