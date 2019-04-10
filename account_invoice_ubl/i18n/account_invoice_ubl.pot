@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 11.0\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
@@ -19,24 +19,29 @@ msgid "Companies"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company_embed_pdf_in_ubl_xml_invoice
-#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings_embed_pdf_in_ubl_xml_invoice
+#: model:ir.model,name:account_invoice_ubl.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__embed_pdf_in_ubl_xml_invoice
 msgid "Embed PDF in UBL XML Invoice"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: model:ir.ui.view,arch_db:account_invoice_ubl.invoice_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl.invoice_form
 msgid "Generate UBL XML File"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: model:ir.model.fields,help:account_invoice_ubl.field_res_company_embed_pdf_in_ubl_xml_invoice
-#: model:ir.model.fields,help:account_invoice_ubl.field_res_config_settings_embed_pdf_in_ubl_xml_invoice
+#: model:ir.model.fields,help:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
+#: model:ir.model.fields,help:account_invoice_ubl.field_res_config_settings__embed_pdf_in_ubl_xml_invoice
 msgid "If active, the standalone UBL Invoice XML file will include the PDF of the invoice in base64 under the node 'AdditionalDocumentReference'. For example, to be compliant with the e-fff standard used in Belgium, you should activate this option."
 msgstr ""
 
 #. module: account_invoice_ubl
-#: model:ir.ui.view,arch_db:account_invoice_ubl.view_account_config_settings
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_account_config_settings
 msgid "Include the PDF of the invoice in the standalone UBL Invoice XML file."
 msgstr ""
 
@@ -46,12 +51,22 @@ msgid "Invoice"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: model:ir.model,name:account_invoice_ubl.model_ir_actions_report
-msgid "ir.actions.report"
+#: selection:res.company,xml_format_in_pdf_invoice:0
+msgid "None"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: model:ir.model,name:account_invoice_ubl.model_res_config_settings
-msgid "res.config.settings"
+#: model:ir.model,name:account_invoice_ubl.model_ir_actions_report
+msgid "Report Action"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: selection:res.company,xml_format_in_pdf_invoice:0
+msgid "Universal Business Language (UBL)"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__xml_format_in_pdf_invoice
+msgid "XML Format embedded in PDF invoice"
 msgstr ""
 
