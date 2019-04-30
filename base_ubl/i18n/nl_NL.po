@@ -6,54 +6,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2019-04-30 14:03+0000\n"
+"Last-Translator: Cas Vissers <c.vissers@brahoo.nl>\n"
 "Language-Team: none\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.5.1\n"
 
 #. module: base_ubl
 #: model:ir.model,name:base_ubl.model_base_ubl
 msgid "Common methods to generate and parse UBL XML files"
-msgstr ""
+msgstr "Algemene methoden voor het genereren en parsen van UBL XML-bestanden"
 
 #. module: base_ubl
 #: model:ir.model.fields,field_description:base_ubl.field_base_ubl_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Weergave naam"
 
 #. module: base_ubl
 #: model:ir.model.fields,field_description:base_ubl.field_base_ubl_id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: base_ubl
 #: model:ir.model.fields,field_description:base_ubl.field_base_ubl___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Laatst bijgewerkt op"
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:421
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr ""
+msgstr "Missende UNECE BTW categorie op BTW '%s'"
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:441
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr ""
+msgstr "Missende UNECE BTW type op BTW '%s'"
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:293
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
-msgstr ""
+msgstr "Missing UNECE code op maateenheid '%s'"
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:501
 #, python-format
 msgid "The UBL XML file is not valid against the official XML Schema Definition. The XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s."
 msgstr ""
+"Het UBL XML-bestand is niet geldig vergeleken met de officiële XML Schema-"
+"definitie. Het XML-bestand en de volledige fout zijn in de server logs "
+"geschreven. Hier staat de fout die mogelijk een idee geeft van de oorzaak "
+"van het probleem:% s."
