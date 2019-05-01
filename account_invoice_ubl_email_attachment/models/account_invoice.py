@@ -18,9 +18,9 @@ class AccountInvoice(models.Model):
     def _generate_email_ubl_attachment(self):
         self.ensure_one()
         attachments = self.env['ir.attachment']
-        if not self.type in ('out_invoice', 'out_refund'):
+        if self.type not in ('out_invoice', 'out_refund'):
             return attachments
-        if not self.state in ('open', 'paid'):
+        if self.state not in ('open', 'paid'):
             return attachments
         version = self.get_ubl_version()
         ubl_filename = self.get_ubl_filename(version=version)
