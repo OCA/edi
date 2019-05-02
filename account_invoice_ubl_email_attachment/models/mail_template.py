@@ -23,6 +23,14 @@ class MailTemplate(models.Model):
             ])
             if not ubl_attachments:
                 ubl_attachments = invoice._generate_email_ubl_attachment()
-            attachments = [(a.name, a.datas) for a in ubl_attachments]
+            if len(ubl_attachments) == 1:
+                report_name = self.render_template(
+                    template.report_name, template.model, res_id)
+                ext = '.xml'
+                if not report_name.endswith(ext):
+                    report_name += ext
+                attachments = [(report_name, ubl_attachments.datas)]
+            else:
+                attachments = [(a.name, a.datas) for a in ubl_attachments]
             res[res_id]['attachments'] += attachments
         return res
