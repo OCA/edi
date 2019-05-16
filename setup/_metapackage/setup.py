@@ -12,6 +12,7 @@ setuptools.setup(
         'odoo12-addon-account_invoice_ubl',
         'odoo12-addon-base_ubl',
         'odoo12-addon-base_ubl_payment',
+        'odoo12-addon-sale_order_ubl',
     ],
     classifiers=[
         'Programming Language :: Python',
