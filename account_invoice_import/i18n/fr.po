@@ -37,6 +37,13 @@ msgid "%d new invoice line(s) created: %s"
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.ui.view,arch_db:account_invoice_import.res_config_settings_view_form
+msgid ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
+"specific.\" groups=\"base.group_multi_company\"/>"
+msgstr ""
+
+#. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:289
 #, python-format
 msgid "Account missing on product '%s' or on it's related category '%s'."
