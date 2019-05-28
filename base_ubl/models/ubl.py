@@ -342,9 +342,9 @@ class BaseUbl(models.AbstractModel):
         if product:
             if type == 'purchase':
                 if seller:
-                    sellers = self.env['product.supplierinfo'].search([
-                        ('name', '=', seller.id),
-                        ('product_tmpl_id', '=', product.product_tmpl_id.id)])
+                    sellers = product._select_seller(
+                        partner_id=seller, quantity=0.0, date=None,
+                        uom_id=False)
                     if sellers:
                         product_name = sellers[0].product_name
                         seller_code = sellers[0].product_code
