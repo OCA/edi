@@ -12,6 +12,7 @@ setuptools.setup(
         'odoo11-addon-account_invoice_import',
         'odoo11-addon-account_invoice_import_ubl',
         'odoo11-addon-account_invoice_ubl',
+        'odoo11-addon-account_invoice_ubl_email_attachment',
         'odoo11-addon-base_business_document_import',
         'odoo11-addon-base_ubl',
         'odoo11-addon-base_ubl_payment',
