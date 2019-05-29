@@ -8,7 +8,7 @@ from odoo.tests.common import HttpCase
 class TestUblInvoiceEmailAttachment(HttpCase):
 
     def setUp(self):
-        super(TestUblInvoiceEmailAttachment, self).setUp()
+        super().setUp()
 
         partner = self.env.ref('base.res_partner_3')
         product = self.env.ref('product.product_product_5')
@@ -71,7 +71,9 @@ class TestUblInvoiceEmailAttachment(HttpCase):
         composer = self.env['mail.compose.message'].with_context(
             self.composer_ctx).create(self.composer_vals)
         self.assertFalse(composer.attachment_ids)
-        composer.onchange_template_id_wrapper()
+        composer.with_context(
+            force_report_rendering=True
+        ).onchange_template_id_wrapper()
         self.assertTrue(composer.attachment_ids)
         self.assertEqual(len(composer.attachment_ids), 1)
 
@@ -84,7 +86,9 @@ class TestUblInvoiceEmailAttachment(HttpCase):
         composer = self.env['mail.compose.message'].with_context(
             self.composer_ctx).create(self.composer_vals)
         self.assertFalse(composer.attachment_ids)
-        composer.onchange_template_id_wrapper()
+        composer.with_context(
+            force_report_rendering=True
+        ).onchange_template_id_wrapper()
         self.assertTrue(composer.attachment_ids)
         self.assertEqual(len(composer.attachment_ids), 1)
 
@@ -98,6 +102,8 @@ class TestUblInvoiceEmailAttachment(HttpCase):
         composer = self.env['mail.compose.message'].with_context(
             self.composer_ctx).create(self.composer_vals)
         self.assertFalse(composer.attachment_ids)
-        composer.onchange_template_id_wrapper()
+        composer.with_context(
+            force_report_rendering=True
+        ).onchange_template_id_wrapper()
         self.assertTrue(composer.attachment_ids)
         self.assertEqual(len(composer.attachment_ids), 2)
