@@ -10,7 +10,7 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     def action_invoice_sent(self):
-        action = super(AccountInvoice, self).action_invoice_sent()
+        action = super().action_invoice_sent()
         if self.company_id.include_ubl_attachment_in_invoice_email:
             action['context']['attach_ubl_xml_file'] = True
         return action
