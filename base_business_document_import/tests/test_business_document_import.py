@@ -31,28 +31,28 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEqual(res, partner1)
 
     def test_match_shipping_partner(self):
-        rpo = self.env['res.partner']
+        partner = self.env['res.partner']
         bdio = self.env['business.document.import']
-        partner1 = rpo.create({
+        partner1 = partner.create({
             'name': 'Akretion France',
             'street': '35B rue Montgolfier',
             'zip': '69100',
             'country_id': self.env.ref('base.fr').id,
             'email': 'contact@akretion.com',
         })
-        cpartner1 = rpo.create({
+        cpartner1 = partner.create({
             'parent_id': partner1.id,
             'name': 'Alexis de Lattre',
             'email': 'alexis.delattre@akretion.com',
             'type': 'delivery',
         })
-        rpo.create({
+        partner.create({
             'parent_id': partner1.id,
             'name': 'Sébastien BEAU',
             'email': 'sebastien.beau@akretion.com',
             'type': 'contact',
         })
-        cpartner3 = rpo.create({
+        cpartner3 = partner.create({
             'parent_id': partner1.id,
             'name': 'Flo',
             'email': 'flo@akretion.com',
