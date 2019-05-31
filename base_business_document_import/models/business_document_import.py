@@ -59,12 +59,12 @@ class BusinessDocumentImport(models.AbstractModel):
         The key 'phone' is used by the module
         base_phone_business_document_import
         """
-        rpo = self.env['res.partner']
+        partner = self.env['res.partner']
         self._strip_cleanup_dict(partner_dict)
         if partner_dict.get('recordset'):
             return partner_dict['recordset']
         if partner_dict.get('id'):
-            return rpo.browse(partner_dict['id'])
+            return partner.browse(partner_dict['id'])
         company_id = self._context.get('force_company') or\
             self.env.user.company_id.id
         domain = [
@@ -210,7 +210,7 @@ class BusinessDocumentImport(models.AbstractModel):
         The partner argument is a bit special: it is a fallback in case
         shipping_dict['partner'] = {}
         """
-        rpo = self.env['res.partner']
+        partner = self.env['res.partner']
         if shipping_dict.get('partner'):
             partner = self._match_partner(
                 shipping_dict['partner'], chatter_msg, partner_type=False)
@@ -250,11 +250,11 @@ class BusinessDocumentImport(models.AbstractModel):
         if address_dict.get('zip'):
             domain.append(('zip', '=', address_dict['zip']))
             # sanitize ZIP ?
-        partners = rpo.search(domain + [('type', '=', 'delivery')])
+        partners = partner.search(domain + [('type', '=', 'delivery')])
         if partners:
             partner = partners[0]
         else:
-            partners = rpo.search(domain)
+            partners = partner.search(domain)
             if partners:
                 partner = partners[0]
         return partner
@@ -943,11 +943,11 @@ class BusinessDocumentImport(models.AbstractModel):
                     'datas_fname': filename,
                 })
         for msg in parsed_dict['chatter_msg']:
-            record.message_post(msg)
+            record.message_post(body=msg)
         if parsed_dict.get('note'):
             if doc_filename:
                 msg = _('<b>Notes in file %s:</b>') % doc_filename
             else:
                 msg = _('<b>Notes in imported document:</b>')
             record.message_post(  # pylint: disable=translation-required
-                '%s %s' % (msg, parsed_dict['note']))
+                body='%s %s' % (msg, parsed_dict['note']))
