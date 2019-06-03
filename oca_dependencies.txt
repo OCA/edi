@@ -3,4 +3,4 @@ community-data-files
 server-tools
 bank-payment
 sale-workflow
-
+connector-telephony
