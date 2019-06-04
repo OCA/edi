@@ -8,7 +8,10 @@ class Picking(models.Model):
     _name = "stock.picking"
     _inherit = ['stock.picking', 'voxel.mixin']
 
-    voxel_enabled = fields.Boolean(related='company_id.voxel_enabled')
+    voxel_enabled = fields.Boolean(
+        related='company_id.voxel_enabled',
+        readonly=True,
+    )
     voxel_job_ids = fields.Many2many(
         comodel_name="queue.job",
         relation="stock_picking_voxel_job_rel",
