@@ -48,7 +48,7 @@ class ReportVoxelPicking(models.AbstractModel):
         }
 
     def _get_client_data(self, picking):
-        client = picking.sale_id.partner_id
+        client = picking.sale_id.partner_invoice_id
         return {
             'SupplierClientID': client.ref,
             'CIF': client.vat,
@@ -65,7 +65,7 @@ class ReportVoxelPicking(models.AbstractModel):
     def _get_customers_data(self, picking):
         customer = picking.partner_id
         return [{
-            'SupplierClientID': picking.sale_id.partner_id.ref,
+            'SupplierClientID': picking.sale_id.partner_invoice_id.ref,
             'SupplierCustomerID': customer.ref,
             'Customer': customer.name,
             'Address': ', '.join(
