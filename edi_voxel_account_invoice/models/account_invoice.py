@@ -8,7 +8,10 @@ class AccountInvoice(models.Model):
     _name = 'account.invoice'
     _inherit = ['account.invoice', 'voxel.mixin']
 
-    voxel_enabled = fields.Boolean(related='company_id.voxel_enabled')
+    voxel_enabled = fields.Boolean(
+        related='company_id.voxel_enabled',
+        readonly=True,
+    )
     voxel_job_ids = fields.Many2many(
         comodel_name="queue.job",
         relation="account_invoice_voxel_job_rel",

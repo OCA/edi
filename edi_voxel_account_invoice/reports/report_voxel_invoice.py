@@ -78,7 +78,7 @@ class ReportVoxelInvoice(models.AbstractModel):
             'Province': customer.state_id.name,
             'Country': customer.country_id.code,
             'Email': customer.email,
-        } for customer in invoice.picking_ids.partner_id]
+        } for customer in invoice.mapped('picking_ids.partner_id')]
 
     def _get_comments_data(self, invoice):
         return invoice.comment and [{'Msg': invoice.comment}] or []
