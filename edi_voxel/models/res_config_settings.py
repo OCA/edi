@@ -13,10 +13,3 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.voxel_sent_time', readonly=False)
     voxel_delay_time = fields.Float(
         related='company_id.voxel_delay_time', readonly=False)
-    # Web Sevice credentials
-    voxel_api_url = fields.Char(
-        related='company_id.voxel_api_url', readonly=False)
-    voxel_api_user = fields.Char(
-        related='company_id.voxel_api_user', readonly=False)
-    voxel_api_password = fields.Char(
-        related='company_id.voxel_api_password', readonly=False)
