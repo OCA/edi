@@ -9,15 +9,21 @@ class AccountInvoice(models.Model):
     _inherit = ['account.invoice', 'voxel.mixin']
 
     voxel_enabled = fields.Boolean(
-        related='company_id.voxel_enabled',
-        readonly=True,
-    )
+        compute='_compute_voxel_enabled')
     voxel_job_ids = fields.Many2many(
         comodel_name="queue.job",
         relation="account_invoice_voxel_job_rel",
         column1="invoice_id",
         column2="voxel_job_id",
         string="Jobs", copy=False)
+    voxel_login_id = fields.Many2one(
+        related="company_id.voxel_invoice_login_id")
+
+    @api.multi
+    def _compute_voxel_enabled(self):
+        for record in self:
+            record.voxel_enabled = (record.company_id.voxel_enabled
+                                    and record.partner_id.voxel_enabled)
 
     @api.multi
     def action_invoice_open(self):
@@ -38,7 +44,7 @@ class AccountInvoice(models.Model):
     def action_send_to_voxel(self):
         types = ('out_invoice', 'out_refund')
         invoices = self.filtered(
-            lambda inv: inv.type in types and inv.company_id.voxel_enabled)
+            lambda inv: inv.type in types and inv.voxel_enabled)
         if invoices:
             invoices.enqueue_voxel_report(
                 'edi_voxel_account_invoice.report_voxel_invoice')

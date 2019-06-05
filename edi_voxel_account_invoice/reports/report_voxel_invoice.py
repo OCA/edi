@@ -33,7 +33,8 @@ class ReportVoxelInvoice(models.AbstractModel):
         return {
             'Type': type_mapping.get(invoice.type),
             'Ref': invoice.number,
-            'Date': datetime.strftime(date_invoice, "%Y-%m-%d"),
+            'Date': date_invoice and datetime.strftime(
+                date_invoice, "%Y-%m-%d"),
             'Currency': invoice.currency_id.name,
         }
 
@@ -91,7 +92,8 @@ class ReportVoxelInvoice(models.AbstractModel):
                 references.append({
                     'DNRef': picking.name,
                     'PORef': picking.sale_id.name,
-                    'DNRefDate': datetime.strftime(picking_date, "%Y-%m-%d"),
+                    'DNRefDate': picking_date and datetime.strftime(
+                        picking_date, "%Y-%m-%d"),
                 })
         else:
             orders = invoice.invoice_line_ids.mapped('sale_line_ids.order_id')
@@ -100,7 +102,8 @@ class ReportVoxelInvoice(models.AbstractModel):
                 references.append({
                     'DNRef': invoice.number,
                     'PORef': order.name,
-                    'DNRefDate': date.strftime(date_invoice, "%Y-%m-%d"),
+                    'DNRefDate': date_invoice and date.strftime(
+                        date_invoice, "%Y-%m-%d"),
                 })
         return references
 
@@ -115,33 +118,32 @@ class ReportVoxelInvoice(models.AbstractModel):
         return {
             'SupplierSKU': line.product_id.default_code,
             'Item': line.product_id.name,
-            'Qty': line.quantity,
+            'Qty': str(line.quantity),
             'MU': line.uom_id.voxel_code,
-            'UP': line.price_unit,
-            'Total': line.quantity * line.price_unit,
+            'UP': str(line.price_unit),
+            'Total': str(line.quantity * line.price_unit),
         }
 
     def _get_product_discounts_data(self, line):
         taxes = []
         if line.discount:
-            price_subtotal = line.price_subtotal
-            quantity = line.quantity
-            price_unit = line.price_unit
+            amount = round(
+                line.price_subtotal / line.quantity - line.price_unit, 2)
             taxes.append({
                 'Qualifier': line.discount > 0.0 and 'Descuento' or 'Cargo',
                 'Type': line.discount > 0.0 and 'Comercial' or 'Otro',
-                'Rate': line.discount,
-                'Amount': round(price_subtotal / quantity - price_unit, 2),
-
+                'Rate': str(line.discount),
+                'Amount': str(amount),
             })
         return taxes
 
     def _get_product_taxes_data(self, line):
         taxes = []
         for tax in line.invoice_line_tax_ids:
+            rate = tax.amount_type != 'group' and str(tax.amount) or False
             taxes.append({
                 'Type': tax.voxel_tax_code,
-                'Rate': tax.amount_type != 'group' and tax.amount or False,
+                'Rate': rate,
             })
         return taxes
 
@@ -151,14 +153,14 @@ class ReportVoxelInvoice(models.AbstractModel):
             tax_obj = self.env['account.tax'].browse(tax_line.tax_id.id)
             taxes.append({
                 'Type': tax_obj.voxel_tax_code,
-                'Rate': tax_obj.amount,
-                'Amount': tax_line['amount_total'],
+                'Rate': str(tax_obj.amount),
+                'Amount': str(tax_line['amount_total']),
             })
         return sorted(taxes, key=itemgetter('Type', 'Rate', 'Amount'))
 
     def _get_total_summary_data(self, invoice):
         return {
-            'SubTotal': invoice.amount_untaxed,
-            'Tax': invoice.amount_tax,
-            'Total': invoice.amount_total,
+            'SubTotal': str(invoice.amount_untaxed),
+            'Tax': str(invoice.amount_tax),
+            'Total': str(invoice.amount_total),
         }

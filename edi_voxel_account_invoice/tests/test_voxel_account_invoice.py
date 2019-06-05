@@ -62,7 +62,15 @@ class TestVoxelAccountInvoice(common.SavepointCase):
                     'name': 'Product 5',
                     'uom_id': cls.env.ref('product.product_uom_unit').id,
                     'account_id': account_revenue.id,
-                })
+                }),
+                (0, 0, {
+                    'product_id': cls.env.ref("product.product_product_3").id,
+                    'quantity': 0,
+                    'price_unit': 0,
+                    'name': 'Product 3',
+                    'uom_id': cls.env.ref('product.product_uom_unit').id,
+                    'account_id': account_revenue.id,
+                }),
             ]
         })
 
@@ -153,10 +161,10 @@ class TestVoxelAccountInvoice(common.SavepointCase):
                 'product': {
                     'SupplierSKU': 'E-COM01',
                     'Item': 'iPad Retina Display',
-                    'Qty': 2.0,
+                    'Qty': "2.0",
                     'MU': 'Unidades',
-                    'UP': 750.0,
-                    'Total': 1500.0,
+                    'UP': "750.0",
+                    'Total': "1500.0",
                 },
                 'taxes': [],
                 'discounts': [],
@@ -165,47 +173,59 @@ class TestVoxelAccountInvoice(common.SavepointCase):
                 'product': {
                     'SupplierSKU': 'E-COM06',
                     'Item': 'Custom Computer (kit)',
-                    'Qty': 3.0,
+                    'Qty': "3.0",
                     'MU': 'Unidades',
-                    'UP': 147.0,
-                    'Total': 441.0,
+                    'UP': "147.0",
+                    'Total': "441.0",
                 },
                 'taxes': [
                     {
-                        'Rate': 15.0,
+                        'Rate': "15.0",
                         'Type': False,
                     },
                     {
-                        'Rate': 30.0,
+                        'Rate': "30.0",
                         'Type': False,
                     },
                 ],
                 'discounts': [{
-                    'Amount': -29.4,
+                    'Amount': "-29.4",
                     'Qualifier': 'Descuento',
-                    'Rate': 20.0,
+                    'Rate': "20.0",
                     'Type': 'Comercial',
                 }],
+            },
+            {
+                'product': {
+                    'SupplierSKU': 'PCSC234',
+                    'Item': 'Computer SC234',
+                    'Qty': "0.0",
+                    'MU': 'Unidades',
+                    'UP': "0.0",
+                    'Total': "0.0",
+                },
+                'taxes': [],
+                'discounts': [],
             },
         ]
 
     def _get_taxes_data(self):
         return [
             {
-                'Amount': 52.92,
-                'Rate': 15.0,
+                'Amount': "52.92",
+                'Rate': "15.0",
                 'Type': False,
             },
             {
-                'Amount': 105.84,
-                'Rate': 30.0,
+                'Amount': "105.84",
+                'Rate': "30.0",
                 'Type': False,
             },
         ]
 
     def _get_total_summary_data(self):
         return {
-            'Tax': 158.76,
-            'SubTotal': 1852.8,
-            'Total': 2011.56,
+            'Tax': "158.76",
+            'SubTotal': "1852.8",
+            'Total': "2011.56",
         }
