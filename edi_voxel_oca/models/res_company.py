@@ -20,10 +20,11 @@ class Company(models.Model):
     )
     voxel_sent_time = fields.Float(string="Sent time")
     voxel_delay_time = fields.Float(string="Delay time")
-    # Web Sevice credentials
-    voxel_api_url = fields.Char(string="URL")
-    voxel_api_user = fields.Char(string="User")
-    voxel_api_password = fields.Char(string="Password")
+    voxel_login_ids = fields.One2many(
+        comodel_name="voxel.login",
+        inverse_name="company_id",
+        string="Voxel logins",
+    )
 
     def _get_voxel_report_eta(self):
         if self.voxel_send_mode == 'fixed':

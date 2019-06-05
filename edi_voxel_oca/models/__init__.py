@@ -6,3 +6,5 @@ from . import voxel_mixin
 from . import product_uom
 from . import account
 from . import queue_job
+from . import res_partner
+from . import voxel_login
