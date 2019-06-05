@@ -51,13 +51,21 @@ class VoxelMixin(models.AbstractModel):
         company = self.env['res.company']._company_default_get()
         eta = company._get_voxel_report_eta()
         queue_obj = self.env['queue.job'].sudo()
-        for record in self:
-            new_delay = record.sudo().with_delay(
+        for record in self.sudo():
+            # Look first if there's a failing job. If so, retry that one
+            failing_job = record.voxel_job_ids.filtered(
+                lambda x: x.state == 'failed'
+            )[:1]
+            if failing_job:
+                failing_job.voxel_requeue_sudo()
+                continue
+            # If not, create a new one
+            new_delay = record.with_delay(
                 eta=eta)._get_and_send_voxel_report(report_name)
             job = queue_obj.search([
                 ('uuid', '=', new_delay.uuid)
             ], limit=1)
-            record.sudo().voxel_job_ids |= job
+            record.voxel_job_ids |= job
 
     @job(default_channel='root.voxel')
     @api.multi

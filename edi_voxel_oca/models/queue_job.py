@@ -15,7 +15,7 @@ class QueueJob(models.Model):
     @api.multi
     def voxel_cancel_now(self):
         self.sudo().filtered(
-            lambda x: x.state in ['pending', 'enqueued']
+            lambda x: x.state in ['pending', 'enqueued', 'failed']
         ).unlink()
 
     @api.multi
