@@ -17,6 +17,8 @@
     "data": [
         "views/account_invoice_views.xml",
         "views/report_voxel_invoice.xml",
+        "views/res_company_view.xml",
+        "views/res_config_settings_views.xml",
     ],
     "installable": True,
 }
