@@ -1,9 +1,9 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime
 import logging
 import requests
+from datetime import datetime
 from lxml import etree
 from odoo import api, fields, models
 
@@ -48,8 +48,7 @@ class VoxelMixin(models.AbstractModel):
 
     @api.multi
     def enqueue_voxel_report(self, report_name):
-        company = self.env['res.company']._company_default_get()
-        eta = company._get_voxel_report_eta()
+        eta = self.company_id._get_voxel_report_eta()
         queue_obj = self.env['queue.job'].sudo()
         for record in self.sudo():
             # Look first if there's a failing job. If so, retry that one
@@ -60,14 +59,18 @@ class VoxelMixin(models.AbstractModel):
                 failing_job.voxel_requeue_sudo()
                 continue
             # If not, create a new one
-            new_delay = record.with_delay(
-                eta=eta)._get_and_send_voxel_report(report_name)
+            new_delay = record.with_context(
+                company_id=self.company_id.id
+            ).with_delay(
+                eta=eta
+            )._get_and_send_voxel_report(report_name)
+
             job = queue_obj.search([
                 ('uuid', '=', new_delay.uuid)
             ], limit=1)
             record.voxel_job_ids |= job
 
-    @job(default_channel='root.voxel')
+    @job(default_channel='root.voxel_export')
     @api.multi
     def _get_and_send_voxel_report(self, report_name):
         self.ensure_one()
@@ -83,25 +86,13 @@ class VoxelMixin(models.AbstractModel):
         self.voxel_xml_report = report_xml
 
     def _send_voxel_report(self, file_data):
-        company = self.env['res.company']._company_default_get()
-        outbox_url = "%s/Outbox" % company.voxel_api_url
-        user = company.voxel_api_user
-        password = company.voxel_api_password
         file_name = self._get_voxel_filename()
         try:
-            response = requests.put(
-                "%s/%s" % (outbox_url, file_name),
-                data=file_data,
-                auth=(user, password))
+            self._request_to_voxel(requests.put, voxel_filename=file_name,
+                                   data=file_data)
             self.voxel_state = 'sent'
-            _logger.info("Voxel request response: %s", str(response))
         except Exception:
             self.voxel_state = 'sent_errors'
-            raise
-
-    def _get_outbox_url(self):
-        company = self.env['res.company']._company_default_get()
-        return "%s/Outbox" % company.voxel_api_url
 
     @api.multi
     def _cancel_voxel_jobs(self, jobs):
@@ -114,3 +105,82 @@ class VoxelMixin(models.AbstractModel):
             elif queue.state in ('pending', 'enqueued', 'failed'):
                 queue.unlink()
         return True
+
+    def enqueue_import_voxel_documents(self, company):
+        queue_job_obj = self.env['queue.job']
+        # list document names
+        voxel_filenames = self._list_voxel_document_filenames(company)
+        # iterate the list to import documents one by one
+        for voxel_filename in voxel_filenames:
+            # Look first if there's a job for the current filename.
+            # If so, retry that one
+            file_job = queue_job_obj.search([
+                ('channel', '=', 'root.voxel_import')
+            ]).filtered(lambda r: r.args == [voxel_filename, company])[:1]
+            if file_job:
+                if file_job.state == 'failed':
+                    file_job.voxel_requeue_sudo()
+                continue
+            # If not, create a new one
+            self.with_context(
+                company_id=company.id
+            ).with_delay()._import_voxel_document(voxel_filename, company)
+
+    def _list_voxel_document_filenames(self, company):
+        try:
+            response = self._request_to_voxel(requests.get, company)
+        except Exception:
+            _logger.info("Error reading the inbox in Voxel")
+            return []
+        # if no error, return list of documents file names
+        return response.content.decode('utf-8').split('\n')
+
+    @job(default_channel='root.voxel_import')
+    def _import_voxel_document(self, voxel_filename, company):
+        try:
+            response = self._request_to_voxel(requests.get, company,
+                                              voxel_filename)
+        except Exception:
+            raise Exception("Error importing document %s" % (voxel_filename))
+        # if no error, get xml content
+        content = response.content.decode('utf-8')
+        # call method that parse and create the document from the content
+        doc = self.create_document_from_xml(content, voxel_filename)
+        if doc:
+            # write file content in the created object
+            doc.write({
+                'voxel_xml_report': content,
+                'voxel_filename': voxel_filename
+            })
+            # Delete file from Voxel
+            # self._delete_voxel_document(voxel_filename)
+
+    # def _delete_voxel_document(self, voxel_filename):
+    #     try:
+    #         self._request_to_voxel(requests.delete, company, voxel_filename)
+    #     except Exception:
+    #         raise Exception("Error deleting document %s" % (voxel_filename))
+
+    def _request_to_voxel(self, request_method, company=None,
+                          voxel_filename=None, data=None):
+        login = self.get_voxel_login(company)
+        if not login:
+            raise Exception
+        response = request_method(
+            url="/".join(filter(None, [login.url, voxel_filename])),
+            auth=(login.user, login.password),
+            data=data)
+        _logger.debug("Voxel request response: %s", str(response))
+        if response.status_code != 200:
+            raise Exception
+        return response
+
+    def create_document_from_xml(self):
+        """ This method must be overwritten by the model that use
+        `enqueue_import_voxel_documents` method """
+        return False
+
+    def get_voxel_login(self, company=None):
+        """ This method must be overwritten by the model that inherit from
+        voxel.mixin"""
+        return self.env['voxel.login']

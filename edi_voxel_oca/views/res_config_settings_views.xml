@@ -46,20 +46,7 @@
                             <div class="text-muted">
                                 Set credentials for connection to Voxel using Web Service
                             </div>
-                            <div class="content-group">
-                                <div class="row mt16">
-                                    <label for="voxel_api_url" class="col-lg-3 o_light_label"/>
-                                    <field name="voxel_api_url"/>
-                                </div>
-                                <div class="row mt16">
-                                    <label for="voxel_api_user" class="col-lg-3 o_light_label"/>
-                                    <field name="voxel_api_user"/>
-                                </div>
-                                <div class="row mt16">
-                                    <label for="voxel_api_password" class="col-lg-3 o_light_label"/>
-                                    <field name="voxel_api_password" password="True"/>
-                                </div>
-                            </div>
+                            <div class="content-group" name="voxel_login_config"/>
                         </div>
                     </div>
                 </div>
