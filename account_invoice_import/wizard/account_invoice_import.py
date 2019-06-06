@@ -617,10 +617,13 @@ class AccountInvoiceImport(models.TransientModel):
             self, diff_amount, invoice, import_config):
         ailo = self.env['account.invoice.line']
         prec = invoice.currency_id.rounding
+        account = import_config.get(
+            'account', self.env['account.account'].browse())
         il_vals = {
             'name': _('Adjustment'),
             'quantity': 1,
             'price_unit': diff_amount,
+            'account_id': account.id,
             }
         # no taxes nor product on such a global adjustment line
         if import_config['invoice_line_method'] == 'nline_no_product':
