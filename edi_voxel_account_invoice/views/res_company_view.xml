@@ -9,7 +9,7 @@
         <field name="inherit_id" ref="edi_voxel.view_company_form"/>
         <field name="arch" type="xml">
             <group name="voxel_login_config" position="inside">
-                <field name="voxel_invoice_login_id"/>
+                <field name="voxel_invoice_login_id" options="{'no_create': True}"/>
             </group>
         </field>
     </record>

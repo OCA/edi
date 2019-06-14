@@ -16,8 +16,12 @@ class AccountInvoice(models.Model):
         column1="invoice_id",
         column2="voxel_job_id",
         string="Jobs", copy=False)
-    voxel_login_id = fields.Many2one(
-        related="company_id.voxel_invoice_login_id")
+
+    def get_voxel_login(self, company=None):
+        """ This method overwrites the one defined in voxel.mixin to provide
+        the login for this specific model (account.invoice)
+        """
+        return self.company_id.voxel_invoice_login_id
 
     @api.multi
     def _compute_voxel_enabled(self):

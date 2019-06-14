@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-12 15:26+0000\n"
-"PO-Revision-Date: 2019-04-12 15:26+0000\n"
+"POT-Creation-Date: 2019-06-28 16:48+0000\n"
+"PO-Revision-Date: 2019-06-28 16:48+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,24 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: edi_voxel_account_invoice
+#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "Already sent to Voxel"
+msgstr "Enviadas a Voxel"
+
+#. module: edi_voxel_account_invoice
 #: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Cancel sending"
 msgstr "Cancelar envío"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "Cancelled Voxel reports"
+msgstr "Envíos a Voxel cancelados"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.model,name:edi_voxel_account_invoice.model_res_company
+msgid "Companies"
+msgstr "Compañías"
 
 #. module: edi_voxel_account_invoice
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_report_edi_voxel_account_invoice_template_voxel_invoice_display_name
@@ -34,6 +49,12 @@ msgstr "ID (identificación)"
 #: model:ir.model,name:edi_voxel_account_invoice.model_account_invoice
 msgid "Invoice"
 msgstr "Factura"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_res_company_voxel_invoice_login_id
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_res_config_settings_voxel_invoice_login_id
+msgid "Invoice login"
+msgstr "Login para Facturas"
 
 #. module: edi_voxel_account_invoice
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_invoice_voxel_job_ids
@@ -61,9 +82,19 @@ msgid "Send to Voxel"
 msgstr "Enviar a Voxel"
 
 #. module: edi_voxel_account_invoice
+#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "The last attemp to sent to Voxel has failed"
+msgstr "El úlimo intento de envío a Voxel ha fallado"
+
+#. module: edi_voxel_account_invoice
 #: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Voxel"
 msgstr "Voxel"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_invoice_voxel_enabled
+msgid "Voxel Enabled"
+msgstr "Voxel habilitado"
 
 #. module: edi_voxel_account_invoice
 #: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
@@ -76,12 +107,37 @@ msgid "Voxel XML report"
 msgstr "Reporte XML Voxel"
 
 #. module: edi_voxel_account_invoice
+#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "Voxel cancelled"
+msgstr "Envíos a Voxel cancelados"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "Voxel filters"
+msgstr "Filtros de Voxel"
+
+#. module: edi_voxel_account_invoice
 #: model:ir.actions.report,name:edi_voxel_account_invoice.report_voxel_invoice
 msgid "Voxel invoice"
 msgstr "Factura Voxel"
 
 #. module: edi_voxel_account_invoice
-#: code:addons/edi_voxel_account_invoice/models/account_invoice.py:28
+#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "Voxel report failed"
+msgstr "Envíos a Voxel fallidos"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "Voxel report not sent"
+msgstr "No envíadas a Voxel"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "Voxel report sent"
+msgstr "Enviadas a Voxel"
+
+#. module: edi_voxel_account_invoice
+#: code:addons/edi_voxel_account_invoice/models/account_invoice.py:42
 #, python-format
 msgid "You can not cancel this invoice because there is a job running!"
 msgstr "¡No puede cancelar una factura porque hay un trabajo ejecutándose!"
@@ -90,4 +146,9 @@ msgstr "¡No puede cancelar una factura porque hay un trabajo ejecutándose!"
 #: model:ir.model,name:edi_voxel_account_invoice.model_report_edi_voxel_account_invoice_template_voxel_invoice
 msgid "report.edi_voxel_account_invoice.template_voxel_invoice"
 msgstr "report.edi_voxel_account_invoice.template_voxel_invoice"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.model,name:edi_voxel_account_invoice.model_res_config_settings
+msgid "res.config.settings"
+msgstr "res.config.settings"
 
