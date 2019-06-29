@@ -379,7 +379,7 @@ msgstr "Login Voxel"
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_res_company_voxel_login_ids
 msgid "Voxel logins"
-msgstr "Voxel logins"
+msgstr "Logins de Voxel"
 
 #. module: edi_voxel
 #: model:res.groups,name:edi_voxel.group_voxel_manager
@@ -421,4 +421,3 @@ msgstr "Reporte XML"
 #: model:ir.model,name:edi_voxel.model_res_config_settings
 msgid "res.config.settings"
 msgstr "res.config.settings"
-

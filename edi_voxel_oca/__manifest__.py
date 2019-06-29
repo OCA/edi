@@ -15,6 +15,8 @@
         "queue_job",
     ],
     "data": [
+        "security/voxel_security.xml",
+        "security/ir.model.access.csv",
         "data/data_voxel_uom.xml",
         "views/res_company_view.xml",
         "views/account_tax_views.xml",
@@ -23,8 +25,6 @@
         "views/res_partner_views.xml",
         "views/template_voxel_report.xml",
         "views/voxel_login_views.xml",
-        "security/voxel_security.xml",
-        "security/ir.model.access.csv",
     ],
     "installable": True,
 }
