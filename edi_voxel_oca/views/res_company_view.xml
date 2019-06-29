@@ -7,13 +7,25 @@
         <field name="name">res.company.voxel.form</field>
         <field name="model">res.company</field>
         <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="groups_id" eval="[(4, ref('group_voxel_manager'))]"/>
         <field name="arch" type="xml">
             <notebook position="inside">
                 <page name="voxel" string="Voxel">
                     <group name="voxel_enabled">
                         <field name="voxel_enabled"/>
                     </group>
+                    <group string="Logins" name="voxel_logins" attrs="{'invisible': [('voxel_enabled', '=', False)]}">
+                        <field name="voxel_login_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="url"/>
+                                <field name="user"/>
+                                <field name="password" password="True"/>
+                            </tree>
+                        </field>
+                    </group>
                     <group name="voxel_config"
+                           string="Configuration"
                            attrs="{'invisible': [('voxel_enabled', '=', False)]}">
                         <group name="voxel_send_config">
                             <field name="voxel_send_mode"/>
@@ -23,16 +35,6 @@
                                    attrs="{'invisible': [('voxel_send_mode', '!=', 'delayed')]}"/>
                         </group>
                         <group name="voxel_login_config"/>
-                    </group>
-                    <group string="Voxel Logins">
-                        <field name="voxel_login_ids" nolabel="1">
-                            <tree editable="bottom">
-                                <field name="name"/>
-                                <field name="url"/>
-                                <field name="user"/>
-                                <field name="password" password="True"/>
-                            </tree>
-                        </field>
                     </group>
                 </page>
             </notebook>
