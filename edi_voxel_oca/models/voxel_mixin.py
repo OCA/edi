@@ -113,24 +113,20 @@ class VoxelMixin(models.AbstractModel):
         # iterate the list to import documents one by one
         for voxel_filename in voxel_filenames:
             # Look first if there's a job for the current filename.
-            # If so, retry that one
+            # If not, create it
             file_job = queue_job_obj.search([
                 ('channel', '=', 'root.voxel_import')
             ]).filtered(lambda r: r.args == [voxel_filename, company])[:1]
-            if file_job:
-                if file_job.state == 'failed':
-                    file_job.voxel_requeue_sudo()
-                continue
-            # If not, create a new one
-            self.with_context(
-                company_id=company.id
-            ).with_delay()._import_voxel_document(voxel_filename, company)
+            if not file_job:
+                self.with_context(
+                    company_id=company.id
+                ).with_delay()._import_voxel_document(voxel_filename, company)
 
     def _list_voxel_document_filenames(self, company):
         try:
             response = self._request_to_voxel(requests.get, company)
         except Exception:
-            _logger.info("Error reading the inbox in Voxel")
+            _logger.exception("Error reading the inbox in Voxel")
             return []
         # if no error, return list of documents file names
         return response.content.decode('utf-8').split('\n')
@@ -145,21 +141,21 @@ class VoxelMixin(models.AbstractModel):
         # if no error, get xml content
         content = response.content.decode('utf-8')
         # call method that parse and create the document from the content
-        doc = self.create_document_from_xml(content, voxel_filename)
+        doc = self.create_document_from_xml(content, voxel_filename, company)
         if doc:
             # write file content in the created object
             doc.write({
                 'voxel_xml_report': content,
-                'voxel_filename': voxel_filename
+                'voxel_filename': voxel_filename,
             })
             # Delete file from Voxel
-            # self._delete_voxel_document(voxel_filename)
+            # self._delete_voxel_document(voxel_filename, company)
 
-    # def _delete_voxel_document(self, voxel_filename):
-    #     try:
-    #         self._request_to_voxel(requests.delete, company, voxel_filename)
-    #     except Exception:
-    #         raise Exception("Error deleting document %s" % (voxel_filename))
+    def _delete_voxel_document(self, voxel_filename, company):
+        try:
+            self._request_to_voxel(requests.delete, company, voxel_filename)
+        except Exception:
+            raise Exception("Error deleting document %s" % (voxel_filename))
 
     def _request_to_voxel(self, request_method, company=None,
                           voxel_filename=None, data=None):
@@ -172,10 +168,10 @@ class VoxelMixin(models.AbstractModel):
             data=data)
         _logger.debug("Voxel request response: %s", str(response))
         if response.status_code != 200:
-            raise Exception
+            response.raise_for_status()
         return response
 
-    def create_document_from_xml(self):
+    def create_document_from_xml(self, xml_content, voxel_filename, company):
         """ This method must be overwritten by the model that use
         `enqueue_import_voxel_documents` method """
         return False
