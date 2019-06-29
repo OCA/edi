@@ -45,17 +45,16 @@ class Company(models.Model):
 
     # Voxel import auxiliary methods
     @api.model
-    def create_document_from_xml(self, xml_content, order_filename):
+    def create_document_from_xml(self, xml_content, voxel_filename, company):
         """ This method overwrites the one defined in voxel.mixin to provide
         the mechanism to import a document for this specific model (sale.order)
         """
         error_msgs = []
-        so_vals = self._parse_voxel_order(
-            xml_content, order_filename, error_msgs)
-        order = self.create(so_vals)
+        order = self._parse_voxel_order(
+            xml_content, voxel_filename, error_msgs, company)
         # Add internal note to the created sale order
         create_msg = _(
-            "Created automatically via voxel import (%s)." % (order_filename))
+            "Created automatically via voxel import (%s)." % (voxel_filename))
         if error_msgs:
             str_error_msgs = ""
             for error_msg in error_msgs:
@@ -67,7 +66,8 @@ class Company(models.Model):
         return order
 
     @api.model
-    def _parse_voxel_order(self, order_file, order_filename, error_msgs):
+    def _parse_voxel_order(self, order_file, order_filename, error_msgs,
+                           company):
         filetype = mimetypes.guess_type(order_filename)[0]
         _logger.debug('Order file mimetype: %s', filetype)
         if filetype in ['application/xml', 'text/xml']:
@@ -75,23 +75,21 @@ class Company(models.Model):
                 xml_root = etree.fromstring(order_file)
             except Exception:
                 raise UserError(_("This XML file is not XML-compliant"))
-            _logger.debug('Starting to import:%s' % (order_filename))
-            parsed_order = self._parse_xml_order(xml_root, error_msgs)
         else:
             raise UserError(_(
                 "'%s' is not recognised as an XML file") % order_filename)
-        _logger.debug('Order parsed')
-        return parsed_order
+        _logger.debug('Starting to import:%s' % (order_filename))
+        return self._parse_xml_order(xml_root, error_msgs, company)
 
-    def _parse_xml_order(self, xml_root, error_msgs):
-        vals = {}
+    def _parse_xml_order(self, xml_root, error_msgs, company):
+        vals = {'company_id': company.id}
         self._parse_general_data_voxel(vals, xml_root, error_msgs)
-        self._parse_supplier_data_voxel(vals, xml_root, error_msgs)
         self._parse_client_data_voxel(vals, xml_root, error_msgs)
         self._parse_customers_data_voxel(vals, xml_root, error_msgs)
         self._parse_comments_data_voxel(vals, xml_root, error_msgs)
-        self._parse_product_list_data_voxel(vals, xml_root, error_msgs)
-        return vals
+        order = self.create(vals)
+        self._parse_product_list_data_voxel(order, xml_root, error_msgs)
+        return order
 
     def _parse_general_data_voxel(self, vals, xml_root, error_msgs):
         general_elements = xml_root.xpath("//GeneralData")
@@ -132,6 +130,7 @@ class Company(models.Model):
                     end_date, "%Y-%m-%d").date()
 
     def _parse_supplier_data_voxel(self, vals, xml_root, error_msgs):
+        """Not in use right now."""
         supplier_elements = xml_root.xpath("//Supplier")
         if supplier_elements:
             supplier_data = supplier_elements[0].attrib
@@ -160,19 +159,19 @@ class Company(models.Model):
         if client_elements:
             client_data = client_elements[0].attrib
             partner_data = self._get_partner_data_voxel(client_data)
-            partner_data.update(ref=client_data.get('SupplierClientID'))
-            if any(partner_data.values()):
-                partner = self._parse_partner_data_voxel(partner_data)
-            else:
+            if not any(partner_data.values()):
                 # If there aren't any client data, try to add the first
                 # customer as a client (`partner_id`)
                 customer_elements = xml_root.xpath("//Customers/Customer")
                 if customer_elements:
-                    customer_data = customer_elements[0].attrib
-                    partner_data = self._get_partner_data_voxel(customer_data)
-                    partner_data.update(name=customer_data.get('Customer'))
-                    partner = self._parse_partner_data_voxel(partner_data)
-            # update vals with partner_id field value
+                    client_data = customer_elements[0].attrib
+                    partner_data = self._get_partner_data_voxel(client_data)
+                    partner_data.update(name=client_data.get('Customer'))
+            if client_data.get('SupplierClientID'):
+                partner_data['ref'] = client_data.get('SupplierClientID')
+            else:
+                partner_data['ref'] = client_data.get('CustomerID')
+            partner = self._parse_partner_data_voxel(partner_data)
             if partner:
                 vals.update(partner_id=partner.id)
 
@@ -182,6 +181,10 @@ class Company(models.Model):
             customer_data = customer_elements[0].attrib
             partner_data = self._get_partner_data_voxel(customer_data)
             partner_data.update(name=customer_data.get('Customer'))
+            if customer_data.get('SupplierClientID'):
+                partner_data['ref'] = customer_data.get('SupplierClientID')
+            else:
+                partner_data['ref'] = customer_data.get('CustomerID')
             partner = self._parse_partner_data_voxel(partner_data)
             # Update partner_shipping_id value
             if partner:
@@ -196,7 +199,7 @@ class Company(models.Model):
                       "from the Voxel document:<br/>"
                       "<ul>%s</ul>") % (msg_fields))
 
-    def _parse_partner_data_voxel(self, data):
+    def _parse_partner_data_voxel(self, data, raise_error=True):
         domains = []
         # fill domains list
         if data.get('ref'):
@@ -204,6 +207,8 @@ class Company(models.Model):
         partner = self.env['res.partner'].search(expression.AND(domains))
         if len(partner) == 1:
             return partner
+        elif len(partner) == 0:
+            domains = []
         # If there are ZERO or more than ONE objects, continue filling domains
         if data.get('country_id'):
             domains.append(
@@ -214,12 +219,19 @@ class Company(models.Model):
             domains.append([('name', '=', data['name'])])
         if data.get('email'):
             domains.append([('email', '=', data['email'])])
-        if data.get('city'):
-            domains.append([('city', '=', data['city'])])
         if data.get('zip'):
             domains.append([('zip', '=', data['zip'])])
-        # return the first objet matching
-        return self.env['res.partner'].search(expression.AND(domains))
+        elif data.get('city'):
+            domains.append([('city', '=', data['city'])])
+        partner = self.env['res.partner'].search(expression.AND(domains))
+        if len(partner) == 1:
+            return  # return the unique partner matching
+        if raise_error:
+            raise UserError(
+                _("Can't find a suitable partner for this data:\n\n%s"
+                  "\nResults: %s") % (data, len(partner))
+            )
+        return self.env['res.partner']
 
     def _parse_comments_data_voxel(self, vals, xml_root, error_msgs):
         comments = []
@@ -232,24 +244,26 @@ class Company(models.Model):
         if comments:
             vals.update(note="\n\n".join(comments))
 
-    def _parse_product_list_data_voxel(self, vals, xml_root, error_msgs):
+    def _parse_product_list_data_voxel(self, order, xml_root, error_msgs):
         line_elements = xml_root.xpath("//ProductList/Product")
+        so_line_obj = self.env['sale.order.line']
         for line_element in line_elements:
-            line_vals = {}
-            self._parse_product_voxel(line_vals, line_element, error_msgs)
+            line_vals = {'order_id': order.id}
+            self._parse_product_voxel(line_vals, line_element)
+            line_vals = so_line_obj.play_onchanges(
+                line_vals, ['product_id', 'product_uom_qty'],
+            )
             self._parse_discounts_product_voxel(line_vals, line_element,
                                                 error_msgs)
             self._parse_taxes_product_voxel(line_vals, line_element,
                                             error_msgs)
             if line_vals:
-                vals.setdefault('order_line', []).append((0, 0, line_vals))
+                so_line_obj.create(line_vals)
 
-    def _parse_product_voxel(self, line_vals, line_element, error_msgs):
+    def _parse_product_voxel(self, line_vals, line_element):
         product_data = line_element.attrib
-        # Get attr data
         supplier_sku = product_data.get('SupplierSKU')
         item = product_data.get('Item')
-        # set domain
         domains = []
         product = self.env['res.partner']
         if supplier_sku:
@@ -258,31 +272,22 @@ class Company(models.Model):
         if len(product) != 1:
             if item:
                 domains.append([('name', '=', item)])
-            # find product
             domain = expression.AND(domains)
             if domain:
-                product = self.env['product.product'].search(domain, limit=1)
-        # If a product was found, update line_vals
-        if product:
-            product_uom_qty = float(product_data.get('Qty', '1'))
-            product_uom = self.env['product.uom'].search(
-                [('voxel_code', '=', product_data.get('MU'))])
-            # Update line_vals
-            line_vals.update(
-                product_id=product.id,
-                product_uom_qty=product_uom_qty,
-                product_uom=product_uom.id,
+                product = self.env['product.product'].search(domain)
+        if len(product) != 1:
+            raise UserError(
+                _("Can't find a suitable product for this data:\n\n%s"
+                  "\nResults: %s") % (product_data, len(product))
             )
-        else:
-            # Add error message to error_msgs list
-            product_data = {'default_code': supplier_sku, 'name': item}
-            msg_fields = self._get_voxel_msg_fields(
-                'product.product', product_data)
-            error_msgs.append(
-                _("Couldn't find any <b>Product</b> corresponding to "
-                  "the following information extracted from the Voxel "
-                  "document:<br/>"
-                  "<ul>%s</ul>") % (msg_fields))
+        product_uom_qty = float(product_data.get('Qty', '1'))
+        product_uom = self.env['product.uom'].search(
+            [('voxel_code', '=', product_data.get('MU'))])
+        line_vals.update(
+            product_id=product.id,
+            product_uom_qty=product_uom_qty,
+            product_uom=product_uom.id,
+        )
 
     def _parse_discounts_product_voxel(self, line_vals, line_element,
                                        error_msg):
