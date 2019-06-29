@@ -4,6 +4,7 @@
         <field name="name">account.invoice.form.inherit</field>
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="groups_id" eval="[(4, ref('edi_voxel.group_voxel_manager'))]"/>
         <field name="arch" type="xml">
             <header position="inside">
                 <button name="action_send_to_voxel"
@@ -74,13 +75,14 @@
         <field name="name">account.invoice.filter.voxel</field>
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="groups_id" eval="[(4, ref('edi_voxel.group_voxel_manager'))]"/>
         <field name="arch" type="xml">
             <filter name="unpaid" position="after">
                 <group string="Voxel filters">
                     <separator/>
                     <filter name="voxel_not_sent"
                             string="Voxel report not sent"
-                            domain="[('voxel_state', '=', 'not_sent')]"/>
+                            domain="[('voxel_state', '=', 'not_sent'), ('voxel_enabled', '=', True)]"/>
                     <filter name="voxel_sent" string="Voxel report sent"
                             domain="[('voxel_state', '=', 'sent')]"
                             help="Already sent to Voxel"/>
@@ -88,7 +90,6 @@
                             string="Voxel report failed"
                             domain="[('voxel_state', '=', 'sent_errors')]"
                             help="The last attemp to sent to Voxel has failed"/>
-                    <separator/>
                     <filter name="voxel_cancelled" string="Voxel cancelled"
                             domain="[('voxel_state', '=', 'cancelled')]"
                             help="Cancelled Voxel reports"/>

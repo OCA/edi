@@ -9,7 +9,9 @@ class AccountInvoice(models.Model):
     _inherit = ['account.invoice', 'voxel.mixin']
 
     voxel_enabled = fields.Boolean(
-        compute='_compute_voxel_enabled')
+        compute='_compute_voxel_enabled',
+        search='_search_voxel_enabled',
+    )
     voxel_job_ids = fields.Many2many(
         comodel_name="queue.job",
         relation="account_invoice_voxel_job_rel",
@@ -28,6 +30,12 @@ class AccountInvoice(models.Model):
         for record in self:
             record.voxel_enabled = (record.company_id.voxel_enabled
                                     and record.partner_id.voxel_enabled)
+
+    def _search_voxel_enabled(self, operator, value):
+        return [
+            ('company_id.voxel_enabled', operator, value),
+            ('partner_id.voxel_enabled', operator, value),
+        ]
 
     @api.multi
     def action_invoice_open(self):
