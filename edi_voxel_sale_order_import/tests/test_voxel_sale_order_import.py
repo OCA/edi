@@ -32,6 +32,7 @@ class TestVoxelSaleOrderImport(common.SavepointCase):
             'street': 'Av Alcalde Pere Molas',
             'city': 'Vila-seca',
             'zip': '43222',
+            'ref': 'F111',
             'state_id': cls.env.ref('base.state_es_t').id,
             'country_id': cls.env.ref('base.es').id,
         })
@@ -53,7 +54,9 @@ class TestVoxelSaleOrderImport(common.SavepointCase):
             content = file.read()
         # call method
         so_obj = self.env['sale.order']
-        sale_order = so_obj.create_document_from_xml(content, filename)
+        sale_order = so_obj.create_document_from_xml(
+            content, filename, self.company_test,
+        )
         # check the import was successful
         # check general data
         self.assertEqual(sale_order.origin, "1111")

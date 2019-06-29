@@ -11,6 +11,7 @@
     "license": "AGPL-3",
     "depends": [
         "edi_voxel",
+        "onchange_helper",  # See server-side forms (SSF) on v12
         "sale",
         "sale_order_dates",
     ],

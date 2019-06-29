@@ -6,6 +6,7 @@
         <field name="name">sale.order.view.form</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="groups_id" eval="[(4, ref('edi_voxel.group_voxel_manager'))]"/>
         <field name="arch" type="xml">
             <notebook>
                 <page string="Voxel"
@@ -26,6 +27,19 @@
         </field>
     </record>
 
+    <record id="sale_order_view_search_inherit_quotation" model="ir.ui.view">
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <filter name="sales" position="after">
+                <filter name="voxel"
+                        string="Voxel Quotations"
+                        domain="[('voxel_filename', '!=', False)]"
+                />
+            </filter>
+        </field>
+    </record>
+
     <record id="action_voxel_queue_job" model="ir.actions.act_window">
         <field name="name">Voxel order Jobs</field>
         <field name="res_model">queue.job</field>
@@ -38,5 +52,7 @@
     <menuitem id="menu_voxel_queue_job"
         action="action_voxel_queue_job"
         sequence="10"
-        parent="sale.menu_sale_report"/>
+        parent="sale.menu_sale_report"
+        groups="edi_voxel.group_voxel_manager"
+    />
 </odoo>
