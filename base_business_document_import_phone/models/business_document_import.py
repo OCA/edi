@@ -32,11 +32,11 @@ class BusinessDocumentImport(models.AbstractModel):
             logger.debug(
                 '_hook_match_partner phone_num_e164: %s', phone_num_e164)
             if phone_num_e164:
-                partners = rpo.search(domain + [
+                partner = rpo.search(domain + [
                     '|',
                     ('phone', '=', phone_num_e164),
-                    ('mobile', '=', phone_num_e164)])
-                if partners:
-                    return partners[0]
+                    ('mobile', '=', phone_num_e164)], limit=1)
+                if partner:
+                    return partner
         return super(BusinessDocumentImport, self)._hook_match_partner(
             partner_dict, chatter_msg, domain, partner_type_label)
