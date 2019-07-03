@@ -493,7 +493,6 @@ class AccountInvoiceImport(models.TransientModel):
         """Method called by the button of the wizard
         (import step AND config step)"""
         self.ensure_one()
-        aio = self.env['account.invoice']
         aiico = self.env['account.invoice.import.config']
         bdio = self.env['business.document.import']
         iaao = self.env['ir.actions.act_window']
@@ -550,25 +549,36 @@ class AccountInvoiceImport(models.TransientModel):
                 'account_invoice_import_action')
             action['res_id'] = self.id
         else:
-            draft_same_supplier_invs = aio.search([
-                ('commercial_partner_id', '=', partner.id),
-                ('type', '=', parsed_inv['type']),
-                ('state', '=', 'draft'),
-                ])
+            draft_same_supplier_invs = self._get_existing_invoices(
+                parsed_inv, partner)
             logger.debug(
                 'draft_same_supplier_invs=%s', draft_same_supplier_invs)
             if draft_same_supplier_invs:
                 wiz_vals['state'] = 'update'
                 if len(draft_same_supplier_invs) == 1:
-                    wiz_vals['invoice_id'] = draft_same_supplier_invs[0].id
-                action = iaao.for_xml_id(
-                    'account_invoice_import',
-                    'account_invoice_import_action')
-                action['res_id'] = self.id
+                    wiz_vals['invoice_id'] = draft_same_supplier_invs.id
+                self.write(wiz_vals)
+                wiz_vals = {}
+                action = self.update_invoice()
             else:
                 action = self.create_invoice_action(parsed_inv, import_config)
-        self.write(wiz_vals)
+        if wiz_vals:
+            self.write(wiz_vals)
         return action
+
+    @api.multi
+    def _get_existing_invoices(self, parsed_inv, partner):
+        """
+        Get a draft account invoice for given partner with same invoice type.
+        :param parsed_inv: dict
+        :param partner: res.partner recordset
+        :return: account.invoice recordset
+        """
+        return self.env['account.invoice'].search([
+            ('commercial_partner_id', '=', partner.id),
+            ('type', '=', parsed_inv['type']),
+            ('state', '=', 'draft'),
+        ])
 
     @api.multi
     def create_invoice_action_button(self):
