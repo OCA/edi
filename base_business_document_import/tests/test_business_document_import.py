@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
+from odoo.exceptions import UserError
 
 
 class TestBaseBusinessDocumentImport(TransactionCase):
@@ -35,7 +36,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         bdio = self.env['business.document.import']
         partner1 = rpo.create({
             'name': 'Akretion France',
-            'street': '35B rue Montgolfier',
+            'street': '27 rue Henri Rolland',
             'zip': '69100',
             'country_id': self.env.ref('base.fr').id,
             'email': 'contact@akretion.com',
@@ -62,22 +63,41 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'country_id': self.env.ref('base.fr').id,
             'type': 'invoice',
         })
-        agrolait = self.env.ref('base.res_partner_2')
+        demo_partner2 = self.env.ref('base.res_partner_2')
         shipping_dict = {
             'partner': {'email': 'contact@akretion.com'},
             'address': {},
         }
-        res = bdio._match_shipping_partner(shipping_dict, agrolait, [])
+        res = bdio._match_shipping_partner(shipping_dict, None, [])
         self.assertEqual(res, cpartner1)
         shipping_dict['address'] = {
             'zip': '92400',
             'country_code': 'fr',
         }
-        res = bdio._match_shipping_partner(shipping_dict, agrolait, [])
+        res = bdio._match_shipping_partner(shipping_dict, None, [])
         self.assertEqual(res, cpartner3)
         shipping_dict['address']['zip'] = '92500'
-        res = bdio._match_shipping_partner(shipping_dict, agrolait, [])
-        self.assertEqual(res, partner1)
+        with self.assertRaises(UserError):
+            bdio._match_shipping_partner(shipping_dict, None, [])
+        partner2 = rpo.create({
+            'name': 'Alex Corp',
+            'zip': '69009',
+            'country_id': self.env.ref('base.fr').id,
+            'email': 'contact@alex.com',
+        })
+        cpartner2 = rpo.create({
+            'name': 'Joe Taylor',
+            'parent_id': partner2.id,
+            'type': 'delivery',
+            'zip': '69005',
+            'country_id': self.env.ref('base.fr').id,
+            })
+        shipping_dict = {
+            'partner': {'email': 'contact@alex.com'},
+            'address': {'country_code': 'FR', 'zip': '69009'},
+            }
+        res = bdio._match_shipping_partner(shipping_dict, None, [])
+        self.assertEqual(res, partner2)
         shipping_dict = {
             'partner': {},
             'address': {},
