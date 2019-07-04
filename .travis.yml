@@ -54,10 +54,6 @@ install:
   #- wget -P /tmp http://public.akretion.com/pdftotext-3.04
   #- sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
   #- sudo chmod 755 /usr/local/bin/pdftotext
-  - pip install phonenumbers
-  - pip install weboob
-  - pip install ovh
-  - pip install PyPDF2
 
 script:
   - travis_run_tests
