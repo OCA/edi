@@ -91,7 +91,8 @@ class ReportVoxelInvoice(models.AbstractModel):
                 picking_date = fields.Datetime.from_string(picking.date)
                 references.append({
                     'DNRef': picking.name,
-                    'PORef': picking.sale_id.name,
+                    'PORef': (picking.sale_id.client_order_ref
+                              or picking.sale_id.name),
                     'DNRefDate': picking_date and datetime.strftime(
                         picking_date, "%Y-%m-%d"),
                 })
@@ -101,7 +102,7 @@ class ReportVoxelInvoice(models.AbstractModel):
             for order in orders:
                 references.append({
                     'DNRef': invoice.number,
-                    'PORef': order.name,
+                    'PORef': order.client_order_ref or order.name,
                     'DNRefDate': date_invoice and date.strftime(
                         date_invoice, "%Y-%m-%d"),
                 })
