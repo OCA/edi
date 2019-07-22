@@ -48,7 +48,7 @@ class ReportVoxelPicking(models.AbstractModel):
         }
 
     def _get_client_data(self, picking):
-        client = picking.sale_id.partner_invoice_id
+        client = picking.sale_id.partner_invoice_id or picking.partner_id
         return {
             'SupplierClientID': client.ref,
             'CIF': client.vat,
@@ -64,8 +64,9 @@ class ReportVoxelPicking(models.AbstractModel):
 
     def _get_customers_data(self, picking):
         customer = picking.partner_id
+        client = picking.sale_id.partner_invoice_id or picking.partner_id
         return [{
-            'SupplierClientID': picking.sale_id.partner_invoice_id.ref,
+            'SupplierClientID': client.ref,
             'SupplierCustomerID': customer.ref,
             'Customer': customer.name,
             'Address': ', '.join(
@@ -81,8 +82,11 @@ class ReportVoxelPicking(models.AbstractModel):
         return picking.note and [{'Msg': picking.note}] or []
 
     def _get_references_data(self, picking):
+        so = picking.sale_id
         return [{
-            'PORef': picking.sale_id.client_order_ref or picking.sale_id.name,
+            'PORef': (
+                so.client_order_ref or so.name
+            ) if so else picking.origin,
         }]
 
     def _get_products_data(self, picking):

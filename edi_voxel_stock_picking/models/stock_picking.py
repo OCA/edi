@@ -28,8 +28,11 @@ class Picking(models.Model):
     @api.multi
     def _compute_voxel_enabled(self):
         for record in self:
-            record.voxel_enabled = (record.company_id.voxel_enabled
-                                    and record.partner_id.voxel_enabled)
+            record.voxel_enabled = (
+                record.company_id.voxel_enabled
+                and record.partner_id.voxel_enabled
+                and record.picking_type_code == 'outgoing'
+            )
 
     def _search_voxel_enabled(self, operator, value):
         return [
