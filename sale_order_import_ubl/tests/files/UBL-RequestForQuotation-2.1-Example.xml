@@ -8,32 +8,32 @@
   <cbc:CustomizationID>OIOUBL-2.1</cbc:CustomizationID>
   <cbc:ProfileID schemeAgencyID="320" schemeID="urn:oioubl:id:profileid-1.2">Procurement-QuoSim-1.0</cbc:ProfileID>
   <cbc:ID>G867B</cbc:ID>
-	<cbc:CopyIndicator>false</cbc:CopyIndicator>
-	<cbc:UUID>93T5G3G5-HYA3-7267-BVG3-GS46SW44WG53</cbc:UUID>
-	<cbc:IssueDate>2010-04-19</cbc:IssueDate>
-	<cbc:IssueTime>11:32:26.0Z</cbc:IssueTime>
-	<cbc:SubmissionDueDate>2008-04-24</cbc:SubmissionDueDate>
-	<cbc:Note>Bestilling af computere</cbc:Note>
+  <cbc:CopyIndicator>false</cbc:CopyIndicator>
+  <cbc:UUID>93T5G3G5-HYA3-7267-BVG3-GS46SW44WG53</cbc:UUID>
+  <cbc:IssueDate>2010-04-19</cbc:IssueDate>
+  <cbc:IssueTime>11:32:26.0Z</cbc:IssueTime>
+  <cbc:SubmissionDueDate>2008-04-24</cbc:SubmissionDueDate>
+  <cbc:Note>Bestilling af computere</cbc:Note>
   <cbc:PricingCurrencyCode>DKK</cbc:PricingCurrencyCode>
-	<cac:OriginatorCustomerParty>
-		<cac:Party>
+  <cac:OriginatorCustomerParty>
+    <cac:Party>
       <cbc:EndpointID schemeAgencyID="9" schemeID="GLN">5798000416604</cbc:EndpointID>
       <cac:PartyIdentification>
         <cbc:ID schemeAgencyID="9" schemeID="GLN">5798000416604</cbc:ID>
       </cac:PartyIdentification>
       <cac:PartyName>
-				<cbc:Name>Gentofte Kommune</cbc:Name>
-			</cac:PartyName>
-			<cac:PostalAddress>
+        <cbc:Name>Gentofte Kommune</cbc:Name>
+      </cac:PartyName>
+      <cac:PostalAddress>
         <cbc:AddressFormatCode listAgencyID="320" listID="urn:oioubl:codelist:addressformatcode-1.1">StructuredDK</cbc:AddressFormatCode>
         <cbc:StreetName>Bernstorffsvej</cbc:StreetName>
-				<cbc:BuildingNumber>161</cbc:BuildingNumber>
-				<cbc:CityName>Charlottenlund</cbc:CityName>
-				<cbc:PostalZone>2920</cbc:PostalZone>
-				<cac:Country>
-					<cbc:IdentificationCode>DK</cbc:IdentificationCode>
-				</cac:Country>
-			</cac:PostalAddress>
+        <cbc:BuildingNumber>161</cbc:BuildingNumber>
+        <cbc:CityName>Charlottenlund</cbc:CityName>
+        <cbc:PostalZone>2920</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>DK</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
       <cac:PartyTaxScheme>
         <cbc:CompanyID schemeID="DK:SE">DK12345678</cbc:CompanyID>
         <cac:TaxScheme>
@@ -47,30 +47,30 @@
       </cac:PartyLegalEntity>
       <cac:Contact>
         <cbc:ID>12345678</cbc:ID>
-				<cbc:Name>Sille Schyberg</cbc:Name>
-			</cac:Contact>
-		</cac:Party>
-	</cac:OriginatorCustomerParty>
-	<cac:SellerSupplierParty>
-		<cbc:CustomerAssignedAccountID>LEV00123</cbc:CustomerAssignedAccountID>
-		<cac:Party>
+        <cbc:Name>Sille Schyberg</cbc:Name>
+      </cac:Contact>
+    </cac:Party>
+  </cac:OriginatorCustomerParty>
+  <cac:SellerSupplierParty>
+    <cbc:CustomerAssignedAccountID>LEV00123</cbc:CustomerAssignedAccountID>
+    <cac:Party>
       <cbc:EndpointID schemeID="DK:CVR">DK18296799</cbc:EndpointID>
       <cac:PartyIdentification>
         <cbc:ID schemeID="DK:CVR">DK18296799</cbc:ID>
       </cac:PartyIdentification>
       <cac:PartyName>
-				<cbc:Name>Delcomputer A/S</cbc:Name>
-			</cac:PartyName>
-			<cac:PostalAddress>
+        <cbc:Name>Delcomputer A/S</cbc:Name>
+      </cac:PartyName>
+      <cac:PostalAddress>
         <cbc:AddressFormatCode listAgencyID="320" listID="urn:oioubl:codelist:addressformatcode-1.1">StructuredDK</cbc:AddressFormatCode>
         <cbc:StreetName>Arne Jacobsens Allé</cbc:StreetName>
-				<cbc:BuildingNumber>15</cbc:BuildingNumber>
-				<cbc:CityName>København S</cbc:CityName>
-				<cbc:PostalZone>2300</cbc:PostalZone>
-				<cac:Country>
-					<cbc:IdentificationCode>DK</cbc:IdentificationCode>
-				</cac:Country>
-			</cac:PostalAddress>
+        <cbc:BuildingNumber>15</cbc:BuildingNumber>
+        <cbc:CityName>København S</cbc:CityName>
+        <cbc:PostalZone>2300</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>DK</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
       <cac:PartyTaxScheme>
         <cbc:CompanyID schemeID="DK:SE">DK18296799</cbc:CompanyID>
         <cac:TaxScheme>
@@ -82,10 +82,10 @@
         <cbc:RegistrationName>Delcomputer A/S</cbc:RegistrationName>
         <cbc:CompanyID schemeID="DK:CVR">DK18296799</cbc:CompanyID>
       </cac:PartyLegalEntity>
-		</cac:Party>
-	</cac:SellerSupplierParty>
-	<cac:Delivery>
-		<cac:DeliveryAddress>
+    </cac:Party>
+  </cac:SellerSupplierParty>
+  <cac:Delivery>
+    <cac:DeliveryAddress>
       <cbc:AddressFormatCode listAgencyID="320" listID="urn:oioubl:codelist:addressformatcode-1.1">StructuredDK</cbc:AddressFormatCode>
       <cbc:StreetName>Bernstorffsvej</cbc:StreetName>
       <cbc:BuildingNumber>161</cbc:BuildingNumber>
@@ -98,25 +98,25 @@
         <cbc:Line>IT-afdelingen</cbc:Line>
       </cac:AddressLine>
       <cac:Country>
-				<cbc:IdentificationCode>DK</cbc:IdentificationCode>
-			</cac:Country>
-		</cac:DeliveryAddress>
-		<cac:RequestedDeliveryPeriod>
-			<cbc:StartDate>2008-05-06</cbc:StartDate>
-			<cbc:StartTime>09:30:47.0Z</cbc:StartTime>
-			<cbc:EndDate>2008-05-10</cbc:EndDate>
-			<cbc:EndTime>09:30:47.0Z</cbc:EndTime>
-		</cac:RequestedDeliveryPeriod>
-	</cac:Delivery>
-	<cac:DeliveryTerms>
-		<cbc:SpecialTerms>1% reduktion i kontraktsummen pr. dags forsinkelse jf. SKI kontrakt</cbc:SpecialTerms>
-	</cac:DeliveryTerms>
-	<cac:Contract>
-		<cac:ContractDocumentReference>
-			<cbc:ID>SKI123456</cbc:ID>
-			<cbc:IssueDate>2006-01-01</cbc:IssueDate>
-		</cac:ContractDocumentReference>
-	</cac:Contract>
+        <cbc:IdentificationCode>DK</cbc:IdentificationCode>
+      </cac:Country>
+    </cac:DeliveryAddress>
+    <cac:RequestedDeliveryPeriod>
+      <cbc:StartDate>2008-05-06</cbc:StartDate>
+      <cbc:StartTime>09:30:47.0Z</cbc:StartTime>
+      <cbc:EndDate>2008-05-10</cbc:EndDate>
+      <cbc:EndTime>09:30:47.0Z</cbc:EndTime>
+    </cac:RequestedDeliveryPeriod>
+  </cac:Delivery>
+  <cac:DeliveryTerms>
+    <cbc:SpecialTerms>1% reduktion i kontraktsummen pr. dags forsinkelse jf. SKI kontrakt</cbc:SpecialTerms>
+  </cac:DeliveryTerms>
+  <cac:Contract>
+    <cac:ContractDocumentReference>
+      <cbc:ID>SKI123456</cbc:ID>
+      <cbc:IssueDate>2006-01-01</cbc:IssueDate>
+    </cac:ContractDocumentReference>
+  </cac:Contract>
   <cac:RequestForQuotationLine>
     <cbc:ID>1</cbc:ID>
     <cbc:Note>Computer</cbc:Note>
