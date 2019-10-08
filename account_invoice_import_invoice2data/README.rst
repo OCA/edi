@@ -6,14 +6,14 @@
 Account Invoice Import Invoice2data
 ===================================
 
-This module is an extension of the module *account_invoice_import*: it adds support for regular PDF invoices i.e. PDF invoice that don't have an embedded XML file. It uses the `invoice2data library <https://github.com/m3nu/invoice2data>`_ which takes care of extracting the text of the PDF invoice, find an existing invoice template and execute the invoice template to extract the useful information from the invoice.
+This module is an extension of the module *account_invoice_import*: it adds support for regular PDF invoices i.e. PDF invoice that don't have an embedded XML file. It uses the `invoice2data library <https://github.com/invoice-x/invoice2data>`_ which takes care of extracting the text of the PDF invoice, find an existing invoice template and execute the invoice template to extract the useful information from the invoice.
 
 To know the full story behind the development of this module, read this `blog post <http://www.akretion.com/blog/akretions-christmas-present-for-the-odoo-community>`_.
 
 Installation
 ============
 
-This module requires the Python library *invoice2data* available on `Github <https://github.com/m3nu/invoice2data>`_ with a version >= 0.2.74 (February 2018).
+This module requires the Python library *invoice2data* available on `Github <https://github.com/invoice-x/invoice2data>`_ with a version >= 0.2.74 (February 2018).
 
 To install the latest version of this library, run:
 
@@ -60,11 +60,11 @@ Go to the form view of the supplier and configure it with the following paramete
 * the *TIN* (i.e. VAT number) is set (the VAT number is used by default when searching the supplier in the Odoo partner database)
 * in the *Accounting* tab, create an *Invoice Import Configuration*.
 
-For the PDF invoice of your supplier that don't have an embedded XML file, you will have to create a `template file <https://github.com/m3nu/invoice2data/blob/master/invoice2data/templates>`_ in YAML format in the invoice2data Python library. It is quite easy to do ; if you are familiar with `regexp <https://docs.python.org/2/library/re.html>`_, it should not take more than 10 minutes for each supplier.
+For the PDF invoice of your supplier that don't have an embedded XML file, you will have to create a `template file <https://github.com/invoice-x/invoice2data/tree/master/src/invoice2data/extract/templates>`_ in YAML format in the invoice2data Python library. It is quite easy to do ; if you are familiar with `regexp <https://docs.python.org/2/library/re.html>`_, it should not take more than 10 minutes for each supplier.
 
 Here are some hints to help you add a template for your supplier:
 
-* Take `Free SAS template file <https://github.com/m3nu/invoice2data/blob/master/invoice2data/templates/fr/fr.free.adsl-fiber.yml>`_ as an example. You will find a sample PDF invoice for this supplier under invoice2data/test/pdfs/2015-07-02-invoice_free_fiber.pdf
+* Take `Free SAS template file <https://github.com/invoice-x/invoice2data/blob/master/src/invoice2data/extract/templates/fr/fr.free.adsl-fiber.yml>`_ as an example. You will find a sample PDF invoice for this supplier under invoice2data/test/pdfs/2015-07-02-invoice_free_fiber.pdf
 
 * Try to run the invoice2data library manually on the sample invoice of Free:
 
