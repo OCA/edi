@@ -14,7 +14,7 @@
     <field name="inherit_id" ref="account_invoice_import.account_invoice_import_form"/>
     <field name="arch"  type="xml">
         <ul name="supported_formats_list" position="inside">
-                <li><b>regular PDF</b> file without any embedded XML file via the <a href="https://github.com/m3nu/invoice2data/" target="_blank">invoice2data</a> library (reads the text of the PDF and get the information). It will work only if the invoice2data library has a template for the invoices of that supplier.</li>
+                <li><b>regular PDF</b> file without any embedded XML file via the <a href="https://github.com/invoice-x/invoice2data/" target="_blank">invoice2data</a> library (reads the text of the PDF and get the information). It will work only if the invoice2data library has a template for the invoices of that supplier.</li>
         </ul>
     </field>
 </record>
