@@ -42,6 +42,11 @@ class AccountInvoiceImportDirectory(models.Model):
 
     backup_path = fields.Char(
         help="Directory where you want to move the file after the import")
+    attach_file_job = fields.Boolean(
+        string="Attach file to job",
+        default=False,
+        help="Attach the file to import to the related importation job",
+    )
 
     @api.model
     def _scheduler_import_invoice(self):
@@ -103,10 +108,38 @@ class AccountInvoiceImportDirectory(models.Model):
                     as fileobj:
                 data = fileobj.read()
             description = 'Import Vendor Invoice from file %s' % file_imported
-            self.with_delay(
-                description=description).action_batch_import(
-                    file_imported, data.encode('base64'))
+            file_content = data.encode('base64')
+            job = self.with_delay(description=description).action_batch_import(
+                file_imported, file_content)
+            if self.attach_file_job:
+                queue_job = self.env['queue.job'].search([
+                    ('uuid', '=', job.uuid),
+                ], limit=1)
+                self._attach_file_to_job(
+                    file_imported, file_content, queue_job)
             self._after_import(file_imported, file_full_name)
+
+    @api.multi
+    def _attach_file_to_job(self, filename, file_content, job):
+        """
+        Attach the given file to the given job
+        :param filename: str
+        :param file_content: base64 str
+        :param job: queue.job recordset
+        :return:
+        """
+        attach_obj = self.env['ir.attachment']
+        attach = attach_obj.browse()
+        if job:
+            values = {
+                'name': filename,
+                'datas': file_content,
+                'datas_fname': filename,
+                'res_model': job._name,
+                'res_id': job.id,
+            }
+            attach = self.env['ir.attachment'].create(values)
+        return attach
 
     @job(default_channel=BASE_CHANNEL)
     def action_batch_import(self, file_name, file_content):
