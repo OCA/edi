@@ -23,6 +23,7 @@
                                 <field name="after_import" widget="selection"/>
                                 <field name="backup_path"
                                        attrs="{'invisible': [('after_import','=', 'delete')], 'required': [('after_import','=', 'backup')]}"/>
+                                <field name="attach_file_job"/>
                             </group>
                         </page>
                     </notebook>
