@@ -24,13 +24,20 @@ msgid "Companies"
 msgstr "Bedrijf"
 
 #. module: account_invoice_ubl_email_attachment
+#: model:ir.model,name:account_invoice_ubl_email_attachment.model_res_config_settings
+#, fuzzy
+#| msgid "res.config.settings"
+msgid "Config Settings"
+msgstr "res.config.settings"
+
+#. module: account_invoice_ubl_email_attachment
 #: model:ir.model,name:account_invoice_ubl_email_attachment.model_mail_template
 msgid "Email Templates"
 msgstr "E-mail-sjablonen"
 
 #. module: account_invoice_ubl_email_attachment
-#: model:ir.model.fields,help:account_invoice_ubl_email_attachment.field_res_company_include_ubl_attachment_in_invoice_email
-#: model:ir.model.fields,help:account_invoice_ubl_email_attachment.field_res_config_settings_include_ubl_attachment_in_invoice_email
+#: model:ir.model.fields,help:account_invoice_ubl_email_attachment.field_res_company__include_ubl_attachment_in_invoice_email
+#: model:ir.model.fields,help:account_invoice_ubl_email_attachment.field_res_config_settings__include_ubl_attachment_in_invoice_email
 msgid ""
 "If active, the UBL Invoice XML file will be included in the attachments when "
 "sending the invoice by email."
@@ -39,13 +46,13 @@ msgstr ""
 "bij het versturen van de factuur per e-mail."
 
 #. module: account_invoice_ubl_email_attachment
-#: model:ir.model.fields,field_description:account_invoice_ubl_email_attachment.field_res_company_include_ubl_attachment_in_invoice_email
-#: model:ir.model.fields,field_description:account_invoice_ubl_email_attachment.field_res_config_settings_include_ubl_attachment_in_invoice_email
+#: model:ir.model.fields,field_description:account_invoice_ubl_email_attachment.field_res_company__include_ubl_attachment_in_invoice_email
+#: model:ir.model.fields,field_description:account_invoice_ubl_email_attachment.field_res_config_settings__include_ubl_attachment_in_invoice_email
 msgid "Include UBL XML in Invoice Email"
 msgstr "Voeg UBL XML toe aan factuur e-mail"
 
 #. module: account_invoice_ubl_email_attachment
-#: model:ir.ui.view,arch_db:account_invoice_ubl_email_attachment.view_account_config_settings
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl_email_attachment.view_account_config_settings
 msgid ""
 "Include the UBL XML in the attachments when sending the invoice by email."
 msgstr ""
@@ -55,8 +62,3 @@ msgstr ""
 #: model:ir.model,name:account_invoice_ubl_email_attachment.model_account_invoice
 msgid "Invoice"
 msgstr "Factuur"
-
-#. module: account_invoice_ubl_email_attachment
-#: model:ir.model,name:account_invoice_ubl_email_attachment.model_res_config_settings
-msgid "res.config.settings"
-msgstr "res.config.settings"
