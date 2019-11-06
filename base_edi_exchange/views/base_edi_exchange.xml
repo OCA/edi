@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="base_edi_exchange_tree" model="ir.ui.view">
+            <field name="name">EDI Exchanges</field>
+            <field name="model">base.edi.exchange</field>
+            <field name="arch" type="xml">
+                <tree string="EDI Exchanges">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="base_edi_exchange_form" model="ir.ui.view">
+            <field name="name">EDI Exchange</field>
+            <field name="model">base.edi.exchange</field>
+            <field name="arch" type="xml">
+                <form string="EDI Exchange">
+                    <header>
+                        <button name="receive" type="object" string="Receive" class="oe_highlight" attrs="{'invisible': [('state', '=', 'disabled')]}"/>
+                        <field name="state" widget="statusbar"  clickable="True"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object"
+                                name="action_pending_transfers" icon="fa-exchange" attrs="{'invisible': [('pending_transfer_count', '&lt;', 1)]}">
+                                <div class="o_stat_info">
+                                    <field name="pending_transfer_count" class="o_stat_value"/>
+                                    <span class="o_stat_text"> Pending</span>
+                                </div>
+                            </button>
+                            <button class="oe_stat_button" type="object"
+                                name="action_sent_transfers" icon="fa-exchange" attrs="{'invisible': [('sent_transfer_count', '&lt;', 1)]}">
+                                <div class="o_stat_info">
+                                    <field name="sent_transfer_count" class="o_stat_value"/>
+                                    <span class="o_stat_text"> Sent</span>
+                                </div>
+                            </button>
+                            <button class="oe_stat_button" type="object"
+                                name="action_processed_transfers" icon="fa-exchange" attrs="{'invisible': [('processed_transfer_count', '&lt;', 1)]}">
+                                <div class="o_stat_info">
+                                    <field name="processed_transfer_count" class="o_stat_value"/>
+                                    <span class="o_stat_text"> Processed</span>
+                                </div>
+                            </button>
+                            <button class="oe_stat_button" type="object"
+                                name="action_error_transfers" icon="fa-exchange" attrs="{'invisible': [('error_transfer_count', '&lt;', 1)]}">
+                                <div class="o_stat_info">
+                                    <field name="error_transfer_count" class="o_stat_value"/>
+                                    <span class="o_stat_text"> Error</span>
+                                </div>
+                            </button>
+                            <button class="oe_stat_button" type="object"
+                                name="action_manual_transfers" icon="fa-exchange" attrs="{'invisible': [('manual_transfer_count', '&lt;', 1)]}">
+                                <div class="o_stat_info">
+                                    <field name="manual_transfer_count" class="o_stat_value"/>
+                                    <span class="o_stat_text"> Manual</span>
+                                </div>
+                            </button>
+                            <button name="toggle_active" type="object"
+                                    class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button"
+                                    options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Exchange name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="type"/>
+                        </group>
+                        <notebook>
+                            <page name="transfer" string="Transfers">
+                                <label for="inbound_transfer_ids"/>
+                                <field name="inbound_transfer_ids"/>
+                                <label for="outbound_transfer_ids"/>
+                                <field name="outbound_transfer_ids"/>
+                            </page>
+                            <page name="config" string="Configuration">
+                                <group>
+                                    <field name="last_run"/>
+                                    <field name="interval"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="base_edi_exchange_action" model="ir.actions.act_window">
+            <field name="name">EDI Exchanges</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">base.edi.exchange</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                <!-- Add Text Here -->
+              </p><p>
+                <!-- More details about what a user can do with this object will be OK -->
+              </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

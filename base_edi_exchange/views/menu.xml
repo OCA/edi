@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="base_edi_menu"
+                  name="EDI Exchange"
+                  sequence="30"
+                  web_icon="base_edi_exchange,static/description/icon.png"
+                  groups="base_edi_exchange.res_groups_edi_exchange_manager"/>
+
+        <menuitem id="base_edi_manage_menu"
+                  name="Manage"
+                  parent="base_edi_menu"
+                  sequence="10"/>
+
+        <menuitem id="base_edi_exchange_menu"
+                  name="Exchanges"
+                  parent="base_edi_manage_menu"
+                  action="base_edi_exchange_action"
+                  sequence="10"/>
+        <menuitem id="base_edi_transfer_menu"
+                  name="Transfers"
+                  parent="base_edi_manage_menu"
+                  action="base_edi_transfer_action"
+                  sequence="20"/>
+
+    </data>
+</odoo>

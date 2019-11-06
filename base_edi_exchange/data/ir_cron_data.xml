@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.cron" id="check_active_exchange">
+            <field name="name">Check active exchanges</field>
+            <field name="model_id" ref="base_edi_exchange.model_base_edi_exchange"/>
+            <field name="state">code</field>
+            <field name="code">model.check_active_exchanges()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

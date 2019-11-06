@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ir_module_category_edi_exchange" model="ir.module.category">
+            <field name="name">EDI Exchange</field>
+        </record>
+
+        <record id="res_groups_edi_exchange_manager" model="res.groups">
+            <field name="name">EDI Exchange Manager</field>
+            <field name="category_id" ref="ir_module_category_edi_exchange"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="comment">
+                Configure EDI Exchanges
+            </field>
+        </record>
+    </data>
+</odoo>
