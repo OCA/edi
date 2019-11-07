@@ -144,7 +144,7 @@ class AccountInvoiceImport(models.TransientModel):
         self._ubl_check_xml_schema(xml_string, 'Invoice', version=ubl_version)
         prec = self.env['decimal.precision'].precision_get('Account')
         doc_type_xpath = xml_root.xpath(
-            "/inv:Invoice/cbc:InvoiceTypeCode[@listAgencyID='6']",
+            "/inv:Invoice/cbc:InvoiceTypeCode",
             namespaces=namespaces)
         inv_type = 'in_invoice'
         if doc_type_xpath:
