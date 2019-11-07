@@ -5,7 +5,7 @@
   <cbc:ProfileID>FFF.BE ExactOnline</cbc:ProfileID>
   <cbc:ID>16117778</cbc:ID>
   <cbc:IssueDate>2016-04-21</cbc:IssueDate>
-  <cbc:InvoiceTypeCode listURI="http://www.FFF.be/ubl/2.0/cl/gc/BE-InvoiceCode-1.0.gc">380</cbc:InvoiceTypeCode>
+  <cbc:InvoiceTypeCode listURI="http://www.FFF.be/ubl/2.0/cl/gc/BE-InvoiceCode-1.0.gc">381</cbc:InvoiceTypeCode>
   <cbc:Note>Exact Online April / Mei 2016</cbc:Note>
   <cbc:TaxPointDate>2016-04-21</cbc:TaxPointDate>
   <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
