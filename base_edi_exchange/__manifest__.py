@@ -1,24 +1,15 @@
-# -*- coding: utf-8 -*-
 {
     'name': "Base EDI Exchange",
 
     'summary': """
         Base Module for Exchange of EDI documents
         """,
-
-    'description': """
-Base EDI Exchange
-====================
-
-* 
-    """,
-
-    'author': "Callino",
+    'author': "Callino, Odoo Community Association (OCA)",
     'website': "http://callino.at",
     'development_status': "Beta",
     "license": "AGPL-3",
     'category': 'Accounting',
-    'version': '12.0.1.0',
+    'version': '12.0.1.0.0',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'sale', 'account', 'purchase'],

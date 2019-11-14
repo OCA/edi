@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 # Copyright 2019 Callino <wpichler@callino.at
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -16,7 +14,8 @@ class ResPartner(models.Model):
     @api.depends('available_exchange_ids')
     def _get_edi_exchange_available(self):
         for record in self:
-            record.edi_exchange_available = True if record.available_exchange_ids else False
+            record.edi_exchange_available = \
+                True if record.available_exchange_ids else False
 
     available_exchange_ids = fields.Many2many(
         comodel_name="base.edi.exchange",
