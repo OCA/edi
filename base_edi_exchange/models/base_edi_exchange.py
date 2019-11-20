@@ -14,7 +14,7 @@ class BaseEDIExchange(models.Model):
 
     @api.multi
     @api.depends('transfer_ids')
-    def _get_transfer_counts(self):
+    def _compute_transfer_counts(self):
         for record in self:
             record.pending_transfer_count = len(record.transfer_ids.filtered(
                 lambda r: r.state == 'pending')
@@ -70,15 +70,15 @@ class BaseEDIExchange(models.Model):
     partner_ids = fields.Many2many('res.partner',
                                    string="Partners")
     pending_transfer_count = fields.Integer(string="Pending Transfers",
-                                            compute="_get_transfer_counts")
+                                            compute="_compute_transfer_counts")
     sent_transfer_count = fields.Integer(string="Sent Transfers",
-                                         compute="_get_transfer_counts")
+                                         compute="_compute_transfer_counts")
     processed_transfer_count = fields.Integer(string="Processed Transfers",
-                                              compute="_get_transfer_counts")
+                                              compute="_compute_transfer_counts")
     error_transfer_count = fields.Integer(string="Error Transfers",
-                                          compute="_get_transfer_counts")
+                                          compute="_compute_transfer_counts")
     manual_transfer_count = fields.Integer(string="Manual Transfers",
-                                           compute="_get_transfer_counts")
+                                           compute="_compute_transfer_counts")
 
     @api.multi
     def send(self, file, vals=None):
