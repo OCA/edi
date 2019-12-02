@@ -6,6 +6,7 @@ import requests
 from datetime import datetime
 from lxml import etree
 from odoo import api, fields, models
+from odoo.modules.registry import Registry
 
 _logger = logging.getLogger(__name__)
 
@@ -92,7 +93,13 @@ class VoxelMixin(models.AbstractModel):
                                    data=file_data)
             self.voxel_state = 'sent'
         except Exception:
-            self.voxel_state = 'sent_errors'
+            new_cr = Registry(self.env.cr.dbname).cursor()
+            env = api.Environment(new_cr, self.env.uid, self.env.context)
+            record = env[self._name].browse(self.id)
+            record.voxel_state = 'sent_errors'
+            new_cr.commit()
+            new_cr.close()
+            raise
 
     @api.multi
     def _cancel_voxel_jobs(self, jobs):
