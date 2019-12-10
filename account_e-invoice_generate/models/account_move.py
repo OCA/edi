@@ -4,8 +4,8 @@
 from odoo import models
 
 
-class AccountInvoice(models.Model):
-    _inherit = 'account.invoice'
+class AccountMove(models.Model):
+    _inherit = 'account.move'
 
     def get_payment_identifier(self):
         """This method is designed to be inherited in localization modules"""

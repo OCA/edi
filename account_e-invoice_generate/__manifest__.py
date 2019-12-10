@@ -4,12 +4,12 @@
 
 {
     'name': 'Account e-invoice Generate',
-    'version': '12.0.1.0.0',
+    'version': '13.0.1.0.0',
     'category': 'Accounting & Finance',
     'license': 'AGPL-3',
     'summary': 'Technical module to generate PDF invoices with '
                'embedded XML file',
-    'author': 'Akretion,Odoo Community Association (OCA)',
+    'author': 'Akretion,Onestein,Odoo Community Association (OCA)',
     'website': 'https://github.com/OCA/edi',
     'depends': ['account'],
     'data': [

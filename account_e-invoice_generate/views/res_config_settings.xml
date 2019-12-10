@@ -11,19 +11,16 @@
         <xpath expr="//div[@id='invoicing_settings']" position="after">
             <h2>Electronic Invoices</h2>
             <div class="row mt16 o_settings_container" id="invoicing_settings">
-                <div class="col-xs-12 col-md-6 o_setting_box" id="e-invoices">
+                <div class="col-12 col-lg-8 o_setting_box" id="e-invoices">
                     <div class="o_setting_left_pane"/>
                     <div class="o_setting_right_pane">
-                        <label string="Select Format" for="xml_format_in_pdf_invoice"/>
+                        <span class="o_form_label">Select Format</span>
                         <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
                         <div class="text-muted">
                             Select the format of your e-invoices.
                         </div>
-                        <div class="content-group" name="xml_format_in_pdf_invoice">
-                            <div class="row mt16">
-                                <label string="Format" class="col-md-3 o_light_label" for="xml_format_in_pdf_invoice"/>
-                                <field name="xml_format_in_pdf_invoice"/>
-                            </div>
+                        <div class="text-muted" name="xml_format_in_pdf_invoice">
+                            <field name="xml_format_in_pdf_invoice"/>
                         </div>
                     </div>
                 </div>
