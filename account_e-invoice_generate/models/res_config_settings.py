@@ -6,7 +6,8 @@ from odoo import fields, models
 
 
 class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+    _inherit = "res.config.settings"
 
     xml_format_in_pdf_invoice = fields.Selection(
-        related='company_id.xml_format_in_pdf_invoice', readonly=False)
+        related="company_id.xml_format_in_pdf_invoice", readonly=False
+    )
