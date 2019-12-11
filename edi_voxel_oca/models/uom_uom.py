@@ -4,8 +4,8 @@
 from odoo import fields, models
 
 
-class ProductUoM(models.Model):
-    _inherit = 'product.uom'
+class UoM(models.Model):
+    _inherit = 'uom.uom'
 
     voxel_code = fields.Selection(
         selection=[
