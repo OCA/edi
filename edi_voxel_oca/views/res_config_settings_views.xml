@@ -12,7 +12,7 @@
                 <div class="row mt16 o_settings_container" name="voxel">
                     <div class="col-xs-12 col-md-6 o_setting_box">
                         <div class="o_setting_right_pane">
-                            <label string='Send mode'/>
+                            <span class="o_form_label">Send mode</span>
                             <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
                             <div class="text-muted">
                                 Choose the send mode for documents to Voxel
@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-xs-12 col-md-6 o_setting_box">
                         <div class="o_setting_right_pane">
-                            <label string='Web Sevice credentials'/>
+                            <span class="o_form_label">Web Sevice credentials</span>
                             <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
                             <div class="text-muted">
                                 Set credentials for connection to Voxel using Web Service
