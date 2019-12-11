@@ -1,452 +1,409 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* edi_voxel
+#	* edi_voxel
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 11.0\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-11 14:55+0000\n"
-"PO-Revision-Date: 2019-12-11 09:59-0500\n"
+"PO-Revision-Date: 2019-12-11 14:55+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 2.0.6\n"
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(EXENTO) Exento"
-msgstr "(EXENTO) Exento"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IBA) Impuesto sobre bebidas alcohólicas"
-msgstr "(IBA) Impuesto sobre bebidas alcohólicas"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(ICIO) Impuesto sobre las construcciones, instalaciones y obras"
-msgstr "(ICIO) Impuesto sobre las construcciones, instalaciones y obras"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IE) Impuestos especiales"
-msgstr "(IE) Impuestos especiales"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
-msgid ""
-"(IECDPCAC) Impuesto especial sobre los combustibles derivados del petróleo "
-"en la comunidad Autónoma Canaria"
+msgid "(IECDPCAC) Impuesto especial sobre los combustibles derivados del petróleo en la comunidad Autónoma Canaria"
 msgstr ""
-"(IECDPCAC) Impuesto especial sobre los combustibles derivados del petróleo "
-"en la comunidad Autónoma Canaria"
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IGIC) IGIC"
-msgstr "(IGIC) IGIC"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
-msgid ""
-"(IGTECM) Impuesto general sobre el tráfico de empresas que se aplica en "
-"Ceuta y Melilla"
+msgid "(IGTECM) Impuesto general sobre el tráfico de empresas que se aplica en Ceuta y Melilla"
 msgstr ""
-"(IGTECM) Impuesto general sobre el tráfico de empresas que se aplica en "
-"Ceuta y Melilla"
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IHC) Impuesto sobre harinas cárnicas"
-msgstr "(IHC) Impuesto sobre harinas cárnicas"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
-msgid ""
-"(IIIMAB) Impuesto sobre las instalaciones que inciden sobre le medio "
-"ambiente en las Baleares"
+msgid "(IIIMAB) Impuesto sobre las instalaciones que inciden sobre le medio ambiente en las Baleares"
 msgstr ""
-"(IIIMAB) Impuesto sobre las instalaciones que inciden sobre le medio "
-"ambiente en las Baleares"
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IMGSN) Impuesto municipal sobre gastos suntuarios en Navarra"
-msgstr "(IMGSN) Impuesto municipal sobre gastos suntuarios en Navarra"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IMPN) Impuesto municipal sobre publicidad en Navarra"
-msgstr "(IMPN) Impuesto municipal sobre publicidad en Navarra"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IMSN) Impuesto municipal sobre solares en Navarra"
-msgstr "(IMSN) Impuesto municipal sobre solares en Navarra"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IMVDN) Impuesto municipal sobre las viviendas desocupadas en Navarra"
-msgstr "(IMVDN) Impuesto municipal sobre las viviendas desocupadas en Navarra"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IRPF) IRPF"
-msgstr "(IRPF) IRPF"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
-msgid ""
-"(ITPAJD) Impuesto sobre transmisiones patrimoniales y actos jurídicos "
-"documentados"
+msgid "(ITPAJD) Impuesto sobre transmisiones patrimoniales y actos jurídicos documentados"
 msgstr ""
-"(ITPAJD) Impuesto sobre transmisiones patrimoniales y actos jurídicos "
-"documentados"
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(IVA) IVA"
-msgstr "(IVA) IVA"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(OTRO) Otro"
-msgstr "(OTRO) Otro"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(RA) Renta aduanas"
-msgstr "(RA) Renta aduanas"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:account.tax,voxel_tax_code:0
 msgid "(RE) Recargo de equivalencia"
-msgstr "(RE) Recargo de equivalencia"
+msgstr ""
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
-#, fuzzy
-#| msgid ""
-#| "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are "
-#| "company-specific.\" groups=\"base.group_multi_company\"/>"
-msgid ""
-"<span class=\"o_form_label\">Send mode</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
+msgid "<span class=\"o_form_label\">Send mode</span>\n"
+"                            <span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
-"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
-#, fuzzy
-#| msgid ""
-#| "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are "
-#| "company-specific.\" groups=\"base.group_multi_company\"/>"
-msgid ""
-"<span class=\"o_form_label\">Web Sevice credentials</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
+msgid "<span class=\"o_form_label\">Web Sevice credentials</span>\n"
+"                            <span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
-"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
 
 #. module: edi_voxel
 #: selection:res.company,voxel_send_mode:0
 msgid "At fixed time"
-msgstr "A una hora fija"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Bultos"
-msgstr "Bultos"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Cajas"
-msgstr "Cajas"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:voxel.mixin,voxel_state:0
 msgid "Cancelled"
-msgstr "Cancelado"
+msgstr ""
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
 msgid "Choose the send mode for documents to Voxel"
-msgstr "Escoge el modo de envío de los documentos a Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_res_company
 msgid "Companies"
-msgstr "Compañías"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_res_config_settings
-#, fuzzy
-#| msgid "res.config.settings"
 msgid "Config Settings"
-msgstr "res.config.settings"
+msgstr ""
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.view_company_form
 msgid "Configuration"
-msgstr "Configuración"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_res_partner
 msgid "Contact"
-msgstr "Contacto"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Contenedores"
-msgstr "Contenedores"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__create_uid
 msgid "Created by"
-msgstr "Creado por"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__create_date
 msgid "Created on"
-msgstr "Creado en"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_res_company__voxel_delay_time
 #: model:ir.model.fields,field_description:edi_voxel.field_res_config_settings__voxel_delay_time
 msgid "Delay time"
-msgstr "Tiempo de retardo"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__display_name
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__display_name
 msgid "Display Name"
-msgstr "Nombre mostrado"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_res_company__voxel_enabled
 #: model:ir.model.fields,field_description:edi_voxel.field_res_partner__voxel_enabled
 #: model:ir.model.fields,field_description:edi_voxel.field_res_users__voxel_enabled
 msgid "Enable Voxel"
-msgstr "Habilitar voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:voxel.mixin,voxel_state:0
 msgid "Errors"
-msgstr "Errores"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Horas"
-msgstr "Horas"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__id
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__id
 msgid "ID"
-msgstr "ID (identificación)"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,help:edi_voxel.field_voxel_mixin__voxel_state
 msgid "Indicates the state of the Voxel report send state"
-msgstr "Indica el estado del envío del reporte a Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Kgs"
-msgstr "Kgs"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login____last_update
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin____last_update
 msgid "Last Modified on"
-msgstr "Última modificación en"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__write_uid
 msgid "Last Updated by"
-msgstr "Última actualización de"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__write_date
 msgid "Last Updated on"
-msgstr "Última actualización en"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Lbs"
-msgstr "Lbs"
+msgstr ""
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.view_company_form
-#, fuzzy
-#| msgid "Voxel Logins"
 msgid "Logins"
-msgstr "Voxel logins"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Lts"
-msgstr "Lts"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Metros"
-msgstr "Metros"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "MetrosCuadrados"
-msgstr "MetrosCuadrados"
+msgstr ""
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
 msgid "Mode"
-msgstr "Modo"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__name
 msgid "Name"
-msgstr "Nombre"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:voxel.mixin,voxel_state:0
 msgid "Not sent"
-msgstr "No enviado"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:res.company,voxel_send_mode:0
 msgid "On validate"
-msgstr "Al validar"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Otros"
-msgstr "Otros"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Palets"
-msgstr "Palets"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__company_id
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__password
 msgid "Password"
-msgstr "Contraseña"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_uom_uom
 msgid "Product Unit of Measure"
-msgstr "Unidad de medida del producto"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_queue_job
 msgid "Queue Job"
-msgstr "Trabajo en cola"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_res_company__voxel_send_mode
 #: model:ir.model.fields,field_description:edi_voxel.field_res_config_settings__voxel_send_mode
 msgid "Send mode"
-msgstr "Modo de envío"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:voxel.mixin,voxel_state:0
 msgid "Sent"
-msgstr "Enviado"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_res_company__voxel_sent_time
 #: model:ir.model.fields,field_description:edi_voxel.field_res_config_settings__voxel_sent_time
 msgid "Sent time"
-msgstr "Hora de envío"
+msgstr ""
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
 msgid "Set credentials for connection to Voxel using Web Service"
 msgstr ""
-"Establece las credenciales para la conexión con Voxel usando Servicio Web"
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_account_tax
 msgid "Tax"
-msgstr "Impuesto"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__url
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Unidades"
-msgstr "Unidades"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__user
 msgid "User"
-msgstr "Usuario"
+msgstr ""
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
 #: model_terms:ir.ui.view,arch_db:edi_voxel.view_company_form
 msgid "Voxel"
-msgstr "Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_uom_uom__voxel_code
 msgid "Voxel Code"
-msgstr "Código Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_account_tax__voxel_tax_code
 msgid "Voxel Tax Code"
-msgstr "Código Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_voxel_login
 msgid "Voxel login"
-msgstr "Login Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_res_company__voxel_login_ids
 msgid "Voxel logins"
-msgstr "Logins de Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: model:res.groups,name:edi_voxel.group_voxel_manager
 msgid "Voxel manager"
-msgstr "Administrador Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_voxel_mixin
 msgid "Voxel mixin"
-msgstr "Voxel mixin"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__voxel_state
 msgid "Voxel send state"
-msgstr "Estado del envío a Voxel"
+msgstr ""
 
 #. module: edi_voxel
 #: selection:res.company,voxel_send_mode:0
 msgid "With delay"
-msgstr "Con retardo"
+msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__voxel_xml_report
 msgid "XML Report"
-msgstr "Reporte XML"
+msgstr ""
 
-#~ msgid "Web Sevice credentials"
-#~ msgstr "Credenciales para el Servicio Web"
