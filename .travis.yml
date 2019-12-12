@@ -9,38 +9,24 @@ python:
   - "3.5"
 
 addons:
+  postgresql: "9.6"
   apt:
-# only add the two lines below if you need wkhtmltopdf for your tests
-    sources:
-      - pov-wkhtmltopdf
-#    Search your sources alias here:
-#      https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
     packages:
       - expect-dev  # provides unbuffer utility
       - python-lxml  # because pip installation is slow
       - python-simplejson
       - python-serial
       - python-yaml
-#     Search your packages here:
-#       https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
-      - wkhtmltopdf  # only add if needed and check the before_install section below
-
-# set up an X server to run wkhtmltopdf.
-before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
 
 env:
   global:
-  - VERSION="11.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
-  - TRANSIFEX_USER='transbot@odoo-community.org'
-  - secure: "J06UsyF7JFAMRw83lzKl5GZZforXvYyl2Dav0qeJ/g6btlaow6MUBP0maIB/q1o63nqJl4o3ljZFdSsVTQymNBXBIutNRFr+ZZxlyToe6C//p0G59mfLznmJHAgiE+TlH0BhdAplhfzd7zGl1ff9tP28BOq3R4j1FPhhu9s+2p0zuktgUIikrggdBY5OgCEqqa5xvzZT3iXrvE7D6lGO6ObFoi7LEo8pwyQEZ9fElu8w+bTPPuMGEbzk7t0HUQuiz82SyFW/ul/aqVoxzFeF4ksxlpFqtSMIulPWtmc3OY2jj3lfzbwkVJBeGnNHHUzHyCL7DMF9xjBbFtzWe/5wGaE7X6XK8rjlNjI0E1Dp7i2kzYqEQKyPI6YoWq7vc2uiCvYasl9ECWoaC2SOhee70QcrJEgTAZa0nNoeHHxoDk79I3LQuwCyNmmo9VO4txoizmlzloNje4uL9isdXUwY4VpCDyHGTsnG324cNk4YQizBW87+pOwP76uJCum+tBMSKJIm8vUtZysJtlxORlMMFXOc8MbFim1U/JuQpmaDdU5j4DD3zSPd9BVgwGCI+Tw5N2s+FEo0AnJhmK7yubNJHM5jm6IydgykpvY9b2aOywz+MRxxR5LE01UiFNPBQTDHIMUqyrwCTD6/7Zm+9XHlktFyikxyrS1yItrv1qh9wxQ="
+  - VERSION="11.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0"
+  - WKHTMLTOPDF_VERSION="0.12.5"
 
   matrix:
   - LINT_CHECK="1"
-  - TRANSIFEX="1"
-  - TESTS="1" ODOO_REPO="OCA/OCB"
-  - TESTS="1" ODOO_REPO="odoo/odoo"
+  - TESTS="1" ODOO_REPO="OCA/OCB" OPTIONS="--test-report-directory=/tmp"
+  - TESTS="1" ODOO_REPO="odoo/odoo" OPTIONS="--test-report-directory=/tmp" MAKEPOT="1"
 
 
 install:
@@ -53,8 +39,6 @@ install:
   #- wget -P /tmp http://public.akretion.com/pdftotext-3.04
   #- sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
   #- sudo chmod 755 /usr/local/bin/pdftotext
-  - pip install PyPDF2  # needed for account_invoice*zugferd
-  - pip install phonenumbers
 
 script:
   - travis_run_tests
