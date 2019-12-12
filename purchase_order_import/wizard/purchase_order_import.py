@@ -139,17 +139,6 @@ class PurchaseOrderImport(models.TransientModel):
             vals['incoterm_id'] = incoterm.id
         return vals
 
-    @api.model
-    def _prepare_create_order_line(
-            self, product, qty, uom, price_unit, so_vals):
-        vals = {
-            'product_id': product.id,
-            'product_qty': qty,
-            'product_uom': uom.id,
-            'price_unit': price_unit,  # TODO fix
-        }
-        return vals
-
     @api.multi
     def update_order_lines(self, parsed_quote, order):
         polo = self.env['purchase.order.line']
