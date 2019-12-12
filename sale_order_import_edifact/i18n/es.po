@@ -1,0 +1,77 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sale_order_import_edifact
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-12 15:18+0000\n"
+"PO-Revision-Date: 2019-12-12 15:18+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_order_import_edifact
+#: model:ir.model,name:sale_order_import_edifact.model_business_document_import
+msgid "Common methods to import business documents"
+msgstr "Métodos comunes para importar business documents"
+
+#. module: sale_order_import_edifact
+#: model:ir.model,name:sale_order_import_edifact.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: sale_order_import_edifact
+#: model:ir.model.fields,field_description:sale_order_import_edifact.field_sale_order_import__doc_type
+msgid "Document Type"
+msgstr "Tipo Documento"
+
+#. module: sale_order_import_edifact
+#: selection:sale.order.import,doc_type:0
+msgid "Edifact"
+msgstr "Edifact"
+
+#. module: sale_order_import_edifact
+#: model:ir.model.fields,field_description:sale_order_import_edifact.field_res_partner__edifact_code
+#: model:ir.model.fields,field_description:sale_order_import_edifact.field_res_users__edifact_code
+msgid "Edifact Code"
+msgstr "Código Edifact"
+
+#. module: sale_order_import_edifact
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:137
+#, python-format
+msgid "Error reading header: Bad edifact file format"
+msgstr "Error leyendo la cabecera: El fichero no tiene un formato Edifact correcto."
+
+#. module: sale_order_import_edifact
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:170
+#, python-format
+msgid "Error reading lines: Bad edifact file format"
+msgstr "Error leyendo las líneas del pedido: El fichero no tiene un formato Edifact correcto."
+
+#. module: sale_order_import_edifact
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:67
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:70
+#, python-format
+msgid "File not imported due to format mismatch or a malformed file."
+msgstr "El fichero no se ha podido importar porqué no está bien compuesto."
+
+#. module: sale_order_import_edifact
+#: selection:sale.order.import,doc_type:0
+msgid "Request For Quotation"
+msgstr "Solicitud de presupuesto"
+
+#. module: sale_order_import_edifact
+#: selection:sale.order.import,doc_type:0
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: sale_order_import_edifact
+#: model:ir.model,name:sale_order_import_edifact.model_sale_order_import
+msgid "Sale Order Import from Files"
+msgstr "Importación de Pedidos de Venta desde Ficheros"
+
