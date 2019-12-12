@@ -226,7 +226,7 @@ class PurchaseOrderImport(models.TransientModel):
     def _prepare_create_order_line(self, product, uom, import_line, order):
         polo = self.env['purchase.order.line']
         vals = {'product_id': product.id, 'order_id': order}
-        vals = polo.play_onchanges(vals, ['product_id'])
+        vals.update(polo.play_onchanges(vals, ['product_id']))
         vals.pop('order_id')
         return vals
 

@@ -188,7 +188,7 @@ class SaleOrderImport(models.TransientModel):
             'partner_id': partner.id,
             'client_order_ref': parsed_order.get('order_ref'),
             }
-        so_vals = soo.play_onchanges(so_vals, ['partner_id'])
+        so_vals.update(soo.play_onchanges(so_vals, ['partner_id']))
         so_vals['order_line'] = []
         if parsed_order.get('ship_to'):
             shipping_partner = bdio._match_shipping_partner(
@@ -366,7 +366,7 @@ class SaleOrderImport(models.TransientModel):
             # but it is not enough: we also need to play _onchange_discount()
             # to have the right discount for pricelist
             vals['order_id'] = order
-            vals = solo.play_onchanges(vals, ['product_id'])
+            vals.update(solo.play_onchanges(vals, ['product_id']))
             vals.pop('order_id')
         return vals
 

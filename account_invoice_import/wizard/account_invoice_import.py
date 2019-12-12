@@ -205,7 +205,7 @@ class AccountInvoiceImport(models.TransientModel):
             'journal_id': journal_id,
             'invoice_line_ids': [],
         }
-        vals = aio.play_onchanges(vals, ['partner_id'])
+        vals.update(aio.play_onchanges(vals, ['partner_id']))
         vals['invoice_line_ids'] = []
         # Force due date of the invoice
         if parsed_inv.get('date_due'):
@@ -243,7 +243,7 @@ class AccountInvoiceImport(models.TransientModel):
             elif config['invoice_line_method'] == '1line_static_product':
                 product = config['product']
                 il_vals = {'product_id': product.id, 'invoice_id': vals}
-                il_vals = ailo.play_onchanges(il_vals, ['product_id'])
+                il_vals.update(ailo.play_onchanges(il_vals, ['product_id']))
                 il_vals.pop('invoice_id')
             if config.get('label'):
                 il_vals['name'] = config['label']
@@ -267,7 +267,7 @@ class AccountInvoiceImport(models.TransientModel):
             elif config['invoice_line_method'] == 'nline_static_product':
                 sproduct = config['product']
                 static_vals = {'product_id': sproduct.id, 'invoice_id': vals}
-                static_vals = ailo.play_onchanges(static_vals, ['product_id'])
+                static_vals.update(ailo.play_onchanges(static_vals, ['product_id']))
                 static_vals.pop('invoice_id')
             else:
                 static_vals = {}
@@ -278,7 +278,7 @@ class AccountInvoiceImport(models.TransientModel):
                         line['product'], parsed_inv['chatter_msg'],
                         seller=partner)
                     il_vals = {'product_id': product.id, 'invoice_id': vals}
-                    il_vals = ailo.play_onchanges(il_vals, ['product_id'])
+                    il_vals.update(ailo.play_onchanges(il_vals, ['product_id']))
                     il_vals.pop('invoice_id')
                 elif config['invoice_line_method'] == 'nline_no_product':
                     taxes = bdio._match_taxes(
