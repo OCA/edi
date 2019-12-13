@@ -40,6 +40,7 @@ class BaseEdifact(models.AbstractModel):
 
         address_dict = {
             'partner': {
+                'edifact_code': address_segments[1],
                 'name': address_segments[3] or False,
                 'email': False,
             },
