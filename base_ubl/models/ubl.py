@@ -1,4 +1,5 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2019 Onestein (<https://www.onestein.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models, api, _
@@ -6,7 +7,7 @@ from odoo.exceptions import UserError
 from odoo.tools import float_is_zero, float_round, file_open
 from lxml import etree
 from io import BytesIO
-from tempfile import NamedTemporaryFile
+
 import mimetypes
 import logging
 logger = logging.getLogger(__name__)
@@ -346,8 +347,7 @@ class BaseUbl(models.AbstractModel):
             if not seller_code:
                 seller_code = product.default_code
             if not product_name:
-                variant = ", ".join(
-                    [v.name for v in product.attribute_value_ids])
+                variant = ", ".join(product.attribute_line_ids.mapped('value_ids.name'))
                 product_name = variant and "%s (%s)" % (product.name, variant)\
                     or product.name
         description = etree.SubElement(item, ns['cbc'] + 'Description')
@@ -380,7 +380,7 @@ class BaseUbl(models.AbstractModel):
                     self._ubl_add_tax_category(
                         tax, item, ns, node_name='ClassifiedTaxCategory',
                         version=version)
-            for attribute_value in product.attribute_value_ids:
+            for attribute_value in product.attribute_line_ids.mapped('value_ids'):
                 item_property = etree.SubElement(
                     item, ns['cac'] + 'AdditionalItemProperty')
                 property_name = etree.SubElement(
@@ -509,6 +509,40 @@ class BaseUbl(models.AbstractModel):
         return True
 
     @api.model
+    def _ubl_add_xml_in_pdf_buffer(self, xml_string, xml_filename, buffer):
+        # Add attachment to PDF content.
+        reader = PdfFileReader(buffer)
+        writer = PdfFileWriter()
+        writer.appendPagesFromReader(reader)
+        writer.addAttachment(xml_filename, xml_string)
+        # show attachments when opening PDF
+        writer._root_object.update({
+            NameObject("/PageMode"): NameObject("/UseAttachments"),
+        })
+        buffer.close()
+        buffer = BytesIO()
+        writer.write(buffer)
+        return buffer
+
+    @api.model
+    def _embed_ubl_xml_in_pdf_content(self, xml_string, xml_filename, pdf_content):
+        """Add the attachments to the PDF content.
+        Use the pdf_content argument, which has the binary of the PDF
+        -> it will return the new PDF binary with the embedded XML
+        (used for qweb-pdf reports)
+        """
+        self.ensure_one()
+        logger.debug('Starting to embed %s in PDF', xml_filename)
+
+        with BytesIO(pdf_content) as reader_buffer:
+            buffer = self._ubl_add_xml_in_pdf_buffer(xml_string, xml_filename, reader_buffer)
+        pdf_content = buffer.getvalue()
+        buffer.close()
+
+        logger.info('%s file added to PDF content', xml_filename)
+        return pdf_content
+
+    @api.model
     def embed_xml_in_pdf(
             self, xml_string, xml_filename, pdf_content=None, pdf_file=None):
         """
@@ -516,40 +550,21 @@ class BaseUbl(models.AbstractModel):
         a) use the pdf_content argument, which has the binary of the PDF
         -> it will return the new PDF binary with the embedded XML
         (used for qweb-pdf reports)
-        b) OR use the pdf_file argument, which has the path to the
+        b) OR use the pdf_file argument, which has the full path to the
         original PDF file
         -> it will re-write this file with the new PDF
         (used for py3o reports, *_ubl_py3o modules in this repo)
         """
         assert pdf_content or pdf_file, 'Missing pdf_file or pdf_content'
-        logger.debug('Starting to embed %s in PDF file', xml_filename)
         if pdf_file:
-            original_pdf_file = pdf_file
-        elif pdf_content:
-            original_pdf_file = BytesIO(pdf_content[0])
-        original_pdf = PdfFileReader(original_pdf_file)
-        new_pdf_filestream = PdfFileWriter()
-        new_pdf_filestream.appendPagesFromReader(original_pdf)
-        new_pdf_filestream.addAttachment(xml_filename, xml_string)
-        # show attachments when opening PDF
-        new_pdf_filestream._root_object.update({
-            NameObject("/PageMode"): NameObject("/UseAttachments"),
-        })
-        new_pdf_content = None
+            with open(pdf_file, 'rb') as f:
+                pdf_content = f.read()
+        updated_pdf_content = self._embed_ubl_xml_in_pdf_content(
+            xml_string, xml_filename, pdf_content)
         if pdf_file:
-            f = open(pdf_file, 'wb')
-            new_pdf_filestream.write(f)
-            f.close()
-            new_pdf_content = pdf_content
-        elif pdf_content:
-            with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
-                new_pdf_filestream.write(f)
-                f.seek(0)
-                file_content = f.read()
-                new_pdf_content = (file_content, pdf_content[1])
-                f.close()
-        logger.info('%s file added to PDF', xml_filename)
-        return new_pdf_content
+            with open(pdf_file, 'wb') as f:
+                f.write(updated_pdf_content)
+        return updated_pdf_content
 
     # ==================== METHODS TO PARSE UBL files
 
@@ -633,11 +648,10 @@ class BaseUbl(models.AbstractModel):
                 delivery_address_xpath[0], ns)
         else:
             address_dict = {}
-        delivery_dict = {
+        return {
             'partner': partner_dict,
             'address': address_dict,
             }
-        return delivery_dict
 
     def ubl_parse_incoterm(self, delivery_term_node, ns):
         incoterm_xpath = delivery_term_node.xpath("cbc:ID", namespaces=ns)
@@ -692,9 +706,9 @@ class BaseUbl(models.AbstractModel):
                         'A valid XML file %s has been found in the PDF file',
                         filename)
                     res[filename] = xml_root
-                except Exception as e:
+                except Exception:
                     continue
-        except Exception as e:
+        except Exception:
             pass
         logger.info('Valid XML files found in PDF: %s', list(res.keys()))
         return res
