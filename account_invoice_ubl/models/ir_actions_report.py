@@ -19,29 +19,33 @@ class IrActionsReport(models.Model):
         time and also when it is read from the attachment.
         """
         pdf_content = super()._post_pdf(
-            save_in_attachment, pdf_content=pdf_content, res_ids=res_ids)
+            save_in_attachment, pdf_content=pdf_content, res_ids=res_ids
+        )
         if res_ids and len(res_ids) == 1:
             if self.is_ubl_xml_to_embed_in_invoice():
-                invoice = self.env['account.move'].browse(res_ids)
+                invoice = self.env["account.move"].browse(res_ids)
                 pdf_content = invoice.embed_ubl_xml_in_pdf(pdf_content)
         return pdf_content
 
     def render_qweb_pdf(self, res_ids=None, data=None):
         """This is only necessary when tests are enabled.
         It forces the creation of pdf instead of html."""
-        if len(res_ids or []) == 1 and not self.env.context.get('no_embedded_ubl_xml'):
+        if len(res_ids or []) == 1 and not self.env.context.get("no_embedded_ubl_xml"):
             if len(self) == 1 and self.is_ubl_xml_to_embed_in_invoice():
                 self = self.with_context(force_report_rendering=True)
         return super().render_qweb_pdf(res_ids, data)
 
     def is_ubl_xml_to_embed_in_invoice(self):
-        return self.model == 'account.move'\
-               and not self.env.context.get('no_embedded_ubl_xml')\
-               and self.report_name in self._get_invoice_reports_ubl()
+        return (
+            self.model == "account.move"
+            and not self.env.context.get("no_embedded_ubl_xml")
+            and self.report_name in self._get_invoice_reports_ubl()
+        )
 
     @classmethod
     def _get_invoice_reports_ubl(cls):
         return [
-            'account.report_invoice',
-            'account.report_invoice_with_payments',
-            'account.account_invoice_report_duplicate_main']
+            "account.report_invoice",
+            "account.report_invoice_with_payments",
+            "account.account_invoice_report_duplicate_main",
+        ]
