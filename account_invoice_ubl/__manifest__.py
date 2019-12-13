@@ -21,5 +21,6 @@
         'views/res_config_settings.xml',
         ],
     'post_init_hook': 'set_xml_format_in_pdf_invoice_to_ubl',
+    'uninstall_hook': 'remove_ubl_xml_format_in_pdf_invoice',
     'installable': True,
 }
