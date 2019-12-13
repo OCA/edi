@@ -19,13 +19,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:221
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:210
 #, python-format
 msgid "%d new order line(s) created: %s"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:205
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:194
 #, python-format
 msgid "%d order line(s) are not in the imported quotation: %s"
 msgstr ""
@@ -125,7 +125,7 @@ msgid "RFQ to Update"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:257
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:250
 #, python-format
 msgid ""
 "The currency of the imported quotation (%s) is different from the currency "
@@ -141,7 +141,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:191
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:180
 #, python-format
 msgid ""
 "The quantity has been updated on the RFQ line with product '%s' from %s to "
@@ -149,7 +149,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:253
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:246
 #, python-format
 msgid ""
 "The supplier of the imported quotation (%s) is different from the supplier "
@@ -157,7 +157,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:183
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:172
 #, python-format
 msgid ""
 "The unit price has been updated on the RFQ line with product '%s' from %s to "
@@ -176,7 +176,7 @@ msgid "There are no embedded XML file in this PDF file."
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:272
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:265
 #, python-format
 msgid ""
 "This RFQ has been updated automatically via the import of quotation file %s"
@@ -197,7 +197,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:265
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:258
 #, python-format
 msgid "This quotation doesn't have any line !"
 msgstr ""
@@ -246,7 +246,7 @@ msgid "XML or PDF Quotation"
 msgstr ""
 
 #. module: purchase_order_import
-#: code:addons/purchase_order_import/wizard/purchase_order_import.py:240
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:233
 #, python-format
 msgid "You must select a quotation to update."
 msgstr ""
