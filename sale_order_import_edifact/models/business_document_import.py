@@ -19,7 +19,8 @@ class BusinessDocumentImport(models.AbstractModel):
             domain = [
                 '|', ('company_id', '=', False),
                 ('company_id', '=', company_id),
-                ('edifact_code', '=', partner_dict['edifact_code'])]
+                ('edifact_code', '=', partner_dict['edifact_code']),
+                ('type', 'not in', ('delivery', 'invoice'))]
             partner = rpo.search(domain, limit=1)
             if partner:
                 return partner
