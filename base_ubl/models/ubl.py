@@ -80,7 +80,7 @@ class BaseUbl(models.AbstractModel):
             contact_id.text = contact_id_text
         if partner.parent_id:
             contact_name = etree.SubElement(contact, ns["cbc"] + "Name")
-            contact_name.text = partner.name
+            contact_name.text = partner.name or partner.parent_id.name
         phone = partner.phone or partner.commercial_partner_id.phone
         if phone:
             telephone = etree.SubElement(contact, ns["cbc"] + "Telephone")
