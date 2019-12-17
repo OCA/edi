@@ -5,6 +5,11 @@
 
 from odoo.addons.account_tax_unece.tests.test_account_invoice import TestAccountInvoice
 
+from ..hooks import (
+    remove_ubl_xml_format_in_pdf_invoice,
+    set_xml_format_in_pdf_invoice_to_ubl,
+)
+
 
 class TestUblInvoice(TestAccountInvoice):
     def test_ubl_generate(self):
@@ -35,3 +40,17 @@ class TestUblInvoice(TestAccountInvoice):
         self.assertEqual(action["res_model"], "ir.attachment")
         self.assertEqual(action["view_mode"], "form,tree")
         self.assertFalse(action["views"])
+
+    def test_install_uninstall_hooks(self):
+        set_xml_format_in_pdf_invoice_to_ubl(self.env.cr, None)
+        self.assertTrue(
+            self.env["res.company"].search([("xml_format_in_pdf_invoice", "=", "ubl")])
+        )
+        remove_ubl_xml_format_in_pdf_invoice(self.env.cr, None)
+        self.assertFalse(
+            self.env["res.company"].search([("xml_format_in_pdf_invoice", "=", "ubl")])
+        )
+        set_xml_format_in_pdf_invoice_to_ubl(self.env.cr, None)
+        self.assertTrue(
+            self.env["res.company"].search([("xml_format_in_pdf_invoice", "=", "ubl")])
+        )
