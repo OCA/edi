@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019 PlanetaTIC - Marc Poch <mpoch@planetatic.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<data>
+
+<record id="invoice_edifact_form" model="ir.ui.view">
+    <field name="name">account_invoice_edifact.customer.invoice.form</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_form"/>
+    <field name="arch" type="xml">
+        <header position="inside">
+            <button type="object" name="invoice_export_edifact"
+                string="Invoice Export Edifact" states="open,paid"/>
+        </header>
+    </field>
+</record>
+
+</data>
+</odoo>
