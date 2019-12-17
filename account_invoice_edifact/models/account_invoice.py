@@ -16,10 +16,15 @@ class AccountInvoice(models.Model):
         edifact_header += self.edifact_invoice_name(
             self.number, self.type)  # INV
         edifact_header += self.edifact_invoice_date(self.date_invoice)  # DTM
+        if not self.company_id.partner_id.edifact_code:
+            raise UserError(_('Partner %s has no Edifact Code') %
+                            self.company_id.partner_id.name)
+        if not self.partner_id.edifact_code:
+            raise UserError(
+                _('Partner %s has no Edifact Code') % self.partner_id.name)
         sale_order_partner = self.partner_id
         picking = False
         if self.picking_ids:
-            # FIXME: Què passa quan hi ha més d'un albarà?
             picking = self.picking_ids[0]
             if not picking.partner_id.edifact_code:
                 raise UserError(_('Partner %s has no Edifact Code') %
@@ -30,7 +35,7 @@ class AccountInvoice(models.Model):
                 sale = picking.sale_id
                 if not sale.partner_id.edifact_code:
                     raise UserError(_('Partner %s has no Edifact Code') %
-                                    picking.partner_id.name)
+                                    sale.partner_id.name)
                 sale_order_partner = sale.partner_id
                 edifact_header += self.edifact_invoice_references(
                     'order', sale.name, sale.date_order)
