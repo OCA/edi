@@ -552,10 +552,9 @@ class BaseUbl(models.AbstractModel):
         writer._root_object.update(
             {NameObject("/PageMode"): NameObject("/UseAttachments")}
         )
-        buffer.close()
-        buffer = BytesIO()
-        writer.write(buffer)
-        return buffer
+        new_buffer = BytesIO()
+        writer.write(new_buffer)
+        return new_buffer
 
     @api.model
     def _embed_ubl_xml_in_pdf_content(self, xml_string, xml_filename, pdf_content):
