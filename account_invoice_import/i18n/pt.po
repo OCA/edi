@@ -274,7 +274,7 @@ msgid "Invoice or Refund"
 msgstr "Fatura ou Crédito"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:1042
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:1012
 #, python-format
 msgid ""
 "Invoice successfully imported from email sent by <b>%s</b> on %s with "
