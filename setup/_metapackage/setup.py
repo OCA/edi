@@ -11,6 +11,8 @@ setuptools.setup(
         'odoo12-addon-account_e-invoice_generate',
         'odoo12-addon-account_invoice_ubl',
         'odoo12-addon-account_invoice_ubl_email_attachment',
+        'odoo12-addon-base_business_document_import',
+        'odoo12-addon-base_business_document_import_phone',
         'odoo12-addon-base_ubl',
         'odoo12-addon-base_ubl_payment',
         'odoo12-addon-sale_order_ubl',
