@@ -703,7 +703,7 @@ class BaseUbl(models.AbstractModel):
         )
         product_dict = {
             "barcode": barcode_xpath and barcode_xpath[0].text or False,
-            "default_code": code_xpath and code_xpath[0].text or False,
+            "code": code_xpath and code_xpath[0].text or False,
         }
         return product_dict
 
