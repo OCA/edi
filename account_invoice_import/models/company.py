@@ -9,10 +9,10 @@ class ResCompany(models.Model):
     _inherit = 'res.company'
 
     adjustment_credit_account_id = fields.Many2one(
-        'account.account', string='Adjustment Credit Account',
+        'account.account',
         domain=[('deprecated', '=', False)])
     adjustment_debit_account_id = fields.Many2one(
-        'account.account', string='Adjustment Debit Account',
+        'account.account',
         domain=[('deprecated', '=', False)])
     invoice_import_email = fields.Char(
         'Mail Gateway: Destination E-mail',
