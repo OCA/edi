@@ -1,7 +1,7 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime
+from datetime import date, datetime
 from odoo.tests import common
 
 
@@ -9,35 +9,64 @@ class TestVoxelAccountInvoice(common.SavepointCase):
     @classmethod
     def setUpClass(cls):
         super(TestVoxelAccountInvoice, cls).setUpClass()
-
+        # Invoice line account
         account_type_revenue = cls.env.ref('account.data_account_type_revenue')
         account_revenue = cls.env['account.account'].search(
             [('user_type_id', '=', account_type_revenue.id)], limit=1)
-
+        # Invoice company
         main_company = cls.env.ref('base.main_company')
         main_company.write({'vat': 'US1234567890', 'street2': 'Street 2'})
-
-        partner = cls.env.ref("base.res_partner_2")
-        partner.write(
-            {'vat': 'BE0477472701', 'street2': 'Street 3', 'ref': 'C01'})
-
+        # Invoice client
+        partner = cls.env["res.partner"].create({
+            'ref': 'C01',
+            'vat': 'BE0123456789',
+            'name': 'Client (test)',
+            'email': 'client_test@example.com',
+            'street': 'Street 1',
+            'street2': 'Street 2',
+            'city': 'City (test)',
+            'zip': '10000',
+            'state_id': cls.env.ref("base.state_us_49").id,
+            'country_id': cls.env.ref("base.us").id,
+        })
+        # Invoice products
+        product_obj = cls.env["product.product"]
+        product_1 = product_obj.create({
+            'default_code': 'DC_001',
+            'name': 'Product 1 (test)',
+        })
+        cls.env['product.customerinfo'].create({
+            'name': partner.id,
+            'product_tmpl_id': product_1.product_tmpl_id.id,
+            'product_id': product_1.id,
+            'product_code': '1234567891234',
+        })
+        product_2 = product_obj.create({
+            'default_code': 'DC_002',
+            'name': 'Product 2 (test)',
+        })
+        product_3 = product_obj.create({
+            'default_code': 'DC_003',
+            'name': 'Product 3 (test)',
+        })
+        # Invoice
         cls.invoice = cls.env['account.invoice'].create({
             'partner_id': partner.id,
             'type': 'out_invoice',
             'currency_id': cls.env.ref('base.USD').id,
-            'date_invoice': datetime(2019, 4, 13),
+            'date_invoice': date(2019, 4, 13),
             'company_id': main_company.id,
             'invoice_line_ids': [
                 (0, 0, {
-                    'product_id': cls.env.ref("product.product_product_4").id,
+                    'product_id': product_1.id,
                     'quantity': 2,
                     'price_unit': 750,
-                    'name': 'Product 4',
-                    'uom_id': cls.env.ref('product.product_uom_unit').id,
+                    'name': 'Product 1',
+                    'uom_id': cls.env.ref('uom.product_uom_unit').id,
                     'account_id': account_revenue.id,
                 }),
                 (0, 0, {
-                    'product_id': cls.env.ref("product.product_product_5").id,
+                    'product_id': product_2.id,
                     'quantity': 3,
                     'price_unit': 147,
                     'discount': 20,
@@ -59,16 +88,16 @@ class TestVoxelAccountInvoice(common.SavepointCase):
                                 'account.tax_group_taxes').id,
                         }),
                     ],
-                    'name': 'Product 5',
-                    'uom_id': cls.env.ref('product.product_uom_unit').id,
+                    'name': 'Product 2',
+                    'uom_id': cls.env.ref('uom.product_uom_unit').id,
                     'account_id': account_revenue.id,
                 }),
                 (0, 0, {
-                    'product_id': cls.env.ref("product.product_product_3").id,
+                    'product_id': product_3.id,
                     'quantity': 0,
                     'price_unit': 0,
                     'name': 'Product 3',
-                    'uom_id': cls.env.ref('product.product_uom_unit').id,
+                    'uom_id': cls.env.ref('uom.product_uom_unit').id,
                     'account_id': account_revenue.id,
                 }),
             ]
@@ -93,7 +122,7 @@ class TestVoxelAccountInvoice(common.SavepointCase):
         # Get report data
         model_name = 'report.edi_voxel_account_invoice.template_voxel_invoice'
         report_edi_obj = self.env[model_name]
-        report_data = report_edi_obj.get_report_values(self.invoice.ids)
+        report_data = report_edi_obj._get_report_values(self.invoice.ids)
         # Get expected data
         expected_report_data = self._get_invoice_data()
         # Check data
@@ -137,14 +166,14 @@ class TestVoxelAccountInvoice(common.SavepointCase):
     def _get_client_data(self):
         return {
             'SupplierClientID': 'C01',
-            'CIF': 'BE0477472701',
-            'Company': 'Agrolait',
-            'Address': '69 rue de Namur, Street 3',
-            'City': 'Wavre',
-            'PC': '1300',
-            'Province': False,
-            'Country': 'BEL',
-            'Email': 'agrolait@yourcompany.example.com',
+            'CIF': 'BE0123456789',
+            'Company': 'Client (test)',
+            'Address': 'Street 1, Street 2',
+            'City': 'City (test)',
+            'PC': '10000',
+            'Province': 'West Virginia',
+            'Country': 'USA',
+            'Email': 'client_test@example.com',
         }
 
     def _get_customers_data(self):
@@ -160,8 +189,9 @@ class TestVoxelAccountInvoice(common.SavepointCase):
         return [
             {
                 'product': {
-                    'SupplierSKU': 'E-COM01',
-                    'Item': 'iPad Retina Display',
+                    'SupplierSKU': 'DC_001',
+                    'CustomerSKU': '1234567891234',
+                    'Item': 'Product 1 (test)',
                     'Qty': "2.0",
                     'MU': 'Unidades',
                     'UP': "750.0",
@@ -172,8 +202,9 @@ class TestVoxelAccountInvoice(common.SavepointCase):
             },
             {
                 'product': {
-                    'SupplierSKU': 'E-COM06',
-                    'Item': 'Custom Computer (kit)',
+                    'SupplierSKU': 'DC_002',
+                    'CustomerSKU': False,
+                    'Item': 'Product 2 (test)',
                     'Qty': "3.0",
                     'MU': 'Unidades',
                     'UP': "147.0",
@@ -198,8 +229,9 @@ class TestVoxelAccountInvoice(common.SavepointCase):
             },
             {
                 'product': {
-                    'SupplierSKU': 'PCSC234',
-                    'Item': 'Computer SC234',
+                    'SupplierSKU': 'DC_003',
+                    'CustomerSKU': False,
+                    'Item': 'Product 3 (test)',
                     'Qty': "0.0",
                     'MU': 'Unidades',
                     'UP': "0.0",

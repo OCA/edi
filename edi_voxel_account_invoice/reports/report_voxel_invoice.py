@@ -8,9 +8,10 @@ from odoo import api, fields, models
 
 class ReportVoxelInvoice(models.AbstractModel):
     _name = 'report.edi_voxel_account_invoice.template_voxel_invoice'
+    _description = 'Edi Voxel Account Invoice Report'
 
     @api.model
-    def get_report_values(self, docids, data=None):
+    def _get_report_values(self, docids, data=None):
         docs = self.env['account.invoice'].browse(docids)[:1]
         data = {
             'general': self._get_general_data(docs),
@@ -118,12 +119,32 @@ class ReportVoxelInvoice(models.AbstractModel):
     def _get_product_data(self, line):
         return {
             'SupplierSKU': line.product_id.default_code,
+            'CustomerSKU': self._get_customer_sku(line),
             'Item': line.product_id.name,
             'Qty': str(line.quantity),
             'MU': line.uom_id.voxel_code,
             'UP': str(line.price_unit),
             'Total': str(line.quantity * line.price_unit),
         }
+
+    def _get_customer_sku(self, line):
+        supplierinfo = line.product_id.product_tmpl_id.customer_ids
+        customer = line.invoice_id.picking_ids.mapped('partner_id')
+        if customer:
+            res = self._get_supplierinfo(line, supplierinfo, customer[0])
+        if not customer or not res:
+            client = line.invoice_id.partner_id
+            res = self._get_supplierinfo(line, supplierinfo, client)
+        return res.product_code
+
+    def _get_supplierinfo(self, line, supplierinfo, partner):
+        res = self.env['product.supplierinfo']
+        for rec in supplierinfo:
+            if rec.name == partner and rec.product_id == line.product_id:
+                return rec
+            if not res and (rec.name == partner and not rec.product_id):
+                res = rec
+        return res
 
     def _get_product_discounts_data(self, line):
         taxes = []
