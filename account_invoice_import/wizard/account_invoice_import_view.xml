@@ -2,13 +2,12 @@
 <!--
   © 2015-2017 Akretion (http://www.akretion.com/)
   @author: Alexis de Lattre <alexis.delattre@akretion.com>
-  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 -->
 
 <odoo>
 
 <record id="account_invoice_import_form" model="ir.ui.view">
-    <field name="name">account.invoice.import.form</field>
     <field name="model">account.invoice.import</field>
     <field name="arch"  type="xml">
         <form string="Import Supplier Invoice or Refund">
