@@ -8,17 +8,16 @@
 <odoo>
 
   <record id="res_config_settings_view_form" model="ir.ui.view">
-    <field name="name">invoice_import.res.config.settings.form</field>
     <field name="model">res.config.settings</field>
     <field name="inherit_id" ref="account.res_config_settings_view_form"/>
     <field name="arch" type="xml">
-      <xpath expr="//div[@data-key='account_invoicing']" position="inside">
+      <xpath expr="//div[@data-key='account']" position="inside">
         <h2 attrs="{'invisible': [('has_accounting_entries','==',False)]}">Invoice Import</h2>
         <div class="row mt16 o_settings_container">
           <div class="col-xs-12 col-md-6 o_setting_box" attrs="{'invisible': [('has_accounting_entries','==',False)]}" title="These taxes are set in any new product created.">
             <div class="o_setting_left_pane"/>
             <div class="o_setting_right_pane">
-              <label string='Default Taxes'/>
+              <span class="o_form_label">Default Taxes</span>
               <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
               <div class="text-muted">
                 Default taxes applied to local transactions
