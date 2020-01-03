@@ -4,15 +4,15 @@
 {
     "name": "Voxel account invoice",
     "summary": "Sends account invoices to Voxel.",
-    "version": "11.0.1.0.0",
+    "version": "12.0.1.0.0",
     "category": "Accounting & Finance",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/oca/edi/",
     "license": "AGPL-3",
     "depends": [
-        "account_invoicing",
         "edi_voxel",
         "stock_picking_invoice_link",
+        "product_supplierinfo_for_customer",
     ],
     "data": [
         "views/account_invoice_views.xml",
