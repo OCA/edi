@@ -1,5 +1,5 @@
 # © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
 from odoo.tools import float_compare
@@ -8,7 +8,7 @@ from odoo.tools import float_compare
 class TestInvoiceImport(TransactionCase):
 
     def setUp(self):
-        super(TestInvoiceImport, self).setUp()
+        super().setUp()
         self.expense_account = self.env['account.account'].create({
             'code': '612AII',
             'name': 'expense account invoice import',
@@ -81,7 +81,7 @@ class TestInvoiceImport(TransactionCase):
             'date_start': '2017-08-01',
             'date_end': '2017-08-31',
             'partner': {
-                'name': 'ASUSTeK',
+                'name': 'Wood Corner',
             },
             'description': 'New hi-tech gadget',
             'lines': [{
@@ -106,7 +106,7 @@ class TestInvoiceImport(TransactionCase):
             'type': 'out_invoice',
             'date_invoice': '2017-08-16',
             'partner': {
-                'name': 'Agrolait',
+                'name': 'Deco Addict',
             },
             'lines': [{
                 'product': {'code': 'AII-TEST-PRODUCT'},
