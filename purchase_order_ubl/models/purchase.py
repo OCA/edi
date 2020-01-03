@@ -1,4 +1,5 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2020 Onestein (<https://www.onestein.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api
@@ -20,7 +21,6 @@ class PurchaseOrder(models.Model):
     def get_order_states(self):
         return ['purchase', 'done']
 
-    @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):
         if doc_type == 'rfq':
             now_utc = fields.Datetime.to_string(fields.Datetime.now())
@@ -48,7 +48,6 @@ class PurchaseOrder(models.Model):
             parent_node, ns['cbc'] + currency_node_name)
         doc_currency.text = self.currency_id.name
 
-    @api.multi
     def _ubl_add_monetary_total(self, parent_node, ns, version='2.1'):
         monetary_total = etree.SubElement(
             parent_node, ns['cac'] + 'AnticipatedMonetaryTotal')
@@ -61,7 +60,6 @@ class PurchaseOrder(models.Model):
             currencyID=self.currency_id.name)
         payable_amount.text = str(self.amount_total)
 
-    @api.multi
     def _ubl_add_rfq_line(
             self, parent_node, oline, line_number, ns, version='2.1'):
         line_root = etree.SubElement(
@@ -71,7 +69,6 @@ class PurchaseOrder(models.Model):
             oline.product_qty, oline.product_uom, line_root, ns,
             seller=self.partner_id.commercial_partner_id, version=version)
 
-    @api.multi
     def _ubl_add_order_line(
             self, parent_node, oline, line_number, ns, version='2.1'):
         line_root = etree.SubElement(
@@ -87,14 +84,12 @@ class PurchaseOrder(models.Model):
             qty_precision=qty_precision, price_precision=price_precision,
             version=version)
 
-    @api.multi
     def get_delivery_partner(self):
         self.ensure_one()
         if self.dest_address_id:
             return self.dest_address_id
         return self.company_id.partner_id
 
-    @api.multi
     def generate_rfq_ubl_xml_etree(self, version='2.1'):
         nsmap, ns = self._ubl_get_nsmap_namespace(
             'RequestForQuotation-2', version=version)
@@ -124,7 +119,6 @@ class PurchaseOrder(models.Model):
                 xml_root, oline, line_number, ns, version=version)
         return xml_root
 
-    @api.multi
     def generate_order_ubl_xml_etree(self, version='2.1'):
         nsmap, ns = self._ubl_get_nsmap_namespace('Order-2', version=version)
         xml_root = etree.Element('Order', nsmap=nsmap)
@@ -154,7 +148,6 @@ class PurchaseOrder(models.Model):
                 xml_root, oline, line_number, ns, version=version)
         return xml_root
 
-    @api.multi
     def generate_ubl_xml_string(self, doc_type, version='2.1'):
         self.ensure_one()
         assert doc_type in ('order', 'rfq'), 'wrong doc_type'
@@ -184,7 +177,6 @@ class PurchaseOrder(models.Model):
         logger.debug(xml_string)
         return xml_string
 
-    @api.multi
     def get_ubl_filename(self, doc_type, version='2.1'):
         """This method is designed to be inherited"""
         if doc_type == 'rfq':
@@ -192,29 +184,36 @@ class PurchaseOrder(models.Model):
         elif doc_type == 'order':
             return 'UBL-Order-%s.xml' % version
 
-    @api.multi
     def get_ubl_version(self):
-        version = self._context.get('ubl_version') or '2.1'
-        return version
+        return self.env.context.get('ubl_version') or '2.1'
 
-    @api.multi
     def get_ubl_lang(self):
+        self.ensure_one()
         return self.partner_id.lang or 'en_US'
 
-    @api.multi
-    def embed_ubl_xml_in_pdf(self, pdf_content=None, pdf_file=None):
+    def add_xml_in_pdf_buffer(self, buffer):
         self.ensure_one()
-        doc_type = False
-        if self.state in self.get_rfq_states():
-            doc_type = 'rfq'
-        elif self.state in self.get_order_states():
-            doc_type = 'order'
+        doc_type = self.get_ubl_purchase_order_doc_type()
         if doc_type:
             version = self.get_ubl_version()
-            ubl_filename = self.get_ubl_filename(doc_type, version=version)
-            xml_string = self.generate_ubl_xml_string(
-                doc_type, version=version)
-            pdf_content = self.embed_xml_in_pdf(
-                xml_string, ubl_filename,
-                pdf_content=pdf_content, pdf_file=pdf_file)
+            xml_filename = self.get_ubl_filename(doc_type, version=version)
+            xml_string = self.generate_ubl_xml_string(doc_type, version=version)
+            buffer = self._ubl_add_xml_in_pdf_buffer(xml_string, xml_filename, buffer)
+        return buffer
+
+    def embed_ubl_xml_in_pdf(self, pdf_content):
+        self.ensure_one()
+        doc_type = self.get_ubl_purchase_order_doc_type()
+        if doc_type:
+            version = self.get_ubl_version()
+            xml_filename = self.get_ubl_filename(doc_type, version=version)
+            xml_string = self.generate_ubl_xml_string(doc_type, version=version)
+            pdf_content = self.embed_xml_in_pdf(xml_string, xml_filename, pdf_content=pdf_content)
         return pdf_content
+
+    def get_ubl_purchase_order_doc_type(self):
+        self.ensure_one()
+        if self.state in self.get_rfq_states():
+            return 'rfq'
+        elif self.state in self.get_order_states():
+            return 'order'
