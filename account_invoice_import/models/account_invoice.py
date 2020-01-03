@@ -1,5 +1,5 @@
 # © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models, api, _
 
@@ -10,8 +10,8 @@ class AccountInvoice(models.Model):
     @api.multi
     def name_get(self):
         """Add amount_untaxed in name_get of invoices"""
-        res = super(AccountInvoice, self).name_get()
-        if self._context.get('invoice_show_amount'):
+        res = super().name_get()
+        if self.env.context.get('invoice_show_amount'):
             new_res = []
             for (inv_id, name) in res:
                 inv = self.browse(inv_id)
@@ -22,5 +22,4 @@ class AccountInvoice(models.Model):
                     inv.amount_untaxed, inv.currency_id.name)
                 new_res.append((inv_id, name))
             return new_res
-        else:
-            return res
+        return res

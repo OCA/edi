@@ -8,7 +8,6 @@
 <odoo>
 
 <record id="account_invoice_import_config_form" model="ir.ui.view">
-    <field name="name">account.invoice.import.config.form</field>
     <field name="model">account.invoice.import.config</field>
     <field name="arch"  type="xml">
         <form string="Invoice Import Configuration">
@@ -43,7 +42,6 @@
 </record>
 
 <record id="account_invoice_import_config_tree" model="ir.ui.view">
-    <field name="name">account.invoice.import.config.tree</field>
     <field name="model">account.invoice.import.config</field>
     <field name="arch"  type="xml">
         <tree string="Invoice Import Configurations">
@@ -57,7 +55,6 @@
 </record>
 
 <record id="account_invoice_import_config_search" model="ir.ui.view">
-    <field name="name">account.invoice.import.config.search</field>
     <field name="model">account.invoice.import.config</field>
     <field name="arch"  type="xml">
         <search string="Search Invoice Import Configurations">
