@@ -63,7 +63,6 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'country_id': self.env.ref('base.fr').id,
             'type': 'invoice',
         })
-        demo_partner2 = self.env.ref('base.res_partner_2')
         shipping_dict = {
             'partner': {'email': 'contact@akretion.com'},
             'address': {},
@@ -85,13 +84,6 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             'country_id': self.env.ref('base.fr').id,
             'email': 'contact@alex.com',
         })
-        cpartner2 = rpo.create({
-            'name': 'Joe Taylor',
-            'parent_id': partner2.id,
-            'type': 'delivery',
-            'zip': '69005',
-            'country_id': self.env.ref('base.fr').id,
-            })
         shipping_dict = {
             'partner': {'email': 'contact@alex.com'},
             'address': {'country_code': 'FR', 'zip': '69009'},
