@@ -1,6 +1,6 @@
 # Copyright 2015-2018 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import base64
 from odoo import api, fields, models, _
@@ -27,13 +27,13 @@ class AccountInvoiceImport(models.TransientModel):
         ('config', 'Select Invoice Import Configuration'),
         ('update', 'Update'),
         ('update-from-invoice', 'Update From Invoice'),
-        ], string='State', default="import")
+        ], default="import")
     partner_id = fields.Many2one(
         'res.partner', string="Supplier", readonly=True)
     import_config_id = fields.Many2one(
         'account.invoice.import.config', string='Invoice Import Configuration')
     currency_id = fields.Many2one(
-        'res.currency', 'Currency', readonly=True)
+        'res.currency', readonly=True)
     invoice_type = fields.Selection([
         ('in_invoice', 'Invoice'),
         ('in_refund', 'Refund'),
@@ -49,16 +49,16 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(AccountInvoiceImport, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         # I can't put 'default_state' in context because then it is transfered
         # to the code and it causes problems when we create invoice lines
-        if self._context.get('wizard_default_state'):
-            res['state'] = self._context['wizard_default_state']
+        if self.env.context.get('wizard_default_state'):
+            res['state'] = self.env.context['wizard_default_state']
         if (
-                self._context.get('default_partner_id') and
-                not self._context.get('default_import_config_id')):
+                self.env.context.get('default_partner_id') and
+                not self.env.context.get('default_import_config_id')):
             configs = self.env['account.invoice.import.config'].search([
-                ('partner_id', '=', self._context['default_partner_id']),
+                ('partner_id', '=', self.env.context['default_partner_id']),
                 ('company_id', '=', self.env.user.company_id.id),
                 ])
             if len(configs) == 1:
@@ -177,7 +177,7 @@ class AccountInvoiceImport(models.TransientModel):
         ailo = self.env['account.invoice.line']
         bdio = self.env['business.document.import']
         rpo = self.env['res.partner']
-        company_id = self._context.get('force_company') or\
+        company_id = self.env.context.get('force_company') or\
             self.env.user.company_id.id
         start_end_dates_installed = hasattr(ailo, 'start_date') and\
             hasattr(ailo, 'end_date')
@@ -350,7 +350,7 @@ class AccountInvoiceImport(models.TransientModel):
             il_vals['end_date'] = parsed_inv.get('date_end')
 
     def company_cannot_refund_vat(self):
-        company_id = self._context.get('force_company') or\
+        company_id = self.env.context.get('force_company') or\
             self.env.user.company_id.id
         vat_purchase_taxes = self.env['account.tax'].search([
             ('company_id', '=', company_id),
@@ -365,7 +365,6 @@ class AccountInvoiceImport(models.TransientModel):
         assert invoice_file_b64, 'No invoice file'
         logger.info('Starting to import invoice %s', invoice_filename)
         file_data = base64.b64decode(invoice_file_b64)
-        parsed_inv = {}
         filetype = mimetypes.guess_type(invoice_filename)
         logger.debug('Invoice mimetype: %s', filetype)
         if filetype and filetype[0] in ['application/xml', 'text/xml']:
@@ -470,14 +469,14 @@ class AccountInvoiceImport(models.TransientModel):
         if (
                 parsed_inv.get('company') and
                 not config['test_enable'] and
-                not self._context.get('edi_skip_company_check')):
+                not self.env.context.get('edi_skip_company_check')):
             self.env['business.document.import']._check_company(
                 parsed_inv['company'], parsed_inv['chatter_msg'])
         return parsed_inv
 
     @api.model
     def invoice_already_exists(self, commercial_partner, parsed_inv):
-        company_id = self._context.get('force_company') or\
+        company_id = self.env.context.get('force_company') or\
             self.env.user.company_id.id
         existing_inv = self.env['account.invoice'].search([
             ('company_id', '=', company_id),
@@ -496,7 +495,7 @@ class AccountInvoiceImport(models.TransientModel):
         aiico = self.env['account.invoice.import.config']
         bdio = self.env['business.document.import']
         iaao = self.env['ir.actions.act_window']
-        company_id = self._context.get('force_company') or\
+        company_id = self.env.context.get('force_company') or\
             self.env.user.company_id.id
         parsed_inv = self.parse_invoice(
             self.invoice_file, self.invoice_filename)
@@ -587,7 +586,7 @@ class AccountInvoiceImport(models.TransientModel):
             assert self.import_config_id
             import_config = self.import_config_id.convert_to_import_config()
         invoice = self.create_invoice(parsed_inv, import_config)
-        invoice.message_post(_(
+        invoice.message_post(body=_(
             "This invoice has been created automatically via file import"))
         action = iaao.for_xml_id('account', 'action_invoice_tree2')
         action.update({
@@ -724,7 +723,7 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv['amount_untaxed']
             invoice.tax_line_ids[0].amount = tax_amount
             cur_symbol = invoice.currency_id.symbol
-            invoice.message_post(_(
+            invoice.message_post(body=_(
                 'The total tax amount has been forced to %s %s '
                 '(amount computed by Odoo was: %s %s).')
                 % (tax_amount, cur_symbol, initial_tax_amount, cur_symbol))
@@ -886,7 +885,7 @@ class AccountInvoiceImport(models.TransientModel):
         logger.info(
             'Supplier invoice ID %d updated via import of file %s',
             invoice.id, self.invoice_filename)
-        invoice.message_post(_(
+        invoice.message_post(body=_(
             "This invoice has been updated automatically via the import "
             "of file %s") % self.invoice_filename)
         action = iaao.for_xml_id('account', 'action_invoice_tree2')
@@ -1035,7 +1034,7 @@ class AccountInvoiceImport(models.TransientModel):
                         import_configs[0].convert_to_import_config()
                 invoice = self.create_invoice(parsed_inv, import_config)
                 logger.info('Invoice ID %d created from email', invoice.id)
-                invoice.message_post(_(
+                invoice.message_post(body=_(
                     "Invoice successfully imported from email sent by "
                     "<b>%s</b> on %s with subject <i>%s</i>.") % (
                         msg_dict.get('email_from'), msg_dict.get('date'),
