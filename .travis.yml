@@ -1,5 +1,5 @@
 language: python
-sudo: true 
+sudo: true
 cache:
   apt: true
   directories:
@@ -7,6 +7,10 @@ cache:
 
 python:
   - "3.5"
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install --yes build-essential libpoppler-cpp-dev pkg-config python-dev
 
 addons:
   postgresql: "9.6"
@@ -17,7 +21,6 @@ addons:
       - python-simplejson
       - python-serial
       - python-yaml
-
 env:
   global:
   - VERSION="11.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0"
@@ -34,11 +37,12 @@ install:
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
   - pip install invoice2data
+  - pip install pdftotext
   # Invoice2data new requires a recent version of pdftotext from https://poppler.freedesktop.org/releases.html
   # and the version below doesn't work any more
-  #- wget -P /tmp http://public.akretion.com/pdftotext-3.04
-  #- sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
-  #- sudo chmod 755 /usr/local/bin/pdftotext
+  - wget -P /tmp http://public.akretion.com/pdftotext-3.04
+  - sudo mv /tmp/pdftotext-3.04 /usr/local/bin/pdftotext
+  - sudo chmod 755 /usr/local/bin/pdftotext
 
 script:
   - travis_run_tests
