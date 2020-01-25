@@ -42,7 +42,7 @@ class ReportVoxelInvoice(models.AbstractModel):
     def _get_suplier_data(self, invoice):
         supplier = invoice.company_id.partner_id
         return {
-            'CIF': supplier.vat,
+            'CIF': supplier._get_voxel_vat(),
             'Company': supplier.name,
             'Address': ', '.join(
                 filter(None, [supplier.street, supplier.street2])),
@@ -57,7 +57,7 @@ class ReportVoxelInvoice(models.AbstractModel):
         client = invoice.partner_id
         return {
             'SupplierClientID': client.ref,
-            'CIF': client.vat,
+            'CIF': client._get_voxel_vat(),
             'Company': client.commercial_partner_id.name,
             'Address': ', '.join(
                 filter(None, [client.street, client.street2])),
@@ -117,34 +117,21 @@ class ReportVoxelInvoice(models.AbstractModel):
         } for line in invoice.invoice_line_ids]
 
     def _get_product_data(self, line):
+        customer_sku = line.invoice_id._get_customer_product_sku(
+            line.product_id,
+            line.mapped('move_line_ids.picking_id.partner_id')[:1])
+        if not customer_sku:
+            customer_sku = line.invoice_id._get_customer_product_sku(
+                line.product_id, line.invoice_id.partner_id)
         return {
             'SupplierSKU': line.product_id.default_code,
-            'CustomerSKU': self._get_customer_sku(line),
+            'CustomerSKU': customer_sku,
             'Item': line.product_id.name,
             'Qty': str(line.quantity),
             'MU': line.uom_id.voxel_code,
             'UP': str(line.price_unit),
             'Total': str(line.quantity * line.price_unit),
         }
-
-    def _get_customer_sku(self, line):
-        supplierinfo = line.product_id.product_tmpl_id.customer_ids
-        customer = line.invoice_id.picking_ids.mapped('partner_id')
-        if customer:
-            res = self._get_supplierinfo(line, supplierinfo, customer[0])
-        if not customer or not res:
-            client = line.invoice_id.partner_id
-            res = self._get_supplierinfo(line, supplierinfo, client)
-        return res.product_code
-
-    def _get_supplierinfo(self, line, supplierinfo, partner):
-        res = self.env['product.supplierinfo']
-        for rec in supplierinfo:
-            if rec.name == partner and rec.product_id == line.product_id:
-                return rec
-            if not res and (rec.name == partner and not rec.product_id):
-                res = rec
-        return res
 
     def _get_product_discounts_data(self, line):
         taxes = []

@@ -12,7 +12,6 @@
     "depends": [
         "edi_voxel",
         "stock_picking_invoice_link",
-        "product_supplierinfo_for_customer",
     ],
     "data": [
         "views/account_invoice_views.xml",
