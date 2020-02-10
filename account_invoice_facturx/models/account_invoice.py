@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-# © 2016-2017 Akretion (http://www.akretion.com)
+# Copyright 2016-2020 Akretion France (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields, api, _
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from odoo.tools import float_compare, float_is_zero, float_round
 from lxml import etree
@@ -11,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import generate_facturx_from_binary
+    from facturx import generate_facturx_from_binary, check_facturx_xsd
 except ImportError:
     logger.debug('Cannot import facturx')
 
@@ -19,6 +18,7 @@ except ImportError:
 FACTURX_FILENAME = 'factur-x.xml'
 DIRECT_DEBIT_CODES = ('49', '59')
 CREDIT_TRF_CODES = ('30', '31', '42')
+PROFILES_EN_UP = ['en16931', 'extended']
 
 
 class AccountInvoice(models.Model):
@@ -50,7 +50,7 @@ class AccountInvoice(models.Model):
             raise UserError(_(
                 "Country is not set on partner '%s'. In the Factur-X "
                 "standard, the country is required for buyer and seller."
-                % partner.name))
+                % partner.display_name))
         address_country = etree.SubElement(
             address, ns['ram'] + 'CountryID')
         address_country.text = partner.country_id.code
@@ -113,6 +113,9 @@ class AccountInvoice(models.Model):
             urn = 'urn:cen.eu:en16931:2017'
         elif ns['level'] == 'basic':
             urn = 'urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic'
+        elif ns['level'] == 'extended':
+            urn = 'urn:cen.eu:en16931:2017#conformant#'\
+                  'urn:factur-x.eu:1p0:extended'
         else:
             urn = 'urn:factur-x.eu:1p0:%s' % ns['level']
         ctx_param_id.text = urn
@@ -140,8 +143,7 @@ class AccountInvoice(models.Model):
         # For Chorus, they impose option b)
         # Until August 2017, I was using option a), now I use option b)
         # Starting from November 2017, it's a config option !
-        date_invoice_dt = fields.Date.from_string(
-            self.date_invoice or fields.Date.context_today(self))
+        date_invoice_dt = self.date_invoice or fields.Date.context_today(self)
         self._cii_add_date('IssueDateTime', date_invoice_dt, header_doc, ns)
         if self.comment and ns['level'] != 'minimum':
             note = etree.SubElement(header_doc, ns['ram'] + 'IncludedNote')
@@ -191,7 +193,7 @@ class AccountInvoice(models.Model):
         seller_name.text = company.name
         self._cii_add_party_identification(
             company.partner_id, seller, ns)
-        if ns['level'] == 'en16931':
+        if ns['level'] in PROFILES_EN_UP:
             self._cii_add_trade_contact_block(
                 self.user_id.partner_id or company.partner_id, seller, ns)
         self._cii_add_address_block(company.partner_id, seller, ns)
@@ -212,7 +214,7 @@ class AccountInvoice(models.Model):
         self._cii_add_party_identification(
             self.commercial_partner_id, buyer, ns)
         if (
-                ns['level'] == 'en16931' and
+                ns['level'] in PROFILES_EN_UP and
                 self.commercial_partner_id != self.partner_id and
                 self.partner_id.name):
             self._cii_add_trade_contact_block(self.partner_id, buyer, ns)
@@ -257,7 +259,7 @@ class AccountInvoice(models.Model):
             trade_transaction,
             ns['ram'] + 'ApplicableHeaderTradeDelivery')
         if (
-                ns['level'] == 'en16931' and
+                ns['level'] in PROFILES_EN_UP and
                 hasattr(self, 'partner_shipping_id') and
                 self.partner_shipping_id):
             shipto_trade_party = etree.SubElement(
@@ -274,19 +276,19 @@ class AccountInvoice(models.Model):
             ns['ram'] + 'SpecifiedTradeSettlementPaymentMeans')
         payment_means_code = etree.SubElement(
             payment_means, ns['ram'] + 'TypeCode')
-        if ns['level'] == 'en16931':
+        if ns['level'] in PROFILES_EN_UP:
             payment_means_info = etree.SubElement(
                 payment_means, ns['ram'] + 'Information')
         if self.payment_mode_id:
             payment_means_code.text =\
                 self.payment_mode_id.payment_method_id.unece_code
-            if ns['level'] == 'en16931':
+            if ns['level'] in PROFILES_EN_UP:
                 payment_means_info.text =\
                     self.payment_mode_id.note or self.payment_mode_id.name
         else:
             payment_means_code.text = '30'  # use 30 and not 31,
             # for wire transfer, according to Factur-X CIUS
-            if ns['level'] == 'en16931':
+            if ns['level'] == PROFILES_EN_UP:
                 payment_means_info.text = _('Wire transfer')
             logger.warning(
                 'Missing payment mode on invoice ID %d. '
@@ -309,7 +311,7 @@ class AccountInvoice(models.Model):
                 iban = etree.SubElement(
                     payment_means_bank_account, ns['ram'] + 'IBANID')
                 iban.text = partner_bank.sanitized_acc_number
-                if ns['level'] == 'en16931' and partner_bank.bank_bic:
+                if ns['level'] in PROFILES_EN_UP and partner_bank.bank_bic:
                     payment_means_bank = etree.SubElement(
                         payment_means,
                         ns['ram'] +
@@ -334,7 +336,7 @@ class AccountInvoice(models.Model):
     def _cii_trade_payment_terms_block(self, trade_settlement, ns):
         trade_payment_term = etree.SubElement(
             trade_settlement, ns['ram'] + 'SpecifiedTradePaymentTerms')
-        if ns['level'] == 'en16931':
+        if ns['level'] in PROFILES_EN_UP:
             trade_payment_term_desc = etree.SubElement(
                 trade_payment_term, ns['ram'] + 'Description')
             # The 'Description' field of SpecifiedTradePaymentTerms
@@ -346,9 +348,8 @@ class AccountInvoice(models.Model):
                     _('No specific payment term selected')
 
         if self.date_due:
-            date_due_dt = fields.Date.from_string(self.date_due)
             self._cii_add_date(
-                'DueDateDateTime', date_due_dt, trade_payment_term, ns)
+                'DueDateDateTime', self.date_due, trade_payment_term, ns)
 
         # Direct debit Mandate
         if (
@@ -369,11 +370,12 @@ class AccountInvoice(models.Model):
                     continue
                 if not tax.unece_type_code:
                     raise UserError(_(
-                        "Missing UNECE Tax Type on tax '%s'") % tax.name)
+                        "Missing UNECE Tax Type on tax '%s'")
+                        % tax.display_name)
                 if not tax.unece_categ_code:
                     raise UserError(_(
                         "Missing UNECE Tax Category on tax '%s'")
-                        % tax.name)
+                        % tax.display_name)
                 trade_tax = etree.SubElement(
                     trade_settlement, ns['ram'] + 'ApplicableTradeTax')
                 amount = etree.SubElement(
@@ -442,8 +444,8 @@ class AccountInvoice(models.Model):
                 self.payment_mode_id and
                 not self.payment_mode_id.payment_method_id.unece_code):
             raise UserError(_(
-                "Missing UNECE code on payment export type '%s'")
-                % self.payment_mode_id.payment_method_id.name)
+                "Missing UNECE code on payment method '%s'")
+                % self.payment_mode_id.payment_method_id.display_name)
         if (
                 ns['level'] != 'minimum' and (
                 self.type == 'out_invoice' or
@@ -467,11 +469,9 @@ class AccountInvoice(models.Model):
             inv_ref_doc_num = etree.SubElement(
                 inv_ref_doc, ns['ram'] + 'IssuerAssignedID')
             inv_ref_doc_num.text = self.refund_invoice_id.number
-            date_refund_dt = fields.Date.from_string(
-                self.refund_invoice_id.date_invoice)
             self._cii_add_date(
-                'FormattedIssueDateTime', date_refund_dt, inv_ref_doc, ns,
-                date_ns_type='qdt')
+                'FormattedIssueDateTime', self.refund_invoice_id.date_invoice,
+                inv_ref_doc, ns, date_ns_type='qdt')
 
     def _cii_monetary_summation_block(
             self, trade_settlement, tax_basis_total, ns):
@@ -521,7 +521,7 @@ class AccountInvoice(models.Model):
         line_doc = etree.SubElement(
             line_item, ns['ram'] + 'AssociatedDocumentLineDocument')
         etree.SubElement(
-            line_doc, ns['ram'] + 'LineID').text = unicode(line_number)
+            line_doc, ns['ram'] + 'LineID').text = str(line_number)
 
         # TODO: move in dedicated method ?
         trade_product = etree.SubElement(
@@ -532,7 +532,7 @@ class AccountInvoice(models.Model):
                     trade_product, ns['ram'] + 'GlobalID', schemeID='0160')
                 # 0160 = GS1 Global Trade Item Number (GTIN, EAN)
                 barcode.text = iline.product_id.barcode
-            if ns['level'] == 'en16931' and iline.product_id.default_code:
+            if ns['level'] in PROFILES_EN_UP and iline.product_id.default_code:
                 product_code = etree.SubElement(
                     trade_product, ns['ram'] + 'SellerAssignedID')
                 product_code.text = iline.product_id.default_code
@@ -540,7 +540,7 @@ class AccountInvoice(models.Model):
             trade_product, ns['ram'] + 'Name')
         product_name.text = iline.name
         if (
-                ns['level'] == 'en16931' and
+                ns['level'] in PROFILES_EN_UP and
                 iline.product_id and
                 iline.product_id.description_sale):
             product_desc = etree.SubElement(
@@ -569,7 +569,7 @@ class AccountInvoice(models.Model):
             net_price_val = float_round(
                 iline.price_subtotal / float(iline.quantity),
                 precision_digits=ns['price_prec'])
-        if ns['level'] == 'en16931':
+        if ns['level'] in PROFILES_EN_UP:
             gross_price = etree.SubElement(
                 line_trade_agreement,
                 ns['ram'] + 'GrossPriceProductTradePrice')
@@ -637,14 +637,14 @@ class AccountInvoice(models.Model):
                 if not tax.unece_type_code:
                     raise UserError(_(
                         "Missing UNECE Tax Type on tax '%s'")
-                        % tax.name)
+                        % tax.display_name)
                 trade_tax_typecode.text = tax.unece_type_code
                 trade_tax_categcode = etree.SubElement(
                     trade_tax, ns['ram'] + 'CategoryCode')
                 if not tax.unece_categ_code:
                     raise UserError(_(
                         "Missing UNECE Tax Category on tax '%s'")
-                        % tax.name)
+                        % tax.display_name)
                 trade_tax_categcode.text = tax.unece_categ_code
                 # No 'DueDateTypeCode' on lines
                 if tax.amount_type == 'percent':
@@ -652,17 +652,15 @@ class AccountInvoice(models.Model):
                         trade_tax, ns['ram'] + 'RateApplicablePercent')
                     trade_tax_percent.text = '%0.*f' % (2, tax.amount)
         if (
-                ns['level'] == 'en16931' and
+                ns['level'] in PROFILES_EN_UP and
                 hasattr(iline, 'start_date') and hasattr(iline, 'end_date') and
                 iline.start_date and iline.end_date):
             bill_period = etree.SubElement(
                 line_trade_settlement, ns['ram'] + 'BillingSpecifiedPeriod')
             self._cii_add_date(
-                'StartDateTime', fields.Date.from_string(iline.start_date),
-                bill_period, ns)
+                'StartDateTime', iline.start_date, bill_period, ns)
             self._cii_add_date(
-                'EndDateTime', fields.Date.from_string(iline.end_date),
-                bill_period, ns)
+                'EndDateTime', iline.end_date, bill_period, ns)
 
         subtotal = etree.SubElement(
             line_trade_settlement,
@@ -721,7 +719,7 @@ class AccountInvoice(models.Model):
         trade_transaction = etree.SubElement(
             root, ns['rsm'] + 'SupplyChainTradeTransaction')
 
-        if ns['level'] in ('en16931', 'basic'):
+        if ns['level'] in ('extended', 'en16931', 'basic'):
             line_number = 0
             for iline in self.invoice_line_ids:
                 line_number += 1
@@ -734,7 +732,7 @@ class AccountInvoice(models.Model):
 
         xml_string = etree.tostring(
             root, pretty_print=True, encoding='UTF-8', xml_declaration=True)
-        self._cii_check_xml_schema(xml_string, 'factur-x', level=ns['level'])
+        check_facturx_xsd(xml_string, 'factur-x', facturx_level=ns['level'])
         logger.debug(
             'Factur-X XML file generated for invoice ID %d', self.id)
         logger.debug(xml_string)
