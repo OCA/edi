@@ -7,10 +7,10 @@ but I didn't succedded (without re-defining a full header or footer)
 -->
 
 <template id="report_invoice_facturx_logo" inherit_id="account.report_invoice_document">
-    <xpath expr="//div[@class='page']" position="inside">
+    <xpath expr="//div[hasclass('page')]" position="inside">
 
         <div t-if="o.company_id.xml_format_in_pdf_invoice == 'factur-x' and o.type in ('out_invoice', 'out_refund')">
-            <img t-if="o.company_id.facturx_logo" t-att-src="'data:image/png;base64,%s' % o.company_id.facturx_logo" style="max-height: 25px;"/>
+            <img t-if="o.company_id.facturx_logo" t-att-src="'/account_invoice_facturx/static/logos/factur-x-%s.png' % o.company_id.facturx_level" style="max-height: 25px;"/>
         </div>
 
     </xpath>

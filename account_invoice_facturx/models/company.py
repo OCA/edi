@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
-# © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2017-2020 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models, tools
+import base64
 
 
 class ResCompany(models.Model):
@@ -16,6 +17,7 @@ class ResCompany(models.Model):
         ('basicwl', 'Basic without lines'),
         ('basic', 'Basic'),
         ('en16931', 'EN 16931 (Comfort)'),
+        ('extended', 'Extended'),
         ], string='Factur-X Level', default='en16931',
         help="Unless if you have a good reason, you should always "
         "select 'EN 16931 (Comfort)', which is the default value.")
@@ -24,16 +26,17 @@ class ResCompany(models.Model):
         ('381', 'Type 381 with positive amounts'),
         ], string='Factur-X Refund Type', default='381')
     facturx_logo = fields.Binary(
-        compute='compute_facturx_logo', string='Factur-X Logo',
+        compute='_compute_facturx_logo', string='Factur-X Logo',
         help='Logo to include in the visible part of Factur-X invoices',
         readonly=True)
 
-    def compute_facturx_logo(self):
+    def _compute_facturx_logo(self):
         level2logo = {
             'minimum': 'factur-x-minimum.png',
             'basicwl': 'factur-x-basicwl.png',
             'basic': 'factur-x-basic.png',
             'en16931': 'factur-x-en16931.png',
+            'extended': 'factur-x-extended.png',
             }
         for company in self:
             facturx_logo = False
@@ -42,10 +45,10 @@ class ResCompany(models.Model):
                     company.facturx_level and
                     company.facturx_level in level2logo):
                 fname = level2logo[company.facturx_level]
-                fname_path = 'account_invoice_factur-x/static/logos/%s' % fname
+                fname_path = 'account_invoice_facturx/static/logos/%s' % fname
                 f = tools.file_open(fname_path, 'rb')
                 f_binary = f.read()
                 if f_binary:
-                    facturx_logo = f_binary.encode('base64')
+                    facturx_logo = base64.b64encode(f_binary)
 
             company.facturx_logo = facturx_logo
