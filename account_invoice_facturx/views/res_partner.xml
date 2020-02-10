@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  Copyright 2017-2020 Akretion France
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 
@@ -16,7 +17,7 @@ block other modules or data) -->
     <field name="model">res.partner</field>
     <field name="inherit_id" ref="base.view_partner_form" />
     <field name="arch" type="xml">
-        <xpath expr="//div[@class='o_address_format']/field[@name='country_id']" position="attributes">
+        <xpath expr="//div[hasclass('o_address_format')]/field[@name='country_id']" position="attributes">
             <attribute name="required">1</attribute>
         </xpath>
         <xpath expr="//field[@name='child_ids']/form//field[@name='country_id']"
