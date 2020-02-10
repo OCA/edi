@@ -526,7 +526,7 @@ class BaseUbl(models.AbstractModel):
         if pdf_file:
             original_pdf_file = pdf_file
         elif pdf_content:
-            original_pdf_file = BytesIO(pdf_content[0])
+            original_pdf_file = BytesIO(pdf_content)
         original_pdf = PdfFileReader(original_pdf_file)
         new_pdf_filestream = PdfFileWriter()
         new_pdf_filestream.appendPagesFromReader(original_pdf)
@@ -545,8 +545,7 @@ class BaseUbl(models.AbstractModel):
             with NamedTemporaryFile(prefix='odoo-ubl-', suffix='.pdf') as f:
                 new_pdf_filestream.write(f)
                 f.seek(0)
-                file_content = f.read()
-                new_pdf_content = (file_content, pdf_content[1])
+                new_pdf_content = f.read()
                 f.close()
         logger.info('%s file added to PDF', xml_filename)
         return new_pdf_content
