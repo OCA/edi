@@ -1,0 +1,54 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * base_zugferd
+#
+# Translators:
+# enjolras <yo@miguelrevilla.com>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-12 01:43+0000\n"
+"PO-Revision-Date: 2018-03-12 01:43+0000\n"
+"Last-Translator: enjolras <yo@miguelrevilla.com>, 2018\n"
+"Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: base_zugferd
+#: model:ir.model,name:base_zugferd.model_base_facturx
+msgid "Common methods to generate and parse Factur-X invoices"
+msgstr ""
+
+#. module: base_zugferd
+#: model:ir.model.fields,field_description:base_zugferd.field_base_facturx_display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: base_zugferd
+#: model:ir.model.fields,field_description:base_zugferd.field_base_facturx_id
+msgid "ID"
+msgstr ""
+
+#. module: base_zugferd
+#: model:ir.model.fields,field_description:base_zugferd.field_base_facturx___last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: base_zugferd
+#: code:addons/base_zugferd/models/base_facturx.py:46
+#, python-format
+msgid ""
+"The %s XML file is not valid against the official XML Schema Definition. The "
+"XML file and the full error have been written in the server logs. Here is "
+"the error, which may give you an idea on the cause of the problem : %s."
+msgstr ""
+
+#. module: base_zugferd
+#: code:addons/base_zugferd/models/base_facturx.py:29
+#, python-format
+msgid "Wrong level '%s' for Factur-X invoice."
+msgstr ""
