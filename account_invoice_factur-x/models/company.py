@@ -16,6 +16,7 @@ class ResCompany(models.Model):
         ('basicwl', 'Basic without lines'),
         ('basic', 'Basic'),
         ('en16931', 'EN 16931 (Comfort)'),
+        ('extended', 'Extended'),
         ], string='Factur-X Level', default='en16931',
         help="Unless if you have a good reason, you should always "
         "select 'EN 16931 (Comfort)', which is the default value.")
@@ -34,6 +35,7 @@ class ResCompany(models.Model):
             'basicwl': 'factur-x-basicwl.png',
             'basic': 'factur-x-basic.png',
             'en16931': 'factur-x-en16931.png',
+            'extended': 'factur-x-extended.png',
             }
         for company in self:
             facturx_logo = False

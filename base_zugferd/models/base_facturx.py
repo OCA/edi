@@ -23,6 +23,7 @@ class BaseFacturX(models.AbstractModel):
                 'basicwl': 'FACTUR-X_BASIC-WL.xsd',
                 'basic': 'FACTUR-X_EN16931.xsd',
                 'en16931': 'FACTUR-X_EN16931.xsd',  # comfort
+                'extended': 'FACTUR-X_EXTENDED.xsd',
                 False: 'FACTUR-X_EN16931.xsd',
                 }
             if level not in facturx_level2xsd:
