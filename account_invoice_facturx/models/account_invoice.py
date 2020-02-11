@@ -290,7 +290,7 @@ class AccountInvoice(models.Model):
         else:
             payment_means_code.text = '30'  # use 30 and not 31,
             # for wire transfer, according to Factur-X CIUS
-            if ns['level'] == PROFILES_EN_UP:
+            if ns['level'] in PROFILES_EN_UP:
                 payment_means_info.text = _('Wire transfer')
             logger.warning(
                 'Missing payment mode on invoice ID %d. '
