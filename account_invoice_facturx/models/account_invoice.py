@@ -163,7 +163,7 @@ class AccountInvoice(models.Model):
         if id_dict:
             party_identification = etree.SubElement(
                 parent_node, ns['ram'] + 'SpecifiedLegalOrganization')
-            for scheme_name, party_id_text in id_dict.iteritems():
+            for scheme_name, party_id_text in id_dict.items():
                 party_identification_id = etree.SubElement(
                     party_identification, ns['ram'] + 'ID',
                     schemeID=scheme_name)
