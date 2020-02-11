@@ -202,12 +202,12 @@ PRILIN|AAB|%.2f\n' % (invoice_line.price_unit, discounted_price)
 
         partner_dict = {
             'edifact_code': partner_segments[1],
-            'name': partner_segments[5],
-            'street': partner_segments[6],
-            'city': partner_segments[7],
-            'zip': len(partner_segments) >= 9 and partner_segments[8] or False,
+            'name': len(partner_segments) > 5 and partner_segments[5],
+            'street': len(partner_segments) > 6 and partner_segments[6],
+            'city': len(partner_segments) > 7 and partner_segments[7],
+            'zip': len(partner_segments) > 8 and partner_segments[8] or False,
             'vat':
-                len(partner_segments) >= 10 and partner_segments[9] or False,
+                len(partner_segments) > 9 and partner_segments[9] or False,
         }
         return partner_dict
 
@@ -219,16 +219,16 @@ PRILIN|AAB|%.2f\n' % (invoice_line.price_unit, discounted_price)
         address_dict = {
             'partner': {
                 'edifact_code': address_segments[1],
-                'name': address_segments[3] or False,
+                'name': len(address_segments) > 3 and address_segments[3],
                 'email': False,
             },
             'address': {
-                'street': address_segments[4] or False,
-                'city': address_segments[5] or False,
-                'zip': address_segments[6] or False,
+                'street': len(address_segments) > 4 and address_segments[4],
+                'city': len(address_segments) > 5 and address_segments[5],
+                'zip': len(address_segments) > 6 and address_segments[6],
             }
         }
-        if len(address_segments) >= 8:
+        if len(address_segments) > 7:
             address_dict['vat'] = address_segments[7] or False
         return address_dict
 
