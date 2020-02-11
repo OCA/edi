@@ -19,6 +19,7 @@ except ImportError:
 FACTURX_FILENAME = 'factur-x.xml'
 DIRECT_DEBIT_CODES = ('49', '59')
 CREDIT_TRF_CODES = ('30', '31', '42')
+PROFILES_EN_UP = ['en16931', 'extended']
 
 
 class AccountInvoice(models.Model):
@@ -113,6 +114,9 @@ class AccountInvoice(models.Model):
             urn = 'urn:cen.eu:en16931:2017'
         elif ns['level'] == 'basic':
             urn = 'urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic'
+        elif ns['level'] == 'extended':
+            urn = 'urn:cen.eu:en16931:2017#conformant#'\
+                  'urn:factur-x.eu:1p0:extended'
         else:
             urn = 'urn:factur-x.eu:1p0:%s' % ns['level']
         ctx_param_id.text = urn
@@ -191,7 +195,7 @@ class AccountInvoice(models.Model):
         seller_name.text = company.name
         self._cii_add_party_identification(
             company.partner_id, seller, ns)
-        if ns['level'] == 'en16931':
+        if ns['level'] in PROFILES_EN_UP:
             self._cii_add_trade_contact_block(
                 self.user_id.partner_id or company.partner_id, seller, ns)
         self._cii_add_address_block(company.partner_id, seller, ns)
@@ -203,7 +207,7 @@ class AccountInvoice(models.Model):
             seller_tax_reg_id.text = company.vat
         buyer = etree.SubElement(
             trade_agreement, ns['ram'] + 'BuyerTradeParty')
-        if ns['level'] == 'minimum' and self.commercial_partner_id.ref:
+        if ns['level'] != 'minimum' and self.commercial_partner_id.ref:
             buyer_id = etree.SubElement(buyer, ns['ram'] + 'ID')
             buyer_id.text = self.commercial_partner_id.ref
         buyer_name = etree.SubElement(
@@ -212,7 +216,7 @@ class AccountInvoice(models.Model):
         self._cii_add_party_identification(
             self.commercial_partner_id, buyer, ns)
         if (
-                ns['level'] == 'en16931' and
+                ns['level'] in PROFILES_EN_UP and
                 self.commercial_partner_id != self.partner_id and
                 self.partner_id.name):
             self._cii_add_trade_contact_block(self.partner_id, buyer, ns)
@@ -257,7 +261,7 @@ class AccountInvoice(models.Model):
             trade_transaction,
             ns['ram'] + 'ApplicableHeaderTradeDelivery')
         if (
-                ns['level'] == 'en16931' and
+                ns['level'] in PROFILES_EN_UP and
                 hasattr(self, 'partner_shipping_id') and
                 self.partner_shipping_id):
             shipto_trade_party = etree.SubElement(
@@ -274,23 +278,23 @@ class AccountInvoice(models.Model):
             ns['ram'] + 'SpecifiedTradeSettlementPaymentMeans')
         payment_means_code = etree.SubElement(
             payment_means, ns['ram'] + 'TypeCode')
-        if ns['level'] == 'en16931':
+        if ns['level'] in PROFILES_EN_UP:
             payment_means_info = etree.SubElement(
                 payment_means, ns['ram'] + 'Information')
         if self.payment_mode_id:
             payment_means_code.text =\
                 self.payment_mode_id.payment_method_id.unece_code
-            if ns['level'] == 'en16931':
+            if ns['level'] in PROFILES_EN_UP:
                 payment_means_info.text =\
                     self.payment_mode_id.note or self.payment_mode_id.name
         else:
             payment_means_code.text = '30'  # use 30 and not 31,
             # for wire transfer, according to Factur-X CIUS
-            if ns['level'] == 'en16931':
+            if ns['level'] in PROFILES_EN_UP:
                 payment_means_info.text = _('Wire transfer')
             logger.warning(
                 'Missing payment mode on invoice ID %d. '
-                'Using 31 (wire transfer) as UNECE code as fallback '
+                'Using 30 (wire transfer) as UNECE code as fallback '
                 'for payment mean',
                 self.id)
         if payment_means_code.text in CREDIT_TRF_CODES:
@@ -309,7 +313,7 @@ class AccountInvoice(models.Model):
                 iban = etree.SubElement(
                     payment_means_bank_account, ns['ram'] + 'IBANID')
                 iban.text = partner_bank.sanitized_acc_number
-                if ns['level'] == 'en16931' and partner_bank.bank_bic:
+                if ns['level'] in PROFILES_EN_UP and partner_bank.bank_bic:
                     payment_means_bank = etree.SubElement(
                         payment_means,
                         ns['ram'] +
@@ -334,7 +338,7 @@ class AccountInvoice(models.Model):
     def _cii_trade_payment_terms_block(self, trade_settlement, ns):
         trade_payment_term = etree.SubElement(
             trade_settlement, ns['ram'] + 'SpecifiedTradePaymentTerms')
-        if ns['level'] == 'en16931':
+        if ns['level'] in PROFILES_EN_UP:
             trade_payment_term_desc = etree.SubElement(
                 trade_payment_term, ns['ram'] + 'Description')
             # The 'Description' field of SpecifiedTradePaymentTerms
@@ -445,11 +449,10 @@ class AccountInvoice(models.Model):
                 "Missing UNECE code on payment export type '%s'")
                 % self.payment_mode_id.payment_method_id.name)
         if (
-                ns['level'] != 'minimum' and (
-                self.type == 'out_invoice' or
-                (self.payment_mode_id and
-                 self.payment_mode_id.payment_method_id.unece_code
-                 not in [31, 42]))):  # TODO why this ?
+                ns['level'] != 'minimum' and not (
+                    self.type == 'out_refund' and self.payment_mode_id and
+                    self.payment_mode_id.payment_method_id.unece_code
+                    in CREDIT_TRF_CODES)):
             self._cii_add_trade_settlement_payment_means_block(
                 trade_settlement, ns)
 
@@ -532,7 +535,7 @@ class AccountInvoice(models.Model):
                     trade_product, ns['ram'] + 'GlobalID', schemeID='0160')
                 # 0160 = GS1 Global Trade Item Number (GTIN, EAN)
                 barcode.text = iline.product_id.barcode
-            if ns['level'] == 'en16931' and iline.product_id.default_code:
+            if ns['level'] in PROFILES_EN_UP and iline.product_id.default_code:
                 product_code = etree.SubElement(
                     trade_product, ns['ram'] + 'SellerAssignedID')
                 product_code.text = iline.product_id.default_code
@@ -540,7 +543,7 @@ class AccountInvoice(models.Model):
             trade_product, ns['ram'] + 'Name')
         product_name.text = iline.name
         if (
-                ns['level'] == 'en16931' and
+                ns['level'] in PROFILES_EN_UP and
                 iline.product_id and
                 iline.product_id.description_sale):
             product_desc = etree.SubElement(
@@ -569,7 +572,7 @@ class AccountInvoice(models.Model):
             net_price_val = float_round(
                 iline.price_subtotal / float(iline.quantity),
                 precision_digits=ns['price_prec'])
-        if ns['level'] == 'en16931':
+        if ns['level'] in PROFILES_EN_UP:
             gross_price = etree.SubElement(
                 line_trade_agreement,
                 ns['ram'] + 'GrossPriceProductTradePrice')
@@ -652,7 +655,7 @@ class AccountInvoice(models.Model):
                         trade_tax, ns['ram'] + 'RateApplicablePercent')
                     trade_tax_percent.text = '%0.*f' % (2, tax.amount)
         if (
-                ns['level'] == 'en16931' and
+                ns['level'] in PROFILES_EN_UP and
                 hasattr(iline, 'start_date') and hasattr(iline, 'end_date') and
                 iline.start_date and iline.end_date):
             bill_period = etree.SubElement(
@@ -721,7 +724,7 @@ class AccountInvoice(models.Model):
         trade_transaction = etree.SubElement(
             root, ns['rsm'] + 'SupplyChainTradeTransaction')
 
-        if ns['level'] in ('en16931', 'basic'):
+        if ns['level'] in ('extended', 'en16931', 'basic'):
             line_number = 0
             for iline in self.invoice_line_ids:
                 line_number += 1
