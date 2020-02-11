@@ -205,7 +205,7 @@ class AccountInvoice(models.Model):
             seller_tax_reg_id.text = company.vat
         buyer = etree.SubElement(
             trade_agreement, ns['ram'] + 'BuyerTradeParty')
-        if ns['level'] == 'minimum' and self.commercial_partner_id.ref:
+        if ns['level'] != 'minimum' and self.commercial_partner_id.ref:
             buyer_id = etree.SubElement(buyer, ns['ram'] + 'ID')
             buyer_id.text = self.commercial_partner_id.ref
         buyer_name = etree.SubElement(
@@ -241,6 +241,7 @@ class AccountInvoice(models.Model):
     @api.multi
     def _cii_add_contract_reference(self, trade_agreement, ns):
         self.ensure_one()
+        # agreement_id is provided by the OCA module agreement_account
         if (
                 ns['level'] != 'minimum' and
                 hasattr(self, 'agreement_id') and
@@ -258,6 +259,7 @@ class AccountInvoice(models.Model):
         trade_agreement = etree.SubElement(
             trade_transaction,
             ns['ram'] + 'ApplicableHeaderTradeDelivery')
+        # partner_shipping_id is provided by the sale module
         if (
                 ns['level'] in PROFILES_EN_UP and
                 hasattr(self, 'partner_shipping_id') and
@@ -292,7 +294,7 @@ class AccountInvoice(models.Model):
                 payment_means_info.text = _('Wire transfer')
             logger.warning(
                 'Missing payment mode on invoice ID %d. '
-                'Using 31 (wire transfer) as UNECE code as fallback '
+                'Using 30 (wire transfer) as UNECE code as fallback '
                 'for payment mean',
                 self.id)
         if payment_means_code.text in CREDIT_TRF_CODES:
@@ -319,6 +321,7 @@ class AccountInvoice(models.Model):
                     payment_means_bic = etree.SubElement(
                         payment_means_bank, ns['ram'] + 'BICID')
                     payment_means_bic.text = partner_bank.bank_bic
+        # Field mandate_id provided by the OCA module account_banking_mandate
         elif (
                 payment_means_code.text in DIRECT_DEBIT_CODES and
                 hasattr(self, 'mandate_id') and
@@ -422,7 +425,7 @@ class AccountInvoice(models.Model):
         trade_settlement = etree.SubElement(
             trade_transaction,
             ns['ram'] + 'ApplicableHeaderTradeSettlement')
-        # ICS
+        # ICS, provided by the OCA module account_banking_sepa_direct_debit
         if (
                 ns['level'] != 'minimum' and
                 self.payment_mode_id.payment_method_id.unece_code in
@@ -447,11 +450,10 @@ class AccountInvoice(models.Model):
                 "Missing UNECE code on payment method '%s'")
                 % self.payment_mode_id.payment_method_id.display_name)
         if (
-                ns['level'] != 'minimum' and (
-                self.type == 'out_invoice' or
-                (self.payment_mode_id and
-                 self.payment_mode_id.payment_method_id.unece_code
-                 not in [31, 42]))):  # TODO why this ?
+                ns['level'] != 'minimum' and not (
+                    self.type == 'out_refund' and self.payment_mode_id and
+                    self.payment_mode_id.payment_method_id.unece_code
+                    in CREDIT_TRF_CODES)):
             self._cii_add_trade_settlement_payment_means_block(
                 trade_settlement, ns)
 
@@ -651,6 +653,8 @@ class AccountInvoice(models.Model):
                     trade_tax_percent = etree.SubElement(
                         trade_tax, ns['ram'] + 'RateApplicablePercent')
                     trade_tax_percent.text = '%0.*f' % (2, tax.amount)
+        # Fields start_date and end_date are provided by the OCA
+        # module account_invoice_start_end_dates
         if (
                 ns['level'] in PROFILES_EN_UP and
                 hasattr(iline, 'start_date') and hasattr(iline, 'end_date') and
