@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2020 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="order_response_import_form" model="ir.ui.view">
+        <field name="name">order.response.import.form</field>
+        <field name="model">order.response.import</field>
+        <field name="arch"  type="xml">
+            <form string="Import OrderResponse File from Supplier">
+                <group name="help-import">
+                  <div>
+                    <p>Upload below the OrderResponse you received from your supplier. When you click on the import button:</p>
+                    <ol>
+                      <li>If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed. For the <a href="http://ubl.xml.org/" target="_blank">Universal Business Language</a> format (UBL), you should install the module <em>order_response_import_ubl</em>.</li>
+                      <li>If it is a PDF file, Odoo will try to find an XML file in the attachments of the PDF file and then use this XML file.</li>
+                    </ol>
+                    <p>Then, Odoo will process the related purchase order as follow:</p>
+                    <ul>
+                        <li>If the status code is acknowledgement: update the acknowledge datetime on the PO</li>
+                        <li>If the status code is Rejected: cancel the PO</li>
+                        <li>If the status code is Accepted: confirm the PO and create the picking</li>
+                        <li>If the status code is Conditionally accepted: confirm the PO and create the picking and update the picking operations according to the amendments specified into the document</li>
+                        <li>for lines that are present both in the imported quotation and in the RFQ, Odoo will update the unit prices (and also the quantities, depending on the chosen option),</li>
+                    </ul>
+                    <p>Possible line amendments:</p>
+                    <ul>
+                        <li>The order line is refused: The picking operation is cancelled</li>
+                        <li>The order line is accepted with change: The picking operation is modified. (split to stock move). If a backorder qty is provided, a backorder is created. Otherwise the stock.move for the missing quantities is cancelled.</li>
+                    </ul>
+                  </div>
+                </group>
+                <group name="main">
+                    <field name="document" filename="filename"/>
+                    <field name="filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="process_document" type="object"
+                        class="oe_highlight" string="Import document"/>
+                    <button special="cancel" string="Cancel" class="oe_link"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="order_response_import_action" model="ir.actions.act_window">
+        <field name="name">Import Quotation</field>
+        <field name="res_model">order.response.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.ui.menu" id="order_response_import_importer_menu">
+        <field name="name">UBL OrderResponse Importer</field>
+        <field name="parent_id" ref="purchase.menu_procurement_management"/>
+        <field name="action" ref="order_response_import_action"/>
+        <field name="sequence" eval="99"/>
+    </record>
+
+
+</odoo>

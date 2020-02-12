@@ -16,6 +16,7 @@
         'onchange_helper'
         ],
     'data': [
+        'wizard/order_response_import_view.xml',
         'wizard/purchase_order_import_view.xml',
         'views/purchase.xml',
     ],
