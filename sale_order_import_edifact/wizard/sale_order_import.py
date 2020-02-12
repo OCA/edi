@@ -59,6 +59,7 @@ class SaleOrderImport(models.TransientModel):
     def parse_pla_order(self, order_file):
         with TemporaryFile(mode='r+') as buf:
             try:
+                filename = self.order_filename or '-'
                 buf.write(str(order_file, 'iso-8859-1'))
                 buf.seek(0)
                 csv_iterator = csv.reader(buf, delimiter='|')
@@ -68,13 +69,15 @@ class SaleOrderImport(models.TransientModel):
                     res = self.parse_edifact_sale_order(reader)
                 else:
                     raise UserError(
-                        _('File not imported due to format mismatch'
-                          ' or a malformed file.'))
+                        _('Unknow Edifact document type: %s.') % (
+                            reader[0][0]))
             except Exception as e:
-                logger.exception('File unsuccessfully imported,'
-                                 ' due to format mismatch.\n%s' % e)
-                raise UserError(_('File not imported due to format mismatch'
-                                  ' or a malformed file.'))
+                logger.exception(
+                    'Error in File %s: Unsuccessfully imported,'
+                    ' due to format mismatch.%s' % (
+                        filename, str(e.args[0])))
+                raise UserError(
+                    _('%s') % (str(e.args[0])))
 
         return res
 
@@ -182,3 +185,15 @@ class SaleOrderImport(models.TransientModel):
         if cur_line:
             parsed_order['lines'].append(cur_line)
         parsed_order['index'] = index
+
+    def import_order_button(self):
+        try:
+            res = super(SaleOrderImport, self).import_order_button()
+        except Exception as e:
+            logger.exception(
+                'Error in File %s: %s' % (
+                    self.order_filename, str(e.args[0])))
+            raise UserError(
+                _('Error in File %s:\n%s') % (
+                      self.order_filename, str(e.args[0])))
+        return res

@@ -42,7 +42,33 @@ msgid "Edifact Code"
 msgstr "Código Edifact"
 
 #. module: sale_order_import_edifact
-#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:137
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:72
+#, python-format
+msgid "Error in File %s\n"
+" Unknow Edifact document type: %s."
+msgstr "Error en el fichero %s\n"
+" Tipo de documento Edifact desconocido: %s."
+
+#. module: sale_order_import_edifact
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:85
+#, python-format
+msgid "Error in File %s:\n"
+" not imported due to format mismatch or a malformed file.\n"
+"%s"
+msgstr "Error en el fichero %s:\n"
+" No se ha podido importar porqué no está bien compuesto.\n"
+"%s"
+
+#. module: sale_order_import_edifact
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:205
+#, python-format
+msgid "Error in File %s:\n"
+"%s"
+msgstr "Error en el fichero %s:\n"
+"%s"
+
+#. module: sale_order_import_edifact
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:155
 #, python-format
 msgid "Error reading header: Bad edifact file format"
 msgstr "Error leyendo la cabecera: El fichero no tiene un formato Edifact correcto."
@@ -54,11 +80,10 @@ msgid "Error reading lines: Bad edifact file format"
 msgstr "Error leyendo las líneas del pedido: El fichero no tiene un formato Edifact correcto."
 
 #. module: sale_order_import_edifact
-#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:67
-#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:70
+#: code:addons/sale_order_import_edifact/models/business_document_import.py:27
 #, python-format
-msgid "File not imported due to format mismatch or a malformed file."
-msgstr "El fichero no se ha podido importar porqué no está bien compuesto."
+msgid "Odoo couldn't find any partner with Edifact code: %s"
+msgstr "No se ha encontrado ningún cliente con el código Edifact: %s"
 
 #. module: sale_order_import_edifact
 #: selection:sale.order.import,doc_type:0

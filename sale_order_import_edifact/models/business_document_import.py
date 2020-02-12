@@ -2,7 +2,7 @@
 # Copyright 2019 PlanetaTIC - Marc Poch <mpoch@planetatic.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, api
+from odoo import models, api, _
 
 
 class BusinessDocumentImport(models.AbstractModel):
@@ -24,7 +24,11 @@ class BusinessDocumentImport(models.AbstractModel):
             partner = rpo.search(domain, limit=1)
             if partner:
                 return partner
-        partner = super(BusinessDocumentImport, self)._match_partner(
-            partner_dict, chatter_msg, partner_type=partner_type)
+            raise self.user_error_wrap(_(
+                'Odoo couldn\'t find any partner with Edifact code: %s')
+                % partner_dict['edifact_code'])
+        else:
+            partner = super(BusinessDocumentImport, self)._match_partner(
+                partner_dict, chatter_msg, partner_type=partner_type)
 
         return partner
