@@ -12,6 +12,7 @@
     'website': 'http://www.akretion.com',
     'depends': ['purchase', 'base_business_document_import_stock'],
     'data': [
+        'wizard/order_response_import_view.xml',
         'wizard/purchase_order_import_view.xml',
         'views/purchase.xml',
     ],
