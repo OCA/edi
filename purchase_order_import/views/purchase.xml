@@ -16,6 +16,9 @@
                  name="%(purchase_order_import.purchase_order_import_action)d" states="draft,sent,bid"
                  groups="purchase.group_purchase_user"/>
         </button>
+        <field name="date_order" position="after">
+            <field name="supplier_ack_dt"/>
+        </field>
     </field>
 </record>
 
