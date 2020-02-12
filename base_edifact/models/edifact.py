@@ -215,21 +215,27 @@ PRILIN|AAB|%.2f\n' % (invoice_line.price_unit, discounted_price)
     def edifact_parse_address(self, address_segments):
         if address_segments[0] not in ('NADDP', 'NADIV'):
             return False
+        elif address_segments[0] == 'NADDP':
+            type = 'delivery'
+        else:
+            type = 'invoice'
 
+        # When dealing edifact address only check edifact_code:
         address_dict = {
             'partner': {
                 'edifact_code': address_segments[1],
-                'name': len(address_segments) > 3 and address_segments[3],
+                'edifact_type': type,
+                'name': False,
                 'email': False,
+                'vat': False,
             },
             'address': {
-                'street': len(address_segments) > 4 and address_segments[4],
-                'city': len(address_segments) > 5 and address_segments[5],
-                'zip': len(address_segments) > 6 and address_segments[6],
+                'street': False,
+                'city': False,
+                'zip': False,
             }
         }
-        if len(address_segments) > 7:
-            address_dict['vat'] = address_segments[7] or False
+
         return address_dict
 
     @api.model
