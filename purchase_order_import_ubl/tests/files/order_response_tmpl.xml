@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<OrderResponse xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:OrderResponse-2">
+  <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+  <cbc:ID>PO07337</cbc:ID>
+  <cbc:IssueDate>2020-02-04</cbc:IssueDate>
+  <cbc:IssueTime>22:10:30</cbc:IssueTime>
+  <cbc:OrderResponseCode>{order_response_code}</cbc:OrderResponseCode>
+  <cbc:Note>Note1</cbc:Note>
+  <cbc:Note>Note2</cbc:Note>
+  <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+  <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+  </cac:OrderReference>
+  <cac:SellerSupplierParty>
+    <cbc:CustomerAssignedAccountID>79201</cbc:CustomerAssignedAccountID>
+    <cac:Party>
+      <cac:PartyIdentification>
+        <cbc:ID schemeName="BE:VAT">BE0477472701</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyName>
+        <cbc:Name>My supplier company BELGIUM</cbc:Name>
+      </cac:PartyName>
+      <cac:Language>
+        <cbc:Name>French (BE) / Français (BE)</cbc:Name>
+        <cbc:LocaleCode>fr_BE</cbc:LocaleCode>
+      </cac:Language>
+      <cac:PostalAddress>
+        <cbc:StreetName>straat 20</cbc:StreetName>
+        <cbc:CityName>ZAVENTEM</cbc:CityName>
+        <cbc:PostalZone>1930</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>BE</cbc:IdentificationCode>
+          <cbc:Name>Belgique</cbc:Name>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyTaxScheme>
+        <cbc:RegistrationName>My supplier company BELGIUM</cbc:RegistrationName>
+        <cbc:CompanyID>BE0401953350</cbc:CompanyID>
+        <cac:TaxScheme>
+          <cbc:ID schemeAgencyID="6" schemeID="UN/ECE 5153">VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>
+      <cac:Contact>
+        <cbc:Telephone>12345</cbc:Telephone>
+        <cbc:Telefax>12345</cbc:Telefax>
+        <cbc:ElectronicMail>orderahbelux@my-supplier-company.com</cbc:ElectronicMail>
+      </cac:Contact>
+    </cac:Party>
+  </cac:SellerSupplierParty>
+  <cac:BuyerCustomerParty>
+    <cac:Party>
+      <cbc:WebsiteURI>http://www.my-company.be</cbc:WebsiteURI>
+      <cac:PartyIdentification>
+        <cbc:ID schemeName="BE:VAT">BE0421801233</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyName>
+        <cbc:Name>My Componay Belux SA</cbc:Name>
+      </cac:PartyName>
+      <cac:Language>
+        <cbc:Name>English</cbc:Name>
+        <cbc:LocaleCode>en_US</cbc:LocaleCode>
+      </cac:Language>
+      <cac:PostalAddress>
+        <cbc:StreetName>Rue , 17</cbc:StreetName>
+        <cbc:CityName>Villers-le-Bouillet</cbc:CityName>
+        <cbc:PostalZone>4530</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>BE</cbc:IdentificationCode>
+          <cbc:Name>Belgique</cbc:Name>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyTaxScheme>
+        <cbc:RegistrationName>My Componay Belux SA</cbc:RegistrationName>
+        <cbc:CompanyID>BE0421801233</cbc:CompanyID>
+        <cac:TaxScheme>
+          <cbc:ID schemeAgencyID="6" schemeID="UN/ECE 5153">VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>My Componay Belux SA</cbc:RegistrationName>
+        <cac:RegistrationAddress>
+          <cbc:StreetName>Rue , 17</cbc:StreetName>
+          <cbc:CityName>Villers-le-Bouillet</cbc:CityName>
+          <cbc:PostalZone>4530</cbc:PostalZone>
+          <cac:Country>
+            <cbc:IdentificationCode>BE</cbc:IdentificationCode>
+            <cbc:Name>Belgique</cbc:Name>
+          </cac:Country>
+        </cac:RegistrationAddress>
+      </cac:PartyLegalEntity>
+      <cac:Contact>
+        <cbc:Telephone>+32 (0)4 123 34 90</cbc:Telephone>
+        <cbc:Telefax>+32 (0)4 123 27 83</cbc:Telefax>
+        <cbc:ElectronicMail>secretariat@my-compy.be</cbc:ElectronicMail>
+      </cac:Contact>
+    </cac:Party>
+  </cac:BuyerCustomerParty>
+  <cac:OrderLine>
+    <cac:LineItem>
+      <cbc:ID>{line_1_id}</cbc:ID>
+      <cbc:Note>line_1 Note1</cbc:Note>
+      <cbc:Note>line_1 Note2</cbc:Note>
+      <cbc:Quantity unitCode="C62">{line_1_qty}</cbc:Quantity>
+      <cbc:MaximumBackorderQuantity>{line_1_backorder_qty}</cbc:MaximumBackorderQuantity>
+      <cbc:LineStatusCode>{line_1_status_code}</cbc:LineStatusCode>
+      <cbc:LineExtensionAmount currencyID="EUR">228.2</cbc:LineExtensionAmount>
+      <cac:Price>
+        <cbc:PriceAmount currencyID="EUR">45.64</cbc:PriceAmount>
+        <cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+      </cac:Price>
+      <cac:Item>
+        <cbc:Description>[10016098] CYTOPOINT 10MG 2x1ml</cbc:Description>
+        <cbc:Name>CYTOPOINT 10MG 2x1ml</cbc:Name>
+        <cac:SellersItemIdentification>
+          <cbc:ID>10016098</cbc:ID>
+        </cac:SellersItemIdentification>
+
+      </cac:Item>
+    </cac:LineItem>
+  </cac:OrderLine>
+  <cac:OrderLine>
+    <cac:LineItem>
+      <cbc:ID>{line_2_id}</cbc:ID>
+      <cbc:Note>line_2 Note1</cbc:Note>
+      <cbc:Note>line_2 Note2</cbc:Note>
+      <cbc:Quantity unitCode="C62">{line_2_qty}</cbc:Quantity>
+      <cbc:MaximumBackorderQuantity>{line_2_backorder_qty}</cbc:MaximumBackorderQuantity>
+      <cbc:LineStatusCode>{line_2_status_code}</cbc:LineStatusCode>
+      <cbc:LineExtensionAmount currencyID="EUR">1117.07</cbc:LineExtensionAmount>
+      <cac:Price>
+        <cbc:PriceAmount currencyID="EUR">65.71</cbc:PriceAmount>
+        <cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+      </cac:Price>
+      <cac:Item>
+        <cbc:Description>[10016099] CYTOPOINT 20MG 2x1ml</cbc:Description>
+        <cbc:Name>CYTOPOINT 20MG 2x1ml</cbc:Name>
+        <cac:SellersItemIdentification>
+          <cbc:ID>10016099</cbc:ID>
+        </cac:SellersItemIdentification>
+      </cac:Item>
+    </cac:LineItem>
+  </cac:OrderLine>
+</OrderResponse>
