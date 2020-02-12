@@ -9,24 +9,36 @@ class BusinessDocumentImport(models.AbstractModel):
     _inherit = 'business.document.import'
 
     @api.model
+    def _match_shipping_partner(self, shipping_dict, partner, chatter_msg):
+        partner_obj = self.env['res.partner']
+
+        if 'partner' in shipping_dict\
+                and shipping_dict['partner'].get('edifact_code', False):
+            edifact_code = shipping_dict['partner']['edifact_code']
+            delivery = False
+            if shipping_dict['partner'].get(
+                    'edifact_type', False) == 'delivery':
+                delivery = True
+            res = partner_obj.find_partner_by_edifact_code(
+                edifact_code, partner.id, delivery=delivery)
+        else:
+            res = super(BusinessDocumentImport, self)._match_shipping_partner(
+                shipping_dict, partner, chatter_msg)
+        return res
+
+    @api.model
     def _match_partner(
             self, partner_dict, chatter_msg, partner_type='supplier'):
-        rpo = self.env['res.partner']
+        partner_obj = self.env['res.partner']
 
         if 'edifact_code' in partner_dict:
-            company_id = self._context.get('force_company') or\
-                self.env.user.company_id.id
-            domain = [
-                '|', ('company_id', '=', False),
-                ('company_id', '=', company_id),
-                ('edifact_code', '=', partner_dict['edifact_code']),
-                ('type', 'not in', ('delivery', 'invoice'))]
-            partner = rpo.search(domain, limit=1)
-            if partner:
-                return partner
-            raise self.user_error_wrap(_(
-                'Odoo couldn\'t find any partner with Edifact code: %s')
-                % partner_dict['edifact_code'])
+            parent_id = self._context.get('edifact_partner_parent_id', False)
+            partner = partner_obj.find_partner_by_edifact_code(
+                partner_dict['edifact_code'], parent_id)
+            if not partner:
+                raise self.user_error_wrap(_(
+                    'Odoo couldn\'t find any partner with Edifact code: %s')
+                    % partner_dict['edifact_code'])
         else:
             partner = super(BusinessDocumentImport, self)._match_partner(
                 partner_dict, chatter_msg, partner_type=partner_type)

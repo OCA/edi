@@ -195,5 +195,5 @@ class SaleOrderImport(models.TransientModel):
                     self.order_filename, str(e.args[0])))
             raise UserError(
                 _('Error in File %s:\n%s') % (
-                      self.order_filename, str(e.args[0])))
+                    self.order_filename, str(e.args[0])))
         return res

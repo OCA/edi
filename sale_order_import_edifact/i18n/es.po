@@ -42,25 +42,7 @@ msgid "Edifact Code"
 msgstr "Código Edifact"
 
 #. module: sale_order_import_edifact
-#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:72
-#, python-format
-msgid "Error in File %s\n"
-" Unknow Edifact document type: %s."
-msgstr "Error en el fichero %s\n"
-" Tipo de documento Edifact desconocido: %s."
-
-#. module: sale_order_import_edifact
-#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:85
-#, python-format
-msgid "Error in File %s:\n"
-" not imported due to format mismatch or a malformed file.\n"
-"%s"
-msgstr "Error en el fichero %s:\n"
-" No se ha podido importar porqué no está bien compuesto.\n"
-"%s"
-
-#. module: sale_order_import_edifact
-#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:205
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:197
 #, python-format
 msgid "Error in File %s:\n"
 "%s"
@@ -80,7 +62,13 @@ msgid "Error reading lines: Bad edifact file format"
 msgstr "Error leyendo las líneas del pedido: El fichero no tiene un formato Edifact correcto."
 
 #. module: sale_order_import_edifact
-#: code:addons/sale_order_import_edifact/models/business_document_import.py:27
+#: code:addons/sale_order_import_edifact/models/partner.py:35
+#, python-format
+msgid "Multiple partner sharing edifact code: %s"
+msgstr "Más de un cliente o dirección usan el código edifact: %s"
+
+#. module: sale_order_import_edifact
+#: code:addons/sale_order_import_edifact/models/business_document_import.py:40
 #, python-format
 msgid "Odoo couldn't find any partner with Edifact code: %s"
 msgstr "No se ha encontrado ningún cliente con el código Edifact: %s"
@@ -99,4 +87,10 @@ msgstr "Pedido de venta"
 #: model:ir.model,name:sale_order_import_edifact.model_sale_order_import
 msgid "Sale Order Import from Files"
 msgstr "Importación de Pedidos de Venta desde Ficheros"
+
+#. module: sale_order_import_edifact
+#: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:72
+#, python-format
+msgid "Unknow Edifact document type: %s."
+msgstr "Tipo de documento Edifact desconocido: %s."
 
