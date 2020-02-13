@@ -7,8 +7,6 @@
     <field name="categ_id" ref="product.product_category_5"/>
     <field name="sale_ok" eval="False"/>
     <field name="type">service</field>
-    <field name="uom_id" ref="product.product_uom_unit"/>
-    <field name="uom_po_id" ref="product.product_uom_unit"/>
 </record>
 
 <record id="free" model="res.partner">
