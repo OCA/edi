@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-# © 2015-2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2015-2020 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models, tools, _
@@ -53,7 +53,7 @@ class AccountInvoiceImport(models.TransientModel):
             templates)
         try:
             invoice2data_res = extract_data(file_name, templates=templates)
-        except Exception, e:
+        except Exception as e:
             raise UserError(_(
                 "PDF Invoice parsing failed. Error message: %s") % e)
         if not invoice2data_res:

@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
-# © 2015-2017 Akretion France (www.akretion.com)
+# Copyright 2015-2020 Akretion France (www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import TransactionCase
-import base64
 from odoo.tools import file_open, float_compare
+from odoo import fields
+import base64
 
 
 class TestInvoiceImport(TransactionCase):
@@ -15,18 +15,16 @@ class TestInvoiceImport(TransactionCase):
         frtax = self.env['account.tax'].create({
             'name': 'French VAT purchase 20.0%',
             'description': 'FR-VAT-buy-20.0',
-            'amount': 0.2,
-            'type': 'percent',
-            'account_collected_id': self.env['account.account'].search([
+            'amount': 20,
+            'amount_type': 'percent',
+            'account_id': self.env['account.account'].search([
                 ('user_type_id', '=',
                  self.env.ref('account.data_account_type_expenses').id)
             ], limit=1).id,
-            'account_paid_id': self.env['account.account'].search([
+            'refund_account_id': self.env['account.account'].search([
                 ('user_type_id', '=',
                  self.env.ref('account.data_account_type_expenses').id)
             ], limit=1).id,
-            'base_sign': -1,
-            'tax_sign': -1,
             'type_tax_use': 'purchase',
             })
         # Set this tax on Internet access product
@@ -54,20 +52,19 @@ class TestInvoiceImport(TransactionCase):
         self.assertEquals(len(invoices), 1)
         inv = invoices[0]
         self.assertEquals(inv.type, 'in_invoice')
-        self.assertEquals(inv.date_invoice, '2015-07-02')
+        self.assertEquals(
+            fields.Date.to_string(inv.date_invoice), '2015-07-02')
         self.assertEquals(
             inv.partner_id,
             self.env.ref('account_invoice_import_invoice2data.free'))
         self.assertEquals(inv.journal_id.type, 'purchase')
         self.assertEquals(
-            float_compare(inv.check_total, 29.99, precision_digits=2), 0)
-        self.assertEquals(
             float_compare(inv.amount_total, 29.99, precision_digits=2), 0)
         self.assertEquals(
             float_compare(inv.amount_untaxed, 24.99, precision_digits=2), 0)
         self.assertEquals(
-            len(inv.invoice_line), 1)
-        iline = inv.invoice_line[0]
+            len(inv.invoice_line_ids), 1)
+        iline = inv.invoice_line_ids[0]
         self.assertEquals(iline.name, 'Fiber optic access at the main office')
         self.assertEquals(
             iline.product_id,
@@ -83,7 +80,6 @@ class TestInvoiceImport(TransactionCase):
         inv.write({
             'date_invoice': False,
             'reference': False,
-            'check_total': False,
             })
 
         # New import with update of an existing draft invoice
@@ -109,6 +105,5 @@ class TestInvoiceImport(TransactionCase):
             ])
         self.assertEquals(len(invoices), 1)
         inv = invoices[0]
-        self.assertEquals(inv.date_invoice, '2015-07-02')
         self.assertEquals(
-            float_compare(inv.check_total, 29.99, precision_digits=2), 0)
+            fields.Date.to_string(inv.date_invoice), '2015-07-02')
