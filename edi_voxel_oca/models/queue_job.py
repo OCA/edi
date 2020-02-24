@@ -10,7 +10,7 @@ class QueueJob(models.Model):
 
     @api.multi
     def voxel_do_now(self):
-        self.sudo().write({'eta': 0})
+        self.sudo().write({'eta': False})
 
     @api.multi
     def voxel_cancel_now(self):
