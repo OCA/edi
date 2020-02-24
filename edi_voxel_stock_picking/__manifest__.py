@@ -10,8 +10,8 @@
     "license": "AGPL-3",
     "depends": [
         "edi_voxel",
+        "product_expiry",
         "sale_stock",
-        "product_supplierinfo_for_customer",
     ],
     "data": [
         "views/report_voxel_picking.xml",

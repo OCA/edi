@@ -36,6 +36,17 @@ class TestVoxelStockPicking(common.SavepointCase):
             'product_id': product.id,
             'product_code': '1234567891234',
         })
+        product2 = cls.env['product.product'].create({
+            'default_code': 'DC_002',
+            'name': 'Product 2 (test)',
+            'type': 'product',
+            'tracking': 'lot',
+        })
+        lot = cls.env['stock.production.lot'].create({
+            'name': 'LOT01',
+            'product_id': product2.id,
+            'life_date': '2020-01-01 12:05:23',
+        })
         sale_order = cls.env['sale.order'].create({
             'name': 'Sale order name (test)',
             'partner_id': partner.id,
@@ -46,7 +57,13 @@ class TestVoxelStockPicking(common.SavepointCase):
                     'product_uom_qty': 2,
                     'product_uom': product.uom_id.id,
                     'price_unit': 750,
-                })
+                }),
+                (0, 0, {
+                    'product_id': product2.id,
+                    'product_uom_qty': 1,
+                    'product_uom': product2.uom_id.id,
+                    'price_unit': 50,
+                }),
             ],
         })
         # Confirm quotation
@@ -59,7 +76,9 @@ class TestVoxelStockPicking(common.SavepointCase):
             'company_id': main_company.id,
             'note': 'Picking note (test)',
         })
-        cls.picking.move_lines.write({'quantity_done': 2})
+        cls.picking.move_lines[0].write({'quantity_done': 2})
+        cls.picking.move_lines[1].write({'quantity_done': 1})
+        cls.picking.move_lines[1].move_line_ids.lot_id = lot.id
         cls.picking.button_validate()
 
     def test_get_voxel_filename(self):
@@ -153,14 +172,25 @@ class TestVoxelStockPicking(common.SavepointCase):
         return [{'PORef': 'Sale order name (test)'}]
 
     def _get_products_data(self):
-        return [
-            {
-                'product': {
-                    'SupplierSKU': 'DC_001',
-                    'CustomerSKU': '1234567891234',
-                    'Item': 'Product 1 (test)',
-                    'Qty': "2.0",
-                    'MU': 'Unidades',
-                },
+        return [{
+            'product': {
+                'SupplierSKU': 'DC_001',
+                'CustomerSKU': '1234567891234',
+                'Item': 'Product 1 (test)',
+                'Qty': "2.0",
+                'MU': 'Unidades',
             },
-        ]
+        }, {
+            'product': {
+                'SupplierSKU': 'DC_002',
+                'CustomerSKU': False,
+                'Item': 'Product 2 (test)',
+                'Qty': "1.0",
+                'MU': 'Unidades',
+                'TraceabilityList': [{
+                    'BatchNumber': "LOT01",
+                    'ExpirationDate': "2020-01-01T12:05:23",
+                    'Quantity': 1.0,
+                }],
+            },
+        }]

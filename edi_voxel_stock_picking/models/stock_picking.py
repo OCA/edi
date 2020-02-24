@@ -35,10 +35,21 @@ class Picking(models.Model):
             )
 
     def _search_voxel_enabled(self, operator, value):
-        return [
-            ('company_id.voxel_enabled', operator, value),
-            ('partner_id.voxel_enabled', operator, value),
-        ]
+        if (operator == '=' and value) or (operator == '!=' and not value):
+            domain = [
+                ('company_id.voxel_enabled', '=', True),
+                ('partner_id.voxel_enabled', '=', True),
+                ('picking_type_code', '=', 'outgoing')
+            ]
+        else:
+            domain = [
+                '|',
+                '|',
+                ('company_id.voxel_enabled', '=', False),
+                ('partner_id.voxel_enabled', '=', False),
+                ('picking_type_code', '!=', 'outgoing')
+            ]
+        return [('id', 'in', self.search(domain).ids)]
 
     @api.multi
     def action_done(self):
