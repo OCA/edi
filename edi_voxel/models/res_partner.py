@@ -11,3 +11,10 @@ class ResPartner(models.Model):
 
     def _commercial_fields(self):
         return super(ResPartner, self)._commercial_fields() + ['voxel_enabled']
+
+    def _get_voxel_vat(self):
+        """Rip initial ES prefix if exists."""
+        self.ensure_one()
+        if self.vat.startswith("ES"):
+            return self.vat[2:]
+        return self.vat

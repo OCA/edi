@@ -1,6 +1,7 @@
 account-invoicing
 community-data-files
 partner-contact
+product-attribute
 queue
 reporting-engine
 sale-workflow
