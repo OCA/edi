@@ -13,6 +13,7 @@
         "report_xml",
         "base_iso3166",
         "queue_job",
+        "product_supplierinfo_for_customer",
     ],
     "data": [
         "security/voxel_security.xml",
