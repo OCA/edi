@@ -187,3 +187,14 @@ class VoxelMixin(models.AbstractModel):
         """ This method must be overwritten by the model that inherit from
         voxel.mixin"""
         return self.env['voxel.login']
+
+    def _get_customer_product_sku(self, product, partner):
+        customerinfo = self.env["product.customerinfo"].search([
+            ("name", "=", partner.id),
+            "|",
+            ("product_id", "=", product.id),
+            "&",
+            ("product_tmpl_id", "=", product.product_tmpl_id.id),
+            ("product_id", "=", False),
+        ], limit=1, order="product_id, sequence")
+        return customerinfo.product_code
