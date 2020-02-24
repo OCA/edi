@@ -35,7 +35,7 @@ class ReportVoxelPicking(models.AbstractModel):
     def _get_suplier_data(self, picking):
         supplier = picking.company_id.partner_id
         return {
-            'CIF': supplier.vat,
+            'CIF': supplier._get_voxel_vat(),
             'Company': supplier.name,
             'Address': ', '.join(
                 filter(None, [supplier.street, supplier.street2])),
@@ -50,7 +50,7 @@ class ReportVoxelPicking(models.AbstractModel):
         client = picking.sale_id.partner_invoice_id or picking.partner_id
         return {
             'SupplierClientID': client.ref,
-            'CIF': client.vat,
+            'CIF': client._get_voxel_vat(),
             'Company': client.commercial_partner_id.name,
             'Address': ', '.join(
                 filter(None, [client.street, client.street2])),
@@ -94,29 +94,30 @@ class ReportVoxelPicking(models.AbstractModel):
         } for line in picking.move_lines]
 
     def _get_product_data(self, line):
-        return {
+        customer_sku = line.picking_id._get_customer_product_sku(
+            line.product_id, line.picking_id.partner_id)
+        if not customer_sku:
+            customer_sku = line.picking_id._get_customer_product_sku(
+                line.product_id, line.picking_id.sale_id.partner_invoice_id)
+        vals = {
             'SupplierSKU': line.product_id.default_code,
-            'CustomerSKU': self._get_customer_sku(line),
+            'CustomerSKU': customer_sku,
             'Item': line.product_id.name,
             'Qty': str(line.product_uom_qty),
             'MU': line.product_uom.voxel_code,
         }
+        traceability_vals = self._get_traceability(line)
+        if traceability_vals:
+            vals['TraceabilityList'] = traceability_vals
+        return vals
 
-    def _get_customer_sku(self, line):
-        supplierinfo = line.product_id.product_tmpl_id.customer_ids
-        customer = line.picking_id.partner_id
-        if customer:
-            res = self._get_supplierinfo(line, supplierinfo, customer)
-        if not customer or not res:
-            client = line.picking_id.sale_id.partner_invoice_id
-            res = self._get_supplierinfo(line, supplierinfo, client)
-        return res.product_code
-
-    def _get_supplierinfo(self, line, supplierinfo, partner):
-        res = self.env['product.customerinfo']
-        for rec in supplierinfo:
-            if rec.name == partner and rec.product_id == line.product_id:
-                return rec
-            if not res and (rec.name == partner and not rec.product_id):
-                res = rec
-        return res
+    def _get_traceability(self, line):
+        if line.product_id.tracking == 'none':
+            return []
+        return [{
+            'BatchNumber': ml.lot_id.name,
+            'ExpirationDate': (
+                ml.lot_id.life_date and
+                ml.lot_id.life_date.strftime("%Y-%m-%dT%H:%M:%S") or ''),
+            'Quantity': ml.qty_done,
+        } for ml in line.move_line_ids]
