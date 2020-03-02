@@ -34,13 +34,13 @@ msgid "Last Modified on"
 msgstr ""
 
 #. module: base_zugferd
-#: code:addons/base_zugferd/models/base_facturx.py:46
+#: code:addons/base_zugferd/models/base_facturx.py:47
 #, python-format
 msgid "The %s XML file is not valid against the official XML Schema Definition. The XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s."
 msgstr ""
 
 #. module: base_zugferd
-#: code:addons/base_zugferd/models/base_facturx.py:29
+#: code:addons/base_zugferd/models/base_facturx.py:30
 #, python-format
 msgid "Wrong level '%s' for Factur-X invoice."
 msgstr ""
