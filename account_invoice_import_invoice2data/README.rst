@@ -23,9 +23,11 @@ Account Invoice Import Invoice2data
     :target: https://runbot.odoo-community.org/runbot/226/12.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module is an extension of the module *account_invoice_import*: it adds support for regular PDF invoices i.e. PDF invoice that don't have an embedded XML file. It uses the `invoice2data library <https://github.com/invoice-x/invoice2data>`_ which takes care of extracting the text of the PDF invoice, find an existing invoice template and execute the invoice template to extract the useful information from the invoice.
+
+Invoice templates can be stored on the filesystem or in the database. The invoice templates stored in the database, can be managed from the Odoo gui.
 
 To know the full story behind the development of this module, read this `blog post <http://www.akretion.com/blog/akretions-christmas-present-for-the-odoo-community>`_.
 
@@ -108,6 +110,23 @@ On the output, you will get first the text of the PDF, then some debug info on t
   * 'invoice_number'
   * 'date_due', if this information is available in the text of the PDF file.
 
+=====
+Usage
+=====
+
+Refer to the usage section of the module *account_invoice_import*.
+
+.. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
+   :alt: Try me on Runbot
+   :target: https://runbot.odoo-community.org/runbot/226/8.0
+
+
+To manage the templates in the database, you need to:
+
+#. go to Accounting/Configuration/Invoice2data templates
+#. select or create a template
+#. after selecting a type, you can preview a template by uploading a PDF and pressing ``Preview``
+
 Bug Tracker
 ===========
 
@@ -130,6 +149,11 @@ Contributors
 ~~~~~~~~~~~~
 
 * Alexis de Lattre <alexis.delattre@akretion.com>
+* Holger Brunn <hbrunn@therp.nl>
+* Robin Conjour <rconjour@demolium.com>
+
+Do not contact contributors directly about help with questions or problems concerning this addon, but use the `community mailing list <mailto:community@mail.odoo.com>`_ or the `appropriate specialized mailinglist <https://odoo-community.org/groups>`_ for help, and the bug tracker linked in `Bug Tracker`_ above for technical issues.
+
 
 Maintainers
 ~~~~~~~~~~~

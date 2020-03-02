@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
     <data>
-        <record id="base.group_user" model="res.groups">
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
-        </record>
         <record id="group_invoice2data_user" model="res.groups">
             <field name="name">Invoice2data user</field>
         </record>
@@ -12,4 +9,4 @@
             <field name="implied_ids" eval="[(4, ref('group_invoice2data_user'))]" />
         </record>
     </data>
-</openerp>
+</odoo>
