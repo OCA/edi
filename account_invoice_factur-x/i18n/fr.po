@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 3.1.1\n"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:751
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:754
 #, python-format
 msgid "%s: %s %s dated %s"
 msgstr "%s : %s %s daté le %s"
@@ -41,7 +41,7 @@ msgid "Companies"
 msgstr "Sociétés"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:50
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:51
 #, python-format
 msgid ""
 "Country is not set on partner '%s'. In the Factur-X standard, the country is "
@@ -56,7 +56,12 @@ msgid "EN 16931 (Comfort)"
 msgstr "EN 16931 (Confort)"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:750
+#: selection:res.company,facturx_level:0
+msgid "Extended"
+msgstr ""
+
+#. module: account_invoice_factur-x
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:753
 #, python-format
 msgid "Factur-X"
 msgstr "Factur-X"
@@ -84,7 +89,7 @@ msgid "Factur-X Refund Type"
 msgstr "Type d'avoir Factur-X"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:747
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:750
 #: model:ir.model,name:account_invoice_factur-x.model_account_invoice
 #, python-format
 msgid "Invoice"
@@ -101,33 +106,33 @@ msgid "Minimum"
 msgstr "Minimum"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:374
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:645
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:378
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:648
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr "Catégorie de taxe UNECE manquante sur la taxe %s"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:371
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:638
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:375
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:641
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
 msgstr "Type de taxe UNECE manquante sur la taxe %s"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:444
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:448
 #, python-format
 msgid "Missing UNECE code on payment export type '%s'"
 msgstr "Code UNECE manquant sur le type d'export de paiement %s"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:346
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:350
 #, python-format
 msgid "No specific payment term selected"
 msgstr "Aucun terme de paiement spécifique sélectionné"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:747
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:750
 #, python-format
 msgid "Refund"
 msgstr "Avoir"
@@ -138,7 +143,7 @@ msgid "Report"
 msgstr "Rapport"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:555
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:558
 #, python-format
 msgid ""
 "The Factur-X standard specify that unit prices can't be negative. The unit "
@@ -170,7 +175,7 @@ msgstr ""
 "qui est la valeur par défaut."
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:290
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:294
 #, python-format
 msgid "Wire transfer"
 msgstr "Virement bancaire"

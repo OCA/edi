@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_invoice_factur-x
+# 	* account_invoice_factur-x
 #
 msgid ""
 msgstr ""
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Weblate 3.6.1\n"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:751
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:754
 #, python-format
 msgid "%s: %s %s dated %s"
 msgstr "%s: %s %s datiert %s"
@@ -38,9 +38,11 @@ msgid "Companies"
 msgstr "Firmen"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:50
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:51
 #, python-format
-msgid "Country is not set on partner '%s'. In the Factur-X standard, the country is required for buyer and seller."
+msgid ""
+"Country is not set on partner '%s'. In the Factur-X standard, the country is "
+"required for buyer and seller."
 msgstr ""
 "Das Land wurde für den Partner '%s' nicht gesetzt. Im Factur-X standard, ist "
 "das Setzen des Landes für Käufer und Verkäufer zwingend erforderlich."
@@ -51,7 +53,12 @@ msgid "EN 16931 (Comfort)"
 msgstr "EN 16931 (Komfort)"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:750
+#: selection:res.company,facturx_level:0
+msgid "Extended"
+msgstr ""
+
+#. module: account_invoice_factur-x
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:753
 #, python-format
 msgid "Factur-X"
 msgstr "Factur-X"
@@ -79,7 +86,7 @@ msgid "Factur-X Refund Type"
 msgstr "Factur-X Erstattungstyp"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:747
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:750
 #: model:ir.model,name:account_invoice_factur-x.model_account_invoice
 #, python-format
 msgid "Invoice"
@@ -96,33 +103,33 @@ msgid "Minimum"
 msgstr "Minimum"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:374
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:645
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:378
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:648
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr "Fehlende UNECE Steuerkategorie für Steuer '%s'"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:371
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:638
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:375
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:641
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
 msgstr "Fehlende UNECE Steuerkategorie für Steuer '%s'"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:444
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:448
 #, python-format
 msgid "Missing UNECE code on payment export type '%s'"
 msgstr "Fehlender UNECE Schlüssel für den Zahlungsexporttyp '%s'"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:346
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:350
 #, python-format
 msgid "No specific payment term selected"
 msgstr "Keine spezifische Zahlungsbedingung ausgewählt"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:747
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:750
 #, python-format
 msgid "Refund"
 msgstr "Erstattung"
@@ -133,9 +140,12 @@ msgid "Report"
 msgstr "Bericht"
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:555
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:558
 #, python-format
-msgid "The Factur-X standard specify that unit prices can't be negative. The unit price of line '%s' is negative. You should generate a customer refund for that line."
+msgid ""
+"The Factur-X standard specify that unit prices can't be negative. The unit "
+"price of line '%s' is negative. You should generate a customer refund for "
+"that line."
 msgstr ""
 "Der Factur-X Standard legt fest die Preise einer Einheit nicht negativ sein "
 "dürfen. Der Preis der Einheit '%s' ist jedoch negativ. Sie sollten eine "
@@ -154,13 +164,15 @@ msgstr "Typ 381 mit negativer Anzahl"
 #. module: account_invoice_factur-x
 #: model:ir.model.fields,help:account_invoice_factur-x.field_account_config_settings_facturx_level
 #: model:ir.model.fields,help:account_invoice_factur-x.field_res_company_facturx_level
-msgid "Unless if you have a good reason, you should always select 'EN 16931 (Comfort)', which is the default value."
+msgid ""
+"Unless if you have a good reason, you should always select 'EN 16931 "
+"(Comfort)', which is the default value."
 msgstr ""
 "Sofern Sie keinen guten Grund haben anders zu handeln, sollten Sie stets die "
 "Voreinstellung 'EN 16931 (Comfort)'  verwenden."
 
 #. module: account_invoice_factur-x
-#: code:addons/account_invoice_factur-x/models/account_invoice.py:290
+#: code:addons/account_invoice_factur-x/models/account_invoice.py:294
 #, python-format
 msgid "Wire transfer"
 msgstr "Bargeldlose Bezahlung"
