@@ -7,4 +7,5 @@
 # But Travis build environnement are based on Ubuntu 12.04 and I didn't
 # find any PPA for poppler-utils for 12.04 and it doesn't seem easy to have a
 # static build
-#from . import test_invoice_import
+from . import test_invoice2data_template
+from . import test_invoice_import

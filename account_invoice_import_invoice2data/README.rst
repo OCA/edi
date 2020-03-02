@@ -8,6 +8,8 @@ Account Invoice Import Invoice2data
 
 This module is an extension of the module *account_invoice_import*: it adds support for regular PDF invoices i.e. PDF invoice that don't have an embedded XML file. It uses the `invoice2data library <https://github.com/invoice-x/invoice2data>`_ which takes care of extracting the text of the PDF invoice, find an existing invoice template and execute the invoice template to extract the useful information from the invoice.
 
+Invoice templates can be stored on the filesystem or in the database. The invoice templates stored in the database, can be managed from the Odoo gui.
+
 To know the full story behind the development of this module, read this `blog post <http://www.akretion.com/blog/akretions-christmas-present-for-the-odoo-community>`_.
 
 Installation
@@ -92,6 +94,13 @@ Refer to the usage section of the module *account_invoice_import*.
    :alt: Try me on Runbot
    :target: https://runbot.odoo-community.org/runbot/226/8.0
 
+
+To manage the templates in the database, you need to:
+
+#. go to Accounting/Configuration/Invoice2data templates
+#. select or create a template
+#. after selecting a type, you can preview a template by uploading a PDF and pressing ``Preview``
+
 Bug Tracker
 ===========
 
@@ -107,6 +116,11 @@ Contributors
 ------------
 
 * Alexis de Lattre <alexis.delattre@akretion.com>
+* Holger Brunn <hbrunn@therp.nl>
+* Robin Conjour <robin@conjour.nl>
+
+Do not contact contributors directly about help with questions or problems concerning this addon, but use the `community mailing list <mailto:community@mail.odoo.com>`_ or the `appropriate specialized mailinglist <https://odoo-community.org/groups>`_ for help, and the bug tracker linked in `Bug Tracker`_ above for technical issues.
+
 
 Maintainer
 ----------

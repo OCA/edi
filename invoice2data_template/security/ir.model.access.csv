@@ -1,3 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-access_invoice2data_template_editor,"Invoice2data templates editor",invoice2data_template.model_invoice2data_template,group_invoice2data_editor,1,1,1,1
-access_invoice2data_template_user,"Invoice2data templates user",invoice2data_template.model_invoice2data_template,group_invoice2data_user,1,0,0,0

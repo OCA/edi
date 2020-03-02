@@ -33,13 +33,11 @@
                         <group name="preview_buttons" col="4">
                             <field name="preview_file" placeholder="Upload file for preview" />
                             <button type="object" name="action_preview" string="Preview" class="oe_highlight" />
+                            <button type="object" name="action_test" string="Test" class="oe_highlight" />
                         </group>
-<<<<<<< HEAD
                         <field name="preview" attrs="{'invisible': [('preview', '=', False)]}" />
-=======
-                        <field name="preview" attrs="{'invisible': [('preview', '=', False)]}" class="oe_edit_only" />
-                        <field name="preview_text" attrs="{'invisible': [('preview', '=', False)]}" class="oe_edit_only" />
->>>>>>> b64ebc0... [ADD] preview the text version too
+                        <field name="preview_text" attrs="{'invisible': [('preview', '=', False)]}" style="width:50%" />
+                        <field name="test_results" attrs="{'invisible': [('test_results', '=', False)]}" style="width:50%" />
                     </sheet>
                 </form>
             </field>

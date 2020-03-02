@@ -50,9 +50,13 @@ class AccountInvoiceImport(models.TransientModel):
         if not exclude_built_in_templates:
             templates += read_templates(
                 pkg_resources.resource_filename('invoice2data', 'templates'))
+
+        templates += self.env['invoice2data.template'].get_templates('purchase_invoice')
+
         logger.debug(
             'Calling invoice2data.extract_data with templates=%s',
             templates)
+
         try:
             invoice2data_res = extract_data(file_name, templates=templates)
         except Exception, e:
