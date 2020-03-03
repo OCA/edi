@@ -39,25 +39,25 @@ msgid "Last Modified on"
 msgstr ""
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:421
+#: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr ""
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:441
+#: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
 msgstr ""
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:293
+#: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
 msgstr ""
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:501
+#: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid ""
 "The UBL XML file is not valid against the official XML Schema Definition. "
