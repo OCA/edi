@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo13-addon-account_e-invoice_generate',
+        'odoo13-addon-base_ubl',
     ],
     classifiers=[
         'Programming Language :: Python',
