@@ -9,7 +9,7 @@
     "summary": "Base module for Universal Business Language (UBL)",
     "author": "Akretion,Onestein,Odoo Community Association (OCA)",
     "website": "https://github.com/oca/edi/",
-    "depends": ["uom_unece", "account_tax_unece", "base_vat_sanitized"],
+    "depends": ["uom_unece", "account_tax_unece", "base_vat"],
     "external_dependencies": {"python": ["PyPDF2"]},
     "installable": True,
 }
