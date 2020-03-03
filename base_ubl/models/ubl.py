@@ -142,7 +142,7 @@ class BaseUbl(models.AbstractModel):
             )
             registration_name.text = commercial_partner.name
             company_id = etree.SubElement(party_tax_scheme, ns["cbc"] + "CompanyID")
-            company_id.text = commercial_partner.sanitized_vat
+            company_id.text = commercial_partner.vat
             tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_partner(
                 commercial_partner
             )
