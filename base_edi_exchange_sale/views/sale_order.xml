@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="sale_order_edi_exchange" model="ir.ui.view">
+            <field name="name">Sale Order EDI Exchange</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <field name="partner_edi_exchange" invisible="1"/>
+                    <button name="send_via_edi_exchange" type="object" string="Send via EDI Exchange" attrs="{'invisible': [('partner_edi_exchange', '=', False)]}"/>
+                    <button name="add_edi_exchange_to_partner" type="object" string="Configure Partner EDI Exchange" attrs="{'invisible': [('partner_edi_exchange', '=', True)]}"/>
+                </xpath>
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <button class="oe_stat_button" type="object"
+                        name="open_transfers" icon="fa-exchange" attrs="{'invisible': [('transfer_count', '&lt;', 1)]}">
+                        <div class="o_stat_info">
+                            <field name="transfer_count" class="o_stat_value"/>
+                            <span class="o_stat_text"> Transfers</span>
+                        </div>
+                    </button>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page name="transfers" string="Transfers" groups="base.group_no_one">
+                        <label for="edi_conversation_id"/>
+                        <field name="edi_conversation_id"/>
+                        <field name="transfer_ids"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

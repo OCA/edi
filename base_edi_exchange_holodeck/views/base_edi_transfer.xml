@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="base_edi_transfer_holodeck_form" model="ir.ui.view">
+            <field name="name">EDI Transfer</field>
+            <field name="model">base.edi.transfer</field>
+            <field name="inherit_id" ref="base_edi_exchange.base_edi_transfer_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page name="folder" string="Folders">
+                        <group name="folder_list">
+                            <field name="conversation_folder"/>
+                            <field name="confirmation_folder"/>
+                            <field name="inbound_archive_folder"/>
+                            <field name="inbound_attachment_archive_folder"/>
+                            <field name="outbound_archive_folder"/>
+                            <field name="outbound_attachment_archive_folder"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="base_edi_exchange_folder" model="ir.ui.view">
+            <field name="name">Base EDI Exchange Type folder</field>
+            <field name="model">base.edi.exchange</field>
+            <field name="inherit_id" ref="base_edi_exchange.base_edi_exchange_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@name='config']" position="inside">
+                    <group name="folder_config" string="Folder Configuration" attrs="{'invisible': [('type', '!=', 'folder')]}">
+                        <field name="send_folder" attrs="{'required': [('type', '=', 'folder')]}"/>
+                        <field name="receive_folder" attrs="{'required': [('type', '=', 'folder')]}"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

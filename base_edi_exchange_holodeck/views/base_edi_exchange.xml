@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="base_edi_exchange_folder" model="ir.ui.view">
+            <field name="name">Base EDI Exchange Type Holodeck</field>
+            <field name="model">base.edi.exchange</field>
+            <field name="inherit_id" ref="base_edi_exchange.base_edi_exchange_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@name='config']" position="inside">
+                    <group name="holodeck_config" string="Holodeck Configuration" attrs="{'invisible': [('type', '!=', 'holodeck')]}">
+                        <field name="send_folder" attrs="{'required': [('type', '=', 'holodeck')]}"/>
+                        <field name="receive_folder" attrs="{'required': [('type', '=', 'holodeck')]}"/>
+                        <field name="archive_folder" attrs="{'required': [('type', '=', 'holodeck')]}"/>
+                        <field name="send_pmode" attrs="{'required': [('type', '=', 'holodeck')]}"/>
+                        <field name="receive_pmode" attrs="{'required': [('type', '=', 'holodeck')]}"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
