@@ -118,6 +118,7 @@ class OrderResponseImport(models.TransientModel):
             try:
                 xml_root = etree.fromstring(document)
             except:
+                logger.exception("File is not XML-compliant")
                 raise UserError(_("This XML file is not XML-compliant"))
             if logger.isEnabledFor(logging.DEBUG):
                 pretty_xml_string = etree.tostring(
