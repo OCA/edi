@@ -58,7 +58,7 @@ class TestVoxelSaleOrderImport(common.SavepointCase):
         )
         # check the import was successful
         # check general data
-        self.assertEqual(sale_order.origin, "1111")
+        self.assertEqual(sale_order.client_order_ref, "1111")
         self.assertEqual(sale_order.currency_id.name, "EUR")
         self.assertEqual(
             sale_order.commitment_date, datetime(2019, 6, 19))

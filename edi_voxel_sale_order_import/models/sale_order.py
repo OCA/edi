@@ -95,8 +95,7 @@ class Company(models.Model):
         general_elements = xml_root.xpath("//GeneralData")
         if general_elements:
             general_data = general_elements[0].attrib
-            # Add origin
-            vals.update(origin=general_data.get('Ref'))
+            vals.update(client_order_ref=general_data.get('Ref'))
             # get pricelist
             currency_name = general_data.get('Currency')
             pricelist = self.env['product.pricelist'].search(
