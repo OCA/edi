@@ -6,13 +6,11 @@ from odoo import models
 
 
 class PurchaseOrder(models.Model):
-    _inherit = 'purchase.order'
+    _inherit = "purchase.order"
 
     def get_delivery_partner(self):
         self.ensure_one()
-        if (
-                not self.dest_address_id and
-                self.picking_type_id.warehouse_id.partner_id):
+        if not self.dest_address_id and self.picking_type_id.warehouse_id.partner_id:
             return self.picking_type_id.warehouse_id.partner_id
 
         return super().get_delivery_partner()
