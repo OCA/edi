@@ -158,6 +158,23 @@ class PurchaseOrder(models.Model):
 
     @api.multi
     def generate_ubl_xml_string(self, doc_type, version='2.1'):
+        """ Provide UBL Xml string with no check
+            According to your use check this string integrity with
+            _ubl_check_xml_schema() method
+        """
+        self.ensure_one()
+        xml_root = self.get_ubl_xml_etree(doc_type, version=version)
+        xml_string = etree.tostring(
+            xml_root, pretty_print=True, encoding='UTF-8',
+            xml_declaration=True)
+        logger.debug(
+            '%s UBL XML file generated for purchase order ID %d (state %s)',
+            doc_type, self.id, self.state)
+        logger.debug(xml_string)
+        return xml_string
+
+    @api.multi
+    def get_ubl_xml_etree(self, doc_type, version='2.1'):
         self.ensure_one()
         assert doc_type in ('order', 'rfq'), 'wrong doc_type'
         logger.debug('Starting to generate UBL XML %s file', doc_type)
@@ -171,20 +188,18 @@ class PurchaseOrder(models.Model):
         if doc_type == 'order':
             xml_root = self.with_context(lang=lang).\
                 generate_order_ubl_xml_etree(version=version)
-            document = 'Order'
         elif doc_type == 'rfq':
             xml_root = self.with_context(lang=lang).\
                 generate_rfq_ubl_xml_etree(version=version)
-            document = 'RequestForQuotation'
-        xml_string = etree.tostring(
-            xml_root, pretty_print=True, encoding='UTF-8',
-            xml_declaration=True)
-        self._ubl_check_xml_schema(xml_string, document, version=version)
-        logger.debug(
-            '%s UBL XML file generated for purchase order ID %d (state %s)',
-            doc_type, self.id, self.state)
-        logger.debug(xml_string)
-        return xml_string
+        return xml_root
+
+    def get_document_name(self, doc_type):
+        document = False
+        if doc_type == "order":
+            document = "Order"
+        elif doc_type == "rfq":
+            document = "RequestForQuotation"
+        return document
 
     @api.multi
     def get_ubl_filename(self, doc_type, version='2.1'):
@@ -206,16 +221,21 @@ class PurchaseOrder(models.Model):
     @api.multi
     def embed_ubl_xml_in_pdf(self, pdf_content):
         self.ensure_one()
-        doc_type = False
-        if self.state in self.get_rfq_states():
-            doc_type = 'rfq'
-        elif self.state in self.get_order_states():
-            doc_type = 'order'
+        doc_type = self.get_ubl_purchase_order_doc_type()
         if doc_type:
             version = self.get_ubl_version()
             ubl_filename = self.get_ubl_filename(doc_type, version=version)
             xml_string = self.generate_ubl_xml_string(
                 doc_type, version=version)
+            self._ubl_check_xml_schema(
+                xml_string, self.get_document_name(doc_type), version=version)
             pdf_content = self.embed_xml_in_pdf(
                 xml_string, ubl_filename, pdf_content)
         return pdf_content
+
+    def get_ubl_purchase_order_doc_type(self):
+        self.ensure_one()
+        if self.state in self.get_rfq_states():
+            return "rfq"
+        elif self.state in self.get_order_states():
+            return "order"
