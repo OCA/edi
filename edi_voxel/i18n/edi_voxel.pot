@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-11 14:55+0000\n"
-"PO-Revision-Date: 2019-12-11 14:55+0000\n"
+"POT-Creation-Date: 2020-04-14 19:31+0000\n"
+"PO-Revision-Date: 2020-04-14 19:31+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -202,11 +202,6 @@ msgid "Enable Voxel"
 msgstr ""
 
 #. module: edi_voxel
-#: selection:voxel.mixin,voxel_state:0
-msgid "Errors"
-msgstr ""
-
-#. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Horas"
 msgstr ""
@@ -305,6 +300,12 @@ msgid "Password"
 msgstr ""
 
 #. module: edi_voxel
+#: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__processing_error
+#: selection:voxel.mixin,voxel_state:0
+msgid "Processing error"
+msgstr ""
+
+#. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_uom_uom
 msgid "Product Unit of Measure"
 msgstr ""
@@ -322,7 +323,17 @@ msgstr ""
 
 #. module: edi_voxel
 #: selection:voxel.mixin,voxel_state:0
-msgid "Sent"
+msgid "Sending error"
+msgstr ""
+
+#. module: edi_voxel
+#: selection:voxel.mixin,voxel_state:0
+msgid "Sent and accepted"
+msgstr ""
+
+#. module: edi_voxel
+#: selection:voxel.mixin,voxel_state:0
+msgid "Sent not verified"
 msgstr ""
 
 #. module: edi_voxel
@@ -339,6 +350,12 @@ msgstr ""
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_account_tax
 msgid "Tax"
+msgstr ""
+
+#. module: edi_voxel
+#: code:addons/edi_voxel/models/voxel_mixin.py:275
+#, python-format
+msgid "This operation cannot be performed because there are jobs running therefore cannot be unlinked."
 msgstr ""
 
 #. module: edi_voxel
@@ -370,6 +387,11 @@ msgstr ""
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_account_tax__voxel_tax_code
 msgid "Voxel Tax Code"
+msgstr ""
+
+#. module: edi_voxel
+#: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__voxel_filename
+msgid "Voxel filename"
 msgstr ""
 
 #. module: edi_voxel
