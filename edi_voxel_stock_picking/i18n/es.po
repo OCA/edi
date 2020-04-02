@@ -1,24 +1,33 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* edi_voxel_stock_picking
+# 	* edi_voxel_stock_picking
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-28 16:48+0000\n"
-"PO-Revision-Date: 2019-06-28 16:48+0000\n"
+"POT-Creation-Date: 2020-04-14 19:34+0000\n"
+"PO-Revision-Date: 2020-04-14 15:36-0400\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: Poedit 2.0.6\n"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
 msgid "Cancel sending"
 msgstr "Cancelar envío"
+
+#. module: edi_voxel_stock_picking
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+#, fuzzy
+#| msgid "Voxel XML report"
+msgid "Cancelled Voxel reports"
+msgstr "Envíos a Voxel cancelados"
 
 #. module: edi_voxel_stock_picking
 #: model:ir.model,name:edi_voxel_stock_picking.model_res_company
@@ -26,45 +35,81 @@ msgid "Companies"
 msgstr "Compañías"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_report_edi_voxel_stock_picking_template_voxel_picking_display_name
+#: model:ir.model,name:edi_voxel_stock_picking.model_res_config_settings
+#, fuzzy
+#| msgid "res.config.settings"
+msgid "Config Settings"
+msgstr "Configuración"
+
+#. module: edi_voxel_stock_picking
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_report_edi_voxel_stock_picking_template_voxel_picking__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_report_edi_voxel_stock_picking_template_voxel_picking_id
+#: model:ir.model,name:edi_voxel_stock_picking.model_report_edi_voxel_stock_picking_template_voxel_picking
+#, fuzzy
+#| msgid "Stock picking login"
+msgid "Edi Voxel Stock picking Report"
+msgstr "Informe Voxel de albaranes"
+
+#. module: edi_voxel_stock_picking
+#: model:ir.actions.server,name:edi_voxel_stock_picking.ir_cron_check_invoice_export_status_ir_actions_server
+#: model:ir.cron,cron_name:edi_voxel_stock_picking.ir_cron_check_invoice_export_status
+#: model:ir.cron,name:edi_voxel_stock_picking.ir_cron_check_invoice_export_status
+msgid "Edi Voxel: Update stock picking export status"
+msgstr "Edi Voxel: Actualizar estado de las exportaciones de albaranes"
+
+#. module: edi_voxel_stock_picking
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_report_edi_voxel_stock_picking_template_voxel_picking__id
 msgid "ID"
 msgstr "ID (identificación)"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_stock_picking_voxel_job_ids
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_stock_picking__voxel_job_ids
 msgid "Jobs"
 msgstr "Trabajos"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_report_edi_voxel_stock_picking_template_voxel_picking___last_update
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_report_edi_voxel_stock_picking_template_voxel_picking____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
+msgid "Processing error"
+msgstr "Error de procesamiento"
+
+#. module: edi_voxel_stock_picking
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
 msgid "Requeue"
 msgstr "Volver a poner en cola"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
 msgid "Send now"
 msgstr "Enviar ahora"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
 msgid "Send to Voxel"
 msgstr "Enviar a Voxel"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_res_company_voxel_picking_login_id
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_res_config_settings_voxel_picking_login_id
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_res_company__voxel_picking_login_id
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_res_config_settings__voxel_picking_login_id
 msgid "Stock picking login"
 msgstr "Login para albaranes"
+
+#. module: edi_voxel_stock_picking
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+msgid "The last Voxel report processing with errors"
+msgstr "El último envío a Voxel tiene errores de procesamiento"
+
+#. module: edi_voxel_stock_picking
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+msgid "The last attemp to sent to Voxel has failed"
+msgstr "El úlimo intento de envío a Voxel ha fallado"
 
 #. module: edi_voxel_stock_picking
 #: model:ir.model,name:edi_voxel_stock_picking.model_stock_picking
@@ -72,17 +117,17 @@ msgid "Transfer"
 msgstr "Transferir"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
 msgid "Voxel"
 msgstr "Voxel"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_stock_picking_voxel_enabled
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking.field_stock_picking__voxel_enabled
 msgid "Voxel Enabled"
 msgstr "Voxel habilitado"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
 msgid "Voxel Jobs"
 msgstr "Trabajos Voxel"
 
@@ -92,22 +137,53 @@ msgid "Voxel Picking Operations"
 msgstr "Operaciones de albarán Voxel"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_form
 msgid "Voxel XML report"
 msgstr "Reporte XML Voxel"
 
 #. module: edi_voxel_stock_picking
-#: code:addons/edi_voxel_stock_picking/models/stock_picking.py:44
-#, python-format
-msgid "You can not cancel this delivery order because there is a job running!"
-msgstr "¡No puede cancelar esta operación de albarán porque hay un trabajo ejecutándose!"
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+#, fuzzy
+#| msgid "Voxel Enabled"
+msgid "Voxel cancelled"
+msgstr "Envíos a Voxel cancelados"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.model,name:edi_voxel_stock_picking.model_report_edi_voxel_stock_picking_template_voxel_picking
-msgid "report.edi_voxel_stock_picking.template_voxel_picking"
-msgstr "report.edi_voxel_stock_picking.template_voxel_picking"
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+#, fuzzy
+#| msgid "Voxel Enabled"
+msgid "Voxel filters"
+msgstr "Filtros de Voxel"
 
 #. module: edi_voxel_stock_picking
-#: model:ir.model,name:edi_voxel_stock_picking.model_res_config_settings
-msgid "res.config.settings"
-msgstr "res.config.settings"
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+#, fuzzy
+#| msgid "Voxel XML report"
+msgid "Voxel report accepted"
+msgstr "Envíos a Voxel aceptados"
+
+#. module: edi_voxel_stock_picking
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+#, fuzzy
+#| msgid "Voxel XML report"
+msgid "Voxel report failed"
+msgstr "Envíos a Voxel fallidos"
+
+#. module: edi_voxel_stock_picking
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+#, fuzzy
+#| msgid "Voxel XML report"
+msgid "Voxel report in process"
+msgstr "Envíos a Voxel en proceso"
+
+#. module: edi_voxel_stock_picking
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+#, fuzzy
+#| msgid "Voxel XML report"
+msgid "Voxel report not sent"
+msgstr "No envíadas a Voxel"
+
+#. module: edi_voxel_stock_picking
+#: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
+msgid "Voxel report processing error"
+msgstr "Envíos a Voxel con errores de procesamiento"

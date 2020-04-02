@@ -10,6 +10,7 @@
     "license": "AGPL-3",
     "depends": ["edi_voxel", "product_expiry", "sale_stock"],
     "data": [
+        "data/ir_cron_data.xml",
         "views/report_voxel_picking.xml",
         "views/stock_picking_views.xml",
         "views/res_company_view.xml",
