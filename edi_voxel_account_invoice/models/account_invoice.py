@@ -1,7 +1,7 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, exceptions, fields, models
+from odoo import api, fields, models
 
 
 class AccountInvoice(models.Model):
@@ -24,7 +24,7 @@ class AccountInvoice(models.Model):
         """ This method overwrites the one defined in voxel.mixin to provide
         the login for this specific model (account.invoice)
         """
-        return self.company_id.voxel_invoice_login_id
+        return (company or self.company_id).voxel_invoice_login_id
 
     @api.multi
     def _compute_voxel_enabled(self):
@@ -55,11 +55,7 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def action_cancel(self):
-        jobs = self.mapped("voxel_job_ids")
-        if not self._cancel_voxel_jobs(jobs):
-            raise exceptions.Warning(
-                _("You can not cancel this invoice because" " there is a job running!")
-            )
+        self._cancel_voxel_jobs()
         return super(AccountInvoice, self).action_cancel()
 
     @api.multi

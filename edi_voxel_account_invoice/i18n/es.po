@@ -1,32 +1,29 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* edi_voxel_account_invoice
+# 	* edi_voxel_account_invoice
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-28 16:48+0000\n"
-"PO-Revision-Date: 2019-06-28 16:48+0000\n"
+"POT-Creation-Date: 2020-04-14 19:34+0000\n"
+"PO-Revision-Date: 2020-04-14 15:36-0400\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"X-Generator: Poedit 2.0.6\n"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
-msgid "Already sent to Voxel"
-msgstr "Enviadas a Voxel"
-
-#. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Cancel sending"
 msgstr "Cancelar envío"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
 msgid "Cancelled Voxel reports"
 msgstr "Envíos a Voxel cancelados"
 
@@ -36,12 +33,31 @@ msgid "Companies"
 msgstr "Compañías"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_report_edi_voxel_account_invoice_template_voxel_invoice_display_name
+#: model:ir.model,name:edi_voxel_account_invoice.model_res_config_settings
+#, fuzzy
+#| msgid "res.config.settings"
+msgid "Config Settings"
+msgstr "Configuración"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_report_edi_voxel_account_invoice_template_voxel_invoice__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_report_edi_voxel_account_invoice_template_voxel_invoice_id
+#: model:ir.model,name:edi_voxel_account_invoice.model_report_edi_voxel_account_invoice_template_voxel_invoice
+msgid "Edi Voxel Account Invoice Report"
+msgstr "Informe Voxel"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.actions.server,name:edi_voxel_account_invoice.ir_cron_check_invoice_export_status_ir_actions_server
+#: model:ir.cron,cron_name:edi_voxel_account_invoice.ir_cron_check_invoice_export_status
+#: model:ir.cron,name:edi_voxel_account_invoice.ir_cron_check_invoice_export_status
+msgid "Edi Voxel: Update invoice export status"
+msgstr "Edi Voxel: Actualizar estado de las exportaciones de facturas"
+
+#. module: edi_voxel_account_invoice
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_report_edi_voxel_account_invoice_template_voxel_invoice__id
 msgid "ID"
 msgstr "ID (identificación)"
 
@@ -51,68 +67,78 @@ msgid "Invoice"
 msgstr "Factura"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_res_company_voxel_invoice_login_id
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_res_config_settings_voxel_invoice_login_id
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_res_company__voxel_invoice_login_id
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_res_config_settings__voxel_invoice_login_id
 msgid "Invoice login"
 msgstr "Login para Facturas"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_invoice_voxel_job_ids
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_invoice__voxel_job_ids
 msgid "Jobs"
 msgstr "Trabajos"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_report_edi_voxel_account_invoice_template_voxel_invoice___last_update
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_report_edi_voxel_account_invoice_template_voxel_invoice____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+msgid "Processing error"
+msgstr "Error de procesamiento"
+
+#. module: edi_voxel_account_invoice
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Requeue"
 msgstr "Volver a poner en cola"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Send now"
 msgstr "Enviar ahora"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Send to Voxel"
 msgstr "Enviar a Voxel"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+msgid "The last Voxel report processing with errors"
+msgstr "Con error de procesamiento"
+
+#. module: edi_voxel_account_invoice
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
 msgid "The last attemp to sent to Voxel has failed"
 msgstr "El úlimo intento de envío a Voxel ha fallado"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Voxel"
 msgstr "Voxel"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_invoice_voxel_enabled
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_invoice__voxel_enabled
 msgid "Voxel Enabled"
 msgstr "Voxel habilitado"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Voxel Jobs"
 msgstr "Trabajos Voxel"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
 msgid "Voxel XML report"
 msgstr "Reporte XML Voxel"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
 msgid "Voxel cancelled"
 msgstr "Envíos a Voxel cancelados"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
 msgid "Voxel filters"
 msgstr "Filtros de Voxel"
 
@@ -122,32 +148,32 @@ msgid "Voxel invoice"
 msgstr "Factura Voxel"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#, fuzzy
+#| msgid "Voxel report failed"
+msgid "Voxel report accepted"
+msgstr "Envíos a Voxel aceptados"
+
+#. module: edi_voxel_account_invoice
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
 msgid "Voxel report failed"
 msgstr "Envíos a Voxel fallidos"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#, fuzzy
+#| msgid "Voxel report not sent"
+msgid "Voxel report in process"
+msgstr "Envíos a Voxel en proceso"
+
+#. module: edi_voxel_account_invoice
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
 msgid "Voxel report not sent"
 msgstr "No envíadas a Voxel"
 
 #. module: edi_voxel_account_invoice
-#: model:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
-msgid "Voxel report sent"
-msgstr "Enviadas a Voxel"
-
-#. module: edi_voxel_account_invoice
-#: code:addons/edi_voxel_account_invoice/models/account_invoice.py:42
-#, python-format
-msgid "You can not cancel this invoice because there is a job running!"
-msgstr "¡No puede cancelar una factura porque hay un trabajo ejecutándose!"
-
-#. module: edi_voxel_account_invoice
-#: model:ir.model,name:edi_voxel_account_invoice.model_report_edi_voxel_account_invoice_template_voxel_invoice
-msgid "report.edi_voxel_account_invoice.template_voxel_invoice"
-msgstr "report.edi_voxel_account_invoice.template_voxel_invoice"
-
-#. module: edi_voxel_account_invoice
-#: model:ir.model,name:edi_voxel_account_invoice.model_res_config_settings
-msgid "res.config.settings"
-msgstr "res.config.settings"
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
+#, fuzzy
+#| msgid "Voxel report sent"
+msgid "Voxel report processing error"
+msgstr "Envíos a Voxel con errores de procesamiento"

@@ -27,6 +27,13 @@
                     <group>
                         <field name="voxel_state" />
                     </group>
+                    <group
+                        name="group_voxel_processing_error"
+                        colspan="8"
+                        attrs="{'invisible': [('processing_error', '=', False)]}"
+                    >
+                        <field name="processing_error" />
+                    </group>
                     <notebook>
                         <page string="Voxel Jobs" name="page_voxel_jobs">
                             <group name="group_voxel_jobs">
@@ -74,6 +81,12 @@
                             attrs="{'invisible': [('voxel_xml_report', '=', False)]}"
                         >
                             <group name="group_voxel_report">
+                                <group
+                                    colspan="8"
+                                    attrs="{'invisible': [('voxel_filename', '=', False)]}"
+                                >
+                                    <field name="voxel_filename" />
+                                </group>
                                 <field
                                     name="voxel_xml_report"
                                     widget="ace"
@@ -102,16 +115,28 @@
                         domain="[('voxel_state', '=', 'not_sent'), ('voxel_enabled', '=', True)]"
                     />
                     <filter
-                        name="voxel_sent"
-                        string="Voxel report sent"
-                        domain="[('voxel_state', '=', 'sent')]"
-                        help="Already sent to Voxel"
+                        name="voxel_in_process"
+                        string="Voxel report in process"
+                        domain="[('voxel_state', '=', 'in_process')]"
+                        help="Voxel report in process"
                     />
                     <filter
-                        name="voxel_send_failed"
+                        name="voxel_accepted"
+                        string="Voxel report accepted"
+                        domain="[('voxel_state', '=', 'accepted')]"
+                        help="Voxel report accepted"
+                    />
+                    <filter
+                        name="voxel_sending_error"
                         string="Voxel report failed"
-                        domain="[('voxel_state', '=', 'sent_errors')]"
+                        domain="[('voxel_state', '=', 'sending_error')]"
                         help="The last attemp to sent to Voxel has failed"
+                    />
+                    <filter
+                        name="voxel_processing_error"
+                        string="Voxel report processing error"
+                        domain="[('voxel_state', '=', 'processing_error')]"
+                        help="The last Voxel report processing with errors"
                     />
                     <filter
                         name="voxel_cancelled"
