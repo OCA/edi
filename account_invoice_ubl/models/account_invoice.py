@@ -149,7 +149,7 @@ class AccountInvoice(models.Model):
         self._ubl_add_invoice_line_tax_total(
             iline, line_root, ns, version=version)
         self._ubl_add_item(
-            iline.name, iline.product_id, line_root, ns, type='sale',
+            iline.name, iline.product_id, line_root, ns, line_type='sale',
             version=version)
         price_node = etree.SubElement(line_root, ns['cac'] + 'Price')
         price_amount = etree.SubElement(

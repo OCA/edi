@@ -54,8 +54,8 @@ class BaseUbl(models.AbstractModel):
             city = etree.SubElement(address, ns['cbc'] + 'CityName')
             city.text = partner.city
         if partner.zip:
-            zip = etree.SubElement(address, ns['cbc'] + 'PostalZone')
-            zip.text = partner.zip
+            zip_ = etree.SubElement(address, ns['cbc'] + 'PostalZone')
+            zip_.text = partner.zip
         if partner.state_id:
             state = etree.SubElement(
                 address, ns['cbc'] + 'CountrySubentity')
@@ -287,9 +287,10 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def _ubl_add_line_item(
-            self, line_number, name, product, type, quantity, uom, parent_node,
-            ns, seller=False, currency=False, price_subtotal=False,
-            qty_precision=3, price_precision=2, version='2.1'):
+            self, line_number, name, product, type_, quantity, uom,
+            parent_node, ns, seller=False, currency=False,
+            price_subtotal=False, qty_precision=3, price_precision=2,
+            version='2.1'):
         line_item = etree.SubElement(
             parent_node, ns['cac'] + 'LineItem')
         line_item_id = etree.SubElement(line_item, ns['cbc'] + 'ID')
@@ -325,12 +326,12 @@ class BaseUbl(models.AbstractModel):
                 unitCode=uom.unece_code)
             base_qty.text = '1'  # What else could it be ?
         self._ubl_add_item(
-            name, product, line_item, ns, type=type, seller=seller,
+            name, product, line_item, ns, line_type=type_, seller=seller,
             version=version)
 
     @api.model
     def _ubl_add_item(
-            self, name, product, parent_node, ns, type='purchase',
+            self, name, product, parent_node, ns, line_type='purchase',
             seller=False, version='2.1'):
         '''Beware that product may be False (in particular on invoices)'''
         assert type in ('sale', 'purchase'), 'Wrong type param'
@@ -587,10 +588,10 @@ class BaseUbl(models.AbstractModel):
             'cbc:CountrySubentityCode', namespaces=ns)
         state_code = state_code_xpath and state_code_xpath[0].text or False
         zip_xpath = address_node.xpath('cbc:PostalZone', namespaces=ns)
-        zip = zip_xpath and zip_xpath[0].text and\
+        zip_ = zip_xpath and zip_xpath[0].text and\
             zip_xpath[0].text.replace(' ', '') or False
         address_dict = {
-            'zip': zip,
+            'zip': zip_,
             'state_code': state_code,
             'country_code': country_code,
             }
