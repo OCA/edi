@@ -12,18 +12,15 @@ logger = logging.getLogger(__name__)
 class Report(models.Model):
     _inherit = 'report'
 
-    @api.v7
-    def get_pdf(
-            self, cr, uid, ids, report_name, html=None, data=None,
-            context=None):
+    @api.model
+    def get_pdf(self, docids, report_name, html=None, data=None):
         """We go through that method when the PDF is generated for the 1st
         time and also when it is read from the attachment.
         This method is specific to QWeb"""
         pdf_content = super(Report, self).get_pdf(
-            cr, uid, ids, report_name, html=html, data=data, context=context)
-        if report_name == 'account.report_invoice' and len(ids) == 1:
-            invoice = self.pool['account.invoice'].browse(
-                cr, uid, ids[0], context=context)
+            docids, report_name, html=html, data=data)
+        if report_name == "account.report_invoice" and len(docids) == 1:
+            invoice = self.env['account.invoice'].browse(docids[0])
             pdf_content = invoice.regular_pdf_invoice_to_zugferd_invoice(
                 pdf_content)
         return pdf_content
