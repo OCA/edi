@@ -27,9 +27,8 @@ class Company(models.Model):
         string="Jobs",
         copy=False,
     )
-    voxel_filename = fields.Char(string="Voxel filename", readonly=True)
 
-    def get_voxel_login(self, company=None):
+    def get_voxel_login(self, company):
         """ This method overwrites the one defined in voxel.mixin to provide
         the login for this specific model (sale.order) and company passed as
         parameter
