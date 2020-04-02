@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-11 14:55+0000\n"
-"PO-Revision-Date: 2019-12-11 09:59-0500\n"
+"POT-Creation-Date: 2020-04-14 19:31+0000\n"
+"PO-Revision-Date: 2020-04-14 15:35-0400\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -140,8 +140,10 @@ msgid ""
 "\"Values set here are company-specific.\" groups=\"base.group_multi_company"
 "\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
-"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
+"<span class=\"o_form_label\">Modo de envío</span>\n"
+"                            <span class=\"fa fa-lg fa-building-o\" title="
+"\"Los valores establecidos aquí son específicos para cada compañía..\" "
+"groups=\"base.group_multi_company\"/>"
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
@@ -240,11 +242,6 @@ msgid "Enable Voxel"
 msgstr "Habilitar voxel"
 
 #. module: edi_voxel
-#: selection:voxel.mixin,voxel_state:0
-msgid "Errors"
-msgstr "Errores"
-
-#. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
 msgid "Horas"
 msgstr "Horas"
@@ -291,7 +288,7 @@ msgstr "Lbs"
 #, fuzzy
 #| msgid "Voxel Logins"
 msgid "Logins"
-msgstr "Voxel logins"
+msgstr "Logins"
 
 #. module: edi_voxel
 #: selection:uom.uom,voxel_code:0
@@ -345,6 +342,12 @@ msgid "Password"
 msgstr "Contraseña"
 
 #. module: edi_voxel
+#: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__processing_error
+#: selection:voxel.mixin,voxel_state:0
+msgid "Processing error"
+msgstr "Error de procesamiento en Voxel"
+
+#. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_uom_uom
 msgid "Product Unit of Measure"
 msgstr "Unidad de medida del producto"
@@ -362,8 +365,20 @@ msgstr "Modo de envío"
 
 #. module: edi_voxel
 #: selection:voxel.mixin,voxel_state:0
-msgid "Sent"
-msgstr "Enviado"
+msgid "Sending error"
+msgstr "Error de envío"
+
+#. module: edi_voxel
+#: selection:voxel.mixin,voxel_state:0
+msgid "Sent and accepted"
+msgstr "Enviado y aceptado"
+
+#. module: edi_voxel
+#: selection:voxel.mixin,voxel_state:0
+#, fuzzy
+#| msgid "Sent time"
+msgid "Sent not verified"
+msgstr "Enviado sin verificar"
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_res_company__voxel_sent_time
@@ -381,6 +396,15 @@ msgstr ""
 #: model:ir.model,name:edi_voxel.model_account_tax
 msgid "Tax"
 msgstr "Impuesto"
+
+#. module: edi_voxel
+#: code:addons/edi_voxel/models/voxel_mixin.py:275
+#, python-format
+msgid ""
+"This operation cannot be performed because there are jobs running therefore "
+"cannot be unlinked."
+msgstr "Esta operación no puede ser realizada porque hay trabajos "
+"ejecutandose y no pueden ser eliminados"
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__url
@@ -412,6 +436,13 @@ msgstr "Código Voxel"
 #: model:ir.model.fields,field_description:edi_voxel.field_account_tax__voxel_tax_code
 msgid "Voxel Tax Code"
 msgstr "Código Voxel"
+
+#. module: edi_voxel
+#: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__voxel_filename
+#, fuzzy
+#| msgid "Voxel manager"
+msgid "Voxel filename"
+msgstr "Nombre de archivo Voxel"
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_voxel_login
@@ -447,6 +478,18 @@ msgstr "Con retardo"
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__voxel_xml_report
 msgid "XML Report"
 msgstr "Reporte XML"
+
+#~ msgid "Accepted"
+#~ msgstr "Aceptado"
+
+#~ msgid "In process"
+#~ msgstr "En proceso"
+
+#~ msgid "Errors"
+#~ msgstr "Errores"
+
+#~ msgid "Sent"
+#~ msgstr "Enviado"
 
 #~ msgid "Web Sevice credentials"
 #~ msgstr "Credenciales para el Servicio Web"
