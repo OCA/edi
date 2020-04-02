@@ -11,6 +11,7 @@
     "license": "AGPL-3",
     "depends": ["edi_voxel", "stock_picking_invoice_link"],
     "data": [
+        "data/ir_cron_data.xml",
         "views/account_invoice_views.xml",
         "views/report_voxel_invoice.xml",
         "views/res_company_view.xml",
