@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * account_invoice_ubl
-# 
+#
 # Translators:
 # Armando Vulcano Junior <vulcano@uol.com.br>, 2017
 msgid ""
@@ -11,11 +11,12 @@ msgstr ""
 "POT-Creation-Date: 2017-09-30 15:53+0000\n"
 "PO-Revision-Date: 2017-09-30 15:53+0000\n"
 "Last-Translator: Armando Vulcano Junior <vulcano@uol.com.br>, 2017\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/23907/pt_BR/)\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
+"teams/23907/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: account_invoice_ubl
@@ -37,9 +38,9 @@ msgstr ""
 #: help:res.company,embed_pdf_in_ubl_xml_invoice:0
 msgid ""
 "If active, the standalone UBL Invoice XML file will include the PDF of the "
-"invoice in base64 under the node 'AdditionalDocumentReference'. For example,"
-" to be compliant with the e-fff standard used in Belgium, you should "
-"activate this option."
+"invoice in base64 under the node 'AdditionalDocumentReference'. For example, "
+"to be compliant with the e-fff standard used in Belgium, you should activate "
+"this option."
 msgstr ""
 
 #. module: account_invoice_ubl
@@ -59,7 +60,7 @@ msgid "Report"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: code:addons/account_invoice_ubl/models/account_invoice.py:216
+#: code:addons/account_invoice_ubl/models/account_invoice.py:218
 #, python-format
 msgid "The tax code '%s' is not linked to a tax."
 msgstr ""
