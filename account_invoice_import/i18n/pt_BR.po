@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * account_invoice_import
-# 
+#
 # Translators:
 # Armando Vulcano Junior <vulcano@uol.com.br>, 2017
 msgid ""
@@ -11,11 +11,12 @@ msgstr ""
 "POT-Creation-Date: 2017-09-30 15:53+0000\n"
 "PO-Revision-Date: 2017-09-30 15:53+0000\n"
 "Last-Translator: Armando Vulcano Junior <vulcano@uol.com.br>, 2017\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/23907/pt_BR/)\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
+"teams/23907/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: account_invoice_import
@@ -159,14 +160,13 @@ msgstr "Se for um arquivo PDF / A-3 com um arquivo XML incorporado e o módulo"
 msgid ""
 "If it is a regular PDF file without any embedded XML file and the module"
 msgstr ""
-"Se for um arquivo PDF regular sem qualquer arquivo XML incorporado e o "
-"módulo"
+"Se for um arquivo PDF regular sem qualquer arquivo XML incorporado e o módulo"
 
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid ""
-"If it is an XML file, Odoo will parse it if the module that adds support for"
-" this XML format is installed. For the"
+"If it is an XML file, Odoo will parse it if the module that adds support for "
+"this XML format is installed. For the"
 msgstr ""
 "Se for um arquivo XML, o Odoo irá analisá-lo se o módulo que adiciona "
 "suporte para este formato XML estiver instalado. Para o"
@@ -275,9 +275,9 @@ msgstr "Nome"
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid ""
-"Odoo will create a draft supplier invoice or refund. If there is an existing"
-" draft invoice for that supplier, Odoo will propose you to update that draft"
-" invoice or create a new invoice."
+"Odoo will create a draft supplier invoice or refund. If there is an existing "
+"draft invoice for that supplier, Odoo will propose you to update that draft "
+"invoice or create a new invoice."
 msgstr ""
 "A Odoo vai criar um rascunho da de fatura ou reembolso do fornecedor. Se "
 "houver um rascunho de facura existente para esse fornecedor, a Odoo irá "
@@ -317,8 +317,8 @@ msgstr "Linha Única, Produto Estático"
 #. module: account_invoice_import
 #: view:account.invoice.import:account_invoice_import.account_invoice_import_form
 msgid ""
-"Some draft supplier invoices/refunds have been found for the supplier of the"
-" PDF invoice you are importing ; one of them may correspond to the PDF "
+"Some draft supplier invoices/refunds have been found for the supplier of the "
+"PDF invoice you are importing ; one of them may correspond to the PDF "
 "invoice. You can either select an existing draft supplier invoice to update "
 "with the information of the PDF (information that will be updated include "
 "invoice date, supplier invoice number and attachment) or create a new draft "
