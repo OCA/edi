@@ -9,22 +9,8 @@ python:
 addons:
   postgresql: "9.6"
   apt:
-# only add the two lines below if you need wkhtmltopdf for your tests
-    sources:
-      - pov-wkhtmltopdf
-#    Search your sources alias here:
-#      https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
     packages:
-      - expect-dev  # provides unbuffer utility
-      - python-lxml  # because pip installation is slow
-      - python-simplejson
-      - python-serial
-      - python-yaml
-#     Search your packages here:
-#       https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
-      - wkhtmltopdf  # only add if needed and check the before_install section below
-
-#before_install:
+      - expect-dev # provides unbuffer utility
 
 stages:
   - linting
@@ -38,20 +24,11 @@ jobs:
     - stage: test
       env:
         - TESTS="1" ODOO_REPO="OCA/OCB" MAKEPOT="1"
-    # Other env possibilities:
-    # use this to install a standalone database to export .pot files
-    # - MAKEPOT="1"
-    # either use the two lines above or the two below. Don't change the default if
-    # it's not necessary (it is only necessary if modules in your repository can't
-    # be installed in the same database. And you get a huge speed penalty in your
-    # tests)
-    #  - TESTS="1.0" ODOO_REPO="odoo/odoo" UNIT_TEST="1"
-    #  - TESTS="1.0" ODOO_REPO="OCA/OCB" UNIT_TEST="1"
 
 env:
   global:
     - VERSION="8.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0"
-    - WKHTMLTOPDF_VERSION="0.12.1"
+    - WKHTMLTOPDF_VERSION="0.12.5"
 
 install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
