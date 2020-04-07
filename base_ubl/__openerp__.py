@@ -15,6 +15,7 @@
         'account_tax_unece',
         'base_vat_sanitized',
         ],
+    'data': ["views/company_view.xml"],
     'external_dependencies': {'python': ['PyPDF2']},
     'installable': True,
 }

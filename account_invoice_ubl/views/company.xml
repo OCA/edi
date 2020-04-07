@@ -9,13 +9,12 @@
 
 
 <record id="view_company_form" model="ir.ui.view">
-    <field name="name">account_invoice_ubl.company.form</field>
     <field name="model">res.company</field>
-    <field name="inherit_id" ref="base.view_company_form"/>
+    <field name="inherit_id" ref="base_ubl.view_company_form"/>
     <field name="arch" type="xml">
-        <group name="account_grp" position="inside">
+        <xpath expr="//group[@name='ubl_invoice']" position="inside">
             <field name="embed_pdf_in_ubl_xml_invoice"/>
-        </group>
+        </xpath>
     </field>
 </record>
 
