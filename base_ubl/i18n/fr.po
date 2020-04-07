@@ -34,6 +34,11 @@ msgid "ID"
 msgstr "ID"
 
 #. module: base_ubl
+#: view:res.company:base_ubl.view_company_form
+msgid "Invoices"
+msgstr ""
+
+#. module: base_ubl
 #: field:base.ubl,__last_update:0
 msgid "Last Modified on"
 msgstr ""
@@ -64,4 +69,14 @@ msgid ""
 "Definition. The generated XML file and the full error have been written in "
 "the server logs. Here is the error, which may give you an idea on the cause "
 "of the problem : %s."
+msgstr ""
+
+#. module: base_ubl
+#: view:res.company:base_ubl.view_company_form
+msgid "UBL"
+msgstr ""
+
+#. module: base_ubl
+#: view:res.company:base_ubl.view_company_form
+msgid "Universal Business Langage"
 msgstr ""
