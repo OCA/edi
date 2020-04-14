@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+
+<record id="account_invoice_import_form" model="ir.ui.view">
+    <field name="name">account.invoice.import.factur-x.form</field>
+    <field name="model">account.invoice.import</field>
+    <field name="inherit_id" ref="account_invoice_import.account_invoice_import_form"/>
+    <field name="arch"  type="xml">
+        <ul name="supported_formats_list" position="inside">
+                <li><b><a href="http://fnfe-mpe.org/factur-x/" target="_blank">Factur-X</a></b> (also called ZUGFeRD 2.0) and <b><a href="https://www.ferd-net.de/zugferd/specification/index.html" target="_blank">ZUGFeRD 1.0</a></b> : PDF file with an XML attachment in CrossIndustryInvoice format.</li>
+        </ul>
+    </field>
+</record>
+
+
+</odoo>
