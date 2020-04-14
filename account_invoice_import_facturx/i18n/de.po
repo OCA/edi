@@ -1,0 +1,177 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_invoice_import_factur-x
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2019-05-24 15:19+0000\n"
+"Last-Translator: Frederik Kramer <frederik.kramer@initos.com>\n"
+"Language-Team: none\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.6.1\n"
+
+#. module: account_invoice_import_factur-x
+#: model:ir.ui.view,arch_db:account_invoice_import_factur-x.account_invoice_import_form
+msgid "(also called ZUGFeRD 2.0) and"
+msgstr "(auch ZUGFeRD 2.0 genannt) und"
+
+#. module: account_invoice_import_factur-x
+#: model:ir.ui.view,arch_db:account_invoice_import_factur-x.account_invoice_import_form
+msgid ": PDF file with an XML attachment in CrossIndustryInvoice format."
+msgstr ""
+": PDF Datei mit einem XML Anhang in landesübergreifendem Rechnungsformat."
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:522
+#, python-format
+msgid "AllowanceTotalAmount (%s) doesn't match the total of the allowance lines (%s). Maybe it is because the Factur-X XML file is at BASIC level, and we don't have the details of taxes for the allowance lines."
+msgstr ""
+"Gesamtnachlass (%s) stimmt nicht mit der Summe der Einzelnachlässe (%s) "
+"überein. Möglicherweise ist dies eine Facture-X XML Datei auf BASIC Ebene "
+"und wir haben keine Details zu den Steuern auf die Einzelnachlässe."
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:500
+#, python-format
+msgid "ChargeTotalAmount (%s) doesn't match the total of the charge lines (%s). Maybe it is because the Factur-X XML file is at BASIC level, and we don't have the details of taxes for the charge lines."
+msgstr ""
+"Die Gesamtgebühren (%s) stimmen nicht mit der Summe der Einzelgebühren (%s) "
+"überein. Möglicherweise ist dies eine Facture-X XML Datei auf BASIC Ebene "
+"und wir haben keine Details zu den Steuern auf die Einzelgebühren."
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:296
+#, python-format
+msgid "Could not detect if the invoice is a Factur-X or ZUGFeRD invoice."
+msgstr ""
+"Es konnte nicht ermittelt werden ob es ich bei der Rechnung um eine Factur-X "
+"oder ZUGFeRD Rechnung handelt."
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,description:account_invoice_import_factur-x.de_insurance_purchase_16_34
+msgid "DE-INSURANCE-buy-16.34"
+msgstr "DE-INSURANCE-buy-16.34"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,description:account_invoice_import_factur-x.de_insurance_purchase_19
+msgid "DE-INSURANCE-buy-19.0"
+msgstr "DE-INSURANCE-buy-19.0"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,description:account_invoice_import_factur-x.de_vat_purchase_19
+msgid "DE-VAT-buy-19.0"
+msgstr "DE-VAT-buy-19.0"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,description:account_invoice_import_factur-x.de_vat_purchase_7
+msgid "DE-VAT-buy-7.0"
+msgstr "DE-VAT-buy-7.0"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,name:account_invoice_import_factur-x.fr_vat_purchase_20
+msgid "FR VAT purchase 20.0%"
+msgstr "FR VAT purchase 20.0%"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,description:account_invoice_import_factur-x.fr_vat_purchase_20
+msgid "FR-VAT-buy-20.0"
+msgstr "FR-VAT-buy-20.0"
+
+#. module: account_invoice_import_factur-x
+#: model:ir.ui.view,arch_db:account_invoice_import_factur-x.account_invoice_import_form
+msgid "Factur-X"
+msgstr "Factur-X"
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:329
+#, python-format
+msgid "For the moment, in the Factur-X import, we only support type code 380 and 381. (TypeCode is %s)"
+msgstr ""
+"Zurzeit unterstützt der Factur-X Import nur  die Schlüssel 380 und 381.  ("
+"Der Schlüssel ist %s)"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,name:account_invoice_import_factur-x.de_insurance_purchase_16_34
+msgid "German Insurance purchase 16.34%"
+msgstr "Deutscher Versicherungskauf 16.34%"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,name:account_invoice_import_factur-x.de_insurance_purchase_19
+msgid "German Insurance purchase 19.0%"
+msgstr "Deutscher Versicherungskauf 19.0%"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,name:account_invoice_import_factur-x.de_vat_purchase_19
+msgid "German VAT purchase 19.0%"
+msgstr "German VAT purchase 19.0%"
+
+#. module: account_invoice_import_factur-x
+#: model:account.tax,name:account_invoice_import_factur-x.de_vat_purchase_7
+msgid "German VAT purchase 7.0%"
+msgstr "German VAT purchase 7.0%"
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:459
+#, python-format
+msgid "Global"
+msgstr "Global"
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:473
+#, python-format
+msgid "Logistics Service"
+msgstr "Logistik Dienstleistung"
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:182
+#, python-format
+msgid "Misc Allowance"
+msgstr "Sonstiger Nachlass"
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:189
+#, python-format
+msgid "Misc Charge"
+msgstr "Sonstige Gebühr"
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:516
+#, python-format
+msgid "Misc Global Allowance"
+msgstr "Sonstiger weltweiter Nachlass"
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:494
+#, python-format
+msgid "Misc Global Charge"
+msgstr "Sonstige weltweite Gebühr"
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:388
+#, python-format
+msgid "The GrandTotalAmount is %s but the sum of the lines plus the total charge plus the total trade allowance plus the total taxes is %s."
+msgstr ""
+"Der Gesamtbetrag ist %s, aber die Summe der Einzelpositionen zuzüglich der "
+"gesamten Gebühren, gesamten Handelsnachlässe und gesamten Steuern ist %s."
+
+#. module: account_invoice_import_factur-x
+#: code:addons/account_invoice_import_factur-x/wizard/account_invoice_import.py:191
+#, python-format
+msgid "Unknown ChargeIndicator %s"
+msgstr "Unbekannter Gebührenindikator %s"
+
+#. module: account_invoice_import_factur-x
+#: model:ir.model,name:account_invoice_import_factur-x.model_account_invoice_import
+msgid "Wizard to import supplier invoices/refunds"
+msgstr "Wizard zum Import von Lieferantenrechnungen und Lieferantengutschriften"
+
+#. module: account_invoice_import_factur-x
+#: model:ir.ui.view,arch_db:account_invoice_import_factur-x.account_invoice_import_form
+msgid "ZUGFeRD 1.0"
+msgstr "ZUGFeRD 1.0"
