@@ -1,17 +1,16 @@
-# -*- coding: utf-8 -*-
-# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2015-2020 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, api, _
+from odoo import api, models, _
 from odoo.exceptions import UserError
 from odoo.tools import float_compare, float_is_zero
-from lxml import etree
 import logging
 
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import get_facturx_flavor, get_facturx_level
+    from facturx import check_facturx_xsd
 except ImportError:
     logger.debug('Cannot import facturx')
 
@@ -287,31 +286,14 @@ class AccountInvoiceImport(models.TransientModel):
         """Parse Cross Industry Invoice XML file"""
         logger.debug('Starting to parse XML file as Factur-X/ZUGFeRD file')
         namespaces = xml_root.nsmap
-        xml_string = etree.tostring(
-            xml_root, pretty_print=True, encoding='UTF-8',
-            xml_declaration=True)
+        # Check XML schema to avoid headaches trying to import invalid files
         try:
-            flavor = get_facturx_flavor(xml_root)
+            check_facturx_xsd(xml_root)
         except Exception:
             raise UserError(_(
-                "Could not detect if the invoice is a Factur-X or ZUGFeRD "
-                "invoice."))
-        doc_id = self.multi_xpath_helper(
-            xml_root,
-            ["//rsm:ExchangedDocumentContext"
-             "/ram:GuidelineSpecifiedDocumentContextParameter"
-             "/ram:ID",  # Factur-X
-             "//rsm:SpecifiedExchangedDocumentContext"
-             "/ram:GuidelineSpecifiedDocumentContextParameter"
-             "/ram:ID",  # ZUGFeRD
-             ], namespaces)
-        if flavor == 'factur-x':
-            level = get_facturx_level(xml_root)
-        else:
-            level = doc_id.split(':')[-1]
-        # Check XML schema to avoid headaches trying to import invalid files
-        self._cii_check_xml_schema(xml_string, flavor, level=level)
-        prec = self.env['decimal.precision'].precision_get('Account')
+                "The XML file embedded in the Factur-X invoice is invalid "
+                "according to the official XML Schema Definition."))
+        prec = self.env['decimal.precision'].precision_get('Account')  # TODO
         logger.debug('XML file namespaces=%s', namespaces)
         doc_type = self.multi_xpath_helper(
             xml_root,
