@@ -13,3 +13,6 @@ class AccountConfigSettings(models.TransientModel):
         related='company_id.adjustment_debit_account_id', readonly=False)
     invoice_import_email = fields.Char(
         related='company_id.invoice_import_email', readonly=False)
+    invoice_import_create_bank_account = fields.Boolean(
+        related='company_id.invoice_import_create_bank_account',
+        readonly=False)
