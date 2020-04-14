@@ -8,6 +8,26 @@
     <field name="user_type_id" ref="account.data_account_type_expenses"/>
 </record>
 
+<record id="jolie_boutique" model="res.partner">
+    <field name="name">Ma jolie boutique</field>
+    <field name="is_company" eval="True"/>
+    <field name="supplier" eval="True"/>
+    <field name="customer" eval="False"/>
+    <field name="street">35 rue de la république</field>
+    <field name="zip">69001</field>
+    <field name="city">Lyon</field>
+    <field name="country_id" ref="base.fr"/>
+    <field name="vat">FR11999999998</field>
+</record>
+
+<record id="jolie_boutique_import_config" model="account.invoice.import.config">
+    <field name="name">Jolie Boutique</field>
+    <field name="partner_id" ref="jolie_boutique"/>
+    <field name="invoice_line_method">1line_no_product</field>
+    <field name="account_id" ref="charge_account"/>
+    <field name="tax_ids" eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"/>
+</record>
+
 <record id="lieferant" model="res.partner">
     <field name="name">Lieferant GmbH</field>
     <field name="is_company" eval="True"/>
@@ -97,7 +117,7 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="type_tax_use">purchase</field>
     <field name="amount">19</field>
     <field name="amount_type">percent</field>
-    <field name="unece_type_id" ref="base_zugferd.tax_type_zf_insurance_tax"/>
+    <field name="unece_type_id" ref="base_facturx.tax_type_zf_insurance_tax"/>
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
     <field name="account_id" ref="charge_account"/>
     <field name="refund_account_id" ref="charge_account"/>
@@ -109,7 +129,7 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="type_tax_use">purchase</field>
     <field name="amount">16.34</field>
     <field name="amount_type">percent</field>
-    <field name="unece_type_id" ref="base_zugferd.tax_type_zf_insurance_tax"/>
+    <field name="unece_type_id" ref="base_facturx.tax_type_zf_insurance_tax"/>
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
     <field name="account_id" ref="charge_account"/>
     <field name="refund_account_id" ref="charge_account"/>
@@ -141,7 +161,7 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="partner_id" ref="test_noline"/>
     <field name="invoice_line_method">1line_no_product</field>
     <field name="account_id" ref="charge_account"/>
-    <field name="tax_ids" eval="[(4, ref('account_invoice_import_factur-x.fr_vat_purchase_20'))]"/>
+    <field name="tax_ids" eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"/>
 </record>
 
 <record id="test_line" model="res.partner">
@@ -158,7 +178,7 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="partner_id" ref="test_line"/>
     <field name="invoice_line_method">nline_no_product</field>
     <field name="account_id" ref="charge_account"/>
-    <field name="tax_ids" eval="[(4, ref('account_invoice_import_factur-x.fr_vat_purchase_20'))]"/>
+    <field name="tax_ids" eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"/>
 </record>
 
 
