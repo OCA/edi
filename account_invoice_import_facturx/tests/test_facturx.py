@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
-# © 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2015-2020 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests.common import TransactionCase
 import base64
 from odoo.tools import file_open
 from odoo.tools import float_compare
+from odoo import fields
 
 
 class TestFacturx(TransactionCase):
@@ -125,19 +126,40 @@ class TestFacturx(TransactionCase):
                 'date_invoice': '2013-08-06',
                 'partner_xmlid': 'musterlieferant',
                 },
-            'Factur-X_MINIMUM-1.xml': {
-                'invoice_number': 'INV-1242',
-                'amount_untaxed': 100.00,
-                'amount_total': 120.00,
-                'date_invoice': '2017-08-09',
-                'partner_xmlid': 'test_noline',
+            'Facture_FR_MINIMUM.pdf': {
+                'invoice_number': 'FA-2017-0010',
+                'amount_untaxed': 624.90,
+                'amount_total': 671.15,
+                'date_invoice': '2017-11-13',
+                'partner_xmlid': 'jolie_boutique',
                 },
-            'Factur-X_BASIC-1.xml': {
-                'invoice_number': 'FA12421242',
-                'amount_untaxed': 100.00,
-                'amount_total': 120.00,
-                'date_invoice': '2017-08-09',
-                'partner_xmlid': 'test_line',
+            'Facture_FR_BASICWL.pdf': {
+                'invoice_number': 'FA-2017-0010',
+                'amount_untaxed': 624.90,
+                'amount_total': 671.15,
+                'date_invoice': '2017-11-13',
+                'partner_xmlid': 'jolie_boutique',
+                },
+            'Facture_FR_BASIC.pdf': {
+                'invoice_number': 'FA-2017-0010',
+                'amount_untaxed': 624.90,
+                'amount_total': 671.15,
+                'date_invoice': '2017-11-13',
+                'partner_xmlid': 'jolie_boutique',
+                },
+            'Facture_FR_EN16931.pdf': {
+                'invoice_number': 'FA-2017-0010',
+                'amount_untaxed': 624.90,
+                'amount_total': 671.15,
+                'date_invoice': '2017-11-13',
+                'partner_xmlid': 'jolie_boutique',
+                },
+            'Facture_FR_EXTENDED.pdf': {
+                'invoice_number': 'FA-2017-0010',
+                'amount_untaxed': 624.90,
+                'amount_total': 671.15,
+                'date_invoice': '2017-11-13',
+                'partner_xmlid': 'jolie_boutique',
                 },
             }
         aio = self.env['account.invoice']
@@ -146,9 +168,9 @@ class TestFacturx(TransactionCase):
         # in order to import ZUGFeRD_1p0_EXTENDED_Kostenrechnung.pdf
         price_precision = self.env.ref('product.decimal_price')
         price_precision.digits = 4
-        for (inv_file, res_dict) in sample_files.iteritems():
+        for (inv_file, res_dict) in sample_files.items():
             f = file_open(
-                'account_invoice_import_factur-x/tests/files/' +
+                'account_invoice_import_facturx/tests/files/' +
                 inv_file, 'rb')
             pdf_file = f.read()
             f.close()
@@ -165,11 +187,14 @@ class TestFacturx(TransactionCase):
             self.assertEqual(len(invoices), 1)
             inv = invoices[0]
             self.assertEqual(inv.type, res_dict.get('type', 'in_invoice'))
-            self.assertEqual(inv.date_invoice, res_dict['date_invoice'])
+            self.assertEqual(
+                fields.Date.to_string(inv.date_invoice),
+                res_dict['date_invoice'])
             if res_dict.get('date_due'):
-                self.assertEqual(inv.date_due, res_dict['date_due'])
+                self.assertEqual(
+                    fields.Date.to_string(inv.date_due), res_dict['date_due'])
             self.assertEqual(inv.partner_id, self.env.ref(
-                'account_invoice_import_factur-x.' +
+                'account_invoice_import_facturx.' +
                 res_dict['partner_xmlid']))
             self.assertFalse(float_compare(
                 inv.amount_untaxed, res_dict['amount_untaxed'],
