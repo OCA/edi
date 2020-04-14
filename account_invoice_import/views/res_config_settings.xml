@@ -35,6 +35,10 @@
                   <label class="o_form_label col-md-6 o_light_label" for="invoice_import_email"/>
                   <field name="invoice_import_email" class="oe_inline"/>
                 </div>
+                <div class="row">
+                  <label class="o_form_label col-md-6 o_light_label" for="invoice_import_create_bank_account"/>
+                  <field name="invoice_import_create_bank_account" class="oe_inline"/>
+                </div>
               </div>
             </div>
           </div>
