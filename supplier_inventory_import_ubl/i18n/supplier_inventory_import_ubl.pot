@@ -1,0 +1,295 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* supplier_inventory_import_ubl
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: supplier_inventory_import_ubl
+#: field:res.company,inventory_ubl_alert_partner_id:0
+msgid "Alert Recipient"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: view:inventory.ubl.import:supplier_inventory_import_ubl.inventory_ubl_import_form
+msgid "Cancel"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:ir.model,name:supplier_inventory_import_ubl.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:product.product,supplier_stock_info:0
+#: help:stock.quant,supplier_stock_info:0
+msgid "Contextual info on last supplier stock updated with UBL import"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.helper,create_uid:0
+#: field:inventory.ubl.import,create_uid:0
+msgid "Created by"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.helper,create_date:0
+#: field:inventory.ubl.import,create_date:0
+msgid "Created on"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:product.supplierinfo,last_stock:0
+msgid "Date of the last known supplier stock"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:product.supplierinfo,product_default_code:0
+msgid "Default code of product"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.helper,display_name:0
+#: field:inventory.ubl.import,display_name:0
+msgid "Display Name"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.import,document:0
+msgid "Document to import"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.import,filename:0
+msgid "Filename"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.helper,id:0
+#: field:inventory.ubl.import,id:0
+msgid "ID"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:res.company,inventory_ubl_link_document:0
+msgid "If checked, imported attachment is linked to supplier"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: view:inventory.ubl.import:supplier_inventory_import_ubl.inventory_ubl_import_form
+msgid "Import document"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:res.company,inventory_ubl_store_document:0
+msgid "Import xml file as ERP attachment"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:ir.model,name:supplier_inventory_import_ubl.model_product_supplierinfo
+msgid "Information about a product supplier"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:product.product,supplier_stock:0
+#: help:stock.quant,supplier_stock:0
+msgid "Information updated by the last supplier inventory report (UBL Edi)"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:137
+#, python-format
+msgid "Internal Reference"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:product.supplierinfo,product_default_code:0
+msgid "Internal reference"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: view:product.supplierinfo:supplier_inventory_import_ubl.product_supplierinfo_form_view
+#: view:res.company:supplier_inventory_import_ubl.view_company_form
+msgid "Inventory Report"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:ir.model,name:supplier_inventory_import_ubl.model_inventory_ubl_helper
+msgid "Inventory Report Helper for test and demo"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:ir.model,name:supplier_inventory_import_ubl.model_inventory_ubl_import
+msgid "Inventory Report for UBL file importation"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.helper,__last_update:0
+#: field:inventory.ubl.import,__last_update:0
+msgid "Last Modified on"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:product.supplierinfo,last_stock:0
+msgid "Last Stock"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.helper,write_uid:0
+#: field:inventory.ubl.import,write_uid:0
+msgid "Last Updated by"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:inventory.ubl.helper,write_date:0
+#: field:inventory.ubl.import,write_date:0
+msgid "Last Updated on"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:res.company,inventory_ubl_link_document:0
+msgid "Link File to Supplier"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:140
+#, python-format
+msgid "No matching product for this file '%(file)s'\n"
+"Check if you have product relations with this supplier '%(supp)s' (procurement tab in product screen)\n"
+"\n"
+"Here is product refs in the file\n"
+"%(codes)sfile"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:130
+#, python-format
+msgid "No valid product reference int this file"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:res.company,inventory_ubl_alert_partner_id:0
+msgid "Partner to alert in case of fails on import"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:product.template,name:supplier_inventory_import_ubl.product_product_9_product_template
+msgid "Pedal Bin"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:56
+#, python-format
+msgid "Please check your file. It seems invalid"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:ir.model,name:supplier_inventory_import_ubl.model_product_product
+msgid "Product"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:ir.model,name:supplier_inventory_import_ubl.model_stock_quant
+msgid "Quants"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: view:stock.quant:supplier_inventory_import_ubl.view_stock_quant_tree
+msgid "Stock"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:product.supplierinfo,stock:0
+msgid "Stock Qty"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:res.company,inventory_ubl_store_document:0
+msgid "Store Imported File"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: view:product.product:supplier_inventory_import_ubl.product_product_tree_view
+#: field:stock.quant,supplier_stock_info:0
+msgid "Supplier Inventory"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:product.product,supplier_stock:0
+#: field:stock.quant,supplier_stock:0
+msgid "Supplier Stock"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: field:product.product,supplier_stock_info:0
+msgid "Supplier Stock Info"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:347
+#, python-format
+msgid "These product codes %s have no matching code in ERPunmatch_codes"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:39
+#, python-format
+msgid "This XML file is not XML-compliant"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: view:inventory.ubl.import:supplier_inventory_import_ubl.inventory_ubl_import_form
+msgid "UBL Import"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:ir.ui.menu,name:supplier_inventory_import_ubl.inventory_ubl_import_menu
+msgid "UBL Inventory Report"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: model:ir.actions.act_window,name:supplier_inventory_import_ubl.inventory_ubl_import_action
+msgid "UBL Inventory Report import"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:370
+#, python-format
+msgid "Updated '%s' vendor stock"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:382
+#, python-format
+msgid "Updated '%s' vendor stock on product"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:inventory.ubl.import,document:0
+msgid "Upload xml file that you received from your supplier."
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: help:product.supplierinfo,stock:0
+msgid "Vendor stock quantity available"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:136
+#, python-format
+msgid "supplier code"
+msgstr ""
+
+#. module: supplier_inventory_import_ubl
+#: view:product.supplierinfo:supplier_inventory_import_ubl.ubl_supinfo_tree_view
+msgid "supplierinfo"
+msgstr ""
+
