@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InventoryReport
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:InventoryReport-2">
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+    <cbc:ID>CC2679</cbc:ID>
+    <cbc:CopyIndicator>false</cbc:CopyIndicator>
+    <cbc:IssueDate>2020-04-12</cbc:IssueDate>
+    <cbc:Note>Report about the quantities on stock.</cbc:Note>
+    <cbc:DocumentCurrencyCode listID="ISO 4217 Alpha">EUR</cbc:DocumentCurrencyCode>
+    <cac:InventoryPeriod>
+        <cbc:StartDate>2020-04-11</cbc:StartDate>
+        <cbc:StartTime>14:00:00</cbc:StartTime>
+        <cbc:EndDate>2020-04-11</cbc:EndDate>
+    </cac:InventoryPeriod>
+    <cac:RetailerCustomerParty>
+        <cac:Party>
+            <cac:PartyName>
+                <cbc:Name>OSKAB</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>rue du Centre</cbc:StreetName>
+                <cbc:BuildingNumber>7</cbc:BuildingNumber>
+                <cbc:CityName>Wasquehal</cbc:CityName>
+                <cbc:PostalZone>59290</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>FR</cbc:IdentificationCode>
+                    <cbc:Name>France</cbc:Name>
+                </cac:Country>
+            </cac:PostalAddress>
+        </cac:Party>
+    </cac:RetailerCustomerParty>
+    <cac:InventoryReportingParty>
+        <cac:PartyName>
+            <cbc:Name>Wood Corner</cbc:Name>
+        </cac:PartyName>
+        <cac:PostalAddress>
+            <cbc:StreetName>1839 Arbor Way</cbc:StreetName>
+            <cbc:BuildingNumber>1839</cbc:BuildingNumber>
+            <cbc:Department>Sales and Planning Department</cbc:Department>
+            <cbc:CityName>Turlock</cbc:CityName>
+            <cbc:PostalZone>95380</cbc:PostalZone>
+            <cac:Country>
+                <cbc:IdentificationCode>US</cbc:IdentificationCode>
+                <cbc:Name>United States of America</cbc:Name>
+            </cac:Country>
+        </cac:PostalAddress>
+    </cac:InventoryReportingParty>
+    <cac:InventoryReportLine>
+        <cbc:ID>2</cbc:ID>
+        <cbc:Quantity unitCode="NAR">15</cbc:Quantity>
+        <cbc:InventoryValueAmount currencyID="EUR">1.5</cbc:InventoryValueAmount>
+        <cac:Item>
+            <cbc:Description>Processor AMD 8-Core</cbc:Description>
+            <cac:BuyersItemIdentification>
+                <cbc:ID>CPUa8</cbc:ID>
+            </cac:BuyersItemIdentification>
+        </cac:Item>
+    </cac:InventoryReportLine>
+</InventoryReport>

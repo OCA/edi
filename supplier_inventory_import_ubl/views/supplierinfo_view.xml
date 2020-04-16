@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+<data>
+
+    <record id="product_supplierinfo_form_view" model="ir.ui.view">
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_form_view" />
+        <field name="arch" type="xml">
+            <field position="after" name="company_id">
+                <group
+                        name="inventory_report"
+                        string="Inventory Report"
+                        col="4"
+                    >
+                    <field name="stock" />
+                    <field name="last_stock" />
+                </group>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_supplierinfo_tree_view" model="ir.ui.view">
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_tree_view" />
+        <field name="arch" type="xml">
+            <field name="min_qty" position="after">
+                <field name="stock" />
+                <field name="last_stock" />
+            </field>
+        </field>
+    </record>
+
+    <record id="ubl_supinfo_tree_view" model="ir.ui.view">
+        <field name="model">product.supplierinfo</field>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <tree string="supplierinfo" create="0" delete="0">
+                <field name="product_tmpl_id" />
+                <field name="product_code" />
+                <field name="product_default_code" />
+                <field name="stock" />
+                <field name="last_stock" />
+                <field name="min_qty" />
+            </tree>
+        </field>
+    </record>
+
+</data>
+</openerp>

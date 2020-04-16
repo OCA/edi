@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InventoryReport
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:InventoryReport-2">
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+    <cbc:ID>CC2679</cbc:ID>
+    <cbc:CopyIndicator>false</cbc:CopyIndicator>
+    <cbc:IssueDate>2020-04-12</cbc:IssueDate>
+    <cbc:Note>Report about the quantities on stock.</cbc:Note>
+    <cbc:DocumentCurrencyCode listID="ISO 4217 Alpha">EUR</cbc:DocumentCurrencyCode>
+    <cac:InventoryPeriod>
+        <cbc:StartDate>2020-04-11</cbc:StartDate>
+        <cbc:StartTime>14:00:00</cbc:StartTime>
+        <cbc:EndDate>2020-04-11</cbc:EndDate>
+    </cac:InventoryPeriod>
+    <cac:RetailerCustomerParty>
+        <cac:Party>
+            <cac:PartyName>
+                <cbc:Name>OSKAB</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>rue du Centre</cbc:StreetName>
+                <cbc:BuildingNumber>7</cbc:BuildingNumber>
+                <cbc:CityName>Wasquehal</cbc:CityName>
+                <cbc:PostalZone>59290</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>FR</cbc:IdentificationCode>
+                    <cbc:Name>France</cbc:Name>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:Contact>
+                <cbc:Name>Mr Delta</cbc:Name>
+                <cbc:Telephone>0039 059 33000000</cbc:Telephone>
+                <cbc:Telefax>0039 059 33000055</cbc:Telefax>
+                <cbc:ElectronicMail>blabla@oskab.com</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:RetailerCustomerParty>
+    <cac:InventoryReportingParty>
+        <cac:PartyName>
+            <cbc:Name>Wood Corner</cbc:Name>
+        </cac:PartyName>
+        <cac:PostalAddress>
+            <cbc:StreetName>1839 Arbor Way</cbc:StreetName>
+            <cbc:BuildingNumber>1839</cbc:BuildingNumber>
+            <cbc:Department>Sales and Planning Department</cbc:Department>
+            <cbc:CityName>Turlock</cbc:CityName>
+            <cbc:PostalZone>95380</cbc:PostalZone>
+            <cac:Country>
+                <cbc:IdentificationCode>US</cbc:IdentificationCode>
+                <cbc:Name>United States of America</cbc:Name>
+            </cac:Country>
+        </cac:PostalAddress>
+        <cac:Contact>
+            <cbc:Name>Mr Bianchi</cbc:Name>
+            <cbc:Telephone>0039 051 23000008</cbc:Telephone>
+            <cbc:Telefax>0039 051 23000025</cbc:Telefax>
+            <cbc:ElectronicMail>bianchi@arancioforniture.it</cbc:ElectronicMail>
+        </cac:Contact>
+    </cac:InventoryReportingParty>
+    <cac:SellerSupplierParty>
+        <cac:Party>
+            <cac:PartyName>
+                <cbc:Name>Wood Corner</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>1839 Arbor Way</cbc:StreetName>
+                <cbc:BuildingNumber>1839</cbc:BuildingNumber>
+                <cbc:CityName>Turlock</cbc:CityName>
+                <cbc:PostalZone>95380</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>US</cbc:IdentificationCode>
+                    <cbc:Name>United States of America</cbc:Name>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:Contact>
+                <cbc:Name>Mr Rossi</cbc:Name>
+                <cbc:Telephone>0039 051 23000000</cbc:Telephone>
+                <cbc:Telefax>0039 051 23000023</cbc:Telefax>
+                <cbc:ElectronicMail>rossi@arancioforniture.it</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:SellerSupplierParty>
+    <cac:InventoryReportLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:Quantity unitCode="NAR">10</cbc:Quantity>
+        <cbc:InventoryValueAmount currencyID="EUR">15</cbc:InventoryValueAmount>
+        <cac:Item>
+            <cbc:Description>Mister Bin, the special one</cbc:Description>
+            <cac:BuyersItemIdentification>
+                <cbc:ID>BINALL</cbc:ID>
+            </cac:BuyersItemIdentification>
+            <cac:SellersItemIdentification>
+                <cbc:ID>BIN4U</cbc:ID>
+            </cac:SellersItemIdentification>
+        </cac:Item>
+    </cac:InventoryReportLine>
+    <cac:InventoryReportLine>
+        <cbc:ID>2</cbc:ID>
+        <cbc:Quantity unitCode="NAR">15</cbc:Quantity>
+        <cbc:InventoryValueAmount currencyID="EUR">1.5</cbc:InventoryValueAmount>
+        <cac:Item>
+            <cbc:Description>Blank CD</cbc:Description>
+            <cac:BuyersItemIdentification>
+                <cbc:ID>CD</cbc:ID>
+            </cac:BuyersItemIdentification>
+            <cac:SellersItemIdentification>
+                <cbc:ID>MYCD</cbc:ID>
+            </cac:SellersItemIdentification>
+        </cac:Item>
+    </cac:InventoryReportLine>
+    <cac:InventoryReportLine>
+        <cbc:ID>2</cbc:ID>
+        <cbc:Quantity unitCode="NAR">17</cbc:Quantity>
+        <cbc:InventoryValueAmount currencyID="EUR">80</cbc:InventoryValueAmount>
+        <cac:Item>
+            <cbc:Description>iPod 32</cbc:Description>
+            <cac:SellersItemIdentification>
+                <cbc:ID>IPOPO</cbc:ID>
+            </cac:SellersItemIdentification>
+        </cac:Item>
+    </cac:InventoryReportLine>
+    <cac:InventoryReportLine>
+        <cbc:ID>3</cbc:ID>
+        <cbc:Quantity unitCode="NAR">7</cbc:Quantity>
+        <cbc:InventoryValueAmount currencyID="EUR">7</cbc:InventoryValueAmount>
+        <cac:Item>
+            <cbc:Description>Unknown product in my company</cbc:Description>
+            <cac:BuyersItemIdentification>
+                <cbc:ID>NA</cbc:ID>
+            </cac:BuyersItemIdentification>
+            <cac:SellersItemIdentification>
+                <cbc:ID>UN</cbc:ID>
+            </cac:SellersItemIdentification>
+        </cac:Item>
+    </cac:InventoryReportLine>
+    <cac:InventoryReportLine>
+        <cbc:ID>3</cbc:ID>
+        <cbc:Quantity unitCode="NAR">77</cbc:Quantity>
+        <cbc:InventoryValueAmount currencyID="EUR">1</cbc:InventoryValueAmount>
+        <cac:Item>
+            <cbc:Description>Yet another unknown product pfffff</cbc:Description>
+            <cac:SellersItemIdentification>
+                <cbc:ID>??</cbc:ID>
+            </cac:SellersItemIdentification>
+        </cac:Item>
+    </cac:InventoryReportLine>
+</InventoryReport>
