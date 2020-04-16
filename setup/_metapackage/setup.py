@@ -29,6 +29,7 @@ setuptools.setup(
         'odoo8-addon-sale_order_import_ubl',
         'odoo8-addon-sale_order_ubl',
         'odoo8-addon-sale_stock_order_import',
+        'odoo8-addon-supplier_inventory_import_ubl',
     ],
     classifiers=[
         'Programming Language :: Python',
