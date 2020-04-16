@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+<data>
+
+    <record id="product_product_9" model="product.product">
+        <field name="name">Pedal Bin</field>
+        <field name="standard_price">10.0</field>
+        <field name="list_price">47.0</field>
+        <field name="purchase_ok">1</field>
+        <field name="type">consu</field>
+        <field name="weight">1.15</field>
+        <field name="uom_id" ref="product.product_uom_unit" />
+        <field name="uom_po_id" ref="product.product_uom_unit" />
+        <field name="default_code">BINALL</field>
+    </record>
+
+    <record id="supp_inf_wood_ipod" model="product.supplierinfo">
+        <field name="name" search="[('name', '=', 'Wood Corner')]" />
+        <field name="product_tmpl_id" search="[('name', '=', 'iPod')]" />
+        <field name="product_code">IPOPO</field>
+    </record>
+    <record id="supp_inf_wood_processeur_amd" model="product.supplierinfo">
+        <field name="name" search="[('name', '=', 'Wood Corner')]" />
+        <field name="product_tmpl_id" search="[('name', '=', 'Processor AMD 8-Core')]" />
+        <field name="product_code"></field>
+    </record>
+    <record id="supp_inf_wood_bin" model="product.supplierinfo">
+        <field name="name" search="[('name', '=', 'Wood Corner')]" />
+        <field name="product_tmpl_id" search="[('name', '=', 'Pedal Bin')]" />
+        <field name="product_name">Mister Bin, the special one</field>
+        <field name="product_code">BIN4U</field>
+    </record>
+    <record id="supp_inf_wood_cd" model="product.supplierinfo">
+        <field name="name" search="[('name', '=', 'Wood Corner')]" />
+        <field name="product_tmpl_id" search="[('name', '=', 'Blank CD')]" />
+        <field name="product_name">Blank CD</field>
+        <field name="product_code">MYCD</field>
+        <field name="sequence" eval="0" />
+    </record>
+    Copy of the last record to test write on several supplierinfo
+    <record id="supp_inf_wood_cd2" model="product.supplierinfo">
+        <field name="name" search="[('name', '=', 'Wood Corner')]" />
+        <field name="product_tmpl_id" search="[('name', '=', 'Blank CD')]" />
+        <field name="product_name">Blank CD2</field>
+        <field name="product_code">MYCD2</field>
+        <field name="sequence" eval="1" />
+    </record>
+
+    <record id="inventory_ubl_helper" model="inventory.ubl.helper"/>
+    <!-- Import 'main.xml' file -->
+    <function model="inventory.ubl.helper"
+              name="_import_main_xml_file_when_demo_and_test"
+              eval="[ref('inventory_ubl_helper')]"/>
+
+</data>
+</openerp>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+<data>
+
+<!-- We use a partner defined in v12 to make easier the migration -->
+
+<record id="res_partner_1" model="res.partner">
+    <field name="name">Wood Corner</field>
+    <field name="is_company">1</field>
+    <!-- remove below in v13 -->
+    <field name="supplier">1</field>
+    <field name="street">1839 Arbor Way</field>
+    <field name="city">Turlock</field>
+    <field name="zip">95380</field>
+    <field name="country_id" ref="base.us" />
+    <field name="email">wood.corner26@example.com</field>
+    <field name="phone">(623)-853-7197</field>
+    <field name="website">http://www.wood-corner.com</field>
+</record>
+
+</data>
+</openerp>
