@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  © 2016 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<openerp>
+<data>
+
+
+<record id="view_company_form" model="ir.ui.view">
+    <field name="model">res.company</field>
+    <field name="inherit_id" ref="base_ubl.view_company_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//group[@name='ubl_main']" position="inside">
+            <group name="ubl_inventory" string="Inventory Report" colspan="2">
+                <field name="inventory_ubl_alert_partner_id" />
+                <field name="inventory_ubl_store_document" />
+                <field name="inventory_ubl_link_document" />
+            </group>
+        </xpath>
+    </field>
+</record>
+
+
+</data>
+</openerp>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<openerp>
+<data>
+
+
+    <record id="product_normal_form_view" model="ir.ui.view">
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@string='Stock and Expected Variations']" position="inside">
+                <label for="supplier_stock" />
+                <div>
+                    <field name="supplier_stock" class="oe_inline" />
+                    <field name="supplier_stock_info" nolabel="1" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_search_form_view" model="ir.ui.view">
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_search_form_view" />
+        <field name="arch" type="xml">
+            <field name="pricelist_id" position="after">
+                <field name="supplier_stock_info" />
+            </field>
+        </field>
+    </record>
+
+    <record id="product_product_tree_view" model="ir.ui.view">
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view" />
+        <field name="arch" type="xml">
+            <field name="ean13" position="before">
+                <field name="supplier_stock" />
+                <field name="supplier_stock_info" string="Supplier Inventory" />
+            </field>
+        </field>
+    </record>
+
+    <record id="ubl_product_tree_view" model="ir.ui.view">
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="product_tmpl_id" />
+                <field name="default_code" />
+                <field name="supplier_stock" />
+                <field name="supplier_stock_info" />
+            </tree>
+        </field>
+    </record>
+
+
+</data>
+</openerp>

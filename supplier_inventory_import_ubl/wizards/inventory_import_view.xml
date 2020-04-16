@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+
+    <record id="inventory_ubl_import_form" model="ir.ui.view">
+        <field name="model">inventory.ubl.import</field>
+        <field name="arch" type="xml">
+            <form string="UBL Import">
+                <group name="help-import">
+                </group>
+                <group name="main">
+                    <field name="document" filename="filename" />
+                    <field name="filename" invisible="1" />
+                </group>
+                <footer>
+                    <button
+                            name="process_document"
+                            type="object"
+                            class="oe_highlight"
+                            string="Import document"
+                        />
+                    <button special="cancel" string="Cancel" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="inventory_ubl_import_action" model="ir.actions.act_window">
+        <field name="name">UBL Inventory Report import</field>
+        <field name="res_model">inventory.ubl.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="inventory_ubl_import_menu" model="ir.ui.menu">
+        <field name="name">UBL Inventory Report</field>
+        <field
+                name="parent_id"
+                ref="purchase.menu_procurement_management_product"
+            />
+        <field name="action" ref="inventory_ubl_import_action" />
+        <field name="sequence" eval="99" />
+    </record>
+
+</data>
+</openerp>
