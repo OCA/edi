@@ -6,7 +6,7 @@
 
 **Optionnally**
 
-.. image:: /supplier_inventory_import_ubl/static/description/settings.png
+.. image:: https://raw.githubusercontent.com/OCA/edi/8.0/supplier_inventory_import_ubl/static/description/settings.png
     :align: center
 
 
