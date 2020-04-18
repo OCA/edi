@@ -309,18 +309,18 @@ class InventoryUblImport(models.TransientModel):
                 )
         # extract implied writed ids of records
         supplierinfo_ids = []
-        for x, ids in sinfo_by_sup_code.items():
-            supplierinfo_ids.extend(ids)
         # Update Supplierinfo
         for sup_code in sinfo_by_sup_code:
             # need to make unique ids
             prd_suppinfos = self.env["product.supplierinfo"].browse(
                 set(sinfo_by_sup_code[sup_code])
             )
-            prd_suppinfos._update_supplier_stock_from_ubl_inventory(
-                supplier, stock_by_tmpl, inventory_date
+            supplierinfo_ids.extend(
+                prd_suppinfos._update_supplier_stock_from_ubl_inventory(
+                    supplier, stock_by_tmpl, inventory_date
+                )
             )
-        return list(set(supplierinfo_ids))
+        return supplierinfo_ids
 
     def _get_unknown_supplier_codes(self, supplier, stock_by):
         """ Some products may not have been found in Odoo

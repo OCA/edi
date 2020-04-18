@@ -27,12 +27,15 @@ class ProductSupplierinfo(models.Model):
     def _update_supplier_stock_from_ubl_inventory(
         self, supplier, stock_by_tmpl, inventory_date
     ):
+        ids = []
         for rec in self:
             if rec.product_tmpl_id and stock_by_tmpl.get(rec.product_tmpl_id.id):
                 rec.write(
                     {"stock": stock_by_tmpl[rec.product_tmpl_id.id],
                      "last_stock": inventory_date, }
                 )
+                ids.append(rec.id)
+        return ids
 
     @api.multi
     def _compute_product_default_code(self):
