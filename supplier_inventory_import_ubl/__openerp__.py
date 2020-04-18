@@ -5,7 +5,7 @@
 {
     "name": "Supplier Inventory Import UBL",
     "summary": "Import vendor inventory on vendor info",
-    "version": "8.0.1.0.0",
+    "version": "8.0.1.1.0",
     "website": "https://github.com/oca/edi",
     "author": " Akretion, Odoo Community Association (OCA)",
     "category": "Purchases",
