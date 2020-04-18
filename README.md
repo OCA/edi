@@ -33,7 +33,7 @@ addon | version | summary
 [sale_order_import_ubl](sale_order_import_ubl/) | 8.0.1.0.0 | Import UBL XML sale order files
 [sale_order_ubl](sale_order_ubl/) | 8.0.1.0.0 | Embed UBL XML file inside the PDF quotation
 [sale_stock_order_import](sale_stock_order_import/) | 8.0.1.0.0 | Glue module between sale_stock and sale_order_import
-[supplier_inventory_import_ubl](supplier_inventory_import_ubl/) | 8.0.1.0.0 | Import vendor inventory on vendor info
+[supplier_inventory_import_ubl](supplier_inventory_import_ubl/) | 8.0.1.1.0 | Import vendor inventory on vendor info
 
 [//]: # (end addons)
 
