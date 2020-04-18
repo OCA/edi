@@ -26,18 +26,22 @@ class TestImport(TransactionCase):
         info = ref("product.product_product_11").supplier_stock_info
         self.assertEqual(info, False)
         self.assertEqual(
-            res.get("res_model"),
-            "product.supplierinfo",
-            "Current model should be product.supplierinfo",
+            res.get("res_model"), "product.product",
+            "Current model should be product.product",
         )
 
     def test_no_seller_reference(self):
         wizard = self.env["inventory.ubl.helper"]._create_inventory_transient(
             "no_seller_reference"
         )
-        wizard.process_document()
+        res = wizard.process_document()
         info = self.env.ref("product.product_product_35").supplier_stock_info
         self.assertEqual(info and info[:4], "Wood")
+        self.assertEqual(
+            res.get("res_model"),
+            "product.product",
+            "Current model should be product.product",
+        )
 
     def test_unknow_supplier(self):
         wizard = self.env["inventory.ubl.helper"]._create_inventory_transient(

@@ -59,7 +59,7 @@ Configuration
 
 **Optionnally**
 
-.. image:: https://raw.githubusercontent.com/supplier_inventory_import_ubl/static/description/settings.png
+.. image:: https://raw.githubusercontent.com/OCA/edi/8.0/supplier_inventory_import_ubl/static/description/settings.png
     :align: center
 
 
@@ -74,28 +74,28 @@ Usage
 
 **Here is the wizard to import your UBL Inventory Report**
 
-.. image:: https://raw.githubusercontent.com/supplier_inventory_import_ubl/static/description/import.png
+.. image:: https://raw.githubusercontent.com/OCA/edi/8.0/supplier_inventory_import_ubl/static/description/import.png
     :align: center
 
 ----
 
 **Supplier stock level and date complete vendors informations**
 
-.. image:: https://raw.githubusercontent.com/supplier_inventory_import_ubl/static/description/supplier_info.png
+.. image:: https://raw.githubusercontent.com/OCA/edi/8.0/supplier_inventory_import_ubl/static/description/supplier_info.png
     :align: center
 
 ----
 
 **Report on updated data when wizard is closed**
 
-.. image:: https://raw.githubusercontent.com/supplier_inventory_import_ubl/static/description/supplierinfo_updated_data.png
+.. image:: https://raw.githubusercontent.com/OCA/edi/8.0/supplier_inventory_import_ubl/static/description/supplierinfo_updated_data.png
     :align: center
 
 ----
 
 **Missing data or false data are set on supplier**
 
-.. image:: https://raw.githubusercontent.com/supplier_inventory_import_ubl/static/description/wood_message.png
+.. image:: https://raw.githubusercontent.com/OCA/edi/8.0/supplier_inventory_import_ubl/static/description/wood_message.png
     :align: center
 
 ----
@@ -103,7 +103,7 @@ Usage
 
 **Supplier stock on quants**
 
-.. image:: https://raw.githubusercontent.com/supplier_inventory_import_ubl/static/description/stock_report.png
+.. image:: https://raw.githubusercontent.com/OCA/edi/8.0/supplier_inventory_import_ubl/static/description/stock_report.png
     :align: center
     :scale: 80 %
 
@@ -112,7 +112,7 @@ Usage
 
 **Supplier stock on product: from the last imported file**
 
-.. image:: https://raw.githubusercontent.com/supplier_inventory_import_ubl/static/description/product.png
+.. image:: https://raw.githubusercontent.com/OCA/edi/8.0/supplier_inventory_import_ubl/static/description/product.png
     :align: center
 
 ----
