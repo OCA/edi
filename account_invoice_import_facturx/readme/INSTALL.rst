@@ -1,4 +1,4 @@
-This module requires the Python library `factur-x <https://github.com/akretion/factur-x>`_ developped by Akretion. To install it, run:
+This module requires the Python library `factur-x <https://github.com/akretion/factur-x>`__ developped by Akretion. To install it, run:
 
 .. code::
 
