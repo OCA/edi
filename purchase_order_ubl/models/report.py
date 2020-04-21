@@ -34,3 +34,8 @@ class Report(models.Model):
             pdf_content = order.embed_ubl_xml_in_pdf(
                 pdf_content)
         return pdf_content
+
+    @api.v8  # noqa
+    def get_pdf(self, records, report_name, html=None, data=None):
+        return Report.get_pdf(self._model, self._cr, self._uid, records.ids,
+                              report_name, html=html, data=data, context=self._context)
