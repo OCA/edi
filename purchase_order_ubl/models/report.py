@@ -37,5 +37,5 @@ class Report(models.Model):
 
     @api.v8  # noqa
     def get_pdf(self, records, report_name, html=None, data=None):
-        return Report.get_pdf(self._model, self._cr, self._uid, records.ids,
+        return self._model.get_pdf(self._cr, self._uid, records.ids,
                               report_name, html=html, data=data, context=self._context)
