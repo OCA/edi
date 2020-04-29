@@ -36,6 +36,11 @@ msgid "Embed PDF in UBL XML Invoice"
 msgstr ""
 
 #. module: account_invoice_ubl
+#: selection:res.company,xml_format_in_pdf_invoice:0
+msgid "Factur-X (CII)"
+msgstr ""
+
+#. module: account_invoice_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.invoice_form
 msgid "Generate UBL XML File"
 msgstr ""
