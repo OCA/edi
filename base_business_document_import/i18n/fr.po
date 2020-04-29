@@ -19,25 +19,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:590
+#: code:addons/base_business_document_import/models/business_document_import.py:600
 #, python-format
 msgid "(fixed)"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:966
+#: code:addons/base_business_document_import/models/business_document_import.py:976
 #, python-format
 msgid "<b>Notes in file %s:</b>"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:968
+#: code:addons/base_business_document_import/models/business_document_import.py:978
 #, python-format
 msgid "<b>Notes in imported document:</b>"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:503
+#: code:addons/base_business_document_import/models/business_document_import.py:513
 #, python-format
 msgid ""
 "<p>Odoo couldn't find any unit of measure corresponding to the following "
@@ -47,7 +47,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:772
+#: code:addons/base_business_document_import/models/business_document_import.py:782
 #, python-format
 msgid "Approximate match: account %s has been matched with account %s"
 msgstr ""
@@ -58,7 +58,7 @@ msgid "Common methods to import business documents"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:881
+#: code:addons/base_business_document_import/models/business_document_import.py:891
 #, python-format
 msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
 msgstr ""
@@ -69,7 +69,7 @@ msgid "Display Name"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:682
+#: code:addons/base_business_document_import/models/business_document_import.py:692
 #, python-format
 msgid ""
 "For product '%s', the unit of measure is %s on the existing line, but it is "
@@ -94,13 +94,13 @@ msgid "Last Modified on"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:909
+#: code:addons/base_business_document_import/models/business_document_import.py:919
 #, python-format
 msgid "Missing VAT number on company '%s'"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:460
+#: code:addons/base_business_document_import/models/business_document_import.py:470
 #, python-format
 msgid "No currency specified, so Odoo used the company currency (%s)"
 msgstr ""
@@ -121,7 +121,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:776
+#: code:addons/base_business_document_import/models/business_document_import.py:786
 #, python-format
 msgid ""
 "Odoo couldn't find any account corresponding to the following information "
@@ -129,7 +129,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:817
+#: code:addons/base_business_document_import/models/business_document_import.py:827
 #, python-format
 msgid ""
 "Odoo couldn't find any analytic account corresponding to the following "
@@ -137,7 +137,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:856
+#: code:addons/base_business_document_import/models/business_document_import.py:866
 #, python-format
 msgid ""
 "Odoo couldn't find any journal corresponding to the following information "
@@ -145,7 +145,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:372
+#: code:addons/base_business_document_import/models/business_document_import.py:382
 #, python-format
 msgid ""
 "Odoo couldn't find any product corresponding to the following information "
@@ -167,7 +167,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:578
+#: code:addons/base_business_document_import/models/business_document_import.py:588
 #, python-format
 msgid ""
 "Odoo couldn't find any tax with 'Tax Application' = '%s' and 'Tax Included "
@@ -179,7 +179,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:666
+#: code:addons/base_business_document_import/models/business_document_import.py:676
 #, python-format
 msgid ""
 "One of the imported lines doesn't have any product, so <b>the lines haven't "
@@ -195,7 +195,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:900
+#: code:addons/base_business_document_import/models/business_document_import.py:910
 #, python-format
 msgid ""
 "The VAT number of the customer written in the business document (%s) doesn't "
@@ -221,7 +221,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:442
+#: code:addons/base_business_document_import/models/business_document_import.py:452
 #, python-format
 msgid ""
 "The analysis of the business document returned '%s' as the country code to "
@@ -230,7 +230,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:449
+#: code:addons/base_business_document_import/models/business_document_import.py:459
 #, python-format
 msgid ""
 "The analysis of the business document returned '%s' as the country code to "
@@ -238,7 +238,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:406
+#: code:addons/base_business_document_import/models/business_document_import.py:416
 #, python-format
 msgid ""
 "The analysis of the business document returned '%s' as the currency ISO "
@@ -246,7 +246,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:429
+#: code:addons/base_business_document_import/models/business_document_import.py:439
 #, python-format
 msgid ""
 "The analysis of the business document returned '%s' as the currency symbol "
@@ -255,7 +255,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:416
+#: code:addons/base_business_document_import/models/business_document_import.py:426
 #, python-format
 msgid ""
 "The analysis of the business document returned '%s' as the currency symbol. "
@@ -263,7 +263,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:490
+#: code:addons/base_business_document_import/models/business_document_import.py:500
 #, python-format
 msgid ""
 "The analysis of the business document returned '%s' as the unit of measure "
@@ -272,15 +272,25 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:329
+#, python-format
+msgid ""
+"The analysis of the business document returned <b>IBAN %s</b> as bank "
+"account, but there is no such bank account in Odoo linked to partner <a "
+"href=# data-oe-model=res.partner data-oe-id=%d>%s</a> and the option to "
+"automatically create bank accounts upon import is disabled."
+msgstr ""
+
+#. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:322
 #, python-format
 msgid ""
 "The bank account <b>IBAN %s</b> has been automatically added on the supplier "
-"<b>%s</b>"
+"<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:646
+#: code:addons/base_business_document_import/models/business_document_import.py:656
 #, python-format
 msgid ""
 "The existing line '%s' doesn't have any product, so <b>the lines haven't "
@@ -288,7 +298,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:652
+#: code:addons/base_business_document_import/models/business_document_import.py:662
 #, python-format
 msgid ""
 "The product '%s' is used on several existing lines, so <b>the lines haven't "
@@ -296,7 +306,7 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:674
+#: code:addons/base_business_document_import/models/business_document_import.py:684
 #, python-format
 msgid ""
 "The product '%s' is used on several imported lines, so <b>the lines haven't "
