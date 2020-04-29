@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: account_invoice_factur-x_py3o
-#: model:ir.model,name:account_invoice_factur-x_py3o.model_py3o_report
+#. module: account_invoice_facturx_py3o
+#: model:ir.model,name:account_invoice_facturx_py3o.model_py3o_report
 msgid "Report Py30"
 msgstr "Informe Py30"
