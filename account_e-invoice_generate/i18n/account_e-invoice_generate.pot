@@ -34,6 +34,11 @@ msgid "Electronic Invoices"
 msgstr ""
 
 #. module: account_e-invoice_generate
+#: selection:res.company,xml_format_in_pdf_invoice:0
+msgid "Factur-X (CII)"
+msgstr ""
+
+#. module: account_e-invoice_generate
 #: model_terms:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
 msgid "Format"
 msgstr ""
