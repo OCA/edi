@@ -16,7 +16,7 @@
         'base_zugferd',
         'base_vat',
         ],
-    'external_dependencies': {'python': ['facturx']},
+    'external_dependencies': {'python': ['factur-x']},
     'data': [
         'views/res_partner.xml',
         'views/account_config_settings.xml',
