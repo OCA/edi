@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_invoice_import_invoice2data
-#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "<b>regular PDF</b> file without any embedded XML file via the"
 msgstr ""
 
@@ -37,17 +37,29 @@ msgid "This PDF invoice doesn't match a known template of the invoice2data lib."
 msgstr ""
 
 #. module: account_invoice_import_invoice2data
+#: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
+#: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
+msgid "Unit(s)"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
 #: model:ir.model,name:account_invoice_import_invoice2data.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
 msgstr ""
 
 #. module: account_invoice_import_invoice2data
-#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "invoice2data"
 msgstr ""
 
 #. module: account_invoice_import_invoice2data
-#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+#: model:product.product,weight_uom_name:account_invoice_import_invoice2data.internet_access
+#: model:product.template,weight_uom_name:account_invoice_import_invoice2data.internet_access_product_template
+msgid "kg"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "library (reads the text of the PDF and get the information). It will work only if the invoice2data library has a template for the invoices of that supplier."
 msgstr ""
 
