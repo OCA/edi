@@ -20,13 +20,13 @@ msgid " Amount w/o tax: %s %s"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:780
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:781
 #, python-format
 msgid "%d invoice line(s) deleted: %s"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:795
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:796
 #, python-format
 msgid "%d new invoice line(s) created: %s"
 msgstr ""
@@ -38,7 +38,7 @@ msgid "<span class=\"o_form_label\">Default Taxes</span>\n"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:289
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:290
 #, python-format
 msgid "Account missing on product '%s' or on it's related category '%s'."
 msgstr ""
@@ -54,7 +54,7 @@ msgid "Active"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:619
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:620
 #, python-format
 msgid "Adjustment"
 msgstr ""
@@ -72,7 +72,7 @@ msgid "Adjustment Debit Account"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:681
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:682
 #, python-format
 msgid "Adjustment on %s"
 msgstr ""
@@ -85,6 +85,12 @@ msgstr ""
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
 msgid "Archived"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__invoice_import_create_bank_account
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__invoice_import_create_bank_account
+msgid "Auto-create Bank Account of Supplier"
 msgstr ""
 
 #. module: account_invoice_import
@@ -260,7 +266,7 @@ msgid "Invoice or Refund"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:1037
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:1040
 #, python-format
 msgid "Invoice successfully imported from email sent by <b>%s</b> on %s with subject <i>%s</i>."
 msgstr ""
@@ -284,8 +290,8 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:252
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:296
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:253
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:297
 #, python-format
 msgid "MISSING DESCRIPTION"
 msgstr ""
@@ -303,8 +309,8 @@ msgid "Method for Invoice Line"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:224
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:533
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:225
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:534
 #, python-format
 msgid "Missing Invoice Import Configuration on partner '%s'."
 msgstr ""
@@ -336,7 +342,7 @@ msgid "Number of Invoice Import Configurations"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:929
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:932
 #, python-format
 msgid "Only the date format 102 is supported "
 msgstr ""
@@ -420,7 +426,7 @@ msgid "The Expense Account must be set on the invoice import configuration of su
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:869
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:872
 #, python-format
 msgid "The currency of the imported invoice (%s) is different from the currency of the existing invoice (%s)"
 msgstr ""
@@ -431,7 +437,7 @@ msgid "The multi-line methods will not work for PDF invoices that don't have an 
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:758
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:759
 #, python-format
 msgid "The quantity has been updated on the invoice line with product '%s' from %s to %s %s"
 msgstr ""
@@ -442,25 +448,25 @@ msgid "The supplier has several invoice import configurations: please select the
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:857
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:860
 #, python-format
 msgid "The supplier of the imported invoice (%s) is different from the supplier of the invoice to update (%s)."
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:718
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:719
 #, python-format
 msgid "The total amount is different from the untaxed amount, but no tax has been configured !"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:726
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:727
 #, python-format
 msgid "The total tax amount has been forced to %s %s (amount computed by Odoo was: %s %s)."
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:766
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:767
 #, python-format
 msgid "The unit price has been updated on the invoice line with product '%s' from %s to %s %s"
 msgstr ""
@@ -471,7 +477,7 @@ msgid "These taxes are set in any new product created."
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:374
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:375
 #, python-format
 msgid "This XML file is not XML-compliant. Error: %s"
 msgstr ""
@@ -483,19 +489,19 @@ msgid "This field is used in multi-company setups to import the invoices receive
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:519
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:520
 #, python-format
 msgid "This invoice already exists in Odoo. It's Supplier Invoice Number is '%s' and it's Odoo number is '%s'"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:589
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:590
 #, python-format
 msgid "This invoice has been created automatically via file import"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:888
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:891
 #, python-format
 msgid "This invoice has been updated automatically via the import of file %s"
 msgstr ""
@@ -512,7 +518,7 @@ msgid "This type of PDF invoice is not supported. Did you install the module to 
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:383
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:384
 #, python-format
 msgid "This type of XML invoice is not supported. Did you install the module to support this type of file?"
 msgstr ""
@@ -558,37 +564,37 @@ msgid "Wizard to import supplier invoices/refunds"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:442
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:443
 #, python-format
 msgid "You are importing an invoice in a company that cannot deduct VAT and the imported invoice has several VAT taxes on the same line (%s). We do not support this scenario for the moment."
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:258
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:259
 #, python-format
 msgid "You have selected a Multi Line method for this import but Odoo could not extract/read any XML file inside the PDF invoice."
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:642
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:643
 #, python-format
 msgid "You must configure the 'Adjustment Credit Account' on the Accounting Configuration page."
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:636
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:637
 #, python-format
 msgid "You must configure the 'Adjustment Debit Account' on the Accounting Configuration page."
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:845
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:848
 #, python-format
 msgid "You must select a supplier invoice or refund to update"
 msgstr ""
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:863
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:866
 #, python-format
 msgid "You must select an Invoice Import Configuration."
 msgstr ""
