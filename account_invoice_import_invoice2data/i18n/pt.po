@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_invoice_import_invoice2data
+# 	* account_invoice_import_invoice2data
 #
 msgid ""
 msgstr ""
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Weblate 3.3\n"
 
 #. module: account_invoice_import_invoice2data
-#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "<b>regular PDF</b> file without any embedded XML file via the"
 msgstr "arquivo <b>PDF regular</b> sem qualquer arquivo XML incorporado via"
 
@@ -36,9 +36,16 @@ msgstr "Análise de fatura PDF falhou. Mensagem de erro: %s"
 #. module: account_invoice_import_invoice2data
 #: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:60
 #, python-format
-msgid "This PDF invoice doesn't match a known template of the invoice2data lib."
+msgid ""
+"This PDF invoice doesn't match a known template of the invoice2data lib."
 msgstr ""
 "Esta fatura PDF não combina com um modelo conhecido do invoice2data lib."
+
+#. module: account_invoice_import_invoice2data
+#: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
+#: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
+msgid "Unit(s)"
+msgstr ""
 
 #. module: account_invoice_import_invoice2data
 #: model:ir.model,name:account_invoice_import_invoice2data.model_account_invoice_import
@@ -46,13 +53,22 @@ msgid "Wizard to import supplier invoices/refunds"
 msgstr "Assistente para importar as faturas/créditos do fornecedor"
 
 #. module: account_invoice_import_invoice2data
-#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "invoice2data"
 msgstr ""
 
 #. module: account_invoice_import_invoice2data
-#: model:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
-msgid "library (reads the text of the PDF and get the information). It will work only if the invoice2data library has a template for the invoices of that supplier."
+#: model:product.product,weight_uom_name:account_invoice_import_invoice2data.internet_access
+#: model:product.template,weight_uom_name:account_invoice_import_invoice2data.internet_access_product_template
+msgid "kg"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
+msgid ""
+"library (reads the text of the PDF and get the information). It will work "
+"only if the invoice2data library has a template for the invoices of that "
+"supplier."
 msgstr ""
 "biblioteca (lê o texto do PDF e obtém a informação). Apenas funcionará se a "
 "biblioteca de invoice2data tiver um modelo para as faturas deste fornecedor."
