@@ -1,22 +1,17 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * account_invoice_import_zugferd
+#	* account_invoice_import_facturx
 #
-# Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2016
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-12 13:36+0000\n"
-"PO-Revision-Date: 2016-11-12 13:36+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
-"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
-"Language: fr\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: \n"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
@@ -31,19 +26,13 @@ msgstr ""
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:504
 #, python-format
-msgid ""
-"AllowanceTotalAmount (%s) doesn't match the total of the allowance lines "
-"(%s). Maybe it is because the Factur-X XML file is at BASIC level, and we "
-"don't have the details of taxes for the allowance lines."
+msgid "AllowanceTotalAmount (%s) doesn't match the total of the allowance lines (%s). Maybe it is because the Factur-X XML file is at BASIC level, and we don't have the details of taxes for the allowance lines."
 msgstr ""
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:482
 #, python-format
-msgid ""
-"ChargeTotalAmount (%s) doesn't match the total of the charge lines (%s). "
-"Maybe it is because the Factur-X XML file is at BASIC level, and we don't "
-"have the details of taxes for the charge lines."
+msgid "ChargeTotalAmount (%s) doesn't match the total of the charge lines (%s). Maybe it is because the Factur-X XML file is at BASIC level, and we don't have the details of taxes for the charge lines."
 msgstr ""
 
 #. module: account_invoice_import_facturx
@@ -54,9 +43,7 @@ msgstr ""
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:311
 #, python-format
-msgid ""
-"For the moment, in the Factur-X import, we only support type code 380 and "
-"381. (TypeCode is %s)"
+msgid "For the moment, in the Factur-X import, we only support type code 380 and 381. (TypeCode is %s)"
 msgstr ""
 
 #. module: account_invoice_import_facturx
@@ -98,17 +85,13 @@ msgstr ""
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:370
 #, python-format
-msgid ""
-"The GrandTotalAmount is %s but the sum of the lines plus the total charge "
-"plus the total trade allowance plus the total taxes is %s."
+msgid "The GrandTotalAmount is %s but the sum of the lines plus the total charge plus the total trade allowance plus the total taxes is %s."
 msgstr ""
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:293
 #, python-format
-msgid ""
-"The XML file embedded in the Factur-X invoice is invalid according to the "
-"official XML Schema Definition."
+msgid "The XML file embedded in the Factur-X invoice is invalid according to the official XML Schema Definition."
 msgstr ""
 
 #. module: account_invoice_import_facturx
@@ -120,9 +103,10 @@ msgstr ""
 #. module: account_invoice_import_facturx
 #: model:ir.model,name:account_invoice_import_facturx.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
-msgstr "Assistant pour importer les PDF de facture fournisseur"
+msgstr ""
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid "ZUGFeRD 1.0"
 msgstr ""
+
