@@ -30,8 +30,8 @@ class PurchaseOrder(models.Model):
             time = now_utc[11:]
             currency_node_name = "PricingCurrencyCode"
         elif doc_type == "order":
-            date = self.date_approve or self.date_order.date()
-            date = fields.Datetime.to_string(date)
+            date = self.date_approve or self.date_order
+            date = fields.Date.to_string(date)
             currency_node_name = "DocumentCurrencyCode"
         ubl_version = etree.SubElement(parent_node, ns["cbc"] + "UBLVersionID")
         ubl_version.text = version
@@ -262,7 +262,9 @@ class PurchaseOrder(models.Model):
 
     def get_ubl_purchase_order_doc_type(self):
         self.ensure_one()
+        doc_type = False
         if self.state in self.get_rfq_states():
-            return "rfq"
+            doc_type = "rfq"
         elif self.state in self.get_order_states():
-            return "order"
+            doc_type = "order"
+        return doc_type
