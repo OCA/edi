@@ -18,7 +18,7 @@ class Report(models.Model):
         This method is specific to QWeb"""
         purchases = self.env["purchase.order"].browse(docids)
         pdf_content = super(Report, self).get_pdf(
-            purchases, report_name, html=html, data=data
+            docids, report_name, html=html, data=data
         )
         purchase_reports = [
             "purchase.report_purchaseorder",
