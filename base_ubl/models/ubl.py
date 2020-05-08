@@ -186,11 +186,9 @@ class BaseUbl(models.AbstractModel):
         name.text = commercial_partner.name
         if partner.lang:
             self._ubl_add_language(partner.lang, party, ns, version=version)
-        self._ubl_add_address(
-            commercial_partner, "PostalAddress", party, ns, version=version
-        )
+        self._ubl_add_address(partner, "PostalAddress", party, ns, version=version)
         self._ubl_add_party_tax_scheme(commercial_partner, party, ns, version=version)
-        if company:
+        if commercial_partner.is_company or company:
             self._ubl_add_party_legal_entity(
                 commercial_partner, party, ns, version="2.1"
             )
