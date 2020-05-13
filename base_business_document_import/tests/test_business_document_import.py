@@ -9,25 +9,21 @@ from odoo.tests.common import TransactionCase
 class TestBaseBusinessDocumentImport(TransactionCase):
     def test_match_partner(self):
         partner1 = self.env["res.partner"].create(
-            {
-                "name": "Total SA",
-                "supplier": False,
-                "customer": False,
-                "ref": "TOTAL",
-                "website": "www.total.com",
-            }
+            {"name": "COGIP", "ref": "COGIP", "website": "http://example.com/"}
         )
         bdio = self.env["business.document.import"]
         # match on domain extracted from email with warning
-        partner_dict = {"email": "alexis.delattre@total.com"}
+        partner_dict = {"email": "alexis.delattre@example.com"}
         warn = []
         res = bdio._match_partner(partner_dict, warn, partner_type=False)
         self.assertEqual(res, partner1)
         self.assertTrue(warn)
         partner_dict = {"name": "ready mat "}
+        partner_ready_mat = self.env.ref("base.res_partner_4")
+        partner_ready_mat.supplier_rank = 1  # to be considered as a supplier
         res = bdio._match_partner(partner_dict, [], partner_type="supplier")
-        self.assertEqual(res, self.env.ref("base.res_partner_4"))
-        partner_dict = {"ref": "TOTAL"}
+        self.assertEqual(res, partner_ready_mat)
+        partner_dict = {"ref": "COGIP"}
         res = bdio._match_partner(partner_dict, [], partner_type=False)
         self.assertEqual(res, partner1)
 
