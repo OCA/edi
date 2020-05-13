@@ -11,6 +11,8 @@ setuptools.setup(
         'odoo13-addon-account_e-invoice_generate',
         'odoo13-addon-base_ubl',
         'odoo13-addon-base_ubl_payment',
+        'odoo13-addon-purchase_order_ubl',
+        'odoo13-addon-purchase_stock_ubl',
     ],
     classifiers=[
         'Programming Language :: Python',
