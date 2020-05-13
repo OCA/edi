@@ -27,7 +27,7 @@ addon | version | summary
 [base_business_document_import](base_business_document_import/) | 10.0.1.0.0 | Provides technical tools to import sale orders or supplier invoices
 [base_business_document_import_phone](base_business_document_import_phone/) | 10.0.1.0.0 | Use phone numbers to match partners upon import of business documents
 [base_business_document_import_stock](base_business_document_import_stock/) | 10.0.1.0.0 | Match incoterms upon import of business documents
-[base_ubl](base_ubl/) | 10.0.1.0.0 | Base module for Universal Business Language (UBL)
+[base_ubl](base_ubl/) | 10.0.1.1.0 | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 10.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
 [base_zugferd](base_zugferd/) | 10.0.1.0.0 | Base module for Factur-X and ZUGFeRD
 [purchase_order_import](purchase_order_import/) | 10.0.1.0.0 | Update RFQ via the import of quotations from suppliers
