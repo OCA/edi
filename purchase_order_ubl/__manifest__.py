@@ -3,7 +3,7 @@
 
 {
     "name": "Purchase Order UBL",
-    "version": "13.0.1.0.0",
+    "version": "13.0.1.1.0",
     "category": "Purchase Management",
     "license": "AGPL-3",
     "summary": "Embed UBL XML file inside the PDF purchase order",
