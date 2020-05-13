@@ -71,10 +71,10 @@ class BusinessDocumentImport(models.AbstractModel):
         company_id = self._context.get("force_company") or self.env.user.company_id.id
         domain = ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
         if partner_type == "supplier":
-            domain += [("supplier", "=", True)]
+            domain += [("supplier_rank", ">", 0)]
             partner_type_label = _("supplier")
         elif partner_type == "customer":
-            domain += [("customer", "=", True)]
+            domain += [("customer_rank", ">", 0)]
             partner_type_label = _("customer")
         else:
             partner_type_label = _("partner")
@@ -110,10 +110,8 @@ class BusinessDocumentImport(models.AbstractModel):
                 domain += ["|", ("state_id", "=", False), ("state_id", "=", state.id)]
         if partner_dict.get("vat"):
             vat = partner_dict["vat"].replace(" ", "").upper()
-            # use base_vat_sanitized
             partner = rpo.search(
-                domain + [("parent_id", "=", False), ("sanitized_vat", "=", vat)],
-                limit=1,
+                domain + [("parent_id", "=", False), ("vat", "=", vat)], limit=1,
             )
             if partner:
                 return partner
@@ -1019,8 +1017,8 @@ class BusinessDocumentImport(models.AbstractModel):
             company = self.env.user.company_id
         if company_dict.get("vat"):
             parsed_company_vat = company_dict["vat"].replace(" ", "").upper()
-            if company.partner_id.sanitized_vat:
-                if company.partner_id.sanitized_vat != parsed_company_vat:
+            if company.partner_id.vat:
+                if company.partner_id.vat != parsed_company_vat:
                     raise self.user_error_wrap(
                         _(
                             "The VAT number of the customer written in the "
@@ -1031,7 +1029,7 @@ class BusinessDocumentImport(models.AbstractModel):
                         % (
                             parsed_company_vat,
                             company.display_name,
-                            company.partner_id.sanitized_vat,
+                            company.partner_id.vat,
                         )
                     )
             else:
@@ -1086,7 +1084,6 @@ class BusinessDocumentImport(models.AbstractModel):
                         "res_id": record.id,
                         "res_model": str(record._name),
                         "datas": data_base64,
-                        "datas_fname": filename,
                     }
                 )
         for msg in parsed_dict["chatter_msg"]:
