@@ -9,7 +9,7 @@ class SaleOrder(models.Model):
 
     def name_get(self):
         """Add amount_untaxed in name_get of sale orders"""
-        res = super(SaleOrder, self).name_get()
+        res = super().name_get()
         if self._context.get("sale_order_show_amount"):
             new_res = []
             for (sale_id, name) in res:
