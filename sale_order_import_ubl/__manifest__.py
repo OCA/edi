@@ -2,14 +2,14 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Sale Order UBL Import',
-    'version': '12.0.1.0.0',
-    'category': 'Sales Management',
-    'license': 'AGPL-3',
-    'summary': 'Import UBL XML sale order files',
-    'author': 'Akretion,Odoo Community Association (OCA)',
-    'website': 'https://github.com/oca/edi',
-    'depends': ['sale_order_import', 'base_ubl'],
-    'demo': ['demo/demo_data.xml'],
-    'installable': True,
+    "name": "Sale Order UBL Import",
+    "version": "12.0.1.0.0",
+    "category": "Sales Management",
+    "license": "AGPL-3",
+    "summary": "Import UBL XML sale order files",
+    "author": "Akretion,Odoo Community Association (OCA)",
+    "website": "https://github.com/oca/edi",
+    "depends": ["sale_order_import", "base_ubl"],
+    "demo": ["demo/demo_data.xml"],
+    "installable": True,
 }
