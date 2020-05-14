@@ -15,8 +15,7 @@
     <record id="johnssons" model="res.partner">
         <field name="name">Johnssons byggvaror</field>
         <field name="is_company" eval="True" />
-        <field name="supplier" eval="False" />
-        <field name="customer" eval="True" />
+        <field name="customer_rank" eval="1" />
         <field name="email" />
         <field name="street">5 Rådhusgatan</field>
         <field name="street2">PoBox123</field>
@@ -30,15 +29,13 @@
         <field name="name">Pelle Svensson</field>
         <field name="function">Boss</field>
         <field name="email">pelle@johnsson.se</field>
-        <field name="customer" eval="True" />
+        <field name="customer_rank" eval="1" />
         <field name="type">contact</field>
         <field name="property_product_pricelist" ref="sek_pricelist" />
     </record>
     <record id="swedish_trucking" model="res.partner">
         <field name="name">Swedish trucking</field>
         <field name="is_company" eval="True" />
-        <field name="supplier" eval="False" />
-        <field name="customer" eval="False" />
         <field name="email">bill@svetruck.se</field>
         <field name="street">5 Rådhusgatan</field>
         <field name="street2">2nd floor</field>
@@ -77,12 +74,11 @@
     <record id="iyt" model="res.partner">
         <field name="name">IYT Corporation</field>
         <field name="is_company" eval="True" />
-        <field name="supplier" eval="False" />
-        <field name="customer" eval="True" />
+        <field name="customer_rank" eval="1" />
         <field name="email" />
         <field name="street">56A Avon Way</field>
         <field name="street2">Thereabouts</field>
-        <field name="zip">ZZ99 1ZZ</field>
+        <field name="zip">ZZ991ZZ</field>
         <field name="city">Bridgtow</field>
         <field name="country_id" ref="base.uk" />
         <field name="property_product_pricelist" ref="gbp_pricelist" />
@@ -91,7 +87,7 @@
         <field name="parent_id" ref="iyt" />
         <field name="name">Fred Churchill</field>
         <field name="email">fred@iytcorporation.gov.uk</field>
-        <field name="customer" eval="True" />
+        <field name="customer_rank" eval="1" />
         <field name="type">contact</field>
         <field name="property_product_pricelist" ref="gbp_pricelist" />
     </record>
@@ -108,12 +104,11 @@
     <record id="terminus" model="res.partner">
         <field name="name">The Terminus</field>
         <field name="is_company" eval="True" />
-        <field name="supplier" eval="False" />
-        <field name="customer" eval="True" />
+        <field name="customer_rank" eval="1" />
         <field name="email" />
         <field name="street">56A Avon Way</field>
         <field name="street2">Thereabouts</field>
-        <field name="zip">ZZ99 1ZZ</field>
+        <field name="zip">ZZ991ZZ</field>
         <field name="city">Bridgtow</field>
         <field name="country_id" ref="base.uk" />
     </record>
@@ -121,7 +116,7 @@
         <field name="parent_id" ref="terminus" />
         <field name="name">S Massiah</field>
         <field name="email">smassiah@the-email.co.uk</field>
-        <field name="customer" eval="True" />
+        <field name="customer_rank" eval="1" />
         <field name="type">contact</field>
     </record>
     <!-- for tests/UBL-RequestForQuotation-2.1-Example.xml -->
@@ -139,8 +134,7 @@
     <record id="gentofte_kommune" model="res.partner">
         <field name="name">Gentofte Kommune</field>
         <field name="is_company" eval="True" />
-        <field name="supplier" eval="False" />
-        <field name="customer" eval="True" />
+        <field name="customer_rank" eval="1" />
         <field name="email" />
         <field name="street">161 Bernstorffsvej</field>
         <field name="zip">2920</field>
@@ -151,7 +145,7 @@
     <record id="delivery_gentofte_kommune" model="res.partner">
         <field name="parent_id" ref="gentofte_kommune" />
         <field name="name">Joe Delivery</field>
-        <field name="customer" eval="True" />
+        <field name="customer_rank" eval="1" />
         <field name="type">contact</field>
     </record>
 </odoo>
