@@ -48,9 +48,6 @@ class SaleOrderImport(models.TransientModel):
     partner_shipping_id = fields.Many2one(
         "res.partner", string="Shipping Address", readonly=True
     )
-    # amount_untaxed = fields.Float(
-    #    string='Total Untaxed', digits=dp.get_precision('Account'),
-    #    readonly=True)
     sale_id = fields.Many2one("sale.order", string="Quotation to Update")
 
     @api.onchange("order_file")
