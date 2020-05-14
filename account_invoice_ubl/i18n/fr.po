@@ -36,7 +36,7 @@ msgid "Embed PDF in UBL XML Invoice"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: model_terms:ir.ui.view,arch_db:account_invoice_ubl.invoice_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_move_form
 msgid "Generate UBL XML File"
 msgstr ""
 
@@ -56,13 +56,8 @@ msgid "Include the PDF of the invoice in the standalone UBL Invoice XML file."
 msgstr ""
 
 #. module: account_invoice_ubl
-#: model:ir.model,name:account_invoice_ubl.model_account_invoice
-msgid "Invoice"
-msgstr ""
-
-#. module: account_invoice_ubl
-#: selection:res.company,xml_format_in_pdf_invoice:0
-msgid "None"
+#: model:ir.model,name:account_invoice_ubl.model_account_move
+msgid "Journal Entries"
 msgstr ""
 
 #. module: account_invoice_ubl
@@ -71,7 +66,7 @@ msgid "Report Action"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: selection:res.company,xml_format_in_pdf_invoice:0
+#: model:ir.model.fields.selection,name:account_invoice_ubl.selection__res_company__xml_format_in_pdf_invoice__ubl
 msgid "Universal Business Language (UBL)"
 msgstr ""
 
