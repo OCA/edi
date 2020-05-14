@@ -3,7 +3,7 @@
 
 {
     "name": "Sale Order Import",
-    "version": "12.0.1.0.0",
+    "version": "13.0.1.0.0",
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Import RFQ or sale orders from files",
