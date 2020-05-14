@@ -1,4 +1,5 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2020 Onestein (<https://www.onestein.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
@@ -22,7 +23,6 @@ class SaleOrder(models.Model):
     def get_order_states(self):
         return ["sale", "done"]
 
-    @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version="2.1"):
         now_utc = fields.Datetime.to_string(fields.Datetime.now())
         date = now_utc[:10]
@@ -45,7 +45,6 @@ class SaleOrder(models.Model):
             )
             doc_currency.text = self.currency_id.name
 
-    @api.multi
     def _ubl_add_quoted_monetary_total(self, parent_node, ns, version="2.1"):
         monetary_total = etree.SubElement(
             parent_node, ns["cac"] + "QuotedMonetaryTotal"
@@ -69,7 +68,6 @@ class SaleOrder(models.Model):
         )
         payable_amount.text = str(self.amount_total)
 
-    @api.multi
     def _ubl_add_quotation_line(
         self, parent_node, oline, line_number, ns, version="2.1"
     ):
@@ -93,7 +91,6 @@ class SaleOrder(models.Model):
             version=version,
         )
 
-    @api.multi
     def generate_quotation_ubl_xml_etree(self, version="2.1"):
         nsmap, ns = self._ubl_get_nsmap_namespace("Quotation-2", version=version)
         xml_root = etree.Element("Quotation", nsmap=nsmap)
@@ -125,7 +122,6 @@ class SaleOrder(models.Model):
             )
         return xml_root
 
-    @api.multi
     def generate_order_response_simple_ubl_xml_etree(self, version="2.1"):
         nsmap, ns = self._ubl_get_nsmap_namespace(
             "OrderResponseSimple-2", version=version
@@ -147,7 +143,6 @@ class SaleOrder(models.Model):
         )
         return xml_root
 
-    @api.multi
     def generate_ubl_xml_string(self, doc_type, version="2.1"):
         self.ensure_one()
         assert doc_type in ("quotation", "order"), "wrong doc_type"
@@ -182,7 +177,6 @@ class SaleOrder(models.Model):
         logger.debug(xml_string)
         return xml_string
 
-    @api.multi
     def get_ubl_filename(self, doc_type, version="2.1"):
         """This method is designed to be inherited"""
         if doc_type == "quotation":
@@ -190,28 +184,40 @@ class SaleOrder(models.Model):
         elif doc_type == "order":
             return "UBL-OrderResponseSimple-%s.xml" % version
 
-    @api.multi
     def get_ubl_version(self):
-        version = self._context.get("ubl_version") or "2.1"
-        return version
+        return self.env.context.get("ubl_version") or "2.1"
 
-    @api.multi
     def get_ubl_lang(self):
+        self.ensure_one()
         return self.partner_id.lang or "en_US"
 
-    @api.multi
-    def embed_ubl_xml_in_pdf(self, pdf_content=None, pdf_file=None):
+    def add_xml_in_pdf_buffer(self, buffer):
+        self.ensure_one()
+        doc_type = self.get_ubl_sale_order_doc_type()
+        if doc_type:
+            version = self.get_ubl_version()
+            xml_filename = self.get_ubl_filename(doc_type, version=version)
+            xml_string = self.generate_ubl_xml_string(doc_type, version=version)
+            buffer = self._ubl_add_xml_in_pdf_buffer(xml_string, xml_filename, buffer)
+        return buffer
+
+    def embed_ubl_xml_in_pdf(self, pdf_content):
+        self.ensure_one()
+        doc_type = self.get_ubl_sale_order_doc_type()
+        if doc_type:
+            version = self.get_ubl_version()
+            ubl_filename = self.get_ubl_filename(doc_type, version=version)
+            xml_string = self.generate_ubl_xml_string(doc_type, version=version)
+            pdf_content = self.embed_xml_in_pdf(
+                xml_string, ubl_filename, pdf_content=pdf_content
+            )
+        return pdf_content
+
+    def get_ubl_sale_order_doc_type(self):
         self.ensure_one()
         doc_type = False
         if self.state in self.get_quotation_states():
             doc_type = "quotation"
         elif self.state in self.get_order_states():
             doc_type = "order"
-        if doc_type:
-            version = self.get_ubl_version()
-            ubl_filename = self.get_ubl_filename(doc_type, version=version)
-            xml_string = self.generate_ubl_xml_string(doc_type, version=version)
-            pdf_content = self.embed_xml_in_pdf(
-                xml_string, ubl_filename, pdf_content=pdf_content, pdf_file=pdf_file
-            )
-        return pdf_content
+        return doc_type
