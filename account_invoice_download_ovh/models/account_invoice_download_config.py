@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2015-2018 Akretion France
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -111,7 +110,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             logs['msg'].append(_(
                 "Cannot connect to the OVH API with endpoint '%s'. "
                 "The error message is: '%s'.") % (
-                    self.ovh_endpoint, unicode(e)))
+                    self.ovh_endpoint, str(e)))
             logs['result'] = 'failure'
             return []
         logger.info(
