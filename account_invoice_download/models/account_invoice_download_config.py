@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017-2018 Akretion France
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
@@ -91,7 +90,7 @@ class AccountInvoiceDownloadConfig(models.Model):
     def name_get(self):
         res = []
         for rec in self:
-            name = u'%s (%s / %s)' % (rec.name, rec.backend, rec.method)
+            name = '%s (%s / %s)' % (rec.name, rec.backend, rec.method)
             res.append((rec.id, name))
         return res
 
