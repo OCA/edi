@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2020-03-16 13:13+0000\n"
-"Last-Translator: Thorsten Vocks <thorsten.vocks@big-consulting.net>\n"
+"PO-Revision-Date: 2020-05-27 09:19+0000\n"
+"Last-Translator: Maria Sparenberg <maria.sparenberg@gmx.net>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -45,23 +45,23 @@ msgstr ""
 #: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Unit(s)"
-msgstr ""
+msgstr "Einheit(en)"
 
 #. module: account_invoice_import_invoice2data
 #: model:ir.model,name:account_invoice_import_invoice2data.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
-msgstr "Assistent für den Lieferantenrechnung-/gutschrift Import"
+msgstr "Assistent für den Import von Lieferantenrechnungen / -gutschriften"
 
 #. module: account_invoice_import_invoice2data
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "invoice2data"
-msgstr ""
+msgstr "invoice2data"
 
 #. module: account_invoice_import_invoice2data
 #: model:product.product,weight_uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,weight_uom_name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "kg"
-msgstr ""
+msgstr "kg"
 
 #. module: account_invoice_import_invoice2data
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
