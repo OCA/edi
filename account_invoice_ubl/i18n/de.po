@@ -6,72 +6,78 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2020-05-27 09:19+0000\n"
+"Last-Translator: Maria Sparenberg <maria.sparenberg@gmx.net>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10\n"
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Unternehmen"
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Konfigurationseinstellungen"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__embed_pdf_in_ubl_xml_invoice
 msgid "Embed PDF in UBL XML Invoice"
-msgstr ""
+msgstr "PDF in die UBL-XML-Datei der Rechnung einbetten"
 
 #. module: account_invoice_ubl
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "Factur-X (CII)"
-msgstr ""
+msgstr "Factur-X (CII)"
 
 #. module: account_invoice_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.invoice_form
 msgid "Generate UBL XML File"
-msgstr ""
+msgstr "UBL-XML-Datei erstellen"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,help:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
 #: model:ir.model.fields,help:account_invoice_ubl.field_res_config_settings__embed_pdf_in_ubl_xml_invoice
 msgid "If active, the standalone UBL Invoice XML file will include the PDF of the invoice in base64 under the node 'AdditionalDocumentReference'. For example, to be compliant with the e-fff standard used in Belgium, you should activate this option."
 msgstr ""
+"Wenn der Haken gesetzt ist, wird die UBL-XML-Datei die PDF der Rechnung "
+"base64-kodiert unter 'AdditionalDocumentReference' enthalten. Beispielsweise "
+"ist diese Option in Belgien zu aktivieren, um dem 'e-fff-Standard' gerecht "
+"zu werden."
 
 #. module: account_invoice_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_account_config_settings
 msgid "Include the PDF of the invoice in the standalone UBL Invoice XML file."
-msgstr ""
+msgstr "Die PDF der Rechnung wird in die UBL-XML-Datei integriert."
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_account_invoice
 msgid "Invoice"
-msgstr ""
+msgstr "Rechnung"
 
 #. module: account_invoice_ubl
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "None"
-msgstr ""
+msgstr "Keins"
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_ir_actions_report
 msgid "Report Action"
-msgstr ""
+msgstr "Beleg-Aktion"
 
 #. module: account_invoice_ubl
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "Universal Business Language (UBL)"
-msgstr ""
+msgstr "Universal Business Language (UBL)"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
-msgstr ""
+msgstr "XML-Format (zur Einbettung in der PDF der Rechnung )"
