@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2020-03-16 13:13+0000\n"
-"Last-Translator: Thorsten Vocks <thorsten.vocks@big-consulting.net>\n"
+"PO-Revision-Date: 2020-05-27 09:19+0000\n"
+"Last-Translator: Maria Sparenberg <maria.sparenberg@gmx.net>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -119,7 +119,7 @@ msgstr "Unternehmen"
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_res_config_settings
 msgid "Config Settings"
-msgstr "Konfiguration"
+msgstr "Konfigurationseinstellungen"
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import_config
