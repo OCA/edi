@@ -1,9 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <record id="queue_job_voxel_order_rule" model="ir.rule">
         <field name="name">Queue job voxel order</field>
-        <field name="model_id" ref="queue_job.model_queue_job"/>
-        <field name="domain_force" eval="[('channel', '=', 'root.voxel_import'), ('model_name', '=', 'sale.order')]"/>
-        <field name="groups" eval="[(4, ref('sales_team.group_sale_manager'))]"/>
+        <field name="model_id" ref="queue_job.model_queue_job" />
+        <field
+            name="domain_force"
+            eval="[('channel', '=', 'root.voxel_import'), ('model_name', '=', 'sale.order')]"
+        />
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_manager'))]" />
     </record>
 </odoo>
