@@ -151,4 +151,3 @@ msgstr "report.edi_voxel_account_invoice.template_voxel_invoice"
 #: model:ir.model,name:edi_voxel_account_invoice.model_res_config_settings
 msgid "res.config.settings"
 msgstr "res.config.settings"
-
