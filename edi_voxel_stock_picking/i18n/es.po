@@ -111,4 +111,3 @@ msgstr "report.edi_voxel_stock_picking.template_voxel_picking"
 #: model:ir.model,name:edi_voxel_stock_picking.model_res_config_settings
 msgid "res.config.settings"
 msgstr "res.config.settings"
-

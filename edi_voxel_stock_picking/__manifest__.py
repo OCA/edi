@@ -8,11 +8,7 @@
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/oca/edi/",
     "license": "AGPL-3",
-    "depends": [
-        "edi_voxel",
-        "product_expiry",
-        "sale_stock",
-    ],
+    "depends": ["edi_voxel", "product_expiry", "sale_stock"],
     "data": [
         "views/report_voxel_picking.xml",
         "views/stock_picking_views.xml",
