@@ -6,16 +6,16 @@ from odoo import api, models
 
 
 class QueueJob(models.Model):
-    _inherit = 'queue.job'
+    _inherit = "queue.job"
 
     @api.multi
     def voxel_do_now(self):
-        self.sudo().write({'eta': False})
+        self.sudo().write({"eta": False})
 
     @api.multi
     def voxel_cancel_now(self):
         self.sudo().filtered(
-            lambda x: x.state in ['pending', 'enqueued', 'failed']
+            lambda x: x.state in ["pending", "enqueued", "failed"]
         ).unlink()
 
     @api.multi

@@ -5,21 +5,21 @@ from odoo import fields, models
 
 
 class UoM(models.Model):
-    _inherit = 'uom.uom'
+    _inherit = "uom.uom"
 
     voxel_code = fields.Selection(
         selection=[
-            ('Unidades', 'Unidades'),
-            ('Kgs', 'Kgs'),
-            ('Lts', 'Lts'),
-            ('Lbs', 'Lbs'),
-            ('Cajas', 'Cajas'),
-            ('Bultos', 'Bultos'),
-            ('Palets', 'Palets'),
-            ('Horas', 'Horas'),
-            ('Metros', 'Metros'),
-            ('MetrosCuadrados', 'MetrosCuadrados'),
-            ('Contenedores', 'Contenedores'),
-            ('Otros', 'Otros'),
+            ("Unidades", "Unidades"),
+            ("Kgs", "Kgs"),
+            ("Lts", "Lts"),
+            ("Lbs", "Lbs"),
+            ("Cajas", "Cajas"),
+            ("Bultos", "Bultos"),
+            ("Palets", "Palets"),
+            ("Horas", "Horas"),
+            ("Metros", "Metros"),
+            ("MetrosCuadrados", "MetrosCuadrados"),
+            ("Contenedores", "Contenedores"),
+            ("Otros", "Otros"),
         ],
     )
