@@ -5,7 +5,8 @@ from odoo import fields, models
 
 
 class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+    _inherit = "res.config.settings"
 
     voxel_invoice_login_id = fields.Many2one(
-        related='company_id.voxel_invoice_login_id', readonly=False)
+        related="company_id.voxel_invoice_login_id", readonly=False
+    )
