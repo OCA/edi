@@ -406,4 +406,3 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__voxel_xml_report
 msgid "XML Report"
 msgstr ""
-
