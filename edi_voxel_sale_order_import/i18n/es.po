@@ -121,4 +121,3 @@ msgstr "Trabajos Voxel"
 #: model:ir.model,name:edi_voxel_sale_order_import.model_res_config_settings
 msgid "res.config.settings"
 msgstr "res.config.settings"
-

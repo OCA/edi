@@ -15,12 +15,12 @@
         "sale",
     ],
     "data": [
-        'security/ir.model.access.csv',
-        'security/voxel_sale_order_security.xml',
-        'data/ir_cron_data.xml',
-        'views/res_company_views.xml',
-        'views/res_config_settings_views.xml',
-        'views/sale_order_views.xml',
+        "security/ir.model.access.csv",
+        "security/voxel_sale_order_security.xml",
+        "data/ir_cron_data.xml",
+        "views/res_company_views.xml",
+        "views/res_config_settings_views.xml",
+        "views/sale_order_views.xml",
     ],
     "installable": True,
 }
