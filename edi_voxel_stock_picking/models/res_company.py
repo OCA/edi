@@ -8,4 +8,5 @@ class Company(models.Model):
     _inherit = "res.company"
 
     voxel_picking_login_id = fields.Many2one(
-        string='Stock picking login', comodel_name='voxel.login')
+        string="Stock picking login", comodel_name="voxel.login"
+    )

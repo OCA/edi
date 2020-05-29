@@ -151,4 +151,3 @@ msgstr ""
 #, python-format
 msgid "You can not cancel this delivery order because there is a job running!"
 msgstr ""
-
