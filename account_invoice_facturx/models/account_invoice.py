@@ -629,30 +629,34 @@ class AccountInvoice(models.Model):
         line_trade_settlement = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedLineTradeSettlement')
 
-        if iline.invoice_line_tax_ids:
-            for tax in iline.invoice_line_tax_ids:
-                trade_tax = etree.SubElement(
-                    line_trade_settlement,
-                    ns['ram'] + 'ApplicableTradeTax')
-                trade_tax_typecode = etree.SubElement(
-                    trade_tax, ns['ram'] + 'TypeCode')
-                if not tax.unece_type_code:
-                    raise UserError(_(
-                        "Missing UNECE Tax Type on tax '%s'")
-                        % tax.display_name)
-                trade_tax_typecode.text = tax.unece_type_code
-                trade_tax_categcode = etree.SubElement(
-                    trade_tax, ns['ram'] + 'CategoryCode')
-                if not tax.unece_categ_code:
-                    raise UserError(_(
-                        "Missing UNECE Tax Category on tax '%s'")
-                        % tax.display_name)
-                trade_tax_categcode.text = tax.unece_categ_code
-                # No 'DueDateTypeCode' on lines
-                if tax.amount_type == 'percent':
-                    trade_tax_percent = etree.SubElement(
-                        trade_tax, ns['ram'] + 'RateApplicablePercent')
-                    trade_tax_percent.text = '%0.*f' % (2, tax.amount)
+        if not iline.invoice_line_tax_ids:
+            raise UserError(_(
+                "The Factur-X standard specifies that each line needs, "
+                "at least, one tax."))
+
+        for tax in iline.invoice_line_tax_ids:
+            trade_tax = etree.SubElement(
+                line_trade_settlement,
+                ns['ram'] + 'ApplicableTradeTax')
+            trade_tax_typecode = etree.SubElement(
+                trade_tax, ns['ram'] + 'TypeCode')
+            if not tax.unece_type_code:
+                raise UserError(_(
+                    "Missing UNECE Tax Type on tax '%s'")
+                    % tax.display_name)
+            trade_tax_typecode.text = tax.unece_type_code
+            trade_tax_categcode = etree.SubElement(
+                trade_tax, ns['ram'] + 'CategoryCode')
+            if not tax.unece_categ_code:
+                raise UserError(_(
+                    "Missing UNECE Tax Category on tax '%s'")
+                    % tax.display_name)
+            trade_tax_categcode.text = tax.unece_categ_code
+            # No 'DueDateTypeCode' on lines
+            if tax.amount_type == 'percent':
+                trade_tax_percent = etree.SubElement(
+                    trade_tax, ns['ram'] + 'RateApplicablePercent')
+                trade_tax_percent.text = '%0.*f' % (2, tax.amount)
         # Fields start_date and end_date are provided by the OCA
         # module account_invoice_start_end_dates
         if (
