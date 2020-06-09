@@ -21,9 +21,9 @@ CREDIT_TRF_CODES = ('30', '31', '42')
 PROFILES_EN_UP = ['en16931', 'extended']
 
 
-class AccountInvoice(models.Model):
-    _name = 'account.invoice'
-    _inherit = ['account.invoice', 'base.facturx']
+class AccountMove(models.Model):
+    _name = 'account.move'
+    _inherit = ['account.move', 'base.facturx']
 
     @api.model
     def _cii_add_address_block(self, partner, parent_node, ns):
@@ -95,7 +95,6 @@ class AccountInvoice(models.Model):
         # 102 = format YYYYMMDD
         date_node_str.text = date_datetime.strftime('%Y%m%d')
 
-    @api.multi
     def _cii_add_document_context_block(self, root, nsmap, ns):
         self.ensure_one()
         doc_ctx = etree.SubElement(
@@ -120,14 +119,13 @@ class AccountInvoice(models.Model):
             urn = 'urn:factur-x.eu:1p0:%s' % ns['level']
         ctx_param_id.text = urn
 
-    @api.multi
     def _cii_add_header_block(self, root, ns):
         self.ensure_one()
         header_doc = etree.SubElement(
             root, ns['rsm'] + 'ExchangedDocument')
         header_doc_id = etree.SubElement(header_doc, ns['ram'] + 'ID')
-        if self.state in ('open', 'paid'):
-            header_doc_id.text = self.number
+        if self.state == 'posted':
+            header_doc_id.text = self.name
         else:
             header_doc_id.text = self.state
         header_doc_typecode = etree.SubElement(
@@ -143,12 +141,12 @@ class AccountInvoice(models.Model):
         # For Chorus, they impose option b)
         # Until August 2017, I was using option a), now I use option b)
         # Starting from November 2017, it's a config option !
-        date_invoice_dt = self.date_invoice or fields.Date.context_today(self)
-        self._cii_add_date('IssueDateTime', date_invoice_dt, header_doc, ns)
-        if self.comment and ns['level'] != 'minimum':
+        invoice_date_dt = self.invoice_date or fields.Date.context_today(self)
+        self._cii_add_date('IssueDateTime', invoice_date_dt, header_doc, ns)
+        if self.narration and ns['level'] != 'minimum':
             note = etree.SubElement(header_doc, ns['ram'] + 'IncludedNote')
             content_note = etree.SubElement(note, ns['ram'] + 'Content')
-            content_note.text = self.comment
+            content_note.text = self.narration
 
     @api.model
     def _cii_get_party_identification(self, commercial_partner):
@@ -174,7 +172,6 @@ class AccountInvoice(models.Model):
     def _cii_trade_agreement_buyer_ref(self, partner):
         return None
 
-    @api.multi
     def _cii_add_trade_agreement_block(self, trade_transaction, ns):
         self.ensure_one()
         company = self.company_id
@@ -195,7 +192,7 @@ class AccountInvoice(models.Model):
             company.partner_id, seller, ns)
         if ns['level'] in PROFILES_EN_UP:
             self._cii_add_trade_contact_block(
-                self.user_id.partner_id or company.partner_id, seller, ns)
+                self.invoice_user_id.partner_id or company.partner_id, seller, ns)
         self._cii_add_address_block(company.partner_id, seller, ns)
         if company.vat:
             seller_tax_reg = etree.SubElement(
@@ -228,17 +225,15 @@ class AccountInvoice(models.Model):
         self._cii_add_buyer_order_reference(trade_agreement, ns)
         self._cii_add_contract_reference(trade_agreement, ns)
 
-    @api.multi
     def _cii_add_buyer_order_reference(self, trade_agreement, ns):
         self.ensure_one()
-        if self.name:
+        if self.ref:
             buyer_order_ref = etree.SubElement(
                 trade_agreement, ns['ram'] + 'BuyerOrderReferencedDocument')
             buyer_order_id = etree.SubElement(
                 buyer_order_ref, ns['ram'] + 'IssuerAssignedID')
-            buyer_order_id.text = self.name
+            buyer_order_id.text = self.ref
 
-    @api.multi
     def _cii_add_contract_reference(self, trade_agreement, ns):
         self.ensure_one()
         # agreement_id is provided by the OCA module agreement_account
@@ -253,7 +248,6 @@ class AccountInvoice(models.Model):
                 contract_ref, ns['ram'] + 'IssuerAssignedID')
             contract_id.text = self.agreement_id.code
 
-    @api.multi
     def _cii_add_trade_delivery_block(self, trade_transaction, ns):
         self.ensure_one()
         trade_agreement = etree.SubElement(
@@ -270,7 +264,6 @@ class AccountInvoice(models.Model):
                 self.partner_shipping_id, shipto_trade_party, ns)
         return trade_agreement
 
-    @api.multi
     def _cii_add_trade_settlement_payment_means_block(
             self, trade_settlement, ns):
         payment_means = etree.SubElement(
@@ -298,7 +291,7 @@ class AccountInvoice(models.Model):
                 'for payment mean',
                 self.id)
         if payment_means_code.text in CREDIT_TRF_CODES:
-            partner_bank = self.partner_bank_id
+            partner_bank = self.invoice_partner_bank_id
             if (
                     not partner_bank and
                     self.payment_mode_id and
@@ -344,15 +337,15 @@ class AccountInvoice(models.Model):
                 trade_payment_term, ns['ram'] + 'Description')
             # The 'Description' field of SpecifiedTradePaymentTerms
             # is a required field, so we must always give a value
-            if self.payment_term_id:
-                trade_payment_term_desc.text = self.payment_term_id.name
+            if self.invoice_payment_term_id:
+                trade_payment_term_desc.text = self.invoice_payment_term_id.name
             else:
                 trade_payment_term_desc.text =\
                     _('No specific payment term selected')
 
-        if self.date_due:
+        if self.invoice_date_due:
             self._cii_add_date(
-                'DueDateDateTime', self.date_due, trade_payment_term, ns)
+                'DueDateDateTime', self.invoice_date_due, trade_payment_term, ns)
 
         # Direct debit Mandate
         if (
@@ -363,63 +356,57 @@ class AccountInvoice(models.Model):
                 trade_payment_term, ns['ram'] + 'DirectDebitMandateID')
             mandate.text = self.mandate_id.unique_mandate_reference
 
-    def _cii_applicable_trade_tax_block(self, trade_settlement, ns):
-        tax_basis_total = 0.0
-        if self.tax_line_ids:
-            for tline in self.tax_line_ids:
-                tax = tline.tax_id
-                tax_basis_total += tline.base
-                if ns['level'] == 'minimum':
-                    continue
-                if not tax.unece_type_code:
-                    raise UserError(_(
-                        "Missing UNECE Tax Type on tax '%s'")
-                        % tax.display_name)
-                if not tax.unece_categ_code:
-                    raise UserError(_(
-                        "Missing UNECE Tax Category on tax '%s'")
-                        % tax.display_name)
-                trade_tax = etree.SubElement(
-                    trade_settlement, ns['ram'] + 'ApplicableTradeTax')
-                amount = etree.SubElement(
-                    trade_tax, ns['ram'] + 'CalculatedAmount')
-                amount.text = '%0.*f' % (
-                    ns['cur_prec'], tline.amount * ns['sign'])
-                tax_type = etree.SubElement(
-                    trade_tax, ns['ram'] + 'TypeCode')
-                tax_type.text = tax.unece_type_code
+    def _cii_applicable_trade_tax_block(
+            self, tax, tax_amount, base_amount, trade_settlement, ns):
+        if ns['level'] == 'minimum':
+            return
+        if not tax.unece_type_code:
+            raise UserError(_(
+                "Missing UNECE Tax Type on tax '%s'")
+                % tax.display_name)
+        if not tax.unece_categ_code:
+            raise UserError(_(
+                "Missing UNECE Tax Category on tax '%s'")
+                % tax.display_name)
+        trade_tax = etree.SubElement(
+            trade_settlement, ns['ram'] + 'ApplicableTradeTax')
+        amount = etree.SubElement(
+            trade_tax, ns['ram'] + 'CalculatedAmount')
+        amount.text = '%0.*f' % (
+            ns['cur_prec'], tax_amount * ns['sign'])
+        tax_type = etree.SubElement(
+            trade_tax, ns['ram'] + 'TypeCode')
+        tax_type.text = tax.unece_type_code
 
-                if (
-                        tax.unece_categ_code != 'S' and
-                        float_is_zero(
-                            tax.amount, precision_digits=ns['cur_prec']) and
-                        self.fiscal_position_id and
-                        self.fiscal_position_id.note):
-                    exemption_reason = etree.SubElement(
-                        trade_tax, ns['ram'] + 'ExemptionReason')
-                    exemption_reason.text = self.with_context(
-                        lang=self.partner_id.lang or 'en_US').\
-                        fiscal_position_id.note
+        if (
+                tax.unece_categ_code != 'S' and
+                float_is_zero(
+                    tax_amount, precision_digits=ns['cur_prec']) and
+                self.fiscal_position_id and
+                self.fiscal_position_id.note):
+            exemption_reason = etree.SubElement(
+                trade_tax, ns['ram'] + 'ExemptionReason')
+            exemption_reason.text = self.with_context(
+                lang=self.partner_id.lang or 'en_US').\
+                fiscal_position_id.note
 
-                base = etree.SubElement(
-                    trade_tax, ns['ram'] + 'BasisAmount')
-                base.text = '%0.*f' % (
-                    ns['cur_prec'], tline.base * ns['sign'])
-                tax_categ_code = etree.SubElement(
-                    trade_tax, ns['ram'] + 'CategoryCode')
-                tax_categ_code.text = tax.unece_categ_code
-                if tax.unece_due_date_code:
-                    trade_tax_due_date = etree.SubElement(
-                        trade_tax, ns['ram'] + 'DueDateTypeCode')
-                    trade_tax_due_date.text = tax.unece_due_date_code
-                    # This field is not required, so no error if missing
-                if tax.amount_type == 'percent':
-                    percent = etree.SubElement(
-                        trade_tax, ns['ram'] + 'RateApplicablePercent')
-                    percent.text = '%0.*f' % (2, tax.amount)
-        return tax_basis_total
+        base = etree.SubElement(
+            trade_tax, ns['ram'] + 'BasisAmount')
+        base.text = '%0.*f' % (
+            ns['cur_prec'], base_amount * ns['sign'])
+        tax_categ_code = etree.SubElement(
+            trade_tax, ns['ram'] + 'CategoryCode')
+        tax_categ_code.text = tax.unece_categ_code
+        if tax.unece_due_date_code:
+            trade_tax_due_date = etree.SubElement(
+                trade_tax, ns['ram'] + 'DueDateTypeCode')
+            trade_tax_due_date.text = tax.unece_due_date_code
+            # This field is not required, so no error if missing
+        if tax.amount_type == 'percent':
+            percent = etree.SubElement(
+                trade_tax, ns['ram'] + 'RateApplicablePercent')
+            percent.text = '%0.*f' % (2, tax.amount)
 
-    @api.multi
     def _cii_add_trade_settlement_block(self, trade_transaction, ns):
         self.ensure_one()
         trade_settlement = etree.SubElement(
@@ -439,7 +426,7 @@ class AccountInvoice(models.Model):
         if ns['level'] != 'minimum':
             payment_ref = etree.SubElement(
                 trade_settlement, ns['ram'] + 'PaymentReference')
-            payment_ref.text = self.number or self.state
+            payment_ref.text = self.name or self.state
         invoice_currency = etree.SubElement(
             trade_settlement, ns['ram'] + 'InvoiceCurrencyCode')
         invoice_currency.text = ns['currency']
@@ -457,23 +444,38 @@ class AccountInvoice(models.Model):
             self._cii_add_trade_settlement_payment_means_block(
                 trade_settlement, ns)
 
-        tax_basis_total = self._cii_applicable_trade_tax_block(
-            trade_settlement, ns)
+        tax_basis_total = 0.0
+        for tline in self.line_ids.filtered(lambda x: x.tax_line_id):
+            tax_base_amount = tline.tax_base_amount
+            self._cii_applicable_trade_tax_block(
+               tline.tax_line_id, tline.price_subtotal, tax_base_amount,
+               trade_settlement, ns)
+            tax_basis_total += tax_base_amount
+        tax_zero_amount = {}  # key = tax recordset, value = base
+        for line in self.line_ids:
+            for tax in line.tax_ids.filtered(lambda t: float_is_zero(t.amount, precision_digits=ns['cur_prec'])):
+                tax_zero_amount.setdefault(tax, 0.0)
+                tax_zero_amount[tax] += line.price_subtotal
+        for tax, tax_base_amount in tax_zero_amount.items():
+            self._cii_applicable_trade_tax_block(
+                tax, 0, tax_base_amount, trade_settlement, ns)
+            tax_basis_total += tax_base_amount
 
         if ns['level'] != 'minimum':
             self._cii_trade_payment_terms_block(trade_settlement, ns)
 
         self._cii_monetary_summation_block(
             trade_settlement, tax_basis_total, ns)
-        if self.refund_invoice_id and self.refund_invoice_id.number:
-            inv_ref_doc = etree.SubElement(
-                trade_settlement, ns['ram'] + 'InvoiceReferencedDocument')
-            inv_ref_doc_num = etree.SubElement(
-                inv_ref_doc, ns['ram'] + 'IssuerAssignedID')
-            inv_ref_doc_num.text = self.refund_invoice_id.number
-            self._cii_add_date(
-                'FormattedIssueDateTime', self.refund_invoice_id.date_invoice,
-                inv_ref_doc, ns, date_ns_type='qdt')
+        # TODO find remplacement of field refund_invoice_id
+        # if self.refund_invoice_id and self.refund_invoice_id.number:
+        #    inv_ref_doc = etree.SubElement(
+        #        trade_settlement, ns['ram'] + 'InvoiceReferencedDocument')
+        #    inv_ref_doc_num = etree.SubElement(
+        #        inv_ref_doc, ns['ram'] + 'IssuerAssignedID')
+        #    inv_ref_doc_num.text = self.refund_invoice_id.number
+        #    self._cii_add_date(
+        #        'FormattedIssueDateTime', self.refund_invoice_id.invoice_date,
+        #        inv_ref_doc, ns, date_ns_type='qdt')
 
     def _cii_monetary_summation_block(
             self, trade_settlement, tax_basis_total, ns):
@@ -508,12 +510,11 @@ class AccountInvoice(models.Model):
                 sums, ns['ram'] + 'TotalPrepaidAmount')
             prepaid.text = '%0.*f' % (
                 ns['cur_prec'],
-                (self.amount_total - self.residual) * ns['sign'])
+                (self.amount_total - self.amount_residual) * ns['sign'])
         residual = etree.SubElement(
             sums, ns['ram'] + 'DuePayableAmount')
-        residual.text = '%0.*f' % (ns['cur_prec'], self.residual * ns['sign'])
+        residual.text = '%0.*f' % (ns['cur_prec'], self.amount_residual * ns['sign'])
 
-    @api.multi
     def _cii_add_invoice_line_block(
             self, trade_transaction, iline, line_number, ns):
         self.ensure_one()
@@ -560,7 +561,7 @@ class AccountInvoice(models.Model):
                 "should generate a customer refund for that line.")
                 % iline.name)
         # convert gross price_unit to tax_excluded value
-        taxres = iline.invoice_line_tax_ids.compute_all(iline.price_unit)
+        taxres = iline.tax_ids.compute_all(iline.price_unit)
         gross_price_val = float_round(
             taxres['total_excluded'], precision_digits=ns['price_prec'])
         # Use oline.price_subtotal/qty to compute net unit price to be sure
@@ -607,11 +608,11 @@ class AccountInvoice(models.Model):
         net_price_amount.text = '%0.*f' % (ns['price_prec'], net_price_val)
         line_trade_delivery = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedLineTradeDelivery')
-        if iline.uom_id and iline.uom_id.unece_code:
-            unitCode = iline.uom_id.unece_code
+        if iline.product_uom_id and iline.product_uom_id.unece_code:
+            unitCode = iline.product_uom_id.unece_code
         else:
             unitCode = 'C62'
-            if not iline.uom_id:
+            if not iline.product_uom_id:
                 logger.warning(
                     "No unit of measure on invoice line '%s', "
                     "using C62 (piece) as fallback",
@@ -620,7 +621,7 @@ class AccountInvoice(models.Model):
                 logger.warning(
                     'Missing UNECE Code on unit of measure %s, '
                     'using C62 (piece) as fallback',
-                    iline.uom_id.name)
+                    iline.product_uom_id.name)
         billed_qty = etree.SubElement(
             line_trade_delivery, ns['ram'] + 'BilledQuantity',
             unitCode=unitCode)
@@ -629,8 +630,8 @@ class AccountInvoice(models.Model):
         line_trade_settlement = etree.SubElement(
             line_item, ns['ram'] + 'SpecifiedLineTradeSettlement')
 
-        if iline.invoice_line_tax_ids:
-            for tax in iline.invoice_line_tax_ids:
+        if iline.tax_ids:
+            for tax in iline.tax_ids:
                 trade_tax = etree.SubElement(
                     line_trade_settlement,
                     ns['ram'] + 'ApplicableTradeTax')
@@ -674,7 +675,6 @@ class AccountInvoice(models.Model):
         subtotal_amount.text = '%0.*f' % (
             ns['cur_prec'], iline.price_subtotal * ns['sign'])
 
-    @api.multi
     def generate_facturx_xml(self):
         self.ensure_one()
         assert self.type in ('out_invoice', 'out_refund'),\
@@ -725,7 +725,8 @@ class AccountInvoice(models.Model):
 
         if ns['level'] in ('extended', 'en16931', 'basic'):
             line_number = 0
-            for iline in self.invoice_line_ids:
+            for iline in self.invoice_line_ids.filtered(
+                    lambda x: not x.display_type):
                 line_number += 1
                 self._cii_add_invoice_line_block(
                     trade_transaction, iline, line_number, ns)
@@ -742,7 +743,6 @@ class AccountInvoice(models.Model):
         logger.debug(xml_string)
         return (xml_string, level)
 
-    @api.multi
     def _prepare_pdf_metadata(self):
         self.ensure_one()
         company_name = self.company_id.name
@@ -753,17 +753,16 @@ class AccountInvoice(models.Model):
             'title': _('%s: %s %s dated %s') % (
                 company_name,
                 inv_type,
-                self.number or self.state,
-                self.date_invoice or '(no date)'),
+                self.name or self.state,
+                self.invoice_date or '(no date)'),
             'subject': 'Factur-X %s %s dated %s issued by %s' % (
                 inv_type,
-                self.number or self.state,
-                self.date_invoice or '(no date)',
+                self.name or self.state,
+                self.invoice_date or '(no date)',
                 company_name),
         }
         return pdf_metadata
 
-    @api.multi
     def regular_pdf_invoice_to_facturx_invoice(self, pdf_content):
         self.ensure_one()
         assert pdf_content, 'Missing pdf_content'
