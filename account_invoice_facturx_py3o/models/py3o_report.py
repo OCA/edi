@@ -2,7 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, models
+from odoo import models
 import logging
 logger = logging.getLogger(__name__)
 
@@ -15,10 +15,9 @@ except ImportError:
 class Py3oReport(models.TransientModel):
     _inherit = 'py3o.report'
 
-    @api.multi
     def _postprocess_report(self, model_instance, result_path):
-        aio = self.env['account.invoice']
-        invoice_reports = aio._get_invoice_report_names()
+        amo = self.env['account.move']
+        invoice_reports = amo._get_invoice_report_names()
         if (
                 self.ir_actions_report_id.report_name
                 in invoice_reports and
@@ -29,10 +28,7 @@ class Py3oReport(models.TransientModel):
                 result_path):
             invoice = model_instance
             # re-write PDF on result_path
-            if (
-                    invoice.type in ('out_invoice', 'out_refund') and
-                    invoice.company_id.xml_format_in_pdf_invoice ==
-                    'factur-x'):
+            if invoice._xml_format_in_pdf_invoice() == 'factur-x':
                 facturx_xml_str, level = invoice.generate_facturx_xml()
                 pdf_metadata = invoice._prepare_pdf_metadata()
                 generate_facturx_from_file(

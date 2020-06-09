@@ -4,11 +4,12 @@
 
 {
     'name': 'Py3o Factur-x Invoice',
-    'version': '12.0.1.0.0',
+    'version': '13.0.1.0.0',
     'category': 'Invoicing Management',
     'license': 'AGPL-3',
     'summary': 'Generate Factur-X invoices with Py3o reporting engine',
     'author': 'Akretion,Odoo Community Association (OCA)',
+    'maintainers': ['alexis-via'],
     'website': 'https://github.com/OCA/edi',
     'depends': ['account_invoice_facturx', 'report_py3o'],
     'external_dependencies': {'python': ['facturx']},
