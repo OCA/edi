@@ -4,11 +4,12 @@
 
 {
     'name': 'Account Invoice Factur-X',
-    'version': '12.0.1.0.0',
+    'version': '13.0.1.0.0',
     'category': 'Invoicing Management',
     'license': 'AGPL-3',
     'summary': 'Generate Factur-X/ZUGFeRD customer invoices',
     'author': 'Akretion,Odoo Community Association (OCA)',
+    'maintainers': ['alexis-via'],
     'website': 'https://github.com/OCA/edi',
     'depends': [
         'account_e-invoice_generate',
