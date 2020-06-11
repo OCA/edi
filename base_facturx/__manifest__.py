@@ -4,11 +4,12 @@
 
 {
     'name': 'Base Factur-X',
-    'version': '12.0.1.0.0',
+    'version': '13.0.1.0.0',
     'category': 'Invoicing Management',
     'license': 'AGPL-3',
     'summary': 'Base module for Factur-X/ZUGFeRD',
     'author': 'Akretion,Odoo Community Association (OCA)',
+    'maintainers': ['alexis-via'],
     'website': 'https://github.com/OCA/edi',
     'depends': [
         'uom_unece',
