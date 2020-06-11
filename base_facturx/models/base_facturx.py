@@ -6,5 +6,5 @@ from odoo import models
 
 
 class BaseFacturX(models.AbstractModel):
-    _name = 'base.facturx'
-    _description = 'Common methods to generate and parse Factur-X invoices'
+    _name = "base.facturx"
+    _description = "Common methods to generate and parse Factur-X invoices"
