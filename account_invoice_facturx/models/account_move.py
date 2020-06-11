@@ -554,7 +554,7 @@ class AccountMove(models.Model):
         etree.SubElement(line_doc, ns["ram"] + "LineID").text = str(line_number)
 
         trade_product = etree.SubElement(line_item, ns["ram"] + "SpecifiedTradeProduct")
-        self._set_iline_product_name(self, iline, trade_product, ns)
+        self._set_iline_product_name(iline, trade_product, ns)
         if (
             ns["level"] in PROFILES_EN_UP
             and iline.product_id
