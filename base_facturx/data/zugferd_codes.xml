@@ -13,7 +13,7 @@
     <field name="type">tax_categ</field>
     <field name="code">IC</field>
     <field name="name">Intra-Community Supply</field>
-    <field name="description">Code specifying that the VAT rate is levied from the invoicee for Intra-Community supplies.</field>
+    <field name="description">[ZUGFeRD 1.0 only] Code specifying that the VAT rate is levied from the invoicee for Intra-Community supplies.</field>
 </record>
 
 
