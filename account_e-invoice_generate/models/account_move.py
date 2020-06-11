@@ -15,9 +15,7 @@ class AccountMove(models.Model):
 
     @api.model
     def _get_invoice_report_names(self):
-        return [
-            'account.report_invoice',
-            'account.report_invoice_with_payments']
+        return ["account.report_invoice", "account.report_invoice_with_payments"]
 
     def _xml_format_in_pdf_invoice(self):
         """Returns the format if it is possible to generate the XML
@@ -27,12 +25,13 @@ class AccountMove(models.Model):
         # I want to allow embedded XML even on draft invoice
         # So I write here the conditions to be able to generate a valid XML
         if (
-                xml_format and
-                xml_format != 'none' and
-                self.type in ('out_invoice', 'out_refund') and
-                self.partner_id and
-                self.state != 'cancel' and
-                self.invoice_line_ids.filtered(lambda x: not x.display_type)):
+            xml_format
+            and xml_format != "none"
+            and self.type in ("out_invoice", "out_refund")
+            and self.partner_id
+            and self.state != "cancel"
+            and self.invoice_line_ids.filtered(lambda x: not x.display_type)
+        ):
             return xml_format
         else:
             return False

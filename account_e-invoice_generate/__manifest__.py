@@ -12,7 +12,7 @@
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account"],
-    'excludes': ['account_facturx'],
+    "excludes": ["account_facturx"],
     "data": ["views/res_config_settings.xml"],
     "installable": True,
 }
