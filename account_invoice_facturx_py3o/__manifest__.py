@@ -12,6 +12,6 @@
     'maintainers': ['alexis-via'],
     'website': 'https://github.com/OCA/edi',
     'depends': ['account_invoice_facturx', 'report_py3o'],
-    'external_dependencies': {'python': ['facturx']},
+    'external_dependencies': {'python': ['factur-x']},
     'installable': True,
 }
