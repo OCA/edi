@@ -296,7 +296,7 @@ class BaseUbl(models.AbstractModel):
         line_number,
         name,
         product,
-        type,
+        type_,
         quantity,
         uom,
         parent_node,
@@ -339,7 +339,7 @@ class BaseUbl(models.AbstractModel):
             )
             base_qty.text = "1"  # What else could it be ?
         self._ubl_add_item(
-            name, product, line_item, ns, type=type, seller=seller, version=version
+            name, product, line_item, ns, type=type_, seller=seller, version=version
         )
 
     @api.model
@@ -349,18 +349,18 @@ class BaseUbl(models.AbstractModel):
         product,
         parent_node,
         ns,
-        type="purchase",
+        type_="purchase",
         seller=False,
         version="2.1",
     ):
         """Beware that product may be False (in particular on invoices)"""
-        assert type in ("sale", "purchase"), "Wrong type param"
+        assert type_ in ("sale", "purchase"), "Wrong type param"
         assert name, "name is a required arg"
         item = etree.SubElement(parent_node, ns["cac"] + "Item")
         product_name = False
         seller_code = False
         if product:
-            if type == "purchase":
+            if type_ == "purchase":
                 if seller:
                     sellers = product._select_seller(
                         partner_id=seller, quantity=0.0, date=None, uom_id=False
@@ -402,7 +402,7 @@ class BaseUbl(models.AbstractModel):
             # I'm not 100% sure, but it seems that ClassifiedTaxCategory
             # contains the taxes of the product without taking into
             # account the fiscal position
-            if type == "sale":
+            if type_ == "sale":
                 taxes = product.taxes_id
             else:
                 taxes = product.supplier_taxes_id
