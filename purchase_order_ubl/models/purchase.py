@@ -19,7 +19,7 @@ class PurchaseOrder(models.Model):
 
     @api.model
     def get_order_states(self):
-        return ['approved', 'except_picking', 'except_invoice', 'done']
+        return ['confirmed', 'approved', 'except_picking', 'except_invoice', 'done']
 
     @api.multi
     def _ubl_add_header(self, doc_type, parent_node, ns, version='2.1'):
