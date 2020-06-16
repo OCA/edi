@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">Account Invoice Export on Invoice form view</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <field name="transmit_method_id" position="after">
+                <field name="invoice_sent_through_http" invisible="1" />
+            </field>
+            <button name="action_invoice_sent" position="after">
+                <button
+                    name="send_through_http"
+                    string="Send eBill"
+                    type="object"
+                    attrs="{'invisible':['|', ('state', '!=', 'posted'), ('invoice_sent_through_http', '=', True)]}"
+                    groups="base.group_user"
+                    class="oe_highlight"
+                />
+            </button>
+        </field>
+    </record>
+    <record id="view_invoice_tree" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree" />
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field
+                    name="activity_exception_decoration"
+                    widget="activity_exception"
+                />
+            </field>
+        </field>
+    </record>
+    <record model="ir.actions.server" id="action_send_ebill">
+        <field name="name">Send eBill</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="binding_model_id" ref="account.model_account_move" />
+        <field name="state">code</field>
+        <field name="code">
+        records.send_through_http()
+      </field>
+    </record>
+</odoo>
