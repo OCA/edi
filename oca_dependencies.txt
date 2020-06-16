@@ -2,3 +2,5 @@ community-data-files
 partner-contact
 sale-workflow
 server-tools
+account-invoicing
+queue
