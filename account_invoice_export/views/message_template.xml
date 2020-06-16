@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="exception_sending_invoice">
+        <div>
+            <p>Error sending invoice to <t t-esc="transmit_method_name" />.</p>
+            <p>The failed job has the uuid <t t-esc="job_id" /></p>
+        </div>
+    </template>
+</odoo>
