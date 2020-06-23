@@ -5,16 +5,16 @@
 -->
 <odoo>
     <record id="invoice_supplier_form" model="ir.ui.view">
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_supplier_form" />
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
-            <button name="action_invoice_draft" position="before">
+            <button name="button_draft" position="before">
                 <button
                     type="action"
                     name="%(account_invoice_import_action)d"
                     string="Import Invoice File"
-                    states="draft"
                     context="{'wizard_default_state': 'update-from-invoice', 'default_invoice_id': id, 'default_partner_id': commercial_partner_id}"
+                    attrs="{'invisible': ['|', ('type', '!=', 'in_invoice'), ('state', '!=', 'draft')]}"
                 />
             </button>
         </field>
