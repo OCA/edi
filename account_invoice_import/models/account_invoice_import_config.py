@@ -13,9 +13,7 @@ class AccountInvoiceImportConfig(models.Model):
 
     name = fields.Char(required=True)
     partner_id = fields.Many2one(
-        "res.partner",
-        ondelete="cascade",
-        domain=[("supplier", "=", True), ("parent_id", "=", False)],
+        "res.partner", ondelete="cascade", domain=[("parent_id", "=", False)],
     )
     active = fields.Boolean(default=True)
     sequence = fields.Integer()
@@ -86,6 +84,14 @@ class AccountInvoiceImportConfig(models.Model):
 
     @api.onchange("invoice_line_method", "account_id")
     def invoice_line_method_change(self):
+        if self.invoice_line_method == "1line_no_product" and self.account_id:
+            self.tax_ids = [(6, 0, self.account_id.tax_ids.ids)]
+        elif self.invoice_line_method != "1line_no_product":
+            self.tax_ids = [(6, 0, [])]
+
+    @api.onchange("partner_id")
+    def partner_id_change(self):
+        # if available get proporty
         if self.invoice_line_method == "1line_no_product" and self.account_id:
             self.tax_ids = [(6, 0, self.account_id.tax_ids.ids)]
         elif self.invoice_line_method != "1line_no_product":
