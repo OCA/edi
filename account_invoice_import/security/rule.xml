@@ -9,6 +9,6 @@
         <field name="model_id" ref="model_account_invoice_import_config" />
         <field
             name="domain_force"
-        >['|', ('company_id', '=', False), ('company_id', 'child_of', [user.company_id.id])]</field>
+        >['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
     </record>
 </odoo>
