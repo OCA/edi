@@ -5,9 +5,8 @@ from odoo import _, api, models
 
 
 class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+    _inherit = "account.move"
 
-    @api.multi
     def name_get(self):
         """Add amount_untaxed in name_get of invoices"""
         res = super().name_get()
