@@ -174,6 +174,36 @@ def update_fail_subdir(directory, fail_subdir):
     return True
 
 
+def handle_failure(directory, entry, file_path):
+    if not options.no_move_failed:
+        if directory not in fail_subdir_ok:
+            update_fail_subdir(directory, options.fail_subdir)
+        fail_dir_path = fail_subdir_ok[directory]
+        if fail_dir_path:
+            logger.info(
+                "Moving file %s to sub-directory %s", entry, options.fail_subdir,
+            )
+            os.rename(file_path, os.path.join(fail_dir_path, entry))
+
+
+def browse_directory(odoo, directory):
+    if os.path.isdir(directory):
+        logger.info("Start working on directory %s", directory)
+        for entry in os.listdir(directory):
+            file_path = os.path.join(directory, entry)
+            logger.debug("file_path=%s", entry)
+            if not os.path.isfile(file_path):
+                continue
+            res = send_file(odoo, file_path)
+            if res == "failure":
+                handle_failure(options)
+
+    elif os.path.isfile(directory):
+        res = send_file(odoo, directory)
+    else:
+        logger.warning("%s is not a directory nor a file. Skipped." % directory)
+
+
 def main(options, arguments):
     # print 'options = %s' % options
     # print 'arguments = %s' % arguments
@@ -235,31 +265,7 @@ def main(options, arguments):
         sys.exit(1)
 
     for directory in arguments:
-        if os.path.isdir(directory):
-            logger.info("Start working on directory %s", directory)
-            fail_dir_path = False
-            for entry in os.listdir(directory):
-                file_path = os.path.join(directory, entry)
-                logger.debug("file_path=%s", entry)
-                if os.path.isfile(file_path):
-                    res = send_file(odoo, file_path)
-                    if res == "failure":
-                        if not options.no_move_failed:
-                            if directory not in fail_subdir_ok:
-                                update_fail_subdir(directory, options.fail_subdir)
-                            fail_dir_path = fail_subdir_ok[directory]
-                            if fail_dir_path:
-                                logger.info(
-                                    "Moving file %s to sub-directory %s",
-                                    entry,
-                                    options.fail_subdir,
-                                )
-                                os.rename(file_path, os.path.join(fail_dir_path, entry))
-
-        elif os.path.isfile(directory):
-            res = send_file(odoo, directory)
-        else:
-            logger.warning("%s is not a directory nor a file. Skipped." % directory)
+        browse_directory(odoo, directory)
     logger.info(
         "RESULT: %d invoice%s created in Odoo, %d invoice import failure%s.",
         len(invoice_ids),
