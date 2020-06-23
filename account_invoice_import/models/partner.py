@@ -23,8 +23,8 @@ class ResPartner(models.Model):
             [("partner_id", "in", self.ids)], ["partner_id"], ["partner_id"]
         )
         mapped_data = {
-                config["partner_id"][0]: config["partner_id_count"]
-                for config in config_data
+            config["partner_id"][0]: config["partner_id_count"]
+            for config in config_data
         }
         for partner in self:
             partner.invoice_import_count = mapped_data.get(partner.id, 0)
