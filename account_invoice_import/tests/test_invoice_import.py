@@ -30,8 +30,9 @@ class TestInvoiceImport(TransactionCase):
             "amount_type": "percent",
             "unece_type_id": self.env.ref("account_tax_unece.tax_type_vat").id,
             "unece_categ_id": self.env.ref("account_tax_unece.tax_categ_s").id,
-            "account_id": self.expense_account.id,
-            "refund_account_id": self.expense_account.id,
+            # TODO tax armageddon
+            # "account_id": self.expense_account.id,
+            # "refund_account_id": self.expense_account.id,
         }
         self.purchase_tax = self.env["account.tax"].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
@@ -55,14 +56,20 @@ class TestInvoiceImport(TransactionCase):
                 "account": self.expense_account,
                 "taxes": self.purchase_tax,
             },
-            {"invoice_line_method": "1line_static_product", "product": self.product,},
+            {"invoice_line_method": "1line_static_product", "product": self.product},
             {
                 "invoice_line_method": "nline_no_product",
                 "account": self.expense_account,
             },
-            {"invoice_line_method": "nline_static_product", "product": self.product,},
-            {"invoice_line_method": "nline_auto_product",},
+            {"invoice_line_method": "nline_static_product", "product": self.product},
+            {"invoice_line_method": "nline_auto_product"},
         ]
+
+        # Define partners as supplier and customer
+        # Wood Corner
+        self.env.ref("base.res_partner_1").supplier_rank = 1
+        # Deco Addict
+        self.env.ref("base.res_partner_2").customer_rank = 1
 
     def test_import_in_invoice(self):
         parsed_inv = {
@@ -74,7 +81,7 @@ class TestInvoiceImport(TransactionCase):
             "date_due": "2017-08-31",
             "date_start": "2017-08-01",
             "date_end": "2017-08-31",
-            "partner": {"name": "Wood Corner",},
+            "partner": {"name": "Wood Corner"},
             "description": "New hi-tech gadget",
             "lines": [
                 {
@@ -100,7 +107,7 @@ class TestInvoiceImport(TransactionCase):
         parsed_inv = {
             "type": "out_invoice",
             "date_invoice": "2017-08-16",
-            "partner": {"name": "Deco Addict",},
+            "partner": {"name": "Deco Addict"},
             "lines": [
                 {
                     "product": {"code": "AII-TEST-PRODUCT"},
