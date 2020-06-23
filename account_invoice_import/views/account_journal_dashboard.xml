@@ -9,13 +9,14 @@
         <field name="model">account.journal</field>
         <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view" />
         <field name="arch" type="xml">
-            <button
-                type="action"
-                name="%(account.account_invoice_import_wizard_action)d"
-                position="attributes"
-            >
-                <attribute name="name">%(account_invoice_import_action)d</attribute>
-            </button>
+            <!--TODO-->
+            <!--<button-->
+                <!--type="action"-->
+                <!--name="%(account.account_invoice_import_wizard_action)d"-->
+                <!--position="attributes"-->
+            <!-->-->
+                <!--<attribute name="name">%(account_invoice_import_action)d</attribute>-->
+            <!--</button>-->
         </field>
     </record>
 </odoo>
