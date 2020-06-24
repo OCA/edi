@@ -531,6 +531,12 @@ class AccountInvoiceImport(models.TransientModel):
         """Hook to change the method of retrieval for the invoice data"""
         return self.parse_invoice(self.invoice_file, self.invoice_filename)
 
+    def _hook_no_partner_found(self, partner_dict):
+        """Hook designed to add an action when no partner is found
+        For instance to propose to create the partner based on the partner_dict.
+        """
+        return False
+
     def import_invoice(self):
         """Method called by the button of the wizard
         (import step AND config step)"""
@@ -543,7 +549,18 @@ class AccountInvoiceImport(models.TransientModel):
             self.env.context.get("force_company") or self.env.user.company_id.id
         )
         parsed_inv = self.get_parsed_invoice()
-        partner = bdio._match_partner(parsed_inv["partner"], parsed_inv["chatter_msg"])
+        if not self.partner_id:
+            try:
+                partner = bdio._match_partner(
+                    parsed_inv["partner"], parsed_inv["chatter_msg"]
+                )
+            except UserError as e:
+                action = self._hook_no_partner_found(parsed_inv["partner"])
+                if action:
+                    return action
+                raise e
+        else:
+            partner = self.partner_id
         partner = partner.commercial_partner_id
         currency = bdio._match_currency(
             parsed_inv.get("currency"), parsed_inv["chatter_msg"]
