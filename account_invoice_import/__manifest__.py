@@ -22,7 +22,7 @@
         "views/res_config_settings.xml",
         "wizard/account_invoice_import_view.xml",
         "views/account_invoice.xml",
-        # TODO "views/account_journal_dashboard.xml",
+        "views/account_journal_dashboard.xml",
         "views/partner.xml",
     ],
     "images": ["images/sshot-wizard1.png"],
