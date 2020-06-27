@@ -89,6 +89,14 @@ class AccountInvoiceImportConfig(models.Model):
         elif self.invoice_line_method != "1line_no_product":
             self.tax_ids = [(6, 0, [])]
 
+    @api.onchange("partner_id")
+    def partner_id_change(self):
+        # if available get proporty
+        if self.invoice_line_method == "1line_no_product" and self.account_id:
+            self.tax_ids = [(6, 0, self.account_id.tax_ids.ids)]
+        elif self.invoice_line_method != "1line_no_product":
+            self.tax_ids = [(6, 0, [])]
+
     def convert_to_import_config(self):
         self.ensure_one()
         vals = {

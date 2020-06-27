@@ -107,7 +107,7 @@ class TestInvoiceImport(TransactionCase):
         parsed_inv = {
             "type": "out_invoice",
             "date_invoice": "2017-08-16",
-            "partner": {"name": "Deco Addict",},
+            "partner": {"name": "Deco Addict"},
             "lines": [
                 {
                     "product": {"code": "AII-TEST-PRODUCT"},
