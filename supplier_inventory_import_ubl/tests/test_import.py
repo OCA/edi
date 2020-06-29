@@ -50,6 +50,16 @@ class TestImport(TransactionCase):
         with self.assertRaises(UserError):
             wizard.process_document()
 
+    def test_same_product(self):
+        wizard = self.env["inventory.ubl.helper"]._create_inventory_transient(
+            "same_product"
+        )
+        wizard.process_document()
+        prd = self.env.ref("product.product_product_23")
+        self.assertEqual(
+            prd.supplier_stock_info and prd.supplier_stock_info[:4], "Wood")
+        self.assertEqual(prd.supplier_stock, 17)
+
     def test_main(self):
         self.env["inventory.ubl.helper"]._import_main_xml_file_when_demo_and_test()
         supplier = self.env.ref("supplier_inventory_import_ubl.res_partner_1")

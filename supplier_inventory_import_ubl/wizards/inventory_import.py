@@ -118,7 +118,15 @@ class InventoryUblImport(models.TransientModel):
 
         # extract stock from provided data in file
         def _populate_stock_by_code(prd_lines, key):
-            return {x[key]: float(x["stock"]) for x in prd_lines if x[key]}
+            """ Some products may appear several times in report
+                because of different lot or location
+                then we sum quantities
+            """
+            stk = defaultdict(float)
+            for line in prd_lines:
+                if line[key]:
+                    stk[line[key]] += float(line["stock"])
+            return stk
 
         # example {'sup_code': {'UN': 7.0, 'MYCD': 15.0, 'BIN4U': 10.0}, }
         stock_by = OrderedDict()
