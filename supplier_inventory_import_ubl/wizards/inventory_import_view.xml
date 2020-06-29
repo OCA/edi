@@ -37,7 +37,7 @@
         <field name="name">UBL Inventory Report</field>
         <field
                 name="parent_id"
-                ref="purchase.menu_procurement_management_product"
+                ref="stock.menu_stock_inventory_control"
             />
         <field name="action" ref="inventory_ubl_import_action" />
         <field name="sequence" eval="99" />
