@@ -105,7 +105,7 @@ msgid "Information updated by the last supplier inventory report (UBL Edi)"
 msgstr ""
 
 #. module: supplier_inventory_import_ubl
-#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:137
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:145
 #, python-format
 msgid "Internal Reference"
 msgstr ""
@@ -160,7 +160,7 @@ msgid "Link File to Supplier"
 msgstr ""
 
 #. module: supplier_inventory_import_ubl
-#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:140
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:148
 #, python-format
 msgid "No matching product for this file '%(file)s'\n"
 "Check if you have product relations with this supplier '%(supp)s' (procurement tab in product screen)\n"
@@ -170,7 +170,7 @@ msgid "No matching product for this file '%(file)s'\n"
 msgstr ""
 
 #. module: supplier_inventory_import_ubl
-#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:130
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:138
 #, python-format
 msgid "No valid product reference int this file"
 msgstr ""
@@ -234,7 +234,7 @@ msgid "Supplier Stock Info"
 msgstr ""
 
 #. module: supplier_inventory_import_ubl
-#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:347
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:355
 #, python-format
 msgid "These product codes %s have no matching code in ERPunmatch_codes"
 msgstr ""
@@ -261,13 +261,13 @@ msgid "UBL Inventory Report import"
 msgstr ""
 
 #. module: supplier_inventory_import_ubl
-#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:370
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:378
 #, python-format
 msgid "Updated '%s' vendor stock"
 msgstr ""
 
 #. module: supplier_inventory_import_ubl
-#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:382
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:390
 #, python-format
 msgid "Updated '%s' vendor stock on product"
 msgstr ""
@@ -283,7 +283,7 @@ msgid "Vendor stock quantity available"
 msgstr ""
 
 #. module: supplier_inventory_import_ubl
-#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:136
+#: code:addons/supplier_inventory_import_ubl/wizards/inventory_import.py:144
 #, python-format
 msgid "supplier code"
 msgstr ""
