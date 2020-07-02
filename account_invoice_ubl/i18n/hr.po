@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2019-11-14 16:34+0000\n"
+"PO-Revision-Date: 2020-07-02 14:19+0000\n"
 "Last-Translator: Bole <bole@dajmi5.com>\n"
 "Language-Team: none\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.8\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.10\n"
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_res_company
@@ -36,7 +36,7 @@ msgstr "Pridruži PDF u UBL XML datuteku"
 #. module: account_invoice_ubl
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "Factur-X (CII)"
-msgstr ""
+msgstr "Factur-X (CII)"
 
 #. module: account_invoice_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.invoice_form
@@ -52,6 +52,10 @@ msgid ""
 "to be compliant with the e-fff standard used in Belgium, you should activate "
 "this option."
 msgstr ""
+"Ako je uključeno, samostalnai UBL-XML datoteka će sadržavati PDF ispis "
+"računa, u base64 kodiranom obliku unutar bloka "
+"'AdditionalDocumentReference'. Primjerice ako želite biti kompatabilni sa e-"
+"fff standardom korištenim u Belgiji, trebali bi aktivirati ovu opciju."
 
 #. module: account_invoice_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_account_config_settings
@@ -76,9 +80,9 @@ msgstr "Akcija izvještaja"
 #. module: account_invoice_ubl
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "Universal Business Language (UBL)"
-msgstr "Universal Business Language (UBL)"
+msgstr "Univerzalni poslovni jezik (UBL)"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
-msgstr "XML format ugnježđen u PDF datoteku"
+msgstr "XML format ugrađen u PDF datoteku"
