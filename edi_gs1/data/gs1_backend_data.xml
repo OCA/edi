@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="default_gs1_backend_type" model="edi.backend.type">
+        <field name="name">default_gs1_backend_type</field>
+        <field name="code">gs1</field>
+    </record>
+    <record id="default_gs1_backend" model="edi.backend">
+        <field name="name">GS1</field>
+        <field name="backend_type_id" ref="default_gs1_backend_type" />
+        <field name="storage_id" ref="storage_backend.default_storage_backend" />
+    </record>
+</odoo>
