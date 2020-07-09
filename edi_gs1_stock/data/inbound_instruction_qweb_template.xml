@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template
+        id="edi_exchange_inbound_instruction"
+        name="Render GS1 Inbound Instruction"
+    >
+        <warehousing_inbound_instruction:warehousingInboundInstructionMessage
+            xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+            xmlns:warehousing_inbound_instruction="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
+            <t
+                t-raw="render_edi_template(exchange_record, 'gs1.BusinessHeader', sender=sender, receiver=receiver)"
+            />
+            <t t-set="purchase_order" t-value="record.purchase_id" />
+            <warehousingInboundInstruction>
+                <creationDateTime>2020-07-09T10:30:00</creationDateTime>
+                <documentStatusCode>ORIGINAL</documentStatusCode>
+                <documentActionCode>ADD</documentActionCode>
+                <warehousingInboundInstructionIdentification>
+                    <entityIdentification
+                        t-esc="record.name"
+                    >WH/IN/00014</entityIdentification>
+                </warehousingInboundInstructionIdentification>
+                <logisticServicesBuyer>
+                    <gln t-esc="ls_buyer.gln_code" />
+                </logisticServicesBuyer>
+                <logisticServicesSeller>
+                    <gln t-esc="ls_seller.gln_code" />
+                </logisticServicesSeller>
+                <warehousingInboundInstructionShipment>
+                    <shipmentIdentification>
+                        <additionalShipmentIdentification
+                            additionalShipmentIdentificationTypeCode="GOODS_RECEIVER_ASSIGNED"
+                            t-esc="record.name"
+                        >WH/IN/00014</additionalShipmentIdentification>
+                    </shipmentIdentification>
+                    <!-- TODO: get it from info.warehousingInboundInstructionShipment.shipper -->
+                    <shipper>
+                        <gln t-esc="shipper.gln_code">0000000000044</gln>
+                        <additionalPartyIdentification
+                            additionalPartyIdentificationTypeCode="BUYER_ASSIGNED_IDENTIFIER_FOR_A_PARTY"
+                            t-esc="shipper.name"
+                        >CARRIER#1</additionalPartyIdentification>
+                    </shipper>
+                    <receiver>
+                        <gln t-esc="receiver.gln_code">0000000000001</gln>
+                    </receiver>
+                    <packageTotal t-if="info.packageTotal">
+                        <packageTypeCode
+                            t-esc="info.packageTotal.packageTypeCode"
+                        >AF</packageTypeCode>
+                        <totalPackageQuantity
+                            t-esc="info.packageTotal.totalPackageQuantity"
+                        >2</totalPackageQuantity>
+                        <totalGrossWeight
+                            t-att="info.packageTotal.totalGrossWeight.attrs"
+                            t-esc="info.packageTotal.totalGrossWeight.value"
+                        >6.0</totalGrossWeight>
+                    </packageTotal>
+                    <warehousingReceiptTypeCode
+                    >REGULAR_RECEIPT</warehousingReceiptTypeCode>
+                    <plannedReceipt>
+                        <logisticEventDateTime>
+                            <date>2020-07-12</date>
+                        </logisticEventDateTime>
+                    </plannedReceipt>
+                    <warehousingInboundInstructionShipmentItem>
+                        <lineItemNumber>1</lineItemNumber>
+                        <transactionalTradeItem>
+                            <gtin>11111111111111</gtin>
+                        </transactionalTradeItem>
+                        <plannedReceiptQuantity
+                            measurementUnitCode="KGM"
+                        >300.0</plannedReceiptQuantity>
+                    </warehousingInboundInstructionShipmentItem>
+                    <warehousingInboundInstructionShipmentItem>
+                        <lineItemNumber>2</lineItemNumber>
+                        <transactionalTradeItem>
+                            <gtin>22222222222222</gtin>
+                        </transactionalTradeItem>
+                        <plannedReceiptQuantity
+                            measurementUnitCode="KGM"
+                        >200.0</plannedReceiptQuantity>
+                    </warehousingInboundInstructionShipmentItem>
+                    <warehousingInboundInstructionShipmentItem>
+                        <lineItemNumber>3</lineItemNumber>
+                        <transactionalTradeItem>
+                            <gtin>33333333333333</gtin>
+                        </transactionalTradeItem>
+                        <plannedReceiptQuantity
+                            measurementUnitCode="KGM"
+                        >100.0</plannedReceiptQuantity>
+                    </warehousingInboundInstructionShipmentItem>
+                </warehousingInboundInstructionShipment>
+            </warehousingInboundInstruction>
+        </warehousing_inbound_instruction:warehousingInboundInstructionMessage>
+    </template>
+</odoo>

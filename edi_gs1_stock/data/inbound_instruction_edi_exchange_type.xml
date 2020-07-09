@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_type_inbound_instruction" model="edi.exchange.type">
+        <field name="backend_type_id" ref="base_gs1.default_gs1_backend_type" />
+        <field name="name">GS1 Inbound Instruction</field>
+        <field name="code">gs1.warehousingInboundInstructionMessage</field>
+        <field name="direction">output</field>
+        <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <field name="ack_needed" eval="True" />
+        <field name="ack_code" />
+        <field name="ack_filename_pattern">{type.exchange_filename_pattern}.ack</field>
+        <field name="ack_file_ext">xml</field>
+    </record>
+</odoo>
