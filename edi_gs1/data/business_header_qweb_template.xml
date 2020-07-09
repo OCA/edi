@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template
+        id="edi_exchange_business_header_contact"
+        name="Render GS1 Business header contact"
+    >
+        <!--
+            `nswrapper` is a trick to be able to import these templates
+            as XML because a namespace is mandatory for element prefixes.
+            `nswrapper` elements are purged afterwards in post-processing.
+         -->
+        <nswrapper
+            xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
+            <sh:Identifier Authority="GS1" />
+            <sh:ContactInformation>
+                <sh:Contact t-esc="partner.name">John Doe</sh:Contact>
+                <sh:EmailAddress
+                    t-esc="partner.email"
+                >John_Doe@purchasing.XYZretailer.com</sh:EmailAddress>
+                <sh:TelephoneNumber
+                    t-esc="partner.phone"
+                >+1-212-555-2122</sh:TelephoneNumber>
+                <sh:ContactTypeIdentifier
+                    t-esc="contact_indentifier"
+                >Buyer</sh:ContactTypeIdentifier>
+            </sh:ContactInformation>
+        </nswrapper>
+    </template>
+    <template id="edi_exchange_business_header" name="Render GS1 Business header">
+        <nswrapper
+            xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
+            <sh:StandardBusinessDocumentHeader>
+                <sh:HeaderVersion>1.0</sh:HeaderVersion>
+                <sh:Sender>
+                    <t t-call="edi_gs1.edi_exchange_business_header_contact">
+                        <t t-set="partner" t-value="sender" />
+                        <t t-set="contact_indentifier" t-value="'Buyer'" />
+                    </t>
+                </sh:Sender>
+                <sh:Receiver>
+                    <t t-call="edi_gs1.edi_exchange_business_header_contact">
+                        <t t-set="partner" t-value="receiver" />
+                        <t t-set="contact_indentifier" t-value="'Seller'" />
+                    </t>
+                </sh:Receiver>
+                <sh:DocumentIdentification>
+                    <sh:Standard>GS1</sh:Standard>
+                    <sh:TypeVersion>3.4</sh:TypeVersion>
+                    <sh:InstanceIdentifier
+                        t-esc="instance_identifier"
+                    >100002</sh:InstanceIdentifier>
+                    <sh:Type />
+                    <sh:MultipleType>false</sh:MultipleType>
+                    <sh:CreationDateAndTime
+                        t-esc="utc_now()"
+                    >2006-01-10T12:00:01.000-05:00</sh:CreationDateAndTime>
+                </sh:DocumentIdentification>
+            </sh:StandardBusinessDocumentHeader>
+        </nswrapper>
+    </template>
+</odoo>

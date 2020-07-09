@@ -1,0 +1,13 @@
+Inbound Instruction
+
+- [x] allow skipping keys / elements by returning none
+- [x] check UOM code handling
+- [x] finish mapping of what we know
+- [] draft RF-EFR module w/ tests
+- [] allow export from PO
+- [] handle state of export
+- [] use storage backend to store it
+- [] add lookup of acknowledge message
+- [] add new field code to UOM
+- [] draft send ack
+- [] draft Outbound Notification parse
