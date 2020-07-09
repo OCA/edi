@@ -1,0 +1,103 @@
+<warehousing_inbound_instruction:warehousingInboundInstructionMessage
+    xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+    xmlns:warehousing_inbound_instruction="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+    <sh:StandardBusinessDocumentHeader>
+        <sh:HeaderVersion>1.0</sh:HeaderVersion>
+        <sh:Sender>
+            <sh:Identifier Authority="GS1" />
+            <sh:ContactInformation>
+                <sh:Contact>My Company (San Francisco)</sh:Contact>
+                <sh:EmailAddress>info@yourcompany.example.com</sh:EmailAddress>
+                <sh:TelephoneNumber>+1 (650) 691-3277 </sh:TelephoneNumber>
+                <sh:ContactTypeIdentifier>Buyer</sh:ContactTypeIdentifier>
+            </sh:ContactInformation>
+        </sh:Sender>
+        <sh:Receiver>
+            <sh:Identifier Authority="GS1" />
+            <sh:ContactInformation>
+                <sh:Contact>Gemini Furniture</sh:Contact>
+                <sh:EmailAddress>gemini.furniture39@example.com</sh:EmailAddress>
+                <sh:TelephoneNumber>(941)-284-4875</sh:TelephoneNumber>
+                <sh:ContactTypeIdentifier>Seller</sh:ContactTypeIdentifier>
+            </sh:ContactInformation>
+        </sh:Receiver>
+        <sh:DocumentIdentification>
+            <sh:Standard>GS1</sh:Standard>
+            <sh:TypeVersion>3.4</sh:TypeVersion>
+            <sh:InstanceIdentifier>WH-IN-TEST-01</sh:InstanceIdentifier>
+            <sh:Type />
+            <sh:MultipleType>false</sh:MultipleType>
+            <sh:CreationDateAndTime>2020-07-09T10:30:00</sh:CreationDateAndTime>
+        </sh:DocumentIdentification>
+    </sh:StandardBusinessDocumentHeader>
+    <warehousingInboundInstruction>
+        <creationDateTime>2020-07-09T10:30:00</creationDateTime>
+        <documentStatusCode>ORIGINAL</documentStatusCode>
+        <documentActionCode>ADD</documentActionCode>
+        <warehousingInboundInstructionIdentification>
+            <entityIdentification>WH/IN/00014</entityIdentification>
+        </warehousingInboundInstructionIdentification>
+        <logisticServicesBuyer>
+            <gln>0000000000002</gln>
+        </logisticServicesBuyer>
+        <logisticServicesSeller>
+            <gln>0000000000001</gln>
+        </logisticServicesSeller>
+        <warehousingInboundInstructionShipment>
+            <shipmentIdentification>
+                <additionalShipmentIdentification
+                    additionalShipmentIdentificationTypeCode="GOODS_RECEIVER_ASSIGNED"
+                >WH/IN/00014</additionalShipmentIdentification>
+            </shipmentIdentification>
+            <shipper>
+                <gln>0000000000044</gln>
+                <additionalPartyIdentification
+                    additionalPartyIdentificationTypeCode="BUYER_ASSIGNED_IDENTIFIER_FOR_A_PARTY"
+                >CARRIER#1</additionalPartyIdentification>
+            </shipper>
+            <receiver>
+                <gln>0000000000001</gln>
+            </receiver>
+            <packageTotal>
+                <packageTypeCode>AF</packageTypeCode>
+                <totalPackageQuantity>2</totalPackageQuantity>
+                <totalGrossWeight measurementUnitCode="KGM">6.0</totalGrossWeight>
+            </packageTotal>
+            <warehousingReceiptTypeCode>REGULAR_RECEIPT</warehousingReceiptTypeCode>
+            <plannedReceipt>
+                <logisticEventDateTime>
+                    <date>2020-07-12</date>
+                </logisticEventDateTime>
+            </plannedReceipt>
+            <warehousingInboundInstructionShipmentItem>
+                <lineItemNumber>1</lineItemNumber>
+                <transactionalTradeItem>
+                    <gtin>11111111111111</gtin>
+                </transactionalTradeItem>
+                <plannedReceiptQuantity
+                    measurementUnitCode="KGM"
+                >300.0</plannedReceiptQuantity>
+            </warehousingInboundInstructionShipmentItem>
+            <warehousingInboundInstructionShipmentItem>
+                <lineItemNumber>2</lineItemNumber>
+                <transactionalTradeItem>
+                    <gtin>22222222222222</gtin>
+                </transactionalTradeItem>
+                <plannedReceiptQuantity
+                    measurementUnitCode="KGM"
+                >200.0</plannedReceiptQuantity>
+            </warehousingInboundInstructionShipmentItem>
+            <warehousingInboundInstructionShipmentItem>
+                <lineItemNumber>3</lineItemNumber>
+                <transactionalTradeItem>
+                    <gtin>33333333333333</gtin>
+                </transactionalTradeItem>
+                <plannedReceiptQuantity
+                    measurementUnitCode="KGM"
+                >100.0</plannedReceiptQuantity>
+            </warehousingInboundInstructionShipmentItem>
+        </warehousingInboundInstructionShipment>
+    </warehousingInboundInstruction>
+</warehousing_inbound_instruction:warehousingInboundInstructionMessage>

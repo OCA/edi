@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<warehousing_inbound_instruction:warehousingInboundInstructionMessage
+    xmlns:warehousing_inbound_instruction="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3"
+    xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3 ../Schemas/gs1/ecom/WarehousingInboundInstruction.xsd"
+>
+    <sh:StandardBusinessDocumentHeader>
+        <sh:HeaderVersion>1.0</sh:HeaderVersion>
+        <sh:Sender>
+            <sh:Identifier Authority="GS1" />
+            <sh:ContactInformation>
+                <sh:Contact>John Doe</sh:Contact>
+                <sh:EmailAddress>John_Doe@purchasing.XYZretailer.com</sh:EmailAddress>
+                <sh:FaxNumber>+1-212-555-1213</sh:FaxNumber>
+                <sh:TelephoneNumber>+1-212-555-2122</sh:TelephoneNumber>
+                <sh:ContactTypeIdentifier>Buyer</sh:ContactTypeIdentifier>
+            </sh:ContactInformation>
+        </sh:Sender>
+        <sh:Receiver>
+            <sh:Identifier Authority="GS1" />
+            <sh:ContactInformation>
+                <sh:Contact>Mary Smith</sh:Contact>
+                <sh:EmailAddress>Mary_Smith@widgets.com</sh:EmailAddress>
+                <sh:FaxNumber>+1-312-555-1214</sh:FaxNumber>
+                <sh:TelephoneNumber>+1-312-555-2125</sh:TelephoneNumber>
+                <sh:ContactTypeIdentifier>Seller</sh:ContactTypeIdentifier>
+            </sh:ContactInformation>
+        </sh:Receiver>
+        <sh:DocumentIdentification>
+            <sh:Standard>GS1</sh:Standard>
+            <sh:TypeVersion>3.4</sh:TypeVersion>
+            <sh:InstanceIdentifier>100002</sh:InstanceIdentifier>
+            <sh:Type />
+            <sh:MultipleType>false</sh:MultipleType>
+            <sh:CreationDateAndTime
+            >2006-01-10T12:00:01.000-05:00</sh:CreationDateAndTime>
+        </sh:DocumentIdentification>
+    </sh:StandardBusinessDocumentHeader>
+    <warehousingInboundInstruction>
+        <creationDateTime>2012-07-11T12:15:00.000-05:00</creationDateTime>
+        <documentStatusCode>ORIGINAL</documentStatusCode>
+        <documentActionCode>ADD</documentActionCode>
+        <warehousingInboundInstructionIdentification>
+            <entityIdentification>INSREC00123</entityIdentification>
+        </warehousingInboundInstructionIdentification>
+        <logisticServicesBuyer>
+            <gln>2222222000004</gln>
+        </logisticServicesBuyer>
+        <logisticServicesSeller>
+            <gln>3333333000001</gln>
+        </logisticServicesSeller>
+        <warehousingInboundInstructionShipment>
+            <shipmentIdentification>
+                <gsin>11111110000834053</gsin>
+            </shipmentIdentification>
+            <shipper>
+                <gln>1111111000007</gln>
+            </shipper>
+            <receiver>
+                <gln>3333333000018</gln>
+            </receiver>
+            <logisticUnit>
+                <sscc>311111110000123455</sscc>
+                <packageTypeCode>AF</packageTypeCode>
+            </logisticUnit>
+            <logisticUnit>
+                <sscc>311111110000123554</sscc>
+                <packageTypeCode>AF</packageTypeCode>
+            </logisticUnit>
+            <packageTotal>
+                <packageTypeCode>AF</packageTypeCode>
+                <totalPackageQuantity>2</totalPackageQuantity>
+            </packageTotal>
+            <warehousingReceiptTypeCode>PRIORITY_RECEIPT</warehousingReceiptTypeCode>
+            <plannedReceipt>
+                <logisticEventPeriod>
+                    <beginDate>2012-07-12</beginDate>
+                    <beginTime>10:00:00</beginTime>
+                    <endDate>2012-07-12</endDate>
+                    <endTime>11:00:00</endTime>
+                </logisticEventPeriod>
+            </plannedReceipt>
+            <carrierPickUpDropOffDetails>
+                <transportResponsiblePerson>
+                    <personName>LENMAN</personName>
+                    <identityDocument>
+                        <identityDocumentNumber>12345</identityDocumentNumber>
+                        <identityDocumentType>DRIVERS_LICENSE</identityDocumentType>
+                    </identityDocument>
+                </transportResponsiblePerson>
+                <transportMeans>
+                    <transportMeansType>31</transportMeansType>
+                    <transportMeansID>11-BB-AA</transportMeansID>
+                </transportMeans>
+            </carrierPickUpDropOffDetails>
+            <warehousingInboundInstructionShipmentItem>
+                <lineItemNumber>1</lineItemNumber>
+                <transactionalTradeItem>
+                    <gtin>02222222003333</gtin>
+                </transactionalTradeItem>
+                <logisticUnit>
+                    <sscc>311111110000123455</sscc>
+                    <tradeItemQuantity>20</tradeItemQuantity>
+                </logisticUnit>
+                <logisticUnit>
+                    <sscc>311111110000123554</sscc>
+                    <tradeItemQuantity>20</tradeItemQuantity>
+                </logisticUnit>
+                <plannedReceiptQuantity>40</plannedReceiptQuantity>
+            </warehousingInboundInstructionShipmentItem>
+        </warehousingInboundInstructionShipment>
+    </warehousingInboundInstruction>
+</warehousing_inbound_instruction:warehousingInboundInstructionMessage>
