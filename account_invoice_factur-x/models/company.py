@@ -25,9 +25,12 @@ class ResCompany(models.Model):
         ('381', 'Type 381 with positive amounts'),
         ], string='Factur-X Refund Type', default='381')
     facturx_logo = fields.Binary(
-        compute='compute_facturx_logo', string='Factur-X Logo',
+        compute='_compute_facturx_logo', string='Factur-X Logo',
         help='Logo to include in the visible part of Factur-X invoices',
         readonly=True)
+
+    def _compute_facturx_logo(self):
+        self.compute_facturx_logo()
 
     def compute_facturx_logo(self):
         level2logo = {

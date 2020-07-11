@@ -939,5 +939,8 @@ class BusinessDocumentImport(models.AbstractModel):
                 msg = _('<b>Notes in file %s:</b>') % doc_filename
             else:
                 msg = _('<b>Notes in imported document:</b>')
+            # we remove alert because string is translated
+            # but not quite to the right place, but it doesn't matter
+            # pylint: disable=translation-required
             record.message_post(
                 '%s %s' % (msg, parsed_dict['note']))
