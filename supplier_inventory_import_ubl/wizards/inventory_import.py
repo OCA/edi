@@ -246,7 +246,7 @@ class InventoryUblImport(models.TransientModel):
             if _ckeck_key_in_stock_by("def_code"):
                 prd_by_def_code[row["def_code"]].append(row["prd_id"])
             if _ckeck_key_in_stock_by("barcode"):
-                prd_by_barcode[row["prd_by_barcode"]].append(row["prd_id"])
+                prd_by_barcode[row["barcode"]].append(row["prd_id"])
             raw_prd_by_tmpl[row["tmpl_id"]].append(row["prd_id"])
         prd2update = []
         prd_by_tmpl = defaultdict(set)
@@ -263,27 +263,32 @@ class InventoryUblImport(models.TransientModel):
                 row["def_code"] or row["sup_code"] or row["barcode"]
             ):
                 stk_by_product[row["prd_id"]] = (
-                    stock_by["def_code"].get(row["def_code"])
+                    stock_by.get("def_code")
+                    and stock_by["def_code"].get(row["def_code"])
                     or stock_by["sup_code"].get(row["sup_code"])
                     or stock_by["barcode"].get(row["barcode"])
                     or False
                 )
-        product_ids = []
+
+        def _find_product(prd_by_, key):
+            prds = self.env["product.product"].browse()
+            for key in prd_by_:
+                prds |= self.env["product.product"].browse(
+                    [
+                        x
+                        for x in set(prd_by_[key])
+                        if x in prd2update and x in stk_by_product
+                        # ids in prd2update have 1 product by product_tmpl
+                    ]
+                )
+            return prds
         # Update products
-        for def_code in prd_by_def_code:
-            products = self.env["product.product"].browse(
-                [
-                    x
-                    for x in set(prd_by_def_code[def_code])
-                    if x in prd2update and x in stk_by_product
-                    # ids in prd2update have 1 product by product_tmpl
-                ]
-            )
-            products._update_supplier_stock_from_ubl_inventory(
-                supplier, stk_by_product, inventory_date
-            )
-            product_ids.extend(products.ids)
-        return product_ids
+        products = _find_product(prd_by_def_code, "def_code")
+        products |= _find_product(prd_by_barcode, "barcode")
+        products._update_supplier_stock_from_ubl_inventory(
+            supplier, stk_by_product, inventory_date
+        )
+        return products.ids
 
     def _extract_data_and_update_supplierinfo(
         self, data, stock_by, supplier, inventory_date
@@ -310,7 +315,8 @@ class InventoryUblImport(models.TransientModel):
                 row["def_code"] or row["sup_code"] or row["barcode"]
             ):
                 stk_by_product[row["prd_id"]] = (
-                    stock_by["def_code"].get(row["def_code"])
+                    stock_by.get("def_code")
+                    and stock_by["def_code"].get(row["def_code"])
                     or stock_by["sup_code"].get(row["sup_code"])
                     or stock_by["barcode"].get(row["barcode"])
                     or False
