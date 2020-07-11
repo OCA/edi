@@ -57,27 +57,38 @@ class InventoryUblImport(models.TransientModel):
         ns = xml_root.nsmap
         ns["main"] = ns.pop(None)
         root = "/main:InventoryReport"
-        date_xpath = xml_root.xpath(
-            "%s/cac:InventoryPeriod/cbc:StartDate" % root, namespaces=ns
+        end_date_xp = xml_root.xpath(
+            "%s/cac:InventoryPeriod/cbc:EndDate" % root, namespaces=ns
         )
-        supplier_xpath = xml_root.xpath(
+        issue_date_xp = xml_root.xpath("%s/cbc:IssueDate" % root, namespaces=ns)
+        supplier_xp = xml_root.xpath(
             "%s/cac:InventoryReportingParty" % root, namespaces=ns
         )
         # supplier Cardinality:minOccurs="1" maxOccurs="1"
-        supplier_dict = self.ubl_parse_party(supplier_xpath[0], ns)
-        customer_xpath = xml_root.xpath(
+        supplier_dict = self.ubl_parse_party(supplier_xp[0], ns)
+        customer_xp = xml_root.xpath(
             "%s/cac:RetailerCustomerParty/cac:Party" % root, namespaces=ns
         )
         # customer Cardinality:minOccurs="1" maxOccurs="1"
-        customer_dict = self.ubl_parse_party(customer_xpath[0], ns)
-        lines_xpath = xml_root.xpath("%s/cac:InventoryReportLine" % root, namespaces=ns)
+        customer_dict = self.ubl_parse_party(customer_xp[0], ns)
+        lines_xp = xml_root.xpath("%s/cac:InventoryReportLine" % root, namespaces=ns)
         res_lines = []
-        for line in lines_xpath:
+        for line in lines_xp:
             res_lines.append(self._ubl_parse_inventory_line(line, ns))
+        inventory_date = (
+            len(end_date_xp)
+            and end_date_xp[0].text
+            or len(issue_date_xp)
+            and issue_date_xp[0].text
+        )
+        if not inventory_date:
+            raise UserError(
+                _("Missing InventoryPeriod/EndDate or IssueDate in this report")
+            )
         return {
             "customer": customer_dict,
             "supplier": supplier_dict,
-            "date": len(date_xpath) and date_xpath[0].text,
+            "date": inventory_date,
             "product_lines": res_lines,
         }
 
