@@ -4,7 +4,7 @@
 
 {
     'name': 'Purchase Order Import',
-    'version': '10.0.1.0.0',
+    'version': '10.0.2.0.0',
     'category': 'Purchase Management',
     'license': 'AGPL-3',
     'summary': 'Update RFQ via the import of quotations from suppliers',
