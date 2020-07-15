@@ -18,3 +18,20 @@ msgstr ""
 msgid "Purchase Order Import from Files"
 msgstr ""
 
+#. module: purchase_order_import_ubl
+#: model:ir.model,name:purchase_order_import_ubl.model_order_response_import
+msgid "Purchase Order Response Import from Files"
+msgstr ""
+
+#. module: purchase_order_import_ubl
+#: code:addons/purchase_order_import_ubl/wizard/order_response_import.py:60
+#, python-format
+msgid "Unknown response code found '%s'"
+msgstr ""
+
+#. module: purchase_order_import_ubl
+#: code:addons/purchase_order_import_ubl/wizard/order_response_import.py:70
+#, python-format
+msgid "Unsupported line status code found '%s'"
+msgstr ""
+
