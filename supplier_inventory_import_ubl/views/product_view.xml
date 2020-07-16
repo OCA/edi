@@ -24,6 +24,10 @@
             <field name="pricelist_id" position="after">
                 <field name="supplier_stock_info" />
             </field>
+            <xpath expr="//filter[@name='consumable']" position="after">
+                <filter string="Supplier Out" name="supplier_out"
+                        domain="[('supplier_stock', '=', 0), ('supplier_stock_info', '!=', False)]"/>
+            </xpath>
         </field>
     </record>
 
