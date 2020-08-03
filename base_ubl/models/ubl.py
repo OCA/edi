@@ -376,7 +376,8 @@ class BaseUbl(models.AbstractModel):
             else:
                 taxes = product.supplier_taxes_id
             if taxes:
-                for tax in taxes:
+                for tax in taxes.filtered(
+                        lambda t: t.company_id == self.env.user.company_id):
                     self._ubl_add_tax_category(
                         tax, item, ns, node_name='ClassifiedTaxCategory',
                         version=version)
