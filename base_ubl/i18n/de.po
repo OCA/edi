@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* base_ubl
+# 	* base_ubl
 #
 msgid ""
 msgstr ""
@@ -38,13 +38,13 @@ msgid "Last Modified on"
 msgstr "Zuletzt geändert am"
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:422
+#: code:addons/base_ubl/models/ubl.py:423
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr "Es fehlt die UNECE-Steuerkategorie für die Steuer '%s'."
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:442
+#: code:addons/base_ubl/models/ubl.py:443
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
 msgstr "Es fehlt der UNECE-Steuertyp für die Steuer '%s'."
@@ -56,9 +56,12 @@ msgid "Missing UNECE code on unit of measure '%s'"
 msgstr "Es fehlt der UNECE-Code für die Mengeneinheit '%s'."
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:502
+#: code:addons/base_ubl/models/ubl.py:503
 #, python-format
-msgid "The UBL XML file is not valid against the official XML Schema Definition. The XML file and the full error have been written in the server logs. Here is the error, which may give you an idea on the cause of the problem : %s."
+msgid ""
+"The UBL XML file is not valid against the official XML Schema Definition. "
+"The XML file and the full error have been written in the server logs. Here "
+"is the error, which may give you an idea on the cause of the problem : %s."
 msgstr ""
 "Die UBL-XML-Datei entspricht nicht dem offiziellen XML-Schema. Die XML-Datei "
 "und die vollständige Fehlermeldung wurden in die Server-Logs geschrieben. "
