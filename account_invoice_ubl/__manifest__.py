@@ -15,6 +15,7 @@
         "account_payment_partner",
         "base_ubl_payment",
         "account_tax_unece",
+        "sale",
     ],
     "data": ["views/account_move.xml", "views/res_config_settings.xml"],
     "post_init_hook": "set_xml_format_in_pdf_invoice_to_ubl",
