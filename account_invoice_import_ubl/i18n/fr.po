@@ -19,48 +19,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: account_invoice_import_ubl
-#: model:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "(Universal Business Language, also known as"
 msgstr ""
 
 #. module: account_invoice_import_ubl
-#: model:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "), either as XML file or as PDF file with an UBL XML attachment."
 msgstr ""
 
 #. module: account_invoice_import_ubl
-#: model:account.tax,name:account_invoice_import_ubl.nl_vat_purchase_21
-msgid "Dutch VAT purchase 21.0%"
-msgstr ""
-
-#. module: account_invoice_import_ubl
-#: model:account.tax,name:account_invoice_import_ubl.nl_vat_purchase_6
-msgid "Dutch VAT purchase 6.0%"
-msgstr ""
-
-#. module: account_invoice_import_ubl
-#: model:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "ISO/IEC 19845"
 msgstr ""
 
 #. module: account_invoice_import_ubl
-#: model:account.tax,description:account_invoice_import_ubl.nl_vat_purchase_21
-msgid "NL-VAT-buy-21.0"
-msgstr ""
-
-#. module: account_invoice_import_ubl
-#: model:account.tax,description:account_invoice_import_ubl.nl_vat_purchase_6
-msgid "NL-VAT-buy-6.0"
-msgstr ""
-
-#. module: account_invoice_import_ubl
-#: code:addons/account_invoice_import_ubl/wizard/account_invoice_import.py:152
+#: code:addons/account_invoice_import_ubl/wizard/account_invoice_import.py:151
 #, python-format
 msgid "This UBL XML file is not an invoice/refund file (InvoiceTypeCode is %s"
 msgstr ""
 
 #. module: account_invoice_import_ubl
-#: model:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "UBL"
 msgstr ""
 
