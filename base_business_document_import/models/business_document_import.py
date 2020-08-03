@@ -71,12 +71,13 @@ class BusinessDocumentImport(models.AbstractModel):
         company_id = self._context.get("force_company") or self.env.user.company_id.id
         domain = ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
         if partner_type == "supplier":
-            domain += [("supplier_rank", ">", 0)]
+            order = "supplier_rank desc"
             partner_type_label = _("supplier")
         elif partner_type == "customer":
-            domain += [("customer_rank", ">", 0)]
+            order = "customer_rank desc"
             partner_type_label = _("customer")
         else:
+            order = ""
             partner_type_label = _("partner")
         country = False
         if partner_dict.get("country_code"):
@@ -111,7 +112,9 @@ class BusinessDocumentImport(models.AbstractModel):
         if partner_dict.get("vat"):
             vat = partner_dict["vat"].replace(" ", "").upper()
             partner = rpo.search(
-                domain + [("parent_id", "=", False), ("vat", "=", vat)], limit=1,
+                domain + [("parent_id", "=", False), ("vat", "=", vat)],
+                limit=1,
+                order=order,
             )
             if partner:
                 return partner
@@ -134,7 +137,9 @@ class BusinessDocumentImport(models.AbstractModel):
         email_domain = False
         if partner_dict.get("email") and "@" in partner_dict["email"]:
             partner = rpo.search(
-                domain + [("email", "=ilike", partner_dict["email"])], limit=1
+                domain + [("email", "=ilike", partner_dict["email"])],
+                limit=1,
+                order=order,
             )
             if partner:
                 return partner
@@ -150,14 +155,18 @@ class BusinessDocumentImport(models.AbstractModel):
         if website_domain or email_domain:
             partner_domain = website_domain or email_domain
             partner = rpo.search(
-                domain + [("website", "=ilike", "%" + partner_domain + "%")], limit=1
+                domain + [("website", "=ilike", "%" + partner_domain + "%")],
+                limit=1,
+                order=order,
             )
             # I can't search on email addresses with
             # email_domain because of the emails such as
             # @gmail.com, @yahoo.com that may match random partners
             if not partner and website_domain:
                 partner = rpo.search(
-                    domain + [("email", "=ilike", "%@" + website_domain)], limit=1
+                    domain + [("email", "=ilike", "%@" + website_domain)],
+                    limit=1,
+                    order=order,
                 )
             if partner:
                 chatter_msg.append(
@@ -169,12 +178,16 @@ class BusinessDocumentImport(models.AbstractModel):
                 )
                 return partner
         if partner_dict.get("ref"):
-            partner = rpo.search(domain + [("ref", "=", partner_dict["ref"])], limit=1)
+            partner = rpo.search(
+                domain + [("ref", "=", partner_dict["ref"])], limit=1, order=order
+            )
             if partner:
                 return partner
         if partner_dict.get("name"):
             partner = rpo.search(
-                domain + [("name", "=ilike", partner_dict["name"])], limit=1
+                domain + [("name", "=ilike", partner_dict["name"])],
+                limit=1,
+                order=order,
             )
             if partner:
                 return partner
