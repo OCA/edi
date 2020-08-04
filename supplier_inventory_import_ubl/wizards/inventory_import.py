@@ -274,10 +274,18 @@ class InventoryUblImport(models.TransientModel):
                 row["def_code"] or row["sup_code"] or row["barcode"]
             ):
                 stk_by_product[row["prd_id"]] = (
-                    stock_by.get("def_code")
-                    and stock_by["def_code"].get(row["def_code"])
-                    or stock_by["sup_code"].get(row["sup_code"])
-                    or stock_by["barcode"].get(row["barcode"])
+                    (
+                        stock_by.get("def_code")
+                        and stock_by["def_code"].get(row["def_code"])
+                    )
+                    or (
+                        stock_by.get("sup_code")
+                        and stock_by["sup_code"].get(row["sup_code"])
+                    )
+                    or (
+                        stock_by.get("barcode")
+                        and stock_by["barcode"].get(row["barcode"])
+                    )
                     or False
                 )
 
@@ -326,10 +334,18 @@ class InventoryUblImport(models.TransientModel):
                 row["def_code"] or row["sup_code"] or row["barcode"]
             ):
                 stk_by_product[row["prd_id"]] = (
-                    stock_by.get("def_code")
-                    and stock_by["def_code"].get(row["def_code"])
-                    or stock_by["sup_code"].get(row["sup_code"])
-                    or stock_by["barcode"].get(row["barcode"])
+                    (
+                        stock_by.get("def_code")
+                        and stock_by["def_code"].get(row["def_code"])
+                    )
+                    or (
+                        stock_by.get("sup_code")
+                        and stock_by["sup_code"].get(row["sup_code"])
+                    )
+                    or (
+                        stock_by.get("barcode")
+                        and stock_by["barcode"].get(row["barcode"])
+                    )
                     or False
                 )
         # extract implied writed ids of records
