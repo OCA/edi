@@ -45,7 +45,7 @@ class AccountMove(models.Model):
             order_id = order_id[0]
         order_ref = etree.SubElement(parent_node, ns["cac"] + "OrderReference")
         order_ref_orderid = etree.SubElement(order_ref, ns["cbc"] + "SalesOrderID")
-        order_ref_orderid.text = order_id.name
+        order_ref_orderid.text = order_id.name or ""
         customer_ref = order_id.client_order_ref
         if customer_ref:
             order_ref_id = etree.SubElement(order_ref, ns["cbc"] + "ID")
