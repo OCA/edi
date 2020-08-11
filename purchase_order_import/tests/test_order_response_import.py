@@ -2,9 +2,9 @@
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, _
-from odoo.exceptions import UserError
-from odoo.tests import SavepointCase
+from openerp import fields, _
+from openerp.exceptions import UserError
+from openerp.tests import SavepointCase
 
 from ..wizard.order_response_import import (
     ORDER_RESPONSE_STATUS_ACK,

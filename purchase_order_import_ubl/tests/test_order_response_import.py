@@ -2,12 +2,12 @@
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tools import file_open
-from odoo.addons.purchase_order_import.wizard.order_response_import import (
+from openerp.tools import file_open
+from openerp.addons.purchase_order_import.wizard.order_response_import import (
     ORDER_RESPONSE_STATUS_ACK,
     LINE_STATUS_ACCEPTED,
 )
-from odoo.addons.purchase_order_import.tests.test_order_response_import import (
+from openerp.addons.purchase_order_import.tests.test_order_response_import import (
     TestOrderResponseImportCommon,
 )
 from ..wizard.order_response_import import (

@@ -2,7 +2,8 @@
 <!-- Copyright 2020 ACSONE SA/NV
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
-<odoo>
+<openerp>
+<data>
 
     <record id="order_response_import_form" model="ir.ui.view">
         <field name="name">order.response.import.form</field>
@@ -59,4 +60,5 @@
     </record>
 
 
-</odoo>
+</data>
+</openerp>

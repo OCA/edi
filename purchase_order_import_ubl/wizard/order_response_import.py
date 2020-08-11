@@ -2,9 +2,9 @@
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, models, _
-from odoo.exceptions import UserError
-from odoo.addons.purchase_order_import.wizard.order_response_import import (
+from openerp import api, models, _
+from openerp.exceptions import Warning as UserError
+from openerp.addons.purchase_order_import.wizard.order_response_import import (
     ORDER_RESPONSE_STATUS_ACK,
     ORDER_RESPONSE_STATUS_ACCEPTED,
     ORDER_RESPONSE_STATUS_REJECTED,
