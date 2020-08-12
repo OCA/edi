@@ -19,7 +19,7 @@ class PurchaseOrderImport(models.TransientModel):
         if xml_root.tag == start_tag + 'Quotation-2}Quotation':
             return self.parse_ubl_quote(xml_root)
         else:
-            return super(PurchaseOrderImport, self).parse_xml_order(xml_root)
+            return super(PurchaseOrderImport, self).parse_xml_quote(xml_root)
 
     @api.model
     def parse_ubl_quote_line(self, line, ns):
