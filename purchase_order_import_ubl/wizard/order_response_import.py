@@ -55,6 +55,10 @@ class OrderResponseImport(models.TransientModel):
             "/main:OrderResponse/cbc:OrderResponseCode", namespaces=ns
         )
         code = code_xpath and len(code_xpath) and code_xpath[0].text
+        if not code:
+            # OrderResponseCode is not mandatory
+            # see _guess_doc_status_from_lines()
+            return None
         status = _ORDER_RESPONSE_CODE_TO_STATUS.get(code)
         if not status:
             raise UserError(_("Unknown response code found '%s'") % code)
@@ -150,7 +154,8 @@ class OrderResponseImport(models.TransientModel):
         )
         supplier_dict = self.ubl_parse_supplier_party(supplier_xpath[0], ns)
         # We only take the "official references" for supplier_dict
-        supplier_dict = {"vat": supplier_dict.get("vat")}
+        supplier_dict = {
+            x: supplier_dict[x] for x in supplier_dict if x in ("vat", "gln")}
         customer_xpath_party = xml_root.xpath(
             "/main:OrderResponse/cac:BuyerCustomerParty/cac:Party",
             namespaces=ns,
@@ -181,3 +186,22 @@ class OrderResponseImport(models.TransientModel):
             "lines": res_lines,
         }
         return res
+
+    @api.model
+    def _guess_doc_status_from_lines(self, lines):
+        """ Document status is not mandatory: status in order lines can help
+        """
+        super(OrderResponseImport, self)._guess_doc_status_from_lines(lines)
+        status = {"accepted": 0, "rejected": 0, "amend": 0}
+        for line in lines:
+            if line.get("status"):
+                status[line["status"]] += 1
+        final_status = [x for x in status if status[x] > 0]
+        if "rejected" in final_status:
+            return ORDER_RESPONSE_STATUS_REJECTED
+        elif "amend" in final_status:
+            return ORDER_RESPONSE_STATUS_CONDITIONAL
+        elif "accepted" in final_status:
+            return ORDER_RESPONSE_STATUS_ACCEPTED
+        else:
+            return None

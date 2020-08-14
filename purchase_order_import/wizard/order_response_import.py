@@ -212,8 +212,9 @@ class OrderResponseImport(models.TransientModel):
                 )
                 % (currency.name, order.currency_id.name)
             )
-
         status = parsed_order_document.get("status")
+        if not status:
+            status = self._guess_doc_status_from_lines(parsed_order_document["lines"])
         if status == ORDER_RESPONSE_STATUS_ACK:
             self._process_ack(order, parsed_order_document)
         elif status == ORDER_RESPONSE_STATUS_REJECTED:
@@ -412,3 +413,10 @@ class OrderResponseImport(models.TransientModel):
                 )
                 % picking.name
             )
+
+    @api.model
+    def _guess_doc_status_from_lines(self, lines):
+        """ Some flows also have status define on lines
+            May be overrided
+        """
+        return None
