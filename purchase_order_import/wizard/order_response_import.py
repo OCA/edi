@@ -253,7 +253,7 @@ class OrderResponseImport(models.TransientModel):
         parsed_order_document["chatter_msg"].append(
             _("PO cancelled by the supplier.")
         )
-        purchase_order.button_cancel()
+        purchase_order.action_cancel()
 
     @api.model
     def _process_accepted(self, purchase_order, parsed_order_document):
