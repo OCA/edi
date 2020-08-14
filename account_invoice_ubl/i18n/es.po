@@ -63,7 +63,6 @@ msgstr ""
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_ir_actions_report
 #, fuzzy
-#| msgid "Report"
 msgid "Report Action"
 msgstr "Informe"
 
