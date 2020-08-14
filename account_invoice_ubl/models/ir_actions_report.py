@@ -30,6 +30,8 @@ class IrActionsReport(models.Model):
     def render_qweb_pdf(self, res_ids=None, data=None):
         """This is only necessary when tests are enabled.
         It forces the creation of pdf instead of html."""
+        if isinstance(res_ids, int):
+            res_ids = [res_ids]
         if len(res_ids or []) == 1 and not self.env.context.get("no_embedded_ubl_xml"):
             if len(self) == 1 and self.is_ubl_xml_to_embed_in_invoice():
                 self = self.with_context(force_report_rendering=True)
