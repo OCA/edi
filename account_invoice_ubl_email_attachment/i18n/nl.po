@@ -26,7 +26,6 @@ msgstr "Bedrijf"
 #. module: account_invoice_ubl_email_attachment
 #: model:ir.model,name:account_invoice_ubl_email_attachment.model_res_config_settings
 #, fuzzy
-#| msgid "res.config.settings"
 msgid "Config Settings"
 msgstr "res.config.settings"
 
