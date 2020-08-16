@@ -25,6 +25,5 @@ msgstr "Akcija izvještaja"
 #. module: sale_order_ubl
 #: model:ir.model,name:sale_order_ubl.model_sale_order
 #, fuzzy
-#| msgid "Sale Order"
 msgid "Sales Order"
 msgstr "Ponuda"
