@@ -254,10 +254,6 @@ msgstr ""
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, fuzzy, python-format
-#| msgid ""
-#| "The analysis of the business document returned '%s' as the currency "
-#| "symbol or ISO code. But there are no currency with the symbol nor ISO "
-#| "code in Odoo."
 msgid ""
 "The analysis of the business document returned '%s' as the currency symbol "
 "or ISO code. But there are none or several currencies with the symbol/ISO "
@@ -301,9 +297,6 @@ msgstr ""
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, fuzzy, python-format
-#| msgid ""
-#| "The bank account <b>IBAN %s</b> has been automatically added on the "
-#| "supplier <b>%s</b>"
 msgid ""
 "The bank account <b>IBAN %s</b> has been automatically added on the supplier "
 "<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
