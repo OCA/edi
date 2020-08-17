@@ -325,7 +325,7 @@ class AccountMove(models.Model):
 
     def add_xml_in_pdf_buffer(self, buffer):
         self.ensure_one()
-        if self.is_ubl_sale_invoice_posted:
+        if self.is_ubl_sale_invoice_posted():
             version = self.get_ubl_version()
             xml_filename = self.get_ubl_filename(version=version)
             xml_string = self.generate_ubl_xml_string(version=version)
@@ -334,7 +334,7 @@ class AccountMove(models.Model):
 
     def embed_ubl_xml_in_pdf(self, pdf_content):
         self.ensure_one()
-        if self.is_ubl_sale_invoice_posted:
+        if self.is_ubl_sale_invoice_posted():
             version = self.get_ubl_version()
             xml_filename = self.get_ubl_filename(version=version)
             xml_string = self.generate_ubl_xml_string(version=version)
