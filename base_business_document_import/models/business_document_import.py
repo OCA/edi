@@ -208,7 +208,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 ("category_id", "=", categ.id),
                 ("name", "=", gln_number_from_file)], limit=1)
             # GLN unicity is managed by gln module
-            if id_number and id_number.name == gln_number_from_file:
+            if id_number:
                 return id_number.partner_id
 
     @api.model
