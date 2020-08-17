@@ -49,6 +49,7 @@ class BusinessDocumentImport(models.AbstractModel):
             'country_code': 'FR',
             'state_code': False,
             'vat': 'FR12448890432',
+            'gln': '3000000000007',
             'email': 'roger.lemaire@akretion.com',
             'website': 'www.akretion.com',
             'name': 'Akretion France',
@@ -103,6 +104,10 @@ class BusinessDocumentImport(models.AbstractModel):
             partner_dict, chatter_msg, domain, partner_type_label)
         if partner:
             return partner
+        if partner_dict.get("gln"):
+            partner = self._match_partner_by_gln(partner_dict["gln"])
+            if partner:
+                return partner
         if partner_dict.get('vat'):
             vat = partner_dict['vat'].replace(' ', '').upper()
             # use base_vat_sanitized
@@ -188,6 +193,23 @@ class BusinessDocumentImport(models.AbstractModel):
     def _hook_match_partner(
             self, partner_dict, chatter_msg, domain, partner_type_label):
         return False
+
+    @api.model
+    def _match_partner_by_gln(self, gln_number_from_file):
+        """ You may override if your gln_number is not defined
+            by partner_identification_gln module
+        """
+        categ = self.env.ref(
+            "partner_identification_gln."
+            "partner_identification_gln_number_category", raise_if_not_found=False)
+        if categ:
+            # partner_identification_gln is installed
+            id_number = self.env["res.partner.id_number"].search([
+                ("category_id", "=", categ.id),
+                ("name", "=", gln_number_from_file)], limit=1)
+            # GLN unicity is managed by gln module
+            if id_number:
+                return id_number.partner_id
 
     @api.model
     def _match_shipping_partner(self, shipping_dict, partner, chatter_msg):

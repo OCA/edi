@@ -552,6 +552,9 @@ class BaseUbl(models.AbstractModel):
     def ubl_parse_party(self, party_node, ns):
         partner_name_xpath = party_node.xpath(
             'cac:PartyName/cbc:Name', namespaces=ns)
+        # GLN example http://www.datypic.com/sc/ubl21/e-ns41_Order.html
+        gln_xpath = party_node.xpath(
+            'cac:PartyIdentification/cbc:ID[@schemeID="GLN"]', namespaces=ns)
         vat_xpath = party_node.xpath(
             'cac:PartyTaxScheme/cbc:CompanyID', namespaces=ns)
         email_xpath = party_node.xpath(
@@ -564,6 +567,7 @@ class BaseUbl(models.AbstractModel):
             'cbc:WebsiteURI', namespaces=ns)
         partner_dict = {
             'vat': vat_xpath and vat_xpath[0].text or False,
+            'gln': gln_xpath and gln_xpath[0].text or False,
             'name': partner_name_xpath[0].text,
             'email': email_xpath and email_xpath[0].text or False,
             'website': website_xpath and website_xpath[0].text or False,
