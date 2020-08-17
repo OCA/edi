@@ -12,9 +12,8 @@
                 <button
                     type="object"
                     name="attach_ubl_xml_file_button"
-                    attrs="{'invisible': [('type', 'not in', ['out_invoice', 'out_refund'])]}"
+                    attrs="{'invisible': ['|', ('type', 'not in', ['out_invoice', 'out_refund']), ('state', '!=', 'posted')]}"
                     string="Generate UBL XML File"
-                    states="posted"
                 />
             </button>
         </field>

@@ -24,7 +24,8 @@ class IrActionsReport(models.Model):
         if res_ids and len(res_ids) == 1:
             if self.is_ubl_xml_to_embed_in_invoice():
                 invoice = self.env["account.move"].browse(res_ids)
-                pdf_content = invoice.embed_ubl_xml_in_pdf(pdf_content)
+                if invoice.is_ubl_sale_invoice_posted():
+                    pdf_content = invoice.embed_ubl_xml_in_pdf(pdf_content)
         return pdf_content
 
     def render_qweb_pdf(self, res_ids=None, data=None):
