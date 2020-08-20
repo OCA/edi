@@ -679,7 +679,7 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def _prepare_global_adjustment_line(self, diff_amount, invoice, import_config):
-        ailo = self.env["account.invoice.line"]
+        ailo = self.env["account.move.line"]
         prec = invoice.currency_id.rounding
         il_vals = {"name": _("Adjustment"), "quantity": 1, "price_unit": diff_amount}
         # no taxes nor product on such a global adjustment line
