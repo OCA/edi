@@ -43,7 +43,7 @@ class OrderResponseImport(models.TransientModel):
         if xml_root.tag == start_tag + "OrderResponse-2}OrderResponse":
             return self.parse_ubl_order_response(xml_root)
         else:
-            return super(OrderResponseImport, self).parse_xml_order(xml_root)
+            return super(OrderResponseImport, self).parse_xml_order_document(xml_root)
 
     @api.model
     def parse_note_path(self, note_xpath):
