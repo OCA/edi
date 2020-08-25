@@ -31,7 +31,7 @@ addon | version | summary
 [base_ubl_payment](base_ubl_payment/) | 10.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
 [base_zugferd](base_zugferd/) | 10.0.1.0.0 | Base module for Factur-X and ZUGFeRD
 [purchase_order_import](purchase_order_import/) | 10.0.2.0.0 | Update RFQ via the import of quotations from suppliers
-[purchase_order_import_ubl](purchase_order_import_ubl/) | 10.0.2.0.1 | Import UBL XML quotation files
+[purchase_order_import_ubl](purchase_order_import_ubl/) | 10.0.2.0.2 | Import UBL XML quotation files
 [purchase_order_ubl](purchase_order_ubl/) | 10.0.1.0.0 | Embed UBL XML file inside the PDF purchase order
 [purchase_order_ubl_py3o](purchase_order_ubl_py3o/) | 10.0.1.0.0 | Generate UBL purchase orders with Py3o reporting engine
 [sale_order_import](sale_order_import/) | 10.0.1.0.0 | Import RFQ or sale orders from files
