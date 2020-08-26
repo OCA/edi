@@ -16,29 +16,28 @@ class TestUblInvoiceEmailAttachment(HttpCase):
             [("user_type_id", "=", acc_type_revenue.id)], limit=1
         )
 
-        invoice_line_data = [
-            (
-                0,
-                0,
-                {
-                    "product_id": product.id,
-                    "quantity": 10.0,
-                    "account_id": account.id,
-                    "name": "product test",
-                    "price_unit": 100.00,
-                },
-            )
-        ]
-
-        self.invoice = self.env["account.invoice"].create(
+        self.invoice = self.env["account.move"].create(
             {
                 "name": "Test Customer Invoice",
+                "type": "out_invoice",
                 "partner_id": partner.id,
-                "invoice_line_ids": invoice_line_data,
+                "invoice_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "product_id": product.id,
+                            "quantity": 10.0,
+                            "account_id": account.id,
+                            "name": "product test",
+                            "price_unit": 100.00,
+                        },
+                    )
+                ],
             }
         )
 
-        self.invoice.action_invoice_open()
+        self.invoice.action_post()
         action_invoice_sent = self.invoice.action_invoice_sent()
         template_id = action_invoice_sent["context"]["default_template_id"]
         self.composer_ctx = dict(
@@ -50,7 +49,7 @@ class TestUblInvoiceEmailAttachment(HttpCase):
         )
         self.composer_vals = {
             "attachment_ids": [],
-            "model": "account.invoice",
+            "model": "account.move",
             "record_name": False,
             "template_id": template_id,
         }
