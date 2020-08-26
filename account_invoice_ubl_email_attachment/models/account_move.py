@@ -6,8 +6,8 @@ import base64
 from odoo import models
 
 
-class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+class AccountMove(models.Model):
+    _inherit = "account.move"
 
     def action_invoice_sent(self):
         action = super().action_invoice_sent()
@@ -17,24 +17,20 @@ class AccountInvoice(models.Model):
 
     def _generate_email_ubl_attachment(self):
         self.ensure_one()
-        attachments = self.env["ir.attachment"]
-        if self.type not in ("out_invoice", "out_refund"):
-            return attachments
-        if self.state not in ("open", "paid"):
-            return attachments
+        if not self.is_ubl_sale_invoice_posted():
+            return self.env["ir.attachment"]
         version = self.get_ubl_version()
-        ubl_filename = self.get_ubl_filename(version=version)
+        xml_filename = self.get_ubl_filename(version=version)
         xml_string = self.generate_ubl_xml_string(version=version)
         return (
             self.env["ir.attachment"]
             .with_context({})
             .create(
                 {
-                    "name": ubl_filename,
+                    "name": xml_filename,
                     "res_model": str(self._name),
                     "res_id": self.id,
                     "datas": base64.b64encode(xml_string),
-                    "datas_fname": ubl_filename,
                     "type": "binary",
                 }
             )
