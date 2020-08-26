@@ -5,10 +5,10 @@ from odoo import fields, models
 
 
 class ResCompany(models.Model):
-    _inherit = 'res.company'
+    _inherit = "res.company"
 
     include_ubl_attachment_in_invoice_email = fields.Boolean(
-        string='Include UBL XML in Invoice Email',
+        string="Include UBL XML in Invoice Email",
         help="If active, the UBL Invoice XML file will be included "
-        "in the attachments when sending the invoice by email."
+        "in the attachments when sending the invoice by email.",
     )
