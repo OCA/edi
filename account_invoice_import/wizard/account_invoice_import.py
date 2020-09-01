@@ -495,8 +495,6 @@ class AccountInvoiceImport(models.TransientModel):
     def _hook_no_partner_found(self, partner_dict):
         """Hook designed to add an action when no partner is found
         For instance to propose to create the partner based on the partner_dict.
-        In that case, the hook is expected to return an action serialized
-        as a dictionary which will be returned to the web client.
         """
         return False
 
