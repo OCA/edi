@@ -488,6 +488,40 @@ class AccountInvoiceImport(models.TransientModel):
             ], limit=1)
         return existing_inv
 
+    def _get_parsed_invoice(self):
+        """Hook to change the method of retrieval for the invoice data"""
+        return self.parse_invoice(self.invoice_file, self.invoice_filename)
+
+    def _hook_no_partner_found(self, partner_dict):
+        """Hook designed to add an action when no partner is found
+        For instance to propose to create the partner based on the partner_dict.
+        In that case, the hook is expected to return an action serialized
+        as a dictionary which will be returned to the web client.
+        """
+        return False
+
+    def _get_partner(self, parsed_inv):
+        """Get partner info from parsed data
+
+        If no partner found will raise an error.
+        Unless a wizard action has been defined.
+
+        returns: (dict of partner data, action)
+        """
+        bdio = self.env['business.document.import']
+        if not self.partner_id:
+            try:
+                partner = bdio._match_partner(
+                    parsed_inv['partner'], parsed_inv['chatter_msg'])
+            except UserError as e:
+                action = self._hook_no_partner_found(parsed_inv["partner"])
+                if action:
+                    return None, action
+                raise e
+        else:
+            partner = self.partner_id
+        return partner.commercial_partner_id, None
+
     @api.multi
     def import_invoice(self):
         """Method called by the button of the wizard
@@ -499,11 +533,10 @@ class AccountInvoiceImport(models.TransientModel):
         iaao = self.env['ir.actions.act_window']
         company_id = self._context.get('force_company') or\
             self.env.user.company_id.id
-        parsed_inv = self.parse_invoice(
-            self.invoice_file, self.invoice_filename)
-        partner = bdio._match_partner(
-            parsed_inv['partner'], parsed_inv['chatter_msg'])
-        partner = partner.commercial_partner_id
+        parsed_inv = self._get_parsed_invoice()
+        partner, action = self._get_partner(parsed_inv)
+        if action:
+            return action
         currency = bdio._match_currency(
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
         parsed_inv['partner']['recordset'] = partner
@@ -853,10 +886,9 @@ class AccountInvoiceImport(models.TransientModel):
         if self.partner_id:
             # True if state='update' ; False when state='update-from-invoice'
             parsed_inv['partner']['recordset'] = self.partner_id
-        partner = bdio._match_partner(
-            parsed_inv['partner'], parsed_inv['chatter_msg'],
-            partner_type='supplier')
-        partner = partner.commercial_partner_id
+        partner, action = self._get_partner(parsed_inv)
+        if action:
+            return action
         if partner != invoice.commercial_partner_id:
             raise UserError(_(
                 "The supplier of the imported invoice (%s) is different from "
