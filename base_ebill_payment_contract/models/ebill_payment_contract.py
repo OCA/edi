@@ -25,7 +25,7 @@ class EbillPaymentContract(models.Model):
         required=True,
         default="draft",
     )
-    is_valid = fields.Boolean(compute="_compute_is_valid")
+    is_valid = fields.Boolean(compute="_compute_is_valid", search="_search_is_valid")
 
     @api.onchange("state")
     def _onchange_state(self):
@@ -37,7 +37,7 @@ class EbillPaymentContract(models.Model):
     def _compute_is_valid(self):
         """ Check that the contract is valid
 
-        It is valid if the contract is opened and his start date is in the pass
+        It is valid if the contract is opened and its start date is in the past
         And his end date is in the future or not set.
         """
         today = fields.Date.today()
@@ -48,3 +48,19 @@ class EbillPaymentContract(models.Model):
                 and contract.date_start <= today
                 and (not contract.date_end or contract.date_end >= today)
             )
+
+    def _search_is_valid(self, operator, value):
+        now = fields.Date.today()
+        domain = [
+            ("state", "=", "open"),
+            ("date_start", "<=", now),
+            "|",
+            ("date_end", "=", False),
+            ("date_end", ">=", now),
+        ]
+        valid_contract = self.search(domain)
+        if (operator == "=" and value) or (operator == "!=" and not value):
+            new_operator = "in"
+        else:
+            new_operator = "not in"
+        return [("id", new_operator, valid_contract.ids)]
