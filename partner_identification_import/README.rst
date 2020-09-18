@@ -1,5 +1,5 @@
 =============================
-Base Business Document Import
+Partner Identification Import
 =============================
 
 .. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -14,10 +14,10 @@ Base Business Document Import
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/13.0/base_business_document_import
+    :target: https://github.com/OCA/edi/tree/13.0/partner_identification_import
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-13-0/edi-13-0-base_business_document_import
+    :target: https://translation.odoo-community.org/projects/edi-13-0/edi-13-0-partner_identification_import
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
     :target: https://runbot.odoo-community.org/runbot/226/13.0
@@ -25,11 +25,10 @@ Base Business Document Import
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
 
-This is a technical module ; it doesn't bring any useful feature by itself. This module is the base modules for 2 other modules :
+Glue module between base_business_document_import and partner_identification (in OCA/partner-contact)
 
-* *account_invoice_import* which imports supplier invoices as PDF or XML files (this module also requires some additional modules such as *account_invoice_import_invoice2data*, *account_invoice_import_ubl*, etc... to support specific invoice formats),
-
-* *sale_invoice_import* which imports sale orders as CSV, XML or PDF files (this module also requires some additional modules such as *sale_invoice_import_csv* or *sale_invoice_import_ubl* to support specific order formats)
+Allow to define extra partner ID (thanks to partner_identification) and match
+the partner using for exemple the UBL PartyIdentification/ID
 
 **Table of contents**
 
@@ -42,7 +41,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20base_business_document_import%0Aversion:%2013.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20partner_identification_import%0Aversion:%2013.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -52,14 +51,11 @@ Credits
 Authors
 ~~~~~~~
 
-* Akretion
-* Nicolas JEUDY
+* BCIM
 
 Contributors
 ~~~~~~~~~~~~
 
-* Alexis de Lattre <alexis.delattre@akretion.com>
-* Nicolas JEUDY <https://github.com/njeudy>
 * Jacques-Etienne Baudoux <je@bcim.be>
 
 Maintainers
@@ -75,6 +71,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/13.0/base_business_document_import>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/13.0/partner_identification_import>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

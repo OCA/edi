@@ -1,3 +1,4 @@
 community-data-files
 sale-workflow
 server-tools
+partner-contact
