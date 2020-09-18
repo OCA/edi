@@ -633,7 +633,7 @@ class BaseUbl(models.AbstractModel):
         website_xpath = party_node.xpath("cbc:WebsiteURI", namespaces=ns)
         partner_dict = {
             "vat": vat_xpath and vat_xpath[0].text or False,
-            "name": partner_name_xpath[0].text,
+            "name": partner_name_xpath and partner_name_xpath[0].text or False,
             "email": email_xpath and email_xpath[0].text or False,
             "website": website_xpath and website_xpath[0].text or False,
             "phone": phone_xpath and phone_xpath[0].text or False,
