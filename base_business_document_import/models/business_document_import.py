@@ -79,6 +79,16 @@ class BusinessDocumentImport(models.AbstractModel):
         else:
             order = ""
             partner_type_label = _("partner")
+
+        # If a ref is explicitly given, we just want to match that partner
+        if partner_dict.get("ref"):
+            partner = rpo.search(
+                domain + [("ref", "=", partner_dict["ref"])], limit=1, order=order
+            )
+            if partner:
+                return partner
+
+        # Append optional country and state to the domain
         country = False
         if partner_dict.get("country_code"):
             country = self.env["res.country"].search(
@@ -109,31 +119,20 @@ class BusinessDocumentImport(models.AbstractModel):
             )
             if state:
                 domain += ["|", ("state_id", "=", False), ("state_id", "=", state.id)]
+
+        # Append required vat to the domain
         if partner_dict.get("vat"):
-            vat = partner_dict["vat"].replace(" ", "").upper()
-            partner = rpo.search(
-                domain + [("parent_id", "=", False), ("vat", "=", vat)],
-                limit=1,
-                order=order,
-            )
-            if partner:
-                return partner
-            else:
-                chatter_msg.append(
-                    _(
-                        "The analysis of the business document returned '%s' as "
-                        "%s VAT number. But there are no %s "
-                        "with this VAT number in Odoo."
-                    )
-                    % (vat, partner_type_label, partner_type_label)
-                )
+            vat = partner_dict["vat"]
+            domain += [("vat", "=", vat)]
+
         # Hook to plug alternative matching methods
         partner = self._hook_match_partner(
             partner_dict, chatter_msg, domain, partner_type_label
         )
         if partner:
             return partner
-        website_domain = False
+
+        # Search for partner
         email_domain = False
         if partner_dict.get("email") and "@" in partner_dict["email"]:
             partner = rpo.search(
@@ -145,6 +144,17 @@ class BusinessDocumentImport(models.AbstractModel):
                 return partner
             else:
                 email_domain = partner_dict["email"].split("@")[1]
+
+        if partner_dict.get("name"):
+            partner = rpo.search(
+                domain + [("name", "=ilike", partner_dict["name"])],
+                limit=1,
+                order=order,
+            )
+            if partner:
+                return partner
+
+        website_domain = False
         if partner_dict.get("website"):
             urlp = urlparse(partner_dict["website"])
             netloc = urlp.netloc
@@ -177,20 +187,25 @@ class BusinessDocumentImport(models.AbstractModel):
                     % (partner_type_label, partner_domain, partner_type_label)
                 )
                 return partner
-        if partner_dict.get("ref"):
+
+        if partner_dict.get("vat"):
             partner = rpo.search(
-                domain + [("ref", "=", partner_dict["ref"])], limit=1, order=order
-            )
-            if partner:
-                return partner
-        if partner_dict.get("name"):
-            partner = rpo.search(
-                domain + [("name", "=ilike", partner_dict["name"])],
+                domain,
                 limit=1,
                 order=order,
             )
             if partner:
                 return partner
+            if not partner:
+                chatter_msg.append(
+                    _(
+                        "The analysis of the business document returned '%s' as "
+                        "%s VAT number. But there are no %s "
+                        "with this VAT number in Odoo."
+                    )
+                    % (vat, partner_type_label, partner_type_label)
+                )
+
         raise self.user_error_wrap(
             _(
                 "Odoo couldn't find any %s corresponding to the following "
@@ -695,7 +710,7 @@ class BusinessDocumentImport(models.AbstractModel):
         price_precision=None,
         seller=False,
     ):
-        """ Example:
+        """Example:
         existing_lines = [{
             'product': odoo_recordset,
             'name': 'USB Adapter',
