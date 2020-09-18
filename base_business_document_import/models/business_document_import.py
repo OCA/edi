@@ -189,11 +189,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 return partner
 
         if partner_dict.get("vat"):
-            partner = rpo.search(
-                domain,
-                limit=1,
-                order=order,
-            )
+            partner = rpo.search(domain, limit=1, order=order)
             if partner:
                 return partner
             if not partner:
