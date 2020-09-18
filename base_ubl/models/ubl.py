@@ -638,6 +638,10 @@ class BaseUbl(models.AbstractModel):
             "website": website_xpath and website_xpath[0].text or False,
             "phone": phone_xpath and phone_xpath[0].text or False,
         }
+        id_node = party_node.xpath("cac:PartyIdentification/cbc:ID", namespaces=ns)
+        if id_node:
+            partner_dict["id_number"] = id_node[0].text
+            partner_dict["id_schemeID"] = id_node[0].attrib.get("schemeID")
         address_xpath = party_node.xpath("cac:PostalAddress", namespaces=ns)
         if address_xpath:
             address_dict = self.ubl_parse_address(address_xpath[0], ns)
