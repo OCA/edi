@@ -41,7 +41,6 @@ class Company(models.Model):
             now = now.replace(hour=hour, minute=minute)
             return now
         elif self.voxel_send_mode == "delayed":
-            seconds = self.voxel_delay_time * 3600
-            return datetime.now() + timedelta(seconds=seconds)
+            return datetime.now() + timedelta(hours=self.voxel_delay_time)
         else:
             return None
