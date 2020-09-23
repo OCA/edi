@@ -42,7 +42,7 @@ class VoxelMixin(models.AbstractModel):
         default="not_sent",
         readonly=True,
         copy=False,
-        help="Indicates the state of the Voxel report send state",
+        help="Indicates the status of sending report to Voxel",
     )
     voxel_xml_report = fields.Text(string="XML Report", readonly=True)
     voxel_filename = fields.Char(string="Voxel filename", readonly=True)
@@ -50,7 +50,6 @@ class VoxelMixin(models.AbstractModel):
 
     # Export methods
     # --------------
-    @api.multi
     def enqueue_voxel_report(self, report_name):
         eta = self.company_id._get_voxel_report_eta()
         queue_obj = self.env["queue.job"].sudo()
@@ -182,8 +181,8 @@ class VoxelMixin(models.AbstractModel):
             self._delete_voxel_document("Inbox", voxel_filename, company)
 
     def create_document_from_xml(self, xml_content, voxel_filename, company):
-        """This method must be overwritten by the model that use
-        `enqueue_import_voxel_documents` method"""
+        """ This method must be overwritten by the model that use
+        `enqueue_import_voxel_documents` method """
         return False
 
     # API request methods
@@ -252,14 +251,12 @@ class VoxelMixin(models.AbstractModel):
 
     # auxiliary methods
     # -----------------
-    @api.multi
     def _get_voxel_filename(self):
         self.ensure_one()
         document_type = self.get_document_type()
         date_time_seq = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
         return "{}_{}.xml".format(document_type, date_time_seq)
 
-    @api.multi
     def _cancel_voxel_jobs(self):
         # Remove not started jobs
         not_started_jobs = self.env["queue.job"]
@@ -278,27 +275,21 @@ class VoxelMixin(models.AbstractModel):
         self.write({"voxel_state": "cancelled"})
 
     def get_voxel_login(self, company=None):
-        """This method must be overwritten by the model that inherit from
+        """ This method must be overwritten by the model that inherit from
         voxel.mixin"""
         return self.env["voxel.login"]
 
     def _get_customer_product_sku(self, product, partner):
-        """Look for an entry for specific contact (sending/invoicing contact),
-        and if not found, look for the commercial partner.
-        """
-        domain = [
-            "|",
-            ("product_id", "=", product.id),
-            "&",
-            ("product_tmpl_id", "=", product.product_tmpl_id.id),
-            ("product_id", "=", False),
-        ]
         customerinfo = self.env["product.customerinfo"].search(
-            [("name", "=", partner.id)] + domain, order="product_id, sequence",
+            [
+                ("name", "=", partner.id),
+                "|",
+                ("product_id", "=", product.id),
+                "&",
+                ("product_tmpl_id", "=", product.product_tmpl_id.id),
+                ("product_id", "=", False),
+            ],
+            limit=1,
+            order="product_id, sequence",
         )
-        if not customerinfo:
-            customerinfo = self.env["product.customerinfo"].search(
-                [("name", "=", partner.commercial_partner_id.id)] + domain,
-                order="product_id, sequence",
-            )
-        return customerinfo[:1].product_code
+        return customerinfo.product_code
