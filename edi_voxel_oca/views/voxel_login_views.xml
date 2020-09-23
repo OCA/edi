@@ -5,6 +5,7 @@
     <record id="voxel_login_form_view" model="ir.ui.view">
         <field name="name">voxel.login.view.form</field>
         <field name="model">voxel.login</field>
+        <field name="groups_id" eval="[(4, ref('group_voxel_manager'))]" />
         <field name="arch" type="xml">
             <form>
                 <sheet>
