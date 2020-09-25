@@ -21,7 +21,7 @@ class AccountInvoice(models.Model):
     )
 
     def get_voxel_login(self, company=None):
-        """ This method overwrites the one defined in voxel.mixin to provide
+        """This method overwrites the one defined in voxel.mixin to provide
         the login for this specific model (account.invoice)
         """
         return (company or self.company_id).voxel_invoice_login_id
