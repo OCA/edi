@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* edi_voxel_account_invoice
+# 	* edi_voxel_account_invoice
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-14 19:34+0000\n"
-"PO-Revision-Date: 2020-04-14 19:34+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2020-04-24 23:58+0000\n"
+"PO-Revision-Date: 2020-04-24 23:58+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: edi_voxel_account_invoice
-#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_move_form
 msgid "Cancel sending"
 msgstr ""
 
@@ -58,19 +58,19 @@ msgid "ID"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model,name:edi_voxel_account_invoice.model_account_invoice
-msgid "Invoice"
-msgstr ""
-
-#. module: edi_voxel_account_invoice
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_res_company__voxel_invoice_login_id
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_res_config_settings__voxel_invoice_login_id
 msgid "Invoice login"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_invoice__voxel_job_ids
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_move__voxel_job_ids
 msgid "Jobs"
+msgstr ""
+
+#. module: edi_voxel_account_invoice
+#: model:ir.model,name:edi_voxel_account_invoice.model_account_move
+msgid "Journal Entries"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
@@ -79,22 +79,17 @@ msgid "Last Modified on"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
-msgid "Processing error"
-msgstr ""
-
-#. module: edi_voxel_account_invoice
-#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_move_form
 msgid "Requeue"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_move_form
 msgid "Send now"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_move_form
 msgid "Send to Voxel"
 msgstr ""
 
@@ -109,22 +104,22 @@ msgid "The last attemp to sent to Voxel has failed"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_move_form
 msgid "Voxel"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_invoice__voxel_enabled
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice.field_account_move__voxel_enabled
 msgid "Voxel Enabled"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_move_form
 msgid "Voxel Jobs"
 msgstr ""
 
 #. module: edi_voxel_account_invoice
-#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.invoice_form
+#: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_move_form
 msgid "Voxel XML report"
 msgstr ""
 
@@ -166,4 +161,9 @@ msgstr ""
 #. module: edi_voxel_account_invoice
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice.view_account_invoice_filter
 msgid "Voxel report processing error"
+msgstr ""
+
+#. module: edi_voxel_account_invoice
+#: model:ir.actions.report,print_report_name:edi_voxel_account_invoice.report_voxel_invoice
+msgid "object._get_voxel_filename()"
 msgstr ""
