@@ -3,21 +3,29 @@
 
 from datetime import date, datetime
 
-from odoo.tests import common
+from odoo.tests import SavepointCase
 
 
-class TestVoxelAccountInvoice(common.SavepointCase):
+class TestVoxelAccountInvoice(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super(TestVoxelAccountInvoice, cls).setUpClass()
         # Invoice line account
-        account_type_revenue = cls.env.ref("account.data_account_type_revenue")
-        account_revenue = cls.env["account.account"].search(
-            [("user_type_id", "=", account_type_revenue.id)], limit=1
-        )
         # Invoice company
         main_company = cls.env.ref("base.main_company")
-        main_company.write({"vat": "US1234567890", "street2": "Street 2"})
+        main_company.write(
+            {
+                "vat": "US1234567890",
+                "street": "Street 1",
+                "street2": "Street 2",
+                "name": "YourCompany",
+                "city": "City",
+                "zip": "99999",
+                "state_id": cls.env.ref("base.state_es_m").id,
+                "country_id": cls.env.ref("base.es").id,
+                "email": "info@yourcompany.example.com",
+            }
+        )
         # Invoice client
         partner = cls.env["res.partner"].create(
             {
@@ -52,13 +60,32 @@ class TestVoxelAccountInvoice(common.SavepointCase):
         product_3 = product_obj.create(
             {"default_code": "DC_003", "name": "Product 3 (test)"}
         )
+
+        tax_15 = cls.env["account.tax"].create(
+            {
+                "name": "Tax 15%",
+                "type_tax_use": "sale",
+                "amount_type": "percent",
+                "amount": 15,
+                "tax_group_id": cls.env.ref("account.tax_group_taxes").id,
+            }
+        )
+        tax_30 = cls.env["account.tax"].create(
+            {
+                "name": "Tax 30.00%",
+                "type_tax_use": "sale",
+                "amount_type": "percent",
+                "amount": 30,
+                "tax_group_id": cls.env.ref("account.tax_group_taxes").id,
+            }
+        )
         # Invoice
-        cls.invoice = cls.env["account.invoice"].create(
+        cls.invoice = cls.env["account.move"].create(
             {
                 "partner_id": partner.id,
                 "type": "out_invoice",
                 "currency_id": cls.env.ref("base.USD").id,
-                "date_invoice": date(2019, 4, 13),
+                "invoice_date": date(2019, 4, 13),
                 "company_id": main_company.id,
                 "invoice_line_ids": [
                     (
@@ -69,8 +96,7 @@ class TestVoxelAccountInvoice(common.SavepointCase):
                             "quantity": 2,
                             "price_unit": 750,
                             "name": "Product 1",
-                            "uom_id": cls.env.ref("uom.product_uom_unit").id,
-                            "account_id": account_revenue.id,
+                            "product_uom_id": cls.env.ref("uom.product_uom_unit").id,
                         },
                     ),
                     (
@@ -81,37 +107,9 @@ class TestVoxelAccountInvoice(common.SavepointCase):
                             "quantity": 3,
                             "price_unit": 147,
                             "discount": 20,
-                            "invoice_line_tax_ids": [
-                                (
-                                    0,
-                                    None,
-                                    {
-                                        "name": "Tax 15%",
-                                        "type_tax_use": "sale",
-                                        "amount_type": "percent",
-                                        "amount": 15,
-                                        "tax_group_id": cls.env.ref(
-                                            "account.tax_group_taxes"
-                                        ).id,
-                                    },
-                                ),
-                                (
-                                    0,
-                                    None,
-                                    {
-                                        "name": "Tax 30.00%",
-                                        "type_tax_use": "sale",
-                                        "amount_type": "percent",
-                                        "amount": 30,
-                                        "tax_group_id": cls.env.ref(
-                                            "account.tax_group_taxes"
-                                        ).id,
-                                    },
-                                ),
-                            ],
+                            "tax_ids": [(6, 0, (tax_15 | tax_30).ids)],
                             "name": "Product 2",
-                            "uom_id": cls.env.ref("uom.product_uom_unit").id,
-                            "account_id": account_revenue.id,
+                            "product_uom_id": product_2.uom_id.id,
                         },
                     ),
                     (
@@ -122,8 +120,7 @@ class TestVoxelAccountInvoice(common.SavepointCase):
                             "quantity": 0,
                             "price_unit": 0,
                             "name": "Product 3",
-                            "uom_id": cls.env.ref("uom.product_uom_unit").id,
-                            "account_id": account_revenue.id,
+                            "product_uom_id": product_3.uom_id.id,
                         },
                     ),
                 ],
@@ -146,11 +143,6 @@ class TestVoxelAccountInvoice(common.SavepointCase):
         date_time = datetime.strptime(date_time, "%Y%m%d_%H%M%S_%f")
         self.assertEqual(document_type, "Factura")
         self.assertGreaterEqual(date_time, bef)
-        # Commented because it raise random error in pipeline tests
-        # aft = datetime.now()
-        # aft = datetime(aft.year, aft.month, aft.day, aft.hour, aft.minute,
-        #                aft.second, (bef.microsecond // 1000) * 1000)
-        # self.assertLessEqual(date_time, aft)
 
     def test_get_report_values(self):
         # Get report data
@@ -180,7 +172,7 @@ class TestVoxelAccountInvoice(common.SavepointCase):
     def _get_general_data(self):
         return {
             "Type": "FacturaComercial",
-            "Ref": False,
+            "Ref": "/",
             "Date": "2019-04-13",
             "Currency": "USD",
         }
@@ -189,11 +181,11 @@ class TestVoxelAccountInvoice(common.SavepointCase):
         return {
             "CIF": "US1234567890",
             "Company": "YourCompany",
-            "Address": "1725 Slough Ave., Street 2",
-            "City": "Scranton",
-            "PC": "18540",
-            "Province": "Pennsylvania",
-            "Country": "US",
+            "Address": "Street 1, Street 2",
+            "City": "City",
+            "PC": "99999",
+            "Province": "Madrid",
+            "Country": "ESP",
             "Email": "info@yourcompany.example.com",
         }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record id="invoice_form" model="ir.ui.view">
-        <field name="name">account.invoice.form.inherit</field>
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_form" />
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
         <field name="groups_id" eval="[(4, ref('edi_voxel.group_voxel_manager'))]" />
         <field name="arch" type="xml">
             <header position="inside">
@@ -87,12 +87,14 @@
                                 >
                                     <field name="voxel_filename" />
                                 </group>
-                                <field
-                                    name="voxel_xml_report"
-                                    widget="ace"
-                                    options="{'mode': 'xml'}"
-                                    nolabel="1"
-                                />
+                                <group colspan="8">
+                                    <field
+                                        name="voxel_xml_report"
+                                        widget="ace"
+                                        options="{'mode': 'xml'}"
+                                        nolabel="1"
+                                    />
+                                </group>
                             </group>
                         </page>
                     </notebook>
@@ -101,8 +103,8 @@
         </field>
     </record>
     <record id="view_account_invoice_filter" model="ir.ui.view">
-        <field name="name">account.invoice.filter.voxel</field>
-        <field name="model">account.invoice</field>
+        <field name="name">account.invoice.select.inherit</field>
+        <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_account_invoice_filter" />
         <field name="groups_id" eval="[(4, ref('edi_voxel.group_voxel_manager'))]" />
         <field name="arch" type="xml">

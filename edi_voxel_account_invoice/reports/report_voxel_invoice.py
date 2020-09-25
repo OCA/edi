@@ -9,11 +9,12 @@ from odoo import api, fields, models
 
 class ReportVoxelInvoice(models.AbstractModel):
     _name = "report.edi_voxel_account_invoice.template_voxel_invoice"
+    _inherit = "report.report_xml.abstract"
     _description = "Edi Voxel Account Invoice Report"
 
     @api.model
     def _get_report_values(self, docids, data=None):
-        docs = self.env["account.invoice"].browse(docids)[:1]
+        docs = self.env["account.move"].browse(docids)[:1]
         data = {
             "general": self._get_general_data(docs),
             "supplier": self._get_suplier_data(docs),
@@ -30,11 +31,11 @@ class ReportVoxelInvoice(models.AbstractModel):
     # report data. Auxiliary methods
     def _get_general_data(self, invoice):
         type_mapping = {"out_invoice": "FacturaComercial", "out_refund": "FacturaAbono"}
-        date_invoice = fields.Datetime.from_string(invoice.date_invoice)
         return {
             "Type": type_mapping.get(invoice.type),
-            "Ref": invoice.number,
-            "Date": date_invoice and datetime.strftime(date_invoice, "%Y-%m-%d"),
+            "Ref": invoice.name,
+            "Date": invoice.invoice_date
+            and datetime.strftime(invoice.invoice_date, "%Y-%m-%d"),
             "Currency": invoice.currency_id.name,
         }
 
@@ -47,7 +48,7 @@ class ReportVoxelInvoice(models.AbstractModel):
             "City": supplier.city,
             "PC": supplier.zip,
             "Province": supplier.state_id.name,
-            "Country": supplier.country_id.code,
+            "Country": supplier.country_id.code_alpha3,
             "Email": supplier.email,
         }
 
@@ -75,14 +76,14 @@ class ReportVoxelInvoice(models.AbstractModel):
                 "City": customer.city,
                 "PC": customer.zip,
                 "Province": customer.state_id.name,
-                "Country": customer.country_id.code,
+                "Country": customer.country_id.code_alpha3,
                 "Email": customer.email,
             }
             for customer in invoice.mapped("picking_ids.partner_id")
         ]
 
     def _get_comments_data(self, invoice):
-        return invoice.comment and [{"Msg": invoice.comment}] or []
+        return invoice.narration and [{"Msg": invoice.narration}] or []
 
     def _get_references_data(self, invoice):
         references = []
@@ -101,14 +102,13 @@ class ReportVoxelInvoice(models.AbstractModel):
                 )
         else:
             orders = invoice.invoice_line_ids.mapped("sale_line_ids.order_id")
-            date_invoice = fields.Date.from_string(invoice.date_invoice)
             for order in orders:
                 references.append(
                     {
                         "DNRef": invoice.number,
                         "PORef": order.client_order_ref or order.name,
-                        "DNRefDate": date_invoice
-                        and date.strftime(date_invoice, "%Y-%m-%d"),
+                        "DNRefDate": invoice.invoice_date
+                        and date.strftime(invoice.invoice_date, "%Y-%m-%d"),
                     }
                 )
         return references
@@ -124,19 +124,19 @@ class ReportVoxelInvoice(models.AbstractModel):
         ]
 
     def _get_product_data(self, line):
-        customer_sku = line.invoice_id._get_customer_product_sku(
+        customer_sku = line.move_id._get_customer_product_sku(
             line.product_id, line.mapped("move_line_ids.picking_id.partner_id")[:1]
         )
         if not customer_sku:
-            customer_sku = line.invoice_id._get_customer_product_sku(
-                line.product_id, line.invoice_id.partner_id
+            customer_sku = line.move_id._get_customer_product_sku(
+                line.product_id, line.move_id.partner_id
             )
         return {
             "SupplierSKU": line.product_id.default_code,
             "CustomerSKU": customer_sku,
             "Item": line.product_id.name,
             "Qty": str(line.quantity),
-            "MU": line.uom_id.voxel_code,
+            "MU": line.product_uom_id.voxel_code,
             "UP": str(line.price_unit),
             "Total": str(line.quantity * line.price_unit),
         }
@@ -157,20 +157,19 @@ class ReportVoxelInvoice(models.AbstractModel):
 
     def _get_product_taxes_data(self, line):
         taxes = []
-        for tax in line.invoice_line_tax_ids:
+        for tax in line.tax_ids:
             rate = tax.amount_type != "group" and str(tax.amount) or False
             taxes.append({"Type": tax.voxel_tax_code, "Rate": rate})
         return taxes
 
     def _get_taxes_data(self, invoice):
         taxes = []
-        for tax_line in invoice.tax_line_ids:
-            tax_obj = self.env["account.tax"].browse(tax_line.tax_id.id)
+        for move_line in invoice.line_ids.filtered("tax_line_id"):
             taxes.append(
                 {
-                    "Type": tax_obj.voxel_tax_code,
-                    "Rate": str(tax_obj.amount),
-                    "Amount": str(tax_line["amount_total"]),
+                    "Type": move_line.tax_line_id.voxel_tax_code,
+                    "Rate": str(move_line.tax_line_id.amount),
+                    "Amount": str(abs(move_line.balance)),
                 }
             )
         return sorted(taxes, key=itemgetter("Type", "Rate", "Amount"))
