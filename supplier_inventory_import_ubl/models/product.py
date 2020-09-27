@@ -16,12 +16,15 @@ class ProductTemplate(models.Model):
     supplier_stock = fields.Float(
         string="Supplier Stock",
         readonly=True,
+        store=True,
         digits=dp.get_precision("Product Unit of Measure"),
         compute="_compute_supplier_stock_fields",
         help=HELP_STK,
     )
     supplier_stock_info = fields.Char(
-        string="Supplier Stock Info", readonly=True,
+        string="Supplier Stock Info",
+        readonly=True,
+        store=True,
         compute="_compute_supplier_stock_fields",
         help=HELP_INF + "\nIf ⚠ is displayed, check supplier stock on variants to get "
         "specific stock information on a particular product",
@@ -54,7 +57,9 @@ class ProductProduct(models.Model):
         help=HELP_STK,
     )
     supplier_stock_info = fields.Char(
-        string="Supplier Stock Info", readonly=True, help=HELP_INF,
+        string="Supplier Stock Info",
+        readonly=True,
+        help=HELP_INF,
     )
 
     @api.multi
@@ -72,7 +77,7 @@ class ProductProduct(models.Model):
 
     @api.model
     def _set_stock_info_from_ubl_inventory(self, supplier, update_date):
-        """ Mainly used in stock quant screen and for reports
-            You may customize it
+        """Mainly used in stock quant screen and for reports
+        You may customize it
         """
         return "%s on %s" % (supplier.name[:5], update_date)
