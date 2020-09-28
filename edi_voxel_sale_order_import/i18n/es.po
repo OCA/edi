@@ -1,0 +1,124 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* edi_voxel_sale_order_import
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-06-28 16:44+0000\n"
+"PO-Revision-Date: 2019-06-28 16:44+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:81
+#, python-format
+msgid "'%s' is not recognised as an XML file"
+msgstr "'%s' no es reconocido como un archivo XML"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:65
+#, python-format
+msgid "<br/><span style='font-weight: bold;'>The following errors were found:</span><br/><ul>%s</ul>"
+msgstr "<br/><span style='font-weight: bold;'>Los siguientes errores fueron encontrados:</span><br/><ul>%s</ul>"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.actions.act_window,help:edi_voxel_sale_order_import.action_voxel_queue_job
+msgid "Click here to add new document"
+msgstr "Clic aquí para agregar un nuevo documento"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.model,name:edi_voxel_sale_order_import.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:153
+#, python-format
+msgid "Couldn't find any <b>Company</b> corresponding to the following information extracted from the Voxel document:<br/><ul>%s</ul>"
+msgstr "No se pudo encontrar ninguna <b>Compañía</b> correspondiente a la siguiente información extraida del documento Voxel:<br/><ul>%s</ul>"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:194
+#, python-format
+msgid "Couldn't find any <b>Delivery Address</b> corresponding to the following information extracted from the Voxel document:<br/><ul>%s</ul>"
+msgstr "No se pudo encontrar ninguna <b>Dirección de entrega</b> correspondiente a la siguiente información extraida del documento Voxel:<br/><ul>%s</ul>"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:284
+#, python-format
+msgid "Couldn't find any <b>Product</b> corresponding to the following information extracted from the Voxel document:<br/><ul>%s</ul>"
+msgstr "No se pudo encontrar ningún <b>Producto</b> correspondiente a la siguiente información extraida del documento Voxel:<br/><ul>%s</ul>"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:320
+#, python-format
+msgid "Couldn't find any <b>Tax</b> corresponding to the following information extracted from the Voxel document:<br/><ul>%s</ul>"
+msgstr "No se pudo encontrar ningún <b>Impuesto</b> correspondiente a la siguiente información extraida del documento Voxel:<br/><ul>%s</ul>"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:58
+#, python-format
+msgid "Created automatically via voxel import (%s)."
+msgstr "Creado automáticamente por importación desde Voxel (%s)."
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.actions.server,name:edi_voxel_sale_order_import.ir_cron_get_voxel_sale_order_ir_actions_server
+#: model:ir.cron,cron_name:edi_voxel_sale_order_import.ir_cron_get_voxel_sale_order
+#: model:ir.cron,name:edi_voxel_sale_order_import.ir_cron_get_voxel_sale_order
+msgid "Edi Voxel: Get voxel sale order"
+msgstr "Edi Voxel: Obtener pedido de Voxel"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.model.fields,field_description:edi_voxel_sale_order_import.field_sale_order_voxel_enabled
+msgid "Enable Voxel"
+msgstr "Habilitar voxel"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.model.fields,field_description:edi_voxel_sale_order_import.field_sale_order_voxel_job_ids
+msgid "Jobs"
+msgstr "Trabajos"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.model,name:edi_voxel_sale_order_import.model_sale_order
+msgid "Quotation"
+msgstr "Presupuesto"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.model.fields,field_description:edi_voxel_sale_order_import.field_res_company_voxel_sale_order_login_id
+#: model:ir.model.fields,field_description:edi_voxel_sale_order_import.field_res_config_settings_voxel_sale_order_login_id
+msgid "Sale Order login"
+msgstr "Login para Pedidos"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:77
+#, python-format
+msgid "This XML file is not XML-compliant"
+msgstr "Este archivo no es compatible con el formato XML"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.ui.view,arch_db:edi_voxel_sale_order_import.view_order_form
+msgid "Voxel"
+msgstr "Voxel"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.model.fields,field_description:edi_voxel_sale_order_import.field_sale_order_voxel_filename
+msgid "Voxel filename"
+msgstr "Archivo Voxel"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.actions.act_window,name:edi_voxel_sale_order_import.action_voxel_queue_job
+#: model:ir.ui.menu,name:edi_voxel_sale_order_import.menu_voxel_queue_job
+msgid "Voxel order Jobs"
+msgstr "Trabajos Voxel"
+
+#. module: edi_voxel_sale_order_import
+#: model:ir.model,name:edi_voxel_sale_order_import.model_res_config_settings
+msgid "res.config.settings"
+msgstr "res.config.settings"
+
