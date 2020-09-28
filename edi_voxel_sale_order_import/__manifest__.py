@@ -4,7 +4,7 @@
 {
     "name": "Voxel sale order",
     "summary": "Import sale order from Voxel.",
-    "version": "11.0.1.0.0",
+    "version": "12.0.1.0.0",
     "category": "Sale",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/oca/edi/",
@@ -13,7 +13,6 @@
         "edi_voxel",
         "onchange_helper",  # See server-side forms (SSF) on v12
         "sale",
-        "sale_order_dates",
     ],
     "data": [
         'security/ir.model.access.csv',
