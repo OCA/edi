@@ -21,7 +21,7 @@ class Picking(models.Model):
     )
 
     def get_voxel_login(self, company=None):
-        """ This method overwrites the one defined in voxel.mixin to provide
+        """This method overwrites the one defined in voxel.mixin to provide
         the login for this specific model (stock.picking)
         """
         return (company or self.company_id).voxel_picking_login_id
