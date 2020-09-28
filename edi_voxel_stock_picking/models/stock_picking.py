@@ -9,15 +9,25 @@ class Picking(models.Model):
     _inherit = ['stock.picking', 'voxel.mixin']
 
     voxel_enabled = fields.Boolean(
-        related='company_id.voxel_enabled',
-        readonly=True,
-    )
+        compute='_compute_voxel_enabled')
     voxel_job_ids = fields.Many2many(
         comodel_name="queue.job",
         relation="stock_picking_voxel_job_rel",
         column1="picking_id",
         column2="voxel_job_id",
         string="Jobs", copy=False)
+
+    def get_voxel_login(self, company=None):
+        """ This method overwrites the one defined in voxel.mixin to provide
+        the login for this specific model (stock.picking)
+        """
+        return self.company_id.voxel_picking_login_id
+
+    @api.multi
+    def _compute_voxel_enabled(self):
+        for record in self:
+            record.voxel_enabled = (record.company_id.voxel_enabled
+                                    and record.partner_id.voxel_enabled)
 
     @api.multi
     def action_done(self):
@@ -40,7 +50,7 @@ class Picking(models.Model):
     def action_send_to_voxel(self):
         # Check if it is a return picking
         def able_to_voxel(record):
-            enabled = record.company_id.voxel_enabled
+            enabled = record.voxel_enabled
             type_code = record.picking_type_code
             is_outgoing = type_code == 'outgoing'
             is_incoming_returned = (type_code == 'incoming' and bool(

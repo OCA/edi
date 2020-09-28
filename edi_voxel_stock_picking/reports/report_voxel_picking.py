@@ -30,7 +30,7 @@ class ReportVoxelPicking(models.AbstractModel):
         return {
             'Type': type_mapping.get(picking.picking_type_code),
             'Ref': picking.name,
-            'Date': datetime.strftime(date, "%Y-%m-%d")
+            'Date': date and datetime.strftime(date, "%Y-%m-%d")
         }
 
     def _get_suplier_data(self, picking):
@@ -92,6 +92,6 @@ class ReportVoxelPicking(models.AbstractModel):
         return {
             'SupplierSKU': line.product_id.default_code,
             'Item': line.product_id.name,
-            'Qty': line.product_uom_qty,
+            'Qty': str(line.product_uom_qty),
             'MU': line.product_uom.voxel_code,
         }

@@ -15,6 +15,8 @@
     "data": [
         "views/report_voxel_picking.xml",
         "views/stock_picking_views.xml",
+        "views/res_company_view.xml",
+        "views/res_config_settings_views.xml",
     ],
     "installable": True,
 }
