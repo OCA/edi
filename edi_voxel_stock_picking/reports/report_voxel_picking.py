@@ -1,15 +1,15 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime
-from odoo import api, fields, models
+from odoo import api, models
 
 
 class ReportVoxelPicking(models.AbstractModel):
     _name = 'report.edi_voxel_stock_picking.template_voxel_picking'
+    _description = 'Edi Voxel Stock picking Report'
 
     @api.model
-    def get_report_values(self, docids, data=None):
+    def _get_report_values(self, docids, data=None):
         docs = self.env['stock.picking'].browse(docids[:1])
         return {
             'general': self._get_general_data(docs),
@@ -26,11 +26,10 @@ class ReportVoxelPicking(models.AbstractModel):
     def _get_general_data(self, picking):
         type_mapping = {'outgoing': 'AlbaranComercial',
                         'incoming': 'AlbaranAbono'}
-        date = fields.Datetime.from_string(picking.date)
         return {
             'Type': type_mapping.get(picking.picking_type_code),
             'Ref': picking.name,
-            'Date': date and datetime.strftime(date, "%Y-%m-%d")
+            'Date': picking.date and picking.date.strftime("%Y-%m-%d") or ''
         }
 
     def _get_suplier_data(self, picking):
@@ -74,7 +73,7 @@ class ReportVoxelPicking(models.AbstractModel):
             'City': customer.city,
             'PC': customer.zip,
             'Province': customer.state_id.name,
-            'Country': customer.country_id.code,
+            'Country': customer.country_id.code_alpha3,
             'Email': customer.email,
         }]
 
