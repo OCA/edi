@@ -30,6 +30,12 @@ class TestVoxelStockPicking(common.SavepointCase):
             'name': 'Product 1 (test)',
             'type': 'product',
         })
+        cls.env['product.customerinfo'].create({
+            'name': partner.id,
+            'product_tmpl_id': product.product_tmpl_id.id,
+            'product_id': product.id,
+            'product_code': '1234567891234',
+        })
         sale_order = cls.env['sale.order'].create({
             'name': 'Sale order name (test)',
             'partner_id': partner.id,
@@ -151,6 +157,7 @@ class TestVoxelStockPicking(common.SavepointCase):
             {
                 'product': {
                     'SupplierSKU': 'DC_001',
+                    'CustomerSKU': '1234567891234',
                     'Item': 'Product 1 (test)',
                     'Qty': "2.0",
                     'MU': 'Unidades',

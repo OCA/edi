@@ -11,6 +11,7 @@
     "depends": [
         "edi_voxel",
         "sale_stock",
+        "product_supplierinfo_for_customer",
     ],
     "data": [
         "views/report_voxel_picking.xml",

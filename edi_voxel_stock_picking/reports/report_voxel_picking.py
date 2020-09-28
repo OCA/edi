@@ -96,7 +96,27 @@ class ReportVoxelPicking(models.AbstractModel):
     def _get_product_data(self, line):
         return {
             'SupplierSKU': line.product_id.default_code,
+            'CustomerSKU': self._get_customer_sku(line),
             'Item': line.product_id.name,
             'Qty': str(line.product_uom_qty),
             'MU': line.product_uom.voxel_code,
         }
+
+    def _get_customer_sku(self, line):
+        supplierinfo = line.product_id.product_tmpl_id.customer_ids
+        customer = line.picking_id.partner_id
+        if customer:
+            res = self._get_supplierinfo(line, supplierinfo, customer)
+        if not customer or not res:
+            client = line.picking_id.sale_id.partner_invoice_id
+            res = self._get_supplierinfo(line, supplierinfo, client)
+        return res.product_code
+
+    def _get_supplierinfo(self, line, supplierinfo, partner):
+        res = self.env['product.customerinfo']
+        for rec in supplierinfo:
+            if rec.name == partner and rec.product_id == line.product_id:
+                return rec
+            if not res and (rec.name == partner and not rec.product_id):
+                res = rec
+        return res
