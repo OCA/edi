@@ -2,10 +2,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import os
-from datetime import datetime
+from datetime import date, datetime
 from odoo.tests import common
 from odoo.modules.module import get_module_path
-from odoo import fields
 
 
 class TestVoxelSaleOrderImport(common.SavepointCase):
@@ -61,13 +60,12 @@ class TestVoxelSaleOrderImport(common.SavepointCase):
         # check general data
         self.assertEqual(sale_order.origin, "1111")
         self.assertEqual(sale_order.currency_id.name, "EUR")
-        date_begin = date_end = datetime(2019, 6, 19)
         self.assertEqual(
-            sale_order.requested_date, fields.Datetime.to_string(date_begin))
+            sale_order.commitment_date, datetime(2019, 6, 19))
         self.assertEqual(
-            sale_order.date_order, fields.Datetime.to_string(date_begin))
+            sale_order.date_order, datetime(2019, 6, 19))
         self.assertEqual(
-            sale_order.validity_date, fields.Date.to_string(date_end))
+            sale_order.validity_date, date(2019, 6, 19))
         # check supplier, client and customer
         self.assertEqual(sale_order.company_id, self.company_test)
         self.assertEqual(sale_order.partner_id, self.customer_test)
@@ -76,11 +74,11 @@ class TestVoxelSaleOrderImport(common.SavepointCase):
         so_line = sale_order.order_line[0]
         self.assertEqual(so_line.product_id, self.product_test_1)
         self.assertEqual(
-            so_line.product_uom, self.env.ref('product.product_uom_unit'))
+            so_line.product_uom, self.env.ref('uom.product_uom_unit'))
         self.assertEqual(so_line.product_uom_qty, 1)
         # check order line 2
         so_line = sale_order.order_line[1]
         self.assertEqual(so_line.product_id, self.product_test_2)
         self.assertEqual(
-            so_line.product_uom, self.env.ref('product.product_uom_unit'))
+            so_line.product_uom, self.env.ref('uom.product_uom_unit'))
         self.assertEqual(so_line.product_uom_qty, 2)

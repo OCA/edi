@@ -62,7 +62,7 @@ class Company(models.Model):
             create_msg += _("<br/><span style='font-weight: bold;'>"
                             "The following errors were found:</span><br/>"
                             "<ul>%s</ul>" % (str_error_msgs))
-        order.message_post(create_msg)
+        order.message_post(body=create_msg)
         return order
 
     @api.model
@@ -119,7 +119,7 @@ class Company(models.Model):
                     begin_date += begin_time
                     date_format += "%H:%M:%S"
                 vals.update(
-                    requested_date=datetime.strptime(begin_date, date_format),
+                    commitment_date=datetime.strptime(begin_date, date_format),
                     date_order=datetime.strptime(begin_date, date_format),
                 )
             # add validity_date
@@ -281,7 +281,7 @@ class Company(models.Model):
                   "\nResults: %s") % (product_data, len(product))
             )
         product_uom_qty = float(product_data.get('Qty', '1'))
-        product_uom = self.env['product.uom'].search(
+        product_uom = self.env['uom.uom'].search(
             [('voxel_code', '=', product_data.get('MU'))])
         line_vals.update(
             product_id=product.id,
