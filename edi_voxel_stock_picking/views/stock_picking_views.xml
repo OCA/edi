@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_send_to_voxel"
+                        string="Send to Voxel"
+                        type="object"
+                        attrs="{'invisible': [
+                            '|',
+                            ('picking_type_code', '=', 'internal'),
+                            ('state', 'not in', ['assigned', 'done']),
+                        ]}"/>
+            </header>
+            <notebook position="inside">
+                <field name="voxel_enabled" invisible="1"/>
+                <page string="Voxel"
+                      attrs="{'invisible': [('voxel_enabled', '!=', True)]}">
+                    <group>
+                        <field name="voxel_state"/>
+                    </group>
+                    <notebook>
+                        <page string="Voxel Jobs" name="page_voxel_jobs">
+                            <group name="group_voxel_jobs">
+                                <field name="voxel_job_ids"
+                                       options="{'reload_on_button': true}"
+                                       nolabel="1"
+                                       readonly="1">
+                                    <tree>
+                                        <field name="date_created"/>
+                                        <field name="eta"/>
+                                        <field name="date_done"/>
+                                        <field name="state"/>
+                                        <button type="object"
+                                                name="voxel_requeue_sudo"
+                                                string="Requeue"
+                                                class="oe_highlight"
+                                                attrs="{'invisible': [('state', '!=', 'failed')]}"/>
+                                        <button type="object"
+                                                name="voxel_cancel_now"
+                                                string="Cancel sending"
+                                                class="oe_highlight_cancel"
+                                                icon="fa-times-circle"
+                                                attrs="{'invisible': [('state', 'not in', ['pending','enqueued'])]}"/>
+                                        <button type="object"
+                                                name="voxel_do_now"
+                                                string="Send now"
+                                                class="oe_highlight"
+                                                icon="fa-fighter-jet"
+                                                attrs="{'invisible': ['|', ('state', '!=', 'pending'), ('eta', '=', False)]}"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Voxel XML report"
+                              name="page_voxel_report"
+                              attrs="{'invisible': [('voxel_xml_report', '=', False)]}">
+                            <group name="group_voxel_report">
+                                <field name="voxel_xml_report" widget="ace"
+                                       options="{'mode': 'xml'}"
+                                       nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
