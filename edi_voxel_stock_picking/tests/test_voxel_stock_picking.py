@@ -11,8 +11,24 @@ class TestVoxelStockPicking(common.SavepointCase):
     def setUpClass(cls):
         super(TestVoxelStockPicking, cls).setUpClass()
         # Sale order company
+        country = cls.env["res.country"].create({"name": "Country", "code": "CT"})
+        state = cls.env["res.country.state"].create(
+            {"name": "Province", "code": "PRC", "country_id": country.id}
+        )
         main_company = cls.env.ref("base.main_company")
-        main_company.write({"vat": "US1234567890", "street2": "Street 2"})
+        main_company.write(
+            {
+                "vat": "US1234567890",
+                "street": "Street 1",
+                "street2": "Street 2",
+                "name": "YourCompany",
+                "city": "City",
+                "zip": "99999",
+                "state_id": state.id,
+                "country_id": country.id,
+                "email": "info@yourcompany.example.com",
+            }
+        )
         # Sale order client
         partner = cls.env["res.partner"].create(
             {
@@ -52,6 +68,7 @@ class TestVoxelStockPicking(common.SavepointCase):
                 "name": "LOT01",
                 "product_id": product2.id,
                 "life_date": "2020-01-01 12:05:23",
+                "company_id": main_company.id,
             }
         )
         sale_order = cls.env["sale.order"].create(
@@ -157,11 +174,11 @@ class TestVoxelStockPicking(common.SavepointCase):
         return {
             "CIF": "US1234567890",
             "Company": "YourCompany",
-            "Address": "1725 Slough Ave., Street 2",
-            "City": "Scranton",
-            "PC": "18540",
-            "Province": "Pennsylvania",
-            "Country": "US",
+            "Address": "Street 1, Street 2",
+            "City": "City",
+            "PC": "99999",
+            "Province": "Province",
+            "Country": "CT",
             "Email": "info@yourcompany.example.com",
         }
 

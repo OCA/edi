@@ -6,6 +6,7 @@ from odoo import api, models
 
 class ReportVoxelPicking(models.AbstractModel):
     _name = "report.edi_voxel_stock_picking.template_voxel_picking"
+    _inherit = "report.report_xml.abstract"
     _description = "Edi Voxel Stock picking Report"
 
     @api.model

@@ -27,13 +27,6 @@
                     <group>
                         <field name="voxel_state" />
                     </group>
-                    <group
-                        name="group_voxel_processing_error"
-                        colspan="8"
-                        attrs="{'invisible': [('processing_error', '=', False)]}"
-                    >
-                        <field name="processing_error" />
-                    </group>
                     <notebook>
                         <page string="Voxel Jobs" name="page_voxel_jobs">
                             <group name="group_voxel_jobs">
@@ -59,6 +52,7 @@
                                             type="object"
                                             name="voxel_cancel_now"
                                             string="Cancel sending"
+                                            class="oe_highlight_cancel"
                                             icon="fa-times-circle"
                                             attrs="{'invisible': [('state', 'not in', ['pending','enqueued'])]}"
                                         />
@@ -66,6 +60,7 @@
                                             type="object"
                                             name="voxel_do_now"
                                             string="Send now"
+                                            class="oe_highlight"
                                             icon="fa-fighter-jet"
                                             attrs="{'invisible': ['|', ('state', '!=', 'pending'), ('eta', '=', False)]}"
                                         />
@@ -85,12 +80,23 @@
                                 >
                                     <field name="voxel_filename" />
                                 </group>
-                                <field
-                                    name="voxel_xml_report"
-                                    widget="ace"
-                                    options="{'mode': 'xml'}"
-                                    nolabel="1"
-                                />
+                                <group colspan="8">
+                                    <field
+                                        name="voxel_xml_report"
+                                        widget="ace"
+                                        options="{'mode': 'xml'}"
+                                        nolabel="1"
+                                    />
+                                </group>
+                            </group>
+                        </page>
+                        <page
+                            string="Processing error"
+                            name="page_voxel_precessing_error"
+                            attrs="{'invisible': [('processing_error', '=', False)]}"
+                        >
+                            <group name="group_voxel_processing_error" colspan="8">
+                                <field name="processing_error" nolabel="1" />
                             </group>
                         </page>
                     </notebook>
