@@ -81,7 +81,9 @@ class ReportVoxelPicking(models.AbstractModel):
         return picking.note and [{'Msg': picking.note}] or []
 
     def _get_references_data(self, picking):
-        return [{'PORef': picking.sale_id.name}]
+        return [{
+            'PORef': picking.sale_id.client_order_ref or picking.sale_id.name,
+        }]
 
     def _get_products_data(self, picking):
         return [{
