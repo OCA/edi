@@ -29,15 +29,15 @@ class Company(models.Model):
     )
 
     def get_voxel_login(self, company):
-        """ This method overwrites the one defined in voxel.mixin to provide
+        """This method overwrites the one defined in voxel.mixin to provide
         the login for this specific model (sale.order) and company passed as
         parameter
         """
         return company.voxel_sale_order_login_id
 
     def import_orders_cron(self):
-        """ Using the method defined in 'voxel.mixin' class for importing
-        documents from Voxel """
+        """Using the method defined in 'voxel.mixin' class for importing
+        documents from Voxel"""
         for company in self.env["res.company"].search([]):
             if company.voxel_enabled and self.get_voxel_login(company):
                 self.enqueue_import_voxel_documents(company)
@@ -45,7 +45,7 @@ class Company(models.Model):
     # Voxel import auxiliary methods
     @api.model
     def create_document_from_xml(self, xml_content, voxel_filename, company):
-        """ This method overwrites the one defined in voxel.mixin to provide
+        """This method overwrites the one defined in voxel.mixin to provide
         the mechanism to import a document for this specific model (sale.order)
         """
         error_msgs = []
