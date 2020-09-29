@@ -126,7 +126,9 @@ class Company(models.Model):
             end_date = general_data.get("EndDate")
             if end_date:
                 # add validity_date
-                vals["validity_date"] = datetime.strptime(end_date, "%Y-%m-%d").date()
+                vals.update(
+                    validity_date=datetime.strptime(end_date, "%Y-%m-%d").date()
+                )
 
     def _parse_supplier_data_voxel(self, vals, xml_root, error_msgs):
         """Not in use right now."""
@@ -230,7 +232,7 @@ class Company(models.Model):
             domains.append([("city", "=", data["city"])])
         partner = self.env["res.partner"].search(expression.AND(domains))
         if len(partner) == 1:
-            return  # return the unique partner matching
+            return partner  # return the unique partner matching
         if raise_error:
             raise UserError(
                 _("Can't find a suitable partner for this data:\n\n%s" "\nResults: %s")

@@ -18,13 +18,13 @@ msgstr ""
 "X-Generator: Poedit 2.0.6\n"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:76
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid "'%s' is not recognised as an XML file"
 msgstr "'%s' no es reconocido como un archivo XML"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:61
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid ""
 "<br/><span style='font-weight: bold;'>The following errors were found:</"
@@ -34,7 +34,7 @@ msgstr ""
 "encontrados:</span><br/><ul>%s</ul>"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:227
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid ""
 "Can't find a suitable partner for this data:\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Results: %s"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:276
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid ""
 "Can't find a suitable product for this data:\n"
@@ -69,12 +69,11 @@ msgstr "Compañías"
 #. module: edi_voxel_sale_order_import
 #: model:ir.model,name:edi_voxel_sale_order_import.model_res_config_settings
 #, fuzzy
-#| msgid "res.config.settings"
 msgid "Config Settings"
 msgstr "Configuración"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:148
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid ""
 "Couldn't find any <b>Company</b> corresponding to the following information "
@@ -84,7 +83,7 @@ msgstr ""
 "información extraida del documento Voxel:<br/><ul>%s</ul>"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:193
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid ""
 "Couldn't find any <b>Delivery Address</b> corresponding to the following "
@@ -94,7 +93,7 @@ msgstr ""
 "la siguiente información extraida del documento Voxel:<br/><ul>%s</ul>"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:319
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid ""
 "Couldn't find any <b>Tax</b> corresponding to the following information "
@@ -104,7 +103,7 @@ msgstr ""
 "información extraida del documento Voxel:<br/><ul>%s</ul>"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:54
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid "Created automatically via voxel import (%s)."
 msgstr "Creado automáticamente por importación desde Voxel (%s)."
@@ -127,20 +126,19 @@ msgid "Jobs"
 msgstr "Trabajos"
 
 #. module: edi_voxel_sale_order_import
-#: model:ir.model,name:edi_voxel_sale_order_import.model_sale_order
-#, fuzzy
-#| msgid "Sale Order login"
-msgid "Sale Order"
-msgstr "Orden de Venta"
-
-#. module: edi_voxel_sale_order_import
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import.field_res_company__voxel_sale_order_login_id
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import.field_res_config_settings__voxel_sale_order_login_id
 msgid "Sale Order login"
 msgstr "Login para Pedidos"
 
 #. module: edi_voxel_sale_order_import
-#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:74
+#: model:ir.model,name:edi_voxel_sale_order_import.model_sale_order
+#, fuzzy
+msgid "Sales Order"
+msgstr "Orden de Venta"
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid "This XML file is not XML-compliant"
 msgstr "Este archivo no es compatible con el formato XML"
@@ -153,7 +151,6 @@ msgstr "Voxel"
 #. module: edi_voxel_sale_order_import
 #: model_terms:ir.ui.view,arch_db:edi_voxel_sale_order_import.sale_order_view_search_inherit_quotation
 #, fuzzy
-#| msgid "Quotation"
 msgid "Voxel Quotations"
 msgstr "Presupuestos Voxel"
 
