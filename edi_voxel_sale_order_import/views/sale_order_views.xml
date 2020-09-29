@@ -47,7 +47,6 @@
     <record id="action_voxel_queue_job" model="ir.actions.act_window">
         <field name="name">Voxel order Jobs</field>
         <field name="res_model">queue.job</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="context">{'search_default_failed': 1}</field>
         <field
