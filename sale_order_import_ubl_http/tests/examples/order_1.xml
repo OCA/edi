@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Order
+    xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2"
+    xmlns:ccts="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2"
+    xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2"
+    xmlns:gaga="urn:oasis:names:specification:ubl:schema:xsd:Order-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:Order-2"
+>
+    <cbc:UBLVersionID>2.0</cbc:UBLVersionID>
+    <cbc:ProfileID
+    >bpid:urn:oasis:names:draft:bpss:ubl-2-sbs-order-with-simple-response-draft</cbc:ProfileID>
+    <cbc:ID>4500018194</cbc:ID>
+    <cbc:IssueDate>2020-09-17</cbc:IssueDate>
+    <cbc:IssueTime>00:00:00</cbc:IssueTime>
+    <cac:BuyerCustomerParty>
+        <cac:Party>
+            <cac:PartyIdentification>
+                <cac:ID cac:schemeName="CH;VAT">310010</cac:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Wood Corner</cbc:Name>
+            </cac:PartyName>
+            <cac:PartyTaxScheme>
+                <cbc:RegistrationName>Wood Corner</cbc:RegistrationName>
+                <cbc:CompanyID>CHE-105.825.014 MWST</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>CH;VAT</cbc:ID>
+                    <cbc:TaxTypeCode>4035645145881</cbc:TaxTypeCode>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+        </cac:Party>
+    </cac:BuyerCustomerParty>
+    <cac:SellerSupplierParty>
+        <cac:Party>
+            <cac:PartyName>
+                <cbc:Name>YourCompany</cbc:Name>
+            </cac:PartyName>
+        </cac:Party>
+    </cac:SellerSupplierParty>
+    <cac:OrderLine>
+        <cac:LineItem>
+            <cbc:ID>30</cbc:ID>
+            <cbc:Quantity cbc:unitCode="C62">20000</cbc:Quantity>
+            <cac:Item>
+                <cbc:Description>Office Chair</cbc:Description>
+                <cac:SellersItemIdentification>
+                    <cbc:ID>FURN_7777</cbc:ID>
+                </cac:SellersItemIdentification>
+            </cac:Item>
+        </cac:LineItem>
+    </cac:OrderLine>
+    <cac:OrderLine>
+        <cac:LineItem>
+            <cbc:ID>40</cbc:ID>
+            <cbc:Quantity cbc:unitCode="C62">78000</cbc:Quantity>
+            <cac:Item>
+                <cbc:Description>Office Lamp</cbc:Description>
+                <cac:SellersItemIdentification>
+                    <cbc:ID>FURN_8888</cbc:ID>
+                </cac:SellersItemIdentification>
+            </cac:Item>
+        </cac:LineItem>
+    </cac:OrderLine>
+</Order>
