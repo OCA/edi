@@ -641,7 +641,9 @@ class BaseUbl(models.AbstractModel):
         id_node = party_node.xpath("cac:PartyIdentification/cbc:ID", namespaces=ns)
         if id_node:
             partner_dict["id_number"] = id_node[0].text
-            partner_dict["id_schemeID"] = id_node[0].attrib.get("schemeID")
+            partner_dict["id_schemeID"] = id_node[0].attrib.get(
+                "{urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2}"
+                "schemeID")
         address_xpath = party_node.xpath("cac:PostalAddress", namespaces=ns)
         if address_xpath:
             address_dict = self.ubl_parse_address(address_xpath[0], ns)
