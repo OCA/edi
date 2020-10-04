@@ -8,9 +8,7 @@ class BusinessDocumentImport(models.AbstractModel):
     _inherit = "business.document.import"
 
     @api.model
-    def _hook_match_partner(
-        self, partner_dict, chatter_msg, domain, partner_type_label
-    ):
+    def _hook_match_partner(self, partner_dict, chatter_msg, domain, order):
         if partner_dict.get("id_number") and partner_dict.get("id_schemeID"):
             categ = self.env["res.partner.id_category"].search(
                 [("code", "=", partner_dict.get("id_schemeID"))]
@@ -25,6 +23,15 @@ class BusinessDocumentImport(models.AbstractModel):
                     limit=1,
                 )
                 if id_number:
+                    partner = id_number.partner_id
+                    # Search for a contact of this partner
+                    domain = [
+                        ("parent_id", "=", partner.id),
+                        ("is_company", "=", False),
+                    ]
+                    contact = self._match_partner_contact(partner_dict, domain, order)
+                    if contact:
+                        return contact
                     return id_number.partner_id
                 raise self.user_error_wrap(
                     _(
@@ -33,11 +40,6 @@ class BusinessDocumentImport(models.AbstractModel):
                         "ID Number: %s\n"
                         "ID Number Category: %s\n"
                     )
-                    % (
-                        partner_dict["id_number"],
-                        partner_dict["id_schemeID"],
-                   )
+                    % (partner_dict["id_number"], partner_dict["id_schemeID"])
                 )
-        return super()._hook_match_partner(
-            partner_dict, chatter_msg, domain, partner_type_label
-        )
+        return super()._hook_match_partner(partner_dict, chatter_msg, domain, order)
