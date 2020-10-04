@@ -46,6 +46,39 @@ class BusinessDocumentImport(models.AbstractModel):
             if match_dict.get("state_code"):
                 match_dict["state_code"] = match_dict["state_code"].upper()
 
+    @api.model
+    def _match_partner_contact(self, partner_dict, domain, order):
+        rpo = self.env["res.partner"]
+        if partner_dict.get("email") and "@" in partner_dict["email"]:
+            partner = rpo.search(
+                domain + [("email", "=ilike", partner_dict["email"])],
+                limit=1,
+                order=order,
+            )
+            if partner:
+                return partner
+        if partner_dict.get("contact"):
+            partner = rpo.search(
+                domain + [("name", "=ilike", partner_dict["contact"])],
+                limit=1,
+                order=order,
+            )
+            if partner:
+                return partner
+        if partner_dict.get("phone"):
+            partner = rpo.search(
+                domain
+                + [
+                    "|",
+                    ("mobile", "=", partner_dict["phone"]),
+                    ("phone", "=", partner_dict["phone"]),
+                ],
+                limit=1,
+                order=order,
+            )
+            if partner:
+                return partner
+
     @api.model  # noqa: C901
     def _match_partner(self, partner_dict, chatter_msg, partner_type="supplier"):
         """Example:
@@ -59,8 +92,6 @@ class BusinessDocumentImport(models.AbstractModel):
             'ref': 'C1242',
             'phone': '01.41.98.12.42',
             }
-        The key 'phone' is used by the module
-        base_phone_business_document_import
         """
         rpo = self.env["res.partner"]
         self._strip_cleanup_dict(partner_dict)
@@ -126,25 +157,16 @@ class BusinessDocumentImport(models.AbstractModel):
             domain += [("vat", "=", vat)]
 
         # Hook to plug alternative matching methods
-        partner = self._hook_match_partner(
-            partner_dict, chatter_msg, domain, partner_type_label
-        )
+        partner = self._hook_match_partner(partner_dict, chatter_msg, domain, order)
+        if partner:
+            return partner
+
+        # Search for partner contact
+        partner = self._match_partner_contact(partner_dict, domain, order)
         if partner:
             return partner
 
         # Search for partner
-        email_domain = False
-        if partner_dict.get("email") and "@" in partner_dict["email"]:
-            partner = rpo.search(
-                domain + [("email", "=ilike", partner_dict["email"])],
-                limit=1,
-                order=order,
-            )
-            if partner:
-                return partner
-            else:
-                email_domain = partner_dict["email"].split("@")[1]
-
         if partner_dict.get("name"):
             partner = rpo.search(
                 domain + [("name", "=ilike", partner_dict["name"])],
@@ -155,6 +177,11 @@ class BusinessDocumentImport(models.AbstractModel):
                 return partner
 
         website_domain = False
+        email_domain = (
+            partner_dict.get("email")
+            and "@" in partner_dict["email"]
+            and partner_dict["email"].split("@")[1]
+        )
         if partner_dict.get("website"):
             urlp = urlparse(partner_dict["website"])
             netloc = urlp.netloc
