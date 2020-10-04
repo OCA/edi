@@ -1,10 +1,10 @@
 # Copyright 2020 Jacques-Etienne Baudoux <je@bcim.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import TransactionCase
+from odoo.tests import common
 
 
-class TestBaseBusinessDocumentImport(TransactionCase):
+class TestBaseBusinessDocumentImport(common.SavepointCase):
     def test_match_partner(self):
         externalID = "MYEXTID"
         externalSchemeID = "EXTCATEG"
