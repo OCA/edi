@@ -1,4 +1,5 @@
 # Copyright 2016-2019 Akretion France (http://www.akretion.com/)
+# Copyright 2020 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -39,14 +40,6 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                 "email": "contact@akretion.com",
             }
         )
-        cpartner1 = rpo.create(
-            {
-                "parent_id": partner1.id,
-                "name": "Alexis de Lattre",
-                "email": "alexis.delattre@akretion.com",
-                "type": "delivery",
-            }
-        )
         rpo.create(
             {
                 "parent_id": partner1.id,
@@ -68,18 +61,18 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             }
         )
         shipping_dict = {
-            "partner": {"email": "contact@akretion.com"},
-            "address": {},
+            "email": "contact@akretion.com",
         }
         res = bdio._match_shipping_partner(shipping_dict, None, [])
-        self.assertEqual(res, cpartner1)
-        shipping_dict["address"] = {
+        self.assertEqual(res, partner1)
+        shipping_dict = {
+            "street": "42 rue des lilas d'Espagne",
             "zip": "92400",
             "country_code": "fr",
         }
         res = bdio._match_shipping_partner(shipping_dict, None, [])
         self.assertEqual(res, cpartner3)
-        shipping_dict["address"]["zip"] = "92500"
+        shipping_dict["zip"] = "92500"
         with self.assertRaises(UserError):
             bdio._match_shipping_partner(shipping_dict, None, [])
         partner2 = rpo.create(
@@ -91,17 +84,12 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             }
         )
         shipping_dict = {
-            "partner": {"email": "contact@alex.com"},
-            "address": {"country_code": "FR", "zip": "69009"},
+            "email": "contact@alex.com",
+            "zip": "69009",
+            "country_code": "FR",
         }
         res = bdio._match_shipping_partner(shipping_dict, None, [])
         self.assertEqual(res, partner2)
-        shipping_dict = {
-            "partner": {},
-            "address": {},
-        }
-        res = bdio._match_shipping_partner(shipping_dict, partner1, [])
-        self.assertEqual(res, cpartner1)
 
     def test_match_currency(self):
         bdio = self.env["business.document.import"]
