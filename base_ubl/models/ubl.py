@@ -1,5 +1,6 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # Copyright 2019 Onestein (<https://www.onestein.eu>)
+# Copyright 2020 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
@@ -605,21 +606,17 @@ class BaseUbl(models.AbstractModel):
     # ==================== METHODS TO PARSE UBL files
 
     @api.model
-    def ubl_parse_customer_party(self, customer_party_node, ns):
-        ref_xpath = customer_party_node.xpath(
-            "cac:SupplierAssignedAccountID", namespaces=ns
-        )
-        party_node = customer_party_node.xpath("cac:Party", namespaces=ns)[0]
+    def ubl_parse_customer_party(self, party_node, ns):
+        ref_xpath = party_node.xpath("cac:SupplierAssignedAccountID", namespaces=ns)
+        party_node = party_node.xpath("cac:Party", namespaces=ns)[0]
         partner_dict = self.ubl_parse_party(party_node, ns)
         partner_dict["ref"] = ref_xpath and ref_xpath[0].text or False
         return partner_dict
 
     @api.model
-    def ubl_parse_supplier_party(self, customer_party_node, ns):
-        ref_xpath = customer_party_node.xpath(
-            "cac:CustomerAssignedAccountID", namespaces=ns
-        )
-        party_node = customer_party_node.xpath("cac:Party", namespaces=ns)[0]
+    def ubl_parse_supplier_party(self, party_node, ns):
+        ref_xpath = party_node.xpath("cac:CustomerAssignedAccountID", namespaces=ns)
+        party_node = party_node.xpath("cac:Party", namespaces=ns)[0]
         partner_dict = self.ubl_parse_party(party_node, ns)
         partner_dict["ref"] = ref_xpath and ref_xpath[0].text or False
         return partner_dict
@@ -644,13 +641,19 @@ class BaseUbl(models.AbstractModel):
             "email": contact_email_xpath and contact_email_xpath[0].text or False,
             "phone": contact_phone_xpath and contact_phone_xpath[0].text or False,
         }
-        id_node = party_node.xpath("cac:PartyIdentification/cbc:ID", namespaces=ns)
-        if id_node:
-            partner_dict["id_number"] = id_node[0].text
-            partner_dict["id_schemeID"] = id_node[0].attrib.get(
-                "{urn:oasis:names:specification:ubl:schema:xsd:"
-                "CommonAggregateComponents-2}schemeID"
+        id_nodes = party_node.xpath("cac:PartyIdentification/cbc:ID", namespaces=ns)
+        id_numbers = []
+        for id_node in id_nodes:
+            id_numbers.append(
+                {
+                    "value": id_node.text,
+                    "schemeID": id_node.attrib.get(
+                        "{urn:oasis:names:specification:ubl:schema:xsd:"
+                        "CommonAggregateComponents-2}schemeID"
+                    ),
+                }
             )
+        partner_dict["id_number"] = id_numbers
         address_xpath = party_node.xpath("cac:PostalAddress", namespaces=ns)
         if address_xpath:
             address_dict = self.ubl_parse_address(address_xpath[0], ns)
@@ -665,6 +668,10 @@ class BaseUbl(models.AbstractModel):
         country_code = country_code_xpath and country_code_xpath[0].text or False
         state_code_xpath = address_node.xpath("cbc:CountrySubentityCode", namespaces=ns)
         state_code = state_code_xpath and state_code_xpath[0].text or False
+        street_xpath = address_node.xpath("cbc:StreetName", namespaces=ns)
+        street2_xpath = address_node.xpath("cbc:AdditionalStreetName", namespaces=ns)
+        street_number_xpath = address_node.xpath("cbc:BuildingNumber", namespaces=ns)
+        city_xpath = address_node.xpath("cbc:CityName", namespaces=ns)
         zip_xpath = address_node.xpath("cbc:PostalZone", namespaces=ns)
         zip_code = (
             zip_xpath
@@ -673,6 +680,12 @@ class BaseUbl(models.AbstractModel):
             or False
         )
         address_dict = {
+            "street": street_xpath and street_xpath[0].text or False,
+            "street_number": street_number_xpath
+            and street_number_xpath[0].text
+            or False,
+            "street2": street2_xpath and street2_xpath[0].text or False,
+            "city": city_xpath and city_xpath[0].text or False,
             "zip": zip_code,
             "state_code": state_code,
             "country_code": country_code,
@@ -686,18 +699,22 @@ class BaseUbl(models.AbstractModel):
             partner_dict = self.ubl_parse_party(party_xpath[0], ns)
         else:
             partner_dict = {}
-        delivery_address_xpath = delivery_node.xpath(
-            "cac:DeliveryLocation/cac:Address", namespaces=ns
+        postal_xpath = delivery_node.xpath(
+            "cac:DeliveryParty/cac:PostalAddress", namespaces=ns
         )
-        if not delivery_address_xpath:
+        if not postal_xpath:
             delivery_address_xpath = delivery_node.xpath(
-                "cac:DeliveryAddress", namespaces=ns
+                "cac:DeliveryLocation/cac:Address", namespaces=ns
             )
-        if delivery_address_xpath:
-            address_dict = self.ubl_parse_address(delivery_address_xpath[0], ns)
-        else:
-            address_dict = {}
-        return {"partner": partner_dict, "address": address_dict}
+            if not delivery_address_xpath:
+                delivery_address_xpath = delivery_node.xpath(
+                    "cac:DeliveryAddress", namespaces=ns
+                )
+            if delivery_address_xpath:
+                partner_dict.update(
+                    self.ubl_parse_address(delivery_address_xpath[0], ns)
+                )
+        return partner_dict
 
     def ubl_parse_incoterm(self, delivery_term_node, ns):
         incoterm_xpath = delivery_term_node.xpath("cbc:ID", namespaces=ns)
