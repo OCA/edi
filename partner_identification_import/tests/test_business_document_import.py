@@ -24,7 +24,9 @@ class TestBaseBusinessDocumentImport(common.SavepointCase):
         cls.partner1_contact = cls.env["res.partner"].create(
             {"name": "Contact", "parent_id": cls.partner1.id, "type": "contact"}
         )
-        cls.partner_dict = {"id_number": externalID, "id_schemeID": externalSchemeID}
+        cls.partner_dict = {
+            "id_number": [{"value": externalID, "schemeID": externalSchemeID}]
+        }
 
     def test_match_partner(self):
         bdio = self.env["business.document.import"]

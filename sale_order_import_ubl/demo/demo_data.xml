@@ -33,6 +33,14 @@
         <field name="type">contact</field>
         <field name="property_product_pricelist" ref="sek_pricelist" />
     </record>
+    <record id="karlsson" model="res.partner">
+        <field name="parent_id" ref="johnssons" />
+        <field name="name">Jack Karlsson</field>
+        <field name="function">Accountant</field>
+        <field name="email">jack@johnsson.se</field>
+        <field name="customer_rank" eval="1" />
+        <field name="type">invoice</field>
+    </record>
     <record id="swedish_trucking" model="res.partner">
         <field name="name">Swedish trucking</field>
         <field name="is_company" eval="True" />
@@ -146,6 +154,10 @@
         <field name="parent_id" ref="gentofte_kommune" />
         <field name="name">Joe Delivery</field>
         <field name="customer_rank" eval="1" />
-        <field name="type">contact</field>
+        <field name="type">delivery</field>
+        <field name="street">161 Bernstorffsvej</field>
+        <field name="zip">2920</field>
+        <field name="city">Charlottenlund</field>
+        <field name="country_id" ref="base.dk" />
     </record>
 </odoo>

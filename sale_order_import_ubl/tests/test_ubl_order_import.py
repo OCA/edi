@@ -14,24 +14,23 @@ class TestUblOrderImport(TransactionCase):
             "UBL-Order-2.1-Example.xml": {
                 "client_order_ref": "34",
                 "date_order": "2010-01-20",
-                "partner": self.env.ref("sale_order_import_ubl.johnssons"),
+                "partner": self.env.ref("sale_order_import_ubl.svensson"),
                 "shipping_partner": self.env.ref(
                     "sale_order_import_ubl.swedish_trucking"
                 ),
+                "invoicing_partner": self.env.ref("sale_order_import_ubl.karlsson"),
                 "currency": self.env.ref("base.SEK"),
             },
             "UBL-Order-2.0-Example.xml": {
                 "client_order_ref": "AEG012345",
                 "date_order": "2010-06-20",
-                "partner": self.env.ref("sale_order_import_ubl.iyt"),
-                "shipping_partner": self.env.ref(
-                    "sale_order_import_ubl.fred_churchill"
-                ),
+                "partner": self.env.ref("sale_order_import_ubl.fred_churchill"),
+                "shipping_partner": self.env.ref("sale_order_import_ubl.iyt"),
                 "currency": self.env.ref("base.GBP"),
             },
             "UBL-RequestForQuotation-2.0-Example.xml": {
-                "partner": self.env.ref("sale_order_import_ubl.terminus"),
-                "shipping_partner": self.env.ref("sale_order_import_ubl.s_massiah"),
+                "partner": self.env.ref("sale_order_import_ubl.s_massiah"),
+                "shipping_partner": self.env.ref("sale_order_import_ubl.iyt"),
             },
             "UBL-RequestForQuotation-2.1-Example.xml": {
                 "partner": self.env.ref("sale_order_import_ubl.gentofte_kommune"),
@@ -50,7 +49,7 @@ class TestUblOrderImport(TransactionCase):
             f.close()
             action = wiz.import_order_button()
             so = self.env["sale.order"].browse(action["res_id"])
-            self.assertEqual(so.partner_id.commercial_partner_id, res["partner"])
+            self.assertEqual(so.partner_id, res["partner"])
             if res.get("currency"):
                 self.assertEqual(so.currency_id, res["currency"])
             if res.get("client_order_ref"):

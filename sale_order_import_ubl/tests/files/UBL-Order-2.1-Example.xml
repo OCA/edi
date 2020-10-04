@@ -124,6 +124,46 @@
             <cbc:ElectronicMail>eva@johnsson.se</cbc:ElectronicMail>
         </cac:DeliveryContact>
     </cac:BuyerCustomerParty>
+    <cac:AccountingCustomerParty>
+        <cac:Party>
+            <cbc:EndpointID
+                schemeAgencyID="9"
+                schemeID="GLN"
+            >7300072311116</cbc:EndpointID>
+            <cac:PartyIdentification>
+                <cbc:ID schemeAgencyID="9" schemeID="GLN">7300070011116</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyIdentification>
+                <cbc:ID>PartyID124</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Pelle Svensson</cbc:Name>
+            </cac:PartyName>
+            <cac:PartyTaxScheme>
+                <cbc:RegistrationName
+                >Herra Johnssons byggvaror AS</cbc:RegistrationName>
+                <cbc:CompanyID>SE1234567801</cbc:CompanyID>
+                <cac:RegistrationAddress>
+                    <cbc:CityName>Stockholm</cbc:CityName>
+                    <cac:Country>
+                        <cbc:IdentificationCode>SE</cbc:IdentificationCode>
+                    </cac:Country>
+                </cac:RegistrationAddress>
+                <cac:TaxScheme>
+                    <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:Contact>
+                <cbc:ElectronicMail>jack@johnsson.se</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+        <cac:DeliveryContact>
+            <cbc:Name>Eva Johnsson</cbc:Name>
+            <cbc:Telephone>1234356</cbc:Telephone>
+            <cbc:Telefax>123455</cbc:Telefax>
+            <cbc:ElectronicMail>eva@johnsson.se</cbc:ElectronicMail>
+        </cac:DeliveryContact>
+    </cac:AccountingCustomerParty>
     <cac:SellerSupplierParty>
         <cac:Party>
             <cbc:EndpointID

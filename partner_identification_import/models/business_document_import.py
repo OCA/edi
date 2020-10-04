@@ -9,15 +9,25 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _hook_match_partner(self, partner_dict, chatter_msg, domain, order):
-        if partner_dict.get("id_number") and partner_dict.get("id_schemeID"):
-            categ = self.env["res.partner.id_category"].search(
-                [("code", "=", partner_dict.get("id_schemeID"))]
+        # Loop on all the partner_dict["id_number"] and search for a partner
+        # having one.  If the schemeID matches an existing Id Number Category,
+        # then a match is required.
+        schemeIDs = [
+            e["schemeID"] for e in partner_dict.get("id_number", []) if e["schemeID"]
+        ]
+        if schemeIDs:
+            schemes = self.env["res.partner.id_category"].search(
+                [("code", "in", schemeIDs)]
             )
-            if categ:
+            unmatched = []
+            for ident in partner_dict.get("id_number", []):
+                if ident.get("schemeID") not in schemes.mapped("code"):
+                    continue
+                categ = schemes.filtered(lambda s: s.code == ident["schemeID"])
                 id_number = self.env["res.partner.id_number"].search(
                     [
                         ("category_id", "=", categ.id),
-                        ("name", "=", partner_dict["id_number"]),
+                        ("name", "=", ident["value"]),
                         ("status", "!=", "close"),
                     ],
                     limit=1,
@@ -33,13 +43,17 @@ class BusinessDocumentImport(models.AbstractModel):
                     if contact:
                         return contact
                     return id_number.partner_id
+                unmatched.append(
+                    _("ID Number: %s\n" "ID Number Category: %s\n\n")
+                    % (partner_dict["id_number"], partner_dict["id_schemeID"])
+                )
+            if unmatched:
                 raise self.user_error_wrap(
                     _(
                         "Odoo couldn't find a partner corresponding to the "
                         "following information extracted from the business document:\n"
-                        "ID Number: %s\n"
-                        "ID Number Category: %s\n"
+                        "%s"
                     )
-                    % (partner_dict["id_number"], partner_dict["id_schemeID"])
+                    % _("or\n").join(unmatched)
                 )
         return super()._hook_match_partner(partner_dict, chatter_msg, domain, order)

@@ -111,6 +111,12 @@ class SaleOrderImport(models.TransientModel):
             incoterm_dict = self.ubl_parse_incoterm(delivery_term_xpath[0], ns)
         else:
             incoterm_dict = {}
+        invoicing_xpath = xml_root.xpath(
+            "/%s/cac:AccountingCustomerParty" % root_name, namespaces=ns
+        )
+        invoicing_dict = {}
+        if invoicing_xpath:
+            invoicing_dict = self.ubl_parse_customer_party(invoicing_xpath[0], ns)
         note_xpath = xml_root.xpath("/%s/cbc:Note" % root_name, namespaces=ns)
         lines_xpath = xml_root.xpath(
             "/{}/{}".format(root_name, line_name), namespaces=ns
@@ -123,6 +129,7 @@ class SaleOrderImport(models.TransientModel):
             "partner": customer_dict,
             "company": company_dict,
             "ship_to": shipping_dict,
+            "invoice_to": invoicing_dict,
             "currency": {"iso": currency_code},
             "date": date_xpath[0].text,
             "order_ref": order_ref_xpath[0].text,
