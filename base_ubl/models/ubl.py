@@ -628,22 +628,29 @@ class BaseUbl(models.AbstractModel):
     def ubl_parse_party(self, party_node, ns):
         partner_name_xpath = party_node.xpath("cac:PartyName/cbc:Name", namespaces=ns)
         vat_xpath = party_node.xpath("cac:PartyTaxScheme/cbc:CompanyID", namespaces=ns)
-        email_xpath = party_node.xpath("cac:Contact/cbc:ElectronicMail", namespaces=ns)
-        phone_xpath = party_node.xpath("cac:Contact/cbc:Telephone", namespaces=ns)
         website_xpath = party_node.xpath("cbc:WebsiteURI", namespaces=ns)
+        contact_name_xpath = party_node.xpath("cac:Contact/cbc:Name", namespaces=ns)
+        contact_email_xpath = party_node.xpath(
+            "cac:Contact/cbc:ElectronicMail", namespaces=ns
+        )
+        contact_phone_xpath = party_node.xpath(
+            "cac:Contact/cbc:Telephone", namespaces=ns
+        )
         partner_dict = {
             "vat": vat_xpath and vat_xpath[0].text or False,
             "name": partner_name_xpath and partner_name_xpath[0].text or False,
-            "email": email_xpath and email_xpath[0].text or False,
             "website": website_xpath and website_xpath[0].text or False,
-            "phone": phone_xpath and phone_xpath[0].text or False,
+            "contact": contact_name_xpath and contact_name_xpath[0].text or False,
+            "email": contact_email_xpath and contact_email_xpath[0].text or False,
+            "phone": contact_phone_xpath and contact_phone_xpath[0].text or False,
         }
         id_node = party_node.xpath("cac:PartyIdentification/cbc:ID", namespaces=ns)
         if id_node:
             partner_dict["id_number"] = id_node[0].text
             partner_dict["id_schemeID"] = id_node[0].attrib.get(
-                "{urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2}"
-                "schemeID")
+                "{urn:oasis:names:specification:ubl:schema:xsd:"
+                "CommonAggregateComponents-2}schemeID"
+            )
         address_xpath = party_node.xpath("cac:PostalAddress", namespaces=ns)
         if address_xpath:
             address_dict = self.ubl_parse_address(address_xpath[0], ns)
