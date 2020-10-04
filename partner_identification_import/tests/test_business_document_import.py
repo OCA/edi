@@ -5,23 +5,41 @@ from odoo.tests import common
 
 
 class TestBaseBusinessDocumentImport(common.SavepointCase):
-    def test_match_partner(self):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         externalID = "MYEXTID"
         externalSchemeID = "EXTCATEG"
-        partner1 = self.env["res.partner"].create({"name": "Extra ID"})
-        categ = self.env["res.partner.id_category"].create(
+        cls.partner1 = cls.env["res.partner"].create({"name": "Extra ID"})
+        categ = cls.env["res.partner.id_category"].create(
             {"name": "Extra Categ", "code": externalSchemeID}
         )
-        self.env["res.partner.id_number"].create(
+        cls.env["res.partner.id_number"].create(
             {
                 "category_id": categ.id,
-                "name": externalSchemeID,
-                "partner_id": partner1.id,
+                "name": externalID,
+                "partner_id": cls.partner1.id,
             }
         )
+        cls.partner1_contact = cls.env["res.partner"].create(
+            {"name": "Contact", "parent_id": cls.partner1.id, "type": "contact"}
+        )
+        cls.partner_dict = {"id_number": externalID, "id_schemeID": externalSchemeID}
+
+    def test_match_partner(self):
         bdio = self.env["business.document.import"]
-        partner_dict = {"id_number": externalID, "id_schemeID": externalSchemeID}
         warn = []
-        res = bdio._match_partner(partner_dict, warn, partner_type=False)
-        self.assertEqual(res, partner1)
-        self.assertTrue(warn)
+        res = bdio._match_partner(self.partner_dict, warn, partner_type=False)
+        self.assertEqual(res, self.partner1)
+
+    def test_match_partner_contact(self):
+        bdio = self.env["business.document.import"]
+        warn = []
+        # Match contact
+        self.partner_dict["contact"] = "Contact"
+        res = bdio._match_partner(self.partner_dict, warn, partner_type=False)
+        self.assertEqual(res, self.partner1_contact)
+        # Match partner
+        self.partner_dict["contact"] = "Contact2"
+        res = bdio._match_partner(self.partner_dict, warn, partner_type=False)
+        self.assertEqual(res, self.partner1)
