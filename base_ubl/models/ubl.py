@@ -514,6 +514,20 @@ class BaseUbl(models.AbstractModel):
         return nsmap, ns
 
     @api.model
+    def _ubl_get_version(self, xml_root, root_name, ns):
+        version_xpath = xml_root.xpath(
+            "/%s/cbc:UBLVersionID" % root_name, namespaces=ns
+        )
+        if not version_xpath:
+            raise UserError(
+                _(
+                    "The UBL XML file does not contain the version "
+                    "for validating the content according to the schema."
+                )
+            )
+        return version_xpath[0].text.strip()
+
+    @api.model
     def _ubl_check_xml_schema(self, xml_string, document, version="2.1"):
         """Validate the XML file against the XSD"""
         xsd_file = "base_ubl/data/xsd-{}/maindoc/UBL-{}-{}.xsd".format(
@@ -645,13 +659,7 @@ class BaseUbl(models.AbstractModel):
         id_numbers = []
         for id_node in id_nodes:
             id_numbers.append(
-                {
-                    "value": id_node.text,
-                    "schemeID": id_node.attrib.get(
-                        "{urn:oasis:names:specification:ubl:schema:xsd:"
-                        "CommonAggregateComponents-2}schemeID"
-                    ),
-                }
+                {"value": id_node.text, "schemeID": id_node.attrib.get("schemeID")}
             )
         partner_dict["id_number"] = id_numbers
         address_xpath = party_node.xpath("cac:PostalAddress", namespaces=ns)
