@@ -45,7 +45,7 @@ class BusinessDocumentImport(models.AbstractModel):
                     return id_number.partner_id
                 unmatched.append(
                     _("ID Number: %s\n" "ID Number Category: %s\n\n")
-                    % (partner_dict["id_number"], partner_dict["id_schemeID"])
+                    % (ident["value"], ident["schemeID"])
                 )
             if unmatched:
                 raise self.user_error_wrap(
