@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 Creu Blanca
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="edi_format_form_view">
+        <field name="name">edi.format.form (in edi)</field>
+        <field name="model">edi.format</field>
+        <field name="arch" type="xml">
+            <form>
+                <header />
+                <sheet>
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        attrs="{'invisible': [('active', '=', True)]}"
+                    />
+                    <group>
+                        <field name="name" />
+                        <field name="format_key" />
+                        <field name="usage" />
+                        <field name="can_send" />
+                        <field name="can_receive" />
+                        <field name="active" invisible="1" />
+                    </group>
+                </sheet>
+                <div class="oe_chatter" />
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="edi_format_search_view">
+        <field name="name">edi.format.search (in edi)</field>
+        <field name="model">edi.format</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="format_key" />
+                <separator />
+                <filter
+                    name="inactive"
+                    domain="[('active', '=', False)]"
+                    string="Archived"
+                />
+            </search>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="edi_format_tree_view">
+        <field name="name">edi.format.tree (in edi)</field>
+        <field name="model">edi.format</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="format_key" />
+                <field name="usage" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="edi_format_act_window">
+        <field name="name">Electronic Document Format</field>
+        <field name="res_model">edi.format</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record model="ir.ui.menu" id="edi_format_menu">
+        <field name="name">Edi Format</field>
+        <field name="parent_id" ref="menu_edi" />
+        <field name="action" ref="edi_format_act_window" />
+        <field name="sequence" eval="90" />
+    </record>
+</odoo>

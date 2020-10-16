@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2017 Eficent Business and IT Consulting Services, S.L.
+    Copyright 2017 Creu Blanca
+    License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html).
+-->
+<odoo>
+    <record id="ir_module_category_edi" model="ir.module.category">
+        <field name="name">EDI</field>
+    </record>
+    <record id="edi_manager_group" model="res.groups">
+        <field name="name">EDI Manager</field>
+        <field name="comment">Manager</field>
+        <field name="category_id" ref="ir_module_category_edi" />
+    </record>
+    <data noupdate="1">
+        <record id="edi_manager_group" model="res.groups">
+            <field
+                name="users"
+                eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+            />
+        </record>
+    </data>
+</odoo>

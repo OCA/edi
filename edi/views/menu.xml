@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Top menu item -->
+    <menuitem
+        name="Electronic Document"
+        id="menu_edi"
+        groups="base.group_no_one"
+        web_icon="edi,static/description/icon.png"
+        sequence="40"
+    />
+</odoo>

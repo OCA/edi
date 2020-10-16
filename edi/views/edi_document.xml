@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 Creu Blanca
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="edi_document_form_view">
+        <field name="name">edi.document.form (in edi)</field>
+        <field name="model">edi.document</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_send"
+                        type="object"
+                        string="Send"
+                        states="to_send"
+                    />
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <group>
+                        <field name="identification_code" />
+                        <field name="edi_format_id" />
+                        <field name="edi_type" />
+                        <field name="parent_id" />
+                        <field name="attachment_id" />
+                    </group>
+                    <notebook>
+                        <page name="attachments" string="Attachments">
+                            <field name="attachment_ids" />
+                        </page>
+                        <page
+                            name="error"
+                            string="Error"
+                            attrs="{'invisible': [('error', '=', False)]}"
+                        >
+                            <field name="error" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field
+                        name="message_follower_ids"
+                        widget="mail_followers"
+                        groups="base.group_user"
+                    />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="edi_document_search_view">
+        <field name="name">edi.document.search (in edi)</field>
+        <field name="model">edi.document</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="edi_format_id" />
+                <field name="identification_code" />
+                <field name="res_model" />
+                <field name="res_id" />
+                <separator />
+                <filter
+                    name="to_send"
+                    domain="[('state', '=', 'to_send')]"
+                    string="To Send"
+                />
+                <filter name="sent" domain="[('state', '=', 'sent')]" string="Sent" />
+                <filter
+                    name="received"
+                    domain="[('state', '=', 'received')]"
+                    string="Received"
+                />
+            </search>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="edi_document_tree_view">
+        <field name="name">edi.document.tree (in edi)</field>
+        <field name="model">edi.document</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="identification_code" />
+                <field name="edi_format_id" />
+                <field name="attachment_id" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="edi_document_act_window">
+        <field name="name">Edi Document</field>
+        <field name="res_model">edi.document</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record model="ir.ui.menu" id="edi_document_menu">
+        <field name="name">Edi Document</field>
+        <field name="parent_id" ref="menu_edi" />
+        <field name="action" ref="edi_document_act_window" />
+        <field name="sequence" eval="16" />
+    </record>
+</odoo>
