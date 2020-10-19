@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <record id="edi_format_mail" model="edi.format">
+        <field name="name">Mail</field>
+        <field name="active" eval="False" />
+        <field name="format_key">mail</field>
+        <field name="usage">account.move</field>
+        <field name="can_send" eval="True" />
+    </record>
+</odoo>

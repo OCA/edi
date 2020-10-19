@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 Creu Blanca
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="view_move_form">
+        <field name="name">account.move.form (in edi_account)</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button
+                    class="oe_stat_button"
+                    type="object"
+                    name="action_edi_documents"
+                    attrs="{'invisible': [('edi_document_count','=',0)]}"
+                    icon="fa-retweet"
+                >
+                    <field
+                        name="edi_document_count"
+                        string="Electronic Docs"
+                        widget="statinfo"
+                    />
+                    <field name="edi_document_ids" invisible="1" />
+                </button>
+                <button
+                    class="oe_stat_button"
+                    type="object"
+                    name="generate_missing_edi_documents"
+                    string="Generate EDI"
+                    attrs="{'invisible': [('missing_edi_documents', '=', False)]}"
+                    icon="fa-share"
+                >
+                    <field name="missing_edi_documents" invisible="1" />
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>
