@@ -267,9 +267,6 @@ class OrderResponseImport(models.TransientModel):
 
     @api.model
     def _process_conditional(self, purchase_order, parsed_order_document):
-        precision = self.env["decimal.precision"].precision_get(
-            "Product Unit of Measure"
-        )
         chatter = parsed_order_document["chatter_msg"] = (
             parsed_order_document["chatter_msg"] or []
         )
@@ -297,100 +294,132 @@ class OrderResponseImport(models.TransientModel):
         for order_line in purchase_order.order_line:
             line_info = lines_by_id[order_line.id]
             note = line_info.get("note")
-            move = order_line.move_ids.filtered(
+            moves = order_line.move_ids.filtered(
                 lambda x: x.state not in ("cancel", "done")
             )
-            if len(move) != 1:
+            if not moves:
                 self.env["business.document.import"].user_error_wrap(
-                    _(
-                        "More than one move found for PO line.\n"
-                        "Move IDs: %s\n"
-                        "Line Info: %s"
-                    )
-                    % (move.ids, line_info)
+                    _("No move found for PO line.\n" "Line Info: %s")
+                    % line_info
                 )
             if note:
-                move.write({"note": note})
+                moves.write({"note": note})
             status = line_info["status"]
             if status == LINE_STATUS_ACCEPTED:
-                continue
-            if status == LINE_STATUS_REJECTED:
-                order_line.move_ids.action_cancel()
+                self._process_line_accepted(line_info, order_line, moves)
+            elif status == LINE_STATUS_REJECTED:
+                self._process_line_rejected(line_info, order_line, moves)
             elif status == LINE_STATUS_AMEND:
-                qty = line_info["qty"]
-                backorder_qty = line_info["backorder_qty"]
-                move_qty = move.product_qty
-                if (
-                    float_compare(qty, move_qty, precision_digits=precision)
-                    < 0
-                ):
-                    self._check_picking_status(move.picking_id)
-                    new_move_id = move.split(move_qty - qty)
-                    new_move = move.browse(new_move_id)
-                    to_cancel = None
-                    if backorder_qty:
-                        note = note + "\n" if note else ""
-                        note += (
-                            _(
-                                "%s items should be delivered into a next delivery."
-                            )
-                            % backorder_qty
-                        )
-                        move.note = note
-                        # if the backorder qty is < than the remaining qty
-                        # split and cancel the qty that will not be delivered
-                        if (
-                            float_compare(
-                                backorder_qty,
-                                new_move.product_qty,
-                                precision_digits=precision,
-                            )
-                            < 0
-                        ):
-                            to_cancel_id = new_move.split(
-                                new_move.product_qty - backorder_qty
-                            )
-                            to_cancel = move.browse(to_cancel_id)
-                    else:
-                        to_cancel = new_move
-                    if to_cancel:
-                        to_cancel.action_cancel()
-                        to_cancel.write(
-                            {
-                                "note": _(
-                                    "No backorder planned by the supplier."
-                                )
-                            }
-                        )
-                    if new_move.state != "cancel":
-                        # move the new move into an backorder picking to avoid
-                        # that the scheduler merge the two moves into the same
-                        # pack operation
-                        self._add_move_to_backorder(new_move)
+                self._process_line_amended(line_info, order_line, moves)
 
-                    # Reset Operations
-                    move.picking_id.do_prepare_partial()
+    def _process_line_accepted(self, line_info, order_line, moves):
+        pass
+
+    def _process_line_rejected(self, line_info, order_line, moves):
+        moves.action_cancel()
+
+    def _process_line_amended(self, line_info, order_line, moves):
+        precision = self.env["decimal.precision"].precision_get(
+            "Product Unit of Measure"
+        )
+        qty = line_info["qty"]
+        backorder_qty = line_info["backorder_qty"]
+        moves_qty = sum(moves.mapped("product_qty"))
+        if float_compare(qty, moves_qty, precision_digits=precision) >= 0:
+            return
+
+        # confirmed qty < ordered qty
+        move_ids_to_backorder = []
+        move_ids_to_cancel = []
+        for move in moves:
+            self._check_picking_status(move.picking_id)
+            if (
+                float_compare(
+                    qty, move.product_qty, precision_digits=precision
+                )
+                >= 0
+            ):
+                # qty planned => qty into the stock move: Keep it
+                qty -= move.product_qty
+                continue
+            if (
+                qty
+                and float_compare(
+                    qty, move.product_qty, precision_digits=precision
+                )
+                < 0
+            ):
+                # qty planned < qty into the stock move: Split it
+                new_move_id = move.split(move.product_qty - qty)
+                move = self.env["stock.move"].browse(new_move_id)
+            qty -= move.product_qty
+            if not backorder_qty:
+                # if no backorder -> we must cancel the move
+                move_ids_to_cancel.append(move.id)
+                continue
+            # from here we process the backorder qty
+            # we distribute this qty into the remaining moves and
+            # if this qty is < than the expected one, we split and cancel the
+            # remaining qty
+            if (
+                float_compare(
+                    backorder_qty, move.product_qty, precision_digits=precision
+                )
+                < 0
+            ):
+                # backorder_qty < qty into the move -> split the move
+                # anf cancel remaining qty
+                move_ids_to_cancel.append(
+                    move.split(move.product_qty - backorder_qty)
+                )
+            if move.split_from:
+                # Add not on the original move to say that items will be
+                # delivered into a next delivery
+                note = line_info.get("note")
+                note = note + "\n" if note else ""
+                note += (
+                    _("%s items should be delivered into a next delivery.")
+                    % move.product_qty
+                )
+                move.split_from.note = note
+            backorder_qty -= move.product_qty
+            move_ids_to_backorder.append(move.id)
+        # move backorder moves to a backorder
+        if move_ids_to_backorder:
+            moves_to_backorder = self.env["stock.move"].browse(
+                move_ids_to_backorder
+            )
+            self._add_moves_to_backorder(moves_to_backorder)
+        # cancel moves to cancel
+        if move_ids_to_cancel:
+            moves_to_cancel = self.env["stock.move"].browse(move_ids_to_cancel)
+            moves_to_cancel.action_cancel()
+            moves_to_cancel.write(
+                {"note": _("No backorder planned by the supplier.")}
+            )
+        # Reset Operations
+        moves[0].picking_id.do_prepare_partial()
 
     @api.model
-    def _add_move_to_backorder(self, move):
+    def _add_moves_to_backorder(self, moves):
         """
-        Add the move the picking's backorder
+        Add the moves to the picking's backorder
         return the backorder associated to the current picking. If no backorder
         exists, create a new one.
-        :param move:
+        :param moves:
         """
         StockPicking = self.env["stock.picking"]
-        current_picking = move.picking_id
+        current_picking = moves[0].picking_id
         backorder = StockPicking.search(
             [("backorder_id", "=", current_picking.id)]
         )
         if not backorder:
             date_done = current_picking.date_done
-            move.picking_id._create_backorder(backorder_moves=move)
+            current_picking._create_backorder(backorder_moves=moves)
             # preserve date_done....
             current_picking.date_done = date_done
         else:
-            move.write({"picking_id": backorder.id})
+            moves.write({"picking_id": backorder.id})
             backorder.action_confirm()
             backorder.action_assign()
 

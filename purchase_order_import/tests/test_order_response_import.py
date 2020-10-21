@@ -74,6 +74,7 @@ class TestOrderResponseImportCommon(SavepointCase):
             }
         )
         cls.OrderResponseImport = cls.env["order.response.import"]
+        cls.ProcurementOrder = cls.env["procurement.order"]
 
     def order_line_to_data(
         self,
@@ -91,6 +92,19 @@ class TestOrderResponseImportCommon(SavepointCase):
             "line_id": str(order_line.id),
             "uom": {"unece_code": order_line.product_uom.unece_code},
         }
+
+    def _add_procurements(self, line, qties):
+        for qty in qties:
+            self.ProcurementOrder.create(
+                {
+                    "name": "Test",
+                    "product_id": line.product_id.id,
+                    "product_qty": qty,
+                    "product_uom": line.product_uom.id,
+                    "state": "done",
+                    "purchase_line_id": line.id,
+                }
+            )
 
 
 class TestOrderResponseImport(TestOrderResponseImportCommon):
@@ -432,7 +446,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         self.assertTrue(move_confirmed)
         self.assertEqual(
             _("my note\n%s items should be delivered into a next delivery.")
-            % "3",
+            % "3.0",
             move_confirmed.note,
         )
         move_backorder = move_ids.filtered(
@@ -498,7 +512,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         self.assertTrue(move_confirmed)
         self.assertEqual(
             _("my note\n%s items should be delivered into a next delivery.")
-            % "3",
+            % "3.0",
             move_confirmed.note,
         )
         move_backorder = line1_move_ids.filtered(
@@ -521,7 +535,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         self.assertTrue(move_confirmed)
         self.assertEqual(
             _("my note\n%s items should be delivered into a next delivery.")
-            % "3",
+            % "3.0",
             move_confirmed.note,
         )
         move_backorder = line2_move_ids.filtered(
@@ -575,7 +589,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         )
         self.assertTrue(move_confirmed)
         self.assertEqual(
-            _("%s items should be delivered into a next delivery.") % "2",
+            _("%s items should be delivered into a next delivery.") % "2.0",
             move_confirmed.note,
         )
         move_cancel = move_ids.filtered(
@@ -592,3 +606,135 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         self.assertEqual(
             move_backorder.picking_id.backorder_id, move_confirmed.picking_id,
         )
+
+    def test_16(self):
+        """
+        Data:
+            Sale order line:
+            * line1 qty 10 linked to 1 procurement_order (qty into po 5)
+            -> in such a case, the confirmation of the PO will create 2
+                stock.move
+                (1 for the procurement order and 1 for the remaining qty)
+            Data with status 'conditionally_accepted'
+            * line1 amended :
+              * qty 6
+              * backorder qty 3
+            * line2 accepted
+        Test Case:
+            Process data
+        Expected result:
+            PO is confirmed
+            One picking is created with four moves
+            * line1 assigned with qty 5
+            * line1 assigned with qty 1
+            * line1 cancel with qty 1
+            * line2 assigned with qty = confirmed qty
+            One backorder picking is created with one move
+            * line1 assigned with qty = 3
+        """
+        self._add_procurements(self.line1, [5])
+        data = self._get_base_data()
+        data["status"] = ORDER_RESPONSE_STATUS_CONDITIONAL
+        confirmed_qty = 6
+        data["lines"] = [
+            self.order_line_to_data(
+                self.line1,
+                status=LINE_STATUS_AMEND,
+                qty=confirmed_qty,
+                backorder_qty=3,
+            ),
+            self.order_line_to_data(self.line2),
+        ]
+        self.OrderResponseImport.process_data(data)
+        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(len(self.purchase_order.picking_ids), 2)
+        move_ids = self.line1.move_ids
+        self.assertEqual(len(move_ids), 4)
+        self.assertEqual(
+            sum(move_ids.mapped("product_qty")), self.line1.product_qty
+        )
+        moves_confirmed = move_ids.filtered(
+            lambda s: s.state == "assigned" and not s.picking_id.backorder_id
+        )
+        self.assertEqual(
+            sum(moves_confirmed.mapped("product_qty")), confirmed_qty
+        )
+
+        self.assertIn(
+            _("%s items should be delivered into a next delivery.") % "3.0",
+            moves_confirmed.mapped("note"),
+        )
+        move_cancel = move_ids.filtered(
+            lambda s: s.state == "cancel" and s.product_qty == 1
+        )
+        self.assertTrue(move_cancel)
+        self.assertEqual(
+            _("No backorder planned by the supplier."), move_cancel.note,
+        )
+        move_backorder = move_ids.filtered(
+            lambda s: s.state == "assigned" and s.product_qty == 3
+        )
+        self.assertTrue(move_backorder)
+        self.assertEqual(
+            move_backorder.picking_id.backorder_id,
+            moves_confirmed[0].picking_id,
+        )
+
+    def test_17(self):
+        """
+        Data:
+            Sale order line:
+            * line1 qty 10 linked to 4 procurement_order
+            (qty into po (2, 2, 2, 2)))
+             -> in such a case, the confirmation of the PO will create 5
+                stock.move
+                (1 one by procurement order and 1 for the remaining qty)
+            Data with status 'conditionally_accepted'
+            * line1 amended :
+              * qty 3
+              * backorder qty 3
+            * line2 accepted
+        Test Case:
+            Process data
+        Expected result:
+            PO is confirmed
+            One picking is created with four moves
+            * sum(line1 cancel) 4
+            * sum(line1 assigned) 3
+            * line2 assigned with qty = confirmed qty
+            One backorder picking is created with one move
+            * sum(line1 assigned) 3
+        """
+        self._add_procurements(self.line1, [2, 2, 2])
+        data = self._get_base_data()
+        data["status"] = ORDER_RESPONSE_STATUS_CONDITIONAL
+        confirmed_qty = 3
+        data["lines"] = [
+            self.order_line_to_data(
+                self.line1,
+                status=LINE_STATUS_AMEND,
+                qty=confirmed_qty,
+                backorder_qty=3,
+            ),
+            self.order_line_to_data(self.line2),
+        ]
+        self.OrderResponseImport.process_data(data)
+        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(len(self.purchase_order.picking_ids), 2)
+        move_ids = self.line1.move_ids
+        self.assertEqual(
+            sum(move_ids.mapped("product_qty")), self.line1.product_qty
+        )
+        moves_confirmed = move_ids.filtered(
+            lambda s: s.state == "assigned" and not s.picking_id.backorder_id
+        )
+        self.assertEqual(sum(moves_confirmed.mapped("product_qty")), 3)
+
+        moves_cancel = move_ids.filtered(
+            lambda s: s.state == "cancel" and not s.picking_id.backorder_id
+        )
+        self.assertEqual(sum(moves_cancel.mapped("product_qty")), 4)
+        moves_backorder = move_ids.filtered(
+            lambda s: s.state == "assigned" and s.picking_id.backorder_id
+        )
+        self.assertEqual(sum(moves_backorder.mapped("product_qty")), 3)
