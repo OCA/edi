@@ -334,6 +334,7 @@ class SaleOrderImport(models.TransientModel):
             [
                 ("commercial_partner_id", "=", commercial_partner.id),
                 ("state", "in", ("draft", "sent")),
+                ("client_order_ref", "=", parsed_order.get("order_ref")),
             ]
         )
         if existing_quotations:
