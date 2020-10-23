@@ -26,7 +26,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 categ = schemes.filtered(lambda s: s.code == ident["schemeID"])
                 id_number = self.env["res.partner.id_number"].search(
                     [
-                        ("category_id", "=", categ.id),
+                        ("category_id", "in", categ.ids),
                         ("name", "=", ident["value"]),
                         ("status", "!=", "close"),
                     ],
