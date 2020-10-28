@@ -194,10 +194,11 @@ class SaleOrderImport(models.TransientModel):
                 )
             )
         if parsed_order.get("order_ref"):
+            commercial_partner = partner.commercial_partner_id
             existing_orders = soo.search(
                 [
                     ("client_order_ref", "=", parsed_order["order_ref"]),
-                    ("partner_id", "=", partner.id),
+                    ("commercial_partner_id", "=", commercial_partner.id),
                     ("state", "!=", "cancel"),
                 ]
             )
