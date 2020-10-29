@@ -14,7 +14,7 @@ class ImportController(http.Controller):
         "/ubl_api/sales", type="http", auth="api_key", methods=["POST"], csrf=False
     )
     def import_sale_order(self, **kw):
-        """Endpoint to import an UBL sale order.
+        """Endpoint to import an UBL order.
 
         Example to test from the terminal:
 
@@ -32,12 +32,12 @@ class ImportController(http.Controller):
         env = request.env
         xml_data = req.get_data()
         self.check_data_to_import(env, xml_data)
-        description = "Import UBL sale order from http"
+        description = "Import UBL order from http"
         xml_data = xml_data.decode("utf-8")
         env["sale.order"].with_delay(description=description).import_ubl_from_http(
             xml_data
         )
-        return "Thank you. Your sale order will be processed, shortly"
+        return "Thank you. Your order will be processed, shortly"
 
     def check_data_to_import(self, env, data):
         """ Check the data received looks valid.
