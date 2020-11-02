@@ -3,7 +3,7 @@
 
 import os
 
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, Unauthorized
 
 from odoo import tools
 from odoo.tests.common import SingleTransactionCase
@@ -25,7 +25,9 @@ class TestSaleOrderImportEndpoint(SingleTransactionCase):
 
     def test_import_so_ubl(self):
         user = self.env.ref("sale_order_import_ubl_http.user_endpoint")
-        path = os.path.join(os.path.dirname(__file__), "examples", "order_1.xml",)
+        path = os.path.join(
+            os.path.dirname(__file__), "examples", "UBL-Order-2.0-Example.xml"
+        )
         with open(path, "rb") as file:
             data = file.read()
         self.controller.check_data_to_import(self.env, data)
@@ -37,6 +39,23 @@ class TestSaleOrderImportEndpoint(SingleTransactionCase):
                 .with_context(test_queue_job_no_delay=True)
                 .import_ubl_from_http(data)
             )
-        order_id = int(res.split(" ")[-1])
-        new_order = self.env["sale.order"].browse(order_id)
+        order_ref = res.split(" ")[2]
+        new_order = self.env["sale.order"].search([("name", "=", order_ref)])
         self.assertEqual(new_order.state, "sale")
+
+    def test_api_key_validity(self):
+        """ Check auth key validity."""
+        valid_key = self.env["auth.api.key"].create(
+            {
+                "name": "test_key",
+                "user_id": self.env.ref("sale_order_import_ubl_http.user_endpoint").id,
+            }
+        )
+        self.controller.check_api_key(self.env, valid_key.id)
+        # Check non existing key
+        with self.assertRaises(Unauthorized):
+            self.controller.check_api_key(self.env, valid_key.id + 1)
+        # Check key with incorrect user
+        valid_key.user_id = self.env.user.id
+        with self.assertRaises(Unauthorized):
+            self.controller.check_api_key(self.env, valid_key.id)
