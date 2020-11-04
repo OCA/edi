@@ -46,8 +46,48 @@ class BusinessDocumentImport(models.AbstractModel):
             if match_dict.get("state_code"):
                 match_dict["state_code"] = match_dict["state_code"].upper()
 
+    @api.model
+    def _match_partner_contact(self, partner_dict, domain, order):
+        rpo = self.env["res.partner"]
+        if partner_dict.get("email") and "@" in partner_dict["email"]:
+            partner = rpo.search(
+                domain + [("email", "=ilike", partner_dict["email"])],
+                limit=1,
+                order=order,
+            )
+            if partner:
+                return partner
+        if partner_dict.get("contact"):
+            partner = rpo.search(
+                domain + [("name", "=ilike", partner_dict["contact"])],
+                limit=1,
+                order=order,
+            )
+            if partner:
+                return partner
+        if partner_dict.get("phone"):
+            partner = rpo.search(
+                domain
+                + [
+                    "|",
+                    ("mobile", "=", partner_dict["phone"]),
+                    ("phone", "=", partner_dict["phone"]),
+                ],
+                limit=1,
+                order=order,
+            )
+            if partner:
+                return partner
+
     @api.model  # noqa: C901
-    def _match_partner(self, partner_dict, chatter_msg, partner_type="supplier"):
+    def _match_partner(
+        self,
+        partner_dict,
+        chatter_msg,
+        partner_type="supplier",
+        domain=None,
+        raise_exception=True,
+    ):
         """Example:
         partner_dict = {
             'country_code': 'FR',
@@ -59,8 +99,6 @@ class BusinessDocumentImport(models.AbstractModel):
             'ref': 'C1242',
             'phone': '01.41.98.12.42',
             }
-        The key 'phone' is used by the module
-        base_phone_business_document_import
         """
         rpo = self.env["res.partner"]
         self._strip_cleanup_dict(partner_dict)
@@ -69,7 +107,8 @@ class BusinessDocumentImport(models.AbstractModel):
         if partner_dict.get("id"):
             return rpo.browse(partner_dict["id"])
         company_id = self._context.get("force_company") or self.env.user.company_id.id
-        domain = ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
+        domain = domain or []
+        domain += ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
         if partner_type == "supplier":
             order = "supplier_rank desc"
             partner_type_label = _("supplier")
@@ -79,6 +118,16 @@ class BusinessDocumentImport(models.AbstractModel):
         else:
             order = ""
             partner_type_label = _("partner")
+
+        # If a ref is explicitly given, we just want to match that partner
+        if partner_dict.get("ref"):
+            partner = rpo.search(
+                domain + [("ref", "=", partner_dict["ref"])], limit=1, order=order
+            )
+            if partner:
+                return partner
+
+        # Append optional country and state to the domain
         country = False
         if partner_dict.get("country_code"):
             country = self.env["res.country"].search(
@@ -109,42 +158,38 @@ class BusinessDocumentImport(models.AbstractModel):
             )
             if state:
                 domain += ["|", ("state_id", "=", False), ("state_id", "=", state.id)]
+
+        # Append required vat to the domain
         if partner_dict.get("vat"):
-            vat = partner_dict["vat"].replace(" ", "").upper()
-            partner = rpo.search(
-                domain + [("parent_id", "=", False), ("vat", "=", vat)],
-                limit=1,
-                order=order,
-            )
-            if partner:
-                return partner
-            else:
-                chatter_msg.append(
-                    _(
-                        "The analysis of the business document returned '%s' as "
-                        "%s VAT number. But there are no %s "
-                        "with this VAT number in Odoo."
-                    )
-                    % (vat, partner_type_label, partner_type_label)
-                )
+            vat = partner_dict["vat"]
+            domain += [("vat", "=", vat)]
+
         # Hook to plug alternative matching methods
-        partner = self._hook_match_partner(
-            partner_dict, chatter_msg, domain, partner_type_label
-        )
+        partner = self._hook_match_partner(partner_dict, chatter_msg, domain, order)
         if partner:
             return partner
-        website_domain = False
-        email_domain = False
-        if partner_dict.get("email") and "@" in partner_dict["email"]:
+
+        # Search for partner contact
+        partner = self._match_partner_contact(partner_dict, domain, order)
+        if partner:
+            return partner
+
+        # Search for partner
+        if partner_dict.get("name"):
             partner = rpo.search(
-                domain + [("email", "=ilike", partner_dict["email"])],
+                domain + [("name", "=ilike", partner_dict["name"])],
                 limit=1,
                 order=order,
             )
             if partner:
                 return partner
-            else:
-                email_domain = partner_dict["email"].split("@")[1]
+
+        website_domain = False
+        email_domain = (
+            partner_dict.get("email")
+            and "@" in partner_dict["email"]
+            and partner_dict["email"].split("@")[1]
+        )
         if partner_dict.get("website"):
             urlp = urlparse(partner_dict["website"])
             netloc = urlp.netloc
@@ -177,20 +222,14 @@ class BusinessDocumentImport(models.AbstractModel):
                     % (partner_type_label, partner_domain, partner_type_label)
                 )
                 return partner
-        if partner_dict.get("ref"):
-            partner = rpo.search(
-                domain + [("ref", "=", partner_dict["ref"])], limit=1, order=order
-            )
+
+        if partner_dict.get("vat"):
+            partner = rpo.search(domain, limit=1, order=order)
             if partner:
                 return partner
-        if partner_dict.get("name"):
-            partner = rpo.search(
-                domain + [("name", "=ilike", partner_dict["name"])],
-                limit=1,
-                order=order,
-            )
-            if partner:
-                return partner
+
+        if not raise_exception:
+            return
         raise self.user_error_wrap(
             _(
                 "Odoo couldn't find any %s corresponding to the following "
@@ -222,97 +261,116 @@ class BusinessDocumentImport(models.AbstractModel):
         return False
 
     @api.model
-    def _match_shipping_partner(self, shipping_dict, partner, chatter_msg):
+    def _match_shipping_partner(
+        self, partner_dict, partner, chatter_msg, domain=None, raise_exception=True
+    ):
         """Example:
         shipping_dict = {
-            'partner': {
-                'email': 'contact@akretion.com',
-                'name': 'Akretion France',
-                },
-            'address': {
-                'zip': '69100',
-                'country_code': 'FR',
-                },
+            'email': 'contact@akretion.com',
+            'name': 'Akretion France',
+            'street': 'Long Avenue',
+            'street2': 'Building 2A',
+            'city': 'Paris',
+            'zip': '69100',
+            'country_code': 'FR',
             }
-        The partner argument is a bit special: it is a fallback in case
-        shipping_dict['partner'] = {}
+        The shipping partner can be any partner, not especially related to the
+        customer/supplier (partner argument)
         """
-        rpo = self.env["res.partner"]
-        if shipping_dict.get("partner"):
-            partner = self._match_partner(
-                shipping_dict["partner"], chatter_msg, partner_type=False
-            )
-        company_id = self._context.get("force_company") or self.env.user.company_id.id
-        domain = [
-            "|",
-            ("company_id", "=", False),
-            ("company_id", "=", company_id),
-            ("parent_id", "=", partner.id),
-        ]
-        address_dict = shipping_dict["address"]
-        self._strip_cleanup_dict(address_dict)
-        country = False
-        parent_partner_matches = True
-        if address_dict.get("country_code"):
-            country = self.env["res.country"].search(
-                [("code", "=", address_dict["country_code"])], limit=1
-            )
-            if country:
+        domain = domain or []
+        if partner_dict.get("street"):
+            if partner_dict.get("street_number"):
                 domain += [
-                    "|",
-                    ("country_id", "=", False),
-                    ("country_id", "=", country.id),
-                ]
-                if partner.country_id != country:
-                    parent_partner_matches = False
-            else:
-                chatter_msg.append(
-                    _(
-                        "The analysis of the business document returned '%s' as "
-                        "country code. But there are no country with that code "
-                        "in Odoo."
+                    (
+                        "street",
+                        "in",
+                        [
+                            "{} {}".format(
+                                partner_dict.get("street"),
+                                partner_dict.get("street_number"),
+                            ),
+                            "{} {}".format(
+                                partner_dict.get("street_number"),
+                                partner_dict.get("street"),
+                            ),
+                            "{}, {}".format(
+                                partner_dict.get("street"),
+                                partner_dict.get("street_number"),
+                            ),
+                            "{}, {}".format(
+                                partner_dict.get("street_number"),
+                                partner_dict.get("street"),
+                            ),
+                        ],
                     )
-                    % address_dict["country_code"]
-                )
-        if country and address_dict.get("state_code"):
-            state = self.env["res.country.state"].search(
-                [
-                    ("code", "=", address_dict["state_code"]),
-                    ("country_id", "=", country.id),
-                ],
-                limit=1,
-            )
-            if state:
-                domain += ["|", ("state_id", "=", False), ("state_id", "=", state.id)]
-                if partner.state_id and partner.state_id != state:
-                    parent_partner_matches = False
-        if address_dict.get("zip"):
-            domain.append(("zip", "=", address_dict["zip"]))
-            # sanitize ZIP ?
-            if partner.zip != address_dict["zip"]:
-                parent_partner_matches = False
-        spartner = rpo.search(domain + [("type", "=", "delivery")], limit=1)
-        if spartner:
-            return spartner
-        spartner = rpo.search(domain, limit=1)
-        if spartner:
-            return spartner
-        if parent_partner_matches:
+                ]
+            else:
+                domain += [("street", "=", partner_dict.get("street"))]
+        if partner_dict.get("street2"):
+            domain += [("street2", "=", partner_dict.get("street2"))]
+        if partner_dict.get("city"):
+            domain += [("city", "=", partner_dict.get("city"))]
+        if partner_dict.get("zip"):
+            domain += [("zip", "=", partner_dict.get("zip"))]
+
+        domain_delivery = domain + [("type", "=", "delivery")]
+        partner = self._match_partner(
+            partner_dict,
+            chatter_msg,
+            partner_type=False,
+            domain=domain_delivery,
+            raise_exception=False,
+        )
+        if partner:
             return partner
+        if not partner_dict.get("vat"):
+            partner = self.env["res.partner"].search(domain_delivery, limit=1)
+        if partner:
+            return partner
+        partner = self._match_partner(
+            partner_dict,
+            chatter_msg,
+            partner_type=False,
+            domain=domain,
+            raise_exception=False,
+        )
+        if partner:
+            return partner
+        if not partner_dict.get("vat"):
+            partner = self.env["res.partner"].search(domain, limit=1)
+        if partner:
+            return partner
+
+        if not raise_exception:
+            return
         raise self.user_error_wrap(
             _(
                 "Odoo couldn't find any shipping partner corresponding to the "
                 "following information extracted from the business document:\n"
-                "Parent Partner: %s\n"
+                "Name: %s\n"
+                "VAT number: %s\n"
+                "Reference: %s\n"
+                "E-mail: %s\n"
+                "Website: %s\n"
+                "Street: %s\n"
+                "Street2: %s\n"
+                "City: %s\n"
                 "ZIP: %s\n"
                 "State code: %s\n"
                 "Country code: %s\n"
             )
             % (
-                partner.display_name,
-                address_dict.get("zip"),
-                address_dict.get("state_code"),
-                address_dict.get("country_code"),
+                partner_dict.get("name"),
+                partner_dict.get("vat"),
+                partner_dict.get("ref"),
+                partner_dict.get("email"),
+                partner_dict.get("website"),
+                partner_dict.get("street"),
+                partner_dict.get("street2"),
+                partner_dict.get("city"),
+                partner_dict.get("zip"),
+                partner_dict.get("state_code"),
+                partner_dict.get("country_code"),
             )
         )
 
@@ -695,7 +753,7 @@ class BusinessDocumentImport(models.AbstractModel):
         price_precision=None,
         seller=False,
     ):
-        """ Example:
+        """Example:
         existing_lines = [{
             'product': odoo_recordset,
             'name': 'USB Adapter',

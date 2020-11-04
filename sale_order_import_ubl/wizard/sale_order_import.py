@@ -1,6 +1,8 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from lxml import etree
+
 from odoo import api, models
 from odoo.tools import float_is_zero
 
@@ -60,13 +62,23 @@ class SaleOrderImport(models.TransientModel):
         main_xmlns = ns.pop(None)
         ns["main"] = main_xmlns
         if "RequestForQuotation" in main_xmlns:
+            document = "RequestForQuotation"
             root_name = "main:RequestForQuotation"
             line_name = "cac:RequestForQuotationLine"
             doc_type = "rfq"
         elif "Order" in main_xmlns:
+            document = "Order"
             root_name = "main:Order"
             line_name = "cac:OrderLine"
             doc_type = "order"
+        # Validate content according to xsd file
+        xml_string = etree.tostring(
+            xml_root, pretty_print=True, encoding="UTF-8", xml_declaration=True
+        )
+        self._ubl_check_xml_schema(
+            xml_string, document, version=self._ubl_get_version(xml_root, root_name, ns)
+        )
+        # Parse content
         date_xpath = xml_root.xpath("/%s/cbc:IssueDate" % root_name, namespaces=ns)
         currency_code = False
         for cur_node_name in ("DocumentCurrencyCode", "PricingCurrencyCode"):
@@ -111,6 +123,12 @@ class SaleOrderImport(models.TransientModel):
             incoterm_dict = self.ubl_parse_incoterm(delivery_term_xpath[0], ns)
         else:
             incoterm_dict = {}
+        invoicing_xpath = xml_root.xpath(
+            "/%s/cac:AccountingCustomerParty" % root_name, namespaces=ns
+        )
+        invoicing_dict = {}
+        if invoicing_xpath:
+            invoicing_dict = self.ubl_parse_customer_party(invoicing_xpath[0], ns)
         note_xpath = xml_root.xpath("/%s/cbc:Note" % root_name, namespaces=ns)
         lines_xpath = xml_root.xpath(
             "/{}/{}".format(root_name, line_name), namespaces=ns
@@ -123,6 +141,7 @@ class SaleOrderImport(models.TransientModel):
             "partner": customer_dict,
             "company": company_dict,
             "ship_to": shipping_dict,
+            "invoice_to": invoicing_dict,
             "currency": {"iso": currency_code},
             "date": date_xpath[0].text,
             "order_ref": order_ref_xpath[0].text,
