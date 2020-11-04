@@ -167,7 +167,14 @@ msgstr ""
 msgid ""
 "Odoo couldn't find any shipping partner corresponding to the following "
 "information extracted from the business document:\n"
-"Parent Partner: %s\n"
+"Name: %s\n"
+"VAT number: %s\n"
+"Reference: %s\n"
+"E-mail: %s\n"
+"Website: %s\n"
+"Street: %s\n"
+"Street2: %s\n"
+"City: %s\n"
 "ZIP: %s\n"
 "State code: %s\n"
 "Country code: %s\n"
@@ -208,14 +215,6 @@ msgid ""
 "The VAT number of the customer written in the business document (%s) doesn't "
 "match the VAT number of the company '%s' (%s) in which you are trying to "
 "import this document."
-msgstr ""
-
-#. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-#, python-format
-msgid ""
-"The analysis of the business document returned '%s' as %s VAT number. But "
-"there are no %s with this VAT number in Odoo."
 msgstr ""
 
 #. module: base_business_document_import
