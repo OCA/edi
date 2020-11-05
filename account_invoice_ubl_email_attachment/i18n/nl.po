@@ -58,6 +58,9 @@ msgstr ""
 "Voeg de UBL XML toe aan de bijlages bij het versturen van factuur per e-mail."
 
 #. module: account_invoice_ubl_email_attachment
-#: model:ir.model,name:account_invoice_ubl_email_attachment.model_account_invoice
-msgid "Invoice"
-msgstr "Factuur"
+#: model:ir.model,name:account_invoice_ubl_email_attachment.model_account_move
+msgid "Journal Entries"
+msgstr ""
+
+#~ msgid "Invoice"
+#~ msgstr "Factuur"

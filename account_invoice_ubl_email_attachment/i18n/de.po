@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_invoice_ubl_email_attachment
+# 	* account_invoice_ubl_email_attachment
 #
 msgid ""
 msgstr ""
@@ -34,7 +34,9 @@ msgstr "Email-Vorlagen"
 #. module: account_invoice_ubl_email_attachment
 #: model:ir.model.fields,help:account_invoice_ubl_email_attachment.field_res_company__include_ubl_attachment_in_invoice_email
 #: model:ir.model.fields,help:account_invoice_ubl_email_attachment.field_res_config_settings__include_ubl_attachment_in_invoice_email
-msgid "If active, the UBL Invoice XML file will be included in the attachments when sending the invoice by email."
+msgid ""
+"If active, the UBL Invoice XML file will be included in the attachments when "
+"sending the invoice by email."
 msgstr ""
 "Wenn der Haken gesetzt ist, wird die UBL-XML-Datei beim Email-Versand der "
 "Rechnung ebenfalls angehängt."
@@ -47,12 +49,16 @@ msgstr "UBL-XML-Datei beim Email-Versand der Rechnung anhängen"
 
 #. module: account_invoice_ubl_email_attachment
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl_email_attachment.view_account_config_settings
-msgid "Include the UBL XML in the attachments when sending the invoice by email."
+msgid ""
+"Include the UBL XML in the attachments when sending the invoice by email."
 msgstr ""
 "Die UBL-XML-Datei wird beim Email-Versand der Rechnung als Anhang "
 "hinzugefügt."
 
 #. module: account_invoice_ubl_email_attachment
-#: model:ir.model,name:account_invoice_ubl_email_attachment.model_account_invoice
-msgid "Invoice"
-msgstr "Rechnung"
+#: model:ir.model,name:account_invoice_ubl_email_attachment.model_account_move
+msgid "Journal Entries"
+msgstr ""
+
+#~ msgid "Invoice"
+#~ msgstr "Rechnung"
