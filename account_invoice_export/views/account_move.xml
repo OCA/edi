@@ -14,7 +14,7 @@
                     name="export_invoice"
                     string="Send eBill"
                     type="object"
-                    attrs="{'invisible':['|', ('state', '!=', 'posted'), ('invoice_exported', '=', True)]}"
+                    attrs="{'invisible':['|', '|', ('state', '!=', 'posted'), ('invoice_exported', '=', True), ('type', 'not in', ('out_invoice', 'out_refund'))]}"
                     groups="base.group_user"
                     class="oe_highlight"
                 />
@@ -22,7 +22,7 @@
                     name="export_invoice"
                     string="Resend eBill"
                     type="object"
-                    attrs="{'invisible':['|', ('state', '!=', 'posted'), '|', ('invoice_export_confirmed', '=', True), ('invoice_exported', '=', False)]}"
+                    attrs="{'invisible':['|', '|', ('state', '!=', 'posted'), '|', ('invoice_export_confirmed', '=', True), ('invoice_exported', '=', False), ('type', 'not in', ('out_invoice', 'out_refund'))]}"
                     groups="base.group_user"
                     class="oe_highlight"
                     confirm="Ebill has already been sent, but has not yet been accpeted by the distant system. Are you sure you want to send it again ?"
