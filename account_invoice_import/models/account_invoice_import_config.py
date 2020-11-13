@@ -14,7 +14,7 @@ class AccountInvoiceImportConfig(models.Model):
     name = fields.Char(required=True)
     partner_id = fields.Many2one(
         'res.partner', ondelete='cascade',
-        domain=[('supplier', '=', True), ('parent_id', '=', False)])
+        domain=[('parent_id', '=', False)])
     active = fields.Boolean(default=True)
     sequence = fields.Integer()
     invoice_line_method = fields.Selection([

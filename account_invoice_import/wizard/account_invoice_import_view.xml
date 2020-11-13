@@ -68,8 +68,20 @@
     <field name="context">{'invoice_show_amount': True}</field>
 </record>
 
+<record id="account_invoice_customer_import_action" model="ir.actions.act_window">
+    <field name="name">Import Customer Bill</field>
+    <field name="res_model">account.invoice.import</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'invoice_show_amount': True, 'customer': True}</field>
+</record>
+
 <menuitem id="account_invoice_import_menu"
     parent="account.menu_finance_payables"
     action="account_invoice_import_action" sequence="15"/>
+
+<menuitem id="account_invoice_customer_import_menu"
+    parent="account.menu_finance_receivables"
+    action="account_invoice_customer_import_action" sequence="15"/>
 
 </odoo>
