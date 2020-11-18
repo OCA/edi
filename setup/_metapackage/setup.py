@@ -16,6 +16,7 @@ setuptools.setup(
         'odoo13-addon-base_ebill_payment_contract',
         'odoo13-addon-base_ubl',
         'odoo13-addon-base_ubl_payment',
+        'odoo13-addon-edi_voxel',
         'odoo13-addon-partner_identification_import',
         'odoo13-addon-purchase_order_ubl',
         'odoo13-addon-purchase_stock_ubl',
