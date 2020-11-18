@@ -6,8 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-24 23:57+0000\n"
-"PO-Revision-Date: 2020-04-24 23:57+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -163,6 +161,11 @@ msgid "Companies"
 msgstr ""
 
 #. module: edi_voxel
+#: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__company_id
+msgid "Company"
+msgstr ""
+
+#. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_res_config_settings
 msgid "Config Settings"
 msgstr ""
@@ -224,7 +227,7 @@ msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields,help:edi_voxel.field_voxel_mixin__voxel_state
-msgid "Indicates the state of the Voxel report send state"
+msgid "Indicates the status of sending report to Voxel"
 msgstr ""
 
 #. module: edi_voxel
@@ -304,7 +307,6 @@ msgid "Palets"
 msgstr ""
 
 #. module: edi_voxel
-#: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__company_id
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__password
 msgid "Password"
 msgstr ""
