@@ -98,6 +98,8 @@ class BaseUbl(models.AbstractModel):
             electronicmail = etree.SubElement(
                 contact, ns['cbc'] + 'ElectronicMail')
             electronicmail.text = email
+        if not len(contact):
+            parent_node.remove(contact)
 
     @api.model
     def _ubl_add_language(self, lang_code, parent_node, ns, version='2.1'):
