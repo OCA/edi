@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <report
+        id="report_voxel_invoice"
+        name="edi_voxel_account_invoice.template_voxel_invoice"
+        string="Voxel invoice"
+        report_type="qweb-xml"
+        model="account.move"
+        print_report_name="object._get_voxel_filename()"
+    />
+    <template id="template_voxel_invoice">
+        <t t-call="edi_voxel.voxel_template" />
+    </template>
+</odoo>
