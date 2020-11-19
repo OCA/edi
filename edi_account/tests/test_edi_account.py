@@ -1,9 +1,12 @@
 # Copyright 2020 Creu Blanca
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo.tests import tagged
+
 from odoo.addons.account.tests.account_test_savepoint import AccountTestInvoicingCommon
 
 
+@tagged("-at_install", "post_install")
 class TestEdi(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):

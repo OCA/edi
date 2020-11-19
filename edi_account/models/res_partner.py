@@ -8,5 +8,5 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     account_move_edi_format_ids = fields.Many2many(
-        "edi.format", domain=[("usage", "=", "account.move")]
+        "edi.format", domain=[("res_model", "=", "account.move")]
     )

@@ -3,8 +3,8 @@
     <record id="edi_format_mail" model="edi.format">
         <field name="name">Mail</field>
         <field name="active" eval="False" />
-        <field name="format_key">mail</field>
-        <field name="usage">account.move</field>
+        <field name="usage">mail</field>
+        <field name="res_model">account.move</field>
         <field name="can_send" eval="True" />
     </record>
 </odoo>

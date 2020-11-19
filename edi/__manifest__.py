@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "author": "Creu Blanca,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
-    "depends": ["mail"],
+    "depends": ["mail", "component"],
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
