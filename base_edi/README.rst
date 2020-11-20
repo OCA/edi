@@ -25,7 +25,7 @@ Base EDI
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
 
-Base EDI app.
+Base EDI module to aggregate EDI features.
 
 Currently it provides:
 
@@ -42,6 +42,12 @@ Currently it provides:
 
 .. contents::
    :local:
+
+Known issues / Roadmap
+======================
+
+* implement new generic features around this
+* integrate existing modules with this
 
 Bug Tracker
 ===========
@@ -78,6 +84,14 @@ This module is maintained by the OCA.
 OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
+
+.. |maintainer-simahawk| image:: https://github.com/simahawk.png?size=40px
+    :target: https://github.com/simahawk
+    :alt: simahawk
+
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-simahawk| 
 
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/13.0/base_edi>`_ project on GitHub.
 
