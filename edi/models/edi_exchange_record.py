@@ -96,6 +96,12 @@ class EDIExchangeRecord(models.Model):
             if rec.type_id.ack_needed and not rec.ack_filename:
                 rec.ack_filename = rec.type_id._make_exchange_filename(rec, ack=True)
 
+    @api.depends("edi_exchange_state")
+    def _compute_exchanged_on(self):
+        for rec in self:
+            if rec.edi_exchange_state in ["output_sent"]:
+                rec.exchanged_on = fields.Datetime.now()
+
     @api.constrains("edi_exchange_state")
     def _constrain_edi_exchange_state(self):
         for rec in self:
@@ -131,3 +137,15 @@ class EDIExchangeRecord(models.Model):
                     raise exceptions.ValidationError(
                         _("Backend type must match with exchange type's backend type!")
                     )
+
+    def _exchange_sent_msg(self):
+        return _("File %s sent") % self.exchange_filename
+
+    def _exchange_send_error_msg(self):
+        return _("An error happened while sending. Please check exchange record info.")
+
+    def action_exchange_send(self):
+        self.ensure_one()
+        if not self.direction == "output":
+            raise exceptions.UserError(_("An output record is required for sending!"))
+        return self.backend_id.exchange_send(self)
