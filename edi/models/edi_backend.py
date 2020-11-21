@@ -127,3 +127,68 @@ class EDIBackend(models.Model):
     def _generate_output(self, exchange_record, **kw):
         """To be implemented"""
         raise NotImplementedError()
+
+    def exchange_send(self, exchange_record):
+        """Send exchange file."""
+        self.ensure_one()
+        exchange_record.ensure_one()
+        # In case already sent: skip sending and check the state
+        check = self._exchange_output_check(exchange_record)
+        if not check:
+            return False
+        try:
+            self._exchange_send(exchange_record)
+        except Exception as err:
+            if self.env.context.get("_edi_send_break_on_error"):
+                raise
+            error = str(err)
+            state = "output_error_on_send"
+            message = exchange_record._exchange_send_error_msg()
+            res = False
+        else:
+            message = exchange_record._exchange_sent_msg()
+            error = None
+            state = "output_sent"
+            res = True
+        finally:
+            exchange_record.edi_exchange_state = state
+            exchange_record.exchange_error = error
+            if message:
+                self._exchange_notify_record(exchange_record, message)
+        return res
+
+    def _exchange_output_check(self, exchange_record):
+        if exchange_record.direction != "output":
+            raise exceptions.UserError(
+                _("Record ID=%d is not meant to be sent!") % exchange_record.id
+            )
+        if not exchange_record.exchange_file:
+            raise exceptions.UserError(
+                _("Record ID=%d has no file to send!") % exchange_record.id
+            )
+        return exchange_record.edi_exchange_state in [
+            "output_pending",
+            "output_error_on_send",
+        ]
+
+    def _exchange_send(self, exchange_record):
+        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
+        component = self._get_component(usage="edi.send.%s" % self.backend_type_id.code)
+        if component:
+            return component.send(exchange_record)
+        raise NotImplementedError()
+
+    def _exchange_notify_record(self, record, message, level="info"):
+        """Attach notification of exchange state to the original record."""
+        if not hasattr(record.record, "message_post_with_view"):
+            return
+        record.record.message_post_with_view(
+            "edi.message_edi_exchange_link",
+            values={
+                "backend": self,
+                "exchange_record": record,
+                "message": message,
+                "level": level,
+            },
+            subtype_id=self.env.ref("mail.mt_note").id,
+        )
