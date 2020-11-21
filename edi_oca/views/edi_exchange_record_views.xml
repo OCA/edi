@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_record_view_tree" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="arch" type="xml">
+            <tree string="EDI Exchange Record">
+                <field name="name" />
+                <field name="type_id" />
+                <field name="res_id" />
+                <field name="model" />
+                <field name="exchanged_on" />
+                <field name="ack_received_on" />
+                <field name="edi_exchange_state" />
+            </tree>
+        </field>
+    </record>
+    <record id="edi_exchange_record_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="arch" type="xml">
+            <form string="EDI Exchange Record">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group name="wrapper">
+                        <group name="main">
+                            <field name="type_id" />
+                            <field name="res_id" />
+                            <field name="model" />
+                            <field name="exchanged_on" />
+                            <field name="ack_received_on" />
+                            <field name="edi_exchange_state" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="edi_exchange_record_view_search" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="arch" type="xml">
+            <search string="EDI Exchange Record">
+                <field name="type_id" />
+                <field name="res_id" />
+                <field name="exchanged_on" />
+                <field name="ack_received_on" />
+                <field name="edi_exchange_state" />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_type_id"
+                        string="Type"
+                        context="{'group_by': 'type_id'}"
+                    />
+                    <filter
+                        name="group_by_edi_exchange_state"
+                        string="State"
+                        context="{'group_by': 'edi_exchange_state'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view">
+        <field name="name">EDI Exchange Record</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_record_view_form"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_record_view" />
+        <field name="sequence" eval="20" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="edi_exchange_record_view_form" />
+    </record>
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_record_view_tree"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_record_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="edi_exchange_record_view_tree" />
+    </record>
+    <menuitem
+        id="menu_edi_exchange_record"
+        parent="menu_edi_exchange"
+        sequence="10"
+        action="act_open_edi_exchange_record_view"
+    />
+</odoo>
