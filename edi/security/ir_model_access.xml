@@ -18,4 +18,22 @@
         <field name="perm_write" eval="1" />
         <field name="perm_unlink" eval="1" />
     </record>
+    <record model="ir.model.access" id="access_edi_exchange_type_manager">
+        <field name="name">access_edi_exchange_type manager</field>
+        <field name="model_id" ref="model_edi_exchange_type" />
+        <field name="group_id" ref="base_edi.group_edi_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record model="ir.model.access" id="access_edi_exchange_record_manager">
+        <field name="name">access_edi_exchange_record manager</field>
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="group_id" ref="base_edi.group_edi_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
 </odoo>

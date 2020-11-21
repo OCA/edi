@@ -10,11 +10,14 @@
     "license": "AGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
-    "depends": ["base_edi", "component"],
+    "depends": ["base_edi", "component", "mail"],
     "data": [
         "security/ir_model_access.xml",
         "views/edi_backend_views.xml",
         "views/edi_backend_type_views.xml",
+        "views/edi_exchange_record_views.xml",
+        "views/edi_exchange_type_views.xml",
+        "templates/exchange_chatter_msg.xml",
     ],
     "demo": ["demo/edi_backend_demo.xml"],
 }
