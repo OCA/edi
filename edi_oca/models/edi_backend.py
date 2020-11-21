@@ -4,9 +4,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 
+import base64
 import logging
 
-from odoo import fields, models
+from odoo import _, exceptions, fields, models, tools
 
 _logger = logging.getLogger(__name__)
 
@@ -15,6 +16,10 @@ class EDIBackend(models.Model):
     """Generic backend to control EDI exchanges.
 
     Backends can be organized with types.
+
+    The backend should be responsible for generating export records.
+    For each record it can generate or parse their values
+    depending on their direction (incoming, outgoing).
     """
 
     _name = "edi.backend"
@@ -63,8 +68,6 @@ class EDIBackend(models.Model):
         res["type_id"] = export_type.id
         res["backend_id"] = self.id
         return res
-<<<<<<< HEAD
-=======
 
     def _get_exchange_type_domain(self, code):
         return [
@@ -124,4 +127,3 @@ class EDIBackend(models.Model):
     def _generate_output(self, exchange_record, **kw):
         """To be implemented"""
         raise NotImplementedError()
->>>>>>> 6df23cc... fixup! edi: small fix/imp on models
