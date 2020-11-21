@@ -48,3 +48,12 @@ class EDIBackendCheckComponentMixin(AbstractComponent):
 
     def check(self):
         raise NotImplementedError()
+
+
+class EDIBackendCheckComponentProcess(AbstractComponent):
+
+    _name = "edi.component.process.mixin"
+    _inherit = "edi.component.mixin"
+
+    def process(self):
+        raise NotImplementedError()
