@@ -1,9 +1,14 @@
 # Copyright 2020 ACSONE SA
+# Copyright 2020 Creu Blanca
 # @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 
+import logging
+
 from odoo import fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class EDIBackend(models.Model):
@@ -37,3 +42,18 @@ class EDIBackend(models.Model):
                 component = work.many_components(**kw)
                 return component[0] if component else None
             return work.component(**kw)
+
+    def create_record(self, type_code, values):
+        """Create an exchange record for current backend.
+
+        :param type_code: edi.exchange.type code
+        :param values: edi.exchange.record values
+        :return: edi.exchange.record record
+        """
+        self.ensure_one()
+        export_type = self.env["edi.exchange.type"].search(
+            [("code", "=", type_code), ("backend_id", "=", self.id)], limit=1
+        )
+        export_type.ensure_one()
+        values["type_id"] = export_type.id
+        return self.env["edi.exchange.record"].create(values)
