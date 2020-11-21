@@ -101,7 +101,7 @@ class EDIExchangeRecord(models.Model):
     @api.depends("edi_exchange_state")
     def _compute_exchanged_on(self):
         for rec in self:
-            if rec.edi_exchange_state in ["output_sent"]:
+            if rec.edi_exchange_state in ("input_received", "output_sent"):
                 rec.exchanged_on = fields.Datetime.now()
 
     @api.constrains("edi_exchange_state")
@@ -176,3 +176,12 @@ class EDIExchangeRecord(models.Model):
     def action_exchange_send(self):
         self.ensure_one()
         return self.backend_id.exchange_send(self)
+
+    def _exchange_processed_ok_msg(self):
+        return _("File %s processed successfully ") % self.exchange_filename
+
+    def _exchange_processed_ko_msg(self):
+        return _("File %s processed with errors") % self.exchange_filename
+
+    def _exchange_processed_ack_needed_missing_msg(self):
+        return _("ACK file is required for this exchange but not found.")
