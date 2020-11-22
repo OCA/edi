@@ -25,7 +25,6 @@ msgstr "Cancelar envío"
 #. module: edi_voxel_stock_picking
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
 #, fuzzy
-#| msgid "Voxel XML report"
 msgid "Cancelled Voxel reports"
 msgstr "Envíos a Voxel cancelados"
 
@@ -37,7 +36,6 @@ msgstr "Compañías"
 #. module: edi_voxel_stock_picking
 #: model:ir.model,name:edi_voxel_stock_picking.model_res_config_settings
 #, fuzzy
-#| msgid "res.config.settings"
 msgid "Config Settings"
 msgstr "Configuración"
 
@@ -49,7 +47,6 @@ msgstr "Nombre mostrado"
 #. module: edi_voxel_stock_picking
 #: model:ir.model,name:edi_voxel_stock_picking.model_report_edi_voxel_stock_picking_template_voxel_picking
 #, fuzzy
-#| msgid "Stock picking login"
 msgid "Edi Voxel Stock picking Report"
 msgstr "Informe de Alabarán para Voxel"
 
@@ -144,42 +141,36 @@ msgstr "Reporte XML Voxel"
 #. module: edi_voxel_stock_picking
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
 #, fuzzy
-#| msgid "Voxel Enabled"
 msgid "Voxel cancelled"
 msgstr "Envíos a Voxel cancelados"
 
 #. module: edi_voxel_stock_picking
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
 #, fuzzy
-#| msgid "Voxel Enabled"
 msgid "Voxel filters"
 msgstr "Filtros de Voxel"
 
 #. module: edi_voxel_stock_picking
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
 #, fuzzy
-#| msgid "Voxel XML report"
 msgid "Voxel report accepted"
 msgstr "Envíos a Voxel aceptados"
 
 #. module: edi_voxel_stock_picking
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
 #, fuzzy
-#| msgid "Voxel XML report"
 msgid "Voxel report failed"
 msgstr "Envíos a Voxel fallidos"
 
 #. module: edi_voxel_stock_picking
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
 #, fuzzy
-#| msgid "Voxel XML report"
 msgid "Voxel report in process"
 msgstr "Envíos a Voxel en proceso"
 
 #. module: edi_voxel_stock_picking
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking.view_picking_internal_search
 #, fuzzy
-#| msgid "Voxel XML report"
 msgid "Voxel report not sent"
 msgstr "No envíadas a Voxel"
 
