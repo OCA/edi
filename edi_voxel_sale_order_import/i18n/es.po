@@ -69,7 +69,6 @@ msgstr "Compañías"
 #. module: edi_voxel_sale_order_import
 #: model:ir.model,name:edi_voxel_sale_order_import.model_res_config_settings
 #, fuzzy
-#| msgid "res.config.settings"
 msgid "Config Settings"
 msgstr "Configuración"
 
@@ -135,7 +134,6 @@ msgstr "Login para Pedidos"
 #. module: edi_voxel_sale_order_import
 #: model:ir.model,name:edi_voxel_sale_order_import.model_sale_order
 #, fuzzy
-#| msgid "Sale Order login"
 msgid "Sales Order"
 msgstr "Orden de Venta"
 
@@ -153,7 +151,6 @@ msgstr "Voxel"
 #. module: edi_voxel_sale_order_import
 #: model_terms:ir.ui.view,arch_db:edi_voxel_sale_order_import.sale_order_view_search_inherit_quotation
 #, fuzzy
-#| msgid "Quotation"
 msgid "Voxel Quotations"
 msgstr "Presupuestos Voxel"
 
