@@ -20,9 +20,6 @@ msgstr ""
 #. module: account_e-invoice_generate
 #: model_terms:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
 #, fuzzy
-#| msgid ""
-#| "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are "
-#| "company-specific.\" groups=\"base.group_multi_company\"/>"
 msgid ""
 "<span class=\"o_form_label\">Select Format</span>\n"
 "                            <span class=\"fa fa-lg fa-building-o\" title="
