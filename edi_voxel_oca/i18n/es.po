@@ -175,7 +175,6 @@ msgstr "Compañías"
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__company_id
 #, fuzzy
-#| msgid "Companies"
 msgid "Company"
 msgstr "Compañías"
 
@@ -242,7 +241,6 @@ msgstr "ID (identificación)"
 #. module: edi_voxel
 #: model:ir.model.fields,help:edi_voxel.field_voxel_mixin__voxel_state
 #, fuzzy
-#| msgid "Indicates the state of the Voxel report send state"
 msgid "Indicates the status of sending report to Voxel"
 msgstr "Indica el estado del envío del reporte a Voxel"
 
