@@ -30,7 +30,9 @@ Base EDI backend.
 Provides following models:
 
 1. EDI Backend, to centralize configuration
-2. EDI Backend Type, to classify EDI backends (eg: UBL, GS1, pick-yours)
+2. EDI Backend Type, to classify EDI backends (eg: UBL, GS1, e-invoice, pick-yours)
+3. EDI Exchange Type, to define file types of exchange
+4. EDI Exchange Record, to define a record exchanged between systems
 
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
@@ -64,6 +66,7 @@ Contributors
 ~~~~~~~~~~~~
 
 * Simone Orsi <simahawk@gmail.com>
+* Enric Tobella <etobella@creublanca.es>
 
 Maintainers
 ~~~~~~~~~~~
