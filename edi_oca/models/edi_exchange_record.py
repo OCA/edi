@@ -13,6 +13,7 @@ class EDIExchangeRecord(models.Model):
     _name = "edi.exchange.record"
     _inherit = "mail.thread"
     _description = "EDI exchange Record"
+    _order = "exchanged_on desc"
 
     name = fields.Char(compute="_compute_name")
     type_id = fields.Many2one(
@@ -22,9 +23,9 @@ class EDIExchangeRecord(models.Model):
         ondelete="cascade",
         auto_join=True,
     )
-    direction = fields.Selection(related="type_id.direction",)
+    direction = fields.Selection(related="type_id.direction")
     backend_id = fields.Many2one(
-        comodel_name="edi.backend", related="type_id.backend_id",
+        comodel_name="edi.backend", related="type_id.backend_id"
     )
     model = fields.Char(index=True, required=False, readonly=True)
     res_id = fields.Many2oneReference(
@@ -44,6 +45,7 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_exchanged_on",
         store=True,
     )
+    # TODO: use sequence and make it unique
     exchange_identification_code = fields.Char(
         track_visibility="onchange",
         help="Identification of the EDI, useful to search and join other documents",
