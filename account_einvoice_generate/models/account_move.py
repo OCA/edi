@@ -27,7 +27,7 @@ class AccountMove(models.Model):
         if (
             xml_format
             and xml_format != "none"
-            and self.type in ("out_invoice", "out_refund")
+            and self.move_type in ("out_invoice", "out_refund")
             and self.partner_id
             and self.state != "cancel"
             and self.invoice_line_ids.filtered(lambda x: not x.display_type)
