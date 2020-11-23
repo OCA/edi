@@ -117,3 +117,17 @@ class EDIExchangeRecord(models.Model):
             name = "[{}] {} {}".format(rec.type_id.name, rec.record.name, dt)
             result.append((rec.id, name))
         return result
+
+    @api.constrains("backend_id", "type_id")
+    def _constrain_backend(self):
+        for rec in self:
+            if rec.type_id.backend_id:
+                if rec.type_id.backend_id != rec.backend_id:
+                    raise exceptions.ValidationError(
+                        _("Backend must match with exchange type's backend!")
+                    )
+            else:
+                if rec.type_id.backend_type_id != rec.backend_id.backend_type_id:
+                    raise exceptions.ValidationError(
+                        _("Backend type must match with exchange type's backend type!")
+                    )
