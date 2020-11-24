@@ -42,6 +42,7 @@ install:
     ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
+  - rm -fr ${HOME}/{odoo,OCB}-${VERSION}/addons/account_facturx
 
 script:
   - travis_run_tests
