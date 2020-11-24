@@ -118,3 +118,7 @@ class EDIBackendTestCase(EDIBackendCommonTestCase):
             with self.assertRaises(UserError):
                 record.action_exchange_send()
             patch.assert_not_called()
+
+    # TODO:
+    # 1. split output from incoming
+    # 2. test components lookup a ComponentRegistryCase
