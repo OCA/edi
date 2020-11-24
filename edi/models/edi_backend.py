@@ -9,6 +9,8 @@ import logging
 
 from odoo import _, exceptions, fields, models, tools
 
+from odoo.addons.component.exception import NoComponentError
+
 _logger = logging.getLogger(__name__)
 
 
@@ -34,19 +36,27 @@ class EDIBackend(models.Model):
         ondelete="restrict",
     )
 
-    def _get_component(self, safe=False, work_ctx=None, **kw):
+    def _get_component(self, usage_candidates, safe=True, work_ctx=None, **kw):
         """Retrieve components for current backend.
 
+        :param usage_candidates:
+            list of usage to try by priority. 1st found, 1st returned
         :param safe: boolean, if true does not break if component is not found
         :param work_ctx: dictionary with work context params
         :param kw: keyword args to lookup for components (eg: usage)
         """
+        component = None
         work_ctx = work_ctx or {}
         with self.work_on(self._name, **work_ctx) as work:
-            if safe:
-                component = work.many_components(**kw)
-                return component[0] if component else None
-            return work.component(**kw)
+            for usage in usage_candidates:
+                component = work.many_components(usage=usage, **kw)
+                if component:
+                    return component[0]
+        if not component and not safe:
+            raise NoComponentError(
+                "No componend found matching any of: {}".format(usage_candidates)
+            )
+        return component
 
     def create_record(self, type_code, values):
         """Create an exchange record for current backend.
@@ -125,8 +135,23 @@ class EDIBackend(models.Model):
             )
 
     def _generate_output(self, exchange_record, **kw):
-        """To be implemented"""
+        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
+        candidates = self._generate_output_component_usage_candidates(exchange_record)
+        component = self._get_component(candidates)
+        if component:
+            return component.generate(exchange_record)
         raise NotImplementedError()
+
+    def _generate_output_component_usage_candidates(self, exchange_record):
+        """Retrieve candidates for exchange send components."""
+        base_usage = "edi.output.{}".format(self.backend_type_id.code)
+        type_code = exchange_record.type_id.code
+        return [
+            # specific for backend type and exchange type
+            base_usage + "." + type_code,
+            # specific for backend type
+            base_usage,
+        ]
 
     def exchange_send(self, exchange_record):
         """Send exchange file."""
@@ -173,10 +198,22 @@ class EDIBackend(models.Model):
 
     def _exchange_send(self, exchange_record):
         # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        component = self._get_component(usage="edi.send.%s" % self.backend_type_id.code)
+        candidates = self._exchange_send_component_usage_candidates(exchange_record)
+        component = self._get_component(candidates)
         if component:
             return component.send(exchange_record)
         raise NotImplementedError()
+
+    def _exchange_send_component_usage_candidates(self, exchange_record):
+        """Retrieve candidates for exchange send components."""
+        base_usage = "edi.send.{}".format(self.backend_type_id.code)
+        type_code = exchange_record.exchange_type_id.code
+        return [
+            # specific for backend type and exchange type
+            base_usage + "." + type_code,
+            # specific for backend type
+            base_usage,
+        ]
 
     def _exchange_notify_record(self, record, message, level="info"):
         """Attach notification of exchange state to the original record."""
