@@ -16,7 +16,7 @@ class EDIExchangeType(models.Model):
     _description = "EDI Exchange Type"
 
     backend_id = fields.Many2one(
-        string="EDI backend", comodel_name="edi.backend", ondelete="restrict",
+        string="EDI backend", comodel_name="edi.backend", ondelete="set null",
     )
     backend_type_id = fields.Many2one(
         string="EDI Backend type",
