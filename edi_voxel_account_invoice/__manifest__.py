@@ -4,7 +4,7 @@
 {
     "name": "Voxel account invoice",
     "summary": "Sends account invoices to Voxel.",
-    "version": "13.0.1.0.0",
+    "version": "13.0.1.0.1",
     "category": "Accounting & Finance",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/oca/edi/",
