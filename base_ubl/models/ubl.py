@@ -339,7 +339,7 @@ class BaseUbl(models.AbstractModel):
             )
             base_qty.text = "1"  # What else could it be ?
         self._ubl_add_item(
-            name, product, line_item, ns, type=type_, seller=seller, version=version
+            name, product, line_item, ns, type_=type_, seller=seller, version=version
         )
 
     @api.model
