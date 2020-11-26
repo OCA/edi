@@ -28,7 +28,7 @@ def xml_purge_nswrapper(xml_content):
     # deeper elements come after, keep the root element at the end (if any)
     for nswrapper in reversed(root.xpath("//nswrapper")):
         parent = nswrapper.getparent()
-        if not parent:
+        if parent is None:
             # fmt:off
             return "".join([
                 pycompat.to_text(etree.tostring(el))

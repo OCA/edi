@@ -24,6 +24,8 @@ class EDIBackend(models.Model):
 
         Template's code must match the same component usage as per normal components.
         """
+        # TODO: maybe we can add a m2o to output templates
+        # but then we would need another for input templates if they are introduced.
         tmpl = None
         candidates = self._generate_output_component_usage_candidates(exchange_record)
         if code:
