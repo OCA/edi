@@ -7,18 +7,22 @@ import os
 
 from odoo.tests.common import SavepointCase, tagged
 
+from odoo.addons.component.tests.common import (
+    SavepointComponentCase,
+    SavepointComponentRegistryCase,
+)
 
-@tagged("-at_install", "post_install")
-class EDIBackendCommonTestCase(SavepointCase):
+
+class EDIBackendTestMixin(object):
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def _setup_records(cls):
         cls.env = cls.env(
             context=dict(
                 cls.env.context, tracking_disable=True, test_queue_job_no_delay=True
             )
         )
         cls.backend = cls._get_backend()
+        cls.backend_type_code = cls.backend.backend_type_id.code
         cls.backend_model = cls.env["edi.backend"]
         cls.backend_type_model = cls.env["edi.backend.type"]
         cls.exchange_type_in = cls._create_exchange_type(
@@ -57,3 +61,30 @@ class EDIBackendCommonTestCase(SavepointCase):
         }
         vals.update(kw)
         return model.create(vals)
+
+
+@tagged("-at_install", "post_install")
+class EDIBackendCommonTestCase(SavepointCase, EDIBackendTestMixin):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_records()
+
+
+@tagged("-at_install", "post_install")
+class EDIBackendCommonComponentTestCase(SavepointComponentCase, EDIBackendTestMixin):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_records()
+
+
+@tagged("-at_install", "post_install")
+class EDIBackendCommonComponentRegistryTestCase(
+    SavepointComponentRegistryCase, EDIBackendTestMixin
+):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._setup_records()
+        cls._load_module_components(cls, "edi")
