@@ -32,7 +32,10 @@ class EDIExchangeType(models.Model):
     exchange_filename_pattern = fields.Char(default="{record_name}-{type.code}-{dt}")
     # TODO make required if exchange_filename_pattern is
     exchange_file_ext = fields.Char()
-
+    exchange_file_auto_generate = fields.Boolean(
+        help="Auto generate output for records missing their payload. "
+        "If active, a cron will take care of generating the output when not set yet. "
+    )
     ack_needed = fields.Boolean()
     ack_name = fields.Char()
     ack_code = fields.Char()
