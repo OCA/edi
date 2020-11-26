@@ -39,27 +39,20 @@ class BusinessHeaderTestCase(BaseTestCase):
 
     def test_template_render_values(self):
         values = self.bh_tmpl._get_render_values(self.exc_record)
-        self.assertEqual(
-            values,
-            {
-                "backend": self.backend,
-                "date_to_string": self.bh_tmpl._date_to_string,
-                "exchange_record": self.exc_record,
-                "instance_identifier": self.related_record.name,
-                "record": self.related_record,
-                "template": self.bh_tmpl,
-                "utc_now": self.bh_tmpl._utc_now,
-                "render_edi_template": self.bh_tmpl._render_template,
-            },
-        )
+        expected = {
+            "backend": self.backend,
+            "exchange_record": self.exc_record,
+            "instance_identifier": self.related_record.name,
+            "record": self.related_record,
+            "template": self.bh_tmpl,
+        }
+        for k, v in expected.items():
+            self.assertEqual(values[k], v)
 
     @freeze_time("2020-07-08 07:30:00")
     def test_xml(self):
-        output = self.backend.generate_output(
-            self.exc_record,
-            template_code="gs1.BusinessHeader",
-            sender=self.lsc_partner,
-            receiver=self.lsp_partner,
+        output = self.bh_tmpl.generate_output(
+            self.exc_record, sender=self.lsc_partner, receiver=self.lsp_partner,
         )
         expected = """
             <sh:StandardBusinessDocumentHeader xmlns:sh="{ns}">

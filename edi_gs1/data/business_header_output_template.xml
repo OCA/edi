@@ -6,7 +6,7 @@
     >
         <field name="name">EDI Exchange - GS1 Business Header</field>
         <field name="code">gs1.BusinessHeader</field>
-        <field name="backend_type_id" ref="default_gs1_backend_type" />
+        <field name="backend_type_id" ref="backend_type_gs1" />
         <field name="output_type">xml</field>
         <field name="template_id" ref="edi_exchange_business_header" />
         <field name="code_snippet">

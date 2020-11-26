@@ -6,11 +6,13 @@ import os
 
 import xmlunittest
 
-from odoo.tests.common import SavepointCase, tagged
+from odoo.tests.common import tagged
+
+from odoo.addons.component.tests.common import SavepointComponentCase
 
 
 @tagged("-at_install", "post_install")
-class BaseTestCase(SavepointCase, xmlunittest.XmlTestMixin):
+class BaseTestCase(SavepointComponentCase, xmlunittest.XmlTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -29,7 +31,7 @@ class BaseTestCase(SavepointCase, xmlunittest.XmlTestMixin):
 
     @classmethod
     def _get_backend(cls):
-        return cls.env.ref("edi_gs1.default_gs1_backend")
+        return cls.env.ref("edi_gs1.edi_backend_gs1_default")
 
     def _dev_write_example_file(self, test_file, filename, content):
         from pathlib import Path
