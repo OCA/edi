@@ -1,0 +1,184 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_exchange_template
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__backend_id
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__backend_id
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_search
+msgid "Backend"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_search
+msgid "Backend type"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__code
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__code
+msgid "Code"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__code_snippet
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__code_snippet
+msgid "Code Snippet"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__code_snippet_docs
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__code_snippet_docs
+msgid "Code Snippet Docs"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_form
+msgid "Code snippet"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_form
+msgid "Code snippet docs"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__display_name
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model,name:edi_exchange_template.model_edi_backend
+msgid "EDI Backend"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__backend_type_id
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__backend_type_id
+msgid "EDI Backend type"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model,name:edi_exchange_template.model_edi_exchange_template_mixin
+msgid "EDI Exchange Output Mixin"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model,name:edi_exchange_template.model_edi_exchange_template_output
+msgid "EDI Exchange Output Template"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.actions.act_window,name:edi_exchange_template.act_open_edi_exchange_template_output_view
+#: model:ir.ui.menu,name:edi_exchange_template.menu_edi_exchange_template_output
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_form
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_search
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_tree
+msgid "EDI Exchange Template Output"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.ui.menu,name:edi_exchange_template.menu_edi_exchange_template_root
+msgid "EDI Exchange Templates"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__type_id
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__type_id
+msgid "EDI Exchange type"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_search
+msgid "Group By"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__id
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__id
+msgid "ID"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,help:edi_exchange_template.field_edi_exchange_template_output__template_key
+msgid "ID of the view defined in xml file"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin____last_update
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_mixin__name
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__name
+msgid "Name"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__output_type
+msgid "Output Type"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__template_arch
+msgid "QWeb arch"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__template_id
+msgid "Qweb Template"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_form
+msgid "Template"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__template_key
+msgid "Template key"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,help:edi_exchange_template.field_edi_exchange_template_output__template_arch
+msgid "This field stores the view arch."
+msgstr ""
+
+#. module: edi_exchange_template
+#: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_search
+msgid "Type"
+msgstr ""
