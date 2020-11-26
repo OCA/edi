@@ -136,15 +136,19 @@ class EDIBackend(models.Model):
 
     def _generate_output(self, exchange_record, **kw):
         # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._generate_output_component_usage_candidates(exchange_record)
-        component = self._get_component(candidates)
+        candidates = self._get_component_usage_candidates(exchange_record, "output")
+        component = self._get_component(
+            candidates, work_ctx={"exchange_record": exchange_record}
+        )
         if component:
-            return component.generate(exchange_record)
-        raise NotImplementedError()
+            return component.generate()
+        raise NotImplementedError("No handler for `_generate_output`")
 
-    def _generate_output_component_usage_candidates(self, exchange_record):
-        """Retrieve candidates for exchange send components."""
-        base_usage = "edi.output.{}".format(self.backend_type_id.code)
+    def _get_component_usage_candidates(self, exchange_record, key):
+        """Retrieve usage candidates for components."""
+        base_usage = "edi.{key}.{backend.backend_type_id.code}".format(
+            backend=self, key=key
+        )
         type_code = exchange_record.type_id.code
         return [
             # specific for backend type and exchange type
@@ -198,22 +202,13 @@ class EDIBackend(models.Model):
 
     def _exchange_send(self, exchange_record):
         # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._exchange_send_component_usage_candidates(exchange_record)
-        component = self._get_component(candidates)
+        candidates = self._get_component_usage_candidates(exchange_record, "send")
+        component = self._get_component(
+            candidates, work_ctx={"exchange_record": exchange_record}
+        )
         if component:
-            return component.send(exchange_record)
-        raise NotImplementedError()
-
-    def _exchange_send_component_usage_candidates(self, exchange_record):
-        """Retrieve candidates for exchange send components."""
-        base_usage = "edi.send.{}".format(self.backend_type_id.code)
-        type_code = exchange_record.exchange_type_id.code
-        return [
-            # specific for backend type and exchange type
-            base_usage + "." + type_code,
-            # specific for backend type
-            base_usage,
-        ]
+            return component.send()
+        raise NotImplementedError("No handler for `_exchange_send`")
 
     def _exchange_notify_record(self, record, message, level="info"):
         """Attach notification of exchange state to the original record."""
