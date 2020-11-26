@@ -58,6 +58,10 @@ class EDIBackend(models.Model):
             )
         return component
 
+    @property
+    def exchange_record_model(self):
+        return self.env["edi.exchange.record"]
+
     def create_record(self, type_code, values):
         """Create an exchange record for current backend.
 
@@ -67,7 +71,7 @@ class EDIBackend(models.Model):
         """
         self.ensure_one()
         _values = self._create_record_prepare_values(type_code, values)
-        return self.env["edi.exchange.record"].create(_values)
+        return self.exchange_record_model.create(_values)
 
     def _create_record_prepare_values(self, type_code, values):
         res = values.copy()  # do not pollute original dict
@@ -162,7 +166,7 @@ class EDIBackend(models.Model):
         self.ensure_one()
         exchange_record.ensure_one()
         # In case already sent: skip sending and check the state
-        check = self._exchange_output_check(exchange_record)
+        check = self._output_check_send(exchange_record)
         if not check:
             return False
         try:
@@ -170,7 +174,7 @@ class EDIBackend(models.Model):
         except Exception as err:
             if self.env.context.get("_edi_send_break_on_error"):
                 raise
-            error = str(err)
+            error = repr(err)
             state = "output_error_on_send"
             message = exchange_record._exchange_send_error_msg()
             res = False
@@ -186,7 +190,7 @@ class EDIBackend(models.Model):
                 self._exchange_notify_record(exchange_record, message)
         return res
 
-    def _exchange_output_check(self, exchange_record):
+    def _output_check_send(self, exchange_record):
         if exchange_record.direction != "output":
             raise exceptions.UserError(
                 _("Record ID=%d is not meant to be sent!") % exchange_record.id
@@ -210,17 +214,80 @@ class EDIBackend(models.Model):
             return component.send()
         raise NotImplementedError("No handler for `_exchange_send`")
 
-    def _exchange_notify_record(self, record, message, level="info"):
+    def _exchange_notify_record(self, exchange_record, message, level="info"):
         """Attach notification of exchange state to the original record."""
-        if not hasattr(record.record, "message_post_with_view"):
+        if not hasattr(exchange_record.record, "message_post_with_view"):
             return
-        record.record.message_post_with_view(
+        exchange_record.record.message_post_with_view(
             "edi.message_edi_exchange_link",
             values={
                 "backend": self,
-                "exchange_record": record,
+                "exchange_record": exchange_record,
                 "message": message,
                 "level": level,
             },
             subtype_id=self.env.ref("mail.mt_note").id,
         )
+
+    def _cron_check_output_exchange_sync(self, **kw):
+        for backend in self:
+            backend._check_output_exchange_sync(**kw)
+
+    def _check_output_exchange_sync(self, skip_send=False):
+        """Lookup for pending output records and take care of them.
+
+        First work on records that need output generation.
+        Then work on records waiting for a state update.
+
+        :param skip_send: only generate missing output.
+        """
+        # Generate output files
+        new_records = self.exchange_record_model.search(
+            self._output_new_records_domain()
+        )
+        _logger.info(
+            "EDI Exchange output sync: " "found %d new records to process.",
+            len(new_records),
+        )
+        for rec in new_records:
+            self.generate_output(rec)
+
+        if skip_send:
+            return
+        pending_records = self.exchange_record_model.search(
+            self._output_pending_records_domain()
+        )
+        _logger.info(
+            "EDI Exchange output sync: " "found %d pending records to process.",
+            len(pending_records),
+        )
+        for rec in pending_records:
+            if rec.edi_exchange_state == "output_pending":
+                self.exchange_send(rec)
+            else:
+                self._exchange_output_check_state(rec)
+
+    def _output_new_records_domain(self):
+        return [
+            ("type_id.exchange_file_auto_generate", "=", True),
+            ("type_id.direction", "=", "output"),
+            ("edi_exchange_state", "=", "new"),
+            ("exchange_file", "=", False),
+        ]
+
+    def _output_pending_records_domain(self):
+        states = ("output_pending", "output_sent", "output_sent_and_error")
+        return [
+            ("type_id.direction", "=", "output"),
+            ("edi_exchange_state", "in", states),
+        ]
+
+    def _exchange_output_check_state(self, exchange_record):
+        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
+        candidates = self._get_component_usage_candidates(exchange_record, "check")
+        component = self._get_component(
+            candidates, work_ctx={"exchange_record": exchange_record}
+        )
+        if component:
+            return component.check()
+        raise NotImplementedError("No handler for `_exchange_output_check_state`")
