@@ -27,7 +27,7 @@ class EDIBackend(models.Model):
         # TODO: maybe we can add a m2o to output templates
         # but then we would need another for input templates if they are introduced.
         tmpl = None
-        candidates = self._generate_output_component_usage_candidates(exchange_record)
+        candidates = self._get_component_usage_candidates(exchange_record, "output")
         if code:
             candidates.insert(code)
         for usage in candidates:
