@@ -9,12 +9,8 @@ from odoo.addons.edi.tests.common import EDIBackendCommonTestCase
 
 class TestEDIBackendOutputBase(EDIBackendCommonTestCase):
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls._setup_records()
-
-    @classmethod
     def _setup_records(cls):
+        super()._setup_records()
         cls.type_out1 = cls._create_exchange_type(
             name="Template output 1",
             direction="output",
