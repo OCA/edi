@@ -25,14 +25,14 @@ class StockPicking(models.Model):
         # TODO: how do we handle this?
         # We could have a wizard of some special fields to set by record
         # which backend to use.
-        return self.env.ref("edi_gs1.default_gs1_backend")
+        return self.env.ref("edi_gs1.edi_backend_gs1_default")
 
     def send_wh_inbound_instruction(self, send=True):
         """Generate an Inbound Instruction for given delivery and send it.
         """
         delivery = self
         edi_backend = self.get_backend_by_delivery()
-        type_code = "gs1.warehousingInboundInstructionMessage"
+        type_code = "warehousingInboundInstructionMessage"
         values = {"model": delivery._name, "res_id": delivery.id}
         exchange_record = edi_backend.create_record(type_code, values)
         edi_backend.generate_output(exchange_record)

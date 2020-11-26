@@ -13,7 +13,6 @@ from odoo.addons.component.core import Component
 class GS1InboundInstructionMessage(Component):
     """Generate data for Inbound Instruction.
 
-
     The Warehousing Inbound Instruction message enables a
 
         Logistic Services Client (LSC)
@@ -35,7 +34,7 @@ class GS1InboundInstructionMessage(Component):
     _inherit = [
         "edi.output.mixin",
     ]
-    _usage = "gs1.warehousingInboundInstructionMessage"
+    _usage = "edi.output.gs1.warehousingInboundInstructionMessage.info"
     # _xsd_schema_module = "gs1_stock"
     # _xsd_schema_path = "static/schemas/gs1/ecom/WarehousingInboundInstruction.xsd"
 

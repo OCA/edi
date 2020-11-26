@@ -82,9 +82,11 @@ class InboundInstructionTestCase(InboundInstructionTestCaseBase):
     def setUpClass(cls):
         super().setUpClass()
         cls._setup_order()
-        cls.exc_type = cls.env.ref("gs1_stock.edi_exchange_type_inbound_instruction")
+        cls.exc_type = cls.env.ref(
+            "edi_gs1_stock.edi_exchange_type_inbound_instruction"
+        )
         cls.exc_tmpl = cls.env.ref(
-            "gs1_stock.edi_exchange_template_inbound_instruction"
+            "edi_gs1_stock.edi_exchange_template_inbound_instruction"
         )
         vals = {
             "model": cls.delivery._name,
@@ -94,10 +96,10 @@ class InboundInstructionTestCase(InboundInstructionTestCaseBase):
         cls.record = cls.backend.create_record(cls.exc_type.code, vals)
 
     def test_get_template(self):
-        template = self.backend._get_template(self.record)
+        template = self.backend._get_output_template(self.record)
         self.assertEqual(template, self.exc_tmpl)
         self.assertEqual(
-            template.template_id.key, "gs1_stock.edi_exchange_inbound_instruction"
+            template.template_id.key, "edi_gs1_stock.edi_exchange_inbound_instruction"
         )
 
     def test_get_info(self):
