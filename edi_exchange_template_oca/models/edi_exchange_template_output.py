@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 
 class EDIExchangeOutputTemplate(models.Model):
-    """Define an output template to generate outgoing files
+    """Define an output template to generate outgoing records' content.
     """
 
     _name = "edi.exchange.template.output"
@@ -20,12 +20,21 @@ class EDIExchangeOutputTemplate(models.Model):
 
     output_type = fields.Char(required=True)
     # TODO: add a good domain (maybe add a new flag or category to ir.ui.view)
+    # Options:
+    # 1. add a flag "edi_template" to ir.ui.view
+    # 2. set model="edi.exchange.template.output" on the view
+    #    As templates are defined using `<template />` tag
+    #    I'm not sure this is a good option.
+    # 3. what else?
     template_id = fields.Many2one(
         string="Qweb Template",
         comodel_name="ir.ui.view",
         required=True,
         ondelete="restrict",
     )
+    # TODO: find a way to prevent editing "master templates"
+    # This would allow editing only a copy of the original template
+    # so that you can always check or rollback to it.
     template_arch = fields.Text(
         string="QWeb arch", related="template_id.arch_db", readonly=False,
     )
