@@ -1,0 +1,20 @@
+# Copyright 2020 ACSONE
+# @author: Simone Orsi <simahawk@gmail.com>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
+from odoo.addons.component.core import AbstractComponent
+
+
+class EDIExchangeInfoMixin(AbstractComponent):
+    """Abstract component mixin provide info for exchanges."""
+
+    _name = "edi.info.provider.mixin"
+    _collection = "edi.backend"
+    # Enable validation of work context attributes
+    _work_context_validate_attrs = []
+
+    def __init__(self, work_context):
+        super().__init__(work_context)
+        for key in self._work_context_validate_attrs:
+            if not hasattr(work_context, key):
+                raise AttributeError(f"`{key}` is required for this component!")
