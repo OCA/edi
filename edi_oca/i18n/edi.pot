@@ -91,6 +91,7 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__backend_id
 #: model_terms:ir.ui.view,arch_db:edi.edi_exchange_type_view_search
 msgid "Backend"
 msgstr ""
@@ -212,7 +213,6 @@ msgid "EDI Exchange type"
 msgstr ""
 
 #. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__backend_id
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__backend_id
 msgid "EDI backend"
 msgstr ""
