@@ -8,3 +8,4 @@ sale-workflow
 server-tools
 stock-logistics-workflow
 connector
+storage
