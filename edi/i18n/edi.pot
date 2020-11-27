@@ -96,6 +96,13 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_type__exchange_file_auto_generate
+msgid ""
+"Auto generate output for records missing their payload. If active, a cron "
+"will take care of generating the output when not set yet. "
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__backend_id
 #: model_terms:ir.ui.view,arch_db:edi.edi_exchange_type_view_search
 msgid "Backend"
@@ -229,6 +236,20 @@ msgid "EDI exchange Record"
 msgstr ""
 
 #. module: edi
+#: model:ir.actions.server,name:edi.cron_edi_backend_check_output_exchange_ir_actions_server
+#: model:ir.cron,cron_name:edi.cron_edi_backend_check_output_exchange
+#: model:ir.cron,name:edi.cron_edi_backend_check_output_exchange
+msgid "EDI exchange check status"
+msgstr ""
+
+#. module: edi
+#: model:ir.actions.server,name:edi.cron_edi_backend_check_input_exchange_ir_actions_server
+#: model:ir.cron,cron_name:edi.cron_edi_backend_check_input_exchange
+#: model:ir.cron,name:edi.cron_edi_backend_check_input_exchange
+msgid "EDI exchange input status"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields.selection,name:edi.selection__edi_exchange_record__edi_exchange_state__input_processed_error
 msgid "Error on process"
 msgstr ""
@@ -242,6 +263,11 @@ msgstr ""
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__exchange_file
 msgid "Exchange File"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__exchange_file_auto_generate
+msgid "Exchange File Auto Generate"
 msgstr ""
 
 #. module: edi
