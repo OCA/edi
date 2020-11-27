@@ -34,7 +34,7 @@ class GS1InboundInstructionMessage(Component):
     _inherit = [
         "edi.output.mixin",
     ]
-    _usage = "edi.output.gs1.warehousingInboundInstructionMessage.info"
+    _usage = "edi.output.generate.gs1.warehousingInboundInstructionMessage.info"
     # _xsd_schema_module = "gs1_stock"
     # _xsd_schema_path = "static/schemas/gs1/ecom/WarehousingInboundInstruction.xsd"
 
@@ -91,11 +91,11 @@ class GS1InboundInstructionMessage(Component):
     def _inbound_instruction_shipment_elements(self):
         return {
             "shipper": self._shipper,
-            "receiver": self._receiver,
             "logisticUnit": self._logistic_unit,
             "packageTotal": self._package_total,
             "warehousingReceiptTypeCode": self._receipt_type_code,
             "plannedReceipt": self._planned_receipt,
+            "_shipment_items": self._inbound_instruction_shipment_items,
         }
 
     def _shipment_identification(self):
@@ -117,7 +117,6 @@ class GS1InboundInstructionMessage(Component):
 
     def _shipper(self):
         """The carrier of the shipment."""
-
         record = self._get_shipper_record()
         if not record.gln_code and not record.ref:
             raise exceptions.ValidationError(
@@ -128,9 +127,9 @@ class GS1InboundInstructionMessage(Component):
         # `gln` is required in the schema.
         # Depending on your LSP having a fake one and relying on
         # `additionalPartyIdentification` can be enough.
-        data = {"gln": "".zfill(13)}
+        data = {"gln_code": "".zfill(13)}
         if record.gln_code:
-            data["gln"] = record.gln_code
+            data["gln_code"] = record.gln_code
         if record.ref:
             data["additionalPartyIdentification"] = {
                 "attrs": {
@@ -142,16 +141,6 @@ class GS1InboundInstructionMessage(Component):
                 "value": record.ref,
             }
         return data
-
-    def _get_receiver_record(self):
-        return self.work.receiver
-
-    def _receiver(self):
-        """Who receives the goods, generally the LSP."""
-        record = self._get_receiver_record()
-        return {
-            "gln": record.gln_code,
-        }
 
     def _logistic_unit(self):
         return {
@@ -211,10 +200,9 @@ class GS1InboundInstructionMessage(Component):
         }
 
     def _inbound_instruction_shipment_items(self):
-        item_key = "warehousingInboundInstructionShipmentItem"
         res = []
         for i, item in enumerate(self._get_shipment_items(), start=1):
-            res.append({item_key: self._shipment_item(item, i)})
+            res.append(self._shipment_item(item, i))
         return res
 
     def _get_shipment_items(self):

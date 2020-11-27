@@ -73,7 +73,7 @@ class InboundInstructionTestCaseBase(BaseTestCase, DeliveryMixin):
         cls.purchase.button_approve()
         cls.delivery = cls.purchase.picking_ids[0]
         cls.carrier = cls.env.ref("base.res_partner_4")
-        cls.carrier.gln_code = "44".zfill(13)
+        cls.carrier.gln_code = "123".zfill(13)
         cls.carrier.ref = "CARRIER#1"
 
 
@@ -102,7 +102,7 @@ class InboundInstructionTestCase(InboundInstructionTestCaseBase):
             template.template_id.key, "edi_gs1_stock.edi_exchange_inbound_instruction"
         )
 
-    def test_get_info(self):
+    def test_render_values(self):
         values = self.exc_tmpl._get_render_values(self.record)
         expected = [
             ("sender", self.backend.lsc_partner_id),
@@ -122,11 +122,87 @@ class InboundInstructionTestCase(InboundInstructionTestCaseBase):
         ]
         for k, v in expected:
             self.assertEqual(values[k], v)
-        # info = values["info"]
-        # expected_info = None
-        # TODO
-        # import pdb;pdb.set_trace()
-        pass
+
+        # Detailed test below
+        self.assertTrue(values["info"])
+
+    def test_info_provider_bad_work_ctx(self):
+        with self.assertRaises(AttributeError) as err:
+            self.exc_tmpl._get_info_provider(self.record)
+            self.assertEqual(
+                str(err.exception), "`sender` is required for this component!"
+            )
+
+    @freeze_time("2020-07-09 10:30:00")
+    def test_info_provider_data(self):
+        values = self.exc_tmpl._get_render_values(self.record, shipper=self.carrier)
+        provider = self.exc_tmpl._get_info_provider(self.record, work_ctx=values)
+        expected_shipment = {
+            "shipmentIdentification": {
+                "additionalShipmentIdentification": {
+                    "attrs": {
+                        # fmt: off
+                        "additionalShipmentIdentificationTypeCode":
+                            "GOODS_RECEIVER_ASSIGNED"
+                        # fmt: on
+                    },
+                    "value": self.delivery.name,
+                }
+            },
+            "shipper": {
+                "gln_code": "0000000000123",
+                "additionalPartyIdentification": {
+                    "attrs": {
+                        # fmt: off
+                        "additionalPartyIdentificationTypeCode":
+                            "BUYER_ASSIGNED_IDENTIFIER_FOR_A_PARTY"
+                        # fmt: on
+                    },
+                    "value": "CARRIER#1",
+                },
+            },
+            "packageTotal": {
+                "packageTypeCode": "AF",
+                "totalPackageQuantity": "2",
+                "totalGrossWeight": {
+                    "value": self.delivery.weight,
+                    "attrs": {"measurementUnitCode": "KGM"},
+                },
+            },
+            "warehousingReceiptTypeCode": "REGULAR_RECEIPT",
+            "plannedReceipt": {"logisticEventDateTime": {"date": "2020-07-12"}},
+            "_shipment_items": [
+                {
+                    "lineItemNumber": 1,
+                    "transactionalTradeItem": {"gtin": "1" * 14},
+                    "plannedReceiptQuantity": {
+                        "value": 300.0,
+                        "attrs": {"measurementUnitCode": "KGM"},
+                    },
+                },
+                {
+                    "lineItemNumber": 2,
+                    "transactionalTradeItem": {"gtin": "2" * 14},
+                    "plannedReceiptQuantity": {
+                        "value": 200.0,
+                        "attrs": {"measurementUnitCode": "KGM"},
+                    },
+                },
+                {
+                    "lineItemNumber": 3,
+                    "transactionalTradeItem": {"gtin": "3" * 14},
+                    "plannedReceiptQuantity": {
+                        "value": 100.0,
+                        "attrs": {"measurementUnitCode": "KGM"},
+                    },
+                },
+            ],
+        }
+        info = provider.generate_info().warehousingInboundInstruction
+        for k, v in expected_shipment.items():
+            self.assertEqual(
+                info.warehousingInboundInstructionShipment[k], v, f"{k} does not match"
+            )
 
     @freeze_time("2020-07-09 10:30:00")
     def test_xml(self):
