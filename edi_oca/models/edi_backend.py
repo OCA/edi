@@ -176,10 +176,11 @@ class EDIBackend(models.Model):
                 raise
             error = repr(err)
             state = "output_error_on_send"
-            message = exchange_record._exchange_send_error_msg()
+            message = exchange_record._exchange_status_message("send_ko")
             res = False
         else:
-            message = exchange_record._exchange_sent_msg()
+            # TODO: maybe the send handler should return desired message and state
+            message = exchange_record._exchange_status_message("send_ok")
             error = None
             state = "output_sent"
             res = True
@@ -291,3 +292,43 @@ class EDIBackend(models.Model):
         if component:
             return component.check()
         raise NotImplementedError("No handler for `_exchange_output_check_state`")
+
+    def _trigger_edi_event_make_name(self, exchange_record, suffix=None):
+        return "on_edi_{type.code}_{exchange_record.edi_exchange_state}{suffix}".format(
+            exchange_record=exchange_record,
+            type=exchange_record.type_id,
+            suffix=("_" + suffix) if suffix else "",
+        )
+
+    def _trigger_edi_event(self, exchange_record, name=None, suffix=None):
+        """Trigger a component event linked to this backend and edi exchange."""
+        name = name or self._trigger_edi_event_make_name(exchange_record, suffix=suffix)
+        self._event(name).notify(exchange_record)
+
+    def _notify_done(self, exchange_record):
+        self._exchange_notify_record(
+            exchange_record, exchange_record._exchange_status_message("process_ok")
+        )
+        self._trigger_edi_event(exchange_record)
+
+    def _notify_error(self, exchange_record, message_key):
+        self._exchange_notify_record(
+            exchange_record,
+            exchange_record._exchange_status_message(message_key),
+            level="error",
+        )
+        self._trigger_edi_event(exchange_record)
+
+    def _notify_ack_received(self, exchange_record):
+        self._exchange_notify_record(
+            exchange_record, exchange_record._exchange_status_message("ack_received")
+        )
+        self._trigger_edi_event(exchange_record, suffix="ack_received")
+
+    def _notify_ack_missing(self, exchange_record):
+        self._exchange_notify_record(
+            exchange_record,
+            exchange_record._exchange_status_message("ack_missing"),
+            level="warning",
+        )
+        self._trigger_edi_event(exchange_record, suffix="ack_missing")
