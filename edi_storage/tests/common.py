@@ -7,6 +7,10 @@ import mock
 
 from odoo.addons.edi.tests.common import EDIBackendCommonComponentTestCase
 
+STORAGE_BACKEND_MOCK_PATH = (
+    "odoo.addons.storage_backend.models.storage_backend.StorageBackend"
+)
+
 
 class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
     @classmethod
@@ -73,13 +77,11 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
         self._storage_backend_calls.append(path)
 
     def _mock_storage_backend_get(self, mocked_paths):
-        mock_path = "odoo.addons.storage_backend.models.storage_backend.StorageBackend"
         mocked = functools.partial(self._mocked_backend_get, mocked_paths)
-        return mock.patch(mock_path + ".get", mocked)
+        return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".get", mocked)
 
     def _mock_storage_backend_add(self):
-        mock_path = "odoo.addons.storage_backend.models.storage_backend.StorageBackend"
-        return mock.patch(mock_path + ".add", self._mocked_backend_add)
+        return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".add", self._mocked_backend_add)
 
     def _test_result(
         self, record, expected_values, expected_messages=None, state_paths=None,
