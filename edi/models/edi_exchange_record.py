@@ -152,11 +152,22 @@ class EDIExchangeRecord(models.Model):
                         _("Backend type must match with exchange type's backend type!")
                     )
 
-    def _exchange_sent_msg(self):
-        return _("File %s sent") % self.exchange_filename
+    @property
+    def _exchange_status_messages(self):
+        return {
+            # status: message
+            "send_ok": _("File %s sent") % self.exchange_filename,
+            "send_ko": _(
+                "An error happened while sending. Please check exchange record info."
+            ),
+            "process_ok": _("File %s processed successfully ") % self.exchange_filename,
+            "process_ko": _("File %s processed with errors") % self.exchange_filename,
+            "ack_received": _("ACK file received."),
+            "ack_missing": _("ACK file is required for this exchange but not found."),
+        }
 
-    def _exchange_send_error_msg(self):
-        return _("An error happened while sending. Please check exchange record info.")
+    def _exchange_status_message(self, key):
+        return self._exchange_status_messages[key]
 
     def action_exchange_send(self):
         self.ensure_one()
