@@ -274,7 +274,7 @@ class EDIBackend(models.Model):
             self._output_new_records_domain()
         )
         _logger.info(
-            "EDI Exchange output sync: " "found %d new records to process.",
+            "EDI Exchange output sync: found %d new records to process.",
             len(new_records),
         )
         for rec in new_records:
@@ -286,7 +286,7 @@ class EDIBackend(models.Model):
             self._output_pending_records_domain()
         )
         _logger.info(
-            "EDI Exchange output sync: " "found %d pending records to process.",
+            "EDI Exchange output sync: found %d pending records to process.",
             len(pending_records),
         )
         for rec in pending_records:
