@@ -45,7 +45,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.backend._cron_check_output_exchange_sync(skip_send=True)
         for rec in self.records:
             self.assertEqual(rec.edi_exchange_state, "output_pending")
-            self.assertEqual(rec._get_output(), "FAKE_OUTPUT: %s" % rec.id)
+            self.assertEqual(rec._get_file_content(), "FAKE_OUTPUT: %s" % rec.id)
 
     def test_generate_output_new_auto_send(self):
         self.exchange_type_out.exchange_file_auto_generate = True
@@ -55,13 +55,13 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.backend._cron_check_output_exchange_sync()
         for rec in self.records:
             self.assertEqual(rec.edi_exchange_state, "output_sent")
-            self.assertEqual(rec._get_output(), "FAKE_OUTPUT: %s" % rec.id)
+            self.assertEqual(rec._get_file_content(), "FAKE_OUTPUT: %s" % rec.id)
 
     def test_generate_output_output_ready_auto_send(self):
         # No content ready to be sent, will get the content and send it
         for rec in self.records:
             self.assertEqual(rec.edi_exchange_state, "new")
-        self.record1._set_output("READY")
+        self.record1._set_file_content("READY")
         self.record1.edi_exchange_state = "output_sent"
         self.backend.with_context(
             test_output_check_update_values={
