@@ -173,7 +173,7 @@ class EDIBackend(models.Model):
             return False
         try:
             self._exchange_send(exchange_record)
-        except Exception as err:
+        except self._swallable_exceptions() as err:
             if self.env.context.get("_edi_send_break_on_error"):
                 raise
             error = repr(err)
@@ -192,6 +192,15 @@ class EDIBackend(models.Model):
             if message:
                 self._exchange_notify_record(exchange_record, message)
         return res
+
+    def _swallable_exceptions(self):
+        # TODO: improve this list
+        return (
+            ValueError,
+            FileNotFoundError,
+            exceptions.UserError,
+            exceptions.ValidationError,
+        )
 
     def _output_check_send(self, exchange_record):
         if exchange_record.direction != "output":
