@@ -17,6 +17,7 @@ class EDIExchangeRecord(models.Model):
     _description = "EDI exchange Record"
     _order = "exchanged_on desc"
 
+    # TODO: add unique identifier using a sequence
     name = fields.Char(compute="_compute_name")
     type_id = fields.Many2one(
         string="EDI Exchange type",
