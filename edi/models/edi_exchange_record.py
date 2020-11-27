@@ -116,19 +116,21 @@ class EDIExchangeRecord(models.Model):
     def record(self):
         return self.env[self.model].browse(self.res_id)
 
-    def _set_output(self, output_string, encoding="utf-8"):
+    def _set_file_content(
+        self, output_string, encoding="utf-8", field_name="exchange_file"
+    ):
         """Handy method to no have to convert b64 back and forth."""
         self.ensure_one()
         if not isinstance(output_string, bytes):
             output_string = bytes(output_string, encoding)
-        self.exchange_file = base64.b64encode(output_string)
+        self[field_name] = base64.b64encode(output_string)
 
-    def _get_output(self):
+    def _get_file_content(self, field_name="exchange_file"):
         """Handy method to no have to convert b64 back and forth."""
         self.ensure_one()
-        if not self.exchange_file:
+        if not self[field_name]:
             return ""
-        return base64.b64decode(self.exchange_file).decode()
+        return base64.b64decode(self[field_name]).decode()
 
     def name_get(self):
         result = []
