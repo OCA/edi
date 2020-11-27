@@ -12,15 +12,21 @@
             <t
                 t-raw="render_edi_template(exchange_record, 'gs1.BusinessHeader', sender=sender, receiver=receiver)"
             />
+            <t t-set="instruction_info" t-value="info.warehousingInboundInstruction" />
+            <t
+                t-set="shipment_info"
+                t-value="instruction_info.warehousingInboundInstructionShipment"
+            />
             <t t-set="purchase_order" t-value="record.purchase_id" />
             <warehousingInboundInstruction>
-                <creationDateTime>2020-07-09T10:30:00</creationDateTime>
+                <creationDateTime t-esc="utc_now()" />
                 <documentStatusCode>ORIGINAL</documentStatusCode>
                 <documentActionCode>ADD</documentActionCode>
                 <warehousingInboundInstructionIdentification>
+                    <!-- FIXME: use `identifier` field -->
                     <entityIdentification
-                        t-esc="record.name"
-                    >WH/IN/00014</entityIdentification>
+                        t-esc="exchange_record.id"
+                    >EDI/123456789</entityIdentification>
                 </warehousingInboundInstructionIdentification>
                 <logisticServicesBuyer>
                     <gln t-esc="ls_buyer.gln_code" />
@@ -31,31 +37,33 @@
                 <warehousingInboundInstructionShipment>
                     <shipmentIdentification>
                         <additionalShipmentIdentification
+                            t-esc="shipment_info.shipmentIdentification.additionalShipmentIdentification.value"
+                            t-att="shipment_info.shipmentIdentification.additionalShipmentIdentification.attrs"
                             additionalShipmentIdentificationTypeCode="GOODS_RECEIVER_ASSIGNED"
-                            t-esc="record.name"
                         >WH/IN/00014</additionalShipmentIdentification>
                     </shipmentIdentification>
-                    <!-- TODO: get it from info.warehousingInboundInstructionShipment.shipper -->
+                    <t t-set="shipper" t-value="shipment_info.shipper" />
                     <shipper>
                         <gln t-esc="shipper.gln_code">0000000000044</gln>
                         <additionalPartyIdentification
-                            additionalPartyIdentificationTypeCode="BUYER_ASSIGNED_IDENTIFIER_FOR_A_PARTY"
-                            t-esc="shipper.name"
+                            t-if="shipper.additionalPartyIdentification"
+                            t-att="shipper.additionalPartyIdentification.attrs"
+                            t-esc="shipper.additionalPartyIdentification.value"
                         >CARRIER#1</additionalPartyIdentification>
                     </shipper>
                     <receiver>
                         <gln t-esc="receiver.gln_code">0000000000001</gln>
                     </receiver>
-                    <packageTotal t-if="info.packageTotal">
+                    <packageTotal t-if="shipment_info.packageTotal">
                         <packageTypeCode
-                            t-esc="info.packageTotal.packageTypeCode"
+                            t-esc="shipment_info.packageTotal.packageTypeCode"
                         >AF</packageTypeCode>
                         <totalPackageQuantity
-                            t-esc="info.packageTotal.totalPackageQuantity"
+                            t-esc="shipment_info.packageTotal.totalPackageQuantity"
                         >2</totalPackageQuantity>
                         <totalGrossWeight
-                            t-att="info.packageTotal.totalGrossWeight.attrs"
-                            t-esc="info.packageTotal.totalGrossWeight.value"
+                            t-att="shipment_info.packageTotal.totalGrossWeight.attrs"
+                            t-esc="shipment_info.packageTotal.totalGrossWeight.value"
                         >6.0</totalGrossWeight>
                     </packageTotal>
                     <warehousingReceiptTypeCode
@@ -65,33 +73,40 @@
                             <date>2020-07-12</date>
                         </logisticEventDateTime>
                     </plannedReceipt>
-                    <warehousingInboundInstructionShipmentItem>
-                        <lineItemNumber>1</lineItemNumber>
-                        <transactionalTradeItem>
-                            <gtin>11111111111111</gtin>
-                        </transactionalTradeItem>
-                        <plannedReceiptQuantity
-                            measurementUnitCode="KGM"
-                        >300.0</plannedReceiptQuantity>
-                    </warehousingInboundInstructionShipmentItem>
-                    <warehousingInboundInstructionShipmentItem>
-                        <lineItemNumber>2</lineItemNumber>
-                        <transactionalTradeItem>
-                            <gtin>22222222222222</gtin>
-                        </transactionalTradeItem>
-                        <plannedReceiptQuantity
-                            measurementUnitCode="KGM"
-                        >200.0</plannedReceiptQuantity>
-                    </warehousingInboundInstructionShipmentItem>
-                    <warehousingInboundInstructionShipmentItem>
-                        <lineItemNumber>3</lineItemNumber>
-                        <transactionalTradeItem>
-                            <gtin>33333333333333</gtin>
-                        </transactionalTradeItem>
-                        <plannedReceiptQuantity
-                            measurementUnitCode="KGM"
-                        >100.0</plannedReceiptQuantity>
-                    </warehousingInboundInstructionShipmentItem>
+                    <t t-foreach="shipment_info._shipment_items" t-as="ship_item">
+                        <t
+                            t-set="trade_item"
+                            t-value="ship_item.transactionalTradeItem"
+                        />
+                        <t t-set="avp_list" t-value="ship_item.avpList" />
+                        <warehousingInboundInstructionShipmentItem>
+                            <lineItemNumber
+                                t-esc="ship_item.lineItemNumber"
+                            >1</lineItemNumber>
+                            <transactionalTradeItem>
+                                <gtin t-esc="trade_item.gtin">11111111111111</gtin>
+                                <additionalTradeItemIdentification
+                                    t-if="trade_item.additionalTradeItemIdentification"
+                                    t-att="trade_item.additionalTradeItemIdentification.attrs"
+                                    t-esc="trade_item.additionalTradeItemIdentification.value"
+                                    additionalTradeItemIdentificationTypeCode="BUYER_ASSIGNED"
+                                >102150001001000010003200010311101101</additionalTradeItemIdentification>
+                            </transactionalTradeItem>
+                            <avpList t-if="avp_list">
+                                <t t-foreach="avp_list" t-as="avp_list_item">
+                                    <eComStringAttributeValuePairList
+                                        t-att="avp_list_item.attrs"
+                                        t-esc="avp_list_item.value"
+                                    >TRUE</eComStringAttributeValuePairList>
+                                </t>
+                            </avpList>
+                            <plannedReceiptQuantity
+                                t-att="ship_item.plannedReceiptQuantity.attrs"
+                                t-esc="ship_item.plannedReceiptQuantity.value"
+                                measurementUnitCode="KGM"
+                            >300.0</plannedReceiptQuantity>
+                        </warehousingInboundInstructionShipmentItem>
+                    </t>
                 </warehousingInboundInstructionShipment>
             </warehousingInboundInstruction>
         </warehousing_inbound_instruction:warehousingInboundInstructionMessage>
