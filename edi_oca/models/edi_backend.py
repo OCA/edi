@@ -47,6 +47,8 @@ class EDIBackend(models.Model):
         """
         component = None
         work_ctx = work_ctx or {}
+        if "backend" not in work_ctx:
+            work_ctx["backend"] = self
         with self.work_on(self._name, **work_ctx) as work:
             for usage in usage_candidates:
                 component = work.many_components(usage=usage, **kw)
