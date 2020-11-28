@@ -15,12 +15,17 @@ from odoo.addons.component.tests.common import (
 
 class EDIBackendTestMixin(object):
     @classmethod
-    def _setup_records(cls):
-        cls.env = cls.env(
-            context=dict(
-                cls.env.context, tracking_disable=True, test_queue_job_no_delay=True
-            )
+    def _setup_context(cls):
+        return dict(
+            cls.env.context, tracking_disable=True, test_queue_job_no_delay=True
         )
+
+    @classmethod
+    def _setup_env(cls):
+        cls.env = cls.env(context=cls._setup_context())
+
+    @classmethod
+    def _setup_records(cls):
         cls.backend = cls._get_backend()
         cls.backend_type_code = cls.backend.backend_type_id.code
         cls.backend_model = cls.env["edi.backend"]
@@ -68,6 +73,7 @@ class EDIBackendCommonTestCase(SavepointCase, EDIBackendTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls._setup_env()
         cls._setup_records()
 
 
@@ -76,6 +82,7 @@ class EDIBackendCommonComponentTestCase(SavepointComponentCase, EDIBackendTestMi
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls._setup_env()
         cls._setup_records()
 
 
@@ -86,5 +93,6 @@ class EDIBackendCommonComponentRegistryTestCase(
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls._setup_env()
         cls._setup_records()
         cls._load_module_components(cls, "edi")
