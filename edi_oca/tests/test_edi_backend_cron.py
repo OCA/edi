@@ -2,13 +2,10 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import tagged
-
 from .common import EDIBackendCommonComponentRegistryTestCase
 from .fake_components import FakeOutputChecker, FakeOutputGenerator, FakeOutputSender
 
 
-@tagged("-at_install", "post_install")
 class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
     @classmethod
     def setUpClass(cls):
