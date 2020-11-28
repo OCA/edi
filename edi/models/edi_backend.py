@@ -172,6 +172,9 @@ class EDIBackend(models.Model):
         check = self._output_check_send(exchange_record)
         if not check:
             return False
+        state = exchange_record.edi_exchange_state
+        error = False
+        message = None
         try:
             self._exchange_send(exchange_record)
         except self._swallable_exceptions() as err:
@@ -188,8 +191,15 @@ class EDIBackend(models.Model):
             state = "output_sent"
             res = True
         finally:
-            exchange_record.edi_exchange_state = state
-            exchange_record.exchange_error = error
+            exchange_record.write(
+                {
+                    "edi_exchange_state": state,
+                    "exchange_error": error,
+                    # FIXME: this should come from _compute_exchanged_on
+                    # but somehow it's failing in send tests (in record tests it works).
+                    "exchanged_on": fields.Datetime.now(),
+                }
+            )
             if message:
                 self._exchange_notify_record(exchange_record, message)
         return res
