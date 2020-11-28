@@ -23,9 +23,12 @@ class FakeOutputSender(Component):
     _inherit = "edi.component.send.mixin"
     _usage = "edi.send.demo_backend.test_csv_output"
 
+    FAKE_SEND_COLLECTOR = []
+
     def send(self):
         if self.env.context.get("test_break_it"):
             raise ValueError(self.env.context.get("test_break_it", "YOU BROKE IT!"))
+        self.FAKE_SEND_COLLECTOR.append(self.exchange_record._get_file_content())
         return self.env.context.get(
             "fake_output", "FAKE_OUTPUT: %d" % self.exchange_record.id
         )
