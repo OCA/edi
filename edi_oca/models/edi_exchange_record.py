@@ -45,6 +45,7 @@ class EDIExchangeRecord(models.Model):
         help="Sent or received on this date.",
         compute="_compute_exchanged_on",
         store=True,
+        readonly=False,
     )
     # TODO: use sequence and make it unique
     exchange_identification_code = fields.Char(
@@ -174,6 +175,4 @@ class EDIExchangeRecord(models.Model):
 
     def action_exchange_send(self):
         self.ensure_one()
-        if not self.direction == "output":
-            raise exceptions.UserError(_("An output record is required for sending!"))
         return self.backend_id.exchange_send(self)
