@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <!-- Sequence for edi.exchange.record -->
+    <record id="seq_edi_exchange_record" model="ir.sequence">
+        <field name="name">EDI Exchange Record</field>
+        <field name="code">edi.exchange</field>
+        <field name="prefix">EDI/%(year)s/</field>
+        <field name="padding">10</field>
+        <field name="company_id" eval="False" />
+    </record>
+</odoo>
