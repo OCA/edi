@@ -31,7 +31,9 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
 
     def setUp(self):
         super().setUp()
-        FakeOutputSender.FAKE_SEND_COLLECTOR = []
+        FakeOutputGenerator.reset_faked()
+        FakeOutputSender.reset_faked()
+        FakeOutputChecker.reset_faked()
 
     def test_generate_record_output(self):
         self.backend.with_context(fake_output="yeah!").generate_output(self.record)
@@ -43,9 +45,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.assertFalse(self.record.exchanged_on)
         with freeze_time("2020-10-21 10:00:00"):
             self.record.action_exchange_send()
-        self.assertIn(
-            self.record._get_file_content(), FakeOutputSender.FAKE_SEND_COLLECTOR
-        )
+        self.assertTrue(FakeOutputSender.check_called_for(self.record))
         self.assertRecordValues(self.record, [{"edi_exchange_state": "output_sent"}])
         self.assertEqual(
             fields.Datetime.to_string(self.record.exchanged_on), "2020-10-21 10:00:00"
@@ -58,9 +58,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.record.with_context(
             test_break_it="OOPS! Something went wrong :("
         ).action_exchange_send()
-        self.assertNotIn(
-            self.record._get_file_content(), FakeOutputSender.FAKE_SEND_COLLECTOR
-        )
+        self.assertTrue(FakeOutputSender.check_not_called_for(self.record))
         self.assertRecordValues(
             self.record,
             [
