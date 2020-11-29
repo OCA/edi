@@ -19,6 +19,7 @@ class EDIExchangeRecord(models.Model):
 
     name = fields.Char(compute="_compute_name")
     identifier = fields.Char(required=True, index=True, readonly=True)
+    external_identifier = fields.Char(index=True, readonly=True)
     type_id = fields.Many2one(
         string="EDI Exchange type",
         comodel_name="edi.exchange.type",
@@ -79,7 +80,12 @@ class EDIExchangeRecord(models.Model):
     exchange_error = fields.Text(string="Exchange error", readonly=True)
 
     _sql_constraints = [
-        ("identifier_uniq", "unique(identifier)", "The identifier must be unique.",)
+        ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
+        (
+            "external_identifier_uniq",
+            "unique(external_identifier)",
+            "The external_identifier must be unique.",
+        ),
     ]
 
     @api.depends("type_id.code", "model", "res_id")
