@@ -177,11 +177,6 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         return self.backend_id.exchange_send(self)
 
-    def _exchange_processed_ok_msg(self):
-        return _("File %s processed successfully ") % self.exchange_filename
-
-    def _exchange_processed_ko_msg(self):
-        return _("File %s processed with errors") % self.exchange_filename
-
-    def _exchange_processed_ack_needed_missing_msg(self):
-        return _("ACK file is required for this exchange but not found.")
+    def action_exchange_process(self):
+        self.ensure_one()
+        return self.backend_id.exchange_process(self)
