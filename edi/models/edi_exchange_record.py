@@ -17,6 +17,7 @@ class EDIExchangeRecord(models.Model):
     _description = "EDI exchange Record"
     _order = "exchanged_on desc"
 
+    # TODO: add unique identifier using a sequence
     name = fields.Char(compute="_compute_name")
     type_id = fields.Many2one(
         string="EDI Exchange type",
@@ -44,6 +45,7 @@ class EDIExchangeRecord(models.Model):
         help="Sent or received on this date.",
         compute="_compute_exchanged_on",
         store=True,
+        readonly=False,
     )
     # TODO: use sequence and make it unique
     exchange_identification_code = fields.Char(
@@ -116,19 +118,21 @@ class EDIExchangeRecord(models.Model):
     def record(self):
         return self.env[self.model].browse(self.res_id)
 
-    def _set_output(self, output_string, encoding="utf-8"):
+    def _set_file_content(
+        self, output_string, encoding="utf-8", field_name="exchange_file"
+    ):
         """Handy method to no have to convert b64 back and forth."""
         self.ensure_one()
         if not isinstance(output_string, bytes):
             output_string = bytes(output_string, encoding)
-        self.exchange_file = base64.b64encode(output_string)
+        self[field_name] = base64.b64encode(output_string)
 
-    def _get_output(self):
+    def _get_file_content(self, field_name="exchange_file"):
         """Handy method to no have to convert b64 back and forth."""
         self.ensure_one()
-        if not self.exchange_file:
+        if not self[field_name]:
             return ""
-        return base64.b64decode(self.exchange_file).decode()
+        return base64.b64decode(self[field_name]).decode()
 
     def name_get(self):
         result = []
@@ -152,14 +156,23 @@ class EDIExchangeRecord(models.Model):
                         _("Backend type must match with exchange type's backend type!")
                     )
 
-    def _exchange_sent_msg(self):
-        return _("File %s sent") % self.exchange_filename
+    @property
+    def _exchange_status_messages(self):
+        return {
+            # status: message
+            "send_ok": _("File %s sent") % self.exchange_filename,
+            "send_ko": _(
+                "An error happened while sending. Please check exchange record info."
+            ),
+            "process_ok": _("File %s processed successfully ") % self.exchange_filename,
+            "process_ko": _("File %s processed with errors") % self.exchange_filename,
+            "ack_received": _("ACK file received."),
+            "ack_missing": _("ACK file is required for this exchange but not found."),
+        }
 
-    def _exchange_send_error_msg(self):
-        return _("An error happened while sending. Please check exchange record info.")
+    def _exchange_status_message(self, key):
+        return self._exchange_status_messages[key]
 
     def action_exchange_send(self):
         self.ensure_one()
-        if not self.direction == "output":
-            raise exceptions.UserError(_("An output record is required for sending!"))
         return self.backend_id.exchange_send(self)
