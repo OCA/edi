@@ -6,6 +6,7 @@
             <tree string="EDI Exchange Record">
                 <field name="name" />
                 <field name="identifier" />
+                <field name="external_identifier" />
                 <field name="type_id" />
                 <field name="res_id" />
                 <field name="model" />
@@ -26,7 +27,12 @@
                             <field name="name" />
                         </h1>
                         <h2>
+                            <label for="identifier" />
                             <field name="identifier" />
+                        </h2>
+                        <h2>
+                            <label for="external_identifier" />
+                            <field name="external_identifier" />
                         </h2>
                     </div>
                     <group name="wrapper">
@@ -53,6 +59,7 @@
                 <field name="ack_received_on" />
                 <field name="edi_exchange_state" />
                 <field name="identifier" />
+                <field name="external_identifier" />
                 <group expand="0" string="Group By">
                     <filter
                         name="group_by_type_id"
