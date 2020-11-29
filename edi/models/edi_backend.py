@@ -142,7 +142,7 @@ class EDIBackend(models.Model):
 
     def _generate_output(self, exchange_record, **kw):
         # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "output")
+        candidates = self._get_component_usage_candidates(exchange_record, "generate")
         component = self._get_component(
             candidates, work_ctx={"exchange_record": exchange_record}
         )
@@ -152,9 +152,14 @@ class EDIBackend(models.Model):
 
     def _get_component_usage_candidates(self, exchange_record, key):
         """Retrieve usage candidates for components."""
-        base_usage = "edi.{key}.{backend.backend_type_id.code}".format(
-            backend=self, key=key
-        )
+        # fmt:off
+        base_usage = ".".join([
+            "edi",
+            exchange_record.direction,
+            key,
+            self.backend_type_id.code,
+        ])
+        # fmt:on
         type_code = exchange_record.type_id.code
         return [
             # specific for backend type and exchange type
