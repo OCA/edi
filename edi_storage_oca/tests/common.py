@@ -98,8 +98,12 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
             self.assertIn(path, self._storage_backend_calls)
         self.assertRecordValues(record, [expected_values])
         if expected_messages:
-            self.assertEqual(len(record.record.message_ids), len(expected_messages))
-            for msg_rec, expected in zip(record.record.message_ids, expected_messages):
+            # consider only edi related messages
+            messages = record.record.message_ids.filtered(
+                lambda x: "edi-exchange" in x.body
+            )
+            self.assertEqual(len(messages), len(expected_messages))
+            for msg_rec, expected in zip(messages, expected_messages):
                 self.assertIn(expected["message"], msg_rec.body)
                 self.assertIn("level-" + expected["level"], msg_rec.body)
         # TODO: test content of file sent
