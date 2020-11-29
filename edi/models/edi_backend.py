@@ -361,7 +361,7 @@ class EDIBackend(models.Model):
         self._trigger_edi_event(exchange_record, suffix="ack_missing")
 
     def _exchange_input_check(self, exchange_record):
-        if not exchange_record.direction != "inbound":
+        if not exchange_record.direction == "input":
             raise exceptions.UserError(
                 _("Record ID=%d is not meant to be processed") % exchange_record.id
             )
