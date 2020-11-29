@@ -375,7 +375,7 @@ class EDIBackend(models.Model):
         ]
 
     def exchange_process(self, exchange_record):
-        """ Process an incoming document
+        """Process an incoming document.
 
         This function should be called when an exchange record has been received
         it could integrate check where to relate or modificate the data
@@ -393,23 +393,30 @@ class EDIBackend(models.Model):
                 raise
             error = repr(err)
             state = "input_processed_error"
-            message = exchange_record._exchange_processed_ko_msg()
+            message = exchange_record._exchange_status_message("process_ko")
             res = False
         else:
-            message = exchange_record._exchange_processed_ok_msg()
+            message = exchange_record._exchange_status_message("process_ok")
             error = None
             state = "input_processed"
             res = True
         finally:
-            exchange_record.edi_exchange_state = state
-            exchange_record.exchange_error = error
+            exchange_record.write(
+                {
+                    "edi_exchange_state": state,
+                    "exchange_error": error,
+                    # FIXME: this should come from _compute_exchanged_on
+                    # but somehow it's failing in send tests (in record tests it works).
+                    "exchanged_on": fields.Datetime.now(),
+                }
+            )
             if message:
                 self._exchange_notify_record(exchange_record, message)
         return res
 
     def _exchange_process(self, exchange_record):
         # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "input")
+        candidates = self._get_component_usage_candidates(exchange_record, "process")
         component = self._get_component(
             candidates, work_ctx={"exchange_record": exchange_record}
         )
