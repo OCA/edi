@@ -9,8 +9,26 @@ from odoo import exceptions, fields
 from .common import EDIBackendCommonTestCase
 
 
-class EDIBackendTestCase(EDIBackendCommonTestCase):
+class EDIRecordTestCase(EDIBackendCommonTestCase):
     # TODO: test more
+
+    def test_record_identifier(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record = self.backend.create_record("test_csv_output", vals)
+        self.assertTrue(
+            record.identifier.startswith("EDI/{}".format(fields.Date.today().year))
+        )
+        new_record = self.backend.create_record(
+            "test_csv_output", dict(vals, identifier=record.identifier)
+        )
+        self.assertTrue(
+            new_record.identifier.startswith("EDI/{}".format(fields.Date.today().year))
+        )
+        self.assertNotEqual(new_record.identifier, record.identifier)
+
     def test_record_validate_state(self):
         with self.assertRaises(exceptions.ValidationError) as err:
             vals = {
