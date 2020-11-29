@@ -102,10 +102,4 @@
         <field name="view_mode">tree</field>
         <field name="view_id" ref="edi_exchange_record_view_tree" />
     </record>
-    <menuitem
-        id="menu_edi_exchange_record"
-        parent="menu_edi_exchange"
-        sequence="10"
-        action="act_open_edi_exchange_record_view"
-    />
 </odoo>
