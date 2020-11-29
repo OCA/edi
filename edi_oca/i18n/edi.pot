@@ -29,6 +29,18 @@ msgid "<strong>State:</strong>"
 msgstr ""
 
 #. module: edi
+#: code:addons/edi/models/edi_exchange_record.py:0
+#, python-format
+msgid "ACK file is required for this exchange but not found."
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_exchange_record.py:0
+#, python-format
+msgid "ACK file received."
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_received_on
 msgid "ACK received on"
 msgstr ""
@@ -82,12 +94,6 @@ msgstr ""
 #: code:addons/edi/models/edi_exchange_record.py:0
 #, python-format
 msgid "An error happened while sending. Please check exchange record info."
-msgstr ""
-
-#. module: edi
-#: code:addons/edi/models/edi_exchange_record.py:0
-#, python-format
-msgid "An output record is required for sending!"
 msgstr ""
 
 #. module: edi
@@ -332,6 +338,18 @@ msgstr ""
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__exchanged_on
 msgid "Exchanged on"
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_exchange_record.py:0
+#, python-format
+msgid "File %s processed successfully "
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_exchange_record.py:0
+#, python-format
+msgid "File %s processed with errors"
 msgstr ""
 
 #. module: edi
