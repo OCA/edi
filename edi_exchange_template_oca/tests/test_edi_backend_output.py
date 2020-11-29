@@ -32,7 +32,7 @@ class TestEDIBackendOutputBase(EDIBackendCommonTestCase):
         )
         cls.tmpl_out1 = model.create(
             {
-                "code": "edi.output.demo_backend.test_type_out1",
+                "code": "edi.output.generate.demo_backend.test_type_out1",
                 "name": "Out 1",
                 "backend_type_id": cls.backend.backend_type_id.id,
                 "type_id": cls.type_out1.id,
@@ -72,7 +72,7 @@ class TestEDIBackendOutputBase(EDIBackendCommonTestCase):
         )
         cls.tmpl_out2 = model.create(
             {
-                "code": "edi.output.demo_backend.test_type_out2",
+                "code": "edi.output.generate.demo_backend.test_type_out2",
                 "name": "Out 2",
                 "backend_type_id": cls.backend.backend_type_id.id,
                 "type_id": cls.type_out2.id,
