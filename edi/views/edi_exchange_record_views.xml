@@ -5,6 +5,7 @@
         <field name="arch" type="xml">
             <tree string="EDI Exchange Record">
                 <field name="name" />
+                <field name="identifier" />
                 <field name="type_id" />
                 <field name="res_id" />
                 <field name="model" />
@@ -24,6 +25,9 @@
                         <h1>
                             <field name="name" />
                         </h1>
+                        <h2>
+                            <field name="identifier" />
+                        </h2>
                     </div>
                     <group name="wrapper">
                         <group name="main">
@@ -48,6 +52,7 @@
                 <field name="exchanged_on" />
                 <field name="ack_received_on" />
                 <field name="edi_exchange_state" />
+                <field name="identifier" />
                 <group expand="0" string="Group By">
                     <filter
                         name="group_by_type_id"
