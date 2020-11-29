@@ -78,6 +78,7 @@ class EDIExchangeRecord(models.Model):
         ],
     )
     exchange_error = fields.Text(string="Exchange error", readonly=True)
+    ack_needed = fields.Boolean(related="type_id.ack_needed")
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -98,6 +99,8 @@ class EDIExchangeRecord(models.Model):
     @api.depends("model", "type_id", "type_id.ack_needed")
     def _compute_exchange_filename(self):
         for rec in self:
+            if not rec.type_id:
+                continue
             if not rec.exchange_filename:
                 rec.exchange_filename = rec.type_id._make_exchange_filename(rec)
             if rec.type_id.ack_needed and not rec.ack_filename:
@@ -143,7 +146,10 @@ class EDIExchangeRecord(models.Model):
         result = []
         for rec in self:
             dt = fields.Datetime.to_string(rec.exchanged_on) if rec.exchanged_on else ""
-            name = "[{}] {} {}".format(rec.type_id.name, rec.record.name, dt)
+            rec_name = rec.identifier
+            if rec.res_id and rec.model:
+                rec_name = rec.record.display_name
+            name = "[{}] {} {}".format(rec.type_id.name, rec_name, dt)
             result.append((rec.id, name))
         return result
 
@@ -193,3 +199,9 @@ class EDIExchangeRecord(models.Model):
     def action_exchange_process(self):
         self.ensure_one()
         return self.backend_id.exchange_process(self)
+
+    def action_open_related_record(self):
+        self.ensure_one()
+        if not self.model or not self.res_id:
+            return {}
+        return self.record.get_formview_action()
