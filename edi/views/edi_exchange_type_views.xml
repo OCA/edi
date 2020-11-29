@@ -25,6 +25,7 @@
                     <group name="wrapper">
                         <group name="main">
                             <field name="backend_id" />
+                            <field name="backend_type_id" />
                             <field name="code" />
                             <field name="direction" />
                         </group>
