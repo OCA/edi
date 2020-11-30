@@ -521,7 +521,19 @@ msgstr ""
 #. module: edi
 #: code:addons/edi/models/edi_backend.py:0
 #, python-format
+msgid "Record ID=%d has no file to process!"
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_backend.py:0
+#, python-format
 msgid "Record ID=%d has no file to send!"
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_backend.py:0
+#, python-format
+msgid "Record ID=%d is not meant to be processed"
 msgstr ""
 
 #. module: edi
