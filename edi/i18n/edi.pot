@@ -143,9 +143,19 @@ msgid "Backend type must match with exchange type's backend type!"
 msgstr ""
 
 #. module: edi
+#: model:ir.ui.menu,name:edi.menu_edi_backend
+msgid "Backends"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type__code
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__code
 msgid "Code"
+msgstr ""
+
+#. module: edi
+#: model:ir.ui.menu,name:edi.menu_edi_config
+msgid "Config"
 msgstr ""
 
 #. module: edi
@@ -182,8 +192,6 @@ msgstr ""
 #. module: edi
 #: model:ir.actions.act_window,name:edi.act_open_edi_backend_view
 #: model:ir.model,name:edi.model_edi_backend
-#: model:ir.ui.menu,name:edi.menu_edi_backend
-#: model:ir.ui.menu,name:edi.menu_edi_backend_root
 #: model_terms:ir.ui.view,arch_db:edi.edi_backend_view_form
 #: model_terms:ir.ui.view,arch_db:edi.edi_backend_view_search
 #: model_terms:ir.ui.view,arch_db:edi.edi_backend_view_tree
@@ -194,7 +202,6 @@ msgstr ""
 #: model:ir.actions.act_window,name:edi.act_open_edi_backend_type_view
 #: model:ir.model,name:edi.model_edi_backend_type
 #: model:ir.ui.menu,name:edi.menu_edi_backend_type
-#: model:ir.ui.menu,name:edi.menu_edi_exchange
 #: model_terms:ir.ui.view,arch_db:edi.edi_backend_type_view_form
 #: model_terms:ir.ui.view,arch_db:edi.edi_backend_type_view_search
 #: model_terms:ir.ui.view,arch_db:edi.edi_backend_type_view_tree
@@ -209,7 +216,6 @@ msgstr ""
 
 #. module: edi
 #: model:ir.actions.act_window,name:edi.act_open_edi_exchange_record_view
-#: model:ir.ui.menu,name:edi.menu_edi_exchange_record
 #: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_view_form
 #: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_view_search
 #: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_view_tree
@@ -249,13 +255,6 @@ msgid "EDI exchange check status"
 msgstr ""
 
 #. module: edi
-#: model:ir.actions.server,name:edi.cron_edi_backend_check_input_exchange_ir_actions_server
-#: model:ir.cron,cron_name:edi.cron_edi_backend_check_input_exchange
-#: model:ir.cron,name:edi.cron_edi_backend_check_input_exchange
-msgid "EDI exchange input status"
-msgstr ""
-
-#. module: edi
 #: model:ir.model.fields.selection,name:edi.selection__edi_exchange_record__edi_exchange_state__input_processed_error
 msgid "Error on process"
 msgstr ""
@@ -289,11 +288,6 @@ msgstr ""
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__exchange_filename_pattern
 msgid "Exchange Filename Pattern"
-msgstr ""
-
-#. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__exchange_identification_code
-msgid "Exchange Identification Code"
 msgstr ""
 
 #. module: edi
@@ -338,6 +332,16 @@ msgstr ""
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__exchanged_on
 msgid "Exchanged on"
+msgstr ""
+
+#. module: edi
+#: model:ir.ui.menu,name:edi.menu_edi_exchange_record
+msgid "Exchanges"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__external_identifier
+msgid "External Identifier"
 msgstr ""
 
 #. module: edi
@@ -389,8 +393,8 @@ msgid "ID"
 msgstr ""
 
 #. module: edi
-#: model:ir.model.fields,help:edi.field_edi_exchange_record__exchange_identification_code
-msgid "Identification of the EDI, useful to search and join other documents"
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__identifier
+msgid "Identifier"
 msgstr ""
 
 #. module: edi
@@ -575,6 +579,16 @@ msgstr ""
 #. module: edi
 #: model:ir.model.constraint,message:edi.constraint_edi_exchange_type_code_uniq
 msgid "The code must be unique per backend"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.constraint,message:edi.constraint_edi_exchange_record_external_identifier_uniq
+msgid "The external_identifier must be unique."
+msgstr ""
+
+#. module: edi
+#: model:ir.model.constraint,message:edi.constraint_edi_exchange_record_identifier_uniq
+msgid "The identifier must be unique."
 msgstr ""
 
 #. module: edi
