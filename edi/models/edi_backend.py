@@ -58,7 +58,7 @@ class EDIBackend(models.Model):
             raise NoComponentError(
                 "No componend found matching any of: {}".format(usage_candidates)
             )
-        return component
+        return component or None
 
     @property
     def exchange_record_model(self):
