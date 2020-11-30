@@ -142,7 +142,7 @@ class EDIBackend(models.Model):
 
     def _generate_output(self, exchange_record, **kw):
         # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "output")
+        candidates = self._get_component_usage_candidates(exchange_record, "generate")
         component = self._get_component(
             candidates, work_ctx={"exchange_record": exchange_record}
         )
@@ -152,9 +152,14 @@ class EDIBackend(models.Model):
 
     def _get_component_usage_candidates(self, exchange_record, key):
         """Retrieve usage candidates for components."""
-        base_usage = "edi.{key}.{backend.backend_type_id.code}".format(
-            backend=self, key=key
-        )
+        # fmt:off
+        base_usage = ".".join([
+            "edi",
+            exchange_record.direction,
+            key,
+            self.backend_type_id.code,
+        ])
+        # fmt:on
         type_code = exchange_record.type_id.code
         return [
             # specific for backend type and exchange type
@@ -354,3 +359,67 @@ class EDIBackend(models.Model):
             level="warning",
         )
         self._trigger_edi_event(exchange_record, suffix="ack_missing")
+
+    def _exchange_input_check(self, exchange_record):
+        if not exchange_record.direction == "input":
+            raise exceptions.UserError(
+                _("Record ID=%d is not meant to be processed") % exchange_record.id
+            )
+        if not exchange_record.exchange_file:
+            raise exceptions.UserError(
+                _("Record ID=%d has no file to process!") % exchange_record.id
+            )
+        return exchange_record.edi_exchange_state in [
+            "input_received",
+            "input_processed_error",
+        ]
+
+    def exchange_process(self, exchange_record):
+        """Process an incoming document.
+
+        This function should be called when an exchange record has been received
+        it could integrate check where to relate or modificate the data
+        """
+        self.ensure_one()
+        exchange_record.ensure_one()
+        # In case already processed: skip processing and check the state
+        check = self._exchange_input_check(exchange_record)
+        if not check:
+            return False
+        try:
+            self._exchange_process(exchange_record)
+        except self._swallable_exceptions() as err:
+            if self.env.context.get("_edi_receive_break_on_error"):
+                raise
+            error = repr(err)
+            state = "input_processed_error"
+            message = exchange_record._exchange_status_message("process_ko")
+            res = False
+        else:
+            message = exchange_record._exchange_status_message("process_ok")
+            error = None
+            state = "input_processed"
+            res = True
+        finally:
+            exchange_record.write(
+                {
+                    "edi_exchange_state": state,
+                    "exchange_error": error,
+                    # FIXME: this should come from _compute_exchanged_on
+                    # but somehow it's failing in send tests (in record tests it works).
+                    "exchanged_on": fields.Datetime.now(),
+                }
+            )
+            if message:
+                self._exchange_notify_record(exchange_record, message)
+        return res
+
+    def _exchange_process(self, exchange_record):
+        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
+        candidates = self._get_component_usage_candidates(exchange_record, "process")
+        component = self._get_component(
+            candidates, work_ctx={"exchange_record": exchange_record}
+        )
+        if component:
+            return component.process()
+        raise NotImplementedError()
