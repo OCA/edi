@@ -187,6 +187,7 @@ class EDIExchangeRecord(models.Model):
             "process_ko": _("File %s processed with errors") % self.exchange_filename,
             "ack_received": _("ACK file received."),
             "ack_missing": _("ACK file is required for this exchange but not found."),
+            "ack_received_error": _("ACK file received but contains errors."),
         }
 
     def _exchange_status_message(self, key):
