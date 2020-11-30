@@ -5,7 +5,7 @@
 {
     "name": "Base EDI Backend",
     "summary": """Base module to define EDI backends""",
-    "version": "13.0.1.7.0",
+    "version": "13.0.1.8.0",
     "development_status": "Alpha",
     "license": "AGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
