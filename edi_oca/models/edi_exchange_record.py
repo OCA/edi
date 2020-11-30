@@ -48,16 +48,6 @@ class EDIExchangeRecord(models.Model):
         store=True,
         readonly=False,
     )
-    ack_file = fields.Binary(attachment=True)
-    ack_filename = fields.Char(
-        compute="_compute_exchange_filename", readonly=False, store=True
-    )
-    ack_received_on = fields.Datetime(
-        string="ACK received on",
-        readonly=True,
-        compute="_compute_ack_received_on",
-        store=True,
-    )
     edi_exchange_state = fields.Selection(
         string="Exchange state",
         readonly=True,
@@ -78,7 +68,25 @@ class EDIExchangeRecord(models.Model):
         ],
     )
     exchange_error = fields.Text(string="Exchange error", readonly=True)
-    ack_needed = fields.Boolean(related="type_id.ack_needed")
+    # Relations w/ other records
+    parent_id = fields.Many2one(
+        comodel_name="edi.exchange.record",
+        help="Original exchange which originated this record",
+    )
+    related_exchange_ids = fields.One2many(
+        string="Related records",
+        comodel_name="edi.exchange.record",
+        inverse_name="parent_id",
+    )
+    # TODO: shall we add a constrain on the direction?
+    # In theory if the record is outgoing the ack should be incoming and vice versa.
+    ack_exchange_id = fields.Many2one(
+        comodel_name="edi.exchange.record",
+        help="Ack for this exchange",
+        compute="_compute_ack_exchange_id",
+        store=True,
+    )
+    ack_received_on = fields.Datetime(related="ack_exchange_id.exchanged_on")
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -96,15 +104,13 @@ class EDIExchangeRecord(models.Model):
                 rec.type_id.name, rec.record.name if rec.model else "Unrelated"
             )
 
-    @api.depends("model", "type_id", "type_id.ack_needed")
+    @api.depends("model", "type_id")
     def _compute_exchange_filename(self):
         for rec in self:
             if not rec.type_id:
                 continue
             if not rec.exchange_filename:
                 rec.exchange_filename = rec.type_id._make_exchange_filename(rec)
-            if rec.type_id.ack_needed and not rec.ack_filename:
-                rec.ack_filename = rec.type_id._make_exchange_filename(rec, ack=True)
 
     @api.depends("edi_exchange_state")
     def _compute_exchanged_on(self):
@@ -121,6 +127,21 @@ class EDIExchangeRecord(models.Model):
                 raise exceptions.ValidationError(
                     _("Exchange state must respect direction!")
                 )
+
+    @api.depends("related_exchange_ids.type_id")
+    def _compute_ack_exchange_id(self):
+        for rec in self:
+            rec.ack_exchange_id = rec._get_ack_record()
+
+    def _get_ack_record(self):
+        if not self.type_id.ack_type_id:
+            return None
+        return self.related_exchange_ids.filtered(
+            lambda x: x.type_id == self.type_id.ack_type_id
+        )
+
+    def needs_ack(self):
+        return self.type_id.ack_type_id and not self.ack_exchange_id
 
     @property
     def record(self):
