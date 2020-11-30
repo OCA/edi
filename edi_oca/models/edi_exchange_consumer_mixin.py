@@ -45,3 +45,30 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     def _edi_generate_records(self):
         raise NotImplementedError()
+
+    @api.model
+    def get_edi_access(self, doc_ids, operation, model_name=False):
+        """Retrieve access policy.
+        The behavior is similar to `mail.thread` and `mail.message`
+        and it relies on the access rules defines on the related record.
+        The behavior can be customized on the related model
+        by defining `_edi_exchange_record_access`.
+
+        By default `write`, otherwise the custom permission is returned.
+        """
+        DocModel = self.env[model_name] if model_name else self
+        create_allow = getattr(DocModel, "_edi_exchange_record_access", "write")
+        if operation in ["write", "unlink"]:
+            check_operation = "write"
+        elif operation == "create" and create_allow in [
+            "create",
+            "read",
+            "write",
+            "unlink",
+        ]:
+            check_operation = create_allow
+        elif operation == "create":
+            check_operation = "write"
+        else:
+            check_operation = operation
+        return check_operation
