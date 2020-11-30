@@ -54,3 +54,19 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
             self.assertEqual(
                 fields.Datetime.to_string(record.exchanged_on), "2020-10-21 10:00:00"
             )
+
+    def test_record_relation(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record = self.backend.create_record("test_csv_output", vals)
+        record1 = self.backend.create_record(
+            "test_csv_output", dict(vals, parent_id=record.id)
+        )
+        record2 = self.backend.create_record(
+            "test_csv_output_ack", dict(vals, parent_id=record.id)
+        )
+        self.assertIn(record1, record.related_exchange_ids)
+        self.assertIn(record2, record.related_exchange_ids)
+        self.assertEqual(record.ack_exchange_id, record2)
