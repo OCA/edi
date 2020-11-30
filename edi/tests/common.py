@@ -44,6 +44,14 @@ class EDIBackendTestMixin(object):
             exchange_file_ext="csv",
             exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
         )
+        cls.exchange_type_out_ack = cls._create_exchange_type(
+            name="Test CSV output ACK",
+            code="test_csv_output_ack",
+            direction="input",
+            exchange_file_ext="txt",
+            exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
+        )
+        cls.exchange_type_out.ack_type_id = cls.exchange_type_out_ack
         cls.partner = cls.env.ref("base.res_partner_1")
         cls.partner.ref = "EDI_EXC_TEST"
 
