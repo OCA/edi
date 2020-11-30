@@ -13,11 +13,13 @@
     "depends": ["base_edi", "component", "component_event", "mail"],
     "data": [
         "data/cron.xml",
+        "data/sequence.xml",
         "security/ir_model_access.xml",
         "views/edi_backend_views.xml",
         "views/edi_backend_type_views.xml",
         "views/edi_exchange_record_views.xml",
         "views/edi_exchange_type_views.xml",
+        "views/menuitems.xml",
         "templates/exchange_chatter_msg.xml",
     ],
     "demo": ["demo/edi_backend_demo.xml"],

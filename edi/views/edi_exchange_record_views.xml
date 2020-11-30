@@ -5,6 +5,8 @@
         <field name="arch" type="xml">
             <tree string="EDI Exchange Record">
                 <field name="name" />
+                <field name="identifier" />
+                <field name="external_identifier" />
                 <field name="type_id" />
                 <field name="res_id" />
                 <field name="model" />
@@ -24,6 +26,14 @@
                         <h1>
                             <field name="name" />
                         </h1>
+                        <h2>
+                            <label for="identifier" />
+                            <field name="identifier" />
+                        </h2>
+                        <h2>
+                            <label for="external_identifier" />
+                            <field name="external_identifier" />
+                        </h2>
                     </div>
                     <group name="wrapper">
                         <group name="main">
@@ -48,6 +58,8 @@
                 <field name="exchanged_on" />
                 <field name="ack_received_on" />
                 <field name="edi_exchange_state" />
+                <field name="identifier" />
+                <field name="external_identifier" />
                 <group expand="0" string="Group By">
                     <filter
                         name="group_by_type_id"
@@ -90,10 +102,4 @@
         <field name="view_mode">tree</field>
         <field name="view_id" ref="edi_exchange_record_view_tree" />
     </record>
-    <menuitem
-        id="menu_edi_exchange_record"
-        parent="menu_edi_exchange"
-        sequence="10"
-        action="act_open_edi_exchange_record_view"
-    />
 </odoo>
