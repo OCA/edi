@@ -36,11 +36,13 @@ class EDIExchangeType(models.Model):
         help="Auto generate output for records missing their payload. "
         "If active, a cron will take care of generating the output when not set yet. "
     )
-    ack_needed = fields.Boolean()
-    ack_name = fields.Char()
-    ack_code = fields.Char()
-    ack_filename_pattern = fields.Char(default="{type.exchange_filename_pattern}.ack")
-    ack_file_ext = fields.Char(default="")
+    ack_type_id = fields.Many2one(
+        string="Ack exchange type",
+        comodel_name="edi.exchange.type",
+        ondelete="set null",
+        help="Identify the type of the ack. "
+        "If this field is valued it means an hack is expected.",
+    )
 
     _sql_constraints = [
         (
@@ -58,13 +60,10 @@ class EDIExchangeType(models.Model):
             if rec.backend_id.backend_type_id != rec.backend_type_id:
                 raise exceptions.UserError(_("Backend should respect backend type!"))
 
-    def _make_exchange_filename(self, record, ack=False):
+    def _make_exchange_filename(self, record):
         """Generate filename."""
         pattern = self.exchange_filename_pattern
         ext = self.exchange_file_ext
-        if ack:
-            pattern = self.ack_filename_pattern
-            ext = self.ack_file_ext
         pattern = pattern + ".{ext}"
         dt = slugify(fields.Datetime.to_string(fields.Datetime.now()))
         record_name = self._get_record_name(record)
