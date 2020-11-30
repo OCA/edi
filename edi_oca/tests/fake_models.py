@@ -12,5 +12,5 @@ class EdiExchangeConsumerTest(models.Model):
 
     name = fields.Char()
 
-    def _get_edi_exchange_record_name(self, exchange_record, exchange_type):
+    def _get_edi_exchange_record_name(self, exchange_record):
         return self.id
