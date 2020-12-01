@@ -315,52 +315,7 @@ class EDIBackend(models.Model):
             return component.check()
         raise NotImplementedError("No handler for `_exchange_output_check_state`")
 
-    def _trigger_edi_event_make_name(self, exchange_record, name, suffix=None):
-        return "on_edi_exchange_{name}{suffix}".format(
-            name=name, suffix=("_" + suffix) if suffix else "",
-        )
-
-    def _trigger_edi_event(self, exchange_record, name, suffix=None):
-        """Trigger a component event linked to this backend and edi exchange."""
-        name = self._trigger_edi_event_make_name(exchange_record, name, suffix=suffix)
-        self._event(name).notify(exchange_record)
-
-    def _notify_done(self, exchange_record):
-        self._exchange_notify_record(
-            exchange_record, exchange_record._exchange_status_message("process_ok")
-        )
-        self._trigger_edi_event(exchange_record, "done")
-
-    def _notify_error(self, exchange_record, message_key):
-        self._exchange_notify_record(
-            exchange_record,
-            exchange_record._exchange_status_message(message_key),
-            level="error",
-        )
-        self._trigger_edi_event(exchange_record, "error")
-
-    def _notify_ack_received(self, exchange_record):
-        self._exchange_notify_record(
-            exchange_record, exchange_record._exchange_status_message("ack_received")
-        )
-        self._trigger_edi_event(exchange_record, "done", suffix="ack_received")
-
-    def _notify_ack_missing(self, exchange_record):
-        self._exchange_notify_record(
-            exchange_record,
-            exchange_record._exchange_status_message("ack_missing"),
-            level="warning",
-        )
-        self._trigger_edi_event(exchange_record, "done", suffix="ack_missing")
-
-    def _notify_ack_received_error(self, exchange_record):
-        self._exchange_notify_record(
-            exchange_record,
-            exchange_record._exchange_status_message("ack_received_error"),
-        )
-        self._trigger_edi_event(exchange_record, "done", suffix="ack_received_error")
-
-    def _exchange_input_check(self, exchange_record):
+    def _exchange_process_check(self, exchange_record):
         if not exchange_record.direction == "input":
             raise exceptions.UserError(
                 _("Record ID=%d is not meant to be processed") % exchange_record.id
@@ -376,14 +331,11 @@ class EDIBackend(models.Model):
 
     def exchange_process(self, exchange_record):
         """Process an incoming document.
-
-        This function should be called when an exchange record has been received
-        it could integrate check where to relate or modificate the data
         """
         self.ensure_one()
         exchange_record.ensure_one()
         # In case already processed: skip processing and check the state
-        check = self._exchange_input_check(exchange_record)
+        check = self._exchange_process_check(exchange_record)
         if not check:
             return False
         try:
