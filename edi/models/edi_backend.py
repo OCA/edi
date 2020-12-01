@@ -36,7 +36,14 @@ class EDIBackend(models.Model):
         ondelete="restrict",
     )
 
-    def _get_component(self, usage_candidates, safe=True, work_ctx=None, **kw):
+    def _get_component(self, exchange_record, action):
+        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
+        candidates = self._get_component_usage_candidates(exchange_record, action)
+        return self._find_component(
+            candidates, work_ctx={"exchange_record": exchange_record}
+        )
+
+    def _find_component(self, usage_candidates, safe=True, work_ctx=None, **kw):
         """Retrieve components for current backend.
 
         :param usage_candidates:
@@ -59,6 +66,24 @@ class EDIBackend(models.Model):
                 "No componend found matching any of: {}".format(usage_candidates)
             )
         return component or None
+
+    def _get_component_usage_candidates(self, exchange_record, key):
+        """Retrieve usage candidates for components."""
+        # fmt:off
+        base_usage = ".".join([
+            "edi",
+            exchange_record.direction,
+            key,
+            self.backend_type_id.code,
+        ])
+        # fmt:on
+        type_code = exchange_record.type_id.code
+        return [
+            # specific for backend type and exchange type
+            base_usage + "." + type_code,
+            # specific for backend type
+            base_usage,
+        ]
 
     @property
     def exchange_record_model(self):
@@ -141,32 +166,10 @@ class EDIBackend(models.Model):
             )
 
     def _generate_output(self, exchange_record, **kw):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "generate")
-        component = self._get_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        component = self._get_component(exchange_record, "generate")
         if component:
             return component.generate()
         raise NotImplementedError("No handler for `_generate_output`")
-
-    def _get_component_usage_candidates(self, exchange_record, key):
-        """Retrieve usage candidates for components."""
-        # fmt:off
-        base_usage = ".".join([
-            "edi",
-            exchange_record.direction,
-            key,
-            self.backend_type_id.code,
-        ])
-        # fmt:on
-        type_code = exchange_record.type_id.code
-        return [
-            # specific for backend type and exchange type
-            base_usage + "." + type_code,
-            # specific for backend type
-            base_usage,
-        ]
 
     # TODO: add job config for these methods
     def exchange_send(self, exchange_record):
@@ -233,11 +236,7 @@ class EDIBackend(models.Model):
         ]
 
     def _exchange_send(self, exchange_record):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "send")
-        component = self._get_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        component = self._get_component(exchange_record, "send")
         if component:
             return component.send()
         raise NotImplementedError("No handler for `_exchange_send`")
@@ -313,11 +312,7 @@ class EDIBackend(models.Model):
         ]
 
     def _exchange_output_check_state(self, exchange_record):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "check")
-        component = self._get_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        component = self._get_component(exchange_record, "check")
         if component:
             return component.check()
         raise NotImplementedError("No handler for `_exchange_output_check_state`")
@@ -422,11 +417,7 @@ class EDIBackend(models.Model):
         return res
 
     def _exchange_process(self, exchange_record):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "process")
-        component = self._get_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        component = self._get_component(exchange_record, "process")
         if component:
             return component.process()
         raise NotImplementedError()
