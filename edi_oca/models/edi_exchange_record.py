@@ -63,6 +63,7 @@ class EDIExchangeRecord(models.Model):
             # input exchange states
             ("input_pending", "Waiting to be received"),
             ("input_received", "Received"),
+            ("input_receive_error", "Error on reception"),
             ("input_processed", "Processed"),
             ("input_processed_error", "Error on process"),
         ],
