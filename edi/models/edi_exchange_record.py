@@ -84,6 +84,7 @@ class EDIExchangeRecord(models.Model):
         comodel_name="edi.exchange.record",
         help="Ack for this exchange",
         compute="_compute_ack_exchange_id",
+        store=True,
     )
     ack_received_on = fields.Datetime(related="ack_exchange_id.exchanged_on")
 
@@ -128,7 +129,7 @@ class EDIExchangeRecord(models.Model):
     @api.depends("type_id.ack_type_id")
     def _compute_ack_exchange_id(self):
         for rec in self:
-            rec.ack_exchange_id = self._get_ack_record()
+            rec.ack_exchange_id = rec._get_ack_record()
 
     def _get_ack_record(self):
         if not self.type_id.ack_type_id:
@@ -136,6 +137,9 @@ class EDIExchangeRecord(models.Model):
         return self.related_exchange_ids.filtered(
             lambda x: x.type_id == self.type_id.ack_type_id
         )
+
+    def needs_ack(self):
+        return self.type_id.ack_type_id and not self.ack_exchange_id
 
     @property
     def record(self):

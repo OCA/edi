@@ -60,23 +60,25 @@ class EDIExchangeType(models.Model):
             if rec.backend_id.backend_type_id != rec.backend_type_id:
                 raise exceptions.UserError(_("Backend should respect backend type!"))
 
-    def _make_exchange_filename(self, record):
+    def _make_exchange_filename(self, exchange_record):
         """Generate filename."""
         pattern = self.exchange_filename_pattern
         ext = self.exchange_file_ext
         pattern = pattern + ".{ext}"
         dt = slugify(fields.Datetime.to_string(fields.Datetime.now()))
-        record_name = self._get_record_name(record)
+        record_name = self._get_record_name(exchange_record)
         return pattern.format(
-            exchange_record=record,
-            record=record.record,
+            exchange_record=exchange_record,
+            record=exchange_record.record,
             record_name=record_name,
             type=self,
             dt=dt,
             ext=ext,
         )
 
-    def _get_record_name(self, record):
-        if hasattr(record.record, "_get_edi_exchange_record_name"):
-            return record.record._get_edi_exchange_record_name(record, self)
-        return slugify(record.record.display_name)
+    def _get_record_name(self, exchange_record):
+        if hasattr(exchange_record.record, "_get_edi_exchange_record_name"):
+            return exchange_record.record._get_edi_exchange_record_name(
+                exchange_record, self
+            )
+        return slugify(exchange_record.record.display_name)
