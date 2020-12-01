@@ -81,6 +81,7 @@ msgid "Ack Name"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_needed
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__ack_needed
 msgid "Ack Needed"
 msgstr ""
@@ -156,6 +157,11 @@ msgstr ""
 #. module: edi
 #: model:ir.ui.menu,name:edi.menu_edi_config
 msgid "Config"
+msgstr ""
+
+#. module: edi
+#: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_view_form
+msgid "Configuration"
 msgstr ""
 
 #. module: edi
@@ -252,6 +258,11 @@ msgstr ""
 #: model:ir.cron,cron_name:edi.cron_edi_backend_check_output_exchange
 #: model:ir.cron,name:edi.cron_edi_backend_check_output_exchange
 msgid "EDI exchange check status"
+msgstr ""
+
+#. module: edi
+#: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_view_form
+msgid "Error"
 msgstr ""
 
 #. module: edi
@@ -544,6 +555,11 @@ msgstr ""
 #: code:addons/edi/models/edi_backend.py:0
 #, python-format
 msgid "Record ID=%d is not meant to be sent!"
+msgstr ""
+
+#. module: edi
+#: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_view_form
+msgid "Related record"
 msgstr ""
 
 #. module: edi
