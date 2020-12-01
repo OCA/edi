@@ -297,6 +297,7 @@ class EDIBackend(models.Model):
 
     def _output_new_records_domain(self):
         return [
+            ("backend_id", "=", self.id),
             ("type_id.exchange_file_auto_generate", "=", True),
             ("type_id.direction", "=", "output"),
             ("edi_exchange_state", "=", "new"),
@@ -307,6 +308,7 @@ class EDIBackend(models.Model):
         states = ("output_pending", "output_sent", "output_sent_and_error")
         return [
             ("type_id.direction", "=", "output"),
+            ("backend_id", "=", self.id),
             ("edi_exchange_state", "in", states),
         ]
 
