@@ -358,3 +358,105 @@ class EDIBackend(models.Model):
         if component:
             return component.process()
         raise NotImplementedError()
+
+    def exchange_receive(self, exchange_record):
+        """Retrieve an incoming document.
+        """
+        self.ensure_one()
+        exchange_record.ensure_one()
+        # In case already processed: skip processing and check the state
+        check = self._exchange_receive_check(exchange_record)
+        if not check:
+            return False
+        try:
+            self._exchange_receive(exchange_record)
+        except self._swallable_exceptions() as err:
+            if self.env.context.get("_edi_receive_break_on_error"):
+                raise
+            error = repr(err)
+            state = "input_receive_error"
+            message = exchange_record._exchange_status_message("receive_ko")
+            res = False
+        else:
+            message = exchange_record._exchange_status_message("receive_ok")
+            error = None
+            state = "input_received"
+            res = True
+        finally:
+            exchange_record.write(
+                {
+                    "edi_exchange_state": state,
+                    "exchange_error": error,
+                    # FIXME: this should come from _compute_exchanged_on
+                    # but somehow it's failing in send tests (in record tests it works).
+                    "exchanged_on": fields.Datetime.now(),
+                }
+            )
+            if message:
+                self._exchange_notify_record(exchange_record, message)
+        return res
+
+    def _exchange_receive_check(self, exchange_record):
+        # TODO: use `filtered_domain` + _input_pending_records_domain
+        # and raise one single error
+        # do the same for all the other check cases.
+        if not exchange_record.direction == "input":
+            raise exceptions.UserError(
+                _("Record ID=%d is not meant to be processed") % exchange_record.id
+            )
+        return exchange_record.edi_exchange_state in [
+            "input_pending",
+            "input_receive_error",
+        ]
+
+    def _exchange_receive(self, exchange_record):
+        component = self._get_component(exchange_record, "receive")
+        if component:
+            return component.receive()
+        raise NotImplementedError()
+
+    def _cron_check_input_exchange_sync(self, **kw):
+        for backend in self:
+            backend._check_input_exchange_sync(**kw)
+
+    def _check_input_exchange_sync(self):
+        """Lookup for pending input records and take care of them.
+
+        First work on records that need to receive input.
+        Then work on records waiting to be processed.
+        """
+        pending_records = self.exchange_record_model.search(
+            self._input_pending_records_domain()
+        )
+        _logger.info(
+            "EDI Exchange input sync: found %d pending records to receive.",
+            len(pending_records),
+        )
+        for rec in pending_records:
+            self.exchange_receive(rec)
+
+        pending_process_records = self.exchange_record_model.search(
+            self._input_pending_process_records_domain()
+        )
+        _logger.info(
+            "EDI Exchange input sync: found %d pending records to process.",
+            len(pending_process_records),
+        )
+        for rec in pending_process_records:
+            self.exchange_process(rec)
+
+    def _input_pending_records_domain(self):
+        return [
+            ("backend_id", "=", self.id),
+            ("type_id.direction", "=", "input"),
+            ("edi_exchange_state", "=", "input_pending"),
+            ("exchange_file", "=", False),
+        ]
+
+    def _input_pending_process_records_domain(self):
+        states = ("input_received", "input_processed_error")
+        return [
+            ("backend_id", "=", self.id),
+            ("type_id.direction", "=", "input"),
+            ("edi_exchange_state", "in", states),
+        ]
