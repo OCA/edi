@@ -21,6 +21,7 @@ setuptools.setup(
         'odoo13-addon-base_ubl',
         'odoo13-addon-base_ubl_payment',
         'odoo13-addon-edi',
+        'odoo13-addon-edi_account',
         'odoo13-addon-edi_exchange_template',
         'odoo13-addon-edi_storage',
         'odoo13-addon-edi_voxel',
