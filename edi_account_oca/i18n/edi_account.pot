@@ -1,0 +1,30 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_account
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_account
+#: model_terms:ir.ui.view,arch_db:edi_account.account_move_form_view
+msgid "<span class=\"o_stat_text\">EDI</span>"
+msgstr ""
+
+#. module: edi_account
+#: model_terms:ir.ui.view,arch_db:edi_account.view_account_journal_form
+#: model_terms:ir.ui.view,arch_db:edi_account.view_partner_form
+msgid "EDI Configuration"
+msgstr ""
+
+#. module: edi_account
+#: model:ir.model,name:edi_account.model_account_move
+msgid "Journal Entries"
+msgstr ""
