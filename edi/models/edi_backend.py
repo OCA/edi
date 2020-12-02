@@ -36,7 +36,14 @@ class EDIBackend(models.Model):
         ondelete="restrict",
     )
 
-    def _get_component(self, usage_candidates, safe=True, work_ctx=None, **kw):
+    def _get_component(self, exchange_record, action):
+        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
+        candidates = self._get_component_usage_candidates(exchange_record, action)
+        return self._find_component(
+            candidates, work_ctx={"exchange_record": exchange_record}
+        )
+
+    def _find_component(self, usage_candidates, safe=True, work_ctx=None, **kw):
         """Retrieve components for current backend.
 
         :param usage_candidates:
@@ -58,7 +65,25 @@ class EDIBackend(models.Model):
             raise NoComponentError(
                 "No componend found matching any of: {}".format(usage_candidates)
             )
-        return component
+        return component or None
+
+    def _get_component_usage_candidates(self, exchange_record, key):
+        """Retrieve usage candidates for components."""
+        # fmt:off
+        base_usage = ".".join([
+            "edi",
+            exchange_record.direction,
+            key,
+            self.backend_type_id.code,
+        ])
+        # fmt:on
+        type_code = exchange_record.type_id.code
+        return [
+            # specific for backend type and exchange type
+            base_usage + "." + type_code,
+            # specific for backend type
+            base_usage,
+        ]
 
     @property
     def exchange_record_model(self):
@@ -141,32 +166,10 @@ class EDIBackend(models.Model):
             )
 
     def _generate_output(self, exchange_record, **kw):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "generate")
-        component = self._get_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        component = self._get_component(exchange_record, "generate")
         if component:
             return component.generate()
         raise NotImplementedError("No handler for `_generate_output`")
-
-    def _get_component_usage_candidates(self, exchange_record, key):
-        """Retrieve usage candidates for components."""
-        # fmt:off
-        base_usage = ".".join([
-            "edi",
-            exchange_record.direction,
-            key,
-            self.backend_type_id.code,
-        ])
-        # fmt:on
-        type_code = exchange_record.type_id.code
-        return [
-            # specific for backend type and exchange type
-            base_usage + "." + type_code,
-            # specific for backend type
-            base_usage,
-        ]
 
     # TODO: add job config for these methods
     def exchange_send(self, exchange_record):
@@ -206,7 +209,7 @@ class EDIBackend(models.Model):
                 }
             )
             if message:
-                self._exchange_notify_record(exchange_record, message)
+                exchange_record._notify_related_record(message)
         return res
 
     def _swallable_exceptions(self):
@@ -233,29 +236,10 @@ class EDIBackend(models.Model):
         ]
 
     def _exchange_send(self, exchange_record):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "send")
-        component = self._get_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        component = self._get_component(exchange_record, "send")
         if component:
             return component.send()
         raise NotImplementedError("No handler for `_exchange_send`")
-
-    def _exchange_notify_record(self, exchange_record, message, level="info"):
-        """Attach notification of exchange state to the original record."""
-        if not hasattr(exchange_record.record, "message_post_with_view"):
-            return
-        exchange_record.record.message_post_with_view(
-            "edi.message_edi_exchange_link",
-            values={
-                "backend": self,
-                "exchange_record": exchange_record,
-                "message": message,
-                "level": level,
-            },
-            subtype_id=self.env.ref("mail.mt_note").id,
-        )
 
     def _cron_check_output_exchange_sync(self, **kw):
         for backend in self:
@@ -313,56 +297,12 @@ class EDIBackend(models.Model):
         ]
 
     def _exchange_output_check_state(self, exchange_record):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "check")
-        component = self._get_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        component = self._get_component(exchange_record, "check")
         if component:
             return component.check()
         raise NotImplementedError("No handler for `_exchange_output_check_state`")
 
-    def _trigger_edi_event_make_name(self, exchange_record, suffix=None):
-        return "on_edi_{type.code}_{exchange_record.edi_exchange_state}{suffix}".format(
-            exchange_record=exchange_record,
-            type=exchange_record.type_id,
-            suffix=("_" + suffix) if suffix else "",
-        )
-
-    def _trigger_edi_event(self, exchange_record, name=None, suffix=None):
-        """Trigger a component event linked to this backend and edi exchange."""
-        name = name or self._trigger_edi_event_make_name(exchange_record, suffix=suffix)
-        self._event(name).notify(exchange_record)
-
-    def _notify_done(self, exchange_record):
-        self._exchange_notify_record(
-            exchange_record, exchange_record._exchange_status_message("process_ok")
-        )
-        self._trigger_edi_event(exchange_record)
-
-    def _notify_error(self, exchange_record, message_key):
-        self._exchange_notify_record(
-            exchange_record,
-            exchange_record._exchange_status_message(message_key),
-            level="error",
-        )
-        self._trigger_edi_event(exchange_record)
-
-    def _notify_ack_received(self, exchange_record):
-        self._exchange_notify_record(
-            exchange_record, exchange_record._exchange_status_message("ack_received")
-        )
-        self._trigger_edi_event(exchange_record, suffix="ack_received")
-
-    def _notify_ack_missing(self, exchange_record):
-        self._exchange_notify_record(
-            exchange_record,
-            exchange_record._exchange_status_message("ack_missing"),
-            level="warning",
-        )
-        self._trigger_edi_event(exchange_record, suffix="ack_missing")
-
-    def _exchange_input_check(self, exchange_record):
+    def _exchange_process_check(self, exchange_record):
         if not exchange_record.direction == "input":
             raise exceptions.UserError(
                 _("Record ID=%d is not meant to be processed") % exchange_record.id
@@ -378,14 +318,11 @@ class EDIBackend(models.Model):
 
     def exchange_process(self, exchange_record):
         """Process an incoming document.
-
-        This function should be called when an exchange record has been received
-        it could integrate check where to relate or modificate the data
         """
         self.ensure_one()
         exchange_record.ensure_one()
         # In case already processed: skip processing and check the state
-        check = self._exchange_input_check(exchange_record)
+        check = self._exchange_process_check(exchange_record)
         if not check:
             return False
         try:
@@ -413,15 +350,11 @@ class EDIBackend(models.Model):
                 }
             )
             if message:
-                self._exchange_notify_record(exchange_record, message)
+                exchange_record._notify_related_record(message)
         return res
 
     def _exchange_process(self, exchange_record):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, "process")
-        component = self._get_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        component = self._get_component(exchange_record, "process")
         if component:
             return component.process()
         raise NotImplementedError()
