@@ -33,11 +33,7 @@
                             <field name="exchange_filename_pattern" />
                             <field name="exchange_file_ext" />
                             <field name="exchange_file_auto_generate" />
-                            <field name="ack_needed" />
-                            <field name="ack_name" />
-                            <field name="ack_code" />
-                            <field name="ack_filename_pattern" />
-                            <field name="ack_file_ext" />
+                            <field name="ack_type_id" />
                         </group>
                     </group>
                 </sheet>
