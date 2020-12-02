@@ -46,7 +46,7 @@ class EDIStorageCheckComponentMixin(Component):
                 == "output_sent_and_processed"
             ):
                 self.exchange_record.edi_exchange_state = "output_sent_and_processed"
-                self.backend._notify_done(self.exchange_record)
+                self.exchange_record._notify_done()
                 if self.exchange_record.type_id.ack_needed:
                     self._exchange_output_handle_ack()
             return False
@@ -68,7 +68,7 @@ class EDIStorageCheckComponentMixin(Component):
                         "exchange_error": pycompat.to_text(error_report),
                     }
                 )
-                self.backend._notify_error(self.exchange_record, "process_ko")
+                self.exchange_record._notify_error("process_ko")
             return False
         return True
 
@@ -78,6 +78,6 @@ class EDIStorageCheckComponentMixin(Component):
         )
         if ack_file:
             self.exchange_record._set_file_content(ack_file, field_name="ack_file")
-            self.backend._notify_ack_received(self.exchange_record)
+            self.exchange_record._notify_ack_received()
         else:
-            self.backend._notify_ack_missing(self.exchange_record)
+            self.exchange_record._notify_ack_missing()
