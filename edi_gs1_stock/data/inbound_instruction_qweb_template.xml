@@ -23,10 +23,9 @@
                 <documentStatusCode>ORIGINAL</documentStatusCode>
                 <documentActionCode>ADD</documentActionCode>
                 <warehousingInboundInstructionIdentification>
-                    <!-- FIXME: use `identifier` field -->
                     <entityIdentification
-                        t-esc="exchange_record.id"
-                    >EDI/123456789</entityIdentification>
+                        t-esc="record.name"
+                    >WH/IN/123456789</entityIdentification>
                 </warehousingInboundInstructionIdentification>
                 <logisticServicesBuyer>
                     <gln t-esc="ls_buyer.gln_code" />
