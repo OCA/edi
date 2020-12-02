@@ -302,7 +302,7 @@ class EDIBackend(models.Model):
             return component.check()
         raise NotImplementedError("No handler for `_exchange_output_check_state`")
 
-    def _exchange_input_check(self, exchange_record):
+    def _exchange_process_check(self, exchange_record):
         if not exchange_record.direction == "input":
             raise exceptions.UserError(
                 _("Record ID=%d is not meant to be processed") % exchange_record.id
@@ -318,14 +318,11 @@ class EDIBackend(models.Model):
 
     def exchange_process(self, exchange_record):
         """Process an incoming document.
-
-        This function should be called when an exchange record has been received
-        it could integrate check where to relate or modificate the data
         """
         self.ensure_one()
         exchange_record.ensure_one()
         # In case already processed: skip processing and check the state
-        check = self._exchange_input_check(exchange_record)
+        check = self._exchange_process_check(exchange_record)
         if not check:
             return False
         try:
