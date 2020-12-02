@@ -209,7 +209,7 @@ class EDIBackend(models.Model):
                 }
             )
             if message:
-                self._exchange_notify_record(exchange_record, message)
+                exchange_record._notify_related_record(message)
         return res
 
     def _swallable_exceptions(self):
@@ -240,21 +240,6 @@ class EDIBackend(models.Model):
         if component:
             return component.send()
         raise NotImplementedError("No handler for `_exchange_send`")
-
-    def _exchange_notify_record(self, exchange_record, message, level="info"):
-        """Attach notification of exchange state to the original record."""
-        if not hasattr(exchange_record.record, "message_post_with_view"):
-            return
-        exchange_record.record.message_post_with_view(
-            "edi.message_edi_exchange_link",
-            values={
-                "backend": self,
-                "exchange_record": exchange_record,
-                "message": message,
-                "level": level,
-            },
-            subtype_id=self.env.ref("mail.mt_note").id,
-        )
 
     def _cron_check_output_exchange_sync(self, **kw):
         for backend in self:
@@ -368,7 +353,7 @@ class EDIBackend(models.Model):
                 }
             )
             if message:
-                self._exchange_notify_record(exchange_record, message)
+                exchange_record._notify_related_record(message)
         return res
 
     def _exchange_process(self, exchange_record):
