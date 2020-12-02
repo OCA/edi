@@ -37,6 +37,12 @@ msgstr ""
 #. module: edi
 #: code:addons/edi/models/edi_exchange_record.py:0
 #, python-format
+msgid "ACK file received but contains errors."
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_exchange_record.py:0
+#, python-format
 msgid "ACK file received."
 msgstr ""
 
