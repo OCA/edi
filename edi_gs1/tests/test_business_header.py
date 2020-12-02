@@ -42,7 +42,7 @@ class BusinessHeaderTestCase(BaseTestCase):
         expected = {
             "backend": self.backend,
             "exchange_record": self.exc_record,
-            "instance_identifier": self.related_record.name,
+            "instance_identifier": self.exc_record.identifier,
             "record": self.related_record,
             "template": self.bh_tmpl,
         }
@@ -88,7 +88,7 @@ class BusinessHeaderTestCase(BaseTestCase):
             ns=BH_NS,
             sender=self.lsc_partner,
             receiver=self.lsp_partner,
-            identifier=self.related_record.name,
+            identifier=self.exc_record.identifier,
             date="2020-07-08T07:30:00",
         )
         self.assertXmlEquivalentOutputs(self.flatten(output), self.flatten(expected))
