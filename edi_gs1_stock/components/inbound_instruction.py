@@ -2,11 +2,6 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-# from lxml import etree
-# from odoo import tools
-from odoo import _, exceptions
-from odoo.tools import DotDict
-
 from odoo.addons.component.core import Component
 
 
@@ -32,26 +27,11 @@ class GS1InboundInstructionMessage(Component):
 
     _name = "gs1.output.inboundinstruction"
     _inherit = [
-        "edi.output.mixin",
+        "edi.gs1.output.shipment.mixin",
     ]
     _usage = "edi.output.generate.gs1.warehousingInboundInstructionMessage.info"
-    # _xsd_schema_module = "gs1_stock"
-    # _xsd_schema_path = "static/schemas/gs1/ecom/WarehousingInboundInstruction.xsd"
 
-    _work_context_validate_attrs = [
-        "record",
-        "sender",
-        "receiver",
-        # instruction specific
-        "shipper",  # shipper tag
-        "ls_buyer",  # logisticServicesBuyer tag
-        "ls_seller",  # logisticServicesSeller tag
-    ]
-
-    def generate_info(self):
-        return DotDict(self._inbound_instruction())
-
-    def _inbound_instruction(self):
+    def _generate_info(self):
         data = {
             "creationDateTime": self._utc_now(),
             # status code can stay always as it is if we don't send around copies
@@ -59,119 +39,23 @@ class GS1InboundInstructionMessage(Component):
             "documentActionCode": self._document_action_code(),
             # fmt: off
             "warehousingInboundInstructionShipment":
-                self._inbound_instruction_shipment(),
+                self._shipment_info(),
             # fmt: on
         }
         return {"warehousingInboundInstruction": data}
 
-    @property
-    def replace_existing(self):
-        """Pass `replace_existing` to work context to change this value."""
-        return getattr(self.work, "replace_existing", False)
-
-    def _document_action_code(self):
-        # Brand new file
-        code = "ADD"
-        if self.replace_existing:
-            code = "CHANGE_BY_REFRESH"
-        return code
-
-    def _entity_identification(self):
-        return self.record.name
-
-    def _inbound_instruction_shipment(self):
-        data = {"shipmentIdentification": self._shipment_identification()}
-        for key, handler in self._inbound_instruction_shipment_elements().items():
-            value = handler()
-            # Return empty dict or None in you handler to skip an element
-            if value:
-                data[key] = value
-        return data
-
-    def _inbound_instruction_shipment_elements(self):
-        return {
-            "shipper": self._shipper,
-            "logisticUnit": self._logistic_unit,
-            "packageTotal": self._package_total,
-            "warehousingReceiptTypeCode": self._receipt_type_code,
-            "plannedReceipt": self._planned_receipt,
-            "_shipment_items": self._inbound_instruction_shipment_items,
-        }
-
-    def _shipment_identification(self):
-        return {
-            "additionalShipmentIdentification": {
-                "attrs": {
-                    # fmt: off
-                    "additionalShipmentIdentificationTypeCode":
-                        "GOODS_RECEIVER_ASSIGNED"
-                    # fmt: on
-                },
-                "value": self.record.name,
-            }
-        }
-
-    def _get_shipper_record(self):
-        # We should get the carrier here
-        return self.work.shipper
-
-    def _shipper(self):
-        """The carrier of the shipment."""
-        record = self._get_shipper_record()
-        if not record.gln_code and not record.ref:
-            raise exceptions.ValidationError(
-                _("Either `gln_code` or `ref` is required for shipper: {}").format(
-                    record.name
-                )
-            )
-        # `gln` is required in the schema.
-        # Depending on your LSP having a fake one and relying on
-        # `additionalPartyIdentification` can be enough.
-        data = {"gln_code": "".zfill(13)}
-        if record.gln_code:
-            data["gln_code"] = record.gln_code
-        if record.ref:
-            data["additionalPartyIdentification"] = {
-                "attrs": {
-                    # fmt: off
-                    "additionalPartyIdentificationTypeCode":
-                        "BUYER_ASSIGNED_IDENTIFIER_FOR_A_PARTY"
-                    # fmt: on
-                },
-                "value": record.ref,
-            }
-        return data
-
-    def _logistic_unit(self):
-        return {
-            # "sscc": "",
-            # TODO: pick this from uom or packaging info
-            # https://www.unece.org/
-            # fileadmin/DAM/cefact/recommendations/rec21/rec21rev4_ecetrd309.pdf
-            # "packageTypeCode": "",
-        }
-
-    def _package_total(self):
-        return DotDict(
+    def _shipment_info_elements(self):
+        res = super()._shipment_info_elements()
+        res.update(
             {
-                # TODO: would be nice to have mapping based on product packaging
-                # but as in some case you simply use the same package types
-                # for all the shipments, then is up to integrator to provide
-                # proper values by overriding this method.
-                # https://www.gs1.se/en/our-standards/Technical-documentation/
-                # code-lists/t0137-packaging-type-code/
-                # TODO: get generic numbers from picking.
-                "packageTypeCode": "AF",
-                "totalPackageQuantity": "2",
-                "totalGrossWeight": {
-                    "value": self.record.weight,
-                    "attrs": {"measurementUnitCode": "KGM"},
-                },
+                "warehousingReceiptTypeCode": self._receipt_type_code,
+                "plannedReceipt": self._planned_receipt,
             }
         )
+        return res
 
     def _receipt_type_code(self):
-        """TODO use picking priority?
+        """TODO
 
         # cross-dock receipt.
         # The instructed receipt is intended to be cross-docked.
@@ -197,67 +81,4 @@ class GS1InboundInstructionMessage(Component):
             "logisticEventDateTime": {
                 "date": self.date_to_string(self.record.scheduled_date) or "",
             },
-        }
-
-    def _inbound_instruction_shipment_items(self):
-        res = []
-        for i, item in enumerate(self._get_shipment_items(), start=1):
-            res.append(self._shipment_item(item, i))
-        return res
-
-    def _get_shipment_items(self):
-        return self.work.record.move_line_ids
-
-    def _shipment_item(self, item, i=1):
-        qty = item.product_uom_qty
-        # TODO: get it from line uom
-        uom_code = "KGM"
-        # Watch out: order is important for XSD validation!
-        data = DotDict(
-            {
-                "lineItemNumber": i,
-                "transactionalTradeItem": self._shipment_item_trade_item(item),
-            }
-        )
-        avp_list = self._shipment_item_avp_list(item)
-        if avp_list:
-            data["avpList"] = avp_list
-        data["plannedReceiptQuantity"] = {
-            "value": qty,
-            "attrs": {"measurementUnitCode": uom_code},
-        }
-        return data
-
-    def _shipment_item_trade_item(self, item):
-        # GTIN is required here.
-        # We assume you set it on product's default code.
-        # NOTE: GTIN must be 14 chars hence we fill the gap
-        # to make XSD validation happy in case it's empty.
-        # You are supposed to validate your barcode to match GTIN requirements.
-        return {"gtin": item.product_id.barcode or "".zfill(14)}
-
-    def _shipment_item_avp_list(self, item):
-        """Hook to add avpList attributes.
-
-        `avpList` can contain an arbitrary set of custom attributes.
-        Use `_make_avp_attribute()` to custom items and produce a list here.
-
-        Eg:
-            [self._make_avp_attribute("vendorProductName", "Apple")]
-
-        will generate an element like
-
-            <eComStringAttributeValuePairList attributeName="vendorProductName">
-                Apple
-            </eComStringAttributeValuePairList>
-        """
-        return []
-
-    def _make_avp_attribute(self, attr_name, value):
-        """Generate `eComStringAttributeValuePairList` element."""
-        return {
-            "eComStringAttributeValuePairList": {
-                "attrs": {"attributeName": attr_name},
-                "value": value,
-            }
         }
