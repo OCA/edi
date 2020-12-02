@@ -207,6 +207,21 @@ class EDIExchangeRecord(models.Model):
             return {}
         return self.record.get_formview_action()
 
+    def _notify_related_record(self, message, level="info"):
+        """Post notification on the original record."""
+        if not hasattr(self.record, "message_post_with_view"):
+            return
+        self.record.message_post_with_view(
+            "edi.message_edi_exchange_link",
+            values={
+                "backend": self.backend_id,
+                "exchange_record": self,
+                "message": message,
+                "level": level,
+            },
+            subtype_id=self.env.ref("mail.mt_note").id,
+        )
+
     def _trigger_edi_event_make_name(self, name, suffix=None):
         return "on_edi_exchange_{name}{suffix}".format(
             name=name, suffix=("_" + suffix) if suffix else "",
@@ -218,31 +233,27 @@ class EDIExchangeRecord(models.Model):
         self._event(name).notify(self)
 
     def _notify_done(self):
-        self.backend_id._exchange_notify_record(
-            self, self._exchange_status_message("process_ok")
-        )
+        self._notify_related_record(self._exchange_status_message("process_ok"))
         self._trigger_edi_event("done")
 
     def _notify_error(self, message_key):
-        self.backend_id._exchange_notify_record(
-            self, self._exchange_status_message(message_key), level="error",
+        self._notify_related_record(
+            self._exchange_status_message(message_key), level="error",
         )
         self._trigger_edi_event("error")
 
     def _notify_ack_received(self):
-        self.backend_id._exchange_notify_record(
-            self, self._exchange_status_message("ack_received")
-        )
+        self._notify_related_record(self._exchange_status_message("ack_received"))
         self._trigger_edi_event("done", suffix="ack_received")
 
     def _notify_ack_missing(self):
-        self.backend_id._exchange_notify_record(
-            self, self._exchange_status_message("ack_missing"), level="warning",
+        self._notify_related_record(
+            self._exchange_status_message("ack_missing"), level="warning",
         )
         self._trigger_edi_event("done", suffix="ack_missing")
 
     def _notify_ack_received_error(self):
-        self.backend_id._exchange_notify_record(
-            self, self._exchange_status_message("ack_received_error"),
+        self._notify_related_record(
+            self._exchange_status_message("ack_received_error"),
         )
         self._trigger_edi_event("done", suffix="ack_received_error")
