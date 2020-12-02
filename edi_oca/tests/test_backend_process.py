@@ -77,3 +77,5 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         record._set_file_content("TEST %d" % record.id)
         with self.assertRaises(UserError):
             record.action_exchange_process()
+
+    # TODO: test ack file are processed
