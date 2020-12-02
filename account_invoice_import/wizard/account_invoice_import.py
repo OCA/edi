@@ -1,4 +1,5 @@
 # Copyright 2015-2018 Akretion France (http://www.akretion.com/)
+# Copyright 2020 Therp BV (https://therp.nl)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
@@ -181,15 +182,10 @@ class AccountInvoiceImport(models.TransientModel):
         # WARNING: on future versions, import_config will probably become
         # a required argument
         aio = self.env["account.move"]
-        ailo = self.env["account.move.line"]
         bdio = self.env["business.document.import"]
-        rpo = self.env["res.partner"]
         company = (
             self.env["res.company"].browse(self.env.context.get("force_company"))
             or self.env.user.company_id
-        )
-        start_end_dates_installed = hasattr(ailo, "start_date") and hasattr(
-            ailo, "end_date"
         )
         if parsed_inv["type"] in ("out_invoice", "out_refund"):
             partner_type = "customer"
@@ -219,13 +215,11 @@ class AccountInvoiceImport(models.TransientModel):
             "invoice_line_ids": [],
         }
         vals = aio.play_onchanges(vals, ["partner_id"])
-        vals["invoice_line_ids"] = []
         # Force due date of the invoice
         if parsed_inv.get("date_due"):
             vals["invoice_date_due"] = parsed_inv.get("date_due")
         # Bank info
         if parsed_inv.get("iban"):
-            partner = rpo.browse(vals["partner_id"])
             partner_bank = bdio._match_partner_bank(
                 partner,
                 parsed_inv["iban"],
@@ -245,101 +239,112 @@ class AccountInvoiceImport(models.TransientModel):
             else:
                 import_config_obj = partner.invoice_import_ids[0]
                 config = import_config_obj.convert_to_import_config()
-
+        # get invoice line vals
+        vals["invoice_line_ids"] = []
         if config["invoice_line_method"].startswith("1line"):
-            if config["invoice_line_method"] == "1line_no_product":
-                if config["taxes"]:
-                    il_tax_ids = [(6, 0, config["taxes"].ids)]
-                else:
-                    il_tax_ids = False
-                il_vals = {
-                    "account_id": config["account"].id,
-                    "tax_ids": il_tax_ids,
-                    "price_unit": parsed_inv.get("amount_untaxed"),
-                }
-            elif config["invoice_line_method"] == "1line_static_product":
-                product = config["product"]
-                il_vals = {"product_id": product.id, "move_id": vals}
-                il_vals = ailo.play_onchanges(il_vals, ["product_id"])
-                il_vals.pop("move_id")
-            if config.get("label"):
-                il_vals["name"] = config["label"]
-            elif parsed_inv.get("description"):
-                il_vals["name"] = parsed_inv["description"]
-            elif not il_vals.get("name"):
-                il_vals["name"] = _("MISSING DESCRIPTION")
-            self.set_1line_price_unit_and_quantity(il_vals, parsed_inv)
-            self.set_1line_start_end_dates(il_vals, parsed_inv)
-            vals["invoice_line_ids"].append((0, 0, il_vals))
+            self._prepare_line_vals_1line(partner, vals, parsed_inv, import_config)
         elif config["invoice_line_method"].startswith("nline"):
-            if not parsed_inv.get("lines"):
+            self._prepare_line_vals_nline(partner, vals, parsed_inv, import_config)
+        # Write analytic account + fix syntax for taxes
+        analytic_account = config.get("account_analytic", False)
+        if analytic_account:
+            for line in vals["invoice_line_ids"]:
+                line[2]["account_analytic_id"] = analytic_account.id
+        return (vals, config)
+
+    @api.model
+    def _prepare_line_vals_1line(self, partner, vals, parsed_inv, import_config):
+        line_model = self.env["account.move.line"]
+        if config["invoice_line_method"] == "1line_no_product":
+            if config["taxes"]:
+                il_tax_ids = [(6, 0, config["taxes"].ids)]
+            else:
+                il_tax_ids = False
+            il_vals = {
+                "account_id": config["account"].id,
+                "tax_ids": il_tax_ids,
+                "price_unit": parsed_inv.get("amount_untaxed"),
+            }
+        elif config["invoice_line_method"] == "1line_static_product":
+            product = config["product"]
+            il_vals = {"product_id": product.id, "move_id": vals}
+            il_vals = line_model.play_onchanges(il_vals, ["product_id"])
+            il_vals.pop("move_id")
+        if config.get("label"):
+            il_vals["name"] = config["label"]
+        elif parsed_inv.get("description"):
+            il_vals["name"] = parsed_inv["description"]
+        elif not il_vals.get("name"):
+            il_vals["name"] = _("MISSING DESCRIPTION")
+        self.set_1line_price_unit_and_quantity(il_vals, parsed_inv)
+        self.set_1line_start_end_dates(il_vals, parsed_inv)
+        vals["invoice_line_ids"].append((0, 0, il_vals))
+
+    @api.model
+    def _prepare_line_vals_nline(self, partner, vals, parsed_inv, import_config):
+        line_model = self.env["account.move.line"]
+        import_model = self.env["business.document.import"]
+        start_end_dates_installed = hasattr(line_model, "start_date") and hasattr(
+            line_model, "end_date"
+        )
+        if not parsed_inv.get("lines"):
+            raise UserError(
+                _(
+                    "You have selected a Multi Line method for this import "
+                    "but Odoo could not extract/read any XML file inside "
+                    "the PDF invoice."
+                )
+            )
+        if config["invoice_line_method"] == "nline_no_product":
+            static_vals = {"account_id": config["account"].id}
+        elif config["invoice_line_method"] == "nline_static_product":
+            sproduct = config["product"]
+            static_vals = {"product_id": sproduct.id, "move_id": vals}
+            static_vals = line_model.play_onchanges(static_vals, ["product_id"])
+            static_vals.pop("move_id")
+        else:
+            static_vals = {}
+        for line in parsed_inv["lines"]:
+            il_vals = static_vals.copy()
+            if config["invoice_line_method"] == "nline_auto_product":
+                product = import_model._match_product(
+                    line["product"], parsed_inv["chatter_msg"], seller=partner
+                )
+                il_vals = {"product_id": product.id, "move_id": vals}
+                il_vals = line_model.play_onchanges(il_vals, ["product_id"])
+                il_vals.pop("move_id")
+            elif config["invoice_line_method"] == "nline_no_product":
+                taxes = import_model._match_taxes(
+                    line.get("taxes"), parsed_inv["chatter_msg"]
+                )
+                il_vals["tax_ids"] = [(6, 0, taxes.ids)]
+            if not il_vals.get("account_id") and il_vals.get("product_id"):
+                product = self.env["product.product"].browse(il_vals["product_id"])
                 raise UserError(
                     _(
-                        "You have selected a Multi Line method for this import "
-                        "but Odoo could not extract/read any XML file inside "
-                        "the PDF invoice."
+                        "Account missing on product '%s' or on it's related "
+                        "category '%s'."
                     )
+                    % (product.display_name, product.categ_id.display_name)
                 )
-            if config["invoice_line_method"] == "nline_no_product":
-                static_vals = {"account_id": config["account"].id}
-            elif config["invoice_line_method"] == "nline_static_product":
-                sproduct = config["product"]
-                static_vals = {"product_id": sproduct.id, "move_id": vals}
-                static_vals = ailo.play_onchanges(static_vals, ["product_id"])
-                static_vals.pop("move_id")
-            else:
-                static_vals = {}
-            for line in parsed_inv["lines"]:
-                il_vals = static_vals.copy()
-                if config["invoice_line_method"] == "nline_auto_product":
-                    product = bdio._match_product(
-                        line["product"], parsed_inv["chatter_msg"], seller=partner
-                    )
-                    il_vals = {"product_id": product.id, "move_id": vals}
-                    il_vals = ailo.play_onchanges(il_vals, ["product_id"])
-                    il_vals.pop("move_id")
-                elif config["invoice_line_method"] == "nline_no_product":
-                    taxes = bdio._match_taxes(
-                        line.get("taxes"), parsed_inv["chatter_msg"]
-                    )
-                    il_vals["tax_ids"] = [(6, 0, taxes.ids)]
-                if not il_vals.get("account_id") and il_vals.get("product_id"):
-                    product = self.env["product.product"].browse(il_vals["product_id"])
-                    raise UserError(
-                        _(
-                            "Account missing on product '%s' or on it's related "
-                            "category '%s'."
-                        )
-                        % (product.display_name, product.categ_id.display_name)
-                    )
-                if line.get("name"):
-                    il_vals["name"] = line["name"]
-                elif not il_vals.get("name"):
-                    il_vals["name"] = _("MISSING DESCRIPTION")
-                if start_end_dates_installed:
-                    il_vals["start_date"] = line.get("date_start") or parsed_inv.get(
-                        "date_start"
-                    )
-                    il_vals["end_date"] = line.get("date_end") or parsed_inv.get(
-                        "date_end"
-                    )
-                uom = bdio._match_uom(line.get("uom"), parsed_inv["chatter_msg"])
-                il_vals["product_uom_id"] = uom.id
-                il_vals.update(
-                    {
-                        "quantity": line["qty"],
-                        "price_unit": line["price_unit"],  # TODO fix for tax incl
-                    }
+            if line.get("name"):
+                il_vals["name"] = line["name"]
+            elif not il_vals.get("name"):
+                il_vals["name"] = _("MISSING DESCRIPTION")
+            if start_end_dates_installed:
+                il_vals["start_date"] = line.get("date_start") or parsed_inv.get(
+                    "date_start"
                 )
-                vals["invoice_line_ids"].append((0, 0, il_vals))
-        # Write analytic account + fix syntax for taxes
-        aacount_id = (
-            config.get("account_analytic") and config["account_analytic"].id or False
-        )
-        if aacount_id:
-            for line in vals["invoice_line_ids"]:
-                line[2]["account_analytic_id"] = aacount_id
-        return (vals, config)
+                il_vals["end_date"] = line.get("date_end") or parsed_inv.get("date_end")
+            uom = import_model._match_uom(line.get("uom"), parsed_inv["chatter_msg"])
+            il_vals["product_uom_id"] = uom.id
+            il_vals.update(
+                {
+                    "quantity": line["qty"],
+                    "price_unit": line["price_unit"],  # TODO fix for tax incl
+                }
+            )
+            vals["invoice_line_ids"].append((0, 0, il_vals))
 
     @api.model
     def set_1line_price_unit_and_quantity(self, il_vals, parsed_inv):
@@ -464,8 +469,37 @@ class AccountInvoiceImport(models.TransientModel):
                 line["qty"] *= -1
                 if "price_subtotal" in line:
                     line["price_subtotal"] *= -1
+        # Handle taxes:
+        self._pre_process_parsed_inv_taxes(parsed_inv)
+        # Handle rounding:
+        for line in parsed_inv.get("lines", []):
+            line["qty"] = float_round(line["qty"], precision_digits=prec_uom)
+            line["price_unit"] = float_round(
+                line["price_unit"], precision_digits=prec_pp
+            )
+        logger.debug("Result of invoice parsing parsed_inv=%s", parsed_inv)
+        # the 'company' dict in parsed_inv is NOT used to auto-detect
+        # the company, but to check that we are not importing an
+        # invoice for another company by mistake
+        # The advantage of doing the check here is that it will be run
+        # in all scenarios (create/update/...), but it's not related
+        # to invoice parsing...
+        if (
+            parsed_inv.get("company")
+            and not config["test_enable"]
+            and not self.env.context.get("edi_skip_company_check")
+        ):
+            self.env["business.document.import"]._check_company(
+                parsed_inv["company"], parsed_inv["chatter_msg"]
+            )
+        return parsed_inv
+
+    @api.model
+    def _pre_process_parsed_inv_taxes(self, parsed_inv):
+        """Handle taxes in pre_processing parsed invoice."""
         # Handle the case where we import an invoice with VAT in a company that
         # cannot deduct VAT
+        prec_ac = self.env["decimal.precision"].precision_get("Account")
         if self.company_cannot_refund_vat():
             parsed_inv["amount_tax"] = 0
             parsed_inv["amount_untaxed"] = parsed_inv["amount_total"]
@@ -489,27 +523,6 @@ class AccountInvoiceImport(models.TransientModel):
         # Rounding work
         for entry in ["amount_untaxed", "amount_total"]:
             parsed_inv[entry] = float_round(parsed_inv[entry], precision_digits=prec_ac)
-        for line in parsed_inv.get("lines", []):
-            line["qty"] = float_round(line["qty"], precision_digits=prec_uom)
-            line["price_unit"] = float_round(
-                line["price_unit"], precision_digits=prec_pp
-            )
-        logger.debug("Result of invoice parsing parsed_inv=%s", parsed_inv)
-        # the 'company' dict in parsed_inv is NOT used to auto-detect
-        # the company, but to check that we are not importing an
-        # invoice for another company by mistake
-        # The advantage of doing the check here is that it will be run
-        # in all scenarios (create/update/...), but it's not related
-        # to invoice parsing...
-        if (
-            parsed_inv.get("company")
-            and not config["test_enable"]
-            and not self.env.context.get("edi_skip_company_check")
-        ):
-            self.env["business.document.import"]._check_company(
-                parsed_inv["company"], parsed_inv["chatter_msg"]
-            )
-        return parsed_inv
 
     @api.model
     def invoice_already_exists(self, commercial_partner, parsed_inv):
