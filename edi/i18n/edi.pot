@@ -47,49 +47,23 @@ msgid "ACK file received."
 msgstr ""
 
 #. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_received_on
-msgid "ACK received on"
-msgstr ""
-
-#. module: edi
 #: model:ir.model,name:edi.model_edi_exchange_consumer_mixin
 msgid "Abstract record where exchange records can be assigned"
 msgstr ""
 
 #. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__ack_code
-msgid "Ack Code"
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_exchange_id
+msgid "Ack Exchange"
 msgstr ""
 
 #. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_file
-msgid "Ack File"
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__ack_type_id
+msgid "Ack exchange type"
 msgstr ""
 
 #. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__ack_file_ext
-msgid "Ack File Ext"
-msgstr ""
-
-#. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_filename
-msgid "Ack Filename"
-msgstr ""
-
-#. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__ack_filename_pattern
-msgid "Ack Filename Pattern"
-msgstr ""
-
-#. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__ack_name
-msgid "Ack Name"
-msgstr ""
-
-#. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_needed
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__ack_needed
-msgid "Ack Needed"
+#: model:ir.model.fields,help:edi.field_edi_exchange_record__ack_exchange_id
+msgid "Ack for this exchange"
 msgstr ""
 
 #. module: edi
@@ -347,6 +321,7 @@ msgid "Exchange state must respect direction!"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_received_on
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__exchanged_on
 msgid "Exchanged on"
 msgstr ""
@@ -412,6 +387,13 @@ msgstr ""
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__identifier
 msgid "Identifier"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_type__ack_type_id
+msgid ""
+"Identify the type of the ack. If this field is valued it means an hack is "
+"expected."
 msgstr ""
 
 #. module: edi
@@ -520,8 +502,23 @@ msgid "Number of unread messages"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_record__parent_id
+msgid "Original exchange which originated this record"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields.selection,name:edi.selection__edi_exchange_type__direction__output
 msgid "Output"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__parent_id
+msgid "Parent"
+msgstr ""
+
+#. module: edi
+#: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_view_search
+msgid "Parent exchange"
 msgstr ""
 
 #. module: edi
@@ -569,6 +566,11 @@ msgid "Related record"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__related_exchange_ids
+msgid "Related records"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__message_has_sms_error
 msgid "SMS Delivery error"
 msgstr ""
@@ -589,6 +591,7 @@ msgid "Sent and processed"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_record__ack_received_on
 #: model:ir.model.fields,help:edi.field_edi_exchange_record__exchanged_on
 msgid "Sent or received on this date."
 msgstr ""
