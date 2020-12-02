@@ -279,7 +279,11 @@ class EDIBackend(models.Model):
             else:
                 self._exchange_output_check_state(rec)
 
+        self._exchange_check_ack_needed(pending_records)
+
     def _output_new_records_domain(self):
+        """Domain for output records needing output content generation.
+        """
         return [
             ("backend_id", "=", self.id),
             ("type_id.exchange_file_auto_generate", "=", True),
@@ -289,6 +293,8 @@ class EDIBackend(models.Model):
         ]
 
     def _output_pending_records_domain(self):
+        """Domain for output records needing to be sent or have errors or ack to handle.
+        """
         states = ("output_pending", "output_sent", "output_sent_and_error")
         return [
             ("type_id.direction", "=", "output"),
@@ -445,6 +451,9 @@ class EDIBackend(models.Model):
         for rec in pending_process_records:
             self.exchange_process(rec)
 
+        # TODO: test it!
+        self._exchange_check_ack_needed(pending_process_records)
+
     def _input_pending_records_domain(self):
         return [
             ("backend_id", "=", self.id),
@@ -460,3 +469,17 @@ class EDIBackend(models.Model):
             ("type_id.direction", "=", "input"),
             ("edi_exchange_state", "in", states),
         ]
+
+    def _exchange_check_ack_needed(self, pending_records):
+        ack_pending_records = pending_records.filtered(lambda x: x.needs_ack())
+        _logger.info(
+            "EDI Exchange output sync: found %d records needing ack record.",
+            len(ack_pending_records),
+        )
+        for rec in ack_pending_records:
+            self._create_ack_record(rec)
+
+    def _create_ack_record(self, exchange_record):
+        ack_type = exchange_record.type_id.ack_type_id
+        values = {"parent_id": exchange_record.id}
+        return self.create_record(ack_type.code, values)
