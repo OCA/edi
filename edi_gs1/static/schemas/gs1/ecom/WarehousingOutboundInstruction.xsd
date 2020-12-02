@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ecom_common="urn:gs1:ecom:ecom_common:xsd:3" xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader" xmlns:shared_common="urn:gs1:shared:shared_common:xsd:3" xmlns:warehousing_common="urn:gs1:ecom:warehousing_common:xsd:3" xmlns:warehousing_outbound_instruction="urn:gs1:ecom:warehousing_outbound_instruction:xsd:3" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="urn:gs1:ecom:warehousing_outbound_instruction:xsd:3" version="3.4">
+    <xsd:annotation>
+        <xsd:documentation><![CDATA[---------------------------
+© Copyright GS1, 2019
+
+GS1 is providing this XML Schema Definition file and resultant XML file as a service to interested industries.
+This XML Schema Definition file and resultant XML file were developed through a consensus process of interested parties.
+
+Although efforts have been made to ensure that the XML Schema Definition file and resultant XML file are correct, reliable, and technically
+accurate,  GS1 makes NO WARRANTY, EXPRESS OR IMPLIED, THAT THIS XML Schema Definition file and resultant XML file ARE
+CORRECT, WILL NOT REQUIRE MODIFICATION AS EXPERIENCE AND TECHNOLOGICAL ADVANCES DICTATE, OR WILL BE SUITABLE FOR
+ANY PURPOSE OR WORKABLE IN ANY APPLICATION, OR OTHERWISE.  Use of the XML Schema Definition file and resultant XML
+file are with the understanding that GS1 has no liability for any claim to the contrary, or for any damage or loss of any kind or nature.
+
+Version Information:
+Version Number: 3.4
+Date of creation: April 2019
+
+The schema and subsequent updates will be provided on the GS1 websites.
+---------------------------
+]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:import namespace="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader" schemaLocation="../../sbdh/StandardBusinessDocumentHeader.xsd"/>
+    <xsd:import namespace="urn:gs1:shared:shared_common:xsd:3" schemaLocation="../shared/SharedCommon.xsd"/>
+    <xsd:import namespace="urn:gs1:ecom:ecom_common:xsd:3" schemaLocation="eComCommon.xsd"/>
+    <xsd:import namespace="urn:gs1:ecom:warehousing_common:xsd:3" schemaLocation="WarehousingCommon.xsd"/>
+    <xsd:element name="warehousingOutboundInstructionMessage" type="warehousing_outbound_instruction:WarehousingOutboundInstructionMessageType"/>
+    <xsd:complexType name="WarehousingDeliveryInstructionCodeType">
+        <xsd:simpleContent>
+            <xsd:extension base="shared_common:GS1CodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingDespatchTypeCodeType">
+        <xsd:simpleContent>
+            <xsd:extension base="shared_common:GS1CodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingOutboundInstructionMessageType">
+        <xsd:sequence>
+            <xsd:element ref="sh:StandardBusinessDocumentHeader"/>
+            <xsd:element maxOccurs="10000" name="warehousingOutboundInstruction" type="warehousing_outbound_instruction:WarehousingOutboundInstructionType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingOutboundInstructionShipmentItemType">
+        <xsd:complexContent>
+            <xsd:extension base="warehousing_common:WarehousingShipmentItemType">
+                <xsd:sequence>
+                    <xsd:element name="plannedDespatchQuantity" type="shared_common:QuantityType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="deliveryInstructionCode" type="warehousing_outbound_instruction:WarehousingDeliveryInstructionCodeType"/>
+                    <xsd:element minOccurs="0" name="crossDockIndicator" type="xsd:boolean"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="inboundLogisticUnitReference" type="ecom_common:Ecom_LogisticUnitIdentificationType"/>
+                    <xsd:element minOccurs="0" name="inboundShipmentReference" type="ecom_common:Ecom_ShipmentIdentificationType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="inlineServiceInstruction" type="warehousing_common:WarehousingServiceInstructionType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingOutboundInstructionShipmentType">
+        <xsd:complexContent>
+            <xsd:extension base="warehousing_common:WarehousingShipmentType">
+                <xsd:sequence>
+                    <xsd:element name="warehousingDespatchTypeCode" type="warehousing_outbound_instruction:WarehousingDespatchTypeCodeType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="warehousingDeliveryInstructionCode" type="warehousing_outbound_instruction:WarehousingDeliveryInstructionCodeType"/>
+                    <xsd:element minOccurs="0" name="plannedDespatch" type="ecom_common:LogisticEventType"/>
+                    <xsd:element minOccurs="0" name="plannedDelivery" type="ecom_common:LogisticEventType"/>
+                    <xsd:element minOccurs="0" name="carrierPickUpDropOffDetails" type="ecom_common:CarrierPickUpDropOffDetailsType"/>
+                    <xsd:element minOccurs="0" name="shipmentTransportationInformation" type="ecom_common:ShipmentTransportationInformationType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="inlineServiceInstruction" type="warehousing_common:WarehousingServiceInstructionType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="warehousingOutboundInstructionShipmentItem" type="warehousing_outbound_instruction:WarehousingOutboundInstructionShipmentItemType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingOutboundInstructionType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:EcomDocumentType">
+                <xsd:sequence>
+                    <xsd:element name="warehousingOutboundInstructionIdentification" type="ecom_common:Ecom_EntityIdentificationType"/>
+                    <xsd:element name="logisticServicesBuyer" type="ecom_common:TransactionalPartyType"/>
+                    <xsd:element name="logisticServicesSeller" type="ecom_common:TransactionalPartyType"/>
+                    <xsd:element maxOccurs="unbounded" name="warehousingOutboundInstructionShipment" type="warehousing_outbound_instruction:WarehousingOutboundInstructionShipmentType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+</xsd:schema>

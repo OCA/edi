@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ecom_common="urn:gs1:ecom:ecom_common:xsd:3" xmlns:shared_common="urn:gs1:shared:shared_common:xsd:3" xmlns:warehousing_common="urn:gs1:ecom:warehousing_common:xsd:3" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="urn:gs1:ecom:warehousing_common:xsd:3" version="3.4">
+    <xsd:annotation>
+        <xsd:documentation><![CDATA[---------------------------
+© Copyright GS1, 2019
+
+GS1 is providing this XML Schema Definition file and resultant XML file as a service to interested industries.
+This XML Schema Definition file and resultant XML file were developed through a consensus process of interested parties.
+
+Although efforts have been made to ensure that the XML Schema Definition file and resultant XML file are correct, reliable, and technically
+accurate,  GS1 makes NO WARRANTY, EXPRESS OR IMPLIED, THAT THIS XML Schema Definition file and resultant XML file ARE
+CORRECT, WILL NOT REQUIRE MODIFICATION AS EXPERIENCE AND TECHNOLOGICAL ADVANCES DICTATE, OR WILL BE SUITABLE FOR
+ANY PURPOSE OR WORKABLE IN ANY APPLICATION, OR OTHERWISE.  Use of the XML Schema Definition file and resultant XML
+file are with the understanding that GS1 has no liability for any claim to the contrary, or for any damage or loss of any kind or nature.
+
+Version Information:
+Version Number: 3.4
+Date of creation: April 2019
+
+The schema and subsequent updates will be provided on the GS1 websites.
+---------------------------
+]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:import namespace="urn:gs1:shared:shared_common:xsd:3" schemaLocation="../shared/SharedCommon.xsd"/>
+    <xsd:import namespace="urn:gs1:ecom:ecom_common:xsd:3" schemaLocation="eComCommon.xsd"/>
+    <xsd:complexType name="InventoryBusinessStepCodeType">
+        <xsd:simpleContent>
+            <xsd:extension base="shared_common:GS1CodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="InventoryDispositionCodeType">
+        <xsd:simpleContent>
+            <xsd:extension base="shared_common:GS1CodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="InventoryEventReasonCodeType">
+        <xsd:simpleContent>
+            <xsd:extension base="shared_common:GS1CodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="LogisticUnitInventoryEventType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:LogisticUnitType">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="eventDateTime" type="xsd:dateTime"/>
+                    <xsd:element minOccurs="0" name="eventIdentifier">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:maxLength value="80"/>
+                                <xsd:minLength value="1"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:element>
+                    <xsd:element name="inventoryBusinessStepCode" type="warehousing_common:InventoryBusinessStepCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryMovementTypeCode" type="ecom_common:InventoryMovementTypeCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryEventReasonCode" type="warehousing_common:InventoryEventReasonCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryEventReasonDescription" type="shared_common:Description70Type"/>
+                    <xsd:element name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="LogisticUnitInventoryStatusType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:LogisticUnitType">
+                <xsd:sequence>
+                    <xsd:element name="inventoryDispositionCode" type="warehousing_common:InventoryDispositionCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryDateTime" type="xsd:dateTime"/>
+                    <xsd:element name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="LogisticUnitReferenceType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:Ecom_LogisticUnitIdentificationType">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="tradeItemQuantity" type="shared_common:QuantityType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="ReturnablePackagingInventoryEventType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:ReturnablePackagingType">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="eventDateTime" type="xsd:dateTime"/>
+                    <xsd:element minOccurs="0" name="eventIdentifier">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:maxLength value="80"/>
+                                <xsd:minLength value="1"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:element>
+                    <xsd:element name="inventoryBusinessStepCode" type="warehousing_common:InventoryBusinessStepCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryMovementTypeCode" type="ecom_common:InventoryMovementTypeCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryEventReasonCode" type="warehousing_common:InventoryEventReasonCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryEventReasonDescription" type="shared_common:Description70Type"/>
+                    <xsd:element name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="ReturnablePackagingInventoryStatusType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:ReturnablePackagingType">
+                <xsd:sequence>
+                    <xsd:element name="inventoryDispositionCode" type="warehousing_common:InventoryDispositionCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryDateTime" type="xsd:dateTime"/>
+                    <xsd:element name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="TradeItemInventoryEventType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:TransactionalTradeItemType">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="eventDateTime" type="xsd:dateTime"/>
+                    <xsd:element minOccurs="0" name="eventIdentifier">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:maxLength value="80"/>
+                                <xsd:minLength value="1"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:element>
+                    <xsd:element name="inventoryBusinessStepCode" type="warehousing_common:InventoryBusinessStepCodeType"/>
+                    <xsd:element name="inventoryDispositionCode" type="warehousing_common:InventoryDispositionCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryMovementTypeCode" type="ecom_common:InventoryMovementTypeCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryEventReasonCode" type="warehousing_common:InventoryEventReasonCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryEventReasonDescription" type="shared_common:Description70Type"/>
+                    <xsd:element name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+                    <xsd:element minOccurs="0" name="liableParty" type="ecom_common:TransactionalPartyType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="logisticUnitReference" type="warehousing_common:LogisticUnitReferenceType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="packageTotal" type="ecom_common:PackageTotalType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="inventoryDutyFeeTaxStatus" type="ecom_common:InventoryDutyFeeTaxStatusType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="administrativeUnit" type="ecom_common:AdministrativeUnitType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="transactionalReference" type="ecom_common:TransactionalReferenceType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="TradeItemInventoryStatusType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:TransactionalTradeItemType">
+                <xsd:sequence>
+                    <xsd:element name="inventoryDispositionCode" type="warehousing_common:InventoryDispositionCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryDateTime" type="xsd:dateTime"/>
+                    <xsd:element name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="inventoryDutyFeeTaxStatus" type="ecom_common:InventoryDutyFeeTaxStatusType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="administrativeUnit" type="ecom_common:AdministrativeUnitType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="logisticUnitReference" type="warehousing_common:LogisticUnitReferenceType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="TransportEquipmentInventoryEventType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:TransportEquipmentType">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" name="eventDateTime" type="xsd:dateTime"/>
+                    <xsd:element minOccurs="0" name="eventIdentifier">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:maxLength value="80"/>
+                                <xsd:minLength value="1"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:element>
+                    <xsd:element name="numberOfPiecesOfEquipment" type="xsd:positiveInteger"/>
+                    <xsd:element minOccurs="0" name="inventoryMovementTypeCode" type="ecom_common:InventoryMovementTypeCodeType"/>
+                    <xsd:element name="inventoryBusinessStepCode" type="warehousing_common:InventoryBusinessStepCodeType"/>
+                    <xsd:element name="inventoryDispositionCode" type="warehousing_common:InventoryDispositionCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryEventReasonCode" type="warehousing_common:InventoryEventReasonCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryEventReasonDescription" type="shared_common:Description70Type"/>
+                    <xsd:element name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="TransportEquipmentInventoryStatusType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:TransportEquipmentType">
+                <xsd:sequence>
+                    <xsd:element name="numberOfPiecesOfEquipment" type="xsd:positiveInteger"/>
+                    <xsd:element name="inventoryDispositionCode" type="warehousing_common:InventoryDispositionCodeType"/>
+                    <xsd:element minOccurs="0" name="inventoryDateTime" type="xsd:dateTime"/>
+                    <xsd:element name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingQuantityVarianceCodeType">
+        <xsd:simpleContent>
+            <xsd:extension base="shared_common:GS1CodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingQuantityVarianceType">
+        <xsd:sequence>
+            <xsd:element name="varianceQuantity" type="shared_common:QuantityType"/>
+            <xsd:element name="warehousingQuantityVarianceCode" type="warehousing_common:WarehousingQuantityVarianceCodeType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingServiceAttributeType">
+        <xsd:sequence>
+            <xsd:element name="warehousingServiceAttributeTypeCode" type="shared_common:CodeType"/>
+            <xsd:element minOccurs="0" name="warehousingServiceAttributeText">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="200"/>
+                        <xsd:minLength value="1"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="warehousingServiceAttributeMeasurement" type="shared_common:MeasurementType"/>
+            <xsd:element minOccurs="0" name="warehousingServiceAttributeIndicator" type="xsd:boolean"/>
+            <xsd:element minOccurs="0" name="warehousingServiceAttributeDateTime" type="xsd:dateTime"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingServiceInstructionType">
+        <xsd:sequence>
+            <xsd:element name="warehousingServiceConditionCode" type="shared_common:CodeType"/>
+            <xsd:element minOccurs="0" name="warehousingServiceVariant">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="80"/>
+                        <xsd:minLength value="1"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="warehousingServiceAttribute" type="warehousing_common:WarehousingServiceAttributeType"/>
+            <xsd:element minOccurs="0" name="warehouseServiceID" type="ecom_common:Ecom_TradeItemIdentificationType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingShipmentItemType">
+        <xsd:sequence>
+            <xsd:element name="lineItemNumber" type="xsd:positiveInteger"/>
+            <xsd:element minOccurs="0" name="associatedInvoicePrice" type="shared_common:AmountType"/>
+            <xsd:element minOccurs="0" name="parentLineItemNumber" type="xsd:positiveInteger"/>
+            <xsd:element minOccurs="0" name="note" type="shared_common:Description500Type"/>
+            <xsd:element name="transactionalTradeItem" type="ecom_common:TransactionalTradeItemType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="logisticUnit" type="ecom_common:ExtendedLogisticUnitType"/>
+            <xsd:element minOccurs="0" name="shipTo" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="inventoryLocation" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="ultimateConsignee" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="inventorySubLocation" type="ecom_common:InventorySubLocationType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="administrativeUnit" type="ecom_common:AdministrativeUnitType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="transactionalReference" type="ecom_common:TransactionalReferenceType"/>
+            <xsd:element minOccurs="0" name="transportCargoCharacteristics" type="ecom_common:TransportCargoCharacteristicsType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="packageTotal" type="ecom_common:PackageTotalType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="handlingInstruction" type="ecom_common:HandlingInstructionType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="inventoryDutyFeeTaxStatus" type="ecom_common:InventoryDutyFeeTaxStatusType"/>
+            <xsd:element minOccurs="0" name="avpList" type="ecom_common:Ecom_AttributeValuePairListType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="WarehousingShipmentType">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="note" type="shared_common:Description500Type"/>
+            <xsd:element minOccurs="0" name="shipmentIdentification" type="ecom_common:Ecom_ShipmentIdentificationType"/>
+            <xsd:element name="shipper" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element name="receiver" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="buyer" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="seller" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="shipFrom" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="shipTo" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="inventoryLocation" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="ultimateConsignee" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element minOccurs="0" name="pickUpLocation" type="ecom_common:TransactionalPartyType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="logisticUnit" type="ecom_common:LogisticUnitType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="administrativeUnit" type="ecom_common:AdministrativeUnitType"/>
+            <xsd:element minOccurs="0" name="deliveryTerms" type="ecom_common:DeliveryTermsType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="transactionalReference" type="ecom_common:TransactionalReferenceType"/>
+            <xsd:element minOccurs="0" name="transportCargoCharacteristics" type="ecom_common:TransportCargoCharacteristicsType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="packageTotal" type="ecom_common:PackageTotalType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="handlingInstruction" type="ecom_common:HandlingInstructionType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>
