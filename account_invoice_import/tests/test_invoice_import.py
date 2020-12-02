@@ -36,9 +36,7 @@ class TestInvoiceImport(TransactionCase):
         }
         self.purchase_tax = self.env["account.tax"].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
-        sale_tax_vals.update(
-            {"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"}
-        )
+        sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
         self.sale_tax = self.env["account.tax"].create(sale_tax_vals)
         self.product = self.env["product.product"].create(
             {
