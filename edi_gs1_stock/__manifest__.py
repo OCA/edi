@@ -22,5 +22,7 @@
         "data/edi_exchange_type.xml",
         "data/inbound_instruction_qweb_template.xml",
         "data/inbound_instruction_output_template.xml",
+        "data/outbound_instruction_qweb_template.xml",
+        "data/outbound_instruction_output_template.xml",
     ],
 }

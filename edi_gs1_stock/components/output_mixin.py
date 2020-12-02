@@ -128,7 +128,11 @@ class GS1OutputShipmentMessageMixin(AbstractComponent):
         avp_list = self._shipment_item_avp_list(item)
         if avp_list:
             data["avpList"] = avp_list
-        data["plannedReceiptQuantity"] = {
+        # NOTE: `_plannedQty` does not match the final key
+        # which vary depending on the message
+        # (eg: plannedReceiptQuantity, plannedDespatchQuantity)
+        # You should handle it properly in your template.
+        data["_plannedQty"] = {
             "value": qty,
             "attrs": {"measurementUnitCode": uom_code},
         }

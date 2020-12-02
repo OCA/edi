@@ -9,4 +9,33 @@
         <field name="exchange_file_ext">xml</field>
         <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_in" />
     </record>
+    <!-- TODO -->
+    <!-- <record id="edi_exchange_type_inbound_notification" model="edi.exchange.type">
+        <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
+        <field name="name">GS1 Inbound Notification</field>
+        <field name="code">warehousingInboundNotificationMessage</field>
+        <field name="direction">input</field>
+        <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_out" />
+    </record> -->
+    <record id="edi_exchange_type_outbound_instruction" model="edi.exchange.type">
+        <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
+        <field name="name">GS1 Outbound Instruction</field>
+        <field name="code">warehousingOutboundInstructionMessage</field>
+        <field name="direction">output</field>
+        <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_in" />
+    </record>
+    <!-- TODO -->
+    <!-- <record id="edi_exchange_type_outbound_notification" model="edi.exchange.type">
+        <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
+        <field name="name">GS1 Outbound Notification</field>
+        <field name="code">warehousingOutboundNotificationMessage</field>
+        <field name="direction">input</field>
+        <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_out" />
+    </record> -->
 </odoo>

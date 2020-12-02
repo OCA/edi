@@ -8,12 +8,19 @@
         <field name="inherit_id" ref="stock.view_picking_form" />
         <field name="priority" eval="150" />
         <field name="arch" type="xml">
-            <!-- TODO: any better placement? -->
+            <!-- TODO: any better placement?
+            Maybe a wizard to select the backend and decide other few options?
+            -->
             <header position="inside">
                 <button
                     type="object"
                     name="action_send_wh_inbound_instruction"
                     string="GS1 Send WH inbound instruction"
+                />
+                <button
+                    type="object"
+                    name="action_send_wh_outbound_instruction"
+                    string="GS1 Send WH outbound instruction"
                 />
             </header>
         </field>
