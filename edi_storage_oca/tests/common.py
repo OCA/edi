@@ -53,7 +53,9 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
 
     def _filename(self, record=None, ack=False):
         record = record or self.record
-        return record.exchange_filename if not ack else record.ack_filename
+        if ack:
+            record.type_id.ack_type_id._make_exchange_filename(record)
+        return record.exchange_filename
 
     def _file_fullpath(self, state, record=None, ack=False):
         record = record or self.record
