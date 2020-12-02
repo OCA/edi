@@ -111,7 +111,7 @@ class EDIExchangeOutputTemplate(models.Model):
         )
         default_work_ctx.update(work_ctx or {})
         usage_candidates = [usage or self.code + ".info"]
-        provider = exchange_record.backend_id._get_component(
+        provider = exchange_record.backend_id._find_component(
             usage_candidates, work_ctx=default_work_ctx, **kw
         )
         return provider
