@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template
-        id="edi_exchange_inbound_instruction"
-        name="Render GS1 Inbound Instruction"
+        id="edi_exchange_outbound_instruction"
+        name="Render GS1 Outbound Instruction"
     >
-        <warehousing_inbound_instruction:warehousingInboundInstructionMessage
+        <warehousing_outbound_instruction:warehousingOutboundInstructionMessage
             xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
-            xmlns:warehousing_inbound_instruction="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3"
+            xmlns:warehousing_outbound_instruction="urn:gs1:ecom:warehousing_outbound_instruction:xsd:3"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         >
             <t
                 t-raw="render_edi_template(exchange_record, 'gs1.BusinessHeader', sender=sender, receiver=receiver)"
             />
-            <t t-set="instruction_info" t-value="info.warehousingInboundInstruction" />
+            <t t-set="instruction_info" t-value="info.warehousingOutboundInstruction" />
             <t
                 t-set="shipment_info"
-                t-value="instruction_info.warehousingInboundInstructionShipment"
+                t-value="instruction_info.warehousingOutboundInstructionShipment"
             />
             <t t-set="purchase_order" t-value="record.purchase_id" />
-            <warehousingInboundInstruction>
+            <warehousingOutboundInstruction>
                 <creationDateTime t-esc="utc_now()" />
                 <documentStatusCode>ORIGINAL</documentStatusCode>
                 <documentActionCode>ADD</documentActionCode>
-                <warehousingInboundInstructionIdentification>
+                <warehousingOutboundInstructionIdentification>
                     <entityIdentification
                         t-esc="record.name"
-                    >WH/IN/123456789</entityIdentification>
-                </warehousingInboundInstructionIdentification>
+                    >WH/OUT/123456789</entityIdentification>
+                </warehousingOutboundInstructionIdentification>
                 <logisticServicesBuyer>
                     <gln t-esc="ls_buyer.gln_code" />
                 </logisticServicesBuyer>
                 <logisticServicesSeller>
                     <gln t-esc="ls_seller.gln_code" />
                 </logisticServicesSeller>
-                <warehousingInboundInstructionShipment>
+                <warehousingOutboundInstructionShipment>
+                    <note
+                        languageCode="en"
+                        t-if="record.note"
+                        t-esc="record.note"
+                    >Something important to know!</note>
                     <shipmentIdentification>
                         <additionalShipmentIdentification
                             t-esc="shipment_info.shipmentIdentification.additionalShipmentIdentification.value"
@@ -51,8 +56,23 @@
                         >CARRIER#1</additionalPartyIdentification>
                     </shipper>
                     <receiver>
+                        <!-- TODO: add more info here -->
                         <gln t-esc="receiver.gln_code">0000000000001</gln>
                     </receiver>
+                    <shipTo t-if="TODO" />
+                    <deliveryTerms t-if="TODO">
+                        <incotermsCode>???</incotermsCode>
+                        <deliveryTermsLocation>???</deliveryTermsLocation>
+                    </deliveryTerms>
+                    <transactionalReference t-if="TODO">
+                        <entityIdentification>SO00001</entityIdentification>
+                        <creationDateTime
+                        >2020-01-07T21:15:00.000+01:00</creationDateTime>
+                        <transactionalReferenceTypeCode
+                        >VN</transactionalReferenceTypeCode>
+                        <referencedDocumentUrl
+                        >https://possible.url/to/delivery-document</referencedDocumentUrl>
+                    </transactionalReference>
                     <packageTotal t-if="shipment_info.packageTotal">
                         <packageTypeCode
                             t-esc="shipment_info.packageTotal.packageTypeCode"
@@ -65,23 +85,34 @@
                             t-esc="shipment_info.packageTotal.totalGrossWeight.value"
                         >6.0</totalGrossWeight>
                     </packageTotal>
-                    <warehousingReceiptTypeCode
-                    >REGULAR_RECEIPT</warehousingReceiptTypeCode>
-                    <plannedReceipt>
+                    <handlingInstruction t-if="TODO">
+                        <handlingInstructionCode>11</handlingInstructionCode>
+                    </handlingInstruction>
+                    <warehousingDespatchTypeCode
+                        t-if="'TODO: mandatory'"
+                    >WAREHOUSE_SHIPMENT</warehousingDespatchTypeCode>
+                    <warehousingDeliveryInstructionCode
+                        t-if="TODO"
+                    >PRIORITY_DESPATCH</warehousingDeliveryInstructionCode>
+                    <plannedDespatch t-if="TODO">
                         <logisticEventDateTime>
-                            <date>2020-07-12</date>
+                            <date>2020-12-02</date>
                         </logisticEventDateTime>
-                    </plannedReceipt>
+                    </plannedDespatch>
                     <t t-foreach="shipment_info._shipment_items" t-as="ship_item">
                         <t
                             t-set="trade_item"
                             t-value="ship_item.transactionalTradeItem"
                         />
                         <t t-set="avp_list" t-value="ship_item.avpList" />
-                        <warehousingInboundInstructionShipmentItem>
+                        <warehousingOutboundInstructionShipmentItem>
                             <lineItemNumber
                                 t-esc="ship_item.lineItemNumber"
                             >1</lineItemNumber>
+                            <note
+                                languageCode="en"
+                                t-if="TODO"
+                            >Maybe use for some long description of the product</note>
                             <transactionalTradeItem>
                                 <gtin t-esc="trade_item.gtin">11111111111111</gtin>
                                 <additionalTradeItemIdentification
@@ -99,15 +130,15 @@
                                     >TRUE</eComStringAttributeValuePairList>
                                 </t>
                             </avpList>
-                            <plannedReceiptQuantity
+                            <plannedDespatchQuantity
                                 t-att="ship_item._plannedQty.attrs"
                                 t-esc="ship_item._plannedQty.value"
                                 measurementUnitCode="KGM"
-                            >300.0</plannedReceiptQuantity>
-                        </warehousingInboundInstructionShipmentItem>
+                            >300.0</plannedDespatchQuantity>
+                        </warehousingOutboundInstructionShipmentItem>
                     </t>
-                </warehousingInboundInstructionShipment>
-            </warehousingInboundInstruction>
-        </warehousing_inbound_instruction:warehousingInboundInstructionMessage>
+                </warehousingOutboundInstructionShipment>
+            </warehousingOutboundInstruction>
+        </warehousing_outbound_instruction:warehousingOutboundInstructionMessage>
     </template>
 </odoo>

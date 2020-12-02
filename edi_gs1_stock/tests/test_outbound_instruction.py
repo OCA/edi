@@ -7,16 +7,16 @@ from freezegun import freeze_time
 from .common import ShipmentTestCaseBase
 
 
-class InboundInstructionTestCase(ShipmentTestCaseBase):
+class OutboundInstructionTestCase(ShipmentTestCaseBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls._setup_order()
         cls.exc_type = cls.env.ref(
-            "edi_gs1_stock.edi_exchange_type_inbound_instruction"
+            "edi_gs1_stock.edi_exchange_type_outbound_instruction"
         )
         cls.exc_tmpl = cls.env.ref(
-            "edi_gs1_stock.edi_exchange_template_inbound_instruction"
+            "edi_gs1_stock.edi_exchange_template_outbound_instruction"
         )
         vals = {
             "model": cls.delivery._name,
@@ -29,7 +29,7 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
         template = self.backend._get_output_template(self.record)
         self.assertEqual(template, self.exc_tmpl)
         self.assertEqual(
-            template.template_id.key, "edi_gs1_stock.edi_exchange_inbound_instruction"
+            template.template_id.key, "edi_gs1_stock.edi_exchange_outbound_instruction"
         )
 
     def test_render_values(self):
@@ -99,8 +99,8 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
                     "attrs": {"measurementUnitCode": "KGM"},
                 },
             },
-            "warehousingReceiptTypeCode": "REGULAR_RECEIPT",
-            "plannedReceipt": {"logisticEventDateTime": {"date": "2020-07-12"}},
+            "warehousingDespatchTypeCode": "WAREHOUSE_SHIPMENT",
+            "plannedDespatch": {"logisticEventDateTime": {"date": "2020-07-12"}},
             "_shipment_items": [
                 {
                     "lineItemNumber": 1,
@@ -128,19 +128,19 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
                 },
             ],
         }
-        info = provider.generate_info().warehousingInboundInstruction
+        info = provider.generate_info().warehousingOutboundInstruction
         for k, v in expected_shipment.items():
             self.assertEqual(
-                info.warehousingInboundInstructionShipment[k], v, f"{k} does not match"
+                info.warehousingOutboundInstructionShipment[k], v, f"{k} does not match"
             )
 
     @freeze_time("2020-07-09 10:30:00")
     def test_xml(self):
         record = self.delivery.with_context(
             edi_exchange_send=False
-        ).action_send_wh_inbound_instruction()
+        ).action_send_wh_outbound_instruction()
         file_content = record._get_file_content()
         # FIXME: do proper validation
         self.assertTrue(
-            file_content.startswith("<warehousing_inbound_instruction"), file_content
+            file_content.startswith("<warehousing_outbound_instruction"), file_content
         )

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record
+        id="edi_exchange_template_outbound_instruction"
+        model="edi.exchange.template.output"
+    >
+        <field name="name">EDI Exchange - GS1 Outbound Instruction</field>
+        <field
+            name="code"
+        >edi.output.generate.gs1.warehousingOutboundInstructionMessage</field>
+        <field name="output_type">xml</field>
+        <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
+        <field name="type_id" ref="edi_exchange_type_outbound_instruction" />
+        <field name="template_id" ref="edi_exchange_outbound_instruction" />
+        <field name="code_snippet">
+sender = backend.lsc_partner_id
+receiver = backend.lsp_partner_id
+logistic_service_seller = receiver
+logistic_service_buyer = sender
+# FIXME: this is probably wrong or not always true
+buyer = sender
+seller = record.purchase_id.partner_id
+# TODO: get a default carrier somehow?
+shipper = DotDict(dict(name="NO_CARRIER_SPECIFIED", gln_code="0" * 13, ref=None))
+
+_result = {
+    "sender": sender,
+    "receiver": receiver,
+    "ls_seller": logistic_service_seller,
+    "ls_buyer": logistic_service_buyer,
+    "buyer": buyer,
+    "seller": seller,
+    "shipper": shipper,
+}
+
+provider = get_info_provider(exchange_record, work_ctx=_result)
+if provider:
+    _result["info"] = provider.generate_info()
+
+result = _result
+        </field>
+    </record>
+</odoo>
