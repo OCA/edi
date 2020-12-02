@@ -7,9 +7,6 @@
         <field name="direction">output</field>
         <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
         <field name="exchange_file_ext">xml</field>
-        <field name="ack_needed" eval="True" />
-        <field name="ack_code" />
-        <field name="ack_filename_pattern">{type.exchange_filename_pattern}.ack</field>
-        <field name="ack_file_ext">xml</field>
+        <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_in" />
     </record>
 </odoo>
