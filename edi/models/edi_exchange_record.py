@@ -206,3 +206,43 @@ class EDIExchangeRecord(models.Model):
         if not self.model or not self.res_id:
             return {}
         return self.record.get_formview_action()
+
+    def _trigger_edi_event_make_name(self, name, suffix=None):
+        return "on_edi_exchange_{name}{suffix}".format(
+            name=name, suffix=("_" + suffix) if suffix else "",
+        )
+
+    def _trigger_edi_event(self, name, suffix=None):
+        """Trigger a component event linked to this backend and edi exchange."""
+        name = self._trigger_edi_event_make_name(name, suffix=suffix)
+        self._event(name).notify(self)
+
+    def _notify_done(self):
+        self.backend_id._exchange_notify_record(
+            self, self._exchange_status_message("process_ok")
+        )
+        self._trigger_edi_event("done")
+
+    def _notify_error(self, message_key):
+        self.backend_id._exchange_notify_record(
+            self, self._exchange_status_message(message_key), level="error",
+        )
+        self._trigger_edi_event("error")
+
+    def _notify_ack_received(self):
+        self.backend_id._exchange_notify_record(
+            self, self._exchange_status_message("ack_received")
+        )
+        self._trigger_edi_event("done", suffix="ack_received")
+
+    def _notify_ack_missing(self):
+        self.backend_id._exchange_notify_record(
+            self, self._exchange_status_message("ack_missing"), level="warning",
+        )
+        self._trigger_edi_event("done", suffix="ack_missing")
+
+    def _notify_ack_received_error(self):
+        self.backend_id._exchange_notify_record(
+            self, self._exchange_status_message("ack_received_error"),
+        )
+        self._trigger_edi_event("done", suffix="ack_received_error")
