@@ -16,10 +16,10 @@ class EDIBackendInputComponentMixin(AbstractComponent):
         raise NotImplementedError()
 
 
-# class EDIBackendCheckComponentMixin(AbstractComponent):
+class EDIBackendReceiveComponentMixin(AbstractComponent):
 
-#     _name = "edi.component.check.mixin"
-#     _inherit = "edi.component.mixin"
+    _name = "edi.component.receive.mixin"
+    _inherit = "edi.component.mixin"
 
-#     def check(self):
-#         raise NotImplementedError()
+    def receive(self):
+        raise NotImplementedError()
