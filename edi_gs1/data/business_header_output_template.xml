@@ -11,7 +11,7 @@
         <field name="template_id" ref="edi_exchange_business_header" />
         <field name="code_snippet">
 # Default identifier to record name
-result = {"instance_identifier": record.name}
+result = {"instance_identifier": exchange_record.identifier}
         </field>
     </record>
 </odoo>
