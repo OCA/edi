@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="group_edi_advanced_settings_manager" model="res.groups">
+        <field name="name">EDI Advanced Settings Manager</field>
+        <field name="category_id" ref="base_edi.module_category_edi" />
+        <field
+            name="users"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+    </record>
+</odoo>
