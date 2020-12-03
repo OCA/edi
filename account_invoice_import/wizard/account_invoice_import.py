@@ -229,8 +229,7 @@ class AccountInvoiceImport(models.TransientModel):
             )
             if partner_bank:
                 vals["invoice_partner_bank_id"] = partner_bank.id
-        config = import_config  # just to make variable name shorter
-        if not config:
+        if not import_config:
             if not partner.invoice_import_ids:
                 raise UserError(
                     _("Missing Invoice Import Configuration on partner '%s'.")
@@ -238,40 +237,40 @@ class AccountInvoiceImport(models.TransientModel):
                 )
             else:
                 import_config_obj = partner.invoice_import_ids[0]
-                config = import_config_obj.convert_to_import_config()
+                import_config = import_config_obj.convert_to_import_config()
         # get invoice line vals
         vals["invoice_line_ids"] = []
-        if config["invoice_line_method"].startswith("1line"):
+        if import_config["invoice_line_method"].startswith("1line"):
             self._prepare_line_vals_1line(partner, vals, parsed_inv, import_config)
-        elif config["invoice_line_method"].startswith("nline"):
+        elif import_config["invoice_line_method"].startswith("nline"):
             self._prepare_line_vals_nline(partner, vals, parsed_inv, import_config)
         # Write analytic account + fix syntax for taxes
-        analytic_account = config.get("account_analytic", False)
+        analytic_account = import_config.get("account_analytic", False)
         if analytic_account:
             for line in vals["invoice_line_ids"]:
                 line[2]["account_analytic_id"] = analytic_account.id
-        return (vals, config)
+        return (vals, import_config)
 
     @api.model
     def _prepare_line_vals_1line(self, partner, vals, parsed_inv, import_config):
         line_model = self.env["account.move.line"]
-        if config["invoice_line_method"] == "1line_no_product":
-            if config["taxes"]:
-                il_tax_ids = [(6, 0, config["taxes"].ids)]
+        if import_config["invoice_line_method"] == "1line_no_product":
+            if import_config["taxes"]:
+                il_tax_ids = [(6, 0, import_config["taxes"].ids)]
             else:
                 il_tax_ids = False
             il_vals = {
-                "account_id": config["account"].id,
+                "account_id": import_config["account"].id,
                 "tax_ids": il_tax_ids,
                 "price_unit": parsed_inv.get("amount_untaxed"),
             }
-        elif config["invoice_line_method"] == "1line_static_product":
-            product = config["product"]
+        elif import_config["invoice_line_method"] == "1line_static_product":
+            product = import_config["product"]
             il_vals = {"product_id": product.id, "move_id": vals}
             il_vals = line_model.play_onchanges(il_vals, ["product_id"])
             il_vals.pop("move_id")
-        if config.get("label"):
-            il_vals["name"] = config["label"]
+        if import_config.get("label"):
+            il_vals["name"] = import_config["label"]
         elif parsed_inv.get("description"):
             il_vals["name"] = parsed_inv["description"]
         elif not il_vals.get("name"):
@@ -295,10 +294,10 @@ class AccountInvoiceImport(models.TransientModel):
                     "the PDF invoice."
                 )
             )
-        if config["invoice_line_method"] == "nline_no_product":
-            static_vals = {"account_id": config["account"].id}
-        elif config["invoice_line_method"] == "nline_static_product":
-            sproduct = config["product"]
+        if import_config["invoice_line_method"] == "nline_no_product":
+            static_vals = {"account_id": import_config["account"].id}
+        elif import_config["invoice_line_method"] == "nline_static_product":
+            sproduct = import_config["product"]
             static_vals = {"product_id": sproduct.id, "move_id": vals}
             static_vals = line_model.play_onchanges(static_vals, ["product_id"])
             static_vals.pop("move_id")
@@ -306,14 +305,14 @@ class AccountInvoiceImport(models.TransientModel):
             static_vals = {}
         for line in parsed_inv["lines"]:
             il_vals = static_vals.copy()
-            if config["invoice_line_method"] == "nline_auto_product":
+            if import_config["invoice_line_method"] == "nline_auto_product":
                 product = import_model._match_product(
                     line["product"], parsed_inv["chatter_msg"], seller=partner
                 )
                 il_vals = {"product_id": product.id, "move_id": vals}
                 il_vals = line_model.play_onchanges(il_vals, ["product_id"])
                 il_vals.pop("move_id")
-            elif config["invoice_line_method"] == "nline_no_product":
+            elif import_config["invoice_line_method"] == "nline_no_product":
                 taxes = import_model._match_taxes(
                     line.get("taxes"), parsed_inv["chatter_msg"]
                 )
