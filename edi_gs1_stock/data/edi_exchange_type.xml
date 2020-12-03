@@ -3,13 +3,17 @@
     <record id="edi_exchange_type_inbound_instruction" model="edi.exchange.type">
         <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
         <field name="name">GS1 Inbound Instruction</field>
-        <field name="code">warehousingInboundInstructionMessage</field>
+        <field name="code">warehousingInboundInstruction</field>
         <field name="direction">output</field>
         <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
         <field name="exchange_file_ext">xml</field>
         <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_in" />
         <field name="advanced_settings_edit">
 components:
+  generate:
+    usage: gs1.generate.warehousingInboundInstruction
+  info:
+    usage: gs1.info.warehousingInboundInstruction
   validate:
     usage: edi.xml
     work_ctx:
@@ -29,13 +33,17 @@ components:
     <record id="edi_exchange_type_outbound_instruction" model="edi.exchange.type">
         <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
         <field name="name">GS1 Outbound Instruction</field>
-        <field name="code">warehousingOutboundInstructionMessage</field>
+        <field name="code">warehousingOutboundInstruction</field>
         <field name="direction">output</field>
         <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
         <field name="exchange_file_ext">xml</field>
         <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_in" />
         <field name="advanced_settings_edit">
 components:
+  generate:
+    usage: gs1.generate.warehousingOutboundInstruction
+  info:
+    usage: gs1.info.warehousingOutboundInstruction
   validate:
     usage: edi.xml
     work_ctx:
