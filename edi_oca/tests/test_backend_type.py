@@ -9,7 +9,7 @@ from odoo.tools import mute_logger
 from .common import EDIBackendCommonTestCase
 
 
-class EDIBackendTestCase(EDIBackendCommonTestCase):
+class EDIBackendTypeTestCase(EDIBackendCommonTestCase):
     def test_type_code(self):
         btype = self.backend_type_model.create(
             {"name": "Test new type", "code": "Test new type"}
