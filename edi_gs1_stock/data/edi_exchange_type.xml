@@ -8,6 +8,13 @@
         <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
         <field name="exchange_file_ext">xml</field>
         <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_in" />
+        <field name="advanced_settings_edit">
+components:
+  validate:
+    usage: edi.xml
+    work_ctx:
+      schema_path: edi_gs1:static/schemas/gs1/ecom/WarehousingInboundInstruction.xsd
+        </field>
     </record>
     <!-- TODO -->
     <!-- <record id="edi_exchange_type_inbound_notification" model="edi.exchange.type">
@@ -27,6 +34,13 @@
         <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
         <field name="exchange_file_ext">xml</field>
         <field name="ack_type_id" ref="edi_gs1.edi_exchange_type_receipt_ack_in" />
+        <field name="advanced_settings_edit">
+components:
+  validate:
+    usage: edi.xml
+    work_ctx:
+      schema_path: edi_gs1:static/schemas/gs1/ecom/WarehousingOutboundInstruction.xsd
+        </field>
     </record>
     <!-- TODO -->
     <!-- <record id="edi_exchange_type_outbound_notification" model="edi.exchange.type">
