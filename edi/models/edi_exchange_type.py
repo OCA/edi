@@ -1,10 +1,20 @@
 # Copyright 2020 ACSONE SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import logging
 
 from odoo import _, api, exceptions, fields, models
 
+from odoo.addons.base_sparse_field.models.fields import Serialized
 from odoo.addons.http_routing.models.ir_http import slugify
+
+_logger = logging.getLogger(__name__)
+
+
+try:
+    import yaml
+except ImportError:
+    _logger.debug("`yaml` lib is missing")
 
 
 class EDIExchangeType(models.Model):
@@ -43,6 +53,36 @@ class EDIExchangeType(models.Model):
         help="Identify the type of the ack. "
         "If this field is valued it means an hack is expected.",
     )
+    advanced_settings_edit = fields.Text(
+        string="Advanced YAML settings",
+        help="""
+            Advanced technical settings as YAML format.
+            The YAML structure should reproduce a dictionary.
+            The backend might use these settings for automated operations.
+
+            Currently supported conf:
+
+              components:
+                generate:
+                  usage: $comp_usage
+                  work_ctx:
+                     opt1: True
+                validate:
+                  usage: $comp_usage
+                check:
+                  usage: $comp_usage
+                send:
+                  usage: $comp_usage
+                receive:
+                  usage: $comp_usage
+                process:
+                  usage: $comp_usage
+
+            In any case, you can use these settings
+            to provide your own configuration for whatever need you might have.
+        """,
+    )
+    advanced_settings = Serialized(default={}, compute="_compute_advanced_settings")
 
     _sql_constraints = [
         (
@@ -51,6 +91,14 @@ class EDIExchangeType(models.Model):
             "The code must be unique per backend",
         )
     ]
+
+    @api.depends("advanced_settings_edit")
+    def _compute_advanced_settings(self):
+        for rec in self:
+            rec.advanced_settings = rec._load_advanced_settings()
+
+    def _load_advanced_settings(self):
+        return yaml.safe_load(self.advanced_settings_edit or "") or {}
 
     @api.constrains("backend_id", "backend_type_id")
     def _check_backend(self):

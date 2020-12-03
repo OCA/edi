@@ -11,9 +11,11 @@
     "author": "ACSONE,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "depends": ["base_edi", "component", "component_event", "mail"],
+    "external_dependencies": {"python": ["pyyaml"]},
     "data": [
         "data/cron.xml",
         "data/sequence.xml",
+        "security/res_groups.xml",
         "security/ir_model_access.xml",
         "views/edi_backend_views.xml",
         "views/edi_backend_type_views.xml",

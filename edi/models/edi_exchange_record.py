@@ -87,7 +87,9 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_ack_exchange_id",
         store=True,
     )
-    ack_received_on = fields.Datetime(related="ack_exchange_id.exchanged_on")
+    ack_received_on = fields.Datetime(
+        string="ACK received on", related="ack_exchange_id.exchanged_on"
+    )
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),

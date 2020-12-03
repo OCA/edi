@@ -36,12 +36,14 @@ class EDIBackend(models.Model):
         ondelete="restrict",
     )
 
-    def _get_component(self, exchange_record, action):
+    def _get_component(self, exchange_record, key):
         # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, action)
-        return self._find_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        candidates = self._get_component_usage_candidates(exchange_record, key)
+        work_ctx = {"exchange_record": exchange_record}
+        # Inject work context from advanced settings
+        record_conf = self._get_component_conf_for_record(exchange_record, key)
+        work_ctx.update(record_conf.get("work_ctx", {}))
+        return self._find_component(candidates, work_ctx=work_ctx)
 
     def _find_component(self, usage_candidates, safe=True, work_ctx=None, **kw):
         """Retrieve components for current backend.
@@ -68,7 +70,8 @@ class EDIBackend(models.Model):
         return component or None
 
     def _get_component_usage_candidates(self, exchange_record, key):
-        """Retrieve usage candidates for components."""
+        """Retrieve usage candidates for components.
+        """
         # fmt:off
         base_usage = ".".join([
             "edi",
@@ -78,12 +81,19 @@ class EDIBackend(models.Model):
         ])
         # fmt:on
         type_code = exchange_record.type_id.code
-        return [
+        record_conf = self._get_component_conf_for_record(exchange_record, key)
+        candidates = [record_conf["usage"]] if record_conf else []
+        candidates += [
             # specific for backend type and exchange type
             base_usage + "." + type_code,
             # specific for backend type
             base_usage,
         ]
+        return candidates
+
+    def _get_component_conf_for_record(self, exchange_record, key):
+        adv_settings = exchange_record.type_id.advanced_settings
+        return adv_settings.get("components", {}).get(key, {})
 
     @property
     def exchange_record_model(self):
