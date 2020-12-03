@@ -353,6 +353,9 @@ class EDIBackend(models.Model):
         check = self._exchange_process_check(exchange_record)
         if not check:
             return False
+        state = exchange_record.edi_exchange_state
+        error = False
+        message = None
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
@@ -396,8 +399,12 @@ class EDIBackend(models.Model):
         check = self._exchange_receive_check(exchange_record)
         if not check:
             return False
+        state = exchange_record.edi_exchange_state
+        error = False
+        message = None
+        content = None
         try:
-            self._exchange_receive(exchange_record)
+            content = self._exchange_receive(exchange_record)
         except self._swallable_exceptions() as err:
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
@@ -411,6 +418,8 @@ class EDIBackend(models.Model):
             state = "input_received"
             res = True
         finally:
+            if content:
+                exchange_record._set_file_content(content)
             exchange_record.write(
                 {
                     "edi_exchange_state": state,
@@ -421,7 +430,7 @@ class EDIBackend(models.Model):
                 }
             )
             if message:
-                self._exchange_notify_record(exchange_record, message)
+                exchange_record._notify_related_record(message)
         # TODO: any better place to call this?
         self._validate_data(exchange_record)
         return res
