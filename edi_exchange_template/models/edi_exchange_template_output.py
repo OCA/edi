@@ -124,12 +124,18 @@ class EDIExchangeOutputTemplate(models.Model):
         TODO: improve this description.
         TODO: add tests
         """
-        default_work_ctx = dict(
-            exchange_record=exchange_record, record=exchange_record.record,
+        record_conf = exchange_record.type_id._component_conf_for(
+            exchange_record, "info"
         )
+        candidates = [self.code + ".info"]
+        if record_conf:
+            candidates.insert(0, record_conf["usage"])
+        if usage:
+            candidates.insert(0, usage)
+        default_work_ctx = dict(exchange_record=exchange_record)
+        default_work_ctx.update(record_conf.get("work_ctx", {}))
         default_work_ctx.update(work_ctx or {})
-        usage_candidates = [usage or self.code + ".info"]
         provider = exchange_record.backend_id._find_component(
-            usage_candidates, work_ctx=default_work_ctx, **kw
+            candidates, work_ctx=default_work_ctx, **kw
         )
         return provider
