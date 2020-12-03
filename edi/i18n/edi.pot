@@ -251,6 +251,11 @@ msgid "Error on process"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields.selection,name:edi.selection__edi_exchange_record__edi_exchange_state__input_receive_error
+msgid "Error on reception"
+msgstr ""
+
+#. module: edi
 #: code:addons/edi/models/edi_backend.py:0
 #, python-format
 msgid "Exchabge record ID=%d already has a file to process!"
@@ -549,6 +554,7 @@ msgid "Record ID=%d has no file to send!"
 msgstr ""
 
 #. module: edi
+#: code:addons/edi/models/edi_backend.py:0
 #: code:addons/edi/models/edi_backend.py:0
 #, python-format
 msgid "Record ID=%d is not meant to be processed"
