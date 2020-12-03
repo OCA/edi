@@ -16,10 +16,14 @@ class GS1OutputMessageMixin(AbstractComponent):
         "edi.output.mixin",
     ]
     _work_context_validate_attrs = [
-        "record",
+        "exchange_record",
         "sender",
         "receiver",
     ]
+
+    @property
+    def record(self):
+        return self.work.exchange_record.record
 
     def generate_info(self):
         return DotDict(self._generate_info())
