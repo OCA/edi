@@ -137,7 +137,7 @@ class EDIBackend(models.Model):
         :param kw: keyword args to be propagated to output generate handler
         """
         self.ensure_one()
-        self._validate_generate_output(exchange_record, force=force)
+        self._check_generate_output(exchange_record, force=force)
         output = self._generate_output(exchange_record, **kw)
         if output and store:
             if not isinstance(output, bytes):
@@ -148,9 +148,12 @@ class EDIBackend(models.Model):
                     "edi_exchange_state": "output_pending",
                 }
             )
-        return tools.pycompat.to_text(output)
+        output = tools.pycompat.to_text(output)
+        if output:
+            self._validate_data(exchange_record, output)
+        return output
 
-    def _validate_generate_output(self, exchange_record, force=False):
+    def _check_generate_output(self, exchange_record, force=False):
         exchange_record.ensure_one()
         if (
             exchange_record.edi_exchange_state != "new"
@@ -164,9 +167,12 @@ class EDIBackend(models.Model):
                 )
                 % exchange_record.id
             )
-        if not exchange_record.direction != "outbound":
+        if exchange_record.direction != "output":
             raise exceptions.UserError(
-                _("Exchange record ID=%d is not file is not meant to b generated")
+                _(
+                    "Exchange record ID=%d is not an outgoing record, "
+                    "cannot be generated"
+                )
                 % exchange_record.id
             )
         if exchange_record.exchange_file:
@@ -180,6 +186,12 @@ class EDIBackend(models.Model):
         if component:
             return component.generate()
         raise NotImplementedError("No handler for `_generate_output`")
+
+    # TODO: add tests
+    def _validate_data(self, exchange_record, value=None, **kw):
+        component = self._get_component(exchange_record, "validate")
+        if component:
+            return component.validate(value)
 
     # TODO: add job config for these methods
     def exchange_send(self, exchange_record):
@@ -410,6 +422,8 @@ class EDIBackend(models.Model):
             )
             if message:
                 self._exchange_notify_record(exchange_record, message)
+        # TODO: any better place to call this?
+        self._validate_data(exchange_record)
         return res
 
     def _exchange_receive_check(self, exchange_record):
