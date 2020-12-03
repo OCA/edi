@@ -69,3 +69,12 @@ class FakeInputProcess(FakeComponentMixin):
 
     def process(self):
         return self._fake_it()
+
+
+class FakeInputReceive(FakeComponentMixin):
+    _name = "fake.input.receive"
+    _inherit = "edi.component.input.mixin"
+    _usage = "edi.input.receive.demo_backend.test_csv_input"
+
+    def receive(self):
+        return self._fake_it()
