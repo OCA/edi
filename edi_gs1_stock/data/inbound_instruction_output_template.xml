@@ -5,9 +5,7 @@
         model="edi.exchange.template.output"
     >
         <field name="name">EDI Exchange - GS1 Inbound Instruction</field>
-        <field
-            name="code"
-        >edi.output.generate.gs1.warehousingInboundInstructionMessage</field>
+        <field name="code">gs1.generate.warehousingInboundInstruction</field>
         <field name="output_type">xml</field>
         <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
         <field name="type_id" ref="edi_exchange_type_inbound_instruction" />
@@ -19,7 +17,7 @@ logistic_service_seller = receiver
 logistic_service_buyer = sender
 # FIXME: this is probably wrong or not always true
 buyer = sender
-seller = record.purchase_id.partner_id
+seller = exchange_record.record.purchase_id.partner_id
 # TODO: get a default carrier somehow?
 shipper = DotDict(dict(name="NO_CARRIER_SPECIFIED", gln_code="0" * 13, ref=None))
 

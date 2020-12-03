@@ -29,7 +29,7 @@ class GS1InboundInstructionMessage(Component):
     _inherit = [
         "edi.gs1.output.shipment.mixin",
     ]
-    _usage = "edi.output.generate.gs1.warehousingInboundInstructionMessage.info"
+    _usage = "gs1.info.warehousingInboundInstruction"
 
     def _generate_info(self):
         data = {

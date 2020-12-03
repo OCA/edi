@@ -112,7 +112,7 @@ class GS1OutputShipmentMessageMixin(AbstractComponent):
         return res
 
     def _get_shipment_items(self):
-        return self.work.record.move_line_ids
+        return self.record.move_line_ids
 
     def _shipment_item(self, item, i=1):
         qty = item.product_uom_qty

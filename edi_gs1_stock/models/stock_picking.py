@@ -33,7 +33,7 @@ class StockPicking(models.Model):
         """
         delivery = self
         edi_backend = self.get_backend_by_delivery()
-        type_code = "warehousingInboundInstructionMessage"
+        type_code = "warehousingInboundInstruction"
         values = {"model": delivery._name, "res_id": delivery.id}
         exchange_record = edi_backend.create_record(type_code, values)
         edi_backend.generate_output(exchange_record)
@@ -53,7 +53,7 @@ class StockPicking(models.Model):
         """
         delivery = self
         edi_backend = self.get_backend_by_delivery()
-        type_code = "warehousingOutboundInstructionMessage"
+        type_code = "warehousingOutboundInstruction"
         values = {"model": delivery._name, "res_id": delivery.id}
         exchange_record = edi_backend.create_record(type_code, values)
         edi_backend.generate_output(exchange_record)
