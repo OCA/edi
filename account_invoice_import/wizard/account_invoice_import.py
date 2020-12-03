@@ -174,13 +174,11 @@ class AccountInvoiceImport(models.TransientModel):
         # get invoice line vals
         vals["invoice_line_ids"] = []
         if config["invoice_line_method"].startswith("1line"):
-            self. _prepare_line_vals_1line(partner, vals, parsed_inv, import_config)
+            self._prepare_line_vals_1line(partner, vals, parsed_inv, import_config)
         elif config["invoice_line_method"].startswith("nline"):
-            self. _prepare_line_vals_nline(partner, vals, parsed_inv, import_config)
+            self._prepare_line_vals_nline(partner, vals, parsed_inv, import_config)
         # Write analytic account + fix syntax for taxes
-        analytic_account = (
-            config.get("account_analytic", False)
-        )
+        analytic_account = config.get("account_analytic", False)
         if analytic_account:
             for line in vals["invoice_line_ids"]:
                 line[2]["account_analytic_id"] = analytic_account.id
@@ -269,9 +267,7 @@ class AccountInvoiceImport(models.TransientModel):
                 il_vals["start_date"] = line.get("date_start") or parsed_inv.get(
                     "date_start"
                 )
-                il_vals["end_date"] = line.get("date_end") or parsed_inv.get(
-                    "date_end"
-                )
+                il_vals["end_date"] = line.get("date_end") or parsed_inv.get("date_end")
             uom = import_model._match_uom(line.get("uom"), parsed_inv["chatter_msg"])
             il_vals["product_uom_id"] = uom.id
             il_vals.update(
