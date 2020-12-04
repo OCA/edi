@@ -13,6 +13,9 @@ from odoo.addons.component.tests.common import SavepointComponentCase
 
 @tagged("-at_install", "post_install")
 class BaseTestCase(SavepointComponentCase, xmlunittest.XmlTestMixin):
+
+    _schema_path = "edi_gs1:static/schemas/sbdh/StandardBusinessDocumentHeader.xsd"
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -47,3 +50,10 @@ class BaseTestCase(SavepointComponentCase, xmlunittest.XmlTestMixin):
         path = os.path.join(os.path.dirname(__file__), "examples", filename)
         with open(path, "r") as thefile:
             return thefile.read()
+
+    _schema_path = ""
+
+    def _get_xml_handler(self):
+        return self.backend._find_component(
+            ["edi.xml"], work_ctx={"schema_path": self._schema_path}, safe=False,
+        )

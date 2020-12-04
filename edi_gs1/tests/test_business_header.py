@@ -10,6 +10,9 @@ BH_NS = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
 
 
 class BusinessHeaderTestCase(BaseTestCase):
+
+    _schema_path = "edi_gs1:static/schemas/sbdh/StandardBusinessDocumentHeader.xsd"
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -92,6 +95,5 @@ class BusinessHeaderTestCase(BaseTestCase):
             date="2020-07-08T07:30:00",
         )
         self.assertXmlEquivalentOutputs(self.flatten(output), self.flatten(expected))
-        # when valid returns none
-        # TODO
-        # self.assertFalse(handler.validate_schema(result))
+        handler = self._get_xml_handler()
+        self.assertEqual(handler.validate(output), None)
