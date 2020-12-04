@@ -8,6 +8,9 @@ from .common import ShipmentTestCaseBase
 
 
 class InboundInstructionTestCase(ShipmentTestCaseBase):
+
+    _schema_path = "edi_gs1:static/schemas/gs1/ecom/WarehousingInboundInstruction.xsd"
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -140,7 +143,5 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
             edi_exchange_send=False
         ).action_send_wh_inbound_instruction()
         file_content = record._get_file_content()
-        # FIXME: do proper validation
-        self.assertTrue(
-            file_content.startswith("<warehousing_inbound_instruction"), file_content
-        )
+        handler = self._get_xml_handler()
+        self.assertEqual(handler.validate(file_content), None)
