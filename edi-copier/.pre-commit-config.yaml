@@ -101,3 +101,10 @@ repos:
     rev: 2.5.2
     hooks:
       - id: setuptools-odoo-make-default
+      - id: setuptools-odoo-get-requirements
+        name: Generate requirements.txt for an addons directory
+        entry: setuptools-odoo-get-requirements
+        args: ["--addons-dir=.", "--output=requirements.txt"]
+        language: python
+        pass_filenames: false
+        files: (__manifest__\.py|__openerp__\.py|__terp__\.py|setup\.py)$

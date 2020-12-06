@@ -1,0 +1,13 @@
+# Do NOT update manually; changes here will be overwritten by Copier
+_commit: v1.0.5
+_src_path: https://github.com/OCA/oca-addons-repo-template.git
+dependency_installation_mode: OCA
+generate_requirements_txt: true
+include_wkhtmltopdf: true
+odoo_version: 13.0
+rebel_module_groups: []
+repo_description: null
+repo_name: EDI modules
+repo_slug: edi
+travis_apt_packages: []
+travis_apt_sources: []
