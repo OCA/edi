@@ -13,7 +13,7 @@ from odoo.tools import float_compare, float_is_zero, float_round
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import generate_facturx_from_binary, check_facturx_xsd
+    from facturx import check_facturx_xsd, generate_facturx_from_binary
 except ImportError:
     logger.debug("Cannot import facturx")
 
