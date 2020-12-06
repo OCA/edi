@@ -16,7 +16,7 @@ from odoo.tools import file_open, float_is_zero, float_round
 logger = logging.getLogger(__name__)
 
 try:
-    from PyPDF2 import PdfFileWriter, PdfFileReader
+    from PyPDF2 import PdfFileReader, PdfFileWriter
     from PyPDF2.generic import NameObject
 except ImportError:
     logger.debug("Cannot import PyPDF2")
