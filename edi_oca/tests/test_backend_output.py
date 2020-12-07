@@ -56,9 +56,9 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.record._set_file_content("TEST %d" % self.record.id)
         self.assertFalse(self.record.exchanged_on)
         self.record.with_context(
-            test_break_it="OOPS! Something went wrong :("
+            test_break_send="OOPS! Something went wrong :("
         ).action_exchange_send()
-        self.assertTrue(FakeOutputSender.check_not_called_for(self.record))
+        self.assertTrue(FakeOutputSender.check_called_for(self.record))
         self.assertRecordValues(
             self.record,
             [
