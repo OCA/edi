@@ -14,4 +14,9 @@ class EDIBackendValidateComponentMixin(AbstractComponent):
     _usage = "edi.validate.*"
 
     def validate(self, value=None):
+        self._validate(value)
+
+    def _validate(self, value=None):
+        """Return None validated, raise `edi.exceptions.EDIValidationError` if not.
+        """
         raise NotImplementedError()
