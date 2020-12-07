@@ -49,9 +49,9 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.record.write({"edi_exchange_state": "input_received"})
         self.record._set_file_content("TEST %d" % self.record.id)
         self.record.with_context(
-            test_break_it="OOPS! Something went wrong :("
+            test_break_process="OOPS! Something went wrong :("
         ).action_exchange_process()
-        self.assertTrue(FakeInputProcess.check_not_called_for(self.record))
+        self.assertTrue(FakeInputProcess.check_called_for(self.record))
         self.assertRecordValues(
             self.record,
             [

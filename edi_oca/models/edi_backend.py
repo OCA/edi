@@ -11,6 +11,8 @@ from odoo import _, exceptions, fields, models, tools
 
 from odoo.addons.component.exception import NoComponentError
 
+from ..exceptions import EDIValidationError
+
 _logger = logging.getLogger(__name__)
 
 
@@ -128,6 +130,7 @@ class EDIBackend(models.Model):
             ("backend_id", "=", self.id),
         ]
 
+    # TODO: rename to `exchange_generate` to match other methods
     def generate_output(self, exchange_record, store=True, force=False, **kw):
         """Generate output content for given exchange record.
 
@@ -150,7 +153,16 @@ class EDIBackend(models.Model):
             )
         output = tools.pycompat.to_text(output)
         if output:
-            self._validate_data(exchange_record, output)
+            try:
+                self._validate_data(exchange_record, output)
+            except EDIValidationError as err:
+                error = repr(err)
+                state = "validate_error"
+                message = exchange_record._exchange_status_message("validate_ko")
+                exchange_record.update(
+                    {"edi_exchange_state": state, "exchange_error": error}
+                )
+                exchange_record._notify_related_record(message)
         return output
 
     def _check_generate_output(self, exchange_record, force=False):
@@ -405,6 +417,14 @@ class EDIBackend(models.Model):
         content = None
         try:
             content = self._exchange_receive(exchange_record)
+            if content:
+                exchange_record._set_file_content(content)
+                self._validate_data(exchange_record)
+        except EDIValidationError as err:
+            error = repr(err)
+            state = "validate_error"
+            message = exchange_record._exchange_status_message("validate_ko")
+            res = False
         except self._swallable_exceptions() as err:
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
@@ -418,8 +438,6 @@ class EDIBackend(models.Model):
             state = "input_received"
             res = True
         finally:
-            if content:
-                exchange_record._set_file_content(content)
             exchange_record.write(
                 {
                     "edi_exchange_state": state,
@@ -431,8 +449,6 @@ class EDIBackend(models.Model):
             )
             if message:
                 exchange_record._notify_related_record(message)
-        # TODO: any better place to call this?
-        self._validate_data(exchange_record)
         return res
 
     def _exchange_receive_check(self, exchange_record):
