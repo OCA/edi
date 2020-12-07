@@ -4,10 +4,10 @@ import base64
 
 from lxml import etree
 
-from odoo.addons.edi.tests.common import EDIBackendCommonTestCase
+from odoo.addons.edi.tests.common import EDIBackendCommonComponentTestCase
 
 
-class TestEDIBackendOutputBase(EDIBackendCommonTestCase):
+class TestEDIBackendOutputBase(EDIBackendCommonComponentTestCase):
     @classmethod
     def _setup_records(cls):
         super()._setup_records()
