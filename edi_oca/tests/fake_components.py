@@ -9,13 +9,21 @@ class FakeComponentMixin(Component):
 
     FAKED_COLLECTOR = []
 
+    # only for testing
+    _action = ""
+
     def _fake_it(self):
-        if self.env.context.get("test_break_it"):
-            raise ValueError(self.env.context.get("test_break_it", "YOU BROKE IT!"))
+        self.FAKED_COLLECTOR.append(self._call_key(self.exchange_record))
+        if self.env.context.get("test_break_" + self._action):
+            exception = self.env.context.get(
+                "test_break_" + self._action, "YOU BROKE IT!"
+            )
+            if not isinstance(exception, Exception):
+                exception = ValueError(exception)
+            raise exception
         update_values = self.env.context.get("fake_update_values")
         if update_values:
             self.exchange_record.write(update_values)
-        self.FAKED_COLLECTOR.append(self._call_key(self.exchange_record))
         return self.env.context.get("fake_output", self._call_key(self.exchange_record))
 
     @classmethod
@@ -40,6 +48,8 @@ class FakeOutputGenerator(FakeComponentMixin):
     _inherit = "edi.component.output.mixin"
     _usage = "edi.output.generate.demo_backend.test_csv_output"
 
+    _action = "generate"
+
     def generate(self):
         return self._fake_it()
 
@@ -48,6 +58,8 @@ class FakeOutputSender(FakeComponentMixin):
     _name = "fake.output.sender"
     _inherit = "edi.component.send.mixin"
     _usage = "edi.output.send.demo_backend.test_csv_output"
+
+    _action = "send"
 
     def send(self):
         return self._fake_it()
@@ -58,6 +70,8 @@ class FakeOutputChecker(FakeComponentMixin):
     _inherit = "edi.component.check.mixin"
     _usage = "edi.output.check.demo_backend.test_csv_output"
 
+    _action = "check"
+
     def check(self):
         return self._fake_it()
 
@@ -66,6 +80,8 @@ class FakeInputProcess(FakeComponentMixin):
     _name = "fake.input.process"
     _inherit = "edi.component.input.mixin"
     _usage = "edi.input.process.demo_backend.test_csv_input"
+
+    _action = "process"
 
     def process(self):
         return self._fake_it()
@@ -76,5 +92,31 @@ class FakeInputReceive(FakeComponentMixin):
     _inherit = "edi.component.input.mixin"
     _usage = "edi.input.receive.demo_backend.test_csv_input"
 
+    _action = "receive"
+
     def receive(self):
         return self._fake_it()
+
+
+class FakeOutputValidate(FakeComponentMixin):
+    _name = "fake.out.validate"
+    _inherit = "edi.component.validate.mixin"
+    _usage = "edi.output.validate.demo_backend.test_csv_output"
+
+    _action = "validate"
+
+    def validate(self, value=None):
+        self._fake_it()
+        return
+
+
+class FakeInputValidate(FakeComponentMixin):
+    _name = "fake.in.validate"
+    _inherit = "edi.component.validate.mixin"
+    _usage = "edi.input.validate.demo_backend.test_csv_input"
+
+    _action = "validate"
+
+    def validate(self, value=None):
+        self._fake_it()
+        return
