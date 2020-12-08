@@ -34,6 +34,8 @@ Provides following models:
 3. EDI Exchange Type, to define file types of exchange
 4. EDI Exchange Record, to define a record exchanged between systems
 
+Also define a mixin to be inherited by records that will generate EDIs
+
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
    Only for development or testing purpose, do not use in production.
@@ -43,6 +45,74 @@ Provides following models:
 
 .. contents::
    :local:
+
+Configuration
+=============
+
+This module aims to provide an infrastructure to simplify interchangability of documents
+between systems providing a configuration platform.
+It will be inherited by other modules in order to define the proper implementations of
+components.
+
+In order to define a new Exchange Record, we need to configure:
+
+* Backend Type
+* Exchange Type
+* Backend
+* Components
+
+Component definition
+~~~~~~~~~~~~~~~~~~~~
+
+The component usage must be defined like `edi.{direction}.{kind}.{code}` where:
+
+* direction is `output` or `input`
+* kind can be: `generate`, `send`, `check`, `process`, `receive`
+* code is the `{backend type code}` or `{backend type code}.{exchange type code}`
+
+User EDI generation
+~~~~~~~~~~~~~~~~~~~
+
+On the exchange type, it might be possible to define a set of models, a domain and a
+snippet of code.
+After defining this fields, we will automatically see buttons on the view to generate
+the exchange records.
+This configuration is useful to define a way of generation managed by user.
+
+Usage
+=====
+
+After certain operations or manual execution, Exchange records will be generated.
+This Exchange records might be input records or outputs records.
+
+The change of state can be manually executed by the system or be managed through by
+`ir.cron`.
+
+Output Exchange records
+~~~~~~~~~~~~~~~~~~~~~~~
+
+An output record is intended to be used for exchange information from Odoo to another
+system.
+
+The flow of an output record should be:
+
+* Creation
+* Generation of data
+* Validation of data
+* Sending data
+* Validation of data processed properly by the other party
+
+Input Exchange records
+~~~~~~~~~~~~~~~~~~~~~~
+
+An input record is intended to be used for exchange information another system to odoo.
+
+The flow of an input record should be:
+
+* Creation
+* Reception of data
+* Checking data
+* Processing data
 
 Bug Tracker
 ===========
