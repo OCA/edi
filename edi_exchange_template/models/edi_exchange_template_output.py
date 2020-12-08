@@ -56,7 +56,7 @@ class EDIExchangeOutputTemplate(models.Model):
         """
         )
 
-    def generate_output(self, exchange_record, **kw):
+    def exchange_generate(self, exchange_record, **kw):
         """Generate output for given record using related QWeb template.
         """
         tmpl = self.template_id
@@ -90,7 +90,7 @@ class EDIExchangeOutputTemplate(models.Model):
         """
         tmpl = self.search([("code", "=", code)], limit=1)
         tmpl.ensure_one()
-        return tmpl.generate_output(exchange_record, **kw)
+        return tmpl.exchange_generate(exchange_record, **kw)
 
     def _post_process_output(self, output):
         """Post process generated output.
