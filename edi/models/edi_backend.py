@@ -11,6 +11,8 @@ from odoo import _, exceptions, fields, models, tools
 
 from odoo.addons.component.exception import NoComponentError
 
+from ..exceptions import EDIValidationError
+
 _logger = logging.getLogger(__name__)
 
 
@@ -36,12 +38,14 @@ class EDIBackend(models.Model):
         ondelete="restrict",
     )
 
-    def _get_component(self, exchange_record, action):
+    def _get_component(self, exchange_record, key):
         # TODO: maybe lookup for an `exchange_record.model` specific component 1st
-        candidates = self._get_component_usage_candidates(exchange_record, action)
-        return self._find_component(
-            candidates, work_ctx={"exchange_record": exchange_record}
-        )
+        candidates = self._get_component_usage_candidates(exchange_record, key)
+        work_ctx = {"exchange_record": exchange_record}
+        # Inject work context from advanced settings
+        record_conf = self._get_component_conf_for_record(exchange_record, key)
+        work_ctx.update(record_conf.get("work_ctx", {}))
+        return self._find_component(candidates, work_ctx=work_ctx)
 
     def _find_component(self, usage_candidates, safe=True, work_ctx=None, **kw):
         """Retrieve components for current backend.
@@ -68,7 +72,8 @@ class EDIBackend(models.Model):
         return component or None
 
     def _get_component_usage_candidates(self, exchange_record, key):
-        """Retrieve usage candidates for components."""
+        """Retrieve usage candidates for components.
+        """
         # fmt:off
         base_usage = ".".join([
             "edi",
@@ -78,12 +83,19 @@ class EDIBackend(models.Model):
         ])
         # fmt:on
         type_code = exchange_record.type_id.code
-        return [
+        record_conf = self._get_component_conf_for_record(exchange_record, key)
+        candidates = [record_conf["usage"]] if record_conf else []
+        candidates += [
             # specific for backend type and exchange type
             base_usage + "." + type_code,
             # specific for backend type
             base_usage,
         ]
+        return candidates
+
+    def _get_component_conf_for_record(self, exchange_record, key):
+        adv_settings = exchange_record.type_id.advanced_settings
+        return adv_settings.get("components", {}).get(key, {})
 
     @property
     def exchange_record_model(self):
@@ -118,6 +130,7 @@ class EDIBackend(models.Model):
             ("backend_id", "=", self.id),
         ]
 
+    # TODO: rename to `exchange_generate` to match other methods
     def generate_output(self, exchange_record, store=True, force=False, **kw):
         """Generate output content for given exchange record.
 
@@ -127,7 +140,7 @@ class EDIBackend(models.Model):
         :param kw: keyword args to be propagated to output generate handler
         """
         self.ensure_one()
-        self._validate_generate_output(exchange_record, force=force)
+        self._check_generate_output(exchange_record, force=force)
         output = self._generate_output(exchange_record, **kw)
         if output and store:
             if not isinstance(output, bytes):
@@ -138,9 +151,21 @@ class EDIBackend(models.Model):
                     "edi_exchange_state": "output_pending",
                 }
             )
-        return tools.pycompat.to_text(output)
+        output = tools.pycompat.to_text(output)
+        if output:
+            try:
+                self._validate_data(exchange_record, output)
+            except EDIValidationError as err:
+                error = repr(err)
+                state = "validate_error"
+                message = exchange_record._exchange_status_message("validate_ko")
+                exchange_record.update(
+                    {"edi_exchange_state": state, "exchange_error": error}
+                )
+                exchange_record._notify_related_record(message)
+        return output
 
-    def _validate_generate_output(self, exchange_record, force=False):
+    def _check_generate_output(self, exchange_record, force=False):
         exchange_record.ensure_one()
         if (
             exchange_record.edi_exchange_state != "new"
@@ -154,9 +179,12 @@ class EDIBackend(models.Model):
                 )
                 % exchange_record.id
             )
-        if not exchange_record.direction != "outbound":
+        if exchange_record.direction != "output":
             raise exceptions.UserError(
-                _("Exchange record ID=%d is not file is not meant to b generated")
+                _(
+                    "Exchange record ID=%d is not an outgoing record, "
+                    "cannot be generated"
+                )
                 % exchange_record.id
             )
         if exchange_record.exchange_file:
@@ -170,6 +198,12 @@ class EDIBackend(models.Model):
         if component:
             return component.generate()
         raise NotImplementedError("No handler for `_generate_output`")
+
+    # TODO: add tests
+    def _validate_data(self, exchange_record, value=None, **kw):
+        component = self._get_component(exchange_record, "validate")
+        if component:
+            return component.validate(value)
 
     # TODO: add job config for these methods
     def exchange_send(self, exchange_record):
@@ -331,6 +365,9 @@ class EDIBackend(models.Model):
         check = self._exchange_process_check(exchange_record)
         if not check:
             return False
+        state = exchange_record.edi_exchange_state
+        error = False
+        message = None
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
@@ -374,8 +411,20 @@ class EDIBackend(models.Model):
         check = self._exchange_receive_check(exchange_record)
         if not check:
             return False
+        state = exchange_record.edi_exchange_state
+        error = False
+        message = None
+        content = None
         try:
-            self._exchange_receive(exchange_record)
+            content = self._exchange_receive(exchange_record)
+            if content:
+                exchange_record._set_file_content(content)
+                self._validate_data(exchange_record)
+        except EDIValidationError as err:
+            error = repr(err)
+            state = "validate_error"
+            message = exchange_record._exchange_status_message("validate_ko")
+            res = False
         except self._swallable_exceptions() as err:
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
@@ -399,7 +448,7 @@ class EDIBackend(models.Model):
                 }
             )
             if message:
-                self._exchange_notify_record(exchange_record, message)
+                exchange_record._notify_related_record(message)
         return res
 
     def _exchange_receive_check(self, exchange_record):

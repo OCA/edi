@@ -53,7 +53,9 @@ class EDIExchangeRecord(models.Model):
         readonly=True,
         default="new",
         selection=[
+            # Common states
             ("new", "New"),
+            ("validate_error", "Error on validation"),
             # output exchange states
             ("output_pending", "Waiting to be sent"),
             ("output_error_on_send", "error on send"),
@@ -87,7 +89,9 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_ack_exchange_id",
         store=True,
     )
-    ack_received_on = fields.Datetime(related="ack_exchange_id.exchanged_on")
+    ack_received_on = fields.Datetime(
+        string="ACK received on", related="ack_exchange_id.exchanged_on"
+    )
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -122,7 +126,7 @@ class EDIExchangeRecord(models.Model):
     @api.constrains("edi_exchange_state")
     def _constrain_edi_exchange_state(self):
         for rec in self:
-            if rec.edi_exchange_state == "new":
+            if rec.edi_exchange_state in ("new", "validate_error"):
                 continue
             if not rec.edi_exchange_state.startswith(rec.direction):
                 raise exceptions.ValidationError(
@@ -207,9 +211,12 @@ class EDIExchangeRecord(models.Model):
             ),
             "process_ok": _("File %s processed successfully ") % self.exchange_filename,
             "process_ko": _("File %s processed with errors") % self.exchange_filename,
+            "receive_ok": _("File %s received successfully ") % self.exchange_filename,
+            "receive_ko": _("File %s not received") % self.exchange_filename,
             "ack_received": _("ACK file received."),
             "ack_missing": _("ACK file is required for this exchange but not found."),
             "ack_received_error": _("ACK file received but contains errors."),
+            "validate_ko": _("File %s not valid") % self.exchange_filename,
         }
 
     def _exchange_status_message(self, key):

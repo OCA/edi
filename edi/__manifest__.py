@@ -3,17 +3,22 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Base EDI Backend",
-    "summary": """Base module to define EDI backends""",
+    "name": "EDI",
+    "summary": """
+    Define backends, exchange types, exchange records,
+    basic automation and views for handling EDI exchanges.
+    """,
     "version": "13.0.1.11.0",
     "development_status": "Alpha",
     "license": "AGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "depends": ["base_edi", "component", "component_event", "mail"],
+    "external_dependencies": {"python": ["pyyaml"]},
     "data": [
         "data/cron.xml",
         "data/sequence.xml",
+        "security/res_groups.xml",
         "security/ir_model_access.xml",
         "views/edi_backend_views.xml",
         "views/edi_backend_type_views.xml",

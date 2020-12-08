@@ -36,6 +36,12 @@
                             <field name="ack_type_id" />
                         </group>
                     </group>
+                    <group
+                        name="advanced_settings"
+                        groups="edi.group_edi_advanced_settings_manager"
+                    >
+                        <field name="advanced_settings_edit" widget="ace" />
+                    </group>
                 </sheet>
             </form>
         </field>
