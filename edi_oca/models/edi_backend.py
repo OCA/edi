@@ -231,7 +231,6 @@ class EDIBackend(models.Model):
         if component:
             return component.validate(value)
 
-    # TODO: add job config for these methods
     def exchange_send(self, exchange_record):
         """Send exchange file."""
         self.ensure_one()
