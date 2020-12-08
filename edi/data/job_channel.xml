@@ -1,0 +1,10 @@
+<odoo noupdate="1">
+    <record id="channel_edi_root" model="queue.job.channel">
+        <field name="name">edi</field>
+        <field name="parent_id" ref="queue_job.channel_root" />
+    </record>
+    <record id="channel_edi_exchange" model="queue.job.channel">
+        <field name="name">edi_exchange</field>
+        <field name="parent_id" ref="channel_edi_root" />
+    </record>
+</odoo>
