@@ -36,7 +36,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         FakeOutputChecker.reset_faked()
 
     def test_generate_record_output(self):
-        self.backend.with_context(fake_output="yeah!").generate_output(self.record)
+        self.backend.with_context(fake_output="yeah!").exchange_generate(self.record)
         self.assertEqual(self.record._get_file_content(), "yeah!")
 
     def test_send_record(self):

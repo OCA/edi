@@ -37,7 +37,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         FakeOutputChecker.reset_faked()
 
     @mute_logger(*LOGGERS)
-    def test_generate_output_new_no_auto(self):
+    def test_exchange_generate_new_no_auto(self):
         # No content ready to be sent, no auto-generate, nothing happens
         for rec in self.records:
             self.assertEqual(rec.edi_exchange_state, "new")
@@ -46,7 +46,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             self.assertEqual(rec.edi_exchange_state, "new")
 
     @mute_logger(*LOGGERS)
-    def test_generate_output_new_auto_skip_send(self):
+    def test_exchange_generate_new_auto_skip_send(self):
         self.exchange_type_out.exchange_file_auto_generate = True
         # No content ready to be sent, will get the content but not send it
         for rec in self.records:
@@ -62,7 +62,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             self.assertFalse(rec.ack_exchange_id)
 
     @mute_logger(*LOGGERS)
-    def test_generate_output_new_auto_send(self):
+    def test_exchange_generate_new_auto_send(self):
         self.exchange_type_out.exchange_file_auto_generate = True
         # No content ready to be sent, will get the content and send it
         for rec in self.records:
@@ -79,7 +79,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             self.assertTrue(rec.ack_exchange_id)
 
     @mute_logger(*LOGGERS)
-    def test_generate_output_output_ready_auto_send(self):
+    def test_exchange_generate_output_ready_auto_send(self):
         # No content ready to be sent, will get the content and send it
         for rec in self.records:
             self.assertEqual(rec.edi_exchange_state, "new")

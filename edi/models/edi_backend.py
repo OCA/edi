@@ -157,8 +157,7 @@ class EDIBackend(models.Model):
             ("backend_id", "=", self.id),
         ]
 
-    # TODO: rename to `exchange_generate` to match other methods
-    def generate_output(self, exchange_record, store=True, force=False, **kw):
+    def exchange_generate(self, exchange_record, store=True, force=False, **kw):
         """Generate output content for given exchange record.
 
         :param exchange_record: edi.exchange.record recordset
@@ -167,8 +166,8 @@ class EDIBackend(models.Model):
         :param kw: keyword args to be propagated to output generate handler
         """
         self.ensure_one()
-        self._check_generate_output(exchange_record, force=force)
-        output = self._generate_output(exchange_record, **kw)
+        self._check_exchange_generate(exchange_record, force=force)
+        output = self._exchange_generate(exchange_record, **kw)
         if output and store:
             if not isinstance(output, bytes):
                 output = output.encode()
@@ -192,7 +191,7 @@ class EDIBackend(models.Model):
                 exchange_record._notify_related_record(message)
         return output
 
-    def _check_generate_output(self, exchange_record, force=False):
+    def _check_exchange_generate(self, exchange_record, force=False):
         exchange_record.ensure_one()
         if (
             exchange_record.edi_exchange_state != "new"
@@ -220,11 +219,11 @@ class EDIBackend(models.Model):
                 % exchange_record.id
             )
 
-    def _generate_output(self, exchange_record, **kw):
+    def _exchange_generate(self, exchange_record, **kw):
         component = self._get_component(exchange_record, "generate")
         if component:
             return component.generate()
-        raise NotImplementedError("No handler for `_generate_output`")
+        raise NotImplementedError("No handler for `_exchange_generate`")
 
     # TODO: add tests
     def _validate_data(self, exchange_record, value=None, **kw):
@@ -323,7 +322,7 @@ class EDIBackend(models.Model):
             len(new_records),
         )
         for rec in new_records:
-            self.generate_output(rec)
+            self.exchange_generate(rec)
 
         if skip_send:
             return
