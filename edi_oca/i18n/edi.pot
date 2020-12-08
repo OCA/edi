@@ -14,6 +14,37 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_type__advanced_settings_edit
+msgid ""
+"\n"
+"            Advanced technical settings as YAML format.\n"
+"            The YAML structure should reproduce a dictionary.\n"
+"            The backend might use these settings for automated operations.\n"
+"\n"
+"            Currently supported conf:\n"
+"\n"
+"              components:\n"
+"                generate:\n"
+"                  usage: $comp_usage\n"
+"                  work_ctx:\n"
+"                     opt1: True\n"
+"                validate:\n"
+"                  usage: $comp_usage\n"
+"                check:\n"
+"                  usage: $comp_usage\n"
+"                send:\n"
+"                  usage: $comp_usage\n"
+"                receive:\n"
+"                  usage: $comp_usage\n"
+"                process:\n"
+"                  usage: $comp_usage\n"
+"\n"
+"            In any case, you can use these settings\n"
+"            to provide your own configuration for whatever need you might have.\n"
+"        "
+msgstr ""
+
+#. module: edi
 #: model_terms:ir.ui.view,arch_db:edi.message_edi_exchange_link
 msgid "<strong>EDI exchange:</strong>"
 msgstr ""
@@ -47,6 +78,11 @@ msgid "ACK file received."
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_received_on
+msgid "ACK received on"
+msgstr ""
+
+#. module: edi
 #: model:ir.model,name:edi.model_edi_exchange_consumer_mixin
 msgid "Abstract record where exchange records can be assigned"
 msgstr ""
@@ -69,6 +105,16 @@ msgstr ""
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__message_needaction
 msgid "Action Needed"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__advanced_settings
+msgid "Advanced Settings"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__advanced_settings_edit
+msgid "Advanced YAML settings"
 msgstr ""
 
 #. module: edi
@@ -176,6 +222,11 @@ msgid "Display Name"
 msgstr ""
 
 #. module: edi
+#: model:res.groups,name:edi.group_edi_advanced_settings_manager
+msgid "EDI Advanced Settings Manager"
+msgstr ""
+
+#. module: edi
 #: model:ir.actions.act_window,name:edi.act_open_edi_backend_view
 #: model:ir.model,name:edi.model_edi_backend
 #: model_terms:ir.ui.view,arch_db:edi.edi_backend_view_form
@@ -256,6 +307,11 @@ msgid "Error on reception"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields.selection,name:edi.selection__edi_exchange_record__edi_exchange_state__validate_error
+msgid "Error on validation"
+msgstr ""
+
+#. module: edi
 #: code:addons/edi/models/edi_backend.py:0
 #, python-format
 msgid "Exchabge record ID=%d already has a file to process!"
@@ -304,7 +360,7 @@ msgstr ""
 #. module: edi
 #: code:addons/edi/models/edi_backend.py:0
 #, python-format
-msgid "Exchange record ID=%d is not file is not meant to b generated"
+msgid "Exchange record ID=%d is not an outgoing record, cannot be generated"
 msgstr ""
 
 #. module: edi
@@ -326,7 +382,6 @@ msgid "Exchange state must respect direction!"
 msgstr ""
 
 #. module: edi
-#: model:ir.model.fields,field_description:edi.field_edi_exchange_record__ack_received_on
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__exchanged_on
 msgid "Exchanged on"
 msgstr ""
@@ -344,6 +399,18 @@ msgstr ""
 #. module: edi
 #: code:addons/edi/models/edi_exchange_record.py:0
 #, python-format
+msgid "File %s not received"
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_exchange_record.py:0
+#, python-format
+msgid "File %s not valid"
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_exchange_record.py:0
+#, python-format
 msgid "File %s processed successfully "
 msgstr ""
 
@@ -351,6 +418,12 @@ msgstr ""
 #: code:addons/edi/models/edi_exchange_record.py:0
 #, python-format
 msgid "File %s processed with errors"
+msgstr ""
+
+#. module: edi
+#: code:addons/edi/models/edi_exchange_record.py:0
+#, python-format
+msgid "File %s received successfully "
 msgstr ""
 
 #. module: edi
