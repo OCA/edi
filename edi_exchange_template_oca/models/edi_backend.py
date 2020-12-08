@@ -8,12 +8,12 @@ from odoo import models
 class EDIBackend(models.Model):
     _inherit = "edi.backend"
 
-    def _generate_output(self, exchange_record, **kw):
+    def _exchange_generate(self, exchange_record, **kw):
         # Template take precedence over component lookup
         tmpl = self._get_output_template(exchange_record)
         if tmpl:
-            return tmpl.generate_output(exchange_record, **kw)
-        return super()._generate_output(exchange_record, **kw)
+            return tmpl.exchange_generate(exchange_record, **kw)
+        return super()._exchange_generate(exchange_record, **kw)
 
     @property
     def output_template_model(self):
