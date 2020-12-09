@@ -289,7 +289,7 @@ class BaseUbl(models.AbstractModel):
     def _ubl_add_line_item(
             self, line_number, name, product, type, quantity, uom, parent_node,
             ns, seller=False, currency=False, price_subtotal=False,
-            qty_precision=3, price_precision=2, version='2.1'):
+            qty_precision=3, price_precision=2, taxes=None, version='2.1'):
         line_item = etree.SubElement(
             parent_node, ns['cac'] + 'LineItem')
         line_item_id = etree.SubElement(line_item, ns['cbc'] + 'ID')
@@ -326,12 +326,12 @@ class BaseUbl(models.AbstractModel):
             base_qty.text = '1'  # What else could it be ?
         self._ubl_add_item(
             name, product, line_item, ns, type=type, seller=seller,
-            version=version)
+            taxes=taxes, version=version)
 
     @api.model
     def _ubl_add_item(
             self, name, product, parent_node, ns, type='purchase',
-            seller=False, version='2.1'):
+            seller=False, taxes=None, version='2.1'):
         '''Beware that product may be False (in particular on invoices)'''
         assert type in ('sale', 'purchase'), 'Wrong type param'
         assert name, 'name is a required arg'
@@ -372,18 +372,22 @@ class BaseUbl(models.AbstractModel):
                     std_identification, ns['cbc'] + 'ID',
                     schemeAgencyID='6', schemeID='GTIN')
                 std_identification_id.text = product.ean13
-            # I'm not 100% sure, but it seems that ClassifiedTaxCategory
-            # contains the taxes of the product without taking into
-            # account the fiscal position
+        # I'm not 100% sure, but it seems that ClassifiedTaxCategory
+        # contains the taxes of the product without taking into
+        # account the fiscal position
+        if product and not taxes:
             if type == 'sale':
                 taxes = product.taxes_id
             else:
                 taxes = product.supplier_taxes_id
-            if taxes:
-                for tax in taxes:
-                    self._ubl_add_tax_category(
-                        tax, item, ns, node_name='ClassifiedTaxCategory',
-                        version=version)
+        if not taxes:
+            taxes = self.company_id.ubl_default_tax
+        if taxes:
+            for tax in taxes:
+                self._ubl_add_tax_category(
+                    tax, item, ns, node_name='ClassifiedTaxCategory',
+                    version=version)
+        if product:
             for attribute_value in product.attribute_value_ids:
                 item_property = etree.SubElement(
                     item, ns['cac'] + 'AdditionalItemProperty')
@@ -421,6 +425,7 @@ class BaseUbl(models.AbstractModel):
     def _ubl_add_tax_category(
             self, tax, parent_node, ns, node_name='TaxCategory',
             version='2.1'):
+        prec = self.env['decimal.precision'].precision_get('Account')
         tax_category = etree.SubElement(parent_node, ns['cac'] + node_name)
         if not tax.unece_categ_id:
             raise UserError(_(
@@ -432,7 +437,14 @@ class BaseUbl(models.AbstractModel):
         tax_name = etree.SubElement(
             tax_category, ns['cbc'] + 'Name')
         tax_name.text = tax.name
-        if tax.type == 'percent':
+        if tax.type == 'none' or (
+            tax.type in ('percent', 'fixed') and
+            float_is_zero(tax.amount, precision_digits=prec)
+        ):
+            tax_exemption_reason = etree.SubElement(
+                tax_category, ns['cbc'] + 'TaxExemptionReason')
+            tax_exemption_reason.text = tax.unece_categ_id.name
+        elif tax.type == 'percent':
             tax_percent = etree.SubElement(
                 tax_category, ns['cbc'] + 'Percent')
             tax_percent.text = unicode(tax.amount * 100)

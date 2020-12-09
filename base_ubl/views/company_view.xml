@@ -12,6 +12,9 @@
             <page name="ubl" string="UBL">
                 <h2>Universal Business Langage</h2>
                 <group name="ubl_main" col="4">
+                    <group name="ubl_general" string="General" colspan="2">
+                        <field name="ubl_default_tax"/>
+                    </group>
                     <group name="ubl_invoice" string="Invoices" colspan="2">
                     </group>
                 </group>

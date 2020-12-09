@@ -76,7 +76,7 @@ class SaleOrder(models.Model):
             oline.product_uom_qty, oline.product_uom, line_root, ns,
             currency=self.currency_id, price_subtotal=oline.price_subtotal,
             qty_precision=qty_precision, price_precision=price_precision,
-            version=version)
+            taxes=oline.tax_id, version=version)
 
     @api.multi
     def generate_quotation_ubl_xml_etree(self, version='2.1'):

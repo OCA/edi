@@ -150,7 +150,7 @@ class AccountInvoice(models.Model):
             iline, line_root, ns, version=version)
         self._ubl_add_item(
             iline.name, iline.product_id, line_root, ns, type='sale',
-            version=version)
+            taxes=iline.invoice_line_tax_id, version=version)
         price_node = etree.SubElement(line_root, ns['cac'] + 'Price')
         price_amount = etree.SubElement(
             price_node, ns['cbc'] + 'PriceAmount', currencyID=cur_name)
@@ -222,6 +222,10 @@ class AccountInvoice(models.Model):
             self._ubl_add_tax_subtotal(
                 tline.base, tline.amount, tax, cur_name, tax_total_node, ns,
                 version=version)
+        if not self.tax_line and self.company_id.ubl_default_tax:
+            self._ubl_add_tax_subtotal(
+                self.amount_untaxed, 0.0, self.company_id.ubl_default_tax,
+                cur_name, tax_total_node, ns, version=version)
 
     @api.multi
     def generate_invoice_ubl_xml_etree(self, version='2.1'):

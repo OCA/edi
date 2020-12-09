@@ -20,6 +20,8 @@ Configuration
 
 On the form view of the company, there is an option to embed the PDF of the invoices inside the XML invoice.
 
+There is also an option to select a default tax, which will be added as a zero-sum tax subtotal in case an invoice has no taxes specified. This is useful to satisfy PEPPOL rule BR-CO-18 for Dutch non-profits that are exempted from tax.
+
 Usage
 =====
 
