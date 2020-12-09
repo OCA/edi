@@ -14,6 +14,7 @@
     <field name="arch" type="xml">
         <xpath expr="//group[@name='ubl_invoice']" position="inside">
             <field name="embed_pdf_in_ubl_xml_invoice"/>
+            <field name="ubl_default_uom_id"/>
         </xpath>
     </field>
 </record>

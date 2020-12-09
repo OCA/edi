@@ -22,6 +22,8 @@ On the form view of the company, there is an option to embed the PDF of the invo
 
 There is also an option to select a default tax, which will be added as a zero-sum tax subtotal in case an invoice has no taxes specified. This is useful to satisfy PEPPOL rule BR-CO-18 for Dutch non-profits that are exempted from tax.
 
+Finally, there is an option to select a default unit of measure, of which the UNECE code will be used in case an invoice line has no unit or product unit. A typical default unit could be the Odoo 'unit', configured with a UNECE code of UN, XUN or C62.
+
 Usage
 =====
 

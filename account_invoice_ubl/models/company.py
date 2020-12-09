@@ -14,3 +14,6 @@ class ResCompany(models.Model):
         "PDF of the invoice in base64 under the node "
         "'AdditionalDocumentReference'. For example, to be compliant with the "
         "e-fff standard used in Belgium, you should activate this option.")
+    ubl_default_uom_id = fields.Many2one(
+        comodel_name="product.uom",
+        string="Use this unit if an invoice line has no unit or product unit")

@@ -133,6 +133,10 @@ class AccountInvoice(models.Model):
         # on v8, uos_id is not a required field on account.invoice.line
         if iline.uos_id and iline.uos_id.unece_code:
             uom_unece_code = iline.uos_id.unece_code
+        if not uom_unece_code and iline.product_id.uom_id:
+            uom_unece_code = iline.product_id.uom_id.unece_code
+        if not uom_unece_code:
+            uom_unece_code = self.company_id.ubl_default_uom_id.unece_code
         if uom_unece_code:
             quantity = etree.SubElement(
                 line_root, ns['cbc'] + 'InvoicedQuantity',
