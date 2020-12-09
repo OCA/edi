@@ -24,6 +24,9 @@ class AccountInvoice(models.Model):
         doc_id.text = self.number
         issue_date = etree.SubElement(parent_node, ns['cbc'] + 'IssueDate')
         issue_date.text = self.date_invoice
+        if version >= '2.1':
+            due_date = etree.SubElement(parent_node, ns['cbc'] + 'DueDate')
+            due_date.text = self.date_due
         type_code = etree.SubElement(
             parent_node, ns['cbc'] + 'InvoiceTypeCode')
         if self.type == 'out_invoice':
