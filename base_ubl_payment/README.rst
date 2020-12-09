@@ -11,7 +11,7 @@ This module is a small module above the *base_ubl* module; it adds the generatio
 Configuration
 =============
 
-No configuration is needed.
+By default, if no payment mode is set on an invoice, the UNECE code 31 is passed as PaymentMeans/PaymentMeansCode. If you want to override this, select a default payment mode on the UBL tab of the Company form view and set the UNECE code of its payment.mode.type to something else.
 
 Usage
 =====

@@ -21,6 +21,7 @@ class BaseUbl(models.AbstractModel):
         pay_means_code = etree.SubElement(
             pay_means, ns['cbc'] + 'PaymentMeansCode', listID="UN/ECE 4461")
         # Why not schemeAgencyID='6' + schemeID
+        payment_mode = payment_mode or self.company_id.ubl_default_payment_mode
         if payment_mode:  # type is a required field on payment_mode
             if not payment_mode.type.unece_id:
                 raise UserError(_(

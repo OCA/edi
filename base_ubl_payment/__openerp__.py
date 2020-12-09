@@ -13,6 +13,9 @@
     'depends': [
         'account_payment_unece',
         'base_ubl',
-        ],
+    ],
+    'data': [
+        'views/company.xml',
+    ],
     'installable': True,
 }
