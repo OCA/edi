@@ -39,7 +39,8 @@ class BaseUbl(models.AbstractModel):
             pay_due_date = etree.SubElement(
                 pay_means, ns['cbc'] + 'PaymentDueDate')
             pay_due_date.text = date_due
-        if pay_means_code.text in ['31', '42']:
+        if pay_means_code.text in ['30', '31', '42', '58'] or \
+                payment_mode.bank_id.state == 'iban':
             if not partner_bank and payment_mode:
                 partner_bank = payment_mode.bank_id
             if partner_bank and partner_bank.state == 'iban':
