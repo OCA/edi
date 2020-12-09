@@ -12,7 +12,7 @@
     "website": "https://github.com/OCA/edi",
     "depends": [
         # odoo
-        "account",
+        "edi_account",
         # OCA/community-data-files
         "account_tax_unece",
         "uom_unece",
