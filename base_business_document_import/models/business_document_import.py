@@ -24,6 +24,7 @@ except ImportError:
 
 
 class BusinessDocumentImport(models.AbstractModel):
+    # TODO: All this information, needs to be moved to components
     _name = "business.document.import"
     _description = "Common methods to import business documents"
 
@@ -79,8 +80,8 @@ class BusinessDocumentImport(models.AbstractModel):
             if partner:
                 return partner
 
-    @api.model  # noqa: C901
-    def _match_partner(
+    @api.model
+    def _match_partner(  # noqa: C901
         self,
         partner_dict,
         chatter_msg,
