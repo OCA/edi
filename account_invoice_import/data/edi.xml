@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="backend_type" model="edi.backend.type">
+        <field name="name">Account Invoice Import</field>
+        <field name="code">account_invoice_import</field>
+    </record>
+    <record id="account_exchange_type" model="edi.exchange.type">
+        <field name="name">Invoice Import File</field>
+        <field name="code">account.invoice.import</field>
+        <field name="backend_type_id" ref="backend_type" />
+        <field name="backend_id" eval="False" />
+        <field name="direction">input</field>
+        <field name="exchange_filename_pattern">{record_name}--{dt}</field>
+        <field name="exchange_file_ext">pdf</field>
+    </record>
+</odoo>

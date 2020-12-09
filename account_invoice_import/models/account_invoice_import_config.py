@@ -9,9 +9,11 @@ from odoo.exceptions import ValidationError
 class AccountInvoiceImportConfig(models.Model):
     _name = "account.invoice.import.config"
     _description = "Configuration for the import of Supplier Invoices"
+    _inherits = {"edi.backend": "backend_id"}
     _order = "sequence"
 
-    name = fields.Char(required=True)
+    backend_id = fields.Many2one("edi.backend", readonly=True, required=True)
+    #  TODO: Migration scripts
     partner_id = fields.Many2one(
         "res.partner", ondelete="cascade", domain=[("parent_id", "=", False)],
     )
@@ -37,9 +39,7 @@ class AccountInvoiceImportConfig(models.Model):
         "res.company",
         ondelete="cascade",
         required=True,
-        default=lambda self: self.env["res.company"]._company_default_get(
-            "account.invoice.import.config"
-        ),
+        default=lambda self: self.env.company,
     )
     account_id = fields.Many2one(
         "account.account", string="Expense Account", domain=[("deprecated", "=", False)]
@@ -54,6 +54,12 @@ class AccountInvoiceImportConfig(models.Model):
         "account.tax", string="Taxes", domain=[("type_tax_use", "=", "purchase")]
     )
     static_product_id = fields.Many2one("product.product")
+
+    @api.model
+    def default_get(self, fields_list):
+        res = super().default_get(fields_list)
+        res["backend_type_id"] = self.env.ref("account_invoice_import.backend_type").id
+        return res
 
     @api.constrains("invoice_line_method", "account_id", "static_product_id")
     def _check_import_config(self):
@@ -91,7 +97,7 @@ class AccountInvoiceImportConfig(models.Model):
 
     @api.onchange("partner_id")
     def partner_id_change(self):
-        # if available get proporty
+        # if available get property
         if self.invoice_line_method == "1line_no_product" and self.account_id:
             self.tax_ids = [(6, 0, self.account_id.tax_ids.ids)]
         elif self.invoice_line_method != "1line_no_product":
