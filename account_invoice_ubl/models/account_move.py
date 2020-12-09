@@ -8,7 +8,7 @@ import logging
 
 from lxml import etree
 
-from odoo import models
+from odoo import fields, models
 from odoo.tools import float_is_zero, float_round
 
 logger = logging.getLogger(__name__)
@@ -26,6 +26,9 @@ class AccountMove(models.Model):
         doc_id.text = self.name
         issue_date = etree.SubElement(parent_node, ns["cbc"] + "IssueDate")
         issue_date.text = self.invoice_date.strftime("%Y-%m-%d")
+        if self.invoice_date_due and version >= "2.1":
+            due_date = etree.SubElement(parent_node, ns["cbc"] + "DueDate")
+            due_date.text = fields.Date.to_string(self.invoice_date_due)
         type_code = etree.SubElement(parent_node, ns["cbc"] + "InvoiceTypeCode")
         type_code.text = self._ubl_get_invoice_type_code()
         if self.narration:
