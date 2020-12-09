@@ -11,4 +11,18 @@
             name="domain_force"
         >['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
     </record>
+    <record id="edi_backend_edi_manager_rule" model="ir.rule">
+        <field name="name">Edi Backend Edi Manager rule</field>
+        <field name="model_id" ref="edi.model_edi_backend" />
+        <field name="groups" eval="[(4,ref('base_edi.group_edi_manager'))]" />
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="edi_backend_account_manager_rule" model="ir.rule">
+        <field name="name">Edi Backend Account manager rule</field>
+        <field name="model_id" ref="edi.model_edi_backend" />
+        <field name="groups" eval="[(4,ref('account.group_account_manager'))]" />
+        <field
+            name="domain_force"
+        >[('backend_type_id.code', '=', 'account_invoice_import')]</field>
+    </record>
 </odoo>

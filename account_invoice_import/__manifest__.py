@@ -16,6 +16,7 @@
         "onchange_helper",
     ],
     "data": [
+        "data/edi.xml",
         "security/ir.model.access.csv",
         "security/rule.xml",
         "views/account_invoice_import_config.xml",
