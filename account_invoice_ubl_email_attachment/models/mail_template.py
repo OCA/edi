@@ -21,24 +21,26 @@ class MailTemplate(models.Model):
             invoice = self.env["account.move"].browse(res_id)
             version = invoice.get_ubl_version()
             ubl_filename = invoice.get_ubl_filename(version=version)
-            ubl_attachments = self.env["ir.attachment"].search(
+            ubl_attachment = self.env["ir.attachment"].search(
                 [
                     ("res_model", "=", "account.move"),
                     ("res_id", "=", res_id),
                     ("name", "=", ubl_filename),
-                ]
+                ],
+                order="create_date desc",
+                limit=1,
             )
-            if not ubl_attachments:
-                ubl_attachments = invoice._generate_email_ubl_attachment()
-            if len(ubl_attachments) == 1 and template.report_name:
+            if not ubl_attachment:
+                ubl_attachment = invoice._generate_email_ubl_attachment()
+            if template.report_name:
                 report_name = self._render_template(
                     template.report_name, template.model, res_id
                 )
                 ext = ".xml"
                 if not report_name.endswith(ext):
                     report_name += ext
-                attachments = [(report_name, ubl_attachments.datas)]
+                attachments = [(report_name, ubl_attachment.datas)]
             else:
-                attachments = [(a.name, a.datas) for a in ubl_attachments]
+                attachments = [(ubl_attachment.name, ubl_attachment.datas)]
             res[res_id]["attachments"] += attachments
         return multi_mode and res or res[res_ids[0]]
