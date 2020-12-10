@@ -41,6 +41,13 @@
                         groups="edi.group_edi_advanced_settings_manager"
                     >
                         <field name="advanced_settings_edit" widget="ace" />
+                        <field name="model_ids" widget="many2many_tags" />
+                        <field name="enable_domain" />
+                        <field
+                            name="enable_snippet"
+                            widget="ace"
+                            options="{'mode': 'python'}"
+                        />
                     </group>
                 </sheet>
             </form>
