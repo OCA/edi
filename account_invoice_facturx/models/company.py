@@ -11,7 +11,9 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     xml_format_in_pdf_invoice = fields.Selection(
-        selection_add=[("factur-x", "Factur-X (CII)")], default="factur-x"
+        selection_add=[("factur-x", "Factur-X (CII)")],
+        default="factur-x",
+        ondelete={"factur-x": "set null"},
     )
     facturx_level = fields.Selection(
         [
@@ -38,7 +40,6 @@ class ResCompany(models.Model):
         compute="_compute_facturx_logo",
         string="Factur-X Logo",
         help="Logo to include in the visible part of Factur-X invoices",
-        readonly=True,
     )
 
     def _compute_facturx_logo(self):

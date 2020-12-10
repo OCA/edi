@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-  Copyright 2017-2020 Akretion France
+  Copyright 2017-2020 Akretion France (http://www.akretion.com/)
   @author: Alexis de Lattre <alexis.delattre@akretion.com>
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
@@ -10,7 +10,7 @@
         <field name="model">res.config.settings</field>
         <field
             name="inherit_id"
-            ref="account_e-invoice_generate.view_account_config_settings"
+            ref="account_einvoice_generate.view_account_config_settings"
         />
         <field name="arch" type="xml">
             <div id="e-invoices" position="after">
