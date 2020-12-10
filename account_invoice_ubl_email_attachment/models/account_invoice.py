@@ -1,20 +1,23 @@
+# -*- coding: utf-8 -*
 # Copyright 2019 Onestein (<https://www.onestein.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import base64
 
-from odoo import models
+from openerp import api, models
 
 
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
+    @api.multi
     def action_invoice_sent(self):
         action = super(AccountInvoice, self).action_invoice_sent()
         if self.company_id.include_ubl_attachment_in_invoice_email:
             action['context']['attach_ubl_xml_file'] = True
         return action
 
+    @api.multi
     def _generate_email_ubl_attachment(self):
         self.ensure_one()
         attachments = self.env['ir.attachment']
