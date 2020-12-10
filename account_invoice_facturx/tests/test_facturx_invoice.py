@@ -13,7 +13,7 @@ class TestFacturXInvoice(TestAccountInvoice):
         invoice = self.test_only_create_invoice()
         company = invoice.company_id
         if company.xml_format_in_pdf_invoice != "factur-x":
-            company.xml_format_in_pdf_invoice = "factur-x"
+            company.write({"xml_format_in_pdf_invoice": "factur-x"})
         inv_report = self.env.ref("account.account_invoices").with_context(
             force_report_rendering=True
         )
