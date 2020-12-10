@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 Creu Blanca
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="edi_backend_view_form" model="ir.ui.view">
+        <field name="model">edi.backend</field>
+        <field name="inherit_id" ref="edi.edi_backend_view_form" />
+        <field name="arch" type="xml">
+            <group name="config" position="after">
+                <group name="webservice_config">
+                    <field name="webservice_backend_id" />
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>
