@@ -26,7 +26,7 @@ class EmailTemplate(models.Model):
                 ('res_model', '=', 'account.invoice'),
                 ('res_id', '=', invoice.id),
                 ('datas_fname', '=', ubl_filename)
-            ])
+            ], order='create_date desc', limit=1)
             if not ubl_attachments:
                 ubl_attachments = invoice._generate_email_ubl_attachment()
             if len(ubl_attachments) == 1 and template.report_name:
