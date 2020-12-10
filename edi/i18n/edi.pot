@@ -45,6 +45,12 @@ msgid ""
 msgstr ""
 
 #. module: edi
+#: model_terms:ir.ui.view,arch_db:edi.edi_exchange_consumer_mixin_buttons
+msgid ""
+"<i class=\"fa fa-retweet\"/>The record has some pending EDIs to be generated"
+msgstr ""
+
+#. module: edi
 #: model_terms:ir.ui.view,arch_db:edi.message_edi_exchange_link
 msgid "<strong>EDI exchange:</strong>"
 msgstr ""
@@ -137,6 +143,7 @@ msgstr ""
 
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__backend_id
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__backend_id
 #: model_terms:ir.ui.view,arch_db:edi.edi_exchange_type_view_search
 msgid "Backend"
 msgstr ""
@@ -175,6 +182,11 @@ msgid "Backends"
 msgstr ""
 
 #. module: edi
+#: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_create_form_view
+msgid "Cancel"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type__code
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__code
 msgid "Code"
@@ -191,9 +203,15 @@ msgid "Configuration"
 msgstr ""
 
 #. module: edi
+#: model:ir.model,name:edi.model_edi_exchange_record_create
+msgid "Create an Exchange Record"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_backend__create_uid
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type__create_uid
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__create_uid
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__create_uid
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__create_uid
 msgid "Created by"
 msgstr ""
@@ -202,6 +220,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi.field_edi_backend__create_date
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type__create_date
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__create_date
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__create_date
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__create_date
 msgid "Created on"
 msgstr ""
@@ -217,6 +236,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type__display_name
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_consumer_mixin__display_name
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__display_name
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__display_name
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__display_name
 msgid "Display Name"
 msgstr ""
@@ -247,6 +267,7 @@ msgstr ""
 
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_backend__backend_type_id
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__backend_type_id
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__backend_type_id
 msgid "EDI Backend type"
 msgstr ""
@@ -289,6 +310,16 @@ msgstr ""
 #: model:ir.cron,cron_name:edi.cron_edi_backend_check_output_exchange
 #: model:ir.cron,name:edi.cron_edi_backend_check_output_exchange
 msgid "EDI exchange check status"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__enable_domain
+msgid "Enable on domain"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__enable_snippet
+msgid "Enable on snippet"
 msgstr ""
 
 #. module: edi
@@ -353,6 +384,11 @@ msgid "Exchange Record Count"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__exchange_type_id
+msgid "Exchange Type"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__exchange_error
 msgid "Exchange error"
 msgstr ""
@@ -389,6 +425,11 @@ msgstr ""
 #. module: edi
 #: model:ir.ui.menu,name:edi.menu_edi_exchange_record
 msgid "Exchanges"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_consumer_mixin__expected_edi_configuration
+msgid "Expected Edi Configuration"
 msgstr ""
 
 #. module: edi
@@ -433,6 +474,11 @@ msgid "File %s sent"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_type__enable_domain
+msgid "Filter domain to be checked on Models"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__message_follower_ids
 msgid "Followers"
 msgstr ""
@@ -448,9 +494,25 @@ msgid "Followers (Partners)"
 msgstr ""
 
 #. module: edi
+#: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_create_form_view
+msgid "Generate"
+msgstr ""
+
+#. module: edi
+#: model:ir.actions.act_window,name:edi.edi_exchange_record_create_act_window
+#: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_create_form_view
+msgid "Generate Exchange Record"
+msgstr ""
+
+#. module: edi
 #: model_terms:ir.ui.view,arch_db:edi.edi_exchange_record_view_search
 #: model_terms:ir.ui.view,arch_db:edi.edi_exchange_type_view_search
 msgid "Group By"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_consumer_mixin__has_expected_edi_configuration
+msgid "Has Expected Edi Configuration"
 msgstr ""
 
 #. module: edi
@@ -458,6 +520,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type__id
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_consumer_mixin__id
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__id
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__id
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__id
 msgid "ID"
 msgstr ""
@@ -501,6 +564,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type____last_update
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_consumer_mixin____last_update
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record____last_update
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create____last_update
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type____last_update
 msgid "Last Modified on"
 msgstr ""
@@ -509,6 +573,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi.field_edi_backend__write_uid
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type__write_uid
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__write_uid
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__write_uid
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__write_uid
 msgid "Last Updated by"
 msgstr ""
@@ -517,6 +582,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi.field_edi_backend__write_date
 #: model:ir.model.fields,field_description:edi.field_edi_backend_type__write_date
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__write_date
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__write_date
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__write_date
 msgid "Last Updated on"
 msgstr ""
@@ -538,7 +604,14 @@ msgstr ""
 
 #. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__model
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__model
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_type__model_ids
 msgid "Model"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_type__model_ids
+msgid "Modules to be checked for manual EDI generation"
 msgstr ""
 
 #. module: edi
@@ -650,6 +723,11 @@ msgid "Related records"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_record_create__res_id
+msgid "Res"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_record__message_has_sms_error
 msgid "SMS Delivery error"
 msgstr ""
@@ -673,6 +751,15 @@ msgstr ""
 #: model:ir.model.fields,help:edi.field_edi_exchange_record__ack_received_on
 #: model:ir.model.fields,help:edi.field_edi_exchange_record__exchanged_on
 msgid "Sent or received on this date."
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_type__enable_snippet
+msgid ""
+"Snippet of code to be checked on Models,\n"
+"        You can use `record` and `exchange_type` here.\n"
+"        It will be executed if variable result has been defined as True\n"
+"        "
 msgstr ""
 
 #. module: edi
