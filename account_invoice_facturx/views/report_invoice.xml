@@ -10,7 +10,7 @@ but I didn't succedded (without re-defining a full header or footer)
     >
         <xpath expr="//div[hasclass('page')]" position="inside">
             <div
-                t-if="o.company_id.xml_format_in_pdf_invoice == 'factur-x' and o.type in ('out_invoice', 'out_refund')"
+                t-if="o.company_id.xml_format_in_pdf_invoice == 'factur-x' and o.move_type in ('out_invoice', 'out_refund')"
             >
                 <img
                     t-if="o.company_id.facturx_logo"
