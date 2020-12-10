@@ -10,12 +10,3 @@ def set_xml_format_in_pdf_invoice_to_facturx(cr, registry):
         env = api.Environment(cr, SUPERUSER_ID, {})
         companies = env["res.company"].search([])
         companies.write({"xml_format_in_pdf_invoice": "factur-x"})
-
-
-def remove_facturx_xml_format_in_pdf_invoice(cr, registry):
-    with api.Environment.manage():
-        env = api.Environment(cr, SUPERUSER_ID, {})
-        companies = env["res.company"].search(
-            [("xml_format_in_pdf_invoice", "=", "factur-x")]
-        )
-        companies.write({"xml_format_in_pdf_invoice": "none"})
