@@ -3,6 +3,31 @@
 <data>
 
 
+    <record id="product_template_only_form_view" model="ir.ui.view">
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@string='Stock and Expected Variations']" position="inside">
+                <label for="supplier_stock" />
+                <div>
+                    <field name="supplier_stock" class="oe_inline" />
+                    <field name="supplier_stock_info" nolabel="1" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_tree_view" model="ir.ui.view">
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view" />
+        <field name="arch" type="xml">
+            <field name="virtual_available" position="after">
+                <field name="supplier_stock" />
+                <field name="supplier_stock_info" string="Supplier Inventory" />
+            </field>
+        </field>
+    </record>
+
     <record id="product_normal_form_view" model="ir.ui.view">
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view" />
@@ -24,6 +49,10 @@
             <field name="pricelist_id" position="after">
                 <field name="supplier_stock_info" />
             </field>
+            <xpath expr="//filter[@name='consumable']" position="after">
+                <filter string="Supplier Out" name="supplier_out"
+                        domain="[('supplier_stock', '=', 0), ('supplier_stock_info', '!=', False)]"/>
+            </xpath>
         </field>
     </record>
 

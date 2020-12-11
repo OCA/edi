@@ -26,7 +26,8 @@ class TestImport(TransactionCase):
         info = ref("product.product_product_11").supplier_stock_info
         self.assertEqual(info, False)
         self.assertEqual(
-            res.get("res_model"), "product.product",
+            res.get("res_model"),
+            "product.product",
             "Current model should be product.product",
         )
 
@@ -51,14 +52,32 @@ class TestImport(TransactionCase):
             wizard.process_document()
 
     def test_same_product(self):
+        """ The product has 2 inventory lines according its lot """
         wizard = self.env["inventory.ubl.helper"]._create_inventory_transient(
             "same_product"
         )
         wizard.process_document()
         prd = self.env.ref("product.product_product_23")
         self.assertEqual(
-            prd.supplier_stock_info and prd.supplier_stock_info[:4], "Wood")
-        self.assertEqual(prd.supplier_stock, 17)
+            prd.supplier_stock_info and prd.supplier_stock_info[:4], "Wood"
+        )
+        self.assertEqual(
+            prd.supplier_stock, 17, "Stock should be the sum of the 2 inventory lines"
+        )
+
+    def test_same_barcode(self):
+        """ The product has 2 inventory lines according its lot """
+        wizard = self.env["inventory.ubl.helper"]._create_inventory_transient(
+            "same_barcode"
+        )
+        wizard.process_document()
+        prd = self.env.ref("supplier_inventory_import_ubl.shoes_with_barcode")
+        self.assertEqual(
+            prd.supplier_stock_info and prd.supplier_stock_info[:4], "Wood"
+        )
+        self.assertEqual(
+            prd.supplier_stock, 17, "Stock should be the sum of the 2 inventory lines"
+        )
 
     def test_main(self):
         self.env["inventory.ubl.helper"]._import_main_xml_file_when_demo_and_test()

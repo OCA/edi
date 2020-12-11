@@ -57,27 +57,38 @@ class InventoryUblImport(models.TransientModel):
         ns = xml_root.nsmap
         ns["main"] = ns.pop(None)
         root = "/main:InventoryReport"
-        date_xpath = xml_root.xpath(
-            "%s/cac:InventoryPeriod/cbc:StartDate" % root, namespaces=ns
+        end_date_xp = xml_root.xpath(
+            "%s/cac:InventoryPeriod/cbc:EndDate" % root, namespaces=ns
         )
-        supplier_xpath = xml_root.xpath(
+        issue_date_xp = xml_root.xpath("%s/cbc:IssueDate" % root, namespaces=ns)
+        supplier_xp = xml_root.xpath(
             "%s/cac:InventoryReportingParty" % root, namespaces=ns
         )
         # supplier Cardinality:minOccurs="1" maxOccurs="1"
-        supplier_dict = self.ubl_parse_party(supplier_xpath[0], ns)
-        customer_xpath = xml_root.xpath(
+        supplier_dict = self.ubl_parse_party(supplier_xp[0], ns)
+        customer_xp = xml_root.xpath(
             "%s/cac:RetailerCustomerParty/cac:Party" % root, namespaces=ns
         )
         # customer Cardinality:minOccurs="1" maxOccurs="1"
-        customer_dict = self.ubl_parse_party(customer_xpath[0], ns)
-        lines_xpath = xml_root.xpath("%s/cac:InventoryReportLine" % root, namespaces=ns)
+        customer_dict = self.ubl_parse_party(customer_xp[0], ns)
+        lines_xp = xml_root.xpath("%s/cac:InventoryReportLine" % root, namespaces=ns)
         res_lines = []
-        for line in lines_xpath:
+        for line in lines_xp:
             res_lines.append(self._ubl_parse_inventory_line(line, ns))
+        inventory_date = (
+            len(end_date_xp)
+            and end_date_xp[0].text
+            or len(issue_date_xp)
+            and issue_date_xp[0].text
+        )
+        if not inventory_date:
+            raise UserError(
+                _("Missing InventoryPeriod/EndDate or IssueDate in this report")
+            )
         return {
             "customer": customer_dict,
             "supplier": supplier_dict,
-            "date": len(date_xpath) and date_xpath[0].text,
+            "date": inventory_date,
             "product_lines": res_lines,
         }
 
@@ -246,7 +257,7 @@ class InventoryUblImport(models.TransientModel):
             if _ckeck_key_in_stock_by("def_code"):
                 prd_by_def_code[row["def_code"]].append(row["prd_id"])
             if _ckeck_key_in_stock_by("barcode"):
-                prd_by_barcode[row["prd_by_barcode"]].append(row["prd_id"])
+                prd_by_barcode[row["barcode"]].append(row["prd_id"])
             raw_prd_by_tmpl[row["tmpl_id"]].append(row["prd_id"])
         prd2update = []
         prd_by_tmpl = defaultdict(set)
@@ -263,27 +274,40 @@ class InventoryUblImport(models.TransientModel):
                 row["def_code"] or row["sup_code"] or row["barcode"]
             ):
                 stk_by_product[row["prd_id"]] = (
-                    stock_by["def_code"].get(row["def_code"])
-                    or stock_by["sup_code"].get(row["sup_code"])
-                    or stock_by["barcode"].get(row["barcode"])
+                    (
+                        stock_by.get("def_code")
+                        and stock_by["def_code"].get(row["def_code"])
+                    )
+                    or (
+                        stock_by.get("sup_code")
+                        and stock_by["sup_code"].get(row["sup_code"])
+                    )
+                    or (
+                        stock_by.get("barcode")
+                        and stock_by["barcode"].get(row["barcode"])
+                    )
                     or False
                 )
-        product_ids = []
+
+        def _find_product(prd_by_, key):
+            prds = self.env["product.product"].browse()
+            for key in prd_by_:
+                prds |= self.env["product.product"].browse(
+                    [
+                        x
+                        for x in set(prd_by_[key])
+                        if x in prd2update and x in stk_by_product
+                        # ids in prd2update have 1 product by product_tmpl
+                    ]
+                )
+            return prds
         # Update products
-        for def_code in prd_by_def_code:
-            products = self.env["product.product"].browse(
-                [
-                    x
-                    for x in set(prd_by_def_code[def_code])
-                    if x in prd2update and x in stk_by_product
-                    # ids in prd2update have 1 product by product_tmpl
-                ]
-            )
-            products._update_supplier_stock_from_ubl_inventory(
-                supplier, stk_by_product, inventory_date
-            )
-            product_ids.extend(products.ids)
-        return product_ids
+        products = _find_product(prd_by_def_code, "def_code")
+        products |= _find_product(prd_by_barcode, "barcode")
+        products._update_supplier_stock_from_ubl_inventory(
+            supplier, stk_by_product, inventory_date
+        )
+        return products.ids
 
     def _extract_data_and_update_supplierinfo(
         self, data, stock_by, supplier, inventory_date
@@ -310,9 +334,18 @@ class InventoryUblImport(models.TransientModel):
                 row["def_code"] or row["sup_code"] or row["barcode"]
             ):
                 stk_by_product[row["prd_id"]] = (
-                    stock_by["def_code"].get(row["def_code"])
-                    or stock_by["sup_code"].get(row["sup_code"])
-                    or stock_by["barcode"].get(row["barcode"])
+                    (
+                        stock_by.get("def_code")
+                        and stock_by["def_code"].get(row["def_code"])
+                    )
+                    or (
+                        stock_by.get("sup_code")
+                        and stock_by["sup_code"].get(row["sup_code"])
+                    )
+                    or (
+                        stock_by.get("barcode")
+                        and stock_by["barcode"].get(row["barcode"])
+                    )
                     or False
                 )
         # extract implied writed ids of records
