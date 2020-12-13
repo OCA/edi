@@ -97,6 +97,9 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 View = View.with_context(base_model_name=res["base_model"])
             new_arch, new_fields = View.postprocess_and_fields(self._name, doc, view_id)
             res["arch"] = new_arch
+            # We don't want to lose previous configuration, so, we only want to add
+            # the new fields
+            new_fields.update(res["fields"])
             res["fields"] = new_fields
         return res
 
