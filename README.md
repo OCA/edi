@@ -31,7 +31,7 @@ addon | version | summary
 [base_facturx](base_facturx/) | 13.0.1.0.0 | Base module for Factur-X/ZUGFeRD
 [base_ubl](base_ubl/) | 13.0.2.0.1 | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 13.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
-[edi](edi/) | 13.0.1.14.0 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
+[edi](edi/) | 13.0.1.14.1 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_account](edi_account/) | 13.0.1.0.1 | Define EDI Configuration for Account Moves
 [edi_exchange_template](edi_exchange_template/) | 13.0.1.4.0 | Allows definition of exchanges via templates.
 [edi_storage](edi_storage/) | 13.0.1.3.0 | Base module to allow exchanging files via storage backend (eg: SFTP).
