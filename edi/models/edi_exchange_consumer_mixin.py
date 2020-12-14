@@ -97,6 +97,9 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 View = View.with_context(base_model_name=res["base_model"])
             new_arch, new_fields = View.postprocess_and_fields(self._name, doc, view_id)
             res["arch"] = new_arch
+            # We don't want to lose previous configuration, so, we only want to add
+            # the new fields
+            new_fields.update(res["fields"])
             res["fields"] = new_fields
         return res
 
@@ -138,7 +141,19 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return action
 
     def _has_exchange_record(self, exchange_type, backend=False, extra_domain=False):
-        """This function is useful when generating the configuration"""
+        """Check if there is a related exchange record following with a specific
+        exchange type"""
+        return bool(
+            self.env["edi.exchange.record"].search_count(
+                self._has_exchange_record_domain(
+                    exchange_type, backend=backend, extra_domain=extra_domain
+                )
+            )
+        )
+
+    def _has_exchange_record_domain(
+        self, exchange_type, backend=False, extra_domain=False
+    ):
         domain = [
             ("model", "=", self._name),
             ("res_id", "=", self.id),
@@ -148,7 +163,17 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             domain.append(("backend_id", "=", backend.id))
         if extra_domain:
             domain += extra_domain
-        return bool(self.env["edi.exchange.record"].search_count(domain))
+        return domain
+
+    def _get_exchange_record(self, exchange_type, backend=False, extra_domain=False):
+        """Obtain all the exchange record related to this record with the expected
+        exchange type"""
+
+        return self.env["edi.exchange.record"].search(
+            self._has_exchange_record_domain(
+                exchange_type, backend=backend, extra_domain=extra_domain
+            )
+        )
 
     @api.depends("exchange_record_ids")
     def _compute_exchange_record_count(self):
