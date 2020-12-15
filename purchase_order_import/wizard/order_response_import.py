@@ -264,7 +264,7 @@ class OrderResponseImport(models.TransientModel):
         parsed_order_document["chatter_msg"].append(
             _("PO confirmed by the supplier.")
         )
-        purchase_order.button_approve()
+        purchase_order.signal_workflow("purchase_confirm")
 
     @api.model
     def _process_conditional(self, purchase_order, parsed_order_document):
@@ -289,7 +289,7 @@ class OrderResponseImport(models.TransientModel):
                 )
             )
             return
-        purchase_order.button_approve()
+        purchase_order.signal_workflow("purchase_confirm")
         # apply changes to the created moves...
         lines_by_id = {int(l["line_id"]): l for l in lines}
         for order_line in purchase_order.order_line:
@@ -351,7 +351,7 @@ class OrderResponseImport(models.TransientModel):
                 < 0
             ):
                 # qty planned < qty into the stock move: Split it
-                new_move_id = move.split(move.product_qty - qty)
+                new_move_id = self.env["stock.move"].split(move, move.product_qty - qty)
                 move = self.env["stock.move"].browse(new_move_id)
             qty -= move.product_qty
             if not backorder_qty:
@@ -371,7 +371,7 @@ class OrderResponseImport(models.TransientModel):
                 # backorder_qty < qty into the move -> split the move
                 # anf cancel remaining qty
                 move_ids_to_cancel.append(
-                    move.split(move.product_qty - backorder_qty)
+                    self.env["stock.move"].split(move, move.product_qty - backorder_qty)
                 )
             if move.split_from:
                 # Add not on the original move to say that items will be
@@ -416,7 +416,8 @@ class OrderResponseImport(models.TransientModel):
         )
         if not backorder:
             date_done = current_picking.date_done
-            current_picking._create_backorder(backorder_moves=moves)
+            self.env["stock.picking"]._create_backorder(
+                current_picking, backorder_moves=moves)
             # preserve date_done....
             current_picking.date_done = date_done
         else:

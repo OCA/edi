@@ -89,7 +89,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             ],
             "note": "Note1\nNote2",
             "time": "22:10:30",
-            "supplier": {"vat": "BE0401953350"},
+            "supplier": {"vat": "BE0401953350", "gln": False},
             "ref": str(self.purchase_order.name),
         }
         self.assertDictEqual(expected, result)

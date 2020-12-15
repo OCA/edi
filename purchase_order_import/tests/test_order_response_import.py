@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from openerp import fields, _
-from openerp.exceptions import UserError
+from openerp.exceptions import Warning
 from openerp.tests import SavepointCase
 
 from ..wizard.order_response_import import (
@@ -43,12 +43,16 @@ class TestOrderResponseImportCommon(SavepointCase):
                 ],
             }
         )
+        pick_type = cls.env.ref("stock.picking_type_in")
         cls.purchase_order = cls.env["purchase.order"].create(
             {
                 "partner_id": cls.supplier.id,
                 "date_order": fields.Datetime.now(),
-                "date_planned": fields.Datetime.now(),
+                "minimum_planned_date": fields.Datetime.now(),
                 "currency_id": cls.currency_euro.id,
+                "picking_type_id": pick_type.id,
+                "location_id": pick_type.default_location_dest_id.id,
+                "pricelist_id": cls.env.ref("purchase.list0").id,
             }
         )
         cls.line1 = cls.purchase_order.order_line.create(
@@ -129,14 +133,14 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         Test Case:
             Process data
         Expected result:
-            UserError is raised
+            Warning is raised
         """
         data = self._get_base_data()
         data["ref"] = "123456"
-        with self.assertRaises(UserError) as ue:
+        with self.assertRaises(Warning) as ue:
             self.OrderResponseImport.process_data(data)
         self.assertEqual(
-            ue.exception.name, _("No purchase order found for name 123456.")
+            ue.exception.message, _("No purchase order found for name 123456.")
         )
 
     def test_02(self):
@@ -146,13 +150,13 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         Test Case:
             Process data
         Expected result:
-            UserError is raised
+            Warning is raised
         """
         data = self._get_base_data()
         data["status"] = "unknown"
-        with self.assertRaises(UserError) as ue:
+        with self.assertRaises(Warning) as ue:
             self.OrderResponseImport.process_data(data)
-        self.assertEqual(ue.exception.name, _("Unknown status 'unknown'."))
+        self.assertEqual(ue.exception.message, _("Unknown status 'unknown'."))
 
     def test_03(self):
         """
@@ -161,14 +165,14 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         Test Case:
             Process data
         Expected result:
-            UserError is raised
+            Warning is raised
         """
         data = self._get_base_data()
         data["currency"] = {"iso": self.currency_usd.name}
-        with self.assertRaises(UserError) as ue:
+        with self.assertRaises(Warning) as ue:
             self.OrderResponseImport.process_data(data)
         self.assertEqual(
-            ue.exception.name,
+            ue.exception.message,
             _(
                 "The currency of the imported OrderResponse (USD) is "
                 "different from the currency of the purchase order (EUR)."
@@ -207,7 +211,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         self.assertEqual(self.purchase_order.state, "draft")
         self.OrderResponseImport.process_data(data)
         self.assertTrue(self.purchase_order.picking_ids)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
 
     def test_06(self):
         """
@@ -220,6 +224,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             PO is cancelled
         """
         data = self._get_base_data()
+
         data["status"] = ORDER_RESPONSE_STATUS_REJECTED
         self.assertEqual(self.purchase_order.state, "draft")
         self.OrderResponseImport.process_data(data)
@@ -232,13 +237,13 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         Test Case:
             Process data
         Expected result:
-            UserError is raised since a all line details must be provided with
+            Warning is raised since a all line details must be provided with
             this status
         """
         data = self._get_base_data()
         data["status"] = ORDER_RESPONSE_STATUS_CONDITIONAL
         data["lines"] = []
-        with self.assertRaises(UserError) as ue:
+        with self.assertRaises(Warning) as ue:
             self.OrderResponseImport.process_data(data)
             expected = (
                 _(
@@ -250,7 +255,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
                 )
                 % self.purchase_order.order_line.ids
             )
-            self.assertEqual(ue.exception.name, expected)
+            self.assertEqual(ue.exception.message, expected)
 
     def test_08(self):
         """
@@ -259,7 +264,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         Test Case:
             Process data
         Expected result:
-            UserError is raised since a all line details must be provided with
+            Warning is raised since a all line details must be provided with
             this status
         """
         data = self._get_base_data()
@@ -268,7 +273,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         line2 = self.order_line_to_data(self.line2)
         line2["line_id"] = "WRONG"
         data["lines"].append(line2)
-        with self.assertRaises(UserError) as ue:
+        with self.assertRaises(Warning) as ue:
             self.OrderResponseImport.process_data(data)
             expected = _(
                 "Unable to conditionally confirm the purchase order. \n"
@@ -280,7 +285,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
                 [str(self.line1.id), "WRONG"],
                 self.purchase_order.order_line.ids,
             )
-            self.assertEqual(ue.exception.name, expected)
+            self.assertEqual(ue.exception.message, expected)
 
     def test_09(self):
         """
@@ -299,7 +304,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             self.order_line_to_data(self.line2),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertTrue(self.purchase_order.picking_ids)
         self.assertEqual(self.line1.move_ids.state, "assigned")
         self.assertEqual(self.line2.move_ids.state, "assigned")
@@ -328,7 +333,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             ),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertTrue(self.purchase_order.picking_ids)
         self.assertEqual(self.line1.move_ids.state, "assigned")
         self.assertEqual(self.line2.move_ids.state, "cancel")
@@ -358,7 +363,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             ),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertTrue(self.purchase_order.picking_ids)
         self.assertEqual(self.line1.move_ids.state, "assigned")
         self.assertEqual(self.line2.move_ids.state, "cancel")
@@ -389,7 +394,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             self.order_line_to_data(self.line2),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertTrue(self.purchase_order.picking_ids)
         move_ids = self.line1.move_ids
         self.assertEqual(len(move_ids), 2)
@@ -433,7 +438,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             self.order_line_to_data(self.line2),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         move_ids = self.line1.move_ids
         self.assertEqual(len(move_ids), 2)
@@ -497,7 +502,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             ),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         # line1
         line1_move_ids = self.line1.move_ids
@@ -577,7 +582,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             self.order_line_to_data(self.line2),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         move_ids = self.line1.move_ids
         self.assertEqual(len(move_ids), 3)
@@ -646,7 +651,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             self.order_line_to_data(self.line2),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         move_ids = self.line1.move_ids
         self.assertEqual(len(move_ids), 4)
@@ -719,7 +724,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             self.order_line_to_data(self.line2),
         ]
         self.OrderResponseImport.process_data(data)
-        self.assertEqual(self.purchase_order.state, "purchase")
+        self.assertEqual(self.purchase_order.state, "approved")
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         move_ids = self.line1.move_ids
         self.assertEqual(
