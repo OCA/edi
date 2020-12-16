@@ -6,13 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2020-12-16 03:19+0000\n"
+"Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
 "Language-Team: none\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:600
@@ -53,7 +55,7 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:891
 #, python-format
 msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
-msgstr ""
+msgstr "De incoterm overeenkomstig met '%s' kon niet worden gevonden"
 
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__display_name
@@ -70,7 +72,7 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:292
 #, python-format
 msgid "IBAN <b>%s</b> is not valid, so it has been ignored."
-msgstr ""
+msgstr "Ongeldig IBAN <b>%s</b> nummer, dus het is genegeerd."
 
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__id
@@ -107,24 +109,40 @@ msgid "Odoo couldn't find any %s corresponding to the following information extr
 "Country code: %s\n"
 ""
 msgstr ""
+"Er kon geen %s worden gevonden op basis van de informatie uit het business "
+"document:\n"
+"Naam: %s\n"
+"BTW number: %s\n"
+"Referentie: %s\n"
+"E-mail: %s\n"
+"Website: %s\n"
+"State code: %s\n"
+"Landcode: %s\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:786
 #, python-format
 msgid "Odoo couldn't find any account corresponding to the following information extracted from the business document: Account code: %s"
 msgstr ""
+"Er kon geen overeenkomstige account worden gevonden aan de hand van de "
+"informatie in het business document: Account code : %s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:827
 #, python-format
 msgid "Odoo couldn't find any analytic account corresponding to the following information extracted from the business document: Analytic account code: %s"
 msgstr ""
+"Er kon geen analytisch account worden gevonden aan de hand van de informatie "
+"uit het business document:\n"
+"Analytisch account code: %s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:866
 #, python-format
 msgid "Odoo couldn't find any journal corresponding to the following information extracted from the business document: Journal code: %s"
 msgstr ""
+"Er kon geen dagboek worden gevonden aan de hand van de informatie uit het "
+"business document: Dagboek code: %s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:382
@@ -134,6 +152,10 @@ msgid "Odoo couldn't find any product corresponding to the following information
 "Supplier: %s\n"
 ""
 msgstr ""
+"Er kan geen product worden gevonden aan de hand van de informatie ui het "
+"business document: Barcode: %s\n"
+"Product code: %s\n"
+"Leverancier: %s\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:266
@@ -145,6 +167,12 @@ msgid "Odoo couldn't find any shipping partner corresponding to the following in
 "Country code: %s\n"
 ""
 msgstr ""
+"Er kan geen transporteur worden gevonden aan de hand van de informatie ui "
+"het business document: \n"
+"Parent Partner: %s\n"
+"Postcode: %s\n"
+"State code: %s\n"
+"Land code: %s\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:588
@@ -154,6 +182,12 @@ msgid "Odoo couldn't find any tax with 'Tax Application' = '%s' and 'Tax Include
 "UNECE Tax Category code: %s\n"
 "Tax amount: %s %s"
 msgstr ""
+"Er kon geen belasting worden gevonden met 'Belasting regel\" = '%s' en "
+"'Belasting inclusief' = '%s' welke overeenkomt met de volgende informatie "
+"uit het business document:\n"
+"UNECE Tax Type code: %s\n"
+"UNECE Tax Category code: %s\n"
+"Tax amount: %s %s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:676
@@ -256,16 +290,16 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:78
 #, python-format
 msgid "customer"
-msgstr ""
+msgstr "Klant"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:80
 #, python-format
 msgid "partner"
-msgstr ""
+msgstr "partner"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:75
 #, python-format
 msgid "supplier"
-msgstr ""
+msgstr "leverancier"
