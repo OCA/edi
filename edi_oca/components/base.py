@@ -17,3 +17,7 @@ class EDIBackendComponentMixin(AbstractComponent):
     @property
     def backend(self):
         return self.work.backend
+
+    @property
+    def record(self):
+        return self.work.exchange_record.record
