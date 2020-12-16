@@ -45,10 +45,34 @@ class EDIBackend(models.Model):
         # Inject work context from advanced settings
         record_conf = self._get_component_conf_for_record(exchange_record, key)
         work_ctx.update(record_conf.get("work_ctx", {}))
-        return self._find_component(candidates, work_ctx=work_ctx)
+        match_attrs = self._component_match_attrs(exchange_record, key)
+        return self._find_component(
+            exchange_record.model, candidates, work_ctx=work_ctx, **match_attrs,
+        )
 
-    def _find_component(self, usage_candidates, safe=True, work_ctx=None, **kw):
-        """Retrieve components for current backend.
+    def _component_match_attrs(self, exchange_record, key):
+        """Attributes that will be used to lookup components.
+
+        They will be set in the work context and propagated to components.
+        """
+        return {
+            "backend_type": self.backend_type_id.code,
+            "exchange_type": exchange_record.type_id.code,
+        }
+
+    def _component_sort_key(self, component_class):
+        """Determine the order of matched components.
+
+        The order can be very important if your implementation
+        allow generic / default components to be registered.
+        """
+        return (
+            1 if component_class._backend_type else 0,
+            1 if component_class._exchange_type else 0,
+        )
+
+    def _find_component(self, model, usage_candidates, safe=True, work_ctx=None, **kw):
+        """Retrieve component for current backend.
 
         :param usage_candidates:
             list of usage to try by priority. 1st found, 1st returned
@@ -60,14 +84,23 @@ class EDIBackend(models.Model):
         work_ctx = work_ctx or {}
         if "backend" not in work_ctx:
             work_ctx["backend"] = self
-        with self.work_on(self._name, **work_ctx) as work:
+        with self.work_on(model, **work_ctx) as work:
             for usage in usage_candidates:
-                component = work.many_components(usage=usage, **kw)
-                if component:
-                    return component[0]
+                components, c_work_ctx = work._matching_components(usage=usage, **kw)
+                if not components:
+                    continue
+                # Sort components and pick the 1st one matching.
+                # In this way we support generic components registration
+                # and specific components registrations
+                components = sorted(
+                    components, key=lambda x: self._component_sort_key(x), reverse=True
+                )
+                component = components[0](c_work_ctx)
+                _logger.debug("using component", component._name)
+                break
         if not component and not safe:
             raise NoComponentError(
-                "No componend found matching any of: {}".format(usage_candidates)
+                "No component found matching any of: {}".format(usage_candidates)
             )
         return component or None
 
@@ -76,19 +109,13 @@ class EDIBackend(models.Model):
         """
         # fmt:off
         base_usage = ".".join([
-            "edi",
             exchange_record.direction,
             key,
-            self.backend_type_id.code,
         ])
         # fmt:on
-        type_code = exchange_record.type_id.code
         record_conf = self._get_component_conf_for_record(exchange_record, key)
         candidates = [record_conf["usage"]] if record_conf else []
         candidates += [
-            # specific for backend type and exchange type
-            base_usage + "." + type_code,
-            # specific for backend type
             base_usage,
         ]
         return candidates
