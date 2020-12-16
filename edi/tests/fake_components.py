@@ -46,7 +46,9 @@ class FakeComponentMixin(Component):
 class FakeOutputGenerator(FakeComponentMixin):
     _name = "fake.output.generator"
     _inherit = "edi.component.output.mixin"
-    _usage = "edi.output.generate.demo_backend.test_csv_output"
+    _usage = "output.generate"
+    _backend_type = "demo_backend"
+    _exchange_type = "test_csv_output"
 
     _action = "generate"
 
@@ -57,7 +59,9 @@ class FakeOutputGenerator(FakeComponentMixin):
 class FakeOutputSender(FakeComponentMixin):
     _name = "fake.output.sender"
     _inherit = "edi.component.send.mixin"
-    _usage = "edi.output.send.demo_backend.test_csv_output"
+    _usage = "output.send"
+    _backend_type = "demo_backend"
+    _exchange_type = "test_csv_output"
 
     _action = "send"
 
@@ -68,7 +72,9 @@ class FakeOutputSender(FakeComponentMixin):
 class FakeOutputChecker(FakeComponentMixin):
     _name = "fake.output.checker"
     _inherit = "edi.component.check.mixin"
-    _usage = "edi.output.check.demo_backend.test_csv_output"
+    _usage = "output.check"
+    _backend_type = "demo_backend"
+    _exchange_type = "test_csv_output"
 
     _action = "check"
 
@@ -79,7 +85,9 @@ class FakeOutputChecker(FakeComponentMixin):
 class FakeInputProcess(FakeComponentMixin):
     _name = "fake.input.process"
     _inherit = "edi.component.input.mixin"
-    _usage = "edi.input.process.demo_backend.test_csv_input"
+    _usage = "input.process"
+    _backend_type = "demo_backend"
+    _exchange_type = "test_csv_input"
 
     _action = "process"
 
@@ -90,7 +98,9 @@ class FakeInputProcess(FakeComponentMixin):
 class FakeInputReceive(FakeComponentMixin):
     _name = "fake.input.receive"
     _inherit = "edi.component.input.mixin"
-    _usage = "edi.input.receive.demo_backend.test_csv_input"
+    _usage = "input.receive"
+    _backend_type = "demo_backend"
+    _exchange_type = "test_csv_input"
 
     _action = "receive"
 
@@ -101,7 +111,9 @@ class FakeInputReceive(FakeComponentMixin):
 class FakeOutputValidate(FakeComponentMixin):
     _name = "fake.out.validate"
     _inherit = "edi.component.validate.mixin"
-    _usage = "edi.output.validate.demo_backend.test_csv_output"
+    _usage = "output.validate"
+    _backend_type = "demo_backend"
+    _exchange_type = "test_csv_output"
 
     _action = "validate"
 
@@ -113,7 +125,9 @@ class FakeOutputValidate(FakeComponentMixin):
 class FakeInputValidate(FakeComponentMixin):
     _name = "fake.in.validate"
     _inherit = "edi.component.validate.mixin"
-    _usage = "edi.input.validate.demo_backend.test_csv_input"
+    _usage = "input.validate"
+    _backend_type = "demo_backend"
+    _exchange_type = "test_csv_input"
 
     _action = "validate"
 
