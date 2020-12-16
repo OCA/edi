@@ -11,6 +11,8 @@ from lxml import etree
 from odoo import api, fields, models
 from odoo.tools.safe_eval import safe_eval
 
+from odoo.addons.base_sparse_field.models.fields import Serialized
+
 
 class EDIExchangeConsumerMixin(models.AbstractModel):
     """Record that might have related EDI Exchange records
@@ -25,7 +27,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         domain=lambda r: [("model", "=", r._name)],
     )
     exchange_record_count = fields.Integer(compute="_compute_exchange_record_count")
-    expected_edi_configuration = fields.Serialized(
+    expected_edi_configuration = Serialized(
         compute="_compute_expected_edi_configuration", default={},
     )
     has_expected_edi_configuration = fields.Boolean(
