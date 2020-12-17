@@ -25,13 +25,13 @@ msgid " Amount w/o tax: %s %s)"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:426
+#: code:addons/sale_order_import/wizard/sale_order_import.py:439
 #, python-format
 msgid "%d new order line(s) created: %s"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:409
+#: code:addons/sale_order_import/wizard/sale_order_import.py:422
 #, python-format
 msgid "%d order line(s) deleted: %s"
 msgstr ""
@@ -59,7 +59,7 @@ msgid "Create New"
 msgstr "Créer une nouvelle"
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:307
+#: code:addons/sale_order_import/wizard/sale_order_import.py:320
 #, python-format
 msgid "Created automatically via file import (%s)."
 msgstr ""
@@ -168,7 +168,7 @@ msgid "Last Updated on"
 msgstr "Dernière mise-à-jour le"
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:229
+#: code:addons/sale_order_import/wizard/sale_order_import.py:239
 #, python-format
 msgid "Missing customer"
 msgstr ""
@@ -227,7 +227,7 @@ msgid "State"
 msgstr "Etat"
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:443
+#: code:addons/sale_order_import/wizard/sale_order_import.py:456
 #, python-format
 msgid ""
 "The currency of the imported order (%s) is different from the currency of "
@@ -243,7 +243,7 @@ msgid ""
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:379
+#: code:addons/sale_order_import/wizard/sale_order_import.py:392
 #, python-format
 msgid ""
 "The quantity has been updated on the order line with product '%s' from %s to "
@@ -251,7 +251,7 @@ msgid ""
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:395
+#: code:addons/sale_order_import/wizard/sale_order_import.py:408
 #, python-format
 msgid ""
 "The unit price has been updated on the order line with product '%s' from %s "
@@ -266,14 +266,14 @@ msgstr ""
 
 #. module: sale_order_import
 #: code:addons/sale_order_import/wizard/sale_order_import.py:65
-#: code:addons/sale_order_import/wizard/sale_order_import.py:235
+#: code:addons/sale_order_import/wizard/sale_order_import.py:245
 #, python-format
 msgid "This XML file is not XML-compliant"
 msgstr ""
 
 #. module: sale_order_import
 #: code:addons/sale_order_import/wizard/sale_order_import.py:76
-#: code:addons/sale_order_import/wizard/sale_order_import.py:245
+#: code:addons/sale_order_import/wizard/sale_order_import.py:255
 #, python-format
 msgid ""
 "This file '%s' is not recognised as a CSV, XML nor PDF file. Please check "
@@ -281,13 +281,13 @@ msgid ""
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:265
+#: code:addons/sale_order_import/wizard/sale_order_import.py:275
 #, python-format
 msgid "This order doesn't have any line !"
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:456
+#: code:addons/sale_order_import/wizard/sale_order_import.py:469
 #, python-format
 msgid "This quotation has been updated automatically via the import of file %s"
 msgstr ""
@@ -345,7 +345,7 @@ msgid ""
 msgstr ""
 
 #. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:436
+#: code:addons/sale_order_import/wizard/sale_order_import.py:449
 #, python-format
 msgid "You must select a quotation to update."
 msgstr ""
