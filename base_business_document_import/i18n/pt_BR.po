@@ -26,9 +26,15 @@ msgid "(fixed)"
 msgstr ""
 
 #. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:870
+#: code:addons/base_business_document_import/models/business_document_import.py:871
 #, python-format
-msgid "<b>Notes in file %s:</b> %s"
+msgid "<b>Notes in file %s:</b>"
+msgstr ""
+
+#. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:873
+#, python-format
+msgid "<b>Notes in imported document:</b>"
 msgstr ""
 
 #. module: base_business_document_import
