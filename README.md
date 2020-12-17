@@ -18,7 +18,7 @@ addon | version | summary
 [account_invoice_import_zugferd](account_invoice_import_zugferd/) | 8.0.1.0.0 | Import ZUGFeRD-compliant supplier invoices/refunds
 [account_invoice_ubl](account_invoice_ubl/) | 8.0.1.0.1 | Generate UBL XML file for customer invoices/refunds
 [account_invoice_zugferd](account_invoice_zugferd/) | 8.0.1.0.0 | Generate ZUGFeRD customer invoices
-[base_business_document_import](base_business_document_import/) | 8.0.1.1.0 | Provides technical tools to import sale orders or supplier invoices
+[base_business_document_import](base_business_document_import/) | 8.0.1.2.0 | Provides technical tools to import sale orders or supplier invoices
 [base_business_document_import_phone](base_business_document_import_phone/) | 8.0.1.0.0 | Use phone numbers to match partners upon import of business documents
 [base_business_document_import_stock](base_business_document_import_stock/) | 8.0.1.0.0 | Match incoterms upon import of business documents
 [base_ubl](base_ubl/) | 8.0.1.1.0 | Base module for Universal Business Language (UBL)
@@ -28,7 +28,7 @@ addon | version | summary
 [purchase_order_import_ubl](purchase_order_import_ubl/) | 8.0.1.0.0 | Import UBL XML quotation files
 [purchase_order_ubl](purchase_order_ubl/) | 8.0.1.1.0 | Embed UBL XML file inside the PDF purchase order
 [sale_commercial_partner](sale_commercial_partner/) | 8.0.1.0.0 | Add stored related field 'Commercial Customer' on sale orders
-[sale_order_import](sale_order_import/) | 8.0.1.0.0 | Import RFQ or sale orders from files
+[sale_order_import](sale_order_import/) | 8.0.1.1.0 | Import RFQ or sale orders from files
 [sale_order_import_csv](sale_order_import_csv/) | 8.0.1.0.0 | Import CSV sale order files
 [sale_order_import_ubl](sale_order_import_ubl/) | 8.0.1.0.0 | Import UBL XML sale order files
 [sale_order_ubl](sale_order_ubl/) | 8.0.1.0.0 | Embed UBL XML file inside the PDF quotation
