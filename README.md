@@ -24,7 +24,7 @@ addon | version | summary
 [account_invoice_facturx](account_invoice_facturx/) | 13.0.1.0.0 | Generate Factur-X/ZUGFeRD customer invoices
 [account_invoice_facturx_py3o](account_invoice_facturx_py3o/) | 13.0.1.0.0 | Generate Factur-X invoices with Py3o reporting engine
 [account_invoice_ubl](account_invoice_ubl/) | 13.0.1.0.3 | Generate UBL XML file for customer invoices/refunds
-[account_invoice_ubl_email_attachment](account_invoice_ubl_email_attachment/) | 13.0.1.0.0 | Automatically adds the UBL file to the email.
+[account_invoice_ubl_email_attachment](account_invoice_ubl_email_attachment/) | 13.0.1.1.0 | Automatically adds the UBL file to the email.
 [base_business_document_import](base_business_document_import/) | 13.0.2.0.0 | Provides technical tools to import sale orders or supplier invoices
 [base_ebill_payment_contract](base_ebill_payment_contract/) | 13.0.1.0.0 | Base for managing e-billing contracts
 [base_edi](base_edi/) | 13.0.1.0.0 | Base module to aggregate EDI features.
