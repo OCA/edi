@@ -4,7 +4,7 @@
 {
     "name": "Account Invoice UBL Email Attachment",
     "summary": "Automatically adds the UBL file to the email.",
-    "version": "13.0.1.0.0",
+    "version": "13.0.1.1.0",
     "category": "Accounting & Finance",
     "author": "Onestein, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi/",
