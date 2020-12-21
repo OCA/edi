@@ -16,7 +16,9 @@
     ],
     'demo': [],
     'data': [
+        'data/ir_config_parameter.xml',
         'views/account_invoice_view.xml',
+        'wizard/export_multi_edifact_invoice_view.xml',
     ],
     'installable': True,
     'auto_install': False,

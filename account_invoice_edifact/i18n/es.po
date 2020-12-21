@@ -16,6 +16,74 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_invoice_edifact
+#: model_terms:ir.ui.view,arch_db:account_invoice_edifact.export_multi_edifact_invoice_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: account_invoice_edifact
+#: model:ir.model,name:account_invoice_edifact.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de Configuración"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_res_config_settings__deliveryslip_folder
+msgid "Delivery Slip Folder"
+msgstr "Directorio Vale de Entrega"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,help:account_invoice_edifact.field_res_config_settings__deliveryslip_folder
+msgid "Directory where to store Delivery Slip report"
+msgstr "Directorio donde guardar los Vales de Entrega una vez se confirman los albaranes"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: account_invoice_edifact
+#: selection:export.multi.edifact.invoice.wizard,state:0
+msgid "Done"
+msgstr "Hecho"
+
+#. module: account_invoice_edifact
+#: model_terms:ir.ui.view,arch_db:account_invoice_edifact.export_multi_edifact_invoice_view
+msgid "Edifact Invoices Exported Succesfully"
+msgstr "Facturas Edifact exportadas correctamente"
+
+#. module: account_invoice_edifact
+#: code:addons/account_invoice_edifact/wizard/export_multi_edifact_invoice.py:60
+#: model:ir.actions.act_window,name:account_invoice_edifact.action_export_multi_edifact_invoice
+#: model_terms:ir.ui.view,arch_db:account_invoice_edifact.export_multi_edifact_invoice_view
+#, python-format
+msgid "Export Edifact Invoices"
+msgstr "Exportar Facturas Edifact"
+
+#. module: account_invoice_edifact
+#: model_terms:ir.ui.view,arch_db:account_invoice_edifact.export_multi_edifact_invoice_view
+msgid "Exporting Edifact Invoices"
+msgstr "Exportación de Facturas a Edifact"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_invoice_edifact
+#: selection:export.multi.edifact.invoice.wizard,state:0
+msgid "Init"
+msgstr "Inicio"
+
+#. module: account_invoice_edifact
 #: model:ir.model,name:account_invoice_edifact.model_account_invoice
 msgid "Invoice"
 msgstr "Factura"
@@ -26,8 +94,25 @@ msgid "Invoice Export Edifact"
 msgstr "Exportar Factura a Edifact"
 
 #. module: account_invoice_edifact
-#: code:addons/account_invoice_edifact/models/account_invoice.py:25
-#: code:addons/account_invoice_edifact/models/account_invoice.py:32
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: account_invoice_edifact
+#: code:addons/account_invoice_edifact/models/account_invoice.py:20
+#: code:addons/account_invoice_edifact/models/account_invoice.py:24
+#: code:addons/account_invoice_edifact/models/account_invoice.py:30
+#: code:addons/account_invoice_edifact/models/account_invoice.py:37
 #, python-format
 msgid "Partner %s has no Edifact Code"
 msgstr "El cliente %s no tiene ningún Código Edifact asignado."
@@ -37,4 +122,29 @@ msgstr "El cliente %s no tiene ningún Código Edifact asignado."
 #, python-format
 msgid "Product %s does not have barcode assigned."
 msgstr "El producto %s no tiene ningún Código de barras asignado."
+
+#. module: account_invoice_edifact
+#: model_terms:ir.ui.view,arch_db:account_invoice_edifact.export_multi_edifact_invoice_view
+msgid "Some Edifact Invoice Exportation has failed:"
+msgstr "Estas facturas no se han podido exportar al formato Edifact"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard__state
+msgid "State"
+msgstr "Estado"
+
+#. module: account_invoice_edifact
+#: model:ir.model.fields,field_description:account_invoice_edifact.field_export_multi_edifact_invoice_wizard__unexported_invoice_ids
+msgid "Unexported Invoices"
+msgstr "Facturas no exportadas"
+
+#. module: account_invoice_edifact
+#: selection:export.multi.edifact.invoice.wizard,state:0
+msgid "With Errors"
+msgstr "Con Errores"
+
+#. module: account_invoice_edifact
+#: model:ir.model,name:account_invoice_edifact.model_export_multi_edifact_invoice_wizard
+msgid "export.multi.edifact.invoice.wizard"
+msgstr "export.multi.edifact.invoice.wizard"
 

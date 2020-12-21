@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2020 PlanetaTIC - Marc Poch <mpoch@planetatic.com>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<data>
+
+<record id="export_multi_edifact_invoice_view" model="ir.ui.view">
+    <field name="name">export.multi.edifact.invoice.form</field>
+    <field name="model">export.multi.edifact.invoice.wizard</field>
+    <field name="arch" type="xml">
+        <form string="Export Edifact Invoices">
+            <field name="state" invisible="1" />
+            <p class="oe_grey" attrs="{'invisible': [('state', '!=', 'init')]}">
+                Exporting Edifact Invoices
+            </p>
+            <p class="oe_grey" attrs="{'invisible': [('state', '!=', 'done')]}">
+                Edifact Invoices Exported Succesfully
+            </p>
+            <p class="oe_grey" attrs="{'invisible': [('state', '!=', 'with_errors')]}">
+                Some Edifact Invoice Exportation has failed:
+            </p>
+            <group attrs="{'invisible': [('state', '!=', 'with_errors')]}">
+                <field name="unexported_invoice_ids"/>
+            </group>
+
+            <footer>
+                <button string="Export Edifact Invoices" name="export_multi_edifact_invoice" type="object" default_focus="1" class="btn-primary" attrs="{'invisible': [('state', '!=', 'init')]}"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+<act_window id="action_export_multi_edifact_invoice"
+    multi="True"
+    key2="client_action_multi" name="Export Edifact Invoices"
+    res_model="export.multi.edifact.invoice.wizard"
+    src_model="account.invoice"
+    view_mode="form" target="new" view_type="form" />
+
+</data>
+</odoo>

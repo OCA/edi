@@ -2,7 +2,7 @@
 # Copyright 2019 PlanetaTIC - Marc Poch <mpoch@planetatic.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import base64
+import base64, os
 from odoo import models, api, _
 from odoo.exceptions import UserError
 
@@ -169,6 +169,8 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def invoice_export_edifact(self):
+        param_obj = self.env['ir.config_parameter']
+
         self.ensure_one()
         assert self.type in ('out_invoice', 'out_refund')
         assert self.state in ('open', 'paid')
@@ -176,6 +178,7 @@ class AccountInvoice(models.Model):
         edifact_content = self.generate_edifact_invoice()
         filename = self.get_edifact_invoice_name()
 
+        # Attach Edifact file to the invoice:
         ctx = {}
         attach = self.env['ir.attachment'].with_context(ctx).create({
             'name': filename,
@@ -192,4 +195,12 @@ class AccountInvoice(models.Model):
             'views': False,
             'view_mode': 'form,tree'
             })
+
+        # Move Edifact file to specified folder:
+        edifact_folder = param_obj.sudo().get_param(
+            'account_invoice_edifact.edifact_invoices_folder')
+        if edifact_folder:
+            full_path = os.path.join(edifact_folder, filename)
+            with open(full_path, 'wb') as file_handle:
+                file_handle.write(edifact_content.encode())
         return action
