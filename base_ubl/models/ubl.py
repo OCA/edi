@@ -265,6 +265,18 @@ class BaseUbl(models.AbstractModel):
         self._ubl_add_party(
             delivery_partner, False, 'DeliveryParty', delivery, ns,
             version=version)
+        self._ubl_add_delivery_period(delivery, ns, version=version)
+
+    @api.model
+    def _ubl_add_delivery_period(
+            self, parent_node, ns, version='2.1'):
+        # TODO: make it works for sale and purchase
+        period = etree.SubElement(
+            parent_node, ns["cac"] + "RequestedDeliveryPeriod")
+        start = etree.SubElement(period, ns["cbc"] + "StartDate")
+        start.text = self.minimum_planned_date
+        end = etree.SubElement(period, ns["cbc"] + "EndDate")
+        end.text = self.minimum_planned_date
 
     @api.model
     def _ubl_add_delivery_terms(
