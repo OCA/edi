@@ -69,7 +69,8 @@ class PurchaseOrder(models.Model):
         self._ubl_add_line_item(
             line_number, oline.name, oline.product_id, 'purchase',
             oline.product_qty, oline.product_uom, line_root, ns,
-            seller=self.partner_id.commercial_partner_id, version=version)
+            seller=self.partner_id.commercial_partner_id, uuid=oline.id,
+            version=version)
 
     @api.multi
     def _ubl_add_order_line(
@@ -85,7 +86,7 @@ class PurchaseOrder(models.Model):
             seller=self.partner_id.commercial_partner_id,
             currency=self.currency_id, price_subtotal=oline.price_subtotal,
             qty_precision=qty_precision, price_precision=price_precision,
-            version=version)
+            uuid=oline.id, version=version)
 
     @api.multi
     def get_delivery_partner(self):

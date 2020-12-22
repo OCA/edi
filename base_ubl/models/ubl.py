@@ -289,11 +289,21 @@ class BaseUbl(models.AbstractModel):
     def _ubl_add_line_item(
             self, line_number, name, product, type, quantity, uom, parent_node,
             ns, seller=False, currency=False, price_subtotal=False,
-            qty_precision=3, price_precision=2, version='2.1'):
+            qty_precision=3, price_precision=2, uuid=False, version='2.1'):
+        """
+        Parameters:
+        uuid (int): value of the id column in order_line table like purchase_order_line
+                    this information can be used to match line with Order Response
+                    Edifact for example use this notion, then it can be useful
+                    in case of conversion
+       """
         line_item = etree.SubElement(
             parent_node, ns['cac'] + 'LineItem')
         line_item_id = etree.SubElement(line_item, ns['cbc'] + 'ID')
         line_item_id.text = unicode(line_number)
+        if uuid:
+            line_item_uuid = etree.SubElement(line_item, ns["cbc"] + "UUID")
+            line_item_uuid.text = unicode(uuid)
         if not uom.unece_code:
             raise UserError(_(
                 "Missing UNECE code on unit of measure '%s'")
