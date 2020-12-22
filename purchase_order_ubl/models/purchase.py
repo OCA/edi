@@ -29,7 +29,8 @@ class PurchaseOrder(models.Model):
             time = now_utc[11:]
             currency_node_name = 'PricingCurrencyCode'
         elif doc_type == 'order':
-            date = self.date_approve
+            # date_approve is not always set at 'confirmed' state
+            date = self.date_approve or self.date_order
             currency_node_name = 'DocumentCurrencyCode'
         ubl_version = etree.SubElement(
             parent_node, ns['cbc'] + 'UBLVersionID')
