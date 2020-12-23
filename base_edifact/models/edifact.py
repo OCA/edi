@@ -274,10 +274,20 @@ PRILIN|AAB|%.2f\n' % (invoice_line.price_unit, discounted_price)
 
     @api.model
     def edifact_parse_date(self, date_segments):
-        if date_segments[0] != 'DTM':
+        if len(date_segments) < 2 or date_segments[0] != 'DTM':
             return False
         if date_segments[1]:
             res = datetime.strptime(date_segments[1], '%Y%m%d')
+        else:
+            res = False
+        return res
+
+    @api.model
+    def edifact_parse_commitment_date(self, date_segments):
+        if len(date_segments) < 3 or date_segments[0] != 'DTM':
+            return False
+        if date_segments[2]:
+            res = datetime.strptime(date_segments[2], '%Y%m%d')
         else:
             res = False
         return res
