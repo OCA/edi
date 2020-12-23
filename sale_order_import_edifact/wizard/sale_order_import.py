@@ -88,13 +88,24 @@ class SaleOrderImport(models.TransientModel):
 
         so_vals = super(SaleOrderImport, self)._prepare_order(
             parsed_order, price_source)
-        if 'invoice_to' in parsed_order:
+        if self.doc_type == 'edifact' and 'invoice_to' in parsed_order:
             partner = partner_obj.browse(so_vals['partner_id'])
             invoice_partner = bdio._match_shipping_partner(
                 parsed_order['invoice_to'], partner,
                 parsed_order['chatter_msg'])
             so_vals['partner_invoice_id'] = invoice_partner.id
+            so_vals['commitment_date'] = parsed_order.get(
+                'commitment_date', False)
         return so_vals
+
+    @api.model
+    def _prepare_create_order_line(
+            self, product, uom, order, import_line, price_source):
+        line_vals = super(SaleOrderImport, self)._prepare_create_order_line(
+            product, uom, order, import_line, price_source)
+        if self.doc_type == 'edifact':
+            line_vals['sequence'] = import_line['sequence']
+        return line_vals
 
     @api.model
     def parse_edifact_sale_order(self, reader):
@@ -124,6 +135,8 @@ class SaleOrderImport(models.TransientModel):
             elif label == 'DTM':
                 # date:
                 parsed_order['date'] = self.edifact_parse_date(segments)
+                parsed_order['commitment_date'] =\
+                    self.edifact_parse_commitment_date(segments)
             elif label == 'NADBY':
                 # customer partner:
                 parsed_order['partner'] = self.edifact_parse_partner(segments)
@@ -158,6 +171,7 @@ class SaleOrderImport(models.TransientModel):
         label = segments[0]
         parsed_order['lines'] = []
         cur_line = False
+        cur_line_index = 0
         while(label != 'MOARES'):
             if label == 'LIN':
                 # new order line:
@@ -166,6 +180,8 @@ class SaleOrderImport(models.TransientModel):
                 cur_line = {}
                 # product
                 cur_line['product'] = self.edifact_parse_product(segments)
+                cur_line['sequence'] = cur_line_index
+                cur_line_index += 1
             elif label == 'QTYLIN':
                 # This label can be repeated for the same line.
                 self.edifact_parse_quantity(segments, cur_line)
