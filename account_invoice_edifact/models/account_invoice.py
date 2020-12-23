@@ -29,23 +29,28 @@ class AccountInvoice(models.Model):
             if not picking.partner_id.edifact_code:
                 raise UserError(_('Partner %s has no Edifact Code') %
                                 picking.partner_id.name)
-            edifact_header += self.edifact_invoice_references(
-                'picking', picking.name, picking.date_done)
             if picking.sale_id:
                 sale = picking.sale_id
                 if not sale.partner_id.edifact_code:
                     raise UserError(_('Partner %s has no Edifact Code') %
                                     sale.partner_id.name)
                 sale_order_partner = sale.partner_id
+                if sale.client_order_ref:
+                    order_name = sale.client_order_ref
+                else:
+                    order_name = sale.name
                 edifact_header += self.edifact_invoice_references(
-                    'order', sale.name, sale.date_order)
+                    'order', order_name, sale.date_order)
+            edifact_header += self.edifact_invoice_references(
+                'picking', picking.name, picking.date_done)
 
         edifact_header += self.edifact_invoice_buyer(
             sale_order_partner)  # NADBY
         edifact_header += self.edifact_invoice_receiver(
             sale_order_partner)  # NADIV
+        parent_partner = self.partner_id.parent_id or self.partner_id
         edifact_header += self.edifact_invoice_legal_buyer(
-            self.partner_id)  # NADBCO
+            parent_partner)  # NADBCO
         company_registry = self.company_id.company_registry
         edifact_header += self.edifact_invoice_supplier(
             self.company_id.partner_id, company_registry)  # NADSU
@@ -149,7 +154,8 @@ class AccountInvoice(models.Model):
             inv_res['with_discounts'], inv_res['discounts_amount'])
         for tax_code, percent_dict in inv_res['taxes'].items():
             for tax_percent, amount_dict in percent_dict.items():
-                tax_amount = amount_dict['tax_amount']
+                tax_amount =\
+                    amount_dict['tax_amount'] - amount_dict['untaxed_amount']
                 untaxed_amount = amount_dict['untaxed_amount']
                 edifact_result += self.edifact_invoice_result_taxes(
                     tax_code, tax_percent, tax_amount, untaxed_amount)
