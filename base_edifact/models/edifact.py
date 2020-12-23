@@ -11,6 +11,20 @@ class BaseEdifact(models.AbstractModel):
     _description =\
         'Common methods to generate and parse Edifact plain text files'
 
+    def get_vat(self, partner):
+        vat = ''
+        if partner.vat:
+            vat = partner._split_vat(partner.vat)[1]
+        return vat
+
+    def get_street(self, partner):
+        street = partner.street or ''
+        if partner.street2:
+            if street:
+                street += ' '
+            street += partner.street2
+        return street
+
     @api.model
     def edifact_date(self, date):
         return '%s%s%s' % (date.year,
@@ -47,68 +61,83 @@ class BaseEdifact(models.AbstractModel):
 
     @api.model
     def edifact_invoice_buyer(self, partner):
+        street = self.get_street(partner)
+        vat = self.get_vat(partner)
         return 'NADBY|%s|%s|%s|%s|%s|%s||%s\n' % (
             partner.edifact_code or '',
             partner.name or '',
-            partner.street or '',
+            street,
             partner.city or '',
             partner.zip or '',
-            partner.vat or '',
+            vat,
             partner.country_id.code or ''
         )
 
     @api.model
     def edifact_invoice_receiver(self, partner):
+        street = self.get_street(partner)
+        vat = self.get_vat(partner)
         return 'NADIV|%s|%s|%s|%s|%s|%s\n' % (
             partner.edifact_code or '',
             partner.name or '',
-            partner.street or '',
+            street,
             partner.city or '',
             partner.zip or '',
-            partner.vat or '',
+            vat,
         )
 
     @api.model
     def edifact_invoice_legal_buyer(self, partner):
-        return 'NADBCO|%s|%s|%s|%s|%s|%s\n' % (
+        street = self.get_street(partner)
+        vat = self.get_vat(partner)
+        res = 'NADBCO|%s|%s|%s|%s|%s|%s' % (
             partner.edifact_code or '',
             partner.name or '',
-            partner.street or '',
+            street,
             partner.city or '',
             partner.zip or '',
-            partner.vat or '',
+            vat,
         )
+        if partner.country_id:
+            res += '|%s' % partner.country_id.code
+        res += '\n'
+        return res
 
     @api.model
     def edifact_invoice_supplier(self, supplier, company_registry):
+        street = self.get_street(supplier)
+        vat = self.get_vat(supplier)
         return 'NADSU|%s|%s|%s|%s|%s|%s|%s\n' % (
             supplier.edifact_code or '',
             supplier.name or '',
             company_registry or '',
-            supplier.street or '',
+            street,
             supplier.city or '',
             supplier.zip or '',
-            supplier.vat or '',
+            vat,
         )
 
     @api.model
     def edifact_invoice_legal_supplier(self, supplier, company_registry):
+        street = self.get_street(supplier)
+        vat = self.get_vat(supplier)
         return 'NADSCO|%s|%s|%s|%s|%s|%s|%s\n' % (
             supplier.edifact_code or '',
             supplier.name or '',
             company_registry or '',
-            supplier.street or '',
+            street,
             supplier.city or '',
             supplier.zip or '',
-            supplier.vat or '',
+            vat,
         )
 
     @api.model
     def edifact_invoice_goods_receiver(self, partner):
+        street = self.get_street(partner)
         return 'NADDP|%s|%s|%s|%s|%s\n' % (
             partner.edifact_code or '',
             partner.name or '',
-            partner.street or '',
+            street,
             partner.city or '',
             partner.zip or '',
         )
@@ -132,15 +161,17 @@ class BaseEdifact(models.AbstractModel):
 
     @api.model
     def edifact_invoice_line_quantity(self, invoice_line):
-        if invoice_line.uom_id. id == self.env.ref('uom.product_uom_unit'):
+        if invoice_line.uom_id.id == self.env.ref('uom.product_uom_unit').id:
             uom_code = 'PCE'
-        elif invoice_line.uom_id. id == self.env.ref('uom.product_uom_kgm'):
+        elif invoice_line.uom_id.id == self.env.ref('uom.product_uom_kgm').id:
             uom_code = 'KGM'
-        elif invoice_line.uom_id. id == self.env.ref('uom.product_uom_litre'):
+        elif invoice_line.uom_id.id ==\
+                self.env.ref('uom.product_uom_litre').id:
             uom_code = 'LTR'
-        elif invoice_line.uom_id. id == self.env.ref('uom.product_uom_ton'):
+        elif invoice_line.uom_id.id == self.env.ref('uom.product_uom_ton').id:
             uom_code = 'TNE'
-        elif invoice_line.uom_id. id == self.env.ref('uom.product_uom_meter'):
+        elif invoice_line.uom_id.id ==\
+                self.env.ref('uom.product_uom_meter').id:
             uom_code = 'MTR'
         else:
             uom_code = 'PCE'
@@ -173,14 +204,17 @@ PRILIN|AAB|%.2f\n' % (invoice_line.price_unit, discounted_price)
     def edifact_invoice_amount_total(
             self, untaxed_amount, total_amount, total_tax_amount,
             without_discounts, with_discounts, discounts_amount):
-        return 'MOARES|%.2f|%.2f|%.2f|%s|%.2f|%.2f\n' % (
+        res = 'MOARES|%.2f|%.2f|%.2f|%s|%.2f' % (
             with_discounts,
             without_discounts,
             untaxed_amount,
             total_amount,
             total_tax_amount,
-            discounts_amount,
         )
+        if discounts_amount:
+            res += '|%.2f' % discounts_amount
+        res += '\n'
+        return res
 
     @api.model
     def edifact_invoice_result_taxes(
