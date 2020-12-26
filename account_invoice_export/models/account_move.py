@@ -59,7 +59,9 @@ class AccountMove(models.Model):
         file_data = self._get_file_for_transmission_method()
         headers = self.transmit_method_id.get_transmission_http_header()
         res = requests.post(
-            self.transmit_method_id.destination_url, headers=headers, files=file_data,
+            self.transmit_method_id.destination_url,
+            headers=headers,
+            files=file_data,
         )
         if res.status_code != 200:
             raise UserError(

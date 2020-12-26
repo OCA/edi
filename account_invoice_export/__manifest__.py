@@ -8,7 +8,7 @@
     "license": "AGPL-3",
     "summary": "",
     "author": "Camptocamp SA, Odoo Community Association (OCA)",
-    "website": "https://github.com/oca/edi",
+    "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_transmit_method", "queue_job"],
     "data": [
         "data/mail_activity_type.xml",
