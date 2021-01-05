@@ -123,11 +123,10 @@ class PurchaseOrder(models.Model):
             self._ubl_add_delivery_terms(
                 self.incoterm_id, xml_root, ns, version=version)
 
-        line_number = 0
         for oline in self.order_line:
-            line_number += 1
-            self._ubl_add_rfq_line(
-                xml_root, oline, line_number, ns, version=version)
+            # line_number as third arg comes from purchase.order.line id field
+            # see https://github.com/OCA/edi/issues/300
+            self._ubl_add_rfq_line(xml_root, oline, oline.id, ns, version=version)
         return xml_root
 
     @api.multi
@@ -153,11 +152,10 @@ class PurchaseOrder(models.Model):
                 self.payment_term_id, xml_root, ns, version=version)
         self._ubl_add_monetary_total(xml_root, ns, version=version)
 
-        line_number = 0
         for oline in self.order_line:
-            line_number += 1
-            self._ubl_add_order_line(
-                xml_root, oline, line_number, ns, version=version)
+            # line_number as third arg comes from purchase.order.line id field
+            # see https://github.com/OCA/edi/issues/300
+            self._ubl_add_order_line(xml_root, oline, oline.id, ns, version=version)
         return xml_root
 
     @api.multi
