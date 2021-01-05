@@ -48,7 +48,7 @@ msgid "Invoice"
 msgstr "Facture"
 
 #. module: account_invoice_ubl
-#: code:addons/account_invoice_ubl/models/account_invoice.py:211
+#: code:addons/account_invoice_ubl/models/account_invoice.py:213
 #, python-format
 msgid "Missing base code on tax line '%s'."
 msgstr ""
@@ -59,7 +59,7 @@ msgid "Report"
 msgstr ""
 
 #. module: account_invoice_ubl
-#: code:addons/account_invoice_ubl/models/account_invoice.py:218
+#: code:addons/account_invoice_ubl/models/account_invoice.py:220
 #, python-format
 msgid "The tax code '%s' is not linked to a tax."
 msgstr ""
