@@ -74,8 +74,7 @@ class AccountInvoice(models.Model):
                 not self._context.get('no_embedded_pdf')):
             filename = 'Invoice-' + self.number + '.pdf'
             docu_reference = etree.SubElement(
-                parent_node, ns['cac'] + 'AdditionalDocumentReference',
-                filename=filename)
+                parent_node, ns['cac'] + 'AdditionalDocumentReference')
             docu_reference_id = etree.SubElement(
                 docu_reference, ns['cbc'] + 'ID')
             docu_reference_id.text = filename
@@ -83,7 +82,7 @@ class AccountInvoice(models.Model):
                 docu_reference, ns['cac'] + 'Attachment')
             binary_node = etree.SubElement(
                 attach_node, ns['cbc'] + 'EmbeddedDocumentBinaryObject',
-                mimeCode="application/pdf")
+                mimeCode="application/pdf", filename=filename)
             ctx = self._context.copy()
             ctx['no_embedded_ubl_xml'] = True
             pdf_inv = self.pool['report'].get_pdf(
