@@ -26,7 +26,7 @@ addon | version | summary
 [base_zugferd](base_zugferd/) | 8.0.1.0.0 | Base module for ZUGFeRD
 [purchase_order_import](purchase_order_import/) | 8.0.1.0.0 | Update RFQ via the import of quotations from suppliers
 [purchase_order_import_ubl](purchase_order_import_ubl/) | 8.0.1.0.0 | Import UBL XML quotation files
-[purchase_order_ubl](purchase_order_ubl/) | 8.0.1.1.1 | Embed UBL XML file inside the PDF purchase order
+[purchase_order_ubl](purchase_order_ubl/) | 8.0.1.2.0 | Embed UBL XML file inside the PDF purchase order
 [sale_commercial_partner](sale_commercial_partner/) | 8.0.1.0.0 | Add stored related field 'Commercial Customer' on sale orders
 [sale_order_import](sale_order_import/) | 8.0.1.1.0 | Import RFQ or sale orders from files
 [sale_order_import_csv](sale_order_import_csv/) | 8.0.1.0.0 | Import CSV sale order files
