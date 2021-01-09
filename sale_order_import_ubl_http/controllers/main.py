@@ -38,7 +38,7 @@ class ImportController(http.Controller):
         return "Thank you. Your order will be processed, shortly"
 
     def check_data_to_import(self, env, data):
-        """ Check the data received looks valid.
+        """Check the data received looks valid.
 
         For any problem with the data an exception is raised and the HTTP
         request will return an error.
