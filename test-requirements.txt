@@ -1,0 +1,7 @@
+odoo14-addon-sale-order-import-ubl @git+https://github.com/trobz/edi@14.0-mig-sale_order_import_ubl#subdirectory=setup/sale_order_import_ubl
+
+# requirements for sale_order_import_ubl
+odoo14-addon-base-business-document-import @ git+https://github.com/trobz/edi@14.0-mig-base_business_document_import#subdirectory=setup/base_business_document_import
+odoo14-addon-account-tax-unece @ git+https://github.com/trobz/community-data-files@14-mig-account_tax_unece#subdirectory=setup/account_tax_unece
+odoo14-addon-base-ubl @ git+https://github.com/trobz/edi@14.0-mig-base_ubl#subdirectory=setup/base_ubl
+odoo14-addon-sale-order-import @ git+https://github.com/trobz/edi@14.0-mig-sale_order_import#subdirectory=setup/sale_order_import
