@@ -725,7 +725,8 @@ class AccountInvoice(models.Model):
 
         if ns['level'] in ('extended', 'en16931', 'basic'):
             line_number = 0
-            for iline in self.invoice_line_ids:
+            for iline in self.invoice_line_ids.filtered(
+                    lambda x: not x.display_type):
                 line_number += 1
                 self._cii_add_invoice_line_block(
                     trade_transaction, iline, line_number, ns)
@@ -736,10 +737,16 @@ class AccountInvoice(models.Model):
 
         xml_string = etree.tostring(
             root, pretty_print=True, encoding='UTF-8', xml_declaration=True)
-        check_facturx_xsd(xml_string, 'factur-x', facturx_level=ns['level'])
         logger.debug(
             'Factur-X XML file generated for invoice ID %d', self.id)
         logger.debug(xml_string)
+        try:
+            check_facturx_xsd(xml_string, 'factur-x', facturx_level=ns['level'])
+        except Exception as e:
+            raise UserError(_(
+                "The factur-x.xml file is invalid against the official "
+                "XML Schema definition. Here is the error which may give you "
+                "an idea on the cause of the problem:\n%s") % e)
         return (xml_string, level)
 
     @api.multi
