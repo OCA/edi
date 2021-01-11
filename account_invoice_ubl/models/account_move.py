@@ -64,16 +64,18 @@ class AccountMove(models.Model):
         if self.company_id.embed_pdf_in_ubl_xml_invoice and not self.env.context.get(
             "no_embedded_pdf"
         ):
+            filename = "Invoice-" + self.name + ".pdf"
             docu_reference = etree.SubElement(
                 parent_node, ns["cac"] + "AdditionalDocumentReference"
             )
             docu_reference_id = etree.SubElement(docu_reference, ns["cbc"] + "ID")
-            docu_reference_id.text = "Invoice-" + self.name + ".pdf"
+            docu_reference_id.text = filename
             attach_node = etree.SubElement(docu_reference, ns["cac"] + "Attachment")
             binary_node = etree.SubElement(
                 attach_node,
                 ns["cbc"] + "EmbeddedDocumentBinaryObject",
                 mimeCode="application/pdf",
+                filename=filename,
             )
             ctx = dict()
             ctx["no_embedded_ubl_xml"] = True
