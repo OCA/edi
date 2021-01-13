@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Weblate 3.10\n"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:753
+#: code:addons/account_invoice_facturx/models/account_invoice.py:760
 #, python-format
 msgid "%s: %s %s dated %s"
 msgstr "%s: %s %s datiert %s"
@@ -63,7 +63,7 @@ msgid "Extended"
 msgstr "Erweitert"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:752
+#: code:addons/account_invoice_facturx/models/account_invoice.py:759
 #, python-format
 msgid "Factur-X"
 msgstr "Factur-X"
@@ -91,7 +91,7 @@ msgid "Factur-X Refund Type"
 msgstr "Factur-X Gutschriftstyp"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:749
+#: code:addons/account_invoice_facturx/models/account_invoice.py:756
 #: model:ir.model,name:account_invoice_facturx.model_account_invoice
 #, python-format
 msgid "Invoice"
@@ -139,7 +139,7 @@ msgid "None"
 msgstr "Keins"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:749
+#: code:addons/account_invoice_facturx/models/account_invoice.py:756
 #, python-format
 msgid "Refund"
 msgstr "Gutschrift"
@@ -160,6 +160,15 @@ msgstr ""
 "Der Factur-X-Standard legt fest, dass der Preis pro Mengeneinheit nicht "
 "negativ sein darf. Der Preis pro Mengeneinheit '%s' ist jedoch negativ. Sie "
 "sollten eine Kundengutschrift für diese Verkaufsposition erstellen."
+
+#. module: account_invoice_facturx
+#: code:addons/account_invoice_facturx/models/account_invoice.py:746
+#, python-format
+msgid ""
+"The factur-x.xml file is invalid against the official XML Schema definition. "
+"Here is the error which may give you an idea on the cause of the problem:\n"
+"%s"
+msgstr ""
 
 #. module: account_invoice_facturx
 #: selection:res.company,facturx_refund_type:0

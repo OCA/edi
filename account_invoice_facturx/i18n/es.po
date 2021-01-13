@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:753
+#: code:addons/account_invoice_facturx/models/account_invoice.py:760
 #, python-format
 msgid "%s: %s %s dated %s"
 msgstr "%s: %s %s fechado %s"
@@ -64,7 +64,7 @@ msgid "Extended"
 msgstr ""
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:752
+#: code:addons/account_invoice_facturx/models/account_invoice.py:759
 #, python-format
 msgid "Factur-X"
 msgstr "Factur-X"
@@ -93,7 +93,7 @@ msgid "Factur-X Refund Type"
 msgstr "Tipo de reembolso Factur-X"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:749
+#: code:addons/account_invoice_facturx/models/account_invoice.py:756
 #: model:ir.model,name:account_invoice_facturx.model_account_invoice
 #, python-format
 msgid "Invoice"
@@ -141,7 +141,7 @@ msgid "None"
 msgstr ""
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:749
+#: code:addons/account_invoice_facturx/models/account_invoice.py:756
 #, python-format
 msgid "Refund"
 msgstr "Reembolso"
@@ -159,6 +159,15 @@ msgid ""
 "The Factur-X standard specify that unit prices can't be negative. The unit "
 "price of line '%s' is negative. You should generate a customer refund for "
 "that line."
+msgstr ""
+
+#. module: account_invoice_facturx
+#: code:addons/account_invoice_facturx/models/account_invoice.py:746
+#, python-format
+msgid ""
+"The factur-x.xml file is invalid against the official XML Schema definition. "
+"Here is the error which may give you an idea on the cause of the problem:\n"
+"%s"
 msgstr ""
 
 #. module: account_invoice_facturx

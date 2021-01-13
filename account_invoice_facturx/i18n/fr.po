@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Weblate 3.1.1\n"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:753
+#: code:addons/account_invoice_facturx/models/account_invoice.py:760
 #, python-format
 msgid "%s: %s %s dated %s"
 msgstr "%s : %s %s daté le %s"
@@ -67,7 +67,7 @@ msgid "Extended"
 msgstr ""
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:752
+#: code:addons/account_invoice_facturx/models/account_invoice.py:759
 #, python-format
 msgid "Factur-X"
 msgstr "Factur-X"
@@ -96,7 +96,7 @@ msgid "Factur-X Refund Type"
 msgstr "Type d'avoir Factur-X"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:749
+#: code:addons/account_invoice_facturx/models/account_invoice.py:756
 #: model:ir.model,name:account_invoice_facturx.model_account_invoice
 #, python-format
 msgid "Invoice"
@@ -144,7 +144,7 @@ msgid "None"
 msgstr ""
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:749
+#: code:addons/account_invoice_facturx/models/account_invoice.py:756
 #, python-format
 msgid "Refund"
 msgstr "Avoir"
@@ -166,6 +166,15 @@ msgstr ""
 "Le standard Factur-X précise que le prix unitaire ne peut être négatif. Le "
 "prix unitaire de la ligne %s est négatif. Vous devriez générer un avoir "
 "client pour cette ligne."
+
+#. module: account_invoice_facturx
+#: code:addons/account_invoice_facturx/models/account_invoice.py:746
+#, python-format
+msgid ""
+"The factur-x.xml file is invalid against the official XML Schema definition. "
+"Here is the error which may give you an idea on the cause of the problem:\n"
+"%s"
+msgstr ""
 
 #. module: account_invoice_facturx
 #: selection:res.company,facturx_refund_type:0
