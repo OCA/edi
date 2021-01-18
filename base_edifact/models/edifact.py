@@ -28,8 +28,8 @@ class BaseEdifact(models.AbstractModel):
     @api.model
     def edifact_date(self, date):
         return '%s%s%s' % (date.year,
-                           date.month,
-                           date.day)
+                           '{0:02d}'.format(date.month),
+                           '{0:02d}'.format(date.day))
 
     # Methods to generate: invoice
     @api.model
@@ -39,7 +39,7 @@ class BaseEdifact(models.AbstractModel):
     @api.model
     def edifact_invoice_name(self, invoice_number, invoice_type):
         if invoice_type == 'out_invoice':
-            invoice_type = '390'
+            invoice_type = '380'
         else:
             invoice_type = '381'
         return 'INV|%s|%s|9\n' % (invoice_number, invoice_type)
