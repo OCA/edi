@@ -95,7 +95,7 @@ class AccountInvoice(models.Model):
             for tax in inv_line.invoice_line_tax_ids:
                 tax_code = self._get_edifact_tax_code(
                     tax.description, tax.amount)
-                tax_amount = with_discount + with_discount * tax.amount / 100.0
+                tax_amount = with_discount * tax.amount / 100.0
                 edifact_line += self.edifact_invoice_line_taxes(
                     tax_code, tax.amount, tax_amount)
             edifact_line += self.edifact_invoice_line_total(inv_line)
