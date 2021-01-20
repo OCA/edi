@@ -83,7 +83,8 @@ class AccountInvoice(models.Model):
         for inv_line in self.invoice_line_ids:
             if not inv_line.product_id.barcode:
                 raise UserError(
-                    _('Product %s does not have barcode assigned.'))
+                    _('Product %s does not have barcode assigned.')
+                    % inv_line.product_id)
             without_discount = inv_line.price_unit * inv_line.quantity
             with_discount = without_discount - (
                 without_discount * inv_line.discount / 100.0)
