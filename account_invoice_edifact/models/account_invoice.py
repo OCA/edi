@@ -107,6 +107,8 @@ class AccountInvoice(models.Model):
         return edifact_body
 
     def _compute_edifact_invoice_result(self):
+        tax_obj = self.env['account.tax']
+
         res = {
             'untaxed_amount': self.amount_untaxed,
             'total_amount': self.amount_total,
@@ -115,7 +117,7 @@ class AccountInvoice(models.Model):
             'with_discounts': 0.0,
             'discounts_amount': 0.0,
         }
-        taxes = {}
+
         for inv_line in self.invoice_line_ids:
             without_discount = inv_line.price_unit * inv_line.quantity
             with_discount = without_discount - (
@@ -125,21 +127,18 @@ class AccountInvoice(models.Model):
             res['discounts_amount'] +=\
                 without_discount * inv_line.discount / 100.0
 
-            for tax in inv_line.invoice_line_tax_ids:
-                tax_code = self._get_edifact_tax_code(
-                    tax.description, tax.amount)
-                tax_amount = with_discount + with_discount * tax.amount / 100.0
-                if tax_code not in taxes:
-                    taxes[tax_code] = {}
-                if tax.amount not in taxes[tax_code]:
-                    taxes[tax_code][tax.amount] = {
-                        'tax_amount': 0.0,
-                        'untaxed_amount': 0.0,
-                    }
-                taxes[tax_code][tax.amount]['tax_amount'] +=\
-                    tax_amount
-                taxes[tax_code][tax.amount]['untaxed_amount'] +=\
-                    with_discount
+        taxes = {}
+        odoo_taxes = self.get_taxes_values()
+        for key, tax_dict in odoo_taxes.items():
+            tax = tax_obj.browse(tax_dict['tax_id'])
+            tax_code = self._get_edifact_tax_code(tax.description, tax.amount)
+            if tax_code not in taxes:
+                taxes[tax_code] = {}
+            taxes[tax_code][tax.amount] = {
+                'tax_amount': tax_dict['amount'],
+                'untaxed_amount': tax_dict['base'],
+            }
+
         res['taxes'] = taxes
         return res
 
@@ -154,8 +153,7 @@ class AccountInvoice(models.Model):
             inv_res['with_discounts'], inv_res['discounts_amount'])
         for tax_code, percent_dict in inv_res['taxes'].items():
             for tax_percent, amount_dict in percent_dict.items():
-                tax_amount =\
-                    amount_dict['tax_amount'] - amount_dict['untaxed_amount']
+                tax_amount = amount_dict['tax_amount']
                 untaxed_amount = amount_dict['untaxed_amount']
                 edifact_result += self.edifact_invoice_result_taxes(
                     tax_code, tax_percent, tax_amount, untaxed_amount)
