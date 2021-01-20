@@ -4,6 +4,7 @@
 
 from odoo import models, api
 from datetime import datetime
+from slugify import slugify
 
 
 class BaseEdifact(models.AbstractModel):
@@ -17,13 +18,19 @@ class BaseEdifact(models.AbstractModel):
             vat = partner._split_vat(partner.vat)[1]
         return vat
 
-    def get_street(self, partner):
+    def get_partner_data(self, partner):
+        name = slugify(partner.name, separator=' ', lowercase=False,
+                       max_length=0)
+        city = slugify(partner.name, separator=' ', lowercase=False,
+                       max_length=0)
         street = partner.street or ''
         if partner.street2:
             if street:
                 street += ' '
             street += partner.street2
-        return street
+        # Only ASCII chars:
+        street = slugify(street, separator=' ', lowercase=False, max_length=0)
+        return (name, city, street)
 
     @api.model
     def edifact_date(self, date):
@@ -61,13 +68,13 @@ class BaseEdifact(models.AbstractModel):
 
     @api.model
     def edifact_invoice_buyer(self, partner):
-        street = self.get_street(partner)
+        name, city, street = self.get_partner_data(partner)
         vat = self.get_vat(partner)
         return 'NADBY|%s|%s|%s|%s|%s|%s||%s\n' % (
             partner.edifact_code or '',
-            partner.name or '',
+            name or '',
             street,
-            partner.city or '',
+            city or '',
             partner.zip or '',
             vat,
             partner.country_id.code or ''
@@ -75,26 +82,26 @@ class BaseEdifact(models.AbstractModel):
 
     @api.model
     def edifact_invoice_receiver(self, partner):
-        street = self.get_street(partner)
+        name, city, street = self.get_partner_data(partner)
         vat = self.get_vat(partner)
         return 'NADIV|%s|%s|%s|%s|%s|%s\n' % (
             partner.edifact_code or '',
-            partner.name or '',
+            name or '',
             street,
-            partner.city or '',
+            city or '',
             partner.zip or '',
             vat,
         )
 
     @api.model
     def edifact_invoice_legal_buyer(self, partner):
-        street = self.get_street(partner)
+        name, city, street = self.get_partner_data(partner)
         vat = self.get_vat(partner)
         res = 'NADBCO|%s|%s|%s|%s|%s|%s' % (
             partner.edifact_code or '',
-            partner.name or '',
+            name or '',
             street,
-            partner.city or '',
+            city or '',
             partner.zip or '',
             vat,
         )
@@ -105,40 +112,40 @@ class BaseEdifact(models.AbstractModel):
 
     @api.model
     def edifact_invoice_supplier(self, supplier, company_registry):
-        street = self.get_street(supplier)
+        name, city, street = self.get_partner_data(supplier)
         vat = self.get_vat(supplier)
         return 'NADSU|%s|%s|%s|%s|%s|%s|%s\n' % (
             supplier.edifact_code or '',
-            supplier.name or '',
+            name or '',
             company_registry or '',
             street,
-            supplier.city or '',
+            city or '',
             supplier.zip or '',
             vat,
         )
 
     @api.model
     def edifact_invoice_legal_supplier(self, supplier, company_registry):
-        street = self.get_street(supplier)
+        name, city, street = self.get_partner_data(supplier)
         vat = self.get_vat(supplier)
         return 'NADSCO|%s|%s|%s|%s|%s|%s|%s\n' % (
             supplier.edifact_code or '',
-            supplier.name or '',
+            name or '',
             company_registry or '',
             street,
-            supplier.city or '',
+            city or '',
             supplier.zip or '',
             vat,
         )
 
     @api.model
     def edifact_invoice_goods_receiver(self, partner):
-        street = self.get_street(partner)
+        name, city, street = self.get_partner_data(partner)
         return 'NADDP|%s|%s|%s|%s|%s\n' % (
             partner.edifact_code or '',
-            partner.name or '',
+            name or '',
             street,
-            partner.city or '',
+            city or '',
             partner.zip or '',
         )
 
@@ -157,7 +164,10 @@ class BaseEdifact(models.AbstractModel):
 
     @api.model
     def edifact_invoice_line_description(self, invoice_line):
-        return 'IMDLIN|%s|M|F\n' % invoice_line.product_id.name
+        # Description Max length: 70
+        description = slugify(invoice_line.product_id.name, separator=' ',
+                              lowercase=False, max_length=70)
+        return 'IMDLIN|%s|M|F\n' % description
 
     @api.model
     def edifact_invoice_line_quantity(self, invoice_line):
