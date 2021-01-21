@@ -20,16 +20,16 @@ class BaseEdifact(models.AbstractModel):
 
     def get_partner_data(self, partner):
         name = slugify(partner.name, separator=' ', lowercase=False,
-                       max_length=0)
+                       max_length=70)
         city = slugify(partner.name, separator=' ', lowercase=False,
-                       max_length=0)
+                       max_length=35)
         street = partner.street or ''
         if partner.street2:
             if street:
                 street += ' '
             street += partner.street2
         # Only ASCII chars:
-        street = slugify(street, separator=' ', lowercase=False, max_length=0)
+        street = slugify(street, separator=' ', lowercase=False, max_length=70)
         return (name, city, street)
 
     @api.model
