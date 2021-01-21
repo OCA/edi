@@ -790,28 +790,6 @@ class AccountInvoiceImport(models.TransientModel):
             invoice.amount_untaxed,
             precision_rounding=prec,
         )
-        # Force tax amount if necessary
-        if float_compare(
-            invoice.amount_total, parsed_inv["amount_total"], precision_rounding=prec
-        ):
-            if not invoice.tax_line_ids:
-                raise UserError(
-                    _(
-                        "The total amount is different from the untaxed amount, "
-                        "but no tax has been configured !"
-                    )
-                )
-            initial_tax_amount = invoice.tax_line_ids[0].amount
-            tax_amount = parsed_inv["amount_total"] - parsed_inv["amount_untaxed"]
-            invoice.tax_line_ids[0].amount = tax_amount
-            cur_symbol = invoice.currency_id.symbol
-            invoice.message_post(
-                body=_(
-                    "The total tax amount has been forced to %s %s "
-                    "(amount computed by Odoo was: %s %s)."
-                )
-                % (tax_amount, cur_symbol, initial_tax_amount, cur_symbol)
-            )
 
     def update_invoice_lines(self, parsed_inv, invoice, seller):
         chatter = parsed_inv["chatter_msg"]
