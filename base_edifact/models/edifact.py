@@ -200,7 +200,7 @@ QTYLIN|47|%s|%s\n' % (int(invoice_line.quantity), uom_code,
         discounted_price = invoice_line.price_unit - (
             invoice_line.price_unit * invoice_line.discount / 100.0)
         res = 'PRILIN|AAA|%.2f\n\
-PRILIN|AAB|%.2f\n' % (invoice_line.price_unit, discounted_price)
+PRILIN|AAB|%.2f\n' % (discounted_price, invoice_line.price_unit)
         return res
 
     @api.model
@@ -209,7 +209,7 @@ PRILIN|AAB|%.2f\n' % (invoice_line.price_unit, discounted_price)
         if invoice_line.discount:
             discount_amount = round(
                 invoice_line.price_unit * invoice_line.quantity * (
-                    1 - (invoice_line.discount or 0.0) / 100.0), 2)
+                    invoice_line.discount or 0.0) / 100.0, 2)
             res = 'ALCLIN|A|1|TD||%s|%s\n' % (
                 invoice_line.discount, discount_amount)
         return res
