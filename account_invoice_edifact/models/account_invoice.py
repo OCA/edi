@@ -94,6 +94,7 @@ class AccountInvoice(models.Model):
             edifact_line += self.edifact_invoice_line_description(inv_line)
             edifact_line += self.edifact_invoice_line_quantity(inv_line)
             edifact_line += self.edifact_invoice_line_price_unit(inv_line)
+            edifact_line += self.edifact_invoice_line_discount(inv_line)
             for tax in inv_line.invoice_line_tax_ids:
                 tax_code = self._get_edifact_tax_code(
                     tax.description, tax.amount)
