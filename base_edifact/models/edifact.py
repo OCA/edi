@@ -157,6 +157,11 @@ class BaseEdifact(models.AbstractModel):
     def edifact_invoice_currency(self, currency):
         return 'CUX|%s|4\n' % currency.name
 
+    @api.model
+    def edifact_invoice_optional_fields(self, invoice):
+        # Method to be inherit by personalizations and add required stuff
+        return ''
+
     # Methods to generate: invoice line
     @api.model
     def edifact_invoice_line_init(self, invoice_line, index):
