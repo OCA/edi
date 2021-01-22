@@ -6,166 +6,170 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2021-01-22 21:44+0000\n"
+"Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
 "Language-Team: none\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_invoice_download_weboob
 #: code:addons/account_invoice_download_weboob/models/account_invoice_download_config.py:45
 #, python-format
 msgid "%s. Possible values: %s."
-msgstr ""
+msgstr "%s. Mogelijke waardes: %s."
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_active
 msgid "Active"
-msgstr ""
+msgstr "Actief"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.account_invoice_download_config_form
 msgid "Additional Parameters"
-msgstr ""
+msgstr "Aanvullende Parameters"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model,name:account_invoice_download_weboob.model_weboob_parameter
 msgid "Additional parameters to configure a Weboob backend"
-msgstr ""
+msgstr "Aanvullende parameters voor de configuratie van de Weboob backend"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_search
 msgid "Archived"
-msgstr ""
+msgstr "Gearchiveerd"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_available_version
 msgid "Available Version"
-msgstr ""
+msgstr "Beschikbare versie"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_update_form
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleer"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model,name:account_invoice_download_weboob.model_account_invoice_download_config
 msgid "Configuration for the download of Supplier Invoices"
-msgstr ""
+msgstr "Configuration voor het downloaden van leveranciers facturen"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_update_form
 msgid "Connect to https://updates.weboob.org/ to get the list of Weboob modules with Invoice API."
 msgstr ""
+"Verbind naar https://updates.weboob.org/ voor de actuele lijst van "
+"beschikbare Weboob modules met de factuur API."
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_create_uid
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_update_create_uid
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Aangemaakt door"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_create_date
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_update_create_date
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Aangemaakt op"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_description
 msgid "Description"
-msgstr ""
+msgstr "Omschrijving"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_display_name
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_update_display_name
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Weergavenaam"
 
 #. module: account_invoice_download_weboob
 #: code:addons/account_invoice_download_weboob/models/weboob_module.py:118
 #, python-format
 msgid "Error when upgrading module '%s'. Error message: %s."
-msgstr ""
+msgstr "Fout tijdens de upgrade van module '%s'. Fout melding: %s."
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_search
 msgid "Group By"
-msgstr ""
+msgstr "Groeperen op"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_account_invoice_download_config_weboob_has_parameter
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_has_parameters
 msgid "Has Additional Parameters"
-msgstr ""
+msgstr "Heeft aanvullende Parameters"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_note
 msgid "Help"
-msgstr ""
+msgstr "Help"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_id
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_update_id
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_form
 msgid "Install"
-msgstr ""
+msgstr "Install"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_search
 #: selection:weboob.module,state:0
 msgid "Installed"
-msgstr ""
+msgstr "Geinstalleerd"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_installed_version
 msgid "Installed Version"
-msgstr ""
+msgstr "Geinstalleerde versie"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_download_config_id
 msgid "Invoice Download Config"
-msgstr ""
+msgstr "Factuur download configuratie"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_key
 msgid "Key"
-msgstr ""
+msgstr "Sleutel"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module___last_update
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_update___last_update
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Laatst bijgewerkt op"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_update_write_uid
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_write_uid
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Laatst bijgewerkt door"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_update_write_date
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_write_date
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Laatst bijgewerkt op"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_license
 msgid "License"
-msgstr ""
+msgstr "Licentie"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_maintainer
@@ -175,28 +179,28 @@ msgstr ""
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_name
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_search
 msgid "Name or Description"
-msgstr ""
+msgstr "Naam of omschrijving"
 
 #. module: account_invoice_download_weboob
 #: selection:weboob.module,state:0
 msgid "Not Installed"
-msgstr ""
+msgstr "Niet geinstalleerd"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_search
 msgid "Search Weboob modules"
-msgstr ""
+msgstr "Zoek Weboob modules"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_module_state
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_search
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_search
@@ -206,63 +210,63 @@ msgstr ""
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_update_form
 msgid "Update Module List"
-msgstr ""
+msgstr "Update Module Lijst"
 
 #. module: account_invoice_download_weboob
 #: model:ir.actions.act_window,name:account_invoice_download_weboob.weboob_module_update_action
 #: model:ir.ui.menu,name:account_invoice_download_weboob.weboob_module_update_menu
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_update_form
 msgid "Update Weboob Modules List"
-msgstr ""
+msgstr "Update Weboob Module Lijst"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model,name:account_invoice_download_weboob.model_weboob_module_update
 msgid "Update Weboob module list"
-msgstr ""
+msgstr "Update Weboob Module Lijst"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_form
 msgid "Upgrade"
-msgstr ""
+msgstr "Upgrade"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_weboob_parameter_value
 msgid "Value"
-msgstr ""
+msgstr "Waarde"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_account_invoice_download_config_weboob_parameter_ids
 msgid "Weboob Additional Parameters"
-msgstr ""
+msgstr "Weboob Aanvullende Parameters"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model.fields,field_description:account_invoice_download_weboob.field_account_invoice_download_config_weboob_module_id
 msgid "Weboob Module"
-msgstr ""
+msgstr "Weboob Module"
 
 #. module: account_invoice_download_weboob
 #: model:ir.actions.act_window,name:account_invoice_download_weboob.weboob_module_action
 #: model:ir.ui.menu,name:account_invoice_download_weboob.weboob_module_menu
 msgid "Weboob Modules"
-msgstr ""
+msgstr "Weboob Modules"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_form
 msgid "Weboob module"
-msgstr ""
+msgstr "Weboob Module"
 
 #. module: account_invoice_download_weboob
 #: model:ir.model,name:account_invoice_download_weboob.model_weboob_module
 msgid "Weboob module for account_invoice_download framework"
-msgstr ""
+msgstr "Weboob module voor het account_invoice_download framework"
 
 #. module: account_invoice_download_weboob
 #: model:ir.ui.view,arch_db:account_invoice_download_weboob.weboob_module_tree
 msgid "Weboob modules"
-msgstr ""
+msgstr "Weboob modules"
 
 #. module: account_invoice_download_weboob
 #: code:addons/account_invoice_download_weboob/models/account_invoice_download_config.py:79
 #, python-format
 msgid "Wrong password."
-msgstr ""
+msgstr "Foutief wachtwoord."
