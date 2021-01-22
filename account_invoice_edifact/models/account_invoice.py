@@ -62,6 +62,7 @@ class AccountInvoice(models.Model):
         edifact_header += self.edifact_invoice_payer(self.partner_id)  # NADPR
         edifact_header += self.edifact_invoice_currency(
             self.currency_id)  # CUX
+        edifact_header += self.edifact_invoice_optional_fields(self)
 
         return edifact_header
 
