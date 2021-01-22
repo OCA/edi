@@ -204,6 +204,17 @@ PRILIN|AAB|%.2f\n' % (invoice_line.price_unit, discounted_price)
         return res
 
     @api.model
+    def edifact_invoice_line_discount(self, invoice_line):
+        res = ''
+        if invoice_line.discount:
+            discount_amount = round(
+                invoice_line.price_unit * invoice_line.quantity * (
+                    1 - (invoice_line.discount or 0.0) / 100.0), 2)
+            res = 'ALCLIN|A|1|TD||%s|%s\n' % (
+                invoice_line.discount, discount_amount)
+        return res
+
+    @api.model
     def edifact_invoice_line_taxes(self, tax_code, tax_percent, tax_amount):
         return 'TAXLIN|%s|%s|%.2f\n' % (tax_code, tax_percent, tax_amount)
 
