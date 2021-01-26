@@ -117,16 +117,14 @@ class AccountInvoice(models.Model):
             'total_amount': self.amount_total,
             'total_tax_amount': self.amount_tax,
             'without_discounts': 0.0,
-            'with_discounts': 0.0,
+            'with_discounts': self.amount_untaxed,
             'discounts_amount': 0.0,
         }
 
         for inv_line in self.invoice_line_ids:
-            without_discount = inv_line.price_unit * inv_line.quantity
-            with_discount = without_discount - (
-                without_discount * inv_line.discount / 100.0)
+            without_discount = inv_line.price_subtotal / (
+                1 - inv_line.discount / 100.0)
             res['without_discounts'] += without_discount
-            res['with_discounts'] += with_discount
 
         taxes = {}
         odoo_taxes = self.get_taxes_values()
