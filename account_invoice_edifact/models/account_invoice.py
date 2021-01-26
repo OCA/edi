@@ -127,8 +127,6 @@ class AccountInvoice(models.Model):
                 without_discount * inv_line.discount / 100.0)
             res['without_discounts'] += without_discount
             res['with_discounts'] += with_discount
-            res['discounts_amount'] +=\
-                without_discount * inv_line.discount / 100.0
 
         taxes = {}
         odoo_taxes = self.get_taxes_values()
