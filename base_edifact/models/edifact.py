@@ -230,7 +230,7 @@ PRILIN|AAB|%.2f\n' % (discounted_price, invoice_line.price_unit)
     def edifact_invoice_amount_total(
             self, untaxed_amount, total_amount, total_tax_amount,
             without_discounts, with_discounts, discounts_amount):
-        res = 'MOARES|%.2f|%.2f|%.2f|%s|%.2f' % (
+        res = 'MOARES|%.2f|%.2f|%.2f|%.2f|%.2f' % (
             with_discounts,
             without_discounts,
             untaxed_amount,
