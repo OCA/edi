@@ -268,10 +268,6 @@ class OrderResponseImport(models.TransientModel):
 
     @api.model
     def _process_conditional(self, purchase_order, parsed_order_document):
-        chatter = parsed_order_document["chatter_msg"] = (
-            parsed_order_document["chatter_msg"] or []
-        )
-        chatter.append(_("PO confirmed with amendment by the supplier."))
         lines = parsed_order_document["lines"]
         line_ids = [int(l["line_id"]) for l in lines if is_int(l["line_id"])]
         if set(line_ids) != set(purchase_order.order_line.ids):
