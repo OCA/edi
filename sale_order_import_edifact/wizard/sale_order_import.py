@@ -4,11 +4,9 @@
 
 from odoo import models, fields, api, _
 from odoo.tools import config
-from tempfile import TemporaryFile
 from odoo.exceptions import UserError
 from base64 import b64encode
 import logging
-import csv
 
 logger = logging.getLogger(__name__)
 
@@ -57,27 +55,29 @@ class SaleOrderImport(models.TransientModel):
 
     @api.model
     def parse_pla_order(self, order_file):
-        with TemporaryFile(mode='r+') as buf:
-            try:
-                filename = self.order_filename or '-'
-                buf.write(str(order_file, 'iso-8859-1'))
-                buf.seek(0)
-                csv_iterator = csv.reader(buf, delimiter='|')
-                reader = [row for row in csv_iterator]
-                if reader[0][0] in (
-                        'ORDERS_D_93A_UN_EAN007', 'ORDERS_D_96A_UN_EAN008'):
-                    res = self.parse_edifact_sale_order(reader)
-                else:
-                    raise UserError(
-                        _('Unknow Edifact document type: %s.') % (
-                            reader[0][0]))
-            except Exception as e:
-                logger.exception(
-                    'Error in File %s: Unsuccessfully imported,'
-                    ' due to format mismatch.%s' % (
-                        filename, str(e.args[0])))
+        try:
+            filename = self.order_filename or '-'
+            order_file = order_file.replace(b'\r', b'')
+            lines = order_file.split(b'\n')
+            reader = []
+            for line in lines:
+                line_str = line.decode('iso-8859-1')
+                fields = line_str.split('|')
+                reader.append(fields)
+            if reader[0][0] in (
+                    'ORDERS_D_93A_UN_EAN007', 'ORDERS_D_96A_UN_EAN008'):
+                res = self.parse_edifact_sale_order(reader)
+            else:
                 raise UserError(
-                    _('%s') % (str(e.args[0])))
+                    _('Unknow Edifact document type: %s.') % (
+                        reader[0][0]))
+        except Exception as e:
+            logger.exception(
+                'Error in File %s: Unsuccessfully imported,'
+                ' due to format mismatch.%s' % (
+                    filename, str(e.args[0])))
+            raise UserError(
+                _('%s') % (str(e.args[0])))
 
         return res
 
