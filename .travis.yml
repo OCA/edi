@@ -27,6 +27,7 @@ jobs:
 env:
   global:
     - VERSION="14.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0"
+    - WKHTMLTOPDF_VERSION="0.12.5"
     - MQT_DEP=PIP
 
 install:
