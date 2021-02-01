@@ -275,13 +275,13 @@ class AccountInvoiceImport(models.TransientModel):
             for line in parsed_inv['lines']:
                 il_vals = static_vals.copy()
                 if config['invoice_line_method'] == 'nline_auto_product':
-                    if 'customer' in self.env.context:
-                        product = bdio._match_product(
-                            line['product'], parsed_inv['chatter_msg'])
-                    else:
-                        product = bdio._match_product(
-                            line['product'], parsed_inv['chatter_msg'],
-                            seller=partner)
+                    if parsed_inv['type'] in ('out_invoice', 'out_refund'):
+                        partner_type = 'customer'
+                    else
+                        partner_type = 'supplier'
+                    product = bdio._match_product(
+                        line['product'], parsed_inv['chatter_msg'],
+                        seller=partner_type)
                     il_vals = {'product_id': product.id, 'invoice_id': vals}
                     il_vals = ailo.play_onchanges(il_vals, ['product_id'])
                     il_vals.pop('invoice_id')
@@ -505,15 +505,14 @@ class AccountInvoiceImport(models.TransientModel):
             self.env.user.company_id.id
         parsed_inv = self.parse_invoice(
             self.invoice_file, self.invoice_filename)
-        if 'customer' in self.env.context:
-            partner = bdio._match_partner(
-                parsed_inv["partner"], parsed_inv["chatter_msg"],
-                partner_type='customer'
-            )
-        else:
-            partner = bdio._match_partner(
-                parsed_inv["partner"], parsed_inv["chatter_msg"]
-            )
+        if parsed_inv['type'] in ('out_invoice', 'out_refund'):
+            partner_type = 'customer'
+        else
+            partner_type = 'supplier'
+        partner = bdio._match_partner(
+            parsed_inv['partner'], parsed_inv['chatter_msg'],
+            partner_type=partner_type
+        )
         partner = partner.commercial_partner_id
         currency = bdio._match_currency(
             parsed_inv.get('currency'), parsed_inv['chatter_msg'])
