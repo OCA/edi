@@ -46,7 +46,73 @@ class BusinessDocumentImport(models.AbstractModel):
                 match_dict["state_code"] = match_dict["state_code"].upper()
 
     @api.model
-    def _match_partner_contact(self, partner_dict, domain, order):
+    def _get_match_partner_order(self, partner_type):
+        if partner_type == "supplier":
+            return "supplier_rank desc"
+        if partner_type == "customer":
+            return "customer_rank desc"
+        return ""
+
+    @api.model
+    def _get_match_partner_type_label(self, partner_type):
+        if partner_type == "supplier":
+            return _("supplier")
+        if partner_type == "customer":
+            return _("customer")
+        return _("partner")
+
+    @api.model
+    def _get_country_filter(self, partner_dict, chatter_msg):
+        """Generate filter by country"""
+        country = False
+        if partner_dict.get("country_code"):
+            country = self.env["res.country"].search(
+                [("code", "=", partner_dict["country_code"])], limit=1
+            )
+            if country:
+                return [
+                    "|",
+                    ("country_id", "=", False),
+                    ("country_id", "=", country.id),
+                ]
+            chatter_msg.append(
+                _(
+                    "The analysis of the business document returned '%s' as "
+                    "country code. But there are no country with that code "
+                    "in Odoo."
+                )
+                % partner_dict["country_code"]
+            )
+        return False
+
+    @api.model
+    def _get_country_state_filter(self, partner_dict, chatter_msg):
+        if partner_dict.get("state_code"):
+            country = self.env["res.country"].search(
+                [("code", "=", partner_dict["country_code"])], limit=1
+            )
+            state = self.env["res.country.state"].search(
+                [
+                    ("code", "=", partner_dict["state_code"]),
+                    ("country_id", "=", country.id),
+                ],
+                limit=1,
+            )
+            if state:
+                return ["|", ("state_id", "=", False), ("state_id", "=", state.id)]
+        return False
+
+    @api.model
+    def _match_partner_ref(self, partner_dict, chatter_msg, domain, order):
+        """If a ref is explicitly given, we just want to match that partner"""
+        if partner_dict.get("ref"):
+            return self.env["res.partner"].search(
+                domain + [("ref", "=", partner_dict["ref"])], limit=1, order=order
+            )
+        return False
+
+    @api.model
+    def _match_partner_contact(self, partner_dict, chatter_msg, domain, order):
         rpo = self.env["res.partner"]
         if partner_dict.get("email") and "@" in partner_dict["email"]:
             partner = rpo.search(
@@ -77,6 +143,76 @@ class BusinessDocumentImport(models.AbstractModel):
             )
             if partner:
                 return partner
+        return False
+
+    @api.model
+    def _match_partner_name(self, partner_dict, chatter_msg, domain, order):
+        if partner_dict.get("name"):
+            return self.env["res.partner"].search(
+                domain + [("name", "=ilike", partner_dict["name"])],
+                limit=1,
+                order=order,
+            )
+        return False
+
+    @api.model
+    def _get_partner_website_domain(self, partner_dict):
+        if partner_dict.get("website"):
+            urlp = urlparse(partner_dict["website"])
+            netloc = urlp.netloc
+            if not urlp.scheme and not netloc:
+                netloc = urlp.path
+            if netloc and len(netloc.split(".")) >= 2:
+                return ".".join(netloc.split(".")[-2:])
+        return False
+
+    @api.model
+    def _match_partner_website(self, partner_dict, chatter_msg, domain, order):
+        website_domain = self._get_partner_website_domain(partner_dict)
+        if website_domain:
+            return self.env["res.partner"].search(
+                domain + [("website", "=ilike", "%" + website_domain + "%")],
+                limit=1,
+                order=order,
+            )
+        return False
+
+    @api.model
+    def _get_partner_email_domain(self, partner_dict):
+        return (
+            partner_dict.get("email")
+            and "@" in partner_dict["email"]
+            and partner_dict["email"].split("@")[1]
+        )
+
+    @api.model
+    def _match_partner_email(self, partner_dict, chatter_msg, domain, order):
+        email_domain = self._get_partner_email_domain(partner_dict)
+        # I can't search on email addresses with
+        # email_domain because of the emails such as
+        # @gmail.com, @yahoo.com that may match random partners
+        if email_domain:
+            partner = self.env["res.partner"].search(
+                domain + [("website", "=ilike", "%" + email_domain + "%")],
+                limit=1,
+                order=order,
+            )
+            if not partner:
+                partner = self.env["res.partner"].search(
+                    domain + [("email", "=ilike", "%@" + email_domain)],
+                    limit=1,
+                    order=order,
+                )
+            if partner:
+                partner_type_label = partner_dict["type_label"]
+                chatter_msg.append(
+                    _(
+                        "The %s has been identified by the domain name '%s' "
+                        "so please check carefully that the %s is correct."
+                    )
+                    % (partner_type_label, domain, partner_type_label)
+                )
+                return partner
 
     @api.model
     def _match_partner(  # noqa: C901
@@ -100,6 +236,7 @@ class BusinessDocumentImport(models.AbstractModel):
             }
         """
         rpo = self.env["res.partner"]
+        partner_dict = partner_dict.copy()
         self._strip_cleanup_dict(partner_dict)
         if partner_dict.get("recordset"):
             return partner_dict["recordset"]
@@ -108,55 +245,23 @@ class BusinessDocumentImport(models.AbstractModel):
         company_id = self._context.get("force_company") or self.env.company.id
         domain = domain or []
         domain += ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
-        if partner_type == "supplier":
-            order = "supplier_rank desc"
-            partner_type_label = _("supplier")
-        elif partner_type == "customer":
-            order = "customer_rank desc"
-            partner_type_label = _("customer")
-        else:
-            order = ""
-            partner_type_label = _("partner")
+        order = self._get_match_partner_order(partner_type)
+        partner_type_label = self._get_match_partner_type_label(partner_type)
+        partner_dict["type"] = partner_type
+        partner_dict["type_label"] = partner_type_label
 
-        # If a ref is explicitly given, we just want to match that partner
-        if partner_dict.get("ref"):
-            partner = rpo.search(
-                domain + [("ref", "=", partner_dict["ref"])], limit=1, order=order
-            )
-            if partner:
-                return partner
+        partner = self._match_partner_ref(partner_dict, chatter_msg, domain, order)
+        if partner:
+            return partner
 
-        # Append optional country and state to the domain
-        country = False
-        if partner_dict.get("country_code"):
-            country = self.env["res.country"].search(
-                [("code", "=", partner_dict["country_code"])], limit=1
-            )
-            if country:
-                domain += [
-                    "|",
-                    ("country_id", "=", False),
-                    ("country_id", "=", country.id),
-                ]
-            else:
-                chatter_msg.append(
-                    _(
-                        "The analysis of the business document returned '%s' as "
-                        "country code. But there are no country with that code "
-                        "in Odoo."
-                    )
-                    % partner_dict["country_code"]
-                )
-        if country and country.state_ids and partner_dict.get("state_code"):
-            state = self.env["res.country.state"].search(
-                [
-                    ("code", "=", partner_dict["state_code"]),
-                    ("country_id", "=", country.id),
-                ],
-                limit=1,
-            )
-            if state:
-                domain += ["|", ("state_id", "=", False), ("state_id", "=", state.id)]
+        country_domain = self._get_country_filter(partner_dict, chatter_msg)
+
+        if country_domain:
+            domain += country_domain
+
+            state_domain = self._get_country_state_filter(partner_dict, chatter_msg)
+            if state_domain:
+                domain += state_domain
 
         # Search on VAT
         if partner_dict.get("vat"):
@@ -171,58 +276,24 @@ class BusinessDocumentImport(models.AbstractModel):
             return partner
 
         # Search for partner contact
-        partner = self._match_partner_contact(partner_dict, domain, order)
+        partner = self._match_partner_contact(partner_dict, chatter_msg, domain, order)
         if partner:
             return partner
 
-        # Search for partner
-        if partner_dict.get("name"):
-            partner = rpo.search(
-                domain + [("name", "=ilike", partner_dict["name"])],
-                limit=1,
-                order=order,
-            )
-            if partner:
-                return partner
+        # Search for partner name
+        partner = self._match_partner_name(partner_dict, chatter_msg, domain, order)
+        if partner:
+            return partner
 
-        website_domain = False
-        email_domain = (
-            partner_dict.get("email")
-            and "@" in partner_dict["email"]
-            and partner_dict["email"].split("@")[1]
-        )
-        if partner_dict.get("website"):
-            urlp = urlparse(partner_dict["website"])
-            netloc = urlp.netloc
-            if not urlp.scheme and not netloc:
-                netloc = urlp.path
-            if netloc and len(netloc.split(".")) >= 2:
-                website_domain = ".".join(netloc.split(".")[-2:])
-        if website_domain or email_domain:
-            partner_domain = website_domain or email_domain
-            partner = rpo.search(
-                domain + [("website", "=ilike", "%" + partner_domain + "%")],
-                limit=1,
-                order=order,
-            )
-            # I can't search on email addresses with
-            # email_domain because of the emails such as
-            # @gmail.com, @yahoo.com that may match random partners
-            if not partner and website_domain:
-                partner = rpo.search(
-                    domain + [("email", "=ilike", "%@" + website_domain)],
-                    limit=1,
-                    order=order,
-                )
-            if partner:
-                chatter_msg.append(
-                    _(
-                        "The %s has been identified by the domain name '%s' "
-                        "so please check carefully that the %s is correct."
-                    )
-                    % (partner_type_label, partner_domain, partner_type_label)
-                )
-                return partner
+        # Search for partner website
+        partner = self._match_partner_website(partner_dict, chatter_msg, domain, order)
+        if partner:
+            return partner
+
+        # Search for partner website
+        partner = self._match_partner_email(partner_dict, chatter_msg, domain, order)
+        if partner:
+            return partner
 
         if not raise_exception:
             return
