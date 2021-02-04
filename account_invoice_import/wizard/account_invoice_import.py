@@ -221,9 +221,10 @@ class AccountInvoiceImport(models.TransientModel):
         # Fallback on PDF
         else:
             parsed_inv = self.parse_pdf_invoice(file_data)
-        if "attachments" not in parsed_inv:
-            parsed_inv["attachments"] = {}
-        parsed_inv["attachments"][invoice_filename] = invoice_file_b64
+        # FIXME binary is not Serializable
+        # if "attachments" not in parsed_inv:
+        #     parsed_inv["attachments"] = {}
+        # parsed_inv["attachments"][invoice_filename] = invoice_file_b64
         # pre_process_parsed_inv() will be called again a second time,
         # but it's OK
         pp_parsed_inv = self.pre_process_parsed_inv(parsed_inv)
@@ -375,8 +376,6 @@ class AccountInvoiceImport(models.TransientModel):
         currency = bdio._match_currency(
             parsed_inv.get("currency"), parsed_inv["chatter_msg"]
         )
-        parsed_inv["partner"]["recordset"] = partner
-        parsed_inv["currency"]["recordset"] = currency
         wiz_vals = {
             "partner_id": partner.id,
             "invoice_type": parsed_inv["type"],
