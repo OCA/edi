@@ -39,7 +39,9 @@ class BusinessDocumentImport(models.AbstractModel):
                         ("parent_id", "=", partner.id),
                         ("is_company", "=", False),
                     ]
-                    contact = self._match_partner_contact(partner_dict, domain, order)
+                    contact = self._match_partner_contact(
+                        partner_dict, chatter_msg, domain, order
+                    )
                     if contact:
                         return contact
                     return id_number.partner_id
