@@ -5,7 +5,7 @@
     "name": "Base eBill Payment Contract",
     "summary": """
         Base for managing e-billing contracts""",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "license": "AGPL-3",
     "author": "Camptocamp SA,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
