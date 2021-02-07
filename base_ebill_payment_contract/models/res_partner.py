@@ -16,7 +16,8 @@ class ResPartner(models.Model):
         """Return the active contract for a specific transmit method."""
         self.ensure_one()
         contracts = self.env["ebill.payment.contract"].search(
-            [("is_valid", "=", True), ("partner_id", "=", self.id)], limit=1,
+            [("is_valid", "=", True), ("partner_id", "=", self.id)],
+            limit=1,
         )
         if not contracts:
             _logger.error(
