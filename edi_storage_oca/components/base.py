@@ -7,9 +7,21 @@ from pathlib import PurePath
 from odoo.addons.component.core import AbstractComponent
 
 
-class EDIStorageSendComponentMixin(AbstractComponent):
+class EDIStorageComponentMixin(AbstractComponent):
 
     _name = "edi.storage.component.mixin"
+    _inherit = "edi.component.mixin"
+    # Components having `_storage_backend_type` will have precedence.
+    # If the value is not set, generic components will be used.
+    _storage_backend_type = None
+
+    @classmethod
+    def _component_match(cls, work, usage=None, model_name=None, **kw):
+        res = super()._component_match(work, usage=usage, model_name=model_name, **kw)
+        storage_type = kw.get("storage_backend_type")
+        if storage_type and cls._storage_backend_type:
+            return cls._storage_backend_type == storage_type
+        return res
 
     @property
     def storage(self):

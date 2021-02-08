@@ -18,7 +18,7 @@ class EDIStorageCheckComponentMixin(Component):
         "edi.component.check.mixin",
         "edi.storage.component.mixin",
     ]
-    _usage = "edi.storage.check"
+    _usage = "storage.check"
 
     def check(self):
         return self._exchange_output_check()
