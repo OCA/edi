@@ -12,13 +12,13 @@ class EDIStorageSendComponent(Component):
         "edi.component.send.mixin",
         "edi.storage.component.mixin",
     ]
-    _usage = "edi.storage.send"
+    _usage = "storage.send"
 
     def send(self):
         # If the file has been sent already, refresh its state
         # TODO: double check if this is useless
         # since the backend checks the state already
-        checker = self.component(usage="edi.storage.check")
+        checker = self.component(usage="storage.check")
         result = checker.check()
         if not result:
             # all good here
