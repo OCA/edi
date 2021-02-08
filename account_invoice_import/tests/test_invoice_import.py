@@ -153,6 +153,43 @@ class TestInvoiceImport(EDIBackendCommonComponentRegistryTestCase):
             invoice.refresh()
             self.assertTrue(invoice.exchange_record_ids)
 
+    def test_import_in_invoice_tax_include(self):
+        self.purchase_tax.price_include = True
+        parsed_inv = {
+            "type": "in_invoice",
+            "amount_total": 101.0,
+            "invoice_number": "INV-2017-9876",
+            "date_invoice": "2017-08-16",
+            "date_due": "2017-08-31",
+            "date_start": "2017-08-01",
+            "date_end": "2017-08-31",
+            "partner": {"name": "Wood Corner"},
+            "description": "New hi-tech gadget",
+            "lines": [
+                {
+                    "product": {"code": "AII-TEST-PRODUCT"},
+                    "name": "Super test product",
+                    "qty": 2,
+                    "price_unit": 50,
+                    "taxes": [
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                }
+            ],
+        }
+        for import_config in self.all_import_config_01:
+            wizard = self.env["account.invoice.import"].create(
+                {"import_config_id": import_config.id, "invoice_file": b"1234"}
+            )
+            invoice = wizard.create_invoice(parsed_inv)
+            invoice.refresh()
+            self.assertTrue(invoice.exchange_record_ids)
+
     def test_update_in_invoice(self):
         parsed_inv = {
             "type": "in_invoice",
