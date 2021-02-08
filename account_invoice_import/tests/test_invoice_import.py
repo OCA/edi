@@ -138,6 +138,7 @@ class TestInvoiceImport(SavepointCase):
             "amount_untaxed": 100.0,
             "amount_total": 101.0,
             "date": "2017-08-16",
+            "invoice_number": "INV-2017-9876",
             "date_due": "2017-08-31",
             "date_start": "2017-08-01",
             "date_end": "2017-08-31",
@@ -190,6 +191,68 @@ class TestInvoiceImport(SavepointCase):
             ],
         }
         for import_c in self.all_import_config:
+            # hack to have a unique vendor inv ref
+            parsed_inv["invoice_number"] = "INV-%s" % import_c["invoice_line_method"]
+            inv = (
+                self.env["account.invoice.import"]
+                .with_company(self.company.id)
+                .create_invoice(parsed_inv, import_c)
+            )
+            logger.debug("testing import with import config=%s", import_c)
+            self.assertEqual(inv.move_type, parsed_inv["type"])
+            self.assertEqual(inv.company_id.id, self.company.id)
+            self.assertFalse(
+                inv.currency_id.compare_amounts(
+                    inv.amount_untaxed, parsed_inv["amount_untaxed"]
+                )
+            )
+            self.assertFalse(
+                inv.currency_id.compare_amounts(
+                    inv.amount_total, parsed_inv["amount_total"]
+                )
+            )
+            self.assertEqual(
+                fields.Date.to_string(inv.invoice_date), parsed_inv["date"]
+            )
+            self.assertEqual(
+                fields.Date.to_string(inv.invoice_date_due), parsed_inv["date_due"]
+            )
+            self.assertEqual(inv.journal_id.id, self.pur_journal2.id)
+
+    def test_import_in_invoice_tax_include(self):
+        self.purchase_tax.price_include = True
+        parsed_inv = {
+            "type": "in_invoice",
+            "journal": {"code": "XXXP2"},
+            "amount_untaxed": 99.01,
+            "amount_total": 101.0,
+            "date": "2017-09-16",
+            "date_due": "2017-10-21",
+            "date_start": "2017-08-01",
+            "date_end": "2017-08-31",
+            "partner": {"name": "Wood Corner"},
+            "description": "New hi-tech gadget",
+            "lines": [
+                {
+                    "product": {"code": "AII-TEST-PRODUCT"},
+                    "name": "Super test product",
+                    "qty": 2,
+                    "price_unit": 50,
+                    "taxes": [
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "price_include": True,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                }
+            ],
+        }
+        for import_c in self.all_import_config:
+            if not import_c["invoice_line_method"].startswith("nline"):
+                continue
             # hack to have a unique vendor inv ref
             parsed_inv["invoice_number"] = "INV-%s" % import_c["invoice_line_method"]
             inv = (
