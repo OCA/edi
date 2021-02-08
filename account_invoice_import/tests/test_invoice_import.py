@@ -1,9 +1,14 @@
 # Copyright 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo import fields
 from odoo.tools import float_compare
 
+from odoo.addons.base_sparse_field.models.fields import Serialized
 from odoo.addons.edi.tests.common import EDIBackendCommonComponentRegistryTestCase
+
+# pytest compatibility
+fields.Serialized = Serialized
 
 
 class TestInvoiceImport(EDIBackendCommonComponentRegistryTestCase):
