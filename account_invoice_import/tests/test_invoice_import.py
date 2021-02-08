@@ -22,8 +22,14 @@ class TestInvoiceImport(TransactionCase):
             'user_type_id':
             self.env.ref('account.data_account_type_revenue').id,
             })
+        self.adjustment_account = self.env['account.account'].create({
+            'code': 'Adjustement',
+            'name': 'adjustement from invoice import',
+            'user_type_id':
+            self.env.ref('account.data_account_type_current_assets').id,
+            })
         purchase_tax_vals = {
-            'name': 'Test 1% VAT',
+            'name': 'Test 1% VAT Purchase',
             'description': 'ZZ-VAT-buy-1.0',
             'type_tax_use': 'purchase',
             'amount': 1,
@@ -36,6 +42,7 @@ class TestInvoiceImport(TransactionCase):
         self.purchase_tax = self.env['account.tax'].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
         sale_tax_vals.update({
+            'name': 'Test 1% VAT Sale',
             'description': 'ZZ-VAT-sale-1.0',
             'type_tax_use': 'sale',
             })
@@ -53,23 +60,35 @@ class TestInvoiceImport(TransactionCase):
                 'invoice_line_method': '1line_no_product',
                 'account': self.expense_account,
                 'taxes': self.purchase_tax,
+                'tax_control': True,
             },
             {
                 'invoice_line_method': '1line_static_product',
                 'product': self.product,
+                'tax_control': True,
             },
             {
                 'invoice_line_method': 'nline_no_product',
                 'account': self.expense_account,
+                'tax_control': True,
             },
             {
                 'invoice_line_method': 'nline_static_product',
                 'product': self.product,
+                'tax_control': True,
             },
             {
                 'invoice_line_method': 'nline_auto_product',
+                'tax_control': True,
             }
             ]
+        company = self.env.ref("base.main_company")
+        company.write(
+            {
+                "adjustment_debit_account_id": self.adjustment_account.id,
+                "adjustment_credit_account_id": self.adjustment_account.id,
+            }
+            )
 
     def test_import_in_invoice(self):
         parsed_inv = {
@@ -101,6 +120,44 @@ class TestInvoiceImport(TransactionCase):
         for import_config in self.all_import_config:
             self.env['account.invoice.import'].create_invoice(
                 parsed_inv, import_config)
+
+    def test_import_in_invoice_tax_include(self):
+        self.purchase_tax.price_include = True
+        parsed_inv = {
+            "type": "in_invoice",
+            # no tax amount on purpose
+            "amount_total": 100.00,
+            "invoice_number": "INV-2017-9876",
+            "date_invoice": "2017-08-16",
+            "date_due": "2017-08-31",
+            "date_start": "2017-08-01",
+            "date_end": "2017-08-31",
+            "partner": {"name": "ASUSTeK"},
+            "description": "New hi-tech gadget",
+            "lines": [
+                {
+                    "product": {"code": "AII-TEST-PRODUCT"},
+                    "name": "Super test product",
+                    "qty": 2,
+                    "price_unit": 50,
+                    "taxes": [
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "price_include": True,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                }
+            ],
+        }
+        for import_config in self.all_import_config:
+            import_config["tax_control"] = False
+            invoice = self.env['account.invoice.import'].create_invoice(
+                parsed_inv, import_config)
+        self.assertAlmostEquals(invoice.amount_total, 100.00, 2)
+        self.assertAlmostEquals(invoice.amount_untaxed, 99.01, 2)
 
     def test_import_out_invoice(self):
         parsed_inv = {
