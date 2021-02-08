@@ -8,6 +8,9 @@ from odoo.addons.component.core import AbstractComponent
 class EDIExchangeInfoMixin(AbstractComponent):
     """Abstract component mixin provide info for exchanges."""
 
+    # TODO: this should be moved to core and renamed to `data`.
+    # A `data` component could be used for both incoming and outgoing.
+
     _name = "edi.info.provider.mixin"
     _collection = "edi.backend"
     # Enable validation of work context attributes
