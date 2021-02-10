@@ -26,12 +26,6 @@ _ORDER_RESPONSE_CODE_TO_STATUS = {
     "CA": ORDER_RESPONSE_STATUS_CONDITIONAL,
 }
 
-_ORDER_LINE_STATUS_TO_STATUS = {
-    "5": LINE_STATUS_ACCEPTED,
-    "7": LINE_STATUS_REJECTED,
-    "3": LINE_STATUS_AMEND,
-}
-
 
 class OrderResponseImport(models.TransientModel):
     _name = "order.response.import"
@@ -68,12 +62,22 @@ class OrderResponseImport(models.TransientModel):
     def parse_line_status_code(self, line, ns):
         code_xpath = line.xpath("cbc:LineStatusCode", namespaces=ns)
         code = code_xpath and len(code_xpath) and code_xpath[0].text
-        status = _ORDER_LINE_STATUS_TO_STATUS.get(code)
+        status = self._get_order_line_status_code().get(code)
         if not status:
             raise UserError(
                 _("Unsupported line status code found '%s'") % code
             )
         return status
+
+    @classmethod
+    def _get_order_line_status_code(cls):
+        """Some edi implementation require to have more status to deal
+        with many use cases"""
+        return {
+            "5": LINE_STATUS_ACCEPTED,
+            "7": LINE_STATUS_REJECTED,
+            "3": LINE_STATUS_AMEND,
+        }
 
     @api.model
     def parse_ubl_order_response_line(self, line, ns):
@@ -189,8 +193,7 @@ class OrderResponseImport(models.TransientModel):
 
     @api.model
     def _guess_doc_status_from_lines(self, lines):
-        """ Document status is not mandatory: status in order lines can help
-        """
+        """Document status is not mandatory: status in order lines can help"""
         super(OrderResponseImport, self)._guess_doc_status_from_lines(lines)
         status = {"accepted": 0, "rejected": 0, "amend": 0}
         for line in lines:
