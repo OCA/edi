@@ -11,12 +11,10 @@
         <field name="arch" type="xml">
             <xpath expr="//div[@data-key='account']" position="inside">
                 <h2
-                    attrs="{'invisible': [('has_accounting_entries','==',False)]}"
                 >Invoice Import</h2>
                 <div class="row mt16 o_settings_container">
                     <div
                         class="col-xs-12 col-md-6 o_setting_box"
-                        attrs="{'invisible': [('has_accounting_entries','==',False)]}"
                         title="These taxes are set in any new product created."
                     >
                         <div class="o_setting_left_pane" />
@@ -28,7 +26,7 @@
                                 groups="base.group_multi_company"
                             />
                             <div class="text-muted">
-                Default taxes applied to local transactions
+                Adjustment settings for account import
               </div>
                             <div class="content-group">
                                 <div class="row mt16">
@@ -46,6 +44,7 @@
                                         class="o_form_label col-md-6 o_light_label"
                                         for="adjustment_credit_account_id"
                                     />
+                                    <!-- TODO maybe add default data to this -->
                                     <field
                                         name="adjustment_credit_account_id"
                                         class="oe_inline"
