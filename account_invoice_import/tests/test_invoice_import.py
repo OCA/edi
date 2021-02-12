@@ -36,8 +36,17 @@ class TestInvoiceImport(SavepointCase):
                 "company_id": cls.company.id,
             }
         )
+        cls.adjustment_account = cls.env["account.account"].create(
+            {
+                "code": "Adjustment",
+                "name": "adjustment from invoice import",
+                "user_type_id": cls.env.ref(
+                    "account.data_account_type_current_assets"
+                ).id,
+            }
+        )
         purchase_tax_vals = {
-            "name": "Test 1% VAT",
+            "name": "Test 1% VAT Purchase",
             "description": "ZZ-VAT-buy-1.0",
             "type_tax_use": "purchase",
             "amount": 1,
@@ -51,7 +60,13 @@ class TestInvoiceImport(SavepointCase):
         }
         cls.purchase_tax = cls.env["account.tax"].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
-        sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
+        sale_tax_vals.update(
+            {
+                "name": "Test 1% VAT Sale",
+                "description": "ZZ-VAT-sale-1.0",
+                "type_tax_use": "sale",
+            }
+        )
         cls.sale_tax = cls.env["account.tax"].create(sale_tax_vals)
         cls.product = cls.env["product.product"].create(
             {
@@ -130,6 +145,13 @@ class TestInvoiceImport(SavepointCase):
                 ],
             }
         )
+        company = cls.env.ref("base.main_company")
+        company.update(
+            {
+                "adjustment_debit_account_id": cls.adjustment_account.id,
+                "adjustment_credit_account_id": cls.adjustment_account.id,
+            }
+        )
 
     def test_import_in_invoice(self):
         parsed_inv = {
@@ -138,7 +160,6 @@ class TestInvoiceImport(SavepointCase):
             "amount_untaxed": 100.0,
             "amount_total": 101.0,
             "date": "2017-08-16",
-            "invoice_number": "INV-2017-9876",
             "date_due": "2017-08-31",
             "date_start": "2017-08-01",
             "date_end": "2017-08-31",
@@ -225,9 +246,9 @@ class TestInvoiceImport(SavepointCase):
             "type": "in_invoice",
             "journal": {"code": "XXXP2"},
             "amount_untaxed": 99.01,
-            "amount_total": 101.0,
-            "date": "2017-09-16",
-            "date_due": "2017-10-21",
+            "amount_total": 100.00,
+            "date": "2017-08-16",
+            "date_due": "2017-08-31",
             "date_start": "2017-08-01",
             "date_end": "2017-08-31",
             "partner": {"name": "Wood Corner"},
