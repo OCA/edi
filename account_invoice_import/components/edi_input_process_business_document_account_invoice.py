@@ -244,7 +244,12 @@ class EDIInputProcessBusinessDocumentImport(Component):
     def _prepare_global_adjustment_line(self, diff_amount, invoice, import_config):
         ailo = self.env["account.move.line"]
         prec = invoice.currency_id.rounding
-        il_vals = {"name": _("Adjustment"), "quantity": 1, "price_unit": diff_amount}
+        res_cmp = float_compare(diff_amount, 0, precision_rounding=prec)
+        il_vals = {
+            "name": _("Adjustment"),
+            "quantity": 1,
+            "price_unit": diff_amount,
+        }
         # no taxes nor product on such a global adjustment line
         if import_config["invoice_line_method"] in "nline_no_product":
             il_vals["account_id"] = import_config["account"].id
@@ -256,8 +261,7 @@ class EDIInputProcessBusinessDocumentImport(Component):
                 invoice.company_id,
             )
             il_vals["account_id"] = account.id
-        elif import_config["invoice_line_method"] == "nline_auto_product":
-            res_cmp = float_compare(diff_amount, 0, precision_rounding=prec)
+        else:
             company = invoice.company_id
             if res_cmp > 0:
                 if not company.adjustment_debit_account_id:
@@ -277,7 +281,7 @@ class EDIInputProcessBusinessDocumentImport(Component):
                         )
                     )
                 il_vals["account_id"] = company.adjustment_credit_account_id.id
-        _logger.debug("Prepared global ajustment invoice line %s", il_vals)
+        _logger.debug("Prepared global adjustment invoice line {}".format(il_vals))
         return il_vals
 
     def _post_process_invoice(self, parsed_inv, invoice, import_config):
@@ -332,7 +336,7 @@ class EDIInputProcessBusinessDocumentImport(Component):
             invoice.amount_untaxed,
             precision_rounding=prec,
         ):
-            # create global ajustment line
+            # create global adjustment line
             diff_amount = float_round(
                 parsed_inv["amount_untaxed"] - invoice.amount_untaxed,
                 precision_rounding=prec,
@@ -346,8 +350,8 @@ class EDIInputProcessBusinessDocumentImport(Component):
             il_vals = self._prepare_global_adjustment_line(
                 diff_amount, invoice, import_config
             )
-            il_vals["move_id"] = invoice.id
-            self.env["account.move.line"].create(il_vals)
+            # TODO test rounding and adjustment
+            invoice.invoice_line_ids = [(0, 0, il_vals)]
             _logger.info("Global adjustment invoice line created")
         # Invalidate cache
         invoice = self.env["account.move"].browse(invoice.id)
