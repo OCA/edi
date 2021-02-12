@@ -742,7 +742,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 tax_dict,
                 chatter_msg,
                 type_tax_use=type_tax_use,
-                price_include=price_include,
+                price_include=tax_dict.get("price_include") or price_include,
             )
         return taxes_recordset
 

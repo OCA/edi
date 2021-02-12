@@ -32,8 +32,17 @@ class TestInvoiceImport(EDIBackendCommonComponentRegistryTestCase):
                 "user_type_id": self.env.ref("account.data_account_type_revenue").id,
             }
         )
+        self.adjustment_account = self.env["account.account"].create(
+            {
+                "code": "Adjustment",
+                "name": "adjustment from invoice import",
+                "user_type_id": self.env.ref(
+                    "account.data_account_type_current_assets"
+                ).id,
+            }
+        )
         purchase_tax_vals = {
-            "name": "Test 1% VAT",
+            "name": "Test 1% VAT Purchase",
             "description": "ZZ-VAT-buy-1.0",
             "type_tax_use": "purchase",
             "amount": 1,
@@ -46,7 +55,13 @@ class TestInvoiceImport(EDIBackendCommonComponentRegistryTestCase):
         }
         self.purchase_tax = self.env["account.tax"].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
-        sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
+        sale_tax_vals.update(
+            {
+                "name": "Test 1% VAT Sale",
+                "description": "ZZ-VAT-sale-1.0",
+                "type_tax_use": "sale",
+            }
+        )
         self.sale_tax = self.env["account.tax"].create(sale_tax_vals)
         self.product_01 = self.env["product.product"].create(
             {
@@ -120,13 +135,20 @@ class TestInvoiceImport(EDIBackendCommonComponentRegistryTestCase):
             )
             .create(self.all_import_config)
         )
+        company = self.env.ref("base.main_company")
+        company.update(
+            {
+                "adjustment_debit_account_id": self.adjustment_account.id,
+                "adjustment_credit_account_id": self.adjustment_account.id,
+            }
+        )
 
     def test_import_in_invoice(self):
         parsed_inv = {
             "type": "in_invoice",
             "amount_untaxed": 100.0,
             "amount_total": 101.0,
-            "invoice_number": "INV-2017-9876",
+            "invoice_number": "INV-2017-9875",
             "date_invoice": "2017-08-16",
             "date_due": "2017-08-31",
             "date_start": "2017-08-01",
@@ -162,7 +184,8 @@ class TestInvoiceImport(EDIBackendCommonComponentRegistryTestCase):
         self.purchase_tax.price_include = True
         parsed_inv = {
             "type": "in_invoice",
-            "amount_total": 101.0,
+            "amount_untaxed": 99.01,
+            "amount_total": 100.00,
             "invoice_number": "INV-2017-9876",
             "date_invoice": "2017-08-16",
             "date_due": "2017-08-31",
@@ -180,6 +203,7 @@ class TestInvoiceImport(EDIBackendCommonComponentRegistryTestCase):
                         {
                             "amount_type": "percent",
                             "amount": 1.0,
+                            "price_include": True,
                             "unece_type_code": "VAT",
                             "unece_categ_code": "S",
                         }

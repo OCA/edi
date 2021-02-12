@@ -485,6 +485,7 @@ class AccountInvoiceImport(models.TransientModel):
             "account.invoice.import", self._exchange_record_vals(parsed_inv)
         )
         self.import_config_id.backend_id.exchange_process(exchange_record)
+        # State procceded with cron cannot check synchronously
         if exchange_record.edi_exchange_state != "input_processed":
             raise UserError(_("Something wrong happened when processing the invoice"))
         return exchange_record.record

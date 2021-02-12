@@ -81,7 +81,7 @@ class EDIInputProcessBusinessDocumentImport(AbstractComponent):
         )
 
     def _match_taxes(
-        self, taxes_list, chatter_msg, type_tax_use="purchase", price_include=False
+        self, taxes_list, chatter_msg, type_tax_use="purchase", price_include=None
     ):
         return self.env["business.document.import"]._match_taxes(
             taxes_list,
@@ -91,7 +91,7 @@ class EDIInputProcessBusinessDocumentImport(AbstractComponent):
         )
 
     def _match_tax(
-        self, tax_dict, chatter_msg, type_tax_use="purchase", price_include=False
+        self, tax_dict, chatter_msg, type_tax_use="purchase", price_include=None
     ):
         return self.env["business.document.import"]._match_tax(
             tax_dict,
