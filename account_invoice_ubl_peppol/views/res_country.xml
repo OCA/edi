@@ -1,0 +1,14 @@
+<odoo>
+
+    <record id="view_res_country_extended_form" model="ir.ui.view">
+        <field name="name">view_res_country_extended_form</field>
+        <field name="model">res.country</field>
+        <field name="inherit_id" ref="base.view_country_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='country_details']" position="inside">
+                <field name="peppol_eas_code" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
