@@ -61,6 +61,18 @@ class AccountMove(models.Model):
             order_ref_id = etree.SubElement(order_ref, ns["cbc"] + "ID")
             order_ref_id.text = sale_order_ref
 
+    def _ubl_get_buyer_reference(self):
+        return self.partner_id.name
+
+    def _ubl_add_buyer_reference(self, parent_node, ns, version="2.1"):
+        self.ensure_one()
+        buyer_ref = self._ubl_get_buyer_reference()
+        if buyer_ref:
+            buyer_order_ref = etree.SubElement(
+                parent_node, ns["cbc"] + "BuyerReference"
+            )
+            buyer_order_ref.text = buyer_ref
+
     def _ubl_get_contract_document_reference_dict(self):
         """Result: dict with key = Doc Type Code, value = ID"""
         self.ensure_one()
@@ -262,6 +274,8 @@ class AccountMove(models.Model):
         nsmap, ns = self._ubl_get_nsmap_namespace("Invoice-2", version=version)
         xml_root = etree.Element("Invoice", nsmap=nsmap)
         self._ubl_add_header(xml_root, ns, version=version)
+        if version == "2.1":
+            self._ubl_add_buyer_reference(xml_root, ns, version=version)
         self._ubl_add_order_reference(xml_root, ns, version=version)
         self._ubl_add_contract_document_reference(xml_root, ns, version=version)
         self._ubl_add_attachments(xml_root, ns, version=version)
