@@ -187,9 +187,7 @@ class BaseUbl(models.AbstractModel):
         name.text = commercial_partner.name
         if partner.lang:
             self._ubl_add_language(partner.lang, party, ns, version=version)
-        self._ubl_add_address(
-            partner, "PostalAddress", party, ns, version=version
-        )
+        self._ubl_add_address(partner, "PostalAddress", party, ns, version=version)
         self._ubl_add_party_tax_scheme(commercial_partner, party, ns, version=version)
         if commercial_partner.is_company or company:
             self._ubl_add_party_legal_entity(
@@ -376,11 +374,8 @@ class BaseUbl(models.AbstractModel):
         ns,
         type_="purchase",
         seller=False,
-<<<<<<< HEAD
         customer=False,
-=======
         taxes=None,
->>>>>>> [RFR] Use invoice/sale order line taxes, not product taxes as they can be empty
         version="2.1",
     ):
         """Beware that product may be False (in particular on invoices)"""
