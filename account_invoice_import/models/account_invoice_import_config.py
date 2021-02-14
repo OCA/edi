@@ -59,7 +59,14 @@ class AccountInvoiceImportConfig(models.Model):
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
-        res["backend_type_id"] = self.env.ref("account_invoice_import.backend_type").id
+        res.update(
+            {
+                "backend_type_id": self.env.ref(
+                    "account_invoice_import.backend_type"
+                ).id,
+                "name": self.env["ir.sequence"].next_by_code("account.invoice.import"),
+            }
+        )
         return res
 
     @api.constrains("invoice_line_method", "account_id", "static_product_id")
