@@ -30,6 +30,7 @@ class AccountInvoiceImportConfig(models.Model):
         "that don't have an embedded XML file. "
         "The 'Multi Line, Auto-selected Product' method will only work with "
         "ZUGFeRD invoices at Comfort or Extended level, not at Basic level.")
+    tax_control = fields.Boolean(help="Compare total tax with parsed data")
     company_id = fields.Many2one(
         'res.company', string='Company',
         ondelete='cascade', required=True,
@@ -85,6 +86,7 @@ class AccountInvoiceImportConfig(models.Model):
         vals = {
             'invoice_line_method': self.invoice_line_method,
             'account_analytic': self.account_analytic_id or False,
+            "tax_control": self.tax_control,
             }
         if self.invoice_line_method == '1line_no_product':
             vals['account'] = self.account_id

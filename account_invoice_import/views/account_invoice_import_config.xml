@@ -26,6 +26,7 @@
             </group>
             <group string="Accounting Parameters" name="accounting">
                 <field name="invoice_line_method"/>
+                <field name="tax_control" />
                 <field name="account_id"
                     attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_no_product', 'nline_no_product'))], 'required': [('invoice_line_method', 'in', ('1line_no_product', 'nline_no_product'))]}"/>
                 <field name="tax_ids"
