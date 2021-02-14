@@ -331,36 +331,37 @@ class EDIInputProcessBusinessDocumentImport(Component):
                     # Add the adjustment line
                     iline.copy(copy_dict)
                     _logger.info("Adjustment invoice line created")
-        if float_compare(
-            parsed_inv["amount_untaxed"],
-            invoice.amount_untaxed,
-            precision_rounding=prec,
-        ):
-            # create global adjustment line
-            diff_amount = float_round(
-                parsed_inv["amount_untaxed"] - invoice.amount_untaxed,
-                precision_rounding=prec,
-            )
-            _logger.info(
-                "Amount untaxed difference found " "(source: %s, odoo:%s, diff:%s)",
+        if import_config["tax_control"]:
+            if float_compare(
                 parsed_inv["amount_untaxed"],
                 invoice.amount_untaxed,
-                diff_amount,
+                precision_rounding=prec,
+            ):
+                # create global adjustment line
+                diff_amount = float_round(
+                    parsed_inv["amount_untaxed"] - invoice.amount_untaxed,
+                    precision_rounding=prec,
+                )
+                _logger.info(
+                    "Amount untaxed difference found " "(source: %s, odoo:%s, diff:%s)",
+                    parsed_inv["amount_untaxed"],
+                    invoice.amount_untaxed,
+                    diff_amount,
+                )
+                il_vals = self._prepare_global_adjustment_line(
+                    diff_amount, invoice, import_config
+                )
+                # TODO test rounding and adjustment
+                invoice.invoice_line_ids = [(0, 0, il_vals)]
+                _logger.info("Global adjustment invoice line created")
+            # Invalidate cache
+            invoice = self.env["account.move"].browse(invoice.id)
+            assert not float_compare(
+                parsed_inv["amount_untaxed"],
+                invoice.amount_untaxed,
+                precision_rounding=prec,
             )
-            il_vals = self._prepare_global_adjustment_line(
-                diff_amount, invoice, import_config
-            )
-            # TODO test rounding and adjustment
-            invoice.invoice_line_ids = [(0, 0, il_vals)]
-            _logger.info("Global adjustment invoice line created")
-        # Invalidate cache
-        invoice = self.env["account.move"].browse(invoice.id)
-        assert not float_compare(
-            parsed_inv["amount_untaxed"],
-            invoice.amount_untaxed,
-            precision_rounding=prec,
-        )
-        # Force tax amount if necessary
+            # Force tax amount if necessary
         if float_compare(
             invoice.amount_total, parsed_inv["amount_total"], precision_rounding=prec
         ):
