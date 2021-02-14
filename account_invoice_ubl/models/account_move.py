@@ -158,7 +158,13 @@ class AccountMove(models.Model):
         line_amount.text = "%0.*f" % (account_precision, iline.price_subtotal)
         self._ubl_add_invoice_line_tax_total(iline, line_root, ns, version=version)
         self._ubl_add_item(
-            iline.name, iline.product_id, line_root, ns, type_="sale", version=version
+            iline.name,
+            iline.product_id,
+            line_root,
+            ns,
+            type_="sale",
+            taxes=iline.tax_ids,
+            version=version,
         )
         price_node = etree.SubElement(line_root, ns["cac"] + "Price")
         price_amount = etree.SubElement(
