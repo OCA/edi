@@ -310,6 +310,7 @@ class BaseUbl(models.AbstractModel):
         price_subtotal=False,
         qty_precision=3,
         price_precision=2,
+        taxes=None,
         version="2.1",
     ):
         line_item = etree.SubElement(parent_node, ns["cac"] + "LineItem")
@@ -343,7 +344,14 @@ class BaseUbl(models.AbstractModel):
             )
             base_qty.text = "1"  # What else could it be ?
         self._ubl_add_item(
-            name, product, line_item, ns, type_=type_, seller=seller, version=version
+            name,
+            product,
+            line_item,
+            ns,
+            type_=type_,
+            seller=seller,
+            version=version,
+            taxes=taxes,
         )
 
     def _ubl_get_seller_code_from_product(self, product):
@@ -366,6 +374,7 @@ class BaseUbl(models.AbstractModel):
         type_="purchase",
         seller=False,
         customer=False,
+        taxes=None,
         version="2.1",
     ):
         """Beware that product may be False (in particular on invoices)"""
