@@ -184,7 +184,7 @@ class AccountMove(models.Model):
             )
         else:
             base_qty = etree.SubElement(price_node, ns["cbc"] + "BaseQuantity")
-        base_qty.text = "%0.*f" % (qty_precision, qty)
+        base_qty.text = "%0.*f" % (qty_precision, 1.0)
 
     def _ubl_add_invoice_line_tax_total(self, iline, parent_node, ns, version="2.1"):
         self.ensure_one()
