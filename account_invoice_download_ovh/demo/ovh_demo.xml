@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data noupdate="1">
+
+        <record id="ovh" model="res.partner">
+            <field name="name">OVH</field>
+            <field name="is_company" eval="1"/>
+            <field name="customer" eval="0"/>
+            <field name="supplier" eval="1"/>
+            <field name="street">2 rue kellermann</field>
+            <field name="street2">BP 80157</field>
+            <field name="zip">59053</field>
+            <field name="city">ROUBAIX CEDEX 1</field>
+            <field name="country_id" ref="base.fr"/>
+            <field name="email">support@ovh.com</field>
+            <field name="website">www.ovh.com</field>
+            <field name="vat">FR22424761419</field>
+        </record>
+
+        <record id="ovh_telephony_product" model="product.product">
+            <field name="name">OVH Telephony</field>
+            <field name="default_code">OVH-voip.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_telephony_options_product" model="product.product">
+            <field name="name">OVH Telephony Options</field>
+            <field name="default_code">OVH-rebill.pack.voip.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_ip_product" model="product.product">
+            <field name="name">OVH IPs</field>
+            <field name="default_code">OVH-ip.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_sms_product" model="product.product">
+            <field name="name">OVH SMS service</field>
+            <field name="default_code">OVH-voip.sms.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_sdsl_product" model="product.product">
+            <field name="name">OVH SDSL</field>
+            <field name="default_code">OVH-pack.sdsl.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_domain_product" model="product.product">
+            <field name="name">OVH Domain Name</field>
+            <field name="default_code">OVH-dom.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_dedicated_server_product" model="product.product">
+            <field name="name">OVH Dedicated Server</field>
+            <field name="default_code">OVH-sd.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_shared_hosting_product" model="product.product">
+            <field name="name">OVH Shared Hosting</field>
+            <field name="default_code">OVH-mut.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_license_product" model="product.product">
+            <field name="name">OVH Licence</field>
+            <field name="default_code">OVH-license.</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+        <record id="ovh_loyalty_point_product" model="product.product">
+            <field name="name">OVH Loyalty Points</field>
+            <field name="default_code">OVH-pp.debit</field>
+            <field name="categ_id" ref="product.product_category_5"/>
+            <field name="sale_ok" eval="False"/>
+            <field name="purchase_ok" eval="True"/>
+            <field name="type">service</field>
+            <field name="uom_id" ref="uom.product_uom_unit"/>
+            <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        </record>
+
+
+    </data>
+</openerp>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Akretion France
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+
+<odoo>
+
+
+    <record id="account_invoice_download_config_form" model="ir.ui.view">
+        <field name="name">ovh.account.invoice.download.config.form</field>
+        <field name="model">account.invoice.download.config</field>
+        <field name="inherit_id" ref="account_invoice_download.account_invoice_download_config_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="%(ovh_api_credentials_action)d" type="action" string="Generate OVH API Credentials" class="btn-primary" attrs="{'invisible': ['|', ('backend', '!=', 'ovh'), ('ovh_consumer_key', '!=', False)]}"/>
+            </header>
+            <field name="password" position="after">
+                <field name="ovh_endpoint" attrs="{'invisible': [('backend', '!=', 'ovh')]}"/>
+                <field name="ovh_application_key" attrs="{'invisible': [('backend', '!=', 'ovh')]}"/>
+                <field name="ovh_application_secret" attrs="{'invisible': [('backend', '!=', 'ovh')]}"/>
+                <field name="ovh_consumer_key" attrs="{'invisible': [('backend', '!=', 'ovh')]}"/>
+            </field>
+            <field name="password" position="attributes">
+                <attribute name="attrs">{'invisible': [('backend', '=', 'ovh')]}</attribute>
+            </field>
+            <field name="login" position="attributes">
+                <attribute name="attrs">{'invisible': [('backend', '=', 'ovh')]}</attribute>
+            </field>
+        </field>
+    </record>
+
+
+</odoo>
