@@ -35,7 +35,7 @@ class AccountInvoiceImportConfig(models.Model):
         default=lambda self: self.env['res.company']._company_default_get(
             'account.invoice.import.config'))
     account_id = fields.Many2one(
-        'account.account', string='Expense Account',
+        'account.account', string='Account',
         domain=[('deprecated', '=', False)])
     account_analytic_id = fields.Many2one(
         'account.analytic.account', string='Analytic Account')
@@ -44,8 +44,11 @@ class AccountInvoiceImportConfig(models.Model):
         help="Force supplier invoice line description")
     tax_ids = fields.Many2many(
         'account.tax', string='Taxes',
-        domain=[('type_tax_use', '=', 'purchase')])
+    )
     static_product_id = fields.Many2one('product.product')
+    type = fields.Selection([
+        ('supplier', 'Supplier'), ('customer', 'Customer')
+    ], string='Type', required=True, default='supplier')
 
     @api.constrains('invoice_line_method', 'account_id', 'static_product_id')
     def _check_import_config(self):
@@ -63,7 +66,7 @@ class AccountInvoiceImportConfig(models.Model):
                     'no_product' in config.invoice_line_method and
                     not config.account_id):
                 raise ValidationError(_(
-                    "The Expense Account must be set on the invoice "
+                    "The Account must be set on the invoice "
                     "import configuration of supplier '%s' that has a "
                     "Method for Invoice Line set to 'Single Line, No Product' "
                     "or 'Multi Line, No Product'.")

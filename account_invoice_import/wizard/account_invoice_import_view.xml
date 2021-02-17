@@ -26,11 +26,18 @@
             <group name="main">
                 <field name="state" invisible="1"/>
                 <field name="currency_id" invisible="1"/>
+                <field name="customer" invisible="1" />
+                <field name="invoice_type" invisible="1" />
                 <field name="invoice_file" filename="invoice_filename"
                     states="import,update-from-invoice"/>
                 <field name="invoice_filename" invisible="1"/>
                 <field name="partner_id" states="config,update,update-from-invoice"/>
-                <field name="invoice_type" states="config,update"/>
+                <field name="invoice_type_customer" states="config,update"
+                    attrs="{'invisible': [('customer', '=', False)]}"
+                />
+                <field name="invoice_type_supplier" states="config,update"
+                    attrs="{'invisible': [('customer', '=', True)]}"
+                />
                 <field name="amount_untaxed" states="config,update"
                     widget="monetary" options="{'currency_field': 'currency_id'}"/>
                 <field name="amount_total" states="config,update"
@@ -73,7 +80,7 @@
     <field name="res_model">account.invoice.import</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
-    <field name="context">{'invoice_show_amount': True, 'customer': True}</field>
+    <field name="context">{'invoice_show_amount': True, 'default_customer': True}</field>
 </record>
 
 <menuitem id="account_invoice_import_menu"

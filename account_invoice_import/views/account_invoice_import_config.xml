@@ -22,6 +22,7 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="company_id" groups="base.group_multi_company"/>
+                <field name="type" />
             </group>
             <group string="Accounting Parameters" name="accounting">
                 <field name="invoice_line_method"/>
@@ -82,7 +83,7 @@
 </record>
 
 <menuitem id="account_invoice_import_config_root"
-    name="Import Vendor Bills"
+    name="Import Bills"
     parent="account.menu_finance_configuration"
     sequence="90"/>
 

@@ -14,6 +14,15 @@ import mimetypes
 
 logger = logging.getLogger(__name__)
 
+CUSTOMER_SELECTION = [
+    ('out_invoice', 'Invoice'),
+    ('out_refund', 'Refund'),
+]
+SUPPLIER_SELECTION = [
+    ('in_invoice', 'Invoice'),
+    ('in_refund', 'Refund'),
+]
+
 
 class AccountInvoiceImport(models.TransientModel):
     _name = 'account.invoice.import'
@@ -34,11 +43,18 @@ class AccountInvoiceImport(models.TransientModel):
         'account.invoice.import.config', string='Invoice Import Configuration')
     currency_id = fields.Many2one(
         'res.currency', readonly=True)
-    invoice_type = fields.Selection([
-        ('in_invoice', 'Supplier Invoice'),
-        ('out_invoice', 'Customer Invoice'),
-        ('in_refund', 'Refund'),
-        ], string="Invoice or Refund", readonly=True)
+    invoice_type_supplier = fields.Selection(
+        SUPPLIER_SELECTION,
+        string="Invoice or Refund", readonly=True
+    )
+    invoice_type_customer = fields.Selection(
+        CUSTOMER_SELECTION,
+        string="Invoice or Refund", readonly=True
+    )
+    invoice_type = fields.Selection(
+        SUPPLIER_SELECTION+CUSTOMER_SELECTION,
+        compute='_compute_invoice_type', readonly=True
+    )
     amount_untaxed = fields.Float(
         string='Total Untaxed', digits=dp.get_precision('Account'),
         readonly=True)
@@ -47,6 +63,17 @@ class AccountInvoiceImport(models.TransientModel):
         readonly=True)
     invoice_id = fields.Many2one(
         'account.invoice', string='Draft Supplier Invoice to Update')
+    customer = fields.Boolean(default=False)
+
+    @api.depends(
+        'invoice_type', 'customer', 'invoice_type_customer', 'invoice_type_supplier'
+    )
+    def _compute_invoice_type(self):
+        for rec in self:
+            if rec.customer:
+                rec.invoice_type = rec.invoice_type_customer
+            else:
+                rec.invoice_type = rec.invoice_type_supplier
 
     @api.model
     def default_get(self, fields_list):
@@ -277,7 +304,7 @@ class AccountInvoiceImport(models.TransientModel):
                 if config['invoice_line_method'] == 'nline_auto_product':
                     if parsed_inv['type'] in ('out_invoice', 'out_refund'):
                         partner_type = 'customer'
-                    else
+                    else:
                         partner_type = 'supplier'
                     product = bdio._match_product(
                         line['product'], parsed_inv['chatter_msg'],
@@ -507,7 +534,7 @@ class AccountInvoiceImport(models.TransientModel):
             self.invoice_file, self.invoice_filename)
         if parsed_inv['type'] in ('out_invoice', 'out_refund'):
             partner_type = 'customer'
-        else
+        else:
             partner_type = 'supplier'
         partner = bdio._match_partner(
             parsed_inv['partner'], parsed_inv['chatter_msg'],
@@ -540,7 +567,9 @@ class AccountInvoiceImport(models.TransientModel):
         else:  # button called from 'import' step
             import_configs = aiico.search([
                 ('partner_id', '=', partner.id),
-                ('company_id', '=', company_id)])
+                ('company_id', '=', company_id),
+                ('type', '=', partner_type)
+            ])
             if not import_configs:
                 raise UserError(_(
                     "Missing Invoice Import Configuration on partner '%s'.")
