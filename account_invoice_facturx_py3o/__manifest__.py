@@ -1,10 +1,10 @@
-# Copyright 2017-2020 Akretion France (http://www.akretion.com/)
+# Copyright 2017-2021 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
     "name": "Py3o Factur-x Invoice",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "category": "Invoicing Management",
     "license": "AGPL-3",
     "summary": "Generate Factur-X invoices with Py3o reporting engine",
