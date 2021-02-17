@@ -9,6 +9,8 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo12-addon-account_e-invoice_generate',
+        'odoo12-addon-account_invoice_download',
+        'odoo12-addon-account_invoice_download_ovh',
         'odoo12-addon-account_invoice_facturx',
         'odoo12-addon-account_invoice_facturx_py3o',
         'odoo12-addon-account_invoice_import',
