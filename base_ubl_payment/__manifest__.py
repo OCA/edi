@@ -3,12 +3,12 @@
 
 {
     "name": "Base UBL Payment",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "category": "Hidden",
     "license": "AGPL-3",
     "summary": "Payment-related code for Universal Business Language (UBL)",
     "author": "Akretion,Odoo Community Association (OCA)",
-    "website": "https://github.com/oca/edi/",
+    "website": "https://github.com/OCA/edi",
     "depends": ["account_payment_unece", "base_ubl"],
     "external_dependencies": {"python": ["lxml"]},
     "installable": True,
