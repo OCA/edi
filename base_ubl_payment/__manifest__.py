@@ -10,6 +10,5 @@
     "author": "Akretion,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": ["account_payment_unece", "base_ubl"],
-    "external_dependencies": {"python": ["lxml"]},
     "installable": True,
 }
