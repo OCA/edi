@@ -12,7 +12,7 @@
                 <button
                     type="object"
                     name="attach_ubl_xml_file_button"
-                    attrs="{'invisible': ['|', ('type', 'not in', ['out_invoice', 'out_refund']), ('state', '!=', 'posted')]}"
+                    attrs="{'invisible': ['|', ('move_type', 'not in', ['out_invoice', 'out_refund']), ('state', '!=', 'posted')]}"
                     string="Generate UBL XML File"
                 />
             </button>
