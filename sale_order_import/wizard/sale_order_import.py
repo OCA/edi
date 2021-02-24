@@ -9,6 +9,7 @@ from lxml import etree
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.osv.expression import AND
 from odoo.tools import config, float_compare, float_is_zero
 
 logger = logging.getLogger(__name__)
@@ -185,6 +186,20 @@ class SaleOrderImport(models.TransientModel):
     #    }]
 
     @api.model
+    def _search_existing_order_domain(
+        self, parsed_order, commercial_partner, state_domain
+    ):
+        return AND(
+            [
+                state_domain,
+                [
+                    ("client_order_ref", "=", parsed_order["order_ref"]),
+                    ("commercial_partner_id", "=", commercial_partner.id),
+                ],
+            ]
+        )
+
+    @api.model
     def _prepare_order(self, parsed_order, price_source):
         soo = self.env["sale.order"]
         bdio = self.env["business.document.import"]
@@ -211,11 +226,9 @@ class SaleOrderImport(models.TransientModel):
         if parsed_order.get("order_ref"):
             commercial_partner = partner.commercial_partner_id
             existing_orders = soo.search(
-                [
-                    ("client_order_ref", "=", parsed_order["order_ref"]),
-                    ("commercial_partner_id", "=", commercial_partner.id),
-                    ("state", "!=", "cancel"),
-                ]
+                self._search_existing_order_domain(
+                    parsed_order, commercial_partner, [("state", "!=", "cancel")]
+                )
             )
             if existing_orders:
                 raise UserError(
@@ -351,11 +364,9 @@ class SaleOrderImport(models.TransientModel):
                 parsed_order["ship_to"], partner, []
             ).id
         existing_quotations = self.env["sale.order"].search(
-            [
-                ("commercial_partner_id", "=", commercial_partner.id),
-                ("state", "in", ("draft", "sent")),
-                ("client_order_ref", "=", parsed_order.get("order_ref")),
-            ]
+            self._search_existing_order_domain(
+                parsed_order, commercial_partner, [("state", "in", ("draft", "sent"))]
+            )
         )
         if existing_quotations:
             default_sale_id = False
