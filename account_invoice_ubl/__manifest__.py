@@ -4,12 +4,12 @@
 
 {
     "name": "Account Invoice UBL",
-    "version": "13.0.1.0.4",
+    "version": "14.0.1.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Generate UBL XML file for customer invoices/refunds",
     "author": "Akretion,Onestein,Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/edi/",
+    "website": "https://github.com/OCA/edi",
     "depends": [
         "account_e-invoice_generate",
         "account_payment_partner",
