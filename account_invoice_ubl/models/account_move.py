@@ -27,15 +27,17 @@ class AccountMove(models.Model):
         issue_date = etree.SubElement(parent_node, ns["cbc"] + "IssueDate")
         issue_date.text = self.invoice_date.strftime("%Y-%m-%d")
         type_code = etree.SubElement(parent_node, ns["cbc"] + "InvoiceTypeCode")
-        if self.type == "out_invoice":
+        if self.move_type == "out_invoice":
             type_code.text = "380"
-        elif self.type == "out_refund":
+        elif self.move_type == "out_refund":
             type_code.text = "381"
         if self.narration:
             note = etree.SubElement(parent_node, ns["cbc"] + "Note")
             note.text = self.narration
         doc_currency = etree.SubElement(parent_node, ns["cbc"] + "DocumentCurrencyCode")
         doc_currency.text = self.currency_id.name
+        buyer_reference = etree.SubElement(parent_node, ns["cbc"] + "BuyerReference")
+        buyer_reference.text = self.ref or ""
 
     def _ubl_add_order_reference(self, parent_node, ns, version="2.1"):
         self.ensure_one()
@@ -83,7 +85,7 @@ class AccountMove(models.Model):
             pdf_inv = (
                 self.with_context(ctx)
                 .env.ref("account.account_invoices")
-                .render_qweb_pdf(self.ids)[0]
+                ._render_qweb_pdf(self.ids)[0]
             )
             binary_node.text = base64.b64encode(pdf_inv)
 
@@ -264,7 +266,7 @@ class AccountMove(models.Model):
         # Put paymentmeans block even when invoice is paid ?
         payment_identifier = self.get_payment_identifier()
         self._ubl_add_payment_means(
-            self.invoice_partner_bank_id,
+            self.partner_bank_id,
             self.payment_mode_id,
             self.invoice_date_due,
             xml_root,
@@ -290,7 +292,7 @@ class AccountMove(models.Model):
     def generate_ubl_xml_string(self, version="2.1"):
         self.ensure_one()
         assert self.state == "posted"
-        assert self.type in ("out_invoice", "out_refund")
+        assert self.move_type in ("out_invoice", "out_refund")
         logger.debug("Starting to generate UBL XML Invoice file")
         lang = self.get_ubl_lang()
         # The aim of injecting lang in context
@@ -347,7 +349,7 @@ class AccountMove(models.Model):
 
     def attach_ubl_xml_file_button(self):
         self.ensure_one()
-        assert self.type in ("out_invoice", "out_refund")
+        assert self.move_type in ("out_invoice", "out_refund")
         assert self.state == "posted"
         version = self.get_ubl_version()
         xml_string = self.generate_ubl_xml_string(version=version)

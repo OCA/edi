@@ -11,7 +11,7 @@
     "author": "Akretion,Onestein,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": [
-        "account_e-invoice_generate",
+        "account_einvoice_generate",
         "account_payment_partner",
         "base_ubl_payment",
         "account_tax_unece",
