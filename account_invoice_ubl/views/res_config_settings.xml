@@ -8,7 +8,7 @@
         <field name="model">res.config.settings</field>
         <field
             name="inherit_id"
-            ref="account_e-invoice_generate.view_account_config_settings"
+            ref="account_einvoice_generate.view_account_config_settings"
         />
         <field name="arch" type="xml">
             <xpath expr="//div[@id='e-invoices']" position="inside">
