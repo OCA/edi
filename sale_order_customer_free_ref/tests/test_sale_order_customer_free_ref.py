@@ -45,3 +45,6 @@ class TestSaleOrderCustomerFreeRef(SingleTransactionCase):
         self.order.client_order_ref = "456/abc"
         self.assertEqual(self.order.customer_order_number, "456/abc")
         self.assertFalse(self.order.customer_order_free_ref)
+        self.order.client_order_ref = ""
+        self.assertFalse(self.order.customer_order_number)
+        self.assertFalse(self.order.customer_order_free_ref)

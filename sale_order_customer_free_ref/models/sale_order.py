@@ -31,12 +31,13 @@ class SaleOrder(models.Model):
             if not order.client_order_ref:
                 order.customer_order_number = ""
                 order.customer_order_free_ref = ""
-            refs = order.client_order_ref.split(self._client_order_ref_separator, 1)
-            order.customer_order_number = refs[0]
-            if len(refs) == 2:
-                order.customer_order_free_ref = refs[1]
             else:
-                order.customer_order_free_ref = ""
+                refs = order.client_order_ref.split(self._client_order_ref_separator, 1)
+                order.customer_order_number = refs[0]
+                if len(refs) == 2:
+                    order.customer_order_free_ref = refs[1]
+                else:
+                    order.customer_order_free_ref = ""
 
     def _prepare_invoice(self):
         res = super()._prepare_invoice()
