@@ -10,7 +10,7 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _match_incoterm(self, incoterm_dict, chatter_msg):
-        sio = self.env["stock.incoterms"]
+        sio = self.env["account.incoterms"]
         if not incoterm_dict:
             return False
         if incoterm_dict.get("recordset"):
