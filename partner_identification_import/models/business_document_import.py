@@ -44,16 +44,18 @@ class BusinessDocumentImport(models.AbstractModel):
                         return contact
                     return id_number.partner_id
                 unmatched.append(
-                    _("ID Number: %s\n" "ID Number Category: %s\n\n")
-                    % (ident["value"], ident["schemeID"])
+                    _("ID Number: {}\nID Number Category: {}\n\n").format(
+                        ident["value"], ident["schemeID"]
+                    )
                 )
             if unmatched:
                 raise self.user_error_wrap(
                     _(
                         "Odoo couldn't find a partner corresponding to the "
                         "following information extracted from the business document:\n"
-                        "%s"
+                        "{}"
                     )
-                    % _("or\n").join(unmatched)
+                    .format_("or\n")
+                    .join(unmatched)
                 )
         return super()._hook_match_partner(partner_dict, chatter_msg, domain, order)
