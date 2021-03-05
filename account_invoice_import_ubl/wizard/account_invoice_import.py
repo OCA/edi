@@ -1,4 +1,5 @@
-# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2016-2021 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, _
@@ -140,7 +141,6 @@ class AccountInvoiceImport(models.TransientModel):
         ubl_version = ubl_version_xpath and ubl_version_xpath[0].text or '2.1'
         # Check XML schema to avoid headaches trying to import invalid files
         self._ubl_check_xml_schema(xml_string, 'Invoice', version=ubl_version)
-        prec = self.env['decimal.precision'].precision_get('Account')
         doc_type_xpath = xml_root.xpath(
             "/inv:Invoice/cbc:InvoiceTypeCode[@listAgencyID='6']",
             namespaces=namespaces)
@@ -232,14 +232,6 @@ class AccountInvoiceImport(models.TransientModel):
                 continue
             res_lines.append(line_vals)
 
-        if float_compare(
-                total_line, counters['lines'], precision_digits=prec):
-            logger.warning(
-                "The gloabl LineExtensionAmount (%s) doesn't match the "
-                "sum of the amounts of each line (%s). It can "
-                "have a diff of a few cents due to sum of rounded values vs "
-                "rounded sum policies.", total_line, counters['lines'])
-
         res = {
             'type': inv_type,
             'partner': supplier_dict,
@@ -256,6 +248,17 @@ class AccountInvoiceImport(models.TransientModel):
             'lines': res_lines,
             'attachments': attachments,
             }
+
+        self.get_precision_rounding_from_currency_helper(res)
+        if float_compare(
+                total_line, counters['lines'], precision_rounding=res['currency_rounding']):
+            logger.warning(
+                "The gloabl LineExtensionAmount (%s) doesn't match the "
+                "sum of the amounts of each line (%s). It can "
+                "have a diff of a few cents due to sum of rounded values vs "
+                "rounded sum policies.", total_line, counters['lines'])
+
+
         # Hack for the sample UBL invoices that use an invalid VAT number
         if res['partner'].get('vat') in ['NL123456789B01', 'DK16356706']:
             res['partner'].pop('vat')
