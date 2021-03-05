@@ -1,10 +1,9 @@
 Go to the form view of the supplier and configure it with the following parameters:
 
-* *Is a Vendor* is True
 * the *VAT* is set (the VAT number is used by default when searching the supplier in the Odoo partner database)
 * in the *Invoicing* tab, create an *Invoice Import Configuration*.
 
-For the PDF invoice of your supplier that don't have an embedded XML file, you will have to create a `template file <https://github.com/invoice-x/invoice2data/tree/master/src/invoice2data/extract/templates>`_ in YAML format in the invoice2data Python library. It is quite easy to do ; if you are familiar with `regexp <https://docs.python.org/2/library/re.html>`_, it should not take more than 10 minutes for each supplier.
+For the PDF invoice of your supplier that don't have an embedded XML file, you will have to create a `template file <https://github.com/invoice-x/invoice2data/tree/master/src/invoice2data/extract/templates>`_ in YAML format in the invoice2data Python library. It is quite easy to do ; if you are familiar with `regexp <https://docs.python.org/3/library/re.html>`_, it should not take more than 10 minutes for each supplier.
 
 Here are some hints to help you add a template for your supplier:
 
@@ -22,7 +21,7 @@ On the output, you will get first the text of the PDF, then some debug info on t
 
 * the list of *fields* should contain the following entries:
 
-  * 'vat' with the VAT number of the supplier (if the VAT number of the supplier is not in the text of PDF file, add a 'partner_name' key, or, if the supplier is French and the module *l10n_fr_business_document_import* is installed, add a 'siren' key)
+  * 'vat' with the VAT number of the supplier (if the VAT number of the supplier is not in the text of PDF file, add a 'partner_name' key)
   * 'amount' ('amount' is the total amount with taxes)
   * 'amount_untaxed' or 'amount_tax' (one or the other, no need for both)
   * 'date': the date of the invoice
