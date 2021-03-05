@@ -1,4 +1,4 @@
-# Copyright 2015-2020 Akretion France (http://www.akretion.com/)
+# Copyright 2015-2021 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -27,8 +27,7 @@ class AccountInvoiceImport(models.TransientModel):
                 'invoice' in xml_root.tag.lower()):
             return self.parse_facturx_invoice(xml_root)
         else:
-            return super(AccountInvoiceImport, self).parse_xml_invoice(
-                xml_root)
+            return super().parse_xml_invoice(xml_root)
 
     def prepare_facturx_xpath_dict(self):
         xpath_dict = {

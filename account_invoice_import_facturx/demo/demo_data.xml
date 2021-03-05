@@ -11,8 +11,8 @@
 <record id="jolie_boutique" model="res.partner">
     <field name="name">Ma jolie boutique</field>
     <field name="is_company" eval="True"/>
-    <field name="supplier" eval="True"/>
-    <field name="customer" eval="False"/>
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
     <field name="street">35 rue de la république</field>
     <field name="zip">69001</field>
     <field name="city">Lyon</field>
@@ -28,8 +28,6 @@
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-    <field name="account_id" ref="charge_account"/>
-    <field name="refund_account_id" ref="charge_account"/>
 </record>
 
 <record id="jolie_boutique_import_config" model="account.invoice.import.config">
@@ -43,8 +41,8 @@
 <record id="lieferant" model="res.partner">
     <field name="name">Lieferant GmbH</field>
     <field name="is_company" eval="True"/>
-    <field name="supplier" eval="True"/>
-    <field name="customer" eval="False"/>
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
     <field name="street">Lieferantenstraße 20</field>
     <field name="zip">80333</field>
     <field name="city">München</field>
@@ -63,8 +61,8 @@
     <field name="name">MVM Musterhafter
 Versicherungsverein Musterstadt a.G.</field>
     <field name="is_company" eval="True"/>
-    <field name="supplier" eval="True"/>
-    <field name="customer" eval="False"/>
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
     <field name="street">Musterstr. 12</field>
     <field name="zip">12345</field>
     <field name="city">Musterstadt</field>
@@ -82,8 +80,8 @@ Versicherungsverein Musterstadt a.G.</field>
 <record id="musterlieferant" model="res.partner">
     <field name="name">MUSTERLIEFERANT GMBH</field>
     <field name="is_company" eval="True"/>
-    <field name="supplier" eval="True"/>
-    <field name="customer" eval="False"/>
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
     <field name="email">max.mustermann@musterlieferant.de</field>
     <field name="street">BAHNHOFSTRASSE 99</field>
     <field name="zip">99199</field>
@@ -107,8 +105,6 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-    <field name="account_id" ref="charge_account"/>
-    <field name="refund_account_id" ref="charge_account"/>
 </record>
 
 <record id="de_vat_purchase_7" model="account.tax">
@@ -119,8 +115,6 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat"/>
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-    <field name="account_id" ref="charge_account"/>
-    <field name="refund_account_id" ref="charge_account"/>
 </record>
 
 <record id="de_insurance_purchase_19" model="account.tax">
@@ -131,8 +125,6 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="base_facturx.tax_type_zf_insurance_tax"/>
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-    <field name="account_id" ref="charge_account"/>
-    <field name="refund_account_id" ref="charge_account"/>
 </record>
 
 <record id="de_insurance_purchase_16_34" model="account.tax">
@@ -143,15 +135,13 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="base_facturx.tax_type_zf_insurance_tax"/>
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s"/>
-    <field name="account_id" ref="charge_account"/>
-    <field name="refund_account_id" ref="charge_account"/>
 </record>
 
 <record id="test_noline" model="res.partner">
     <field name="name">Test Supplier (noline)</field>
     <field name="is_company" eval="True"/>
-    <field name="supplier" eval="True"/>
-    <field name="customer" eval="False"/>
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
     <field name="country_id" ref="base.fr"/>
     <field name="vat">FR11123456782</field>
 </record>
@@ -167,8 +157,8 @@ Versicherungsverein Musterstadt a.G.</field>
 <record id="test_line" model="res.partner">
     <field name="name">Test Supplier (lines)</field>
     <field name="is_company" eval="True"/>
-    <field name="supplier" eval="True"/>
-    <field name="customer" eval="False"/>
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
     <field name="country_id" ref="base.fr"/>
     <field name="vat">FR14987654324</field>
 </record>
