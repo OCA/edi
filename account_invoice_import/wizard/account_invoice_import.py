@@ -308,7 +308,7 @@ class AccountInvoiceImport(models.TransientModel):
                         partner_type = 'supplier'
                     product = bdio._match_product(
                         line['product'], parsed_inv['chatter_msg'],
-                        seller=partner_type)
+                        seller=partner)
                     il_vals = {'product_id': product.id, 'invoice_id': vals}
                     il_vals = ailo.play_onchanges(il_vals, ['product_id'])
                     il_vals.pop('invoice_id')
