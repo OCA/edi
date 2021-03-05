@@ -328,7 +328,6 @@ class AccountInvoiceImport(models.TransientModel):
                     "according to the official XML Schema Definition."
                 )
             )
-        prec = self.env["decimal.precision"].precision_get("Account")  # TODO
         logger.debug("XML file namespaces=%s", namespaces)
         doc_type = self.multi_xpath_helper(
             xml_root,
@@ -356,10 +355,18 @@ class AccountInvoiceImport(models.TransientModel):
 
         xpath_dict = self.prepare_facturx_xpath_dict()
         res = self.xpath_to_dict_helper(xml_root, xpath_dict, namespaces)
+        # We're not supposed to use matching methods in this module,
+        # but I want to get the decimal precision of the currency of the invoice
+        # So I put it in a try/except...
+        try:
+            currency = self._match_currency(res['currency'], [])
+            prec = currency.rounding
+        except Exception:
+            prec = self.env.company.currency_id.rounding
         amount_total = res["amount_total"]
         ac_qty_dict = {"charges": 1, "allowances": -1}
         if (
-            float_compare(amount_total, 0, precision_digits=prec) < 0
+            float_compare(amount_total, 0, precision_rounding=prec) < 0
             and inv_type == "in_invoice"
         ):
             ac_qty_dict = {"charges": -1, "allowances": 1}
@@ -420,7 +427,7 @@ class AccountInvoiceImport(models.TransientModel):
         # Check coherence
         if total_line:
             check_total = total_line + total_charge - total_tradeallowance + amount_tax
-            if float_compare(check_total, amount_total, precision_digits=prec):
+            if float_compare(check_total, amount_total, precision_rounding=prec):
                 raise UserError(
                     _(
                         "The GrandTotalAmount is %s but the sum of "
@@ -488,7 +495,7 @@ class AccountInvoiceImport(models.TransientModel):
                 continue
             res_lines += line_list
 
-        if float_compare(total_line, counters["lines"], precision_digits=prec):
+        if float_compare(total_line, counters["lines"], precision_rounding=prec):
             logger.warning(
                 "The global LineTotalAmount (%s) doesn't match the "
                 "sum of the LineTotalAmount of each line (%s). It can "
@@ -548,9 +555,9 @@ class AccountInvoiceImport(models.TransientModel):
             }
             res_lines.append(vals)
 
-        if float_compare(total_charge, counters["charges"], precision_digits=prec):
+        if float_compare(total_charge, counters["charges"], precision_rounding=prec):
             if len(global_taxes) <= 1 and float_is_zero(
-                counters["charges"], precision_digits=prec
+                counters["charges"], precision_rounding=prec
             ):
                 res_lines.append(
                     {
@@ -573,10 +580,10 @@ class AccountInvoiceImport(models.TransientModel):
                 )
 
         if float_compare(
-            abs(total_tradeallowance), counters["allowances"], precision_digits=prec
+            abs(total_tradeallowance), counters["allowances"], precision_rounding=prec
         ):
             if len(global_taxes) <= 1 and float_is_zero(
-                counters["allowances"], precision_digits=prec
+                counters["allowances"], precision_rounding=prec
             ):
                 res_lines.append(
                     {
