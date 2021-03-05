@@ -12,6 +12,7 @@ addons:
   apt:
     packages:
       - expect-dev # provides unbuffer utility
+      - poppler-utils # required by account_invoice_import_invoice2data
 
 stages:
   - test
