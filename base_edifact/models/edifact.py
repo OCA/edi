@@ -197,10 +197,10 @@ QTYLIN|47|%s|%s\n' % (int(invoice_line.quantity), uom_code,
 
     @api.model
     def edifact_invoice_line_price_unit(self, invoice_line):
-        discounted_price = invoice_line.price_unit - (
-            invoice_line.price_unit * invoice_line.discount / 100.0)
-        res = 'PRILIN|AAA|%.2f\n\
-PRILIN|AAB|%.2f\n' % (discounted_price, invoice_line.price_unit)
+        discounted_price = round(invoice_line.price_unit - (
+            invoice_line.price_unit * invoice_line.discount / 100.0), 6)
+        res = 'PRILIN|AAA|%s\n\
+PRILIN|AAB|%s\n' % (discounted_price, invoice_line.price_unit)
         return res
 
     @api.model
