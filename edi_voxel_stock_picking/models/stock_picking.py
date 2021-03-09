@@ -1,7 +1,7 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, exceptions, fields, models
+from odoo import fields, models
 
 
 class Picking(models.Model):
@@ -58,15 +58,8 @@ class Picking(models.Model):
         return res
 
     def action_cancel(self):
-        jobs = self.mapped("voxel_job_ids")
-        if not self._cancel_voxel_jobs(jobs):
-            raise exceptions.Warning(
-                _(
-                    "You can not cancel this delivery order because"
-                    " there is a job running!"
-                )
-            )
-        return super(Picking, self).action_cancel()
+        self._cancel_voxel_jobs()
+        return super().action_cancel()
 
     def action_send_to_voxel(self):
         # Check if it is a return picking
