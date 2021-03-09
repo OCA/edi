@@ -22,6 +22,10 @@ class AccountInvoice(models.Model):
         if not self.partner_id.edifact_code:
             raise UserError(
                 _('Partner %s has no Edifact Code') % self.partner_id.name)
+        if self.partner_shipping_id and \
+                not self.partner_shipping_id.edifact_code:
+            raise UserError(_('Partner %s has no Edifact Code') %
+                            self.partner_shipping_id.name)
         sale_order_partner = self.partner_id
         picking = False
         if self.picking_ids:
@@ -56,9 +60,8 @@ class AccountInvoice(models.Model):
             self.company_id.partner_id, company_registry)  # NADSU
         edifact_header += self.edifact_invoice_legal_supplier(
             self.company_id.partner_id, company_registry)  # NADSCO
-        if picking:
-            edifact_header += self.edifact_invoice_goods_receiver(
-                picking.partner_id)  # NADDP
+        edifact_header += self.edifact_invoice_goods_receiver(
+            self.partner_shipping_id)  # NADDP
         edifact_header += self.edifact_invoice_payer(self.partner_id)  # NADPR
         edifact_header += self.edifact_invoice_currency(
             self.currency_id)  # CUX
