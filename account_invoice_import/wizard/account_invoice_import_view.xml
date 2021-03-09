@@ -10,18 +10,30 @@
 <record id="account_invoice_import_form" model="ir.ui.view">
     <field name="model">account.invoice.import</field>
     <field name="arch"  type="xml">
-        <form string="Import Supplier Invoice or Refund">
-            <div name="help-import" states="import">
+        <form string="Import Supplier Invoice or Refund" >
+            <div name="help-import-supplier" attrs="{'invisible': ['|',('customer', '=', True),('state', '!=', 'import')]}">
                 <p>Upload below the supplier invoice (or refund) as PDF or XML file: Odoo will create a draft supplier invoice (or refund). Supported formats:</p>
                 <ul name="supported_formats_list"></ul>
                 <p>If the format you need is not listed above, you should install an additionnal Odoo module that adds support for that format (e.g. <i>account_invoice_import_factur-x</i>, <i>account_invoice_import_ubl</i>, <i>account_invoice_import_invoice2data</i>, etc).</p>
                 <p>If there are several invoice import configurations for the supplier of the invoice, Odoo will ask you to choose one of them. If there is an existing draft invoice for that supplier, Odoo will propose you to update that draft invoice or create a new draft invoice.</p>
             </div>
-            <div name="help-config" states="config">
+            <div name="help-import-customer" attrs="{'invisible': ['|',('customer', '=', False),('state', '!=', 'import')]}">
+                <p>Upload below the customer invoice (or refund) as PDF or XML file: Odoo will create a draft customer invoice (or refund). Supported formats:</p>
+                <ul name="supported_formats_list"></ul>
+                <p>If the format you need is not listed above, you should install an additionnal Odoo module that adds support for that format (e.g. <i>account_invoice_import_factur-x</i>, <i>account_invoice_import_ubl</i>, <i>account_invoice_import_invoice2data</i>, etc).</p>
+                <p>If there are several invoice import configurations for the customer of the invoice, Odoo will ask you to choose one of them. If there is an existing draft invoice for that customer, Odoo will propose you to update that draft invoice or create a new draft invoice.</p>
+            </div>
+            <div name="help-config-supplier" attrs="{'invisible': ['|',('customer', '=', True),('state', '!=', 'config')]}">
                 <p>The supplier has several invoice import configurations: please select the one you want to use for this import.</p>
             </div>
-            <div name="help-update" states="update">
+            <div name="help-config-customer" attrs="{'invisible': ['|',('customer', '=', False),('state', '!=', 'config')]}">
+                <p>The customer has several invoice import configurations: please select the one you want to use for this import.</p>
+            </div>
+            <div name="help-update-supplier" attrs="{'invisible': ['|',('customer', '=', True),('state', '!=', 'update')]}">
                 <p>Some draft supplier invoices/refunds have been found for the supplier of the invoice you are importing; one of them may correspond to the invoice you are importing. You can either select an existing draft supplier invoice to update or create a new draft invoice.</p>
+            </div>
+            <div name="help-update-customer" attrs="{'invisible': ['|',('customer', '=', False),('state', '!=', 'update')]}">
+                <p>Some draft customer invoices/refunds have been found for the customer of the invoice you are importing; one of them may correspond to the invoice you are importing. You can either select an existing draft customer invoice to update or create a new draft invoice.</p>
             </div>
             <group name="main">
                 <field name="state" invisible="1"/>
