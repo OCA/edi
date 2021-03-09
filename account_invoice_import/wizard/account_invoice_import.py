@@ -889,8 +889,7 @@ class AccountInvoiceImport(models.TransientModel):
         if not invoice:
             raise UserError(_(
                 'You must select a supplier invoice or refund to update'))
-        parsed_inv = self.parse_invoice(
-            self.invoice_file, self.invoice_filename)
+        parsed_inv = self._get_parsed_invoice()
         if self.partner_id:
             # True if state='update' ; False when state='update-from-invoice'
             parsed_inv['partner']['recordset'] = self.partner_id
@@ -1067,7 +1066,7 @@ class AccountInvoiceImport(models.TransientModel):
         aiico = self.env['account.invoice.import.config']
         company_id = self._context.get('force_company') or\
             self.env.user.company_id.id
-        parsed_inv = self.parse_invoice(invoice_b64, invoice_filename)
+        parsed_inv = self._get_parsed_invoice()
         partner = bdio._match_partner(
             parsed_inv['partner'], parsed_inv['chatter_msg'])
 
