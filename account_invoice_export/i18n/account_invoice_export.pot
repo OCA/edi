@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -14,16 +14,43 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_invoice_export
+#: model:ir.model.fields,help:account_invoice_export.field_account_bank_statement_line__send_through_http
+#: model:ir.model.fields,help:account_invoice_export.field_account_move__send_through_http
+#: model:ir.model.fields,help:account_invoice_export.field_account_payment__send_through_http
+#: model:ir.model.fields,help:account_invoice_export.field_transmit_method__send_through_http
+msgid "Adds a Send eBill button on the invoice"
+msgstr ""
+
+#. module: account_invoice_export
 #: code:addons/account_invoice_export/models/account_move.py:0
 #, python-format
 msgid "An error of type {} occured."
 msgstr ""
 
 #. module: account_invoice_export
-#: model_terms:ir.ui.view,arch_db:account_invoice_export.view_move_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_export.transmit_method_form
 msgid ""
-"Ebill has already been sent, but has not yet been accpeted by the distant "
-"system. Are you sure you want to send it again ?"
+"By default the PDF of the invoice will be sent using the connection "
+"parameters below (basic authenticaiton)."
+msgstr ""
+
+#. module: account_invoice_export
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_invoice_export
+#: model_terms:ir.ui.view,arch_db:account_invoice_export.view_move_form
+msgid "Ebill has already been sent. Are you sure you want to send it again ?"
+msgstr ""
+
+#. module: account_invoice_export
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__send_through_http
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_move__send_through_http
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__send_through_http
+#: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__send_through_http
+msgid "Enable send eBill"
 msgstr ""
 
 #. module: account_invoice_export
@@ -38,12 +65,29 @@ msgid "HTTP error {} sending invoice to {}"
 msgstr ""
 
 #. module: account_invoice_export
+#: model_terms:ir.ui.view,arch_db:account_invoice_export.transmit_method_form
+msgid ""
+"Handling specific connection needs and/or exporting other files can be done "
+"through code."
+msgstr ""
+
+#. module: account_invoice_export
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_move__id
+#: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__id
+msgid "ID"
+msgstr ""
+
+#. module: account_invoice_export
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__invoice_export_confirmed
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__invoice_export_confirmed
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__invoice_export_confirmed
 msgid "Invoice Export Confirmed"
 msgstr ""
 
 #. module: account_invoice_export
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__invoice_exported
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__invoice_exported
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__invoice_exported
 msgid "Invoice Exported"
 msgstr ""
 
@@ -55,7 +99,13 @@ msgstr ""
 
 #. module: account_invoice_export
 #: model:ir.model,name:account_invoice_export.model_account_move
-msgid "Journal Entries"
+msgid "Journal Entry"
+msgstr ""
+
+#. module: account_invoice_export
+#: model:ir.model.fields,field_description:account_invoice_export.field_account_move____last_update
+#: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method____last_update
+msgid "Last Modified on"
 msgstr ""
 
 #. module: account_invoice_export
@@ -72,11 +122,6 @@ msgstr ""
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.view_move_form
 msgid "Resend eBill"
-msgstr ""
-
-#. module: account_invoice_export
-#: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__send_through_http
-msgid "Send Through Http"
 msgstr ""
 
 #. module: account_invoice_export

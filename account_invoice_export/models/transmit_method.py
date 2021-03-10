@@ -9,7 +9,9 @@ from odoo import fields, models
 class TransmitMethod(models.Model):
     _inherit = "transmit.method"
 
-    send_through_http = fields.Boolean()
+    send_through_http = fields.Boolean(
+        string="Enable send eBill", help="Adds a Send eBill button on the invoice"
+    )
     destination_url = fields.Char(string="Url")
     destination_user = fields.Char(string="User", copy=False)
     destination_pwd = fields.Char(string="Password", copy=False)
