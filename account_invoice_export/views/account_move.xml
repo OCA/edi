@@ -8,13 +8,14 @@
             <field name="transmit_method_id" position="after">
                 <field name="invoice_exported" invisible="1" />
                 <field name="invoice_export_confirmed" invisible="1" />
+                <field name="send_through_http" invisible="1" />
             </field>
             <button name="action_invoice_sent" position="after">
                 <button
                     name="export_invoice"
                     string="Send eBill"
                     type="object"
-                    attrs="{'invisible':['|', '|', ('state', '!=', 'posted'), ('invoice_exported', '=', True), ('move_type', 'not in', ('out_invoice', 'out_refund'))]}"
+                    attrs="{'invisible':['|', '|', '|', ('send_through_http', '=', False), ('state', '!=', 'posted'), ('invoice_exported', '=', True), ('move_type', 'not in', ('out_invoice', 'out_refund'))]}"
                     groups="base.group_user"
                     class="oe_highlight"
                 />
@@ -22,10 +23,10 @@
                     name="export_invoice"
                     string="Resend eBill"
                     type="object"
-                    attrs="{'invisible':['|', '|', ('state', '!=', 'posted'), '|', ('invoice_export_confirmed', '=', True), ('invoice_exported', '=', False), ('move_type', 'not in', ('out_invoice', 'out_refund'))]}"
+                    attrs="{'invisible':['|', '|', '|', ('send_through_http', '=', False), ('state', '!=', 'posted'), '|', ('invoice_export_confirmed', '=', True), ('invoice_exported', '=', False), ('move_type', 'not in', ('out_invoice', 'out_refund'))]}"
                     groups="base.group_user"
                     class="oe_highlight"
-                    confirm="Ebill has already been sent, but has not yet been accpeted by the distant system. Are you sure you want to send it again ?"
+                    confirm="Ebill has already been sent. Are you sure you want to send it again ?"
                 />
             </button>
         </field>
