@@ -7,7 +7,7 @@ from freezegun import freeze_time
 from .common import ShipmentTestCaseBase
 
 
-class InboundInstructionTestCase(ShipmentTestCaseBase):
+class InboundNotificationTestCase(ShipmentTestCaseBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
