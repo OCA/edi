@@ -1,5 +1,5 @@
 /* Copyright 2019 Tecnativa - David Vidal
- * License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). */
+ * License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). */
 
 odoo.define("edi.FieldEdiConfiguration", function(require) {
     "use strict";
