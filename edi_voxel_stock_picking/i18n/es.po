@@ -180,17 +180,15 @@ msgid "Voxel report processing error"
 msgstr "Envíos a Voxel con error de procesamiento"
 
 #. module: edi_voxel_stock_picking
-#: code:addons/edi_voxel_stock_picking/models/stock_picking.py:0
-#, python-format
-msgid "You can not cancel this delivery order because there is a job running!"
-msgstr ""
-"¡No puede cancelar esta operación de albarán porque hay un trabajo "
-"ejecutándose!"
-
-#. module: edi_voxel_stock_picking
 #: model:ir.actions.report,print_report_name:edi_voxel_stock_picking.report_voxel_picking
 msgid "object._get_voxel_filename()"
 msgstr ""
+
+#~ msgid ""
+#~ "You can not cancel this delivery order because there is a job running!"
+#~ msgstr ""
+#~ "¡No puede cancelar esta operación de albarán porque hay un trabajo "
+#~ "ejecutándose!"
 
 #~ msgid "report.edi_voxel_stock_picking.template_voxel_picking"
 #~ msgstr "report.edi_voxel_stock_picking.template_voxel_picking"
