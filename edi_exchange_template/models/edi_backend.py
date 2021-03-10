@@ -24,14 +24,23 @@ class EDIBackend(models.Model):
 
         Template's code must match the same component usage as per normal components.
         """
+        search = self.output_template_model.search
         # TODO: maybe we can add a m2o to output templates
         # but then we would need another for input templates if they are introduced.
         tmpl = None
-        candidates = self._get_component_usage_candidates(exchange_record, "generate")
         if code:
-            candidates.insert(code)
-        for usage in candidates:
-            tmpl = self.output_template_model.search([("code", "=", usage)], limit=1)
+            domain = [("code", "=", code)]
+            return search(domain, limit=1)
+        for domain in self._get_output_template_domains(exchange_record):
+            tmpl = search(domain, limit=1)
             if tmpl:
                 break
         return tmpl
+
+    def _get_output_template_domains(self, exchange_record):
+        """Retrieve domains to lookup for templates by priority."""
+        backend_type_leaf = [("backend_type_id", "=", self.backend_type_id.id)]
+        exchange_type_leaf = [("type_id", "=", exchange_record.type_id.id)]
+        full_match_domain = backend_type_leaf + exchange_type_leaf
+        partial_match_domain = backend_type_leaf
+        return full_match_domain, partial_match_domain

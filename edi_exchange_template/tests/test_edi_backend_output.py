@@ -102,6 +102,10 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         self.assertEqual(
             self.backend._get_output_template(self.record2), self.tmpl_out2
         )
+        self.assertEqual(
+            self.backend._get_output_template(self.record2, code=self.tmpl_out1.code),
+            self.tmpl_out1,
+        )
 
     def test_generate_file(self):
         output = self.backend.generate_output(self.record1)

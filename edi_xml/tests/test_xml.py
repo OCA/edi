@@ -21,16 +21,20 @@ class BusinessHeaderTestCase(SavepointComponentCase, XMLTestCaseMixin):
         super().setUpClass()
         cls.backend = cls.env.ref("edi.demo_edi_backend")
         cls.handler = cls.backend._find_component(
-            ["edi.xml"], work_ctx={"schema_path": "edi_xml:tests/fixtures/Test.xsd"}
+            cls.backend._name,
+            ["edi.xml"],
+            work_ctx={"schema_path": "edi_xml:tests/fixtures/Test.xsd"},
         )
 
     def test_xml_schema_fail(self):
         with self.assertRaises(ValueError):
             self.backend._find_component(
-                ["edi.xml"], work_ctx={"schema_path": "Nothing"}
+                self.backend._name, ["edi.xml"], work_ctx={"schema_path": "Nothing"}
             )
         with self.assertRaises(AttributeError):
-            self.backend._find_component(["edi.xml"], work_ctx={"no_schema": "Nothing"})
+            self.backend._find_component(
+                self.backend._name, ["edi.xml"], work_ctx={"no_schema": "Nothing"}
+            )
 
     def test_xml(self):
         data = self.handler.parse_xml(TEST_XML)
