@@ -17,15 +17,9 @@ class GS1InboundInstructionMessage(Component):
         Logistic Services Provider (LSP)
 
     that goods will be arriving.
-
-    Warehousing Inbound Notification Message Definition
-    The Warehousing Inbound Notification message
-    enables a Logistic Services Provider (LSP) to inform
-    his Logistic Services Client (LSC)
-    on the status of goods received on behalf of the client.
     """
 
-    _name = "gs1.output.inboundinstruction"
+    _name = "gs1.output.inbound.instruction"
     _inherit = [
         "edi.gs1.output.shipment.mixin",
     ]
