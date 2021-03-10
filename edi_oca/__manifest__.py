@@ -1,6 +1,6 @@
 # Copyright 2020 ACSONE
 # @author: Simone Orsi <simahawk@gmail.com>
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 {
     "name": "EDI",
@@ -10,7 +10,7 @@
     """,
     "version": "13.0.1.15.0",
     "development_status": "Alpha",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "depends": ["base_edi", "component_event", "mail", "base_sparse_field"],
