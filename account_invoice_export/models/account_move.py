@@ -14,6 +14,7 @@ class AccountMove(models.Model):
     invoice_exported = fields.Boolean(copy=False)
     # Usefull when the distant system does not validate the export synchronously
     invoice_export_confirmed = fields.Boolean(copy=False)
+    send_through_http = fields.Boolean(related="transmit_method_id.send_through_http")
 
     def export_invoice(self):
         for invoice in self:
