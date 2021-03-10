@@ -22,6 +22,10 @@ class AccountInvoice(models.Model):
         if not self.partner_id.edifact_code:
             raise UserError(
                 _('Partner %s has no Edifact Code') % self.partner_id.name)
+        if self.partner_shipping_id and \
+                not self.partner_shipping_id.edifact_code:
+            raise UserError(_('Partner %s has no Edifact Code') %
+                            self.partner_shipping_id.name)
         sale_order_partner = self.partner_id
         picking = False
         if self.picking_ids:
@@ -56,9 +60,8 @@ class AccountInvoice(models.Model):
             self.company_id.partner_id, company_registry)  # NADSU
         edifact_header += self.edifact_invoice_legal_supplier(
             self.company_id.partner_id, company_registry)  # NADSCO
-        if picking:
-            edifact_header += self.edifact_invoice_goods_receiver(
-                picking.partner_id)  # NADDP
+        edifact_header += self.edifact_invoice_goods_receiver(
+            self.partner_shipping_id)  # NADDP
         edifact_header += self.edifact_invoice_payer(self.partner_id)  # NADPR
         edifact_header += self.edifact_invoice_currency(
             self.currency_id)  # CUX
@@ -117,18 +120,14 @@ class AccountInvoice(models.Model):
             'total_amount': self.amount_total,
             'total_tax_amount': self.amount_tax,
             'without_discounts': 0.0,
-            'with_discounts': 0.0,
+            'with_discounts': self.amount_untaxed,
             'discounts_amount': 0.0,
         }
 
         for inv_line in self.invoice_line_ids:
-            without_discount = inv_line.price_unit * inv_line.quantity
-            with_discount = without_discount - (
-                without_discount * inv_line.discount / 100.0)
+            without_discount = inv_line.price_subtotal / (
+                1 - inv_line.discount / 100.0)
             res['without_discounts'] += without_discount
-            res['with_discounts'] += with_discount
-            res['discounts_amount'] +=\
-                without_discount * inv_line.discount / 100.0
 
         taxes = {}
         odoo_taxes = self.get_taxes_values()
