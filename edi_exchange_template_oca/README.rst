@@ -10,9 +10,9 @@ EDI Exchange Template
 .. |badge1| image:: https://img.shields.io/badge/maturity-Alpha-red.png
     :target: https://odoo-community.org/page/development-status
     :alt: Alpha
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
-    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
-    :alt: License: AGPL-3
+.. |badge2| image:: https://img.shields.io/badge/licence-LGPL--3-blue.png
+    :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
+    :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
     :target: https://github.com/OCA/edi/tree/13.0/edi_exchange_template
     :alt: OCA/edi
@@ -23,7 +23,7 @@ EDI Exchange Template
     :target: https://runbot.odoo-community.org/runbot/226/13.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 Provide EDI exchange templates to control input/output records contents.
 
@@ -84,7 +84,7 @@ promote its widespread use.
 
 Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-simahawk| 
+|maintainer-simahawk|
 
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/13.0/edi_exchange_template>`_ project on GitHub.
 
