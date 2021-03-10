@@ -91,6 +91,7 @@ class EDIExchangeTemplateMixin(models.AbstractModel):
         :returns: dict -- evaluation context given to safe_eval
         """
         return {
+            "template": self,
             "datetime": datetime,
             "dateutil": dateutil,
             "time": time,
