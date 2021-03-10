@@ -115,6 +115,7 @@ class EDIExchangeOutputTemplate(models.Model):
         """
         if self.output_type == "xml":
             # TODO: lookup for components to handle this dynamically
+            # TODO: move to edi_exml
             return xml_purge_nswrapper(output)
         return output
 
