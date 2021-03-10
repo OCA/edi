@@ -7,7 +7,7 @@
     "summary": """
     Base module to allow exchanging files via storage backend (eg: SFTP).
     """,
-    "version": "13.0.1.3.0",
+    "version": "13.0.1.4.0",
     "development_status": "Alpha",
     "license": "AGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
