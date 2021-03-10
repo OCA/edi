@@ -12,8 +12,8 @@ class TestVoxelAccountInvoice(SavepointCase):
         super(TestVoxelAccountInvoice, cls).setUpClass()
         # Invoice line account
         # Invoice company
-        main_company = cls.env.ref("base.main_company")
-        main_company.write(
+        cls.main_company = cls.env.ref("base.main_company")
+        cls.main_company.write(
             {
                 "vat": "US1234567890",
                 "street": "Street 1",
@@ -84,9 +84,9 @@ class TestVoxelAccountInvoice(SavepointCase):
             {
                 "partner_id": partner.id,
                 "type": "out_invoice",
-                "currency_id": cls.env.ref("base.USD").id,
+                "currency_id": cls.main_company.currency_id.id,
                 "invoice_date": date(2019, 4, 13),
-                "company_id": main_company.id,
+                "company_id": cls.main_company.id,
                 "invoice_line_ids": [
                     (
                         0,
@@ -174,7 +174,8 @@ class TestVoxelAccountInvoice(SavepointCase):
             "Type": "FacturaComercial",
             "Ref": "/",
             "Date": "2019-04-13",
-            "Currency": "USD",
+            # Set currency code from company for resilient tests
+            "Currency": self.main_company.currency_id.name,
         }
 
     def _get_suplier_data(self):
