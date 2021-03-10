@@ -36,7 +36,7 @@ addon | version | summary
 [edi_exchange_template](edi_exchange_template/) | 13.0.1.5.0 | Allows definition of exchanges via templates.
 [edi_storage](edi_storage/) | 13.0.1.4.0 | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_voxel](edi_voxel/) | 13.0.1.0.0 | Base module for connecting with Voxel
-[edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.0.1 | Sends account invoices to Voxel.
+[edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.0.2 | Sends account invoices to Voxel.
 [edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.0 | Import sale order from Voxel.
 [edi_voxel_stock_picking](edi_voxel_stock_picking/) | 13.0.1.0.1 | Sends stock picking report to Voxel.
 [edi_xml](edi_xml/) | 13.0.1.2.0 | Base module for EDI exchange using XML files.
