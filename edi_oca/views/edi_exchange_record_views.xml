@@ -3,22 +3,20 @@
     <record id="edi_exchange_record_view_tree" model="ir.ui.view">
         <field name="model">edi.exchange.record</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree string="EDI Exchange Record"
+                  decoration-success="edi_exchange_state in ['output_sent_and_processed', 'input_processed']"
+                  decoration-danger="edi_exchange_state in ['validate_error', 'output_error_on_send', 'output_sent_and_error', 'input_receive_error', 'input_processed_error']"
+            >
                 <field name="backend_id" />
                 <field name="type_id" />
                 <field name="identifier" />
-                <field name="external_identifier" optional="hide" />
-                <field name="related_name" optional="hide" />
-                <field name="res_id" groups="base.group_no_one" optional="hide" />
-                <field name="model" groups="base.group_no_one" optional="hide" />
+                <field name="external_identifier"  />
+                <field name="related_name"  />
+                <field name="res_id" groups="base.group_no_one"  />
+                <field name="model" groups="base.group_no_one"  />
                 <field name="exchanged_on" />
                 <field name="ack_received_on" />
-                <field
-                    name="edi_exchange_state"
-                    decoration-success="edi_exchange_state in ['output_sent_and_processed', 'input_processed']"
-                    decoration-danger="edi_exchange_state in ['validate_error', 'output_error_on_send', 'output_sent_and_error', 'input_receive_error', 'input_processed_error']"
-                    widget="badge"
-                />
+                <field name="edi_exchange_state" />
             </tree>
         </field>
     </record>

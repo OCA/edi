@@ -48,7 +48,7 @@ result = not record._has_exchange_record(exchange_type)
             direction="output",
             exchange_file_ext="csv",
             backend_id=False,
-            exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
+            exchange_filename_pattern="{record.name}-{type.code}-{dt}",
             rule_ids=[(0, 0, rule_vals)],
         )
         rule_vals = {

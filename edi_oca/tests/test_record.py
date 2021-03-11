@@ -6,7 +6,6 @@
 import base64
 
 import mock
-from freezegun import freeze_time
 
 from odoo import exceptions, fields
 from odoo.tools import mute_logger
@@ -71,11 +70,13 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         }
         record = self.backend.create_record("test_csv_output", vals)
         self.assertFalse(record.exchanged_on)
-        with freeze_time("2020-10-21 10:00:00"):
-            record.edi_exchange_state = "output_sent"
-            self.assertEqual(
-                fields.Datetime.to_string(record.exchanged_on), "2020-10-21 10:00:00"
-            )
+        now = fields.Datetime.now()
+        record.edi_exchange_state = "output_sent"
+        record.refresh()
+        self.assertAlmostEqual(
+            (record.exchanged_on- now).total_seconds(),
+            0, places=2
+        )
 
     @mute_logger("odoo.models.unlink")
     def test_record_relation(self):

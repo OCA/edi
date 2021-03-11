@@ -4,7 +4,6 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import mock
-from freezegun import freeze_time
 
 from odoo import fields, tools
 from odoo.exceptions import UserError
@@ -51,13 +50,14 @@ class EDIBackendTestOutputCase(EDIBackendCommonComponentRegistryTestCase):
         self.record.write({"edi_exchange_state": "output_pending"})
         self.record._set_file_content("TEST %d" % self.record.id)
         self.assertFalse(self.record.exchanged_on)
-        with freeze_time("2020-10-21 10:00:00"):
-            self.record.action_exchange_send()
+        now = fields.Datetime.now()
+        self.record.action_exchange_send()
         self.assertTrue(FakeOutputSender.check_called_for(self.record))
         self.assertRecordValues(self.record, [{"edi_exchange_state": "output_sent"}])
-        self.assertEqual(
-            fields.Datetime.to_string(self.record.exchanged_on), "2020-10-21 10:00:00"
-        )
+        self.record.refresh()
+        self.assertAlmostEqual(
+            (self.record.exchanged_on - now).total_seconds(),
+            0, places = 2)
 
     def test_send_record_with_error(self):
         self.record.write({"edi_exchange_state": "output_pending"})

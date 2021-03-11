@@ -8,6 +8,7 @@ import logging
 from collections import defaultdict
 
 from odoo import _, api, exceptions, fields, models
+from odoo import SUPERUSER_ID
 
 from ..utils import exchange_record_job_identity_exact, get_checksum
 
@@ -38,13 +39,11 @@ class EDIExchangeRecord(models.Model):
     direction = fields.Selection(related="type_id.direction")
     backend_id = fields.Many2one(comodel_name="edi.backend", required=True)
     model = fields.Char(index=True, required=False, readonly=True)
-    res_id = fields.Many2oneReference(
-        string="Record",
+    res_id = fields.Integer(
+        string="Record ID",
         index=True,
         required=False,
         readonly=True,
-        model_field="model",
-        copy=False,
     )
     related_record_exists = fields.Boolean(compute="_compute_related_record_exists")
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
@@ -58,8 +57,6 @@ class EDIExchangeRecord(models.Model):
     exchanged_on = fields.Datetime(
         string="Exchanged on",
         help="Sent or received on this date.",
-        compute="_compute_exchanged_on",
-        store=True,
         readonly=False,
     )
     edi_exchange_state = fields.Selection(
@@ -130,7 +127,7 @@ class EDIExchangeRecord(models.Model):
             related_record = rec.record
             rec.related_name = related_record.display_name if related_record else ""
 
-    @api.depends("model", "type_id")
+    @api.depends("model", "type_id", "res_id")
     def _compute_exchange_filename(self):
         for rec in self:
             if not rec.type_id:
@@ -146,7 +143,7 @@ class EDIExchangeRecord(models.Model):
                 content = content.encode()
             rec.exchange_filechecksum = get_checksum(content)
 
-    @api.depends("edi_exchange_state")
+    @api.constrains("edi_exchange_state")
     def _compute_exchanged_on(self):
         for rec in self:
             if rec.edi_exchange_state in ("input_received", "output_sent"):
@@ -370,8 +367,7 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         if not self.related_exchange_ids:
             return {}
-        xmlid = "edi_oca.act_open_edi_exchange_record_view"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view")
         action["domain"] = [("id", "in", self.related_exchange_ids.ids)]
         return action
 
@@ -387,7 +383,7 @@ class EDIExchangeRecord(models.Model):
             self._notify_related_record(message)
 
         # Trigger generic action complete event on exchange record
-        event_name = f"{action}_complete"
+        event_name = "{}_complete".format(action)
         self._trigger_edi_event(event_name)
         if self.related_record_exists:
             # Trigger specific event on related record
@@ -468,8 +464,8 @@ class EDIExchangeRecord(models.Model):
             count=False,
             access_rights_uid=access_rights_uid,
         )
-        if self.env.is_system():
-            # restrictions do not apply to group "Settings"
+        if self._uid == SUPERUSER_ID:
+            # rules do not apply for the superuser
             return len(ids) if count else ids
 
         # TODO highlight orphaned EDI records in UI:
@@ -546,7 +542,7 @@ class EDIExchangeRecord(models.Model):
         """In order to check if we can access a record, we are checking if we can access
         the related document"""
         super(EDIExchangeRecord, self).check_access_rule(operation)
-        if self.env.is_superuser():
+        if self._uid == SUPERUSER_ID:
             return
         default_checker = self.env["edi.exchange.consumer.mixin"].get_edi_access
         by_model_rec_ids = defaultdict(set)
@@ -561,7 +557,7 @@ class EDIExchangeRecord(models.Model):
                 )
 
         for model, rec_ids in by_model_rec_ids.items():
-            records = self.env[model].browse(rec_ids).with_user(self._uid)
+            records = self.env[model].browse(rec_ids).sudo(self._uid)
             checker = by_model_checker[model]
             for record in records:
                 check_operation = checker(

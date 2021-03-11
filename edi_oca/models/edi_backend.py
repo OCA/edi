@@ -179,7 +179,7 @@ class EDIBackend(models.Model):
         exchange_type = self.env["edi.exchange.type"].search(
             self._get_exchange_type_domain(type_code), limit=1
         )
-        assert exchange_type, f"Exchange type not found: {type_code}"
+        assert exchange_type, "Exchange type not found: {}".format(type_code)
         res["type_id"] = exchange_type.id
         res["backend_id"] = self.id
         return res
@@ -311,7 +311,7 @@ class EDIBackend(models.Model):
             error = _get_exception_msg()
             state = "output_error_on_send"
             message = exchange_record._exchange_status_message("send_ko")
-            res = f"Error: {error}"
+            res = "Error: {}".format(error)
             _logger.debug(
                 "%s send failed. Marked as errored.", exchange_record.identifier
             )
@@ -491,7 +491,7 @@ class EDIBackend(models.Model):
                 raise
             error = _get_exception_msg()
             state = "input_processed_error"
-            res = f"Error: {error}"
+            res = "Error: {}".format(error)
         else:
             error = None
             state = "input_processed"
@@ -500,9 +500,6 @@ class EDIBackend(models.Model):
                 {
                     "edi_exchange_state": state,
                     "exchange_error": error,
-                    # FIXME: this should come from _compute_exchanged_on
-                    # but somehow it's failing in send tests (in record tests it works).
-                    "exchanged_on": fields.Datetime.now(),
                 }
             )
             if (
@@ -542,14 +539,14 @@ class EDIBackend(models.Model):
             error = _get_exception_msg()
             state = "validate_error"
             message = exchange_record._exchange_status_message("validate_ko")
-            res = f"Validation error: {error}"
+            res = "Validation error: {}".format(error)
         except self._swallable_exceptions():
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
             error = _get_exception_msg()
             state = "input_receive_error"
             message = exchange_record._exchange_status_message("receive_ko")
-            res = f"Input error: {error}"
+            res = "Input error: {}".format(error)
         else:
             message = exchange_record._exchange_status_message("receive_ok")
             error = None
@@ -651,8 +648,7 @@ class EDIBackend(models.Model):
         return self.env["edi.exchange.record"].search(domain, count=count_only)
 
     def action_view_exchanges(self):
-        xmlid = "edi_oca.act_open_edi_exchange_record_view"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view")
         action["context"] = {
             "search_default_backend_id": self.id,
             "default_backend_id": self.id,
@@ -661,8 +657,7 @@ class EDIBackend(models.Model):
         return action
 
     def action_view_exchange_types(self):
-        xmlid = "edi_oca.act_open_edi_exchange_type_view"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action = self.env.ref("edi_oca.act_open_edi_exchange_type_view")
         action["context"] = {
             "search_default_backend_id": self.id,
             "default_backend_id": self.id,
