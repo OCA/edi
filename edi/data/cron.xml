@@ -17,7 +17,7 @@
         <field name="code">model.search([])._cron_check_output_exchange_sync()</field>
     </record>
     <!-- TODO -->
-    <!-- <record
+    <record
         id="cron_edi_backend_check_input_exchange"
         model="ir.cron"
         forcecreate="True"
@@ -32,5 +32,5 @@
         <field name="model_id" ref="edi.model_edi_backend" />
         <field name="state">code</field>
         <field name="code">model.search([])._cron_check_input_exchange_sync()</field>
-    </record> -->
+    </record>
 </odoo>
