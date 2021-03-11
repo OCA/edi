@@ -29,4 +29,6 @@ class EDIBackendType(models.Model):
     def _inverse_code(self):
         for rec in self:
             # Make sure it's always normalized
-            rec.code = normalize_string(rec.code)
+            code = normalize_string(rec.code)
+            if code != rec.code:
+                rec.code = code

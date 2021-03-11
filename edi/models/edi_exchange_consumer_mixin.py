@@ -24,6 +24,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     exchange_record_ids = fields.One2many(
         "edi.exchange.record",
         inverse_name="res_id",
+        prefetch=False,
         domain=lambda r: [("model", "=", r._name)],
     )
     exchange_record_count = fields.Integer(compute="_compute_exchange_record_count")
@@ -52,7 +53,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 self._get_eval_context(), record=self, exchange_type=exchange_type
             )
             domain = safe_eval(exchange_type.enable_domain or "[]", eval_ctx)
-            if not self.filtered_domain(domain):
+            if not self.search(domain + [('id', 'in', self.ids)]):
                 continue
             if exchange_type.enable_snippet:
                 safe_eval(
@@ -60,7 +61,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 )
                 if not eval_ctx.get("result", False):
                     continue
-            result[exchange_type.id] = exchange_type.display_name
+            result[str(exchange_type.id)] = exchange_type.display_name
         return result
 
     def _get_eval_context(self):

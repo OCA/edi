@@ -415,9 +415,6 @@ class EDIBackend(models.Model):
                 {
                     "edi_exchange_state": state,
                     "exchange_error": error,
-                    # FIXME: this should come from _compute_exchanged_on
-                    # but somehow it's failing in send tests (in record tests it works).
-                    "exchanged_on": fields.Datetime.now(),
                 }
             )
             if message:

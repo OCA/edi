@@ -49,7 +49,7 @@ class EDIBackendTestMixin(object):
             code="test_csv_output_ack",
             direction="input",
             exchange_file_ext="txt",
-            exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
+            exchange_filename_pattern="{record.name}-{type.code}-{dt}",
         )
         cls.exchange_type_out.ack_type_id = cls.exchange_type_out_ack
         cls.partner = cls.env.ref("base.res_partner_1")

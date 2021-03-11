@@ -4,7 +4,7 @@
 
 from odoo_test_helper import FakeModelLoader
 
-from odoo.exceptions import AccessError
+from odoo.exceptions import AccessError, ValidationError
 
 from .common import EDIBackendCommonTestCase
 
@@ -69,7 +69,10 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         }
         backend = self.backend
         if user:
-            backend = backend.with_user(user)
+            if isinstance(user, int):
+                backend = backend.sudo(user)
+            else:
+                backend = backend.sudo(user.id)
         return backend.create_record("test_csv_output", vals)
 
     def test_superuser_create(self):
@@ -84,49 +87,57 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
     def test_rule_no_create(self):
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
-            self.create_record(self.user)
+        with self.assertRaises(ValidationError):
+            self.create_record(self.user.id)
 
     def test_no_group_no_create(self):
-        with self.assertRaisesRegex(AccessError, "you are not allowed to modify"):
-            self.create_record(self.user)
+        with self.assertRaises(ValidationError):
+            self.create_record(self.user.id)
 
     def test_no_group_no_read(self):
         exchange_record = self.create_record()
-        with self.assertRaisesRegex(AccessError, "you are not allowed to access"):
-            exchange_record.with_user(self.user).read()
+        with self.assertRaises(AccessError):
+            exchange_record.sudo(self.user.id).read()
 
     def test_rule_no_read(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
-        self.assertTrue(exchange_record.with_user(self.user).read())
+        self.assertTrue(exchange_record.sudo(self.user.id).read())
         self.consumer_record.name = "no_rule"
-        with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
-            exchange_record.with_user(self.user).read()
+        with self.assertRaisesRegex(
+            AccessError, "operation cannot be completed due to security"
+        ):
+            exchange_record.sudo(self.user.id).read()
 
     def test_no_group_no_unlink(self):
         exchange_record = self.create_record()
         with self.assertRaisesRegex(AccessError, "you are not allowed to modify"):
-            exchange_record.with_user(self.user).unlink()
+            new_exchange_record = exchange_record.sudo(self.user.id)
+            new_exchange_record.refresh()
+            new_exchange_record.unlink()
 
     def test_group_unlink(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
-        self.assertTrue(exchange_record.with_user(self.user).unlink())
+        exchange_record = exchange_record.sudo(self.user.id)
+        exchange_record.clear_caches()
+        self.assertTrue(exchange_record.unlink())
 
     def test_rule_no_unlink(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
-            exchange_record.with_user(self.user).unlink()
+        with self.assertRaisesRegex(
+            AccessError, "operation cannot be completed due to security"
+        ):
+            exchange_record.sudo(self.user.id).unlink()
 
     def test_no_group_no_search(self):
         exchange_record = self.create_record()
         self.assertEqual(
             0,
             self.env["edi.exchange.record"]
-            .with_user(self.user)
+            .sudo(self.user.id)
             .search_count([("id", "=", exchange_record.id)]),
         )
 
@@ -136,7 +147,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         self.assertEqual(
             1,
             self.env["edi.exchange.record"]
-            .with_user(self.user)
+            .sudo(self.user.id)
             .search_count([("id", "=", exchange_record.id)]),
         )
 
@@ -147,24 +158,27 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         self.assertEqual(
             0,
             self.env["edi.exchange.record"]
-            .with_user(self.user)
+            .sudo(self.user.id)
             .search_count([("id", "=", exchange_record.id)]),
         )
 
     def test_no_group_no_write(self):
         exchange_record = self.create_record()
         with self.assertRaisesRegex(AccessError, "you are not allowed to modify"):
-            exchange_record.with_user(self.user).write({"external_identifier": "1234"})
+            exchange_record.sudo(self.user.id).write({"external_identifier": "1234"})
 
     def test_group_write(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
-        exchange_record.with_user(self.user).write({"external_identifier": "1234"})
+        exchange_record.sudo(self.user.id).write({"external_identifier": "1234"})
         self.assertEqual(exchange_record.external_identifier, "1234")
 
     def test_rule_no_write(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
-            exchange_record.with_user(self.user).write({"external_identifier": "1234"})
+        with self.assertRaisesRegex(
+            AccessError,
+            "operation cannot be completed due to security"
+        ):
+            exchange_record.sudo(self.user.id).write({"external_identifier": "1234"})
