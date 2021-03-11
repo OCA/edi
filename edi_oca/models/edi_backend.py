@@ -500,6 +500,7 @@ class EDIBackend(models.Model):
         for backend in self:
             backend._check_input_exchange_sync(**kw)
 
+    # TODO: add tests
     def _check_input_exchange_sync(self, **kw):
         """Lookup for pending input records and take care of them.
 
