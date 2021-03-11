@@ -7,6 +7,7 @@
         <field name="direction">input</field>
         <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
         <field name="exchange_file_ext">xml</field>
+        <!-- TODO: add advanced settings for processing and validation -->
     </record>
     <record id="edi_exchange_type_receipt_ack_out" model="edi.exchange.type">
         <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
