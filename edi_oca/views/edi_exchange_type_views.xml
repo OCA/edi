@@ -9,7 +9,7 @@
                 <field name="code" />
                 <field name="direction" />
                 <field name="ack_type_id" />
-                <field name="ack_for_type_ids" optional="hide" />
+                <field name="ack_for_type_ids"  />
                 <field name="active" />
             </tree>
         </field>
@@ -19,13 +19,6 @@
         <field name="arch" type="xml">
             <form string="EDI Exchange Type">
                 <sheet>
-                    <field name="active" invisible="1" />
-                    <widget
-                        name="web_ribbon"
-                        title="Archived"
-                        bg_color="bg-danger"
-                        attrs="{'invisible': [('active', '=', True)]}"
-                    />
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" />
                         <h1>

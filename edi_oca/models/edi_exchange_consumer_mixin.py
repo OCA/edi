@@ -36,6 +36,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     exchange_record_ids = fields.One2many(
         "edi.exchange.record",
         inverse_name="res_id",
+        prefetch=False,
         domain=lambda r: [("model", "=", r._name)],
     )
     exchange_record_count = fields.Integer(compute="_compute_exchange_record_count")
@@ -80,7 +81,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 if not eval_ctx.get("result", False):
                     continue
 
-            result[rule.id] = self._edi_get_exchange_type_rule_conf(rule)
+            result[str(rule.id)] = self._edi_get_exchange_type_rule_conf(rule)
         return result
 
     @api.model
@@ -181,8 +182,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return self._edi_get_create_record_wiz_action(exchange_type_id)
 
     def _edi_get_create_record_wiz_action(self, exchange_type_id):
-        xmlid = "edi_oca.edi_exchange_record_create_act_window"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action = self.env.ref("edi_oca.edi_exchange_record_create_act_window")
         action["context"] = {
             "default_res_id": self.id,
             "default_model": self._name,
@@ -241,8 +241,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     def action_view_edi_records(self):
         self.ensure_one()
-        xmlid = "edi_oca.act_open_edi_exchange_record_view"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view")
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
         # Purge default search filters from ctx to avoid hiding records
         ctx = action.get("context", {})
