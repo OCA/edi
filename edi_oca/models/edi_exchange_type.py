@@ -165,7 +165,8 @@ class EDIExchangeType(models.Model):
         for rec in self:
             # Disable rules if type gets disabled
             if not rec.active:
-                rec.rule_ids.active = False
+                for rule in rec.rule_ids:
+                    rule.active = False
 
     @api.depends("advanced_settings_edit")
     def _compute_advanced_settings(self):
@@ -359,8 +360,11 @@ class EDIExchangeType(models.Model):
                 return True
 
     def button_wipe_deprecated_rule_fields(self):
-        _fields = ["model_ids", "enable_domain", "enable_snippet", "model_manual_btn"]
+        _fields = ["enable_domain", "enable_snippet", "model_manual_btn"]
         deprecated_vals = {}.fromkeys(_fields, None)
+        deprecated_vals.update({
+            "model_ids": [(5,0)],
+        })
         self.with_context(deprecated_rule_fields_bypass_inverse=True).write(
             deprecated_vals
         )

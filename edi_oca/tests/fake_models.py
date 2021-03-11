@@ -11,6 +11,7 @@ class EdiExchangeConsumerTest(models.Model):
     _description = "Model used only for test"
 
     name = fields.Char()
+    ref = fields.Char()
 
     def _get_edi_exchange_record_name(self, exchange_record):
         return self.id
