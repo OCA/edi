@@ -9,6 +9,7 @@ from collections import defaultdict
 
 from odoo import _, api, exceptions, fields, models
 from odoo import SUPERUSER_ID
+from odoo.exceptions import MissingError
 
 from ..utils import exchange_record_job_identity_exact, get_checksum
 
@@ -44,6 +45,7 @@ class EDIExchangeRecord(models.Model):
         index=True,
         required=False,
         readonly=True,
+        inverse="_inverse_res_id"
     )
     related_record_exists = fields.Boolean(compute="_compute_related_record_exists")
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
@@ -591,3 +593,14 @@ class EDIExchangeRecord(models.Model):
 
     def _job_retry_params(self):
         return {}
+
+    def _inverse_res_id(self):
+        for rec in self:
+            if not rec.model or not rec.res_id:
+                continue
+            try:
+                rec.env[rec.model].browse(rec.res_id).write({
+                    'exchange_record_ids': [(4, rec.id)]
+                })
+            except (KeyError, ValueError, MissingError):
+                continue

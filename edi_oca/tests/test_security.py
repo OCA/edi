@@ -101,9 +101,9 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
     @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_read(self):
         exchange_record = self.create_record()
-        model = self.consumer_record
-        msg = r"not allowed to access '{}' \({}\)".format(model._description, model._name)
-        with self.assertRaisesRegex(AccessError, msg):
+        with self.assertRaisesRegex(
+            AccessError, "Sorry, you are not allowed to access this document."
+        ):
             exchange_record.sudo(self.user.id).read()
 
     @mute_logger("odoo.addons.base.models.ir_rule")
@@ -112,15 +112,17 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.assertTrue(exchange_record.sudo(self.user.id).read())
         self.consumer_record.name = "no_rule"
-        model = self.consumer_record
-        msg = r"not allowed to access '{}' \({}\)".format(model._description, model._name)
-        with self.assertRaisesRegex(AccessError, msg):
+        with self.assertRaisesRegex(
+            AccessError, "operation cannot be completed due to security"
+        ):
             exchange_record.sudo(self.user.id).read()
 
     @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_unlink(self):
         exchange_record = self.create_record()
-        with self.assertRaisesRegex(AccessError, "You are not allowed to modify"):
+        with self.assertRaisesRegex(
+            AccessError, "Sorry, you are not allowed to modify this document."
+        ):
             exchange_record.sudo(self.user.id).unlink()
 
     @mute_logger("odoo.models.unlink")
@@ -136,9 +138,9 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        model = self.consumer_record
-        msg = r"not allowed to modify '{}' \({}\)".format(model._description, model._name)
-        with self.assertRaisesRegex(AccessError, msg):
+        with self.assertRaisesRegex(
+            AccessError, "operation cannot be completed due to security"
+        ):
             exchange_record.sudo(self.user.id).unlink()
 
     def test_no_group_no_search(self):
@@ -225,7 +227,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        model = self.consumer_record
-        msg = r"not allowed to modify '{}' \({}\)".format(model._description, model._name)
-        with self.assertRaisesRegex(AccessError, msg):
+        with self.assertRaisesRegex(
+            AccessError, "operation cannot be completed due to security"
+        ):
             exchange_record.sudo(self.user.id).write({"external_identifier": "1234"})

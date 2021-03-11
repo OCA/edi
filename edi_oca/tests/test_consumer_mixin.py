@@ -9,6 +9,7 @@ import unittest
 
 from lxml import etree
 from odoo_test_helper import FakeModelLoader
+from odoo.tools.safe_eval import safe_eval
 
 from odoo.tests.common import Form
 
@@ -89,7 +90,7 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
         action = self.consumer_record.action_view_edi_records()
         self.consumer_record.refresh()
         self.assertEqual(
-            exchange_record, self.env["edi.exchange.record"].search(action["domain"])
+            exchange_record, self.env["edi.exchange.record"].search(safe_eval(action["domain"]))
         )
         self.assertTrue(
             self.consumer_record._has_exchange_record(
@@ -163,9 +164,10 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
         )
         self.assertNotEqual(action["res_model"], "edi.exchange.record")
         self.assertEqual(action["res_model"], "edi.exchange.record.create.wiz")
+        context = safe_eval(action["context"])
         wizard = (
             self.env[action["res_model"]]
-            .with_context(**action["context"])
+            .with_context(**context)
             .create({"backend_id": self.backend_02.id})
         )
         wizard.create_edi()

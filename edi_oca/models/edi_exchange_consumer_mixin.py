@@ -3,12 +3,14 @@
 # Copyright 2022 Camptocamp SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-
+import datetime
+import dateutil
+import time
 
 from lxml import etree
 
 from odoo import api, fields, models
-from odoo.tools import safe_eval
+from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.base_sparse_field.models.fields import Serialized
 
@@ -73,11 +75,11 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             eval_ctx = dict(
                 self._get_eval_context(), record=self, exchange_type=exchange_type
             )
-            domain = safe_eval.safe_eval(rule.enable_domain or "[]", eval_ctx)
-            if not self.filtered_domain(domain):
+            domain = safe_eval(rule.enable_domain or "[]", eval_ctx)
+            if not self.search(domain):
                 continue
             if rule.enable_snippet:
-                safe_eval.safe_eval(
+                safe_eval(
                     rule.enable_snippet, eval_ctx, mode="exec", nocopy=True
                 )
                 if not eval_ctx.get("result", False):
@@ -108,9 +110,9 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         :returns: dict -- evaluation context given to safe_eval
         """
         return {
-            "datetime": safe_eval.datetime,
-            "dateutil": safe_eval.dateutil,
-            "time": safe_eval.time,
+            "datetime": datetime,
+            "dateutil": dateutil,
+            "time": time,
             "uid": self.env.uid,
             "user": self.env.user,
         }
@@ -129,7 +131,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 group = False
                 if hasattr(self, "_edi_generate_group"):
                     group = self._edi_generate_group
-                str_element = self.env["ir.qweb"]._render(
+                str_element = self.env["ir.qweb"].render(
                     "edi_oca.edi_exchange_consumer_mixin_buttons",
                     {"group": group},
                 )
@@ -139,7 +141,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             # Override context for postprocessing
             if view_id and res.get("base_model", self._name) != self._name:
                 View = View.with_context(base_model_name=res["base_model"])
-            new_arch, new_fields = View.postprocess_and_fields(doc, self._name)
+            new_arch, new_fields = View.postprocess_and_fields(self._name, doc, None)
             res["arch"] = new_arch
             # We don't want to lose previous configuration, so, we only want to add
             # the new fields
@@ -206,7 +208,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         self, exchange_type, backend=False, extra_domain=False
     ):
         if isinstance(exchange_type, str):
-            # Backward compat: allow passing the code when this method is called directly
+            # Backward compat: allow passing the code when this method
+            # is called directly
             type_leaf = [("type_id.code", "=", exchange_type)]
         else:
             type_leaf = [("type_id", "=", exchange_type.id)]
@@ -246,9 +249,9 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         action = self.env.ref("edi_oca.act_open_edi_exchange_record_view")
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
         # Purge default search filters from ctx to avoid hiding records
-        ctx = action.get("context", {})
+        ctx = action.get("context") or {}
         if isinstance(ctx, str):
-            ctx = safe_eval.safe_eval(ctx, self.env.context)
+            ctx = safe_eval(ctx, self.env.context)
         action["context"] = {
             k: v for k, v in ctx.items() if not k.startswith("search_default_")
         }
