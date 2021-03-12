@@ -724,6 +724,18 @@ class BaseUbl(models.AbstractModel):
                 )
         return partner_dict
 
+    @api.model
+    def ubl_parse_delivery_details(self, delivery_node, ns):
+        delivery_dict = {}
+        latest_date = delivery_node.xpath("cbc:LatestDeliveryDate", namespaces=ns)
+        latest_time = delivery_node.xpath("cbc:LatestDeliveryTime", namespaces=ns)
+        if latest_date:
+            latest_delivery = latest_date[0].text
+            if latest_time:
+                latest_delivery += " " + latest_time[0].text[:-3]
+            delivery_dict["commitment_date"] = latest_delivery
+        return delivery_dict
+
     def ubl_parse_incoterm(self, delivery_term_node, ns):
         incoterm_xpath = delivery_term_node.xpath("cbc:ID", namespaces=ns)
         if incoterm_xpath:
