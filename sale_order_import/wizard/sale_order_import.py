@@ -227,6 +227,10 @@ class SaleOrderImport(models.TransientModel):
                 parsed_order["ship_to"], partner, parsed_order["chatter_msg"]
             )
             so_vals["partner_shipping_id"] = shipping_partner.id
+
+        if parsed_order.get("delivery_detail"):
+            so_vals.update(parsed_order.get("delivery_detail"))
+
         if parsed_order.get("invoice_to"):
             invoicing_partner = bdio._match_partner(
                 parsed_order["partner"], parsed_order["chatter_msg"], partner_type=""
