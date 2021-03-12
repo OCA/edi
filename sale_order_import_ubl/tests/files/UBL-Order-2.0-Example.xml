@@ -132,6 +132,7 @@
         </cac:Party>
     </cac:OriginatorCustomerParty>
     <cac:Delivery>
+        <cbc:LatestDeliveryDate>2010-02-26</cbc:LatestDeliveryDate>
         <cac:DeliveryAddress>
             <cbc:StreetName>Avon Way</cbc:StreetName>
             <cbc:BuildingName>Thereabouts</cbc:BuildingName>
