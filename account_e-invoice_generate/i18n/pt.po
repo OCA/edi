@@ -6,71 +6,75 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2021-03-12 17:45+0000\n"
+"Last-Translator: Pedro Castro Silva <pedrocs@exo.pt>\n"
 "Language-Team: none\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: account_e-invoice_generate
 #: model_terms:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
 msgid "<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
 msgstr ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Os valores aqui definidos são "
+"específicos por empresa.\" groups=\"base.group_multi_company\"/>"
 
 #. module: account_e-invoice_generate
 #: model:ir.model,name:account_e-invoice_generate.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Empresas"
 
 #. module: account_e-invoice_generate
 #: model:ir.model,name:account_e-invoice_generate.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Parametrizar Configurações"
 
 #. module: account_e-invoice_generate
 #: model_terms:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
 msgid "Electronic Invoices"
-msgstr ""
+msgstr "Faturas Eletrónicas"
 
 #. module: account_e-invoice_generate
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "Factur-X (CII)"
-msgstr ""
+msgstr "Factur-X (CII)"
 
 #. module: account_e-invoice_generate
 #: model_terms:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
 msgid "Format"
-msgstr ""
+msgstr "Formato"
 
 #. module: account_e-invoice_generate
 #: model:ir.model,name:account_e-invoice_generate.model_account_invoice
 msgid "Invoice"
-msgstr ""
+msgstr "Fatura"
 
 #. module: account_e-invoice_generate
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "None"
-msgstr ""
+msgstr "Nenhum"
 
 #. module: account_e-invoice_generate
 #: model_terms:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
 msgid "Select Format"
-msgstr ""
+msgstr "Selecione o Formato"
 
 #. module: account_e-invoice_generate
 #: model_terms:ir.ui.view,arch_db:account_e-invoice_generate.view_account_config_settings
 msgid "Select the format of your e-invoices."
-msgstr ""
+msgstr "Selecione o formato das suas faturas eletrónicas."
 
 #. module: account_e-invoice_generate
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "Universal Business Language (UBL)"
-msgstr ""
+msgstr "Universal Business Language (UBL)"
 
 #. module: account_e-invoice_generate
 #: model:ir.model.fields,field_description:account_e-invoice_generate.field_res_company__xml_format_in_pdf_invoice
 #: model:ir.model.fields,field_description:account_e-invoice_generate.field_res_config_settings__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
-msgstr ""
+msgstr "Formato XML embutido na fatura PDF"
