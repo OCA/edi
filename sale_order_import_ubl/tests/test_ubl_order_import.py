@@ -20,6 +20,7 @@ class TestUblOrderImport(TransactionCase):
                 ),
                 "invoicing_partner": self.env.ref("sale_order_import_ubl.karlsson"),
                 "currency": self.env.ref("base.SEK"),
+                "commitment_date": "2010-02-26 18:00:00",
             },
             "UBL-Order-2.0-Example.xml": {
                 "client_order_ref": "AEG012345",
@@ -27,6 +28,7 @@ class TestUblOrderImport(TransactionCase):
                 "partner": self.env.ref("sale_order_import_ubl.fred_churchill"),
                 "shipping_partner": self.env.ref("sale_order_import_ubl.iyt"),
                 "currency": self.env.ref("base.GBP"),
+                "commitment_date": "2010-02-26 00:00:00",
             },
             "UBL-RequestForQuotation-2.0-Example.xml": {
                 "partner": self.env.ref("sale_order_import_ubl.s_massiah"),
@@ -59,3 +61,10 @@ class TestUblOrderImport(TransactionCase):
                 self.assertEqual(date_order[:10], res["date_order"])
             if res.get("shipping_partner"):
                 self.assertEqual(so.partner_shipping_id, res["shipping_partner"])
+            if res.get("commitment_date"):
+                self.assertEqual(
+                    so.commitment_date.strftime("%Y-%m-%d %H:%M:%S"),
+                    res["commitment_date"],
+                )
+            else:
+                self.assertFalse(so.commitment_date)

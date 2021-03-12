@@ -111,8 +111,10 @@ class SaleOrderImport(models.TransientModel):
             company_dict = {"vat": company_dict_full["vat"]}
         delivery_xpath = xml_root.xpath("/%s/cac:Delivery" % root_name, namespaces=ns)
         shipping_dict = {}
+        delivery_dict = {}
         if delivery_xpath:
             shipping_dict = self.ubl_parse_delivery(delivery_xpath[0], ns)
+            delivery_dict = self.ubl_parse_delivery_details(delivery_xpath[0], ns)
         # In the demo UBL 2.1 file, they use 'IMCOTERM'... but I guess
         # it's a mistake and they should use 'INCOTERM'
         # So, for the moment, I ignore the attributes in the xpath for incoterm
@@ -149,6 +151,7 @@ class SaleOrderImport(models.TransientModel):
             "note": note_xpath and note_xpath[0].text or False,
             "lines": res_lines,
             "doc_type": doc_type,
+            "delivery_detail": delivery_dict,
         }
         # Stupid hack to remove invalid VAT of sample files
         if res["partner"]["vat"] in ["SE1234567801", "12356478", "DK12345678"]:

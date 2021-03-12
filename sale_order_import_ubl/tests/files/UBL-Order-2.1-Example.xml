@@ -236,6 +236,8 @@
         </cac:DeliveryContact>
     </cac:AccountingCustomerParty>
     <cac:Delivery>
+        <cbc:LatestDeliveryDate>2010-02-26</cbc:LatestDeliveryDate>
+        <cbc:LatestDeliveryTime>18:00:00.0Z</cbc:LatestDeliveryTime>
         <cac:DeliveryLocation>
             <cac:Address>
                 <cbc:ID schemeAgencyID="9" schemeID="GLN">1234567890123</cbc:ID>
