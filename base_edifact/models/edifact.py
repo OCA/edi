@@ -231,9 +231,9 @@ PRILIN|AAB|%s\n' % (discounted_price, invoice_line.price_unit)
             self, untaxed_amount, total_amount, total_tax_amount,
             without_discounts, with_discounts, discounts_amount):
         res = 'MOARES|%.2f|%.2f|%.2f|%.2f|%.2f' % (
-            with_discounts,
-            without_discounts,
             untaxed_amount,
+            without_discounts,
+            with_discounts,
             total_amount,
             total_tax_amount,
         )
