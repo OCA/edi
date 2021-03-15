@@ -23,7 +23,7 @@ EDI
     :target: https://runbot.odoo-community.org/runbot/226/13.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5|
+|badge1| |badge2| |badge3| |badge4| |badge5| 
 
 Base EDI backend.
 
@@ -157,7 +157,7 @@ promote its widespread use.
 
 Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-simahawk|
+|maintainer-simahawk| 
 
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/13.0/edi>`_ project on GitHub.
 
