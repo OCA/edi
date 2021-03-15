@@ -39,15 +39,16 @@ class EDIBackend(models.Model):
     )
 
     def _get_component(self, exchange_record, key):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
         candidates = self._get_component_usage_candidates(exchange_record, key)
         work_ctx = {"exchange_record": exchange_record}
         # Inject work context from advanced settings
         record_conf = self._get_component_conf_for_record(exchange_record, key)
         work_ctx.update(record_conf.get("work_ctx", {}))
         match_attrs = self._component_match_attrs(exchange_record, key)
+        # Model is not granted to be there
+        model = exchange_record.model or self._name
         return self._find_component(
-            exchange_record.model, candidates, work_ctx=work_ctx, **match_attrs,
+            model, candidates, work_ctx=work_ctx, **match_attrs,
         )
 
     def _component_match_attrs(self, exchange_record, key):
