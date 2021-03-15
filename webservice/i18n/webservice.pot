@@ -1,0 +1,116 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* webservice
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
+msgid "Content Type"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/x-www-form-urlencoded
+msgid "Form"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__protocol__http
+msgid "HTTP Request"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__id
+msgid "ID"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/json
+msgid "JSON"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__name
+msgid "Name"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password
+msgid "Password"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol
+msgid "Protocol"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__tech_name
+msgid "Tech Name"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,help:webservice.field_webservice_backend__tech_name
+msgid "Unique name for technical purposes. Eg: server env keys."
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url
+msgid "Url"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
+msgid "Username"
+msgstr ""
+
+#. module: webservice
+#: model:ir.actions.act_window,name:webservice.webservice_backend_act_window
+#: model:ir.model,name:webservice.model_webservice_backend
+#: model:ir.ui.menu,name:webservice.webservice_backend_menu
+msgid "WebService Backend"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/xml
+msgid "XML"
+msgstr ""
