@@ -1,6 +1,6 @@
 # Copyright 2020 Creu Blanca
 # @author: Enric Tobella
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 from odoo import fields, models
 
