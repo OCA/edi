@@ -55,5 +55,8 @@ class BaseTestCase(SavepointComponentCase, xmlunittest.XmlTestMixin):
 
     def _get_xml_handler(self):
         return self.backend._find_component(
-            ["edi.xml"], work_ctx={"schema_path": self._schema_path}, safe=False,
+            self.backend._name,
+            ["edi.xml"],
+            work_ctx={"schema_path": self._schema_path},
+            safe=False,
         )
