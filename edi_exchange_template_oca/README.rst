@@ -23,7 +23,7 @@ EDI Exchange Template
     :target: https://runbot.odoo-community.org/runbot/226/13.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5|
+|badge1| |badge2| |badge3| |badge4| |badge5| 
 
 Provide EDI exchange templates to control input/output records contents.
 
@@ -84,7 +84,7 @@ promote its widespread use.
 
 Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-simahawk|
+|maintainer-simahawk| 
 
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/13.0/edi_exchange_template>`_ project on GitHub.
 
