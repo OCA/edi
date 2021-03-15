@@ -39,6 +39,7 @@ addon | version | summary
 [edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.0.2 | Sends account invoices to Voxel.
 [edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.0 | Import sale order from Voxel.
 [edi_voxel_stock_picking](edi_voxel_stock_picking/) | 13.0.1.0.1 | Sends stock picking report to Voxel.
+[edi_webservice](edi_webservice/) | 13.0.1.0.0 | Defines webservice integration from EDI Exchange records
 [edi_xml](edi_xml/) | 13.0.1.2.0 | Base module for EDI exchange using XML files.
 [partner_identification_import](partner_identification_import/) | 13.0.2.0.0 | Provides partner matching on extra ID
 [purchase_order_ubl](purchase_order_ubl/) | 13.0.1.2.0 | Embed UBL XML file inside the PDF purchase order
@@ -46,6 +47,7 @@ addon | version | summary
 [sale_order_import](sale_order_import/) | 13.0.2.0.0 | Import RFQ or sale orders from files
 [sale_order_import_ubl](sale_order_import_ubl/) | 13.0.2.0.0 | Import UBL XML sale order files
 [sale_order_ubl](sale_order_ubl/) | 13.0.1.0.0 | Embed UBL XML file inside the PDF quotation
+[webservice](webservice/) | 13.0.1.0.0 | Defines webservice abstract definition to be used generally
 
 [//]: # (end addons)
 
