@@ -304,6 +304,7 @@ class EDIBackend(models.Model):
         for backend in self:
             backend._check_output_exchange_sync(**kw)
 
+    # TODO: consider splitting cron in 2 (1 for receiving, 1 for processing)
     def _check_output_exchange_sync(self, skip_send=False):
         """Lookup for pending output records and take care of them.
 
@@ -501,6 +502,7 @@ class EDIBackend(models.Model):
             backend._check_input_exchange_sync(**kw)
 
     # TODO: add tests
+    # TODO: consider splitting cron in 2 (1 for receiving, 1 for processing)
     def _check_input_exchange_sync(self, **kw):
         """Lookup for pending input records and take care of them.
 
