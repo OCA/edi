@@ -28,6 +28,7 @@ setuptools.setup(
         'odoo13-addon-edi_voxel_account_invoice',
         'odoo13-addon-edi_voxel_sale_order_import',
         'odoo13-addon-edi_voxel_stock_picking',
+        'odoo13-addon-edi_webservice',
         'odoo13-addon-edi_xml',
         'odoo13-addon-partner_identification_import',
         'odoo13-addon-purchase_order_ubl',
@@ -35,6 +36,7 @@ setuptools.setup(
         'odoo13-addon-sale_order_import',
         'odoo13-addon-sale_order_import_ubl',
         'odoo13-addon-sale_order_ubl',
+        'odoo13-addon-webservice',
     ],
     classifiers=[
         'Programming Language :: Python',
