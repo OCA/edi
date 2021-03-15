@@ -8,9 +8,6 @@ from .common import ShipmentTestCaseBase
 
 
 class InboundInstructionTestCase(ShipmentTestCaseBase):
-
-    _schema_path = "edi_gs1:static/schemas/gs1/ecom/WarehousingInboundInstruction.xsd"
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -136,6 +133,8 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
             self.assertEqual(
                 info.warehousingInboundInstructionShipment[k], v, f"{k} does not match"
             )
+
+    _schema_path = "edi_gs1:static/schemas/gs1/ecom/WarehousingInboundInstruction.xsd"
 
     @freeze_time("2020-07-09 10:30:00")
     def test_xml(self):

@@ -29,7 +29,7 @@ class OutboundInstructionTestCase(ShipmentTestCaseBase):
         cls.record = cls.backend.create_record(cls.exc_type.code, vals)
 
     def test_get_template(self):
-        template = self.backend._get_output_template(self.record)
+        template = self.backend._get_template(self.record, "output", "generate")
         self.assertEqual(template, self.exc_tmpl)
         self.assertEqual(
             template.template_id.key, "edi_gs1_stock.edi_exchange_outbound_instruction"
