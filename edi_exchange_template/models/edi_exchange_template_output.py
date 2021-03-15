@@ -136,7 +136,10 @@ class EDIExchangeOutputTemplate(models.Model):
         default_work_ctx = dict(exchange_record=exchange_record)
         default_work_ctx.update(record_conf.get("work_ctx", {}))
         default_work_ctx.update(work_ctx or {})
+        model = exchange_record.model
+        if not model:
+            model = exchange_record.backend_id._name
         provider = exchange_record.backend_id._find_component(
-            candidates, work_ctx=default_work_ctx, **kw
+            model, candidates, work_ctx=default_work_ctx, **kw
         )
         return provider
