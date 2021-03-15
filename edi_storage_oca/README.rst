@@ -23,7 +23,7 @@ EDI Storage backend support
     :target: https://runbot.odoo-community.org/runbot/226/13.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5|
+|badge1| |badge2| |badge3| |badge4| |badge5| 
 
 Allow exchange files using storage backends from `OCA/storage`.
 
