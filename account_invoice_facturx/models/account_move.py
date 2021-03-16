@@ -57,6 +57,9 @@ class AccountMove(models.Model):
             )
         address_country = etree.SubElement(address, ns["ram"] + "CountryID")
         address_country.text = partner.country_id.code
+        if partner.state_id:
+            address_state = etree.SubElement(address, ns["ram"] + "CountrySubDivisionName")
+            address_state.text = partner.state_id.name
 
     @api.model
     def _cii_trade_contact_department_name(self, partner):
