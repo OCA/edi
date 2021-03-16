@@ -39,15 +39,16 @@ class EDIBackend(models.Model):
     )
 
     def _get_component(self, exchange_record, key):
-        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
         candidates = self._get_component_usage_candidates(exchange_record, key)
         work_ctx = {"exchange_record": exchange_record}
         # Inject work context from advanced settings
         record_conf = self._get_component_conf_for_record(exchange_record, key)
         work_ctx.update(record_conf.get("work_ctx", {}))
         match_attrs = self._component_match_attrs(exchange_record, key)
+        # Model is not granted to be there
+        model = exchange_record.model or self._name
         return self._find_component(
-            exchange_record.model, candidates, work_ctx=work_ctx, **match_attrs,
+            model, candidates, work_ctx=work_ctx, **match_attrs,
         )
 
     def _component_match_attrs(self, exchange_record, key):
@@ -157,8 +158,7 @@ class EDIBackend(models.Model):
             ("backend_id", "=", self.id),
         ]
 
-    # TODO: rename to `exchange_generate` to match other methods
-    def generate_output(self, exchange_record, store=True, force=False, **kw):
+    def exchange_generate(self, exchange_record, store=True, force=False, **kw):
         """Generate output content for given exchange record.
 
         :param exchange_record: edi.exchange.record recordset
@@ -167,8 +167,8 @@ class EDIBackend(models.Model):
         :param kw: keyword args to be propagated to output generate handler
         """
         self.ensure_one()
-        self._check_generate_output(exchange_record, force=force)
-        output = self._generate_output(exchange_record, **kw)
+        self._check_exchange_generate(exchange_record, force=force)
+        output = self._exchange_generate(exchange_record, **kw)
         if output and store:
             if not isinstance(output, bytes):
                 output = output.encode()
@@ -192,7 +192,7 @@ class EDIBackend(models.Model):
                 exchange_record._notify_related_record(message)
         return output
 
-    def _check_generate_output(self, exchange_record, force=False):
+    def _check_exchange_generate(self, exchange_record, force=False):
         exchange_record.ensure_one()
         if (
             exchange_record.edi_exchange_state != "new"
@@ -220,11 +220,11 @@ class EDIBackend(models.Model):
                 % exchange_record.id
             )
 
-    def _generate_output(self, exchange_record, **kw):
+    def _exchange_generate(self, exchange_record, **kw):
         component = self._get_component(exchange_record, "generate")
         if component:
             return component.generate()
-        raise NotImplementedError("No handler for `_generate_output`")
+        raise NotImplementedError("No handler for `_exchange_generate`")
 
     # TODO: add tests
     def _validate_data(self, exchange_record, value=None, **kw):
@@ -232,7 +232,6 @@ class EDIBackend(models.Model):
         if component:
             return component.validate(value)
 
-    # TODO: add job config for these methods
     def exchange_send(self, exchange_record):
         """Send exchange file."""
         self.ensure_one()
@@ -306,6 +305,7 @@ class EDIBackend(models.Model):
         for backend in self:
             backend._check_output_exchange_sync(**kw)
 
+    # TODO: consider splitting cron in 2 (1 for receiving, 1 for processing)
     def _check_output_exchange_sync(self, skip_send=False):
         """Lookup for pending output records and take care of them.
 
@@ -323,7 +323,7 @@ class EDIBackend(models.Model):
             len(new_records),
         )
         for rec in new_records:
-            self.generate_output(rec)
+            self.with_delay().exchange_generate(rec)
 
         if skip_send:
             return
@@ -336,8 +336,9 @@ class EDIBackend(models.Model):
         )
         for rec in pending_records:
             if rec.edi_exchange_state == "output_pending":
-                self.exchange_send(rec)
+                self.with_delay().exchange_send(rec)
             else:
+                # TODO: run in job as well?
                 self._exchange_output_check_state(rec)
 
         self._exchange_check_ack_needed(pending_records)
@@ -501,6 +502,8 @@ class EDIBackend(models.Model):
         for backend in self:
             backend._check_input_exchange_sync(**kw)
 
+    # TODO: add tests
+    # TODO: consider splitting cron in 2 (1 for receiving, 1 for processing)
     def _check_input_exchange_sync(self, **kw):
         """Lookup for pending input records and take care of them.
 
@@ -515,7 +518,7 @@ class EDIBackend(models.Model):
             len(pending_records),
         )
         for rec in pending_records:
-            self.exchange_receive(rec)
+            self.with_delay().exchange_receive(rec)
 
         pending_process_records = self.exchange_record_model.search(
             self._input_pending_process_records_domain()
@@ -525,7 +528,7 @@ class EDIBackend(models.Model):
             len(pending_process_records),
         )
         for rec in pending_process_records:
-            self.exchange_process(rec)
+            self.with_delay().exchange_process(rec)
 
         # TODO: test it!
         self._exchange_check_ack_needed(pending_process_records)
@@ -553,9 +556,9 @@ class EDIBackend(models.Model):
             len(ack_pending_records),
         )
         for rec in ack_pending_records:
-            self._create_ack_record(rec)
+            self.with_delay().exchange_create_ack_record(rec)
 
-    def _create_ack_record(self, exchange_record):
+    def exchange_create_ack_record(self, exchange_record):
         ack_type = exchange_record.type_id.ack_type_id
         values = {"parent_id": exchange_record.id}
         return self.create_record(ack_type.code, values)

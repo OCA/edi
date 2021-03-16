@@ -108,12 +108,12 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         )
 
     def test_generate_file(self):
-        output = self.backend.generate_output(self.record1)
+        output = self.backend.exchange_generate(self.record1)
         expected = "{0.ref} - {0.name}".format(self.partner)
         self.assertEqual(output.strip(), expected)
         file_content = base64.b64decode(self.record1.exchange_file).decode()
         self.assertEqual(file_content.strip(), expected)
-        output = self.backend.generate_output(self.record2)
+        output = self.backend.exchange_generate(self.record2)
         doc = etree.fromstring(output)
         self.assertEqual(doc.tag, "Record")
         self.assertEqual(doc.attrib, {"ref": self.partner.ref})
