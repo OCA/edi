@@ -313,6 +313,13 @@ msgid "EDI exchange check status"
 msgstr ""
 
 #. module: edi
+#: model:ir.actions.server,name:edi.cron_edi_backend_check_input_exchange_ir_actions_server
+#: model:ir.cron,cron_name:edi.cron_edi_backend_check_input_exchange
+#: model:ir.cron,name:edi.cron_edi_backend_check_input_exchange
+msgid "EDI exchange input status"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__enable_domain
 msgid "Enable on domain"
 msgstr ""
