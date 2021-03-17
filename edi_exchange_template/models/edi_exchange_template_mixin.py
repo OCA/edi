@@ -92,6 +92,7 @@ class EDIExchangeTemplateMixin(models.AbstractModel):
         """
         return {
             "template": self,
+            "env": self.env,
             "datetime": datetime,
             "dateutil": dateutil,
             "time": time,
