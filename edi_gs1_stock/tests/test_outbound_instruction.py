@@ -39,25 +39,18 @@ class OutboundInstructionTestCase(ShipmentTestCaseBase):
         values = self.exc_tmpl._get_render_values(self.record)
         expected = [
             ("sender", self.backend.lsc_partner_id),
-            ("receiver", self.backend.lsp_partner_id),
+            ("receiver", self.delivery.partner_id),
             ("ls_buyer", self.backend.lsc_partner_id),
             ("ls_seller", self.backend.lsp_partner_id),
-            ("buyer", self.backend.lsc_partner_id),
-            ("seller", self.purchase.partner_id),
-            (
-                "shipper",
-                {
-                    "gln_code": "0000000000000",
-                    "name": "NO_CARRIER_SPECIFIED",
-                    "ref": None,
-                },
-            ),
+            ("buyer", self.delivery.partner_id),
+            ("seller", self.backend.lsc_partner_id),
         ]
         for k, v in expected:
-            self.assertEqual(values[k], v)
+            self.assertEqual(values[k], v, f"{k} is wrong")
 
         # Detailed test below
         self.assertTrue(values["info"])
+        self.assertTrue(values["shipper"])
 
     def test_info_provider_bad_work_ctx(self):
         with self.assertRaises(AttributeError) as err:

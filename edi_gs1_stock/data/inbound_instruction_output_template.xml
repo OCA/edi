@@ -19,7 +19,10 @@ logistic_service_buyer = sender
 buyer = sender
 seller = exchange_record.record.purchase_id.partner_id
 # TODO: get a default carrier somehow?
-shipper = DotDict(dict(name="NO_CARRIER_SPECIFIED", gln_code="0" * 13, ref=None))
+shipper = env['res.partner'].new({
+    'name': "NO_CARRIER_SPECIFIED",
+    'gln_code': "0" * 13,
+})
 
 _result = {
     "sender": sender,
