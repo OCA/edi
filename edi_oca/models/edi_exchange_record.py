@@ -151,6 +151,12 @@ class EDIExchangeRecord(models.Model):
 
     @property
     def record(self):
+        # In some case the res_model (and res_id) could be empty so we have to load
+        # data from parent
+        if not self.model and not self.parent_id:
+            return None
+        if not self.model and self.parent_id:
+            return self.parent_id.record
         return self.env[self.model].browse(self.res_id)
 
     def _set_file_content(
