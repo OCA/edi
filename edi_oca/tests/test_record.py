@@ -70,3 +70,26 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.assertIn(record1, record.related_exchange_ids)
         self.assertIn(record2, record.related_exchange_ids)
         self.assertEqual(record.ack_exchange_id, record2)
+
+    def test_record_empty_with_parent(self):
+        """
+        Simulate the case when the child record doesn't have a model and res_id.
+        In this case the .record should return the record of the parent.
+        :return:
+        """
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record = self.backend.create_record("test_csv_output", vals)
+        record1 = self.backend.create_record(
+            "test_csv_output", dict(vals, parent_id=record.id)
+        )
+        self.assertTrue(record1.model)
+        self.assertEqual(record.record, record1.record)
+        # Don't use the vals to lets empty model and res_id
+        record2 = self.backend.create_record(
+            "test_csv_output_ack", dict(parent_id=record.id)
+        )
+        self.assertFalse(record2.model)
+        self.assertEqual(record.record, record2.record)
