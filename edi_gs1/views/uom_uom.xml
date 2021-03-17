@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="uom_uom_form_view">
+        <field name="name">uom.uom.form (in edi_gs1)</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="priority" eval="50"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="gs1_code"/>
+            </field>
+        </field>
+    </record>
+</odoo>

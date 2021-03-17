@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="edi_exchange_contact_details" name="Render GS1 Contact Details">
+        <t t-set="company" t-value="contact.parent_id" />
+        <gln t-esc="contact.gln_code">0000000000044</gln>
+        <additionalPartyIdentification
+            t-if="additionalPartyIdentification"
+            t-att="additionalPartyIdentification.attrs"
+            t-esc="additionalPartyIdentification.value"
+        />
+        <address>
+            <city t-if="contact.city" t-esc="contact.city"/>
+            <countryCode t-if="contact.country_id" t-esc="contact.country_id.code"/>
+            <name t-if="contact.name" t-esc="contact.name"/>
+            <postalCode t-if="contact.zip" t-esc="contact.zip"/>
+            <state t-if="contact.state_id" t-esc="contact.state_id.name"/>
+            <streetAddressOne t-if="contact.street" t-esc="contact.street"/>
+            <streetAddressTwo t-if="contact.street2" t-esc="contact.street2"/>
+        </address>
+        <contact>
+            <personName t-if="contact.name" t-esc="contact.name"/>
+            <communicationChannel t-if="contact.email">
+                <communicationChannelCode>EMAIL</communicationChannelCode>
+                <communicationValue t-esc="contact.email"/>
+            </communicationChannel>
+            <communicationChannel t-if="contact.phone">
+                <communicationChannelCode>TELEPHONE</communicationChannelCode>
+                <communicationValue t-esc="contact.phone"/>
+            </communicationChannel>
+        </contact>
+        <organisationDetails t-if="contact.parent_id">
+            <organisationName t-if="company.name" t-esc="company.name"/>
+            <officialAddress>
+                <city t-if="company.city" t-esc="company.city"/>
+                <countryCode t-if="company.country_id" t-esc="company.country_id.code"/>
+                <name t-if="company.name" t-esc="company.name"/>
+                <postalCode t-if="company.zip" t-esc="company.zip"/>
+                <state t-if="company.state_id" t-esc="company.state_id.name"/>
+                <streetAddressOne t-if="company.street" t-esc="company.street"/>
+                <streetAddressTwo t-if="company.street2" t-esc="company.street2"/>
+            </officialAddress>
+        </organisationDetails>
+    </template>
+</odoo>

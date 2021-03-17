@@ -10,7 +10,7 @@
     "development_status": "Alpha",
     "license": "AGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
-    "depends": ["component", "edi_exchange_template", "edi_xml"],
+    "depends": ["component", "edi_exchange_template", "edi_xml", "uom"],
     "external_dependencies": {"python": ["xmlschema"]},
     "data": [
         "security/gs1_backend_acl.xml",
@@ -18,5 +18,8 @@
         "data/exchange_type_data.xml",
         "data/business_header_qweb_template.xml",
         "data/business_header_output_template.xml",
+        "data/contact_details_qweb_template.xml",
+        "views/uom_uom.xml",
     ],
+    "post_init_hook": "post_init_hook",
 }
