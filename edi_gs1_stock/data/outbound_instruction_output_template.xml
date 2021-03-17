@@ -12,14 +12,19 @@
         <field name="template_id" ref="edi_exchange_outbound_instruction" />
         <field name="code_snippet">
 sender = backend.lsc_partner_id
-receiver = backend.lsp_partner_id
-logistic_service_seller = receiver
+receiver = exchange_record.record.partner_id
+shipto = exchange_record.record.partner_id
+logistic_service_seller = backend.lsp_partner_id
 logistic_service_buyer = sender
 # FIXME: this is probably wrong or not always true
-buyer = sender
-seller = exchange_record.record.purchase_id.partner_id
+buyer = exchange_record.record.partner_id
+# TODO: Pick the SO partner customer.
+seller = backend.lsc_partner_id
 # TODO: get a default carrier somehow?
-shipper = DotDict(dict(name="NO_CARRIER_SPECIFIED", gln_code="0" * 13, ref=None))
+shipper = env['res.partner'].new({
+    'name': "NO_CARRIER_SPECIFIED",
+    'gln_code': "0" * 13,
+})
 
 _result = {
     "sender": sender,
@@ -29,6 +34,7 @@ _result = {
     "buyer": buyer,
     "seller": seller,
     "shipper": shipper,
+    "shipto": shipto,
 }
 
 provider = get_info_provider(exchange_record, work_ctx=_result)

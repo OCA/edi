@@ -41,20 +41,13 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
             ("ls_seller", self.backend.lsp_partner_id),
             ("buyer", self.backend.lsc_partner_id),
             ("seller", self.purchase.partner_id),
-            (
-                "shipper",
-                {
-                    "gln_code": "0000000000000",
-                    "name": "NO_CARRIER_SPECIFIED",
-                    "ref": None,
-                },
-            ),
         ]
         for k, v in expected:
             self.assertEqual(values[k], v)
 
         # Detailed test below
         self.assertTrue(values["info"])
+        self.assertTrue(values["shipper"])
 
     def test_info_provider_bad_work_ctx(self):
         with self.assertRaises(AttributeError) as err:

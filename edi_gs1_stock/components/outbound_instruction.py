@@ -25,7 +25,7 @@ class GS1OutboundInstructionMessage(Component):
     on the status of goods received on behalf of the client.
     """
 
-    _name = "gs1.output.outboundinstruction"
+    _name = "gs1.output.outbound.instruction"
     _inherit = [
         "edi.gs1.output.shipment.mixin",
     ]
