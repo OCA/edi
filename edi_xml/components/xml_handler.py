@@ -11,6 +11,7 @@ from odoo import modules
 from odoo.tools import DotDict
 
 from odoo.addons.component.core import Component
+from odoo.addons.edi.exceptions import EDIValidationError
 
 
 class XMLHandler(Component):
@@ -70,5 +71,5 @@ class XMLHandler(Component):
             return self.schema.validate(xml_content)
         except xmlschema.validators.exceptions.XMLSchemaValidationError as err:
             if raise_on_fail:
-                raise
+                raise EDIValidationError(str(err)) from err
             return str(err)
