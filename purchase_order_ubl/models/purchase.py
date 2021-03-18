@@ -174,9 +174,9 @@ class PurchaseOrder(models.Model):
         return xml_root
 
     def generate_ubl_xml_string(self, doc_type, version="2.1"):
-        """ Provide UBL Xml string with no check
-            According to your use check this string integrity with
-            _ubl_check_xml_schema() method
+        """Provide UBL Xml string with no check
+        According to your use check this string integrity with
+        _ubl_check_xml_schema() method
         """
         self.ensure_one()
         xml_root = self.get_ubl_xml_etree(doc_type, version=version)
