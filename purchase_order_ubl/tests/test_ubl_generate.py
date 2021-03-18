@@ -17,7 +17,7 @@ class TestUblOrder(HttpCase):
             for version in ["2.0", "2.1"]:
                 pdf_file = ro.with_context(
                     ubl_version=version, force_report_rendering=True
-                ).render_qweb_pdf(order.ids)[0]
+                )._render_qweb_pdf(order.ids)[0]
                 res = buo.get_xml_files_from_pdf(pdf_file)
                 if order.state in order_states:
                     filename = order.get_ubl_filename("order", version=version)
