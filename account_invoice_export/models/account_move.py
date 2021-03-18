@@ -63,11 +63,8 @@ class AccountMove(models.Model):
             raise UserError(_("Transmit method is not configured to send through HTTP"))
         file_data = self._get_file_for_transmission_method()
         headers = self.transmit_method_id.get_transmission_http_header()
-        res = requests.post(
-            self.transmit_method_id.destination_url,
-            headers=headers,
-            files=file_data,
-        )
+        url = self.transmit_method_id.get_transmission_url()
+        res = requests.post(url, headers=headers, files=file_data)
         if res.status_code != 200:
             raise UserError(
                 _(
