@@ -33,7 +33,7 @@ class BaseTestCase(SavepointComponentCase, xmlunittest.XmlTestMixin):
         cls.lsc_partner.gln_code = "2".zfill(13)
         # We have to trigger this gs1_code update manually in case of a submodule
         # update them.
-        cls.env['uom.uom']._execute_gs1_map_code()
+        cls.env["uom.uom"]._execute_gs1_map_code()
 
     @classmethod
     def _get_backend(cls):
