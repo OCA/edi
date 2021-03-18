@@ -229,7 +229,7 @@ class PurchaseOrder(models.Model):
             return "UBL-Order-%s.xml" % version
 
     def get_ubl_version(self):
-        return self.env.context.get("ubl_version") or "2.1"
+        return self.env.context.get("ubl_version", "2.1")
 
     def get_ubl_lang(self):
         self.ensure_one()
