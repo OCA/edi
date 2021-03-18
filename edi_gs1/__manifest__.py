@@ -15,7 +15,8 @@
     "data": [
         "security/gs1_backend_acl.xml",
         "data/gs1_backend_data.xml",
-        "data/exchange_type_data.xml",
+        "data/ack_in_exchange_type_data.xml",
+        "data/ack_out_exchange_type_data.xml",
         "data/business_header_qweb_template.xml",
         "data/business_header_output_template.xml",
         "data/contact_details_qweb_template.xml",
