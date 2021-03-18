@@ -20,8 +20,6 @@
                 schema_path: edi_gs1:static/schemas/gs1/ecom/ApplicationReceiptAcknowledgement.xsd
             process:
               usage: gs1.in.ApplicationReceiptAcknowledgement
-              work_ctx:
-                schema_path: edi_gs1:static/schemas/gs1/ecom/ApplicationReceiptAcknowledgement.xsd
         </field>
     </record>
 </odoo>
