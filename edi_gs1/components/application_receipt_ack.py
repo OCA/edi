@@ -12,19 +12,27 @@ class ApplicationReceiptAcknowledgement(Component):
     """
 
     _name = "gs1.input.applicationReceiptAcknowledgement"
-    _inherit = "gs1.input.mixin"
+    _inherit = "edi.gs1.input.mixin"
     _usage = "gs1.in.ApplicationReceiptAcknowledgement"
     _xsd_schema_path = "static/schemas/gs1/ecom/ApplicationReceiptAcknowledgement.xsd"
 
-    def get_status(self, result):
+    def _process_data(self, data):
+        if not self.is_ok(data):
+            # TODO: give a proper message based on the real state
+            # options: ERROR, RECEIVED, WARNING
+            raise exceptions.ValidationError(_("Exchange not received"))
+
+    def is_ok(self, data):
+        return self._get_status(data) == "RECEIVED"
+
+    def _get_status(self, data):
         try:
-            ack = result["applicationReceiptAcknowledgement"][0]
+            ack = data["applicationReceiptAcknowledgement"][0]
         except IndexError:
+            # Maybe raise an EDIValidationError?
             raise exceptions.ValidationError(
                 _("applicationReceiptAcknowledgement element not found!")
             )
         status_wrapper = ack["applicationResponseDocumentLevel"][0]
+        # options: ERROR, RECEIVED, WARNING
         return status_wrapper["applicationResponseStatusCode"]
-
-    def is_ok(self, result):
-        return self.get_status(result) == "RECEIVED"
