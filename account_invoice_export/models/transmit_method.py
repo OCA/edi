@@ -26,3 +26,11 @@ class TransmitMethod(models.Model):
         auth = "{}:{}".format(self.destination_user, self.destination_pwd,)
         auth64 = base64.encodebytes(auth.encode("ascii"))[:-1]
         return {"Authorization": "Basic " + auth64.decode("utf-8")}
+
+    def get_transmission_url(self):
+        """Returns the base url used to export.
+
+        Override it to add variable parameters.
+        """
+        self.ensure_one()
+        return self.destination_url or ""
