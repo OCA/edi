@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, _
-from odoo.tools import config, float_compare
-from odoo.exceptions import UserError, ValidationError
 import logging
 import mimetypes
+
 from lxml import etree
+
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import config, float_compare
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +36,7 @@ class OrderResponseImport(models.TransientModel):
 
     @api.model
     def _get_purchase_id(self):
-        assert (
-            self._context["active_model"] == "purchase.order"
-        ), "bad active_model"
+        assert self._context["active_model"] == "purchase.order", "bad active_model"
         return self.env["purchase.order"].browse(self._context["active_id"])
 
     document = fields.Binary(
@@ -65,9 +64,7 @@ class OrderResponseImport(models.TransientModel):
         """
         xml_files_dict = self.get_xml_files_from_pdf(document)
         if not xml_files_dict:
-            raise UserError(
-                _("There are no embedded XML file in this PDF file.")
-            )
+            raise UserError(_("There are no embedded XML file in this PDF file."))
         for xml_filename, xml_root in xml_files_dict.iteritems():
             logger.info("Trying to parse XML file %s", xml_filename)
             try:
@@ -140,14 +137,10 @@ class OrderResponseImport(models.TransientModel):
                 )
                 % filename
             )
-        logger.debug(
-            "Result of OrderResponse parsing: ", parsed_order_document
-        )
+        logger.debug("Result of OrderResponse parsing: ", parsed_order_document)
         if "attachments" not in parsed_order_document:
             parsed_order_document["attachments"] = {}
-        parsed_order_document["attachments"][filename] = document.encode(
-            "base64"
-        )
+        parsed_order_document["attachments"][filename] = document.encode("base64")
         if "chatter_msg" not in parsed_order_document:
             parsed_order_document["chatter_msg"] = []
         if (
@@ -188,10 +181,7 @@ class OrderResponseImport(models.TransientModel):
             parsed_order_document["chatter_msg"],
             partner_type="supplier",
         )
-        if (
-            partner.commercial_partner_id
-            != order.partner_id.commercial_partner_id
-        ):
+        if partner.commercial_partner_id != order.partner_id.commercial_partner_id:
             bdio.user_error_wrap(
                 _(
                     "The supplier of the imported OrderResponse (%s) "
@@ -250,9 +240,7 @@ class OrderResponseImport(models.TransientModel):
         parsed_order_document["chatter_msg"] = (
             parsed_order_document["chatter_msg"] or []
         )
-        parsed_order_document["chatter_msg"].append(
-            _("PO cancelled by the supplier.")
-        )
+        parsed_order_document["chatter_msg"].append(_("PO cancelled by the supplier."))
         purchase_order.button_cancel()
 
     @api.model
@@ -260,9 +248,7 @@ class OrderResponseImport(models.TransientModel):
         parsed_order_document["chatter_msg"] = (
             parsed_order_document["chatter_msg"] or []
         )
-        parsed_order_document["chatter_msg"].append(
-            _("PO confirmed by the supplier.")
-        )
+        parsed_order_document["chatter_msg"].append(_("PO confirmed by the supplier."))
         purchase_order.button_approve()
 
     @api.model
@@ -320,10 +306,7 @@ class OrderResponseImport(models.TransientModel):
                 qty = line_info["qty"]
                 backorder_qty = line_info["backorder_qty"]
                 move_qty = move.product_qty
-                if (
-                    float_compare(qty, move_qty, precision_digits=precision)
-                    < 0
-                ):
+                if float_compare(qty, move_qty, precision_digits=precision) < 0:
                     self._check_picking_status(move.picking_id)
                     new_move_id = move.split(move_qty - qty)
                     new_move = move.browse(new_move_id)
@@ -331,9 +314,7 @@ class OrderResponseImport(models.TransientModel):
                     if backorder_qty:
                         note = note + "\n" if note else ""
                         note += (
-                            _(
-                                "%s items should be delivered into a next delivery."
-                            )
+                            _("%s items should be delivered into a next delivery.")
                             % backorder_qty
                         )
                         move.note = note
@@ -356,11 +337,7 @@ class OrderResponseImport(models.TransientModel):
                     if to_cancel:
                         to_cancel.action_cancel()
                         to_cancel.write(
-                            {
-                                "note": _(
-                                    "No backorder planned by the supplier."
-                                )
-                            }
+                            {"note": _("No backorder planned by the supplier.")}
                         )
                     if new_move.state != "cancel":
                         # move the new move into an backorder picking to avoid
@@ -381,9 +358,7 @@ class OrderResponseImport(models.TransientModel):
         """
         StockPicking = self.env["stock.picking"]
         current_picking = move.picking_id
-        backorder = StockPicking.search(
-            [("backorder_id", "=", current_picking.id)]
-        )
+        backorder = StockPicking.search([("backorder_id", "=", current_picking.id)])
         if not backorder:
             date_done = current_picking.date_done
             move.picking_id._create_backorder(backorder_moves=move)
@@ -401,9 +376,7 @@ class OrderResponseImport(models.TransientModel):
         :param picking:
         :return:
         """
-        if any(
-            operation.qty_done != 0 for operation in picking.pack_operation_ids
-        ):
+        if any(operation.qty_done != 0 for operation in picking.pack_operation_ids):
             raise ValidationError(
                 _(
                     "Some Pack Operations have already started! "
