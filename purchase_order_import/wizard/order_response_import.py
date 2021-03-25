@@ -1,6 +1,6 @@
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
+import base64
 import logging
 import mimetypes
 
@@ -65,12 +65,12 @@ class OrderResponseImport(models.TransientModel):
         xml_files_dict = self.get_xml_files_from_pdf(document)
         if not xml_files_dict:
             raise UserError(_("There are no embedded XML file in this PDF file."))
-        for xml_filename, xml_root in xml_files_dict.iteritems():
+        for xml_filename, xml_root in xml_files_dict.items():
             logger.info("Trying to parse XML file %s", xml_filename)
             try:
                 parsed_order_document = self.parse_xml_order_document(xml_root)
                 return parsed_order_document
-            except:
+            except Exception:
                 continue
         raise UserError(
             _(
@@ -114,7 +114,7 @@ class OrderResponseImport(models.TransientModel):
         if filetype in ["application/xml", "text/xml"]:
             try:
                 xml_root = etree.fromstring(document)
-            except:
+            except Exception:
                 logger.exception("File is not XML-compliant")
                 raise UserError(_("This XML file is not XML-compliant"))
             if logger.isEnabledFor(logging.DEBUG):
@@ -140,7 +140,7 @@ class OrderResponseImport(models.TransientModel):
         logger.debug("Result of OrderResponse parsing: ", parsed_order_document)
         if "attachments" not in parsed_order_document:
             parsed_order_document["attachments"] = {}
-        parsed_order_document["attachments"][filename] = document.encode("base64")
+        parsed_order_document["attachments"][filename] = base64.b64encode(document)
         if "chatter_msg" not in parsed_order_document:
             parsed_order_document["chatter_msg"] = []
         if (
@@ -154,7 +154,6 @@ class OrderResponseImport(models.TransientModel):
             )
         return parsed_order_document
 
-    @api.multi
     def process_document(self):
         self.ensure_one()
         parsed_order_document = self.parse_order_response(
@@ -169,7 +168,7 @@ class OrderResponseImport(models.TransientModel):
         order = self.env["purchase.order"].search([("name", "=", po_name)])
         if not order:
             self.env["business.document.import"].user_error_wrap(
-                _("No purchase order found for name %s.") % po_name
+                "process_data", {}, _("No purchase order found for name %s.") % po_name
             )
 
         currency = bdio._match_currency(
@@ -195,12 +194,14 @@ class OrderResponseImport(models.TransientModel):
             )
         if currency and currency != order.currency_id:
             bdio.user_error_wrap(
+                "process_data",
+                {},
                 _(
                     "The currency of the imported OrderResponse (%s) "
                     "is different from the currency of the purchase order "
                     "(%s)."
                 )
-                % (currency.name, order.currency_id.name)
+                % (currency.name, order.currency_id.name),
             )
 
         status = parsed_order_document.get("status")
@@ -213,7 +214,7 @@ class OrderResponseImport(models.TransientModel):
         elif status == ORDER_RESPONSE_STATUS_CONDITIONAL:
             self._process_conditional(order, parsed_order_document)
         else:
-            bdio.user_error_wrap(_("Unknown status '%s'.") % status)
+            bdio.user_error_wrap("process_data", {}, _("Unknown status '%s'.") % status)
 
         bdio.post_create_or_update(parsed_order_document, order)
         logger.info(
@@ -222,7 +223,7 @@ class OrderResponseImport(models.TransientModel):
             self.filename,
         )
         order.message_post(
-            _(
+            body=_(
                 "This purchase order has been updated automatically"
                 " via the import of OrderResponse file %s."
             )
@@ -261,9 +262,11 @@ class OrderResponseImport(models.TransientModel):
         )
         chatter.append(_("PO confirmed with amendment by the supplier."))
         lines = parsed_order_document["lines"]
-        line_ids = [int(l["line_id"]) for l in lines if is_int(l["line_id"])]
+        line_ids = [int(line["line_id"]) for line in lines if is_int(line["line_id"])]
         if set(line_ids) != set(purchase_order.order_line.ids):
             self.env["business.document.import"].user_error_wrap(
+                "_process_conditional",
+                {},
                 _(
                     "Unable to conditionally confirm the purchase order. \n"
                     "Line IDS into the parsed document differs from the "
@@ -272,14 +275,14 @@ class OrderResponseImport(models.TransientModel):
                     "expected: %s\n"
                 )
                 % (
-                    [l["line_id"] for l in lines],
+                    [line["line_id"] for line in lines],
                     purchase_order.order_line.ids,
-                )
+                ),
             )
             return
         purchase_order.button_approve()
         # apply changes to the created moves...
-        lines_by_id = {int(l["line_id"]): l for l in lines}
+        lines_by_id = {int(line["line_id"]): line for line in lines}
         for order_line in purchase_order.order_line:
             line_info = lines_by_id[order_line.id]
             note = line_info.get("note")
@@ -301,15 +304,15 @@ class OrderResponseImport(models.TransientModel):
             if status == LINE_STATUS_ACCEPTED:
                 continue
             if status == LINE_STATUS_REJECTED:
-                order_line.move_ids.action_cancel()
+                order_line.move_ids._action_cancel()
             elif status == LINE_STATUS_AMEND:
                 qty = line_info["qty"]
                 backorder_qty = line_info["backorder_qty"]
                 move_qty = move.product_qty
                 if float_compare(qty, move_qty, precision_digits=precision) < 0:
                     self._check_picking_status(move.picking_id)
-                    new_move_id = move.split(move_qty - qty)
-                    new_move = move.browse(new_move_id)
+                    new_move_id = move._split(move_qty - qty)
+                    new_move = move.create(new_move_id)
                     to_cancel = None
                     if backorder_qty:
                         note = note + "\n" if note else ""
@@ -328,14 +331,16 @@ class OrderResponseImport(models.TransientModel):
                             )
                             < 0
                         ):
-                            to_cancel_id = new_move.split(
-                                new_move.product_qty - backorder_qty
+                            new_move = new_move._action_confirm()
+                            new_move.move_line_ids.qty_done = qty
+                            to_cancel_id = new_move._split(
+                                new_move.product_qty - qty - backorder_qty
                             )
-                            to_cancel = move.browse(to_cancel_id)
+                            to_cancel = move.create(to_cancel_id)
                     else:
                         to_cancel = new_move
                     if to_cancel:
-                        to_cancel.action_cancel()
+                        to_cancel._action_cancel()
                         to_cancel.write(
                             {"note": _("No backorder planned by the supplier.")}
                         )
@@ -344,9 +349,6 @@ class OrderResponseImport(models.TransientModel):
                         # that the scheduler merge the two moves into the same
                         # pack operation
                         self._add_move_to_backorder(new_move)
-
-                    # Reset Operations
-                    move.picking_id.do_prepare_partial()
 
     @api.model
     def _add_move_to_backorder(self, move):
@@ -361,7 +363,7 @@ class OrderResponseImport(models.TransientModel):
         backorder = StockPicking.search([("backorder_id", "=", current_picking.id)])
         if not backorder:
             date_done = current_picking.date_done
-            move.picking_id._create_backorder(backorder_moves=move)
+            move.picking_id._create_backorder()
             # preserve date_done....
             current_picking.date_done = date_done
         else:
@@ -376,7 +378,10 @@ class OrderResponseImport(models.TransientModel):
         :param picking:
         :return:
         """
-        if any(operation.qty_done != 0 for operation in picking.pack_operation_ids):
+        if any(
+            operation.qty_done != 0
+            for operation in picking.move_line_ids.result_package_id
+        ):
             raise ValidationError(
                 _(
                     "Some Pack Operations have already started! "

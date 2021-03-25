@@ -53,7 +53,7 @@ class TestOrderResponseImportCommon(SavepointCase):
                 "name": cls.product_2.name,
                 "date_planned": fields.Datetime.now(),
                 "product_qty": 10,
-                "product_uom": cls.env.ref("product.product_uom_unit").id,
+                "product_uom": cls.env.ref("uom.product_uom_unit").id,
                 "price_unit": 15,
             }
         )
@@ -64,7 +64,7 @@ class TestOrderResponseImportCommon(SavepointCase):
                 "name": cls.product_2.name,
                 "date_planned": fields.Datetime.now(),
                 "product_qty": 5,
-                "product_uom": cls.env.ref("product.product_uom_unit").id,
+                "product_uom": cls.env.ref("uom.product_uom_unit").id,
                 "price_unit": 25,
             }
         )
@@ -413,7 +413,9 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         ]
         self.OrderResponseImport.process_data(data)
         self.assertEqual(self.purchase_order.state, "purchase")
-        self.assertEqual(len(self.purchase_order.picking_ids), 2)
+
+        self.assertEqual(self.purchase_order.picking_ids.state, "draft")
+
         move_ids = self.line1.move_ids
         self.assertEqual(len(move_ids), 2)
         self.assertEqual(sum(move_ids.mapped("product_qty")), self.line1.product_qty)
@@ -425,7 +427,13 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             _("my note\n%s items should be delivered into a next delivery.") % "3",
             move_confirmed.note,
         )
-        move_backorder = move_ids.filtered(
+
+        # Set the quantity done on the pack operation
+        move_confirmed.move_line_ids.qty_done = 7.0
+        # Validate picking
+        move_confirmed.picking_id._action_done()
+
+        move_backorder = self.line1.move_ids.filtered(
             lambda s: s.state == "assigned" and s.product_qty == 3
         )
         self.assertTrue(move_backorder)
@@ -475,7 +483,8 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         ]
         self.OrderResponseImport.process_data(data)
         self.assertEqual(self.purchase_order.state, "purchase")
-        self.assertEqual(len(self.purchase_order.picking_ids), 2)
+        self.assertEqual(self.purchase_order.picking_ids.state, "draft")
+
         # line1
         line1_move_ids = self.line1.move_ids
         self.assertEqual(len(line1_move_ids), 2)
@@ -490,7 +499,13 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             _("my note\n%s items should be delivered into a next delivery.") % "3",
             move_confirmed.note,
         )
-        move_backorder = line1_move_ids.filtered(
+
+        # Set the quantity done on the pack operation
+        move_confirmed.move_line_ids.qty_done = 7.0
+        # Validate picking
+        move_confirmed.picking_id._action_done()
+
+        move_backorder = self.line1.move_ids.filtered(
             lambda s: s.state == "assigned" and s.product_qty == 3
         )
         self.assertTrue(move_backorder)
@@ -499,20 +514,19 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             move_confirmed.picking_id,
         )
         # lin1
-        line2_move_ids = self.line2.move_ids
-        self.assertEqual(len(line2_move_ids), 2)
-        self.assertEqual(
-            sum(line2_move_ids.mapped("product_qty")), self.line2.product_qty
-        )
-        move_confirmed = line2_move_ids.filtered(
-            lambda s: s.state == "assigned" and s.product_qty == line2_confirmed_qty
-        )
+        move_confirmed = self.line2.move_ids
         self.assertTrue(move_confirmed)
         self.assertEqual(
             _("my note\n%s items should be delivered into a next delivery.") % "3",
             move_confirmed.note,
         )
-        move_backorder = line2_move_ids.filtered(
+
+        # Set the quantity done on the pack operation
+        move_confirmed.move_line_ids.qty_done = line2_confirmed_qty
+        # Validate picking
+        move_confirmed.picking_id._action_done()
+
+        move_backorder = self.line2.move_ids.filtered(
             lambda s: s.state == "assigned" and s.product_qty == 3
         )
         self.assertTrue(move_backorder)
@@ -555,15 +569,20 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         self.assertEqual(self.purchase_order.state, "purchase")
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         move_ids = self.line1.move_ids
-        self.assertEqual(len(move_ids), 3)
+        self.assertEqual(len(move_ids), 2)
         self.assertEqual(sum(move_ids.mapped("product_qty")), self.line1.product_qty)
-        move_confirmed = move_ids.filtered(
-            lambda s: s.state == "assigned" and s.product_qty == confirmed_qty
+
+        move_ids.move_line_ids.qty_done = confirmed_qty
+        move_ids.picking_id._action_done()
+        move_done = move_ids.filtered(
+            lambda s: s.state == "done" and s.product_qty == confirmed_qty
         )
-        self.assertTrue(move_confirmed)
+
+        self.assertTrue(move_done)
+
         self.assertEqual(
             _("%s items should be delivered into a next delivery.") % "2",
-            move_confirmed.note,
+            move_done.note,
         )
         move_cancel = move_ids.filtered(
             lambda s: s.state == "cancel" and s.product_qty == 1
@@ -573,11 +592,15 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             _("No backorder planned by the supplier."),
             move_cancel.note,
         )
-        move_backorder = move_ids.filtered(
+
+        # There is a backorder for 2 lines
+        move_backorder = self.line1.move_ids.filtered(
             lambda s: s.state == "assigned" and s.product_qty == 2
         )
         self.assertTrue(move_backorder)
-        self.assertEqual(
-            move_backorder.picking_id.backorder_id,
-            move_confirmed.picking_id,
+
+        # Line 2 is assigned
+        move_line2 = self.line2.move_ids.filtered(
+            lambda s: s.state == "assigned" and s.product_qty == 5
         )
+        self.assertTrue(move_line2)
