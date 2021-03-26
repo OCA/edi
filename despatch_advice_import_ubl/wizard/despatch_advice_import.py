@@ -4,8 +4,9 @@
 
 import logging
 
-from odoo import api, models
+from odoo import api, models, _
 
+from odoo.exceptions import UserError
 logger = logging.getLogger(__name__)
 
 
@@ -22,7 +23,6 @@ class DespatchAdviceImport(models.TransientModel):
         else:
             return super(DespatchAdviceImport, self).parse_xml_despatch_advice(xml_root)
 
-
     @api.model
     def parse_ubl_despatch_advice(self, xml_root):
         ns = xml_root.nsmap
@@ -30,12 +30,14 @@ class DespatchAdviceImport(models.TransientModel):
         ns["main"] = main_xmlns
         date_xpath = xml_root.xpath("/main:DespatchAdvice/cbc:IssueDate", namespaces=ns)
         estimated_delivery_date_xpath = xml_root.xpath(
-            "/main:DespatchAdvice/cac:Shipment/cac:Delivery/cac:EstimatedDeliveryPeriod/cbc:EndDate",
+            "/main:DespatchAdvice/cac:Shipment/cac:Delivery/"
+            "cac:EstimatedDeliveryPeriod/cbc:EndDate",
             namespaces=ns,
         )
         order_reference_xpath = xml_root.xpath(
             "/main:DespatchAdvice/cac:OrderReference/cbc:ID", namespaces=ns
         )
+
         despatch_advice_type_code_xpath = xml_root.xpath(
             "/main:DespatchAdvice/cbc:DespatchAdviceTypeCode", namespaces=ns
         )
@@ -58,7 +60,7 @@ class DespatchAdviceImport(models.TransientModel):
         for line in lines_xpath:
             res_lines.append(self.parse_ubl_despatch_advice_line(line, ns))
         res = {
-            "ref": order_reference_xpath[0].text,
+            "ref": order_reference_xpath[0].text if order_reference_xpath else '',
             "supplier": supplier_dict,
             "company": customer_dict,
             "despatch_advice_type_code": despatch_advice_type_code_xpath[0].text,
@@ -82,8 +84,20 @@ class DespatchAdviceImport(models.TransientModel):
         product_ref_xpath = line.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns
         )
+
+        order_reference_xpath = line.xpath(
+            "cac:OrderLineReference/cac:OrderReference/cbc:ID", namespaces=ns
+        )
+
+        order_line_id_xpath = line.xpath("cac:OrderLineReference/cbc:LineID", namespaces=ns)
+
+        if not order_line_id_xpath:
+            raise UserError(_("Missing line ID in the Despatch Advice."))
+
         res_line = {
             "line_id": line_id_xpath[0].text,
+            "order_line_id": order_line_id_xpath[0].text,
+            "ref": order_reference_xpath[0].text if order_reference_xpath else '',
             "qty": qty,
             "product_ref": product_ref_xpath[0].text,
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
