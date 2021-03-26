@@ -103,12 +103,12 @@ class TestDespatchAdviceImport(SavepointCase):
 
         cls.DespatchAdviceImport = cls.env["despatch.advice.import"]
 
-
     def order_line_to_data(self, order_line, qty=None, backorder_qty=None):
         return {
             "backorder_qty": backorder_qty,
             "qty": qty if qty is not None else order_line.product_qty,
-            "line_id": order_line.id,
+            "order_line_id": order_line.id,
+            "ref": order_line.order_id.name,
             "product_ref": order_line.product_id.default_code,
             "uom": {"unece_code": order_line.product_uom.unece_code},
         }
@@ -137,7 +137,6 @@ class TestDespatchAdviceImport(SavepointCase):
                 }
             )
 
-
     def test_00(self):
         """
         Data:
@@ -149,6 +148,11 @@ class TestDespatchAdviceImport(SavepointCase):
         """
         data = self._get_base_data()
         data["ref"] = "123456"
+        data["lines"] = [
+            self.order_line_to_data(self.line1)
+        ]
+        data["lines"][0]["ref"] = "123456"
+
         with self.assertRaises(UserError) as ue:
             self.DespatchAdviceImport.process_data(data)
         self.assertEqual(
@@ -170,14 +174,15 @@ class TestDespatchAdviceImport(SavepointCase):
             self.order_line_to_data(self.line4)
         ]
         self.DespatchAdviceImport.process_data(data)
-        
+
         self.assertTrue(self.purchase_order.picking_ids)
         move_ids = self.line1.move_ids
         self.assertEqual(len(move_ids), 2)
         self.assertEqual(
             sum(move_ids.mapped("product_qty")), self.line1.product_qty
         )
-        assigned = move_ids.filtered(lambda s: s.state == "assigned" and s.product_qty == 3)
+        assigned = move_ids.filtered(lambda s: s.state == "assigned"
+                                                    and s.product_qty == 3)
         self.assertEqual(assigned.product_qty, confirmed_qty)
 
         move_backorder = move_ids.filtered(
@@ -187,7 +192,6 @@ class TestDespatchAdviceImport(SavepointCase):
         self.assertEqual(
             move_backorder.picking_id.backorder_id, assigned.picking_id
         )
-
 
     def test_02(self):
         """
@@ -204,7 +208,7 @@ class TestDespatchAdviceImport(SavepointCase):
             self.order_line_to_data(self.line4)
         ]
         self.DespatchAdviceImport.process_data(data)
-        
+
         self.assertTrue(self.purchase_order.picking_ids)
         move_ids = self.line1.move_ids
         self.assertEqual(len(move_ids), 2)
@@ -237,7 +241,7 @@ class TestDespatchAdviceImport(SavepointCase):
             self.order_line_to_data(self.line3),
             self.order_line_to_data(self.line4)
         ]
-       
+
         self.DespatchAdviceImport.process_data(data)
         self.assertEqual(self.purchase_order.state, "purchase")
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
@@ -280,7 +284,6 @@ class TestDespatchAdviceImport(SavepointCase):
         self.assertEqual(
             move_backorder.picking_id.backorder_id, move_confirmed.picking_id,
         )
-
 
     def test_04(self):
         """
@@ -332,10 +335,11 @@ class TestDespatchAdviceImport(SavepointCase):
         data["lines"] = [
             self.order_line_to_data(self.line1),
             self.order_line_to_data(self.line2),
-            self.order_line_to_data(self.line3, 
+            self.order_line_to_data(
+                self.line3,
                 qty=confirmed_qty,
                 backorder_qty=3
-                ),
+            ),
             self.order_line_to_data(self.line4)
         ]
         self.DespatchAdviceImport.process_data(data)
@@ -364,7 +368,6 @@ class TestDespatchAdviceImport(SavepointCase):
             move_backorder.picking_id.backorder_id,
             moves_confirmed[0].picking_id,
         )
-
 
     def test_06(self):
         """
@@ -400,4 +403,3 @@ class TestDespatchAdviceImport(SavepointCase):
             lambda s: s.state == "assigned" and s.picking_id.backorder_id
         )
         self.assertEqual(sum(moves_backorder.mapped("product_qty")), 3)
-
