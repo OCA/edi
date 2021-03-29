@@ -20,6 +20,17 @@ DIRECT_DEBIT_CODES = ('49', '59')
 CREDIT_TRF_CODES = ('30', '31', '42')
 PROFILES_EN_UP = ['en16931', 'extended']
 
+NSMAP = {
+    'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+    'rsm': 'urn:un:unece:uncefact:data:standard:'
+           'CrossIndustryInvoice:100',
+    'ram': 'urn:un:unece:uncefact:data:standard:'
+           'ReusableAggregateBusinessInformationEntity:100',
+    'qdt': 'urn:un:unece:uncefact:data:standard:QualifiedDataType:100',
+    'udt': 'urn:un:unece:uncefact:data:'
+           'standard:UnqualifiedDataType:100',
+}
+
 
 class AccountInvoice(models.Model):
     _name = 'account.invoice'
@@ -674,28 +685,12 @@ class AccountInvoice(models.Model):
         subtotal_amount.text = '%0.*f' % (
             ns['cur_prec'], iline.price_subtotal * ns['sign'])
 
-    @api.multi
-    def generate_facturx_xml(self):
+    def _get_facturx_xml_ns(self, level):
         self.ensure_one()
-        assert self.type in ('out_invoice', 'out_refund'),\
-            'only works for customer invoice and refunds'
         dpo = self.env['decimal.precision']
-        level = self.company_id.facturx_level or 'en16931'
         refund_type = self.company_id.facturx_refund_type or '381'
-        sign = 1
-        if self.type == 'out_refund' and refund_type == '380':
-            sign = -1
-        nsmap = {
-            'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-            'rsm': 'urn:un:unece:uncefact:data:standard:'
-                   'CrossIndustryInvoice:100',
-            'ram': 'urn:un:unece:uncefact:data:standard:'
-                   'ReusableAggregateBusinessInformationEntity:100',
-            'qdt': 'urn:un:unece:uncefact:data:standard:QualifiedDataType:100',
-            'udt': 'urn:un:unece:uncefact:data:'
-                   'standard:UnqualifiedDataType:100',
-            }
-        ns = {
+        sign = -1 if self.type == 'out_refund' and refund_type == '380' else 1
+        return {
             'rsm': '{urn:un:unece:uncefact:data:standard:'
                    'CrossIndustryInvoice:100}',
             'ram': '{urn:un:unece:uncefact:data:standard:'
@@ -712,12 +707,19 @@ class AccountInvoice(models.Model):
             'price_prec': dpo.precision_get('Product Price'),
             'disc_prec': dpo.precision_get('Discount'),
             'qty_prec': dpo.precision_get('Product Unit of Measure'),
-            }
+        }
 
-        root = etree.Element(ns['rsm'] + 'CrossIndustryInvoice', nsmap=nsmap)
+    @api.multi
+    def generate_facturx_xml(self):
+        self.ensure_one()
+        assert self.type in ('out_invoice', 'out_refund'),\
+            'only works for customer invoice and refunds'
+        level = self.company_id.facturx_level or 'en16931'
+        ns = self._get_facturx_xml_ns(level)
+        root = etree.Element(ns['rsm'] + 'CrossIndustryInvoice', nsmap=NSMAP)
         self = self.with_context(
             lang=self.partner_id.lang or self.env.user.lang or 'en_US')
-        self._cii_add_document_context_block(root, nsmap, ns)
+        self._cii_add_document_context_block(root, NSMAP, ns)
         self._cii_add_header_block(root, ns)
 
         trade_transaction = etree.SubElement(
