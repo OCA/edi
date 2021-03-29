@@ -9,3 +9,4 @@ server-tools
 stock-logistics-workflow
 connector
 storage
+server-auth

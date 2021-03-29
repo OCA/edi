@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record model="res.partner" id="partner_endpoint">
+        <field name="name">UBL API endpoint</field>
+        <field name="email">ubl.api.endpoint@test.test</field>
+    </record>
+    <record model="res.users" id="user_endpoint">
+        <field name="login">ublapi.endpoint</field>
+        <field name="partner_id" ref="partner_endpoint" />
+        <field
+            name="groups_id"
+            eval="[(6,0,[
+        ref('base.group_user'),
+        ref('sales_team.group_sale_manager'),
+      ])]"
+        />
+    </record>
+</odoo>
