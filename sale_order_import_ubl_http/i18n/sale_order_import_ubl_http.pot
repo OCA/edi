@@ -1,0 +1,61 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_order_import_ubl_http
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_order_import_ubl_http
+#: model:ir.model,name:sale_order_import_ubl_http.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: sale_order_import_ubl_http
+#: model:ir.model,name:sale_order_import_ubl_http.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: sale_order_import_ubl_http
+#: model:ir.model,name:sale_order_import_ubl_http.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: sale_order_import_ubl_http
+#: code:addons/sale_order_import_ubl_http/models/sale_order.py:0
+#, python-format
+msgid "Sales order has already been imported before, nothing done."
+msgstr ""
+
+#. module: sale_order_import_ubl_http
+#: code:addons/sale_order_import_ubl_http/models/sale_order.py:0
+#, python-format
+msgid "Sales order {} created"
+msgstr ""
+
+#. module: sale_order_import_ubl_http
+#: code:addons/sale_order_import_ubl_http/models/sale_order.py:0
+#, python-format
+msgid "Something went wrong with the importing wizard."
+msgstr ""
+
+#. module: sale_order_import_ubl_http
+#: model:ir.model.fields,field_description:sale_order_import_ubl_http.field_res_company__sale_order_ubl_import_http_confirmed
+#: model:ir.model.fields,field_description:sale_order_import_ubl_http.field_res_config_settings__sale_order_ubl_import_http_confirmed
+msgid "UBL order imported through HTTP set as confirmed"
+msgstr ""
+
+#. module: sale_order_import_ubl_http
+#: model:ir.model.fields,help:sale_order_import_ubl_http.field_res_company__sale_order_ubl_import_http_confirmed
+#: model:ir.model.fields,help:sale_order_import_ubl_http.field_res_config_settings__sale_order_ubl_import_http_confirmed
+msgid ""
+"When set the UBL sales order imported through HTTP will be set as confirmed."
+" Otherwise they are kept as draft."
+msgstr ""
