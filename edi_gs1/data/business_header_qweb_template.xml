@@ -53,7 +53,7 @@
                     <sh:InstanceIdentifier
                         t-esc="instance_identifier"
                     >100002</sh:InstanceIdentifier>
-                    <sh:Type />
+                    <sh:Type t-esc="doc_type or ''" />
                     <sh:MultipleType>false</sh:MultipleType>
                     <sh:CreationDateAndTime
                         t-esc="utc_now()"
