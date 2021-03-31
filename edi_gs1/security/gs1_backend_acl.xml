@@ -5,6 +5,7 @@
     <!-- <record model="ir.model.access" id="gs1_backend_manager">
         <field name="name">gs1_backend manager</field>
         <field name="model_id" ref="model_gs1_backend" />
+        <field name="group_id" ref="edi.group_edi_advanced_settings_manager" />
         <field name="perm_read" eval="1" />
         <field name="perm_create" eval="1" />
         <field name="perm_write" eval="1" />
