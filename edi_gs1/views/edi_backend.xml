@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2021 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="edi_backend_form_view">
+        <field name="name">edi.backend.form (in edi_gs1)</field>
+        <field name="model">edi.backend</field>
+        <field name="inherit_id" ref="edi.edi_backend_view_form"/>
+        <field name="priority" eval="90"/>
+        <field name="arch" type="xml">
+            <group name="config" position="after">
+                <group name="gs1">
+                    <field name="lsp_partner_id"/>
+                    <field name="lsc_partner_id"/>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

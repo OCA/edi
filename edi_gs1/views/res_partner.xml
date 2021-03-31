@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="res_partner_form_view">
+        <field name="name">res.partner.form (in edi_gs1)</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="priority" eval="90" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="GS1">
+                    <group>
+                        <group>
+                            <field name="is_lsp" />
+                            <field name="gln_code" />
+                        </group>
+                        <group />
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
