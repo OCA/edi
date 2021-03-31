@@ -121,24 +121,36 @@ class EDIExchangeType(models.Model):
             if rec.backend_id.backend_type_id != rec.backend_type_id:
                 raise exceptions.UserError(_("Backend should respect backend type!"))
 
-    def _make_exchange_filename(self, exchange_record):
-        """Generate filename."""
-        pattern = self.exchange_filename_pattern
+    def _get_exchange_filename_values(self, exchange_record):
+        """
+        Get values to build the filename
+
+        Values used to build the filename,
+        based on the exchange_filename_pattern pattern
+        :param exchange_record:
+        :return: dict
+        """
         ext = self.exchange_file_ext
-        pattern = pattern + ".{ext}"
         dt = slugify(fields.Datetime.to_string(fields.Datetime.now()))
         record_name = self._get_record_name(exchange_record)
         record = exchange_record
         if exchange_record.model and exchange_record.res_id:
             record = exchange_record.record
-        return pattern.format(
-            exchange_record=exchange_record,
-            record=record,
-            record_name=record_name,
-            type=self,
-            dt=dt,
-            ext=ext,
-        )
+        return {
+            "exchange_record": exchange_record,
+            "record": record,
+            "record_name": record_name,
+            "type": self,
+            "dt": dt,
+            "ext": ext,
+        }
+
+    def _make_exchange_filename(self, exchange_record):
+        """Generate filename."""
+        pattern = self.exchange_filename_pattern
+        pattern = pattern + ".{ext}"
+        format_value = self._get_exchange_filename_values(exchange_record)
+        return pattern.format(**format_value)
 
     def _get_record_name(self, exchange_record):
         if not exchange_record.res_id or not exchange_record.model:
