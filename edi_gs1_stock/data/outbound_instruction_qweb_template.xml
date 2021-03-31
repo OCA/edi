@@ -10,7 +10,7 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         >
             <t
-                t-raw="render_edi_template(exchange_record, 'gs1.BusinessHeader', sender=sender, receiver=receiver)"
+                t-raw="render_edi_template(exchange_record, 'gs1.BusinessHeader', sender=sender, receiver=ls_seller, doc_type='Warehousing Outbound Instruction')"
             />
             <t t-set="instruction_info" t-value="info.warehousingOutboundInstruction" />
             <t
@@ -75,31 +75,38 @@
                         <referencedDocumentUrl
                         >https://possible.url/to/delivery-document</referencedDocumentUrl>
                     </transactionalReference>
-                    <packageTotal t-if="shipment_info.packageTotal">
-                        <packageTypeCode
-                            t-esc="shipment_info.packageTotal.packageTypeCode"
-                        >AF</packageTypeCode>
-                        <totalPackageQuantity
-                            t-esc="shipment_info.packageTotal.totalPackageQuantity"
-                        >2</totalPackageQuantity>
-                        <totalGrossWeight
-                            t-att="shipment_info.packageTotal.totalGrossWeight.attrs"
-                            t-esc="shipment_info.packageTotal.totalGrossWeight.value"
-                        >6.0</totalGrossWeight>
-                    </packageTotal>
+                    <t t-foreach="shipment_info.packageTotal" t-as="package_total">
+                        <packageTotal>
+                            <packageTypeCode
+                                t-esc="package_total.packageTypeCode"
+                            >AF</packageTypeCode>
+                            <totalPackageQuantity
+                                t-esc="package_total.totalPackageQuantity"
+                            >2</totalPackageQuantity>
+                            <totalGrossWeight
+                                t-att="package_total.totalGrossWeight.attrs"
+                                t-esc="package_total.totalGrossWeight.value"
+                            >6.0</totalGrossWeight>
+                        </packageTotal>
+                    </t>
                     <handlingInstruction t-if="TODO">
                         <handlingInstructionCode>11</handlingInstructionCode>
                     </handlingInstruction>
                     <warehousingDespatchTypeCode
-                        t-if="'TODO: mandatory'"
-                    >WAREHOUSE_SHIPMENT</warehousingDespatchTypeCode>
+                        t-esc="shipment_info.warehousingDespatchTypeCode"
+                    />
                     <warehousingDeliveryInstructionCode
                         t-if="TODO"
                     >PRIORITY_DESPATCH</warehousingDeliveryInstructionCode>
-                    <plannedDespatch t-if="TODO">
-                        <logisticEventDateTime>
-                            <date>2020-12-02</date>
-                        </logisticEventDateTime>
+                    <plannedDespatch t-if="shipment_info.plannedDespatch">
+                        <logisticEventPeriod
+                            t-if="shipment_info.plannedDespatch.logisticEventPeriod"
+                        >
+                            <beginDate
+                                t-if="shipment_info.plannedDespatch.logisticEventPeriod.beginDate"
+                                t-esc="shipment_info.plannedDespatch.logisticEventPeriod.beginDate"
+                            />
+                        </logisticEventPeriod>
                     </plannedDespatch>
                     <t t-foreach="shipment_info._shipment_items" t-as="ship_item">
                         <t
@@ -112,9 +119,10 @@
                                 t-esc="ship_item.lineItemNumber"
                             >1</lineItemNumber>
                             <note
-                                languageCode="en"
-                                t-if="TODO"
-                            >Maybe use for some long description of the product</note>
+                                t-if="ship_item.note and ship_item.note.value"
+                                t-att="ship_item.note.attrs"
+                                t-esc="ship_item.note.value"
+                            />
                             <transactionalTradeItem>
                                 <gtin t-esc="trade_item.gtin">11111111111111</gtin>
                                 <additionalTradeItemIdentification
@@ -123,7 +131,49 @@
                                     t-esc="trade_item.additionalTradeItemIdentification.value"
                                     additionalTradeItemIdentificationTypeCode="BUYER_ASSIGNED"
                                 >102150001001000010003200010311101101</additionalTradeItemIdentification>
+                                <t
+                                    t-foreach="trade_item.transactionalItemData"
+                                    t-as="trans_item_data"
+                                >
+                                    <transactionalItemData>
+                                        <batchNumber
+                                            t-if="trans_item_data.batchNumber"
+                                            t-esc="trans_item_data.batchNumber"
+                                        />
+                                        <bestBeforeDate
+                                            t-if="trans_item_data.bestBeforeDate"
+                                            t-esc="trans_item_data.bestBeforeDate"
+                                        />
+                                        <countryOfOrigin
+                                            t-if="trans_item_data.countryOfOrigin"
+                                            t-esc="trans_item_data.countryOfOrigin"
+                                        />
+                                        <itemExpirationDate
+                                            t-if="trans_item_data.itemExpirationDate"
+                                            t-esc="trans_item_data.itemExpirationDate"
+                                        />
+                                        <productionDate
+                                            t-if="trans_item_data.productionDate"
+                                            t-esc="trans_item_data.productionDate"
+                                        />
+                                    </transactionalItemData>
+                                </t>
                             </transactionalTradeItem>
+                            <t
+                                t-foreach="ship_item.inventoryDutyFeeTaxStatus"
+                                t-as="inventory_tax_status"
+                            >
+                                <inventoryDutyFeeTaxStatus>
+                                    <dutyFeeTaxTypeCode
+                                        t-if="inventory_tax_status.dutyFeeTaxTypeCode"
+                                        t-esc="inventory_tax_status.dutyFeeTaxTypeCode"
+                                    />
+                                    <customsWarehouseStatusCode
+                                        t-if="inventory_tax_status.customsWarehouseStatusCode"
+                                        t-esc="inventory_tax_status.customsWarehouseStatusCode"
+                                    />
+                                </inventoryDutyFeeTaxStatus>
+                            </t>
                             <avpList t-if="avp_list">
                                 <t t-foreach="avp_list" t-as="avp_list_item">
                                     <eComStringAttributeValuePairList

@@ -73,8 +73,13 @@ class GS1OutboundInstructionMessage(Component):
 
     def _planned_despatch(self):
         # TODO: better info from?
-        return {
-            "logisticEventDateTime": {
-                "date": self.date_to_string(self.record.scheduled_date) or "",
-            },
-        }
+        values = {}
+        if self.record.scheduled_date:
+            values.update(
+                {
+                    "logisticEventPeriod": {
+                        "beginDate": self.date_to_string(self.record.scheduled_date),
+                    },
+                }
+            )
+        return values

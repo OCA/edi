@@ -84,20 +84,24 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
                     "value": "CARRIER#1",
                 },
             },
-            "packageTotal": {
-                "packageTypeCode": "AF",
-                "totalPackageQuantity": "2",
-                "totalGrossWeight": {
-                    "value": self.delivery.weight,
-                    "attrs": {"measurementUnitCode": "KGM"},
-                },
-            },
+            "packageTotal": [
+                {
+                    "packageTypeCode": "AF",
+                    "totalPackageQuantity": "2",
+                    "totalGrossWeight": {
+                        "value": self.delivery.weight,
+                        "attrs": {"measurementUnitCode": "KGM"},
+                    },
+                }
+            ],
             "warehousingReceiptTypeCode": "REGULAR_RECEIPT",
             "plannedReceipt": {"logisticEventDateTime": {"date": "2020-07-12"}},
             "_shipment_items": [
                 {
                     "lineItemNumber": 1,
+                    "note": {},
                     "transactionalTradeItem": {"gtin": "1" * 14},
+                    "inventoryDutyFeeTaxStatus": [],
                     "_plannedQty": {
                         "value": 300.0,
                         "attrs": {"measurementUnitCode": "KGM"},
@@ -105,7 +109,9 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
                 },
                 {
                     "lineItemNumber": 2,
+                    "note": {},
                     "transactionalTradeItem": {"gtin": "2" * 14},
+                    "inventoryDutyFeeTaxStatus": [],
                     "_plannedQty": {
                         "value": 200.0,
                         "attrs": {"measurementUnitCode": "KGM"},
@@ -113,7 +119,9 @@ class InboundInstructionTestCase(ShipmentTestCaseBase):
                 },
                 {
                     "lineItemNumber": 3,
+                    "note": {},
                     "transactionalTradeItem": {"gtin": "3" * 14},
+                    "inventoryDutyFeeTaxStatus": [],
                     "_plannedQty": {
                         "value": 100.0,
                         "attrs": {"measurementUnitCode": "KGM"},
