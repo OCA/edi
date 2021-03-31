@@ -20,6 +20,8 @@
         "data/business_header_qweb_template.xml",
         "data/business_header_output_template.xml",
         "data/contact_details_qweb_template.xml",
+        "views/res_partner.xml",
+        "views/edi_backend.xml",
         "views/uom_uom.xml",
     ],
     "post_init_hook": "post_init_hook",

@@ -9,7 +9,6 @@ class EDIBackend(models.Model):
     _inherit = "edi.backend"
 
     # TODO: find another way to configure this w/out polluting edi backend
-    # TODO: add to view
     lsp_partner_id = fields.Many2one(
         string="Logistic Services Provider (LSP)",
         comodel_name="res.partner",
