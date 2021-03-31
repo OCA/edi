@@ -8,10 +8,10 @@ from odoo import models
 class IrActionsReport(models.Model):
     _inherit = "ir.actions.report"
 
-    def postprocess_pdf_report(self, record, buffer):
+    def _postprocess_pdf_report(self, record, buffer):
         if self.is_ubl_xml_to_embed_in_sale_order():
             buffer = record.add_xml_in_pdf_buffer(buffer)
-        return super().postprocess_pdf_report(record, buffer)
+        return super()._postprocess_pdf_report(record, buffer)
 
     def _post_pdf(self, save_in_attachment, pdf_content=None, res_ids=None):
         """We go through that method when the PDF is generated for the 1st
@@ -26,13 +26,13 @@ class IrActionsReport(models.Model):
                 pdf_content = sale_order.embed_ubl_xml_in_pdf(pdf_content)
         return pdf_content
 
-    def render_qweb_pdf(self, res_ids=None, data=None):
+    def _render_qweb_pdf(self, res_ids=None, data=None):
         """This is only necessary when tests are enabled.
         It forces the creation of pdf instead of html."""
         if len(res_ids or []) == 1 and not self.env.context.get("no_embedded_ubl_xml"):
             if len(self) == 1 and self.is_ubl_xml_to_embed_in_sale_order():
                 self = self.with_context(force_report_rendering=True)
-        return super().render_qweb_pdf(res_ids, data)
+        return super()._render_qweb_pdf(res_ids, data)
 
     def is_ubl_xml_to_embed_in_sale_order(self):
         return (

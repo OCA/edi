@@ -10,6 +10,5 @@
     "author": "Akretion,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": ["sale", "base_ubl"],
-    "data": [],
     "installable": True,
 }
