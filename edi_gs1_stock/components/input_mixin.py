@@ -2,9 +2,6 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, exceptions
-from odoo.tools import DotDict
-
 from odoo.addons.component.core import AbstractComponent
 
 
@@ -21,4 +18,3 @@ class GS1InputShipmentMessageMixin(AbstractComponent):
         import pdb
 
         pdb.set_trace()
-        pass
