@@ -36,7 +36,7 @@ class StockPicking(models.Model):
         type_code = "warehousingInboundInstruction"
         values = {"model": delivery._name, "res_id": delivery.id}
         exchange_record = edi_backend.create_record(type_code, values)
-        edi_backend.generate_output(exchange_record)
+        edi_backend.exchange_generate(exchange_record)
 
         if "edi_exchange_send" in self.env.context:
             send = self.env.context.get("edi_exchange_send")
@@ -56,7 +56,7 @@ class StockPicking(models.Model):
         type_code = "warehousingOutboundInstruction"
         values = {"model": delivery._name, "res_id": delivery.id}
         exchange_record = edi_backend.create_record(type_code, values)
-        edi_backend.generate_output(exchange_record)
+        edi_backend.exchange_generate(exchange_record)
 
         if "edi_exchange_send" in self.env.context:
             send = self.env.context.get("edi_exchange_send")

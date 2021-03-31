@@ -53,18 +53,20 @@
                     <receiver>
                         <gln t-esc="receiver.gln_code">0000000000001</gln>
                     </receiver>
-                    <packageTotal t-if="shipment_info.packageTotal">
-                        <packageTypeCode
-                            t-esc="shipment_info.packageTotal.packageTypeCode"
-                        >AF</packageTypeCode>
-                        <totalPackageQuantity
-                            t-esc="shipment_info.packageTotal.totalPackageQuantity"
-                        >2</totalPackageQuantity>
-                        <totalGrossWeight
-                            t-att="shipment_info.packageTotal.totalGrossWeight.attrs"
-                            t-esc="shipment_info.packageTotal.totalGrossWeight.value"
-                        >6.0</totalGrossWeight>
-                    </packageTotal>
+                    <t t-foreach="shipment_info.packageTotal" t-as="package_total">
+                        <packageTotal>
+                            <packageTypeCode
+                                t-esc="package_total.packageTypeCode"
+                            >AF</packageTypeCode>
+                            <totalPackageQuantity
+                                t-esc="package_total.totalPackageQuantity"
+                            >2</totalPackageQuantity>
+                            <totalGrossWeight
+                                t-att="package_total.totalGrossWeight.attrs"
+                                t-esc="package_total.totalGrossWeight.value"
+                            >6.0</totalGrossWeight>
+                        </packageTotal>
+                    </t>
                     <warehousingReceiptTypeCode
                     >REGULAR_RECEIPT</warehousingReceiptTypeCode>
                     <plannedReceipt>
@@ -82,6 +84,11 @@
                             <lineItemNumber
                                 t-esc="ship_item.lineItemNumber"
                             >1</lineItemNumber>
+                            <note
+                                t-if="ship_item.note and ship_item.note.value"
+                                t-att="ship_item.note.attrs"
+                                t-esc="ship_item.note.value"
+                            />
                             <transactionalTradeItem>
                                 <gtin t-esc="trade_item.gtin">11111111111111</gtin>
                                 <additionalTradeItemIdentification

@@ -87,23 +87,25 @@ class GS1OutputShipmentMessageMixin(AbstractComponent):
         return data
 
     def _package_total(self):
-        return DotDict(
-            {
-                # TODO: would be nice to have mapping based on product packaging
-                # but as in some case you simply use the same package types
-                # for all the shipments, then is up to integrator to provide
-                # proper values by overriding this method.
-                # https://www.gs1.se/en/our-standards/Technical-documentation/
-                # code-lists/t0137-packaging-type-code/
-                # TODO: get generic numbers from picking.
-                "packageTypeCode": "AF",
-                "totalPackageQuantity": "2",
-                "totalGrossWeight": {
-                    "value": self.record.weight,
-                    "attrs": {"measurementUnitCode": "KGM"},
-                },
-            }
-        )
+        return [
+            DotDict(
+                {
+                    # TODO: would be nice to have mapping based on product packaging
+                    # but as in some case you simply use the same package types
+                    # for all the shipments, then is up to integrator to provide
+                    # proper values by overriding this method.
+                    # https://www.gs1.se/en/our-standards/Technical-documentation/
+                    # code-lists/t0137-packaging-type-code/
+                    # TODO: get generic numbers from picking.
+                    "packageTypeCode": "AF",
+                    "totalPackageQuantity": "2",
+                    "totalGrossWeight": {
+                        "value": self.record.weight,
+                        "attrs": {"measurementUnitCode": "KGM"},
+                    },
+                }
+            ),
+        ]
 
     def _shipment_items(self):
         res = []
@@ -119,10 +121,15 @@ class GS1OutputShipmentMessageMixin(AbstractComponent):
         # TODO: get it from line uom
         uom_code = "KGM"
         # Watch out: order is important for XSD validation!
+        inventory_fee_tax_status = [
+            DotDict(v) for v in self._inventory_duty_fee_tax_status(item)
+        ]
         data = DotDict(
             {
                 "lineItemNumber": i,
                 "transactionalTradeItem": self._shipment_item_trade_item(item),
+                "note": self._shipment_item_note(item),
+                "inventoryDutyFeeTaxStatus": inventory_fee_tax_status,
             }
         )
         avp_list = self._shipment_item_avp_list(item)
@@ -137,6 +144,17 @@ class GS1OutputShipmentMessageMixin(AbstractComponent):
             "attrs": {"measurementUnitCode": uom_code},
         }
         return data
+
+    def _inventory_duty_fee_tax_status(self, item):
+        """
+
+        :param item:
+        :return: list of dict
+        """
+        return []
+
+    def _shipment_item_note(self, item):
+        return {}
 
     def _shipment_item_trade_item(self, item):
         # GTIN is required here.
