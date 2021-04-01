@@ -79,8 +79,8 @@ class BusinessDocumentImport(models.AbstractModel):
             if partner:
                 return partner
 
-    @api.model  # noqa: C901
-    def _match_partner(
+    @api.model
+    def _match_partner(  # noqa: C901
         self,
         partner_dict,
         chatter_msg,
@@ -720,7 +720,8 @@ class BusinessDocumentImport(models.AbstractModel):
                 ("unece_due_date_code", "=", tax_dict["unece_due_date_code"]),
                 ("unece_due_date_code", "=", False),
             ]
-        taxes = ato.search(domain, order="unece_due_date_code")
+        taxes = ato.search(domain)
+        taxes = taxes.sorted(key=lambda t: t._get_unece_due_date_type_code())
         for tax in taxes:
             tax_amount = tax.amount  # 'amount' field : digits=(16, 4)
             if not float_compare(tax_dict["amount"], tax_amount, precision_digits=4):
@@ -905,8 +906,8 @@ class BusinessDocumentImport(models.AbstractModel):
             [("company_id", "=", company_id), ("deprecated", "=", False)], ["code"]
         )
         speed_dict = {}
-        for l in res:
-            speed_dict[l["code"].upper()] = l["id"]
+        for line in res:
+            speed_dict[line["code"].upper()] = line["id"]
         return speed_dict
 
     @api.model
@@ -967,9 +968,9 @@ class BusinessDocumentImport(models.AbstractModel):
             [("company_id", "=", company_id)], ["code"]
         )
         speed_dict = {}
-        for l in res:
-            if l["code"]:
-                speed_dict[l["code"].upper()] = l["id"]
+        for line in res:
+            if line["code"]:
+                speed_dict[line["code"].upper()] = line["id"]
         return speed_dict
 
     @api.model
@@ -1010,8 +1011,8 @@ class BusinessDocumentImport(models.AbstractModel):
             [("company_id", "=", company_id)], ["code"]
         )
         speed_dict = {}
-        for l in res:
-            speed_dict[l["code"].upper()] = l["id"]
+        for line in res:
+            speed_dict[line["code"].upper()] = line["id"]
         return speed_dict
 
     @api.model
