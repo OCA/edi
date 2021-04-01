@@ -162,7 +162,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         uom_dict = {"name": "day"}
         res = bdio._match_uom(uom_dict, [])
         self.assertEqual(res, self.env.ref("uom.product_uom_day"))
-        uom_dict = {"name": " Liter "}
+        uom_dict = {"name": "L"}
         res = bdio._match_uom(uom_dict, [])
         self.assertEqual(res, self.env.ref("uom.product_uom_litre"))
         uom_dict = {}
