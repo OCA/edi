@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-03 16:24+0000\n"
+"PO-Revision-Date: 2021-04-03 16:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -136,13 +138,8 @@ msgid "At fixed time"
 msgstr ""
 
 #. module: edi_voxel
-#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__bultos
-msgid "Bultos"
-msgstr ""
-
-#. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__cajas
-msgid "Cajas"
+msgid "Boxes"
 msgstr ""
 
 #. module: edi_voxel
@@ -182,7 +179,7 @@ msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__contenedores
-msgid "Contenedores"
+msgid "Containers"
 msgstr ""
 
 #. module: edi_voxel
@@ -216,7 +213,7 @@ msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__horas
-msgid "Horas"
+msgid "Hours"
 msgstr ""
 
 #. module: edi_voxel
@@ -257,23 +254,18 @@ msgid "Lbs"
 msgstr ""
 
 #. module: edi_voxel
+#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__lts
+msgid "Liters"
+msgstr ""
+
+#. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.view_company_form
 msgid "Logins"
 msgstr ""
 
 #. module: edi_voxel
-#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__lts
-msgid "Lts"
-msgstr ""
-
-#. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__metros
-msgid "Metros"
-msgstr ""
-
-#. module: edi_voxel
-#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__metroscuadrados
-msgid "MetrosCuadrados"
+msgid "Meters"
 msgstr ""
 
 #. module: edi_voxel
@@ -298,12 +290,17 @@ msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__otros
-msgid "Otros"
+msgid "Others"
+msgstr ""
+
+#. module: edi_voxel
+#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__bultos
+msgid "Packages"
 msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__palets
-msgid "Palets"
+msgid "Pallets"
 msgstr ""
 
 #. module: edi_voxel
@@ -360,6 +357,11 @@ msgid "Set credentials for connection to Voxel using Web Service"
 msgstr ""
 
 #. module: edi_voxel
+#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__metroscuadrados
+msgid "Square meters"
+msgstr ""
+
+#. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_account_tax
 msgid "Tax"
 msgstr ""
@@ -379,7 +381,7 @@ msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__unidades
-msgid "Unidades"
+msgid "Units"
 msgstr ""
 
 #. module: edi_voxel
