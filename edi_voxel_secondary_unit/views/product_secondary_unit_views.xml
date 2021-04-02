@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="product_secondary_unit_view_tree" model="ir.ui.view">
+        <field name="name">product.secondary.unit.view.tree.inherit</field>
+        <field name="model">product.secondary.unit</field>
+        <field
+            name="inherit_id"
+            ref="product_secondary_unit.product_secondary_unit_view_tree"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="voxel_code" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
