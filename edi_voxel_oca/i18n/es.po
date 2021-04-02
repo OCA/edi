@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-24 23:57+0000\n"
-"PO-Revision-Date: 2020-04-24 19:59-0400\n"
+"POT-Creation-Date: 2021-04-03 16:24+0000\n"
+"PO-Revision-Date: 2021-04-03 12:35-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.3\n"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__account_tax__voxel_tax_code__exento
@@ -128,8 +128,9 @@ msgid ""
 "\"Values set here are company-specific.\" groups=\"base.group_multi_company"
 "\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
-"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
+"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos "
+"aquí son específicos para cada compañía.\" groups=\"base.group_multi_company"
+"\"/>"
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
@@ -139,8 +140,9 @@ msgid ""
 "\"Values set here are company-specific.\" groups=\"base.group_multi_company"
 "\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
-"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
+"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos "
+"aquí son específicos para cada compañía.\" groups=\"base.group_multi_company"
+"\"/>"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__res_company__voxel_send_mode__fixed
@@ -148,14 +150,9 @@ msgid "At fixed time"
 msgstr "A una hora fija"
 
 #. module: edi_voxel
-#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__bultos
-msgid "Bultos"
-msgstr ""
-
-#. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__cajas
-msgid "Cajas"
-msgstr ""
+msgid "Boxes"
+msgstr "Cajas"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__voxel_mixin__voxel_state__cancelled
@@ -174,9 +171,8 @@ msgstr "Compañías"
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__company_id
-#, fuzzy
 msgid "Company"
-msgstr "Compañías"
+msgstr "Compañía"
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_res_config_settings
@@ -195,8 +191,8 @@ msgstr "Contacto"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__contenedores
-msgid "Contenedores"
-msgstr ""
+msgid "Containers"
+msgstr "Contenedores"
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__create_uid
@@ -229,8 +225,8 @@ msgstr "Habilitar voxel"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__horas
-msgid "Horas"
-msgstr ""
+msgid "Hours"
+msgstr "Horas"
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__id
@@ -240,14 +236,13 @@ msgstr "ID (identificación)"
 
 #. module: edi_voxel
 #: model:ir.model.fields,help:edi_voxel.field_voxel_mixin__voxel_state
-#, fuzzy
 msgid "Indicates the status of sending report to Voxel"
 msgstr "Indica el estado del envío del reporte a Voxel"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__kgs
 msgid "Kgs"
-msgstr ""
+msgstr "Kgs"
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login____last_update
@@ -268,7 +263,12 @@ msgstr "Última actualización en"
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__lbs
 msgid "Lbs"
-msgstr ""
+msgstr "Lbs"
+
+#. module: edi_voxel
+#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__lts
+msgid "Liters"
+msgstr "Lts"
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.view_company_form
@@ -276,19 +276,9 @@ msgid "Logins"
 msgstr "Voxel logins"
 
 #. module: edi_voxel
-#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__lts
-msgid "Lts"
-msgstr ""
-
-#. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__metros
-msgid "Metros"
-msgstr ""
-
-#. module: edi_voxel
-#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__metroscuadrados
-msgid "MetrosCuadrados"
-msgstr ""
+msgid "Meters"
+msgstr "Metros"
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
@@ -312,13 +302,18 @@ msgstr "Al validar"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__otros
-msgid "Otros"
-msgstr ""
+msgid "Others"
+msgstr "Otros"
+
+#. module: edi_voxel
+#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__bultos
+msgid "Packages"
+msgstr "Bultos"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__palets
-msgid "Palets"
-msgstr ""
+msgid "Pallets"
+msgstr "Palets"
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__password
@@ -375,6 +370,11 @@ msgstr ""
 "Establece las credenciales para la conexión con Voxel usando Servicio Web"
 
 #. module: edi_voxel
+#: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__metroscuadrados
+msgid "Square meters"
+msgstr "Metros Cuadrados"
+
+#. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_account_tax
 msgid "Tax"
 msgstr "Impuesto"
@@ -396,8 +396,8 @@ msgstr ""
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__uom_uom__voxel_code__unidades
-msgid "Unidades"
-msgstr ""
+msgid "Units"
+msgstr "Unidades"
 
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_login__user
@@ -423,7 +423,7 @@ msgstr "Código Voxel"
 #. module: edi_voxel
 #: model:ir.model.fields,field_description:edi_voxel.field_voxel_mixin__voxel_filename
 msgid "Voxel filename"
-msgstr ""
+msgstr "Fichero Voxel"
 
 #. module: edi_voxel
 #: model:ir.model,name:edi_voxel.model_voxel_login
