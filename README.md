@@ -29,7 +29,7 @@ addon | version | summary
 [base_ebill_payment_contract](base_ebill_payment_contract/) | 13.0.1.0.0 | Base for managing e-billing contracts
 [base_edi](base_edi/) | 13.0.1.0.1 | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 13.0.1.0.0 | Base module for Factur-X/ZUGFeRD
-[base_ubl](base_ubl/) | 13.0.2.1.0 | Base module for Universal Business Language (UBL)
+[base_ubl](base_ubl/) | 13.0.2.2.0 | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 13.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
 [edi](edi/) | 13.0.1.16.0 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_account](edi_account/) | 13.0.1.0.2 | Define EDI Configuration for Account Moves
@@ -44,8 +44,8 @@ addon | version | summary
 [partner_identification_import](partner_identification_import/) | 13.0.2.0.0 | Provides partner matching on extra ID
 [purchase_order_ubl](purchase_order_ubl/) | 13.0.1.2.0 | Embed UBL XML file inside the PDF purchase order
 [purchase_stock_ubl](purchase_stock_ubl/) | 13.0.1.1.0 | Glue module for Purchase Order UBL and Stock/Inventory
-[sale_order_import](sale_order_import/) | 13.0.2.0.0 | Import RFQ or sale orders from files
-[sale_order_import_ubl](sale_order_import_ubl/) | 13.0.2.0.0 | Import UBL XML sale order files
+[sale_order_import](sale_order_import/) | 13.0.2.1.0 | Import RFQ or sale orders from files
+[sale_order_import_ubl](sale_order_import_ubl/) | 13.0.2.1.0 | Import UBL XML sale order files
 [sale_order_import_ubl_http](sale_order_import_ubl_http/) | 13.0.1.0.1 | Add an HTTP endpoint to import UBL formatted ordersautomatically as sales order
 [sale_order_ubl](sale_order_ubl/) | 13.0.1.0.0 | Embed UBL XML file inside the PDF quotation
 [webservice](webservice/) | 13.0.1.0.0 | Defines webservice abstract definition to be used generally
