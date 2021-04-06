@@ -128,9 +128,8 @@ msgid ""
 "\"Values set here are company-specific.\" groups=\"base.group_multi_company"
 "\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos "
-"aquí son específicos para cada compañía.\" groups=\"base.group_multi_company"
-"\"/>"
+"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
+"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
 
 #. module: edi_voxel
 #: model_terms:ir.ui.view,arch_db:edi_voxel.res_config_settings_view_form
@@ -140,9 +139,8 @@ msgid ""
 "\"Values set here are company-specific.\" groups=\"base.group_multi_company"
 "\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos "
-"aquí son específicos para cada compañía.\" groups=\"base.group_multi_company"
-"\"/>"
+"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
+"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
 
 #. module: edi_voxel
 #: model:ir.model.fields.selection,name:edi_voxel.selection__res_company__voxel_send_mode__fixed
