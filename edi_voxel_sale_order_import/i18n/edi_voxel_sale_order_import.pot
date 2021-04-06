@@ -31,6 +31,16 @@ msgstr ""
 #: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
 #, python-format
 msgid ""
+"Can't find a suitable Unit of Measure for this data:\n"
+"\n"
+"%s\n"
+"Results: %s"
+msgstr ""
+
+#. module: edi_voxel_sale_order_import
+#: code:addons/edi_voxel_sale_order_import/models/sale_order.py:0
+#, python-format
+msgid ""
 "Can't find a suitable partner for this data:\n"
 "\n"
 "%s\n"
