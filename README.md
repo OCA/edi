@@ -38,6 +38,7 @@ addon | version | summary
 [edi_voxel](edi_voxel/) | 13.0.1.0.0 | Base module for connecting with Voxel
 [edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.0.2 | Sends account invoices to Voxel.
 [edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.0 | Import sale order from Voxel.
+[edi_voxel_secondary_unit](edi_voxel_secondary_unit/) | 13.0.1.0.0 | Add Voxel UoM code to Secondary UoM model
 [edi_voxel_stock_picking](edi_voxel_stock_picking/) | 13.0.1.0.1 | Sends stock picking report to Voxel.
 [edi_webservice](edi_webservice/) | 13.0.1.0.0 | Defines webservice integration from EDI Exchange records
 [edi_xml](edi_xml/) | 13.0.1.2.1 | Base module for EDI exchange using XML files.
