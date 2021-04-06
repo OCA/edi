@@ -3,23 +3,23 @@
 
 from odoo import fields, models
 
+VOXEL_CODE = [
+    ("Unidades", "Units"),
+    ("Kgs", "Kgs"),
+    ("Lts", "Liters"),
+    ("Lbs", "Lbs"),
+    ("Cajas", "Boxes"),
+    ("Bultos", "Packages"),
+    ("Palets", "Pallets"),
+    ("Horas", "Hours"),
+    ("Metros", "Meters"),
+    ("MetrosCuadrados", "Square meters"),
+    ("Contenedores", "Containers"),
+    ("Otros", "Others"),
+]
+
 
 class UoM(models.Model):
     _inherit = "uom.uom"
 
-    voxel_code = fields.Selection(
-        selection=[
-            ("Unidades", "Unidades"),
-            ("Kgs", "Kgs"),
-            ("Lts", "Lts"),
-            ("Lbs", "Lbs"),
-            ("Cajas", "Cajas"),
-            ("Bultos", "Bultos"),
-            ("Palets", "Palets"),
-            ("Horas", "Horas"),
-            ("Metros", "Metros"),
-            ("MetrosCuadrados", "MetrosCuadrados"),
-            ("Contenedores", "Contenedores"),
-            ("Otros", "Otros"),
-        ],
-    )
+    voxel_code = fields.Selection(selection=VOXEL_CODE)
