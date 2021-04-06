@@ -8,10 +8,10 @@ from odoo.modules.module import get_module_path
 from odoo.tests import common
 
 
-class TestVoxelSaleOrderImport(common.SavepointCase):
+class TestVoxelSaleOrderImportCommon(common.SavepointCase):
     @classmethod
     def setUpClass(cls):
-        super(TestVoxelSaleOrderImport, cls).setUpClass()
+        super().setUpClass()
         # This pricelist doesn't show the discount
         pricelist_test = cls.env["product.pricelist"].create(
             {"name": "pricelist test", "currency_id": cls.env.ref("base.EUR").id}
@@ -45,8 +45,20 @@ class TestVoxelSaleOrderImport(common.SavepointCase):
         cls.product_test_2 = cls.env["product.product"].create(
             {"default_code": "222222", "name": "PRODUCT TEST 2"}
         )
+        # Hypothetical unit of measure to be able to load the test file
+        # catching the voxel unit of measure called 'Cajas' for the
+        # first order line
+        cls.boxes_uom = cls.env["uom.uom"].create(
+            {
+                "name": "Boxes 3x3x3",
+                "voxel_code": "Cajas",
+                "category_id": cls.env.ref("uom.product_uom_unit").id,
+                "uom_type": "bigger",
+                "factor_inv": 9.0,
+            }
+        )
 
-    def test_create_document_from_xml(self):
+    def _create_document_from_test_file(self):
         # read file
         filename = "Pedido_20190619_145750_0611125750634.xml"
         module_path = get_module_path("edi_voxel_sale_order_import")
@@ -55,9 +67,12 @@ class TestVoxelSaleOrderImport(common.SavepointCase):
             content = file.read()
         # call method
         so_obj = self.env["sale.order"]
-        sale_order = so_obj.create_document_from_xml(
-            content, filename, self.company_test,
-        )
+        return so_obj.create_document_from_xml(content, filename, self.company_test)
+
+
+class TestVoxelSaleOrderImport(TestVoxelSaleOrderImportCommon):
+    def test_create_document_from_xml(self):
+        sale_order = self._create_document_from_test_file()
         # check the import was successful
         # check general data
         self.assertEqual(sale_order.client_order_ref, "1111")
@@ -72,8 +87,8 @@ class TestVoxelSaleOrderImport(common.SavepointCase):
         # check order line 1
         so_line = sale_order.order_line[0]
         self.assertEqual(so_line.product_id, self.product_test_1)
-        self.assertEqual(so_line.product_uom, self.env.ref("uom.product_uom_unit"))
-        self.assertEqual(so_line.product_uom_qty, 1)
+        self.assertEqual(so_line.product_uom, self.boxes_uom)
+        self.assertEqual(so_line.product_uom_qty, 2)
         # check order line 2
         so_line = sale_order.order_line[1]
         self.assertEqual(so_line.product_id, self.product_test_2)

@@ -14,7 +14,7 @@ from odoo.osv import expression
 _logger = logging.getLogger(__name__)
 
 
-class Company(models.Model):
+class SaleOrder(models.Model):
     _name = "sale.order"
     _inherit = ["sale.order", "voxel.mixin"]
 
@@ -257,9 +257,8 @@ class Company(models.Model):
         for line_element in line_elements:
             line_vals = {"order_id": order.id}
             self._parse_product_voxel(line_vals, line_element)
-            line_vals = so_line_obj.play_onchanges(
-                line_vals, ["product_id", "product_uom_qty"],
-            )
+            self._parse_qty_uom_voxel(line_vals, line_element)
+            line_vals = so_line_obj.play_onchanges(line_vals, list(line_vals)[1:])
             self._parse_discounts_product_voxel(line_vals, line_element, error_msgs)
             self._parse_taxes_product_voxel(line_vals, line_element, error_msgs)
             if line_vals:
@@ -285,15 +284,22 @@ class Company(models.Model):
                 _("Can't find a suitable product for this data:\n\n%s" "\nResults: %s")
                 % (product_data, len(product))
             )
-        product_uom_qty = float(product_data.get("Qty", "1"))
-        product_uom = self.env["uom.uom"].search(
-            [("voxel_code", "=", product_data.get("MU"))]
-        )
-        line_vals.update(
-            product_id=product.id,
-            product_uom_qty=product_uom_qty,
-            product_uom=product_uom.id,
-        )
+        line_vals.update(product_id=product.id)
+
+    def _parse_qty_uom_voxel(self, line_vals, line_element):
+        product_data = line_element.attrib
+        qty = float(product_data.get("Qty", "1"))
+        mu = product_data.get("MU")
+        product_uom = self.env["uom.uom"].search([("voxel_code", "=", mu)])
+        if len(product_uom) != 1:
+            raise UserError(
+                _(
+                    "Can't find a suitable Unit of Measure for this data:\n\n%s"
+                    "\nResults: %s"
+                )
+                % (product_data, len(product_uom))
+            )
+        line_vals.update(product_uom_qty=qty, product_uom=product_uom.id)
 
     def _parse_discounts_product_voxel(self, line_vals, line_element, error_msg):
         discount_line_elements = line_element.xpath("/Discounts/Discount")
