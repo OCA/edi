@@ -6,17 +6,17 @@ from datetime import datetime
 from odoo.tests import common
 
 
-class TestVoxelStockPicking(common.SavepointCase):
+class TestVoxelStockPickingCommon(common.SavepointCase):
     @classmethod
     def setUpClass(cls):
-        super(TestVoxelStockPicking, cls).setUpClass()
+        super().setUpClass()
         # Sale order company
         country = cls.env["res.country"].create({"name": "Country", "code": "CT"})
         state = cls.env["res.country.state"].create(
             {"name": "Province", "code": "PRC", "country_id": country.id}
         )
-        main_company = cls.env.ref("base.main_company")
-        main_company.write(
+        cls.main_company = cls.env.ref("base.main_company")
+        cls.main_company.write(
             {
                 "vat": "US1234567890",
                 "street": "Street 1",
@@ -30,7 +30,7 @@ class TestVoxelStockPicking(common.SavepointCase):
             }
         )
         # Sale order client
-        partner = cls.env["res.partner"].create(
+        cls.partner = cls.env["res.partner"].create(
             {
                 "ref": "C01",
                 "vat": "BE0123456789",
@@ -44,18 +44,18 @@ class TestVoxelStockPicking(common.SavepointCase):
                 "country_id": cls.env.ref("base.us").id,
             }
         )
-        product = cls.env["product.product"].create(
+        cls.product = cls.env["product.product"].create(
             {"default_code": "DC_001", "name": "Product 1 (test)", "type": "product"}
         )
         cls.env["product.customerinfo"].create(
             {
-                "name": partner.id,
-                "product_tmpl_id": product.product_tmpl_id.id,
-                "product_id": product.id,
+                "name": cls.partner.id,
+                "product_tmpl_id": cls.product.product_tmpl_id.id,
+                "product_id": cls.product.id,
                 "product_code": "1234567891234",
             }
         )
-        product2 = cls.env["product.product"].create(
+        cls.product2 = cls.env["product.product"].create(
             {
                 "default_code": "DC_002",
                 "name": "Product 2 (test)",
@@ -63,27 +63,48 @@ class TestVoxelStockPicking(common.SavepointCase):
                 "tracking": "lot",
             }
         )
-        lot = cls.env["stock.production.lot"].create(
+        cls.lot = cls.env["stock.production.lot"].create(
             {
                 "name": "LOT01",
-                "product_id": product2.id,
+                "product_id": cls.product2.id,
                 "life_date": "2020-01-01 12:05:23",
-                "company_id": main_company.id,
+                "company_id": cls.main_company.id,
             }
         )
+        # Create Sales Order
+        cls.sale_order = cls._create_sale_order()
+        # Confirm quotation
+        cls.sale_order.action_confirm()
+        # Validate picking
+        cls.picking = cls.sale_order.picking_ids
+        cls.picking.write(
+            {
+                "name": "Picking name (test)",
+                "date": datetime(2020, 1, 7),
+                "company_id": cls.main_company.id,
+                "note": "Picking note (test)",
+            }
+        )
+        cls.picking.move_lines[0].write({"quantity_done": 2})
+        cls.picking.move_lines[1].write({"quantity_done": 1})
+        cls.picking.move_lines[1].move_line_ids.lot_id = cls.lot.id
+        cls.picking.button_validate()
+
+    @classmethod
+    def _create_sale_order(cls):
         sale_order = cls.env["sale.order"].create(
             {
                 "name": "Sale order name (test)",
-                "partner_id": partner.id,
-                "company_id": main_company.id,
+                "partner_id": cls.partner.id,
+                "company_id": cls.main_company.id,
                 "order_line": [
                     (
                         0,
                         0,
                         {
-                            "product_id": product.id,
+                            "product_id": cls.product.id,
                             "product_uom_qty": 2,
-                            "product_uom": product.uom_id.id,
+                            "product_uom": cls.product.uom_id.id,
                             "price_unit": 750,
                         },
                     ),
@@ -91,32 +112,19 @@ class TestVoxelStockPicking(common.SavepointCase):
                         0,
                         0,
                         {
-                            "product_id": product2.id,
+                            "product_id": cls.product2.id,
                             "product_uom_qty": 1,
-                            "product_uom": product2.uom_id.id,
+                            "product_uom": cls.product2.uom_id.id,
                             "price_unit": 50,
                         },
                     ),
                 ],
             }
         )
-        # Confirm quotation
-        sale_order.action_confirm()
-        # Validate picking
-        cls.picking = sale_order.picking_ids
-        cls.picking.write(
-            {
-                "name": "Picking name (test)",
-                "date": datetime(2020, 1, 7),
-                "company_id": main_company.id,
-                "note": "Picking note (test)",
-            }
-        )
-        cls.picking.move_lines[0].write({"quantity_done": 2})
-        cls.picking.move_lines[1].write({"quantity_done": 1})
-        cls.picking.move_lines[1].move_line_ids.lot_id = lot.id
-        cls.picking.button_validate()
+        return sale_order
 
+
+class TestVoxelStockPicking(TestVoxelStockPickingCommon):
     def test_get_voxel_filename(self):
         bef = datetime.now()
         bef = datetime(
