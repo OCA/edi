@@ -335,6 +335,7 @@ class EDIExchangeRecord(models.Model):
             )
             for eid, res_id, model in self._cr.fetchall():
                 if not model:
+                    result.append(eid)
                     continue
                 model_data[model][res_id].add(eid)
 
@@ -375,10 +376,16 @@ class EDIExchangeRecord(models.Model):
         if self.env.is_superuser():
             return
         for exchange_record in self:
-            if not exchange_record.record:
+            sudo_record = exchange_record.sudo()
+            if not sudo_record.model or not sudo_record.res_id:
                 continue
-            if hasattr(exchange_record.record, "get_edi_access"):
-                check_operation = exchange_record.record.get_edi_access(
+            record = (
+                self.env[sudo_record.model]
+                .browse(sudo_record.res_id)
+                .with_user(self._uid)
+            )
+            if hasattr(record, "get_edi_access"):
+                check_operation = record.get_edi_access(
                     [exchange_record.res_id], operation
                 )
             else:
@@ -389,8 +396,8 @@ class EDIExchangeRecord(models.Model):
                     operation,
                     model_name=exchange_record.model,
                 )
-            exchange_record.record.check_access_rights(check_operation)
-            exchange_record.record.check_access_rule(check_operation)
+            record.check_access_rights(check_operation)
+            record.check_access_rule(check_operation)
 
     def write(self, vals):
         self.check_access_rule("write")
