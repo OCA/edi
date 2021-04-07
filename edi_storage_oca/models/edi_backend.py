@@ -73,4 +73,6 @@ class EDIBackend(models.Model):
         # Override to give precedence by storage_backend_type when needed.
         if not self.storage_id:
             return res
-        return (1 if component_class._storage_backend_type else 0,) + res
+        return (
+            1 if getattr(component_class, "_storage_backend_type", False) else 0,
+        ) + res
