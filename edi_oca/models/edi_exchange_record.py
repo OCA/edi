@@ -375,13 +375,12 @@ class EDIExchangeRecord(models.Model):
         super(EDIExchangeRecord, self).check_access_rule(operation)
         if self.env.is_superuser():
             return
-        for exchange_record in self:
-            sudo_record = exchange_record.sudo()
-            if not sudo_record.model or not sudo_record.res_id:
+        for exchange_record in self.sudo():
+            if not exchange_record.model or not exchange_record.res_id:
                 continue
             record = (
-                self.env[sudo_record.model]
-                .browse(sudo_record.res_id)
+                self.env[exchange_record.model]
+                .browse(exchange_record.res_id)
                 .with_user(self._uid)
             )
             if hasattr(record, "get_edi_access"):
