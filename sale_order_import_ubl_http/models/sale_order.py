@@ -6,14 +6,11 @@ from base64 import b64encode
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
-from odoo.addons.queue_job.job import job
-
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.model
-    @job(default_channel="root.ubl_import")
     def import_ubl_from_http(self, data):
         """Job called by the endpoint to import received data."""
         wiz = self.env["sale.order.import"].create({})

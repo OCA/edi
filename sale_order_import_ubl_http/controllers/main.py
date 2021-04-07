@@ -24,6 +24,15 @@ class ImportController(http.Controller):
             http://localhost/ubl_api/sales
 
         """
+        return self._import_sale_order()
+
+    def _import_sale_order(
+        self,
+        method_name="import_ubl_from_http",
+        job_values=None,
+        final_message=None,
+        **kw
+    ):
         req = request.httprequest
         env = request.env
         if req.content_type != "application/xml":
@@ -31,11 +40,17 @@ class ImportController(http.Controller):
         self.check_api_key(env, request.auth_api_key_id)
         xml_data = req.get_data()
         self.check_data_to_import(env, xml_data)
-        description = "Import UBL order from http"
-        env["sale.order"].with_delay(description=description).import_ubl_from_http(
-            xml_data.decode("utf-8")
+
+        job_values = job_values or {}
+        if "description" not in job_values:
+            job_values["description"] = "Import UBL order from http"
+
+        model = env["sale.order"].with_delay(**job_values)
+        getattr(model, method_name)(xml_data.decode("utf-8"))
+        final_message = (
+            final_message or "Thank you. Your order will be processed, shortly"
         )
-        return "Thank you. Your order will be processed, shortly"
+        return final_message
 
     def check_data_to_import(self, env, data):
         """ Check the data received looks valid.
