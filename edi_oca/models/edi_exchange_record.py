@@ -375,28 +375,27 @@ class EDIExchangeRecord(models.Model):
         super(EDIExchangeRecord, self).check_access_rule(operation)
         if self.env.is_superuser():
             return
-        for exchange_record in self.sudo():
-            if not exchange_record.model or not exchange_record.res_id:
+        default_checker = self.env["edi.exchange.consumer.mixin"].get_edi_access
+        by_model_rec_ids = defaultdict(set)
+        by_model_checker = {}
+        for exc_rec in self.sudo():
+            if not exc_rec.model or not exc_rec.res_id:
                 continue
-            record = (
-                self.env[exchange_record.model]
-                .browse(exchange_record.res_id)
-                .with_user(self._uid)
-            )
-            if hasattr(record, "get_edi_access"):
-                check_operation = record.get_edi_access(
-                    [exchange_record.res_id], operation
+            by_model_rec_ids[exc_rec.model].add(exc_rec.res_id)
+            if exc_rec.model not in by_model_checker:
+                by_model_checker[exc_rec.model] = getattr(
+                    self.env[exc_rec.model], "get_edi_access", default_checker
                 )
-            else:
-                check_operation = self.env[
-                    "edi.exchange.consumer.mixin"
-                ].get_edi_access(
-                    [exchange_record.res_id],
-                    operation,
-                    model_name=exchange_record.model,
+
+        for model, rec_ids in by_model_rec_ids.items():
+            records = self.env[model].browse(rec_ids).with_user(self._uid)
+            checker = by_model_checker[model]
+            for record in records:
+                check_operation = checker(
+                    [record.id], operation, model_name=record._name
                 )
-            record.check_access_rights(check_operation)
-            record.check_access_rule(check_operation)
+                record.check_access_rights(check_operation)
+                record.check_access_rule(check_operation)
 
     def write(self, vals):
         self.check_access_rule("write")
