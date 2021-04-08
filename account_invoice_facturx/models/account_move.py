@@ -13,7 +13,7 @@ from odoo.tools import float_compare, float_is_zero, float_round
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import check_facturx_xsd, generate_facturx_from_binary
+    from facturx import generate_from_binary, xml_check_xsd
 except ImportError:
     logger.debug("Cannot import facturx")
 
@@ -58,7 +58,9 @@ class AccountMove(models.Model):
         address_country = etree.SubElement(address, ns["ram"] + "CountryID")
         address_country.text = partner.country_id.code
         if partner.state_id:
-            address_state = etree.SubElement(address, ns["ram"] + "CountrySubDivisionName")
+            address_state = etree.SubElement(
+                address, ns["ram"] + "CountrySubDivisionName"
+            )
             address_state.text = partner.state_id.name
 
     @api.model
@@ -103,15 +105,9 @@ class AccountMove(models.Model):
         # 102 = format YYYYMMDD
         date_node_str.text = date_datetime.strftime("%Y%m%d")
 
-    def _cii_add_document_context_block(self, root, nsmap, ns):
+    def _cii_add_document_context_block(self, root, ns):
         self.ensure_one()
         doc_ctx = etree.SubElement(root, ns["rsm"] + "ExchangedDocumentContext")
-        # TestIndicator not in factur-X...
-        # if self.state not in ('open', 'paid'):
-        #    test_indic = etree.SubElement(
-        #        doc_ctx, ns['ram'] + 'TestIndicator')
-        #    indic = etree.SubElement(test_indic, ns['udt'] + 'Indicator')
-        #    indic.text = 'true'
         ctx_param = etree.SubElement(
             doc_ctx, ns["ram"] + "GuidelineSpecifiedDocumentContextParameter"
         )
@@ -228,6 +224,14 @@ class AccountMove(models.Model):
                 buyer_tax_reg, ns["ram"] + "ID", schemeID="VA"
             )
             buyer_tax_reg_id.text = self.commercial_partner_id.vat
+        if ns["level"] == "extended" and self.invoice_incoterm_id:
+            delivery_terms = etree.SubElement(
+                trade_agreement, ns["ram"] + "ApplicableTradeDeliveryTerms"
+            )
+            delivery_code = etree.SubElement(
+                delivery_terms, ns["ram"] + "DeliveryTypeCode"
+            )
+            delivery_code.text = self.invoice_incoterm_id.code
         self._cii_add_buyer_order_reference(trade_agreement, ns)
         self._cii_add_contract_reference(trade_agreement, ns)
 
@@ -806,18 +810,18 @@ class AccountMove(models.Model):
         self = self.with_context(lang=lang)
         nsmap = {
             "xsi": "http://www.w3.org/2001/XMLSchema-instance",
-            "rsm": "urn:un:unece:uncefact:data:standard:" "CrossIndustryInvoice:100",
+            "rsm": "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100",
             "ram": "urn:un:unece:uncefact:data:standard:"
             "ReusableAggregateBusinessInformationEntity:100",
             "qdt": "urn:un:unece:uncefact:data:standard:QualifiedDataType:100",
-            "udt": "urn:un:unece:uncefact:data:" "standard:UnqualifiedDataType:100",
+            "udt": "urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100",
         }
         ns = {
-            "rsm": "{urn:un:unece:uncefact:data:standard:" "CrossIndustryInvoice:100}",
+            "rsm": "{urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100}",
             "ram": "{urn:un:unece:uncefact:data:standard:"
             "ReusableAggregateBusinessInformationEntity:100}",
-            "qdt": "{urn:un:unece:uncefact:data:standard:" "QualifiedDataType:100}",
-            "udt": "{urn:un:unece:uncefact:data:standard:" "UnqualifiedDataType:100}",
+            "qdt": "{urn:un:unece:uncefact:data:standard:QualifiedDataType:100}",
+            "udt": "{urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100}",
             "level": level,
             "refund_type": refund_type,
             "sign": sign,
@@ -832,7 +836,7 @@ class AccountMove(models.Model):
         }
 
         root = etree.Element(ns["rsm"] + "CrossIndustryInvoice", nsmap=nsmap)
-        self._cii_add_document_context_block(root, nsmap, ns)
+        self._cii_add_document_context_block(root, ns)
         self._cii_add_header_block(root, ns)
 
         trade_transaction = etree.SubElement(
@@ -857,7 +861,7 @@ class AccountMove(models.Model):
         logger.debug("Factur-X XML file generated for invoice ID %d", self.id)
         logger.debug(xml_byte.decode("utf-8"))
         try:
-            check_facturx_xsd(xml_byte, "factur-x", facturx_level=ns["level"])
+            xml_check_xsd(xml_byte, flavor="factur-x", level=ns["level"])
         except Exception as e:
             raise UserError(str(e))
         return (xml_byte, level)
@@ -890,15 +894,20 @@ class AccountMove(models.Model):
         self.ensure_one()
         assert pdf_content, "Missing pdf_content"
         if self.move_type in ("out_invoice", "out_refund"):
-            facturx_xml_str, level = self.generate_facturx_xml()
+            facturx_xml_bytes, level = self.generate_facturx_xml()
             pdf_metadata = self._prepare_pdf_metadata()
+            lang = (
+                self.partner_id.lang and self.partner_id.lang.replace("_", "-") or None
+            )
             # Generate a new PDF with XML file as attachment
-            pdf_content = generate_facturx_from_binary(
+            pdf_content = generate_from_binary(
                 pdf_content,
-                facturx_xml_str,
+                facturx_xml_bytes,
+                flavor="factur-x",
+                level=level,
                 check_xsd=False,
-                facturx_level=level,
                 pdf_metadata=pdf_metadata,
+                lang=lang,
             )
             logger.info("%s file added to PDF invoice", FACTURX_FILENAME)
         return pdf_content
