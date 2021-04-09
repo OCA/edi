@@ -1,12 +1,14 @@
-# Copyright 2016-2019 Akretion France (http://www.akretion.com/)
-# Copyright 2020 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
+# Copyright 2016-2021 Akretion France (http://www.akretion.com/)
+# Copyright 2020-2021 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.exceptions import UserError
+from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
 
+@tagged("post_install", "-at_install")
 class TestBaseBusinessDocumentImport(TransactionCase):
     def test_match_partner(self):
         partner1 = self.env["res.partner"].create(
@@ -181,6 +183,20 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                 "price_include": False,
                 "amount": 18,
                 "amount_type": "percent",
+                "tax_exigibility": "on_invoice",
+                "unece_type_id": self.env.ref("account_tax_unece.tax_type_vat").id,
+                "unece_categ_id": self.env.ref("account_tax_unece.tax_categ_s").id,
+            }
+        )
+        de_tax_21_onpayment = self.env["account.tax"].create(
+            {
+                "name": "German VAT purchase 18.0%",
+                "description": "DE-VAT-buy-18.0",
+                "type_tax_use": "purchase",
+                "price_include": False,
+                "amount": 18,
+                "amount_type": "percent",
+                "tax_exigibility": "on_payment",
                 "unece_type_id": self.env.ref("account_tax_unece.tax_type_vat").id,
                 "unece_categ_id": self.env.ref("account_tax_unece.tax_categ_s").id,
             }
@@ -193,6 +209,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                 "price_include": True,
                 "amount": 18,
                 "amount_type": "percent",
+                "tax_exigibility": "on_invoice",
                 "unece_type_id": self.env.ref("account_tax_unece.tax_type_vat").id,
                 "unece_categ_id": self.env.ref("account_tax_unece.tax_categ_s").id,
             }
@@ -203,6 +220,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             "amount": 18,
             "unece_type_code": "VAT",
             "unece_categ_code": "S",
+            "unece_due_date_code": "5",
         }
         res = bdio._match_tax(tax_dict, [], type_tax_use="purchase")
         self.assertEqual(res, de_tax_21)
@@ -213,6 +231,10 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEqual(res, de_tax_21_ttc)
         res = bdio._match_taxes([tax_dict], [], type_tax_use="purchase")
         self.assertEqual(res, de_tax_21)
+        res = bdio._match_taxes(
+            [dict(tax_dict, unece_due_date_code=72)], [], type_tax_use="purchase"
+        )
+        self.assertEqual(res, de_tax_21_onpayment)
 
     def test_match_account_exact(self):
         bdio = self.env["business.document.import"]
