@@ -20,6 +20,7 @@ Available addons
 addon | version | summary
 --- | --- | ---
 [base_ubl](base_ubl/) | 14.0.1.0.0 | Base module for Universal Business Language (UBL)
+[sale_order_ubl](sale_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF quotation
 
 [//]: # (end addons)
 
