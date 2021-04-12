@@ -1,27 +1,24 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tools import file_open
-from odoo.addons.purchase_order_import.wizard.order_response_import import (
-    ORDER_RESPONSE_STATUS_ACK,
-    LINE_STATUS_ACCEPTED,
-)
+
 from odoo.addons.purchase_order_import.tests.test_order_response_import import (
     TestOrderResponseImportCommon,
 )
-from ..wizard.order_response_import import (
-    _ORDER_RESPONSE_CODE_TO_STATUS,
-    _ORDER_LINE_STATUS_TO_STATUS,
+from odoo.addons.purchase_order_import.wizard.order_response_import import (
+    LINE_STATUS_ACCEPTED,
+    ORDER_RESPONSE_STATUS_ACK,
 )
 
-_STATUS_TO_RESPONSE_CODE = {
-    p[1]: p[0] for p in _ORDER_RESPONSE_CODE_TO_STATUS.items()
-}
+from ..wizard.order_response_import import (
+    _ORDER_LINE_STATUS_TO_STATUS,
+    _ORDER_RESPONSE_CODE_TO_STATUS,
+)
 
-_STATUS_TO_LINE_STATUS = {
-    p[1]: p[0] for p in _ORDER_LINE_STATUS_TO_STATUS.items()
-}
+_STATUS_TO_RESPONSE_CODE = {p[1]: p[0] for p in _ORDER_RESPONSE_CODE_TO_STATUS.items()}
+
+_STATUS_TO_LINE_STATUS = {p[1]: p[0] for p in _ORDER_LINE_STATUS_TO_STATUS.items()}
 
 
 class TestOrderResponseImport(TestOrderResponseImportCommon):
@@ -45,9 +42,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             All the fields are filled into the internal data structure.
         """
         xml_content = self.order_response_xml.format(
-            order_response_code=_STATUS_TO_RESPONSE_CODE[
-                ORDER_RESPONSE_STATUS_ACK
-            ],
+            order_response_code=_STATUS_TO_RESPONSE_CODE[ORDER_RESPONSE_STATUS_ACK],
             order_id=self.purchase_order.name,
             line_1_id=self.line1.id,
             line_1_qty=self.line1.product_qty,
@@ -58,9 +53,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             line_2_backorder_qty=0,
             line_2_status_code=_STATUS_TO_LINE_STATUS[LINE_STATUS_ACCEPTED],
         )
-        result = self.OrderResponseImport.parse_order_response(
-            xml_content, "test.xml"
-        )
+        result = self.OrderResponseImport.parse_order_response(xml_content, "test.xml")
         attachments = result.pop("attachments")
         self.assertTrue(attachments.get("test.xml"))
         expected = {

@@ -1,20 +1,20 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, models, _
-from odoo.exceptions import UserError
-from odoo.addons.purchase_order_import.wizard.order_response_import import (
-    ORDER_RESPONSE_STATUS_ACK,
-    ORDER_RESPONSE_STATUS_ACCEPTED,
-    ORDER_RESPONSE_STATUS_REJECTED,
-    ORDER_RESPONSE_STATUS_CONDITIONAL,
-    LINE_STATUS_ACCEPTED,
-    LINE_STATUS_REJECTED,
-    LINE_STATUS_AMEND,
-)
-
 import logging
+
+from odoo import _, api, models
+from odoo.exceptions import UserError
+
+from odoo.addons.purchase_order_import.wizard.order_response_import import (
+    LINE_STATUS_ACCEPTED,
+    LINE_STATUS_AMEND,
+    LINE_STATUS_REJECTED,
+    ORDER_RESPONSE_STATUS_ACCEPTED,
+    ORDER_RESPONSE_STATUS_ACK,
+    ORDER_RESPONSE_STATUS_CONDITIONAL,
+    ORDER_RESPONSE_STATUS_REJECTED,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -66,9 +66,7 @@ class OrderResponseImport(models.TransientModel):
         code = code_xpath and len(code_xpath) and code_xpath[0].text
         status = _ORDER_LINE_STATUS_TO_STATUS.get(code)
         if not status:
-            raise UserError(
-                _("Unsupported line status code found '%s'") % code
-            )
+            raise UserError(_("Unsupported line status code found '%s'") % code)
         return status
 
     @api.model
@@ -91,7 +89,7 @@ class OrderResponseImport(models.TransientModel):
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
             "note": self.parse_note_path(note_xpath),
             "status": self.parse_line_status_code(line_item, ns),
-            "backorder_qty": backorder_qty
+            "backorder_qty": backorder_qty,
         }
         return res_line
 
@@ -123,12 +121,8 @@ class OrderResponseImport(models.TransientModel):
         ns = xml_root.nsmap
         main_xmlns = ns.pop(None)
         ns["main"] = main_xmlns
-        date_xpath = xml_root.xpath(
-            "/main:OrderResponse/cbc:IssueDate", namespaces=ns
-        )
-        time_xpath = xml_root.xpath(
-            "/main:OrderResponse/cbc:IssueTime", namespaces=ns
-        )
+        date_xpath = xml_root.xpath("/main:OrderResponse/cbc:IssueDate", namespaces=ns)
+        time_xpath = xml_root.xpath("/main:OrderResponse/cbc:IssueTime", namespaces=ns)
         order_reference_xpath = xml_root.xpath(
             "/main:OrderResponse/cac:OrderReference/cbc:ID", namespaces=ns
         )
@@ -140,9 +134,7 @@ class OrderResponseImport(models.TransientModel):
         if currency_xpath:
             currency_code = currency_xpath[0].text
         else:
-            currency_xpath = xml_root.xpath(
-                "//cbc:LineExtensionAmount", namespaces=ns
-            )
+            currency_xpath = xml_root.xpath("//cbc:LineExtensionAmount", namespaces=ns)
             if currency_xpath:
                 currency_code = currency_xpath[0].attrib.get("currencyID")
         supplier_xpath = xml_root.xpath(
@@ -160,12 +152,8 @@ class OrderResponseImport(models.TransientModel):
         # We only take the "official references" for company_dict
         if company_dict_full.get("vat"):
             company_dict = {"vat": company_dict_full["vat"]}
-        note_xpath = xml_root.xpath(
-            "/main:OrderResponse/cbc:Note", namespaces=ns
-        )
-        lines_xpath = xml_root.xpath(
-            "/main:OrderResponse/cac:OrderLine", namespaces=ns
-        )
+        note_xpath = xml_root.xpath("/main:OrderResponse/cbc:Note", namespaces=ns)
+        lines_xpath = xml_root.xpath("/main:OrderResponse/cac:OrderLine", namespaces=ns)
         res_lines = []
         for line in lines_xpath:
             res_lines.append(self.parse_ubl_order_response_line(line, ns))
