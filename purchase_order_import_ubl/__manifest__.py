@@ -3,7 +3,7 @@
 
 {
     "name": "Quotation Order UBL Import",
-    "version": "10.0.2.0.2",
+    "version": "14.0.1.0.0",
     "category": "Purchase Management",
     "license": "AGPL-3",
     "summary": "Import UBL XML quotation files",

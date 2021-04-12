@@ -8,12 +8,12 @@
   <cbc:ID>PO07337</cbc:ID>
   <cbc:IssueDate>2020-02-04</cbc:IssueDate>
   <cbc:IssueTime>22:10:30</cbc:IssueTime>
-  <cbc:OrderResponseCode>{order_response_code}</cbc:OrderResponseCode>
+  <cbc:OrderResponseCode>%(order_response_code)s</cbc:OrderResponseCode>
   <cbc:Note>Note1</cbc:Note>
   <cbc:Note>Note2</cbc:Note>
   <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
   <cac:OrderReference>
-        <cbc:ID>{order_id}</cbc:ID>
+        <cbc:ID>%(order_id)s</cbc:ID>
   </cac:OrderReference>
   <cac:SellerSupplierParty>
     <cbc:CustomerAssignedAccountID>79201</cbc:CustomerAssignedAccountID>
@@ -101,13 +101,13 @@
   </cac:BuyerCustomerParty>
   <cac:OrderLine>
     <cac:LineItem>
-      <cbc:ID>{line_1_id}</cbc:ID>
+      <cbc:ID>%(line_1_id)s</cbc:ID>
       <cbc:Note>line_1 Note1</cbc:Note>
       <cbc:Note>line_1 Note2</cbc:Note>
-      <cbc:Quantity unitCode="C62">{line_1_qty}</cbc:Quantity>
+      <cbc:Quantity unitCode="C62">%(line_1_qty)s</cbc:Quantity>
       <cbc:MaximumBackorderQuantity
-            >{line_1_backorder_qty}</cbc:MaximumBackorderQuantity>
-      <cbc:LineStatusCode>{line_1_status_code}</cbc:LineStatusCode>
+            >%(line_1_backorder_qty)s</cbc:MaximumBackorderQuantity>
+      <cbc:LineStatusCode>%(line_1_status_code)s</cbc:LineStatusCode>
       <cbc:LineExtensionAmount currencyID="EUR">228.2</cbc:LineExtensionAmount>
       <cac:Price>
         <cbc:PriceAmount currencyID="EUR">45.64</cbc:PriceAmount>
@@ -125,13 +125,13 @@
   </cac:OrderLine>
   <cac:OrderLine>
     <cac:LineItem>
-      <cbc:ID>{line_2_id}</cbc:ID>
+      <cbc:ID>%(line_2_id)s</cbc:ID>
       <cbc:Note>line_2 Note1</cbc:Note>
       <cbc:Note>line_2 Note2</cbc:Note>
-      <cbc:Quantity unitCode="C62">{line_2_qty}</cbc:Quantity>
+      <cbc:Quantity unitCode="C62">%(line_2_qty)s</cbc:Quantity>
       <cbc:MaximumBackorderQuantity
-            >{line_2_backorder_qty}</cbc:MaximumBackorderQuantity>
-      <cbc:LineStatusCode>{line_2_status_code}</cbc:LineStatusCode>
+            >%(line_2_backorder_qty)s</cbc:MaximumBackorderQuantity>
+      <cbc:LineStatusCode>%(line_2_status_code)s</cbc:LineStatusCode>
       <cbc:LineExtensionAmount currencyID="EUR">1117.07</cbc:LineExtensionAmount>
       <cac:Price>
         <cbc:PriceAmount currencyID="EUR">65.71</cbc:PriceAmount>

@@ -41,18 +41,24 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
         Expected result:
             All the fields are filled into the internal data structure.
         """
-        xml_content = self.order_response_xml.format(
-            order_response_code=_STATUS_TO_RESPONSE_CODE[ORDER_RESPONSE_STATUS_ACK],
-            order_id=self.purchase_order.name,
-            line_1_id=self.line1.id,
-            line_1_qty=self.line1.product_qty,
-            line_1_backorder_qty=0,
-            line_1_status_code=_STATUS_TO_LINE_STATUS[LINE_STATUS_ACCEPTED],
-            line_2_id=self.line2.id,
-            line_2_qty=self.line2.product_qty,
-            line_2_backorder_qty=0,
-            line_2_status_code=_STATUS_TO_LINE_STATUS[LINE_STATUS_ACCEPTED],
-        )
+        xml_content = self.order_response_xml % {
+            b"order_response_code": _STATUS_TO_RESPONSE_CODE[
+                ORDER_RESPONSE_STATUS_ACK
+            ].encode("utf8"),
+            b"order_id": self.purchase_order.name.encode("utf8"),
+            b"line_1_id": str(self.line1.id).encode("utf8"),
+            b"line_1_qty": str(self.line1.product_qty).encode("utf8"),
+            b"line_1_backorder_qty": b"0",
+            b"line_1_status_code": _STATUS_TO_LINE_STATUS[LINE_STATUS_ACCEPTED].encode(
+                "utf8"
+            ),
+            b"line_2_id": str(self.line2.id).encode("utf8"),
+            b"line_2_qty": str(self.line2.product_qty).encode("utf8"),
+            b"line_2_backorder_qty": b"0",
+            b"line_2_status_code": _STATUS_TO_LINE_STATUS[LINE_STATUS_ACCEPTED].encode(
+                "utf8"
+            ),
+        }
         result = self.OrderResponseImport.parse_order_response(xml_content, "test.xml")
         attachments = result.pop("attachments")
         self.assertTrue(attachments.get("test.xml"))

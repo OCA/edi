@@ -9,14 +9,18 @@ from odoo.tools import file_open
 
 class TestUblOrderImport(TransactionCase):
     def test_ubl_order_import(self):
+        # Modify partner of used purchase order
+        self.env.ref("purchase.purchase_order_4").write(
+            {"partner_id": self.env.ref("purchase_order_import_ubl.deltapc").id}
+        )
         tests = {
             "quote-PO00004.pdf": {
                 "po_to_update": self.env.ref("purchase.purchase_order_4"),
-                "incoterm": self.env.ref("stock.incoterm_DDU"),
+                "incoterm": self.env.ref("purchase_order_import_ubl.incoterm_DDU"),
             },
         }
         poio = self.env["purchase.order.import"]
-        for filename, res in tests.iteritems():
+        for filename, res in tests.items():
             po = res["po_to_update"]
 
             f = file_open("purchase_order_import_ubl/tests/files/" + filename, "rb")

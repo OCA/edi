@@ -5,8 +5,8 @@
 <record id="johnssons" model="res.partner">
     <field name="name">Johnssons byggvaror</field>
     <field name="is_company" eval="True" />
-    <field name="supplier" eval="False" />
-    <field name="customer" eval="True" />
+    <field name="customer_rank">1</field>
+    <field name="supplier_rank">0</field>
     <field name="email" />
     <field name="street">5 Rådhusgatan</field>
     <field name="street2">PoBox123</field>
@@ -21,7 +21,7 @@
     <field name="name">Pelle Svensson</field>
     <field name="function">Boss</field>
     <field name="email">pelle@johnsson.se</field>
-    <field name="customer" eval="True" />
+    <field name="customer_rank">1</field>
     <field name="type">contact</field>
     <field name="property_purchase_currency_id" ref="base.SEK" />
 </record>
@@ -29,8 +29,8 @@
 <record id="swedish_trucking" model="res.partner">
     <field name="name">Swedish trucking</field>
     <field name="is_company" eval="True" />
-    <field name="supplier" eval="False" />
-    <field name="customer" eval="False" />
+    <field name="customer_rank">0</field>
+    <field name="supplier_rank">0</field>
     <field name="email">bill@svetruck.se</field>
     <field name="street">5 Rådhusgatan</field>
     <field name="street2">2nd floor</field>
@@ -43,8 +43,8 @@
 <record id="iyt" model="res.partner">
     <field name="name">IYT Corporation</field>
     <field name="is_company" eval="True" />
-    <field name="supplier" eval="False" />
-    <field name="customer" eval="True" />
+    <field name="customer_rank">1</field>
+    <field name="supplier_rank">0</field>
     <field name="email" />
     <field name="street">56A Avon Way</field>
     <field name="street2">Thereabouts</field>
@@ -58,7 +58,7 @@
     <field name="parent_id" ref="iyt" />
     <field name="name">Fred Churchill</field>
     <field name="email">fred@iytcorporation.gov.uk</field>
-    <field name="customer" eval="True" />
+    <field name="customer_rank">1</field>
     <field name="type">contact</field>
 </record>
 
@@ -66,8 +66,8 @@
 <record id="terminus" model="res.partner">
     <field name="name">The Terminus</field>
     <field name="is_company" eval="True" />
-    <field name="supplier" eval="False" />
-    <field name="customer" eval="True" />
+    <field name="customer_rank">1</field>
+    <field name="supplier_rank">0</field>
     <field name="email" />
     <field name="street">56A Avon Way</field>
     <field name="street2">Thereabouts</field>
@@ -80,7 +80,7 @@
     <field name="parent_id" ref="terminus" />
     <field name="name">S Massiah</field>
     <field name="email">smassiah@the-email.co.uk</field>
-    <field name="customer" eval="True" />
+    <field name="customer_rank">1</field>
     <field name="type">contact</field>
 </record>
 
@@ -89,8 +89,8 @@
 <record id="gentofte_kommune" model="res.partner">
     <field name="name">Gentofte Kommune</field>
     <field name="is_company" eval="True" />
-    <field name="supplier" eval="False" />
-    <field name="customer" eval="True" />
+    <field name="customer_rank">1</field>
+    <field name="supplier_rank">0</field>
     <field name="email" />
     <field name="street">161 Bernstorffsvej</field>
     <field name="zip">2920</field>
@@ -102,9 +102,32 @@
 <record id="delivery_gentofte_kommune" model="res.partner">
     <field name="parent_id" ref="gentofte_kommune" />
     <field name="name">Joe Delivery</field>
-    <field name="customer" eval="True" />
+    <field name="customer_rank">1</field>
     <field name="type">contact</field>
 </record>
 
+<record id="deltapc" model="res.partner">
+    <field name="name">Delta PC</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="email">info@yourcompany.example.com</field>
+    <field name="country_id" ref="base.us" />
+    <field name="property_purchase_currency_id" ref="base.USD" />
+</record>
+
+<record id="incoterm_DDU" model="account.incoterms">
+    <field name="code">DDU</field>
+    <field name="name">DELIVERED DUTY UNPAID</field>
+</record>
+
+<record id="PROD_DEL02" model="product.product">
+    <field name="default_code">PROD_DEL02</field>
+    <field name="name">PROD_DEL02</field>
+</record>
+
+<record id="PROD_MBi9" model="product.product">
+    <field name="default_code">MBi9</field>
+    <field name="name">MBi9</field>
+</record>
 
 </odoo>
