@@ -167,7 +167,8 @@ class OrderResponseImport(models.TransientModel):
         parsed_order_document = self.parse_order_response(
             self.document.decode("base64"), self.filename
         )
-        self.process_data(parsed_order_document)
+        # returned value contains res_id which allows to make post treatment
+        return self.process_data(parsed_order_document)
 
     @api.model
     def process_data(self, parsed_order_document):
@@ -285,10 +286,11 @@ class OrderResponseImport(models.TransientModel):
                 )
             )
             return
-        self._process_conditional_with_or_without_moves(purchase_order, lines)
+        self._process_conditional_with_or_without_moves(purchase_order, lines, parsed_order_document)
 
     @api.model
-    def _process_conditional_with_or_without_moves(self, purchase_order, lines):
+    def _process_conditional_with_or_without_moves(
+            self, purchase_order, lines, parsed_order_document):
         """This workflow allow us to apply changes from order response to stock.move
            Alternate workflow could be to apply it to  purchase.order.line.
            Only the first workflow is applied here
