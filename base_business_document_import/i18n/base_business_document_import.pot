@@ -119,31 +119,32 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any account corresponding to the following information "
-"extracted from the business document: Account code: %s"
+"Odoo couldn't find any account corresponding to the following information extracted from the business document:\n"
+"Account code: %s"
 msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any analytic account corresponding to the following "
-"information extracted from the business document: Analytic account code: %s"
+"Odoo couldn't find any analytic account corresponding to the following information extracted from the business document:\n"
+"Analytic account code: %s"
 msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any journal corresponding to the following information "
-"extracted from the business document: Journal code: %s"
+"Odoo couldn't find any journal corresponding to the following information extracted from the business document:\n"
+"Journal code: %s"
 msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any product corresponding to the following information extracted from the business document: Barcode: %s\n"
+"Odoo couldn't find any product corresponding to the following information extracted from the business document:\n"
+"Barcode: %s\n"
 "Product code: %s\n"
 "Supplier: %s\n"
 msgstr ""
@@ -173,6 +174,7 @@ msgid ""
 "Odoo couldn't find any tax with 'Tax Application' = '%s' and 'Tax Included in Price' = '%s' which correspond to the following information extracted from the business document:\n"
 "UNECE Tax Type code: %s\n"
 "UNECE Tax Category code: %s\n"
+"UNECE Due Date code: %s\n"
 "Tax amount: %s %s"
 msgstr ""
 
