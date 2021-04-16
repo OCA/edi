@@ -15,6 +15,5 @@ class GS1InputShipmentMessageMixin(AbstractComponent):
     ]
 
     def _process_data(self, data):
-        import pdb
-
-        pdb.set_trace()
+        # TODO
+        pass
