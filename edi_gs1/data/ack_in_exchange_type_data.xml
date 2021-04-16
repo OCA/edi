@@ -10,7 +10,7 @@
             we assume that we can rely on the original file name (of the parent record)
             and a suffix ".ack".
          -->
-        <field name="exchange_filename_pattern"></field>
+        <field name="exchange_filename_pattern" />
         <field name="exchange_file_ext">xml</field>
         <field name="advanced_settings_edit">
           components:

@@ -10,6 +10,7 @@
     "version": "13.0.1.0.0",
     "license": "AGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
+    "website": "https://github.com/OCA/edi",
     "depends": [
         "edi_gs1",
         "stock",

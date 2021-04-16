@@ -9,6 +9,7 @@
     "version": "13.0.1.0.0",
     "development_status": "Alpha",
     "license": "AGPL-3",
+    "website": "https://github.com/OCA/edi",
     "author": "ACSONE,Odoo Community Association (OCA)",
     "depends": ["component", "edi_exchange_template", "edi_xml", "uom"],
     "external_dependencies": {"python": ["xmlschema"]},
