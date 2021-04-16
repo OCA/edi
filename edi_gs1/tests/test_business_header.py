@@ -54,8 +54,8 @@ class BusinessHeaderTestCase(BaseTestCase):
 
     @freeze_time("2020-07-08 07:30:00")
     def test_xml(self):
-        output = self.bh_tmpl.generate_output(
-            self.exc_record, sender=self.lsc_partner, receiver=self.lsp_partner,
+        output = self.bh_tmpl.exchange_generate(
+            self.exc_record, sender=self.lsc_partner, receiver=self.lsp_partner
         )
         expected = """
             <sh:StandardBusinessDocumentHeader xmlns:sh="{ns}">
