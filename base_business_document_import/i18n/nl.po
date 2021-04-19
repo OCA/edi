@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2021-04-17 19:46+0000\n"
+"PO-Revision-Date: 2021-04-19 20:46+0000\n"
 "Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
 "Language-Team: none\n"
 "Language: nl\n"
@@ -44,12 +44,16 @@ msgid ""
 "measure 'Unit(s)' has been used. <em>You may have to change it "
 "manually.</em></p>"
 msgstr ""
+"<p>Er kon geen eenheid gevonden worden welke overeenkomt met de volgende "
+"informatie verkregen uit het bedrijfsdocument:</p><ul><li>UNECE code: "
+"%s</li><li>Eenheidsnaam: %s</li></ul><p>dus de 'Unit(s)' eenheid is "
+"gebruikt. <em>Wellicht wilt u dit handmatig wijzigen.</em></p>"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "Approximate match: account %s has been matched with account %s"
-msgstr ""
+msgstr "Geschatte overeenkomt: rekening %s is gematched met rekening %s"
 
 #. module: base_business_document_import
 #: model:ir.model,name:base_business_document_import.model_business_document_import
@@ -246,6 +250,8 @@ msgid ""
 "The %s has been identified by the domain name '%s' so please check carefully"
 " that the %s is correct."
 msgstr ""
+"Het %s is geidentificeerd op de domeinnaam '%s' controleer zorgvuldig daat "
+"de %s juist is."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -255,6 +261,9 @@ msgid ""
 " match the VAT number of the company '%s' (%s) in which you are trying to "
 "import this document."
 msgstr ""
+"Het BTW nummer van de klant in het bedrijfsdocument (%s) komt niet overeen "
+"met het BTW nummer van het bedrijf '%s' (%s) waarvoor je een document "
+"probeert te importeren."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -263,6 +272,8 @@ msgid ""
 "The analysis of the business document returned '%s' as country code. But "
 "there are no country with that code in Odoo."
 msgstr ""
+"De analyse van het bedrijfsdocument leverde landcode '%s' op. Deze landcode "
+"is niet bekend in het systeem."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -272,6 +283,9 @@ msgid ""
 "find the related currency. But the country '%s' doesn't have any related "
 "currency configured in Odoo."
 msgstr ""
+"De analyse van het bedrijfsdocument leverde '%s' op als de landcode om de "
+"bijbehorende valuta te vinden. Maar voor het land '%s' zijn geen "
+"bijbehorende valuta's geconfigureerd."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -280,6 +294,9 @@ msgid ""
 "The analysis of the business document returned '%s' as the country code to "
 "find the related currency. But there is no country with that code in Odoo."
 msgstr ""
+"De analyse van het bedrijfsdocument leverde '%s' op als de landcode om de "
+"bijbehorende valuta te vinden. Maar deze landcode is niet bekend in het "
+"systeem."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -288,6 +305,8 @@ msgid ""
 "The analysis of the business document returned '%s' as the currency ISO "
 "code. But there are no currency with that code in Odoo."
 msgstr ""
+"De analyse van het bedrijfsdocument leverde '%s' op als de valuta ISO code. "
+"Er is geen valuta met deze code bekend in het systeem."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -297,6 +316,9 @@ msgid ""
 "or ISO code. But there are none or several currencies with the symbol/ISO "
 "code in Odoo."
 msgstr ""
+"De analyse van het bedrijfsdocument leverde '%s' op als het valuta symbool "
+"of ISO code. Er zijn geen of meerdere valuta met dit symbool/code bekend in "
+"het systeem."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -305,6 +327,8 @@ msgid ""
 "The analysis of the business document returned '%s' as the currency symbol. "
 "But there are none or several currencies with that symbol in Odoo."
 msgstr ""
+"De analyse van het bedrijfsdocument leverde '%s' op als de valutateken. Er "
+"zijn geen of meerdre valutas met dat valutateken in het systeem."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -314,6 +338,9 @@ msgid ""
 "UNECE code, but there is no unit of measure with that UNECE code in Odoo. "
 "Please check the configuration of the units of measures in Odoo."
 msgstr ""
+"De analyse van het bedrijfsdocument leverde '%s' als eenheids UNECE code, "
+"maar er is geen eenheid met die UNECE code in het systeem. Controleer de "
+"eenheidsinstellingen."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -324,6 +351,11 @@ msgid ""
 "href=# data-oe-model=res.partner data-oe-id=%d>%s</a> and the option to "
 "automatically create bank accounts upon import is disabled."
 msgstr ""
+"De analyse van het bedrijfsdocument leverde <b>IBAN %s</b> op als "
+"bankrekening, maar het bankrekeningnummer is niet toegewezen aan relatie  <a "
+"href=# data-oe-model=res.partner data-oe-id=%d>%s</a> en de mogelijkheid om "
+"automatisch bankrekeningen aan te maken tijdens de import van "
+"bedrijfsdocumenten is uitgeschakeld."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -342,6 +374,8 @@ msgid ""
 "The existing line '%s' doesn't have any product, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"De bestaande regel '%s' heeft geen product, dus <b>de regel is niet "
+"bijgewerkt</b>."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -350,6 +384,8 @@ msgid ""
 "The product '%s' is used on several existing lines, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"Het product '%s' is gebruikt op meerdere bestaande regels, dus <b>de regels "
+"zijn niet bijgewerkt</b>."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -358,6 +394,8 @@ msgid ""
 "The product '%s' is used on several imported lines, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"Het product '%s' is gebruikt op meerdere geimporteerde regels, dus <b>de "
+"regels zijn niet bijgewerkt</b>."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
