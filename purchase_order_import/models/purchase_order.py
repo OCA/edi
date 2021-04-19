@@ -15,4 +15,5 @@ class PurchaseOrder(models.Model):
         "This field is filled by Odoo when processing a "
         "OrderResponse document.",
         index=True,
+        copy=False
     )
