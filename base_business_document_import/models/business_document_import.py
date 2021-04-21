@@ -253,9 +253,7 @@ class BusinessDocumentImport(models.AbstractModel):
         )
 
     @api.model
-    def _hook_match_partner(
-        self, partner_dict, chatter_msg, domain, partner_type_label
-    ):
+    def _hook_match_partner(self, partner_dict, chatter_msg, domain, order):
         return False
 
     @api.model
