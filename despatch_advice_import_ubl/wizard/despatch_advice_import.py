@@ -80,11 +80,15 @@ class DespatchAdviceImport(models.TransientModel):
         backorder_qty = None
         if backorder_qty_xpath and len(backorder_qty_xpath):
             backorder_qty = float(backorder_qty_xpath[0].text)
-
+        else:
+            backorder_qty = 0
         product_ref_xpath = line.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns
         )
 
+        product_lot_xpath = line.xpath(
+            "cac:Item/cac:ItemInstance/cac:LotIdentification/cbc:LotNumberID", namespaces=ns
+        )
         order_reference_xpath = line.xpath(
             "cac:OrderLineReference/cac:OrderReference/cbc:ID", namespaces=ns
         )
@@ -100,6 +104,7 @@ class DespatchAdviceImport(models.TransientModel):
             "ref": order_reference_xpath[0].text if order_reference_xpath else '',
             "qty": qty,
             "product_ref": product_ref_xpath[0].text,
+            "product_lot": product_lot_xpath[0].text if product_lot_xpath else '',
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
             "backorder_qty": backorder_qty,
         }
