@@ -138,7 +138,20 @@ class DespatchAdviceImport(models.TransientModel):
         po_name = parsed_order_document.get("ref")
 
         lines_doc = parsed_order_document.get("lines")
-        lines_by_id = {int(line["order_line_id"]): line for line in lines_doc}
+
+        lines_by_id = {}
+        for line in lines_doc:
+            if lines_by_id.has_key(int(line["order_line_id"])):
+                lines_by_id[int(line["order_line_id"])]["qty"] += line["qty"]
+                lines_by_id[int(line["order_line_id"])]["backorder_qty"] += line["backorder_qty"]
+                lines_by_id[int(line["order_line_id"])]["product_lot"].append(line["product_lot"])
+                lines_by_id[int(line["order_line_id"])]["product_lot"] = list(set(lines_by_id[int(line["order_line_id"])]["product_lot"]))
+                lines_by_id[int(line["order_line_id"])]["uom"]["unece_code"].append(line["uom"]["unece_code"])
+                lines_by_id[int(line["order_line_id"])]["uom"]["unece_code"] = list(set(lines_by_id[int(line["order_line_id"])]["uom"]["unece_code"]))
+            else:
+                lines_by_id[int(line["order_line_id"])] = line
+                lines_by_id[int(line["order_line_id"])]["product_lot"] = [lines_by_id[int(line["order_line_id"])]["product_lot"]]
+                lines_by_id[int(line["order_line_id"])]["uom"]["unece_code"] = [lines_by_id[int(line["order_line_id"])]["uom"]["unece_code"]]
 
         lines = self.env["purchase.order.line"].browse(lines_by_id.keys())
 
