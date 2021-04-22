@@ -282,7 +282,7 @@ class AccountInvoiceImport(models.TransientModel):
             self.set_1line_price_unit_and_quantity(il_vals, parsed_inv)
             self.set_1line_start_end_dates(il_vals, parsed_inv)
             vals['invoice_line_ids'].append((0, 0, il_vals))
-            vals['check_total'] = parsed_inv['check_total']
+            vals['check_total'] = parsed_inv.get('check_total')
         elif config['invoice_line_method'].startswith('nline'):
             if not parsed_inv.get('lines'):
                 raise UserError(_(
