@@ -202,6 +202,7 @@ class DespatchAdviceImport(models.TransientModel):
             _("Delivery confirmed by the supplier.")
         )
         stock_moves.action_confirm()
+        stock_moves.action_assign()
 
     @api.model
     def _process_conditional(self, moves, parsed_order_document, line):
