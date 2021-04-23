@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2020-12-14 00:28+0000\n"
+"PO-Revision-Date: 2021-04-23 20:47+0000\n"
 "Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
 "Language-Team: none\n"
 "Language: nl\n"
@@ -46,11 +46,15 @@ msgid ""
 " to be compliant with the e-fff standard used in Belgium, you should "
 "activate this option."
 msgstr ""
+"Indien actief, zal het UBL factuur XML-bestand de PDF van de factuur in "
+"base64 onder de kop 'AdditionalDocumentReference' bevatten. Om bijvoorbeeld "
+"te voldoen aan de e-fff-norm die in BelgiÃ« wordt gebruikt, moet u deze "
+"optie activeren."
 
 #. module: account_invoice_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_account_config_settings
 msgid "Include the PDF of the invoice in the standalone UBL Invoice XML file."
-msgstr ""
+msgstr "Voeg de PDF van de factuur toe aan het losse UBL Invoice XML-bestand."
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_account_move
