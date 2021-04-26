@@ -17,7 +17,7 @@ except ImportError:
 
 class OvhApiCredentials(models.TransientModel):
     _name = 'ovh.api.credentials'
-    _generate = 'Generate OVH API credentials'
+    _description = 'Generate OVH API credentials'
 
     download_config_id = fields.Many2one(
         'account.invoice.download.config', string="Download Config",
