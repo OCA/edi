@@ -102,6 +102,11 @@ msgid "Generate OVH API Credentials"
 msgstr ""
 
 #. module: account_invoice_download_ovh
+#: model:ir.model,name:account_invoice_download_ovh.model_ovh_api_credentials
+msgid "Generate OVH API credentials"
+msgstr ""
+
+#. module: account_invoice_download_ovh
 #: code:addons/account_invoice_download_ovh/wizard/ovh_api_credentials.py:111
 #, python-format
 msgid "Go to the Validation URL, enter the required information and validate, then check the option to attest that you did it."
@@ -400,11 +405,6 @@ msgstr ""
 #: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_telephony_options_product_product_template
 #: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_telephony_product_product_template
 msgid "kg"
-msgstr ""
-
-#. module: account_invoice_download_ovh
-#: model:ir.model,name:account_invoice_download_ovh.model_ovh_api_credentials
-msgid "ovh.api.credentials"
 msgstr ""
 
 #. module: account_invoice_download_ovh
