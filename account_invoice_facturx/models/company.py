@@ -64,3 +64,48 @@ class ResCompany(models.Model):
                     facturx_logo = base64.b64encode(f_binary)
 
             company.facturx_logo = facturx_logo
+
+    # Code in account_tax_unece in v14.0
+    def _get_tax_unece_speeddict(self):
+        self.ensure_one()
+        res = {}
+        tax_obj = self.env["account.tax"]
+        all_taxes = tax_obj.with_context(active_test=False).search_read(
+            [("company_id", "=", self.id)],
+            [
+                "unece_type_code",
+                "unece_categ_code",
+                "unece_due_date_code",
+                "amount",
+                "amount_type",
+                "name",
+                "display_name",
+            ],
+        )
+        for tax in all_taxes:
+            res[tax["id"]] = {
+                "unece_type_code": tax["unece_type_code"] or None,
+                "unece_categ_code": tax["unece_categ_code"] or None,
+                "unece_due_date_code": tax["unece_due_date_code"] or None,
+                "amount_type": tax["amount_type"],
+                "amount": tax["amount"],
+                "name": tax["name"],
+                "display_name": tax["display_name"],
+            }
+        return res
+
+    # Code in account_tax_unece in v14.0
+    def _get_fiscal_position_speeddict(self, lang):
+        self.ensure_one()
+        res = {}
+        fp_obj = self.env["account.fiscal.position"]
+        fpositions = fp_obj.with_context(lang=lang, active_test=False).search_read(
+            [("company_id", "=", self.id)], ["name", "display_name", "note"]
+        )
+        for fp in fpositions:
+            res[fp["id"]] = {
+                "name": fp["name"],
+                "display_name": fp["display_name"],
+                "note": fp["note"],  # supposed to store the exemption reason
+            }
+        return res
