@@ -108,13 +108,11 @@ msgstr ""
 
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr ""
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_move.py:0
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
