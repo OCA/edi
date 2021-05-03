@@ -4,8 +4,8 @@
 
 import logging
 
-from openerp import api, models
-from openerp.tools.misc import file_open
+from odoo import api, models
+from odoo.tools.misc import file_open
 
 logger = logging.getLogger(__name__)
 

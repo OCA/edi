@@ -6,8 +6,8 @@ import logging
 from collections import defaultdict, OrderedDict
 
 from lxml import etree
-from openerp import _, api, fields, models
-from openerp.exceptions import Warning as UserError
+from odoo import _, api, fields, models
+from odoo.exceptions import Warning as UserError
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +39,10 @@ class InventoryUblImport(models.TransientModel):
             raise UserError(_("This XML file is not XML-compliant"))
         if logger.isEnabledFor(logging.DEBUG):
             pretty_xml_string = etree.tostring(
-                xml_root, pretty_print=True, encoding="UTF-8", xml_declaration=True,
+                xml_root,
+                pretty_print=True,
+                encoding="UTF-8",
+                xml_declaration=True,
             )
             logger.debug("Starting to import the following XML file:")
             logger.debug(pretty_xml_string)
@@ -112,11 +115,11 @@ class InventoryUblImport(models.TransientModel):
 
     @api.model
     def process_data(self, parsed_document):
-        """ Tasks:
-            - guess supplier/seller
-            - guess customer/buyer for multicompany context (not implemented in v8)
-            - retrieve relative data with product.supplierinfo and product.product
-            - write stock by on supplierinfo and/or product.product
+        """Tasks:
+        - guess supplier/seller
+        - guess customer/buyer for multicompany context (not implemented in v8)
+        - retrieve relative data with product.supplierinfo and product.product
+        - write stock by on supplierinfo and/or product.product
         """
         logger.debug(parsed_document)
         feedback = {}
@@ -129,9 +132,9 @@ class InventoryUblImport(models.TransientModel):
 
         # extract stock from provided data in file
         def _populate_stock_by_code(prd_lines, key):
-            """ Some products may appear several times in report
-                because of different lot or location
-                then we sum quantities
+            """Some products may appear several times in report
+            because of different lot or location
+            then we sum quantities
             """
             stk = defaultdict(float)
             for line in prd_lines:
@@ -177,11 +180,11 @@ class InventoryUblImport(models.TransientModel):
         return feedback
 
     def _get_supplier_product_data_with_query(self, supplier, stock_by):
-        """ supplier: record
-            stock_by: dict, example:
-                {'sup_code': {'BLA': 7.0, 'MYCD': 15.0},
-                 'def_code': {'CD': 15.0, 'BRA': 7.0}
-                 'bardode': {...} }
+        """supplier: record
+        stock_by: dict, example:
+            {'sup_code': {'BLA': 7.0, 'MYCD': 15.0},
+             'def_code': {'CD': 15.0, 'BRA': 7.0}
+             'bardode': {...} }
         """
         sql_field_names = {
             "def_code": "pp.default_code",
@@ -301,6 +304,7 @@ class InventoryUblImport(models.TransientModel):
                     ]
                 )
             return prds
+
         # Update products
         products = _find_product(prd_by_def_code, "def_code")
         products |= _find_product(prd_by_barcode, "barcode")
@@ -312,8 +316,7 @@ class InventoryUblImport(models.TransientModel):
     def _extract_data_and_update_supplierinfo(
         self, data, stock_by, supplier, inventory_date
     ):
-        """ see _extract_data_and_update_product() docstring
-        """
+        """see _extract_data_and_update_product() docstring"""
         sinfo_by_sup_code = defaultdict(list)
         stock_by_tmpl = {}
         for row in data:
@@ -364,8 +367,8 @@ class InventoryUblImport(models.TransientModel):
         return supplierinfo_ids
 
     def _get_unknown_supplier_codes(self, supplier, stock_by):
-        """ Some products may not have been found in Odoo
-            We must provides on relative codes
+        """Some products may not have been found in Odoo
+        We must provides on relative codes
         """
         # example {'sup_code': {'UN': 7.0, 'MYCD': 15.0, 'BIN4U': 10.0}, }
         codes = list(set(stock_by["sup_code"].keys()))
@@ -379,8 +382,8 @@ class InventoryUblImport(models.TransientModel):
         return list(set(codes) - set(erp_supplier_codes))
 
     def _process_feedback(self, feedback):
-        """ Process here are generics: you may behavior by
-            customizing set_feedback_records() method
+        """Process here are generics: you may behavior by
+        customizing set_feedback_records() method
         """
         records = self.set_feedback_records(feedback)
         if feedback.get("unmatch_codes"):
@@ -392,8 +395,8 @@ class InventoryUblImport(models.TransientModel):
             )
 
     def set_feedback_records(self, feedback):
-        """ Inherit to provide feedback to concerned users
-            with the mean you choose
+        """Inherit to provide feedback to concerned users
+        with the mean you choose
         """
         return {
             "unmatch_codes": self.env["res.partner"].browse(feedback["supplier"]),
