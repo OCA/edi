@@ -38,7 +38,7 @@
                     </group>
                     <group
                         name="advanced_settings"
-                        groups="edi.group_edi_advanced_settings_manager"
+                        groups="edi_oca.group_edi_advanced_settings_manager"
                     >
                         <field name="advanced_settings_edit" widget="ace" />
                         <field name="model_ids" widget="many2many_tags" />

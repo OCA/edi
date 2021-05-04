@@ -114,7 +114,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
             self.exchange_type_new.id
         )
         self.assertNotEqual(action["res_model"], "edi.exchange.record")
-        self.assertEqual(action["res_model"], "edi.exchange.record.create")
+        self.assertEqual(action["res_model"], "edi.exchange.record.create.wiz")
         wizard = (
             self.env[action["res_model"]]
             .with_context(**action["context"])
