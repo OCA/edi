@@ -15,8 +15,7 @@ from odoo.addons.base_sparse_field.models.fields import Serialized
 
 
 class EDIExchangeConsumerMixin(models.AbstractModel):
-    """Record that might have related EDI Exchange records
-    """
+    """Record that might have related EDI Exchange records"""
 
     _name = "edi.exchange.consumer.mixin"
     _description = "Abstract record where exchange records can be assigned"
@@ -28,7 +27,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     )
     exchange_record_count = fields.Integer(compute="_compute_exchange_record_count")
     expected_edi_configuration = Serialized(
-        compute="_compute_expected_edi_configuration", default={},
+        compute="_compute_expected_edi_configuration",
+        default={},
     )
     has_expected_edi_configuration = fields.Boolean(
         compute="_compute_expected_edi_configuration"
@@ -64,8 +64,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return result
 
     def _get_eval_context(self):
-        """ Prepare the context used when evaluating python code
-            :returns: dict -- evaluation context given to safe_eval
+        """Prepare the context used when evaluating python code
+        :returns: dict -- evaluation context given to safe_eval
         """
         return {
             "datetime": datetime,
@@ -89,7 +89,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 if hasattr(self, "_edi_generate_group"):
                     group = self._edi_generate_group
                 str_element = self.env["ir.qweb"].render(
-                    "edi.edi_exchange_consumer_mixin_buttons", {"group": group},
+                    "edi.edi_exchange_consumer_mixin_buttons",
+                    {"group": group},
                 )
                 node.addprevious(etree.fromstring(str_element))
             View = self.env["ir.ui.view"]
