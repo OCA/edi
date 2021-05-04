@@ -33,12 +33,14 @@ class EDIBackendTestCase(EDIBackendCommonTestCase):
         record = self.backend.create_record("test_csv_input", vals)
         candidates = self.backend._get_component_usage_candidates(record, "process")
         self.assertEqual(
-            candidates, ["input.process"],
+            candidates,
+            ["input.process"],
         )
         record = self.backend.create_record("test_csv_output", vals)
         candidates = self.backend._get_component_usage_candidates(record, "generate")
         self.assertEqual(
-            candidates, ["output.generate"],
+            candidates,
+            ["output.generate"],
         )
         # set advanced settings on type
         settings = """
@@ -51,9 +53,11 @@ class EDIBackendTestCase(EDIBackendCommonTestCase):
         record.type_id.advanced_settings_edit = settings
         candidates = self.backend._get_component_usage_candidates(record, "generate")
         self.assertEqual(
-            candidates, ["my.special.generate", "output.generate"],
+            candidates,
+            ["my.special.generate", "output.generate"],
         )
         candidates = self.backend._get_component_usage_candidates(record, "send")
         self.assertEqual(
-            candidates, ["my.special.send", "output.send"],
+            candidates,
+            ["my.special.send", "output.send"],
         )

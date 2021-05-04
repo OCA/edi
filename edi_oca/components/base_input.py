@@ -6,8 +6,7 @@ from odoo.addons.component.core import AbstractComponent
 
 
 class EDIBackendInputComponentMixin(AbstractComponent):
-    """Generate input content.
-    """
+    """Generate input content."""
 
     _name = "edi.component.input.mixin"
     _inherit = "edi.component.mixin"
