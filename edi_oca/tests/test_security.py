@@ -24,7 +24,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         cls.ir_access = cls.env["ir.model.access"].create(
             {
                 "name": "model access",
-                "model_id": cls.env.ref("edi.model_edi_exchange_consumer_test").id,
+                "model_id": cls.env.ref("edi_oca.model_edi_exchange_consumer_test").id,
                 "group_id": cls.group.id,
                 "perm_read": True,
                 "perm_write": True,
@@ -35,7 +35,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         cls.rule = cls.env["ir.rule"].create(
             {
                 "name": "Exchange Record rule demo",
-                "model_id": cls.env.ref("edi.model_edi_exchange_consumer_test").id,
+                "model_id": cls.env.ref("edi_oca.model_edi_exchange_consumer_test").id,
                 "domain_force": "[('name', '=', 'test')]",
                 "groups": [(4, cls.group.id)],
             }
@@ -88,12 +88,12 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
             self.create_record(self.user)
 
     def test_no_group_no_create(self):
-        with self.assertRaisesRegex(AccessError, "you are not allowed to modify"):
+        with self.assertRaisesRegex(AccessError, "You are not allowed to modify"):
             self.create_record(self.user)
 
     def test_no_group_no_read(self):
         exchange_record = self.create_record()
-        with self.assertRaisesRegex(AccessError, "you are not allowed to access"):
+        with self.assertRaisesRegex(AccessError, "You are not allowed to access"):
             exchange_record.with_user(self.user).read()
 
     def test_rule_no_read(self):
@@ -106,7 +106,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
 
     def test_no_group_no_unlink(self):
         exchange_record = self.create_record()
-        with self.assertRaisesRegex(AccessError, "you are not allowed to modify"):
+        with self.assertRaisesRegex(AccessError, "You are not allowed to modify"):
             exchange_record.with_user(self.user).unlink()
 
     def test_group_unlink(self):
@@ -153,7 +153,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
 
     def test_no_group_no_write(self):
         exchange_record = self.create_record()
-        with self.assertRaisesRegex(AccessError, "you are not allowed to modify"):
+        with self.assertRaisesRegex(AccessError, "You are not allowed to modify"):
             exchange_record.with_user(self.user).write({"external_identifier": "1234"})
 
     def test_group_write(self):
