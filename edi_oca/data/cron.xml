@@ -12,7 +12,7 @@
         <field name="interval_type">hours</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False" />
-        <field name="model_id" ref="edi.model_edi_backend" />
+        <field name="model_id" ref="edi_oca.model_edi_backend" />
         <field name="state">code</field>
         <field name="code">model.search([])._cron_check_output_exchange_sync()</field>
     </record>
@@ -29,7 +29,7 @@
         <field name="interval_type">hours</field>
         <field name="numbercall">-1</field>
         <field name="doall" eval="False" />
-        <field name="model_id" ref="edi.model_edi_backend" />
+        <field name="model_id" ref="edi_oca.model_edi_backend" />
         <field name="state">code</field>
         <field name="code">model.search([])._cron_check_input_exchange_sync()</field>
     </record>

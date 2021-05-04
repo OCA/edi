@@ -3,13 +3,11 @@
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from datetime import datetime, time
 
-import dateutil
 from lxml import etree
 
 from odoo import api, fields, models
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools import safe_eval
 
 from odoo.addons.base_sparse_field.models.fields import Serialized
 
@@ -51,11 +49,11 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             eval_ctx = dict(
                 self._get_eval_context(), record=self, exchange_type=exchange_type
             )
-            domain = safe_eval(exchange_type.enable_domain or "[]", eval_ctx)
+            domain = safe_eval.safe_eval(exchange_type.enable_domain or "[]", eval_ctx)
             if not self.filtered_domain(domain):
                 continue
             if exchange_type.enable_snippet:
-                safe_eval(
+                safe_eval.safe_eval(
                     exchange_type.enable_snippet, eval_ctx, mode="exec", nocopy=True
                 )
                 if not eval_ctx.get("result", False):
@@ -68,9 +66,9 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         :returns: dict -- evaluation context given to safe_eval
         """
         return {
-            "datetime": datetime,
-            "dateutil": dateutil,
-            "time": time,
+            "datetime": safe_eval.datetime,
+            "dateutil": safe_eval.dateutil,
+            "time": safe_eval.time,
             "uid": self.env.uid,
             "user": self.env.user,
         }
@@ -88,8 +86,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 group = False
                 if hasattr(self, "_edi_generate_group"):
                     group = self._edi_generate_group
-                str_element = self.env["ir.qweb"].render(
-                    "edi.edi_exchange_consumer_mixin_buttons",
+                str_element = self.env["ir.qweb"]._render(
+                    "edi_oca.edi_exchange_consumer_mixin_buttons",
                     {"group": group},
                 )
                 node.addprevious(etree.fromstring(str_element))
@@ -98,7 +96,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             # Override context for postprocessing
             if view_id and res.get("base_model", self._name) != self._name:
                 View = View.with_context(base_model_name=res["base_model"])
-            new_arch, new_fields = View.postprocess_and_fields(self._name, doc, view_id)
+            new_arch, new_fields = View.postprocess_and_fields(doc, self._name)
             res["arch"] = new_arch
             # We don't want to lose previous configuration, so, we only want to add
             # the new fields
@@ -135,7 +133,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             )
         if backend:
             return self._edi_create_exchange_record(exchange_type, backend)
-        action = self.env.ref("edi.edi_exchange_record_create_act_window").read()[0]
+        action = self.env.ref("edi_oca.edi_exchange_record_create_act_window").read()[0]
         action["context"] = {
             "default_res_id": self.id,
             "default_model": self._name,
@@ -185,7 +183,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     def action_view_edi_records(self):
         self.ensure_one()
-        action = self.env.ref("edi.act_open_edi_exchange_record_view").read()[0]
+        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view").read()[0]
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
         return action
 
