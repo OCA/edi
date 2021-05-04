@@ -48,7 +48,10 @@ class EDIBackend(models.Model):
         # Model is not granted to be there
         model = exchange_record.model or self._name
         return self._find_component(
-            model, candidates, work_ctx=work_ctx, **match_attrs,
+            model,
+            candidates,
+            work_ctx=work_ctx,
+            **match_attrs,
         )
 
     def _component_match_attrs(self, exchange_record, key):
@@ -106,8 +109,7 @@ class EDIBackend(models.Model):
         return component or None
 
     def _get_component_usage_candidates(self, exchange_record, key):
-        """Retrieve usage candidates for components.
-        """
+        """Retrieve usage candidates for components."""
         # fmt:off
         base_usage = ".".join([
             exchange_record.direction,
@@ -344,8 +346,7 @@ class EDIBackend(models.Model):
         self._exchange_check_ack_needed(pending_records)
 
     def _output_new_records_domain(self):
-        """Domain for output records needing output content generation.
-        """
+        """Domain for output records needing output content generation."""
         return [
             ("backend_id", "=", self.id),
             ("type_id.exchange_file_auto_generate", "=", True),
@@ -355,8 +356,7 @@ class EDIBackend(models.Model):
         ]
 
     def _output_pending_records_domain(self):
-        """Domain for output records needing to be sent or have errors or ack to handle.
-        """
+        """Domain for output records needing to be sent or have errors or ack to handle."""
         states = ("output_pending", "output_sent", "output_sent_and_error")
         return [
             ("type_id.direction", "=", "output"),
@@ -385,8 +385,7 @@ class EDIBackend(models.Model):
         ]
 
     def exchange_process(self, exchange_record):
-        """Process an incoming document.
-        """
+        """Process an incoming document."""
         self.ensure_one()
         exchange_record.ensure_one()
         # In case already processed: skip processing and check the state
@@ -431,8 +430,7 @@ class EDIBackend(models.Model):
         raise NotImplementedError()
 
     def exchange_receive(self, exchange_record):
-        """Retrieve an incoming document.
-        """
+        """Retrieve an incoming document."""
         self.ensure_one()
         exchange_record.ensure_one()
         # In case already processed: skip processing and check the state
