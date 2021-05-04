@@ -356,7 +356,8 @@ class EDIBackend(models.Model):
         ]
 
     def _output_pending_records_domain(self):
-        """Domain for output records needing to be sent or have errors or ack to handle."""
+        """Domain for output records needing to be sent or have errors or
+        ack to handle."""
         states = ("output_pending", "output_sent", "output_sent_and_error")
         return [
             ("type_id.direction", "=", "output"),
