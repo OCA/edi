@@ -7,7 +7,7 @@ from odoo.tools import mute_logger
 from .common import EDIBackendCommonComponentRegistryTestCase
 from .fake_components import FakeOutputChecker, FakeOutputGenerator, FakeOutputSender
 
-LOGGERS = "odoo.addons.edi.models.edi_backend"
+LOGGERS = "odoo.addons.edi_oca.models.edi_backend"
 
 
 class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
