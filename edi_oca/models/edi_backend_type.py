@@ -8,14 +8,16 @@ from ..utils import normalize_string
 
 
 class EDIBackendType(models.Model):
-    """Define a kind of backend.
-    """
+    """Define a kind of backend."""
 
     _name = "edi.backend.type"
     _description = "EDI Backend Type"
 
     name = fields.Char(required=True)
-    code = fields.Char(required=True, inverse="_inverse_code",)
+    code = fields.Char(
+        required=True,
+        inverse="_inverse_code",
+    )
 
     _sql_constraints = [
         ("uniq_code", "unique(code)", "Backend type code must be unique!")

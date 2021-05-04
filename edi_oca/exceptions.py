@@ -4,5 +4,4 @@
 
 
 class EDIValidationError(Exception):
-    """Thrown when a document validation fails.
-    """
+    """Thrown when a document validation fails."""
