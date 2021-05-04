@@ -8,11 +8,12 @@
     Define backends, exchange types, exchange records,
     basic automation and views for handling EDI exchanges.
     """,
-    "version": "13.0.1.17.0",
+    "version": "14.0.1.0.0",
+    "website": "https://github.com/OCA/edi",
     "development_status": "Alpha",
     "license": "LGPL-3",
-    "author": "ACSONE,Odoo Community Association (OCA)",
-    "maintainers": ["simahawk"],
+    "author": "ACSONE,Creu Blanca,Odoo Community Association (OCA)",
+    "maintainers": ["simahawk", "etobella"],
     "depends": [
         "base_edi",
         "component_event",
@@ -22,7 +23,7 @@
     ],
     "external_dependencies": {"python": ["pyyaml"]},
     "data": [
-        "wizards/edi_exchange_record_create.xml",
+        "wizards/edi_exchange_record_create_wiz.xml",
         "data/cron.xml",
         "data/sequence.xml",
         "data/job_channel.xml",
