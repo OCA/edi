@@ -6,8 +6,7 @@ from odoo.addons.component.core import AbstractComponent
 
 
 class EDIBackendValidateComponentMixin(AbstractComponent):
-    """Validate exchange data.
-    """
+    """Validate exchange data."""
 
     _name = "edi.component.validate.mixin"
     _inherit = "edi.component.mixin"
@@ -17,6 +16,5 @@ class EDIBackendValidateComponentMixin(AbstractComponent):
         self._validate(value)
 
     def _validate(self, value=None):
-        """Return None validated, raise `edi.exceptions.EDIValidationError` if not.
-        """
+        """Return None validated, raise `edi.exceptions.EDIValidationError` if not."""
         raise NotImplementedError()
