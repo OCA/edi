@@ -26,7 +26,9 @@ class EDIExchangeType(models.Model):
     _description = "EDI Exchange Type"
 
     backend_id = fields.Many2one(
-        string="EDI backend", comodel_name="edi.backend", ondelete="set null",
+        string="EDI backend",
+        comodel_name="edi.backend",
+        ondelete="set null",
     )
     backend_type_id = fields.Many2one(
         string="EDI Backend type",
@@ -84,7 +86,8 @@ class EDIExchangeType(models.Model):
     )
     advanced_settings = Serialized(default={}, compute="_compute_advanced_settings")
     model_ids = fields.Many2many(
-        "ir.model", help="""Modules to be checked for manual EDI generation""",
+        "ir.model",
+        help="""Modules to be checked for manual EDI generation""",
     )
     enable_domain = fields.Char(
         string="Enable on domain", help="""Filter domain to be checked on Models"""

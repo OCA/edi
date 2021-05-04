@@ -45,7 +45,10 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
         cls.exchange_type_out.write(
             {
                 "model_ids": [
-                    (4, cls.env["ir.model"]._get_id(cls.consumer_record._name),)
+                    (
+                        4,
+                        cls.env["ir.model"]._get_id(cls.consumer_record._name),
+                    )
                 ],
                 "enable_domain": "[]",
                 "enable_snippet": """result = not   record._has_exchange_record(
