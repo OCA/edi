@@ -4,8 +4,8 @@
 from odoo import fields, models
 
 
-class EdiExchangeRecordCreate(models.TransientModel):
-    _name = "edi.exchange.record.create"
+class EdiExchangeRecordCreateWiz(models.TransientModel):
+    _name = "edi.exchange.record.create.wiz"
     _description = "Create an Exchange Record"
 
     res_id = fields.Integer(required=True)
