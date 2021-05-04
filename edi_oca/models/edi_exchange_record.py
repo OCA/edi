@@ -260,7 +260,8 @@ class EDIExchangeRecord(models.Model):
 
     def _trigger_edi_event_make_name(self, name, suffix=None):
         return "on_edi_exchange_{name}{suffix}".format(
-            name=name, suffix=("_" + suffix) if suffix else "",
+            name=name,
+            suffix=("_" + suffix) if suffix else "",
         )
 
     def _trigger_edi_event(self, name, suffix=None):
@@ -274,7 +275,8 @@ class EDIExchangeRecord(models.Model):
 
     def _notify_error(self, message_key):
         self._notify_related_record(
-            self._exchange_status_message(message_key), level="error",
+            self._exchange_status_message(message_key),
+            level="error",
         )
         self._trigger_edi_event("error")
 
@@ -284,7 +286,8 @@ class EDIExchangeRecord(models.Model):
 
     def _notify_ack_missing(self):
         self._notify_related_record(
-            self._exchange_status_message("ack_missing"), level="warning",
+            self._exchange_status_message("ack_missing"),
+            level="warning",
         )
         self._trigger_edi_event("done", suffix="ack_missing")
 
@@ -364,8 +367,8 @@ class EDIExchangeRecord(models.Model):
         return len(result) if count else list(result)
 
     def read(self, fields=None, load="_classic_read"):
-        """ Override to explicitely call check_access_rule, that is not called
-            by the ORM. It instead directly fetches ir.rules and apply them. """
+        """Override to explicitely call check_access_rule, that is not called
+        by the ORM. It instead directly fetches ir.rules and apply them."""
         self.check_access_rule("read")
         return super().read(fields=fields, load=load)
 
