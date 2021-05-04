@@ -62,7 +62,7 @@ class EDIBackendTestMixin(object):
 
     @classmethod
     def _get_backend(cls):
-        return cls.env.ref("edi.demo_edi_backend")
+        return cls.env.ref("edi_oca.demo_edi_backend")
 
     @classmethod
     def _create_exchange_type(cls, **kw):
@@ -103,4 +103,4 @@ class EDIBackendCommonComponentRegistryTestCase(
         super().setUpClass()
         cls._setup_env()
         cls._setup_records()
-        cls._load_module_components(cls, "edi")
+        cls._load_module_components(cls, "edi_oca")
