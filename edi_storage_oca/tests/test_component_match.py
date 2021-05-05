@@ -10,11 +10,11 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls._load_module_components(cls, "edi_storage")
+        cls._load_module_components(cls, "edi_storage_oca")
 
     @classmethod
     def _get_backend(cls):
-        return cls.env.ref("edi_storage.demo_edi_backend_storage")
+        return cls.env.ref("edi_storage_oca.demo_edi_backend_storage")
 
     def test_component_match(self):
         """Lookup with special match method."""
