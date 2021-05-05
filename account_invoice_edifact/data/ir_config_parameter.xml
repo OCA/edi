@@ -2,7 +2,7 @@
 <!-- Copyright 2020 PlanetaTIC - Marc Poch <mpoch@planetatic.com>
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-<data>
+<data noupdate="1">
 
 <record id="edifact_invoices_folder_param" model="ir.config_parameter">
     <field name="key">account_invoice_edifact.edifact_invoices_folder</field>
