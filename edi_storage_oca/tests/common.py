@@ -90,7 +90,11 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
         return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".add", self._mocked_backend_add)
 
     def _test_result(
-        self, record, expected_values, expected_messages=None, state_paths=None,
+        self,
+        record,
+        expected_values,
+        expected_messages=None,
+        state_paths=None,
     ):
         state_paths = state_paths or ("done", "pending", "error")
         # Paths will be something like:
