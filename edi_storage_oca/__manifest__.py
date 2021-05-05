@@ -10,6 +10,7 @@
     "version": "13.0.1.5.0",
     "development_status": "Alpha",
     "license": "LGPL-3",
+    "website": "https://github.com/OCA/edi",
     "author": "ACSONE,Odoo Community Association (OCA)",
     "depends": ["edi", "storage_backend", "component"],
     "data": ["security/ir_model_access.xml", "views/edi_backend_views.xml"],
