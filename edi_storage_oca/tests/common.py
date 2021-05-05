@@ -5,7 +5,7 @@ import functools
 
 import mock
 
-from odoo.addons.edi.tests.common import EDIBackendCommonComponentTestCase
+from odoo.addons.edi_oca.tests.common import EDIBackendCommonComponentTestCase
 
 STORAGE_BACKEND_MOCK_PATH = (
     "odoo.addons.storage_backend.models.storage_backend.StorageBackend"
@@ -15,7 +15,7 @@ STORAGE_BACKEND_MOCK_PATH = (
 class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
     @classmethod
     def _get_backend(cls):
-        return cls.env.ref("edi_storage.demo_edi_backend_storage")
+        return cls.env.ref("edi_storage_oca.demo_edi_backend_storage")
 
     @classmethod
     def _setup_records(cls):

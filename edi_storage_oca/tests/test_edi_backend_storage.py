@@ -7,8 +7,8 @@ from odoo.tools import mute_logger
 from .common import TestEDIStorageBase
 
 LOGGERS = (
-    "odoo.addons.edi_storage.components.check",
-    "odoo.addons.edi.models.edi_backend",
+    "odoo.addons.edi_storage_oca.components.check",
+    "odoo.addons.edi_oca.models.edi_backend",
 )
 
 
