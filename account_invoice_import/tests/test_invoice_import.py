@@ -3,6 +3,7 @@
 
 from odoo.tests.common import TransactionCase
 from odoo.tools import float_compare
+from odoo.exceptions import UserError
 
 
 class TestInvoiceImport(TransactionCase):
@@ -133,3 +134,35 @@ class TestInvoiceImport(TransactionCase):
                 inv.amount_untaxed, 30.66, precision_rounding=prec))
             self.assertFalse(float_compare(
                 inv.amount_total, 30.97, precision_rounding=prec))
+
+    def test_import_not_matching_partner(self):
+        parsed_inv = {
+            'type': 'in_invoice',
+            'amount_untaxed': 100.0,
+            'amount_total': 101.0,
+            'invoice_number': 'INV-2017-9876',
+            'date_invoice': '2017-08-16',
+            'date_due': '2017-08-31',
+            'date_start': '2017-08-01',
+            'date_end': '2017-08-31',
+            'partner': {
+                'name': 'Another Partner',
+            },
+            'description': 'New hi-tech gadget',
+            'lines': [{
+                'product': {'code': 'AII-TEST-PRODUCT'},
+                'name': 'Super test product',
+                'qty': 2,
+                'price_unit': 50,
+                'taxes': [{
+                    'amount_type': 'percent',
+                    'amount': 1.0,
+                    'unece_type_code': 'VAT',
+                    'unece_categ_code': 'S',
+                }],
+            }]
+        }
+        for import_config in self.all_import_config:
+            with self.assertRaises(UserError):
+                self.env['account.invoice.import'].create_invoice(
+                    parsed_inv, import_config)

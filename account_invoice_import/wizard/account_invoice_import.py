@@ -491,18 +491,48 @@ class AccountInvoiceImport(models.TransientModel):
         """
         return False
 
+    def _search_import_config(self, partner, company_id):
+        return self.env['account.invoice.import.config'].search([
+            ('partner_id', '=', partner.id),
+            ('company_id', '=', company_id)])
+
+    def _get_missing_config(self, partner, company):
+        configs = partner.invoice_import_ids.filtered(
+            lambda r: r.company_id == company)
+        if not configs:
+            raise UserError(_(
+                "Missing Invoice Import Configuration on partner '%s'."
+            ) % partner.display_name)
+        return configs[0].convert_to_import_config()
+
+    def _get_child_company(self, company_id, parsed_inv):
+        """This hook allows us to define ways to set/check the company"""
+        if parsed_inv.get(
+            'company', False
+        ) and parsed_inv['company'].get('vat'):
+            return self.env['res.company'].search([
+                ('id', 'child_of', company_id),
+                ('vat', '=', parsed_inv['company']['vat'])
+            ], limit=1)
+        return False
+
+    @api.multi
     def import_invoice(self):
         """Method called by the button of the wizard
         (import step AND config step)"""
         self.ensure_one()
-        aio = self.env["account.move"]
-        aiico = self.env["account.invoice.import.config"]
-        bdio = self.env["business.document.import"]
-        iaao = self.env["ir.actions.act_window"]
-        company_id = (
-            self.env.context.get("force_company") or self.env.user.company_id.id
-        )
+        aio = self.env['account.invoice']
+        bdio = self.env['business.document.import']
+        iaao = self.env['ir.actions.act_window']
         parsed_inv = self.get_parsed_invoice()
+        company_id = self.env.context.get('force_company') or\
+            self.env.user.company_id.id
+        company = self._get_child_company(
+            company_id, parsed_inv
+        )
+        if company:
+            company_id = company.id
+            self = self.with_context(force_company=company_id)
         if not self.partner_id:
             try:
                 partner = bdio._match_partner(
