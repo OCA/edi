@@ -12,7 +12,7 @@
     "development_status": "Alpha",
     "license": "AGPL-3",
     "installable": True,
-    "depends": ["base_ubl", "base_business_document_import", "stock",],
+    "depends": ["base_ubl", "base_business_document_import", "stock"],
     "data": [
         "views/product_view.xml",
         "views/supplierinfo_view.xml",

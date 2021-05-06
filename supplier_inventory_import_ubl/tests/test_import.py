@@ -21,9 +21,13 @@ class TestImport(TransactionCase):
         )
         res = wizard.process_document()
         ref = self.env.ref
-        info = ref("supplier_inventory_import_ubl.product_product_23").supplier_stock_info
+        info = ref(
+            "supplier_inventory_import_ubl.product_product_23"
+        ).supplier_stock_info
         self.assertEqual(info and info[:4], "Wood")
-        info = ref("supplier_inventory_import_ubl.product_product_11").supplier_stock_info
+        info = ref(
+            "supplier_inventory_import_ubl.product_product_11"
+        ).supplier_stock_info
         self.assertEqual(info, False)
         self.assertEqual(
             res.get("res_model"),
@@ -36,7 +40,9 @@ class TestImport(TransactionCase):
             "no_seller_reference"
         )
         res = wizard.process_document()
-        info = self.env.ref("supplier_inventory_import_ubl.product_product_35").supplier_stock_info
+        info = self.env.ref(
+            "supplier_inventory_import_ubl.product_product_35"
+        ).supplier_stock_info
         self.assertEqual(info and info[:4], "Wood")
         self.assertEqual(
             res.get("res_model"),
@@ -62,7 +68,9 @@ class TestImport(TransactionCase):
             prd.supplier_stock_info and prd.supplier_stock_info[:4], "Wood"
         )
         self.assertEqual(
-            prd.supplier_stock, 17, "Stock should be the sum of the 2 inventory lines"
+            prd.supplier_stock,
+            17,
+            "Stock should be the sum of the 2 inventory lines",
         )
 
     def test_same_barcode(self):
@@ -78,11 +86,15 @@ class TestImport(TransactionCase):
             prd.supplier_stock_info and prd.supplier_stock_info[:4], "Wood"
         )
         self.assertEqual(
-            prd.supplier_stock, 17, "Stock should be the sum of the 2 inventory lines"
+            prd.supplier_stock,
+            17,
+            "Stock should be the sum of the 2 inventory lines",
         )
 
     def test_main(self):
-        self.env["inventory.ubl.helper"]._import_main_xml_file_when_demo_and_test()
+        self.env[
+            "inventory.ubl.helper"
+        ]._import_main_xml_file_when_demo_and_test()
         supplier = self.env.ref("supplier_inventory_import_ubl.res_partner_1")
         ref = self.env.ref
         # A message have been sent on the supplier record
@@ -91,7 +103,11 @@ class TestImport(TransactionCase):
             last_message.body,
             u"<p>These product codes ['??', 'UN'] have no matching code in ERP</p>",
         )
-        info = ref("supplier_inventory_import_ubl.product_product_35").supplier_stock_info
+        info = ref(
+            "supplier_inventory_import_ubl.product_product_35"
+        ).supplier_stock_info
         self.assertEqual(info and info[:4], "Wood")
-        info = ref("supplier_inventory_import_ubl.product_product_9").supplier_stock_info
+        info = ref(
+            "supplier_inventory_import_ubl.product_product_9"
+        ).supplier_stock_info
         self.assertEqual(info and info[:4], "Wood")
