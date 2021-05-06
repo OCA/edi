@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © 2020 David BEAL @ Akretion
+# © 2021 David BEAL @ Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import logging
 from collections import defaultdict, OrderedDict
-
+import base64
 from lxml import etree
 from odoo import _, api, fields, models
 from odoo.exceptions import Warning as UserError
@@ -28,7 +28,7 @@ class InventoryUblImport(models.TransientModel):
     @api.multi
     def process_document(self):
         self.ensure_one()
-        xml_string = self.document.decode("base64")
+        xml_string = base64.b64decode(self.document)
         self.env["base.ubl"]._ubl_check_xml_schema(
             xml_string, "InventoryReport", version="2.1"
         )
@@ -160,7 +160,7 @@ class InventoryUblImport(models.TransientModel):
             )
             raise UserError(
                 _(
-                    "No matching product for this file '%(file)s'\n"
+                    "No matchinng product for this file '%(file)s'\n"
                     "Check if you have product relations with "
                     "this supplier '%(supp)s' "
                     "(procurement tab in product screen)\n\n"
@@ -186,15 +186,17 @@ class InventoryUblImport(models.TransientModel):
              'def_code': {'CD': 15.0, 'BRA': 7.0}
              'bardode': {...} }
         """
+        # import ipdb;
+        # ipdb.set_trace()
         sql_field_names = {
             "def_code": "pp.default_code",
             "sup_code": "ps.product_code",
-            "barcode": "pp.ean13",
+            "barcode": "pp.barcode",
         }
         query = """
         SELECT ps.id AS supinfo_id, pp.id AS prd_id, ps.product_tmpl_id AS tmpl_id,
                ps.product_code AS sup_code, pp.default_code AS def_code,
-               pp.ean13 AS barcode
+               pp.barcode AS barcode
         FROM product_supplierinfo ps
             LEFT JOIN product_template pt ON pt.id = ps.product_tmpl_id
                 LEFT JOIN product_product pp ON pt.id = pp.product_tmpl_id

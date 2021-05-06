@@ -3,27 +3,57 @@
 <data>
 
     <record id="product_product_9" model="product.product">
-        <field name="name">Pedal Bin</field>
+        <field name="name">Pedal Bin2</field>
         <field name="standard_price">10.0</field>
         <field name="list_price">47.0</field>
         <field name="type">consu</field>
         <field name="weight">1.15</field>
-        <field name="uom_id" ref="product.product_uom_unit" />
-        <field name="uom_po_id" ref="product.product_uom_unit" />
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="uom_po_id" ref="uom.product_uom_unit" />
         <field name="default_code">BINALL</field>
     </record>
-
     <record id="shoes_with_barcode" model="product.product">
         <field name="name">Shoes with barcode</field>
         <field name="standard_price">10.0</field>
         <field name="list_price">20.0</field>
         <field name="type">consu</field>
         <field name="weight">1.7</field>
-        <field name="uom_id" ref="product.product_uom_unit" />
-        <field name="uom_po_id" ref="product.product_uom_unit" />
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="uom_po_id" ref="uom.product_uom_unit" />
         <field name="default_code">SHOE1</field>
-        <field name="ean13">1000069784766</field>
+        <field name="barcode">1000069784766</field>
     </record>
+    <record id="product_product_35" model="product.product">
+        <field name="name">Blank CD</field>
+        <field name="standard_price">1.0</field>
+        <field name="list_price">2.0</field>
+        <field name="type">consu</field>
+        <field name="weight">1.0</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="uom_po_id" ref="uom.product_uom_unit" />
+        <field name="default_code">CD</field>
+    </record>
+    <record id="product_product_23" model="product.product">
+        <field name="name">Processor AMD 8-Core</field>
+        <field name="standard_price">1110.0</field>
+        <field name="list_price">2110.0</field>
+        <field name="type">consu</field>
+        <field name="weight">1.1</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="uom_po_id" ref="uom.product_uom_unit" />
+        <field name="default_code">CPUa8</field>
+    </record>
+    <record id="product_product_11" model="product.product">
+        <field name="name">iPod</field>
+        <field name="standard_price">110.0</field>
+        <field name="list_price">120.0</field>
+        <field name="type">consu</field>
+        <field name="weight">0.7</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="uom_po_id" ref="uom.product_uom_unit" />
+        <field name="default_code">IPOPO</field>
+    </record>
+
 
     <record id="supp_inf_wood_ipod" model="product.supplierinfo">
         <field name="name" search="[('name', '=', 'Wood Corner')]" />
@@ -37,7 +67,7 @@
     </record>
     <record id="supp_inf_wood_bin" model="product.supplierinfo">
         <field name="name" search="[('name', '=', 'Wood Corner')]" />
-        <field name="product_tmpl_id" search="[('name', '=', 'Pedal Bin')]" />
+        <field name="product_tmpl_id" search="[('name', '=', 'Pedal Bin2')]" />
         <field name="product_name">Mister Bin, the special one</field>
         <field name="product_code">BIN4U</field>
     </record>
