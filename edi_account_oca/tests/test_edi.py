@@ -5,7 +5,7 @@ import logging
 
 from odoo import fields
 
-from odoo.addons.account.tests.account_test_savepoint import AccountTestInvoicingCommon
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.addons.component.core import Component
 from odoo.addons.component.tests.common import SavepointComponentRegistryCase
 
@@ -38,7 +38,7 @@ class EDIBackendTestCase(AccountTestInvoicingCommon, SavepointComponentRegistryC
             .with_context(components_registry=cls.comp_registry)
             .create(
                 {
-                    "type": "out_invoice",
+                    "move_type": "out_invoice",
                     "partner_id": cls.partner_a.id,
                     "date": fields.Date.from_string("2016-01-01"),
                     "invoice_line_ids": [
@@ -76,10 +76,10 @@ class EDIBackendTestCase(AccountTestInvoicingCommon, SavepointComponentRegistryC
         cls.test_move.refresh()
 
     def test_paid_move(self):
-        self.test_move.post()
+        self.test_move.action_post()
         self.assertEqual(self.test_move.name, "new_name")
 
-        payment_action = self.test_move.action_invoice_register_payment()
+        payment_action = self.test_move.action_register_payment()
         payment = (
             self.env[payment_action["res_model"]]
             .with_context(**payment_action["context"])
@@ -92,11 +92,13 @@ class EDIBackendTestCase(AccountTestInvoicingCommon, SavepointComponentRegistryC
                 }
             )
         )
-        payment.with_context(components_registry=self.comp_registry).post()
+        payment.with_context(
+            components_registry=self.comp_registry
+        ).action_create_payments()
         self.assertEqual(self.test_move.name, "paid")
 
     def test_cancel_move(self):
-        self.test_move.post()
+        self.test_move.action_post()
         self.assertEqual(self.test_move.name, "new_name")
         self.test_move.button_cancel()
         self.assertEqual(self.test_move.name, "cancelled")
