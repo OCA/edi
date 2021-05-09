@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record model="ir.model.access" id="access_edi_backend_type_manager">
+        <field name="name">access_edi_backend_type manager</field>
+        <field name="model_id" ref="model_edi_backend_type" />
+        <field name="group_id" ref="base_edi.group_edi_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record model="ir.model.access" id="access_edi_backend_manager">
+        <field name="name">access_edi_backend manager</field>
+        <field name="model_id" ref="model_edi_backend" />
+        <field name="group_id" ref="base_edi.group_edi_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record model="ir.model.access" id="access_edi_exchange_type_manager">
+        <field name="name">access_edi_exchange_type manager</field>
+        <field name="model_id" ref="model_edi_exchange_type" />
+        <field name="group_id" ref="base_edi.group_edi_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record model="ir.model.access" id="access_edi_exchange_record_manager">
+        <field name="name">access_edi_exchange_record manager</field>
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="group_id" ref="base_edi.group_edi_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record model="ir.model.access" id="access_edi_backend_type_user">
+        <field name="name">access_edi_backend_type user</field>
+        <field name="model_id" ref="model_edi_backend_type" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+    <record model="ir.model.access" id="access_edi_backend_user">
+        <field name="name">access_edi_backend user</field>
+        <field name="model_id" ref="model_edi_backend" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+    <record model="ir.model.access" id="access_edi_exchange_type_user">
+        <field name="name">access_edi_exchange_type user</field>
+        <field name="model_id" ref="model_edi_exchange_type" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+    <record model="ir.model.access" id="access_edi_exchange_record_user">
+        <field name="name">access_edi_exchange_record user</field>
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record model="ir.model.access" id="access_edi_exchange_record_create_user">
+        <field name="name">access_edi_exchange_record user</field>
+        <field name="model_id" ref="model_edi_exchange_record_create_wiz" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="rule_edi_exchange_record_user" model="ir.rule">
+        <field name="name">Assigned EDI exchange records</field>
+        <field name="model_id" ref="edi_oca.model_edi_exchange_record" />
+        <field
+            name="domain_force"
+        >['|', ('model','!=', False), ('res_id', '=', False)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]" />
+    </record>
+    <record id="rule_edi_exchange_record_manager" model="ir.rule">
+        <field name="name">Manager EDI exchange records</field>
+        <field name="model_id" ref="edi_oca.model_edi_exchange_record" />
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base_edi.group_edi_manager'))]" />
+    </record>
+</odoo>
