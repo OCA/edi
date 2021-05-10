@@ -22,7 +22,7 @@ addon | version | summary
 [base_business_document_import](base_business_document_import/) | 14.0.2.0.0 | Provides technical tools to import sale orders or supplier invoices
 [base_edi](base_edi/) | 14.0.1.0.0 | Base module to aggregate EDI features.
 [base_ubl](base_ubl/) | 14.0.1.0.0 | Base module for Universal Business Language (UBL)
-[edi_oca](edi_oca/) | 14.0.1.0.0 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
+[edi_oca](edi_oca/) | 14.0.1.0.1 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF purchase order
 [sale_order_ubl](sale_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF quotation
 
