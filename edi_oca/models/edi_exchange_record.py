@@ -248,7 +248,7 @@ class EDIExchangeRecord(models.Model):
         if not hasattr(self.record, "message_post_with_view"):
             return
         self.record.message_post_with_view(
-            "edi.message_edi_exchange_link",
+            "edi_oca.message_edi_exchange_link",
             values={
                 "backend": self.backend_id,
                 "exchange_record": self,
