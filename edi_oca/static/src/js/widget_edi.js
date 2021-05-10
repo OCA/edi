@@ -1,7 +1,7 @@
 /* Copyright 2019 Tecnativa - David Vidal
  * License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). */
 
-odoo.define("edi.FieldEdiConfiguration", function(require) {
+odoo.define("edi_oca.FieldEdiConfiguration", function(require) {
     "use strict";
 
     var AbstractField = require("web.AbstractField");
@@ -10,7 +10,7 @@ odoo.define("edi.FieldEdiConfiguration", function(require) {
     var FieldEdiConfiguration = AbstractField.extend({
         description: "Field for EDI Missing configurations",
         // We want to maintain it black in order to show nothing on the header
-        template: "edi.FieldEdiConfiguration",
+        template: "edi_oca.FieldEdiConfiguration",
         supportedFieldTypes: ["serialized"],
         events: _.extend({}, AbstractField.prototype.events, {
             "click button": "_onClickGenerateEdiConfiguration",
