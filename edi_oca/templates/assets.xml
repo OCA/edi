@@ -2,7 +2,7 @@
 <odoo>
     <template id="assets_backend" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
-            <script type="text/javascript" src="/edi/static/src/js/widget_edi.js" />
+            <script type="text/javascript" src="/edi_oca/static/src/js/widget_edi.js" />
         </xpath>
     </template>
 </odoo>
