@@ -51,8 +51,8 @@
             SupplierSKU="111111"
             CustomerSKU="005555"
             Item="PRODUCT TEST"
-            Qty="1.0"
-            MU="Unidades"
+            Qty="2.0"
+            MU="Cajas"
         />
         <Product
             SupplierSKU="222222"
