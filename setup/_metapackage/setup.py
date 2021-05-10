@@ -27,6 +27,7 @@ setuptools.setup(
         'odoo13-addon-edi_voxel',
         'odoo13-addon-edi_voxel_account_invoice',
         'odoo13-addon-edi_voxel_sale_order_import',
+        'odoo13-addon-edi_voxel_sale_secondary_unit',
         'odoo13-addon-edi_voxel_secondary_unit',
         'odoo13-addon-edi_voxel_stock_picking',
         'odoo13-addon-edi_voxel_stock_picking_secondary_unit',
