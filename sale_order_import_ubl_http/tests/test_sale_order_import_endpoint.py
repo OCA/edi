@@ -6,6 +6,7 @@ import os
 from werkzeug.exceptions import BadRequest, Unauthorized
 
 from odoo import tools
+from odoo.exceptions import UserError
 from odoo.tests.common import SingleTransactionCase
 
 from odoo.addons.sale_order_import_ubl_http.controllers.main import ImportController
@@ -42,6 +43,17 @@ class TestSaleOrderImportEndpoint(SingleTransactionCase):
         order_ref = res.split(" ")[2]
         new_order = self.env["sale.order"].search([("name", "=", order_ref)])
         self.assertEqual(new_order.state, "draft")
+        # Importing a 2nd time raises an error
+        with self.assertRaisesRegex(
+            UserError, "Sales order has already been imported before"
+        ):
+            with tools.mute_logger("odoo.addons.queue_job.models.base"):
+                res = (
+                    self.env["sale.order"]
+                    .with_user(user)
+                    .with_context(test_queue_job_no_delay=True)
+                    .import_ubl_from_http(data)
+                )
 
     def test_api_key_validity(self):
         """ Check auth key validity."""
