@@ -3,7 +3,7 @@
 
 {
     "name": "Sale Order Import",
-    "version": "13.0.2.0.0",
+    "version": "14.0.1.0.0",
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Import RFQ or sale orders from files",
@@ -17,6 +17,6 @@
         # OCA/server-tools
         "onchange_helper",
     ],
-    "data": ["wizard/sale_order_import_view.xml"],
+    "data": ["security/ir.model.access.csv", "wizard/sale_order_import_view.xml"],
     "installable": True,
 }
