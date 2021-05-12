@@ -67,7 +67,6 @@ class VoxelMixin(models.AbstractModel):
                 .with_delay(eta=eta)
                 ._get_and_send_voxel_report(report_name)
             )
-
             job = queue_obj.search([("uuid", "=", new_delay.uuid)], limit=1)
             record.voxel_job_ids |= job
 
@@ -280,16 +279,22 @@ class VoxelMixin(models.AbstractModel):
         return self.env["voxel.login"]
 
     def _get_customer_product_sku(self, product, partner):
+        """Look for an entry for specific contact (sending/invoicing contact),
+        and if not found, look for the commercial partner.
+        """
+        domain = [
+            "|",
+            ("product_id", "=", product.id),
+            "&",
+            ("product_tmpl_id", "=", product.product_tmpl_id.id),
+            ("product_id", "=", False),
+        ]
         customerinfo = self.env["product.customerinfo"].search(
-            [
-                ("name", "=", partner.id),
-                "|",
-                ("product_id", "=", product.id),
-                "&",
-                ("product_tmpl_id", "=", product.product_tmpl_id.id),
-                ("product_id", "=", False),
-            ],
-            limit=1,
-            order="product_id, sequence",
+            [("name", "=", partner.id)] + domain, order="product_id, sequence",
         )
-        return customerinfo.product_code
+        if not customerinfo:
+            customerinfo = self.env["product.customerinfo"].search(
+                [("name", "=", partner.commercial_partner_id.id)] + domain,
+                order="product_id, sequence",
+            )
+        return customerinfo[:1].product_code
