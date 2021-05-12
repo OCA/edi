@@ -23,12 +23,12 @@ class TestOrderImport(TransactionCase):
             "doc_type": "rfq",
         }
         order = soio.create_order(parsed_order, "pricelist")
-        self.assertEquals(order.client_order_ref, parsed_order["order_ref"])
-        self.assertEquals(
+        self.assertEqual(order.client_order_ref, parsed_order["order_ref"])
+        self.assertEqual(
             order.order_line[0].product_id.default_code,
             parsed_order["lines"][0]["product"]["code"],
         )
-        self.assertEquals(int(order.order_line[0].product_uom_qty), 2)
+        self.assertEqual(int(order.order_line[0].product_uom_qty), 2)
         # Now update the order
         parsed_order_up = {
             "partner": {"email": "agrolait@yourcompany.example.com"},
@@ -52,5 +52,5 @@ class TestOrderImport(TransactionCase):
             "doc_type": "rfq",
         }
         soio.update_order_lines(parsed_order_up, order, "pricelist")
-        self.assertEquals(len(order.order_line), 2)
-        self.assertEquals(int(order.order_line[0].product_uom_qty), 3)
+        self.assertEqual(len(order.order_line), 2)
+        self.assertEqual(int(order.order_line[0].product_uom_qty), 3)
