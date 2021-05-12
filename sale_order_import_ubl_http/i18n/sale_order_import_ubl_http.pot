@@ -31,7 +31,7 @@ msgstr ""
 #. module: sale_order_import_ubl_http
 #: code:addons/sale_order_import_ubl_http/models/sale_order.py:0
 #, python-format
-msgid "Sales order has already been imported before, nothing done."
+msgid "Sales order has already been imported before"
 msgstr ""
 
 #. module: sale_order_import_ubl_http
