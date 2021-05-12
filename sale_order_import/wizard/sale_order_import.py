@@ -372,9 +372,7 @@ class SaleOrderImport(models.TransientModel):
         order.message_post(
             body=_("Created automatically via file import (%s).") % self.order_filename
         )
-        action = self.env["ir.actions.act_window"].for_xml_id(
-            "sale", "action_quotations"
-        )
+        action = self.env["ir.actions.actions"]._for_xml_id("sale.action_quotations")
         action.update(
             {
                 "view_mode": "form,tree,calendar,graph",
@@ -508,8 +506,8 @@ class SaleOrderImport(models.TransientModel):
         if compare_res["to_remove"]:
             to_remove_label = [
                 "%s %s x %s"
-                % (l.product_uom_qty, l.product_uom.name, l.product_id.name)
-                for l in compare_res["to_remove"]
+                % (line.product_uom_qty, line.product_uom.name, line.product_id.name)
+                for line in compare_res["to_remove"]
             ]
             chatter.append(
                 _("%d order line(s) deleted: %s")
