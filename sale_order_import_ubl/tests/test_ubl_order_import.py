@@ -61,7 +61,8 @@ class TestUblOrderImport(TransactionCase):
                 self.assertEqual(date_order[:10], res["date_order"])
             if res.get("shipping_partner"):
                 self.assertEqual(so.partner_shipping_id, res["shipping_partner"])
-            if res.get("commitment_date"):
+            if filename in ("UBL-Order-2.1-Example.xml", "UBL-Order-2.0-Example.xml"):
+                self.assertTrue(res.get("commitment_date"))
                 self.assertEqual(
                     so.commitment_date.strftime("%Y-%m-%d %H:%M:%S"),
                     res["commitment_date"],
