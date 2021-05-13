@@ -85,9 +85,11 @@ class TestVoxelStockPickingCommon(common.SavepointCase):
                 "note": "Picking note (test)",
             }
         )
-        cls.picking.move_lines[0].write({"quantity_done": 2})
-        cls.picking.move_lines[1].write({"quantity_done": 1})
-        cls.picking.move_lines[1].move_line_ids.lot_id = cls.lot.id
+        sm = cls.picking.move_lines[0]
+        sm.write({"quantity_done": sm.product_uom_qty})
+        sm = cls.picking.move_lines[1]
+        sm.write({"quantity_done": sm.product_uom_qty})
+        sm.move_line_ids.lot_id = cls.lot.id
         cls.picking.button_validate()
 
     @classmethod
