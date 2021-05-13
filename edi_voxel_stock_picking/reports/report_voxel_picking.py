@@ -84,9 +84,8 @@ class ReportVoxelPicking(models.AbstractModel):
         return [{"PORef": (so.client_order_ref or so.name) if so else picking.origin}]
 
     def _get_products_data(self, picking):
-        return [
-            {"product": self._get_product_data(line)} for line in picking.move_lines
-        ]
+        lines = picking.move_lines.filtered(lambda x: x.state == "done")
+        return [{"product": self._get_product_data(line)} for line in lines]
 
     def _get_product_data(self, line):
         customer_sku = line.picking_id._get_customer_product_sku(
