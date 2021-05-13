@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo14-addon-base_business_document_import',
         'odoo14-addon-base_edi',
         'odoo14-addon-base_ubl',
+        'odoo14-addon-edi_account_oca',
         'odoo14-addon-edi_oca',
         'odoo14-addon-purchase_order_ubl',
         'odoo14-addon-sale_order_ubl',
