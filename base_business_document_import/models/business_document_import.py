@@ -321,7 +321,7 @@ class BusinessDocumentImport(models.AbstractModel):
         )
         if partner:
             return partner
-        if not partner_dict.get("vat"):
+        if not partner_dict.get("vat") and not partner_dict.get("email"):
             partner = self.env["res.partner"].search(domain_delivery, limit=1)
         if partner:
             return partner
