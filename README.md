@@ -35,7 +35,7 @@ addon | version | summary
 [edi_account](edi_account/) | 13.0.1.0.2 | Define EDI Configuration for Account Moves
 [edi_exchange_template](edi_exchange_template/) | 13.0.1.6.0 | Allows definition of exchanges via templates.
 [edi_storage](edi_storage/) | 13.0.1.5.0 | Base module to allow exchanging files via storage backend (eg: SFTP).
-[edi_voxel](edi_voxel/) | 13.0.1.0.0 | Base module for connecting with Voxel
+[edi_voxel](edi_voxel/) | 13.0.1.0.1 | Base module for connecting with Voxel
 [edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.0.2 | Sends account invoices to Voxel.
 [edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.0 | Import sale order from Voxel.
 [edi_voxel_sale_secondary_unit](edi_voxel_sale_secondary_unit/) | 13.0.1.0.0 | Map Voxel UoM to Sale Secondary UoM and Use Them
