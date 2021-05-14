@@ -2,7 +2,7 @@
 # @author: Enric Tobella
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.addons.edi.tests.common import EDIBackendCommonTestCase
+from odoo.addons.edi_oca.tests.common import EDIBackendCommonTestCase
 
 
 class TestEdiWebService(EDIBackendCommonTestCase):
