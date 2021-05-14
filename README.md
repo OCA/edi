@@ -26,6 +26,7 @@ addon | version | summary
 [edi_oca](edi_oca/) | 14.0.1.0.1 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF purchase order
 [sale_order_ubl](sale_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF quotation
+[webservice](webservice/) | 14.0.1.0.0 | Defines webservice abstract definition to be used generally
 
 [//]: # (end addons)
 
