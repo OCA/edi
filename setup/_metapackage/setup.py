@@ -15,6 +15,7 @@ setuptools.setup(
         'odoo14-addon-edi_oca',
         'odoo14-addon-purchase_order_ubl',
         'odoo14-addon-sale_order_ubl',
+        'odoo14-addon-webservice',
     ],
     classifiers=[
         'Programming Language :: Python',
