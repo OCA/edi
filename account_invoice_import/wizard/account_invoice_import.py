@@ -521,14 +521,8 @@ class AccountInvoiceImport(models.TransientModel):
             raise UserError(_("You must select an Invoice Import Configuration."))
         parsed_inv = self.get_parsed_invoice()
         invoice = self._update_invoice(parsed_inv)
-        action = iaao.for_xml_id("account", "action_invoice_tree2")
-        action.update(
-            {
-                "view_mode": "form,tree,calendar,graph",
-                "views": False,
-                "res_id": invoice.id,
-            }
-        )
+        action = iaao.for_xml_id("account", "action_move_in_invoice_type")
+        action.update({"domain": [('id', '=', invoice.id)]})
         return action
 
     def xpath_to_dict_helper(self, xml_root, xpath_dict, namespaces):
