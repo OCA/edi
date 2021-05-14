@@ -1,0 +1,5 @@
+diff a/.pre-commit-config.yaml b/.pre-commit-config.yaml	(rejected hunks)
+@@ -56,2 +55,3 @@ repos:
+           - --plugin=@prettier/plugin-xml
++        files: \.xml$
+   - repo: https://github.com/pre-commit/mirrors-eslint

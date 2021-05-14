@@ -1,7 +1,7 @@
 /* Copyright 2019 Tecnativa - David Vidal
  * License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). */
 
-odoo.define("edi_oca.FieldEdiConfiguration", function(require) {
+odoo.define("edi_oca.FieldEdiConfiguration", function (require) {
     "use strict";
 
     var AbstractField = require("web.AbstractField");
@@ -15,7 +15,7 @@ odoo.define("edi_oca.FieldEdiConfiguration", function(require) {
         events: _.extend({}, AbstractField.prototype.events, {
             "click button": "_onClickGenerateEdiConfiguration",
         }),
-        _onClickGenerateEdiConfiguration: function(ev) {
+        _onClickGenerateEdiConfiguration: function (ev) {
             ev.preventDefault();
             ev.stopPropagation();
             var button = ev.target.closest("button");
@@ -26,7 +26,7 @@ odoo.define("edi_oca.FieldEdiConfiguration", function(require) {
                 method: "edi_create_exchange_record",
                 args: [[this.res_id], parseInt(type, 10)],
                 context: this.record.getContext({}),
-            }).then(function(action) {
+            }).then(function (action) {
                 self.trigger_up("do_action", {action: action});
             });
         },
