@@ -47,6 +47,7 @@ addon | version | summary
 [partner_identification_import](partner_identification_import/) | 13.0.2.0.0 | Provides partner matching on extra ID
 [purchase_order_ubl](purchase_order_ubl/) | 13.0.1.2.0 | Embed UBL XML file inside the PDF purchase order
 [purchase_stock_ubl](purchase_stock_ubl/) | 13.0.1.1.0 | Glue module for Purchase Order UBL and Stock/Inventory
+[sale_order_customer_free_ref](sale_order_customer_free_ref/) | 13.0.1.0.0 | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
 [sale_order_import](sale_order_import/) | 13.0.2.1.0 | Import RFQ or sale orders from files
 [sale_order_import_ubl](sale_order_import_ubl/) | 13.0.2.1.0 | Import UBL XML sale order files
 [sale_order_import_ubl_http](sale_order_import_ubl_http/) | 13.0.1.1.1 | Add an HTTP endpoint to import UBL formatted ordersautomatically as sales order
