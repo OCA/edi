@@ -267,7 +267,7 @@ class SaleOrderImport(models.TransientModel):
 
     @api.model
     def create_order(self, parsed_order, price_source, order_filename=None):
-        soo = self.env["sale.order"]
+        soo = self.env["sale.order"].with_context(mail_create_nosubscribe=True)
         bdio = self.env["business.document.import"]
         so_vals = self._prepare_order(parsed_order, price_source)
         order = soo.create(so_vals)
