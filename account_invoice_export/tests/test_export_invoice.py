@@ -39,7 +39,7 @@ class TestExportAcountInvoice(SingleTransactionCase):
         cls.invoice_1 = cls.env["account.move"].create(
             {
                 "partner_id": cls.customer.id,
-                "type": "out_invoice",
+                "move_type": "out_invoice",
                 "transmit_method_id": cls.transmit_method.id,
                 "invoice_line_ids": [
                     (
