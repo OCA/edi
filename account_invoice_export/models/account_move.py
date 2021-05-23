@@ -7,8 +7,6 @@ import odoo
 from odoo import _, fields, models
 from odoo.exceptions import UserError, except_orm
 
-from odoo.addons.queue_job.job import job
-
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -22,7 +20,6 @@ class AccountMove(models.Model):
             description = "{} - Export ebill".format(invoice.transmit_method_id.name)
             invoice.with_delay(description=description)._job_export_invoice()
 
-    @job(default_channel="root.invoice_export")
     def _job_export_invoice(self):
         """Export ebill to external server and update the chatter."""
         self.ensure_one()
@@ -83,7 +80,7 @@ class AccountMove(models.Model):
         r = self.env["ir.actions.report"]._get_report_from_name(
             "account.report_invoice"
         )
-        pdf, _ = r.render([self.id])
+        pdf, _ = r._render([self.id])
         filename = self._get_report_base_filename().replace("/", "_") + ".pdf"
         return {"file": (filename, pdf, "application/pdf")}
 
@@ -100,7 +97,7 @@ class AccountMove(models.Model):
         if not activity:
             message = self.env.ref(
                 "account_invoice_export.exception_sending_invoice"
-            ).render(values=values)
+            )._render(values=values)
             activity = self.activity_schedule(
                 activity_type, summary="Job error sending invoice", note=message
             )
