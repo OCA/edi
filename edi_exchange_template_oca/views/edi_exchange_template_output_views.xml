@@ -30,10 +30,22 @@
                             <field name="type_id" />
                             <field name="code" />
                             <field name="output_type" />
-                            <field name="template_id" />
+                            <field name="generator" />
+                            <field
+                                name="template_id"
+                                attrs="{'required': [('generator', '=', 'qweb')], 'invisible': [('generator', '!=', 'qweb')]}"
+                            />
+                            <field
+                                name="report_id"
+                                attrs="{'required': [('generator', '=', 'report')], 'invisible': [('generator', '!=', 'report')]}"
+                            />
                         </group>
                     </group>
-                    <group name="template_edit" col="4">
+                    <group
+                        name="template_edit"
+                        col="4"
+                        attrs="{'invisible': [('generator', '!=', 'qweb')]}"
+                    >
                         <separator string="Template" colspan="4" />
                         <field name="template_key" colspan="4" />
                         <field

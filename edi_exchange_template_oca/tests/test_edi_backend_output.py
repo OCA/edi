@@ -91,6 +91,35 @@ result = {"custom_bit": foo, "baz": baz}
             "type_id": cls.type_out2.id,
         }
         cls.record2 = cls.backend.create_record("test_type_out2", vals)
+        cls.type_out3 = cls._create_exchange_type(
+            name="Template output 3",
+            direction="output",
+            code="test_type_out3",
+            exchange_file_ext="xml",
+            exchange_filename_pattern="{record.id}-{type.code}-{dt}",
+        )
+        cls.report = cls.env.ref("web.action_report_externalpreview")
+        cls.tmpl_out3 = model.create(
+            {
+                "code": "edi.output.generate.demo_backend.test_type_out3",
+                "name": "Out 3",
+                "backend_type_id": cls.backend.backend_type_id.id,
+                "type_id": cls.type_out3.id,
+                "generator": "report",
+                "report_id": cls.report.id,
+                "output_type": "pdf",
+                "code_snippet": """
+result = {"res_ids": record.ids}
+                        """,
+            }
+        )
+        company = cls.env.ref("base.main_company")
+        vals = {
+            "model": company._name,
+            "res_id": company.id,
+            "type_id": cls.type_out2.id,
+        }
+        cls.record3 = cls.backend.create_record("test_type_out3", vals)
 
 
 # TODO: add more unit tests
@@ -122,3 +151,11 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         self.assertEqual(doc.getchildren()[1].tag, "Custom")
         self.assertEqual(doc.getchildren()[1].text, "2")
         self.assertEqual(doc.getchildren()[1].attrib, {"bit": "custom_var"})
+
+    def test_generate_file_report(self):
+        output = self.backend.exchange_generate(self.record3)
+        self.assertTrue(output)
+        self.assertEqual(
+            self.report.render([self.record3.res_id])[0].strip().decode("UTF-8"),
+            output.strip(),
+        )
