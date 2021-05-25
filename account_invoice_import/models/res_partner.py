@@ -1,4 +1,5 @@
-# Copyright 2015-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2015-2021 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models
@@ -20,7 +21,9 @@ class ResPartner(models.Model):
 
     def _compute_invoice_import_count(self):
         config_data = self.env["account.invoice.import.config"].read_group(
-            [("partner_id", "in", self.ids)], ["partner_id"], ["partner_id"]
+            [("partner_id", "in", self.ids), ("company_id", "=", self.env.company.id)],
+            ["partner_id"],
+            ["partner_id"],
         )
         mapped_data = {
             config["partner_id"][0]: config["partner_id_count"]
