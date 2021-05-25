@@ -74,7 +74,6 @@ class TestInvoiceImport(TransactionCase):
             "type": "in_invoice",
             "amount_untaxed": 100.0,
             "amount_total": 101.0,
-            "invoice_number": "INV-2017-9876",
             "date_invoice": "2017-08-16",
             "date_due": "2017-08-31",
             "date_start": "2017-08-01",
@@ -98,8 +97,10 @@ class TestInvoiceImport(TransactionCase):
                 }
             ],
         }
-        for import_config in self.all_import_config:
-            self.env["account.invoice.import"].create_invoice(parsed_inv, import_config)
+        for import_c in self.all_import_config:
+            # hack to have a unique vendor inv ref
+            parsed_inv["invoice_number"] = "INV-%s" % import_c["invoice_line_method"]
+            self.env["account.invoice.import"].create_invoice(parsed_inv, import_c)
 
     def test_import_out_invoice(self):
         parsed_inv = {
