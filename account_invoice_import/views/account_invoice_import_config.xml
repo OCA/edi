@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-  Copyright 2015-2017 Akretion (http://www.akretion.com/)
+  Copyright 2015-2021 Akretion France (http://www.akretion.com/)
   @author: Alexis de Lattre <alexis.delattre@akretion.com>
   License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 -->
@@ -9,49 +9,44 @@
         <field name="model">account.invoice.import.config</field>
         <field name="arch" type="xml">
             <form string="Invoice Import Configuration">
-                <div class="oe_button_box" name="button_box">
-                    <button
-                        name="toggle_active"
-                        type="object"
-                        class="oe_stat_button"
-                        icon="fa-archive"
-                    >
+                <sheet>
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        attrs="{'invisible': [('active', '=', True)]}"
+                    />
+                    <group name="main">
+                        <field name="name" />
+                        <field name="partner_id" />
+                        <field name="company_id" groups="base.group_multi_company" />
+                        <field name="active" invisible="1" />
+                    </group>
+                    <group string="Accounting Parameters" name="accounting">
+                        <field name="invoice_line_method" />
                         <field
-                            name="active"
-                            widget="boolean_button"
-                            options='{"terminology": "archive"}'
+                            name="account_id"
+                            attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_no_product', 'nline_no_product'))], 'required': [('invoice_line_method', 'in', ('1line_no_product', 'nline_no_product'))]}"
                         />
-                    </button>
-                </div>
-                <group name="main">
-                    <field name="name" />
-                    <field name="partner_id" />
-                    <field name="company_id" groups="base.group_multi_company" />
-                </group>
-                <group string="Accounting Parameters" name="accounting">
-                    <field name="invoice_line_method" />
-                    <field
-                        name="account_id"
-                        attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_no_product', 'nline_no_product'))], 'required': [('invoice_line_method', 'in', ('1line_no_product', 'nline_no_product'))]}"
-                    />
-                    <field
-                        name="tax_ids"
-                        widget="many2many_tags"
-                        attrs="{'invisible': [('invoice_line_method', '!=', '1line_no_product')]}"
-                    />
-                    <field
-                        name="static_product_id"
-                        attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_static_product', 'nline_static_product'))], 'required': [('invoice_line_method', 'in', ('1line_static_product', 'nline_static_product'))]}"
-                    />
-                    <field
-                        name="account_analytic_id"
-                        groups="analytic.group_analytic_accounting"
-                    />
-                    <field
-                        name="label"
-                        attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_no_product', '1line_static_product'))]}"
-                    />
-                </group>
+                        <field
+                            name="tax_ids"
+                            widget="many2many_tags"
+                            attrs="{'invisible': [('invoice_line_method', '!=', '1line_no_product')]}"
+                        />
+                        <field
+                            name="static_product_id"
+                            attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_static_product', 'nline_static_product'))], 'required': [('invoice_line_method', 'in', ('1line_static_product', 'nline_static_product'))]}"
+                        />
+                        <field
+                            name="account_analytic_id"
+                            groups="analytic.group_analytic_accounting"
+                        />
+                        <field
+                            name="label"
+                            attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_no_product', '1line_static_product'))]}"
+                        />
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
