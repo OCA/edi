@@ -1,101 +1,30 @@
-#! /usr/bin/python
-#  © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+#! /usr/bin/python3
+# Copyright 2017-2021 Akretion France (http://www.akretion.com/)
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 """
 Mass import of PDF/XML invoice.
 The module OCA/edi/account_invoice_import must be installed on Odoo.
 """
+import argparse
 import base64
 import getpass
 import logging
 import mimetypes
 import os
 import sys
-from optparse import OptionParser
 
 import odoorpc
 
 __author__ = "Alexis de Lattre <alexis.delattre@akretion.com>"
-__date__ = "June 2017"
-__version__ = "0.1"
+__date__ = "March 2021"
+__version__ = "0.2"
 
 FORMAT = "%(asctime)s [%(levelname)s] %(message)s"
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger("add_xivo_user")
-# Define command line options
-options = [
-    {
-        "names": ("-s", "--server"),
-        "dest": "server",
-        "type": "string",
-        "action": "store",
-        "default": False,
-        "help": "DNS or IP address of the Odoo server.",
-    },
-    {
-        "names": ("-p", "--port"),
-        "dest": "port",
-        "type": "int",
-        "action": "store",
-        "default": 443,
-        "help": "Port of Odoo's HTTP(S) interface. Default: 443.",
-    },
-    {
-        "names": ("-x", "--no-ssl"),
-        "dest": "no_ssl",
-        "help": "Use un-encrypted HTTP connection instead of HTTPS.",
-        "action": "store_true",
-        "default": False,
-    },
-    {
-        "names": ("-d", "--database"),
-        "dest": "database",
-        "type": "string",
-        "action": "store",
-        "default": False,
-        "help": "Odoo database name.",
-    },
-    {
-        "names": ("-u", "--username"),
-        "dest": "username",
-        "type": "string",
-        "action": "store",
-        "default": False,
-        "help": "Username to use when connecting to Odoo.",
-    },
-    {
-        "names": ("-w", "--password"),
-        "dest": "password",
-        "type": "string",
-        "action": "store",
-        "default": False,
-        "help": "Password of the Odoo user. If you don't use this option, "
-        "the script will prompt you for a password.",
-    },
-    {
-        "names": ("-m", "--no-move-fail"),
-        "dest": "no_move_failed",
-        "action": "store_true",
-        "default": False,
-        "help": "Don't move failed invoices to a fail sub-directory.",
-    },
-    {
-        "names": ("-k", "--fail-subdir-name"),
-        "dest": "fail_subdir",
-        "action": "store",
-        "default": "odoo-import_fail",
-        "help": "Fail sub-directory name. Default value: 'odoo-import_fail'.",
-    },
-    {
-        "names": ("-l", "--log-level"),
-        "dest": "log_level",
-        "action": "store",
-        "default": "info",
-        "help": "Set log level. Possible values: debug, info, warn, error. "
-        "Default value: info.",
-    },
-]
+
 fail_subdir_ok = {}  # key = directory, value: failsubdir or False
 invoice_ids = []
 fail_files = []
@@ -111,30 +40,21 @@ def send_file(odoo, file_path):
         if not os.access(file_path, os.R_OK):
             logger.error("No read access on file %s. Skipping.", filename)
             return False
-        f = open(file_path)
-        f.seek(0)
-        invoice = f.read()
-        f.close()
-        inv_b64 = base64.b64encode(invoice)
-        wiz_id = odoo.execute(
-            "account.invoice.import",
-            "create",
-            {"invoice_file": inv_b64, "invoice_filename": filename},
-        )
-        logger.debug("account.invoice.import wizard_id=%d", wiz_id)
+        with open(file_path, "rb") as f:
+            f.seek(0)
+            invoice = f.read()
+        inv_b64 = base64.encodebytes(invoice)
+        aiio = odoo.env["account.invoice.import"]
         try:
-            action = odoo.execute(
-                "account.invoice.import", "create_invoice_action", wiz_id
+            invoice_id = aiio.create_invoice_webservice(
+                inv_b64.decode("utf8"), filename, "mass import script"
             )
-            if action.get("res_id"):
-                logger.info(
-                    "Invoice ID %d successfully created in Odoo", action["res_id"]
-                )
-                invoice_ids.append(action["res_id"])
+            if invoice_id:
+                logger.info("Invoice ID %d successfully created in Odoo", invoice_id)
+                invoice_ids.append(invoice_id)
                 return "success"
             else:
-                logger.debug("action=%s", action)
-                logger.warning("Very strange: no res_id key in action")
+                logger.warning("Invoice import failed")
                 fail_files.append(filename)
                 return "failure"
         except Exception as e:
@@ -175,13 +95,15 @@ def update_fail_subdir(directory, fail_subdir):
 
 
 def handle_failure(directory, entry, file_path):
-    if not options.no_move_failed:
+    if not args.no_move_failed:
         if directory not in fail_subdir_ok:
-            update_fail_subdir(directory, options.fail_subdir)
+            update_fail_subdir(directory, args.fail_subdir)
         fail_dir_path = fail_subdir_ok[directory]
         if fail_dir_path:
             logger.info(
-                "Moving file %s to sub-directory %s", entry, options.fail_subdir,
+                "Moving file %s to sub-directory %s",
+                entry,
+                args.fail_subdir,
             )
             os.rename(file_path, os.path.join(fail_dir_path, entry))
 
@@ -196,7 +118,7 @@ def browse_directory(odoo, directory):
                 continue
             res = send_file(odoo, file_path)
             if res == "failure":
-                handle_failure(options)
+                handle_failure(directory, entry, file_path)
 
     elif os.path.isfile(directory):
         res = send_file(odoo, directory)
@@ -204,11 +126,9 @@ def browse_directory(odoo, directory):
         logger.warning("%s is not a directory nor a file. Skipped." % directory)
 
 
-def main(options, arguments):
-    # print 'options = %s' % options
-    # print 'arguments = %s' % arguments
-    if options.log_level:
-        log_level = options.log_level.lower()
+def main(args):
+    if args.log_level:
+        log_level = args.log_level.lower()
         log_map = {
             "debug": logging.DEBUG,
             "info": logging.INFO,
@@ -224,16 +144,7 @@ def main(options, arguments):
                 log_level,
             )
             sys.exit(1)
-    if not options.username:
-        logger.error("Missing username: use the -u command line option.")
-        sys.exit(1)
-    if not options.server:
-        logger.error("Missing server: use the -s command line option.")
-        sys.exit(1)
-    if not options.database:
-        logger.error("Missing database name: use the -d command line option.")
-        sys.exit(1)
-    pwd = options.password
+    pwd = args.password
     first_login = True
     while not pwd:
         # prompt for password
@@ -241,30 +152,30 @@ def main(options, arguments):
         if first_login:
             logger.error("Cannot connect with an empty password. Re-enter a password.")
         first_login = False
-    if not arguments:
+    if not args:
         logger.error(
             "Missing directory argument. You should pass to the "
             "script at least one directory as argument."
         )
         sys.exit(1)
-    proto = options.no_ssl and "jsonrpc" or "jsonrpc+ssl"
+    proto = args.no_ssl and "jsonrpc" or "jsonrpc+ssl"
     logger.info(
         "Connecting to Odoo %s:%s in %s database %s username %s",
-        options.server,
-        options.port,
+        args.server,
+        args.port,
         proto,
-        options.database,
-        options.username,
+        args.database,
+        args.username,
     )
     try:
-        odoo = odoorpc.ODOO(options.server, proto, options.port)
-        odoo.login(options.database, options.username, pwd)
+        odoo = odoorpc.ODOO(args.server, proto, args.port)
+        odoo.login(args.database, args.username, pwd)
         logger.info("Successfully connected to Odoo")
     except Exception as e:
         logger.error("Failed to connect to Odoo. Error: %s", e)
         sys.exit(1)
 
-    for directory in arguments:
+    for directory in args.dir_list:
         browse_directory(odoo, directory)
     logger.info(
         "RESULT: %d invoice%s created in Odoo, %d invoice import failure%s.",
@@ -291,11 +202,81 @@ if __name__ == "__main__":
         "must be installed on Odoo together with the module(s) that add "
         "support for the specific invoice format."
     )
-    parser = OptionParser(usage=usage, epilog=epilog, description=description)
-    for option in options:
-        param = option["names"]
-        del option["names"]
-        parser.add_option(*param, **option)
-    options, arguments = parser.parse_args()
-    sys.argv[:] = arguments
-    main(options, arguments)
+    parser = argparse.ArgumentParser(
+        usage=usage, epilog=epilog, description=description
+    )
+    parser.add_argument(
+        "-s",
+        "--server",
+        dest="server",
+        type=str,
+        required=True,
+        help="DNS or IP address of the Odoo server.",
+    )
+    parser.add_argument(
+        "-p",
+        "--port",
+        dest="port",
+        type=int,
+        default=443,
+        help="Port of Odoo's HTTP(S) interface. Default: 443.",
+    )
+    parser.add_argument(
+        "-x",
+        "--no-ssl",
+        dest="no_ssl",
+        action="store_true",
+        help="Use un-encrypted HTTP connection instead of HTTPS.",
+    )
+    parser.add_argument(
+        "-d",
+        "--database",
+        dest="database",
+        type=str,
+        required=True,
+        help="Odoo database name.",
+    )
+    parser.add_argument(
+        "-u",
+        "--username",
+        dest="username",
+        type=str,
+        required=True,
+        help="Username to use when connecting to Odoo.",
+    )
+    parser.add_argument(
+        "-w",
+        "--password",
+        dest="password",
+        type=str,
+        required=True,
+        help="Password of the Odoo user. If you don't use this option, "
+        "the script will prompt you for a password.",
+    )
+    parser.add_argument(
+        "-m",
+        "--no-move-fail",
+        dest="no_move_failed",
+        action="store_true",
+        help="Don't move failed invoices to a fail sub-directory.",
+    )
+    parser.add_argument(
+        "-k",
+        "--fail-subdir-name",
+        dest="fail_subdir",
+        type=str,
+        default="odoo-import_fail",
+        help="Fail sub-directory name. Default value: 'odoo-import_fail'.",
+    )
+    parser.add_argument(
+        "-l",
+        "--log-level",
+        dest="log_level",
+        default="info",
+        type=str,
+        help="Set log level. Possible values: debug, info, warn, error. "
+        "Default value: info.",
+    )
+    parser.add_argument("dir_list", help="List of directories", type=str, nargs="+")
+    args = parser.parse_args()
+    main(args)
