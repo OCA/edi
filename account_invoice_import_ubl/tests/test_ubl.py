@@ -59,7 +59,7 @@ class TestUbl(TransactionCase):
             )
             self.assertEqual(len(invoices), 1)
             inv = invoices[0]
-            self.assertEqual(inv.type, res_dict.get("type", "in_invoice"))
+            self.assertEqual(inv.move_type, res_dict.get("move_type", "in_invoice"))
             str_invoice_date = fields.Date.to_string(inv.invoice_date)
             self.assertEqual(str_invoice_date, res_dict["invoice_date"])
             if res_dict.get("origin"):
