@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-  © 2015-2017 Akretion (http://www.akretion.com/)
+  Copyright 2015-2021 Akretion France (http://www.akretion.com/)
   @author: Alexis de Lattre <alexis.delattre@akretion.com>
   License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 -->
@@ -11,11 +11,11 @@
             <form string="Import Supplier Invoice or Refund">
                 <div name="help-import" states="import">
                     <p
-                    >Upload below the supplier invoice (or refund) as PDF or XML file: Odoo will create a draft supplier invoice (or refund). Supported formats:</p>
+                    >Upload below the supplier invoice/refund as PDF or XML file: Odoo will create a draft supplier invoice/refund. Supported formats:</p>
                     <ul name="supported_formats_list" />
                     <p
                     >If the format you need is not listed above, you should install an additionnal Odoo module that adds support for that format (e.g. <i
-                        >account_invoice_import_factur-x</i>, <i
+                        >account_invoice_import_facturx</i>, <i
                         >account_invoice_import_ubl</i>, <i
                         >account_invoice_import_invoice2data</i>, etc).</p>
                     <p
@@ -29,7 +29,7 @@
                     <p
                     >Some draft supplier invoices/refunds have been found for the supplier of the invoice you are importing; one of them may correspond to the invoice you are importing. You can either select an existing draft supplier invoice to update or create a new draft invoice.</p>
                 </div>
-                <group name="main">
+                <group name="main" states="import,config,update,update-from-invoice">
                     <field name="state" invisible="1" />
                     <field name="currency_id" invisible="1" />
                     <field
@@ -64,11 +64,62 @@
                     <field
                         name="invoice_id"
                         states="update,update-from-invoice"
-                        domain="[('state', '=', 'draft'), ('type', 'in', ('in_invoice', 'in_refund')), ('commercial_partner_id', '=', partner_id), ('type', '=', invoice_type)]"
+                        domain="[('state', '=', 'draft'), ('move_type', 'in', ('in_invoice', 'in_refund')), ('commercial_partner_id', '=', partner_id), ('move_type', '=', invoice_type)]"
                         context="{'invoice_show_amount': True}"
                         attrs="{'readonly': [('state', '=', 'update-from-invoice')]}"
                     />
                 </group>
+                <group
+                    name="partner-not-found"
+                    states="partner-not-found"
+                    string="Vendor not found"
+                >
+                    <field name="message" nolabel="1" colspan="2" />
+                    <field name="partner_vat" invisible="1" />
+                    <field name="partner_country_id" invisible="1" />
+                </group>
+                <group
+                    name="partner-not-found-create"
+                    states="partner-not-found"
+                    string="Create New Vendor"
+                >
+                    <button
+                        name="new_partner"
+                        type="object"
+                        string="Create"
+                        states="partner-not-found"
+                        class="btn-primary"
+                    />
+                </group>
+                <group
+                    name="partner-not-found-update"
+                    attrs="{'invisible': ['|', ('state', '!=', 'partner-not-found'), ('partner_vat', '=', False)]}"
+                    string="Update Existing Vendor"
+                    col="1"
+                >
+                    <group>
+                            <field
+                            name="partner_id"
+                            domain="[('parent_id', '=', False)]"
+                            readonly="0"
+                            string="Vendor to Update"
+                        />
+                    </group>
+                    <group>
+                    <button
+                            name="update_partner_vat_show"
+                            type="object"
+                            string="Update and Show Vendor"
+                            class="btn-primary"
+                        />
+                    <button
+                            name="update_partner_vat_continue"
+                            type="object"
+                            string="Update and Continue"
+                            class="btn-primary"
+                        />
+                    </group>
+            </group>
                 <footer>
                     <button
                         name="import_invoice"
