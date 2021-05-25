@@ -18,6 +18,11 @@ class EDIExchangeOutputTemplate(models.Model):
     _inherit = "edi.exchange.template.mixin"
     _description = "EDI Exchange Output Template"
 
+    generator = fields.Selection(
+        [("qweb", "Qweb Template"), ("report", "Report")],
+        required=True,
+        default="qweb",
+    )
     output_type = fields.Char(required=True)
     # TODO: add a good domain (maybe add a new flag or category to ir.ui.view)
     # Options:
@@ -29,9 +34,10 @@ class EDIExchangeOutputTemplate(models.Model):
     template_id = fields.Many2one(
         string="Qweb Template",
         comodel_name="ir.ui.view",
-        required=True,
+        required=False,
         ondelete="restrict",
     )
+    report_id = fields.Many2one(comodel_name="ir.actions.report", ondelete="restrict",)
     # TODO: find a way to prevent editing "master templates"
     # This would allow editing only a copy of the original template
     # so that you can always check or rollback to it.
@@ -59,12 +65,24 @@ class EDIExchangeOutputTemplate(models.Model):
     def exchange_generate(self, exchange_record, **kw):
         """Generate output for given record using related QWeb template.
         """
+        method = "_generate_" + self.generator
+        try:
+            generator = getattr(self, method)
+        except AttributeError:
+            raise NotImplementedError(f"`{method}` not found")
+        result = generator(exchange_record, **kw)
+        return self._post_process_output(result)
+
+    def _generate_qweb(self, exchange_record, **kw):
         tmpl = self.template_id
-        # TODO: how to validate mandatory render values?
-        # (eg: sender/receiver are mandatory for BH)
         values = self._get_render_values(exchange_record, **kw)
-        output = tmpl.render(values)
-        return self._post_process_output(output)
+        return tmpl.render(values)
+
+    def _generate_report(self, exchange_record, **kw):
+        report = self.report_id
+        values = self._get_render_values(exchange_record, **kw)
+        res_ids = values.get("res_ids", [])
+        return report.render(res_ids, data=values)[0]
 
     def _get_render_values(self, exchange_record, **kw):
         """Collect values to render current template."""
