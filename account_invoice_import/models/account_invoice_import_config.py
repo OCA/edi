@@ -1,4 +1,4 @@
-# Copyright 2015-2018 Akretion France
+# Copyright 2015-2021 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
@@ -10,10 +10,13 @@ class AccountInvoiceImportConfig(models.Model):
     _name = "account.invoice.import.config"
     _description = "Configuration for the import of Supplier Invoices"
     _order = "sequence"
+    _check_company_auto = True
 
     name = fields.Char(required=True)
     partner_id = fields.Many2one(
-        "res.partner", ondelete="cascade", domain=[("parent_id", "=", False)],
+        "res.partner",
+        ondelete="cascade",
+        domain=[("parent_id", "=", False)],
     )
     active = fields.Boolean(default=True)
     sequence = fields.Integer()
@@ -29,31 +32,38 @@ class AccountInvoiceImportConfig(models.Model):
         required=True,
         default="1line_no_product",
         help="The multi-line methods will not work for PDF invoices "
-        "that don't have an embedded XML file. "
-        "The 'Multi Line, Auto-selected Product' method will only work with "
-        "ZUGFeRD invoices at Comfort or Extended level, not at Basic level.",
+        "that don't have an embedded XML file which has structured information "
+        "on each line.",
     )
     company_id = fields.Many2one(
         "res.company",
         ondelete="cascade",
         required=True,
-        default=lambda self: self.env["res.company"]._company_default_get(
-            "account.invoice.import.config"
-        ),
+        default=lambda self: self.env.company,
     )
     account_id = fields.Many2one(
-        "account.account", string="Expense Account", domain=[("deprecated", "=", False)]
+        "account.account",
+        string="Expense Account",
+        domain="[('deprecated', '=', False), ('company_id', '=', company_id)]",
+        check_company=True,
     )
     account_analytic_id = fields.Many2one(
-        "account.analytic.account", string="Analytic Account"
+        "account.analytic.account", string="Analytic Account", check_company=True
     )
     label = fields.Char(
         string="Force Description", help="Force supplier invoice line description"
     )
     tax_ids = fields.Many2many(
-        "account.tax", string="Taxes", domain=[("type_tax_use", "=", "purchase")]
+        "account.tax",
+        string="Taxes",
+        domain="[('type_tax_use', '=', 'purchase'), ('company_id', '=', company_id)]",
+        check_company=True,
     )
-    static_product_id = fields.Many2one("product.product")
+    static_product_id = fields.Many2one(
+        "product.product",
+        check_company=True,
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+    )
 
     @api.constrains("invoice_line_method", "account_id", "static_product_id")
     def _check_import_config(self):
@@ -84,14 +94,6 @@ class AccountInvoiceImportConfig(models.Model):
 
     @api.onchange("invoice_line_method", "account_id")
     def invoice_line_method_change(self):
-        if self.invoice_line_method == "1line_no_product" and self.account_id:
-            self.tax_ids = [(6, 0, self.account_id.tax_ids.ids)]
-        elif self.invoice_line_method != "1line_no_product":
-            self.tax_ids = [(6, 0, [])]
-
-    @api.onchange("partner_id")
-    def partner_id_change(self):
-        # if available get proporty
         if self.invoice_line_method == "1line_no_product" and self.account_id:
             self.tax_ids = [(6, 0, self.account_id.tax_ids.ids)]
         elif self.invoice_line_method != "1line_no_product":
