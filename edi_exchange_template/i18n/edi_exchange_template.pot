@@ -111,6 +111,11 @@ msgid "EDI Exchange type"
 msgstr ""
 
 #. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__generator
+msgid "Generator"
+msgstr ""
+
+#. module: edi_exchange_template
 #: model_terms:ir.ui.view,arch_db:edi_exchange_template.edi_exchange_template_output_view_search
 msgid "Group By"
 msgstr ""
@@ -160,7 +165,14 @@ msgstr ""
 
 #. module: edi_exchange_template
 #: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__template_id
+#: model:ir.model.fields.selection,name:edi_exchange_template.selection__edi_exchange_template_output__generator__qweb
 msgid "Qweb Template"
+msgstr ""
+
+#. module: edi_exchange_template
+#: model:ir.model.fields,field_description:edi_exchange_template.field_edi_exchange_template_output__report_id
+#: model:ir.model.fields.selection,name:edi_exchange_template.selection__edi_exchange_template_output__generator__report
+msgid "Report"
 msgstr ""
 
 #. module: edi_exchange_template
