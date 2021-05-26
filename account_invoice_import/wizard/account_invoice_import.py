@@ -20,10 +20,10 @@ logger = logging.getLogger(__name__)
 
 class AccountInvoiceImport(models.TransientModel):
     _name = "account.invoice.import"
-    _inherit = ["business.document.import"]
+    _inherit = ["business.document.import", "mail.thread"]
     _description = "Wizard to import supplier invoices/refunds"
 
-    invoice_file = fields.Binary(string="PDF or XML Invoice", required=True)
+    invoice_file = fields.Binary(string="PDF or XML Invoice")
     invoice_filename = fields.Char(string="Filename")
     state = fields.Selection(
         [
@@ -1342,6 +1342,12 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def message_new(self, msg_dict, custom_values=None):
+        """Process the message data from a fetchmail configuration
+
+        The caller expects us to create a record so we always return an empty
+        one even though the actual result is the imported invoice, if the
+        message content allows it.
+        """
         logger.info(
             "New email received associated with account.invoice.import: "
             "From: %s, Subject: %s, Date: %s, Message ID: %s. Executing "
@@ -1391,7 +1397,7 @@ class AccountInvoiceImport(models.TransientModel):
                     msg_dict["email_to"],
                     msg_dict["cc"],
                 )
-                return
+                return self.create({})
         else:  # mono-company setup
             company_id = all_companies[0]["id"]
 
@@ -1445,4 +1451,4 @@ class AccountInvoiceImport(models.TransientModel):
         # fails to import or when the invoice is already created
         # So, for the moment, we leave it like that...
         # If you have a better idea, please suggest!
-        return None
+        return self.create({})
