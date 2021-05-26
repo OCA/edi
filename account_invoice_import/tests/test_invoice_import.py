@@ -139,3 +139,23 @@ class TestInvoiceImport(TransactionCase):
             self.assertFalse(
                 float_compare(inv.amount_total, 30.97, precision_rounding=prec)
             )
+
+    def test_email_gateway(self):
+        """No exception occurs on incoming email"""
+        mail = """\
+Received: from someone@example.com
+Message-Id: <v0214040cad6a13935723@>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Date: Thursday, 4 Jun 1998 09:43:14 -0800
+To: project-discussion@example.com
+From: Nina Marton <nina@example.com>
+Subject: Happy Birthday
+
+Happy Birthday!
+See you this evening,
+Nina
+"""
+        self.env["mail.thread"].with_context(
+            mail_channel_noautofollow=True
+        ).message_process("account.invoice.import", mail)
