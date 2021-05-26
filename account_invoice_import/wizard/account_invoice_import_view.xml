@@ -35,6 +35,7 @@
                     <field
                         name="invoice_file"
                         filename="invoice_filename"
+                        required="1"
                         states="import,update-from-invoice"
                     />
                     <field name="invoice_filename" invisible="1" />
