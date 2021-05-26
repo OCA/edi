@@ -33,7 +33,7 @@ addon | version | summary
 [base_ubl_payment](base_ubl_payment/) | 13.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
 [edi](edi/) | 13.0.1.17.0 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_account](edi_account/) | 13.0.1.0.2 | Define EDI Configuration for Account Moves
-[edi_exchange_template](edi_exchange_template/) | 13.0.1.6.0 | Allows definition of exchanges via templates.
+[edi_exchange_template](edi_exchange_template/) | 13.0.1.7.0 | Allows definition of exchanges via templates.
 [edi_storage](edi_storage/) | 13.0.1.5.0 | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_voxel](edi_voxel/) | 13.0.1.0.1 | Base module for connecting with Voxel
 [edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.0.2 | Sends account invoices to Voxel.
