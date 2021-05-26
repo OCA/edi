@@ -11,8 +11,7 @@ _logger = logging.getLogger(__name__)
 
 
 class EDIExchangeOutputTemplate(models.Model):
-    """Define an output template to generate outgoing records' content.
-    """
+    """Define an output template to generate outgoing records' content."""
 
     _name = "edi.exchange.template.output"
     _inherit = "edi.exchange.template.mixin"
@@ -37,12 +36,17 @@ class EDIExchangeOutputTemplate(models.Model):
         required=False,
         ondelete="restrict",
     )
-    report_id = fields.Many2one(comodel_name="ir.actions.report", ondelete="restrict",)
+    report_id = fields.Many2one(
+        comodel_name="ir.actions.report",
+        ondelete="restrict",
+    )
     # TODO: find a way to prevent editing "master templates"
     # This would allow editing only a copy of the original template
     # so that you can always check or rollback to it.
     template_arch = fields.Text(
-        string="QWeb arch", related="template_id.arch_db", readonly=False,
+        string="QWeb arch",
+        related="template_id.arch_db",
+        readonly=False,
     )
     template_key = fields.Char(related="template_id.xml_id", string="Template key")
 
@@ -63,8 +67,7 @@ class EDIExchangeOutputTemplate(models.Model):
         )
 
     def exchange_generate(self, exchange_record, **kw):
-        """Generate output for given record using related QWeb template.
-        """
+        """Generate output for given record using related QWeb template."""
         method = "_generate_" + self.generator
         try:
             generator = getattr(self, method)
@@ -111,8 +114,7 @@ class EDIExchangeOutputTemplate(models.Model):
         return tmpl.exchange_generate(exchange_record, **kw)
 
     def _post_process_output(self, output):
-        """Post process generated output.
-        """
+        """Post process generated output."""
         if self.output_type == "xml":
             # TODO: lookup for components to handle this dynamically
             return xml_purge_nswrapper(output)
@@ -125,7 +127,8 @@ class EDIExchangeOutputTemplate(models.Model):
         TODO: add tests
         """
         default_work_ctx = dict(
-            exchange_record=exchange_record, record=exchange_record.record,
+            exchange_record=exchange_record,
+            record=exchange_record.record,
         )
         default_work_ctx.update(work_ctx or {})
         usage_candidates = [usage or self.code + ".info"]
