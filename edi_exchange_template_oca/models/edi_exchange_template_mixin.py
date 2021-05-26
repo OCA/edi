@@ -17,8 +17,7 @@ _logger = logging.getLogger(__name__)
 
 
 class EDIExchangeTemplateMixin(models.AbstractModel):
-    """Define a common ground for EDI exchange templates.
-    """
+    """Define a common ground for EDI exchange templates."""
 
     _name = "edi.exchange.template.mixin"
     _description = "EDI Exchange Output Mixin"
