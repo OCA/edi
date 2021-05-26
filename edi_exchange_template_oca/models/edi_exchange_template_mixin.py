@@ -4,14 +4,11 @@
 import datetime
 import logging
 import textwrap
-import time
 
-import dateutil
 import pytz
 
 from odoo import fields, models
-from odoo.tools import DotDict
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools import DotDict, safe_eval
 
 _logger = logging.getLogger(__name__)
 
@@ -90,9 +87,9 @@ class EDIExchangeTemplateMixin(models.AbstractModel):
         :returns: dict -- evaluation context given to safe_eval
         """
         return {
-            "datetime": datetime,
-            "dateutil": dateutil,
-            "time": time,
+            "datetime": safe_eval.datetime,
+            "dateutil": safe_eval.dateutil,
+            "time": safe_eval.time,
             "uid": self.env.uid,
             "user": self.env.user,
             "DotDict": DotDict,
@@ -102,7 +99,7 @@ class EDIExchangeTemplateMixin(models.AbstractModel):
         if not self._code_snippet_valued():
             return {}
         eval_ctx = dict(render_values, **self._get_code_snippet_eval_context())
-        safe_eval(self.code_snippet, eval_ctx, mode="exec", nocopy=True)
+        safe_eval.safe_eval(self.code_snippet, eval_ctx, mode="exec", nocopy=True)
         result = eval_ctx.get("result", {})
         if not isinstance(result, dict):
             _logger.error("code_snippet should return a dict into `result`")

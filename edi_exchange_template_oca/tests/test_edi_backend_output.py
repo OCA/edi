@@ -4,7 +4,7 @@ import base64
 
 from lxml import etree
 
-from odoo.addons.edi.tests.common import EDIBackendCommonComponentTestCase
+from odoo.addons.edi_oca.tests.common import EDIBackendCommonComponentTestCase
 
 
 class TestEDIBackendOutputBase(EDIBackendCommonComponentTestCase):
@@ -156,6 +156,6 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         output = self.backend.exchange_generate(self.record3)
         self.assertTrue(output)
         self.assertEqual(
-            self.report.render([self.record3.res_id])[0].strip().decode("UTF-8"),
+            self.report._render([self.record3.res_id])[0].strip().decode("UTF-8"),
             output.strip(),
         )
