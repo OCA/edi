@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_webservice_backend_edi_manager,webservice_backend edi manager,webservice.model_webservice_backend,base_edi.group_edi_manager,1,1,1,1
