@@ -1436,19 +1436,4 @@ class AccountInvoiceImport(models.TransientModel):
                     )
         else:
             logger.info("The email has no attachments, skipped.")
-        # message_new() is normally used on a models.Model that inherit from
-        # mail.thread and it should return the recordset of the model it creates
-        # As we return None, we get this error in the logs:
-        # Traceback (most recent call last):
-        #  File "xx/mail/models/mail_thread.py", line 1050, in _message_route_process
-        #  subtype_id = thread._creation_subtype().id
-        # AttributeError:
-        # 'account.invoice.import' object has no attribute '_creation_subtype'
-        # This traceback doesn't block the creation of the invoice.
-        # I could move this code to account.move, but I don't want to
-        # create an invoice on every email received, I still want to return
-        # nothing when there is no attachment or when the attachment
-        # fails to import or when the invoice is already created
-        # So, for the moment, we leave it like that...
-        # If you have a better idea, please suggest!
         return self.create({})
