@@ -1,7 +1,13 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<rsm:CrossIndustryDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rsm="urn:ferd:CrossIndustryDocument:invoice:1p0" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15">
+<?xml version='1.0' encoding='UTF-8' ?>
+<rsm:CrossIndustryDocument
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:rsm="urn:ferd:CrossIndustryDocument:invoice:1p0"
+    xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:12"
+    xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:15"
+>
     <rsm:SpecifiedExchangedDocumentContext>
-        <ram:TestIndicator><udt:Indicator>true</udt:Indicator></ram:TestIndicator><!-- Im Echtbetrieb muss der TestIndicator entweder vollständig entfallen oder auf false stehen. -->
+        <ram:TestIndicator><udt:Indicator
+            >true</udt:Indicator></ram:TestIndicator><!-- Im Echtbetrieb muss der TestIndicator entweder vollständig entfallen oder auf false stehen. -->
         <ram:GuidelineSpecifiedDocumentContextParameter>
             <ram:ID>urn:ferd:CrossIndustryDocument:invoice:1p0:comfort</ram:ID>
         </ram:GuidelineSpecifiedDocumentContextParameter>
@@ -10,15 +16,17 @@
         <ram:ID>471102</ram:ID>
         <ram:Name>RECHNUNG</ram:Name>
         <ram:TypeCode>380</ram:TypeCode>
-        <ram:IssueDateTime><udt:DateTimeString format="102">20130305</udt:DateTimeString></ram:IssueDateTime>
+        <ram:IssueDateTime><udt:DateTimeString
+                format="102"
+            >20130305</udt:DateTimeString></ram:IssueDateTime>
         <ram:IncludedNote>
             <ram:Content>Rechnung gemäß Bestellung vom 01.03.2013.</ram:Content>
         </ram:IncludedNote>
         <ram:IncludedNote>
-            <ram:Content>Lieferant GmbH             
-Lieferantenstraße 20                
-80333 München               
-Deutschland             
+            <ram:Content>Lieferant GmbH
+Lieferantenstraße 20
+80333 München
+Deutschland
 Geschäftsführer: Hans Muster
 Handelsregisternummer: H A 123
 </ram:Content>
@@ -60,7 +68,9 @@ Handelsregisternummer: H A 123
         </ram:ApplicableSupplyChainTradeAgreement>
         <ram:ApplicableSupplyChainTradeDelivery>
             <ram:ActualDeliverySupplyChainEvent>
-                <ram:OccurrenceDateTime><udt:DateTimeString format="102">20130305</udt:DateTimeString> </ram:OccurrenceDateTime>
+                <ram:OccurrenceDateTime><udt:DateTimeString
+                        format="102"
+                    >20130305</udt:DateTimeString> </ram:OccurrenceDateTime>
             </ram:ActualDeliverySupplyChainEvent>
         </ram:ApplicableSupplyChainTradeDelivery>
         <ram:ApplicableSupplyChainTradeSettlement>
@@ -91,14 +101,21 @@ Handelsregisternummer: H A 123
                 <ram:ApplicablePercent>19.00</ram:ApplicablePercent>
             </ram:ApplicableTradeTax>
             <ram:SpecifiedTradePaymentTerms>
-                <ram:Description>Zahlbar innerhalb 30 Tagen netto bis 04.04.2013, 3% Skonto innerhalb 10 Tagen bis 15.03.2013</ram:Description>
-                <ram:DueDateDateTime><udt:DateTimeString format="102">20130404</udt:DateTimeString></ram:DueDateDateTime>
+                <ram:Description
+                >Zahlbar innerhalb 30 Tagen netto bis 04.04.2013, 3% Skonto innerhalb 10 Tagen bis 15.03.2013</ram:Description>
+                <ram:DueDateDateTime><udt:DateTimeString
+                        format="102"
+                    >20130404</udt:DateTimeString></ram:DueDateDateTime>
             </ram:SpecifiedTradePaymentTerms>
             <ram:SpecifiedTradeSettlementMonetarySummation>
                 <ram:LineTotalAmount currencyID="EUR">473.00</ram:LineTotalAmount>
                 <ram:ChargeTotalAmount currencyID="EUR">0.00</ram:ChargeTotalAmount>
-                <ram:AllowanceTotalAmount currencyID="EUR">0.00</ram:AllowanceTotalAmount>
-                <ram:TaxBasisTotalAmount currencyID="EUR">473.00</ram:TaxBasisTotalAmount>
+                <ram:AllowanceTotalAmount
+                    currencyID="EUR"
+                >0.00</ram:AllowanceTotalAmount>
+                <ram:TaxBasisTotalAmount
+                    currencyID="EUR"
+                >473.00</ram:TaxBasisTotalAmount>
                 <ram:TaxTotalAmount currencyID="EUR">56.87</ram:TaxTotalAmount>
                 <ram:GrandTotalAmount currencyID="EUR">529.87</ram:GrandTotalAmount>
                 <ram:TotalPrepaidAmount currencyID="EUR">0.00</ram:TotalPrepaidAmount>
@@ -166,6 +183,6 @@ Handelsregisternummer: H A 123
                 <ram:SellerAssignedID>ARNR2</ram:SellerAssignedID>
                 <ram:Name>Joghurt Banane</ram:Name>
             </ram:SpecifiedTradeProduct>
-        </ram:IncludedSupplyChainTradeLineItem>     
+        </ram:IncludedSupplyChainTradeLineItem>
     </rsm:SpecifiedSupplyChainTradeTransaction>
 </rsm:CrossIndustryDocument>
