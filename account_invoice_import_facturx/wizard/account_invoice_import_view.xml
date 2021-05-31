@@ -16,10 +16,9 @@
                 <li><b><a
                             href="http://fnfe-mpe.org/factur-x/"
                             target="_blank"
-                        >Factur-X</a></b> (also called ZUGFeRD 2.0) and <b><a
-                            href="https://www.ferd-net.de/zugferd/specification/index.html"
-                            target="_blank"
-                        >ZUGFeRD 1.0</a></b> : PDF file with an XML attachment in CrossIndustryInvoice format.</li>
+                        >Factur-X</a></b> (also called <b><a
+                            href="https://www.ferd-net.de/standards/was-ist-zugferd/index.html"
+                        >ZUGFeRD</a></b> 2.x) and ZUGFeRD 1.0: PDF file with an XML attachment in CrossIndustryInvoice format.</li>
         </ul>
     </field>
 </record>

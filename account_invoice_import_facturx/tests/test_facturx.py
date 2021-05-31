@@ -17,7 +17,7 @@ class TestFacturx(TransactionCase):
                 "invoice_number": "471102",
                 "amount_untaxed": 198.0,
                 "amount_total": 235.62,
-                "date_invoice": "2013-03-05",
+                "invoice_date": "2013-03-05",
                 "partner_xmlid": "lieferant",
             },
             # Cannot handle BASIC with allowancecharge != 0 and multi-taxes
@@ -26,7 +26,7 @@ class TestFacturx(TransactionCase):
             #    'invoice_number': 'RK21012345',
             #    'amount_untaxed': 7.67,
             #    'amount_total': 8.79,
-            #    'date_invoice': '2013-09-16',
+            #    'invoice_date': '2013-09-16',
             #    'partner_xmlid': 'lieferant',
             #    },
             # COMFORT
@@ -34,15 +34,15 @@ class TestFacturx(TransactionCase):
                 "invoice_number": "471102",
                 "amount_untaxed": 473.0,
                 "amount_total": 529.87,
-                "date_invoice": "2013-03-05",
-                "date_due": "2013-04-04",
+                "invoice_date": "2013-03-05",
+                "invoice_date_due": "2013-04-04",
                 "partner_xmlid": "lieferant",
             },
             "ZUGFeRD_1p0_COMFORT_Einfach.pdf-ZUGFeRD-invoice.xml": {
                 "invoice_number": "471102",
                 "amount_untaxed": 473.0,
                 "amount_total": 529.87,
-                "date_invoice": "2013-03-05",
+                "invoice_date": "2013-03-05",
                 "partner_xmlid": "lieferant",
             },
             "ZUGFeRD_1p0_COMFORT_Haftpflichtversicherung_"
@@ -50,9 +50,9 @@ class TestFacturx(TransactionCase):
                 "invoice_number": "01.234.567.8-2014-1",
                 "amount_untaxed": 50.00,
                 "amount_total": 59.50,
-                "date_invoice": "2014-01-24",
+                "invoice_date": "2014-01-24",
                 # stupid sample files: due date is before invoice date !
-                "date_due": "2013-12-06",
+                "invoice_date_due": "2013-12-06",
                 "partner_xmlid": "mvm_musterhafter",
             },
             "ZUGFeRD_1p0_COMFORT_Kraftfahrversicherung_"
@@ -60,8 +60,8 @@ class TestFacturx(TransactionCase):
                 "invoice_number": "00.123.456.7-2014-1",
                 "amount_untaxed": 184.87,
                 "amount_total": 220.0,
-                "date_invoice": "2014-03-11",
-                "date_due": "2014-04-01",
+                "invoice_date": "2014-03-11",
+                "invoice_date_due": "2014-04-01",
                 "partner_xmlid": "mvm_musterhafter",
             },
             # Disabled due to a bug in the XML
@@ -72,14 +72,14 @@ class TestFacturx(TransactionCase):
             # There is a bug in the total amount of the last line
             # (55.46 ; right value is 20 x 2.7700 = 55.40)
             #    'amount_total': 215.14,
-            #    'date_invoice': '2013-06-05',
+            #    'invoice_date': '2013-06-05',
             #    'partner_xmlid': 'lieferant',
             #    },
             # has AllowanceTotalAmount
             "ZUGFeRD_1p0_COMFORT_Rechnungskorrektur.pdf": {
                 "type": "in_refund",
                 "invoice_number": "RK21012345",
-                "date_invoice": "2013-09-16",
+                "invoice_date": "2013-09-16",
                 "amount_untaxed": 7.67,
                 "amount_total": 8.79,
                 "partner_xmlid": "lieferant",
@@ -89,16 +89,16 @@ class TestFacturx(TransactionCase):
                 "invoice_number": "00.123.456.7-2014-1",
                 "amount_untaxed": 1000.00,
                 "amount_total": 1163.40,
-                "date_invoice": "2014-04-18",
-                "date_due": "2014-05-21",
+                "invoice_date": "2014-04-18",
+                "invoice_date_due": "2014-05-21",
                 "partner_xmlid": "mvm_musterhafter",
             },
             "ZUGFeRD_1p0_COMFORT_SEPA_Prenotification.pdf": {
                 "invoice_number": "471102",
                 "amount_untaxed": 473.00,
                 "amount_total": 529.87,
-                "date_invoice": "2014-03-05",
-                "date_due": "2014-03-20",
+                "invoice_date": "2014-03-05",
+                "invoice_date_due": "2014-03-20",
                 "partner_xmlid": "lieferant",
             },
             # EXTENDED
@@ -107,7 +107,7 @@ class TestFacturx(TransactionCase):
             #    'invoice_number': 'KR87654321012',
             #    'amount_untaxed': 1056.05,
             #    'amount_total': 1256.70,
-            #    'date_invoice': '2013-10-06',
+            #    'invoice_date': '2013-10-06',
             #    'partner_xmlid': 'musterlieferant',
             #    },  # disable for a malformed date "20139102"
             "ZUGFeRD_1p0_EXTENDED_Rechnungskorrektur.pdf": {
@@ -115,53 +115,53 @@ class TestFacturx(TransactionCase):
                 "invoice_number": "RK21012345",
                 "amount_untaxed": 7.67,
                 "amount_total": 8.79,
-                "date_invoice": "2013-09-16",
+                "invoice_date": "2013-09-16",
                 "partner_xmlid": "musterlieferant",
             },
             "ZUGFeRD_1p0_EXTENDED_Warenrechnung.pdf": {
                 "invoice_number": "R87654321012345",
                 "amount_untaxed": 448.99,
                 "amount_total": 518.99,
-                "date_invoice": "2013-08-06",
+                "invoice_date": "2013-08-06",
                 "partner_xmlid": "musterlieferant",
             },
             "Facture_FR_MINIMUM.pdf": {
                 "invoice_number": "FA-2017-0010",
                 "amount_untaxed": 624.90,
                 "amount_total": 671.15,
-                "date_invoice": "2017-11-13",
+                "invoice_date": "2017-11-13",
                 "partner_xmlid": "jolie_boutique",
             },
             "Facture_FR_BASICWL.pdf": {
                 "invoice_number": "FA-2017-0010",
                 "amount_untaxed": 624.90,
                 "amount_total": 671.15,
-                "date_invoice": "2017-11-13",
+                "invoice_date": "2017-11-13",
                 "partner_xmlid": "jolie_boutique",
             },
             "Facture_FR_BASIC.pdf": {
                 "invoice_number": "FA-2017-0010",
                 "amount_untaxed": 624.90,
                 "amount_total": 671.15,
-                "date_invoice": "2017-11-13",
+                "invoice_date": "2017-11-13",
                 "partner_xmlid": "jolie_boutique",
             },
             "Facture_FR_EN16931.pdf": {
                 "invoice_number": "FA-2017-0010",
                 "amount_untaxed": 624.90,
                 "amount_total": 671.15,
-                "date_invoice": "2017-11-13",
+                "invoice_date": "2017-11-13",
                 "partner_xmlid": "jolie_boutique",
             },
             "Facture_FR_EXTENDED.pdf": {
                 "invoice_number": "FA-2017-0010",
                 "amount_untaxed": 624.90,
                 "amount_total": 671.15,
-                "date_invoice": "2017-11-13",
+                "invoice_date": "2017-11-13",
                 "partner_xmlid": "jolie_boutique",
             },
         }
-        aio = self.env["account.invoice"]
+        amo = self.env["account.move"]
         cur_prec = self.env.ref("base.EUR").rounding
         # We need precision of product price at 4
         # in order to import ZUGFeRD_1p0_EXTENDED_Kostenrechnung.pdf
@@ -180,22 +180,23 @@ class TestFacturx(TransactionCase):
                 }
             )
             wiz.import_invoice()
-            invoices = aio.search(
+            invoices = amo.search(
                 [
                     ("state", "=", "draft"),
-                    ("type", "in", ("in_invoice", "in_refund")),
-                    ("reference", "=", res_dict["invoice_number"]),
+                    ("move_type", "in", ("in_invoice", "in_refund")),
+                    ("ref", "=", res_dict["invoice_number"]),
                 ]
             )
             self.assertEqual(len(invoices), 1)
             inv = invoices[0]
-            self.assertEqual(inv.type, res_dict.get("type", "in_invoice"))
+            self.assertEqual(inv.move_type, res_dict.get("type", "in_invoice"))
             self.assertEqual(
-                fields.Date.to_string(inv.date_invoice), res_dict["date_invoice"]
+                fields.Date.to_string(inv.invoice_date), res_dict["invoice_date"]
             )
-            if res_dict.get("date_due"):
+            if res_dict.get("invoice_date_due"):
                 self.assertEqual(
-                    fields.Date.to_string(inv.date_due), res_dict["date_due"]
+                    fields.Date.to_string(inv.invoice_date_due),
+                    res_dict["invoice_date_due"],
                 )
             self.assertEqual(
                 inv.partner_id,
