@@ -1,4 +1,5 @@
-invoice2data>=0.2.74,<=0.3.2
+wheel
+invoice2data>=0.2.74
 factur-x>=0.3
 phonenumbers
 weboob
