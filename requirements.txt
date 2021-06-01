@@ -1,4 +1,4 @@
-invoice2data>=0.2.74
+invoice2data>=0.2.74,<=0.3.2
 factur-x>=0.3
 phonenumbers
 weboob
