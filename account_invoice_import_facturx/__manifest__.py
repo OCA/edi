@@ -12,7 +12,7 @@
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import", "base_facturx"],
-    "external_dependencies": {"python": ["facturx"]},
+    "external_dependencies": {"python": ["factur-x"]},
     "data": ["wizard/account_invoice_import_view.xml"],
     "demo": ["demo/demo_data.xml"],
     "installable": True,
