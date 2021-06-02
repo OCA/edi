@@ -11,7 +11,7 @@ from odoo.tools import float_compare, float_is_zero
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import check_facturx_xsd
+    from facturx import xml_check_xsd
 except ImportError:
     logger.debug("Cannot import facturx")
 
@@ -63,6 +63,42 @@ class AccountInvoiceImport(models.TransientModel):
                     "/ram:DefinedTradeContact"
                     "/ram:EmailURIUniversalCommunication"
                     "/ram:URIID",  # ZUGFeRD
+                ],
+                "country_code": [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:CountryID",  # Factur-X
+                ],
+                "zip": [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:PostcodeCode",  # Factur-X
+                ],
+                "street": [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:LineOne",  # Factur-X
+                ],
+                "street2": [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:LineTwo",  # Factur-X
+                ],
+                "street3": [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:LineThree",  # Factur-X
+                ],
+                "city": [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:CityName",  # Factur-X
                 ],
             },
             "company": {
@@ -320,13 +356,14 @@ class AccountInvoiceImport(models.TransientModel):
         namespaces = xml_root.nsmap
         # Check XML schema to avoid headaches trying to import invalid files
         try:
-            check_facturx_xsd(xml_root)
-        except Exception:
+            xml_check_xsd(xml_root)
+        except Exception as e:
             raise UserError(
                 _(
                     "The XML file embedded in the Factur-X invoice is invalid "
-                    "according to the official XML Schema Definition."
+                    "according to the official XML Schema Definition. Error: %s."
                 )
+                % e
             )
         logger.debug("XML file namespaces=%s", namespaces)
         doc_type = self.multi_xpath_helper(
@@ -358,11 +395,7 @@ class AccountInvoiceImport(models.TransientModel):
         # We're not supposed to use matching methods in this module,
         # but I want to get the decimal precision of the currency of the invoice
         # So I put it in a try/except...
-        try:
-            currency = self._match_currency(res['currency'], [])
-            prec = currency.rounding
-        except Exception:
-            prec = self.env.company.currency_id.rounding
+        prec = self.get_precision_rounding_from_currency_helper(res)
         amount_total = res["amount_total"]
         ac_qty_dict = {"charges": 1, "allowances": -1}
         if (
