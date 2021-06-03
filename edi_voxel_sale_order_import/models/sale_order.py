@@ -179,6 +179,7 @@ class SaleOrder(models.Model):
             partner = self._parse_partner_data_voxel(partner_data)
             if partner:
                 vals.update(partner_id=partner.id)
+                vals.update(self.play_onchanges(vals, ["partner_id"]))
 
     def _parse_customers_data_voxel(self, vals, xml_root, error_msgs):
         customer_elements = xml_root.xpath("//Customers/Customer")
