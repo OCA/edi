@@ -30,6 +30,7 @@ addon | version | summary
 [edi_storage_oca](edi_storage_oca/) | 14.0.1.0.0 | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_webservice_oca](edi_webservice_oca/) | 14.0.1.0.0 | Defines webservice integration from EDI Exchange records
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF purchase order
+[sale_order_import](sale_order_import/) | 14.0.1.0.0 | Import RFQ or sale orders from files
 [sale_order_ubl](sale_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF quotation
 [webservice](webservice/) | 14.0.1.0.0 | Defines webservice abstract definition to be used generally
 
