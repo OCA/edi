@@ -252,7 +252,7 @@ class AccountInvoiceImport(models.TransientModel):
         analytic_account = import_config.get("account_analytic", False)
         if analytic_account:
             for line in vals["invoice_line_ids"]:
-                line[2]["account_analytic_id"] = analytic_account.id
+                line[2]["analytic_account_id"] = analytic_account.id
         return vals
 
     @api.model
@@ -1256,7 +1256,7 @@ class AccountInvoiceImport(models.TransientModel):
         self.post_process_invoice(parsed_inv, invoice, import_config)
         if import_config["account_analytic"]:
             invoice.invoice_line_ids.write(
-                {"account_analytic_id": import_config["account_analytic"].id}
+                {"analytic_account_id": import_config["account_analytic"].id}
             )
         self.post_create_or_update(parsed_inv, invoice)
         logger.info(
