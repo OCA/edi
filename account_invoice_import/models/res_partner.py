@@ -31,3 +31,18 @@ class ResPartner(models.Model):
         }
         for partner in self:
             partner.invoice_import_count = mapped_data.get(partner.id, 0)
+
+    def show_account_invoice_import_config(self):
+        self.ensure_one()
+        action = (
+            self.env.ref("account_invoice_import.account_invoice_import_config_action")
+            .sudo()
+            .read()[0]
+        )
+        action["context"] = {
+            "default_name": self.name,
+            "default_partner_id": self.id,
+            "search_default_partner_id": self.id,
+            "invoice_import_config_main_view": True,
+        }
+        return action
