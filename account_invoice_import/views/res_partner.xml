@@ -19,10 +19,9 @@
                     colspan="2"
                 >
                     <button
-                        type="action"
+                        type="object"
                         class="btn-link"
-                        name="%(account_invoice_import_config_action)d"
-                        context="{'search_default_partner_id': active_id, 'default_partner_id': active_id, 'default_name': name}"
+                        name="show_account_invoice_import_config"
                     >
                         <field
                             name="invoice_import_count"
