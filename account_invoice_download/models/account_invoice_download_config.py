@@ -1,4 +1,4 @@
-# Copyright 2017-2018 Akretion France
+# Copyright 2017-2021 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -18,8 +18,7 @@ class AccountInvoiceDownloadConfig(models.Model):
     active = fields.Boolean(default=True)
     company_id = fields.Many2one(
         'res.company', string='Company', required=True,
-        default=lambda self: self.env['res.company']._company_default_get(
-            'account.invoice.download.config'))
+        default=lambda self: self.env.company)
     import_config_id = fields.Many2one(
         'account.invoice.import.config', string='Invoice Import Config',
         ondelete='cascade')
@@ -62,7 +61,7 @@ class AccountInvoiceDownloadConfig(models.Model):
         ('days', 'Day(s)'),
         ('weeks', 'Week(s)'),
         ('months', 'Month(s)'),
-        ('years', 'Year'),
+        ('years', 'Year(s)'),
         ], string='Download Frequency', default='months')
     interval_number = fields.Integer(string='Frequency', default=1)
 
@@ -81,9 +80,8 @@ class AccountInvoiceDownloadConfig(models.Model):
             if config.last_run:
                 start_date = config.last_run
                 if config.backward_days:
-                    start_date_dt = fields.Date.from_string(config.last_run) -\
+                    start_date = config.last_run -\
                         relativedelta(days=config.backward_days)
-                    start_date = fields.Date.to_string(start_date_dt)
             config.download_start_date = start_date
 
     @api.depends('name', 'backend', 'method')
@@ -116,7 +114,6 @@ class AccountInvoiceDownloadConfig(models.Model):
 
     def run_button(self):
         self.ensure_one()
-        iaao = self.env['ir.actions.act_window']
         if not self.backend:
             raise UserError(_(
                 "No backend configured for download configuration "
@@ -131,17 +128,15 @@ class AccountInvoiceDownloadConfig(models.Model):
             credentials = self.prepare_credentials()
             invoice_ids, log_id = self.run(credentials)
             if invoice_ids:
-                action = iaao.for_xml_id(
-                    'account', 'action_invoice_tree2')
+                action = self.env.ref('account.action_move_in_invoice_type').sudo().read()[0]
                 action.update({
                     'views': False,
                     'view_id': False,
                     'domain': "[('id', 'in', %s)]" % invoice_ids,
                 })
             else:
-                action = iaao.for_xml_id(
-                    'account_invoice_download',
-                    'account_invoice_download_log_action')
+                action = self.env.ref(
+                    'account_invoice_download.account_invoice_download_log_action').sudo().read()[0]
                 action.update({
                     'res_id': log_id,
                     'view_mode': 'form,tree',
@@ -149,16 +144,15 @@ class AccountInvoiceDownloadConfig(models.Model):
                     })
             return action
         else:
-            credentials_wiz_action = iaao.for_xml_id(
-                'account_invoice_download',
-                'account_invoice_download_credentials_action')
+            credentials_wiz_action = self.env.ref(
+                'account_invoice_download.account_invoice_download_credentials_action').sudo().read()[0]
             return credentials_wiz_action
 
     def run(self, credentials):
         '''Do the real work. Handle try/except.
         Create log. Return list of invoices and log'''
         self.ensure_one()
-        aio = self.env['account.invoice']
+        amo = self.env['account.move']
         aiio = self.env['account.invoice.import']
         logger.info(
             'Start to run invoice download %s (%s)',
@@ -187,14 +181,14 @@ class AccountInvoiceDownloadConfig(models.Model):
         assert self.import_config_id.company_id.id == company_id
         import_config = self.import_config_id.convert_to_import_config()
         existing_refs = {}  # key = invoice reference, value = inv ID
-        existing_invs = aio.search_read([
-            ('type', 'in', ('in_invoice', 'in_refund')),
+        existing_invs = amo.search_read([
+            ('move_type', 'in', ('in_invoice', 'in_refund')),
             ('commercial_partner_id', '=', self.partner_id.id),
             ('company_id', '=', company_id),
-            ('reference', '!=', False)],
-            ['reference'])
+            ('ref', '!=', False)],
+            ['ref'])
         for existing_inv in existing_invs:
-            existing_refs[existing_inv.get('reference')] = existing_inv['id']
+            existing_refs[existing_inv.get('ref')] = existing_inv['id']
         logger.debug('existing_refs=%s', existing_refs)
         for inv_struc in invoices_dl:
             if isinstance(inv_struc, dict):  # Pivot format
@@ -224,9 +218,10 @@ class AccountInvoiceDownloadConfig(models.Model):
                     existing_refs[parsed_inv['invoice_number']]))
                 continue
             try:
-                invoice = aiio.with_context(
-                    force_company=company_id).create_invoice(
-                        parsed_inv, import_config)
+                invoice = aiio.with_company(
+                    company_id).create_invoice(
+                        parsed_inv, import_config=import_config,
+                        origin="Download Bill '%s'" % self.name)
             except Exception as e:
                 logs['msg'].append(_(
                     'Failed to create invoice. Error: %s. (parsed_inv=%s '
@@ -258,10 +253,9 @@ class AccountInvoiceDownloadConfig(models.Model):
         logger.info(
             'Start cron that auto-download supplier invoices with '
             'user %s ID %d', self.env.user.name, self.env.user.id)
-        today_str = fields.Date.context_today(self)
-        today_dt = fields.Date.from_string(today_str)
+        today_dt = fields.Date.context_today(self)
         configs = self.search([
-            ('next_run', '<=', today_str),
+            ('next_run', '<=', today_dt),
             ('method', '=', 'auto'),
             ])
         for config in configs:
