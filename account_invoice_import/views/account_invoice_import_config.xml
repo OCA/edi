@@ -16,6 +16,8 @@
                         bg_color="bg-danger"
                         attrs="{'invisible': [('active', '=', True)]}"
                     />
+                    <div class="oe_button_box" name="button_box">
+                    </div>
                     <group name="main">
                         <field name="name" />
                         <field name="partner_id" />
