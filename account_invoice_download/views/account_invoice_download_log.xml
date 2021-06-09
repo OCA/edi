@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright 2018 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  Copyright 2018-2021 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 
@@ -31,13 +32,13 @@
     <field name="name">account.invoice.download.log.tree</field>
     <field name="model">account.invoice.download.log</field>
     <field name="arch"  type="xml">
-        <tree string="Invoice Download Logs" decoration-success="result == 'success'" decoration-danger="result == 'failure'">
+        <tree string="Invoice Download Logs">
             <field name="create_date" string="Date"/>
             <field name="partner_id" invisible="not context.get('download_log_main_view')"/>
             <field name="download_config_id" invisible="not context.get('download_log_main_view')"/>
             <field name="message"/>
             <field name="invoice_count" sum="1"/>
-            <field name="result"/>
+            <field name="result" decoration-success="result == 'success'" decoration-danger="result == 'failure'" widget="badge"/>
         </tree>
     </field>
 </record>
@@ -60,11 +61,34 @@
     </field>
 </record>
 
+<record id="account_invoice_download_log_pivot" model="ir.ui.view">
+    <field name="name">account.invoice.download.log.pivot</field>
+    <field name="model">account.invoice.download.log</field>
+    <field name="arch" type="xml">
+        <pivot string="Invoice Download Logs">
+            <field name="create_date" interval="month" type="col"/>
+            <field name="partner_id" type="row"/>
+            <field name="invoice_count" type="measure"/>
+        </pivot>
+    </field>
+</record>
+
+<record id="account_invoice_download_log_graph" model="ir.ui.view">
+    <field name="name">account.invoice.download.log.graph</field>
+    <field name="model">account.invoice.download.log</field>
+    <field name="arch" type="xml">
+        <graph string="Invoice Download Logs">
+            <field name="create_date" interval="month"/>
+            <field name="invoice_count" type="measure"/>
+        </graph>
+    </field>
+</record>
+
 
 <record id="account_invoice_download_log_action" model="ir.actions.act_window">
     <field name="name">Download Bills Logs</field>
     <field name="res_model">account.invoice.download.log</field>
-    <field name="view_mode">tree,form</field>
+    <field name="view_mode">tree,form,graph,pivot</field>
     <field name="context">{'download_log_main_view': True}</field>
 </record>
 

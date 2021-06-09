@@ -1,4 +1,4 @@
-# Copyright 2017-2018 Akretion France (http://www.akretion.com/)
+# Copyright 2017-2021 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -28,8 +28,7 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(AccountInvoiceDownloadCredentials, self).default_get(
-            fields_list)
+        res = super().default_get(fields_list)
         assert self._context.get('active_model') ==\
             'account.invoice.download.config', 'Wrong active_model'
         assert self._context.get('active_id'), 'Missing active_id'
@@ -65,23 +64,21 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
         if invoice_ids:
             vals['invoice_ids_str'] = '[%s]' % ','.join([
                 str(inv_id) for inv_id in invoice_ids])
-        return super(AccountInvoiceDownloadCredentials, self).create(vals)
+        return super().create(vals)
 
     def run(self):
         """The real work is made in create(), not here!"""
         self.ensure_one()
-        iaao = self.env['ir.actions.act_window']
         if self.invoice_ids_str:
-            action = iaao.for_xml_id('account', 'action_invoice_tree2')
+            action = self.env.ref('account.action_move_in_invoice_type').sudo().read()[0]
             action.update({
                 'views': False,
                 'view_id': False,
                 'domain': "[('id', 'in', %s)]" % self.invoice_ids_str,
                 })
         else:
-            action = iaao.for_xml_id(
-                'account_invoice_download',
-                'account_invoice_download_log_action')
+            action = self.env.ref(
+                'account_invoice_download.account_invoice_download_log_action').sudo().read()[0]
             action.update({
                 'res_id': self.log_id.id,
                 'views': False,
