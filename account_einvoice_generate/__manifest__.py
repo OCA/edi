@@ -4,7 +4,7 @@
 
 {
     "name": "Account e-invoice Generate",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Technical module to generate PDF invoices with " "embedded XML file",
