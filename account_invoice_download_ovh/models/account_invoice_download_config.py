@@ -1,8 +1,8 @@
-# Copyright 2015-2018 Akretion France
+# Copyright 2015-2021 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models, _
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 import json
 import requests
@@ -16,17 +16,6 @@ try:
 except ImportError:
     logger.debug('Cannot import ovh')
 
-ENDPOINTS = [
-    ('ovh-eu', 'OVH Europe API'),
-    ('ovh-us', 'OVH US API'),
-    ('ovh-ca', 'OVH North-America API'),
-    ('soyoustart-eu', 'So you Start Europe API'),
-    ('soyoustart-ca', 'So you Start North America API'),
-    ('kimsufi-eu', 'Kimsufi Europe API'),
-    ('kimsufi-ca', 'Kimsufi North America API'),
-    # ('runabove-ca', 'RunAbove API'),
-    ]
-
 
 class AccountInvoiceDownloadConfig(models.Model):
     _inherit = 'account.invoice.download.config'
@@ -34,15 +23,27 @@ class AccountInvoiceDownloadConfig(models.Model):
     backend = fields.Selection(
         selection_add=[('ovh', 'OVH')])
     ovh_endpoint = fields.Selection(
-        ENDPOINTS, string='OVH Endpoint', default='ovh-eu')
+        '_ovh_get_endpoints', string='OVH Endpoint', default='ovh-eu')
     ovh_application_key = fields.Char(string='OVH Application Key')
     ovh_application_secret = fields.Char(
         string='OVH Application Secret')
     ovh_consumer_key = fields.Char(string='OVH Consumer Key')
 
+    @api.model
+    def _ovh_get_endpoints(self):
+        return [
+            ('ovh-eu', 'OVH Europe API'),
+            ('ovh-us', 'OVH US API'),
+            ('ovh-ca', 'OVH North-America API'),
+            ('soyoustart-eu', 'So you Start Europe API'),
+            ('soyoustart-ca', 'So you Start North America API'),
+            ('kimsufi-eu', 'Kimsufi Europe API'),
+            ('kimsufi-ca', 'Kimsufi North America API'),
+            # ('runabove-ca', 'RunAbove API'),
+            ]
+
     def prepare_credentials(self):
-        credentials = super(
-            AccountInvoiceDownloadConfig, self).prepare_credentials()
+        credentials = super().prepare_credentials()
         if self.backend == 'ovh':
             credentials = {
                 'endpoint': self.ovh_endpoint,
@@ -62,28 +63,24 @@ class AccountInvoiceDownloadConfig(models.Model):
                 return True
             else:
                 raise UserError(_("You must set all the OVH parameters."))
-        return super(AccountInvoiceDownloadConfig, self).credentials_stored()
+        return super().credentials_stored()
 
     def download(self, credentials, logs):
         if self.backend == 'ovh':
             return self.ovh_download(credentials, logs)
-        return super(AccountInvoiceDownloadConfig, self).download(
-            credentials, logs)
+        return super().download(credentials, logs)
 
-    def ovh_invoice_attach_pdf(self, parsed_inv, invoice_password):
+    def ovh_invoice_attach_pdf(self, parsed_inv, pdf_invoice_url):
         logger.info(
             'Starting to download PDF of OVH invoice %s dated %s',
             parsed_inv['invoice_number'], parsed_inv['date'])
-        url = 'https://www.ovh.com/cgi-bin/order/facture.pdf?'
-        url += 'reference=%s&passwd=%s' % (
-            parsed_inv['invoice_number'], invoice_password)
-        logger.debug('OVH invoice download url: %s', url)
-        rpdf = requests.get(url)
+        logger.debug('OVH invoice download url: %s', pdf_invoice_url)
+        rpdf = requests.get(pdf_invoice_url)
         logger.info(
             'OVH invoice PDF download HTTP code: %s', rpdf.status_code)
         res = False
         if rpdf.status_code == 200:
-            res = base64.encodestring(rpdf.content)
+            res = base64.encodebytes(rpdf.content)
             logger.info(
                 'Successfull download of the PDF of the OVH invoice %s',
                 parsed_inv['invoice_number'])
@@ -152,8 +149,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 'amount_untaxed': res_inv['priceWithoutTax'].get('value'),
                 'amount_total': res_inv['priceWithTax'].get('value'),
             }
-            self.ovh_invoice_attach_pdf(
-                parsed_inv, res_inv['password'])
+            self.ovh_invoice_attach_pdf(parsed_inv, res_inv['url'])
 
             if self.import_config_id.invoice_line_method.startswith('nline'):
                 parsed_inv['lines'] = []

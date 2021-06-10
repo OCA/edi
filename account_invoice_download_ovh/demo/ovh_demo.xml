@@ -6,8 +6,7 @@
         <record id="ovh" model="res.partner">
             <field name="name">OVH</field>
             <field name="is_company" eval="1"/>
-            <field name="customer" eval="0"/>
-            <field name="supplier" eval="1"/>
+            <field name="supplier_rank">1</field>
             <field name="street">2 rue kellermann</field>
             <field name="street2">BP 80157</field>
             <field name="zip">59053</field>
