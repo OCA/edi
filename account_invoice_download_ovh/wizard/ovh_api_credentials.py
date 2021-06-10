@@ -1,11 +1,9 @@
-# Copyright 2018 Akretion France
+# Copyright 2018-2021 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from odoo.addons.account_invoice_download_ovh.models.\
-    account_invoice_download_config import ENDPOINTS
 import logging
 logger = logging.getLogger(__name__)
 
@@ -23,7 +21,7 @@ class OvhApiCredentials(models.TransientModel):
         'account.invoice.download.config', string="Download Config",
         readonly=True, required=True)
     endpoint = fields.Selection(
-        ENDPOINTS, string='Endpoint', default='ovh-eu')
+        '_ovh_get_endpoints', string='Endpoint', default='ovh-eu')
     application_key = fields.Char(string='Application Key')
     application_secret = fields.Char(string='Application Secret')
     application_url = fields.Char(string='Application URL', readonly=True)
@@ -37,8 +35,12 @@ class OvhApiCredentials(models.TransientModel):
         ], string='State', readonly=True, default='step1')
 
     @api.model
+    def _ovh_get_endpoints(self):
+        return self.env['account.invoice.download.config']._ovh_get_endpoints()
+
+    @api.model
     def default_get(self, fields_list):
-        res = super(OvhApiCredentials, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         assert self._context.get('active_model') ==\
             'account.invoice.download.config'
         download_config = self.env['account.invoice.download.config'].browse(
@@ -50,8 +52,8 @@ class OvhApiCredentials(models.TransientModel):
 
     def action_continue_wizard(self):
         self.ensure_one()
-        action = self.env['ir.actions.act_window'].for_xml_id(
-            'account_invoice_download_ovh', 'ovh_api_credentials_action')
+        action = self.env.ref(
+            'account_invoice_download_ovh.ovh_api_credentials_action').sudo().read()[0]
         action['res_id'] = self.id
         return action
 
