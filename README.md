@@ -19,7 +19,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
-[account_invoice_import](account_invoice_import/) | 14.0.1.0.0 | Import supplier invoices/refunds as PDF or XML files
+[account_invoice_import](account_invoice_import/) | 14.0.1.1.0 | Import supplier invoices/refunds as PDF or XML files
 [base_business_document_import](base_business_document_import/) | 14.0.2.0.0 | Provides technical tools to import sale orders or supplier invoices
 [base_edi](base_edi/) | 14.0.1.0.0 | Base module to aggregate EDI features.
 [base_ubl](base_ubl/) | 14.0.1.0.0 | Base module for Universal Business Language (UBL)
