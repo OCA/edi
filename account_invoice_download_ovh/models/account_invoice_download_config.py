@@ -70,29 +70,25 @@ class AccountInvoiceDownloadConfig(models.Model):
         return super(AccountInvoiceDownloadConfig, self).download(
             credentials, logs)
 
-    def ovh_invoice_attach_pdf(self, parsed_inv, invoice_password):
+    def ovh_invoice_attach_pdf(self, parsed_inv, pdf_invoice_url):
         logger.info(
             'Starting to download PDF of OVH invoice %s dated %s',
             parsed_inv['invoice_number'], parsed_inv['date'])
-        url = 'https://www.ovh.com/cgi-bin/order/facture.pdf?'
-        url += 'reference=%s&passwd=%s' % (
-            parsed_inv['invoice_number'], invoice_password)
-        logger.debug('OVH invoice download url: %s', url)
-        rpdf = requests.get(url)
+        logger.debug('OVH invoice download url: %s', pdf_invoice_url)
+        rpdf = requests.get(pdf_invoice_url)
         logger.info(
             'OVH invoice PDF download HTTP code: %s', rpdf.status_code)
-        res = False
         if rpdf.status_code == 200:
             res = base64.encodestring(rpdf.content)
             logger.info(
                 'Successfull download of the PDF of the OVH invoice %s',
                 parsed_inv['invoice_number'])
+            filename = 'OVH_invoice_%s.pdf' % parsed_inv['invoice_number']
+            parsed_inv['attachments'] = {filename: res}
         else:
             logger.warning(
                 'Could not download the PDF of the OVH invoice %s. HTTP '
                 'error %d', parsed_inv['invoice_number'], rpdf.status_code)
-        filename = 'OVH_invoice_%s.pdf' % parsed_inv['invoice_number']
-        parsed_inv['attachments'] = {filename: res}
         return
 
     def ovh_download(self, credentials, logs):
@@ -152,8 +148,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 'amount_untaxed': res_inv['priceWithoutTax'].get('value'),
                 'amount_total': res_inv['priceWithTax'].get('value'),
             }
-            self.ovh_invoice_attach_pdf(
-                parsed_inv, res_inv['password'])
+            self.ovh_invoice_attach_pdf(parsed_inv, res_inv['pdfUrl'])
 
             if self.import_config_id.invoice_line_method.startswith('nline'):
                 parsed_inv['lines'] = []
