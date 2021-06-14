@@ -97,12 +97,6 @@ class SaleOrder(models.Model):
         if general_elements:
             general_data = general_elements[0].attrib
             vals.update(client_order_ref=general_data.get("Ref"))
-            # get pricelist
-            currency_name = general_data.get("Currency")
-            pricelist = self.env["product.pricelist"].search(
-                [("currency_id.name", "=", currency_name.upper())], limit=1
-            )
-            vals.update(pricelist_id=pricelist.id)
             # add date_order
             date_order = general_data.get("Date")
             if date_order:
