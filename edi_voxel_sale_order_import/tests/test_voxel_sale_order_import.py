@@ -24,7 +24,7 @@ class TestVoxelSaleOrderImportCommon(common.SavepointCase):
                 "zip": "43111",
                 "state_id": cls.env.ref("base.state_es_t").id,
                 "country_id": cls.env.ref("base.es").id,
-                "currency_id": pricelist_test.id,
+                "currency_id": pricelist_test.currency_id.id,
                 "vat": "ESA12345674",
             }
         )
@@ -37,10 +37,20 @@ class TestVoxelSaleOrderImportCommon(common.SavepointCase):
                 "ref": "F111",
                 "state_id": cls.env.ref("base.state_es_t").id,
                 "country_id": cls.env.ref("base.es").id,
+                "property_product_pricelist": pricelist_test.id,
             }
         )
         cls.product_test_1 = cls.env["product.product"].create(
             {"default_code": "111111", "name": "PRODUCT TEST"}
+        )
+        cls.supplierinfo_product_test_1 = cls.env["product.customerinfo"].create(
+            {
+                "name": cls.customer_test.id,
+                "product_tmpl_id": cls.product_test_1.product_tmpl_id.id,
+                "product_id": cls.product_test_1.id,
+                "product_code": "SP11111",
+                "product_name": "SUPPLIER PRODUCT TEST",
+            }
         )
         cls.product_test_2 = cls.env["product.product"].create(
             {"default_code": "222222", "name": "PRODUCT TEST 2"}
