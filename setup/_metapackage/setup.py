@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo14-addon-account_invoice_import',
         'odoo14-addon-base_business_document_import',
         'odoo14-addon-base_edi',
+        'odoo14-addon-base_facturx',
         'odoo14-addon-base_ubl',
         'odoo14-addon-base_ubl_payment',
         'odoo14-addon-edi_account_oca',
