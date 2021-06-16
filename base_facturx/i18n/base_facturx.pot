@@ -1,22 +1,17 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * base_zugferd
+# 	* base_facturx
 #
-# Translators:
-# enjolras <yo@miguelrevilla.com>, 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-12 01:43+0000\n"
-"PO-Revision-Date: 2018-03-12 01:43+0000\n"
-"Last-Translator: enjolras <yo@miguelrevilla.com>, 2018\n"
-"Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
-"Language: es\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: \n"
 
 #. module: base_facturx
 #: model:ir.model,name:base_facturx.model_base_facturx
@@ -26,7 +21,7 @@ msgstr ""
 #. module: base_facturx
 #: model:ir.model.fields,field_description:base_facturx.field_base_facturx__display_name
 msgid "Display Name"
-msgstr "Nombre mostrado"
+msgstr ""
 
 #. module: base_facturx
 #: model:ir.model.fields,field_description:base_facturx.field_base_facturx__id
@@ -36,4 +31,4 @@ msgstr ""
 #. module: base_facturx
 #: model:ir.model.fields,field_description:base_facturx.field_base_facturx____last_update
 msgid "Last Modified on"
-msgstr "Última modificación el"
+msgstr ""
