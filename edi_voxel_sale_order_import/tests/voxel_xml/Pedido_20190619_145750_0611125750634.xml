@@ -48,7 +48,7 @@
     </Customers>
     <ProductList>
         <Product
-            SupplierSKU="111111"
+            SupplierSKU="SP11111"
             CustomerSKU="005555"
             Item="PRODUCT TEST"
             Qty="2.0"

@@ -264,10 +264,30 @@ class SaleOrder(models.Model):
         supplier_sku = product_data.get("SupplierSKU")
         item = product_data.get("Item")
         domains = []
-        product = self.env["res.partner"]
+        product = self.env["product.product"].browse()
         if supplier_sku:
             domains.append([("default_code", "=", supplier_sku)])
             product = self.env["product.product"].search(domains[0])
+            if not product:
+                partner = (
+                    self.env["sale.order"].browse(line_vals["order_id"]).partner_id
+                )
+                customerinfo = self.env["product.customerinfo"].search(
+                    [("name", "=", partner.id), ("product_code", "=", supplier_sku)],
+                    limit=1,
+                )
+                if not customerinfo:
+                    customerinfo = self.env["product.customerinfo"].search(
+                        [
+                            ("name", "=", partner.commercial_partner_id.id),
+                            ("product_code", "=", supplier_sku),
+                        ],
+                        limit=1,
+                    )
+                product = (
+                    customerinfo.product_id
+                    or customerinfo.product_tmpl_id.product_variant_ids[:1]
+                )
         if len(product) != 1:
             if item:
                 domains.append([("name", "=", item)])
