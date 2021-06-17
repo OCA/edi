@@ -37,7 +37,7 @@ addon | version | summary
 [edi_storage](edi_storage/) | 13.0.1.5.0 | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_voxel](edi_voxel/) | 13.0.1.0.1 | Base module for connecting with Voxel
 [edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.0.2 | Sends account invoices to Voxel.
-[edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.2 | Import sale order from Voxel.
+[edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.3 | Import sale order from Voxel.
 [edi_voxel_sale_secondary_unit](edi_voxel_sale_secondary_unit/) | 13.0.1.0.0 | Map Voxel UoM to Sale Secondary UoM and Use Them
 [edi_voxel_secondary_unit](edi_voxel_secondary_unit/) | 13.0.1.0.0 | Add Voxel UoM code to Secondary UoM model
 [edi_voxel_stock_picking](edi_voxel_stock_picking/) | 13.0.1.0.2 | Sends stock picking report to Voxel.
