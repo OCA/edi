@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+<record id="internet_access" model="product.product">
+    <field name="name">Internet Access</field>
+    <field name="categ_id" ref="product.product_category_5" />
+    <field name="sale_ok" eval="False" />
+    <field name="purchase_ok" eval="True" />
+    <field name="type">service</field>
+</record>
+
+<record id="free" model="res.partner">
+    <field name="name">Free SAS</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="street">8 rue de la Ville l’Évèque</field>
+    <field name="zip">75008</field>
+    <field name="city">Paris</field>
+    <field name="country_id" ref="base.fr" />
+    <field name="website">http://www.free.fr</field>
+    <field name="vat">FR 604 219 388 61</field>
+</record>
+
+<record id="free_import_config" model="account.invoice.import.config">
+    <field name="name">Free</field>
+    <field name="partner_id" ref="free" />
+    <field name="invoice_line_method">1line_static_product</field>
+    <field name="label">Fiber optic access at the main office</field>
+    <field name="static_product_id" ref="internet_access" />
+</record>
+
+
+</odoo>

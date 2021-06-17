@@ -1,3 +1,4 @@
 # generated from manifests external_dependencies
+invoice2data
 PyPDF2
 pyyaml
