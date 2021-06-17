@@ -6,83 +6,85 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2021-06-17 15:48+0000\n"
+"Last-Translator: Yves Le Doeuff <yld@alliasys.fr>\n"
 "Language-Team: none\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
 msgid "Content Type"
-msgstr ""
+msgstr "Type de contenu"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Créé par"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Crée le"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Afficher Nom"
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/x-www-form-urlencoded
 msgid "Form"
-msgstr ""
+msgstr "Formulaire"
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__protocol__http
 msgid "HTTP Request"
-msgstr ""
+msgstr "Requête HTTP"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/json
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Dernière modification le"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Dernière mise à jour par"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Dernière mise à jour le"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__name
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__password
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol
 msgid "Protocol"
-msgstr ""
+msgstr "Protocole"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__tech_name
@@ -97,12 +99,12 @@ msgstr ""
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__url
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
 msgid "Username"
-msgstr ""
+msgstr "nom d'utilisateur :"
 
 #. module: webservice
 #: model:ir.actions.act_window,name:webservice.webservice_backend_act_window
@@ -114,4 +116,4 @@ msgstr ""
 #. module: webservice
 #: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__content_type__application/xml
 msgid "XML"
-msgstr ""
+msgstr "XLM"
