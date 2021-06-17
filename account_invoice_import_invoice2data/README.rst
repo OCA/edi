@@ -14,13 +14,13 @@ Account Invoice Import Invoice2data
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/12.0/account_invoice_import_invoice2data
+    :target: https://github.com/OCA/edi/tree/14.0/account_invoice_import_invoice2data
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-12-0/edi-12-0-account_invoice_import_invoice2data
+    :target: https://translation.odoo-community.org/projects/edi-14-0/edi-14-0-account_invoice_import_invoice2data
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
-    :target: https://runbot.odoo-community.org/runbot/226/12.0
+    :target: https://runbot.odoo-community.org/runbot/226/14.0
     :alt: Try me on Runbot
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
@@ -79,11 +79,10 @@ Configuration
 
 Go to the form view of the supplier and configure it with the following parameters:
 
-* *Is a Vendor* is True
 * the *VAT* is set (the VAT number is used by default when searching the supplier in the Odoo partner database)
 * in the *Invoicing* tab, create an *Invoice Import Configuration*.
 
-For the PDF invoice of your supplier that don't have an embedded XML file, you will have to create a `template file <https://github.com/invoice-x/invoice2data/tree/master/src/invoice2data/extract/templates>`_ in YAML format in the invoice2data Python library. It is quite easy to do ; if you are familiar with `regexp <https://docs.python.org/2/library/re.html>`_, it should not take more than 10 minutes for each supplier.
+For the PDF invoice of your supplier that don't have an embedded XML file, you will have to create a `template file <https://github.com/invoice-x/invoice2data/tree/master/src/invoice2data/extract/templates>`_ in YAML format in the invoice2data Python library. It is quite easy to do ; if you are familiar with `regexp <https://docs.python.org/3/library/re.html>`_, it should not take more than 10 minutes for each supplier.
 
 Here are some hints to help you add a template for your supplier:
 
@@ -101,7 +100,7 @@ On the output, you will get first the text of the PDF, then some debug info on t
 
 * the list of *fields* should contain the following entries:
 
-  * 'vat' with the VAT number of the supplier (if the VAT number of the supplier is not in the text of PDF file, add a 'partner_name' key, or, if the supplier is French and the module *l10n_fr_business_document_import* is installed, add a 'siren' key)
+  * 'vat' with the VAT number of the supplier (if the VAT number of the supplier is not in the text of PDF file, add a 'partner_name' key)
   * 'amount' ('amount' is the total amount with taxes)
   * 'amount_untaxed' or 'amount_tax' (one or the other, no need for both)
   * 'date': the date of the invoice
@@ -114,7 +113,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_import_invoice2data%0Aversion:%2012.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_import_invoice2data%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -144,6 +143,14 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/12.0/account_invoice_import_invoice2data>`_ project on GitHub.
+.. |maintainer-alexis-via| image:: https://github.com/alexis-via.png?size=40px
+    :target: https://github.com/alexis-via
+    :alt: alexis-via
+
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-alexis-via| 
+
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/account_invoice_import_invoice2data>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
