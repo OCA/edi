@@ -1,0 +1,66 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_account_oca
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#. module: edi_account_oca
+#: model_terms:ir.ui.view,arch_db:edi_account_oca.account_move_form_view
+msgid "<span class=\"o_stat_text\">EDI</span>"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: edi_account_oca
+#: model_terms:ir.ui.view,arch_db:edi_account_oca.view_account_journal_form
+#: model_terms:ir.ui.view,arch_db:edi_account_oca.view_partner_form
+msgid "EDI Configuration"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__exchange_record_ids
+msgid "Exchange Record"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__exchange_record_count
+msgid "Exchange Record Count"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__expected_edi_configuration
+msgid "Expected Edi Configuration"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__has_expected_edi_configuration
+msgid "Has Expected Edi Configuration"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__id
+msgid "ID"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model,name:edi_account_oca.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move____last_update
+msgid "Last Modified on"
+msgstr ""
