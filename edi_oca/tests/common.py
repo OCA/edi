@@ -47,7 +47,7 @@ class EDIBackendTestMixin(object):
         cls.exchange_type_out_ack = cls._create_exchange_type(
             name="Test CSV output ACK",
             code="test_csv_output_ack",
-            direction="input",
+            direction="output",
             exchange_file_ext="txt",
             exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
         )
