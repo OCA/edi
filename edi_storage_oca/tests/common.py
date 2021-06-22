@@ -40,6 +40,14 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
         with open(cls.fakepath_error, "w+b") as fakefile:
             fakefile.write(b"ERROR XYZ: line 2 broken on bla bla")
 
+        cls.fakepath_input_pending_1 = "/tmp/test-input-001.csv"
+        with open(cls.fakepath_input_pending_1, "w+b") as fakefile:
+            fakefile.write(b"I received this in my storage.")
+
+        cls.fakepath_input_pending_2 = "/tmp/test-input-002.csv"
+        with open(cls.fakepath_input_pending_2, "w+b") as fakefile:
+            fakefile.write(b"I received that in my storage.")
+
         cls.checker = cls.backend._find_component(
             cls.partner._name,
             ["storage.check"],
@@ -61,16 +69,19 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
             record.type_id.ack_type_id._make_exchange_filename(record)
         return record.exchange_filename
 
-    def _file_fullpath(self, state, record=None, ack=False):
+    def _file_fullpath(
+        self, state, record=None, ack=False, direction=False, fname=None
+    ):
         record = record or self.record
-        fname = self._filename(record, ack=ack)
+        if not fname:
+            fname = self._filename(record, ack=ack)
+        if not direction:
+            direction = record.direction
         if state == "error-report":
             # Exception as we read from the same path but w/ error suffix
             state = "error"
             fname += ".error"
-        return (
-            self.checker._remote_file_path(record.direction, state, fname)
-        ).as_posix()
+        return (self.checker._remote_file_path(direction, state, fname)).as_posix()
 
     def _mocked_backend_get(self, mocked_paths, path, **kwargs):
         self._storage_backend_calls.append(path)
@@ -82,12 +93,24 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
     def _mocked_backend_add(self, path, data, **kwargs):
         self._storage_backend_calls.append(path)
 
+    def _mocked_backend_list_files(self, mocked_paths, path, **kwargs):
+        files = []
+        path_length = len(path)
+        for p in mocked_paths.keys():
+            if path in p and path != p:
+                files.append(p[path_length:])
+        return files
+
     def _mock_storage_backend_get(self, mocked_paths):
         mocked = functools.partial(self._mocked_backend_get, mocked_paths)
         return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".get", mocked)
 
     def _mock_storage_backend_add(self):
         return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".add", self._mocked_backend_add)
+
+    def _mock_storage_backend_list_files(self, mocked_paths):
+        mocked = functools.partial(self._mocked_backend_list_files, mocked_paths)
+        return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".list_files", mocked)
 
     def _test_result(
         self,
@@ -130,3 +153,8 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
         with self._mock_storage_backend_add():
             with self._mock_storage_backend_get(mocked_paths):
                 self.backend._cron_check_output_exchange_sync()
+
+    def _test_run_cron_pending_input(self, mocked_paths):
+        with self._mock_storage_backend_add():
+            with self._mock_storage_backend_list_files(mocked_paths):
+                self.backend._cron_check_storage_pending_input()
