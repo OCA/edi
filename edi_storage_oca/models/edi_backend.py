@@ -1,8 +1,13 @@
 # Copyright 2020 ACSONE SA
 # @author Simone Orsi <simahawk@gmail.com>
+# Copyright 2021 ForgeFlow S.L. (https://www.forgeflow.com)
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import logging
+
 from odoo import fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class EDIBackend(models.Model):
@@ -76,3 +81,47 @@ class EDIBackend(models.Model):
         return (
             1 if getattr(component_class, "_storage_backend_type", False) else 0,
         ) + res
+
+    def _cron_check_storage_pending_input(self, **kw):
+        for backend in self.filtered(lambda b: b.storage_id):
+            backend._check_storage_pending_input(**kw)
+
+    def _check_storage_pending_input(self, **kw):
+        self.ensure_one()
+        if not self.storage_id or not self.input_dir_pending:
+            _logger.info(
+                "%s ignored. No storage and/or input directory specified.", self.name
+            )
+            return False
+
+        pending_files = self.storage_id.list_files(self.input_dir_pending)
+        exchange_type = self.env["edi.exchange.type"].search(
+            self._domain_exchange_type_storage_pending_input()
+        )
+        if not len(exchange_type) == 1:
+            _logger.info("%s ignored. More than one exchange type found.", self.name)
+            return False
+        for file_name in pending_files:
+            existing = self.env["edi.exchange.record"].search(
+                [
+                    ("backend_id", "=", self.id),
+                    ("type_id", "=", exchange_type.id),
+                    ("exchange_filename", "=", file_name),
+                ]
+            )
+            if existing:
+                continue
+            self.create_record(
+                exchange_type.code, self._get_exchange_record_vals(file_name)
+            )
+            _logger.debug("%s: new exchange record generated.", self.name)
+        return True
+
+    def _domain_exchange_type_storage_pending_input(self):
+        return [
+            ("backend_type_id", "=", self.backend_type_id.id),
+            ("direction", "=", "input"),
+        ]
+
+    def _get_exchange_record_vals(self, file_name):
+        return {"exchange_filename": file_name, "edi_exchange_state": "input_pending"}

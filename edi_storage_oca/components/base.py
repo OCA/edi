@@ -27,7 +27,7 @@ class EDIStorageComponentMixin(AbstractComponent):
     def storage(self):
         return self.backend.storage_id
 
-    def _dir_by_state(self, direction, state):
+    def _dir_by_state(self, direction, state, absolute=False):
         """Return remote directory path by direction and state.
 
         :param direction: string stating direction of the exchange
@@ -36,9 +36,11 @@ class EDIStorageComponentMixin(AbstractComponent):
         """
         assert direction in ("input", "output")
         assert state in ("pending", "done", "error")
+        if absolute:
+            return PurePath(self.backend[direction + "_dir_" + state] or "")
         return PurePath((self.backend[direction + "_dir_" + state] or "").strip(" /"))
 
-    def _remote_file_path(self, direction, state, filename):
+    def _remote_file_path(self, direction, state, filename, absolute=False):
         """Return remote file path by direction and state for give filename.
 
         :param direction: string stating direction of the exchange
@@ -46,7 +48,7 @@ class EDIStorageComponentMixin(AbstractComponent):
         :param filename: string for file name
         :return: PurePath object
         """
-        return self._dir_by_state(direction, state) / filename.strip("/ ")
+        return self._dir_by_state(direction, state, absolute) / filename.strip("/ ")
 
     def _get_remote_file(self, state, filename=None, binary=False):
         """Get file for current exchange_record in the given destination state.
