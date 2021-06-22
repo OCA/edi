@@ -50,7 +50,10 @@
                             <field name="exchanged_on" />
                             <field name="edi_exchange_state" />
                             <field name="exchange_file" filename="exchange_filename" />
-                            <field name="exchange_filename" invisible="1" />
+                            <field
+                                name="exchange_filename"
+                                attrs="{'invisible': [('exchange_file', '!=', False)]}"
+                            />
                             <field name="direction" invisible="1" />
                         </group>
                         <!-- TODO: move to a page? -->

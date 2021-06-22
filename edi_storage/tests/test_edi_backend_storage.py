@@ -201,3 +201,32 @@ class TestEDIBackendOutput(TestEDIStorageBase):
                 }
             ],
         )
+
+    @mute_logger(*LOGGERS)
+    def test_create_input_exchange_file_from_file_received(self):
+        exch_type = self.exchange_type_in
+        input_dir = "/test_input/pending/"
+        file_names = ["some-file.csv", "another-file.csv"]
+        self.backend.input_dir_pending = input_dir
+        mocked_paths = {
+            input_dir: "/tmp/",
+            self._file_fullpath(
+                "pending", direction="input", fname=file_names[0]
+            ): self.fakepath_input_pending_1,
+            self._file_fullpath(
+                "pending", direction="input", fname=file_names[1]
+            ): self.fakepath_input_pending_2,
+        }
+        existing = self.env["edi.exchange.record"].search_count(
+            [("backend_id", "=", self.backend.id), ("type_id", "=", exch_type.id)]
+        )
+        self.assertEqual(existing, 0)
+        # Run cron action:
+        self._test_run_cron_pending_input(mocked_paths)
+        new_records = self.env["edi.exchange.record"].search(
+            [("backend_id", "=", self.backend.id), ("type_id", "=", exch_type.id)]
+        )
+        self.assertEqual(len(new_records), 2)
+        for rec in new_records:
+            self.assertIn(rec.exchange_filename, file_names)
+            self.assertEqual(rec.edi_exchange_state, "input_pending")
