@@ -83,7 +83,7 @@ class EDIBackend(models.Model):
         ) + res
 
     def _cron_check_storage_pending_input(self, **kw):
-        for backend in self.filtered(lambda b: b.storage_id):
+        for backend in self:
             backend._check_storage_pending_input(**kw)
 
     def _check_storage_pending_input(self, **kw):
@@ -102,7 +102,7 @@ class EDIBackend(models.Model):
             _logger.info("%s ignored. More than one exchange type found.", self.name)
             return False
         for file_name in pending_files:
-            existing = self.env["edi.exchange.record"].search(
+            existing = self.env["edi.exchange.record"].search_count(
                 [
                     ("backend_id", "=", self.id),
                     ("type_id", "=", exchange_type.id),
