@@ -4,6 +4,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import logging
+import os
 
 from odoo import fields, models
 
@@ -82,46 +83,73 @@ class EDIBackend(models.Model):
             1 if getattr(component_class, "_storage_backend_type", False) else 0,
         ) + res
 
-    def _cron_check_storage_pending_input(self, **kw):
+    def _storage_cron_check_pending_input(self, **kw):
         for backend in self:
-            backend._check_storage_pending_input(**kw)
+            backend._storage_check_pending_input(**kw)
 
-    def _check_storage_pending_input(self, **kw):
+    def _storage_check_pending_input(self, **kw):
+        """Create new exchange records if new files found.
+
+        Collect input exchange types and for each of them,
+        check by pattern if the a new exchange record is required.
+        """
         self.ensure_one()
         if not self.storage_id or not self.input_dir_pending:
             _logger.info(
-                "%s ignored. No storage and/or input directory specified.", self.name
+                "%s ignored: no storage and/or input directory specified.", self.name
             )
             return False
 
-        pending_files = self.storage_id.list_files(self.input_dir_pending)
-        exchange_type = self.env["edi.exchange.type"].search(
-            self._domain_exchange_type_storage_pending_input()
+        exchange_types = self.env["edi.exchange.type"].search(
+            self._storage_exchange_type_pending_input_domain()
         )
-        if not len(exchange_type) == 1:
-            _logger.info("%s ignored. More than one exchange type found.", self.name)
-            return False
-        for file_name in pending_files:
-            existing = self.env["edi.exchange.record"].search_count(
-                [
-                    ("backend_id", "=", self.id),
-                    ("type_id", "=", exchange_type.id),
-                    ("exchange_filename", "=", file_name),
-                ]
+        for exchange_type in exchange_types:
+            # NOTE: this call might keep hanging the cron
+            # if the remote storage is slow (eg: too many files)
+            # We should probably run this code in a separate job per exchange type.
+            file_names = self._storage_get_input_filenames(exchange_type)
+            _logger.info(
+                "Processing exchange type '%s': found %s files to process",
+                exchange_type.display_name,
+                len(file_names),
             )
-            if existing:
-                continue
-            self.create_record(
-                exchange_type.code, self._get_exchange_record_vals(file_name)
-            )
-            _logger.debug("%s: new exchange record generated.", self.name)
+            for file_name in file_names:
+                # TODO: add config for job
+                self.with_delay()._storage_create_record_if_missing(
+                    exchange_type, file_name
+                )
         return True
 
-    def _domain_exchange_type_storage_pending_input(self):
+    def _storage_exchange_type_pending_input_domain(self):
+        """Domain for retrieving input exchange types.
+        """
         return [
             ("backend_type_id", "=", self.backend_type_id.id),
             ("direction", "=", "input"),
         ]
 
-    def _get_exchange_record_vals(self, file_name):
+    def _storage_create_record_if_missing(self, exchange_type, remote_file_name):
+        """Create a new exchange record for given type and file name if missing.
+        """
+        file_name = os.path.basename(remote_file_name)
+        extra_domain = [("exchange_filename", "=", file_name)]
+        existing = self._find_existing_exchange_records(
+            exchange_type, extra_domain=extra_domain, count_only=True
+        )
+        if existing:
+            return
+        record = self.create_record(
+            exchange_type.code, self._storage_new_exchange_record_vals(file_name)
+        )
+        _logger.debug("%s: new exchange record generated.", self.name)
+        return record.identifier
+
+    def _storage_get_input_filenames(self, exchange_type):
+        bits = [exchange_type.exchange_filename_pattern]
+        if exchange_type.exchange_file_ext:
+            bits.append("*." + exchange_type.exchange_file_ext)
+        pattern = "".join(bits)
+        return self.storage_id.find_files(self.input_dir_pending, pattern=pattern)
+
+    def _storage_new_exchange_record_vals(self, file_name):
         return {"exchange_filename": file_name, "edi_exchange_state": "input_pending"}
