@@ -561,3 +561,12 @@ class EDIBackend(models.Model):
         ack_type = exchange_record.type_id.ack_type_id
         values = {"parent_id": exchange_record.id}
         return self.create_record(ack_type.code, values)
+
+    def _find_existing_exchange_records(
+        self, exchange_type, extra_domain=None, count_only=False
+    ):
+        domain = [
+            ("backend_id", "=", self.id),
+            ("type_id", "=", exchange_type.id),
+        ] + extra_domain or []
+        return self.env["edi.exchange.record"].search(domain, count=count_only)
