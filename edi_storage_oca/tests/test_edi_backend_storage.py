@@ -203,8 +203,9 @@ class TestEDIBackendOutput(TestEDIStorageBase):
         )
 
     @mute_logger(*LOGGERS)
-    def test_create_input_exchange_file_from_file_received(self):
+    def test_create_input_exchange_file_from_file_received_no_pattern(self):
         exch_type = self.exchange_type_in
+        exch_type.exchange_filename_pattern = ""
         input_dir = "/test_input/pending/"
         file_names = ["some-file.csv", "another-file.csv"]
         self.backend.input_dir_pending = input_dir

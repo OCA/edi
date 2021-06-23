@@ -157,4 +157,4 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
     def _test_run_cron_pending_input(self, mocked_paths):
         with self._mock_storage_backend_add():
             with self._mock_storage_backend_list_files(mocked_paths):
-                self.backend._cron_check_storage_pending_input()
+                self.backend._storage_cron_check_pending_input()
