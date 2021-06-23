@@ -207,7 +207,12 @@ class EDIBackend(models.Model):
                     "edi_exchange_state": "output_pending",
                 }
             )
-        output = tools.pycompat.to_text(output)
+        try:
+            # TODO: Remove this on 15.0, we will keep it in order to not break current
+            # installations
+            output = tools.pycompat.to_text(output)
+        except UnicodeDecodeError:
+            _logger.info("File is not a text, so it cannot be converted")
         if output:
             try:
                 self._validate_data(exchange_record, output)
