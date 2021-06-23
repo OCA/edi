@@ -10,6 +10,6 @@
         <field name="doall" eval="False" />
         <field name="model_id" ref="edi_oca.model_edi_backend" />
         <field name="state">code</field>
-        <field name="code">model.search([])._cron_check_storage_pending_input()</field>
+        <field name="code">model.search([('storage_backend_id', '!=', False)])._cron_check_storage_pending_input()</field>
     </record>
 </odoo>
