@@ -115,7 +115,7 @@ class ReportVoxelPicking(models.AbstractModel):
                 "BatchNumber": ml.lot_id.name,
                 "ExpirationDate": (
                     ml.lot_id.life_date
-                    and ml.lot_id.life_date.strftime("%Y-%m-%dT%H:%M:%S")
+                    and ml.lot_id.life_date.strftime("%Y-%m-%d")
                     or ""
                 ),
                 "Quantity": ml.qty_done,
