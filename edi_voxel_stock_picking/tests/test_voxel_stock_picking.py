@@ -247,7 +247,7 @@ class TestVoxelStockPicking(TestVoxelStockPickingCommon):
                     "TraceabilityList": [
                         {
                             "BatchNumber": "LOT01",
-                            "ExpirationDate": "2020-01-01T12:05:23",
+                            "ExpirationDate": "2020-01-01",
                             "Quantity": 1.0,
                         }
                     ],
