@@ -1,0 +1,6 @@
+<odoo noupdate="1">
+    <record id="channel_edi_storage" model="queue.job.channel">
+        <field name="name">edi_storage</field>
+        <field name="parent_id" ref="edi_oca.channel_edi_root" />
+    </record>
+</odoo>

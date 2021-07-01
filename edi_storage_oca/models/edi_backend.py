@@ -114,7 +114,6 @@ class EDIBackend(models.Model):
                 len(file_names),
             )
             for file_name in file_names:
-                # TODO: add config for job
                 self.with_delay()._storage_create_record_if_missing(
                     exchange_type, file_name
                 )
