@@ -14,7 +14,8 @@ class EDIExchangeType(models.Model):
         "brackets, `{}`): `exchange_record`, `record_name`, `type` and "
         "`dt`. For instance, a valid string would be "
         "{record_name}-{type.code}-{dt}\n"
-        "For input exchange types it should be a regex expresion to filter "
+        "For input exchange types related to storage backends "
+        "it should be a regex expression to filter "
         "the files to be fetched from the pending directory in the related "
         "storage. E.g: `.*my-type-[0-9]*.\\.csv`"
     )
