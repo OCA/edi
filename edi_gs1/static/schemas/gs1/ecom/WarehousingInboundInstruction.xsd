@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ecom_common="urn:gs1:ecom:ecom_common:xsd:3" xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader" xmlns:shared_common="urn:gs1:shared:shared_common:xsd:3" xmlns:warehousing_common="urn:gs1:ecom:warehousing_common:xsd:3" xmlns:warehousing_inbound_instruction="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3" version="3.4">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ecom_common="urn:gs1:ecom:ecom_common:xsd:3" xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader" xmlns:shared_common="urn:gs1:shared:shared_common:xsd:3" xmlns:warehousing_common="urn:gs1:ecom:warehousing_common:xsd:3" xmlns:warehousing_inbound_instruction="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3" version="3.4.1">
     <xsd:annotation>
         <xsd:documentation><![CDATA[---------------------------
 © Copyright GS1, 2019
@@ -14,8 +14,8 @@ ANY PURPOSE OR WORKABLE IN ANY APPLICATION, OR OTHERWISE.  Use of the XML Schema
 file are with the understanding that GS1 has no liability for any claim to the contrary, or for any damage or loss of any kind or nature.
 
 Version Information:
-Version Number: 3.4
-Date of creation: April 2019
+Version Number: 3.4.1
+Date of creation: November 2019
 
 The schema and subsequent updates will be provided on the GS1 websites.
 ---------------------------
