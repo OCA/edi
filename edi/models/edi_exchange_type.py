@@ -136,13 +136,23 @@ class EDIExchangeType(models.Model):
         record = exchange_record
         if exchange_record.model and exchange_record.res_id:
             record = exchange_record.record
+        parent = exchange_record.parent_id
+        parent_ext = (parent.type_id.exchange_file_ext or "").strip(".")
+        parent_filename_no_ext = (parent.exchange_filename or "").replace("." + ext, "")
+        identifier = exchange_record.identifier
         return {
             "exchange_record": exchange_record,
+            "parent": parent,
             "record": record,
             "record_name": record_name,
             "type": self,
             "dt": dt,
             "ext": ext,
+            "parent_ext": parent_ext,
+            "identifier": slugify(identifier),
+            "parent_filename": parent.exchange_filename,
+            "parent_filename_no_ext": parent_filename_no_ext,
+            "parent_identifier": parent.identifier,
         }
 
     def _make_exchange_filename(self, exchange_record):
