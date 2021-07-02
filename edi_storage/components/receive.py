@@ -38,13 +38,14 @@ class EDIStorageReceiveComponent(Component):
 
     # TODO: add test
     def _get_filename_pattern(self):
-        filename_pattern = self.exchange_record.type_id.exchange_filename_pattern
-        if not filename_pattern:
+        filename_pattern = self.exchange_record.type_id.exchange_filename_pattern or ""
+        if filename_pattern:
             # By convention the filename will be
             # parent.filename + .ack.ext
             parent = self.exchange_record.parent_id
             ext = parent.type_id.exchange_file_ext.strip(".")
-            filename_pattern = parent.exchange_filename.replace(
-                "." + ext, ".ack" + "." + ext
+            values = self.exchange_record.type_id._get_exchange_filename_values(
+                self.exchange_record
             )
+            filename_pattern = filename_pattern.format(**values) + "." + ext
         return filename_pattern
