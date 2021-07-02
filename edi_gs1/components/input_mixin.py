@@ -16,9 +16,12 @@ class GS1InputMessageMixin(AbstractComponent):
     def process(self):
         schema_path = self._xsd_schema_path or self.work.schema_path
         handler = self.backend._find_component(
-            ["edi.xml"], work_ctx={"schema_path": schema_path}, safe=False
+            self.backend._name,
+            ["edi.xml"],
+            work_ctx={"schema_path": schema_path},
+            safe=False,
         )
-        data = handler.parse_xml(self.exchage_record._get_file_content())
+        data = handler.parse_xml(self.exchange_record._get_file_content())
         self._process_data(data)
         return True
 
