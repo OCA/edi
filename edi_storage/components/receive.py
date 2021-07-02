@@ -30,7 +30,7 @@ class EDIStorageReceiveComponent(Component):
         filename_pattern = self._get_filename_pattern()
         # TODO: add test
         # This particular test requires further mocking in `edi_storage.tests.common`
-        filepaths = self.storage_id.find_files(filename_pattern, relative_path=path)
+        filepaths = self.storage.find_files(filename_pattern, relative_path=path)
         if filepaths:
             filepath = filepaths[0]
             return self.storage.get(filepath)
