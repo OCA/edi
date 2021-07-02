@@ -125,6 +125,9 @@ class EDIBackend(models.Model):
         return [
             ("backend_type_id", "=", self.backend_type_id.id),
             ("direction", "=", "input"),
+            "|",
+            ("backend_id", "=", False),
+            ("backend_id", "=", self.id),
         ]
 
     def _storage_create_record_if_missing(self, exchange_type, remote_file_name):
