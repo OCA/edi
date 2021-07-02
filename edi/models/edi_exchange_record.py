@@ -142,8 +142,10 @@ class EDIExchangeRecord(models.Model):
     def _get_ack_record(self):
         if not self.type_id.ack_type_id:
             return None
-        return self.related_exchange_ids.filtered(
-            lambda x: x.type_id == self.type_id.ack_type_id
+        return fields.first(
+            self.related_exchange_ids.filtered(
+                lambda x: x.type_id == self.type_id.ack_type_id
+            )
         )
 
     def needs_ack(self):
@@ -272,7 +274,7 @@ class EDIExchangeRecord(models.Model):
         self._notify_related_record(self._exchange_status_message("process_ok"))
         self._trigger_edi_event("done")
 
-    def _notify_error(self, message_key):
+    def _notify_error(self, message_key="process_ko"):
         self._notify_related_record(
             self._exchange_status_message(message_key), level="error",
         )
