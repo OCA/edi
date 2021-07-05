@@ -120,8 +120,7 @@ class EDIBackend(models.Model):
         return True
 
     def _storage_exchange_type_pending_input_domain(self):
-        """Domain for retrieving input exchange types.
-        """
+        """Domain for retrieving input exchange types."""
         return [
             ("backend_type_id", "=", self.backend_type_id.id),
             ("direction", "=", "input"),
@@ -131,8 +130,7 @@ class EDIBackend(models.Model):
         ]
 
     def _storage_create_record_if_missing(self, exchange_type, remote_file_name):
-        """Create a new exchange record for given type and file name if missing.
-        """
+        """Create a new exchange record for given type and file name if missing."""
         file_name = os.path.basename(remote_file_name)
         extra_domain = [("exchange_filename", "=", file_name)]
         existing = self._find_existing_exchange_records(
