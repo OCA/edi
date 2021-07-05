@@ -395,7 +395,6 @@ class EDIBackend(models.Model):
             return False
         state = exchange_record.edi_exchange_state
         error = False
-        message = None
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
@@ -403,10 +402,8 @@ class EDIBackend(models.Model):
                 raise
             error = repr(err)
             state = "input_processed_error"
-            message = exchange_record._exchange_status_message("process_ko")
             res = False
         else:
-            message = exchange_record._exchange_status_message("process_ok")
             error = None
             state = "input_processed"
             res = True
@@ -420,8 +417,10 @@ class EDIBackend(models.Model):
                     "exchanged_on": fields.Datetime.now(),
                 }
             )
-            if message:
-                exchange_record._notify_related_record(message)
+            if state == "input_processed_error":
+                exchange_record._notify_error("process_ko")
+            elif state == "input_processed":
+                exchange_record._notify_done()
         return res
 
     def _exchange_process(self, exchange_record):
