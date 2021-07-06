@@ -43,7 +43,8 @@ msgid ""
 "                  usage: $comp_usage\n"
 "\n"
 "            In any case, you can use these settings\n"
-"            to provide your own configuration for whatever need you might have.\n"
+"            to provide your own configuration for whatever need you might "
+"have.\n"
 "        "
 msgstr ""
 
@@ -74,7 +75,8 @@ msgstr "<strong>État:</strong>"
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "ACK file is required for this exchange but not found."
-msgstr "Le fichier ACK est nécessaire pour cet échange mais n'a pas été trouvé."
+msgstr ""
+"Le fichier ACK est nécessaire pour cet échange mais n'a pas été trouvé."
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
@@ -513,6 +515,18 @@ msgid "Followers (Partners)"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__exchange_filename_pattern
+msgid ""
+"For output exchange types this should be a formatting string with the "
+"following variables available (to be used between brackets, `{}`): "
+"`exchange_record`, `record_name`, `type` and `dt`. For instance, a valid "
+"string would be {record_name}-{type.code}-{dt}\n"
+"For input exchange types related to storage backends it should be a regex "
+"expression to filter the files to be fetched from the pending directory in "
+"the related storage. E.g: `.*my-type-[0-9]*.\\.csv`"
+msgstr ""
+
+#. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_create_form_view
 msgid "Generate"
 msgstr "Générer"
@@ -720,7 +734,6 @@ msgid "Record ID=%d has no file to send!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
 #: code:addons/edi_oca/models/edi_backend.py:0
 #, python-format
 msgid "Record ID=%d is not meant to be processed"
