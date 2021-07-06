@@ -15,6 +15,7 @@ msgstr ""
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__display_name
+#: model:ir.model.fields,field_description:edi_storage_oca.field_edi_exchange_type__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -24,7 +25,32 @@ msgid "EDI Backend"
 msgstr ""
 
 #. module: edi_storage_oca
+#: model:ir.model,name:edi_storage_oca.model_edi_exchange_type
+msgid "EDI Exchange Type"
+msgstr ""
+
+#. module: edi_storage_oca
+#: model:ir.actions.server,name:edi_storage_oca.cron_check_storage_pending_input_ir_actions_server
+#: model:ir.cron,cron_name:edi_storage_oca.cron_check_storage_pending_input
+#: model:ir.cron,name:edi_storage_oca.cron_check_storage_pending_input
+msgid "EDI backend storage check pending input"
+msgstr ""
+
+#. module: edi_storage_oca
+#: model:ir.model.fields,field_description:edi_storage_oca.field_edi_exchange_type__exchange_filename_pattern
+msgid "Exchange Filename Pattern"
+msgstr ""
+
+#. module: edi_storage_oca
+#: model:ir.model.fields,help:edi_storage_oca.field_edi_exchange_type__exchange_filename_pattern
+msgid ""
+"For output exchange types this should be a formatting string with the following variables available (to be used between brackets, `{}`): `exchange_record`, `record_name`, `type` and `dt`. For instance, a valid string would be {record_name}-{type.code}-{dt}\n"
+"For input exchange types related to storage backends it should be a regex expression to filter the files to be fetched from the pending directory in the related storage. E.g: `.*my-type-[0-9]*.\\.csv`"
+msgstr ""
+
+#. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__id
+#: model:ir.model.fields,field_description:edi_storage_oca.field_edi_exchange_type__id
 msgid "ID"
 msgstr ""
 
@@ -45,6 +71,7 @@ msgstr ""
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend____last_update
+#: model:ir.model.fields,field_description:edi_storage_oca.field_edi_exchange_type____last_update
 msgid "Last Modified on"
 msgstr ""
 
