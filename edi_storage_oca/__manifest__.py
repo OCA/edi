@@ -13,6 +13,12 @@
     "website": "https://github.com/OCA/edi",
     "author": "ACSONE,Odoo Community Association (OCA)",
     "depends": ["edi_oca", "storage_backend", "component"],
-    "data": ["security/ir_model_access.xml", "views/edi_backend_views.xml"],
+    "data": [
+        "data/cron.xml",
+        "data/job_channel_data.xml",
+        "data/queue_job_function_data.xml",
+        "security/ir_model_access.xml",
+        "views/edi_backend_views.xml",
+    ],
     "demo": ["demo/edi_backend_demo.xml"],
 }

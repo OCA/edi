@@ -36,7 +36,9 @@ class EDIStorageComponentMixin(AbstractComponent):
         """
         assert direction in ("input", "output")
         assert state in ("pending", "done", "error")
-        return PurePath((self.backend[direction + "_dir_" + state] or "").strip(" /"))
+        return PurePath(
+            (self.backend[direction + "_dir_" + state] or "").strip().rstrip("/")
+        )
 
     def _remote_file_path(self, direction, state, filename):
         """Return remote file path by direction and state for give filename.

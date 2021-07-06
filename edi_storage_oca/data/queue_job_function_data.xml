@@ -1,0 +1,7 @@
+<odoo noupdate="1">
+    <record id="job_function_edi_backend_create_exch_record" model="queue.job.function">
+        <field name="model_id" ref="edi_oca.model_edi_backend" />
+        <field name="method">_storage_create_record_if_missing</field>
+        <field name="channel_id" ref="channel_edi_storage" />
+    </record>
+</odoo>
