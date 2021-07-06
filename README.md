@@ -28,8 +28,8 @@ addon | version | summary
 [base_ubl_payment](base_ubl_payment/) | 14.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
 [edi_account_oca](edi_account_oca/) | 14.0.1.0.0 | Define EDI Configuration for Account Moves
 [edi_exchange_template_oca](edi_exchange_template_oca/) | 14.0.1.0.0 | Allows definition of exchanges via templates.
-[edi_oca](edi_oca/) | 14.0.1.0.1 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
-[edi_storage_oca](edi_storage_oca/) | 14.0.1.0.0 | Base module to allow exchanging files via storage backend (eg: SFTP).
+[edi_oca](edi_oca/) | 14.0.1.1.0 | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
+[edi_storage_oca](edi_storage_oca/) | 14.0.1.1.0 | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_webservice_oca](edi_webservice_oca/) | 14.0.1.0.0 | Defines webservice integration from EDI Exchange records
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF purchase order
 [sale_order_import](sale_order_import/) | 14.0.1.0.0 | Import RFQ or sale orders from files
