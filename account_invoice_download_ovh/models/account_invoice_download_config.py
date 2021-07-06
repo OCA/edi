@@ -166,7 +166,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 "amount_untaxed": res_inv["priceWithoutTax"].get("value"),
                 "amount_total": res_inv["priceWithTax"].get("value"),
             }
-            self.ovh_invoice_attach_pdf(parsed_inv, res_inv["url"])
+            self.ovh_invoice_attach_pdf(parsed_inv, res_inv["pdfUrl"])
 
             if self.import_config_id.invoice_line_method.startswith("nline"):
                 parsed_inv["lines"] = []
