@@ -26,7 +26,7 @@ class EDIStorageReceiveComponent(Component):
 
         direction = self.exchange_record.direction
         # Just the root of the incoming folder
-        path = self._remote_file_path(direction, "pending", "")
+        path = str(self._remote_file_path(direction, "pending", ""))
         filename_pattern = self._get_filename_pattern()
         # TODO: add test
         # This particular test requires further mocking in `edi_storage.tests.common`
@@ -43,7 +43,7 @@ class EDIStorageReceiveComponent(Component):
             # By convention the filename will be
             # parent.filename + .ack.ext
             parent = self.exchange_record.parent_id
-            ext = parent.type_id.exchange_file_ext.strip(".")
+            ext = (parent.type_id.exchange_file_ext or "").strip(".")
             values = self.exchange_record.type_id._get_exchange_filename_values(
                 self.exchange_record
             )

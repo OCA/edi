@@ -27,22 +27,23 @@ class StockPicking(models.Model):
         # which backend to use.
         return self.env.ref("edi_gs1.edi_backend_gs1_default")
 
+    def _common_instruction(self, send, type_code):
+        delivery = self
+        edi_backend = self.get_backend_by_delivery()
+        values = {"model": delivery._name, "res_id": delivery.id}
+        exchange_record = edi_backend.create_record(type_code, values)
+        edi_backend.exchange_generate(exchange_record)
+        send = self.env.context.get("edi_exchange_send", send)
+        if send:
+            edi_backend.exchange_send(exchange_record)
+        return exchange_record
+
     # TODO: check if sending is required
     def send_wh_inbound_instruction(self, send=False):
         """Generate an Inbound Instruction for given delivery and send it.
         """
-        delivery = self
-        edi_backend = self.get_backend_by_delivery()
         type_code = "warehousingInboundInstruction"
-        values = {"model": delivery._name, "res_id": delivery.id}
-        exchange_record = edi_backend.create_record(type_code, values)
-        edi_backend.exchange_generate(exchange_record)
-
-        if "edi_exchange_send" in self.env.context:
-            send = self.env.context.get("edi_exchange_send")
-        if send:
-            edi_backend.exchange_send(exchange_record)
-        return exchange_record
+        return self._common_instruction(send, type_code)
 
     def action_send_wh_inbound_instruction(self):
         # TODO: return action compat dict
@@ -51,18 +52,8 @@ class StockPicking(models.Model):
     def send_wh_outbound_instruction(self, send=False):
         """Generate an Outbound Instruction for given delivery and send it.
         """
-        delivery = self
-        edi_backend = self.get_backend_by_delivery()
         type_code = "warehousingOutboundInstruction"
-        values = {"model": delivery._name, "res_id": delivery.id}
-        exchange_record = edi_backend.create_record(type_code, values)
-        edi_backend.exchange_generate(exchange_record)
-
-        if "edi_exchange_send" in self.env.context:
-            send = self.env.context.get("edi_exchange_send")
-        if send:
-            edi_backend.exchange_send(exchange_record)
-        return exchange_record
+        return self._common_instruction(send, type_code)
 
     def action_send_wh_outbound_instruction(self):
         # TODO: return action compat dict

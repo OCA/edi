@@ -55,12 +55,13 @@ class EDIBackend(models.Model):
     )
     active = fields.Boolean(default=True)
 
-    def _get_component(self, exchange_record, key):
+    def _get_component(self, exchange_record, key, work_ctx=None):
+        # TODO: maybe lookup for an `exchange_record.model` specific component 1st
         candidates = self._get_component_usage_candidates(exchange_record, key)
         current_work_ctx = {"exchange_record": exchange_record}
         current_work_ctx.update(work_ctx or {})
         # Inject work context from advanced settings if available
-        record_conf = self._get_component_conf_for_record(exchange_record, key)
+        record_conf = exchange_record.type_id._component_conf_for(exchange_record, key)
         current_work_ctx.update(record_conf.get("work_ctx", {}))
         match_attrs = self._component_match_attrs(exchange_record, key)
         # Model is not granted to be there
@@ -132,7 +133,8 @@ class EDIBackend(models.Model):
             key,
         ])
         # fmt:on
-        record_conf = self._get_component_conf_for_record(exchange_record, key)
+        exc_type = exchange_record.type_id
+        record_conf = exc_type._component_conf_for(exchange_record, key)
         candidates = [record_conf["usage"]] if record_conf else []
         candidates += [
             base_usage,
@@ -435,10 +437,7 @@ class EDIBackend(models.Model):
             return False
         state = exchange_record.edi_exchange_state
         error = False
-<<<<<<< HEAD
-=======
         notification_handler = None
->>>>>>> ea4cf09... [FIX] edi: fix minor issues.
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
@@ -446,15 +445,10 @@ class EDIBackend(models.Model):
                 raise
             error = _get_exception_msg(err)
             state = "input_processed_error"
-<<<<<<< HEAD
-            res = False
-        else:
-=======
             notification_handler = exchange_record._notify_error
             res = False
         else:
             notification_handler = exchange_record._notify_done
->>>>>>> ea4cf09... [FIX] edi: fix minor issues.
             error = None
             state = "input_processed"
             res = True
@@ -468,15 +462,8 @@ class EDIBackend(models.Model):
                     "exchanged_on": fields.Datetime.now(),
                 }
             )
-<<<<<<< HEAD
-            if state == "input_processed_error":
-                exchange_record._notify_error("process_ko")
-            elif state == "input_processed":
-                exchange_record._notify_done()
-=======
             if notification_handler:
                 notification_handler()
->>>>>>> ea4cf09... [FIX] edi: fix minor issues.
         return res
 
     def _exchange_process(self, exchange_record):
@@ -618,7 +605,12 @@ class EDIBackend(models.Model):
         # Nothing could pass the default state "new" to "X_pending"
         # so for auto-file generated, we have to force it
         state = "{direction}_pending".format(direction=ack_type.direction)
-        values = {"parent_id": exchange_record.id, "edi_exchange_state": state}
+        values = {
+            "parent_id": exchange_record.id,
+            "edi_exchange_state": state,
+            "res_id": exchange_record.res_id,
+            "model": exchange_record.model,
+        }
         return self.create_record(ack_type.code, values)
 
     def _find_existing_exchange_records(

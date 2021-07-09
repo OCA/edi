@@ -19,6 +19,7 @@
         "edi_exchange_template",
     ],
     "data": [
+        "views/res_config_settings.xml",
         "views/stock_picking_view.xml",
         "data/edi_exchange_type.xml",
         "data/inbound_instruction_qweb_template.xml",
