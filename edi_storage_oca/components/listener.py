@@ -14,7 +14,7 @@ class EdiStorageListener(Component):
     def _move_file(self, storage, from_dir_str, to_dir_str, filename):
         from_dir = PurePath(from_dir_str)
         to_dir = PurePath(to_dir_str)
-        if filename not in storage.list_files(from_dir):
+        if filename not in storage.list_files(from_dir.as_posix()):
             # The file might have been moved after a previous error.
             return False
         self._add_after_commit_hook(
