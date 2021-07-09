@@ -625,7 +625,7 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def ubl_parse_customer_party(self, party_node, ns):
-        ref_xpath = party_node.xpath("cac:SupplierAssignedAccountID", namespaces=ns)
+        ref_xpath = party_node.xpath("cbc:SupplierAssignedAccountID", namespaces=ns)
         party_node = party_node.xpath("cac:Party", namespaces=ns)[0]
         partner_dict = self.ubl_parse_party(party_node, ns)
         partner_dict["ref"] = ref_xpath and ref_xpath[0].text or False
@@ -633,7 +633,7 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def ubl_parse_supplier_party(self, party_node, ns):
-        ref_xpath = party_node.xpath("cac:CustomerAssignedAccountID", namespaces=ns)
+        ref_xpath = party_node.xpath("cbc:CustomerAssignedAccountID", namespaces=ns)
         party_node = party_node.xpath("cac:Party", namespaces=ns)[0]
         partner_dict = self.ubl_parse_party(party_node, ns)
         partner_dict["ref"] = ref_xpath and ref_xpath[0].text or False
