@@ -168,3 +168,6 @@ class EDIExchangeType(models.Model):
         if hasattr(exchange_record.record, "_get_edi_exchange_record_name"):
             return exchange_record.record._get_edi_exchange_record_name(exchange_record)
         return slugify(exchange_record.record.display_name)
+
+    def _component_conf_for(self, exchange_record, key):
+        return self.advanced_settings.get("components", {}).get(key, {})
