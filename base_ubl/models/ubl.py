@@ -342,6 +342,10 @@ class BaseUbl(models.AbstractModel):
             name, product, line_item, ns, type_=type_, seller=seller, version=version
         )
 
+    def _ubl_get_seller_code_from_product(self, product):
+        """Inherit and overwrite if another custom product code is required"""
+        return product.default_code
+
     @api.model
     def _ubl_add_item(
         self,
@@ -369,7 +373,7 @@ class BaseUbl(models.AbstractModel):
                         product_name = sellers[0].product_name
                         seller_code = sellers[0].product_code
             if not seller_code:
-                seller_code = product.default_code
+                seller_code = self._ubl_get_seller_code_from_product(product)
             if not product_name:
                 variant = ", ".join(product.attribute_line_ids.mapped("value_ids.name"))
                 product_name = (
