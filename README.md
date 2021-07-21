@@ -24,7 +24,7 @@ addon | version | summary
 [base_business_document_import](base_business_document_import/) | 14.0.2.0.0 | Provides technical tools to import sale orders or supplier invoices
 [base_edi](base_edi/) | 14.0.1.0.0 | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 14.0.1.0.0 | Base module for Factur-X/ZUGFeRD
-[base_ubl](base_ubl/) | 14.0.1.0.1 | Base module for Universal Business Language (UBL)
+[base_ubl](base_ubl/) | 14.0.1.0.2 | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 14.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
 [edi_account_oca](edi_account_oca/) | 14.0.1.0.0 | Define EDI Configuration for Account Moves
 [edi_exchange_template_oca](edi_exchange_template_oca/) | 14.0.1.0.0 | Allows definition of exchanges via templates.
