@@ -39,10 +39,11 @@ class AccountMove(models.Model):
 
     def _ubl_add_order_reference(self, parent_node, ns, version="2.1"):
         self.ensure_one()
-        if self.name:
+        sale_order = self.invoice_line_ids.sale_line_ids.mapped("order_id")
+        if sale_order.client_order_ref:
             order_ref = etree.SubElement(parent_node, ns["cac"] + "OrderReference")
             order_ref_id = etree.SubElement(order_ref, ns["cbc"] + "ID")
-            order_ref_id.text = self.name
+            order_ref_id.text = sale_order.client_order_ref
 
     def _ubl_get_contract_document_reference_dict(self):
         """Result: dict with key = Doc Type Code, value = ID"""
