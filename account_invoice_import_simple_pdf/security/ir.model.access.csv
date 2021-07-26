@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_invoice_import_simple_pdf_fields_full,Full access on account.invoice.import.simple.pdf.fields,model_account_invoice_import_simple_pdf_fields,account.group_account_invoice,1,1,1,1
+access_account_invoice_import_simple_pdf_fields_read,Read access on account.invoice.import.simple.pdf.fields,model_account_invoice_import_simple_pdf_fields,account.group_account_readonly,1,0,0,0
+access_account_invoice_import_simple_pdf_invoice_number_full,Full access on account.invoice.import.simple.pdf.invoice.number,model_account_invoice_import_simple_pdf_invoice_number,account.group_account_invoice,1,1,1,1
+access_account_invoice_import_simple_pdf_invoice_number_read,Read access on account.invoice.import.simple.pdf.invoice.number,model_account_invoice_import_simple_pdf_invoice_number,account.group_account_readonly,1,0,0,0
