@@ -385,6 +385,7 @@ class BaseUbl(models.AbstractModel):
         description.text = name
         name_node = etree.SubElement(item, ns["cbc"] + "Name")
         name_node.text = product_name or name.split("\n")[0]
+
         if seller_code:
             seller_identification = etree.SubElement(
                 item, ns["cac"] + "SellersItemIdentification"
@@ -429,6 +430,7 @@ class BaseUbl(models.AbstractModel):
                 property_name.text = attribute_value.attribute_id.name
                 property_value = etree.SubElement(item_property, ns["cbc"] + "Value")
                 property_value.text = attribute_value.name
+        return item
 
     @api.model
     def _ubl_add_tax_subtotal(
