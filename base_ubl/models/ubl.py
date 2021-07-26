@@ -230,6 +230,9 @@ class BaseUbl(models.AbstractModel):
             )
         return customer_party_root
 
+    def _ubl_get_customer_assigned_id(self, partner):
+        return partner.commercial_partner_id.ref
+
     @api.model
     def _ubl_add_supplier_party(
         self, partner, company, node_name, parent_node, ns, version="2.1"
@@ -261,7 +264,7 @@ class BaseUbl(models.AbstractModel):
             supplier_ref = etree.SubElement(
                 supplier_party_root, ns["cbc"] + "CustomerAssignedAccountID"
             )
-            supplier_ref.text = partner.commercial_partner_id.ref
+            supplier_ref.text = self._ubl_get_customer_assigned_id(partner)
         self._ubl_add_party(
             partner, company, "Party", supplier_party_root, ns, version=version
         )
@@ -348,6 +351,12 @@ class BaseUbl(models.AbstractModel):
         """Inherit and overwrite if another custom product code is required"""
         return product.default_code
 
+    def _ubl_get_customer_product_code(self, product):
+        """Inherit and overwrite to return the customer product sku either from
+        product, invoice_line or customer (product.customer_sku,
+        invoice_line.customer_sku, customer.product_sku)"""
+        return ""
+
     @api.model
     def _ubl_add_item(
         self,
@@ -386,6 +395,15 @@ class BaseUbl(models.AbstractModel):
         name_node = etree.SubElement(item, ns["cbc"] + "Name")
         name_node.text = product_name or name.split("\n")[0]
 
+        customer_code = self._ubl_get_customer_product_code(product)
+        if customer_code:
+            buyer_identification = etree.SubElement(
+                item, ns["cac"] + "BuyersItemIdentification"
+            )
+            buyer_identification_id = etree.SubElement(
+                buyer_identification, ns["cbc"] + "ID"
+            )
+            buyer_identification_id.text = customer_code
         if seller_code:
             seller_identification = etree.SubElement(
                 item, ns["cac"] + "SellersItemIdentification"
