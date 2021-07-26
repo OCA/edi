@@ -27,10 +27,7 @@ class AccountMove(models.Model):
         issue_date = etree.SubElement(parent_node, ns["cbc"] + "IssueDate")
         issue_date.text = self.invoice_date.strftime("%Y-%m-%d")
         type_code = etree.SubElement(parent_node, ns["cbc"] + "InvoiceTypeCode")
-        if self.move_type == "out_invoice":
-            type_code.text = "380"
-        elif self.move_type == "out_refund":
-            type_code.text = "381"
+        type_code.text = self._ubl_get_invoice_type_code()
         if self.narration:
             note = etree.SubElement(parent_node, ns["cbc"] + "Note")
             note.text = self.narration
@@ -43,12 +40,23 @@ class AccountMove(models.Model):
         # buyer_reference = etree.SubElement(parent_node, ns["cbc"] + "BuyerReference")
         # buyer_reference.text = self.ref or ""
 
+    def _ubl_get_invoice_type_code(self):
+        if self.move_type == "out_invoice":
+            return "380"
+        elif self.move_type == "out_refund":
+            return "381"
+
+    def _ubl_get_order_reference(self):
+        """This method is designed to be inherited"""
+        return self.invoice_origin
+
     def _ubl_add_order_reference(self, parent_node, ns, version="2.1"):
         self.ensure_one()
-        if self.name:
+        sale_order_ref = self._ubl_get_order_reference()
+        if sale_order_ref:
             order_ref = etree.SubElement(parent_node, ns["cac"] + "OrderReference")
             order_ref_id = etree.SubElement(order_ref, ns["cbc"] + "ID")
-            order_ref_id.text = self.name
+            order_ref_id.text = sale_order_ref
 
     def _ubl_get_contract_document_reference_dict(self):
         """Result: dict with key = Doc Type Code, value = ID"""
