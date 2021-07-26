@@ -1,7 +1,11 @@
 # generated from manifests external_dependencies
 factur-x
+dateparser
 invoice2data
 ovh
 PyPDF2
 pyyaml
 requests
+PyMuPDF
+pyyaml
+regex
