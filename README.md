@@ -21,6 +21,7 @@ addon | version | summary
 --- | --- | ---
 [account_invoice_import](account_invoice_import/) | 14.0.1.1.0 | Import supplier invoices/refunds as PDF or XML files
 [account_invoice_import_invoice2data](account_invoice_import_invoice2data/) | 14.0.1.0.0 | Import supplier invoices using the invoice2data lib
+[account_invoice_import_ubl](account_invoice_import_ubl/) | 14.0.1.0.0 | Import UBL XML supplier invoices/refunds
 [base_business_document_import](base_business_document_import/) | 14.0.2.0.0 | Provides technical tools to import sale orders or supplier invoices
 [base_edi](base_edi/) | 14.0.1.0.0 | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 14.0.1.0.0 | Base module for Factur-X/ZUGFeRD
