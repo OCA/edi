@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+<record id="charge_account" model="account.account">
+    <field name="code">606UBL</field>
+    <field name="name">Charge account UBL</field>
+    <field name="user_type_id" ref="account.data_account_type_expenses" />
+</record>
+
+<record id="ketentest" model="res.partner">
+    <field name="name">UBL Ketentest BV</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="email">ublketentest@gbned.nl</field>
+    <field name="street">Berend Slingenbergstraat</field>
+    <field name="street2">9A</field>
+    <field name="zip">7742KD</field>
+    <field name="city">Coevorden</field>
+    <field name="country_id" ref="base.nl" />
+</record>
+
+<record id="ketentest_import_config" model="account.invoice.import.config">
+    <field name="name">UBL Ketentest BV</field>
+    <field name="partner_id" ref="ketentest" />
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account" />
+</record>
+
+<record id="nl_vat_purchase_21" model="account.tax">
+    <field name="name">Dutch VAT purchase 21.0%</field>
+    <field name="description">NL-VAT-buy-21.0</field>
+    <field name="type_tax_use">purchase</field>
+    <field name="amount">21</field>
+    <field name="amount_type">percent</field>
+    <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
+    <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+</record>
+
+<record id="nl_vat_purchase_6" model="account.tax">
+    <field name="name">Dutch VAT purchase 6.0%</field>
+    <field name="description">NL-VAT-buy-6.0</field>
+    <field name="type_tax_use">purchase</field>
+    <field name="amount">6</field>
+    <field name="amount_type">percent</field>
+    <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
+    <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+</record>
+
+<record id="exact_belgium" model="res.partner">
+    <field name="name">Exact Belgium II BVBA</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="street">Koningin Astridlaan 166</field>
+    <field name="zip">1780</field>
+    <field name="city">Wemmel</field>
+    <field name="country_id" ref="base.be" />
+    <field name="vat">BE0505890632</field>
+</record>
+
+<record id="exact_belgium_import_config" model="account.invoice.import.config">
+    <field name="name">Exact Belgium</field>
+    <field name="partner_id" ref="exact_belgium" />
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account" />
+</record>
+
+<record id="multi_tank" model="res.partner">
+    <field name="name">Multi Tank Card bv</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="street">Postbus</field>
+    <field name="zip">2130 KB</field>
+    <field name="city">Hoofddorp</field>
+    <field name="country_id" ref="base.nl" />
+    <field name="vat">NL009276749B01</field>
+</record>
+
+<record id="multi_tank_import_config" model="account.invoice.import.config">
+    <field name="name">Multi Tank</field>
+    <field name="partner_id" ref="multi_tank" />
+    <field name="invoice_line_method">nline_no_product</field>
+    <field name="account_id" ref="charge_account" />
+</record>
+
+</odoo>
