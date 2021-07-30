@@ -197,6 +197,9 @@ class BaseUbl(models.AbstractModel):
             )
         self._ubl_add_contact(partner, party, ns, version=version)
 
+    def _ubl_get_customer_assigned_id(self, partner):
+        return partner.commercial_partner_id.ref
+
     @api.model
     def _ubl_add_customer_party(
         self, partner, company, node_name, parent_node, ns, version="2.1"
@@ -210,11 +213,12 @@ class BaseUbl(models.AbstractModel):
             else:
                 partner = company.partner_id
         customer_party_root = etree.SubElement(parent_node, ns["cac"] + node_name)
-        if not company and partner.commercial_partner_id.ref:
+        partner_ref = self._ubl_get_customer_assigned_id(partner)
+        if partner_ref:
             customer_ref = etree.SubElement(
                 customer_party_root, ns["cbc"] + "SupplierAssignedAccountID"
             )
-            customer_ref.text = partner.commercial_partner_id.ref
+            customer_ref.text = partner_ref
         self._ubl_add_party(
             partner, company, "Party", customer_party_root, ns, version=version
         )
@@ -229,9 +233,6 @@ class BaseUbl(models.AbstractModel):
                 version=version,
             )
         return customer_party_root
-
-    def _ubl_get_customer_assigned_id(self, partner):
-        return partner.commercial_partner_id.ref
 
     @api.model
     def _ubl_add_supplier_party(
@@ -260,11 +261,12 @@ class BaseUbl(models.AbstractModel):
             else:
                 partner = company.partner_id
         supplier_party_root = etree.SubElement(parent_node, ns["cac"] + node_name)
-        if not company and partner.commercial_partner_id.ref:
+        partner_ref = self._ubl_get_customer_assigned_id(partner)
+        if partner_ref:
             supplier_ref = etree.SubElement(
                 supplier_party_root, ns["cbc"] + "CustomerAssignedAccountID"
             )
-            supplier_ref.text = self._ubl_get_customer_assigned_id(partner)
+            supplier_ref.text = partner_ref
         self._ubl_add_party(
             partner, company, "Party", supplier_party_root, ns, version=version
         )
@@ -351,7 +353,7 @@ class BaseUbl(models.AbstractModel):
         """Inherit and overwrite if another custom product code is required"""
         return product.default_code
 
-    def _ubl_get_customer_product_code(self, product):
+    def _ubl_get_customer_product_code(self, product, customer):
         """Inherit and overwrite to return the customer product sku either from
         product, invoice_line or customer (product.customer_sku,
         invoice_line.customer_sku, customer.product_sku)"""
@@ -366,6 +368,7 @@ class BaseUbl(models.AbstractModel):
         ns,
         type_="purchase",
         seller=False,
+        customer=False,
         version="2.1",
     ):
         """Beware that product may be False (in particular on invoices)"""
@@ -395,7 +398,7 @@ class BaseUbl(models.AbstractModel):
         name_node = etree.SubElement(item, ns["cbc"] + "Name")
         name_node.text = product_name or name.split("\n")[0]
 
-        customer_code = self._ubl_get_customer_product_code(product)
+        customer_code = self._ubl_get_customer_product_code(product, customer)
         if customer_code:
             buyer_identification = etree.SubElement(
                 item, ns["cac"] + "BuyersItemIdentification"
