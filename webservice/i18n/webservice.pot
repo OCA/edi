@@ -19,6 +19,16 @@ msgid "Content Type"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_default
+msgid "Content Type Env Default"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_is_editable
+msgid "Content Type Env Is Editable"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__create_uid
 msgid "Created by"
 msgstr ""
@@ -79,8 +89,33 @@ msgid "Password"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_default
+msgid "Password Env Default"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_is_editable
+msgid "Password Env Is Editable"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol
 msgid "Protocol"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_default
+msgid "Protocol Env Default"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_is_editable
+msgid "Protocol Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__server_env_defaults
+msgid "Server Env Defaults"
 msgstr ""
 
 #. module: webservice
@@ -99,8 +134,28 @@ msgid "Url"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_default
+msgid "Url Env Default"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_is_editable
+msgid "Url Env Is Editable"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
 msgid "Username"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_default
+msgid "Username Env Default"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_is_editable
+msgid "Username Env Is Editable"
 msgstr ""
 
 #. module: webservice
