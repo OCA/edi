@@ -35,7 +35,7 @@ addon | version | summary
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF purchase order
 [sale_order_import](sale_order_import/) | 14.0.1.0.0 | Import RFQ or sale orders from files
 [sale_order_ubl](sale_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF quotation
-[webservice](webservice/) | 14.0.1.0.0 | Defines webservice abstract definition to be used generally
+[webservice](webservice/) | 14.0.1.0.1 | Defines webservice abstract definition to be used generally
 
 [//]: # (end addons)
 
