@@ -52,7 +52,7 @@ addon | version | summary
 [sale_order_import_ubl](sale_order_import_ubl/) | 13.0.2.1.0 | Import UBL XML sale order files
 [sale_order_import_ubl_http](sale_order_import_ubl_http/) | 13.0.1.1.1 | Add an HTTP endpoint to import UBL formatted ordersautomatically as sales order
 [sale_order_ubl](sale_order_ubl/) | 13.0.1.0.0 | Embed UBL XML file inside the PDF quotation
-[webservice](webservice/) | 13.0.1.0.0 | Defines webservice abstract definition to be used generally
+[webservice](webservice/) | 13.0.1.0.1 | Defines webservice abstract definition to be used generally
 
 [//]: # (end addons)
 
