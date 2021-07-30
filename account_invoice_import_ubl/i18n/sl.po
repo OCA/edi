@@ -30,12 +30,27 @@ msgid "), either as XML file or as PDF file with an UBL XML attachment."
 msgstr ""
 
 #. module: account_invoice_import_ubl
+#: model:ir.model.fields,field_description:account_invoice_import_ubl.field_account_invoice_import__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_invoice_import_ubl
+#: model:ir.model.fields,field_description:account_invoice_import_ubl.field_account_invoice_import__id
+msgid "ID"
+msgstr ""
+
+#. module: account_invoice_import_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "ISO/IEC 19845"
 msgstr ""
 
 #. module: account_invoice_import_ubl
-#: code:addons/account_invoice_import_ubl/wizard/account_invoice_import.py:151
+#: model:ir.model.fields,field_description:account_invoice_import_ubl.field_account_invoice_import____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: account_invoice_import_ubl
+#: code:addons/account_invoice_import_ubl/wizard/account_invoice_import.py:0
 #, python-format
 msgid "This UBL XML file is not an invoice/refund file (InvoiceTypeCode is %s"
 msgstr "Ta UBL XML datoteka ni račun/dobropis (TypeCode računa je %s"
