@@ -37,6 +37,7 @@ class EDIBackend(models.Model):
         required=True,
         ondelete="restrict",
     )
+    partner_id = fields.Many2one(comodel_name="res.partner",)
 
     def _get_component(self, exchange_record, key):
         candidates = self._get_component_usage_candidates(exchange_record, key)

@@ -33,6 +33,7 @@
         "views/edi_backend_type_views.xml",
         "views/edi_exchange_record_views.xml",
         "views/edi_exchange_type_views.xml",
+        "views/res_partner_views.xml",
         "views/menuitems.xml",
         "templates/exchange_chatter_msg.xml",
         "templates/exchange_mixin_buttons.xml",

@@ -57,3 +57,13 @@ class EDIBackendTestCase(EDIBackendCommonTestCase):
         self.assertEqual(
             candidates, ["my.special.send", "output.send"],
         )
+
+    def test_backend_partner_link(self):
+        partner = self.env["res.partner"].create({"name": "TEST EDI partner"})
+        self.assertEqual(partner.edi_backend_count, 0)
+        self.backend.partner_id = partner
+        partner.invalidate_cache()
+        self.assertEqual(partner.edi_backend_count, 1)
+        # Dummy test for action:
+        res = partner.action_edi_backend()
+        self.assertTrue(res)
