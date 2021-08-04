@@ -6,7 +6,6 @@
         <field name="arch" type="xml">
             <group name="config" position="after">
                 <group name="storage_config">
-                    <field name="backend_type_id" />
                     <field name="storage_id" />
                     <field name="input_dir_pending" />
                     <field name="input_dir_done" />
