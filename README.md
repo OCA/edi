@@ -22,10 +22,10 @@ addon | version | summary
 [account_invoice_import](account_invoice_import/) | 14.0.1.1.0 | Import supplier invoices/refunds as PDF or XML files
 [account_invoice_import_invoice2data](account_invoice_import_invoice2data/) | 14.0.1.0.0 | Import supplier invoices using the invoice2data lib
 [account_invoice_import_ubl](account_invoice_import_ubl/) | 14.0.1.0.0 | Import UBL XML supplier invoices/refunds
-[base_business_document_import](base_business_document_import/) | 14.0.2.0.0 | Provides technical tools to import sale orders or supplier invoices
+[base_business_document_import](base_business_document_import/) | 14.0.2.1.0 | Provides technical tools to import sale orders or supplier invoices
 [base_edi](base_edi/) | 14.0.1.0.0 | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 14.0.1.0.0 | Base module for Factur-X/ZUGFeRD
-[base_ubl](base_ubl/) | 14.0.1.0.2 | Base module for Universal Business Language (UBL)
+[base_ubl](base_ubl/) | 14.0.1.1.0 | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 14.0.1.0.0 | Payment-related code for Universal Business Language (UBL)
 [edi_account_oca](edi_account_oca/) | 14.0.1.0.0 | Define EDI Configuration for Account Moves
 [edi_exchange_template_oca](edi_exchange_template_oca/) | 14.0.1.0.0 | Allows definition of exchanges via templates.
@@ -33,8 +33,8 @@ addon | version | summary
 [edi_storage_oca](edi_storage_oca/) | 14.0.1.2.1 | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_webservice_oca](edi_webservice_oca/) | 14.0.1.0.0 | Defines webservice integration from EDI Exchange records
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF purchase order
-[sale_order_import](sale_order_import/) | 14.0.1.0.0 | Import RFQ or sale orders from files
-[sale_order_import_ubl](sale_order_import_ubl/) | 14.0.1.0.0 | Import UBL XML sale order files
+[sale_order_import](sale_order_import/) | 14.0.1.1.0 | Import RFQ or sale orders from files
+[sale_order_import_ubl](sale_order_import_ubl/) | 14.0.1.1.0 | Import UBL XML sale order files
 [sale_order_ubl](sale_order_ubl/) | 14.0.1.0.0 | Embed UBL XML file inside the PDF quotation
 [webservice](webservice/) | 14.0.1.0.1 | Defines webservice abstract definition to be used generally
 
