@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -19,12 +19,27 @@ msgid "Common methods to import business documents"
 msgstr ""
 
 #. module: partner_identification_import
+#: model:ir.model.fields,field_description:partner_identification_import.field_business_document_import__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: partner_identification_import
+#: model:ir.model.fields,field_description:partner_identification_import.field_business_document_import__id
+msgid "ID"
+msgstr ""
+
+#. module: partner_identification_import
 #: code:addons/partner_identification_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"ID Number: %s\n"
-"ID Number Category: %s\n"
+"ID Number: {}\n"
+"ID Number Category: {}\n"
 "\n"
+msgstr ""
+
+#. module: partner_identification_import
+#: model:ir.model.fields,field_description:partner_identification_import.field_business_document_import____last_update
+msgid "Last Modified on"
 msgstr ""
 
 #. module: partner_identification_import
@@ -32,11 +47,5 @@ msgstr ""
 #, python-format
 msgid ""
 "Odoo couldn't find a partner corresponding to the following information extracted from the business document:\n"
-"%s"
-msgstr ""
-
-#. module: partner_identification_import
-#: code:addons/partner_identification_import/models/business_document_import.py:0
-#, python-format
-msgid "or\n"
+"{}"
 msgstr ""
