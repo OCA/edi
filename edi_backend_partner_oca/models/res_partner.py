@@ -8,7 +8,8 @@ class Partner(models.Model):
     _inherit = "res.partner"
 
     edi_backend_ids = fields.One2many(
-        comodel_name="edi.backend", inverse_name="partner_id",
+        comodel_name="edi.backend",
+        inverse_name="partner_id",
     )
     edi_backend_count = fields.Integer(compute="_compute_edi_backend_count")
 
