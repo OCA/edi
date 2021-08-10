@@ -18,13 +18,13 @@ class Partner(models.Model):
             rec.edi_backend_count = len(rec.edi_backend_ids)
 
     def action_edi_backend(self):
-        action = self.env.ref("edi.act_open_edi_backend_view")
+        action = self.env.ref("edi_oca.act_open_edi_backend_view")
         result = action.read()[0]
         backends = self.mapped("edi_backend_ids")
         if len(backends) > 1:
             result["domain"] = [("id", "in", backends.ids)]
         else:
-            res = self.env.ref("edi.edi_backend_view_form", False)
+            res = self.env.ref("edi_oca.edi_backend_view_form", False)
             result["views"] = [(res and res.id or False, "form")]
             result["res_id"] = backends.id
         return result

@@ -3,7 +3,7 @@
 
 import logging
 
-from odoo.addons.edi.tests.common import EDIBackendCommonTestCase
+from odoo.addons.edi_oca.tests.common import EDIBackendCommonTestCase
 
 _logger = logging.getLogger(__name__)
 

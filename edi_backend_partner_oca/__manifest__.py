@@ -4,13 +4,13 @@
 {
     "name": "Edi Backend Partner",
     "summary": "add the a partner field in EDI backend",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "license": "LGPL-3",
     "author": "ForgeFlow, Odoo Community Association (OCA)",
     "maintainers": ["LoisRForgeFlow"],
     "development_status": "Beta",
     "website": "https://github.com/OCA/edi",
-    "depends": ["edi"],
+    "depends": ["edi_oca"],
     "data": ["views/res_partner_views.xml", "views/edi_backend_views.xml"],
     "demo": [],
 }
