@@ -1,4 +1,4 @@
 PyPDF2
 phonenumbers
-git+https://github.com/invoice-x/invoice2data@v0.3.5
+invoice2data==0.3.5
 factur-x
