@@ -19,7 +19,6 @@ class TestInvoiceImport(TransactionCase):
                 "country_id": self.env.ref("base.fr").id,
                 "simple_pdf_date_format": "dd-mm-y4",
                 "simple_pdf_date_separator": "slash",
-                "lang": "fr_FR",
             }
         )
         aiispfo = self.env["account.invoice.import.simple.pdf.fields"]
@@ -171,6 +170,34 @@ class TestInvoiceImport(TransactionCase):
                     )
                     res_date = parsed_inv["date"]
                     self.assertEqual(fields.Date.to_string(res_date), "2021-07-14")
+
+    def test_restrict_text(self):
+        cut_test = {
+            "T1 ici et là POUET là et par là POUET": {
+                "start": "POUET",
+                "end": "POUET",
+                "res": " là et par là ",
+            },
+            "T2 ici et là POUET là et par là POUET": {
+                "start": "POUET",
+                "res": " là et par là POUET",
+            },
+            "T3 ici et là POUET là et par là POUET": {
+                "end": "POUET",
+                "res": "T3 ici et là ",
+            },
+        }
+        # I use the date field, but I could use any other field
+        self.test_info[self.date_field.name] = {}
+        for raw_txt, config in cut_test.items():
+            self.date_field.write(
+                {
+                    "start": config.get("start"),
+                    "end": config.get("end"),
+                }
+            )
+            res = self.date_field.restrict_text(raw_txt, self.test_info)
+            self.assertEqual(res, config["res"])
 
     def test_amount_parsing(self):
         amount_test = {
@@ -351,18 +378,18 @@ class TestInvoiceImport(TransactionCase):
         )
         wiz.import_invoice()
         # Check result of invoice creation
-        invoices = self.env["account.move"].search(
+        invoices = self.env["account.invoice"].search(
             [
                 ("partner_id", "=", self.demo_partner.id),
                 ("state", "=", "draft"),
-                ("move_type", "=", "in_invoice"),
-                ("ref", "=", "11608848301659"),
+                ("type", "=", "in_invoice"),
+                ("reference", "=", "11608848301659"),
             ]
         )
         inv_config = self.env.ref("%s.bouygues_telecom_import_config" % self.module)
         self.assertEqual(len(invoices), 1)
         inv = invoices[0]
-        self.assertEqual(fields.Date.to_string(inv.invoice_date), "2019-11-02")
+        self.assertEqual(fields.Date.to_string(inv.date_invoice), "2019-11-02")
         self.assertEqual(inv.journal_id.type, "purchase")
         self.assertEqual(inv.currency_id, self.env.ref("base.EUR"))
         self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 12.99))
@@ -371,7 +398,7 @@ class TestInvoiceImport(TransactionCase):
         iline = inv.invoice_line_ids[0]
         self.assertEqual(iline.name, inv_config.label)
         self.assertEqual(iline.product_id, self.product)
-        self.assertEqual(iline.tax_ids, self.product.supplier_taxes_id)
+        self.assertEqual(iline.invoice_line_tax_ids, self.product.supplier_taxes_id)
         self.assertEqual(float_compare(iline.quantity, 1.0, precision_digits=2), 0)
         self.assertEqual(float_compare(iline.price_unit, 10.83, precision_digits=2), 0)
         inv.unlink()

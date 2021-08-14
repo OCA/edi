@@ -197,7 +197,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         start = self.start and self.start.strip() or False
         end = self.end and self.end.strip() or False
         if start:
-            position = restrict_text.rfind(start)
+            position = restrict_text.find(start)
             if position >= 0:
                 restrict_text = restrict_text[position + len(start) :]
                 test_info[self.name]["start"] = _("Successful cut on '%s'") % start
@@ -205,13 +205,23 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                 error_msg = _("String '%s' not found") % start
                 test_info[self.name]["start"] = "<b%s>%s</b>" % (ERROR_STYLE, error_msg)
         if end:
-            position = restrict_text.rfind(end)
-            if position >= 0:
-                restrict_text = restrict_text[:position]
-                test_info[self.name]["end"] = _("Successful cut on '%s'") % end
-            else:
-                error_msg = _("String '%s' not found") % end
+            if not restrict_text or (restrict_text and not restrict_text.strip()):
+                error_msg = _(
+                    "No text to cut, maybe because start string "
+                    "was the very end of the document"
+                )
                 test_info[self.name]["end"] = "<b%s>%s</b>" % (ERROR_STYLE, error_msg)
+            else:
+                position = restrict_text.find(end)
+                if position >= 0:
+                    restrict_text = restrict_text[:position]
+                    test_info[self.name]["end"] = _("Successful cut on '%s'") % end
+                else:
+                    error_msg = _("String '%s' not found") % end
+                    test_info[self.name]["end"] = "<b%s>%s</b>" % (
+                        ERROR_STYLE,
+                        error_msg,
+                    )
         return restrict_text
 
     def _get_date(self, parsed_inv, raw_text, partner_config, test_info):
@@ -267,7 +277,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                 date_raw, date_formats=[date_formatdt], languages=languages
             )
             if date_dt:
-                valid_dates_dt.append(date_dt)
+                valid_dates_dt.append(date_dt.date())
             else:
                 logger.debug(
                     "Failed to parse date %s using format %s and language %s",

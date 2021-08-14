@@ -19,18 +19,19 @@
                     <page
                     name="invoice_import_simple_pdf"
                     string="Vendor Bill Import"
-                    groups="account.group_account_invoice,account.group_account_readonly"
+                    groups="account.group_account_invoice"
                     attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
                 >
                     <div
                         name="invoice_import_configs"
-                        groups="account.group_account_invoice,account.group_account_readonly"
+                        groups="account.group_account_invoice"
                         colspan="2"
                     >
                     <button
-                            type="object"
+                            type="action"
                             class="btn-link"
-                            name="show_account_invoice_import_config"
+                            name="%(account_invoice_import.account_invoice_import_config_action)d"
+                            context="{'search_default_partner_id': active_id, 'default_partner_id': active_id, 'default_name': name}"
                         >
                         <field
                                 name="invoice_import_count"

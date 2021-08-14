@@ -12,7 +12,7 @@
 <record id="bouygues_telecom" model="res.partner">
     <field name="name">Bouygues Telecom</field>
     <field name="is_company" eval="True" />
-    <field name="supplier_rank">1</field>
+    <field name="supplier">1</field>
     <field name="street">37 rue Boissière</field>
     <field name="zip">75116</field>
     <field name="city">Paris</field>

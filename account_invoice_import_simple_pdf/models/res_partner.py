@@ -7,7 +7,8 @@ import logging
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools.misc import format_amount, format_date, format_datetime
+from odoo.tools.misc import format_date, formatLang
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 ERROR_STYLE = ' style="color:red;"'
@@ -191,9 +192,13 @@ class ResPartner(models.Model):
         vals = {}
         test_results = []
         test_results.append("<small>%s</small><br/>" % _("Errors are in red."))
+        now = fields.Datetime.context_timestamp(self, datetime.now())
         test_results.append(
-            "<small>%s %s</small>"
-            % (_("Test Date:"), format_datetime(self.env, fields.Datetime.now()))
+            "<small>%s %s %s</small>" % (
+                _("Test Date:"),
+                format_date(self.env, now),
+                fields.Datetime.to_string(now)[11:],
+                )
         )
         if not self.simple_pdf_test_file:
             raise UserError(_("You must upload a test PDF invoice."))
@@ -278,8 +283,9 @@ class ResPartner(models.Model):
                 if "date" in field.name and result:
                     result = format_date(self.env, result)
                 if "amount" in field.name and result:
-                    result = format_amount(
-                        self.env, result, parsed_inv["currency"]["recordset"]
+                    result = formatLang(
+                        self.env, result,
+                        currency_obj=parsed_inv["currency"]["recordset"]
                     )
                 test_results.append(
                     "<li><b>%s</b> <b%s>%s</b></li></ul>"
@@ -338,19 +344,20 @@ class ResPartner(models.Model):
             thousand_sep = separator2char[self.simple_pdf_thousand_separator]
         elif lang:
             thousand_sep = lang.thousands_sep
-            # Remplace all white space characters (no-break-space, narrow no-break-space)
-            # by regular space
+            # Remplace all white space characters
+            # (no-break-space, narrow no-break-space) by regular space
             if regex.match(r"^\s$", thousand_sep):
                 thousand_sep = chr(32)  # regular space
         else:
             thousand_sep = ""
         logger.debug("decimal_sep=|%s| thousand_sep=|%s|", decimal_sep, thousand_sep)
+        company = self.env.user.company_id
         partner_config = {
             "recordset": self,
             "display_name": self.display_name,
             "date_format": self.simple_pdf_date_format,
             "date_separator": self.simple_pdf_date_separator,
-            "currency": self.simple_pdf_currency_id or self.env.company.currency_id,
+            "currency": self.simple_pdf_currency_id or company.currency_id,
             "decimal_sep": decimal_sep,
             "thousand_sep": thousand_sep,
             "separator2char": separator2char,
