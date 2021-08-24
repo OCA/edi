@@ -116,7 +116,11 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             elif self.name in ("invoice_number", "description", "date"):
                 self.extract_rule = "first"
 
-    def get_value_from_list(self, data_list, test_info, raise_if_none=True):
+    # This method is just 1 line over the complexity limit of C901
+    # and I don't see a good way to split it
+    def get_value_from_list(  # noqa: C901
+        self, data_list, test_info, raise_if_none=True
+    ):
         assert isinstance(data_list, list)
         if not data_list:
             if raise_if_none:
