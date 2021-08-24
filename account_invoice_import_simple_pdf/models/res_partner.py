@@ -48,17 +48,21 @@ class ResPartner(models.Model):
         help="If empty, Odoo will use the VAT number to identify the partner. "
         "To match on several keywords, separate them with '|' (pipe)."
     )
+    # Temporary hack: I disable the default values for the fields
+    # simple_pdf_date_format and simple_pdf_date_separator
+    # to avoid the following bug:
+    # https://github.com/odoo/odoo/issues/75492
     simple_pdf_date_format = fields.Selection(
         "_simple_pdf_date_format_sel",
         string="Date Format",
-        default="dd-mm-y4",
+        # default="dd-mm-y4",
         help="If the date format uses 'Month', check that the language is "
         "properly configured on the partner. 'Month' works both in full and "
         "short version ('January' and 'Jan.').",
     )
     simple_pdf_date_separator = fields.Selection(
         "_simple_pdf_date_separator_sel",
-        default="slash",
+        # default="slash",
         string="Date Separator",
         help="If the date looks like 'Sep. 4, 2021', use 'space' as date "
         "separator (Odoo will ignore the dot and coma).",
