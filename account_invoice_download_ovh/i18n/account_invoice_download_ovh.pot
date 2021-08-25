@@ -39,7 +39,7 @@ msgid "Cancel"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:110
+#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:106
 #, python-format
 msgid "Cannot connect to the OVH API with endpoint '%s'. The error message is: '%s'."
 msgstr ""
@@ -258,13 +258,13 @@ msgid "Select your OVH API endpoint below."
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:142
+#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:138
 #, python-format
 msgid "Skipping OVH invoice %s dated %s because it is a special pre-paid invoice"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:137
+#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:133
 #, python-format
 msgid "Skipping OVH invoice %s dated %s because the amount is 0"
 msgstr ""
