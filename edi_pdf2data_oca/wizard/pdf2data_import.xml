@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="edi_pdf2data_wizard_form" model="ir.ui.view">
+        <field name="model">pdf2data.import</field>
+        <field name="arch" type="xml">
+            <form string="Import PDF to data extract">
+                <group name="main">
+                    <field name="pdf_file" filename="pdf_file_name" />
+                    <field name="pdf_file_name" invisible="1" />
+                </group>
+                <footer>
+                    <button
+                        name="import_pdf"
+                        type="object"
+                        class="btn-primary"
+                        string="Import"
+                    />
+                    <button special="cancel" string="Cancel" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="edi_pdf2data_wizard_action" model="ir.actions.act_window">
+        <field name="name">Import PDF</field>
+        <field name="res_model">pdf2data.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+    <menuitem
+        id="edi_pdf2data_wizard_menu"
+        parent="base_edi.menu_edi_root"
+        action="edi_pdf2data_wizard_action"
+        sequence="20"
+    />
+</odoo>

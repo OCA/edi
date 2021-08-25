@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 Creu Blanca
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="pdf2data_template_form_view">
+        <field name="name">pdf2data.template.form (in edi_pdf2data)</field>
+        <field name="model">pdf2data.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button
+                            name="check_pdf"
+                            type="object"
+                            string="Check PDF"
+                            icon="fa-file-pdf-o"
+                        />
+                    </div>
+                    <group>
+                        <field name="name" />
+                        <field
+                            name="type_id"
+                            options="{'no_open': 1, 'no_create': 1}"
+                        />
+                        <field name="sequence" />
+                        <field name="pdf_file" filename="pdf_filename" />
+                        <field name="pdf_filename" invisible="1" />
+                    </group>
+                    <notebook>
+                        <page name="config" string="YML Template">
+                            <field
+                                name="pdf2data_template_yml"
+                                widget="ace"
+                                options="{'mode': 'yml'}"
+                            />
+                        </page>
+                        <page name="result" string="Result">
+                            <field
+                                name="file_result"
+                                widget="ace"
+                                options="{'mode': 'json'}"
+                            />
+                            <field name="file_processed_result" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter" />
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="pdf2data_template_search_view">
+        <field name="name">pdf2data.template.search (in edi_pdf2data)</field>
+        <field name="model">pdf2data.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="type_id" />
+            </search>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="pdf2data_template_tree_view">
+        <field name="name">pdf2data.template.tree (in edi_pdf2data)</field>
+        <field name="model">pdf2data.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="type_id" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="pdf2data_template_act_window">
+        <field name="name">Pdf2data Template</field>
+        <field name="res_model">pdf2data.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record model="ir.ui.menu" id="pdf2data_template_menu">
+        <field name="name">Pdf2data Templates</field>
+        <field name="parent_id" ref="base_edi.menu_edi_root" />
+        <field name="action" ref="pdf2data_template_act_window" />
+        <field name="sequence" eval="110" />
+    </record>
+</odoo>

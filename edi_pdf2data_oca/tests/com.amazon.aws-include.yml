@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+issuer: Amazon Web Services
+fields:
+  amount: TOTAL AMOUNT DUE ON.*\$(\d+\.\d+)
+  amount_untaxed: TOTAL AMOUNT DUE ON.*\$(\d+\.\d+)
+  date: Invoice Date:\s+([a-zA-Z]+ \d+ , \d+)
+  invoice_number: Invoice Number:\s+(\d+)
+  partner_name: (Amazon Web Services, Inc\.)
+  static_partner_website: aws.amazon.com
+keywords: Google
+exclude_keywords: billing
+lines:
+  start: Detail
+  end: \* May include estimated US sales tax
+  first_line: ^    (?P<description>\w+.*)\$(?P<price_unit>\d+\.\d+)
+  line: (.*)\$(\d+\.\d+)
+  last_line: VAT \*\*
+options:
+  currency: USD
+  date_formats:
+    - "%B %d, %Y"
+  languages:
+    - en
+  decimal_separator: "."
