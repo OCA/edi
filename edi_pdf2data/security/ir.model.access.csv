@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+accesss_pdf2data_template_viewer,accesss.pdf2data.template.viewer,model_pdf2data_template,base.group_user,1,0,0,0
+accesss_pdf2data_template_manager,accesss.pdf2data.template.manager,model_pdf2data_template,base_edi.group_edi_manager,1,1,1,1
+accesss_pdf2data_template_type_viewer,accesss.pdf2data.template.type.viewer,model_pdf2data_template_type,base.group_user,1,0,0,0
+accesss_pdf2data_template_type_manager,accesss.pdf2data.template.type.manager,model_pdf2data_template_type,base_edi.group_edi_manager,1,1,1,1

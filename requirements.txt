@@ -1,4 +1,10 @@
 factur-x
+invoice2data
 lxml
+<<<<<<< HEAD
+=======
+PyMuPDF
+PyPDF2
+>>>>>>> d96a1842 ([ADD] edi_pdf2data)
 pyyaml
 xmlschema
