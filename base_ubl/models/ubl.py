@@ -228,6 +228,7 @@ class BaseUbl(models.AbstractModel):
                 node_name="AccountingContact",
                 version=version,
             )
+        return customer_party_root
 
     @api.model
     def _ubl_add_supplier_party(
@@ -264,6 +265,7 @@ class BaseUbl(models.AbstractModel):
         self._ubl_add_party(
             partner, company, "Party", supplier_party_root, ns, version=version
         )
+        return supplier_party_root
 
     @api.model
     def _ubl_add_delivery(self, delivery_partner, parent_node, ns, version="2.1"):
