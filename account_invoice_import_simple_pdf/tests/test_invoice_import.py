@@ -19,7 +19,6 @@ class TestInvoiceImport(TransactionCase):
                 "country_id": self.env.ref("base.fr").id,
                 "simple_pdf_date_format": "dd-mm-y4",
                 "simple_pdf_date_separator": "slash",
-                "lang": "fr_FR",
             }
         )
         aiispfo = self.env["account.invoice.import.simple.pdf.fields"]
@@ -171,6 +170,34 @@ class TestInvoiceImport(TransactionCase):
                     )
                     res_date = parsed_inv["date"]
                     self.assertEqual(fields.Date.to_string(res_date), "2021-07-14")
+
+    def test_restrict_text(self):
+        cut_test = {
+            "T1 ici et là POUET là et par là POUET": {
+                "start": "POUET",
+                "end": "POUET",
+                "res": " là et par là ",
+            },
+            "T2 ici et là POUET là et par là POUET": {
+                "start": "POUET",
+                "res": " là et par là POUET",
+            },
+            "T3 ici et là POUET là et par là POUET": {
+                "end": "POUET",
+                "res": "T3 ici et là ",
+            },
+        }
+        # I use the date field, but I could use any other field
+        self.test_info[self.date_field.name] = {}
+        for raw_txt, config in cut_test.items():
+            self.date_field.write(
+                {
+                    "start": config.get("start"),
+                    "end": config.get("end"),
+                }
+            )
+            res = self.date_field.restrict_text(raw_txt, self.test_info)
+            self.assertEqual(res, config["res"])
 
     def test_amount_parsing(self):
         amount_test = {
