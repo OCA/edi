@@ -219,6 +219,8 @@ class AccountInvoiceImport(models.TransientModel):
                 create_if_not_found=company.invoice_import_create_bank_account)
             if partner_bank:
                 vals['partner_bank_id'] = partner_bank.id
+            else:
+                vals['partner_bank_id'] = False
         config = import_config  # just to make variable name shorter
         if not config:
             if not partner.invoice_import_ids:
