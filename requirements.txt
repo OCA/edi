@@ -1,6 +1,6 @@
 # generated from manifests external_dependencies
-factur-x
 dateparser
+factur-x
 invoice2data
 ovh
 PyPDF2
