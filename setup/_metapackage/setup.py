@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo14-addon-account_invoice_import',
+        'odoo14-addon-account_invoice_import_facturx',
         'odoo14-addon-account_invoice_import_invoice2data',
         'odoo14-addon-account_invoice_import_ubl',
         'odoo14-addon-base_business_document_import',
