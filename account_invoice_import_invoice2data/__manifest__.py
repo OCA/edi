@@ -12,6 +12,7 @@
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import"],
+    "excludes": ["account_invoice_import_simple_pdf"],
     "external_dependencies": {"python": ["invoice2data"]},
     "data": ["wizard/account_invoice_import_view.xml"],
     "demo": ["demo/demo_data.xml"],
