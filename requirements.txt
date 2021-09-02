@@ -1,4 +1,5 @@
 # generated from manifests external_dependencies
+factur-x
 invoice2data
 PyPDF2
 pyyaml
