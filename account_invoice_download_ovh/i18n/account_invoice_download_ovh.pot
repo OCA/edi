@@ -1,12 +1,12 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_invoice_download_ovh
+# 	* account_invoice_download_ovh
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: <>\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,9 +39,11 @@ msgid "Cancel"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:110
+#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:0
 #, python-format
-msgid "Cannot connect to the OVH API with endpoint '%s'. The error message is: '%s'."
+msgid ""
+"Cannot connect to the OVH API with endpoint '%s'. The error message is: "
+"'%s'."
 msgstr ""
 
 #. module: account_invoice_download_ovh
@@ -51,12 +53,16 @@ msgstr ""
 
 #. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
-msgid "Connect to the <b>Application URL</b> below. A web page will prompt you to enter:"
+msgid ""
+"Connect to the <b>Application URL</b> below. A web page will prompt you to "
+"enter:"
 msgstr ""
 
 #. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
-msgid "Connect to the <b>Validation URL</b> below. A web page will prompt you to enter:"
+msgid ""
+"Connect to the <b>Validation URL</b> below. A web page will prompt you to "
+"enter:"
 msgstr ""
 
 #. module: account_invoice_download_ovh
@@ -75,6 +81,7 @@ msgid "Created on"
 msgstr ""
 
 #. module: account_invoice_download_ovh
+#: model:ir.model.fields,field_description:account_invoice_download_ovh.field_account_invoice_download_config__display_name
 #: model:ir.model.fields,field_description:account_invoice_download_ovh.field_ovh_api_credentials__display_name
 msgid "Display Name"
 msgstr ""
@@ -107,29 +114,21 @@ msgid "Generate OVH API credentials"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/wizard/ovh_api_credentials.py:111
+#: code:addons/account_invoice_download_ovh/wizard/ovh_api_credentials.py:0
 #, python-format
-msgid "Go to the Validation URL, enter the required information and validate, then check the option to attest that you did it."
+msgid ""
+"Go to the Validation URL, enter the required information and validate, then "
+"check the option to attest that you did it."
 msgstr ""
 
 #. module: account_invoice_download_ovh
+#: model:ir.model.fields,field_description:account_invoice_download_ovh.field_account_invoice_download_config__id
 #: model:ir.model.fields,field_description:account_invoice_download_ovh.field_ovh_api_credentials__id
 msgid "ID"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: selection:account.invoice.download.config,ovh_endpoint:0
-#: selection:ovh.api.credentials,endpoint:0
-msgid "Kimsufi Europe API"
-msgstr ""
-
-#. module: account_invoice_download_ovh
-#: selection:account.invoice.download.config,ovh_endpoint:0
-#: selection:ovh.api.credentials,endpoint:0
-msgid "Kimsufi North America API"
-msgstr ""
-
-#. module: account_invoice_download_ovh
+#: model:ir.model.fields,field_description:account_invoice_download_ovh.field_account_invoice_download_config____last_update
 #: model:ir.model.fields,field_description:account_invoice_download_ovh.field_ovh_api_credentials____last_update
 msgid "Last Modified on"
 msgstr ""
@@ -145,7 +144,7 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: selection:account.invoice.download.config,backend:0
+#: model:ir.model.fields.selection,name:account_invoice_download_ovh.selection__account_invoice_download_config__backend__ovh
 msgid "OVH"
 msgstr ""
 
@@ -187,12 +186,6 @@ msgid "OVH Endpoint"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: selection:account.invoice.download.config,ovh_endpoint:0
-#: selection:ovh.api.credentials,endpoint:0
-msgid "OVH Europe API"
-msgstr ""
-
-#. module: account_invoice_download_ovh
 #: model:product.product,name:account_invoice_download_ovh.ovh_ip_product
 #: model:product.template,name:account_invoice_download_ovh.ovh_ip_product_product_template
 msgid "OVH IPs"
@@ -208,12 +201,6 @@ msgstr ""
 #: model:product.product,name:account_invoice_download_ovh.ovh_loyalty_point_product
 #: model:product.template,name:account_invoice_download_ovh.ovh_loyalty_point_product_product_template
 msgid "OVH Loyalty Points"
-msgstr ""
-
-#. module: account_invoice_download_ovh
-#: selection:account.invoice.download.config,ovh_endpoint:0
-#: selection:ovh.api.credentials,endpoint:0
-msgid "OVH North-America API"
 msgstr ""
 
 #. module: account_invoice_download_ovh
@@ -247,38 +234,21 @@ msgid "OVH Telephony Options"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: selection:account.invoice.download.config,ovh_endpoint:0
-#: selection:ovh.api.credentials,endpoint:0
-msgid "OVH US API"
-msgstr ""
-
-#. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
 msgid "Select your OVH API endpoint below."
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:142
+#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:0
 #, python-format
-msgid "Skipping OVH invoice %s dated %s because it is a special pre-paid invoice"
+msgid ""
+"Skipping OVH invoice %s dated %s because it is a special pre-paid invoice"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:137
+#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:0
 #, python-format
 msgid "Skipping OVH invoice %s dated %s because the amount is 0"
-msgstr ""
-
-#. module: account_invoice_download_ovh
-#: selection:account.invoice.download.config,ovh_endpoint:0
-#: selection:ovh.api.credentials,endpoint:0
-msgid "So you Start Europe API"
-msgstr ""
-
-#. module: account_invoice_download_ovh
-#: selection:account.invoice.download.config,ovh_endpoint:0
-#: selection:ovh.api.credentials,endpoint:0
-msgid "So you Start North America API"
 msgstr ""
 
 #. module: account_invoice_download_ovh
@@ -287,45 +257,56 @@ msgid "State"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: selection:ovh.api.credentials,state:0
+#: model:ir.model.fields.selection,name:account_invoice_download_ovh.selection__ovh_api_credentials__state__step1
 msgid "Step1"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: selection:ovh.api.credentials,state:0
+#: model:ir.model.fields.selection,name:account_invoice_download_ovh.selection__ovh_api_credentials__state__step2
 msgid "Step2"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: selection:ovh.api.credentials,state:0
+#: model:ir.model.fields.selection,name:account_invoice_download_ovh.selection__ovh_api_credentials__state__step3
 msgid "Step3"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/wizard/ovh_api_credentials.py:82
+#: code:addons/account_invoice_download_ovh/wizard/ovh_api_credentials.py:0
 #, python-format
-msgid "The endpoint, the application key and the application secret must be set before validation."
+msgid ""
+"The endpoint, the application key and the application secret must be set "
+"before validation."
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/wizard/ovh_api_credentials.py:98
+#: code:addons/account_invoice_download_ovh/wizard/ovh_api_credentials.py:0
 #, python-format
 msgid "The request to generate the consumer key failed."
 msgstr ""
 
 #. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
-msgid "Then click on the button <i>Create keys</i> and it will display a new Web page with the <b>Application Key</b> and the <b>Application Secret</b>. Copy-paste the 2 fields below."
+msgid ""
+"Then click on the button <i>Create keys</i> and it will display a new Web "
+"page with the <b>Application Key</b> and the <b>Application Secret</b>. "
+"Copy-paste the 2 fields below."
 msgstr ""
 
 #. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
-msgid "Then click on the button <i>Log in</i>. If it worked, check the box <i>Validation URL Done</i> below and click on the <i>Finish</i> button. Odoo will update the invoice download configuration with all the parameters that are needed to connect to the"
+msgid ""
+"Then click on the button <i>Log in</i>. If it worked, check the box "
+"<i>Validation URL Done</i> below and click on the <i>Finish</i> button. Odoo"
+" will update the invoice download configuration with all the parameters that"
+" are needed to connect to the"
 msgstr ""
 
 #. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
-msgid "This wizard will assist you in the generation of the 3 parameters that you need to use the"
+msgid ""
+"This wizard will assist you in the generation of the 3 parameters that you "
+"need to use the"
 msgstr ""
 
 #. module: account_invoice_download_ovh
@@ -349,7 +330,7 @@ msgstr ""
 #: model:product.template,uom_name:account_invoice_download_ovh.ovh_sms_product_product_template
 #: model:product.template,uom_name:account_invoice_download_ovh.ovh_telephony_options_product_product_template
 #: model:product.template,uom_name:account_invoice_download_ovh.ovh_telephony_product_product_template
-msgid "Unit(s)"
+msgid "Units"
 msgstr ""
 
 #. module: account_invoice_download_ovh
@@ -368,43 +349,23 @@ msgid "Validation URL Done"
 msgstr ""
 
 #. module: account_invoice_download_ovh
-#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:64
+#: code:addons/account_invoice_download_ovh/models/account_invoice_download_config.py:0
 #, python-format
 msgid "You must set all the OVH parameters."
 msgstr ""
 
 #. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
-msgid "an <i>Application description</i> (you can enter <i>Odoo Invoice auto-download</i> for example)."
+msgid ""
+"an <i>Application description</i> (you can enter <i>Odoo Invoice auto-"
+"download</i> for example)."
 msgstr ""
 
 #. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
-msgid "an <i>Application name</i> (you can enter <i>OdooAccounting</i> for example),"
-msgstr ""
-
-#. module: account_invoice_download_ovh
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_dedicated_server_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_domain_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_ip_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_license_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_loyalty_point_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_sdsl_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_shared_hosting_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_sms_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_telephony_options_product
-#: model:product.product,weight_uom_name:account_invoice_download_ovh.ovh_telephony_product
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_dedicated_server_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_domain_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_ip_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_license_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_loyalty_point_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_sdsl_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_shared_hosting_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_sms_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_telephony_options_product_product_template
-#: model:product.template,weight_uom_name:account_invoice_download_ovh.ovh_telephony_product_product_template
-msgid "kg"
+msgid ""
+"an <i>Application name</i> (you can enter <i>OdooAccounting</i> for "
+"example),"
 msgstr ""
 
 #. module: account_invoice_download_ovh
@@ -424,7 +385,9 @@ msgstr ""
 
 #. module: account_invoice_download_ovh
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
-msgid "the <i>Validity</i>: if this access is for production use, select <i>Unlimited</i>."
+msgid ""
+"the <i>Validity</i>: if this access is for production use, select "
+"<i>Unlimited</i>."
 msgstr ""
 
 #. module: account_invoice_download_ovh
@@ -436,4 +399,3 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_invoice_download_ovh.ovh_api_credentials_form
 msgid "your OVH account ID (i.e. login) or email address,"
 msgstr ""
-
