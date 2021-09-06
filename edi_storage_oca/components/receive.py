@@ -14,12 +14,6 @@ class EDIStorageReceiveComponent(Component):
     _usage = "storage.receive"
 
     def receive(self):
-        checker = self.component(usage="storage.check")
-        result = checker.check()
-        if not result:
-            # all good here
-            return True
-
         direction = self.exchange_record.direction
         filename = self.exchange_record.exchange_filename
         path = self._remote_file_path(direction, "pending", filename)
