@@ -14,7 +14,7 @@
                     attrs="{'invisible': [
                             '|',
                             ('type', 'not in', ['out_invoice', 'out_refund']),
-                            ('state', 'not in', ['open', 'paid']),
+                            ('state', '!=', 'posted'),
                         ]}"
                 />
             </header>
