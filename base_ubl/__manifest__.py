@@ -3,7 +3,7 @@
 
 {
     "name": "Base UBL",
-    "version": "14.0.1.1.0",
+    "version": "14.0.1.2.0",
     "category": "Hidden",
     "license": "AGPL-3",
     "summary": "Base module for Universal Business Language (UBL)",
