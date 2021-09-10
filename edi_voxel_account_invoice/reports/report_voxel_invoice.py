@@ -107,7 +107,7 @@ class ReportVoxelInvoice(models.AbstractModel):
             for order in orders:
                 references.append(
                     {
-                        "DNRef": invoice.number,
+                        "DNRef": invoice.name,
                         "PORef": order.client_order_ref or order.name,
                         "DNRefDate": invoice.invoice_date
                         and date.strftime(invoice.invoice_date, "%Y-%m-%d"),
