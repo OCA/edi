@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="endpoint_demo_1" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 1</field>
+        <field name="route">/demo/one</field>
+        <field name="request_method">GET</field>
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+result = {"response": Response("ok")}
+        </field>
+    </record>
+
+    <record id="endpoint_demo_2" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 2</field>
+        <field name="route">/demo/as_demo_user</field>
+        <field name="request_method">GET</field>
+        <field name="auth_type">public</field>
+        <field name="exec_as_user_id" ref="base.user_demo" />
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+result = {"response": Response("My name is: " + user.name)}
+        </field>
+    </record>
+
+    <record id="endpoint_demo_3" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 3</field>
+        <field name="route">/demo/json_data</field>
+        <field name="request_method">GET</field>
+        <field name="auth_type">public</field>
+        <field name="exec_as_user_id" ref="base.user_demo" />
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+result = {"payload": {"a": 1, "b": 2}}
+        </field>
+    </record>
+
+    <record id="endpoint_demo_4" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 4</field>
+        <field name="route">/demo/raise_not_found</field>
+        <field name="request_method">GET</field>
+        <field name="auth_type">public</field>
+        <field name="exec_as_user_id" ref="base.user_demo" />
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+raise werkzeug.exceptions.NotFound()
+        </field>
+    </record>
+
+    <record id="endpoint_demo_5" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 5</field>
+        <field name="route">/demo/raise_validation_error</field>
+        <field name="request_method">GET</field>
+        <field name="auth_type">public</field>
+        <field name="exec_as_user_id" ref="base.user_demo" />
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+raise exceptions.ValidationError("Sorry, you cannot do this!")
+        </field>
+    </record>
+
+    <record id="endpoint_demo_6" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 6</field>
+        <field name="route">/demo/value_from_request</field>
+        <field name="request_method">GET</field>
+        <field name="auth_type">public</field>
+        <field name="exec_as_user_id" ref="base.user_demo" />
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+result = {"response": Response(request.params.get("your_name", ""))}
+        </field>
+    </record>
+
+    <record id="endpoint_demo_7" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint 7</field>
+        <field name="route">/demo/bad_method</field>
+        <field name="request_method">GET</field>
+        <field name="exec_mode">code</field>
+        <field name="auth_type">public</field>
+        <field name="exec_as_user_id" ref="base.user_demo" />
+        <field name="code_snippet">
+result = {"payload": "Method used:" + request.httprequest.method}
+        </field>
+    </record>
+
+</odoo>
