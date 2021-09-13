@@ -348,6 +348,12 @@ class BaseUbl(models.AbstractModel):
         """Inherit and overwrite if another custom product code is required"""
         return product.default_code
 
+    def _ubl_get_customer_product_code(self, product, customer):
+        """Inherit and overwrite to return the customer product sku either from
+        product, invoice_line or customer (product.customer_sku,
+        invoice_line.customer_sku, customer.product_sku)"""
+        return ""
+
     @api.model
     def _ubl_add_item(
         self,
@@ -357,6 +363,7 @@ class BaseUbl(models.AbstractModel):
         ns,
         type_="purchase",
         seller=False,
+        customer=False,
         version="2.1",
     ):
         """Beware that product may be False (in particular on invoices)"""
@@ -385,7 +392,15 @@ class BaseUbl(models.AbstractModel):
         description.text = name
         name_node = etree.SubElement(item, ns["cbc"] + "Name")
         name_node.text = product_name or name.split("\n")[0]
-
+        customer_code = self._ubl_get_customer_product_code(product, customer)
+        if customer_code:
+            buyer_identification = etree.SubElement(
+                item, ns["cac"] + "BuyersItemIdentification"
+            )
+            buyer_identification_id = etree.SubElement(
+                buyer_identification, ns["cbc"] + "ID"
+            )
+            buyer_identification_id.text = customer_code
         if seller_code:
             seller_identification = etree.SubElement(
                 item, ns["cac"] + "SellersItemIdentification"
