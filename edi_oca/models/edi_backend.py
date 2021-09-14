@@ -21,9 +21,10 @@ class EDIBackend(models.Model):
 
     Backends can be organized with types.
 
-    The backend should be responsible for generating export records.
+    The backend should be responsible for managing records.
     For each record it can generate or parse their values
-    depending on their direction (incoming, outgoing).
+    depending on their direction (incoming, outgoing)
+    and send or receive them automatically depending on their state.
     """
 
     _name = "edi.backend"
