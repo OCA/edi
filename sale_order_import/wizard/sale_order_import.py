@@ -109,7 +109,7 @@ class SaleOrderImport(models.TransientModel):
 
     @api.model
     def parse_xml_order(self, xml_root, detect_doc_type=False):
-        raise UserError(
+        raise NotImplementedError(
             _(
                 "This type of XML RFQ/order is not supported. Did you install "
                 "the module to support this XML format?"
