@@ -58,6 +58,9 @@ class AccountInvoiceImport(models.TransientModel):
             test_results = []
         partner_id = False
         rpo = self.env["res.partner"]
+        # Warning: invoices have the VAT number of the supplier, but they often
+        # also have the VAT number of the customer (i.e. the VAT number of our company)
+        # So we exclude it from the search
         partners = rpo.search_read(
             [
                 "|",
@@ -65,6 +68,7 @@ class AccountInvoiceImport(models.TransientModel):
                 ("simple_pdf_keyword", "!=", False),
                 ("parent_id", "=", False),
                 ("is_company", "=", True),
+                ("id", "!=", self.env.company.partner_id.id),
             ]
         )
         for partner in partners:
