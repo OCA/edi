@@ -145,11 +145,11 @@ class EDIBackend(models.Model):
 
     def _create_record_prepare_values(self, type_code, values):
         res = values.copy()  # do not pollute original dict
-        export_type = self.env["edi.exchange.type"].search(
+        exchange_type = self.env["edi.exchange.type"].search(
             self._get_exchange_type_domain(type_code), limit=1
         )
-        export_type.ensure_one()
-        res["type_id"] = export_type.id
+        exchange_type.ensure_one()
+        res["type_id"] = exchange_type.id
         res["backend_id"] = self.id
         return res
 
