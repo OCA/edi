@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="edi_backend_demo" model="edi.backend">
+        <field name="name">EDI backend with endpoints DEMO</field>
+        <field name="backend_type_id" ref="edi_oca.demo_edi_backend_type" />
+    </record>
+
+    <record id="edi_exchange_type_demo" model="edi.exchange.type">
+        <field name="name">EDI exchange demo </field>
+        <field name="code">demo_endpoint</field>
+        <field name="backend_type_id" ref="edi_oca.demo_edi_backend_type" />
+        <field name="direction">input</field>
+    </record>
+
+    <record id="edi_endpoint_demo_1" model="edi.endpoint">
+        <field name="backend_id" ref="edi_backend_demo" />
+        <field name="backend_type_id" ref="edi_oca.demo_edi_backend_type" />
+        <field name="exchange_type_id" ref="edi_exchange_type_demo" />
+        <field name="name">EDI Demo Endpoint 1</field>
+        <!-- The prefix `/edi/` will be added automatically -->
+        <field name="route">/demo/try</field>
+        <field name="request_method">GET</field>
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+record = endpoint.create_exchange_record()
+result = {"response": Response("Created record: %s" % record.identifier)}
+        </field>
+    </record>
+
+</odoo>
