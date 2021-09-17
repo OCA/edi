@@ -21,11 +21,45 @@
         <field name="model">edi.exchange.record</field>
         <field name="arch" type="xml">
             <form string="EDI Exchange Record">
+                <field name="direction" invisible="1" />
                 <header>
                     <button
                         name="action_open_related_record"
                         type="object"
                         string="Related record"
+                    />
+                    <button
+                        name="action_open_related_exchanges"
+                        type="object"
+                        string="Related exchanges"
+                    />
+                    <field
+                        attrs="{'invisible': [('direction', '=', 'input')]}"
+                        name="edi_exchange_state"
+                        widget="statusbar"
+                        statusbar_visible="new,validate_error,output_pending,output_error_on_send,output_sent,output_sent_and_processed,output_sent_and_error"
+                        statusbar_colors='{
+                          "validate_error": "red",
+                          "output_pending": "yellow",
+                          "output_error_on_send": "red",
+                          "output_sent": "green",
+                          "output_sent_and_processed": "green",
+                          "output_sent_and_error": "red",
+                        }'
+                    />
+                    <field
+                        attrs="{'invisible': [('direction', '=', 'output')]}"
+                        name="edi_exchange_state"
+                        widget="statusbar"
+                        statusbar_visible="new,validate_error,input_pending,input_received,input_receive_error,input_processed,input_processed_error"
+                        statusbar_colors='{
+                          "validate_error": "red",
+                          "input_pending": "yellow",
+                          "input_received": "green",
+                          "input_receive_error": "red",
+                          "input_processed": "green",
+                          "input_processed_error": "red"
+                        }'
                     />
                 </header>
                 <sheet>
@@ -35,34 +69,43 @@
                             <field name="name" />
                         </h1>
                         <h2>
-                            <label for="identifier" />
+                            <label for="identifier" class="oe_edit_only" />
                             <field name="identifier" />
                         </h2>
                         <h2>
-                            <label for="external_identifier" />
+                            <label for="external_identifier" class="oe_edit_only" />
                             <field name="external_identifier" />
                         </h2>
                     </div>
                     <group name="wrapper">
-                        <group name="main">
+                        <group name="config">
                             <field name="type_id" />
                             <field name="backend_id" />
+                        </group>
+                        <group name="status" string="Status">
                             <field name="exchanged_on" />
-                            <field name="edi_exchange_state" />
                             <field name="exchange_file" filename="exchange_filename" />
                             <field
                                 name="exchange_filename"
                                 attrs="{'invisible': [('exchange_file', '!=', False)]}"
                             />
-                            <field name="direction" invisible="1" />
                         </group>
-                        <!-- TODO: move to a page? -->
-                        <group name="related">
+                        <group
+                            name="ack"
+                            string="ACK"
+                            attrs="{'invisible': [('ack_expected', '!=', True)]}"
+                        >
+                            <field name="ack_expected" />
                             <field name="ack_exchange_id" />
                             <field name="ack_received_on" />
-                            <field name="parent_id" />
-                            <!-- TODO: add button to get to a list view in the header -->
-                            <field name="related_exchange_ids" />
+                        </group>
+                        <group
+                            name="related_odoo_record"
+                            string="Related record"
+                            groups="base.group_no_one"
+                        >
+                          <field name="res_id" />
+                          <field name="model" />
                         </group>
                     </group>
                     <notebook>
@@ -73,15 +116,20 @@
                         >
                             <field name="exchange_error" />
                         </page>
-                        <page
-                            name="config"
-                            string="Configuration"
-                            groups="base.group_no_one"
-                        >
-                            <group>
-                                <field name="res_id" />
-                                <field name="model" />
+                        <page name="related_exchanges" string="Related exchanges">
+                            <group name="rel_exchanges">
+                              <field name="parent_id" />
                             </group>
+                            <field name="related_exchange_ids" nolabel="1" colspan="4">
+                              <tree>
+                                <field name="name" />
+                                <field name="identifier" />
+                                <field name="type_id" />
+                                <field name="exchanged_on" />
+                                <field name="ack_received_on" />
+                                <field name="edi_exchange_state" />
+                              </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>

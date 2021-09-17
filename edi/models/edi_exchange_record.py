@@ -22,7 +22,7 @@ class EDIExchangeRecord(models.Model):
     identifier = fields.Char(required=True, index=True, readonly=True)
     external_identifier = fields.Char(index=True, readonly=True)
     type_id = fields.Many2one(
-        string="EDI Exchange type",
+        string="Exchange type",
         comodel_name="edi.exchange.type",
         required=True,
         ondelete="cascade",
@@ -82,11 +82,13 @@ class EDIExchangeRecord(models.Model):
         comodel_name="edi.exchange.record",
         inverse_name="parent_id",
     )
+    ack_expected = fields.Boolean(compute="_compute_ack_expected")
     # TODO: shall we add a constrain on the direction?
     # In theory if the record is outgoing the ack should be incoming and vice versa.
     ack_exchange_id = fields.Many2one(
+        string="ACK exchange",
         comodel_name="edi.exchange.record",
-        help="Ack for this exchange",
+        help="ACK for this exchange",
         compute="_compute_ack_exchange_id",
         store=True,
     )
@@ -145,6 +147,10 @@ class EDIExchangeRecord(models.Model):
         return self.related_exchange_ids.filtered(
             lambda x: x.type_id == self.type_id.ack_type_id
         )
+
+    def _compute_ack_expected(self):
+        for rec in self:
+            rec.ack_expected = bool(self.type_id.ack_type_id)
 
     def needs_ack(self):
         return self.type_id.ack_type_id and not self.ack_exchange_id
@@ -244,6 +250,17 @@ class EDIExchangeRecord(models.Model):
         if not self.model or not self.res_id:
             return {}
         return self.record.get_formview_action()
+
+    def _set_related_record(self, odoo_record):
+        self.update({"model": odoo_record._name, "res_id": odoo_record.id})
+
+    def action_open_related_exchanges(self):
+        self.ensure_one()
+        if not self.related_exchange_ids:
+            return {}
+        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view").read()[0]
+        action["domain"] = [("id", "in", self.related_exchange_ids.ids)]
+        return action
 
     def _notify_related_record(self, message, level="info"):
         """Post notification on the original record."""
