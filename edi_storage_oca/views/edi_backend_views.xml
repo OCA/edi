@@ -4,17 +4,19 @@
         <field name="model">edi.backend</field>
         <field name="inherit_id" ref="edi_oca.edi_backend_view_form" />
         <field name="arch" type="xml">
-            <group name="config" position="after">
-                <group name="storage_config">
-                    <field name="storage_id" />
-                    <field name="input_dir_pending" />
-                    <field name="input_dir_done" />
-                    <field name="input_dir_error" />
-                    <field name="output_dir_pending" />
-                    <field name="output_dir_done" />
-                    <field name="output_dir_error" />
-                </group>
-            </group>
+            <notebook position="inside">
+                <page name="storage_config" string="Storage">
+                    <group name="storage_config">
+                        <field name="storage_id" />
+                        <field name="input_dir_pending" />
+                        <field name="input_dir_done" />
+                        <field name="input_dir_error" />
+                        <field name="output_dir_pending" />
+                        <field name="output_dir_done" />
+                        <field name="output_dir_error" />
+                    </group>
+                </page>
+            </notebook>
         </field>
     </record>
 </odoo>
