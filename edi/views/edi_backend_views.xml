@@ -18,10 +18,13 @@
                         <h1>
                             <field name="name" />
                         </h1>
+                        <h2>
+                            <label for="backend_type_id" class="oe_edit_only" />
+                            <field name="backend_type_id" />
+                        </h2>
                     </div>
-                    <group name="config">
-                        <field name="backend_type_id" />
-                    </group>
+                    <!-- Hook to add more config -->
+                    <notebook />
                 </sheet>
             </form>
         </field>
