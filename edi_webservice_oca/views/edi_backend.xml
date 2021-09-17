@@ -6,11 +6,13 @@
         <field name="model">edi.backend</field>
         <field name="inherit_id" ref="edi_oca.edi_backend_view_form" />
         <field name="arch" type="xml">
-            <group name="config" position="after">
-                <group name="webservice_config">
-                    <field name="webservice_backend_id" />
-                </group>
-            </group>
+            <notebook position="inside">
+                <page name="webservice_config">
+                    <group>
+                        <field name="webservice_backend_id" />
+                    </group>
+                </page>
+            </notebook>
         </field>
     </record>
 </odoo>
