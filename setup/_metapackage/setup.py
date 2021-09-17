@@ -40,6 +40,7 @@ setuptools.setup(
         'odoo13-addon-sale_order_customer_free_ref',
         'odoo13-addon-sale_order_import',
         'odoo13-addon-sale_order_import_ubl',
+        'odoo13-addon-sale_order_import_ubl_customer_free_ref',
         'odoo13-addon-sale_order_import_ubl_http',
         'odoo13-addon-sale_order_ubl',
         'odoo13-addon-webservice',
