@@ -370,8 +370,8 @@ class SaleOrderImport(models.TransientModel):
                     "doc_type": parsed_order.get("doc_type"),
                 }
             )
-            action = self.env["ir.actions.act_window"].for_xml_id(
-                "sale_order_import", "sale_order_import_action"
+            action = self.env["ir.actions.act_window"]._for_xml_id(
+                "sale_order_import.sale_order_import_action"
             )
             action["res_id"] = self.id
             return action
@@ -594,9 +594,7 @@ class SaleOrderImport(models.TransientModel):
             )
             % self.order_filename
         )
-        action = self.env["ir.actions.act_window"].for_xml_id(
-            "sale", "action_quotations"
-        )
+        action = self.env["ir.actions.act_window"]._for_xml_id("sale.action_quotations")
         action.update(
             {
                 "view_mode": "form,tree,calendar,graph",
