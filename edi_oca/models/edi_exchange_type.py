@@ -119,6 +119,9 @@ class EDIExchangeType(models.Model):
     def _load_advanced_settings(self):
         return yaml.safe_load(self.advanced_settings_edit or "") or {}
 
+    def get_settings(self):
+        return self.advanced_settings
+
     @api.constrains("backend_id", "backend_type_id")
     def _check_backend(self):
         for rec in self:
