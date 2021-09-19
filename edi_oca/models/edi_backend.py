@@ -125,8 +125,8 @@ class EDIBackend(models.Model):
         return candidates
 
     def _get_component_conf_for_record(self, exchange_record, key):
-        adv_settings = exchange_record.type_id.advanced_settings
-        return adv_settings.get("components", {}).get(key, {})
+        settings = exchange_record.type_id.get_settings()
+        return settings.get("components", {}).get(key, {})
 
     @property
     def exchange_record_model(self):
