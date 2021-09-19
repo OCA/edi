@@ -34,6 +34,7 @@
                             <field name="exchange_file_ext" />
                             <field name="exchange_file_auto_generate" />
                             <field name="ack_type_id" />
+                            <field name="job_channel_id" />
                         </group>
                     </group>
                     <group
