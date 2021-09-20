@@ -1,0 +1,1 @@
+This module permits to generate edifact files for customer's invoices and refunds
