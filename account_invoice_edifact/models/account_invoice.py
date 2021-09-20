@@ -136,9 +136,18 @@ class AccountInvoice(models.Model):
             tax_code = self._get_edifact_tax_code(tax.description, tax.amount)
             if tax_code not in taxes:
                 taxes[tax_code] = {}
+            if tax.amount not in taxes[tax_code]:
+                taxes[tax_code][tax.amount] = {
+                    'tax_amount': 0,
+                    'untaxed_amount': 0,
+                }
             taxes[tax_code][tax.amount] = {
-                'tax_amount': tax_dict['amount'],
-                'untaxed_amount': tax_dict['base'],
+                'tax_amount':
+                    taxes[tax_code][tax.amount]['tax_amount'] +
+                    tax_dict['amount'],
+                'untaxed_amount':
+                    taxes[tax_code][tax.amount]['untaxed_amount'] +
+                    tax_dict['base'],
             }
 
         res['taxes'] = taxes
