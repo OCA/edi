@@ -42,10 +42,14 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             MatchByBackendExchangeType,
         )
 
+        # Record not relevant for these tests
+        work_ctx = {"exchange_record": self.env["edi.exchange.record"].browse()}
+
         # Search by both backend and exchange type
         component = self.backend._find_component(
             "res.partner",
             ["generate"],
+            work_ctx=work_ctx,
             backend_type="demo_backend",
             exchange_type="test_csv_output",
         )
@@ -53,12 +57,15 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
 
         # Search by backend type only
         component = self.backend._find_component(
-            "res.partner", ["generate"], backend_type="demo_backend"
+            "res.partner", ["generate"], work_ctx=work_ctx, backend_type="demo_backend"
         )
         self.assertEqual(component._name, MatchByBackendTypeOnly._name)
 
         # Search by exchange type only
         component = self.backend._find_component(
-            "res.partner", ["generate"], exchange_type="test_csv_output"
+            "res.partner",
+            ["generate"],
+            work_ctx=work_ctx,
+            exchange_type="test_csv_output",
         )
         self.assertEqual(component._name, MatchByExchangeTypeOnly._name)
