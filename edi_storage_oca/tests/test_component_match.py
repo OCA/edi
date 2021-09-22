@@ -3,7 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 from odoo.addons.component.core import Component
-from odoo.addons.edi.tests.common import EDIBackendCommonComponentRegistryTestCase
+from odoo.addons.edi_oca.tests.common import EDIBackendCommonComponentRegistryTestCase
 
 
 class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
@@ -49,9 +49,13 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
 
         self._build_components(SFTPCheck, SFTPSend, S3Check, S3Send)
 
+        # Record not relevant for these tests
+        work_ctx = {"exchange_record": self.env["edi.exchange.record"].browse()}
+
         component = self.backend._find_component(
             "res.partner",
             ["storage.check"],
+            work_ctx=work_ctx,
             backend_type="demo_backend",
             exchange_type="test_csv_output",
             storage_backend_type="s3",
@@ -61,6 +65,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         component = self.backend._find_component(
             "res.partner",
             ["storage.check"],
+            work_ctx=work_ctx,
             backend_type="demo_backend",
             exchange_type="test_csv_output",
             storage_backend_type="sftp",
@@ -70,6 +75,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         component = self.backend._find_component(
             "res.partner",
             ["storage.send"],
+            work_ctx=work_ctx,
             backend_type="demo_backend",
             exchange_type="test_csv_output",
             storage_backend_type="sftp",
@@ -79,6 +85,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         component = self.backend._find_component(
             "res.partner",
             ["storage.send"],
+            work_ctx=work_ctx,
             backend_type="demo_backend",
             exchange_type="test_csv_output",
             storage_backend_type="s3",
