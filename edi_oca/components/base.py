@@ -13,17 +13,12 @@ class EDIBackendComponentMixin(AbstractComponent):
     _backend_type = None
     _exchange_type = None
 
-    @property
-    def exchange_record(self):
-        return self.work.exchange_record
-
-    @property
-    def backend(self):
-        return self.work.backend
-
-    @property
-    def record(self):
-        return self.work.exchange_record.record
+    def __init__(self, work_context):
+        super().__init__(work_context)
+        self.backend = work_context.backend
+        self.exchange_record = work_context.exchange_record
+        self.record = self.exchange_record.record
+        self.type_settings = self.exchange_record.type_id.get_settings()
 
     @staticmethod
     def _match_attrs():
