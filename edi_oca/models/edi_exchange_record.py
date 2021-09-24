@@ -95,6 +95,10 @@ class EDIExchangeRecord(models.Model):
     ack_received_on = fields.Datetime(
         string="ACK received on", related="ack_exchange_id.exchanged_on"
     )
+    retryable = fields.Boolean(
+        compute="_compute_retryable",
+        help="The record state can be rolled back manually in case of failure.",
+    )
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -154,6 +158,18 @@ class EDIExchangeRecord(models.Model):
 
     def needs_ack(self):
         return self.type_id.ack_type_id and not self.ack_exchange_id
+
+    _rollback_state_mapping = {
+        # From: to
+        "output_error_on_send": "output_pending",
+        "output_sent_and_error": "output_pending",
+        "input_receive_error": "input_pending",
+        "input_processed_error": "input_received",
+    }
+
+    def _compute_retryable(self):
+        for rec in self:
+            rec.retryable = rec.edi_exchange_state in self._rollback_state_mapping
 
     @property
     def record(self):
@@ -243,6 +259,23 @@ class EDIExchangeRecord(models.Model):
     def action_exchange_process(self):
         self.ensure_one()
         return self.backend_id.exchange_process(self)
+
+    def action_retry(self):
+        for rec in self:
+            rec._retry_exchange_action()
+
+    def _retry_exchange_action(self):
+        """Move back to precedent state to retry exchange action if failed."""
+        if not self.retryable:
+            return False
+        new_state = self._rollback_state_mapping[self.edi_exchange_state]
+        fname = "edi_exchange_state"
+        self[fname] = new_state
+        display_state = self._fields[fname].convert_to_export(self[fname], self)
+        self.message_post(
+            body=_("Action retry: state moved back to '%s'") % display_state
+        )
+        return True
 
     def action_open_related_record(self):
         self.ensure_one()
