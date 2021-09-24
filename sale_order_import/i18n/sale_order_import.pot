@@ -177,6 +177,12 @@ msgid "Missing customer"
 msgstr ""
 
 #. module: sale_order_import
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "No data provided"
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__price_source__pricelist
 msgid "Pricelist"
 msgstr ""
@@ -316,6 +322,12 @@ msgstr ""
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid "Universal Business Language"
+msgstr ""
+
+#. module: sale_order_import
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "Unsupported XML document"
 msgstr ""
 
 #. module: sale_order_import
