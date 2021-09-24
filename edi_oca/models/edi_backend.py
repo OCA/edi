@@ -16,6 +16,10 @@ from ..exceptions import EDIValidationError
 _logger = logging.getLogger(__name__)
 
 
+def _get_exception_msg(exc):
+    return exc.name if hasattr(exc, "name") else repr(exc)
+
+
 class EDIBackend(models.Model):
     """Generic backend to control EDI exchanges.
 
@@ -196,7 +200,7 @@ class EDIBackend(models.Model):
             try:
                 self._validate_data(exchange_record, output)
             except EDIValidationError as err:
-                error = repr(err)
+                error = _get_exception_msg(err)
                 state = "validate_error"
                 message = exchange_record._exchange_status_message("validate_ko")
                 exchange_record.update(
@@ -261,7 +265,7 @@ class EDIBackend(models.Model):
         except self._swallable_exceptions() as err:
             if self.env.context.get("_edi_send_break_on_error"):
                 raise
-            error = repr(err)
+            error = _get_exception_msg(err)
             state = "output_error_on_send"
             message = exchange_record._exchange_status_message("send_ko")
             res = False
@@ -411,7 +415,7 @@ class EDIBackend(models.Model):
         except self._swallable_exceptions() as err:
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
-            error = repr(err)
+            error = _get_exception_msg(err)
             state = "input_processed_error"
             res = False
         else:
@@ -458,14 +462,14 @@ class EDIBackend(models.Model):
                 exchange_record._set_file_content(content)
                 self._validate_data(exchange_record)
         except EDIValidationError as err:
-            error = repr(err)
+            error = _get_exception_msg(err)
             state = "validate_error"
             message = exchange_record._exchange_status_message("validate_ko")
             res = False
         except self._swallable_exceptions() as err:
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
-            error = repr(err)
+            error = _get_exception_msg(err)
             state = "input_receive_error"
             message = exchange_record._exchange_status_message("receive_ko")
             res = False
