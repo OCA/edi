@@ -57,7 +57,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             [
                 {
                     "edi_exchange_state": "input_processed_error",
-                    "exchange_error": "ValueError('OOPS! Something went wrong :(',)",
+                    "exchange_error": "OOPS! Something went wrong :(",
                 }
             ],
         )
