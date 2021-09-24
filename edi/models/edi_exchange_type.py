@@ -26,17 +26,15 @@ class EDIExchangeType(models.Model):
     _description = "EDI Exchange Type"
 
     backend_id = fields.Many2one(
-        string="EDI backend", comodel_name="edi.backend", ondelete="set null",
+        string="Backend", comodel_name="edi.backend", ondelete="set null",
     )
     backend_type_id = fields.Many2one(
-        string="EDI Backend type",
+        string="Backend type",
         comodel_name="edi.backend.type",
         required=True,
         ondelete="restrict",
     )
-    job_channel_id = fields.Many2one(
-        comodel_name="queue.job.channel",
-    )
+    job_channel_id = fields.Many2one(comodel_name="queue.job.channel",)
     name = fields.Char(required=True)
     code = fields.Char(required=True)
     direction = fields.Selection(
