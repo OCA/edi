@@ -60,10 +60,9 @@ class SaleOrderImport(models.TransientModel):
                 self.doc_type = False
             elif filetype and filetype[0] in ["application/xml", "text/xml"]:
                 self.csv_import = False
-                try:
-                    xml_root = etree.fromstring(b64decode(self.order_file))
-                except etree.XMLSyntaxError:
-                    raise UserError(_("This XML file is not XML-compliant"))
+                xml_root, error_msg = self._parse_xml(b64decode(self.order_file))
+                if not xml_root and error_msg:
+                    raise UserError(error_msg)
                 doc_type = self.parse_xml_order(xml_root, detect_doc_type=True)
                 self.doc_type = doc_type
             elif filetype and filetype[0] == "application/pdf":
@@ -89,12 +88,28 @@ class SaleOrderImport(models.TransientModel):
             self.doc_type = False
 
     @api.model
+    def _parse_xml(self, data):
+        if not data:
+            return None, _("No data provided")
+        xml_root = None
+        try:
+            xml_root = etree.fromstring(data)
+            error_msg = None
+        except etree.XMLSyntaxError:
+            error_msg = _("This XML file is not XML-compliant")
+        try:
+            self.parse_xml_order(xml_root, detect_doc_type=True)
+        except UserError:
+            error_msg = _("Unsupported XML document")
+        return xml_root, error_msg
+
+    @api.model
     def get_xml_doc_type(self, xml_root):
         raise UserError
 
     @api.model
     def parse_xml_order(self, xml_root, detect_doc_type=False):
-        raise UserError(
+        raise NotImplementedError(
             _(
                 "This type of XML RFQ/order is not supported. Did you install "
                 "the module to support this XML format?"
@@ -355,8 +370,8 @@ class SaleOrderImport(models.TransientModel):
                     "doc_type": parsed_order.get("doc_type"),
                 }
             )
-            action = self.env["ir.actions.act_window"].for_xml_id(
-                "sale_order_import", "sale_order_import_action"
+            action = self.env["ir.actions.act_window"]._for_xml_id(
+                "sale_order_import.sale_order_import_action"
             )
             action["res_id"] = self.id
             return action
@@ -579,9 +594,7 @@ class SaleOrderImport(models.TransientModel):
             )
             % self.order_filename
         )
-        action = self.env["ir.actions.act_window"].for_xml_id(
-            "sale", "action_quotations"
-        )
+        action = self.env["ir.actions.act_window"]._for_xml_id("sale.action_quotations")
         action.update(
             {
                 "view_mode": "form,tree,calendar,graph",
