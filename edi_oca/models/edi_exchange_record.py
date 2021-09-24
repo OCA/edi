@@ -32,7 +32,7 @@ class EDIExchangeRecord(models.Model):
     backend_id = fields.Many2one(comodel_name="edi.backend", required=True)
     model = fields.Char(index=True, required=False, readonly=True)
     res_id = fields.Many2oneReference(
-        string="Record ID",
+        string="Record",
         index=True,
         required=False,
         readonly=True,
@@ -186,11 +186,10 @@ class EDIExchangeRecord(models.Model):
     def name_get(self):
         result = []
         for rec in self:
-            dt = fields.Datetime.to_string(rec.exchanged_on) if rec.exchanged_on else ""
             rec_name = rec.identifier
             if rec.res_id and rec.model:
                 rec_name = rec.record.display_name
-            name = "[{}] {} {}".format(rec.type_id.name, rec_name, dt)
+            name = "[{}] {}".format(rec.type_id.name, rec_name)
             result.append((rec.id, name))
         return result
 
