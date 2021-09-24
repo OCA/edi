@@ -17,7 +17,12 @@ _logger = logging.getLogger(__name__)
 
 
 def _get_exception_msg(exc):
-    return exc.name if hasattr(exc, "name") else repr(exc)
+    if hasattr(exc, "name"):
+        # Odoo exc
+        return exc.name
+    elif hasattr(exc, "args") and isinstance(exc.args[0], str):
+        return exc.args[0]
+    return repr(exc)
 
 
 class EDIBackend(models.Model):
