@@ -37,19 +37,34 @@
                             <field name="job_channel_id" />
                         </group>
                     </group>
-                    <group
-                        name="advanced_settings"
-                        groups="edi_oca.group_edi_advanced_settings_manager"
-                    >
-                        <field name="advanced_settings_edit" widget="ace" />
-                        <field name="model_ids" widget="many2many_tags" />
-                        <field name="enable_domain" />
-                        <field
-                            name="enable_snippet"
-                            widget="ace"
-                            options="{'mode': 'python'}"
-                        />
-                    </group>
+                    <notebook>
+                        <page
+                            name="adv_settings"
+                            string="Advanced settings"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                        >
+                            <field
+                                name="advanced_settings_edit"
+                                widget="ace"
+                                colspan="4"
+                            />
+                        </page>
+                        <page
+                            name="model_rules"
+                            string="Model rules"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                        >
+                            <group>
+                                <field name="model_ids" widget="many2many_tags" />
+                                <field name="enable_domain" />
+                                <field
+                                    name="enable_snippet"
+                                    widget="ace"
+                                    options="{'mode': 'python'}"
+                                />
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
