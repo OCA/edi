@@ -27,12 +27,18 @@
                         name="action_open_related_record"
                         type="object"
                         string="Related record"
+                        attrs="{'invisible': [('res_id', '=', False)]}"
                     />
+                    <!-- FIXME: this `invisible` domain does not work -->
                     <button
                         name="action_open_related_exchanges"
                         type="object"
                         string="Related exchanges"
+                        attrs="{'invisible': [('related_exchange_ids', '=', False)]}"
                     />
+                    <!-- FIXME: colors are ignored...
+                    and can't find how they are supposed to work.
+                    Probably not supported at all. -->
                     <field
                         attrs="{'invisible': [('direction', '=', 'input')]}"
                         name="edi_exchange_state"
@@ -103,6 +109,7 @@
                             name="related_odoo_record"
                             string="Related record"
                             groups="base.group_no_one"
+                            attrs="{'invisible': [('res_id', '=', 0)]}"
                         >
                           <field name="res_id" />
                           <field name="model" />
@@ -116,7 +123,12 @@
                         >
                             <field name="exchange_error" />
                         </page>
-                        <page name="related_exchanges" string="Related exchanges">
+                        <!-- FIXME: this `invisible` domain does not work -->
+                        <page
+                            name="related_exchanges"
+                            string="Related exchanges"
+                            attrs="{'invisible': [('related_exchange_ids', '=', False), ('parent_id', '=', False)]}"
+                        >
                             <group name="rel_exchanges">
                               <field name="parent_id" />
                             </group>
@@ -133,6 +145,10 @@
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
             </form>
         </field>
     </record>
