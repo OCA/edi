@@ -97,6 +97,7 @@ msgid "Customer Order"
 msgstr ""
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order__display_name
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__display_name
 msgid "Display Name"
 msgstr ""
@@ -112,6 +113,7 @@ msgid "Filename"
 msgstr "Nom du fichier"
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order__id
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__id
 msgid "ID"
 msgstr "ID"
@@ -159,6 +161,7 @@ msgid "Import Sale Orders"
 msgstr ""
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order____last_update
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import____last_update
 msgid "Last Modified on"
 msgstr ""
@@ -177,6 +180,12 @@ msgstr "Dernière mise-à-jour le"
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "Missing customer"
+msgstr ""
+
+#. module: sale_order_import
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "No data provided"
 msgstr ""
 
 #. module: sale_order_import
@@ -315,6 +324,12 @@ msgstr ""
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid "Universal Business Language"
+msgstr ""
+
+#. module: sale_order_import
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "Unsupported XML document"
 msgstr ""
 
 #. module: sale_order_import
