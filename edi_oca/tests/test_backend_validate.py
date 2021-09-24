@@ -59,7 +59,12 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.assertTrue(FakeInputValidate.check_called_for(self.record_in))
         self.assertRecordValues(
             self.record_in,
-            [{"edi_exchange_state": "validate_error", "exchange_error": repr(exc)}],
+            [
+                {
+                    "edi_exchange_state": "validate_error",
+                    "exchange_error": "Data seems wrong!",
+                }
+            ],
         )
 
     def test_generate_validate_record(self):
@@ -79,5 +84,10 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.assertTrue(FakeOutputValidate.check_called_for(self.record_out))
         self.assertRecordValues(
             self.record_out,
-            [{"edi_exchange_state": "validate_error", "exchange_error": repr(exc)}],
+            [
+                {
+                    "edi_exchange_state": "validate_error",
+                    "exchange_error": "Data seems wrong!",
+                }
+            ],
         )
