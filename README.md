@@ -39,7 +39,7 @@ addon | version | maintainers | summary
 [edi_webservice_oca](edi_webservice_oca/) | 14.0.1.0.0 |  | Defines webservice integration from EDI Exchange records
 [partner_identification_import](partner_identification_import/) | 14.0.1.0.0 |  | Provides partner matching on extra ID
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.0.0 |  | Embed UBL XML file inside the PDF purchase order
-[sale_order_import](sale_order_import/) | 14.0.1.1.0 |  | Import RFQ or sale orders from files
+[sale_order_import](sale_order_import/) | 14.0.1.1.1 |  | Import RFQ or sale orders from files
 [sale_order_import_ubl](sale_order_import_ubl/) | 14.0.1.1.0 |  | Import UBL XML sale order files
 [sale_order_ubl](sale_order_ubl/) | 14.0.1.0.0 |  | Embed UBL XML file inside the PDF quotation
 [webservice](webservice/) | 14.0.1.0.1 |  | Defines webservice abstract definition to be used generally
