@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo13-addon-account_e-invoice_generate',
         'odoo13-addon-account_invoice_export',
+        'odoo13-addon-account_invoice_export_server_env',
         'odoo13-addon-account_invoice_facturx',
         'odoo13-addon-account_invoice_facturx_py3o',
         'odoo13-addon-account_invoice_ubl',
