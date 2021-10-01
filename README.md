@@ -21,7 +21,7 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [account_e-invoice_generate](account_e-invoice_generate/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Technical module to generate PDF invoices with embedded XML file
 [account_invoice_export](account_invoice_export/) | 13.0.1.1.0 |  | Account Invoice Export
-[account_invoice_export_server_env](account_invoice_export_server_env/) | 13.0.1.0.0 |  | Server environment for Account Invoice Export
+[account_invoice_export_server_env](account_invoice_export_server_env/) | 13.0.1.0.1 |  | Server environment for Account Invoice Export
 [account_invoice_facturx](account_invoice_facturx/) | 13.0.1.1.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X/ZUGFeRD customer invoices
 [account_invoice_facturx_py3o](account_invoice_facturx_py3o/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X invoices with Py3o reporting engine
 [account_invoice_ubl](account_invoice_ubl/) | 13.0.1.0.6 |  | Generate UBL XML file for customer invoices/refunds
@@ -36,7 +36,7 @@ addon | version | maintainers | summary
 [edi_account](edi_account/) | 13.0.1.0.2 |  | Define EDI Configuration for Account Moves
 [edi_backend_partner](edi_backend_partner/) | 13.0.1.0.0 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
 [edi_exchange_template](edi_exchange_template/) | 13.0.1.7.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
-[edi_storage](edi_storage/) | 13.0.1.7.2 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
+[edi_storage](edi_storage/) | 13.0.1.7.3 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_voxel](edi_voxel/) | 13.0.1.0.1 |  | Base module for connecting with Voxel
 [edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.1.1 |  | Sends account invoices to Voxel.
 [edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.3 |  | Import sale order from Voxel.
