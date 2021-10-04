@@ -1,0 +1,1 @@
+If you use the py3o reporting engine (module *report_py3o_fusion_server* from the `reporting-engine <https://github.com/OCA/reporting-engine>`_ OCA project) to generate your PDF purchase orders/RFQs and you want these PDF documents to have an embedded UBL XML file, this module is for you!
