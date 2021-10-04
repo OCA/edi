@@ -245,7 +245,7 @@ class PurchaseOrder(models.Model):
             buffer = self._ubl_add_xml_in_pdf_buffer(xml_string, xml_filename, buffer)
         return buffer
 
-    def embed_ubl_xml_in_pdf(self, pdf_content):
+    def embed_ubl_xml_in_pdf(self, pdf_content, pdf_file=None):
         self.ensure_one()
         doc_type = self.get_ubl_purchase_order_doc_type()
         if doc_type:
@@ -256,8 +256,7 @@ class PurchaseOrder(models.Model):
                 xml_string, self.get_document_name(doc_type), version=version
             )
             pdf_content = self.embed_xml_in_pdf(
-                xml_string, xml_filename, pdf_content=pdf_content
-            )
+                xml_string, xml_filename, pdf_content=pdf_content, pdf_file=pdf_file)
         return pdf_content
 
     def get_ubl_purchase_order_doc_type(self):
