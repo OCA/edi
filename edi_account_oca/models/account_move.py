@@ -1,12 +1,18 @@
 # Copyright 2020 Creu Blanca
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import models
+from odoo import fields, models
 
 
 class AccountMove(models.Model):
     _name = "account.move"
     _inherit = ["account.move", "edi.exchange.consumer.mixin"]
+
+    disable_edi_auto = fields.Boolean(
+        help="When marked, EDI could be avoided",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
 
     def _post(self, soft=True):
         result = super()._post(soft=soft)

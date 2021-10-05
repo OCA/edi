@@ -7,6 +7,11 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
+            <group name="accounting_info_group" position="after">
+                <group name="edi_invoice_group" string="Electronic Data Interchange">
+                    <field name="disable_edi_auto" string="Disable" />
+                </group>
+            </group>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button
                     type="object"
