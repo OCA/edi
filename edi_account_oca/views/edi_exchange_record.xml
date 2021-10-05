@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 Creu Blanca
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_account_move_view"
+    >
+        <field name="name">Account Moves Exchange Record</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('model', '=', 'account.move')]</field>
+        <field name="context">{}</field>
+    </record>
+    <menuitem
+        id="menu_account_edi_root"
+        name="Exchange records"
+        parent="account.menu_finance_entries"
+        sequence="20"
+    />
+    <menuitem
+        id="menu_account_edi_exchange_record"
+        name="Moves"
+        action="act_open_edi_exchange_record_account_move_view"
+        parent="menu_account_edi_root"
+        sequence="20"
+    />
+</odoo>
