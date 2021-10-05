@@ -14,6 +14,7 @@
         "views/account_journal.xml",
         "views/res_partner.xml",
         "views/account_move.xml",
+        "views/edi_exchange_record.xml",
     ],
     "demo": [],
 }
