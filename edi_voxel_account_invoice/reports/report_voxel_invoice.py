@@ -140,7 +140,7 @@ class ReportVoxelInvoice(models.AbstractModel):
             "Qty": str(line.quantity),
             "MU": line.product_uom_id.voxel_code,
             "UP": str(line.price_unit),
-            "Total": str(line.quantity * line.price_unit),
+            "Total": str(round(line.price_subtotal, 2)),
         }
 
     def _get_product_discounts_data(self, line):
