@@ -95,6 +95,9 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_retryable",
         help="The record state can be rolled back manually in case of failure.",
     )
+    exchange_file_auto_generate = fields.Boolean(
+        related="type_id.exchange_file_auto_generate"
+    )
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -256,6 +259,14 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         return self.backend_id.exchange_process(self)
 
+    def action_exchange_receive(self):
+        self.ensure_one()
+        return self.backend_id.exchange_receive(self)
+
+    def action_exchange_generate(self):
+        self.ensure_one()
+        return self.backend_id.exchange_generate(self)
+
     def action_retry(self):
         for rec in self:
             rec._retry_exchange_action()
@@ -286,7 +297,7 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         if not self.related_exchange_ids:
             return {}
-        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view").read()[0]
+        action = self.env.ref("edi.act_open_edi_exchange_record_view").read()[0]
         action["domain"] = [("id", "in", self.related_exchange_ids.ids)]
         return action
 

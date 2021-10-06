@@ -23,59 +23,41 @@
             <form string="EDI Exchange Record">
                 <field name="direction" invisible="1" />
                 <field name="retryable" invisible="1" />
-                <header>
-                    <button
-                        name="action_open_related_record"
-                        type="object"
-                        string="Related record"
-                        attrs="{'invisible': [('res_id', '=', False)]}"
-                    />
-                    <!-- FIXME: this `invisible` domain does not work -->
-                    <button
-                        name="action_open_related_exchanges"
-                        type="object"
-                        string="Related exchanges"
-                        attrs="{'invisible': [('related_exchange_ids', '=', False)]}"
-                    />
-                    <button
-                        name="action_retry"
-                        type="object"
-                        string="Retry"
-                        attrs="{'invisible': [('retryable', '=', False)]}"
-                    />
-                    <!-- FIXME: colors are ignored...
-                    and can't find how they are supposed to work.
-                    Probably not supported at all. -->
-                    <field
-                        attrs="{'invisible': [('direction', '=', 'input')]}"
-                        name="edi_exchange_state"
-                        widget="statusbar"
-                        statusbar_visible="new,validate_error,output_pending,output_error_on_send,output_sent,output_sent_and_processed,output_sent_and_error"
-                        statusbar_colors='{
-                          "validate_error": "red",
-                          "output_pending": "yellow",
-                          "output_error_on_send": "red",
-                          "output_sent": "green",
-                          "output_sent_and_processed": "green",
-                          "output_sent_and_error": "red",
-                        }'
-                    />
-                    <field
-                        attrs="{'invisible': [('direction', '=', 'output')]}"
-                        name="edi_exchange_state"
-                        widget="statusbar"
-                        statusbar_visible="new,validate_error,input_pending,input_received,input_receive_error,input_processed,input_processed_error"
-                        statusbar_colors='{
-                          "validate_error": "red",
-                          "input_pending": "yellow",
-                          "input_received": "green",
-                          "input_receive_error": "red",
-                          "input_processed": "green",
-                          "input_processed_error": "red"
-                        }'
-                    />
-                </header>
+                <field name="exchange_file_auto_generate" invisible="1" />
+                <header />
                 <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button
+                            name="action_exchange_generate"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-cubes"
+                            attrs="{'invisible': ['|', ('edi_exchange_state', '!=', 'new'), ('exchange_file_auto_generate', '=', True)]}"
+                            string="Generate"
+                        />
+                        <button
+                            name="action_retry"
+                            type="object"
+                            icon="fa-refresh"
+                            string="Retry"
+                            attrs="{'invisible': [('retryable', '=', False)]}"
+                        />
+                        <button
+                            name="action_open_related_record"
+                            type="object"
+                            icon="fa-share-square-o"
+                            string="Related record"
+                            attrs="{'invisible': [('res_id', '=', False)]}"
+                        />
+                        <!-- FIXME: this `invisible` domain does not work -->
+                        <button
+                            name="action_open_related_exchanges"
+                            type="object"
+                            icon="fa-sitemap"
+                            string="Related exchanges"
+                            attrs="{'invisible': [('related_exchange_ids', '=', False)]}"
+                        />
+                    </div>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" />
                         <h1>
@@ -97,6 +79,7 @@
                         </group>
                         <group name="status" string="Status">
                             <field name="exchanged_on" />
+                            <field name="edi_exchange_state" />
                             <field name="exchange_file" filename="exchange_filename" />
                             <field
                                 name="exchange_filename"
