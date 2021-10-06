@@ -235,7 +235,7 @@ class TestVoxelAccountInvoice(SavepointCase):
                     "Qty": "3.0",
                     "MU": "Unidades",
                     "UP": "147.0",
-                    "Total": "441.0",
+                    "Total": "352.8",
                 },
                 "taxes": [
                     {"Rate": "15.0", "Type": False},
