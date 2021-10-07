@@ -57,7 +57,7 @@ class AccountMove(models.Model):
             )
         address_country = etree.SubElement(address, ns["ram"] + "CountryID")
         address_country.text = partner.country_id.code
-        if partner.state_id:
+        if ns["level"] != "minimum" and partner.state_id:
             address_state = etree.SubElement(
                 address, ns["ram"] + "CountrySubDivisionName"
             )
@@ -890,6 +890,11 @@ class AccountMove(models.Model):
         }
         return pdf_metadata
 
+    def _prepare_facturx_attachments(self):
+        # This method is designed to be inherited in other modules
+        self.ensure_one()
+        return {}
+
     def regular_pdf_invoice_to_facturx_invoice(self, pdf_content):
         self.ensure_one()
         assert pdf_content, "Missing pdf_content"
@@ -900,6 +905,7 @@ class AccountMove(models.Model):
                 self.partner_id.lang and self.partner_id.lang.replace("_", "-") or None
             )
             # Generate a new PDF with XML file as attachment
+            attachments = self._prepare_facturx_attachments()
             pdf_content = generate_from_binary(
                 pdf_content,
                 facturx_xml_bytes,
@@ -908,6 +914,7 @@ class AccountMove(models.Model):
                 check_xsd=False,
                 pdf_metadata=pdf_metadata,
                 lang=lang,
+                attachments=attachments,
             )
             logger.info("%s file added to PDF invoice", FACTURX_FILENAME)
         return pdf_content
