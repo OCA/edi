@@ -1,3 +1,5 @@
 freezegun
 odoo_test_helper
 responses
+# Python Dependencies
+PyYAML
