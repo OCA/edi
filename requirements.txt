@@ -1,4 +1,4 @@
-invoice2data
+invoice2data 0.3.5
   # Invoice2data new requires a recent version of pdftotext from https://poppler.freedesktop.org/releases.html
   # and the version below doesn't work any more
   #- wget -P /tmp http://public.akretion.com/pdftotext-3.04
