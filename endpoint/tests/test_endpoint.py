@@ -120,6 +120,7 @@ class TestEndpoint(CommonEndpoint):
                 "methods": ["GET"],
                 "routes": ["/demo/one"],
                 "type": "http",
+                "csrf": False,
             },
         )
         endpoint = self.endpoint.copy(
@@ -139,6 +140,7 @@ class TestEndpoint(CommonEndpoint):
                 "methods": ["POST"],
                 "routes": ["/new/one"],
                 "type": "http",
+                "csrf": False,
             },
         )
         # check prefix
@@ -152,6 +154,7 @@ class TestEndpoint(CommonEndpoint):
                 "methods": ["POST"],
                 "routes": ["/foo/new/one"],
                 "type": "http",
+                "csrf": False,
             },
         )
         type(endpoint)._endpoint_route_prefix = ""

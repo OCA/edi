@@ -353,6 +353,9 @@ class EndpointMixin(models.AbstractModel):
             auth=self.auth_type,
             methods=[self.request_method],
             routes=[route],
+            # TODO: make this configurable
+            # in case the endpoint is used for frontend stuff.
+            csrf=False,
         )
         return route, routing
 
