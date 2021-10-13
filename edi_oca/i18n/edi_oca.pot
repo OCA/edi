@@ -66,6 +66,16 @@ msgid "<strong>State:</strong>"
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
+msgid "ACK"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__ack_exchange_id
+msgid "ACK exchange"
+msgstr ""
+
+#. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "ACK file is required for this exchange but not found."
@@ -84,6 +94,11 @@ msgid "ACK file received."
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__ack_exchange_id
+msgid "ACK for this exchange"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__ack_received_on
 msgid "ACK received on"
 msgstr ""
@@ -94,8 +109,8 @@ msgid "Abstract record where exchange records can be assigned"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__ack_exchange_id
-msgid "Ack Exchange"
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__ack_expected
+msgid "Ack Expected"
 msgstr ""
 
 #. module: edi_oca
@@ -104,13 +119,14 @@ msgid "Ack exchange type"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__ack_exchange_id
-msgid "Ack for this exchange"
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_needaction
+msgid "Action Needed"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_needaction
-msgid "Action Needed"
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Action retry: state moved back to '%s'"
 msgstr ""
 
 #. module: edi_oca
@@ -121,6 +137,11 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__advanced_settings_edit
 msgid "Advanced YAML settings"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_form
+msgid "Advanced settings"
 msgstr ""
 
 #. module: edi_oca
@@ -144,6 +165,7 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__backend_id
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__backend_id
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__backend_id
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_search
 msgid "Backend"
 msgstr ""
@@ -163,6 +185,12 @@ msgstr ""
 #: code:addons/edi_oca/models/edi_exchange_type.py:0
 #, python-format
 msgid "Backend should respect backend type!"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__backend_type_id
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__backend_type_id
+msgid "Backend type"
 msgstr ""
 
 #. module: edi_oca
@@ -195,11 +223,6 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.ui.menu,name:edi_oca.menu_edi_config
 msgid "Config"
-msgstr ""
-
-#. module: edi_oca
-#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
-msgid "Configuration"
 msgstr ""
 
 #. module: edi_oca
@@ -267,8 +290,6 @@ msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend__backend_type_id
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__backend_type_id
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__backend_type_id
 msgid "EDI Backend type"
 msgstr ""
 
@@ -288,16 +309,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_search
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_tree
 msgid "EDI Exchange Type"
-msgstr ""
-
-#. module: edi_oca
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__type_id
-msgid "EDI Exchange type"
-msgstr ""
-
-#. module: edi_oca
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__backend_id
-msgid "EDI backend"
 msgstr ""
 
 #. module: edi_oca
@@ -422,6 +433,11 @@ msgstr ""
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "Exchange state must respect direction!"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__type_id
+msgid "Exchange type"
 msgstr ""
 
 #. module: edi_oca
@@ -574,6 +590,11 @@ msgid "Is Follower"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__job_channel_id
+msgid "Job Channel"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend____last_update
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend_type____last_update
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin____last_update
@@ -621,6 +642,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__model
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__model_ids
 msgid "Model"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_form
+msgid "Model rules"
 msgstr ""
 
 #. module: edi_oca
@@ -698,7 +724,7 @@ msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__res_id
-msgid "Record ID"
+msgid "Record"
 msgstr ""
 
 #. module: edi_oca
@@ -728,6 +754,11 @@ msgstr ""
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
+msgid "Related exchanges"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
 msgid "Related record"
 msgstr ""
 
@@ -739,6 +770,16 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__res_id
 msgid "Res"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
+msgid "Retry"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__retryable
+msgid "Retryable"
 msgstr ""
 
 #. module: edi_oca
@@ -782,6 +823,11 @@ msgid "State"
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
+msgid "Status"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.constraint,message:edi_oca.constraint_edi_exchange_type_code_uniq
 msgid "The code must be unique per backend"
 msgstr ""
@@ -794,6 +840,11 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.constraint,message:edi_oca.constraint_edi_exchange_record_identifier_uniq
 msgid "The identifier must be unique."
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__retryable
+msgid "The record state can be rolled back manually in case of failure."
 msgstr ""
 
 #. module: edi_oca
