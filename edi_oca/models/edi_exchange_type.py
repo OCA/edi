@@ -26,15 +26,18 @@ class EDIExchangeType(models.Model):
     _description = "EDI Exchange Type"
 
     backend_id = fields.Many2one(
-        string="EDI backend",
+        string="Backend",
         comodel_name="edi.backend",
         ondelete="set null",
     )
     backend_type_id = fields.Many2one(
-        string="EDI Backend type",
+        string="Backend type",
         comodel_name="edi.backend.type",
         required=True,
         ondelete="restrict",
+    )
+    job_channel_id = fields.Many2one(
+        comodel_name="queue.job.channel",
     )
     name = fields.Char(required=True)
     code = fields.Char(required=True)
@@ -115,6 +118,9 @@ class EDIExchangeType(models.Model):
 
     def _load_advanced_settings(self):
         return yaml.safe_load(self.advanced_settings_edit or "") or {}
+
+    def get_settings(self):
+        return self.advanced_settings
 
     @api.constrains("backend_id", "backend_type_id")
     def _check_backend(self):
