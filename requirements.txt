@@ -3,9 +3,8 @@ dateparser
 factur-x
 invoice2data
 ovh
+PyMuPDF
 PyPDF2
 pyyaml
-requests
-PyMuPDF
-pyyaml
 regex
+requests
