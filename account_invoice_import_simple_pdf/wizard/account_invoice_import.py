@@ -150,7 +150,9 @@ class AccountInvoiceImport(models.TransientModel):
             raise UserError(_("Simple PDF Import: count not find Vendor."))
         partner = rpo.browse(partner_id)
         raw_text = (
-            partner.simple_pdf_pages and raw_text_dict["first"] or raw_text_dict["all"]
+            partner.simple_pdf_pages == "first"
+            and raw_text_dict["first"]
+            or raw_text_dict["all"]
         )
         logger.info(
             "Simple pdf import found partner %s ID %d", partner.display_name, partner_id
