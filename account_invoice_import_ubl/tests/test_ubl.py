@@ -6,10 +6,13 @@ import base64
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
-from odoo.tools import file_open, float_compare
+from odoo.tools import file_open, float_compare, mute_logger
+
+LOGGER = "odoo.addons.account_invoice_import_ubl.wizard.account_invoice_import"
 
 
 class TestUbl(TransactionCase):
+    @mute_logger(LOGGER, "odoo.models.unlink")
     def test_import_ubl_invoice(self):
         sample_files = {
             "UBLKetentest_Referentiefactuur_20150100.xml": {
