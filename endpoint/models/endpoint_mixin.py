@@ -31,6 +31,7 @@ class EndpointMixin(models.AbstractModel):
         required=True,
         index=True,
         compute="_compute_route",
+        inverse="_inverse_route",
         readonly=False,
         store=True,
         copy=False,
@@ -167,6 +168,10 @@ class EndpointMixin(models.AbstractModel):
 
     @api.depends("route")
     def _compute_route(self):
+        for rec in self:
+            rec.route = rec._clean_route()
+
+    def _inverse_route(self):
         for rec in self:
             rec.route = rec._clean_route()
 
