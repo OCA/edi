@@ -361,6 +361,12 @@ class EndpointMixin(models.AbstractModel):
             self._register_controllers()
         return res
 
+    def unlink(self):
+        if not self._abstract:
+            for rec in self:
+                rec._drop_controller_rule()
+        return super().unlink()
+
     def _controller_fields(self):
         return ["route", "auth_type", "request_method"]
 
@@ -410,3 +416,7 @@ class EndpointMixin(models.AbstractModel):
     def _add_or_update_controller_rule(self, rule):
         key = "{0._name}:{0.id}".format(self)
         endpoint_registry.add_or_update_rule(key, rule)
+
+    def _drop_controller_rule(self):
+        key = "{0._name}:{0.id}".format(self)
+        endpoint_registry.drop_rule(key)

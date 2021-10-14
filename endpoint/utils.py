@@ -41,6 +41,15 @@ class EndpointRegistry:
             self._routing_update_required = True
             return True
 
+    def drop_rule(self, key):
+        existing = self._mapping.get(key)
+        if not existing:
+            return False
+        # Override and set as to be updated
+        self._rules_to_drop.append(existing)
+        self._routing_update_required = True
+        return True
+
     def get_rules_to_update(self):
         return {
             "to_drop": self._rules_to_drop,
