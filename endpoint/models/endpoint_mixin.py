@@ -17,6 +17,8 @@ from odoo.addons.base_sparse_field.models.fields import Serialized
 from ..controllers.main import EndpointController
 from ..utils import endpoint_registry
 
+ENDPOINT_MIXIN_CONSUMER_MODELS = []
+
 
 class EndpointMixin(models.AbstractModel):
 
@@ -70,6 +72,47 @@ class EndpointMixin(models.AbstractModel):
             "You can register an endpoint route only once.",
         )
     ]
+
+    @api.constrains("route")
+    def _check_route_unique_across_models(self):
+        """Make sure routes are unique across all models.
+
+        The SQL constraint above, works only on one specific model/table.
+        Here we check that routes stay unique across all models.
+        This is mostly to make sure admins know that the route already exists
+        somewhere else, because route controllers are registered only once
+        for the same path.
+        """
+        # TODO: add tests registering a fake model.
+        # However, @simahawk tested manually and it works.
+        all_models = self._get_endpoint_mixin_consumer_models()
+        routes = [x["route"] for x in self.read(["route"])]
+        clashing_models = []
+        for model in all_models:
+            if model != self._name and self.env[model].sudo().search_count(
+                [("route", "in", routes)]
+            ):
+                clashing_models.append(model)
+        if clashing_models:
+            raise exceptions.UserError(
+                _(
+                    "Non unique route(s): %(routes)s.\n"
+                    "Found in model(s): %(models)s.\n"
+                )
+                % {"routes": ", ".join(routes), "models": ", ".join(clashing_models)}
+            )
+
+    def _get_endpoint_mixin_consumer_models(self):
+        global ENDPOINT_MIXIN_CONSUMER_MODELS
+        if ENDPOINT_MIXIN_CONSUMER_MODELS:
+            return ENDPOINT_MIXIN_CONSUMER_MODELS
+        models = []
+        mixin_name = "endpoint.mixin"
+        for model in self.env.values():
+            if model._name != mixin_name and mixin_name in model._inherit:
+                models.append(model._name)
+        ENDPOINT_MIXIN_CONSUMER_MODELS = models
+        return models
 
     @property
     def _logger(self):
