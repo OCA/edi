@@ -5,8 +5,8 @@
 import json
 import textwrap
 
+import psycopg2
 import werkzeug
-from psycopg2.errors import UniqueViolation
 
 from odoo import exceptions
 from odoo.tools.misc import mute_logger
@@ -22,7 +22,7 @@ class TestEndpoint(CommonEndpoint):
 
     @mute_logger("odoo.sql_db")
     def test_endpoint_unique(self):
-        with self.assertRaises(UniqueViolation):
+        with self.assertRaises(psycopg2.IntegrityError):
             self.env["endpoint.endpoint"].create(
                 {
                     "name": "Endpoint",
