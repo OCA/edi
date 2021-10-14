@@ -13,18 +13,17 @@
             name="inherit_id"
             ref="account_invoice_import.view_partner_property_form"
         />
+        <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
         <field name="arch" type="xml">
             <div name="invoice_import_configs" position="replace" />
             <page name="accounting" position="after">
                     <page
                     name="invoice_import_simple_pdf"
                     string="Vendor Bill Import"
-                    groups="account.group_account_invoice"
                     attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
                 >
                     <div
                         name="invoice_import_configs"
-                        groups="account.group_account_invoice"
                         colspan="2"
                     >
                     <button
