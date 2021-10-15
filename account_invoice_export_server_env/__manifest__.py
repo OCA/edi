@@ -8,6 +8,6 @@
     "license": "AGPL-3",
     "category": "Tools",
     "depends": ["server_environment", "account_invoice_export"],
-    "website": "https://www.camptocamp.com",
+    "website": "https://github.com/OCA/edi",
     "installable": True,
 }
