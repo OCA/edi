@@ -30,6 +30,7 @@ setuptools.setup(
         'odoo14-addon-edi_webservice_oca',
         'odoo14-addon-partner_identification_import',
         'odoo14-addon-purchase_order_ubl',
+        'odoo14-addon-sale_order_customer_free_ref',
         'odoo14-addon-sale_order_import',
         'odoo14-addon-sale_order_import_ubl',
         'odoo14-addon-sale_order_ubl',
