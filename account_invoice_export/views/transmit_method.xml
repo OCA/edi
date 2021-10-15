@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="transmit_method_form" model="ir.ui.view">
+        <field name="name">Transmit Method Form view Export</field>
+        <field name="model">transmit.method</field>
+        <field
+            name="inherit_id"
+            ref="account_invoice_transmit_method.transmit_method_form"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='main']" position="after">
+                <group
+                    name="export"
+                    attrs="{'invisible': [('customer_ok', '=', False)]}"
+                >
+                    <field name="send_through_http" />
+                    <div
+                        role="alert"
+                        class="alert alert-info"
+                        colspan="2"
+                        attrs="{'invisible': [('send_through_http', '=', False)]}"
+                    >
+                        <p
+                        >By default the PDF of the invoice will be sent using the connection parameters below (basic authenticaiton).</p>
+                        <p
+                        >Handling specific connection needs and/or exporting other files can be done through code.</p>
+                    </div>
+                    <field
+                        name="destination_url"
+                        attrs="{'invisible': [('send_through_http', '=', False)]}"
+                    />
+                    <field
+                        name="destination_user"
+                        attrs="{'invisible': [('send_through_http', '=', False)]}"
+                    />
+                    <field
+                        name="destination_pwd"
+                        attrs="{'invisible': [('send_through_http', '=', False)]}"
+                    />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
