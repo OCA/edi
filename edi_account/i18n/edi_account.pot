@@ -19,12 +19,47 @@ msgid "<span class=\"o_stat_text\">EDI</span>"
 msgstr ""
 
 #. module: edi_account
+#: model:ir.actions.act_window,name:edi_account.act_open_edi_exchange_record_account_move_view
+msgid "Account Moves Exchange Record"
+msgstr ""
+
+#. module: edi_account
+#: model_terms:ir.ui.view,arch_db:edi_account.account_move_form_view
+msgid "Disable"
+msgstr ""
+
+#. module: edi_account
+#: model:ir.model.fields,field_description:edi_account.field_account_move__disable_edi_auto
+msgid "Disable Edi Auto"
+msgstr ""
+
+#. module: edi_account
 #: model_terms:ir.ui.view,arch_db:edi_account.view_account_journal_form
 #: model_terms:ir.ui.view,arch_db:edi_account.view_partner_form
 msgid "EDI Configuration"
 msgstr ""
 
 #. module: edi_account
+#: model_terms:ir.ui.view,arch_db:edi_account.account_move_form_view
+msgid "Electronic Data Interchange"
+msgstr ""
+
+#. module: edi_account
+#: model:ir.ui.menu,name:edi_account.menu_account_edi_root
+msgid "Exchange records"
+msgstr ""
+
+#. module: edi_account
 #: model:ir.model,name:edi_account.model_account_move
 msgid "Journal Entries"
+msgstr ""
+
+#. module: edi_account
+#: model:ir.ui.menu,name:edi_account.menu_account_edi_exchange_record
+msgid "Moves"
+msgstr ""
+
+#. module: edi_account
+#: model:ir.model.fields,help:edi_account.field_account_move__disable_edi_auto
+msgid "When marked, EDI could be avoided"
 msgstr ""
