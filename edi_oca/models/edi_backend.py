@@ -47,6 +47,12 @@ class EDIBackend(models.Model):
         required=True,
         ondelete="restrict",
     )
+    output_sent_processed_auto = fields.Boolean(
+        help="""
+    Automatically set the record as processed after sending.
+    Usecase: the web service you send the file to processes it on the fly.
+    """
+    )
 
     def _get_component(self, exchange_record, key):
         candidates = self._get_component_usage_candidates(exchange_record, key)
@@ -278,7 +284,11 @@ class EDIBackend(models.Model):
             # TODO: maybe the send handler should return desired message and state
             message = exchange_record._exchange_status_message("send_ok")
             error = None
-            state = "output_sent"
+            state = (
+                "output_sent_and_processed"
+                if self.output_sent_processed_auto
+                else "output_sent"
+            )
             res = True
         finally:
             exchange_record.write(
