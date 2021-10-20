@@ -21,32 +21,63 @@
         <field name="model">edi.exchange.record</field>
         <field name="arch" type="xml">
             <form string="EDI Exchange Record">
-                <header>
-                    <button
-                        name="action_open_related_record"
-                        type="object"
-                        string="Related record"
-                    />
-                </header>
+                <field name="direction" invisible="1" />
+                <field name="retryable" invisible="1" />
+                <field name="exchange_file_auto_generate" invisible="1" />
+                <header />
                 <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button
+                            name="action_exchange_generate"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-cubes"
+                            attrs="{'invisible': ['|', ('edi_exchange_state', '!=', 'new'), ('exchange_file_auto_generate', '=', True)]}"
+                            string="Generate"
+                        />
+                        <button
+                            name="action_retry"
+                            type="object"
+                            icon="fa-refresh"
+                            string="Retry"
+                            attrs="{'invisible': [('retryable', '=', False)]}"
+                        />
+                        <button
+                            name="action_open_related_record"
+                            type="object"
+                            icon="fa-share-square-o"
+                            string="Related record"
+                            attrs="{'invisible': [('res_id', '=', False)]}"
+                        />
+                        <!-- FIXME: this `invisible` domain does not work -->
+                        <button
+                            name="action_open_related_exchanges"
+                            type="object"
+                            icon="fa-sitemap"
+                            string="Related exchanges"
+                            attrs="{'invisible': [('related_exchange_ids', '=', False)]}"
+                        />
+                    </div>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" />
                         <h1>
                             <field name="name" />
                         </h1>
                         <h2>
-                            <label for="identifier" />
+                            <label for="identifier" class="oe_edit_only" />
                             <field name="identifier" />
                         </h2>
                         <h2>
-                            <label for="external_identifier" />
+                            <label for="external_identifier" class="oe_edit_only" />
                             <field name="external_identifier" />
                         </h2>
                     </div>
                     <group name="wrapper">
-                        <group name="main">
+                        <group name="config">
                             <field name="type_id" />
                             <field name="backend_id" />
+                        </group>
+                        <group name="status" string="Status">
                             <field name="exchanged_on" />
                             <field name="edi_exchange_state" />
                             <field name="exchange_file" filename="exchange_filename" />
@@ -54,15 +85,24 @@
                                 name="exchange_filename"
                                 attrs="{'invisible': [('exchange_file', '!=', False)]}"
                             />
-                            <field name="direction" invisible="1" />
                         </group>
-                        <!-- TODO: move to a page? -->
-                        <group name="related">
+                        <group
+                            name="ack"
+                            string="ACK"
+                            attrs="{'invisible': [('ack_expected', '!=', True)]}"
+                        >
+                            <field name="ack_expected" />
                             <field name="ack_exchange_id" />
                             <field name="ack_received_on" />
-                            <field name="parent_id" />
-                            <!-- TODO: add button to get to a list view in the header -->
-                            <field name="related_exchange_ids" />
+                        </group>
+                        <group
+                            name="related_odoo_record"
+                            string="Related record"
+                            groups="base.group_no_one"
+                            attrs="{'invisible': [('res_id', '=', 0)]}"
+                        >
+                          <field name="res_id" />
+                          <field name="model" />
                         </group>
                     </group>
                     <notebook>
@@ -73,18 +113,32 @@
                         >
                             <field name="exchange_error" />
                         </page>
+                        <!-- FIXME: this `invisible` domain does not work -->
                         <page
-                            name="config"
-                            string="Configuration"
-                            groups="base.group_no_one"
+                            name="related_exchanges"
+                            string="Related exchanges"
+                            attrs="{'invisible': [('related_exchange_ids', '=', False), ('parent_id', '=', False)]}"
                         >
-                            <group>
-                                <field name="res_id" />
-                                <field name="model" />
+                            <group name="rel_exchanges">
+                              <field name="parent_id" />
                             </group>
+                            <field name="related_exchange_ids" nolabel="1" colspan="4">
+                              <tree>
+                                <field name="name" />
+                                <field name="identifier" />
+                                <field name="type_id" />
+                                <field name="exchanged_on" />
+                                <field name="ack_received_on" />
+                                <field name="edi_exchange_state" />
+                              </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
             </form>
         </field>
     </record>
