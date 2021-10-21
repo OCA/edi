@@ -7,7 +7,7 @@
     "version": "13.0.1.1.0",
     "category": "Accounting & Finance",
     "author": "Onestein, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/edi/",
+    "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "depends": ["account_invoice_ubl"],
     "data": ["views/res_config_settings.xml"],
