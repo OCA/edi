@@ -1,0 +1,11 @@
+diff a/.pre-commit-config.yaml b/.pre-commit-config.yaml	(rejected hunks)
+@@ -103,2 +103,8 @@ repos:
+       - id: setuptools-odoo-make-default
+-
++      - id: setuptools-odoo-get-requirements
++        name: Generate requirements.txt for an addons directory
++        entry: setuptools-odoo-get-requirements
++        args: ["--addons-dir=.", "--output=requirements.txt"]
++        language: python
++        pass_filenames: false
++        files: (__manifest__\.py|__openerp__\.py|__terp__\.py|setup\.py)$
