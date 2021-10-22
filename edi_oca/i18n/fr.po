@@ -49,6 +49,15 @@ msgid ""
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_backend__output_sent_processed_auto
+msgid ""
+"\n"
+"    Automatically set the record as processed after sending.\n"
+"    Usecase: the web service you send the file to processes it on the fly.\n"
+"    "
+msgstr ""
+
+#. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_consumer_mixin_buttons
 msgid ""
 "<i class=\"fa fa-retweet\"/>The record has some pending EDIs to be generated"
@@ -721,6 +730,11 @@ msgstr ""
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_type__direction__output
 msgid "Output"
 msgstr "Sortie"
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_backend__output_sent_processed_auto
+msgid "Output Sent Processed Auto"
+msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__parent_id
