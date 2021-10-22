@@ -91,6 +91,11 @@ msgid "Path to folder for pending operations"
 msgstr ""
 
 #. module: edi_storage
+#: model_terms:ir.ui.view,arch_db:edi_storage.edi_backend_view_form
+msgid "Storage"
+msgstr ""
+
+#. module: edi_storage
 #: model:ir.model.fields,field_description:edi_storage.field_edi_backend__storage_id
 msgid "Storage backend"
 msgstr ""
