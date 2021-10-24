@@ -171,6 +171,29 @@ class TestInvoiceImport(TransactionCase):
                     res_date = parsed_inv["date"]
                     self.assertEqual(fields.Date.to_string(res_date), "2021-07-14")
 
+    def test_date_parsing_with_accents(self):
+        testdict = {
+            "20 février 2021": "2021-02-20",
+            "25 décembre 2021": "2021-12-25",
+            "15 août 2021": "2021-08-15",
+            "25 décembre 2021": "2021-12-25",  # use combining acute accent \u0301
+            "15 août 2021": "2021-08-15",  # use combining circumflex accent \u0302
+        }
+        self.date_field.write(
+            {
+                "date_format": "dd-month-y4",
+                "date_separator": "space",
+            }
+        )
+        self.partner_config["lang_short"] = "fr"
+        for src_string, result in testdict.items():
+            raw_text = "Débit 15,12\n%s\nTotal TTC 12,99" % src_string
+            parsed_inv = {"failed_fields": []}
+            self.date_field._get_date(
+                parsed_inv, raw_text, self.partner_config, self.test_info
+            )
+            self.assertEqual(fields.Date.to_string(parsed_inv["date"]), result)
+
     def test_restrict_text(self):
         cut_test = {
             "T1 ici et là POUET là et par là POUET": {
