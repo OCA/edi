@@ -312,7 +312,9 @@ class ResPartner(models.Model):
             "mm": r"\d{1,2}",
             "y4": r"\d{4}",
             "y2": r"\d{2}",
-            "month": r"\p{L}{3,15}\.?",  # \p{L} : any unicode letter (but not digit)
+            "month": r"[\p{L}\p{Mn}]{3,15}\.?",
+            # \p{L} : any unicode letter (but not digit)
+            # \p{Mn} : non spacing mark, for example \u0301 combining acute accent
             # option dot for short month (e.g. 'feb.')
         }
         date_format2dt = {
