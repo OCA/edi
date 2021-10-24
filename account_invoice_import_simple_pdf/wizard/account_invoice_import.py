@@ -38,11 +38,23 @@ class AccountInvoiceImport(models.TransientModel):
         # Extract text from PDF
         # Very interesting reading:
         # https://github.com/erfelipe/PDFtextExtraction
-        res["all"] = ""
+        pages = []
         doc = fitz.open(fileobj.name)
         for page in doc:
-            res["all"] += page.getText("text")
-        res["first"] = doc[0].getText("text")
+            raw_pagetext = page.getText("text")
+            if raw_pagetext:
+                # Remove lonely accents
+                # example : Free mobile invoices for months with accents
+                # i.e. février, août, décembre
+                # that are extracted as f´evrier, aoˆut, d´ecembre
+                clean_pagetext = regex.sub(
+                    test_info["lonely_accents"], "", raw_pagetext
+                )
+                if clean_pagetext:
+                    pages.append(clean_pagetext)
+        res["all"] = " ".join(pages)
+        res["first"] = pages and pages[0] or ""
+
         res["all_no_space"] = regex.sub(
             "%s+" % test_info["space_pattern"], "", res["all"]
         )
@@ -96,6 +108,7 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _get_space_pattern(self):
         # https://en.wikipedia.org/wiki/Whitespace_character
+        # I cannot use \p{White_space} because it includes carriage return
         space_ints = [
             32,
             160,
@@ -116,6 +129,19 @@ class AccountInvoiceImport(models.TransientModel):
         return "[%s]" % "".join([chr(x) for x in space_ints])
 
     @api.model
+    def _get_lonely_accents(self):
+        lonely_accents = [
+            "\u00B4",  # acute accent
+            "\u0060",  # grave accent
+            "\u005E",  # circumflex accent
+            "\u00A8",  # diaeresis
+            "\u02CA",  # modifier letter acute accent
+            "\u02CB",  # modifier letter grave accent
+            "\u02C6",  # modifier letter circumflex accent
+        ]
+        return "[%s]" % "".join(lonely_accents)
+
+    @api.model
     def _simple_pdf_update_test_info(self, test_info):
         aiispfo = self.env["account.invoice.import.simple.pdf.fields"]
         test_info.update(
@@ -134,6 +160,7 @@ class AccountInvoiceImport(models.TransientModel):
                     ]
                 ),
                 "space_pattern": self._get_space_pattern(),
+                "lonely_accents": self._get_lonely_accents(),
             }
         )
 
