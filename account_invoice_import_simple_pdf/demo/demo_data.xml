@@ -23,7 +23,7 @@
     <field name="simple_pdf_date_separator">slash</field>
     <field name="simple_pdf_currency_id" ref="base.EUR" />
     <field name="simple_pdf_pages">first</field>
-    <field name="simple_pdf_decimal_separator">coma</field>
+    <field name="simple_pdf_decimal_separator">comma</field>
     <field name="simple_pdf_thousand_separator">space</field>
 </record>
 
