@@ -318,7 +318,7 @@ class TestInvoiceImport(TransactionCase):
             else:
                 self.amount_field.write({"extract_rule": "first"})
             for raw_txt in raw_text_list:
-                self.amount_field._get_amount(
+                self.amount_field._get_amount_total(
                     parsed_inv, raw_txt, partner_config, self.test_info
                 )
                 res_amount = parsed_inv["amount_total"]
