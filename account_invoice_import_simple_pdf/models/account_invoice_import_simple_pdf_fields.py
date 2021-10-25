@@ -309,7 +309,16 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         else:
             parsed_inv["failed_fields"].append(self.name)
 
-    def _get_amount(self, parsed_inv, raw_text, partner_config, test_info):
+    def _get_date_due(self, *args):
+        return self._get_date(*args)
+
+    def _get_date_start(self, *args):
+        return self._get_date(*args)
+
+    def _get_date_end(self, *args):
+        return self._get_date(*args)
+
+    def _get_amount_total(self, parsed_inv, raw_text, partner_config, test_info):
         thousand_sep = partner_config["thousand_sep"]
         if not thousand_sep:
             thousand_sep_pattern = ""
@@ -376,6 +385,12 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             valid_amounts, test_info, raise_if_none=raise_if_none
         )
         parsed_inv[self.name] = amount
+
+    def _get_amount_untaxed(self, *args):
+        return self._get_amount_total(*args)
+
+    def _get_amount_tax(self, *args):
+        return self._get_amount_total(*args)
 
     def _get_invoice_number(self, parsed_inv, raw_text, partner_config, test_info):
         partner = partner_config["recordset"]
