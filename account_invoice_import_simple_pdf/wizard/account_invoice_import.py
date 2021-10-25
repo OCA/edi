@@ -195,16 +195,15 @@ class AccountInvoiceImport(models.TransientModel):
         # Check field config
         for field in partner.simple_pdf_field_ids:
             logger.debug("Working on field %s", field.name)
-            if field.name.startswith("date"):
-                field._get_date(parsed_inv, raw_text, partner_config, test_info)
-            elif field.name.startswith("amount_"):
-                field._get_amount(parsed_inv, raw_text, partner_config, test_info)
-            elif field.name == "invoice_number":
-                field._get_invoice_number(
+            try:
+                getattr(field, "_get_%s" % field.name)(
                     parsed_inv, raw_text, partner_config, test_info
                 )
-            elif field.name == "description":
-                field._get_description(parsed_inv, raw_text, partner_config, test_info)
+            except AttributeError:
+                raise UserError(
+                    _("Missing parse method for field '%s'. This should never happen.")
+                    % field.name
+                )
 
         failed_fields = parsed_inv.pop("failed_fields")
         if failed_fields:
