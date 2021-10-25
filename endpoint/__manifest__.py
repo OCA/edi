@@ -10,6 +10,7 @@
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "website": "https://github.com/OCA/edi",
+    "depends": ["endpoint_route_handler"],
     "data": [
         "security/ir.model.access.csv",
         "demo/endpoint_demo.xml",
