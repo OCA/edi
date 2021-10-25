@@ -40,6 +40,7 @@ class TestEndpoint(CommonEndpoint):
                     "name": "Endpoint 2",
                     "route": "/demo/2",
                     "exec_mode": "code",
+                    "request_method": "GET",
                     "auth_type": "user_endpoint",
                 }
             )
@@ -111,7 +112,7 @@ class TestEndpoint(CommonEndpoint):
                 endpoint._validate_request(req)
 
     def test_routing(self):
-        route, info = self.endpoint._get_routing_info()
+        route, info, __ = self.endpoint._get_routing_info()
         self.assertEqual(route, "/demo/one")
         self.assertEqual(
             info,
@@ -132,7 +133,7 @@ class TestEndpoint(CommonEndpoint):
                 "exec_as_user_id": self.env.user.id,
             }
         )
-        __, info = endpoint._get_routing_info()
+        __, info, __ = endpoint._get_routing_info()
         self.assertEqual(
             info,
             {
@@ -146,7 +147,7 @@ class TestEndpoint(CommonEndpoint):
         # check prefix
         type(endpoint)._endpoint_route_prefix = "/foo"
         endpoint._compute_route()
-        __, info = endpoint._get_routing_info()
+        __, info, __ = endpoint._get_routing_info()
         self.assertEqual(
             info,
             {
@@ -159,5 +160,18 @@ class TestEndpoint(CommonEndpoint):
         )
         type(endpoint)._endpoint_route_prefix = ""
 
-    # TODO
-    # def test_unlink(self):
+    def test_unlink(self):
+        endpoint = self.endpoint.copy(
+            {
+                "route": "/delete/this",
+                "request_method": "POST",
+                "request_content_type": "text/plain",
+                "auth_type": "public",
+                "exec_as_user_id": self.env.user.id,
+            }
+        )
+        registry = endpoint._endpoint_registry
+        route = endpoint.route
+        endpoint.unlink()
+        self.assertTrue(registry.routing_update_required())
+        self.assertIn(route, [x.rule for x in registry._rules_to_drop])

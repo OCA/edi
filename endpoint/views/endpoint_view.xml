@@ -31,6 +31,7 @@
                         <page name="main" string="Main">
                             <group name="config1">
                                 <group name="main">
+                                    <field name="route_group" />
                                     <field name="exec_mode" />
                                     <field
                                         name="exec_as_user_id"
