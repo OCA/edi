@@ -9,6 +9,12 @@ import unittest
 from odoo.tests.common import HttpCase
 from odoo.tools.misc import mute_logger
 
+# odoo.addons.base.models.res_users: Login successful for db:openerp_test login:admin from n/a
+# endpoint.endpoint: Registered controller /demo/one/new (auth: user_endpoint)
+# odoo.addons.endpoint.models.ir_http: DROPPED /demo/one
+# odoo.addons.endpoint.models.ir_http: LOADED /demo/one/new
+# odoo.addons.endpoint.models.ir_http: Endpoint routing map re-loaded
+
 
 @unittest.skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
 class EndpointHttpCase(HttpCase):
