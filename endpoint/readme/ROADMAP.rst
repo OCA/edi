@@ -1,2 +1,2 @@
 * add validation of request data
-* add api docs
+* add api docs generation
