@@ -226,67 +226,67 @@ class TestInvoiceImport(TransactionCase):
         amount_test = {
             "$ 1.02": {
                 "decimal_separator": "dot",
-                "thousand_separator": "coma",
+                "thousand_separator": "comma",
                 "result": 1.02,
                 "currency": "USD",
             },
             "$ 459.09": {
                 "decimal_separator": "dot",
-                "thousand_separator": "coma",
+                "thousand_separator": "comma",
                 "result": 459.09,
                 "currency": "USD",
             },
             "$ 1,459.32": {
                 "decimal_separator": "dot",
-                "thousand_separator": "coma",
+                "thousand_separator": "comma",
                 "result": 1459.32,
                 "currency": "USD",
             },
             "1.459,32 €": {
-                "decimal_separator": "coma",
+                "decimal_separator": "comma",
                 "thousand_separator": "dot",
                 "result": 1459.32,
                 "currency": "EUR",
             },
             "59,32 €": {
-                "decimal_separator": "coma",
+                "decimal_separator": "comma",
                 "thousand_separator": "space",
                 "result": 59.32,
                 "currency": "EUR",
             },
             "781.459,32 €": {
-                "decimal_separator": "coma",
+                "decimal_separator": "comma",
                 "thousand_separator": "dot",
                 "result": 781459.32,
                 "currency": "EUR",
             },
             "781%s459,32€": {
-                "decimal_separator": "coma",
+                "decimal_separator": "comma",
                 "thousand_separator": "space",
                 "result": 781459.32,
                 "currency": "EUR",
             },
             "99459,32 €": {
-                "decimal_separator": "coma",
+                "decimal_separator": "comma",
                 "thousand_separator": "none",
                 "result": 99459.32,
                 "currency": "EUR",
             },
             "14%s459 XPF": {
-                "decimal_separator": "coma",
+                "decimal_separator": "comma",
                 "thousand_separator": "space",
                 "result": 14459,
                 "currency": "XPF",
             },  # XPF decimal places = 0
             "14%s459,123 XPF": {
-                "decimal_separator": "coma",
+                "decimal_separator": "comma",
                 "thousand_separator": "space",
                 "result": 14459.123,
                 "currency": "TND",
             },  # TND decimal places = 3
             "88,459.1234 VEF": {
                 "decimal_separator": "dot",
-                "thousand_separator": "coma",
+                "thousand_separator": "comma",
                 "result": 88459.1234,
                 "currency": "VEF",
             },  # VEF decimal places = 4
