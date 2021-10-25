@@ -65,12 +65,12 @@ class ResPartner(models.Model):
         # default="slash",
         string="Date Separator",
         help="If the date looks like 'Sep. 4, 2021', use 'space' as date "
-        "separator (Odoo will ignore the dot and coma).",
+        "separator (Odoo will ignore the dot and comma).",
     )
     simple_pdf_decimal_separator = fields.Selection(
         [
             ("dot", "dot"),
-            ("coma", "coma"),
+            ("comma", "comma"),
         ],
         string="Decimal Separator",
         help="If empty, Odoo will use the decimal separator configured on "
@@ -81,7 +81,7 @@ class ResPartner(models.Model):
             ("none", "none"),
             ("space", "space"),
             ("dot", "dot"),
-            ("coma", "coma"),
+            ("comma", "comma"),
         ],
         string="Thousand Separator",
         help="If empty, Odoo will use the thousand separator configured on "
@@ -137,8 +137,8 @@ class ResPartner(models.Model):
     @api.onchange("simple_pdf_decimal_separator")
     def simple_pdf_decimal_separator_change(self):
         if (
-            self.simple_pdf_decimal_separator == "coma"
-            and self.simple_pdf_thousand_separator == "coma"
+            self.simple_pdf_decimal_separator == "comma"
+            and self.simple_pdf_thousand_separator == "comma"
         ):
             self.simple_pdf_thousand_separator = "dot"
 
@@ -302,7 +302,7 @@ class ResPartner(models.Model):
             "slash": "/",
             "dash": "-",
             "dot": ".",
-            "coma": ",",
+            "comma": ",",
             "space": chr(32),  # regular space
             "none": "",
         }
