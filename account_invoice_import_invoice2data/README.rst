@@ -29,6 +29,8 @@ This module is an extension of the module *account_invoice_import*: it adds supp
 
 To know the full story behind the development of this module, read this `blog post <http://www.akretion.com/blog/akretions-christmas-present-for-the-odoo-community>`_.
 
+**WARNING**: an alternative module **account_invoice_import_simple_pdf** developped in July 2021 provides the same feature but has one big advantage: the accountant can add support for a new vendor by himself, no more invoice templates which require technical skill. This new module *account_invoice_import_simple_pdf* will probably replace the module *account_invoice_import_invoice2data* in future Odoo versions.
+
 **Table of contents**
 
 .. contents::
