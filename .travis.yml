@@ -15,6 +15,8 @@ addons:
       - expect-dev  # provides unbuffer utility
       - poppler-utils
       - libmupdf-dev
+      - mupdf-tools
+      - mupdf
 
 env:
   global:
