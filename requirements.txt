@@ -4,4 +4,4 @@ invoice2data
 factur-x
 dateparser
 regex
-PyMuPDF
+PyMuPDF==1.9.2
