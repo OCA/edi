@@ -2,6 +2,9 @@
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+
+from collections import defaultdict
+
 from openerp import api, models, _
 from openerp.exceptions import Warning as UserError
 from openerp.addons.purchase_order_import.wizard.order_response_import import (
@@ -195,7 +198,7 @@ class OrderResponseImport(models.TransientModel):
     def _guess_doc_status_from_lines(self, lines):
         """Document status is not mandatory: status in order lines can help"""
         super(OrderResponseImport, self)._guess_doc_status_from_lines(lines)
-        status = {"accepted": 0, "rejected": 0, "amend": 0}
+        status = defaultdict(int)
         for line in lines:
             if line.get("status"):
                 status[line["status"]] += 1
