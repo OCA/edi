@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 Camptcamp SA
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="endpoint_endpoint_form_view">
+        <field name="name">endpoint.endpoint.form</field>
+        <field name="model">endpoint.endpoint</field>
+        <field name="arch" type="xml">
+            <form>
+                <header />
+                <field name="active" invisible="1" />
+                <widget
+                    name="web_ribbon"
+                    title="Archived"
+                    bg_color="bg-danger"
+                    attrs="{'invisible': [('active', '=', True)]}"
+                />
+                <sheet>
+                    <div name="title" class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <label for="route" class="oe_edit_only" />
+                        <h2>
+                            <field name="route" />
+                        </h2>
+                    </div>
+                    <notebook>
+                        <page name="main" string="Main">
+                            <group name="config1">
+                                <group name="main">
+                                    <field name="route_group" />
+                                    <field name="exec_mode" />
+                                    <field
+                                        name="exec_as_user_id"
+                                        attrs="{'required': [('auth_type', '=', 'public')]}"
+                                    />
+                                </group>
+                                <group name="auth" string="Auth">
+                                    <field name="auth_type" />
+                                </group>
+                            </group>
+                            <group name="config2">
+                                <group name="request" string="Request">
+                                    <field name="request_method" />
+                                    <field
+                                        name="request_content_type"
+                                        attrs="{'required': [('request_method', 'in', ('POST', 'PUT'))],
+                                                   'invisible': [('request_method', 'not in', ('POST', 'PUT'))]}"
+                                    />
+                                </group>
+                            </group>
+                        </page>
+                        <page
+                            name="code"
+                            string="Code"
+                            attrs="{'invisible': [('exec_mode', '!=', 'code')]}"
+                        >
+                            <field name="code_snippet" widget="ace" />
+                        </page>
+                        <page
+                            name="code_help"
+                            string="Code Help"
+                            attrs="{'invisible': [('exec_mode', '!=', 'code')]}"
+                        >
+                            <field name="code_snippet_docs" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="endpoint_endpoint_search_view">
+        <field name="name">endpoint.endpoint.search</field>
+        <field name="model">endpoint.endpoint</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="route" />
+                <field name="exec_mode" />
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="endpoint_endpoint_tree_view">
+        <field name="name">endpoint.endpoint.tree</field>
+        <field name="model">endpoint.endpoint</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="route" />
+                <field name="exec_mode" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="endpoint_endpoint_act_window">
+        <field name="name">Endpoints</field>
+        <field name="res_model">endpoint.endpoint</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record model="ir.ui.menu" id="endpoint_endpoint_menu">
+        <field name="name">Endpoints</field>
+        <field name="parent_id" ref="base.menu_custom" />
+        <field name="action" ref="endpoint_endpoint_act_window" />
+        <field name="sequence" eval="100" />
+    </record>
+
+</odoo>
