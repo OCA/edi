@@ -1,0 +1,218 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* endpoint
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: endpoint
+#: code:addons/endpoint/models/endpoint_mixin.py:0
+#, python-format
+msgid "'Exec as user' is mandatory for public endpoints."
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__active
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__active
+msgid "Active"
+msgstr ""
+
+#. module: endpoint
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+msgid "Archived"
+msgstr ""
+
+#. module: endpoint
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+msgid "Auth"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__auth_type
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__auth_type
+msgid "Auth Type"
+msgstr ""
+
+#. module: endpoint
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+msgid "Code"
+msgstr ""
+
+#. module: endpoint
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+msgid "Code Help"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__code_snippet
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__code_snippet
+msgid "Code Snippet"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__code_snippet_docs
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__code_snippet_docs
+msgid "Code Snippet Docs"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__csrf
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__csrf
+msgid "Csrf"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__display_name
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model,name:endpoint.model_endpoint_endpoint
+msgid "Endpoint"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__endpoint_hash
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__endpoint_hash
+msgid "Endpoint Hash"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model,name:endpoint.model_endpoint_mixin
+msgid "Endpoint mixin"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.actions.act_window,name:endpoint.endpoint_endpoint_act_window
+#: model:ir.ui.menu,name:endpoint.endpoint_endpoint_menu
+msgid "Endpoints"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__exec_as_user_id
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__exec_as_user_id
+msgid "Exec As User"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__exec_mode
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__exec_mode
+msgid "Exec Mode"
+msgstr ""
+
+#. module: endpoint
+#: code:addons/endpoint/models/endpoint_mixin.py:0
+#, python-format
+msgid "Exec mode is set to `Code`: you must provide a piece of code"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__id
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__id
+msgid "ID"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,help:endpoint.field_endpoint_endpoint__endpoint_hash
+#: model:ir.model.fields,help:endpoint.field_endpoint_mixin__endpoint_hash
+msgid "Identify the route with its main params"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint____last_update
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: endpoint
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+msgid "Main"
+msgstr ""
+
+#. module: endpoint
+#: code:addons/endpoint/models/endpoint_mixin.py:0
+#, python-format
+msgid "Missing handler for exec mode %s"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__name
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__name
+msgid "Name"
+msgstr ""
+
+#. module: endpoint
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+msgid "Request"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__request_content_type
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__request_content_type
+msgid "Request Content Type"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__request_method
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__request_method
+msgid "Request Method"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__route
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__route
+msgid "Route"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__route_group
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__route_group
+msgid "Route Group"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_endpoint__route_type
+#: model:ir.model.fields,field_description:endpoint.field_endpoint_mixin__route_type
+msgid "Route Type"
+msgstr ""
+
+#. module: endpoint
+#: model:ir.model.fields,help:endpoint.field_endpoint_endpoint__route_group
+#: model:ir.model.fields,help:endpoint.field_endpoint_mixin__route_group
+msgid "Use this to classify routes together"
+msgstr ""
+
+#. module: endpoint
+#: code:addons/endpoint/models/endpoint_mixin.py:0
+#, python-format
+msgid "code_snippet should return a dict into `result` variable."
+msgstr ""
