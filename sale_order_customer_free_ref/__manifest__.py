@@ -10,7 +10,7 @@
     "An Id and a Free reference. The existing field is transformed "
     "into a computed one.",
     "author": "Camptocamp SA, Odoo Community Association (OCA)",
-    "website": "https://github.com/oca/edi",
+    "website": "https://github.com/OCA/edi",
     "depends": ["sale"],
     "data": ["views/sale_order.xml", "views/account_move.xml"],
     "installable": True,
