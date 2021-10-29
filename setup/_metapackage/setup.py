@@ -30,6 +30,8 @@ setuptools.setup(
         'odoo14-addon-edi_oca',
         'odoo14-addon-edi_storage_oca',
         'odoo14-addon-edi_webservice_oca',
+        'odoo14-addon-endpoint',
+        'odoo14-addon-endpoint_route_handler',
         'odoo14-addon-partner_identification_import',
         'odoo14-addon-purchase_order_ubl',
         'odoo14-addon-sale_order_customer_free_ref',
