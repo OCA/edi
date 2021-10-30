@@ -9,7 +9,7 @@
     "summary": "Add an HTTP endpoint to import UBL formatted orders"
     "automatically as sales order",
     "author": "Camptocamp,Odoo Community Association (OCA)",
-    "website": "https://github.com/oca/edi",
+    "website": "https://github.com/OCA/edi",
     "depends": ["auth_api_key", "queue_job", "sale_order_import_ubl"],
     "data": [
         "data/res_users.xml",

@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "summary": "Glue module for Purchase Order UBL and Stock/Inventory",
     "author": "Akretion, Onestein, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/edi/",
+    "website": "https://github.com/OCA/edi",
     "depends": ["purchase_stock", "purchase_order_ubl"],
     "installable": True,
     "auto_install": True,

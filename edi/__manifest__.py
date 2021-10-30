@@ -12,6 +12,7 @@
     "development_status": "Alpha",
     "license": "LGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
+    "website": "https://github.com/OCA/edi",
     "maintainers": ["simahawk"],
     "depends": [
         "base_edi",

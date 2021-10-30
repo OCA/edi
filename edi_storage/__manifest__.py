@@ -11,6 +11,7 @@
     "development_status": "Alpha",
     "license": "LGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
+    "website": "https://github.com/OCA/edi",
     "depends": ["edi", "storage_backend", "component"],
     "data": [
         "data/cron.xml",
