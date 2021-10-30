@@ -58,7 +58,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 )
                 if not eval_ctx.get("result", False):
                     continue
-            result[exchange_type.id] = exchange_type.display_name
+            result[exchange_type.id] = exchange_type.name
         return result
 
     def _get_eval_context(self):
