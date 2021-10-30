@@ -112,6 +112,12 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
         mocked = functools.partial(self._mocked_backend_list_files, mocked_paths)
         return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".list_files", mocked)
 
+    def _mock_storage_backend_find_files(self, result):
+        def _result(self, pattern, relative_path=None, **kw):
+            return result
+
+        return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".find_files", _result)
+
     def _test_result(
         self,
         record,

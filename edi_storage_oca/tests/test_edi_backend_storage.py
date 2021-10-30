@@ -223,7 +223,9 @@ class TestEDIBackendOutput(TestEDIStorageBase):
         )
         self.assertEqual(existing, 0)
         # Run cron action:
-        self._test_run_cron_pending_input(mocked_paths)
+        found_files = [input_dir + fname for fname in file_names]
+        with self._mock_storage_backend_find_files(found_files):
+            self._test_run_cron_pending_input(mocked_paths)
         new_records = self.env["edi.exchange.record"].search(
             [("backend_id", "=", self.backend.id), ("type_id", "=", exch_type.id)]
         )
