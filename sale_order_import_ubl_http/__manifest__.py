@@ -3,7 +3,7 @@
 
 {
     "name": "Sale Order Import Http",
-    "version": "13.0.1.1.1",
+    "version": "13.0.1.1.2",
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Add an HTTP endpoint to import UBL formatted orders"
