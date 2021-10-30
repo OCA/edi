@@ -89,7 +89,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
             self.consumer_record.expected_edi_configuration[
                 str(self.exchange_type_out.id)
             ],
-            self.exchange_type_out.display_name,
+            self.exchange_type_out.name,
         )
         action = self.consumer_record.edi_create_exchange_record(
             self.exchange_type_out.id
