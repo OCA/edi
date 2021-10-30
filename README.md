@@ -20,41 +20,41 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [account_e-invoice_generate](account_e-invoice_generate/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Technical module to generate PDF invoices with embedded XML file
-[account_invoice_export](account_invoice_export/) | 13.0.1.2.0 |  | Account Invoice Export
-[account_invoice_export_server_env](account_invoice_export_server_env/) | 13.0.1.0.1 |  | Server environment for Account Invoice Export
+[account_invoice_export](account_invoice_export/) | 13.0.1.2.1 |  | Account Invoice Export
+[account_invoice_export_server_env](account_invoice_export_server_env/) | 13.0.1.0.2 |  | Server environment for Account Invoice Export
 [account_invoice_facturx](account_invoice_facturx/) | 13.0.1.1.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X/ZUGFeRD customer invoices
 [account_invoice_facturx_py3o](account_invoice_facturx_py3o/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X invoices with Py3o reporting engine
-[account_invoice_ubl](account_invoice_ubl/) | 13.0.1.0.6 |  | Generate UBL XML file for customer invoices/refunds
-[account_invoice_ubl_email_attachment](account_invoice_ubl_email_attachment/) | 13.0.1.1.0 |  | Automatically adds the UBL file to the email.
-[base_business_document_import](base_business_document_import/) | 13.0.2.0.0 |  | Provides technical tools to import sale orders or supplier invoices
+[account_invoice_ubl](account_invoice_ubl/) | 13.0.1.0.7 |  | Generate UBL XML file for customer invoices/refunds
+[account_invoice_ubl_email_attachment](account_invoice_ubl_email_attachment/) | 13.0.1.1.1 |  | Automatically adds the UBL file to the email.
+[base_business_document_import](base_business_document_import/) | 13.0.2.0.1 |  | Provides technical tools to import sale orders or supplier invoices
 [base_ebill_payment_contract](base_ebill_payment_contract/) | 13.0.1.0.0 |  | Base for managing e-billing contracts
-[base_edi](base_edi/) | 13.0.1.0.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module to aggregate EDI features.
+[base_edi](base_edi/) | 13.0.1.0.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Base module for Factur-X/ZUGFeRD
-[base_ubl](base_ubl/) | 13.0.2.4.0 |  | Base module for Universal Business Language (UBL)
-[base_ubl_payment](base_ubl_payment/) | 13.0.1.0.0 |  | Payment-related code for Universal Business Language (UBL)
-[edi](edi/) | 13.0.1.21.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
+[base_ubl](base_ubl/) | 13.0.2.4.1 |  | Base module for Universal Business Language (UBL)
+[base_ubl_payment](base_ubl_payment/) | 13.0.1.0.1 |  | Payment-related code for Universal Business Language (UBL)
+[edi](edi/) | 13.0.1.21.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_account](edi_account/) | 13.0.1.1.0 |  | Define EDI Configuration for Account Moves
 [edi_backend_partner](edi_backend_partner/) | 13.0.1.0.0 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
-[edi_exchange_template](edi_exchange_template/) | 13.0.1.7.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
-[edi_storage](edi_storage/) | 13.0.1.8.0 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
-[edi_voxel](edi_voxel/) | 13.0.1.0.1 |  | Base module for connecting with Voxel
-[edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.1.2 |  | Sends account invoices to Voxel.
-[edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.3 |  | Import sale order from Voxel.
+[edi_exchange_template](edi_exchange_template/) | 13.0.1.7.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
+[edi_storage](edi_storage/) | 13.0.1.8.1 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
+[edi_voxel](edi_voxel/) | 13.0.1.0.2 |  | Base module for connecting with Voxel
+[edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.1.3 |  | Sends account invoices to Voxel.
+[edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.4 |  | Import sale order from Voxel.
 [edi_voxel_sale_secondary_unit](edi_voxel_sale_secondary_unit/) | 13.0.1.0.0 | [![ernestotejeda](https://github.com/ernestotejeda.png?size=30px)](https://github.com/ernestotejeda) | Map Voxel UoM to Sale Secondary UoM and Use Them
 [edi_voxel_secondary_unit](edi_voxel_secondary_unit/) | 13.0.1.0.0 | [![ernestotejeda](https://github.com/ernestotejeda.png?size=30px)](https://github.com/ernestotejeda) | Add Voxel UoM code to Secondary UoM model
-[edi_voxel_stock_picking](edi_voxel_stock_picking/) | 13.0.1.0.3 |  | Sends stock picking report to Voxel.
+[edi_voxel_stock_picking](edi_voxel_stock_picking/) | 13.0.1.0.4 |  | Sends stock picking report to Voxel.
 [edi_voxel_stock_picking_secondary_unit](edi_voxel_stock_picking_secondary_unit/) | 13.0.1.0.0 | [![ernestotejeda](https://github.com/ernestotejeda.png?size=30px)](https://github.com/ernestotejeda) | Export Secondary UoMs Voxel Code in picking Voxel documents
 [edi_webservice](edi_webservice/) | 13.0.1.2.0 |  | Defines webservice integration from EDI Exchange records
-[edi_xml](edi_xml/) | 13.0.1.2.1 |  | Base module for EDI exchange using XML files.
-[partner_identification_import](partner_identification_import/) | 13.0.2.0.0 |  | Provides partner matching on extra ID
-[purchase_order_ubl](purchase_order_ubl/) | 13.0.1.2.0 |  | Embed UBL XML file inside the PDF purchase order
-[purchase_stock_ubl](purchase_stock_ubl/) | 13.0.1.1.0 |  | Glue module for Purchase Order UBL and Stock/Inventory
-[sale_order_customer_free_ref](sale_order_customer_free_ref/) | 13.0.1.0.0 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
-[sale_order_import](sale_order_import/) | 13.0.2.1.1 |  | Import RFQ or sale orders from files
-[sale_order_import_ubl](sale_order_import_ubl/) | 13.0.2.1.0 |  | Import UBL XML sale order files
-[sale_order_import_ubl_customer_free_ref](sale_order_import_ubl_customer_free_ref/) | 13.0.1.0.0 |  | Extract CustomerReference from sale UBL
-[sale_order_import_ubl_http](sale_order_import_ubl_http/) | 13.0.1.1.1 |  | Add an HTTP endpoint to import UBL formatted ordersautomatically as sales order
-[sale_order_ubl](sale_order_ubl/) | 13.0.1.0.0 |  | Embed UBL XML file inside the PDF quotation
+[edi_xml](edi_xml/) | 13.0.1.2.2 |  | Base module for EDI exchange using XML files.
+[partner_identification_import](partner_identification_import/) | 13.0.2.0.1 |  | Provides partner matching on extra ID
+[purchase_order_ubl](purchase_order_ubl/) | 13.0.1.2.1 |  | Embed UBL XML file inside the PDF purchase order
+[purchase_stock_ubl](purchase_stock_ubl/) | 13.0.1.1.1 |  | Glue module for Purchase Order UBL and Stock/Inventory
+[sale_order_customer_free_ref](sale_order_customer_free_ref/) | 13.0.1.0.1 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
+[sale_order_import](sale_order_import/) | 13.0.2.1.2 |  | Import RFQ or sale orders from files
+[sale_order_import_ubl](sale_order_import_ubl/) | 13.0.2.1.1 |  | Import UBL XML sale order files
+[sale_order_import_ubl_customer_free_ref](sale_order_import_ubl_customer_free_ref/) | 13.0.1.0.1 |  | Extract CustomerReference from sale UBL
+[sale_order_import_ubl_http](sale_order_import_ubl_http/) | 13.0.1.1.2 |  | Add an HTTP endpoint to import UBL formatted ordersautomatically as sales order
+[sale_order_ubl](sale_order_ubl/) | 13.0.1.0.1 |  | Embed UBL XML file inside the PDF quotation
 [webservice](webservice/) | 13.0.1.0.1 |  | Defines webservice abstract definition to be used generally
 
 [//]: # (end addons)
