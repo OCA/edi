@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+
+  <record id="auth_api_key_demo" model="auth.api.key">
+    <field name="name">Endpoint API key demo</field>
+    <field name="key">cZ6dF2UQwNcm</field>
+    <field name="user_id" ref="base.user_demo" />
+  </record>
+
+  <record id="auth_api_key_demo2" model="auth.api.key">
+    <field name="name">Endpoint API key demo 2</field>
+    <field name="key">kV47QyOTC5mS</field>
+    <field name="user_id" ref="base.user_demo" />
+  </record>
+
+  <record id="auth_api_key_group_demo" model="auth.api.key.group">
+    <field name="name">Demo Group 1</field>
+    <field name="code">demo_group1</field>
+    <field name="auth_api_key_ids" eval="[(4, ref('auth_api_key_demo'))]" />
+  </record>
+
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="endpoint_demo_1" model="endpoint.endpoint">
+        <field name="name">Demo Endpoint - auth api key</field>
+        <field name="route">/demo/api/key</field>
+        <field name="request_method">GET</field>
+        <field name="auth_type">api_key</field>
+        <field
+            name="auth_api_key_group_ids"
+            eval="[(4, ref('auth_api_key_group_demo'))]"
+        />
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+result = {"response": Response("ok")}
+        </field>
+    </record>
+
+</odoo>
