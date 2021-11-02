@@ -104,8 +104,8 @@ class EDIExchangeRecord(models.Model):
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
         (
             "external_identifier_uniq",
-            "unique(external_identifier)",
-            "The external_identifier must be unique.",
+            "unique(external_identifier, backend_id, type_id)",
+            "The external_identifier must be unique for a type and a backend.",
         ),
     ]
 
