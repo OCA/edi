@@ -38,10 +38,10 @@ addon | version | maintainers | summary
 [base_ubl_payment](base_ubl_payment/) | 14.0.1.0.0 |  | Payment-related code for Universal Business Language (UBL)
 [edi_account_oca](edi_account_oca/) | 14.0.1.0.0 |  | Define EDI Configuration for Account Moves
 [edi_backend_partner_oca](edi_backend_partner_oca/) | 14.0.1.0.0 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
-[edi_endpoint_oca](edi_endpoint_oca/) | 14.0.1.0.0 |  | Base module allowing configuration of custom endpoints for EDI framework.
+[edi_endpoint_oca](edi_endpoint_oca/) | 14.0.1.1.0 |  | Base module allowing configuration of custom endpoints for EDI framework.
 [edi_exchange_template_oca](edi_exchange_template_oca/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
-[edi_oca](edi_oca/) | 14.0.1.4.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
-[edi_storage_oca](edi_storage_oca/) | 14.0.1.3.0 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
+[edi_oca](edi_oca/) | 14.0.1.5.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
+[edi_storage_oca](edi_storage_oca/) | 14.0.1.4.0 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_webservice_oca](edi_webservice_oca/) | 14.0.1.1.0 |  | Defines webservice integration from EDI Exchange records
 [endpoint](endpoint/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide custom endpoint machinery.
 [endpoint_auth_api_key](endpoint_auth_api_key/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide API key auth for endpoints.
