@@ -47,7 +47,7 @@
                     and can't find how they are supposed to work.
                     Probably not supported at all. -->
                     <field
-                        attrs="{'invisible': [('direction', '=', 'input')]}"
+                        attrs="{'invisible': [('direction', 'in', ('input', False))]}"
                         name="edi_exchange_state"
                         widget="statusbar"
                         statusbar_visible="new,validate_error,output_pending,output_error_on_send,output_sent,output_sent_and_processed,output_sent_and_error"
@@ -61,7 +61,7 @@
                         }'
                     />
                     <field
-                        attrs="{'invisible': [('direction', '=', 'output')]}"
+                        attrs="{'invisible': [('direction', 'in', ('output', False))]}"
                         name="edi_exchange_state"
                         widget="statusbar"
                         statusbar_visible="new,validate_error,input_pending,input_received,input_receive_error,input_processed,input_processed_error"
