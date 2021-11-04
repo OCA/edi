@@ -52,12 +52,14 @@ class BusinessDocumentImport(models.AbstractModel):
                 )
             if unmatched:
                 raise self.user_error_wrap(
+                    "_hook_match_partner",
+                    partner_dict,
                     _(
                         "Odoo couldn't find a partner corresponding to the "
                         "following information extracted from the business document:\n"
                         "{}"
                     )
                     .format("or\n")
-                    .join(unmatched)
+                    .join(unmatched),
                 )
         return super()._hook_match_partner(partner_dict, chatter_msg, domain, order)
