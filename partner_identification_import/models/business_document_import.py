@@ -55,7 +55,7 @@ class BusinessDocumentImport(models.AbstractModel):
                         "following information extracted from the business document:\n"
                         "{}"
                     )
-                    .format_("or\n")
+                    .format("or\n")
                     .join(unmatched)
                 )
         return super()._hook_match_partner(partner_dict, chatter_msg, domain, order)
