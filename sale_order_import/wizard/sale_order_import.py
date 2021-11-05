@@ -98,6 +98,7 @@ class SaleOrderImport(models.TransientModel):
             error_msg = None
         except etree.XMLSyntaxError:
             error_msg = _("This XML file is not XML-compliant")
+            return xml_root, error_msg
         try:
             self.parse_xml_order(xml_root, detect_doc_type=True)
         except UserError:
