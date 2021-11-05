@@ -62,7 +62,7 @@ class SaleOrderImport(models.TransientModel):
             elif filetype and filetype[0] in ["application/xml", "text/xml"]:
                 self.csv_import = False
                 xml_root, error_msg = self._parse_xml(b64decode(self.order_file))
-                if not xml_root and error_msg:
+                if not len(xml_root) and error_msg:
                     raise UserError(error_msg)
                 doc_type = self.parse_xml_order(xml_root, detect_doc_type=True)
                 self.doc_type = doc_type
