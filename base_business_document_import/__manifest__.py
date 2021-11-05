@@ -4,7 +4,7 @@
 
 {
     "name": "Base Business Document Import",
-    "version": "14.0.2.1.0",
+    "version": "14.0.2.1.1",
     "category": "Tools",
     "license": "AGPL-3",
     "summary": "Provides technical tools to import sale orders or supplier invoices",
