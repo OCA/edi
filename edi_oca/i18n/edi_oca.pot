@@ -848,7 +848,7 @@ msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.constraint,message:edi_oca.constraint_edi_exchange_record_external_identifier_uniq
-msgid "The external_identifier must be unique."
+msgid "The external_identifier must be unique for a type and a backend."
 msgstr ""
 
 #. module: edi_oca
