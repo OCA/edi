@@ -43,7 +43,7 @@ addon | version | maintainers | summary
 [edi_oca](edi_oca/) | 14.0.1.6.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_storage_oca](edi_storage_oca/) | 14.0.1.4.0 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_webservice_oca](edi_webservice_oca/) | 14.0.1.1.0 |  | Defines webservice integration from EDI Exchange records
-[endpoint](endpoint/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide custom endpoint machinery.
+[endpoint](endpoint/) | 14.0.1.0.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide custom endpoint machinery.
 [endpoint_auth_api_key](endpoint_auth_api_key/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide API key auth for endpoints.
 [endpoint_route_handler](endpoint_route_handler/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Provide mixin and tool to generate custom endpoints on the fly.
 [partner_identification_import](partner_identification_import/) | 14.0.1.0.1 |  | Provides partner matching on extra ID
