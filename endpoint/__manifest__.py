@@ -13,7 +13,9 @@
     "depends": ["endpoint_route_handler"],
     "data": [
         "security/ir.model.access.csv",
-        "demo/endpoint_demo.xml",
         "views/endpoint_view.xml",
+    ],
+    "demo": [
+        "demo/endpoint_demo.xml",
     ],
 }
