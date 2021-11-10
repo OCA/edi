@@ -36,8 +36,12 @@ class AccountMove(models.Model):
             note.text = self.narration
         doc_currency = etree.SubElement(parent_node, ns["cbc"] + "DocumentCurrencyCode")
         doc_currency.text = self.currency_id.name
-        buyer_reference = etree.SubElement(parent_node, ns["cbc"] + "BuyerReference")
-        buyer_reference.text = self.ref or ""
+        # TODO: enable when below commit of 15.0 is back ported to 14.0
+        # [IMP] account_edi(_*): Standalone UBL format + edi.format inheritance
+        # https://github.com/odoo/odoo/commit/b58810a77bb4c432a6aef18413659b1ea7b25c71
+        # or when migrating to 15.0
+        # buyer_reference = etree.SubElement(parent_node, ns["cbc"] + "BuyerReference")
+        # buyer_reference.text = self.ref or ""
 
     def _ubl_add_order_reference(self, parent_node, ns, version="2.1"):
         self.ensure_one()
