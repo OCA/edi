@@ -14,7 +14,6 @@
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "depends": ["base_edi", "edi_oca", "endpoint"],
     "data": [
-        "demo/edi_backend_demo.xml",
         "security/ir.model.access.csv",
         "views/edi_backend_views.xml",
         "views/edi_endpoint_views.xml",
