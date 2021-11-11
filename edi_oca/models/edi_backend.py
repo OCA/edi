@@ -63,7 +63,13 @@ class EDIBackend(models.Model):
         match_attrs = self._component_match_attrs(exchange_record, key)
         # Model is not granted to be there
         model = exchange_record.model or self._name
-        return self._find_component(
+        # Load additional ctx keys if any
+        collection = self
+        # TODO: document this
+        env_ctx = record_conf.get("env_ctx", {})
+        if env_ctx:
+            collection = collection.with_context(**env_ctx)
+        return collection._find_component(
             model,
             candidates,
             work_ctx=work_ctx,
