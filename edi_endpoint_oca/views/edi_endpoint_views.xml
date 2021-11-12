@@ -35,6 +35,23 @@
                 <field name="backend_id" />
                 <field name="backend_type_id" />
                 <field name="exchange_type_id" />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_backend_type_id"
+                        string="Backend type"
+                        context="{'group_by': 'backend_type_id'}"
+                    />
+                    <filter
+                        name="group_by_backend_id"
+                        string="Backend"
+                        context="{'group_by': 'backend_id'}"
+                    />
+                    <filter
+                        name="group_by_exchange_type_id"
+                        string="Exchange type"
+                        context="{'group_by': 'exchange_type_id'}"
+                    />
+                </group>
             </field>
         </field>
     </record>
@@ -46,6 +63,7 @@
         <field name="arch" type="xml">
             <field name="exec_mode" position="after">
                 <field name="backend_id" />
+                <field name="backend_type_id" />
                 <field name="exchange_type_id" />
             </field>
         </field>
@@ -56,7 +74,7 @@
         <field name="res_model">edi.endpoint</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
-        <field name="context">{}</field>
+        <field name="context">{"search_default_all": 1}</field>
     </record>
 
     <record model="ir.ui.menu" id="edi_endpoint_menu">
