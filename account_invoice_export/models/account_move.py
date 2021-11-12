@@ -17,14 +17,21 @@ class AccountMove(models.Model):
     send_through_http = fields.Boolean(related="transmit_method_id.send_through_http")
 
     def export_invoice(self):
+        resend_invoice = self.env.context.get("resend_ebill", False)
         for invoice in self:
             description = "{} - Export ebill".format(invoice.transmit_method_id.name)
-            invoice.with_delay(description=description)._job_export_invoice()
+            invoice.with_delay(description=description)._job_export_invoice(
+                resend_invoice
+            )
 
-    def _job_export_invoice(self):
+    def _job_export_invoice(self, resend_invoice=False):
         """Export ebill to external server and update the chatter."""
         self.ensure_one()
-        if self.invoice_exported and self.invoice_export_confirmed:
+        if (
+            not resend_invoice
+            and self.invoice_exported
+            and self.invoice_export_confirmed
+        ):
             return _("Nothing done, invoice has already been exported before.")
         try:
             res = self._export_invoice()
@@ -56,11 +63,8 @@ class AccountMove(models.Model):
             raise UserError(_("Transmit method is not configured to send through HTTP"))
         file_data = self._get_file_for_transmission_method()
         headers = self.transmit_method_id.get_transmission_http_header()
-        res = requests.post(
-            self.transmit_method_id.destination_url,
-            headers=headers,
-            files=file_data,
-        )
+        url = self.transmit_method_id.get_transmission_url()
+        res = requests.post(url, headers=headers, files=file_data)
         if res.status_code != 200:
             raise UserError(
                 _(
