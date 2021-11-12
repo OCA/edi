@@ -472,13 +472,13 @@ msgstr ""
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s not received"
+msgid "Exchange not received"
 msgstr ""
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s not valid"
+msgid "Exchange not valid"
 msgstr ""
 
 #. module: edi_oca
@@ -490,19 +490,19 @@ msgstr ""
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s processed with errors"
+msgid "Exchange processed with errors"
 msgstr ""
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s received successfully "
+msgid "Exchange received successfully "
 msgstr ""
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s sent"
+msgid "Exchange sent"
 msgstr ""
 
 #. module: edi_oca
