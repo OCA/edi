@@ -486,38 +486,38 @@ msgstr "Lien externe"
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s not received"
-msgstr "Fichier %s non reçu"
+msgid "Exchange not received"
+msgstr "Échange non reçu"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s not valid"
-msgstr "Fichier %s non valide"
+msgid "Exchange not valid"
+msgstr "Échange non valide"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "File %s processed successfully "
-msgstr "Fichier %s traité avec succès "
+msgstr "Échange traité avec succès "
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s processed with errors"
-msgstr "Fichier %s traité avec des erreurs"
+msgid "Exchange processed with errors"
+msgstr "Échange traité avec des erreurs"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s received successfully "
-msgstr "Fichier %s traité avec succès "
+msgid "Exchange received successfully "
+msgstr "Échange traité avec succès "
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "File %s sent"
-msgstr "Fichier %s envoyé"
+msgid "Exchange sent"
+msgstr "Échange envoyé"
 
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__enable_domain
