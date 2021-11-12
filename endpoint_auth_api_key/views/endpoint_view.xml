@@ -13,6 +13,12 @@
                     widget="many2many_tags"
                     attrs="{'invisible': [('auth_type', '!=', 'api_key')]}"
                 />
+                <button
+                    class="btn-sm"
+                    type="object"
+                    name="action_view_api_key_groups"
+                    string="Manage groups"
+                />
             </group>
         </field>
     </record>
