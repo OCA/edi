@@ -81,6 +81,18 @@
                 <field name="name" />
                 <field name="route" />
                 <field name="exec_mode" />
+                <field name="active" />
+                <filter
+                    string="All"
+                    name="all"
+                    domain="['|', ('active', '=', False), ('active', '=', True)]"
+                />
+                <separator />
+                <filter
+                    string="Archived"
+                    name="inactive"
+                    domain="[('active', '=', False)]"
+                />
             </search>
         </field>
     </record>
@@ -89,10 +101,11 @@
         <field name="name">endpoint.endpoint.tree</field>
         <field name="model">endpoint.endpoint</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree decoration-muted="(not active)">
                 <field name="name" />
                 <field name="route" />
                 <field name="exec_mode" />
+                <field name="active" widget="boolean_toggle" />
             </tree>
         </field>
     </record>
@@ -102,7 +115,7 @@
         <field name="res_model">endpoint.endpoint</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
-        <field name="context">{}</field>
+        <field name="context">{'search_default_all': 1}</field>
     </record>
 
     <record model="ir.ui.menu" id="endpoint_endpoint_menu">
