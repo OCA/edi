@@ -13,7 +13,7 @@ class EdiInputPdf2DataProcess(Component):
     _exchange_type = "pdf2data"
 
     def process(self):
-        data, template = (
+        extracted_text, data, template = (
             self.env["pdf2data.template"]
             .search([])
             ._parse_pdf(self.exchange_record.exchange_file)
