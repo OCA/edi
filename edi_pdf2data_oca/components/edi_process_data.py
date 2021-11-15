@@ -12,7 +12,7 @@ class EDIBackendInputComponentMixin(AbstractComponent):
     _inherit = "edi.component.mixin"
     _usage = "process_data"
     _backend_type = "import_data"
-    _exchange_type = None
+    _exchange_type = "pdf2data"
     _process_type = None
 
     @classmethod
@@ -21,5 +21,5 @@ class EDIBackendInputComponentMixin(AbstractComponent):
         process_type = kw.get("process_type")
         return res and cls._process_type == process_type
 
-    def process_data(self, data, template):
+    def process_data(self, data, template, file):
         raise NotImplementedError()

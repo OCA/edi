@@ -7,7 +7,7 @@ from odoo.exceptions import ValidationError
 
 class Pdf2dataImport(models.TransientModel):
     _name = "pdf2data.import"
-    _description = "Wizard to import pdf and extrac data"
+    _description = "Wizard to import pdf and extract data"
 
     pdf_file = fields.Binary(string="PDF", required=True)
     pdf_file_name = fields.Char()

@@ -47,7 +47,7 @@ class Pdf2DataComponentTestCase(common.EDIBackendCommonComponentRegistryTestCase
             _exchange_type = None
             _process_type = "invoice.demo"
 
-            def process_data(self, data, template):
+            def process_data(self, data, template, file):
                 record = self.env.user.partner_id
                 self.exchange_record.write({"model": record._name, "res_id": record.id})
 
