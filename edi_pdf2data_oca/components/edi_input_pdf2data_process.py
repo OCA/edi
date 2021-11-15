@@ -26,4 +26,4 @@ class EdiInputPdf2DataProcess(Component):
             exchange_type=self.exchange_record.type_id.code,
             process_type=template.type_id.code,
         )
-        component.process_data(data, template)
+        component.process_data(data, template, self.exchange_record.exchange_file)

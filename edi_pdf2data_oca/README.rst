@@ -23,7 +23,7 @@ Pdf2data Import
     :target: https://runbot.odoo-community.org/runbot/226/13.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module allows to define templates used to process pdfs.
 It could be used to import invoices or other kinds of PDFs.
@@ -46,7 +46,7 @@ kind of component
         _inherit = "edi.component.process_data.mixin"
         _process_type = "template type code"
 
-        def process_data(self, data, template):
+        def process_data(self, data, template, file):
             "To implement what it should do"
 
 

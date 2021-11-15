@@ -8,5 +8,5 @@ kind of component
         _inherit = "edi.component.process_data.mixin"
         _process_type = "template type code"
 
-        def process_data(self, data, template):
+        def process_data(self, data, template, file):
             "To implement what it should do"
