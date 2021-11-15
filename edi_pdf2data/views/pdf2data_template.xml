@@ -30,11 +30,7 @@
                     </group>
                     <notebook>
                         <page name="config" string="YML Template">
-                            <field
-                                name="pdf2data_template_yml"
-                                widget="ace"
-                                options="{'mode': 'yml'}"
-                            />
+                            <field name="pdf2data_template_yml" widget="ace" />
                         </page>
                         <page name="result" string="Result">
                             <field
@@ -43,6 +39,9 @@
                                 options="{'mode': 'json'}"
                             />
                             <field name="file_processed_result" />
+                        </page>
+                        <page name="extracted_text" string="Extracted Text">
+                            <field name="extracted_text" />
                         </page>
                     </notebook>
                 </sheet>

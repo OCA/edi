@@ -35,6 +35,7 @@ class Pdf2dataTemplate(models.Model):
     file_result = fields.Char(readonly=True)
     file_processed_result = fields.Html(readonly=True)
     sequence = fields.Integer(default=20)
+    extracted_text = fields.Text(readonly=True)
 
     def _parse_pdf(self, data):
         data_file = NamedTemporaryFile(
@@ -74,20 +75,22 @@ class Pdf2dataTemplate(models.Model):
             t = InvoiceTemplate(tpl)
             optimized_str = t.prepare_input(extracted_str)
             if t.matches_input(optimized_str):
-                return t.extract(optimized_str), template
-        return False, False
+                return optimized_str, t.extract(optimized_str), template
+        return False, False, False
 
     def check_pdf(self):
         self.ensure_one()
-        data, template = self._parse_pdf(self.pdf_file)
+        extracted_text, data, template = self._parse_pdf(self.pdf_file)
         if not template:
             self.write(
                 {
                     "file_result": False,
                     "file_processed_result": "Data cannot be processed",
+                    "extracted_text": "No text extracted",
                 }
             )
             return
+        self.extracted_text = extracted_text
         self.file_result = data
         backend = self.env.ref("edi_pdf2data.pdf2data_backend")
         component = backend._find_component(
