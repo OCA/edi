@@ -237,7 +237,7 @@ class EndpointRouteHandler(models.AbstractModel):
         rule = self._make_controller_rule(endpoint_handler=endpoint_handler)
         key = key or self._endpoint_registry_unique_key()
         self._endpoint_registry.add_or_update_rule(key, rule)
-        self._logger.info(
+        self._logger.debug(
             "Registered controller %s (auth: %s)", self.route, self.auth_type
         )
 

@@ -21,7 +21,7 @@ def safely_add_rule(rmap, rule):
             rule.bind(rmap, rebind=True)
         else:
             rmap.add(rule)
-        _logger.info("LOADED %s", str(rule))
+        _logger.debug("LOADED %s", str(rule))
 
 
 class IrHttp(models.AbstractModel):
