@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_account_config_settings" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field
+            name="inherit_id"
+            ref="account_einvoice_generate.view_account_config_settings"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='e-invoices']" position="inside">
+                <div class="o_setting_left_pane">
+                    <field name="embed_pdf_in_ubl_xml_invoice" />
+                </div>
+                <div class="o_setting_right_pane">
+                    <label for="embed_pdf_in_ubl_xml_invoice" />
+                    <div class="text-muted">
+                    Include the PDF of the invoice in the standalone UBL Invoice XML file.
+                </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
