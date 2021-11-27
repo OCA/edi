@@ -1,0 +1,73 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_invoice_ubl
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2020-12-14 00:28+0000\n"
+"Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
+"Language-Team: none\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
+
+#. module: account_invoice_ubl
+#: model:ir.model,name:account_invoice_ubl.model_res_company
+msgid "Companies"
+msgstr "Bedrijven"
+
+#. module: account_invoice_ubl
+#: model:ir.model,name:account_invoice_ubl.model_res_config_settings
+msgid "Config Settings"
+msgstr "Configuratie instellingen"
+
+#. module: account_invoice_ubl
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__embed_pdf_in_ubl_xml_invoice
+msgid "Embed PDF in UBL XML Invoice"
+msgstr "Geintegreerde PDF in UBL XML Factuur"
+
+#. module: account_invoice_ubl
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_move_form
+msgid "Generate UBL XML File"
+msgstr "Genereer UBL XML bestand"
+
+#. module: account_invoice_ubl
+#: model:ir.model.fields,help:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
+#: model:ir.model.fields,help:account_invoice_ubl.field_res_config_settings__embed_pdf_in_ubl_xml_invoice
+msgid ""
+"If active, the standalone UBL Invoice XML file will include the PDF of the "
+"invoice in base64 under the node 'AdditionalDocumentReference'. For example,"
+" to be compliant with the e-fff standard used in Belgium, you should "
+"activate this option."
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_account_config_settings
+msgid "Include the PDF of the invoice in the standalone UBL Invoice XML file."
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model:ir.model,name:account_invoice_ubl.model_account_move
+msgid "Journal Entries"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model:ir.model,name:account_invoice_ubl.model_ir_actions_report
+msgid "Report Action"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model:ir.model.fields.selection,name:account_invoice_ubl.selection__res_company__xml_format_in_pdf_invoice__ubl
+msgid "Universal Business Language (UBL)"
+msgstr "Universal Business Language (UBL)"
+
+#. module: account_invoice_ubl
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__xml_format_in_pdf_invoice
+msgid "XML Format embedded in PDF invoice"
+msgstr "XML Formaat gebruikt in de PDF factuur"
