@@ -12,7 +12,7 @@ addons:
   apt:
     packages:
       - expect-dev # provides unbuffer utility
-      - poppler-utils # required by account_invoice_import_invoice2data
+      - "poppler-utils"
 
 stages:
   - test
@@ -28,11 +28,6 @@ jobs:
 env:
   global:
     - VERSION="14.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0"
-      # account_invoice_import_simple_pdf and account_invoice_import_invoice2data are incompatible
-      # As account_invoice_import_simple_pdf is designed to replace account_invoice_import_invoice2data
-      # I exclude account_invoice_import_invoice2data from the tests
-    - EXCLUDE=account_invoice_import_invoice2data
-    - WKHTMLTOPDF_VERSION="0.12.5"
     - MQT_DEP=PIP
 
 install:
