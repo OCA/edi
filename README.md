@@ -12,7 +12,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[account_invoice_import](account_invoice_import/) | 8.0.1.0.0 |  | Import supplier invoices/refunds as PDF or XML files
+[account_invoice_import](account_invoice_import/) | 8.0.1.0.1 |  | Import supplier invoices/refunds as PDF or XML files
 [account_invoice_import_invoice2data](account_invoice_import_invoice2data/) | 8.0.1.0.0 |  | Import supplier invoices using the invoice2data lib
 [account_invoice_import_ubl](account_invoice_import_ubl/) | 8.0.1.0.0 |  | Import UBL XML supplier invoices/refunds
 [account_invoice_import_zugferd](account_invoice_import_zugferd/) | 8.0.1.0.0 |  | Import ZUGFeRD-compliant supplier invoices/refunds
