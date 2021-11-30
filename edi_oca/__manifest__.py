@@ -10,7 +10,7 @@
     """,
     "version": "14.0.1.6.1",
     "website": "https://github.com/OCA/edi",
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "license": "LGPL-3",
     "author": "ACSONE,Creu Blanca,Odoo Community Association (OCA)",
     "maintainers": ["simahawk", "etobella"],
