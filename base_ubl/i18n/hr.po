@@ -39,13 +39,13 @@ msgid "Last Modified on"
 msgstr "Zadnja modifikacija"
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:423
+#: code:addons/base_ubl/models/ubl.py:424
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr "Nedostaje UNECE kategorija poreza na porezu '%s'"
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:443
+#: code:addons/base_ubl/models/ubl.py:444
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
 msgstr "Nedostaje UNECE tip poreza na porezu '%s'"
@@ -57,7 +57,7 @@ msgid "Missing UNECE code on unit of measure '%s'"
 msgstr "Nedostaje UNECE šifra jedinice mjere za '%s'"
 
 #. module: base_ubl
-#: code:addons/base_ubl/models/ubl.py:503
+#: code:addons/base_ubl/models/ubl.py:504
 #, python-format
 msgid ""
 "The UBL XML file is not valid against the official XML Schema Definition. "
