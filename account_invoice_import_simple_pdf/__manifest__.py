@@ -12,7 +12,7 @@
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import"],
-    "excludes": ["account_invoice_import_invoice2data"],
+    # "excludes": ["account_invoice_import_invoice2data"],
     "external_dependencies": {"python": ["PyMuPDF", "regex", "dateparser"]},
     "data": [
         "security/ir.model.access.csv",

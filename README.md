@@ -7,7 +7,7 @@
 
 # edi
 
-TODO: add repo description.
+Electronic Data Interchange modules
 
 <!-- /!\ do not modify below this line -->
 
