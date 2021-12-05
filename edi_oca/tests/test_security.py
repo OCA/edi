@@ -10,6 +10,7 @@ from .common import EDIBackendCommonTestCase
 
 
 class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
+    # pylint: disable=W8110
     @classmethod
     def _setup_records(cls):
         super()._setup_records()

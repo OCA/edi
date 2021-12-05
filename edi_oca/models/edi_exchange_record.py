@@ -43,7 +43,6 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_exchange_filename", readonly=False, store=True
     )
     exchanged_on = fields.Datetime(
-        string="Exchanged on",
         help="Sent or received on this date.",
         compute="_compute_exchanged_on",
         store=True,
@@ -71,7 +70,7 @@ class EDIExchangeRecord(models.Model):
             ("input_processed_error", "Error on process"),
         ],
     )
-    exchange_error = fields.Text(string="Exchange error", readonly=True)
+    exchange_error = fields.Text(readonly=True)
     # Relations w/ other records
     parent_id = fields.Many2one(
         comodel_name="edi.exchange.record",
