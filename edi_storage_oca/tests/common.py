@@ -58,6 +58,7 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
             ["storage.send"],
             work_ctx={"exchange_record": cls.record},
         )
+        return
 
     def setUp(self):
         super().setUp()
