@@ -3,7 +3,7 @@
     <record id="edi_exchange_record_view_tree" model="ir.ui.view">
         <field name="model">edi.exchange.record</field>
         <field name="arch" type="xml">
-            <tree string="EDI Exchange Record">
+            <tree>
                 <field name="name" />
                 <field name="identifier" />
                 <field name="external_identifier" />

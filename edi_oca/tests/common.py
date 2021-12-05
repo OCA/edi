@@ -5,11 +5,11 @@
 
 import os
 
-from odoo.tests.common import SavepointCase, tagged
+from odoo.tests.common import TransactionCase, tagged
 
 from odoo.addons.component.tests.common import (
-    SavepointComponentCase,
-    SavepointComponentRegistryCase,
+    TransactionComponentCase,
+    TransactionComponentRegistryCase,
 )
 
 
@@ -77,7 +77,7 @@ class EDIBackendTestMixin(object):
 
 
 @tagged("-at_install", "post_install")
-class EDIBackendCommonTestCase(SavepointCase, EDIBackendTestMixin):
+class EDIBackendCommonTestCase(TransactionCase, EDIBackendTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -86,7 +86,7 @@ class EDIBackendCommonTestCase(SavepointCase, EDIBackendTestMixin):
 
 
 @tagged("-at_install", "post_install")
-class EDIBackendCommonComponentTestCase(SavepointComponentCase, EDIBackendTestMixin):
+class EDIBackendCommonComponentTestCase(TransactionComponentCase, EDIBackendTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -96,11 +96,12 @@ class EDIBackendCommonComponentTestCase(SavepointComponentCase, EDIBackendTestMi
 
 @tagged("-at_install", "post_install")
 class EDIBackendCommonComponentRegistryTestCase(
-    SavepointComponentRegistryCase, EDIBackendTestMixin
+    TransactionComponentRegistryCase, EDIBackendTestMixin
 ):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls._setup_env()
         cls._setup_records()
+        cls._setup_registry(cls)
         cls._load_module_components(cls, "edi_oca")
