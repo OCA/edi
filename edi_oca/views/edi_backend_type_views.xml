@@ -3,7 +3,7 @@
     <record id="edi_backend_type_view_tree" model="ir.ui.view">
         <field name="model">edi.backend.type</field>
         <field name="arch" type="xml">
-            <tree string="EDI Backend Type">
+            <tree>
                 <field name="name" />
                 <field name="code" />
             </tree>

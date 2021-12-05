@@ -3,7 +3,7 @@
     <record id="edi_exchange_type_view_tree" model="ir.ui.view">
         <field name="model">edi.exchange.type</field>
         <field name="arch" type="xml">
-            <tree string="EDI Exchange Type">
+            <tree>
                 <field name="backend_id" />
                 <field name="name" />
                 <field name="code" />
