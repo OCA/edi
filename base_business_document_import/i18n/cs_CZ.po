@@ -42,19 +42,19 @@ msgstr "Poznámky v importovaném dokumentu:"
 #, python-format
 msgid ""
 "<p>Odoo couldn't find any unit of measure corresponding to the following "
-"information extracted from the business document:</p><ul><li>UNECE code: %s</"
-"li><li>Name of the unit of measure: %s</li></ul><p>So the unit of measure "
+"information extracted from the business document:</p><ul><li>UNECE code: %(code)s</"
+"li><li>Name of the unit of measure: %(name)s</li></ul><p>So the unit of measure "
 "'Unit(s)' has been used. <em>You may have to change it manually.</em></p>"
 msgstr ""
 "Společnost Odoo nemohla najít žádnou měrnou jednotku, která by odpovídala "
-"těmto informacím získaným z obchodního dokladu: Kód UNECE %s Náměrová "
-"jednotka: %s Je použita měrná jednotka 'Jednotky)' Musíte ji ručně změnit."
+"těmto informacím získaným z obchodního dokladu: Kód UNECE %(code)s Náměrová "
+"jednotka: %(name)s Je použita měrná jednotka 'Jednotky)' Musíte ji ručně změnit."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
-msgid "Approximate match: account %s has been matched with account %s"
-msgstr "Přibližná shoda: účet %s byl přiřazen účtu %s"
+msgid "Approximate match: account %(account_1)s has been matched with account %(account_2)s"
+msgstr "Přibližná shoda: účet %(account_1)s byl přiřazen účtu %(account_2)s"
 
 #. module: base_business_document_import
 #: model:ir.model,name:base_business_document_import.model_business_document_import
@@ -76,12 +76,12 @@ msgstr "Zobrazovaný název"
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"For product '%s', the unit of measure is %s on the existing line, but it is "
-"%s on the imported line. We don't support this scenario for the moment, so "
+"For product '%(product)s', the unit of measure is %(uom)s on the existing line, but it is "
+"%(uom_imp)s on the imported line. We don't support this scenario for the moment, so "
 "<b>the lines haven't been updated</b>."
 msgstr ""
-"U produktu '%s' je měrnou jednotkou %s na existujícím řádku, ale na "
-"importované řádce je %s. Momentálně nepodporujeme tento scénář, takže 1 "
+"U produktu '%(product)s' je měrnou jednotkou %(uom)s na existujícím řádku, ale na "
+"importované řádce je %(uom_imp)s. Momentálně nepodporujeme tento scénář, takže 1 "
 "řádky nebyly aktualizovány."
 
 #. module: base_business_document_import
@@ -116,15 +116,15 @@ msgstr "Není uvedena žádná měna, takže Odoo použil měnu společnosti (%s
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any %s corresponding to the following information "
+"Odoo couldn't find any %(label)s corresponding to the following information "
 "extracted from the business document:\n"
-"Name: %s\n"
-"VAT number: %s\n"
-"Reference: %s\n"
-"E-mail: %s\n"
-"Website: %s\n"
-"State code: %s\n"
-"Country code: %s\n"
+"Name: %(name)s\n"
+"VAT number: %(vat)s\n"
+"Reference: %(ref)s\n"
+"E-mail: %(email)s\n"
+"Website: %(website)s\n"
+"State code: %(state_code)s\n"
+"Country code: %(country_code)s\n"
 msgstr ""
 
 #. module: base_business_document_import
@@ -160,9 +160,9 @@ msgstr ""
 msgid ""
 "Odoo couldn't find any product corresponding to the following information "
 "extracted from the business document:\n"
-"Barcode: %s\n"
-"Product code: %s\n"
-"Supplier: %s\n"
+"Barcode: %(barcode)s\n"
+"Product code: %(code)s\n"
+"Supplier: %(seller)s\n"
 msgstr ""
 
 #. module: base_business_document_import
@@ -171,30 +171,30 @@ msgstr ""
 msgid ""
 "Odoo couldn't find any shipping partner corresponding to the following "
 "information extracted from the business document:\n"
-"Name: %s\n"
-"VAT number: %s\n"
-"Reference: %s\n"
-"E-mail: %s\n"
-"Website: %s\n"
-"Street: %s\n"
-"Street2: %s\n"
-"City: %s\n"
-"ZIP: %s\n"
-"State code: %s\n"
-"Country code: %s\n"
+"Name: %(name)s\n"
+"VAT number: %(vat)s\n"
+"Reference: %(ref)s\n"
+"E-mail: %(email)s\n"
+"Website: %(website)s\n"
+"Street: %(street)s\n"
+"Street2: %(street2)s\n"
+"City: %(city)s\n"
+"ZIP: %(zip)s\n"
+"State code: %(state)s\n"
+"Country code: %(country)s\n"
 msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any tax with 'Tax Application' = '%s' and 'Tax Included "
-"in Price' = '%s' which correspond to the following information extracted "
+"Odoo couldn't find any tax with 'Tax Application' = '%(tax_use)s' and 'Tax Included "
+"in Price' = '%(price)s' which correspond to the following information extracted "
 "from the business document:\n"
-"UNECE Tax Type code: %s\n"
-"UNECE Tax Category code: %s\n"
-"UNECE Due Date code: %s\n"
-"Tax amount: %s %s"
+"UNECE Tax Type code: %(type_code)s\n"
+"UNECE Tax Category code: %(categ_code)s\n"
+"UNECE Due Date code: %(date_code)s\n"
+"Tax amount: %(amount)s %(amount_type)s"
 msgstr ""
 
 #. module: base_business_document_import
@@ -209,16 +209,16 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The %s has been identified by the domain name '%s' so please check carefully "
-"that the %s is correct."
+"The %(label)s has been identified by the domain name '%(domain)s' so please check carefully"
+" that the %(label)s is correct."
 msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The VAT number of the customer written in the business document (%s) doesn't "
-"match the VAT number of the company '%s' (%s) in which you are trying to "
+"The VAT number of the customer written in the business document (%(document_vat)s) doesn't "
+"match the VAT number of the company '%(company_vat_name)s' (%(company_vat)s) in which you are trying to "
 "import this document."
 msgstr ""
 
@@ -234,8 +234,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The analysis of the business document returned '%s' as the country code to "
-"find the related currency. But the country '%s' doesn't have any related "
+"The analysis of the business document returned '%(code)s' as the country code to "
+"find the related currency. But the country '%(name)s' doesn't have any related "
 "currency configured in Odoo."
 msgstr ""
 
@@ -292,9 +292,9 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The analysis of the business document returned <b>IBAN %s</b> as bank "
+"The analysis of the business document returned <b>IBAN %(iban)s</b> as bank "
 "account, but there is no such bank account in Odoo linked to partner <a "
-"href=# data-oe-model=res.partner data-oe-id=%d>%s</a> and the option to "
+"href=# data-oe-model=res.partner data-oe-id=%(id)d>%(name)s</a> and the option to "
 "automatically create bank accounts upon import is disabled."
 msgstr ""
 
@@ -302,9 +302,10 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, fuzzy, python-format
 msgid ""
-"The bank account <b>IBAN %s</b> has been automatically added on the supplier "
-"<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
-msgstr "Bankovní účet 1IBAN %s  byl automaticky přidán na dodavatele %s"
+"The bank account <b>IBAN %(iban)s</b> has been automatically added on the supplier"
+" <a href=# data-oe-model=res.partner data-oe-id=%(id)d>%(name)s</a>"
+msgstr "Bankovní účet 1IBAN %(iban)s  byl automaticky přidán na dodavatele "
+"<a href=# data-oe-model=res.partner data-oe-id=%(id)d>%(name)s</a>"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0

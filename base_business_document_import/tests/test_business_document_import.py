@@ -3,9 +3,13 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import logging
+
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+
+_logger = logging.getLogger("odoo.tests.test_module_operations")
 
 
 @tagged("post_install", "-at_install")
@@ -94,6 +98,8 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEqual(res, partner2)
 
     def test_match_currency(self):
+        currency_inv = self.env.ref("base.EUR")
+        currency_inv.active = True
         bdio = self.env["business.document.import"]
         currency_dict = {"iso": "EUR"}
         res = bdio._match_currency(currency_dict, [])
@@ -149,8 +155,8 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         try:
             bdio._match_product(product_dict, [], seller=False)
             raise_test = False
-        except Exception:
-            pass
+        except Exception as e:
+            _logger.info(e)
         self.assertTrue(raise_test)
 
     def test_match_uom(self):

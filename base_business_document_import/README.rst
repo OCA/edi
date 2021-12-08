@@ -23,7 +23,7 @@ Base Business Document Import
     :target: https://runbot.odoo-community.org/runbot/226/14.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 This is a technical module ; it doesn't bring any useful feature by itself. This module is the base modules for 2 other modules :
 
@@ -62,6 +62,7 @@ Contributors
 * Nicolas JEUDY <https://github.com/njeudy>
 * Jacques-Etienne Baudoux <je@bcim.be>
 * Phuc (Tran Thanh) <phuc@trobz.com>
+* Koen Loodts <koen.loodts@dynapps.be>
 
 Maintainers
 ~~~~~~~~~~~
@@ -82,7 +83,7 @@ promote its widespread use.
 
 Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-alexis-via| 
+|maintainer-alexis-via|
 
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/base_business_document_import>`_ project on GitHub.
 
