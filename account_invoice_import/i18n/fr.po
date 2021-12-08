@@ -28,14 +28,14 @@ msgstr " Montant hors taxe : %s %s"
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:781
 #, python-format
-msgid "%d invoice line(s) deleted: %s"
-msgstr "%d ligne(s) de facturation supprimée(s) : %s"
+msgid "%(num)d invoice line(s) deleted: %(labels)s"
+msgstr "%(num)d ligne(s) de facturation supprimée(s) : %(labels)s"
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:796
 #, python-format
-msgid "%d new invoice line(s) created: %s"
-msgstr "%d nouvelle(s) ligne(s) de facturation créée(s) : %s"
+msgid "%(num)d new invoice line(s) created: %(labels)s"
+msgstr "%(num)d nouvelle(s) ligne(s) de facturation créée(s) : %(labels)s"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.res_config_settings_view_form
@@ -48,8 +48,8 @@ msgstr ""
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:290
 #, python-format
-msgid "Account missing on product '%s' or on it's related category '%s'."
-msgstr "Compte manquant sur le produit '%s' ou sur sa catégorie connexe '%s'."
+msgid "Account missing on product '%(product)s' or on it's related category '%(categ)s'."
+msgstr "Compte manquant sur le produit '%(product)s' ou sur sa catégorie connexe '%(categ)s'."
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_form
@@ -483,11 +483,11 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:872
 #, python-format
 msgid ""
-"The currency of the imported invoice (%s) is different from the currency of "
-"the existing invoice (%s)"
+"The currency of the imported invoice (%(cur_1)s) is different from the currency of "
+"the existing invoice (%(cur_2)s)"
 msgstr ""
-"La devise de la facture importée (%s) est différente de la devise de la "
-"facture existante (%s)"
+"La devise de la facture importée (%(cur_1)s) est différente de la devise de la "
+"facture existante (%(cur_2)s)"
 
 #. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config__invoice_line_method
@@ -505,11 +505,11 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:759
 #, python-format
 msgid ""
-"The quantity has been updated on the invoice line with product '%s' from %s "
-"to %s %s"
+"The quantity has been updated on the invoice line with product '%(product)s' from %(qty_1)s "
+"to %(qty_2)s %(uom)s"
 msgstr ""
-"La quantité a été mise à jour sur la ligne de facturation du produit '%s' de "
-"%s à %s %s"
+"La quantité a été mise à jour sur la ligne de facturation du produit '%(product)s' de "
+"%(qty_1)s à %(qty_2)s %(uom)s"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
@@ -525,11 +525,18 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:860
 #, python-format
 msgid ""
-"The supplier of the imported invoice (%s) is different from the supplier of "
-"the invoice to update (%s)."
+"The supplier of the imported invoice (%(name_1)s) is different from the supplier of "
+"the invoice to update (%(name_2)s)."
 msgstr ""
-"Le fournisseur de la facture importée (%s) est différent du fournisseur de "
-"la facture à mettre à jour (%s)."
+"Le fournisseur de la facture importée (%(name_1)s) est différent du fournisseur de "
+"la facture à mettre à jour (%(name_2)s)."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The tax amount has been forced to %(new_amount)s (amount computed by Odoo was: %(orig_amount)s)."
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:719
@@ -555,11 +562,27 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:767
 #, python-format
 msgid ""
-"The unit price has been updated on the invoice line with product '%s' from "
-"%s to %s %s"
+"The unit price has been updated on the invoice line with product '%(product)s' from "
+"%(price_1)s to %(price_2)s %(currency)s"
 msgstr ""
 "Le prix unitaire a été mis à jour sur la ligne de facturation du produit "
-"'%s' de %s à %s %s"
+"'%(product)s' de %(price_1)s à %(price_2)s %(currency)s"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The vendor to update '%(partner)s' already has a VAT number (%(partner_vat)s) which is different "
+"from the vendor VAT number of the invoice (%(invoice_vat)s)."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The vendor to update '%(partner)s' already has a country (%(country_1)s) which is different from"
+" the country of the vendor of the invoice (%(country_2)s)."
+msgstr ""
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.res_config_settings_view_form
@@ -586,11 +609,11 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:520
 #, python-format
 msgid ""
-"This invoice already exists in Odoo. It's Supplier Invoice Number is '%s' "
-"and it's Odoo number is '%s'"
+"This invoice already exists in Odoo. It's Supplier Invoice Number is '%(supp_inv)s' "
+"and it's Odoo number is '%(odoo_inv)s'"
 msgstr ""
 "Cette facture existe déjà dans Odoo. Son numéro de facture fournisseur est "
-"'%s' et son numéro Odoo est '%s'."
+"'%(supp_inv)s' et son numéro Odoo est '%(odoo_inv)s'."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:590
@@ -731,3 +754,15 @@ msgstr ""
 #, python-format
 msgid "You must select an Invoice Import Configuration."
 msgstr "Vous devez sélectionner une configuration d'importation de factures."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "email sent by <b>%(from)s</b> on %(date)s with subject <i>%(subject)s</i>"
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "unspecified"
+msgstr ""

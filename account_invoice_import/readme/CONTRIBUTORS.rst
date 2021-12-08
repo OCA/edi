@@ -3,3 +3,4 @@
 * Nicolas JEUDY <https://github.com/njeudy>
 * Yannick Vaucher <yannick.vaucher@camptocamp.com>
 * Ronald Portier <ronald@therp.nl>
+* Koen Loodts <koen.loodts@dynapps.be>

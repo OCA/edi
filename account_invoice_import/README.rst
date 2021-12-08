@@ -23,7 +23,7 @@ Account Invoice Import
     :target: https://runbot.odoo-community.org/runbot/226/14.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5| 
+|badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module has been started by lazy accounting users who hate enter they vendor bills manually in Odoo. Almost all companies have several vendor bills to enter regularly in the system from the same vendors: phone bill, electricity bill, Internet access, train tickets, etc. Most of these invoices are available as PDF. If we are able to automatically extract from the PDF the required information to enter the invoice as vendor bill in Odoo, then this module will create it automatically. To know the full story behind the development of this module, read this `blog post <http://www.akretion.com/blog/akretions-christmas-present-for-the-odoo-community>`_.
 
@@ -115,6 +115,7 @@ Contributors
 * Nicolas JEUDY <https://github.com/njeudy>
 * Yannick Vaucher <yannick.vaucher@camptocamp.com>
 * Ronald Portier <ronald@therp.nl>
+* Koen Loodts <koen.loodts@dynapps.be>
 
 Maintainers
 ~~~~~~~~~~~
@@ -135,7 +136,7 @@ promote its widespread use.
 
 Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-alexis-via| 
+|maintainer-alexis-via|
 
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/account_invoice_import>`_ project on GitHub.
 
