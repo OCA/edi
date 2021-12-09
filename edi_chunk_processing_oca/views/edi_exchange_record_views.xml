@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_record_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="inherit_id" ref="edi_oca.edi_exchange_record_view_form" />
+        <field name="arch" type="xml">
+            <field name="exchange_file" position="after">
+                <field name="chunk_group_id" />
+            </field>
+        </field>
+    </record>
+</odoo>
