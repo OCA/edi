@@ -53,7 +53,6 @@ class AccountMove(models.Model):
                     # The chatter of the invoice need to be updated, when the job fails
                     self.with_env(new_env).log_error_sending_invoice(values)
             raise
-        self.invoice_send = True
         self.log_success_sending_invoice()
         return res
 
