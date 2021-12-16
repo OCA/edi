@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2021 Coop IT Easy (https://coopiteasy.be)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="ir_cron_remove_zipped_file" model="ir.cron">
+        <field name="name">Autovacuum UBL zipped files</field>
+        <field name="model_id" ref="model_account_invoice" />
+        <field name="state">code</field>
+        <field name="code">model._cron_remove_ubl_zip()</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="True" />
+    </record>
+</odoo>

@@ -1,0 +1,40 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_invoice_ubl_mass_download
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-01-20 12:25+0000\n"
+"PO-Revision-Date: 2022-01-20 12:25+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_invoice_ubl_mass_download
+#: model:ir.actions.server,name:account_invoice_ubl_mass_download.ir_cron_remove_zipped_file_ir_actions_server
+#: model:ir.cron,cron_name:account_invoice_ubl_mass_download.ir_cron_remove_zipped_file
+#: model:ir.cron,name:account_invoice_ubl_mass_download.ir_cron_remove_zipped_file
+msgid "Autovacuum UBL zipped files"
+msgstr "Suppression automatique des fichiers zip UBL"
+
+#. module: account_invoice_ubl_mass_download
+#: code:addons/account_invoice_ubl_mass_download/models/account_invoice.py:37
+#, python-format
+msgid "Cannot generate file because Invoice {} is not an invoice or a refund or that invoice is not open or paid status."
+msgstr "Impossible de générer le fichier car la facture {} n'est pas une facture ou un avoir ou la facture n'est pas dans un statut ouvert ou payé."
+
+#. module: account_invoice_ubl_mass_download
+#: model:ir.model,name:account_invoice_ubl_mass_download.model_account_invoice
+msgid "Invoice"
+msgstr "Facture"
+
+#. module: account_invoice_ubl_mass_download
+#: model:ir.actions.server,name:account_invoice_ubl_mass_download.account_invoice_mass_download_ubl
+msgid "Invoices UBL XML and PDF (zip)"
+msgstr "Factures UBL XML et PDF (zip)"
+
