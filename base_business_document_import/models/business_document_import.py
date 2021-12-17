@@ -281,6 +281,7 @@ class BusinessDocumentImport(models.AbstractModel):
             '|', ('company_id', '=', False),
             ('company_id', '=', company_id),
             ('sanitized_acc_number', '=', iban),
+            '|', ('partner_id', '=', False),
             ('partner_id', '=', partner.id),
             ])
         if bankaccounts:
