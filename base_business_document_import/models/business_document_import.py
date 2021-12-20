@@ -285,6 +285,8 @@ class BusinessDocumentImport(models.AbstractModel):
             ('partner_id', '=', partner.id),
             ])
         if bankaccounts:
+            if not bankaccounts[0].partner_id:
+                bankaccounts[0].partner_id = partner
             return bankaccounts[0]
         elif create_if_not_found:
             bank_id = False
