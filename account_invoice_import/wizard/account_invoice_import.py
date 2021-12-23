@@ -609,14 +609,17 @@ class AccountInvoiceImport(models.TransientModel):
         directly from the button, I get the context in parsed_inv'''
         return self.create_invoice_action()
 
+    def _get_parsed_invoice(self):
+        """Hook to change the method of retrieval for the invoice data"""
+        return self.parse_invoice(self.invoice_file, self.invoice_filename)
+
     @api.multi
     def create_invoice_action(self, parsed_inv=None, import_config=None):
         '''parsed_inv is not a required argument'''
         self.ensure_one()
         iaao = self.env['ir.actions.act_window']
         if parsed_inv is None:
-            parsed_inv = self.parse_invoice(
-                self.invoice_file, self.invoice_filename)
+            parsed_inv = self._get_parsed_invoice()
         if import_config is None:
             assert self.import_config_id
             import_config = self.import_config_id.convert_to_import_config()
