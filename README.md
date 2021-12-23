@@ -18,7 +18,7 @@ addon | version | maintainers | summary
 [account_invoice_download_weboob](account_invoice_download_weboob/) | 10.0.1.0.0 |  | Auto-download supplier invoices with Weboob
 [account_invoice_factur-x](account_invoice_factur-x/) | 10.0.1.0.0 |  | Generate Factur-X/ZUGFeRD customer invoices
 [account_invoice_factur-x_py3o](account_invoice_factur-x_py3o/) | 10.0.1.0.0 |  | Generate Factur-x invoices with Py3o reporting engine
-[account_invoice_import](account_invoice_import/) | 10.0.2.0.2 |  | Import supplier invoices/refunds as PDF or XML files
+[account_invoice_import](account_invoice_import/) | 10.0.2.0.3 |  | Import supplier invoices/refunds as PDF or XML files
 [account_invoice_import_factur-x](account_invoice_import_factur-x/) | 10.0.1.0.0 |  | Import ZUGFeRD and Factur-X supplier invoices/refunds
 [account_invoice_import_invoice2data](account_invoice_import_invoice2data/) | 10.0.1.0.1 |  | Import supplier invoices using the invoice2data lib
 [account_invoice_import_ubl](account_invoice_import_ubl/) | 10.0.1.0.0 |  | Import UBL XML supplier invoices/refunds
