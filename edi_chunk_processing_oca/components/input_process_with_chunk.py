@@ -21,9 +21,8 @@ class ProcessWithChunk(Component):
     _usage = "process.with.chunk"
 
     def process(self):
-        vals = {}
+        vals = {"edi_exchange_record_id": [(4, self.exchange_record.id, 0)]}
         for key in CHUNK_GROUP_FIELDS:
             if hasattr(self.work, key):
                 vals[key] = getattr(self.work, key)
-
-        self.exchange_record.chunk_group_id = self.env["chunk.group"].create(vals)
+        self.env["chunk.group"].create(vals)
