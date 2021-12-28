@@ -36,7 +36,7 @@ class EndpointRegistry:
 
     def add_or_update_rule(self, key, rule, force=False):
         existing = self._mapping.get(key)
-        if not existing:
+        if not existing or force:
             self._mapping[key] = rule
             self._rules_to_load.append(rule)
             self._routing_update_required = True
@@ -50,7 +50,7 @@ class EndpointRegistry:
             return True
 
     def drop_rule(self, key):
-        existing = self._mapping.get(key)
+        existing = self._mapping.pop(key, None)
         if not existing:
             return False
         # Override and set as to be updated
