@@ -193,33 +193,51 @@ class EndpointRouteHandler(models.AbstractModel):
 
     @api.model_create_multi
     def create(self, vals_list):
-        res = super().create(vals_list)
-        if not self._abstract:
-            res._register_controllers()
-        return res
+        rec = super().create(vals_list)
+        if not self._abstract and rec.active:
+            rec._register_controllers()
+        return rec
 
     def write(self, vals):
         res = super().write(vals)
-        if not self._abstract and any([x in vals for x in self._controller_fields()]):
-            self._register_controllers()
+        if not self._abstract:
+            self._handle_route_updates(vals)
         return res
+
+    def _handle_route_updates(self, vals):
+        if "active" in vals:
+            if vals["active"]:
+                self._register_controllers()
+            else:
+                self._unregister_controllers()
+            return True
+        if any([x in vals for x in self._controller_fields()]):
+            self._register_controllers()
+            return True
+        return False
 
     def unlink(self):
         if not self._abstract:
-            for rec in self:
-                rec._unregister_controller()
+            self._unregister_controllers()
         return super().unlink()
 
     def _register_hook(self):
         super()._register_hook()
         if not self._abstract:
-            self.search([])._register_controllers()
+            # Look explicitly for active records
+            self.search([("active", "=", True)])._register_controllers()
 
     def _register_controllers(self):
         if self._abstract:
             self._refresh_endpoint_data()
         for rec in self:
             rec._register_controller()
+
+    def _unregister_controllers(self):
+        if self._abstract:
+            self._refresh_endpoint_data()
+        for rec in self:
+            rec._unregister_controller()
 
     def _refresh_endpoint_data(self):
         """Enforce refresh of route computed fields.
