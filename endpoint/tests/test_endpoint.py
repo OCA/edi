@@ -175,3 +175,22 @@ class TestEndpoint(CommonEndpoint):
         endpoint.unlink()
         self.assertTrue(registry.routing_update_required())
         self.assertIn(route, [x.rule for x in registry._rules_to_drop])
+
+    def test_archiving(self):
+        endpoint = self.endpoint.copy(
+            {
+                "route": "/enable-disable/this",
+                "request_method": "POST",
+                "request_content_type": "text/plain",
+                "auth_type": "public",
+                "exec_as_user_id": self.env.user.id,
+            }
+        )
+        self.assertTrue(endpoint.active)
+        registry = endpoint._endpoint_registry
+        route = endpoint.route
+        self.assertTrue(registry.routing_update_required())
+        self.assertIn(route, [x.rule for x in registry._rules_to_load])
+        endpoint.active = False
+        self.assertIn(route, [x.rule for x in registry._rules_to_drop])
+        self.assertTrue(registry.routing_update_required())
