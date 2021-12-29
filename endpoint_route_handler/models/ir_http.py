@@ -3,6 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import logging
+from itertools import chain
 
 import werkzeug
 
@@ -13,92 +14,66 @@ from ..registry import EndpointRegistry
 _logger = logging.getLogger(__name__)
 
 
-def safely_add_rule(rmap, rule):
-    """Add rule to given route map without breaking."""
-    if rule.endpoint not in rmap._rules_by_endpoint:
-        # When the rmap gets re-generated, unbound the old one.
-        if rule.map:
-            rule.bind(rmap, rebind=True)
-        else:
-            rmap.add(rule)
-        _logger.debug("LOADED %s", str(rule))
-
-
 class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
 
     @classmethod
+    def _generate_routing_rules(cls, modules, converters):
+        # Override to inject custom endpoint rules.
+        return chain(
+            super()._generate_routing_rules(modules, converters),
+            cls._endpoint_routing_rules(),
+        )
+
+    @classmethod
+    def _endpoint_routing_rules(cls):
+        """Yield custom endpoint rules"""
+        cr = http.request.env.cr
+        e_registry = EndpointRegistry.registry_for(cr.dbname)
+        for endpoint_rule in e_registry.get_rules():
+            _logger.debug("LOADING %s", endpoint_rule)
+            endpoint = endpoint_rule.endpoint
+            for url in endpoint_rule.routing["routes"]:
+                yield (url, endpoint, endpoint_rule.routing)
+
+    @classmethod
     def routing_map(cls, key=None):
-        # Override to inject custom endpoint routes
-        rmap = super().routing_map(key=key)
-        if hasattr(cls, "_routing_map"):
-            cr = http.request.env.cr
-            endpoint_registry = EndpointRegistry.registry_for(cr.dbname)
-            if not hasattr(cls, "_endpoint_routing_map_loaded"):
-                # First load, register all endpoint routes
-                cls._load_endpoint_routing_map(rmap, endpoint_registry)
-                cls._endpoint_routing_map_loaded = True
-            elif endpoint_registry.routing_update_required():
-                # Some endpoint changed, we must reload
-                cls._reload_endpoint_routing_map(rmap, endpoint_registry)
-                endpoint_registry.reset_update_required()
-        return rmap
+        cr = http.request.env.cr
+        e_registry = EndpointRegistry.registry_for(cr.dbname)
+
+        # Each `env` will have its own `ir.http` "class instance"
+        # thus, each instance will have its own routing map.
+        # Hence, we must keep track of which instances have been updated
+        # to make sure routing rules are always up to date across envs.
+        #
+        # In the original `routing_map` method it's reported in a comment
+        # that the routing map should be unique instead of being duplicated
+        # across envs... well, this is how it works today so we have to deal w/ it.
+        http_id = cls._endpoint_make_http_id()
+
+        is_routing_map_new = not hasattr(cls, "_routing_map")
+        if is_routing_map_new or not e_registry.ir_http_seen(http_id):
+            # When the routing map is not ready yet, simply track current instance
+            e_registry.ir_http_track(http_id)
+            _logger.debug("ir_http instance `%s` tracked", http_id)
+        elif e_registry.ir_http_seen(http_id) and e_registry.routing_update_required(
+            http_id
+        ):
+            # This instance was already tracked
+            # and meanwhile the registry got updated:
+            # ensure all routes are re-loaded.
+            _logger.info(
+                "Endpoint registry updated, reset routing ma for `%s`", http_id
+            )
+            cls._routing_map = {}
+            cls._rewrite_len = {}
+            e_registry.reset_update_required(http_id)
+        return super().routing_map(key=key)
 
     @classmethod
-    def _clear_routing_map(cls):
-        super()._clear_routing_map()
-        if hasattr(cls, "_endpoint_routing_map_loaded"):
-            delattr(cls, "_endpoint_routing_map_loaded")
-
-    @classmethod
-    def _load_endpoint_routing_map(cls, rmap, endpoint_registry):
-        for rule in endpoint_registry.get_rules():
-            safely_add_rule(rmap, rule)
-        _logger.info("Endpoint routing map loaded")
-        # If you have to debug, ncomment to print all routes
-        # print("\n".join([x.rule for x in rmap._rules]))
-
-    @classmethod
-    def _reload_endpoint_routing_map(cls, rmap, endpoint_registry):
-        """Reload endpoints routing map.
-
-        Take care of removing obsolete ones and add new ones.
-        The match is done using the `_endpoint_hash`.
-
-        Typical log entries in case of route changes:
-
-        [...] endpoint.endpoint: Registered controller /demo/one/new (auth: public)
-        [...] odoo.addons.endpoint.models.ir_http: DROPPED /demo/one
-        [...] odoo.addons.endpoint.models.ir_http: LOADED /demo/one/new
-        [...] odoo.addons.endpoint.models.ir_http: Endpoint routing map re-loaded
-
-        and then on subsequent calls:
-
-        [...] GET /demo/one HTTP/1.1" 404 - 3 0.001 0.006
-        [...] GET /demo/one/new HTTP/1.1" 200 - 6 0.001 0.005
-
-        You can look for such entries in logs
-        to check visually that a route has been updated
-        """
-        to_update = endpoint_registry.get_rules_to_update()
-        to_load = to_update["to_load"]
-        to_drop = to_update["to_drop"]
-        hashes_to_drop = [x._endpoint_hash for x in to_drop]
-        remove_count = 0
-        for i, rule in enumerate(rmap._rules[:]):
-            if (
-                hasattr(rule, "_endpoint_hash")
-                and rule._endpoint_hash in hashes_to_drop
-            ):
-                if rule.endpoint in rmap._rules_by_endpoint:
-                    rmap._rules.pop(i - remove_count)
-                    rmap._rules_by_endpoint.pop(rule.endpoint)
-                    remove_count += 1
-                    _logger.info("DROPPED %s", str(rule))
-                    continue
-        for rule in to_load:
-            safely_add_rule(rmap, rule)
-        _logger.info("Endpoint routing map re-loaded")
+    def _endpoint_make_http_id(cls):
+        """Generate current ir.http class ID."""
+        return id(cls)
 
     @classmethod
     def _auth_method_user_endpoint(cls):
