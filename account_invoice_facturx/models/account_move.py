@@ -1,4 +1,4 @@
-# Copyright 2016-2020 Akretion France (http://www.akretion.com)
+# Copyright 2016-2021 Akretion France (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -8,7 +8,14 @@ from lxml import etree
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools import float_compare, float_is_zero, float_round
+from odoo.tools import (
+    float_compare,
+    float_is_zero,
+    float_round,
+    html2plaintext,
+    is_html_empty,
+)
+from odoo.tools.misc import format_date
 
 logger = logging.getLogger(__name__)
 
@@ -52,8 +59,8 @@ class AccountMove(models.Model):
                 _(
                     "Country is not set on partner '%s'. In the Factur-X "
                     "standard, the country is required for buyer and seller."
-                    % partner.display_name
                 )
+                % partner.display_name
             )
         address_country = etree.SubElement(address, ns["ram"] + "CountryID")
         address_country.text = partner.country_id.code
@@ -129,7 +136,9 @@ class AccountMove(models.Model):
         if self.state == "posted":
             header_doc_id.text = self.name
         else:
-            header_doc_id.text = self.state
+            header_doc_id.text = self._fields["state"].convert_to_export(
+                self.state, self
+            )
         header_doc_typecode = etree.SubElement(header_doc, ns["ram"] + "TypeCode")
         if self.move_type == "out_invoice":
             header_doc_typecode.text = "380"
@@ -144,10 +153,10 @@ class AccountMove(models.Model):
         # Starting from November 2017, it's a config option !
         invoice_date_dt = self.invoice_date or fields.Date.context_today(self)
         self._cii_add_date("IssueDateTime", invoice_date_dt, header_doc, ns)
-        if self.narration and ns["level"] != "minimum":
+        if not is_html_empty(self.narration) and ns["level"] != "minimum":
             note = etree.SubElement(header_doc, ns["ram"] + "IncludedNote")
             content_note = etree.SubElement(note, ns["ram"] + "Content")
-            content_note.text = self.narration
+            content_note.text = html2plaintext(self.narration)
 
     @api.model
     def _cii_get_party_identification(self, commercial_partner):
@@ -863,30 +872,38 @@ class AccountMove(models.Model):
         try:
             xml_check_xsd(xml_byte, flavor="factur-x", level=ns["level"])
         except Exception as e:
-            raise UserError(str(e))
+            raise UserError(str(e)) from e
         return (xml_byte, level)
 
     def _prepare_pdf_metadata(self):
         self.ensure_one()
-        company_name = self.company_id.name
         inv_type = self.move_type == "out_refund" and _("Refund") or _("Invoice")
+        if self.invoice_date:
+            invoice_date = format_date(
+                self.env, self.invoice_date, lang_code=self.partner_id.lang
+            )
+        else:
+            invoice_date = _("(no date)")
+        if self.state == "posted":
+            invoice_number = self.name
+        else:
+            invoice_number = self._fields["state"].convert_to_export(self.state, self)
+        format_vals = {
+            "company_name": self.company_id.name,
+            "invoice_type": inv_type,
+            "invoice_number": invoice_number,
+            "invoice_date": invoice_date,
+        }
         pdf_metadata = {
-            "author": company_name,
+            "author": format_vals["company_name"],
             "keywords": ", ".join([inv_type, _("Factur-X")]),
-            "title": _("%s: %s %s dated %s")
-            % (
-                company_name,
-                inv_type,
-                self.name or self.state,
-                self.invoice_date or "(no date)",
-            ),
-            "subject": "Factur-X %s %s dated %s issued by %s"
-            % (
-                inv_type,
-                self.name or self.state,
-                self.invoice_date or "(no date)",
-                company_name,
-            ),
+            "title": _(
+                "{company_name}: {invoice_type} {invoice_number} dated {invoice_date}"
+            ).format(**format_vals),
+            "subject": _(
+                "Factur-X {invoice_type} {invoice_number} dated {invoice_date} "
+                "issued by {company_name}"
+            ).format(**format_vals),
         }
         return pdf_metadata
 
