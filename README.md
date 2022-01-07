@@ -40,7 +40,7 @@ addon | version | maintainers | summary
 [edi_account_oca](edi_account_oca/) | 14.0.1.1.0 |  | Define EDI Configuration for Account Moves
 [edi_backend_partner_oca](edi_backend_partner_oca/) | 14.0.1.0.0 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
 [edi_endpoint_oca](edi_endpoint_oca/) | 14.0.1.1.1 |  | Base module allowing configuration of custom endpoints for EDI framework.
-[edi_exchange_template_oca](edi_exchange_template_oca/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
+[edi_exchange_template_oca](edi_exchange_template_oca/) | 14.0.1.0.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
 [edi_oca](edi_oca/) | 14.0.1.6.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_storage_oca](edi_storage_oca/) | 14.0.1.4.0 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_webservice_oca](edi_webservice_oca/) | 14.0.1.1.0 |  | Defines webservice integration from EDI Exchange records
