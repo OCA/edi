@@ -6,7 +6,7 @@
     "name": "EDI Exchange Template",
     "summary": """Allows definition of exchanges via templates.""",
     "version": "14.0.1.0.0",
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "license": "LGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
