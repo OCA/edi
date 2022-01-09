@@ -4,8 +4,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from odoo.addons.account_invoice_download_ovh.models.\
-    account_invoice_download_config import ENDPOINTS
+from ..models.account_invoice_download_config import ENDPOINTS
 import logging
 logger = logging.getLogger(__name__)
 

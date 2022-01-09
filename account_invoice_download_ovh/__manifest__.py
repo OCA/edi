@@ -3,7 +3,7 @@
 
 {
     'name': 'Account Invoice Download OVH',
-    'version': '12.0.1.0.1',
+    'version': '11.0.1.0.0',
     'category': 'Accounting',
     'license': 'AGPL-3',
     'summary': 'Get OVH Invoice via the API',
@@ -17,5 +17,4 @@
     ],
     'demo': ['demo/ovh_demo.xml'],
     'installable': True,
-    'application': True,
 }
