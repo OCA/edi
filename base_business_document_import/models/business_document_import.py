@@ -512,11 +512,22 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _match_product(self, product_dict, chatter_msg, seller=False):
-        """Example:
-        product_dict = {
-            'barcode': '5449000054227',
-            'code': 'COCA1L',
-            }
+        """Retrieve product.
+
+        Matching sequence:
+
+        1. ID
+        2. barcode
+        3. packaging barcode
+        4. default_code
+        5. seller code
+
+        :param product_dict: dictionary w/ product info.
+
+            Example: {'barcode': '5449000054227', 'code': 'COCA1L'}
+
+        :param chatter_msg: list of msgs to append to chatter (if any)
+        :param seller: optional product.supplierinfo record
         """
         ppo = self.env["product.product"]
         self._strip_cleanup_dict(product_dict)
