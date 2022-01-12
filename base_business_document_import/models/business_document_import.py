@@ -569,6 +569,7 @@ class BusinessDocumentImport(models.AbstractModel):
             domain = cdomain + [
                 "|",
                 ("barcode", "=", product_dict["barcode"]),
+                ("packaging_ids.barcode", "=", product_dict["barcode"]),
             ]
             product = product.search(domain, limit=1)
         if not product and product_dict.get("code"):
