@@ -60,12 +60,18 @@
         <field name="uom_id" ref="uom.product_uom_litre" />
         <field name="uom_po_id" ref="uom.product_uom_litre" />
     </record>
+    <record id="product_packaging_pencil" model="product.packaging">
+        <field name="name">Multi Pack</field>
+        <field name="qty">10</field>
+        <field name="barcode">1122334455</field>
+    </record>
     <record id="product_pencil" model="product.product">
         <field name="name">Pensel 20 mm</field>
         <field name="description_sale">Very good pencils for red paint</field>
         <field name="default_code">SItemNo011</field>
         <field name="list_price">18</field>
         <field name="type">consu</field>
+        <field name="packaging_ids" eval="[(4, ref('product_packaging_pencil'))]" />
     </record>
     <!-- for tests/UBL-Order-2.0-Example.xml -->
     <record id="base.GBP" model="res.currency">
