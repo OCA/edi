@@ -171,7 +171,28 @@ class TestEndpoint(CommonEndpoint):
             }
         )
         registry = endpoint._endpoint_registry
-        route = endpoint.route
         endpoint.unlink()
-        self.assertTrue(registry.routing_update_required())
-        self.assertIn(route, [x.rule for x in registry._rules_to_drop])
+        http_id = self.env["ir.http"]._endpoint_make_http_id()
+        self.assertTrue(registry.routing_update_required(http_id))
+
+    def test_archiving(self):
+        endpoint = self.endpoint.copy(
+            {
+                "route": "/enable-disable/this",
+                "request_method": "POST",
+                "request_content_type": "text/plain",
+                "auth_type": "public",
+                "exec_as_user_id": self.env.user.id,
+            }
+        )
+        self.assertTrue(endpoint.active)
+        registry = endpoint._endpoint_registry
+        http_id = self.env["ir.http"]._endpoint_make_http_id()
+        fake_2nd_http_id = id(2)
+        registry.ir_http_track(http_id)
+        self.assertFalse(registry.routing_update_required(http_id))
+        self.assertFalse(registry.routing_update_required(fake_2nd_http_id))
+
+        endpoint.active = False
+        self.assertTrue(registry.routing_update_required(http_id))
+        self.assertFalse(registry.routing_update_required(fake_2nd_http_id))
