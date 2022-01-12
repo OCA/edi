@@ -524,43 +524,26 @@ class BusinessDocumentImport(models.AbstractModel):
             return product_dict["recordset"]
         if product_dict.get("id"):
             return ppo.browse(product_dict["id"])
-        company_id = self._context.get("force_company") or self.env.company.id
-        cdomain = ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
-        if product_dict.get("barcode"):
-            product = ppo.search(
-                cdomain + [("barcode", "=", product_dict["barcode"])], limit=1
-            )
-            if product:
-                return product
-        if product_dict.get("code"):
-            product = ppo.search(
-                cdomain
+        product = self._match_product_search(product_dict)
+        if product:
+            return product
+        elif seller:
+            # WARNING: Won't work for multi-variant products
+            # because product.supplierinfo is attached to product template
+            sinfo = self.env["product.supplierinfo"].search(
+                self._match_company_domain()
                 + [
-                    "|",
-                    ("barcode", "=", product_dict["code"]),
-                    ("default_code", "=", product_dict["code"]),
+                    ("name", "=", seller.id),
+                    ("product_code", "=", product_dict["code"]),
                 ],
                 limit=1,
             )
-            if product:
-                return product
-            # WARNING: Won't work for multi-variant products
-            # because product.supplierinfo is attached to product template
-            if seller:
-                sinfo = self.env["product.supplierinfo"].search(
-                    cdomain
-                    + [
-                        ("name", "=", seller.id),
-                        ("product_code", "=", product_dict["code"]),
-                    ],
-                    limit=1,
-                )
-                if (
-                    sinfo
-                    and sinfo.product_tmpl_id.product_variant_ids
-                    and len(sinfo.product_tmpl_id.product_variant_ids) == 1
-                ):
-                    return sinfo.product_tmpl_id.product_variant_ids[0]
+            if (
+                sinfo
+                and sinfo.product_tmpl_id.product_variant_ids
+                and len(sinfo.product_tmpl_id.product_variant_ids) == 1
+            ):
+                return sinfo.product_tmpl_id.product_variant_ids[0]
         raise self.user_error_wrap(
             "_match_product",
             product_dict,
@@ -577,6 +560,31 @@ class BusinessDocumentImport(models.AbstractModel):
                 seller and seller.name or "",
             ),
         )
+
+    @api.model
+    def _match_product_search(self, product_dict):
+        product = self.env["product.product"].browse()
+        cdomain = self._match_company_domain()
+        if product_dict.get("barcode"):
+            domain = cdomain + [
+                "|",
+                ("barcode", "=", product_dict["barcode"]),
+            ]
+            product = product.search(domain, limit=1)
+        if not product and product_dict.get("code"):
+            # TODO: this domain could be probably included in the former one
+            domain = cdomain + [
+                "|",
+                ("barcode", "=", product_dict["code"]),
+                ("default_code", "=", product_dict["code"]),
+            ]
+            product = product.search(domain, limit=1)
+        return product
+
+    @api.model
+    def _match_company_domain(self):
+        company_id = self._context.get("force_company") or self.env.user.company_id.id
+        return ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
 
     @api.model
     def _match_currency(self, currency_dict, chatter_msg):
