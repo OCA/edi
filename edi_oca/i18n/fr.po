@@ -435,6 +435,36 @@ msgid "Exchange error"
 msgstr ""
 
 #. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Exchange not received"
+msgstr "Échange non reçu"
+
+#. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Exchange not valid"
+msgstr "Échange non valide"
+
+#. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Exchange processed successfully "
+msgstr ""
+
+#. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Exchange processed with errors"
+msgstr "Échange traité avec des erreurs"
+
+#. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Exchange received successfully "
+msgstr "Échange traité avec succès "
+
+#. module: edi_oca
 #: code:addons/edi_oca/models/edi_backend.py:0
 #, python-format
 msgid "Exchange record ID=%d is not an outgoing record, cannot be generated"
@@ -446,6 +476,12 @@ msgstr ""
 msgid ""
 "Exchange record ID=%d is not in draft state and has already an output value."
 msgstr ""
+
+#. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Exchange sent"
+msgstr "Échange envoyé"
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__edi_exchange_state
@@ -482,42 +518,6 @@ msgstr "Configuration Edi attendue"
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__external_identifier
 msgid "External Identifier"
 msgstr "Lien externe"
-
-#. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
-#, python-format
-msgid "Exchange not received"
-msgstr "Échange non reçu"
-
-#. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
-#, python-format
-msgid "Exchange not valid"
-msgstr "Échange non valide"
-
-#. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
-#, python-format
-msgid "File %s processed successfully "
-msgstr "Échange traité avec succès "
-
-#. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
-#, python-format
-msgid "Exchange processed with errors"
-msgstr "Échange traité avec des erreurs"
-
-#. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
-#, python-format
-msgid "Exchange received successfully "
-msgstr "Échange traité avec succès "
-
-#. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
-#, python-format
-msgid "Exchange sent"
-msgstr "Échange envoyé"
 
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__enable_domain
@@ -919,6 +919,9 @@ msgstr ""
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_error_on_send
 msgid "error on send"
 msgstr ""
+
+#~ msgid "File %s processed successfully "
+#~ msgstr "Échange traité avec succès "
 
 #~ msgid "Ack Exchange"
 #~ msgstr "Ack Exchange"
