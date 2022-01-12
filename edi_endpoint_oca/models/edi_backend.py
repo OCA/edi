@@ -24,7 +24,7 @@ class EDIBackend(models.Model):
     def action_manage_endpoints(self):
         action = self.env.ref("edi_endpoint_oca.edi_endpoint_act_window").read()[0]
         action["domain"] = [
-            ("backend_type_id", "=", self.backend_type_id),
+            ("backend_type_id", "=", self.backend_type_id.id),
             "|",
             ("backend_id", "=", False),
             ("backend_id", "=", self.id),
