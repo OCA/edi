@@ -5,10 +5,11 @@ import base64
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
-from odoo.tools import file_open
+from odoo.tools import file_open, mute_logger
 
 
 class TestUblOrderImport(TransactionCase):
+    @mute_logger("odoo.addons.sale_order_import.wizard.sale_order_import")
     def test_ubl_order_import(self):
         ref = self.env.ref
         tests = {
