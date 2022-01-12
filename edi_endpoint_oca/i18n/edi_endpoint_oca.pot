@@ -30,6 +30,7 @@ msgstr ""
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__backend_id
+#: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
 msgid "Backend"
 msgstr ""
 
@@ -42,6 +43,11 @@ msgstr ""
 #: code:addons/edi_endpoint_oca/models/edi_endpoint.py:0
 #, python-format
 msgid "Backend and exchange type are mandatory"
+msgstr ""
+
+#. module: edi_endpoint_oca
+#: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
+msgid "Backend type"
 msgstr ""
 
 #. module: edi_endpoint_oca
@@ -125,6 +131,11 @@ msgid "Exchange Type"
 msgstr ""
 
 #. module: edi_endpoint_oca
+#: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
+msgid "Exchange type"
+msgstr ""
+
+#. module: edi_endpoint_oca
 #: code:addons/edi_endpoint_oca/models/edi_endpoint.py:0
 #, python-format
 msgid "Exchange type not compatible with selected backend type."
@@ -138,6 +149,11 @@ msgstr ""
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__exec_mode
 msgid "Exec Mode"
+msgstr ""
+
+#. module: edi_endpoint_oca
+#: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
+msgid "Group By"
 msgstr ""
 
 #. module: edi_endpoint_oca
