@@ -132,14 +132,22 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                         },
                     ),
                 ],
+                "packaging_ids": [(0, 0, {"name": "Big Pack", "barcode": "BIG-PACK"})],
             }
         )
+        # Match by code
         product_dict = {"code": "FURN_7777 "}
         res = bdio._match_product(product_dict, [])
         self.assertEqual(res, self.env.ref("product.product_delivery_01"))
+        # Match by barcode
         product_dict = {"barcode": "9782203121102"}
         res = bdio._match_product(product_dict, [])
         self.assertEqual(res, product1)
+        # Match by packaging barcode
+        product_dict = {"barcode": "BIG-PACK"}
+        res = bdio._match_product(product_dict, [])
+        self.assertEqual(res, product1)
+        # Match by seller
         product_dict = {"code": "TEST1242"}
         res = bdio._match_product(
             product_dict, [], seller=self.env.ref("base.res_partner_2")
