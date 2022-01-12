@@ -53,8 +53,7 @@ class TestEndpoint(CommonEndpoint):
                 return "ok"
 
         endpoint_handler = partial(TestController()._do_something, new_route.route)
-        with self._get_mocked_request() as req:
-            req.registry._init_modules = set()
+        with self._get_mocked_request():
             new_route._register_controller(endpoint_handler=endpoint_handler)
             # Ensure the routing rule is registered
             rmap = self.env["ir.http"].routing_map()
@@ -62,7 +61,7 @@ class TestEndpoint(CommonEndpoint):
         # Ensure is updated when needed
         new_route.route += "/new"
         new_route._refresh_endpoint_data()
-        with self._get_mocked_request() as req:
+        with self._get_mocked_request():
             new_route._register_controller(endpoint_handler=endpoint_handler)
             rmap = self.env["ir.http"].routing_map()
             self.assertNotIn("/my/test/route", [x.rule for x in rmap._rules])
@@ -77,8 +76,7 @@ class TestEndpoint(CommonEndpoint):
                 return "ok"
 
         endpoint_handler = TestController()._do_something
-        with self._get_mocked_request() as req:
-            req.registry._init_modules = set()
+        with self._get_mocked_request():
             new_route._register_controller(endpoint_handler=endpoint_handler)
             # Ensure the routing rule is registered
             rmap = self.env["ir.http"].routing_map()

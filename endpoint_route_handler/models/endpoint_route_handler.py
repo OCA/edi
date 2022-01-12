@@ -4,8 +4,6 @@
 
 import logging
 
-from werkzeug.routing import Rule
-
 from odoo import _, api, exceptions, fields, http, models
 
 # from odoo.addons.base_sparse_field.models.fields import Serialized
@@ -193,33 +191,52 @@ class EndpointRouteHandler(models.AbstractModel):
 
     @api.model_create_multi
     def create(self, vals_list):
-        res = super().create(vals_list)
-        if not self._abstract:
-            res._register_controllers()
-        return res
+        rec = super().create(vals_list)
+        if not self._abstract and rec.active:
+            rec._register_controllers()
+        return rec
 
     def write(self, vals):
         res = super().write(vals)
-        if not self._abstract and any([x in vals for x in self._controller_fields()]):
-            self._register_controllers()
+        self._handle_route_updates(vals)
         return res
+
+    def _handle_route_updates(self, vals):
+        if "active" in vals:
+            if vals["active"]:
+                self._register_controllers()
+            else:
+                self._unregister_controllers()
+            return True
+        if any([x in vals for x in self._controller_fields()]):
+            self._register_controllers()
+            return True
+        return False
 
     def unlink(self):
         if not self._abstract:
-            for rec in self:
-                rec._unregister_controller()
+            self._unregister_controllers()
         return super().unlink()
 
     def _register_hook(self):
         super()._register_hook()
         if not self._abstract:
-            self.search([])._register_controllers()
+            # Look explicitly for active records.
+            # Pass `init` to not set the registry as updated
+            # since this piece of code runs only when the model is loaded.
+            self.search([("active", "=", True)])._register_controllers(init=True)
 
-    def _register_controllers(self):
+    def _register_controllers(self, init=False):
         if self._abstract:
             self._refresh_endpoint_data()
         for rec in self:
-            rec._register_controller()
+            rec._register_controller(init=init)
+
+    def _unregister_controllers(self):
+        if self._abstract:
+            self._refresh_endpoint_data()
+        for rec in self:
+            rec._unregister_controller()
 
     def _refresh_endpoint_data(self):
         """Enforce refresh of route computed fields.
@@ -233,24 +250,29 @@ class EndpointRouteHandler(models.AbstractModel):
     def _endpoint_registry(self):
         return EndpointRegistry.registry_for(self.env.cr.dbname)
 
-    def _register_controller(self, endpoint_handler=None, key=None):
-        rule = self._make_controller_rule(endpoint_handler=endpoint_handler)
-        key = key or self._endpoint_registry_unique_key()
-        self._endpoint_registry.add_or_update_rule(key, rule)
+    def _register_controller(self, endpoint_handler=None, key=None, init=False):
+        rule = self._make_controller_rule(endpoint_handler=endpoint_handler, key=key)
+        self._endpoint_registry.add_or_update_rule(rule, init=init)
         self._logger.debug(
             "Registered controller %s (auth: %s)", self.route, self.auth_type
         )
 
-    def _make_controller_rule(self, endpoint_handler=None):
+    def _make_controller_rule(self, endpoint_handler=None, key=None):
+        key = key or self._endpoint_registry_unique_key()
         route, routing, endpoint_hash = self._get_routing_info()
         endpoint_handler = endpoint_handler or self._default_endpoint_handler()
         assert callable(endpoint_handler)
         endpoint = http.EndPoint(endpoint_handler, routing)
-        rule = Rule(route, endpoint=endpoint, methods=routing["methods"])
-        rule.merge_slashes = False
-        rule._auto_endpoint = True
-        rule._endpoint_hash = endpoint_hash
-        rule._endpoint_group = self.route_group
+        rule = self._endpoint_registry.make_rule(
+            # fmt: off
+            key,
+            route,
+            endpoint,
+            routing,
+            endpoint_hash,
+            route_group=self.route_group
+            # fmt: on
+        )
         return rule
 
     def _default_endpoint_handler(self):
