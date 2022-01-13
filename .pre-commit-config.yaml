@@ -13,7 +13,9 @@ exclude: |
   # Repos using Sphinx to generate docs don't need prettying
   ^docs/_templates/.*\.html$|
   # You don't usually want a bot to modify your legal texts
-  (LICENSE.*|COPYING.*)
+  (LICENSE.*|COPYING.*)|
+  # oca-port tool
+  .oca-port.json
 default_language_version:
   python: python3
   node: "14.13.0"
