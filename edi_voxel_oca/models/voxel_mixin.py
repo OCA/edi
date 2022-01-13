@@ -180,8 +180,8 @@ class VoxelMixin(models.AbstractModel):
             self._delete_voxel_document("Inbox", voxel_filename, company)
 
     def create_document_from_xml(self, xml_content, voxel_filename, company):
-        """ This method must be overwritten by the model that use
-        `enqueue_import_voxel_documents` method """
+        """This method must be overwritten by the model that use
+        `enqueue_import_voxel_documents` method"""
         return False
 
     # API request methods
@@ -274,7 +274,7 @@ class VoxelMixin(models.AbstractModel):
         self.write({"voxel_state": "cancelled"})
 
     def get_voxel_login(self, company=None):
-        """ This method must be overwritten by the model that inherit from
+        """This method must be overwritten by the model that inherit from
         voxel.mixin"""
         return self.env["voxel.login"]
 
@@ -290,7 +290,8 @@ class VoxelMixin(models.AbstractModel):
             ("product_id", "=", False),
         ]
         customerinfo = self.env["product.customerinfo"].search(
-            [("name", "=", partner.id)] + domain, order="product_id, sequence",
+            [("name", "=", partner.id)] + domain,
+            order="product_id, sequence",
         )
         if not customerinfo:
             customerinfo = self.env["product.customerinfo"].search(
