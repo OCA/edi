@@ -7,7 +7,7 @@
     "summary": """
     Base module allowing configuration of custom endpoints for EDI framework.
     """,
-    "version": "14.0.1.2.0",
+    "version": "14.0.1.2.1",
     "development_status": "Alpha",
     "license": "LGPL-3",
     "website": "https://github.com/OCA/edi",
