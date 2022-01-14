@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!--
+    NOTE: you must assign a backend to this endpoint in order to work.
+     -->
+    <record id="endpoint_demo_1" model="edi.endpoint">
+        <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
+        <field
+            name="exchange_type_id"
+            ref="edi_sale_order_import_ubl.edi_exchange_type"
+        />
+        <!-- Enable it when ready to be used -->
+        <field name="active" eval="0" />
+        <field name="name">UBL import SO</field>
+        <field name="route">/edi/ubl/input/sale_order</field>
+        <field name="request_method">POST</field>
+        <field name="request_content_type">application/xml</field>
+        <field name="exec_mode">code</field>
+        <field name="code_snippet">
+xml_data = request.httprequest.get_data()
+parsed, error = env["sale.order.import"]._parse_xml(xml_data)
+if error:
+    raise werkzeug.exceptions.BadRequest(error)
+
+exchange_record = endpoint.create_exchange_record(
+    file_content=xml_data,
+    edi_exchange_state="input_received"
+)
+
+result = {
+    "payload": {
+        "ok": True,
+        "message": "Your order will be processed shortly",
+        "data": {
+            "REF": exchange_record.identifier,
+        }
+    }
+}
+        </field>
+    </record>
+
+</odoo>

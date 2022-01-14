@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="edi_backend_ubl_demo" model="edi.backend">
+        <field name="name">UBL backend demo</field>
+        <field name="backend_type_id" ref="edi_backend_type_ubl" />
+    </record>
+</odoo>
