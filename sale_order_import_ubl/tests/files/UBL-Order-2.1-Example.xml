@@ -381,7 +381,7 @@
                     <cbc:ID>SItemNo011</cbc:ID>
                 </cac:SellersItemIdentification>
                 <cac:StandardItemIdentification>
-                    <cbc:ID schemeAgencyID="6" schemeID="GTIN">123452340123</cbc:ID>
+                    <cbc:ID schemeAgencyID="6" schemeID="GTIN">1122334455</cbc:ID>
                 </cac:StandardItemIdentification>
                 <cac:AdditionalItemProperty>
                     <cbc:Name>Hair color</cbc:Name>

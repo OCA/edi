@@ -5,22 +5,24 @@ import base64
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
-from odoo.tools import file_open
+from odoo.tools import file_open, mute_logger
 
 
 class TestUblOrderImport(TransactionCase):
+    @mute_logger("odoo.addons.sale_order_import.wizard.sale_order_import")
     def test_ubl_order_import(self):
+        ref = self.env.ref
         tests = {
             "UBL-Order-2.1-Example.xml": {
                 "client_order_ref": "34",
                 "date_order": "2010-01-20",
-                "partner": self.env.ref("sale_order_import_ubl.svensson"),
-                "shipping_partner": self.env.ref(
-                    "sale_order_import_ubl.swedish_trucking"
-                ),
-                "invoicing_partner": self.env.ref("sale_order_import_ubl.karlsson"),
-                "currency": self.env.ref("base.SEK"),
+                "partner": ref("sale_order_import_ubl.svensson"),
+                "shipping_partner": ref("sale_order_import_ubl.swedish_trucking"),
+                "invoicing_partner": ref("sale_order_import_ubl.karlsson"),
+                "currency": ref("base.SEK"),
                 "commitment_date": "2010-02-26 18:00:00",
+                "products": ref("sale_order_import_ubl.product_red_paint")
+                + ref("sale_order_import_ubl.product_pencil"),
             },
             "UBL-Order-2.0-Example.xml": {
                 "client_order_ref": "AEG012345",
@@ -29,10 +31,12 @@ class TestUblOrderImport(TransactionCase):
                 "shipping_partner": self.env.ref("sale_order_import_ubl.iyt"),
                 "currency": self.env.ref("base.GBP"),
                 "commitment_date": "2010-02-26 00:00:00",
+                "products": ref("sale_order_import_ubl.product_beeswax"),
             },
             "UBL-RequestForQuotation-2.0-Example.xml": {
                 "partner": self.env.ref("sale_order_import_ubl.s_massiah"),
                 "shipping_partner": self.env.ref("sale_order_import_ubl.iyt"),
+                "products": ref("sale_order_import_ubl.product_beeswax"),
             },
             "UBL-RequestForQuotation-2.1-Example.xml": {
                 "partner": self.env.ref("sale_order_import_ubl.gentofte_kommune"),
@@ -40,6 +44,9 @@ class TestUblOrderImport(TransactionCase):
                 "shipping_partner": self.env.ref(
                     "sale_order_import_ubl.delivery_gentofte_kommune"
                 ),
+                "products": ref("product.product_product_25")
+                + ref("product.product_product_24")
+                + ref("product.product_product_9"),
             },
         }
         for filename, res in tests.items():
@@ -69,3 +76,12 @@ class TestUblOrderImport(TransactionCase):
                 )
             else:
                 self.assertFalse(so.commitment_date)
+
+            # NOTE: parsing products should be tested by base_ubl
+            # but ATM there's no test coverage there.
+            # This little test ensures that it works in this context at least.
+            if res.get("products"):
+                expected_ids = sorted(res["products"].ids)
+                self.assertEqual(
+                    sorted(so.order_line.mapped("product_id").ids), expected_ids
+                )
