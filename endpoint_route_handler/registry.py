@@ -31,7 +31,7 @@ class EndpointRegistry:
     # TODO: add test
     def get_rules_by_group(self, group):
         for key, rule in self._mapping.items():
-            if rule.endpoint_group == group:
+            if rule.route_group == group:
                 yield (key, rule)
 
     def add_or_update_rule(self, rule, force=False, init=False):
