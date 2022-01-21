@@ -13,7 +13,8 @@
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import"],
     "excludes": ["account_invoice_import_invoice2data"],
-    "external_dependencies": {"python": ["PyMuPDF", "regex", "dateparser"]},
+    "external_dependencies": {"python": ["fitz", "regex", "dateparser"]},
+    # fitz = pymupdf
     "data": [
         "security/ir.model.access.csv",
         "wizard/account_invoice_import_view.xml",
