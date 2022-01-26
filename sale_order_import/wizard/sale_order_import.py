@@ -101,7 +101,7 @@ class SaleOrderImport(models.TransientModel):
             return xml_root, error_msg
         try:
             self.parse_xml_order(xml_root, detect_doc_type=True)
-        except UserError:
+        except (UserError, NotImplementedError):
             error_msg = _("Unsupported XML document")
         return xml_root, error_msg
 
