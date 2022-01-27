@@ -1,0 +1,909 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_invoice_import
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2022-01-28 00:48+0000\n"
+"Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
+"Language-Team: none\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/models/account_move.py:0
+#, python-format
+msgid " Amount w/o tax: %s"
+msgstr " Bedrag Excl. BTW: %s"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "%d invoice line(s) deleted: %s"
+msgstr "%d factuurregel(s) verwijderd: %s"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "%d new invoice line(s) created: %s"
+msgstr "%d nieuwe factuur regel(s) aangemaakt: %s"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Account missing on product '%s' or on it's related category '%s'."
+msgstr "Account ontbreekt bij '%s' of de daaraan gerelateerde categorie '%s'."
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_form
+msgid "Accounting Parameters"
+msgstr "Boekhoud instellingen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_needaction
+msgid "Action Needed"
+msgstr "Actie vereist"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__active
+msgid "Active"
+msgstr "Actief"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Adjustment"
+msgstr "Aanpassen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__adjustment_credit_account_id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__adjustment_credit_account_id
+msgid "Adjustment Credit Account"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__adjustment_debit_account_id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__adjustment_debit_account_id
+msgid "Adjustment Debit Account"
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Adjustment on %s"
+msgstr "Aanpassing op %s"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__account_analytic_id
+msgid "Analytic Account"
+msgstr "Analytisch account"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Archived"
+msgstr "Gearchiveerd"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_attachment_count
+msgid "Attachment Count"
+msgstr "Aantal bijlagen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__invoice_import_create_bank_account
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__invoice_import_create_bank_account
+msgid "Auto-create Bank Account of Supplier"
+msgstr "Automatisch Bankrekening aanmaken voor leverancier"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Cancel"
+msgstr "Annuleren"
+
+#. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_res_company
+msgid "Companies"
+msgstr "Bedrijven"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__company_id
+msgid "Company"
+msgstr "Bedrijf"
+
+#. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_res_config_settings
+msgid "Config Settings"
+msgstr "Instellingen"
+
+#. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_account_invoice_import_config
+msgid "Configuration for the import of Supplier Invoices"
+msgstr "Instellingen voor het importeren van leveranciersfacturen"
+
+#. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Create"
+msgstr "Aanmaken"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Create New"
+msgstr "Nieuwe aanmaken"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Create New Vendor"
+msgstr "Aanmaken nieuwe leverancier"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__create_uid
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__create_uid
+msgid "Created by"
+msgstr "Aangemaakt door"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__create_date
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__create_date
+msgid "Created on"
+msgstr "Gemaakt op"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__currency_id
+msgid "Currency"
+msgstr "Valuta"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Weergavenaam"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__invoice_id
+msgid "Draft Supplier Invoice to Update"
+msgstr "Concept leveranciers factuur om bij tewerken"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.res_config_settings_view_form
+msgid "Electronic Invoices Import"
+msgstr "Digitale factuur Import"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__account_id
+msgid "Expense Account"
+msgstr "Onkostenrekening"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__invoice_filename
+msgid "Filename"
+msgstr "Bestandsnaam"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_follower_ids
+msgid "Followers"
+msgstr "Volgers"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Volgers (Kanalen)"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Volgers (Partners)"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__label
+msgid "Force Description"
+msgstr "Forceer omschrijving"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config__label
+msgid "Force supplier invoice line description"
+msgstr "Forceer inkoopfactuur regel omschrijving"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Group By"
+msgstr "Groeppeer op"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_move__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_needaction
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_unread
+msgid "If checked, new messages require your attention."
+msgstr "Indien aangevinkt, nieuwe berichten vereisen uw aandacht."
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_error
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Indien aangemerkt enkele berichten hebben afleveringsproblemen."
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid ""
+"If the format you need is not listed above, you should install an "
+"additionnal Odoo module that adds support for that format (e.g. "
+"<i>account_invoice_import_facturx</i>, <i>account_invoice_import_ubl</i>, "
+"<i>account_invoice_import_invoice2data</i>, etc)."
+msgstr ""
+"Indien de indeling hierboven niet is vermeld, dan dient er een aanvullende "
+"module te worden geinstalleerd om de ondersteuning toe te voegen. (b.v. "
+"<i>account_invoice_import_facturx</i>, <i>account_invoice_import_ubl</i>, "
+"<i>account_invoice_import_invoice2data</i>, etc)."
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid ""
+"If there are several invoice import configurations for the supplier of the "
+"invoice, Odoo will ask you to choose one of them. If there is an existing "
+"draft invoice for that supplier, Odoo will propose you to update that draft "
+"invoice or create a new draft invoice."
+msgstr ""
+"Indien er meerdere importeer configuraties aanwezig zijn, zak het systeem "
+"vragen om er een te selecteren. Indien er reeds een bestaande concept "
+"factuur bestaand van de leverancier, dan zal het systeem voorstellen om de "
+"bestaande factuur aantepassen of een nieuwe concept factuur aan te maken."
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__state__import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Import"
+msgstr "Import"
+
+#. module: account_invoice_import
+#: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_config_action
+#: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_config_menu
+msgid "Import Bills"
+msgstr "Import facturen"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.view_move_form
+msgid "Import Invoice File"
+msgstr "Importeer factuur bestand"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.view_move_form
+msgid "Import Next Invoice"
+msgstr "Import volgende factuur"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Import Supplier Invoice or Refund"
+msgstr "Importeer Leveranciers factuur of Credit factuur"
+
+#. module: account_invoice_import
+#: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_action
+#: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_menu
+msgid "Import Vendor Bill"
+msgstr "Importeer Inkoopfactuur"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Import Vendor Bill wizard"
+msgstr "Importeer factuur wizard"
+
+#. module: account_invoice_import
+#: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_config_root
+msgid "Import Vendor Bills"
+msgstr "Importeer inkoopfacturen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__invoice_type__in_invoice
+msgid "Invoice"
+msgstr "factuur"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__import_config_id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_ids
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_users__invoice_import_ids
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_form
+msgid "Invoice Import Configuration"
+msgstr "Factuur import instellingen"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_tree
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
+msgid "Invoice Import Configurations"
+msgstr "Factuur Importeer instellingen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__invoice_type
+msgid "Invoice or Refund"
+msgstr "Factuur of Creditfactuur"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_is_follower
+msgid "Is Follower"
+msgstr "Is volger"
+
+#. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import____last_update
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config____last_update
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_move____last_update
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company____last_update
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings____last_update
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner____last_update
+msgid "Last Modified on"
+msgstr "Laatst gewijzigd op"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__write_uid
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__write_uid
+msgid "Last Updated by"
+msgstr "Laatst bijgewerkt door"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__write_date
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__write_date
+msgid "Last Updated on"
+msgstr "Laatst bijgewerkt op"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__invoice_import_email
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__invoice_import_email
+msgid "Mail Gateway: Destination E-mail"
+msgstr "Mail Gateway: Bestemmings E-mail"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "Hoofdbijlage"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message
+msgid "Message"
+msgstr "Bericht"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_error
+msgid "Message Delivery error"
+msgstr "Bericht afleveringsfout"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_ids
+msgid "Messages"
+msgstr "Berichten"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__invoice_line_method
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Method for Invoice Line"
+msgstr "Methode voor de factuurregel"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Missing Invoice Import Configuration on partner '%s'."
+msgstr ""
+"Er zijn geen instellingen opgegeven om facturen te importeren van de partner "
+"'%s'."
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import_config__invoice_line_method__nline_auto_product
+msgid "Multi Line, Auto-selected Product"
+msgstr "Meerdere regels, Automatische Product selectie"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import_config__invoice_line_method__nline_no_product
+msgid "Multi Line, No Product"
+msgstr "Meerdere regels, Geen product"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import_config__invoice_line_method__nline_static_product
+msgid "Multi Line, Static Product"
+msgstr "Meerdere regels, vast product"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__name
+msgid "Name"
+msgstr "Naam"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Aantal acties"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_count
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_users__invoice_import_count
+msgid "Number of Invoice Import Configurations"
+msgstr "Aantal factuur importeer instellingen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_error_counter
+msgid "Number of errors"
+msgstr "Aantal fouten"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Aantal berichten welke aandacht vereisen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Aantal berichten met afleveringsfouten"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Aantal ongelezen berichten"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Only the date format 102 is supported "
+msgstr "Enkel het datum formaat 102 is ondersteund "
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__invoice_file
+msgid "PDF or XML Invoice"
+msgstr "PDF of XML factuur"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__partner_id
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Partner"
+msgstr "Partner"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__partner_country_id
+msgid "Partner Country"
+msgstr "Partner land"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__partner_vat
+msgid "Partner Vat"
+msgstr "Partner BTW"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__state__partner-not-found
+msgid "Partner not found"
+msgstr "Partner niet gevonden"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__invoice_type__in_refund
+msgid "Refund"
+msgstr "Credit"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "SMS afleveringsfout"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Search Invoice Import Configurations"
+msgstr "Doorzoek factuur importeer instellingen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__state__config
+msgid "Select Invoice Import Configuration"
+msgstr "Selecteer de importeer instellingen"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__sequence
+msgid "Sequence"
+msgstr "Volgorde"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import_config__invoice_line_method__1line_no_product
+msgid "Single Line, No Product"
+msgstr "Enkele regel, Geen Product"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import_config__invoice_line_method__1line_static_product
+msgid "Single Line, Static Product"
+msgstr "Enkele regel, vast Product"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid ""
+"Some draft supplier invoices/refunds have been found for the supplier of the"
+" invoice you are importing; one of them may correspond to the invoice you "
+"are importing. You can either select an existing draft supplier invoice to "
+"update or create a new draft invoice."
+msgstr ""
+"Er zijn reeds enkele concept facturen/creditfacturen aanwezig van deze "
+"leveransier; een van de facturen kan mogelijk overeenkomen met de factuur "
+"die je probeerd te importeren. U kunt er voor kiezen om een bestaande "
+"concept factuur bij te werken of een nieuwe concept factuur aan te maken."
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__state
+msgid "State"
+msgstr "Status"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__static_product_id
+msgid "Static Product"
+msgstr "Vast Product"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/models/account_invoice_import_config.py:0
+#, python-format
+msgid ""
+"Static Product must be set on the invoice import configuration of supplier "
+"'%s' that has a Method for Invoice Line set to 'Single Line, Static Product'"
+" or 'Multi Line, Static Product'."
+msgstr ""
+"Het status product dient te worden opgegeven in de configuratie van de "
+"leverancier '%s' welke de importeer functie heeft volgens de methode 'Enkele "
+"regel, vast Product' of 'Meerdere Regels, vast Product'."
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__tax_ids
+msgid "Taxes"
+msgstr "Belastingen"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/models/account_invoice_import_config.py:0
+#, python-format
+msgid ""
+"The Expense Account must be set on the invoice import configuration of "
+"supplier '%s' that has a Method for Invoice Line set to 'Single Line, No "
+"Product' or 'Multi Line, No Product'."
+msgstr ""
+"De kostplaats moet worden ingesteld in de importeer instellingen voor de "
+"leverancier '%s' welke de importeer methode 'Enkele regel, geen product', of "
+"' Meerdere regels. Geen Product' gebruikt."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The currency of the imported invoice (%s) is different from the currency of "
+"the existing invoice (%s)"
+msgstr ""
+"De valuta van de geimporteerde factuur (%s) is niet gelijk aan de valuta van "
+"de reeds bestaande factuur (%s)"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config__invoice_line_method
+msgid ""
+"The multi-line methods will not work for PDF invoices that don't have an "
+"embedded XML file which has structured information on each line."
+msgstr ""
+"De multi-line methode werkt niet voor PDF facturen zonder een XML bestand "
+"welke de gestructureerde informatie bevat."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The quantity has been updated on the invoice line with product '%s' from %s "
+"to %s %s"
+msgstr ""
+"Het aantal is bijgwerkt op de factuurregel van het product '%s' van %s naar "
+"%s %s"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid ""
+"The supplier has several invoice import configurations: please select the "
+"one you want to use for this import."
+msgstr ""
+"De betreffende leverancier heeft meerdere mogelijke instellingen voor het "
+"importeren van facturen. Selecteer de te gebruiken instelling voor deze "
+"factuur."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The supplier of the imported invoice (%s) is different from the supplier of "
+"the invoice to update (%s)."
+msgstr ""
+"De leverancier (%s) van de geimporteerde factuur is niet gelijk aan de "
+"leverancier van de factuur welke dient te worden aangepast(%s)."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The tax amount has been forced to %s (amount computed by Odoo was: %s)."
+msgstr "Het BTW bedrag is geforceerd naar %s (het berekende bedrag was: %s)."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The total amount is different from the untaxed amount, but no tax has been "
+"configured !"
+msgstr ""
+"Het totaal bedrag wijkt af van het bruto bedrag, maar er is geen belasting "
+"tarief ingesteld !"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The unit price has been updated on the invoice line with product '%s' from "
+"%s to %s %s"
+msgstr ""
+"De eenheidsprijs van het product '%s' is bijgewerkt van '%s' naar '%s' '%s'"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The vendor to update '%s' already has a VAT number (%s) which is different "
+"from the vendor VAT number of the invoice (%s)."
+msgstr ""
+"De levverancier om bij te werken '%s' heeft al een BTW nummer (%s) welke "
+"niet overeeenkomt met het BTW nummer van de leverancier op de factuur (%s)."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The vendor to update '%s' already has a country (%s) which is different from"
+" the country of the vendor of the invoice (%s)."
+msgstr ""
+"De leverancier om bij te werken '%s' heeft al een land toegekend (%s) welke "
+"niet overeenkomt met de landsinformatie van de leverancier op de factuur "
+"(%s)."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "This XML file is not XML-compliant. Error: %s"
+msgstr "Het XML bestand voldoet niet aan de XML standaard. Fout '%s'"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_res_company__invoice_import_email
+#: model:ir.model.fields,help:account_invoice_import.field_res_config_settings__invoice_import_email
+msgid ""
+"This field is used in multi-company setups to import the invoices received "
+"by the mail gateway in the appropriate company"
+msgstr ""
+"Dit veld wordt gebruikt in een multi-company setup om de facturen te "
+"importeren welke zijn ontvangen via de e-mail gateway van het betreffende "
+"bedrijf"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"This invoice already exists in Odoo. It's Supplier Invoice Number is '%s' "
+"and it's Odoo number is '%s'"
+msgstr ""
+"Deze factuur bestaat al. Het inkoopfactuur nummer van de leverancier is '%s' "
+"Het inkoopfactuur nummer is '%s'"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"This invoice has been created automatically via file import. Origin: %s."
+msgstr "Deze factuur is automatisch aangemaakt via bestand import. Bron %s."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "This invoice has been updated automatically via the import of file %s"
+msgstr ""
+"Deze factuur is automatisch bijgwerkt door het  importeren van het bestand %s"
+
+#. module: account_invoice_import
+#: model:ir.model.constraint,message:account_invoice_import.constraint_res_company_invoice_import_email_uniq
+msgid "This invoice import email already exists!"
+msgstr "Dit e-mail adres voor het importeren van facturen bestaat reeds!"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"This type of PDF invoice is not supported. Did you install the module to "
+"support this type of file?"
+msgstr ""
+"Dit type PDF factuur is niet ondersteund. Wilt u de ondersteuning voor dit "
+"type installeren?"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"This type of XML invoice is not supported. Did you install the module to "
+"support this type of file?"
+msgstr ""
+"Dit type XML factuur is niet ondersteund. Is de module vereist voor dit type "
+"geinstalleerd?"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__amount_total
+msgid "Total"
+msgstr "Totaal"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__amount_untaxed
+msgid "Total Untaxed"
+msgstr "Totaal Bruto"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_unread
+msgid "Unread Messages"
+msgstr "Ongelezen berichten"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Ongelezen berichten teller"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__state__update
+msgid "Update"
+msgstr "Bijwerken"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Update Existing"
+msgstr "Bestaande bijwerken"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Update Existing Vendor"
+msgstr "Update bestaande leverancier"
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__state__update-from-invoice
+msgid "Update From Invoice"
+msgstr "Bijwerken van factuur"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Update Invoice"
+msgstr "Factuur Bijwerken"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Update and Continue"
+msgstr "Bijwerken en doorgaan"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Update and Show Vendor"
+msgstr "Bijwerken en weergeven leverancier"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid ""
+"Upload below the supplier invoice/refund as PDF or XML file: Odoo will "
+"create a draft supplier invoice/refund. Supported formats:"
+msgstr ""
+"Upload hieronder de leveranciers factuur/creditfactuur als PDF of XML "
+"bestand. vervolgens zal er een concept factuur worden aangemaakt. "
+"Ondersteunde indelingen:"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__partner_id
+msgid "Vendor"
+msgstr "Leverancier"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Vendor not found"
+msgstr "Leverancier niet gevonden"
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "Vendor to Update"
+msgstr "Leverancier bijwerken"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__website_message_ids
+msgid "Website Messages"
+msgstr "Website berichten"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__website_message_ids
+msgid "Website communication history"
+msgstr "Website berichten geschiedenis"
+
+#. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_account_invoice_import
+msgid "Wizard to import supplier invoices/refunds"
+msgstr "Gids voor het importeren van facturen/creditfacturen"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"You are importing an invoice in a company that cannot deduct VAT and the "
+"imported invoice has several VAT taxes on the same line (%s). We do not "
+"support this scenario for the moment."
+msgstr ""
+"U importeert een factuur van een bedrijf welke geen BTW kan aftrekken en de "
+"geimporteerde factuur heeft meerdere belastingsoorten op dezelfde regel. (%s)"
+". Dit wordt op dit moment niet ondersteund."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"You have selected a Multi Line method for this import but Odoo could not "
+"extract/read any XML file inside the PDF invoice."
+msgstr ""
+"Er is ingesteld om een \"meerdere regel\" methode te gebruiken voor deze "
+"import. Maar er kon geen XML bestand worden gevonden binnen het PDF bestand."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"You must configure the 'Adjustment Credit Account' on the Accounting "
+"Configuration page."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"You must configure the 'Adjustment Debit Account' on the Accounting "
+"Configuration page."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "You must select a supplier invoice or refund to update"
+msgstr ""
+"Er dient een factuur of creditfactuur te worden geselecteerd op bij tewerken"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "You must select a vendor to update."
+msgstr "U dient een leverancier te seleteren om bijtewerken."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "You must select an Invoice Import Configuration."
+msgstr "Er moet een importeer instelling worden geselecteerd."
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "email sent by <b>%s</b> on %s with subject <i>%s</i>"
+msgstr "email verzonden door <b>%s</b> op %s met onderwerp <i>%s</i>"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "unspecified"
+msgstr "ongespecificeerd"
