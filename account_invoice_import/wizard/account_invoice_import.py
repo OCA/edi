@@ -133,8 +133,7 @@ class AccountInvoiceImport(models.TransientModel):
             'currency_id': currency.id,
             'type': parsed_inv['type'],
             'company_id': company.id,
-            'supplier_invoice_number':
-            parsed_inv.get('invoice_number'),
+            'reference': parsed_inv.get('invoice_number'),
             'origin': parsed_inv.get('origin'),
             'date_invoice': parsed_inv.get('date'),
             'journal_id':
@@ -369,7 +368,7 @@ class AccountInvoiceImport(models.TransientModel):
         existing_invs = aio.search(
             domain +
             [(
-                'supplier_invoice_number',
+                'reference',
                 '=ilike',
                 parsed_inv.get('invoice_number'))])
         if existing_invs:
@@ -539,8 +538,7 @@ class AccountInvoiceImport(models.TransientModel):
     def _prepare_update_invoice_vals(self, parsed_inv, partner):
         bdio = self.env['business.document.import']
         vals = {
-            'supplier_invoice_number':
-            parsed_inv.get('invoice_number'),
+            'reference': parsed_inv.get('invoice_number'),
             'date_invoice': parsed_inv.get('date'),
             'check_total': parsed_inv.get('amount_total'),
         }
