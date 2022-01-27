@@ -22,6 +22,7 @@
     ],
     "data": [
         "views/edi_exchange_record_views.xml",
+        "security/ir.model.access.csv",
     ],
     "demo": [],
 }

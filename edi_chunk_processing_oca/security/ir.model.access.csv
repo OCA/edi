@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_chunk_group,Chunk group,chunk_processing.model_chunk_group,base_edi.group_edi_manager,1,1,1,1
+access_chunk_item,Chunk item,chunk_processing.model_chunk_item,base_edi.group_edi_manager,1,1,1,1
