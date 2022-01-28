@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+    <record id="tax_type_zf_insurance_tax" model="unece.code.list">
+        <field name="type">tax_type</field>
+        <field name="code">ZF_INSURANCE_TAX</field>
+        <field name="name">Insurance tax</field>
+        <field name="description">ZUGFeRD Code (temporary)</field>
+    </record>
+    <record id="tax_categ_ic" model="unece.code.list">
+        <field name="type">tax_categ</field>
+        <field name="code">IC</field>
+        <field name="name">Intra-Community Supply</field>
+        <field
+            name="description"
+        >[ZUGFeRD 1.0 only] Code specifying that the VAT rate is levied from the invoicee for Intra-Community supplies.</field>
+    </record>
+</odoo>
