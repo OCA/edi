@@ -76,9 +76,8 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
         """The real work is made in create(), not here!"""
         self.ensure_one()
         if self.invoice_ids_str:
-            action = (
-                self.env.ref("account.action_move_in_invoice_type").sudo().read()[0]
-            )
+            xmlid = "account.action_move_in_invoice_type"
+            action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
             action.update(
                 {
                     "views": False,
@@ -87,13 +86,8 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
                 }
             )
         else:
-            action = (
-                self.env.ref(
-                    "account_invoice_download.account_invoice_download_log_action"
-                )
-                .sudo()
-                .read()[0]
-            )
+            xmlid = "account_invoice_download.account_invoice_download_log_action"
+            action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
             action.update(
                 {
                     "res_id": self.log_id.id,

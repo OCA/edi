@@ -160,9 +160,8 @@ class AccountInvoiceDownloadConfig(models.Model):
             credentials = self.prepare_credentials()
             invoice_ids, log_id = self.run(credentials)
             if invoice_ids:
-                action = (
-                    self.env.ref("account.action_move_in_invoice_type").sudo().read()[0]
-                )
+                xmlid = "account.action_move_in_invoice_type"
+                action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
                 action.update(
                     {
                         "views": False,
@@ -171,13 +170,8 @@ class AccountInvoiceDownloadConfig(models.Model):
                     }
                 )
             else:
-                action = (
-                    self.env.ref(
-                        "account_invoice_download.account_invoice_download_log_action"
-                    )
-                    .sudo()
-                    .read()[0]
-                )
+                xmlid = "account_invoice_download.account_invoice_download_log_action"
+                action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
                 action.update(
                     {
                         "res_id": log_id,
@@ -187,12 +181,11 @@ class AccountInvoiceDownloadConfig(models.Model):
                 )
             return action
         else:
-            credentials_wiz_action = (
-                self.env.ref(
-                    "account_invoice_download.account_invoice_download_credentials_action"
-                )
-                .sudo()
-                .read()[0]
+            xmlid = (
+                "account_invoice_download.account_invoice_download_credentials_action"
+            )
+            credentials_wiz_action = self.env["ir.actions.act_window"]._for_xml_id(
+                xmlid
             )
             return credentials_wiz_action
 
