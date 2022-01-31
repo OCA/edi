@@ -133,7 +133,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             )
         if backend:
             return self._edi_create_exchange_record(exchange_type, backend)
-        action = self.env.ref("edi_oca.edi_exchange_record_create_act_window").read()[0]
+        xmlid = "edi_oca.edi_exchange_record_create_act_window"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["context"] = {
             "default_res_id": self.id,
             "default_model": self._name,
@@ -183,7 +184,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     def action_view_edi_records(self):
         self.ensure_one()
-        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view").read()[0]
+        xmlid = "edi_oca.act_open_edi_exchange_record_view"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
         return action
 
