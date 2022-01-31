@@ -302,7 +302,8 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         if not self.related_exchange_ids:
             return {}
-        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view").read()[0]
+        xmlid = "edi_oca.act_open_edi_exchange_record_view"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["domain"] = [("id", "in", self.related_exchange_ids.ids)]
         return action
 
