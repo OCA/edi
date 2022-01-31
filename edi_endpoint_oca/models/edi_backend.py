@@ -22,7 +22,8 @@ class EDIBackend(models.Model):
             record.endpoints_count = len(record.endpoint_ids)
 
     def action_manage_endpoints(self):
-        action = self.env.ref("edi_endpoint_oca.edi_endpoint_act_window").read()[0]
+        xmlid = "edi_endpoint_oca.edi_endpoint_act_window"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["domain"] = [
             ("backend_type_id", "=", self.backend_type_id.id),
             "|",
