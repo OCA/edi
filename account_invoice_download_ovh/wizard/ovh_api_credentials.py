@@ -63,11 +63,8 @@ class OvhApiCredentials(models.TransientModel):
 
     def action_continue_wizard(self):
         self.ensure_one()
-        action = (
-            self.env.ref("account_invoice_download_ovh.ovh_api_credentials_action")
-            .sudo()
-            .read()[0]
-        )
+        xmlid = "account_invoice_download_ovh.ovh_api_credentials_action"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["res_id"] = self.id
         return action
 
