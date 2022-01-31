@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Download OVH",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "category": "Accounting",
     "license": "AGPL-3",
     "summary": "Get OVH Invoice via the API",
