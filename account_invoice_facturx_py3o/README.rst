@@ -14,18 +14,18 @@ Py3o Factur-x Invoice
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/13.0/account_invoice_facturx_py3o
+    :target: https://github.com/OCA/edi/tree/14.0/account_invoice_facturx_py3o
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-13-0/edi-13-0-account_invoice_facturx_py3o
+    :target: https://translation.odoo-community.org/projects/edi-14-0/edi-14-0-account_invoice_facturx_py3o
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
-    :target: https://runbot.odoo-community.org/runbot/226/13.0
+    :target: https://runbot.odoo-community.org/runbot/226/14.0
     :alt: Try me on Runbot
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
 
-If you use the py3o reporting engine (module *report_py3o* from the `reporting-engine <https://github.com/OCA/reporting-engine>`_ OCA project) to generate your PDF invoices and you want these PDF invoices to be Factur-X invoices (i.e. a PDF invoice with an embedded XML file in CII format), this module is for you ! Factur-X is the e-invoicing standard for France and Germany (in Germany, it is also called ZUGFeRD 2.0).
+If you use the py3o reporting engine (module *report_py3o* from the `reporting-engine <https://github.com/OCA/reporting-engine>`_ OCA project) to generate your PDF invoices and you want these PDF invoices to be Factur-X invoices (i.e. a PDF invoice with an embedded XML file in CII format), this module is for you ! Factur-X is the e-invoicing standard for France and Germany (in Germany, it is also called ZUGFeRD 2.1).
 
 **Table of contents**
 
@@ -38,7 +38,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_facturx_py3o%0Aversion:%2013.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_facturx_py3o%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -76,6 +76,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-alexis-via| 
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/13.0/account_invoice_facturx_py3o>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/account_invoice_facturx_py3o>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
