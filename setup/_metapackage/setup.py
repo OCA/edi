@@ -14,6 +14,7 @@ setuptools.setup(
         'odoo14-addon-account_invoice_export',
         'odoo14-addon-account_invoice_export_server_env',
         'odoo14-addon-account_invoice_facturx',
+        'odoo14-addon-account_invoice_facturx_py3o',
         'odoo14-addon-account_invoice_import',
         'odoo14-addon-account_invoice_import_facturx',
         'odoo14-addon-account_invoice_import_invoice2data',
