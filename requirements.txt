@@ -3,6 +3,7 @@ dateparser
 factur-x
 invoice2data
 ovh
+phonenumbers
 PyMuPDF
 PyPDF2
 pyyaml
