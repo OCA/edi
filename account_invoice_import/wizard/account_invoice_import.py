@@ -206,6 +206,7 @@ class AccountInvoiceImport(models.TransientModel):
             'invoice_line_ids': [],
         }
         vals.update(aio.play_onchanges(vals, ['partner_id']))
+        vals.update(aio.play_onchanges(vals, ['reference']))
         vals['invoice_line_ids'] = []
         # Force due date of the invoice
         if parsed_inv.get('date_due'):
