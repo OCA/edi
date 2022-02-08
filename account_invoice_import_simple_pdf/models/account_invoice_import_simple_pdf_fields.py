@@ -164,7 +164,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             position = self.position
             if self.extract_rule == "position_min":
                 position -= 1
-            return data_list[position * sign]
+            return data_list_sorted[position * sign]
         elif self.extract_rule == "first":
             return data_list[0]
         elif self.extract_rule == "last":
