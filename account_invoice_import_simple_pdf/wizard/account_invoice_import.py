@@ -81,7 +81,8 @@ class AccountInvoiceImport(models.TransientModel):
                 ("parent_id", "=", False),
                 ("is_company", "=", True),
                 ("id", "!=", self.env.company.partner_id.id),
-            ]
+            ],
+            ["simple_pdf_keyword", "vat"],
         )
         for partner in partners:
             if partner["simple_pdf_keyword"] and partner["simple_pdf_keyword"].strip():
