@@ -14,8 +14,8 @@
     "depends": ["account_invoice_import"],
     # "excludes": ["account_invoice_import_invoice2data"],
     "external_dependencies": {
-        "python": ["regex", "dateparser"],
-        "deb": ["python3-fitz"],
+        "python": ["PyMuPDF", "regex", "dateparser"],
+        "deb": ["libmupdf-dev", "mupdf", "mupdf-tools"],
     },
     "data": [
         "security/ir.model.access.csv",
