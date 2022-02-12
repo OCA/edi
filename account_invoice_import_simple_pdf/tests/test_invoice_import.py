@@ -426,6 +426,17 @@ class TestInvoiceImport(TransactionCase):
         self.assertEqual(float_compare(iline.price_unit, 10.83, precision_digits=2), 0)
         inv.unlink()
 
+    def test_complete_import_pdfplumber(self):
+        icpo = self.env["ir.config_parameter"]
+        key = "invoice_import_simple_pdf.pdf2txt"
+        method = "pdfplumber"
+        configp = icpo.search([("key", "=", key)])
+        if configp:
+            configp.write({"value": method})
+        else:
+            icpo.create({"key": key, "value": method})
+        self.test_complete_import()
+
     def test_test_mode(self):
         self.demo_partner.write(
             {
