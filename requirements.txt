@@ -3,8 +3,8 @@ dateparser
 factur-x
 invoice2data
 ovh
+pdfplumber
 phonenumbers
-PyMuPDF
 PyPDF2
 pyyaml
 regex
