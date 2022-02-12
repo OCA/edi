@@ -196,7 +196,7 @@ class ResPartner(models.Model):
         test_results = []
         test_results.append("<small>%s</small><br/>" % _("Errors are in red."))
         test_results.append(
-            "<small>%s %s</small>"
+            "<small>%s %s</small><br/>"
             % (_("Test Date:"), format_datetime(self.env, fields.Datetime.now()))
         )
         if not self.simple_pdf_test_file:
@@ -205,6 +205,17 @@ class ResPartner(models.Model):
         aiio._simple_pdf_update_test_info(test_info)
         file_data = base64.b64decode(self.simple_pdf_test_file)
         raw_text_dict = aiio.simple_pdf_text_extraction(file_data, test_info)
+        test_results.append(
+            "<small>%s %s</small><br/>"
+            % (
+                _("Text extraction system parameter:"),
+                test_info.get("text_extraction_config") or _("none"),
+            )
+        )
+        test_results.append(
+            "<small>%s %s</small><br/>"
+            % (_("Text extraction tool used:"), test_info.get("text_extraction"))
+        )
         if self.simple_pdf_pages == "first":
             vals["simple_pdf_test_raw_text"] = raw_text_dict["first"]
         else:
