@@ -12,7 +12,7 @@ PyMuPDF and pdftotext both give a very good text output. So far, I can't say whi
 You can choose one extraction method and only install the tools/libs for that method.
 
 Install PyMuPDF
----------------
+~~~~~~~~~~~~~~~
 
 To install **PyMuPDF**, if you use Debian (Bullseye aka v11 or higher) or Ubuntu (20.04 or higher), run the following command:
 
@@ -30,7 +30,7 @@ You can also install it via pip:
 but beware that *PyMuPDF* is just a binding on MuPDF, so it will require MuPDF and all the development libs required to compile the binding. That's why *PyMuPDF* is much easier to install via the packages of your Linux distribution (package name **python3-fitz** on Debian/Ubuntu, but the package name may be different in other distributions) than with pip.
 
 Install pdftotext python lib
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To install **pdftotext python lib**, run:
 
@@ -47,7 +47,7 @@ and then install the lib via pip:
 On OSes other than Debian/Ubuntu, follow the instructions on the `project page <https://github.com/jalan/pdftotext>`_.
 
 Install pdftotext command line
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To install **pdftotext command line**, run:
 
@@ -56,7 +56,7 @@ To install **pdftotext command line**, run:
   sudo apt install poppler-utils
 
 Install pdfplumber
-------------------
+~~~~~~~~~~~~~~~~~~
 
 To install the **pdfplumber** python lib, run:
 
@@ -65,7 +65,7 @@ To install the **pdfplumber** python lib, run:
   sudo pip3 install --upgrade pdfplumber
 
 Other requirements
-------------------
+~~~~~~~~~~~~~~~~~~
 
 This module also requires the following Python libraries:
 

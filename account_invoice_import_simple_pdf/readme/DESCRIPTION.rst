@@ -32,4 +32,4 @@ In this list, only 3 fields are required:
 
 To take advantage of the fields *Start Date* and *End Date*, you need the OCA module *account_invoice_start_end_dates* from the `account-closing <https://github.com/OCA/account-closing>`_ project.
 
-To know the full story behind the development of this module, read this `blog post <https://akretion.com/en/blog/new-opensource-pdf-invoice-import-module-for-odoo>`_.
+To know the full story behind the development of this module, read `Akretion's blog post <https://akretion.com/en/blog/new-opensource-pdf-invoice-import-module-for-odoo>`_.
