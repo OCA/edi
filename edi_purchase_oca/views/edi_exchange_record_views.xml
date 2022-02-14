@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 ForgeFlow S.L. (https://www.forgeflow.com)
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_purchase_order_view"
+    >
+        <field name="name">Purchase Order Exchange Record</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('model', '=', 'purchase.order')]</field>
+        <field name="context">{}</field>
+    </record>
+    <menuitem
+        id="menu_purchase_edi_root"
+        name="Exchange records"
+        parent="purchase.menu_purchase_root"
+        sequence="20"
+    />
+    <menuitem
+        id="menu_purchase_edi_exchange_record"
+        name="Purchase Orders"
+        action="act_open_edi_exchange_record_purchase_order_view"
+        parent="menu_purchase_edi_root"
+        sequence="20"
+    />
+</odoo>
