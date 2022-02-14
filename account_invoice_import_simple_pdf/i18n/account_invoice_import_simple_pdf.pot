@@ -495,6 +495,23 @@ msgid "None"
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Odoo could not extract the text from the PDF invoice with the method %s. "
+"Refer to the Odoo server logs for more technical information about the cause"
+" of the failure."
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Odoo could not extract the text from the PDF invoice. Refer to the Odoo "
+"server logs for more technical information about the cause of the failure."
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid "Ordered List"
@@ -642,6 +659,14 @@ msgid "Successful match on VAT number '%s'"
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"System Parameter 'invoice_import_simple_pdf.pdf2txt' has an invalid value "
+"'%s'."
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__amount_tax
 msgid "Tax Amount"
 msgstr ""
@@ -685,6 +710,18 @@ msgstr ""
 #. module: account_invoice_import_simple_pdf
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
 msgid "Text Extraction from PDF"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Text extraction system parameter:"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Text extraction tool used:"
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
@@ -824,7 +861,9 @@ msgid "dot"
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_thousand_separator__none
+#, python-format
 msgid "none"
 msgstr ""
 
