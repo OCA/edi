@@ -59,7 +59,7 @@ In this list, only 3 fields are required:
 
 To take advantage of the fields *Start Date* and *End Date*, you need the OCA module *account_invoice_start_end_dates* from the `account-closing <https://github.com/OCA/account-closing>`_ project.
 
-To know the full story behind the development of this module, read this `blog post <https://akretion.com/en/blog/new-opensource-pdf-invoice-import-module-for-odoo>`_.
+To know the full story behind the development of this module, read `Akretion's blog post <https://akretion.com/en/blog/new-opensource-pdf-invoice-import-module-for-odoo>`_.
 
 **Table of contents**
 
@@ -69,30 +69,104 @@ To know the full story behind the development of this module, read this `blog po
 Installation
 ============
 
-This module requires several Python libraries:
+The most important technical component of this module is the tool that converts the PDF to text. Converting PDF to text is not an easy job. As outlined in this `blog post <https://dida.do/blog/how-to-extract-text-from-pdf>`_, different tools can give quite different results. The best results are usually achieved with tools based on a PDF viewer, which exclude pure-python tools. But pure-python tools are easier to install than tools based on a PDF viewer. It is important to understand that, if you change the PDF to text tool, you will certainly have a slightly different text output, which may oblige you to update the field extraction rule, which can be time-consuming if you have already configured many vendors.
 
-* `PyMuPDF <https://github.com/pymupdf/PyMuPDF>`_ which is a Python binding for `MuPDF <https://mupdf.com/>`_, a lightweight PDF toolkit/viewer/renderer published under the AGPL licence by the company `Artifex Software <https://artifex.com/>`_
+The module supports 4 different extraction methods:
+
+1. `PyMuPDF <https://github.com/pymupdf/PyMuPDF>`_ which is a Python binding for `MuPDF <https://mupdf.com/>`_, a lightweight PDF toolkit/viewer/renderer published under the AGPL licence by the company `Artifex Software <https://artifex.com/>`_.
+#. `pdftotext python library <https://pypi.org/project/pdftotext/>`_, which is a python binding for the pdftotext tool.
+#. `pdftotext command line tool <https://en.wikipedia.org/wiki/Pdftotext>`_, which is based on `poppler <https://poppler.freedesktop.org/>`_, a PDF rendering library used by `xpdf <https://www.xpdfreader.com/>`_ and `Evince <https://wiki.gnome.org/Apps/Evince/FrequentlyAskedQuestions>`_ (the PDF reader of `Gnome <https://www.gnome.org/>`_).
+#. `pdfplumber <https://pypi.org/project/pdfplumber/>`_, which is a python library built on top the of the python library `pdfminer.six <https://pypi.org/project/pdfminer.six/>`_. pdfplumber is a pure-python solution, so it's very easy to install on all OSes.
+
+PyMuPDF and pdftotext both give a very good text output. So far, I can't say which one is best. pdfplumber often gives lower-quality text output, but its advantage is that it's a pure-Python solution, so you will always be able to install it whatever your technical environnement is.
+
+You can choose one extraction method and only install the tools/libs for that method.
+
+Install PyMuPDF
+~~~~~~~~~~~~~~~
+
+To install **PyMuPDF**, if you use Debian (Bullseye aka v11 or higher) or Ubuntu (20.04 or higher), run the following command:
+
+.. code::
+
+  sudo apt install python3-fitz
+
+You can also install it via pip:
+
+.. code::
+
+  sudo pip3 install --upgrade PyMuPDF
+
+
+but beware that *PyMuPDF* is just a binding on MuPDF, so it will require MuPDF and all the development libs required to compile the binding. That's why *PyMuPDF* is much easier to install via the packages of your Linux distribution (package name **python3-fitz** on Debian/Ubuntu, but the package name may be different in other distributions) than with pip.
+
+Install pdftotext python lib
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To install **pdftotext python lib**, run:
+
+.. code::
+
+  sudo apt install build-essential libpoppler-cpp-dev pkg-config python3-dev
+
+and then install the lib via pip:
+
+.. code::
+
+  sudo pip3 install --upgrade pdftotext
+
+On OSes other than Debian/Ubuntu, follow the instructions on the `project page <https://github.com/jalan/pdftotext>`_.
+
+Install pdftotext command line
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To install **pdftotext command line**, run:
+
+.. code::
+
+  sudo apt install poppler-utils
+
+Install pdfplumber
+~~~~~~~~~~~~~~~~~~
+
+To install the **pdfplumber** python lib, run:
+
+.. code::
+
+  sudo pip3 install --upgrade pdfplumber
+
+Other requirements
+~~~~~~~~~~~~~~~~~~
+
+This module also requires the following Python libraries:
+
 * `regex <https://pypi.org/project/regex/>`_ which is backward-compatible with the *re* module of the Python standard library, but has additional functionalities.
 * `dateparser <https://github.com/scrapinghub/dateparser>`_ which is a powerful date parsing library.
 
-If you use Debian (Bullseye or higher) or Ubuntu (20.04 or higher), run the following command:
+You can install these Python libraries via pip:
 
 .. code::
 
-  sudo apt install python3-fitz python3-regex python3-dateparser
-
-You can also install these Python librairies via pip:
-
-.. code::
-
-  sudo pip3 install --upgrade PyMuPDF regex dateparser
-
-but beware that *PyMuPDF* is just a binding on MuPDF, so it will require MuPDF and all the development libs required to compile the binding. So, for *PyMuPDF*, it's much easier to install it via the packages of your Linux distribution (package name **python3-fitz** on Debian/Ubuntu, but the package name may be different in other distributions).
+  sudo pip3 install --upgrade regex dateparser
 
 Configuration
 =============
 
-You will find a full demonstration about how to configure and use this module in this `screencast <https://www.youtube.com/watch?v=edsEuXVyEYE>`_.
+By default, for the PDF to text conversion, the module tries the different methods in the order mentionned in the INSTALL section: it will first try to use **PyMuPDF**; if it fails (for example because the lib is not properly installed), then it will try to use the **pdftotext python lib**, if that one also fails, it will try to use **pdftotext command line** and, if it also fails, it will eventually try **pdfplumber**. If none of the 4 methods work, Odoo will display an error message.
+
+If you want to force Odoo to use a specific text extraction method, go to the menu *Configuration > Technical > Parameters > System Parameters* and create a new System Parameter:
+
+* *Key*: **invoice_import_simple_pdf.pdf2txt**
+* *Value*: select the proper value for the method you want to use:
+
+  1. pymupdf
+  #. pdftotext.lib
+  #. pdftotext.cmd
+  #. pdfplumber
+
+In this configuration, Odoo will only use the selected text extraction method and, if it fails, it will display an error message.
+
+You will find a full demonstration about how to configure each Vendor and import the PDF invoices in this `screencast <https://www.youtube.com/watch?v=edsEuXVyEYE>`_.
 
 Bug Tracker
 ===========
