@@ -3,13 +3,14 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
+import shutil
+import subprocess
 from tempfile import NamedTemporaryFile
 
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
 logger = logging.getLogger(__name__)
-
 try:
     import fitz
 except ImportError:
@@ -18,6 +19,14 @@ try:
     import regex
 except ImportError:
     logger.debug("Cannot import regex")
+try:
+    import pdfplumber
+except ImportError:
+    logger.debug("Cannot import pdfplumber")
+try:
+    import pdftotext
+except ImportError:
+    logger.debug("Cannot import pdftotext")
 
 
 class AccountInvoiceImport(models.TransientModel):
@@ -31,29 +40,172 @@ class AccountInvoiceImport(models.TransientModel):
         return self.simple_pdf_parse_invoice(file_data)
 
     @api.model
+    def _simple_pdf_text_extraction_pymupdf(self, fileobj, test_info):
+        res = False
+        try:
+            pages = []
+            doc = fitz.open(fileobj.name)
+            for page in doc:
+                pages.append(page.getText("text"))
+            res = {
+                "all": "\n\n".join(pages),
+                "first": pages and pages[0] or "",
+            }
+            logger.info("Text extraction made with PyMuPDF")
+            test_info["text_extraction"] = "pymupdf"
+        except Exception as e:
+            logger.warning("Text extraction with PyMuPDF failed. Error: %s", e)
+        return res
+
+    @api.model
+    def _simple_pdf_text_extraction_pdfplumber(self, fileobj, test_info):
+        res = False
+        with pdfplumber.open(fileobj.name, laparams={"detect_vertical": True}) as pdf:
+            pages = []
+            for pdf_page in pdf.pages:
+                pages.append(
+                    pdf_page.extract_text(
+                        layout=True, use_text_flow=True, keep_blank_chars=True
+                    )
+                )
+            res = {
+                "all": "\n\n".join(pages),
+                "first": pages and pages[0] or "",
+            }
+        test_info["text_extraction"] = "pdfplumber"
+        logger.info("Text extraction made with pdfplumber")
+        return res
+
+    @api.model
+    def _simple_pdf_pdftotext_cmd_call(self, fileobj, test_info, first_page=False):
+        res = False
+        if not shutil.which("pdftotext"):
+            logger.warning(
+                "Could not find the pdftotext utility. Hint: sudo apt install poppler-utils"
+            )
+            return False
+        cmd_args = ["pdftotext"]
+        if first_page:
+            cmd_args += ["-l", "1"]
+        cmd_args += ["-layout", fileobj.name, "-"]
+        try:
+            out, err = subprocess.Popen(cmd_args, stdout=subprocess.PIPE).communicate()
+            if err:
+                logger.debug("pdftotext_cmd err=%s", err)
+            if out:
+                res = out.decode("utf8")
+        except Exception as e:
+            logger.info("Text extraction with pdftotext command failed. Error: %s", e)
+        return res
+
+    @api.model
+    def _simple_pdf_text_extraction_pdftotext_cmd(self, fileobj, test_info):
+        res_all = self._simple_pdf_pdftotext_cmd_call(fileobj, test_info)
+        if not res_all:
+            return False
+        res = {
+            "all": res_all,
+            "first": self._simple_pdf_pdftotext_cmd_call(
+                fileobj, test_info, first_page=True
+            ),
+        }
+        test_info["text_extraction"] = "pdftotext.cmd"
+        logger.info("Text extraction made with pdftotext command")
+        return res
+
+    @api.model
+    def _simple_pdf_text_extraction_pdftotext_lib(self, fileobj, test_info):
+        # pdftotext lib doc: https://github.com/jalan/pdftotext
+        res = False
+        try:
+            with open(fileobj.name, "rb") as pdf_file:
+                pdf = pdftotext.PDF(pdf_file)
+                res = {
+                    "all": "\n\n".join(pdf),
+                    "first": pdf[0],
+                }
+            logger.info("Text extraction made with pdftotext lib")
+            test_info["text_extraction"] = "pdftotext.lib"
+        except Exception as e:
+            logger.warning("Text extraction with pdftotext lib failed. Error: %s", e)
+        return res
+
+    @api.model
+    def _simple_pdf_text_extraction_specific_tool(
+        self, specific_tool, fileobj, test_info
+    ):
+        res = False
+        if specific_tool == "pymupdf":
+            res = self._simple_pdf_text_extraction_pymupdf(fileobj, test_info)
+        elif specific_tool == "pdftotext.lib":
+            res = self._simple_pdf_text_extraction_pdftotext_lib(fileobj, test_info)
+        elif specific_tool == "pdftotext.cmd":
+            res = self._simple_pdf_text_extraction_pdftotext_cmd(fileobj, test_info)
+        elif specific_tool == "pdfplumber":
+            res = self._simple_pdf_text_extraction_pdfplumber(fileobj, test_info)
+        else:
+            raise UserError(
+                _(
+                    "System Parameter 'invoice_import_simple_pdf.pdf2txt' "
+                    "has an invalid value '%s'."
+                )
+                % specific_tool
+            )
+        if not res:
+            raise UserError(
+                _(
+                    "Odoo could not extract the text from the PDF invoice "
+                    "with the method %s. Refer to the Odoo server logs for more technical "
+                    "information about the cause of the failure."
+                )
+                % specific_tool
+            )
+        return res
+
+    @api.model
     def simple_pdf_text_extraction(self, file_data, test_info):
-        res = {}
         fileobj = NamedTemporaryFile("wb", prefix="odoo-simple-pdf-", suffix=".pdf")
         fileobj.write(file_data)
         # Extract text from PDF
         # Very interesting reading:
+        # https://dida.do/blog/how-to-extract-text-from-pdf
         # https://github.com/erfelipe/PDFtextExtraction
-        pages = []
-        doc = fitz.open(fileobj.name)
-        for page in doc:
-            raw_pagetext = page.getText("text")
-            if raw_pagetext:
+        specific_tool = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("invoice_import_simple_pdf.pdf2txt")
+        )
+        if specific_tool:
+            specific_tool = specific_tool.strip().lower()
+        test_info["text_extraction_config"] = specific_tool
+        if specific_tool:
+            res = self._simple_pdf_text_extraction_specific_tool(
+                specific_tool, fileobj, test_info
+            )
+        else:
+            # From best tool to worst
+            res = self._simple_pdf_text_extraction_pymupdf(fileobj, test_info)
+            if not res:
+                res = self._simple_pdf_text_extraction_pdftotext_lib(fileobj, test_info)
+            if not res:
+                res = self._simple_pdf_text_extraction_pdftotext_cmd(fileobj, test_info)
+            if not res:
+                res = self._simple_pdf_text_extraction_pdfplumber(fileobj, test_info)
+            if not res:
+                raise UserError(
+                    _(
+                        "Odoo could not extract the text from the PDF invoice. "
+                        "Refer to the Odoo server logs for more technical information "
+                        "about the cause of the failure."
+                    )
+                )
+        for key, text in res.items():
+            if text:
                 # Remove lonely accents
                 # example : Free mobile invoices for months with accents
                 # i.e. février, août, décembre
                 # that are extracted as f´evrier, aoˆut, d´ecembre
-                clean_pagetext = regex.sub(
-                    test_info["lonely_accents"], "", raw_pagetext
-                )
-                if clean_pagetext:
-                    pages.append(clean_pagetext)
-        res["all"] = " ".join(pages)
-        res["first"] = pages and pages[0] or ""
+                res[key] = regex.sub(test_info["lonely_accents"], "", text)
 
         res["all_no_space"] = regex.sub(
             "%s+" % test_info["space_pattern"], "", res["all"]
@@ -81,7 +233,8 @@ class AccountInvoiceImport(models.TransientModel):
                 ("parent_id", "=", False),
                 ("is_company", "=", True),
                 ("id", "!=", self.env.company.partner_id.id),
-            ]
+            ],
+            ["simple_pdf_keyword", "vat"],
         )
         for partner in partners:
             if partner["simple_pdf_keyword"] and partner["simple_pdf_keyword"].strip():

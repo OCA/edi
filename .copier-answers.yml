@@ -12,4 +12,7 @@ repo_name: edi
 repo_slug: edi
 travis_apt_packages:
 - poppler-utils
+- mupdf-tools
+- mupdf
+- libmupdf-dev
 travis_apt_sources: []

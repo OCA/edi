@@ -116,6 +116,11 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             elif self.name in ("invoice_number", "description", "date"):
                 self.extract_rule = "first"
 
+    @api.onchange("date_format")
+    def date_format_change(self):
+        if self.date_format and "month" in self.date_format:
+            self.date_separator = "space"
+
     # This method is just 1 line over the complexity limit of C901
     # and I don't see a good way to split it
     def get_value_from_list(  # noqa: C901
@@ -164,7 +169,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             position = self.position
             if self.extract_rule == "position_min":
                 position -= 1
-            return data_list[position * sign]
+            return data_list_sorted[position * sign]
         elif self.extract_rule == "first":
             return data_list[0]
         elif self.extract_rule == "last":
