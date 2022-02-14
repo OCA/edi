@@ -400,45 +400,110 @@ ul.auto-toc {
 <li>2 out of the 3 Amount fields (the 3rd can be deducted from the 2 others: Total Amount = Total Untaxed + Total Tax)</li>
 </ul>
 <p>To take advantage of the fields <em>Start Date</em> and <em>End Date</em>, you need the OCA module <em>account_invoice_start_end_dates</em> from the <a class="reference external" href="https://github.com/OCA/account-closing">account-closing</a> project.</p>
-<p>To know the full story behind the development of this module, read this <a class="reference external" href="https://akretion.com/en/blog/new-opensource-pdf-invoice-import-module-for-odoo">blog post</a>.</p>
+<p>To know the full story behind the development of this module, read <a class="reference external" href="https://akretion.com/en/blog/new-opensource-pdf-invoice-import-module-for-odoo">Akretion’s blog post</a>.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#installation" id="id1">Installation</a></li>
-<li><a class="reference internal" href="#configuration" id="id2">Configuration</a></li>
-<li><a class="reference internal" href="#bug-tracker" id="id3">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="id4">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="id5">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="id6">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="id7">Maintainers</a></li>
+<li><a class="reference internal" href="#installation" id="id1">Installation</a><ul>
+<li><a class="reference internal" href="#install-pymupdf" id="id2">Install PyMuPDF</a></li>
+<li><a class="reference internal" href="#install-pdftotext-python-lib" id="id3">Install pdftotext python lib</a></li>
+<li><a class="reference internal" href="#install-pdftotext-command-line" id="id4">Install pdftotext command line</a></li>
+<li><a class="reference internal" href="#install-pdfplumber" id="id5">Install pdfplumber</a></li>
+<li><a class="reference internal" href="#other-requirements" id="id6">Other requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration" id="id7">Configuration</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="id8">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="id9">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="id10">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="id11">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="id12">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="installation">
 <h1><a class="toc-backref" href="#id1">Installation</a></h1>
-<p>This module requires several Python libraries:</p>
+<p>The most important technical component of this module is the tool that converts the PDF to text. Converting PDF to text is not an easy job. As outlined in this <a class="reference external" href="https://dida.do/blog/how-to-extract-text-from-pdf">blog post</a>, different tools can give quite different results. The best results are usually achieved with tools based on a PDF viewer, which exclude pure-python tools. But pure-python tools are easier to install than tools based on a PDF viewer. It is important to understand that, if you change the PDF to text tool, you will certainly have a slightly different text output, which may oblige you to update the field extraction rule, which can be time-consuming if you have already configured many vendors.</p>
+<p>The module supports 4 different extraction methods:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://github.com/pymupdf/PyMuPDF">PyMuPDF</a> which is a Python binding for <a class="reference external" href="https://mupdf.com/">MuPDF</a>, a lightweight PDF toolkit/viewer/renderer published under the AGPL licence by the company <a class="reference external" href="https://artifex.com/">Artifex Software</a>.</li>
+<li><a class="reference external" href="https://pypi.org/project/pdftotext/">pdftotext python library</a>, which is a python binding for the pdftotext tool.</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Pdftotext">pdftotext command line tool</a>, which is based on <a class="reference external" href="https://poppler.freedesktop.org/">poppler</a>, a PDF rendering library used by <a class="reference external" href="https://www.xpdfreader.com/">xpdf</a> and <a class="reference external" href="https://wiki.gnome.org/Apps/Evince/FrequentlyAskedQuestions">Evince</a> (the PDF reader of <a class="reference external" href="https://www.gnome.org/">Gnome</a>).</li>
+<li><a class="reference external" href="https://pypi.org/project/pdfplumber/">pdfplumber</a>, which is a python library built on top the of the python library <a class="reference external" href="https://pypi.org/project/pdfminer.six/">pdfminer.six</a>. pdfplumber is a pure-python solution, so it’s very easy to install on all OSes.</li>
+</ol>
+<p>PyMuPDF and pdftotext both give a very good text output. So far, I can’t say which one is best. pdfplumber often gives lower-quality text output, but its advantage is that it’s a pure-Python solution, so you will always be able to install it whatever your technical environnement is.</p>
+<p>You can choose one extraction method and only install the tools/libs for that method.</p>
+<div class="section" id="install-pymupdf">
+<h2><a class="toc-backref" href="#id2">Install PyMuPDF</a></h2>
+<p>To install <strong>PyMuPDF</strong>, if you use Debian (Bullseye aka v11 or higher) or Ubuntu (20.04 or higher), run the following command:</p>
+<pre class="code literal-block">
+sudo apt install python3-fitz
+</pre>
+<p>You can also install it via pip:</p>
+<pre class="code literal-block">
+sudo pip3 install --upgrade PyMuPDF
+</pre>
+<p>but beware that <em>PyMuPDF</em> is just a binding on MuPDF, so it will require MuPDF and all the development libs required to compile the binding. That’s why <em>PyMuPDF</em> is much easier to install via the packages of your Linux distribution (package name <strong>python3-fitz</strong> on Debian/Ubuntu, but the package name may be different in other distributions) than with pip.</p>
+</div>
+<div class="section" id="install-pdftotext-python-lib">
+<h2><a class="toc-backref" href="#id3">Install pdftotext python lib</a></h2>
+<p>To install <strong>pdftotext python lib</strong>, run:</p>
+<pre class="code literal-block">
+sudo apt install build-essential libpoppler-cpp-dev pkg-config python3-dev
+</pre>
+<p>and then install the lib via pip:</p>
+<pre class="code literal-block">
+sudo pip3 install --upgrade pdftotext
+</pre>
+<p>On OSes other than Debian/Ubuntu, follow the instructions on the <a class="reference external" href="https://github.com/jalan/pdftotext">project page</a>.</p>
+</div>
+<div class="section" id="install-pdftotext-command-line">
+<h2><a class="toc-backref" href="#id4">Install pdftotext command line</a></h2>
+<p>To install <strong>pdftotext command line</strong>, run:</p>
+<pre class="code literal-block">
+sudo apt install poppler-utils
+</pre>
+</div>
+<div class="section" id="install-pdfplumber">
+<h2><a class="toc-backref" href="#id5">Install pdfplumber</a></h2>
+<p>To install the <strong>pdfplumber</strong> python lib, run:</p>
+<pre class="code literal-block">
+sudo pip3 install --upgrade pdfplumber
+</pre>
+</div>
+<div class="section" id="other-requirements">
+<h2><a class="toc-backref" href="#id6">Other requirements</a></h2>
+<p>This module also requires the following Python libraries:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/pymupdf/PyMuPDF">PyMuPDF</a> which is a Python binding for <a class="reference external" href="https://mupdf.com/">MuPDF</a>, a lightweight PDF toolkit/viewer/renderer published under the AGPL licence by the company <a class="reference external" href="https://artifex.com/">Artifex Software</a></li>
 <li><a class="reference external" href="https://pypi.org/project/regex/">regex</a> which is backward-compatible with the <em>re</em> module of the Python standard library, but has additional functionalities.</li>
 <li><a class="reference external" href="https://github.com/scrapinghub/dateparser">dateparser</a> which is a powerful date parsing library.</li>
 </ul>
-<p>If you use Debian (Bullseye or higher) or Ubuntu (20.04 or higher), run the following command:</p>
+<p>You can install these Python libraries via pip:</p>
 <pre class="code literal-block">
-sudo apt install python3-fitz python3-regex python3-dateparser
+sudo pip3 install --upgrade regex dateparser
 </pre>
-<p>You can also install these Python librairies via pip:</p>
-<pre class="code literal-block">
-sudo pip3 install --upgrade PyMuPDF regex dateparser
-</pre>
-<p>but beware that <em>PyMuPDF</em> is just a binding on MuPDF, so it will require MuPDF and all the development libs required to compile the binding. So, for <em>PyMuPDF</em>, it’s much easier to install it via the packages of your Linux distribution (package name <strong>python3-fitz</strong> on Debian/Ubuntu, but the package name may be different in other distributions).</p>
+</div>
 </div>
 <div class="section" id="configuration">
-<h1><a class="toc-backref" href="#id2">Configuration</a></h1>
-<p>You will find a full demonstration about how to configure and use this module in this <a class="reference external" href="https://www.youtube.com/watch?v=edsEuXVyEYE">screencast</a>.</p>
+<h1><a class="toc-backref" href="#id7">Configuration</a></h1>
+<p>By default, for the PDF to text conversion, the module tries the different methods in the order mentionned in the INSTALL section: it will first try to use <strong>PyMuPDF</strong>; if it fails (for example because the lib is not properly installed), then it will try to use the <strong>pdftotext python lib</strong>, if that one also fails, it will try to use <strong>pdftotext command line</strong> and, if it also fails, it will eventually try <strong>pdfplumber</strong>. If none of the 4 methods work, Odoo will display an error message.</p>
+<p>If you want to force Odoo to use a specific text extraction method, go to the menu <em>Configuration &gt; Technical &gt; Parameters &gt; System Parameters</em> and create a new System Parameter:</p>
+<ul class="simple">
+<li><em>Key</em>: <strong>invoice_import_simple_pdf.pdf2txt</strong></li>
+<li><em>Value</em>: select the proper value for the method you want to use:<ol class="arabic">
+<li>pymupdf</li>
+<li>pdftotext.lib</li>
+<li>pdftotext.cmd</li>
+<li>pdfplumber</li>
+</ol>
+</li>
+</ul>
+<p>In this configuration, Odoo will only use the selected text extraction method and, if it fails, it will display an error message.</p>
+<p>You will find a full demonstration about how to configure each Vendor and import the PDF invoices in this <a class="reference external" href="https://www.youtube.com/watch?v=edsEuXVyEYE">screencast</a>.</p>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#id3">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#id8">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
@@ -446,21 +511,21 @@ If you spotted it first, help us smashing it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#id4">Credits</a></h1>
+<h1><a class="toc-backref" href="#id9">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#id5">Authors</a></h2>
+<h2><a class="toc-backref" href="#id10">Authors</a></h2>
 <ul class="simple">
 <li>Akretion</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#id6">Contributors</a></h2>
+<h2><a class="toc-backref" href="#id11">Contributors</a></h2>
 <ul class="simple">
 <li>Alexis de Lattre &lt;<a class="reference external" href="mailto:alexis.delattre&#64;akretion.com">alexis.delattre&#64;akretion.com</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#id7">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#id12">Maintainers</a></h2>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org"><img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" /></a>
 <p>OCA, or the Odoo Community Association, is a nonprofit organization whose
