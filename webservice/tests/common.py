@@ -3,11 +3,11 @@
 
 from odoo.tests.common import tagged
 
-from odoo.addons.component.tests.common import SavepointComponentCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 
 @tagged("-at_install", "post_install")
-class CommonWebService(SavepointComponentCase):
+class CommonWebService(TransactionComponentCase):
     @classmethod
     def _setup_context(cls):
         return dict(
