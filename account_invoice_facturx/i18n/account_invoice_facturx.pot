@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
-msgid "%s: %s %s dated %s"
+msgid "(no date)"
 msgstr ""
 
 #. module: account_invoice_facturx
@@ -45,14 +45,6 @@ msgstr ""
 msgid ""
 "Country is not set on partner '%s'. In the Factur-X standard, the country is"
 " required for buyer and seller."
-msgstr ""
-
-#. module: account_invoice_facturx
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_account_move__display_name
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_ir_actions_report__display_name
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__display_name
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings__display_name
-msgid "Display Name"
 msgstr ""
 
 #. module: account_invoice_facturx
@@ -94,11 +86,11 @@ msgid "Factur-X Refund Type"
 msgstr ""
 
 #. module: account_invoice_facturx
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_account_move__id
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_ir_actions_report__id
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__id
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings__id
-msgid "ID"
+#: code:addons/account_invoice_facturx/models/account_move.py:0
+#, python-format
+msgid ""
+"Factur-X {invoice_type} {invoice_number} dated {invoice_date} issued by "
+"{company_name}"
 msgstr ""
 
 #. module: account_invoice_facturx
@@ -110,14 +102,6 @@ msgstr ""
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_account_move
 msgid "Journal Entry"
-msgstr ""
-
-#. module: account_invoice_facturx
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_account_move____last_update
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_ir_actions_report____last_update
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company____last_update
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings____last_update
-msgid "Last Modified on"
 msgstr ""
 
 #. module: account_invoice_facturx
@@ -201,4 +185,10 @@ msgstr ""
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
+msgstr ""
+
+#. module: account_invoice_facturx
+#: code:addons/account_invoice_facturx/models/account_move.py:0
+#, python-format
+msgid "{company_name}: {invoice_type} {invoice_number} dated {invoice_date}"
 msgstr ""
