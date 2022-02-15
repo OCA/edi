@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- I tried to include it in the header or footer of invoice reports following
+https://www.odoo.com/fr_FR/forum/aide-1/question/how-to-have-custom-header-in-qweb-report-68544
+but I didn't succedded (without re-defining a full header or footer)
+-->
+    <template
+        id="report_invoice_facturx_logo"
+        inherit_id="account.report_invoice_document"
+    >
+        <xpath expr="//div[hasclass('page')]" position="inside">
+            <div
+                t-if="o.company_id.xml_format_in_pdf_invoice == 'factur-x' and o.move_type in ('out_invoice', 'out_refund')"
+            >
+                <img
+                    t-if="o.company_id.facturx_logo"
+                    t-att-src="'/account_invoice_facturx/static/logos/factur-x-%s.png' % o.company_id.facturx_level"
+                    style="max-height: 25px;"
+                />
+            </div>
+        </xpath>
+    </template>
+</odoo>
