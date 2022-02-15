@@ -43,7 +43,7 @@ class EDIExchangeSOInput(Component):
     def _setup_wizard(self):
         """Init a `sale.order.import` instance for current record."""
         ctx = self.settings.get("wiz_ctx", {})
-        wiz = self.env["sale.order.import"].with_context(ctx).sudo().create({})
+        wiz = self.env["sale.order.import"].with_context(**ctx).sudo().create({})
         wiz.order_file = self.exchange_record._get_file_content(binary=False)
         wiz.order_filename = self.exchange_record.exchange_filename
         wiz.order_file_change()
