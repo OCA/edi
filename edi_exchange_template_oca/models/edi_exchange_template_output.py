@@ -72,7 +72,7 @@ class EDIExchangeOutputTemplate(models.Model):
         try:
             generator = getattr(self, method)
         except AttributeError:
-            raise NotImplementedError(f"`{method}` not found")
+            raise NotImplementedError(f"`{method}` not found") from AttributeError
         result = generator(exchange_record, **kw)
         return self._post_process_output(result)
 
