@@ -3,7 +3,7 @@
     <record id="edi_exchange_template_output_view_tree" model="ir.ui.view">
         <field name="model">edi.exchange.template.output</field>
         <field name="arch" type="xml">
-            <tree string="EDI Exchange Template Output">
+            <tree>
                 <field name="backend_type_id" />
                 <field name="backend_id" />
                 <field name="name" />

@@ -10,7 +10,7 @@ from odoo.addons.edi_oca.tests.common import EDIBackendCommonComponentTestCase
 class TestEDIBackendOutputBase(EDIBackendCommonComponentTestCase):
     @classmethod
     def _setup_records(cls):
-        super()._setup_records()
+        res = super()._setup_records()
         cls.type_out1 = cls._create_exchange_type(
             name="Template output 1",
             direction="output",
@@ -120,6 +120,7 @@ result = {"res_ids": record.ids}
             "type_id": cls.type_out2.id,
         }
         cls.record3 = cls.backend.create_record("test_type_out3", vals)
+        return res
 
 
 # TODO: add more unit tests
