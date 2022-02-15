@@ -10,7 +10,7 @@ from .common import CommonWebService
 class TestWebService(CommonWebService):
     @classmethod
     def _setup_records(cls):
-        super()._setup_records()
+        res = super()._setup_records()
         cls.url = "http://localhost.demo.odoo/"
         cls.webservice = cls.env["webservice.backend"].create(
             {
@@ -21,6 +21,7 @@ class TestWebService(CommonWebService):
                 "tech_name": "demo_ws",
             }
         )
+        return res
 
     def test_web_service_not_found(self):
         with self.assertRaises(exceptions.ConnectionError):
