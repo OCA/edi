@@ -976,25 +976,9 @@ class BusinessDocumentImport(models.AbstractModel):
                 # used for to_remove
                 existing_lines_dict[product]["import"] = True
                 oline = existing_lines_dict[product]["line"]
-                res["to_update"][oline] = {}
-                if float_compare(
-                    iline["qty"],
-                    existing_lines_dict[product]["qty"],
-                    precision_digits=qty_precision,
-                ):
-                    res["to_update"][oline]["qty"] = [
-                        existing_lines_dict[product]["qty"],
-                        iline["qty"],
-                    ]
-                if "price_unit" in iline and float_compare(
-                    iline["price_unit"],
-                    existing_lines_dict[product]["price_unit"],
-                    precision_digits=price_precision,
-                ):
-                    res["to_update"][oline]["price_unit"] = [
-                        existing_lines_dict[product]["price_unit"],
-                        iline["price_unit"],
-                    ]
+                res["to_update"][oline] = self._prepare_order_line_update_values(
+                    existing_lines_dict[product], iline, qty_precision, price_precision
+                )
             else:
                 res["to_add"].append(
                     {"product": product, "uom": uom, "import_line": iline}
@@ -1006,6 +990,27 @@ class BusinessDocumentImport(models.AbstractModel):
                 else:
                     res["to_remove"] = exiting_dict["line"]
         return res
+
+    def _prepare_order_line_update_values(
+        self, existing_line, iline, qty_precision, price_precision
+    ):
+        values = {}
+        if float_compare(
+            iline["qty"],
+            existing_line["qty"],
+            precision_digits=qty_precision,
+        ):
+            values["qty"] = [existing_line["qty"], iline["qty"]]
+        if "price_unit" in iline and float_compare(
+            iline["price_unit"],
+            existing_line["price_unit"],
+            precision_digits=price_precision,
+        ):
+            values["price_unit"] = [
+                existing_line["price_unit"],
+                iline["price_unit"],
+            ]
+        return values
 
     def _prepare_account_speed_dict(self):
         company_id = self._context.get("force_company") or self.env.company.id
