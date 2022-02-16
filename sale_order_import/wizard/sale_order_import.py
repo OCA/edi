@@ -553,6 +553,7 @@ class SaleOrderImport(models.TransientModel):
                             )
                         )
                         write_vals["price_unit"] = new_price_unit
+                write_vals.update(self._prepare_update_order_line_vals(cdict))
             if write_vals:
                 oline.write(write_vals)
         if compare_res["to_remove"]:
@@ -587,6 +588,10 @@ class SaleOrderImport(models.TransientModel):
                 % (len(compare_res["to_add"]), ", ".join(to_create_label))
             )
         return True
+
+    def _prepare_update_order_line_vals(self, change_dict):
+        # Allows other module to update some fields on the line
+        return {}
 
     def update_order_button(self):
         self.ensure_one()
