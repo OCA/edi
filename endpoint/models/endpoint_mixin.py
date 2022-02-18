@@ -10,9 +10,12 @@ import werkzeug
 from odoo import _, api, exceptions, fields, http, models
 from odoo.tools import safe_eval
 
+from odoo.addons.rpc_helper.decorator import disable_rpc
+
 from ..controllers.main import EndpointController
 
 
+@disable_rpc()  # Block ALL RPC calls
 class EndpointMixin(models.AbstractModel):
 
     _name = "endpoint.mixin"

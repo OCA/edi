@@ -4,13 +4,13 @@
 {
     "name": "Endpoint",
     "summary": """Provide custom endpoint machinery.""",
-    "version": "14.0.1.1.1",
+    "version": "14.0.1.2.0",
     "license": "LGPL-3",
     "development_status": "Alpha",
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "website": "https://github.com/OCA/edi",
-    "depends": ["endpoint_route_handler"],
+    "depends": ["endpoint_route_handler", "rpc_helper"],
     "data": [
         "security/ir.model.access.csv",
         "views/endpoint_view.xml",
