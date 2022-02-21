@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_backend_view_tree" model="ir.ui.view">
+        <field name="model">edi.backend</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+    <record id="edi_backend_view_form" model="ir.ui.view">
+        <field name="model">edi.backend</field>
+        <field name="arch" type="xml">
+            <form string="EDI Backend">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <h2>
+                            <label for="backend_type_id" class="oe_edit_only" />
+                            <field name="backend_type_id" />
+                        </h2>
+                    </div>
+                    <group>
+                        <field name="output_sent_processed_auto" />
+                    </group>
+                    <!-- Hook to add more config -->
+                    <notebook />
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="edi_backend_view_search" model="ir.ui.view">
+        <field name="model">edi.backend</field>
+        <field name="arch" type="xml">
+            <search string="EDI Backend">
+                <field name="name" />
+                <field name="backend_type_id" />
+                <filter
+                    name="group_by_backend_type_id"
+                    string="Backend Type"
+                    context="{'group_by': 'backend_type_id'}"
+                />
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="act_open_edi_backend_view">
+        <field name="name">EDI Backend</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.backend</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_backend_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record model="ir.actions.act_window.view" id="act_open_edi_backend_view_form">
+        <field name="act_window_id" ref="act_open_edi_backend_view" />
+        <field name="sequence" eval="20" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="edi_backend_view_form" />
+    </record>
+    <record model="ir.actions.act_window.view" id="act_open_edi_backend_view_tree">
+        <field name="act_window_id" ref="act_open_edi_backend_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="edi_backend_view_tree" />
+    </record>
+</odoo>

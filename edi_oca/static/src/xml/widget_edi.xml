@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="edi_oca.FieldEdiConfiguration">
+        <div>
+            <t t-foreach="widget.value" t-as="key">
+                <t t-set="data" t-as="widget.value[key]" />
+                <button
+                    t-att-data-name="key"
+                    class="o_edi_create_exchange_record btn btn-icon btn-primary"
+                    type="object"
+                >
+                    <t t-esc="widget.value[key]" />
+                </button>
+            </t>
+        </div>
+    </t>
+</templates>

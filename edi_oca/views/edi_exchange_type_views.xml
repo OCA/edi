@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_type_view_tree" model="ir.ui.view">
+        <field name="model">edi.exchange.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="backend_id" />
+                <field name="name" />
+                <field name="code" />
+                <field name="direction" />
+            </tree>
+        </field>
+    </record>
+    <record id="edi_exchange_type_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.type</field>
+        <field name="arch" type="xml">
+            <form string="EDI Exchange Type">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group name="wrapper">
+                        <group name="main">
+                            <field name="backend_id" />
+                            <field name="backend_type_id" />
+                            <field name="code" />
+                            <field name="direction" />
+                        </group>
+                        <group name="config">
+                            <field name="exchange_filename_pattern" />
+                            <field name="exchange_file_ext" />
+                            <field name="exchange_file_auto_generate" />
+                            <field name="ack_type_id" />
+                            <field name="job_channel_id" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page
+                            name="adv_settings"
+                            string="Advanced settings"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                        >
+                            <field
+                                name="advanced_settings_edit"
+                                widget="ace"
+                                colspan="4"
+                            />
+                        </page>
+                        <page
+                            name="model_rules"
+                            string="Model rules"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                        >
+                            <group>
+                                <field name="model_ids" widget="many2many_tags" />
+                                <field name="enable_domain" />
+                                <field
+                                    name="enable_snippet"
+                                    widget="ace"
+                                    options="{'mode': 'python'}"
+                                />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="edi_exchange_type_view_search" model="ir.ui.view">
+        <field name="model">edi.exchange.type</field>
+        <field name="arch" type="xml">
+            <search string="EDI Exchange Type">
+                <field name="name" />
+                <field name="backend_id" />
+                <field name="code" />
+                <field name="direction" />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_backend_id"
+                        string="Backend"
+                        context="{'group_by': 'backend_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_type_view">
+        <field name="name">EDI Exchange Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_type_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_type_view_form"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_type_view" />
+        <field name="sequence" eval="20" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="edi_exchange_type_view_form" />
+    </record>
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_type_view_tree"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_type_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="edi_exchange_type_view_tree" />
+    </record>
+</odoo>
