@@ -12,6 +12,7 @@ setuptools.setup(
         'odoo-addon-account_invoice_facturx>=15.0dev,<15.1dev',
         'odoo-addon-base_edi>=15.0dev,<15.1dev',
         'odoo-addon-base_facturx>=15.0dev,<15.1dev',
+        'odoo-addon-edi_oca>=15.0dev,<15.1dev',
         'odoo-addon-webservice>=15.0dev,<15.1dev',
     ],
     classifiers=[
