@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -64,8 +64,6 @@ msgid "Created on"
 msgstr ""
 
 #. module: edi_exchange_template_oca
-#: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_backend__display_name
-#: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_exchange_template_mixin__display_name
 #: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_exchange_template_output__display_name
 msgid "Display Name"
 msgstr ""
@@ -96,7 +94,6 @@ msgstr ""
 #: model:ir.ui.menu,name:edi_exchange_template_oca.menu_edi_exchange_template_output
 #: model_terms:ir.ui.view,arch_db:edi_exchange_template_oca.edi_exchange_template_output_view_form
 #: model_terms:ir.ui.view,arch_db:edi_exchange_template_oca.edi_exchange_template_output_view_search
-#: model_terms:ir.ui.view,arch_db:edi_exchange_template_oca.edi_exchange_template_output_view_tree
 msgid "EDI Exchange Template Output"
 msgstr ""
 
@@ -122,8 +119,6 @@ msgid "Group By"
 msgstr ""
 
 #. module: edi_exchange_template_oca
-#: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_backend__id
-#: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_exchange_template_mixin__id
 #: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_exchange_template_output__id
 msgid "ID"
 msgstr ""
@@ -134,8 +129,6 @@ msgid "ID of the view defined in xml file"
 msgstr ""
 
 #. module: edi_exchange_template_oca
-#: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_backend____last_update
-#: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_exchange_template_mixin____last_update
 #: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_exchange_template_output____last_update
 msgid "Last Modified on"
 msgstr ""
