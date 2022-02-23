@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_template_output_view_tree" model="ir.ui.view">
+        <field name="model">edi.exchange.template.output</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="backend_type_id" />
+                <field name="backend_id" />
+                <field name="name" />
+                <field name="code" />
+                <field name="output_type" />
+            </tree>
+        </field>
+    </record>
+    <record id="edi_exchange_template_output_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.template.output</field>
+        <field name="arch" type="xml">
+            <form string="EDI Exchange Template Output">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group name="wrapper">
+                        <group name="main">
+                            <field name="backend_type_id" />
+                            <field name="backend_id" />
+                            <field name="type_id" />
+                            <field name="code" />
+                            <field name="output_type" />
+                            <field name="generator" />
+                            <field
+                                name="template_id"
+                                attrs="{'required': [('generator', '=', 'qweb')], 'invisible': [('generator', '!=', 'qweb')]}"
+                            />
+                            <field
+                                name="report_id"
+                                attrs="{'required': [('generator', '=', 'report')], 'invisible': [('generator', '!=', 'report')]}"
+                            />
+                        </group>
+                    </group>
+                    <group
+                        name="template_edit"
+                        col="4"
+                        attrs="{'invisible': [('generator', '!=', 'qweb')]}"
+                    >
+                        <separator string="Template" colspan="4" />
+                        <field name="template_key" colspan="4" />
+                        <field
+                            name="template_arch"
+                            widget="ace"
+                            nolabel="1"
+                            colspan="4"
+                        />
+                    </group>
+                    <group name="code_snippet_edit" col="4">
+                        <separator string="Code snippet" colspan="4" />
+                        <field
+                            name="code_snippet"
+                            widget="ace"
+                            nolabel="1"
+                            colspan="4"
+                        />
+                        <separator string="Code snippet docs" colspan="4" />
+                        <div class="alert alert-info" role="alert" colspan="4">
+                            <field name="code_snippet_docs" nolabel="1" colspan="4" />
+                        </div>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="edi_exchange_template_output_view_search" model="ir.ui.view">
+        <field name="model">edi.exchange.template.output</field>
+        <field name="arch" type="xml">
+            <search string="EDI Exchange Template Output">
+                <field name="name" />
+                <field name="type_id" />
+                <field name="backend_id" />
+                <field name="template_key" />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_backend_type_id"
+                        string="Backend type"
+                        context="{'group_by': 'backend_type_id'}"
+                    />
+                    <filter
+                        name="group_by_backend_id"
+                        string="Backend"
+                        context="{'group_by': 'backend_id'}"
+                    />
+                    <filter
+                        name="group_by_type_id"
+                        string="Type"
+                        context="{'group_by': 'type_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_template_output_view"
+    >
+        <field name="name">EDI Exchange Template Output</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.template.output</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_template_output_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_template_output_view_form"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_template_output_view" />
+        <field name="sequence" eval="20" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="edi_exchange_template_output_view_form" />
+    </record>
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_template_output_view_tree"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_template_output_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="edi_exchange_template_output_view_tree" />
+    </record>
+    <menuitem
+        id="menu_edi_exchange_template_root"
+        parent="base_edi.menu_edi_root"
+        sequence="200"
+        action="act_open_edi_exchange_template_output_view"
+        name="EDI Exchange Templates"
+    />
+    <menuitem
+        id="menu_edi_exchange_template_output"
+        parent="menu_edi_exchange_template_root"
+        sequence="10"
+        action="act_open_edi_exchange_template_output_view"
+    />
+</odoo>
