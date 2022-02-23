@@ -7,15 +7,16 @@ from odoo import fields
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.addons.component.core import Component
-from odoo.addons.component.tests.common import SavepointComponentRegistryCase
+from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 
 _logger = logging.getLogger(__name__)
 
 
-class EDIBackendTestCase(AccountTestInvoicingCommon, SavepointComponentRegistryCase):
+class EDIBackendTestCase(AccountTestInvoicingCommon, TransactionComponentRegistryCase):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
         super().setUpClass(chart_template_ref=chart_template_ref)
+        cls._setup_registry(cls)
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
 
         class AccountMoveEventListenerDemo(Component):
@@ -85,9 +86,6 @@ class EDIBackendTestCase(AccountTestInvoicingCommon, SavepointComponentRegistryC
             .with_context(**payment_action["context"])
             .create(
                 {
-                    "payment_method_id": self.env.ref(
-                        "account.account_payment_method_manual_in"
-                    ).id,
                     "journal_id": self.company_data["default_journal_bank"].id,
                 }
             )
