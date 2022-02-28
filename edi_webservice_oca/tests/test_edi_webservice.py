@@ -8,7 +8,7 @@ from odoo.addons.edi_oca.tests.common import EDIBackendCommonTestCase
 class TestEdiWebService(EDIBackendCommonTestCase):
     @classmethod
     def _setup_records(cls):
-        super()._setup_records()
+        result = super()._setup_records()
         cls.webservice = cls.env["webservice.backend"].create(
             {
                 "name": "WebService",
@@ -23,6 +23,7 @@ class TestEdiWebService(EDIBackendCommonTestCase):
             "res_id": cls.partner.id,
         }
         cls.record = cls.backend.create_record("test_csv_input", vals)
+        return result
 
     def test_components_with_ws(self):
         self.backend.webservice_backend_id = self.webservice
