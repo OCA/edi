@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 Creu Blanca
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record model="ir.ui.view" id="account_move_form_view">
+        <field name="name">account.move.form (in edi_account)</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <group name="accounting_info_group" position="after">
+                <group name="edi_invoice_group" string="Electronic Data Interchange">
+                    <field name="disable_edi_auto" string="Disable" />
+                </group>
+            </group>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-retweet"
+                    attrs="{'invisible': [('exchange_record_count', '=', 0)]}"
+                    name="action_view_edi_records"
+                >
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="exchange_record_count" />
+                        </span>
+                        <span class="o_stat_text">EDI</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>
