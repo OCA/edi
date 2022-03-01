@@ -36,6 +36,7 @@ addon | version | maintainers | summary
 [edi_account](edi_account/) | 13.0.1.1.0 |  | Define EDI Configuration for Account Moves
 [edi_backend_partner](edi_backend_partner/) | 13.0.1.0.0 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
 [edi_exchange_template](edi_exchange_template/) | 13.0.1.7.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
+[edi_purchase_oca](edi_purchase_oca/) | 13.0.1.0.0 |  | Define EDI Configuration for Purchase Orders
 [edi_storage](edi_storage/) | 13.0.1.8.1 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_voxel](edi_voxel/) | 13.0.1.0.2 |  | Base module for connecting with Voxel
 [edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.1.3 |  | Sends account invoices to Voxel.
