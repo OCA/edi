@@ -7,7 +7,7 @@
         Defines webservice integration from EDI Exchange records""",
     "version": "13.0.1.2.0",
     "license": "AGPL-3",
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "author": "Creu Blanca,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": ["edi", "webservice"],
