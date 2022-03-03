@@ -45,7 +45,7 @@ addon | version | maintainers | summary
 [edi_voxel_secondary_unit](edi_voxel_secondary_unit/) | 13.0.1.0.0 | [![ernestotejeda](https://github.com/ernestotejeda.png?size=30px)](https://github.com/ernestotejeda) | Add Voxel UoM code to Secondary UoM model
 [edi_voxel_stock_picking](edi_voxel_stock_picking/) | 13.0.1.0.4 |  | Sends stock picking report to Voxel.
 [edi_voxel_stock_picking_secondary_unit](edi_voxel_stock_picking_secondary_unit/) | 13.0.1.0.0 | [![ernestotejeda](https://github.com/ernestotejeda.png?size=30px)](https://github.com/ernestotejeda) | Export Secondary UoMs Voxel Code in picking Voxel documents
-[edi_webservice](edi_webservice/) | 13.0.1.2.0 |  | Defines webservice integration from EDI Exchange records
+[edi_webservice](edi_webservice/) | 13.0.1.2.1 |  | Defines webservice integration from EDI Exchange records
 [edi_xml](edi_xml/) | 13.0.1.2.2 |  | Base module for EDI exchange using XML files.
 [partner_identification_import](partner_identification_import/) | 13.0.2.0.1 |  | Provides partner matching on extra ID
 [purchase_order_ubl](purchase_order_ubl/) | 13.0.1.2.1 |  | Embed UBL XML file inside the PDF purchase order
