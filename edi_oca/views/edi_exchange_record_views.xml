@@ -4,13 +4,13 @@
         <field name="model">edi.exchange.record</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name" />
-                <field name="identifier" />
-                <field name="external_identifier" />
-                <field name="type_id" />
                 <field name="backend_id" />
-                <field name="res_id" groups="base.group_no_one" />
-                <field name="model" groups="base.group_no_one" />
+                <field name="identifier" />
+                <field name="external_identifier" optional="hide" />
+                <field name="name" />
+                <field name="type_id" />
+                <field name="res_id" groups="base.group_no_one" optional="hide" />
+                <field name="model" groups="base.group_no_one" optional="hide" />
                 <field name="exchanged_on" />
                 <field name="ack_received_on" />
                 <field
@@ -98,7 +98,7 @@
                     <group name="wrapper">
                         <group name="config">
                             <field name="type_id" />
-                            <field name="backend_id" />
+                            <field name="backend_id" options="{'no_create': True}" />
                         </group>
                         <group name="status" string="Status">
                             <field name="exchanged_on" />
@@ -168,6 +168,59 @@
         <field name="model">edi.exchange.record</field>
         <field name="arch" type="xml">
             <search string="EDI Exchange Record">
+                <filter
+                    string="Successful"
+                    name="filter_success"
+                    domain="[('edi_exchange_state','in', ['output_sent_and_processed', 'input_processed'])]"
+                />
+                <filter
+                    string="Failed"
+                    name="filter_failed"
+                    domain="[('edi_exchange_state','in', ['validate_error', 'output_error_on_send', 'output_sent_and_error', 'input_receive_error', 'input_processed_error'])]"
+                />
+                <filter
+                    string="Pending"
+                    name="filter_pending"
+                    domain="[('edi_exchange_state','in', ['output_pending', 'input_pending', 'output_sent', 'input_received'])]"
+                />
+                <separator />
+                <filter
+                    string="Inbound"
+                    name="filter_inbound"
+                    domain="[('type_id.direction','=', 'input')]"
+                />
+                <filter
+                    string="Outbound"
+                    name="filter_outbound"
+                    domain="[('type_id.direction','=', 'output')]"
+                />
+                <separator />
+                <filter
+                    string="Created today"
+                    name="filter_created_today"
+                    domain="[('create_date','&gt;=',  context_today().strftime('%%Y-%%m-%%d 00:00:00'))]"
+                    help="Show all records created today"
+                />
+                <filter
+                    string="Created last 7 days"
+                    name="filter_created_last_week"
+                    domain="[('create_date','&gt;=',  (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"
+                    help="Show all records created in the last 7 days"
+                />
+                <filter
+                    string="Exchanged today"
+                    name="filter_exchanged_today"
+                    domain="[('exchanged_on','&gt;=', context_today().strftime('%%Y-%%m-%%d 00:00:00'))]"
+                    help="Show all records created today"
+                />
+                <filter
+                    string="Exchanged last 7 days"
+                    name="filter_exchanged_last_week"
+                    domain="[('exchanged_on','&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"
+                    help="Show all records created in the last 7 days"
+                />
+                <separator />
+                <field name="backend_id" />
                 <field name="type_id" />
                 <field name="res_id" />
                 <field name="exchanged_on" />
@@ -178,6 +231,11 @@
                 <field name="ack_exchange_id" />
                 <field name="parent_id" />
                 <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_backend_id"
+                        string="Backend"
+                        context="{'group_by': 'backend_id'}"
+                    />
                     <filter
                         name="group_by_type_id"
                         string="Type"
@@ -193,18 +251,82 @@
                         string="Parent exchange"
                         context="{'group_by': 'parent_id'}"
                     />
+                    <filter
+                        name="group_by_create_date"
+                        string="Create date"
+                        context="{'group_by': 'create_date'}"
+                    />
+                    <filter
+                        name="group_by_exchanged_on"
+                        string="Exchange date"
+                        context="{'group_by': 'exchanged_on'}"
+                    />
+                    <filter
+                        name="group_by_model"
+                        string="Model"
+                        context="{'group_by': 'model'}"
+                    />
                 </group>
             </search>
         </field>
     </record>
     <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view">
-        <field name="name">EDI Exchange Record</field>
+        <field name="name">Exchanges</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">edi.exchange.record</field>
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{}</field>
+        <field name="context">{'search_default_filter_created_today': 1}</field>
+    </record>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_view_pending"
+    >
+        <field name="name">Exchanges - pending</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view_failed">
+        <field name="name">Exchanges - failed</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_filter_failed': 1}</field>
+    </record>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_view_inbound"
+    >
+        <field name="name">Exchanges - inbound</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_filter_inbound': 1}</field>
+    </record>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_view_outbound"
+    >
+        <field name="name">Exchanges - outbound</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_filter_outbound': 1}</field>
     </record>
     <record
         model="ir.actions.act_window.view"
