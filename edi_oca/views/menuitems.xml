@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <menuitem
-        id="menu_edi_backend"
-        parent="base_edi.menu_edi_root"
-        name="Backends"
-        sequence="10"
-        action="act_open_edi_backend_view"
-    />
-    <menuitem
-        id="menu_edi_exchange_record"
+        id="menu_edi_exchange_record_root"
         parent="base_edi.menu_edi_root"
         name="Exchanges"
         sequence="100"
+    />
+    <menuitem
+        id="menu_edi_exchange_record_all"
+        parent="menu_edi_exchange_record_root"
+        name="All"
+        sequence="100"
         action="act_open_edi_exchange_record_view"
+    />
+    <menuitem
+        id="menu_edi_exchange_record_pending"
+        parent="menu_edi_exchange_record_root"
+        name="Failed"
+        sequence="200"
+        action="act_open_edi_exchange_record_view_failed"
+    />
+    <menuitem
+        id="menu_edi_exchange_record_failed"
+        parent="menu_edi_exchange_record_root"
+        name="Pending"
+        sequence="300"
+        action="act_open_edi_exchange_record_view_pending"
+    />
+    <menuitem
+        id="menu_edi_exchange_record_inbound"
+        parent="menu_edi_exchange_record_root"
+        name="Inbound"
+        sequence="400"
+        action="act_open_edi_exchange_record_view_inbound"
+    />
+    <menuitem
+        id="menu_edi_exchange_record_outbound"
+        parent="menu_edi_exchange_record_root"
+        name="Outbound"
+        sequence="500"
+        action="act_open_edi_exchange_record_view_outbound"
     />
     <menuitem
         id="menu_edi_config"
