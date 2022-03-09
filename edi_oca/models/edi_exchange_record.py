@@ -111,9 +111,8 @@ class EDIExchangeRecord(models.Model):
     @api.depends("type_id.code", "model", "res_id")
     def _compute_name(self):
         for rec in self:
-            rec.name = "{} - {}".format(
-                rec.type_id.name, rec.record.name if rec.model else "Unrelated"
-            )
+            bits = [rec.type_id.name, rec.record.name if rec.model else ""]
+            rec.name = " - ".join([x for x in bits if x and x.strip()])
 
     @api.depends("model", "type_id")
     def _compute_exchange_filename(self):
