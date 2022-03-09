@@ -7,7 +7,7 @@
         Defines webservice abstract definition to be used generally""",
     "version": "14.0.1.0.1",
     "license": "AGPL-3",
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "author": "Creu Blanca,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": ["component", "server_environment"],
