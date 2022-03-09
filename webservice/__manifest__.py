@@ -5,7 +5,7 @@
     "name": "WebService",
     "summary": """
         Defines webservice abstract definition to be used generally""",
-    "version": "14.0.1.0.1",
+    "version": "14.0.1.1.0",
     "license": "AGPL-3",
     "development_status": "Beta",
     "author": "Creu Blanca,Odoo Community Association (OCA)",
