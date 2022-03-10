@@ -82,14 +82,10 @@
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <label for="name" class="oe_edit_only" />
+                        <label for="identifier" class="oe_edit_only" />
                         <h1>
-                            <field name="name" />
-                        </h1>
-                        <h2>
-                            <label for="identifier" class="oe_edit_only" />
                             <field name="identifier" />
-                        </h2>
+                        </h1>
                         <h2>
                             <label for="external_identifier" class="oe_edit_only" />
                             <field name="external_identifier" />
