@@ -86,3 +86,7 @@ class EDIBackendTestCase(EDIBackendCommonTestCase):
         self.assertTrue(isinstance(delayed, DelayableRecordset))
         self.assertEqual(delayed.recordset, self.backend)
         self.assertEqual(delayed.channel, "root.parent_test_chan.test_chan")
+
+    def test_action_view_exchanges(self):
+        # Just testing is not broken
+        self.assertTrue(self.backend.action_view_exchanges())
