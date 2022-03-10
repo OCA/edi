@@ -20,6 +20,12 @@
                             string="Exchanges"
                             icon="fa-list"
                         />
+                        <button
+                            type="object"
+                            name="action_view_exchange_types"
+                            string="Exchange types"
+                            icon="fa-list"
+                        />
                     </div>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" />
