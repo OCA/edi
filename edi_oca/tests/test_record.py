@@ -56,26 +56,34 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
             )
 
     def test_record_relation(self):
+        # create new one to delete it later
+        partner = self.partner.copy({"name": "Test EDI record rel"})
         vals = {
-            "model": self.partner._name,
-            "res_id": self.partner.id,
+            "model": partner._name,
+            "res_id": partner.id,
         }
         record = self.backend.create_record("test_csv_output", vals)
+        self.assertEqual(record.related_name, partner.name)
         record1 = self.backend.create_record(
             "test_csv_output", dict(vals, parent_id=record.id)
         )
+        self.assertEqual(record1.related_name, partner.name)
         record2 = self.backend.create_record(
             "test_csv_output_ack", dict(vals, parent_id=record.id)
         )
+        self.assertEqual(record2.related_name, partner.name)
         self.assertIn(record1, record.related_exchange_ids)
         self.assertIn(record2, record.related_exchange_ids)
         self.assertEqual(record.ack_exchange_id, record2)
+        # Check deletion
+        partner.unlink()
+        self.assertFalse(record1.record)
+        self.assertFalse(record1.related_name)
 
     def test_record_empty_with_parent(self):
-        """
-        Simulate the case when the child record doesn't have a model and res_id.
+        """Simulate child record doesn't have a model and res_id.
+
         In this case the .record should return the record of the parent.
-        :return:
         """
         vals = {
             "model": self.partner._name,
