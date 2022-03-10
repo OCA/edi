@@ -90,3 +90,7 @@ class EDIBackendTestCase(EDIBackendCommonTestCase):
     def test_action_view_exchanges(self):
         # Just testing is not broken
         self.assertTrue(self.backend.action_view_exchanges())
+
+    def test_action_view_exchange_types(self):
+        # Just testing is not broken
+        self.assertTrue(self.backend.action_view_exchange_types())
