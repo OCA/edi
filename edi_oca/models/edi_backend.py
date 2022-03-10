@@ -615,3 +615,13 @@ class EDIBackend(models.Model):
             "default_backend_type_id": self.backend_type_id.id,
         }
         return action
+
+    def action_view_exchange_types(self):
+        xmlid = "edi_oca.act_open_edi_exchange_type_view"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action["context"] = {
+            "search_default_backend_id": self.id,
+            "default_backend_id": self.id,
+            "default_backend_type_id": self.backend_type_id.id,
+        }
+        return action
