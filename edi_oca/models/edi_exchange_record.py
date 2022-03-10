@@ -414,6 +414,8 @@ class EDIExchangeRecord(models.Model):
                     access_rights_uid=access_rights_uid,
                 )[: limit - len(result)]
             )
+        # Restore original ordering
+        result = [x for x in orig_ids if x in result]
         return len(result) if count else list(result)
 
     def read(self, fields=None, load="_classic_read"):
