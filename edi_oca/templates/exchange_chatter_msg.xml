@@ -13,7 +13,7 @@
                     t-att-data-oe-model="exchange_record._name"
                     t-att-data-oe-id="exchange_record.id"
                 >
-                    <span t-field="exchange_record.name" />
+                    <span t-field="exchange_record.identifier" />
                 </a>
             </span>
             <br />
