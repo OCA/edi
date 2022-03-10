@@ -19,7 +19,6 @@ class EDIExchangeRecord(models.Model):
     _order = "exchanged_on desc"
     _rec_name = "identifier"
 
-    name = fields.Char(compute="_compute_name")
     identifier = fields.Char(required=True, index=True, readonly=True)
     external_identifier = fields.Char(index=True, readonly=True)
     type_id = fields.Many2one(
@@ -39,6 +38,7 @@ class EDIExchangeRecord(models.Model):
         readonly=True,
         model_field="model",
     )
+    related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
     exchange_file = fields.Binary(attachment=True)
     exchange_filename = fields.Char(
         compute="_compute_exchange_filename", readonly=False, store=True
@@ -109,11 +109,11 @@ class EDIExchangeRecord(models.Model):
         ),
     ]
 
-    @api.depends("type_id.code", "model", "res_id")
-    def _compute_name(self):
+    @api.depends("model", "res_id")
+    def _compute_related_name(self):
         for rec in self:
-            bits = [rec.type_id.name, rec.record.name if rec.model else ""]
-            rec.name = " - ".join([x for x in bits if x and x.strip()])
+            related_record = rec.record
+            rec.related_name = related_record.display_name if related_record else ""
 
     @api.depends("model", "type_id")
     def _compute_exchange_filename(self):
@@ -178,7 +178,7 @@ class EDIExchangeRecord(models.Model):
             return None
         if not self.model and self.parent_id:
             return self.parent_id.record
-        return self.env[self.model].browse(self.res_id)
+        return self.env[self.model].browse(self.res_id).exists()
 
     def _set_file_content(
         self, output_string, encoding="utf-8", field_name="exchange_file"
