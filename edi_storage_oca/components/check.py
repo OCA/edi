@@ -56,7 +56,9 @@ class EDIStorageCheckComponentMixin(Component):
             )
             # Assume a text file will be placed there w/ the same name and error suffix
             err_filename = self.exchange_record.exchange_filename + ".error"
-            error_report = self._get_remote_file("error", filename=err_filename)
+            error_report = (
+                self._get_remote_file("error", filename=err_filename) or "no-report"
+            )
             if self.exchange_record.edi_exchange_state == "output_sent":
                 self.exchange_record.update(
                     {
