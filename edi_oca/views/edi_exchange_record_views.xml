@@ -5,10 +5,10 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="backend_id" />
+                <field name="type_id" />
                 <field name="identifier" />
                 <field name="external_identifier" optional="hide" />
-                <field name="name" />
-                <field name="type_id" />
+                <field name="related_name" optional="hide" />
                 <field name="res_id" groups="base.group_no_one" optional="hide" />
                 <field name="model" groups="base.group_no_one" optional="hide" />
                 <field name="exchanged_on" />
@@ -142,9 +142,8 @@
                             </group>
                             <field name="related_exchange_ids" nolabel="1" colspan="4">
                               <tree>
-                                <field name="name" />
-                                <field name="identifier" />
                                 <field name="type_id" />
+                                <field name="identifier" />
                                 <field name="exchanged_on" />
                                 <field name="ack_received_on" />
                                 <field name="edi_exchange_state" />
