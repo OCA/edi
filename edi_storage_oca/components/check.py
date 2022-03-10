@@ -37,9 +37,8 @@ class EDIStorageCheckComponentMixin(Component):
         """
         if self._get_remote_file("done"):
             _logger.info(
-                "%s done for: %s",
-                self.exchange_record.model,
-                self.exchange_record.name,
+                "%s done",
+                self.exchange_record.identifier,
             )
             if (
                 not self.exchange_record.edi_exchange_state
@@ -52,9 +51,8 @@ class EDIStorageCheckComponentMixin(Component):
         error = self._get_remote_file("error")
         if error:
             _logger.info(
-                "%s error for: %s",
-                self.exchange_record.model,
-                self.exchange_record.name,
+                "%s error",
+                self.exchange_record.identifier,
             )
             # Assume a text file will be placed there w/ the same name and error suffix
             err_filename = self.exchange_record.exchange_filename + ".error"
