@@ -605,3 +605,13 @@ class EDIBackend(models.Model):
             ("type_id", "=", exchange_type.id),
         ] + extra_domain or []
         return self.env["edi.exchange.record"].search(domain, count=count_only)
+
+    def action_view_exchanges(self):
+        xmlid = "edi_oca.act_open_edi_exchange_record_view"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action["context"] = {
+            "search_default_backend_id": self.id,
+            "default_backend_id": self.id,
+            "default_backend_type_id": self.backend_type_id.id,
+        }
+        return action
