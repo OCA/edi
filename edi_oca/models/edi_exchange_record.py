@@ -251,6 +251,10 @@ class EDIExchangeRecord(models.Model):
     def _exchange_status_message(self, key):
         return self._exchange_status_messages[key]
 
+    def action_exchange_generate(self):
+        self.ensure_one()
+        return self.backend_id.exchange_generate(self)
+
     def action_exchange_send(self):
         self.ensure_one()
         return self.backend_id.exchange_send(self)
@@ -258,6 +262,15 @@ class EDIExchangeRecord(models.Model):
     def action_exchange_process(self):
         self.ensure_one()
         return self.backend_id.exchange_process(self)
+
+    def action_exchange_receive(self):
+        self.ensure_one()
+        return self.backend_id.exchange_receive(self)
+
+    def exchange_create_ack_record(self):
+        ack_type = self.type_id.ack_type_id
+        values = {"parent_id": self.id}
+        return self.backend_id.create_record(ack_type.code, values)
 
     def action_retry(self):
         for rec in self:
@@ -455,3 +468,15 @@ class EDIExchangeRecord(models.Model):
     def write(self, vals):
         self.check_access_rule("write")
         return super().write(vals)
+
+    def _job_delay_params(self):
+        params = {}
+        channel = self.type_id.sudo().job_channel_id
+        if channel:
+            params["channel"] = channel.complete_name
+        return params
+
+    def with_delay(self, **kw):
+        params = self._job_delay_params()
+        params.update(kw)
+        return super().with_delay(**params)
