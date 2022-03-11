@@ -182,16 +182,6 @@ class EDIBackend(models.Model):
             ("backend_id", "=", self.id),
         ]
 
-    def _get_job_delay_params(self, exchange_record):
-        params = {}
-        channel = exchange_record.type_id.job_channel_id
-        if channel:
-            params["channel"] = channel.complete_name
-        return params
-
-    def _delay_action(self, rec):
-        return self.with_delay(**self._get_job_delay_params(rec))
-
     def exchange_generate(self, exchange_record, store=True, force=False, **kw):
         """Generate output content for given exchange record.
 
@@ -361,7 +351,7 @@ class EDIBackend(models.Model):
             len(new_records),
         )
         for rec in new_records:
-            self._delay_action(rec).exchange_generate(rec)
+            rec.with_delay().action_exchange_generate()
 
         if skip_send:
             return
@@ -374,7 +364,7 @@ class EDIBackend(models.Model):
         )
         for rec in pending_records:
             if rec.edi_exchange_state == "output_pending":
-                self._delay_action(rec).exchange_send(rec)
+                rec.with_delay().action_exchange_send()
             else:
                 # TODO: run in job as well?
                 self._exchange_output_check_state(rec)
@@ -552,7 +542,7 @@ class EDIBackend(models.Model):
             len(pending_records),
         )
         for rec in pending_records:
-            self._delay_action(rec).exchange_receive(rec)
+            rec.with_delay().action_exchange_receive()
 
         pending_process_records = self.exchange_record_model.search(
             self._input_pending_process_records_domain()
@@ -562,7 +552,7 @@ class EDIBackend(models.Model):
             len(pending_process_records),
         )
         for rec in pending_process_records:
-            self._delay_action(rec).exchange_process(rec)
+            rec.with_delay().action_exchange_process()
 
         # TODO: test it!
         self._exchange_check_ack_needed(pending_process_records)
@@ -590,12 +580,7 @@ class EDIBackend(models.Model):
             len(ack_pending_records),
         )
         for rec in ack_pending_records:
-            self._delay_action(rec).exchange_create_ack_record(rec)
-
-    def exchange_create_ack_record(self, exchange_record):
-        ack_type = exchange_record.type_id.ack_type_id
-        values = {"parent_id": exchange_record.id}
-        return self.create_record(ack_type.code, values)
+            rec.with_delay().exchange_create_ack_record()
 
     def _find_existing_exchange_records(
         self, exchange_type, extra_domain=None, count_only=False
