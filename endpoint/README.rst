@@ -31,6 +31,8 @@ Thanks to endpoint mixin the endpoint records are automatically registered as re
 
 You can easily code what you want in the code snippet.
 
+NOTE: for security reasons any kind of RPC call is blocked on endpoint records.
+
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
    Only for development or testing purpose, do not use in production.
