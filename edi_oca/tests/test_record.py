@@ -6,6 +6,8 @@ from freezegun import freeze_time
 
 from odoo import exceptions, fields
 
+from odoo.addons.queue_job.job import DelayableRecordset
+
 from .common import EDIBackendCommonTestCase
 
 
@@ -101,3 +103,25 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         )
         self.assertFalse(record2.model)
         self.assertEqual(record.record, record2.record)
+
+    def test_with_delay_override(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record = self.backend.create_record("test_csv_input", vals)
+        parent_channel = self.env["queue.job.channel"].create(
+            {
+                "name": "parent_test_chan",
+                "parent_id": self.env.ref("queue_job.channel_root").id,
+            }
+        )
+        channel = self.env["queue.job.channel"].create(
+            {"name": "test_chan", "parent_id": parent_channel.id}
+        )
+        self.exchange_type_in.job_channel_id = channel
+        # re-enable job delayed feature
+        delayed = record.with_context(test_queue_job_no_delay=False).with_delay()
+        self.assertTrue(isinstance(delayed, DelayableRecordset))
+        self.assertEqual(delayed.recordset, record)
+        self.assertEqual(delayed.channel, "root.parent_test_chan.test_chan")
