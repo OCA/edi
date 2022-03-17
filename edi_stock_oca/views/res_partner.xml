@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 Creu Blanca
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record model="ir.ui.view" id="view_partner_form">
+        <field name="name">res.partner.form (in edi_account)</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="stock.view_partner_stock_form" />
+        <field name="arch" type="xml">
+            <group name="inventory" position="after">
+                <group name="edi_configuration" string="EDI Configuration" />
+            </group>
+        </field>
+    </record>
+</odoo>
