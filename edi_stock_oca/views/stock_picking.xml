@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OCA
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="stock_picking_form_view">
+        <field name="name">stock.picking.form (in edi_stock_oca)</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <page name="extra" position="after">
+                <page name="edi" string="EDI">
+                    <group name="edi_stock_group" string="Electronic Data Interchange">
+                        <field name="edi_auto_disabled" string="Disable" />
+                    </group>
+                </page>
+            </page>
+           <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-retweet"
+                    attrs="{'invisible': [('exchange_record_count', '=', 0)]}"
+                    name="action_view_edi_records"
+                >
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="exchange_record_count" />
+                        </span>
+                        <span class="o_stat_text">EDI</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+
+
+</odoo>
