@@ -9,7 +9,7 @@ from odoo import tools
 from odoo.exceptions import UserError
 from odoo.tests.common import SingleTransactionCase
 
-from odoo.addons.sale_order_import_ubl_http.controllers.main import ImportController
+from ..controllers.main import ImportController
 
 
 class TestSaleOrderImportEndpoint(SingleTransactionCase):
