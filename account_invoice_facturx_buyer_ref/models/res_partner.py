@@ -2,7 +2,7 @@
 # @author: Iván Todorovich <ivan.todorovich@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, fields
+from odoo import fields, models
 
 
 class ResPartner(models.Model):
@@ -11,6 +11,6 @@ class ResPartner(models.Model):
     facturx_ref = fields.Char(
         string="Factur-X Reference",
         help="Used as Buyer Reference in Factur-X data.\n"
-             "It's a requirement by some countries regulations.\n"
-             "* Germany : Used for Leitweg ID",
+        "It's a requirement by some countries regulations.\n"
+        "* Germany : Used for Leitweg ID",
     )

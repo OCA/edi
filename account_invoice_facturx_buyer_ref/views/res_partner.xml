@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!--
   Copyright 2021 Camptocamp
   @author: Iván Todorovich <ivan.todorovich@gmail.com>
@@ -11,7 +11,7 @@
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
             <field name="ref" position="after">
-                <field name="facturx_ref"/>
+                <field name="facturx_ref" />
             </field>
         </field>
     </record>

@@ -1,4 +1,4 @@
-Some companies are affected by country-specific regulations that require you to 
+Some companies are affected by country-specific regulations that require you to
 set a BuyerReference in the FacturX data.
 
 For instance, German Public Organizations will require that you set a Leitweg ID
