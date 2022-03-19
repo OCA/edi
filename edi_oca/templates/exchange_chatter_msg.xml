@@ -9,7 +9,7 @@
             <span class="edi-exchange-ref">
                 <strong>EDI exchange:</strong>
                 <a
-                    t-attf-href="/web#id={exchange_record.id}&amp;model={exchange_record._name}&amp;view_type=form"
+                    t-attf-href="/web#id=#{exchange_record.id}&amp;model=#{exchange_record._name}&amp;view_type=form"
                     t-att-data-oe-model="exchange_record._name"
                     t-att-data-oe-id="exchange_record.id"
                 >

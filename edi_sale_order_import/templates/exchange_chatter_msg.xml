@@ -14,7 +14,7 @@
             <span class="order-ref">
                 <strong>Order:</strong>
                 <a
-                    t-attf-href="/web#id={order.id}&amp;model={order._name}&amp;view_type=form"
+                    t-attf-href="/web#id=#{order.id}&amp;model=#{order._name}&amp;view_type=form"
                     t-att-data-oe-model="order._name"
                     t-att-data-oe-id="order.id"
                 >
@@ -25,7 +25,7 @@
             <span class="edi-exchange-ref" t-if="prev_record">
                 <strong>Previous record:</strong>
                 <a
-                    t-attf-href="/web#id={prev_record.id}&amp;model={prev_record._name}&amp;view_type=form"
+                    t-attf-href="/web#id=#{prev_record.id}&amp;model=#{prev_record._name}&amp;view_type=form"
                     t-att-data-oe-model="prev_record._name"
                     t-att-data-oe-id="prev_record.id"
                 >
