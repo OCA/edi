@@ -49,7 +49,7 @@ class EDIExchangeSOInput(Component):
 
     @api.model
     def _get_default_price_source(self):
-        return "pricelist"
+        return self.settings.get("price_source", "pricelist")
 
     def _order_should_be_confirmed(self):
         return self.settings.get("confirm_order", False)
