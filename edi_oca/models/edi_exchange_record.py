@@ -17,8 +17,8 @@ class EDIExchangeRecord(models.Model):
     _inherit = "mail.thread"
     _description = "EDI exchange Record"
     _order = "exchanged_on desc"
+    _rec_name = "identifier"
 
-    name = fields.Char(compute="_compute_name")
     identifier = fields.Char(required=True, index=True, readonly=True)
     external_identifier = fields.Char(index=True, readonly=True)
     type_id = fields.Many2one(
@@ -38,6 +38,7 @@ class EDIExchangeRecord(models.Model):
         readonly=True,
         model_field="model",
     )
+    related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
     exchange_file = fields.Binary(attachment=True)
     exchange_filename = fields.Char(
         compute="_compute_exchange_filename", readonly=False, store=True
@@ -109,12 +110,11 @@ class EDIExchangeRecord(models.Model):
         ),
     ]
 
-    @api.depends("type_id.code", "model", "res_id")
-    def _compute_name(self):
+    @api.depends("model", "res_id")
+    def _compute_related_name(self):
         for rec in self:
-            rec.name = "{} - {}".format(
-                rec.type_id.name, rec.record.name if rec.model else "Unrelated"
-            )
+            related_record = rec.record
+            rec.related_name = related_record.display_name if related_record else ""
 
     @api.depends("model", "type_id")
     def _compute_exchange_filename(self):
@@ -179,7 +179,7 @@ class EDIExchangeRecord(models.Model):
             return None
         if not self.model and self.parent_id:
             return self.parent_id.record
-        return self.env[self.model].browse(self.res_id)
+        return self.env[self.model].browse(self.res_id).exists()
 
     def _set_file_content(
         self, output_string, encoding="utf-8", field_name="exchange_file"
@@ -252,6 +252,10 @@ class EDIExchangeRecord(models.Model):
     def _exchange_status_message(self, key):
         return self._exchange_status_messages[key]
 
+    def action_exchange_generate(self):
+        self.ensure_one()
+        return self.backend_id.exchange_generate(self)
+
     def action_exchange_send(self):
         self.ensure_one()
         return self.backend_id.exchange_send(self)
@@ -259,6 +263,15 @@ class EDIExchangeRecord(models.Model):
     def action_exchange_process(self):
         self.ensure_one()
         return self.backend_id.exchange_process(self)
+
+    def action_exchange_receive(self):
+        self.ensure_one()
+        return self.backend_id.exchange_receive(self)
+
+    def exchange_create_ack_record(self):
+        ack_type = self.type_id.ack_type_id
+        values = {"parent_id": self.id}
+        return self.backend_id.create_record(ack_type.code, values)
 
     def action_retry(self):
         for rec in self:
@@ -416,6 +429,8 @@ class EDIExchangeRecord(models.Model):
                     access_rights_uid=access_rights_uid,
                 )[: limit - len(result)]
             )
+        # Restore original ordering
+        result = [x for x in orig_ids if x in result]
         return len(result) if count else list(result)
 
     def read(self, fields=None, load="_classic_read"):
@@ -455,3 +470,15 @@ class EDIExchangeRecord(models.Model):
     def write(self, vals):
         self.check_access_rule("write")
         return super().write(vals)
+
+    def _job_delay_params(self):
+        params = {}
+        channel = self.type_id.sudo().job_channel_id
+        if channel:
+            params["channel"] = channel.complete_name
+        return params
+
+    def with_delay(self, **kw):
+        params = self._job_delay_params()
+        params.update(kw)
+        return super().with_delay(**params)
