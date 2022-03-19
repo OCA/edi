@@ -13,4 +13,5 @@
     "maintainers": ["simahawk"],
     "depends": ["edi_oca", "sale_order_import"],
     "auto_install": True,
+    "data": ["templates/exchange_chatter_msg.xml"],
 }
