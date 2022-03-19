@@ -17,10 +17,7 @@ _logger = logging.getLogger(__name__)
 
 
 def _get_exception_msg(exc):
-    if hasattr(exc, "name"):
-        # Odoo exc
-        return exc.name
-    elif hasattr(exc, "args") and isinstance(exc.args[0], str):
+    if hasattr(exc, "args") and isinstance(exc.args[0], str):
         return exc.args[0]
     return repr(exc)
 
