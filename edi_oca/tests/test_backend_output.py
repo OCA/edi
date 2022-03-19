@@ -80,7 +80,8 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             with self.assertRaises(UserError) as err:
                 record.action_exchange_send()
             self.assertEqual(
-                err.exception.name, "Record ID=%d is not meant to be sent!" % record.id
+                err.exception.args[0],
+                "Record ID=%d is not meant to be sent!" % record.id,
             )
             mocked.assert_not_called()
 
@@ -95,6 +96,6 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             with self.assertRaises(UserError) as err:
                 record.action_exchange_send()
             self.assertEqual(
-                err.exception.name, "Record ID=%d has no file to send!" % record.id
+                err.exception.args[0], "Record ID=%d has no file to send!" % record.id
             )
             mocked.assert_not_called()
