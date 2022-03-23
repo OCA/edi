@@ -260,6 +260,8 @@ class BaseUbl(models.AbstractModel):
                 ), "partner is wrong"
             else:
                 partner = company.partner_id
+        else:
+            raise UserError(_("Missing company!"))
         supplier_party_root = etree.SubElement(parent_node, ns["cac"] + node_name)
         partner_ref = self._ubl_get_customer_assigned_id(partner)
         if partner_ref:
@@ -488,7 +490,7 @@ class BaseUbl(models.AbstractModel):
     ):
         tax_category = etree.SubElement(parent_node, ns["cac"] + node_name)
         if not tax.unece_categ_id:
-            raise UserError(_("Missing UNECE Tax Category on tax '%s'" % tax.name))
+            raise UserError(_("Missing UNECE Tax Category on tax '%s'") % tax.name)
         tax_category_id = etree.SubElement(
             tax_category, ns["cbc"] + "ID", schemeID="UN/ECE 5305", schemeAgencyID="6"
         )
@@ -504,7 +506,7 @@ class BaseUbl(models.AbstractModel):
     @api.model
     def _ubl_get_tax_scheme_dict_from_tax(self, tax):
         if not tax.unece_type_id:
-            raise UserError(_("Missing UNECE Tax Type on tax '%s'" % tax.name))
+            raise UserError(_("Missing UNECE Tax Type on tax '%s'") % tax.name)
         tax_scheme_dict = {"id": tax.unece_type_code, "name": False, "type_code": False}
         return tax_scheme_dict
 
@@ -582,7 +584,7 @@ class BaseUbl(models.AbstractModel):
                     "cause of the problem : %s."
                 )
                 % str(e)
-            )
+            ) from e
         return True
 
     @api.model
@@ -822,7 +824,7 @@ class BaseUbl(models.AbstractModel):
                     res[filename] = xml_root
                 except Exception:
                     continue
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug("Passing any uncaught exception. \n %s" % exc)
         logger.info("Valid XML files found in PDF: %s", list(res.keys()))
         return res
