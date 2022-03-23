@@ -179,6 +179,14 @@ class EDIBackend(models.Model):
             ("backend_id", "=", self.id),
         ]
 
+    def _delay_action(self, rec):
+        # TODO: Remove this on 16.0
+        _logger.warning(
+            "This function has been replaced by rec.with_delay(). "
+            "It will be removed on 16.0."
+        )
+        return self.with_delay(**rec._job_delay_params())
+
     def exchange_generate(self, exchange_record, store=True, force=False, **kw):
         """Generate output content for given exchange record.
 
