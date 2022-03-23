@@ -348,14 +348,14 @@ class AccountMove(models.Model):
             buffer = self._ubl_add_xml_in_pdf_buffer(xml_string, xml_filename, buffer)
         return buffer
 
-    def embed_ubl_xml_in_pdf(self, pdf_content):
+    def embed_ubl_xml_in_pdf(self, pdf_content, pdf_file=None):
         self.ensure_one()
         if self.is_ubl_sale_invoice_posted():
             version = self.get_ubl_version()
             xml_filename = self.get_ubl_filename(version=version)
             xml_string = self.generate_ubl_xml_string(version=version)
             pdf_content = self.embed_xml_in_pdf(
-                xml_string, xml_filename, pdf_content=pdf_content
+                xml_string, xml_filename, pdf_content=pdf_content, pdf_file=pdf_file
             )
         return pdf_content
 

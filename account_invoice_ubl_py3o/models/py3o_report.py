@@ -1,33 +1,33 @@
-# -*- coding: utf-8 -*-
-# © 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# © 2022 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, api
+from odoo import api, models
 
 
 class Py3oReport(models.TransientModel):
-    _inherit = 'py3o.report'
+    _inherit = "py3o.report"
 
     @api.model
-    def _postprocess_report(self, report_path, res_id, save_in_attachment):
+    def _postprocess_report(self, model_instance, result_path):
         inv_reports = [
-            'account.report_invoice',
-            'account.account_invoice_report_duplicate_main']
+            "account.report_invoice_with_payments",
+            "account.report_invoice",
+        ]
         # We could match on object instead of report_name...
         # but I'm not sure it's a better approach
         if (
-                self.ir_actions_report_xml_id.report_name in inv_reports and
-                self.ir_actions_report_xml_id.report_type == 'py3o' and
-                self.ir_actions_report_xml_id.py3o_filetype == 'pdf' and
-                res_id and
-                report_path):
-            invoice = self.env['account.invoice'].browse(res_id)
+            self.ir_actions_report_id.report_name in inv_reports
+            and self.ir_actions_report_id.report_type == "py3o"
+            and self.ir_actions_report_id.py3o_filetype == "pdf"
+            and result_path
+            and model_instance.company_id.xml_format_in_pdf_invoice == "ubl"
+        ):
             if (
-                    invoice.type in ('out_invoice', 'out_refund') and
-                    invoice.company_id.xml_format_in_pdf_invoice == 'ubl'):
+                model_instance.move_type in ("out_invoice", "out_refund")
+                and model_instance.company_id.xml_format_in_pdf_invoice == "ubl"
+            ):
                 # re-write PDF on report_path
-                invoice.with_context(
-                    no_embedded_pdf=True).embed_ubl_xml_in_pdf(
-                    pdf_file=report_path)
-        return super(Py3oReport, self)._postprocess_report(
-            report_path, res_id, save_in_attachment)
+                model_instance.with_context(no_embedded_pdf=True).embed_ubl_xml_in_pdf(
+                    None, pdf_file=result_path
+                )
+        return super()._postprocess_report(model_instance, result_path)
