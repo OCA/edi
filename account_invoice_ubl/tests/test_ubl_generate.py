@@ -43,7 +43,7 @@ class TestUblInvoice(SavepointCase):
             unece_categ_id = self.env.ref("account_tax_unece.tax_categ_s").id
             tax = ato.create(
                 {
-                    "name": u"German VAT purchase 18.0%",
+                    "name": "German VAT purchase 18.0%",
                     "description": "DE-VAT-sale-18.0",
                     "company_id": company.id,
                     "type_tax_use": "sale",
