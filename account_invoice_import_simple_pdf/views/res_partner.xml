@@ -13,6 +13,7 @@
             name="inherit_id"
             ref="account_invoice_import.view_partner_property_form"
         />
+        <field name="priority">99</field>
         <!-- account_invoice_import.view_partner_property_form is
              limited to groups account.group_account_invoice
              and account.group_account_readonly -->
