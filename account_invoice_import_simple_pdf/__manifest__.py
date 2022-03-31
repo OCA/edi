@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Import Simple PDF",
-    "version": "14.0.2.0.0",
+    "version": "14.0.2.0.1",
     "category": "Accounting/Accounting",
     "license": "AGPL-3",
     "summary": "Import simple PDF vendor bills",
