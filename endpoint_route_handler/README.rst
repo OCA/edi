@@ -7,9 +7,9 @@
    !! changes will be overwritten.                   !!
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-.. |badge1| image:: https://img.shields.io/badge/maturity-Alpha-red.png
+.. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
-    :alt: Alpha
+    :alt: Beta
 .. |badge2| image:: https://img.shields.io/badge/licence-LGPL--3-blue.png
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
@@ -29,11 +29,6 @@ Technical module that provides a base handler
 for adding and removing controller routes on the fly.
 
 Can be used as a mixin or as a tool.
-
-.. IMPORTANT::
-   This is an alpha version, the data model and design can change at any time without warning.
-   Only for development or testing purpose, do not use in production.
-   `More details on development status <https://odoo-community.org/page/development-status>`_
 
 **Table of contents**
 
@@ -84,6 +79,12 @@ You can see a real life example on `shopfloor.app` model.
 
 Known issues / Roadmap
 ======================
+
+* /!\ IMPORTANT /!\ when working w/ multiple workers
+  you MUST restart the instance every time you add or modify a route from the UI
+  (eg: w/ the endpoint module) otherwise is not granted that the routing map
+  is going to be up to date on all workers.
+  @simahawk as already a POC to fix this.
 
 * add api docs helpers
 * allow multiple HTTP methods on the same endpoint
