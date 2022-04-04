@@ -4,7 +4,7 @@
 {
     "name": " Route route handler",
     "summary": """Provide mixin and tool to generate custom endpoints on the fly.""",
-    "version": "14.0.1.0.4",
+    "version": "14.0.1.1.0",
     "license": "LGPL-3",
     "development_status": "Beta",
     "author": "Camptocamp,Odoo Community Association (OCA)",
