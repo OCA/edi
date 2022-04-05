@@ -60,6 +60,15 @@ class EDIBackend(models.Model):
 
     _storage_actions = ("check", "send", "receive")
 
+    def _get_storage_dirs(self, direction):
+        """Returns directories for current backend and direction"""
+        self.ensure_one()
+        return (
+            self[f"{direction}_dir_pending"],
+            self[f"{direction}_dir_done"],
+            self[f"{direction}_dir_error"],
+        )
+
     def _get_component_usage_candidates(self, exchange_record, key):
         candidates = super()._get_component_usage_candidates(exchange_record, key)
         if not self.storage_id or key not in self._storage_actions:

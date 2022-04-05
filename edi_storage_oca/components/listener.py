@@ -30,30 +30,33 @@ class EdiStorageListener(Component):
         )
 
     def on_edi_exchange_done(self, record):
-        storage = record.backend_id.storage_id
-        res = False
-        if record.direction == "input" and storage:
-            file = record.exchange_filename
-            pending_dir = record.backend_id.input_dir_pending
-            done_dir = record.backend_id.input_dir_done
-            error_dir = record.backend_id.input_dir_error
-            if not done_dir:
-                return res
-            res = self._move_file(storage, pending_dir, done_dir, file)
-            if not res:
-                # If a file previously failed it should have been previously
-                # moved to the error dir, therefore it is not present in the
-                # pending dir and we need to retry from error dir.
-                res = self._move_file(storage, error_dir, done_dir, file)
+        """Tries to move the file from pending directory to done directory"""
+        backend = record.backend_id
+        storage = backend.storage_id
+        if not storage:
+            return False
+        direction = record.direction
+        pending_dir, done_dir, error_dir = backend._get_storage_dirs(direction)
+        if not done_dir:
+            return False
+        file = record.exchange_filename
+        # If a file failed previously, it should have been moved to the error
+        # dir. Therefore, it is not present in the pending dir, and we need to
+        # retry from error dir.
+        res = self._move_file(storage, pending_dir, done_dir, file)
+        if not res:
+            res = self._move_file(storage, error_dir, done_dir, file)
         return res
 
     def on_edi_exchange_error(self, record):
-        storage = record.backend_id.storage_id
-        res = False
-        if record.direction == "input" and storage:
-            file = record.exchange_filename
-            pending_dir = record.backend_id.input_dir_pending
-            error_dir = record.backend_id.input_dir_error
-            if error_dir:
-                res = self._move_file(storage, pending_dir, error_dir, file)
-        return res
+        """Tries to move the file from pending directory to error directory"""
+        backend = record.backend_id
+        storage = backend.storage_id
+        if not storage:
+            return False
+        direction = record.direction
+        pending_dir, done_dir, error_dir = backend._get_storage_dirs(direction)
+        if not error_dir:
+            return False
+        file = record.exchange_filename
+        return self._move_file(storage, pending_dir, error_dir, file)

@@ -27,7 +27,8 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             "res_id": cls.partner.id,
             "exchange_file": base64.b64encode(b"1234"),
         }
-        cls.record = cls.backend.create_record("test_csv_input", vals)
+        cls.record_in = cls.backend.create_record("test_csv_input", vals)
+        cls.record_out = cls.backend.create_record("test_csv_output", vals)
         cls.fake_move_args = None
 
     @classmethod
@@ -47,25 +48,50 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
     def _mock_listener_move_file(self):
         return mock.patch(LISTENER_MOCK_PATH + "._move_file", self._move_file_mocked)
 
-    def test_01_process_record_success(self):
+    def test_01_process_record_in_success(self):
         with self._mock_listener_move_file():
-            self.record.write({"edi_exchange_state": "input_received"})
-            self.record.action_exchange_process()
+            self.record_in.write({"edi_exchange_state": "input_received"})
+            self.record_in.action_exchange_process()
             storage, from_dir_str, to_dir_str, filename = self.fake_move_args
             self.assertEqual(storage, self.backend.storage_id)
             self.assertEqual(from_dir_str, self.backend.input_dir_pending)
             self.assertEqual(to_dir_str, self.backend.input_dir_done)
-            self.assertEqual(filename, self.record.exchange_filename)
+            self.assertEqual(filename, self.record_in.exchange_filename)
 
-    def test_02_process_record_with_error(self):
+    def test_02_process_record_in_with_error(self):
         with self._mock_listener_move_file():
-            self.record.write({"edi_exchange_state": "input_received"})
-            self.record._set_file_content("TEST %d" % self.record.id)
-            self.record.with_context(
+            self.record_in.write({"edi_exchange_state": "input_received"})
+            self.record_in._set_file_content("TEST %d" % self.record_in.id)
+            self.record_in.with_context(
                 test_break_process="OOPS! Something went wrong :("
             ).action_exchange_process()
             storage, from_dir_str, to_dir_str, filename = self.fake_move_args
             self.assertEqual(storage, self.backend.storage_id)
             self.assertEqual(from_dir_str, self.backend.input_dir_pending)
             self.assertEqual(to_dir_str, self.backend.input_dir_error)
-            self.assertEqual(filename, self.record.exchange_filename)
+            self.assertEqual(filename, self.record_in.exchange_filename)
+
+    def test_03_process_record_out_success(self):
+        with self._mock_listener_move_file():
+            self.record_out.write({"edi_exchange_state": "output_pending"})
+            self.record_out.action_exchange_send()
+            self.record_out._notify_done()
+            storage, from_dir_str, to_dir_str, filename = self.fake_move_args
+            self.assertEqual(storage, self.backend.storage_id)
+            self.assertEqual(from_dir_str, self.backend.output_dir_pending)
+            self.assertEqual(to_dir_str, self.backend.output_dir_done)
+            self.assertEqual(filename, self.record_out.exchange_filename)
+
+    def test_04_process_record_out_with_error(self):
+        with self._mock_listener_move_file():
+            self.record_out.write({"edi_exchange_state": "output_pending"})
+            self.record_out._set_file_content("TEST %d" % self.record_out.id)
+            self.record_out.with_context(
+                test_break_process="OOPS! Something went wrong :("
+            ).action_exchange_send()
+            self.record_out._notify_error("process_ko")
+            storage, from_dir_str, to_dir_str, filename = self.fake_move_args
+            self.assertEqual(storage, self.backend.storage_id)
+            self.assertEqual(from_dir_str, self.backend.output_dir_pending)
+            self.assertEqual(to_dir_str, self.backend.output_dir_error)
+            self.assertEqual(filename, self.record_out.exchange_filename)
