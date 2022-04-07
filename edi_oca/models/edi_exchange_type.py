@@ -70,10 +70,14 @@ class EDIExchangeType(models.Model):
               components:
                 generate:
                   usage: $comp_usage
+                  # set a value for component work context
                   work_ctx:
                      opt1: True
                 validate:
                   usage: $comp_usage
+                  env_ctx:
+                    # set a value for the whole processing env
+                    opt2: False
                 check:
                   usage: $comp_usage
                 send:

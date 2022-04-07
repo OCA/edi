@@ -4,8 +4,6 @@
 
 from freezegun import freeze_time
 
-from odoo.addons.queue_job.job import DelayableRecordset
-
 from .common import EDIBackendCommonTestCase
 
 
@@ -64,25 +62,10 @@ class EDIBackendTestCase(EDIBackendCommonTestCase):
             ["my.special.send", "output.send"],
         )
 
-    def test_delay_action_init(self):
-        vals = {
-            "model": self.partner._name,
-            "res_id": self.partner.id,
-        }
-        record = self.backend.create_record("test_csv_input", vals)
-        parent_channel = self.env["queue.job.channel"].create(
-            {
-                "name": "parent_test_chan",
-                "parent_id": self.env.ref("queue_job.channel_root").id,
-            }
-        )
-        channel = self.env["queue.job.channel"].create(
-            {"name": "test_chan", "parent_id": parent_channel.id}
-        )
-        self.exchange_type_in.job_channel_id = channel
-        # re-enable job delayed feature
-        backend = self.backend.with_context(test_queue_job_no_delay=None)
-        delayed = backend._delay_action(record)
-        self.assertTrue(isinstance(delayed, DelayableRecordset))
-        self.assertEqual(delayed.recordset, self.backend)
-        self.assertEqual(delayed.channel, "root.parent_test_chan.test_chan")
+    def test_action_view_exchanges(self):
+        # Just testing is not broken
+        self.assertTrue(self.backend.action_view_exchanges())
+
+    def test_action_view_exchange_types(self):
+        # Just testing is not broken
+        self.assertTrue(self.backend.action_view_exchange_types())
