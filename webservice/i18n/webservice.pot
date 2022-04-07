@@ -14,13 +14,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
-msgid "Content Type"
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_default
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_default
+msgid " Env Default"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_default
-msgid "Content Type Env Default"
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
+msgid "Content Type"
 msgstr ""
 
 #. module: webservice
@@ -89,11 +93,6 @@ msgid "Password"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_default
-msgid "Password Env Default"
-msgstr ""
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_is_editable
 msgid "Password Env Is Editable"
 msgstr ""
@@ -101,11 +100,6 @@ msgstr ""
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol
 msgid "Protocol"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_default
-msgid "Protocol Env Default"
 msgstr ""
 
 #. module: webservice
@@ -134,11 +128,6 @@ msgid "Url"
 msgstr ""
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_default
-msgid "Url Env Default"
-msgstr ""
-
-#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_is_editable
 msgid "Url Env Is Editable"
 msgstr ""
@@ -146,11 +135,6 @@ msgstr ""
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
 msgid "Username"
-msgstr ""
-
-#. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_default
-msgid "Username Env Default"
 msgstr ""
 
 #. module: webservice
