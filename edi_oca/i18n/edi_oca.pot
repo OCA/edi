@@ -26,10 +26,14 @@ msgid ""
 "              components:\n"
 "                generate:\n"
 "                  usage: $comp_usage\n"
+"                  # set a value for component work context\n"
 "                  work_ctx:\n"
 "                     opt1: True\n"
 "                validate:\n"
 "                  usage: $comp_usage\n"
+"                  env_ctx:\n"
+"                    # set a value for the whole processing env\n"
+"                    opt2: False\n"
 "                check:\n"
 "                  usage: $comp_usage\n"
 "                send:\n"
@@ -154,6 +158,11 @@ msgid "Advanced settings"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_all
+msgid "All"
+msgstr ""
+
+#. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "An error happened while sending. Please check exchange record info."
@@ -175,6 +184,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__backend_id
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__backend_id
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__backend_id
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_search
 msgid "Backend"
 msgstr ""
@@ -240,6 +250,11 @@ msgid "Create an Exchange Record"
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Create date"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend__create_uid
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend_type__create_uid
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__create_uid
@@ -249,12 +264,22 @@ msgid "Created by"
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Created last 7 days"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend__create_date
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend_type__create_date
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__create_date
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__create_date
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Created today"
 msgstr ""
 
 #. module: edi_oca
@@ -300,7 +325,6 @@ msgid "EDI Backend type"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.actions.act_window,name:edi_oca.act_open_edi_exchange_record_view
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 msgid "EDI Exchange Record"
@@ -416,6 +440,11 @@ msgid "Exchange Type"
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Exchange date"
+msgstr ""
+
+#. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "Exchange not received"
@@ -481,13 +510,50 @@ msgid "Exchange type"
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_form
+msgid "Exchange types"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__exchanged_on
 msgid "Exchanged On"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Exchanged last 7 days"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Exchanged today"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.actions.act_window,name:edi_oca.act_open_edi_exchange_record_view
+#: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_root
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_form
 msgid "Exchanges"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.actions.act_window,name:edi_oca.act_open_edi_exchange_record_view_failed
+msgid "Exchanges - failed"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.actions.act_window,name:edi_oca.act_open_edi_exchange_record_view_inbound
+msgid "Exchanges - inbound"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.actions.act_window,name:edi_oca.act_open_edi_exchange_record_view_outbound
+msgid "Exchanges - outbound"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.actions.act_window,name:edi_oca.act_open_edi_exchange_record_view_pending
+msgid "Exchanges - pending"
 msgstr ""
 
 #. module: edi_oca
@@ -498,6 +564,12 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__external_identifier
 msgid "External Identifier"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_pending
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Failed"
 msgstr ""
 
 #. module: edi_oca
@@ -583,6 +655,12 @@ msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_inbound
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Inbound"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_type__direction__input
 msgid "Input"
 msgstr ""
@@ -643,6 +721,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__model
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__model
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__model_ids
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 msgid "Model"
 msgstr ""
 
@@ -659,7 +738,6 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend__name
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend_type__name
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__name
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__name
 msgid "Name"
 msgstr ""
@@ -700,6 +778,12 @@ msgid "Original exchange which originated this record"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_outbound
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Outbound"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_type__direction__output
 msgid "Output"
 msgstr ""
@@ -717,6 +801,12 @@ msgstr ""
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 msgid "Parent exchange"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_failed
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Pending"
 msgstr ""
 
 #. module: edi_oca
@@ -757,6 +847,11 @@ msgstr ""
 #: code:addons/edi_oca/models/edi_backend.py:0
 #, python-format
 msgid "Record ID=%d is not meant to be sent!"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__related_name
+msgid "Related Name"
 msgstr ""
 
 #. module: edi_oca
@@ -816,6 +911,16 @@ msgid "Sent or received on this date."
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Show all records created in the last 7 days"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Show all records created today"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__enable_snippet
 msgid ""
 "Snippet of code to be checked on Models,\n"
@@ -832,6 +937,11 @@ msgstr ""
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
 msgid "Status"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+msgid "Successful"
 msgstr ""
 
 #. module: edi_oca
