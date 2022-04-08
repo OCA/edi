@@ -48,5 +48,5 @@ class EDIBackendTestCase(TestStockCommon, SavepointComponentRegistryCase):
         move_a.move_line_ids.qty_done = 4
 
     def test_validate_picking(self):
-        self.picking_in.button_validate()
+        self.picking_in.action_done()
         self.assertEqual(self.picking_in.name, "picking_done")

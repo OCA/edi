@@ -18,7 +18,7 @@ class StockPicking(models.Model):
         },
     )
 
-    def button_validate(self):
-        res = super().button_validate()
+    def action_done(self):
+        res = super().action_done()
         self._event("on_validate").notify(self)
         return res
