@@ -33,6 +33,10 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     has_expected_edi_configuration = fields.Boolean(
         compute="_compute_expected_edi_configuration"
     )
+    edi_auto_disabled = fields.Boolean(
+        help="When marked, EDI could be avoided", readonly=True,
+    )
+    # Define states where edi_auto_disabled is permitted (readonly=False) at each specific model
 
     def _compute_expected_edi_configuration(self):
         for record in self:
