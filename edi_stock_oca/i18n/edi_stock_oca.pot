@@ -1,0 +1,54 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_stock_oca
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_stock_oca
+#: model_terms:ir.ui.view,arch_db:edi_stock_oca.stock_picking_form_view
+msgid "<span class=\"o_stat_text\">EDI</span>"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model_terms:ir.ui.view,arch_db:edi_stock_oca.stock_picking_form_view
+msgid "Disable"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model_terms:ir.ui.view,arch_db:edi_stock_oca.stock_picking_form_view
+msgid "EDI"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model_terms:ir.ui.view,arch_db:edi_stock_oca.view_partner_form
+msgid "EDI Configuration"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__edi_auto_disabled
+msgid "Edi Auto Disabled"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model_terms:ir.ui.view,arch_db:edi_stock_oca.stock_picking_form_view
+msgid "Electronic Data Interchange"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model,name:edi_stock_oca.model_stock_picking
+msgid "Transfer"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,help:edi_stock_oca.field_stock_picking__edi_auto_disabled
+msgid "When marked, EDI could be avoided"
+msgstr ""
