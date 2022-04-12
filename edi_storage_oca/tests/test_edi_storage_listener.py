@@ -53,8 +53,13 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             self.record.action_exchange_process()
             storage, from_dir_str, to_dir_str, filename = self.fake_move_args
             self.assertEqual(storage, self.backend.storage_id)
-            self.assertEqual(from_dir_str, self.backend.input_dir_pending)
-            self.assertEqual(to_dir_str, self.backend.input_dir_done)
+            self.assertEqual(
+                from_dir_str,
+                self.backend._storage_full_path(self.backend.input_dir_pending),
+            )
+            self.assertEqual(
+                to_dir_str, self.backend._storage_full_path(self.backend.input_dir_done)
+            )
             self.assertEqual(filename, self.record.exchange_filename)
 
     def test_02_process_record_with_error(self):
@@ -66,6 +71,12 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             ).action_exchange_process()
             storage, from_dir_str, to_dir_str, filename = self.fake_move_args
             self.assertEqual(storage, self.backend.storage_id)
-            self.assertEqual(from_dir_str, self.backend.input_dir_pending)
-            self.assertEqual(to_dir_str, self.backend.input_dir_error)
+            self.assertEqual(
+                from_dir_str,
+                self.backend._storage_full_path(self.backend.input_dir_pending),
+            )
+            self.assertEqual(
+                to_dir_str,
+                self.backend._storage_full_path(self.backend.input_dir_error),
+            )
             self.assertEqual(filename, self.record.exchange_filename)

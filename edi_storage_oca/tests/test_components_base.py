@@ -27,6 +27,30 @@ class EDIStorageComponentTestCase(TestEDIStorageBase):
         with self.assertRaises(AssertionError):
             self.checker._remote_file_path("input", "WHATEVER", "foo.csv")
 
+    def test_remote_file_path_with_directory_path(self):
+        self.backend.write(
+            {
+                "directory_path": "demo",
+                "input_dir_pending": "in/pending",
+                "input_dir_done": "in/done",
+                "input_dir_error": "in/error",
+                "output_dir_pending": "out/pending",
+                "output_dir_done": "out/done",
+                "output_dir_error": "out/error",
+            }
+        )
+        to_test = (
+            (("input", "pending", "foo.csv"), "demo/in/pending/foo.csv"),
+            (("input", "done", "foo.csv"), "demo/in/done/foo.csv"),
+            (("input", "error", "foo.csv"), "demo/in/error/foo.csv"),
+            (("output", "pending", "foo.csv"), "demo/out/pending/foo.csv"),
+            (("output", "done", "foo.csv"), "demo/out/done/foo.csv"),
+            (("output", "error", "foo.csv"), "demo/out/error/foo.csv"),
+        )
+        for _args, expected in to_test:
+            path_obj = self.checker._remote_file_path(*_args)
+            self.assertEqual(path_obj.as_posix(), expected)
+
     def test_get_remote_file(self):
         with mock.patch(STORAGE_BACKEND_MOCK_PATH + ".get") as mocked:
             self.checker._get_remote_file("pending")

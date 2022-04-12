@@ -37,6 +37,9 @@ class EDIBackend(models.Model):
     where A and B are the partners exchanging data and they are in turn
     sender and receiver and vice versa.
     """
+    directory_path = fields.Char(
+        help="Common root path for this backend",
+    )
     # TODO: these paths should probably be by type instead
     # Here we can maybe set a common root folder for this exchange.
     input_dir_pending = fields.Char(
@@ -82,6 +85,13 @@ class EDIBackend(models.Model):
         return (
             1 if getattr(component_class, "_storage_backend_type", False) else 0,
         ) + res
+
+    def _storage_full_path(self, relative_path):
+        return (
+            os.path.join(self.directory_path, relative_path)
+            if self.directory_path
+            else relative_path
+        )
 
     def _storage_cron_check_pending_input(self, **kw):
         for backend in self:
@@ -145,16 +155,17 @@ class EDIBackend(models.Model):
         return record.identifier
 
     def _storage_get_input_filenames(self, exchange_type):
+        input_dir_pending = self._storage_full_path(self.input_dir_pending)
         if not exchange_type.exchange_filename_pattern:
-            # If there is not patter, return everything
-            return self.storage_id.list_files(self.input_dir_pending)
+            # If there is not pattern, return everything
+            return self.storage_id.list_files(input_dir_pending)
 
         bits = [exchange_type.exchange_filename_pattern]
         if exchange_type.exchange_file_ext:
             bits.append(r"\." + exchange_type.exchange_file_ext)
         pattern = "".join(bits)
-        full_paths = self.storage_id.find_files(pattern, self.input_dir_pending)
-        pending_path_len = len(self.input_dir_pending)
+        full_paths = self.storage_id.find_files(pattern, input_dir_pending)
+        pending_path_len = len(input_dir_pending)
         return [p[pending_path_len:].strip("/") for p in full_paths]
 
     def _storage_new_exchange_record_vals(self, file_name):

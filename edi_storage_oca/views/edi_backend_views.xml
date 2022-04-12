@@ -8,12 +8,19 @@
                 <page name="storage_config" string="Storage">
                     <group name="storage_config">
                         <field name="storage_id" />
-                        <field name="input_dir_pending" />
-                        <field name="input_dir_done" />
-                        <field name="input_dir_error" />
-                        <field name="output_dir_pending" />
-                        <field name="output_dir_done" />
-                        <field name="output_dir_error" />
+                        <field name="directory_path" />
+                    </group>
+                    <group name="storage_dir">
+                        <group name="storage_dir_input" string="Input paths">
+                            <field name="input_dir_pending" string="Pending" />
+                            <field name="input_dir_done" string="Done" />
+                            <field name="input_dir_error" string="Error" />
+                        </group>
+                        <group name="storage_dir_output" string="Output paths">
+                            <field name="output_dir_pending" string="Pending" />
+                            <field name="output_dir_done" string="Done" />
+                            <field name="output_dir_error" string="Error" />
+                        </group>
                     </group>
                 </page>
             </notebook>

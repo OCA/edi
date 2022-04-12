@@ -30,30 +30,37 @@ class EdiStorageListener(Component):
         )
 
     def on_edi_exchange_done(self, record):
-        storage = record.backend_id.storage_id
         res = False
-        if record.direction == "input" and storage:
-            file = record.exchange_filename
-            pending_dir = record.backend_id.input_dir_pending
-            done_dir = record.backend_id.input_dir_done
-            error_dir = record.backend_id.input_dir_error
-            if not done_dir:
-                return res
-            res = self._move_file(storage, pending_dir, done_dir, file)
+        backend = record.backend_id
+        storage = backend.storage_id
+        if record.direction == "input" and storage and backend.input_dir_done:
+            res = self._move_file(
+                storage,
+                backend._storage_full_path(backend.input_dir_pending),
+                backend._storage_full_path(backend.input_dir_done),
+                record.exchange_filename,
+            )
             if not res:
                 # If a file previously failed it should have been previously
                 # moved to the error dir, therefore it is not present in the
                 # pending dir and we need to retry from error dir.
-                res = self._move_file(storage, error_dir, done_dir, file)
+                res = self._move_file(
+                    storage,
+                    backend._storage_full_path(backend.input_dir_error),
+                    backend._storage_full_path(backend.input_dir_done),
+                    record.exchange_filename,
+                )
         return res
 
     def on_edi_exchange_error(self, record):
-        storage = record.backend_id.storage_id
         res = False
-        if record.direction == "input" and storage:
-            file = record.exchange_filename
-            pending_dir = record.backend_id.input_dir_pending
-            error_dir = record.backend_id.input_dir_error
-            if error_dir:
-                res = self._move_file(storage, pending_dir, error_dir, file)
+        backend = record.backend_id
+        storage = backend.storage_id
+        if record.direction == "input" and storage and backend.input_dir_error:
+            res = self._move_file(
+                storage,
+                backend._storage_full_path(backend.input_dir_pending),
+                backend._storage_full_path(backend.input_dir_error),
+                record.exchange_filename,
+            )
         return res
