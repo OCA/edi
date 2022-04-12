@@ -23,7 +23,7 @@ EDI Storage backend support
     :target: https://runbot.odoo-community.org/runbot/226/15.0
     :alt: Try me on Runbot
 
-|badge1| |badge2| |badge3| |badge4| |badge5|
+|badge1| |badge2| |badge3| |badge4| |badge5| 
 
 Allow exchange files using storage backends from `OCA/storage`.
 
@@ -48,11 +48,6 @@ Inside this folder you have this hierarchy::
 
 The storage handlers take care of reading files and putting files
 in/from the right place and update exchange records data accordingly.
-
-.. IMPORTANT::
-   This is an alpha version, the data model and design can change at any time without warning.
-   Only for development or testing purpose, do not use in production.
-   `More details on development status <https://odoo-community.org/page/development-status>`_
 
 **Table of contents**
 
