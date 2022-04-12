@@ -12,8 +12,8 @@ _logger = logging.getLogger(__name__)
 
 
 class EDIBackend(models.Model):
-
-    _inherit = "edi.backend"
+    _name = "edi.backend"
+    _inherit = ["edi.backend", "server.env.mixin"]
 
     storage_id = fields.Many2one(
         string="Storage backend",
@@ -62,6 +62,12 @@ class EDIBackend(models.Model):
     )
 
     _storage_actions = ("check", "send", "receive")
+
+    @property
+    def _server_env_fields(self):
+        res = {"directory_path": {}}
+        res.update(super()._server_env_fields)
+        return res
 
     def _get_component_usage_candidates(self, exchange_record, key):
         candidates = super()._get_component_usage_candidates(exchange_record, key)
