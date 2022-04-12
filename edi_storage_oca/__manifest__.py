@@ -8,7 +8,7 @@
     Base module to allow exchanging files via storage backend (eg: SFTP).
     """,
     "version": "14.0.1.5.1",
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "license": "LGPL-3",
     "website": "https://github.com/OCA/edi",
     "author": "ACSONE,Odoo Community Association (OCA)",
