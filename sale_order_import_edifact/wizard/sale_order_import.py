@@ -122,43 +122,51 @@ class SaleOrderImport(models.TransientModel):
 
         return parsed_order
 
+    def parse_edifact_header_segment(self, segments):
+        label = segments[0]
+        vals = {}
+
+        if label == 'ORD':
+            # order number:
+            vals['order_ref'] = self.edifact_parse_order_ref(segments)
+        elif label == 'DTM':
+            # date:
+            vals['date'] = self.edifact_parse_date(segments)
+            vals['commitment_date'] =\
+                self.edifact_parse_commitment_date(segments)
+        elif label == 'NADBY':
+            # customer partner:
+            vals['partner'] = self.edifact_parse_partner(segments)
+        elif label == 'NADDP':
+            # shipping address:
+            vals['ship_to'] = self.edifact_parse_address(segments)
+        elif label == 'NADIV':
+            # invoice address:
+            vals['invoice_to'] = self.edifact_parse_address(segments)
+        elif label == 'CUX':
+            # currency
+            vals['currency'] = self.edifact_parse_currency(segments)
+        return vals
+
+    def get_edifact_header_labels_to_ignore(self):
+        labels_to_ignore = (
+            'PAI', 'ALI', 'FTX', 'RFF', 'NADMS', 'NADMR', 'NADUD', 'CTAXXX',
+            'COMXXX', 'TAX', 'PAT', 'TOD', 'NADPR', 'NADSU')
+        return labels_to_ignore
+
     @api.model
     def parse_edifact_sale_order_header(self, reader, parsed_order):
         index = parsed_order['index']
         segments = reader[index]
         label = segments[0]
+        labels_to_ignore = self.get_edifact_header_labels_to_ignore()
         while(label != 'LIN'):
-            if label == 'ORD':
-                # order number:
-                parsed_order['order_ref'] =\
-                    self.edifact_parse_order_ref(segments)
-            elif label == 'DTM':
-                # date:
-                parsed_order['date'] = self.edifact_parse_date(segments)
-                parsed_order['commitment_date'] =\
-                    self.edifact_parse_commitment_date(segments)
-            elif label == 'NADBY':
-                # customer partner:
-                parsed_order['partner'] = self.edifact_parse_partner(segments)
-            elif label == 'NADDP':
-                # shipping address:
-                parsed_order['ship_to'] = self.edifact_parse_address(segments)
-            elif label == 'NADIV':
-                # invoice address:
-                parsed_order['invoice_to'] =\
-                    self.edifact_parse_address(segments)
-            elif label == 'CUX':
-                # currency
-                parsed_order['currency'] =\
-                    self.edifact_parse_currency(segments)
-            elif label in ('PAI', 'ALI', 'FTX', 'RFF', 'NADMS', 'NADMR',
-                           'NADUD', 'CTAXXX', 'COMXXX', 'TAX', 'PAT', 'TOD',
-                           'NADPR', 'NADSU'):
-                # ignore: not required field
-                pass
-            else:
-                raise UserError(_(
-                    "Error reading header: Bad edifact file format"))
+            if label not in labels_to_ignore:
+                new_vals = self.parse_edifact_header_segment(segments)
+                if not new_vals:
+                    raise UserError(_(
+                        "Error reading header: Bad edifact file format"))
+                parsed_order.update(new_vals)
             index += 1
             segments = reader[index]
             label = segments[0]
