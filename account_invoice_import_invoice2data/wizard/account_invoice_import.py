@@ -16,6 +16,10 @@ try:
     from invoice2data.main import extract_data, logger as loggeri2data
 except ImportError:
     logger.debug("Cannot import invoice2data")
+try:
+    from invoice2data.input import tesseract
+except ImportError:
+    logger.debug("Cannot import tesseract")
 
 
 class AccountInvoiceImport(models.TransientModel):
@@ -52,14 +56,24 @@ class AccountInvoiceImport(models.TransientModel):
         try:
             invoice2data_res = extract_data(file_name, templates=templates)
         except Exception as e:
-            raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
+            raise UserError(_("Invoice parsing failed. Error message: %s") % e)
         if not invoice2data_res:
-            raise UserError(
-                _(
-                    "This PDF invoice doesn't match a known template of "
-                    "the invoice2data lib."
+            # Fallback on tesseract
+            logger.info("PDF Invoice parsing failed: Falling back on tesseract ocr")
+            try:
+                # from invoice2data.input import tesseract
+                invoice2data_res = extract_data(
+                    file_name, templates=templates, input_module=tesseract
                 )
-            )
+            except Exception as e:
+                raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
+            if not invoice2data_res:
+                raise UserError(
+                    _(
+                        "This PDF invoice doesn't match a known template of "
+                        "the invoice2data lib."
+                    )
+                )
         logger.info("Result of invoice2data PDF extraction: %s", invoice2data_res)
         return self.invoice2data_to_parsed_inv(invoice2data_res)
 
