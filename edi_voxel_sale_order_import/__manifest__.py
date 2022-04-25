@@ -4,7 +4,8 @@
 {
     "name": "Voxel sale order",
     "summary": "Import sale order from Voxel.",
-    "version": "13.0.1.0.4",
+    "version": "13.0.1.0.5",
+    "development_status": "Production/Stable",
     "category": "Sale",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",

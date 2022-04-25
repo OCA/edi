@@ -3,8 +3,9 @@
 {
     "name": "Voxel",
     "summary": "Base module for connecting with Voxel",
-    "version": "13.0.1.0.2",
+    "version": "13.0.1.0.3",
     "category": "Hidden",
+    "development_status": "Production/Stable",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
