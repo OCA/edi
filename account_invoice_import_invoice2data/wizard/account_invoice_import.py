@@ -29,6 +29,32 @@ class AccountInvoiceImport(models.TransientModel):
         return self.invoice2data_parse_invoice(file_data)
 
     @api.model
+    def parse_invoice2data_taxes(self, line):
+        taxes = []
+        type_code = "VAT"
+        # CategoryCode assume standard rate s for standard or low rate AA
+        categ_code = "AA"
+        percentage = line.get("vat_percent")
+        if percentage:
+            amount_type = "percent"
+            amount = percentage
+        else:
+            amount_type = "fixed"
+            amount = line.get("vat_line_amount")
+        # todo only add this when one of the values is set.
+
+        taxes.append(
+            {
+                "amount_type": amount_type,
+                "amount": amount,
+                "unece_type_code": type_code,
+                "unece_categ_code": categ_code,
+                # "unece_due_date_code": due_date_code,
+            }
+        )
+        return taxes
+
+    @api.model
     def invoice2data_parse_invoice(self, file_data):
         logger.info("Trying to analyze PDF invoice with invoice2data lib")
         fd, file_name = mkstemp()
@@ -65,6 +91,21 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def invoice2data_to_parsed_inv(self, invoice2data_res):
+        lines = invoice2data_res.get("lines", [])
+
+        for line in lines:
+            # Manipulate line data to match with account_invoice_import
+            line["price_unit"] = float(line.get("price_unit", 0))
+            # qty 0 should be allowed to import notes, but nut supported by document_import
+            line["qty"] = float(line.get("qty", 1))
+            if line.get("qty") > 0:
+                taxes = self.parse_invoice2data_taxes(line)
+                line["taxes"] = taxes  # or global_taxes,
+                line["product"] = {
+                    "barcode": invoice2data_res.get("barcode"),
+                    "code": invoice2data_res.get("code"),
+                }
+
         parsed_inv = {
             "partner": {
                 "vat": invoice2data_res.get("vat"),
