@@ -92,14 +92,48 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def invoice2data_to_parsed_inv(self, invoice2data_res):
+        lines = invoice2data_res.get("lines", [])
+
+        for line in lines:
+            # Manipulate line data to match with account_invoice_import
+            line["price_unit"] = float(line.get("price_unit", 0))
+            # qty 0 should be allowed to import notes, but nut supported by document_import
+            line["qty"] = float(line.get("qty", 1))
+            if line["qty"] > 0:
+                product_dict = {
+                    "barcode": line.get("barcode"),
+                    "code": line.get("code", line.get("name")),
+                }
+                line["product"] = product_dict
+                uom_dict = {
+                    "unece_code": line.get("unece_code"),
+                    "name": line.get("uom"),
+                }
+                line["uom"] = uom_dict
+                line["discount"] = float(line.get("discount", 0.0))
+                if line.get("price_subtotal"):
+                    line["price_subtotal"] = float(line.get("price_subtotal"))
+                if line.get("line_note"):
+                    line["line_note"] = line.get("line_note")
+                line["sectionheader"] = line.get("sectionheader")
+
         parsed_inv = {
             "partner": {
                 "vat": invoice2data_res.get("vat"),
                 "name": invoice2data_res.get("partner_name"),
+                "street": invoice2data_res.get("partner_street"),
+                "street2": invoice2data_res.get("partner_street2"),
+                "city": invoice2data_res.get("partner_city"),
+                "zip": invoice2data_res.get("partner_zip"),
+                "country_code": invoice2data_res.get("country_code"),
                 "email": invoice2data_res.get("partner_email"),
                 "website": invoice2data_res.get("partner_website"),
+                "phone": invoice2data_res.get("telephone"),
                 "siren": invoice2data_res.get("siren"),
+                "coc_registration_number": invoice2data_res.get("partner_coc"),
             },
+            "bic": invoice2data_res.get("bic"),
+            "iban": invoice2data_res.get("iban"),
             "currency": {
                 "iso": invoice2data_res.get("currency"),
             },
@@ -108,6 +142,8 @@ class AccountInvoiceImport(models.TransientModel):
             "date_due": invoice2data_res.get("date_due"),
             "date_start": invoice2data_res.get("date_start"),
             "date_end": invoice2data_res.get("date_end"),
+            "note": invoice2data_res.get("note"),
+            "lines": lines,
         }
         for field in ["invoice_number", "description"]:
             if isinstance(invoice2data_res.get(field), list):
