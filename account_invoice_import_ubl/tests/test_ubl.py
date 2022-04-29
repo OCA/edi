@@ -42,6 +42,10 @@ class TestUbl(TransactionCase):
         }
         amo = self.env["account.move"]
         aiio = self.env["account.invoice.import"]
+        rc = self.env["res.currency"]
+        rc.with_context(active_test=False).search([("name", "=", "EUR")]).write(
+            {"active": True}
+        )
         for (sample_file, res_dict) in sample_files.items():
             f = file_open("account_invoice_import_ubl/tests/files/" + sample_file, "rb")
             pdf_file = f.read()
