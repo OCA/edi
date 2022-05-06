@@ -34,7 +34,7 @@ addon | version | maintainers | summary
 [base_facturx](base_facturx/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Base module for Factur-X/ZUGFeRD
 [base_ubl](base_ubl/) | 13.0.2.4.1 |  | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 13.0.1.0.1 |  | Payment-related code for Universal Business Language (UBL)
-[edi](edi/) | 13.0.1.22.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
+[edi](edi/) | 13.0.1.23.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_account](edi_account/) | 13.0.1.1.0 |  | Define EDI Configuration for Account Moves
 [edi_backend_partner](edi_backend_partner/) | 13.0.1.0.0 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
 [edi_exchange_template](edi_exchange_template/) | 13.0.1.7.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
