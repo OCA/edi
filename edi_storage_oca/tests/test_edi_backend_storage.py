@@ -212,22 +212,25 @@ class TestEDIBackendOutput(TestEDIStorageBase):
         mocked_paths = {
             input_dir: "/tmp/",
             self._file_fullpath(
-                "pending", direction="input", fname=file_names[0]
+                "pending", fname=file_names[0], checker=self.checker_input
             ): self.fakepath_input_pending_1,
             self._file_fullpath(
-                "pending", direction="input", fname=file_names[1]
+                "pending", fname=file_names[1], checker=self.checker_input
             ): self.fakepath_input_pending_2,
         }
-        existing = self.env["edi.exchange.record"].search_count(
+        existing_records = self.env["edi.exchange.record"].search(
             [("backend_id", "=", self.backend.id), ("type_id", "=", exch_type.id)]
         )
-        self.assertEqual(existing, 0)
         # Run cron action:
         found_files = [input_dir + fname for fname in file_names]
         with self._mock_storage_backend_find_files(found_files):
             self._test_run_cron_pending_input(mocked_paths)
         new_records = self.env["edi.exchange.record"].search(
-            [("backend_id", "=", self.backend.id), ("type_id", "=", exch_type.id)]
+            [
+                ("backend_id", "=", self.backend.id),
+                ("type_id", "=", exch_type.id),
+                ("id", "not in", existing_records.ids),
+            ]
         )
         self.assertEqual(len(new_records), 2)
         for rec in new_records:
