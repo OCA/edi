@@ -14,8 +14,6 @@ class EDIStorageReceiveComponent(Component):
     _usage = "storage.receive"
 
     def receive(self):
-        direction = self.exchange_record.direction
-        filename = self.exchange_record.exchange_filename
-        path = self._remote_file_path(direction, "pending", filename)
+        path = self._get_remote_file_path("pending")
         filedata = self.storage.get(path.as_posix())
         return filedata
