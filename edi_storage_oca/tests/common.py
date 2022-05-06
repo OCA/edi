@@ -27,6 +27,7 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
             "exchange_file": cls.filedata,
         }
         cls.record = cls.backend.create_record("test_csv_output", vals)
+        cls.record_input = cls.backend.create_record("test_csv_input", vals)
 
         cls.fakepath = "/tmp/{}".format(cls._filename(cls))
         with open(cls.fakepath, "w+b") as fakefile:
@@ -53,6 +54,11 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
             ["storage.check"],
             work_ctx={"exchange_record": cls.record},
         )
+        cls.checker_input = cls.backend._find_component(
+            cls.partner._name,
+            ["storage.check"],
+            work_ctx={"exchange_record": cls.record_input},
+        )
         cls.sender = cls.backend._find_component(
             cls.partner._name,
             ["storage.send"],
@@ -70,19 +76,16 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
             record.type_id.ack_type_id._make_exchange_filename(record)
         return record.exchange_filename
 
-    def _file_fullpath(
-        self, state, record=None, ack=False, direction=False, fname=None
-    ):
+    def _file_fullpath(self, state, record=None, ack=False, fname=None, checker=None):
         record = record or self.record
+        checker = checker or self.checker
         if not fname:
             fname = self._filename(record, ack=ack)
-        if not direction:
-            direction = record.direction
         if state == "error-report":
             # Exception as we read from the same path but w/ error suffix
             state = "error"
             fname += ".error"
-        return (self.checker._remote_file_path(direction, state, fname)).as_posix()
+        return checker._get_remote_file_path(state, filename=fname).as_posix()
 
     def _mocked_backend_get(self, mocked_paths, path, **kwargs):
         self._storage_backend_calls.append(path)
