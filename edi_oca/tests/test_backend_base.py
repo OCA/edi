@@ -10,6 +10,7 @@ from .common import EDIBackendCommonTestCase
 class EDIBackendTestCase(EDIBackendCommonTestCase):
     @freeze_time("2020-10-21 10:00:00")
     def test_create_record(self):
+        self.env.user.tz = None  # Have no timezone used in generated filename
         vals = {
             "model": self.partner._name,
             "res_id": self.partner.id,
