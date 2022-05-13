@@ -4,6 +4,7 @@
 import logging
 
 from odoo import fields
+from odoo.tests.common import tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.addons.component.core import Component
@@ -12,6 +13,7 @@ from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 _logger = logging.getLogger(__name__)
 
 
+@tagged("-at_install", "post_install")
 class EDIBackendTestCase(AccountTestInvoicingCommon, TransactionComponentRegistryCase):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
