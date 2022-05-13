@@ -221,6 +221,7 @@
                 <field name="exchanged_on" />
                 <field name="ack_received_on" />
                 <field name="edi_exchange_state" />
+                <field name="exchange_filename" />
                 <field name="identifier" />
                 <field name="external_identifier" />
                 <field name="ack_exchange_id" />
