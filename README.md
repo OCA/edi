@@ -41,7 +41,7 @@ addon | version | maintainers | summary
 [base_facturx](base_facturx/) | 14.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Base module for Factur-X/ZUGFeRD
 [base_ubl](base_ubl/) | 14.0.1.5.1 |  | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 14.0.1.0.0 |  | Payment-related code for Universal Business Language (UBL)
-[edi_account_oca](edi_account_oca/) | 14.0.1.1.0 |  | Define EDI Configuration for Account Moves
+[edi_account_oca](edi_account_oca/) | 14.0.1.1.1 |  | Define EDI Configuration for Account Moves
 [edi_backend_partner_oca](edi_backend_partner_oca/) | 14.0.1.0.1 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
 [edi_endpoint_oca](edi_endpoint_oca/) | 14.0.1.2.2 |  | Base module allowing configuration of custom endpoints for EDI framework.
 [edi_exchange_template_oca](edi_exchange_template_oca/) | 14.0.1.0.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
