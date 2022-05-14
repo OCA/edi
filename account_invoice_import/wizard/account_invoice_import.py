@@ -114,12 +114,12 @@ class AccountInvoiceImport(models.TransientModel):
         # That way, it simplifies the code in the format-specific import
         # modules, which is what we want!
         # {
-        # 'type': 'in_invoice' or 'in_refund'  # 'in_invoice' by default
-        # 'journal': {'code': 'PUR'},  # use only if you want to force
+        # "type": "in_invoice" or "in_refund"  # "in_invoice" by default
+        # "journal": {"code": "PUR"},  # use only if you want to force
         #                              # a specific journal
-        # 'currency': {
-        #    'iso': 'EUR',
-        #    'currency_symbol': u'€',  # The one or the other
+        # "currency": {
+        #    "iso": "EUR",
+        #    "currency_symbol": u"€",  # The one or the other
         #    },
         # 'date': '2015-10-08',  # Must be a string
         # 'date_due': '2015-11-07',
@@ -257,6 +257,9 @@ class AccountInvoiceImport(models.TransientModel):
             "invoice_origin": parsed_inv.get("origin"),
             "ref": parsed_inv.get("invoice_number"),
             "invoice_date": parsed_inv.get("date"),
+            "narration": parsed_inv.get("narration"),
+            "payment_reference": parsed_inv.get("payment_reference"),
+            "invoice_line_ids": [],
         }
         if parsed_inv["type"] in ("out_invoice", "out_refund"):
             partner_type = "customer"
@@ -363,24 +366,22 @@ class AccountInvoiceImport(models.TransientModel):
         start_end_dates_installed = hasattr(line_model, "start_date") and hasattr(
             line_model, "end_date"
         )
+        static_vals = {"move_id": None}
         if import_config["invoice_line_method"] == "nline_no_product":
-            static_vals = {"account_id": import_config["account"].id}
+            static_vals = {"account_id": import_config["account"].id, "move_id": None}
         elif import_config["invoice_line_method"] == "nline_static_product":
             sproduct = import_config["product"]
             static_vals = {"product_id": sproduct.id, "move_id": vals}
             static_vals = line_model.play_onchanges(static_vals, ["product_id"])
-            static_vals.pop("move_id")
-        else:
-            static_vals = {}
         for line in parsed_inv["lines"]:
             il_vals = static_vals.copy()
             if import_config["invoice_line_method"] == "nline_auto_product":
-                product = self._match_product(
-                    line["product"], parsed_inv["chatter_msg"], seller=partner
-                )
-                il_vals = {"product_id": product.id, "move_id": vals}
-                il_vals = line_model.play_onchanges(il_vals, ["product_id"])
-                il_vals.pop("move_id")
+                if not line.get("line_note") and not line.get("sectionheader"):
+                    product = self._match_product(
+                        line["product"], parsed_inv["chatter_msg"], seller=partner
+                    )
+                    il_vals = {"product_id": product.id, "move_id": vals}
+                    il_vals = line_model.play_onchanges(il_vals, ["product_id"])
             elif import_config["invoice_line_method"] == "nline_no_product":
                 taxes = self._match_taxes(line.get("taxes"), parsed_inv["chatter_msg"])
                 il_vals["tax_ids"] = [(6, 0, taxes.ids)]
@@ -395,19 +396,36 @@ class AccountInvoiceImport(models.TransientModel):
                 )
             if line.get("name"):
                 il_vals["name"] = line["name"]
+            if line.get("line_note"):
+                il_vals = {
+                    "product_id": None,
+                    "move_id": vals,
+                    "name": line.get("line_note"),
+                    "display_type": "line_note",
+                }
+            if line.get("sectionheader"):
+                il_vals = {
+                    "product_id": None,
+                    "move_id": vals,
+                    "name": line.get("sectionheader"),
+                    "display_type": "line_section",
+                }
+            if "display_type" not in il_vals:  # it is not a line note or sectionheader
+                uom = self._match_uom(line.get("uom"), parsed_inv["chatter_msg"])
+                il_vals["product_uom_id"] = uom.id
+                il_vals.update(
+                    {
+                        "quantity": line["qty"],
+                        "price_unit": line["price_unit"],  # TODO fix for tax incl
+                    }
+                )
             if start_end_dates_installed:
                 il_vals["start_date"] = line.get("date_start") or parsed_inv.get(
                     "date_start"
                 )
                 il_vals["end_date"] = line.get("date_end") or parsed_inv.get("date_end")
-            uom = self._match_uom(line.get("uom"), parsed_inv["chatter_msg"])
-            il_vals["product_uom_id"] = uom.id
-            il_vals.update(
-                {
-                    "quantity": line["qty"],
-                    "price_unit": line["price_unit"],  # TODO fix for tax incl
-                }
-            )
+            il_vals = line_model.play_onchanges(il_vals, ["product_id"])
+            il_vals.pop("move_id", None)
             vals["invoice_line_ids"].append((0, 0, il_vals))
 
     @api.model
@@ -714,12 +732,19 @@ class AccountInvoiceImport(models.TransientModel):
             "default_is_company": True,
             "default_supplier_rank": 1,
             "default_name": partner_dict.get("name"),
-            "default_street": partner_dict.get("street"),
+            "default_street_name": partner_dict.get("street"),
             "default_street2": partner_dict.get("street2"),
             "default_street3": partner_dict.get("street3"),
+            "default_email": partner_dict.get("email"),
+            "default_phone": partner_dict.get("phone"),
+            "default_mobile": partner_dict.get("mobile"),
             "default_zip": partner_dict.get("zip"),
             "default_city": partner_dict.get("city"),
             "default_website": partner_dict.get("website"),
+            "default_siren": partner_dict.get("siren"),
+            "default_coc_registration_number": partner_dict.get(
+                "coc_registration_number"
+            ),
             "default_vat": self.partner_vat,
             "default_country_id": self.partner_country_id.id or False,
         }
@@ -1018,11 +1043,11 @@ class AccountInvoiceImport(models.TransientModel):
                         )
                     )
                 il_vals["account_id"] = company.adjustment_credit_account_id.id
-        logger.debug("Prepared global ajustment invoice line %s", il_vals)
+        logger.debug("Prepared global adjustment invoice line %s", il_vals)
         return il_vals
 
-    @api.model
-    def post_process_invoice(self, parsed_inv, invoice, import_config):
+    @api.model  # noqa: C901
+    def post_process_invoice(self, parsed_inv, invoice, import_config):  # noqa: C901
         if parsed_inv.get("type") in ("out_invoice", "out_refund"):
             return
         if not import_config:
@@ -1059,6 +1084,10 @@ class AccountInvoiceImport(models.TransientModel):
             for i in range(len(parsed_inv["lines"])):
                 if "price_subtotal" not in parsed_inv["lines"][i]:
                     continue
+                if (
+                    "display_type" in parsed_inv["lines"][i]
+                ):  # if it is a line note, skip the checks
+                    continue
                 iline = invoice.invoice_line_ids[i]
                 odoo_subtotal = iline.price_subtotal
                 parsed_subtotal = parsed_inv["lines"][i]["price_subtotal"]
@@ -1091,7 +1120,7 @@ class AccountInvoiceImport(models.TransientModel):
                     )._recompute_dynamic_lines(recompute_all_taxes=True)
                     invoice._check_balanced()
                     logger.info("Adjustment invoice line created")
-        # Fallback: create global ajustment line
+        # Fallback: create global adjustment line
         if float_compare(
             parsed_inv["amount_untaxed"],
             invoice.amount_untaxed,
