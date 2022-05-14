@@ -4,11 +4,14 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-import mock
+import logging
+from unittest import mock
 
 from odoo import fields
 from odoo.tests.common import SavepointCase
 from odoo.tools import file_open, float_is_zero
+
+logger = logging.getLogger(__name__)
 
 
 class TestInvoiceImport(SavepointCase):
@@ -154,7 +157,36 @@ class TestInvoiceImport(SavepointCase):
                             "unece_categ_code": "S",
                         }
                     ],
-                }
+                },
+                {
+                    "product": {"code": ""},  # product dict must be present
+                    "sectionheader": "This is a section header",
+                    "qty": 0,
+                    "price_unit": 0,
+                    "taxes": [  # taxes dict must be present
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                },
+                {
+                    "product": {"code": ""},  # product dict must be present
+                    "line_note": "This is a line note",
+                    "qty": 0,
+                    "price_unit": 0,
+                    "display_type": "line_note",
+                    "taxes": [  # taxes dict must be present
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                },
             ],
         }
         for import_c in self.all_import_config:
@@ -165,6 +197,7 @@ class TestInvoiceImport(SavepointCase):
                 .with_company(self.company.id)
                 .create_invoice(parsed_inv, import_c)
             )
+            logger.debug("testing import with import config=%s", import_c)
             self.assertEqual(inv.move_type, parsed_inv["type"])
             self.assertEqual(inv.company_id.id, self.company.id)
             self.assertFalse(
