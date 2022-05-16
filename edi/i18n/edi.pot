@@ -341,6 +341,11 @@ msgid "EDI exchange input status"
 msgstr ""
 
 #. module: edi
+#: model:ir.model.fields,field_description:edi.field_edi_exchange_consumer_mixin__edi_auto_disabled
+msgid "Edi Auto Disabled"
+msgstr ""
+
+#. module: edi
 #: model:ir.model.fields,field_description:edi.field_edi_exchange_type__enable_domain
 msgid "Enable on domain"
 msgstr ""
@@ -897,6 +902,11 @@ msgstr ""
 #. module: edi
 #: model:ir.model.fields,help:edi.field_edi_exchange_record__website_message_ids
 msgid "Website communication history"
+msgstr ""
+
+#. module: edi
+#: model:ir.model.fields,help:edi.field_edi_exchange_consumer_mixin__edi_auto_disabled
+msgid "When marked, EDI could be avoided"
 msgstr ""
 
 #. module: edi
