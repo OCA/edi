@@ -26,6 +26,7 @@ setuptools.setup(
         'odoo13-addon-edi_backend_partner',
         'odoo13-addon-edi_exchange_template',
         'odoo13-addon-edi_purchase_oca',
+        'odoo13-addon-edi_stock_oca',
         'odoo13-addon-edi_storage',
         'odoo13-addon-edi_voxel',
         'odoo13-addon-edi_voxel_account_invoice',
