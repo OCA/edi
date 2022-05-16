@@ -29,14 +29,15 @@ msgid "Disable"
 msgstr ""
 
 #. module: edi_account
-#: model:ir.model.fields,field_description:edi_account.field_account_move__disable_edi_auto
-msgid "Disable Edi Auto"
-msgstr ""
-
-#. module: edi_account
 #: model_terms:ir.ui.view,arch_db:edi_account.view_account_journal_form
 #: model_terms:ir.ui.view,arch_db:edi_account.view_partner_form
 msgid "EDI Configuration"
+msgstr ""
+
+#. module: edi_account
+#: model:ir.model.fields,field_description:edi_account.field_account_move__disable_edi_auto
+#: model:ir.model.fields,field_description:edi_account.field_account_move__edi_auto_disabled
+msgid "Edi Auto Disabled"
 msgstr ""
 
 #. module: edi_account
@@ -61,5 +62,6 @@ msgstr ""
 
 #. module: edi_account
 #: model:ir.model.fields,help:edi_account.field_account_move__disable_edi_auto
+#: model:ir.model.fields,help:edi_account.field_account_move__edi_auto_disabled
 msgid "When marked, EDI could be avoided"
 msgstr ""
