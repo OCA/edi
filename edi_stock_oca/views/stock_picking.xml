@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Copyright 2020 Creu Blanca
-     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<!-- Copyright 2022 OCA
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-    <record model="ir.ui.view" id="account_move_form_view">
-        <field name="name">account.move.form (in edi_account)</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form" />
+
+    <record model="ir.ui.view" id="stock_picking_form_view">
+        <field name="name">stock.picking.form (in edi_stock_oca)</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
         <field name="arch" type="xml">
-            <group name="payments_info_group" position="after">
-                <group name="edi_invoice_group" string="Electronic Data Interchange">
-                    <field name="edi_auto_disabled" string="Disable" />
-                </group>
-            </group>
-            <xpath expr="//div[@name='button_box']" position="inside">
+            <page name="extra" position="after">
+                <page name="edi" string="EDI">
+                    <group name="edi_stock_group" string="Electronic Data Interchange">
+                        <field name="edi_auto_disabled" string="Disable" />
+                    </group>
+                </page>
+            </page>
+           <xpath expr="//div[@name='button_box']" position="inside">
                 <button
                     type="object"
                     class="oe_stat_button"
@@ -30,4 +33,7 @@
             </xpath>
         </field>
     </record>
+
+
+
 </odoo>

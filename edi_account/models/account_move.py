@@ -8,11 +8,10 @@ class AccountMove(models.Model):
     _name = "account.move"
     _inherit = ["account.move", "edi.exchange.consumer.mixin"]
 
-    disable_edi_auto = fields.Boolean(
-        help="When marked, EDI could be avoided",
-        readonly=True,
-        states={"draft": [("readonly", False)]},
-    )
+    edi_auto_disabled = fields.Boolean(states={"draft": [("readonly", False)]},)
+
+    disable_edi_auto = fields.Boolean(related="edi_auto_disabled")
+    # TODO: remove this field at version 16.0
 
     def post(self):
         result = super().post()
