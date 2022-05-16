@@ -26,7 +26,7 @@ addon | version | maintainers | summary
 [base_edi](base_edi/) | 15.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 15.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Base module for Factur-X/ZUGFeRD
 [edi_account_oca](edi_account_oca/) | 15.0.1.0.1 | [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) | Define EDI Configuration for Account Moves
-[edi_exchange_template_oca](edi_exchange_template_oca/) | 15.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
+[edi_exchange_template_oca](edi_exchange_template_oca/) | 15.0.1.0.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
 [edi_oca](edi_oca/) | 15.0.1.2.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_storage_oca](edi_storage_oca/) | 15.0.1.1.1 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_webservice_oca](edi_webservice_oca/) | 15.0.1.1.0 |  | Defines webservice integration from EDI Exchange records
