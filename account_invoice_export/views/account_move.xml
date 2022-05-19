@@ -23,7 +23,7 @@
                     name="export_invoice"
                     string="Resend eBill"
                     type="object"
-                    attrs="{'invisible':['|', '|', '|', ('send_through_http', '=', False), ('state', '!=', 'posted'), '|', ('invoice_export_confirmed', '=', True), ('invoice_exported', '=', False), ('move_type', 'not in', ('out_invoice', 'out_refund'))]}"
+                    attrs="{'invisible':['|', '|', '|', ('send_through_http', '=', False), ('state', '!=', 'posted'), ('invoice_exported', '=', False), ('move_type', 'not in', ('out_invoice', 'out_refund'))]}"
                     context="{'resend_ebill': True}"
                     groups="base.group_user"
                     class="oe_highlight"
