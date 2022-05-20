@@ -7,7 +7,7 @@
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Import RFQ or sale orders from files",
-    "author": "Akretion,Odoo Community Association (OCA)",
+    "author": "Akretion, Camptocamp, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": [
         # OCA/sale-workflow
