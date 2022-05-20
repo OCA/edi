@@ -212,47 +212,14 @@ class SaleOrderImport(models.TransientModel):
         currency = bdio._match_currency(
             parsed_order.get("currency"), parsed_order["chatter_msg"]
         )
-        if partner.property_product_pricelist.currency_id != currency:
-            raise UserError(
-                _(
-                    "The customer '%s' has a pricelist '%s' but the "
-                    "currency of this order is '%s'."
-                )
-                % (
-                    partner.display_name,
-                    partner.property_product_pricelist.display_name,
-                    currency.name,
-                )
-            )
-        if parsed_order.get("order_ref"):
-            commercial_partner = partner.commercial_partner_id
-            existing_orders = soo.search(
-                self._search_existing_order_domain(
-                    parsed_order, commercial_partner, [("state", "!=", "cancel")]
-                )
-            )
-            if existing_orders:
-                raise UserError(
-                    _(
-                        "An order of customer '%s' with reference '%s' "
-                        "already exists: %s (state: %s)"
-                    )
-                    % (
-                        partner.display_name,
-                        parsed_order["order_ref"],
-                        existing_orders[0].name,
-                        existing_orders[0].state,
-                    )
-                )
         # FIXME: this should work but it's not as it breaks core price compute
         # so_vals = soo.default_get(soo._fields.keys())
-        so_vals = {}
-        so_vals.update(
-            {
-                "partner_id": partner.id,
-                "client_order_ref": parsed_order.get("order_ref"),
-            }
-        )
+        so_vals = {
+            "partner_id": partner.id,
+            "client_order_ref": parsed_order.get("order_ref"),
+        }
+        self._validate_currency(partner, currency)
+        self._validate_existing_orders(partner, parsed_order)
         so_vals = soo.play_onchanges(so_vals, ["partner_id"])
         so_vals["order_line"] = []
         if parsed_order.get("ship_to"):
@@ -282,6 +249,44 @@ class SaleOrderImport(models.TransientModel):
             )
             so_vals["order_line"].append((0, 0, line_vals))
         return so_vals
+
+    def _validate_currency(self, partner, currency):
+        if partner.property_product_pricelist.currency_id != currency:
+            raise UserError(
+                _(
+                    "The customer '%s' has a pricelist '%s' but the "
+                    "currency of this order is '%s'."
+                )
+                % (
+                    partner.display_name,
+                    partner.property_product_pricelist.display_name,
+                    currency.name,
+                )
+            )
+
+    def _validate_existing_orders(self, partner, parsed_order):
+        if not parsed_order.get("order_ref"):
+            return
+        commercial_partner = partner.commercial_partner_id
+        existing_orders = self.env["sale.order"].search(
+            self._search_existing_order_domain(
+                parsed_order, commercial_partner, [("state", "!=", "cancel")]
+            ),
+            limit=1,
+        )
+        if existing_orders:
+            raise UserError(
+                _(
+                    "An order of customer '%s' with reference '%s' "
+                    "already exists: %s (state: %s)"
+                )
+                % (
+                    partner.display_name,
+                    parsed_order["order_ref"],
+                    existing_orders[0].name,
+                    existing_orders[0].state,
+                )
+            )
 
     @api.model
     def create_order(self, parsed_order, price_source, order_filename=None):
