@@ -140,6 +140,7 @@ class SaleOrderImport(models.TransientModel):
         """
         Get PDF attachments, filter on XML files and call import_order_xml
         """
+        # FIXME: this method does not exist anywhere!
         xml_files_dict = self.get_xml_files_from_pdf(order_file)
         if not xml_files_dict:
             raise UserError(_("There are no embedded XML file in this PDF file."))
