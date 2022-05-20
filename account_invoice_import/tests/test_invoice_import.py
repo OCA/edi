@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import mock
-
+from odoo import fields
 from odoo.tests.common import SavepointCase
 from odoo.tools import float_compare
 
@@ -14,11 +14,13 @@ class TestInvoiceImport(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.company = cls.env.ref("base.main_company")
         cls.expense_account = cls.env["account.account"].create(
             {
                 "code": "612AII",
                 "name": "expense account invoice import",
                 "user_type_id": cls.env.ref("account.data_account_type_expenses").id,
+                "company_id": cls.company.id,
             }
         )
         cls.income_account = cls.env["account.account"].create(
@@ -26,6 +28,7 @@ class TestInvoiceImport(SavepointCase):
                 "code": "707AII",
                 "name": "revenue account invoice import",
                 "user_type_id": cls.env.ref("account.data_account_type_revenue").id,
+                "company_id": cls.company.id,
             }
         )
         purchase_tax_vals = {
@@ -36,6 +39,7 @@ class TestInvoiceImport(SavepointCase):
             "amount_type": "percent",
             "unece_type_id": cls.env.ref("account_tax_unece.tax_type_vat").id,
             "unece_categ_id": cls.env.ref("account_tax_unece.tax_categ_s").id,
+            "company_id": cls.company.id,
             # TODO tax armageddon
             # "account_id": cls.expense_account.id,
             # "refund_account_id": cls.expense_account.id,
@@ -74,13 +78,32 @@ class TestInvoiceImport(SavepointCase):
         cls.env.ref("base.res_partner_1").supplier_rank = 1
         # Deco Addict
         cls.env.ref("base.res_partner_2").customer_rank = 1
+        cls.pur_journal1 = cls.env["account.journal"].create(
+            {
+                "type": "purchase",
+                "code": "XXXP1",
+                "name": "Test Purchase Journal 1",
+                "sequence": 10,
+                "company_id": cls.company.id,
+            }
+        )
+        cls.pur_journal2 = cls.env["account.journal"].create(
+            {
+                "type": "purchase",
+                "code": "XXXP2",
+                "name": "Test Purchase Journal 2",
+                "sequence": 100,
+                "company_id": cls.company.id,
+            }
+        )
 
     def test_import_in_invoice(self):
         parsed_inv = {
             "type": "in_invoice",
+            "journal": {"code": "XXXP2"},
             "amount_untaxed": 100.0,
             "amount_total": 101.0,
-            "date_invoice": "2017-08-16",
+            "date": "2017-08-16",
             "date_due": "2017-08-31",
             "date_start": "2017-08-01",
             "date_end": "2017-08-31",
@@ -106,12 +129,36 @@ class TestInvoiceImport(SavepointCase):
         for import_c in self.all_import_config:
             # hack to have a unique vendor inv ref
             parsed_inv["invoice_number"] = "INV-%s" % import_c["invoice_line_method"]
-            self.env["account.invoice.import"].create_invoice(parsed_inv, import_c)
+            inv = (
+                self.env["account.invoice.import"]
+                .with_company(self.company.id)
+                .create_invoice(parsed_inv, import_c)
+            )
+            self.assertEqual(inv.move_type, parsed_inv["type"])
+            self.assertEqual(inv.company_id.id, self.company.id)
+            self.assertFalse(
+                inv.currency_id.compare_amounts(
+                    inv.amount_untaxed, parsed_inv["amount_untaxed"]
+                )
+            )
+            self.assertFalse(
+                inv.currency_id.compare_amounts(
+                    inv.amount_total, parsed_inv["amount_total"]
+                )
+            )
+            self.assertEqual(
+                fields.Date.to_string(inv.invoice_date), parsed_inv["date"]
+            )
+            self.assertEqual(
+                fields.Date.to_string(inv.invoice_date_due), parsed_inv["date_due"]
+            )
+            self.assertEqual(inv.journal_id.id, self.pur_journal2.id)
+
 
     def test_import_out_invoice(self):
         parsed_inv = {
             "type": "out_invoice",
-            "date_invoice": "2017-08-16",
+            "date": "2017-08-16",
             "partner": {"name": "Deco Addict"},
             "lines": [
                 {
@@ -135,15 +182,16 @@ class TestInvoiceImport(SavepointCase):
         for import_config in self.all_import_config:
             if not import_config["invoice_line_method"].startswith("nline"):
                 continue
-            inv = self.env["account.invoice.import"].create_invoice(
-                parsed_inv, import_config
+            inv = (
+                self.env["account.invoice.import"]
+                .with_company(self.company.id)
+                .create_invoice(parsed_inv, import_config)
             )
             prec = inv.currency_id.rounding
-            self.assertFalse(
-                float_compare(inv.amount_untaxed, 30.66, precision_rounding=prec)
-            )
-            self.assertFalse(
-                float_compare(inv.amount_total, 30.97, precision_rounding=prec)
+            self.assertFalse(inv.currency_id.compare_amounts(inv.amount_untaxed, 30.66))
+            self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 30.97))
+            self.assertEqual(
+                fields.Date.to_string(inv.invoice_date), parsed_inv["date"]
             )
 
     _fake_email = """
