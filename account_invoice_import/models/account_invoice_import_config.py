@@ -50,6 +50,13 @@ class AccountInvoiceImportConfig(models.Model):
     account_analytic_id = fields.Many2one(
         "account.analytic.account", string="Analytic Account", check_company=True
     )
+    journal_id = fields.Many2one(
+        "account.journal",
+        string="Force Purchase Journal",
+        check_company=True,
+        domain="[('company_id', '=', company_id), ('type', '=', 'purchase')]",
+        help="If empty, Odoo will use the first purchase journal.",
+    )
     label = fields.Char(
         string="Force Description", help="Force supplier invoice line description"
     )
@@ -104,6 +111,7 @@ class AccountInvoiceImportConfig(models.Model):
         vals = {
             "invoice_line_method": self.invoice_line_method,
             "account_analytic": self.account_analytic_id or False,
+            "journal": self.journal_id or False,
         }
         if self.invoice_line_method == "1line_no_product":
             vals["account"] = self.account_id

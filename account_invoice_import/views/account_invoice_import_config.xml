@@ -47,6 +47,7 @@
                             name="label"
                             attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_no_product', '1line_static_product'))]}"
                         />
+                        <field name="journal_id" />
                     </group>
                 </sheet>
             </form>
@@ -59,8 +60,19 @@
                 <field name="sequence" widget="handle" />
                 <field name="partner_id" />
                 <field name="name" />
-                <field name="company_id" groups="base.group_multi_company" />
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="show"
+                />
                 <field name="invoice_line_method" />
+                <field
+                    name="account_analytic_id"
+                    groups="analytic.group_analytic_accounting"
+                    optional="show"
+                />
+                <field name="label" optional="hide" />
+                <field name="journal_id" optional="hide" />
             </tree>
         </field>
     </record>
@@ -86,6 +98,17 @@
                         name="invoice_line_method_groupby"
                         string="Method for Invoice Line"
                         context="{'group_by': 'invoice_line_method'}"
+                    />
+                    <filter
+                        name="account_analytic_groupby"
+                        string="Analytic Account"
+                        context="{'group_by': 'account_analytic_id'}"
+                        groups="analytic.group_analytic_accounting"
+                    />
+                    <filter
+                        name="journal_groupby"
+                        string="Force Purchase Journal"
+                        context="{'group_by': 'journal_id'}"
                     />
                 </group>
             </search>
