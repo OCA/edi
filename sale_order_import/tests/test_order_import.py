@@ -6,6 +6,7 @@ import base64
 import os
 
 import mock
+from lxml import etree
 
 from odoo import exceptions
 from odoo.tests.common import Form, SavepointCase
@@ -146,3 +147,32 @@ class TestOrderImport(SavepointCase):
                 mocked.assert_called()
                 self.assertFalse(form.csv_import)
                 self.assertEqual(form.doc_type, "rfq")
+
+    def test_parse_xml_bad(self):
+        xml_root, error_msg = self.wiz_model._parse_xml("")
+        self.assertEqual(xml_root, None)
+        self.assertEqual(error_msg, "No data provided")
+        xml_root, error_msg = self.wiz_model._parse_xml("something_wrong")
+        self.assertEqual(xml_root, None)
+        self.assertEqual(error_msg, "This XML file is not XML-compliant")
+
+    def test_parse_xml_unsupported(self):
+        xml_data = b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        xml_root, error_msg = self.wiz_model._parse_xml(xml_data)
+        self.assertTrue(isinstance(xml_root, etree._Element))
+        # Due to parse_xml_order NotImplementedError
+        self.assertEqual(error_msg, "Unsupported XML document")
+        mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
+        with mock_parse_order as mocked:
+            mocked.side_effect = exceptions.UserError("I don't like this file")
+            self.assertTrue(isinstance(xml_root, etree._Element))
+            self.assertEqual(error_msg, "Unsupported XML document")
+
+    def test_parse_xml_good(self):
+        xml_data = b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
+        with mock_parse_order as mocked:
+            mocked.return_value = "rfq"
+            xml_root, error_msg = self.wiz_model._parse_xml(xml_data)
+            self.assertTrue(isinstance(xml_root, etree._Element))
+            self.assertTrue(error_msg is None)
