@@ -81,6 +81,19 @@ class TestOrderImport(SavepointCase):
             self.assertFalse(form.csv_import)
             self.assertFalse(form.doc_type)
 
+    def test_onchange_validation_not_supported(self):
+        # Just test is not broken
+        self.assertTrue(self.wiz_model._unsupported_file_msg("fname.omg"))
+        # Test it gets called (cannot do it w/ Form)
+        mock_file_msg = mock.patch.object(type(self.wiz_model), "_unsupported_file_msg")
+        with mock_file_msg as mocked:
+            with Form(self.wiz_model) as form:
+                form.order_filename = "test.omg"
+                form.order_file = "00100000"
+                self.assertFalse(form.csv_import)
+                self.assertFalse(form.doc_type)
+                mocked.assert_called()
+
     def test_onchange_validation_csv(self):
         csv_data = base64.b64encode(b"id,name\n,1,Foo")
 
