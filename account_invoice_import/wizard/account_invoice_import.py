@@ -118,6 +118,8 @@ class AccountInvoiceImport(models.TransientModel):
         # modules, which is what we want!
         # {
         # 'type': 'in_invoice' or 'in_refund'  # 'in_invoice' by default
+        # 'journal': {'code': 'PUR'},  # use only if you want to force
+        #                              # a specific journal
         # 'currency': {
         #    'iso': 'EUR',
         #    'currency_symbol': u'€',  # The one or the other
@@ -209,13 +211,45 @@ class AccountInvoiceImport(models.TransientModel):
         currency = self._match_currency(
             parsed_inv.get("currency"), parsed_inv["chatter_msg"]
         )
-        journal_id = (
-            amo.with_context(
-                default_move_type=parsed_inv["type"], company_id=company.id
+        if parsed_inv["type"] in ("in_invoice", "in_refund") and import_config.get(
+            "journal"
+        ):
+            journal_id = import_config["journal"].id
+        elif parsed_inv.get("journal"):
+            journal = self.with_company(company.id)._match_journal(
+                parsed_inv["journal"], parsed_inv["chatter_msg"]
             )
-            ._get_default_journal()
-            .id
-        )
+            if (
+                parsed_inv["type"] in ("in_invoice", "in_refund")
+                and journal.type != "purchase"
+            ):
+                raise UserError(
+                    _(
+                        "You are importing a vendor bill/refund in journal '%s' "
+                        "which is not a purchase journal."
+                    )
+                    % journal.display_name
+                )
+            elif (
+                parsed_inv["type"] in ("out_invoice", "out_refund")
+                and journal.type != "sale"
+            ):
+                raise UserError(
+                    _(
+                        "You are importing a customer invoice/refund in journal '%s' "
+                        "which is not a sale journal."
+                    )
+                    % journal.display_name
+                )
+            journal_id = journal.id
+        else:
+            journal_id = (
+                amo.with_context(
+                    default_move_type=parsed_inv["type"], company_id=company.id
+                )
+                ._get_default_journal()
+                .id
+            )
         vals = {
             "partner_id": partner.id,
             "currency_id": currency.id,
@@ -230,7 +264,10 @@ class AccountInvoiceImport(models.TransientModel):
         vals = amo.play_onchanges(vals, ["partner_id"])
         # Force due date of the invoice
         if parsed_inv.get("date_due"):
-            vals["invoice_date_due"] = parsed_inv.get("date_due")
+            vals["invoice_date_due"] = parsed_inv["date_due"]
+            # Set invoice_payment_term_id to False because the due date is
+            # set by invoice_date + invoice_payment_term_id otherwise
+            vals["invoice_payment_term_id"] = False
         # Bank info
         if parsed_inv.get("iban") and vals["move_type"] == "in_invoice":
             partner_bank = self._match_partner_bank(
