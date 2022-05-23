@@ -117,7 +117,7 @@ class SaleOrderImport(models.TransientModel):
 
     # FIXME: not used at all
     @api.model
-    def get_xml_doc_type(self, xml_root):
+    def get_xml_doc_type(self, xml_root):  # pragma: no cover
         raise UserError
 
     @api.model
@@ -131,7 +131,7 @@ class SaleOrderImport(models.TransientModel):
 
     # FIXME: not used at all
     @api.model
-    def parse_csv_order(self, order_file, partner):
+    def parse_csv_order(self, order_file, partner):  # pragma: no cover
         assert partner, "missing partner"
         raise UserError(
             _(
@@ -140,6 +140,7 @@ class SaleOrderImport(models.TransientModel):
             )
         )
 
+    # TODO: move it out to a PDF support module
     @api.model
     def parse_pdf_order(self, order_file, detect_doc_type=False):
         """
@@ -367,6 +368,7 @@ class SaleOrderImport(models.TransientModel):
             )
         return parsed_order
 
+    # TODO: add tests
     def import_order_button(self):
         self.ensure_one()
         bdio = self.env["business.document.import"]
@@ -418,6 +420,7 @@ class SaleOrderImport(models.TransientModel):
         )
         return self.create_order_return_action(parsed_order, self.order_filename)
 
+    # TODO: add tests
     def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
         order = self.create_order(parsed_order, self.price_source, order_filename)
@@ -435,6 +438,7 @@ class SaleOrderImport(models.TransientModel):
         )
         return action
 
+    # TODO: add tests
     @api.model
     def _prepare_update_order_vals(self, parsed_order, order, partner):
         bdio = self.env["business.document.import"]
@@ -453,6 +457,7 @@ class SaleOrderImport(models.TransientModel):
             vals["client_order_ref"] = parsed_order["order_ref"]
         return vals
 
+    # TODO: add tests
     @api.model
     def _prepare_create_order_line(
         self, product, uom, order, import_line, price_source
@@ -494,6 +499,7 @@ class SaleOrderImport(models.TransientModel):
             company_id = order.get("company_id") or company_id
         return company_id
 
+    # TODO: add tests
     @api.model
     def update_order_lines(self, parsed_order, order, price_source):
         chatter = parsed_order["chatter_msg"]
@@ -610,6 +616,7 @@ class SaleOrderImport(models.TransientModel):
         # Allows other module to update some fields on the line
         return {}
 
+    # TODO: add tests
     def update_order_button(self):
         self.ensure_one()
         bdio = self.env["business.document.import"]
