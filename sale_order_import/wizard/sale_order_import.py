@@ -115,6 +115,7 @@ class SaleOrderImport(models.TransientModel):
             error_msg = _("Unsupported XML document")
         return xml_root, error_msg
 
+    # FIXME: not used at all
     @api.model
     def get_xml_doc_type(self, xml_root):
         raise UserError
@@ -128,6 +129,7 @@ class SaleOrderImport(models.TransientModel):
             )
         )
 
+    # FIXME: not used at all
     @api.model
     def parse_csv_order(self, order_file, partner):
         assert partner, "missing partner"
@@ -143,8 +145,7 @@ class SaleOrderImport(models.TransientModel):
         """
         Get PDF attachments, filter on XML files and call import_order_xml
         """
-        # FIXME: this method does not exist anywhere!
-        xml_files_dict = self.get_xml_files_from_pdf(order_file)
+        xml_files_dict = self.env["pdf.helper"].pdf_get_xml_files(order_file)
         if not xml_files_dict:
             raise UserError(_("There are no embedded XML file in this PDF file."))
         for xml_filename, xml_root in xml_files_dict.items():
