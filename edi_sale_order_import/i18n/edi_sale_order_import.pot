@@ -14,15 +14,30 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: edi_sale_order_import
-#: code:addons/edi_sale_order_import/components/process.py:0
-#, python-format
-msgid "Sales order has already been imported before"
+#: model_terms:ir.ui.view,arch_db:edi_sale_order_import.message_already_imported
+msgid "<strong>Message:</strong>"
+msgstr ""
+
+#. module: edi_sale_order_import
+#: model_terms:ir.ui.view,arch_db:edi_sale_order_import.message_already_imported
+msgid "<strong>Order:</strong>"
+msgstr ""
+
+#. module: edi_sale_order_import
+#: model_terms:ir.ui.view,arch_db:edi_sale_order_import.message_already_imported
+msgid "<strong>Previous record:</strong>"
 msgstr ""
 
 #. module: edi_sale_order_import
 #: code:addons/edi_sale_order_import/components/process.py:0
 #, python-format
-msgid "Sales order {} created"
+msgid "Sales order %s created"
+msgstr ""
+
+#. module: edi_sale_order_import
+#: code:addons/edi_sale_order_import/components/process.py:0
+#, python-format
+msgid "Sales order has already been imported before"
 msgstr ""
 
 #. module: edi_sale_order_import
