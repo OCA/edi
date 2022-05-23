@@ -8,8 +8,6 @@ from odoo.exceptions import UserError
 
 from odoo.addons.component.core import Component
 
-# TODO: add tests
-
 
 class EDIExchangeSOInput(Component):
     """Process sale orders."""
@@ -25,20 +23,19 @@ class EDIExchangeSOInput(Component):
     def process(self):
         wiz = self._setup_wizard()
         res = wiz.import_order_button()
-        action_xmlid = res["xml_id"]
-        # TODO: I don't really like that we have to check for the action.
-        # `sale.order.import` should be refactored w/ proper methods that are reusable.
-        if action_xmlid == "sale_order_import.sale_order_import_action":
-            raise UserError(_("Sales order has already been imported before"))
-        elif action_xmlid == "sale.action_quotations":
+        if wiz.state == "update" and wiz.sale_id:
+            order = wiz.sale_id
+            msg = _("Sales order has already been imported before")
+            self._handle_existing_order(order, msg)
+            raise UserError(msg)
+        else:
             order_id = res["res_id"]
             order = self.env["sale.order"].browse(order_id)
             if self._order_should_be_confirmed():
                 order.action_confirm()
             self.exchange_record.sudo()._set_related_record(order)
-            return _("Sales order {} created").format(order.name)
-        else:
-            raise UserError(_("Something went wrong with the importing wizard."))
+            return _("Sales order %s created") % order.name
+        raise UserError(_("Something went wrong with the importing wizard."))
 
     def _setup_wizard(self):
         """Init a `sale.order.import` instance for current record."""
@@ -52,7 +49,25 @@ class EDIExchangeSOInput(Component):
 
     @api.model
     def _get_default_price_source(self):
-        return "pricelist"
+        return self.settings.get("price_source", "pricelist")
 
     def _order_should_be_confirmed(self):
         return self.settings.get("confirm_order", False)
+
+    def _handle_existing_order(self, order, message):
+        prev_record = self._get_previous_record(order)
+        self.exchange_record.message_post_with_view(
+            "edi_sale_order_import.message_already_imported",
+            values={
+                "order": order,
+                "prev_record": prev_record,
+                "message": message,
+                "level": "info",
+            },
+            subtype_id=self.env.ref("mail.mt_note").id,
+        )
+
+    def _get_previous_record(self, order):
+        return self.env["edi.exchange.record"].search(
+            [("model", "=", "sale.order"), ("res_id", "=", order.id)], limit=1
+        )
