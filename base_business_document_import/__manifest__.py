@@ -15,6 +15,6 @@
         # OCA/community-data-files
         "account_tax_unece",
         "uom_unece",
+        "pdf_helper",
     ],
-    "external_dependencies": {"python": ["PyPDF2"]},
 }
