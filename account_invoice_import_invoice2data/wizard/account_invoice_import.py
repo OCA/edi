@@ -82,6 +82,22 @@ class AccountInvoiceImport(models.TransientModel):
             "date_start": invoice2data_res.get("date_start"),
             "date_end": invoice2data_res.get("date_end"),
         }
+
+        lines = []
+        for line in invoice2data_res.get("lines", []):
+            if "name" not in line:
+                line["name"] = ""
+            else:
+                line["name"] = ' '.join(line["name"].split())
+            if "qty" not in line:
+                line["qty"] = 1
+            if "taxes" not in line:
+                line["taxes"] = []
+            line["taxes"] = self.invoice2data_parse_taxes(line["taxes"])
+            lines += [line]
+        if len(lines) > 0:
+            parsed_inv["lines"] = lines
+
         for field in ["invoice_number", "description"]:
             if isinstance(invoice2data_res.get(field), list):
                 parsed_inv[field] = " ".join(invoice2data_res[field])
@@ -97,3 +113,25 @@ class AccountInvoiceImport(models.TransientModel):
             if key.startswith("date") and value:
                 parsed_inv[key] = fields.Date.to_string(value)
         return parsed_inv
+
+    @api.model
+    def invoice2data_parse_taxes(self, taxes=[]):
+        def get_tax(tax_amount):
+            try:
+                tax = float(tax_amount)
+            except (ValueError, TypeError):
+                tax_id = self.env.user.company_id.account_purchase_tax_id
+                if tax_id:
+                    tax = tax_id.amount
+                else:
+                    tax = 0.0
+            return {
+                "amount_type": "percent",
+                "amount": tax,
+            }
+
+        if type(taxes) == list and len(taxes) > 0:
+            taxes_list = [get_tax(tax_amount) for tax_amount in taxes]
+        else:
+            taxes_list = [get_tax(taxes)]
+        return taxes_list
