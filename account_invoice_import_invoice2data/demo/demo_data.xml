@@ -30,5 +30,26 @@
     <field name="static_product_id" ref="internet_access" />
 </record>
 
+<record id="gandi" model="res.partner">
+    <field name="name">Gandi</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="street">63 Boulevard Massena</field>
+    <field name="zip">75013</field>
+    <field name="city">Paris</field>
+    <field name="country_id" ref="base.fr" />
+    <field name="website">https://www.gandi.net</field>
+    <field name="vat">FR81423093459</field>
+</record>
+
+<record id="gandi_import_config" model="account.invoice.import.config">
+    <field name="name">Gandi</field>
+    <field name="partner_id" ref="gandi" />
+    <field name="invoice_line_method">nline_static_product</field>
+    <field name="label">Fiber optic access at the main office</field>
+    <field name="static_product_id" ref="internet_access" />
+</record>
+
 
 </odoo>
