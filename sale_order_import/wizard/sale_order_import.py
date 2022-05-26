@@ -60,7 +60,20 @@ class SaleOrderImport(models.TransientModel):
             self.csv_import = False
             self.doc_type = False
             return
-        filetype = mimetypes.guess_type(self.order_filename)
+
+        doc_type = self._parse_file(
+            self.order_filename, b64decode(self.order_file), detect_doc_type=True
+        )
+        if doc_type is None:
+            return {"warning": self._unsupported_file_msg(self.order_filename)}
+        # I would expect to set doc_type = csv here
+        self.csv_import = not doc_type
+        self.doc_type = doc_type
+
+    def _parse_file(self, filename, filecontent, detect_doc_type=False):
+        assert filename, "Missing filename"
+        assert filecontent, "Missing file content"
+        filetype = mimetypes.guess_type(filename)
         logger.debug("Order file mimetype: %s", filetype)
         mimetype = filetype[0]
         supported_types = {
@@ -68,24 +81,17 @@ class SaleOrderImport(models.TransientModel):
             "XML": ("application/xml", "text/xml"),
             "PDF": ("application/pdf"),
         }
+        res = None
         if filetype and mimetype in supported_types["CSV"]:
-            self.csv_import = True
-            self.doc_type = False
+            res = False
         elif filetype and mimetype in supported_types["XML"]:
-            self.csv_import = False
-            xml_root, error_msg = self._parse_xml(b64decode(self.order_file))
+            xml_root, error_msg = self._parse_xml(filecontent)
             if (xml_root is None or not len(xml_root)) and error_msg:
                 raise UserError(error_msg)
-            doc_type = self.parse_xml_order(xml_root, detect_doc_type=True)
-            self.doc_type = doc_type
+            res = self.parse_xml_order(xml_root, detect_doc_type=detect_doc_type)
         elif filetype and mimetype == supported_types["PDF"]:
-            self.csv_import = False
-            doc_type = self.parse_pdf_order(
-                b64decode(self.order_file), detect_doc_type=True
-            )
-            self.doc_type = doc_type
-        else:
-            return {"warning": self._unsupported_file_msg(self.order_filename)}
+            res = self.parse_pdf_order(filecontent, detect_doc_type=detect_doc_type)
+        return res
 
     def _unsupported_file_msg(self, filename):
         return {
@@ -323,41 +329,16 @@ class SaleOrderImport(models.TransientModel):
 
     @api.model
     def parse_order(self, order_file, order_filename, partner=False):
-        assert order_file, "Missing order file"
-        assert order_filename, "Missing order filename"
-        filetype = mimetypes.guess_type(order_filename)[0]
-        logger.debug("Order file mimetype: %s", filetype)
-        if filetype in ("text/csv", "text/plain"):
-            if not partner:
-                raise UserError(_("Missing customer"))
-            parsed_order = self.parse_csv_order(order_file, partner)
-        elif filetype in ["application/xml", "text/xml"]:
-            try:
-                xml_root = etree.fromstring(order_file)
-            except etree.LxmlError:
-                raise UserError(_("This XML file is not XML-compliant"))
-            pretty_xml_string = etree.tostring(
-                xml_root, pretty_print=True, encoding="UTF-8", xml_declaration=True
-            )
-            logger.debug("Starting to import the following XML file:")
-            logger.debug(pretty_xml_string)
-            parsed_order = self.parse_xml_order(xml_root)
-        elif filetype == "application/pdf":
-            parsed_order = self.parse_pdf_order(order_file)
-        else:
-            raise UserError(
-                _(
-                    "This file '%s' is not recognised as a CSV, XML nor PDF file. "
-                    "Please check the file and it's extension."
-                )
-                % order_filename
-            )
+        parsed_order = self._parse_file(order_filename, order_file)
         logger.debug("Result of order parsing: %s", parsed_order)
-        if "attachments" not in parsed_order:
-            parsed_order["attachments"] = {}
+        defaults = (
+            ("attachments", {}),
+            ("chatter_msg", []),
+        )
+        for key, val in defaults:
+            parsed_order.setdefault(key, val)
+
         parsed_order["attachments"][order_filename] = b64encode(order_file)
-        if "chatter_msg" not in parsed_order:
-            parsed_order["chatter_msg"] = []
         if (
             parsed_order.get("company")
             and not config["test_enable"]
