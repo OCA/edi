@@ -1342,14 +1342,12 @@ class AccountInvoiceImport(models.TransientModel):
         message content allows it.
         """
         logger.info(
-            "New email received associated with account.invoice.import: "
-            "From: %s, Subject: %s, Date: %s, Message ID: %s. Executing "
-            "with user %s ID %d",
-            msg_dict.get("email_from"),
-            msg_dict.get("subject"),
+            "New email received. "
+            "Date: %s, Message ID: %s. "
+            "Executing "
+            "with user ID %d",
             msg_dict.get("date"),
             msg_dict.get("message_id"),
-            self.env.user.name,
             self.env.user.id,
         )
         # It seems that the "Odoo-way" to handle multi-company in E-mail
@@ -1376,19 +1374,16 @@ class AccountInvoiceImport(models.TransientModel):
                     ) or company_dest_email in msg_dict.get("cc", ""):
                         company_id = company["id"]
                         logger.info(
-                            "Matched with %s: importing invoices in company " "ID %d",
-                            company_dest_email,
+                            "Matched message %s: importing invoices in company ID %d",
+                            msg_dict["message_id"],
                             company_id,
                         )
                         break
             if not company_id:
                 logger.error(
-                    "Invoice import mail gateway in multi-company setup: "
-                    "invoice_import_email of the companies of this DB was "
-                    "not found as destination of this email (to: %s, cc: %s). "
-                    "Ignoring this email.",
-                    msg_dict["email_to"],
-                    msg_dict["cc"],
+                    "Mail gateway in multi-company setup: mail ignored. "
+                    "No destination found for message_id = %s.",
+                    msg_dict["message_id"],
                 )
                 return self.create({})
         else:  # mono-company setup
