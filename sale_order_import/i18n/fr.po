@@ -179,12 +179,6 @@ msgstr "Dernière mise-à-jour le"
 #. module: sale_order_import
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
-msgid "Missing customer"
-msgstr ""
-
-#. module: sale_order_import
-#: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "No data provided"
 msgstr ""
 
