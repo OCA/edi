@@ -1,25 +1,26 @@
 # Copyright 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 from odoo.tools import float_compare
 
 
-class TestInvoiceImport(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.expense_account = self.env["account.account"].create(
+class TestInvoiceImport(SavepointCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.expense_account = cls.env["account.account"].create(
             {
                 "code": "612AII",
                 "name": "expense account invoice import",
-                "user_type_id": self.env.ref("account.data_account_type_expenses").id,
+                "user_type_id": cls.env.ref("account.data_account_type_expenses").id,
             }
         )
-        self.income_account = self.env["account.account"].create(
+        cls.income_account = cls.env["account.account"].create(
             {
                 "code": "707AII",
                 "name": "revenue account invoice import",
-                "user_type_id": self.env.ref("account.data_account_type_revenue").id,
+                "user_type_id": cls.env.ref("account.data_account_type_revenue").id,
             }
         )
         purchase_tax_vals = {
@@ -28,46 +29,46 @@ class TestInvoiceImport(TransactionCase):
             "type_tax_use": "purchase",
             "amount": 1,
             "amount_type": "percent",
-            "unece_type_id": self.env.ref("account_tax_unece.tax_type_vat").id,
-            "unece_categ_id": self.env.ref("account_tax_unece.tax_categ_s").id,
+            "unece_type_id": cls.env.ref("account_tax_unece.tax_type_vat").id,
+            "unece_categ_id": cls.env.ref("account_tax_unece.tax_categ_s").id,
             # TODO tax armageddon
-            # "account_id": self.expense_account.id,
-            # "refund_account_id": self.expense_account.id,
+            # "account_id": cls.expense_account.id,
+            # "refund_account_id": cls.expense_account.id,
         }
-        self.purchase_tax = self.env["account.tax"].create(purchase_tax_vals)
+        cls.purchase_tax = cls.env["account.tax"].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
         sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
-        self.sale_tax = self.env["account.tax"].create(sale_tax_vals)
-        self.product = self.env["product.product"].create(
+        cls.sale_tax = cls.env["account.tax"].create(sale_tax_vals)
+        cls.product = cls.env["product.product"].create(
             {
                 "name": "Expense product",
                 "default_code": "AII-TEST-PRODUCT",
-                "taxes_id": [(6, 0, [self.sale_tax.id])],
-                "supplier_taxes_id": [(6, 0, [self.purchase_tax.id])],
-                "property_account_income_id": self.income_account.id,
-                "property_account_expense_id": self.expense_account.id,
+                "taxes_id": [(6, 0, [cls.sale_tax.id])],
+                "supplier_taxes_id": [(6, 0, [cls.purchase_tax.id])],
+                "property_account_income_id": cls.income_account.id,
+                "property_account_expense_id": cls.expense_account.id,
             }
         )
-        self.all_import_config = [
+        cls.all_import_config = [
             {
                 "invoice_line_method": "1line_no_product",
-                "account": self.expense_account,
-                "taxes": self.purchase_tax,
+                "account": cls.expense_account,
+                "taxes": cls.purchase_tax,
             },
-            {"invoice_line_method": "1line_static_product", "product": self.product},
+            {"invoice_line_method": "1line_static_product", "product": cls.product},
             {
                 "invoice_line_method": "nline_no_product",
-                "account": self.expense_account,
+                "account": cls.expense_account,
             },
-            {"invoice_line_method": "nline_static_product", "product": self.product},
+            {"invoice_line_method": "nline_static_product", "product": cls.product},
             {"invoice_line_method": "nline_auto_product"},
         ]
 
         # Define partners as supplier and customer
         # Wood Corner
-        self.env.ref("base.res_partner_1").supplier_rank = 1
+        cls.env.ref("base.res_partner_1").supplier_rank = 1
         # Deco Addict
-        self.env.ref("base.res_partner_2").customer_rank = 1
+        cls.env.ref("base.res_partner_2").customer_rank = 1
 
     def test_import_in_invoice(self):
         parsed_inv = {
