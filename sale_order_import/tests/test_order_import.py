@@ -176,3 +176,67 @@ class TestOrderImport(SavepointCase):
             xml_root, error_msg = self.wiz_model._parse_xml(xml_data)
             self.assertTrue(isinstance(xml_root, etree._Element))
             self.assertTrue(error_msg is None)
+
+    def test_parse_pdf_bad(self):
+        pdf_data = base64.b64encode(self.read_test_file("test.pdf", mode="rb"))
+        mock_pdf_get_xml_files = mock.patch.object(
+            type(self.env["pdf.helper"]), "pdf_get_xml_files"
+        )
+        with mock_pdf_get_xml_files as mocked:
+            mocked.return_value = {}
+            with self.assertRaisesRegex(
+                exceptions.UserError, "There are no embedded XML file in this PDF file."
+            ):
+                self.wiz_model.parse_pdf_order(pdf_data)
+            mocked.assert_called()
+
+    def test_parse_pdf_good(self):
+        pdf_data = base64.b64encode(self.read_test_file("test.pdf", mode="rb"))
+        mock_pdf_get_xml_files = mock.patch.object(
+            type(self.env["pdf.helper"]), "pdf_get_xml_files"
+        )
+        mock_parse_xml_order = mock.patch.object(
+            type(self.wiz_model), "parse_xml_order"
+        )
+        with mock_pdf_get_xml_files as m1, mock_parse_xml_order as m2:
+            m1.return_value = {
+                "test.pdf": etree.fromstring(
+                    b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+                )
+            }
+            fake_parsed_order = {"got": "a wonderful order"}
+            m2.return_value = fake_parsed_order
+            res = self.wiz_model.parse_pdf_order(pdf_data)
+            m1.assert_called()
+            m2.assert_called()
+            self.assertEqual(res, fake_parsed_order)
+
+    def test_parse_pdf_good_but_no_file(self):
+        pdf_data = base64.b64encode(self.read_test_file("test.pdf", mode="rb"))
+        mock_pdf_get_xml_files = mock.patch.object(
+            type(self.env["pdf.helper"]), "pdf_get_xml_files"
+        )
+        mock_parse_xml_order = mock.patch.object(
+            type(self.wiz_model), "parse_xml_order"
+        )
+        with mock_pdf_get_xml_files as m1, mock_parse_xml_order as m2:
+            m1.return_value = {
+                "test.pdf": etree.fromstring(
+                    b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+                )
+            }
+            m2.side_effect = etree.LxmlError("Bad XML sir!")
+            expected_msg = (
+                "This type of XML RFQ/order is not supported. Did you install "
+                "the module to support this XML format?"
+            )
+            with self.assertRaisesRegex(exceptions.UserError, expected_msg):
+                self.wiz_model.parse_pdf_order(pdf_data)
+                m1.assert_called()
+                m2.assert_called()
+            # same w/ UserError catched somewhere else
+            m2.side_effect = exceptions.UserError("Something is wrong w/ this file")
+            with self.assertRaisesRegex(exceptions.UserError, expected_msg):
+                self.wiz_model.parse_pdf_order(pdf_data)
+                m1.assert_called()
+                m2.assert_called()
