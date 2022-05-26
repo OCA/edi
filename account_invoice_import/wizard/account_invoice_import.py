@@ -1341,6 +1341,7 @@ class AccountInvoiceImport(models.TransientModel):
         one even though the actual result is the imported invoice, if the
         message content allows it.
         """
+        # TODO: split this method into smaller ones
         logger.info(
             "New email received. "
             "Date: %s, Message ID: %s. "
