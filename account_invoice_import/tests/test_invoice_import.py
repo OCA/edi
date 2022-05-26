@@ -1,5 +1,10 @@
-# Copyright 2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2017 Akretion
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
+# Copyright 2022 Camptocamp SA
+# @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+import mock
 
 from odoo.tests.common import SavepointCase
 from odoo.tools import float_compare
@@ -141,11 +146,9 @@ class TestInvoiceImport(SavepointCase):
                 float_compare(inv.amount_total, 30.97, precision_rounding=prec)
             )
 
-    def test_email_gateway(self):
-        """No exception occurs on incoming email"""
-        mail = """\
-Received: from someone@example.com
-Message-Id: <v0214040cad6a13935723@>
+    _fake_email = """
+Received: by someone@example.com
+Message-Id: <v0214040cad6a13935723@foo.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Date: Thursday, 4 Jun 1998 09:43:14 -0800
@@ -157,6 +160,65 @@ Happy Birthday!
 See you this evening,
 Nina
 """
+
+    def test_email_gateway(self):
+        """No exception occurs on incoming email"""
         self.env["mail.thread"].with_context(
             mail_channel_noautofollow=True
-        ).message_process("account.invoice.import", mail)
+        ).message_process("account.invoice.import", self._fake_email)
+
+    def test_email_gateway_multi_comp_1_matching(self):
+        comp = self.env["res.company"].create(
+            {
+                "name": "Let it fail INC",
+                "invoice_import_email": "project-discussion@example.com",
+            }
+        )
+        logger_name = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
+
+        mock_parse = mock.patch.object(type(self.env["mail.thread"]), "message_parse")
+        with self.assertLogs(logger_name) as watcher:
+            # NOTE: for some reason in tests the msg is not parsed properly
+            # and message_dict is kind of empty.
+            # Nevertheless, it doesn't really matter
+            # because here we want to make sure that the code works as expected
+            # when a msg is properly parsed.
+            with mock_parse as mocked:
+                mocked_msg = {
+                    "to": "project-discussion@example.com",
+                    "email_from": "Nina Marton <nina@example.com>",
+                    "message_id": "<v0214040cad6a13935723@foo.com>",
+                    "references": "",
+                    "in_reply_to": "",
+                    "subject": "Happy Birthday",
+                    "recipients": "project-discussion@example.com",
+                    "body": self._fake_email,
+                    "date": "2022-05-26 10:30:00",
+                }
+                mocked.return_value = mocked_msg
+                self.env["mail.thread"].with_context(
+                    mail_channel_noautofollow=True
+                ).message_process("account.invoice.import", self._fake_email)
+            expected_msgs = (
+                f"New email received. "
+                f"Date: {mocked_msg['date']}, Message ID: {mocked_msg['message_id']}. "
+                f"Executing with user ID {self.env.user.id}",
+                f"Matched message {mocked_msg['message_id']}: "
+                f"importing invoices in company ID {comp.id}",
+                "The email has no attachments, skipped.",
+            )
+            for msg in expected_msgs:
+                self.assertIn(msg, "\n".join(watcher.output))
+
+    def test_email_gateway_multi_comp_none_matching(self):
+        self.env["res.company"].create({"name": "Let it fail INC"})
+        logger_name = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
+        with self.assertLogs(logger_name, "ERROR") as watcher:
+            self.env["mail.thread"].with_context(
+                mail_channel_noautofollow=True
+            ).message_process("account.invoice.import", self._fake_email)
+            expected_msg = (
+                "Mail gateway in multi-company setup: mail ignored. "
+                "No destination found for message_id ="
+            )
+            self.assertIn(expected_msg, watcher.output[0])
