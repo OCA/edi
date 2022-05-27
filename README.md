@@ -61,6 +61,7 @@ addon | version | maintainers | summary
 [sale_order_import](sale_order_import/) | 14.0.1.2.3 |  | Import RFQ or sale orders from files
 [sale_order_import_ubl](sale_order_import_ubl/) | 14.0.1.2.0 |  | Import UBL XML sale order files
 [sale_order_import_ubl_customer_free_ref](sale_order_import_ubl_customer_free_ref/) | 14.0.1.1.0 |  | Extract CustomerReference from sale UBL
+[sale_order_packaging_import](sale_order_packaging_import/) | 14.0.1.0.0 |  | Import the packaging on the sale order line
 [sale_order_ubl](sale_order_ubl/) | 14.0.1.0.0 |  | Embed UBL XML file inside the PDF quotation
 [webservice](webservice/) | 14.0.1.1.0 |  | Defines webservice abstract definition to be used generally
 
