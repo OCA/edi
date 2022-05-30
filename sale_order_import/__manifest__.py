@@ -7,7 +7,7 @@
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Import RFQ or sale orders from files",
-    "author": "Akretion,Odoo Community Association (OCA)",
+    "author": "Akretion, Camptocamp, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": [
         # OCA/sale-workflow
@@ -16,6 +16,9 @@
         "base_business_document_import",
         # OCA/server-tools
         "onchange_helper",
+        # TODO: this dependency should be removed
+        # and support for PDF import should be moved to a glue module
+        "pdf_helper",
     ],
     "data": ["security/ir.model.access.csv", "wizard/sale_order_import_view.xml"],
     "installable": True,

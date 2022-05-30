@@ -1,4 +1,7 @@
-# © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2016-2017 Akretion
+# @author: Alexis de Lattre <alexis.delattre@akretion.com>
+# Copyright 2022 Camptocamp
+# @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
@@ -53,40 +56,53 @@ class SaleOrderImport(models.TransientModel):
 
     @api.onchange("order_file")
     def order_file_change(self):
-        if self.order_filename and self.order_file:
-            filetype = mimetypes.guess_type(self.order_filename)
-            logger.debug("Order file mimetype: %s", filetype)
-            if filetype and filetype[0] in ("text/csv", "text/plain"):
-                self.csv_import = True
-                self.doc_type = False
-            elif filetype and filetype[0] in ["application/xml", "text/xml"]:
-                self.csv_import = False
-                xml_root, error_msg = self._parse_xml(b64decode(self.order_file))
-                if not len(xml_root) and error_msg:
-                    raise UserError(error_msg)
-                doc_type = self.parse_xml_order(xml_root, detect_doc_type=True)
-                self.doc_type = doc_type
-            elif filetype and filetype[0] == "application/pdf":
-                self.csv_import = False
-                doc_type = self.parse_pdf_order(
-                    b64decode(self.order_file), detect_doc_type=True
-                )
-                self.doc_type = doc_type
-            else:
-                return {
-                    "warning": {
-                        "title": _("Unsupported file format"),
-                        "message": _(
-                            "This file '%s' is not recognised as a CSV, XML nor "
-                            "PDF file. Please check the file and it's "
-                            "extension."
-                        )
-                        % self.order_filename,
-                    }
-                }
-        else:
+        if not self.order_filename or not self.order_file:
             self.csv_import = False
             self.doc_type = False
+            return
+
+        doc_type = self._parse_file(
+            self.order_filename, b64decode(self.order_file), detect_doc_type=True
+        )
+        if doc_type is None:
+            return {"warning": self._unsupported_file_msg(self.order_filename)}
+        # I would expect to set doc_type = csv here
+        self.csv_import = not doc_type
+        self.doc_type = doc_type
+
+    def _parse_file(self, filename, filecontent, detect_doc_type=False):
+        assert filename, "Missing filename"
+        assert filecontent, "Missing file content"
+        filetype = mimetypes.guess_type(filename)
+        logger.debug("Order file mimetype: %s", filetype)
+        mimetype = filetype[0]
+        supported_types = {
+            "CSV": ("text/csv", "text/plain"),
+            "XML": ("application/xml", "text/xml"),
+            "PDF": ("application/pdf"),
+        }
+        res = None
+        if filetype and mimetype in supported_types["CSV"]:
+            res = False
+        elif filetype and mimetype in supported_types["XML"]:
+            xml_root, error_msg = self._parse_xml(filecontent)
+            if (xml_root is None or not len(xml_root)) and error_msg:
+                raise UserError(error_msg)
+            res = self.parse_xml_order(xml_root, detect_doc_type=detect_doc_type)
+        elif filetype and mimetype == supported_types["PDF"]:
+            res = self.parse_pdf_order(filecontent, detect_doc_type=detect_doc_type)
+        return res
+
+    def _unsupported_file_msg(self, filename):
+        return {
+            "title": _("Unsupported file format"),
+            "message": _(
+                "This file '%s' is not recognised as a CSV, XML nor "
+                "PDF file. Please check the file and it's "
+                "extension."
+            )
+            % filename,
+        }
 
     @api.model
     def _parse_xml(self, data):
@@ -105,8 +121,9 @@ class SaleOrderImport(models.TransientModel):
             error_msg = _("Unsupported XML document")
         return xml_root, error_msg
 
+    # FIXME: not used at all
     @api.model
-    def get_xml_doc_type(self, xml_root):
+    def get_xml_doc_type(self, xml_root):  # pragma: no cover
         raise UserError
 
     @api.model
@@ -118,8 +135,9 @@ class SaleOrderImport(models.TransientModel):
             )
         )
 
+    # FIXME: not used at all
     @api.model
-    def parse_csv_order(self, order_file, partner):
+    def parse_csv_order(self, order_file, partner):  # pragma: no cover
         assert partner, "missing partner"
         raise UserError(
             _(
@@ -128,12 +146,13 @@ class SaleOrderImport(models.TransientModel):
             )
         )
 
+    # TODO: move it out to a PDF support module
     @api.model
     def parse_pdf_order(self, order_file, detect_doc_type=False):
         """
         Get PDF attachments, filter on XML files and call import_order_xml
         """
-        xml_files_dict = self.get_xml_files_from_pdf(order_file)
+        xml_files_dict = self.env["pdf.helper"].pdf_get_xml_files(order_file)
         if not xml_files_dict:
             raise UserError(_("There are no embedded XML file in this PDF file."))
         for xml_filename, xml_root in xml_files_dict.items():
@@ -212,47 +231,14 @@ class SaleOrderImport(models.TransientModel):
         currency = bdio._match_currency(
             parsed_order.get("currency"), parsed_order["chatter_msg"]
         )
-        if partner.property_product_pricelist.currency_id != currency:
-            raise UserError(
-                _(
-                    "The customer '%s' has a pricelist '%s' but the "
-                    "currency of this order is '%s'."
-                )
-                % (
-                    partner.display_name,
-                    partner.property_product_pricelist.display_name,
-                    currency.name,
-                )
-            )
-        if parsed_order.get("order_ref"):
-            commercial_partner = partner.commercial_partner_id
-            existing_orders = soo.search(
-                self._search_existing_order_domain(
-                    parsed_order, commercial_partner, [("state", "!=", "cancel")]
-                )
-            )
-            if existing_orders:
-                raise UserError(
-                    _(
-                        "An order of customer '%s' with reference '%s' "
-                        "already exists: %s (state: %s)"
-                    )
-                    % (
-                        partner.display_name,
-                        parsed_order["order_ref"],
-                        existing_orders[0].name,
-                        existing_orders[0].state,
-                    )
-                )
         # FIXME: this should work but it's not as it breaks core price compute
         # so_vals = soo.default_get(soo._fields.keys())
-        so_vals = {}
-        so_vals.update(
-            {
-                "partner_id": partner.id,
-                "client_order_ref": parsed_order.get("order_ref"),
-            }
-        )
+        so_vals = {
+            "partner_id": partner.id,
+            "client_order_ref": parsed_order.get("order_ref"),
+        }
+        self._validate_currency(partner, currency)
+        self._validate_existing_orders(partner, parsed_order)
         so_vals = soo.play_onchanges(so_vals, ["partner_id"])
         so_vals["order_line"] = []
         if parsed_order.get("ship_to"):
@@ -283,6 +269,44 @@ class SaleOrderImport(models.TransientModel):
             so_vals["order_line"].append((0, 0, line_vals))
         return so_vals
 
+    def _validate_currency(self, partner, currency):
+        if partner.property_product_pricelist.currency_id != currency:
+            raise UserError(
+                _(
+                    "The customer '%s' has a pricelist '%s' but the "
+                    "currency of this order is '%s'."
+                )
+                % (
+                    partner.display_name,
+                    partner.property_product_pricelist.display_name,
+                    currency.name,
+                )
+            )
+
+    def _validate_existing_orders(self, partner, parsed_order):
+        if not parsed_order.get("order_ref"):
+            return
+        commercial_partner = partner.commercial_partner_id
+        existing_orders = self.env["sale.order"].search(
+            self._search_existing_order_domain(
+                parsed_order, commercial_partner, [("state", "!=", "cancel")]
+            ),
+            limit=1,
+        )
+        if existing_orders:
+            raise UserError(
+                _(
+                    "An order of customer '%s' with reference '%s' "
+                    "already exists: %s (state: %s)"
+                )
+                % (
+                    partner.display_name,
+                    parsed_order["order_ref"],
+                    existing_orders[0].name,
+                    existing_orders[0].state,
+                )
+            )
+
     @api.model
     def create_order(self, parsed_order, price_source, order_filename=None):
         soo = self.env["sale.order"].with_context(mail_create_nosubscribe=True)
@@ -305,41 +329,16 @@ class SaleOrderImport(models.TransientModel):
 
     @api.model
     def parse_order(self, order_file, order_filename, partner=False):
-        assert order_file, "Missing order file"
-        assert order_filename, "Missing order filename"
-        filetype = mimetypes.guess_type(order_filename)[0]
-        logger.debug("Order file mimetype: %s", filetype)
-        if filetype in ("text/csv", "text/plain"):
-            if not partner:
-                raise UserError(_("Missing customer"))
-            parsed_order = self.parse_csv_order(order_file, partner)
-        elif filetype in ["application/xml", "text/xml"]:
-            try:
-                xml_root = etree.fromstring(order_file)
-            except etree.LxmlError:
-                raise UserError(_("This XML file is not XML-compliant"))
-            pretty_xml_string = etree.tostring(
-                xml_root, pretty_print=True, encoding="UTF-8", xml_declaration=True
-            )
-            logger.debug("Starting to import the following XML file:")
-            logger.debug(pretty_xml_string)
-            parsed_order = self.parse_xml_order(xml_root)
-        elif filetype == "application/pdf":
-            parsed_order = self.parse_pdf_order(order_file)
-        else:
-            raise UserError(
-                _(
-                    "This file '%s' is not recognised as a CSV, XML nor PDF file. "
-                    "Please check the file and it's extension."
-                )
-                % order_filename
-            )
+        parsed_order = self._parse_file(order_filename, order_file)
         logger.debug("Result of order parsing: %s", parsed_order)
-        if "attachments" not in parsed_order:
-            parsed_order["attachments"] = {}
+        defaults = (
+            ("attachments", {}),
+            ("chatter_msg", []),
+        )
+        for key, val in defaults:
+            parsed_order.setdefault(key, val)
+
         parsed_order["attachments"][order_filename] = b64encode(order_file)
-        if "chatter_msg" not in parsed_order:
-            parsed_order["chatter_msg"] = []
         if (
             parsed_order.get("company")
             and not config["test_enable"]
@@ -350,6 +349,7 @@ class SaleOrderImport(models.TransientModel):
             )
         return parsed_order
 
+    # TODO: add tests
     def import_order_button(self):
         self.ensure_one()
         bdio = self.env["business.document.import"]
@@ -401,6 +401,7 @@ class SaleOrderImport(models.TransientModel):
         )
         return self.create_order_return_action(parsed_order, self.order_filename)
 
+    # TODO: add tests
     def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
         order = self.create_order(parsed_order, self.price_source, order_filename)
@@ -418,6 +419,7 @@ class SaleOrderImport(models.TransientModel):
         )
         return action
 
+    # TODO: add tests
     @api.model
     def _prepare_update_order_vals(self, parsed_order, order, partner):
         bdio = self.env["business.document.import"]
@@ -436,6 +438,7 @@ class SaleOrderImport(models.TransientModel):
             vals["client_order_ref"] = parsed_order["order_ref"]
         return vals
 
+    # TODO: add tests
     @api.model
     def _prepare_create_order_line(
         self, product, uom, order, import_line, price_source
@@ -477,6 +480,7 @@ class SaleOrderImport(models.TransientModel):
             company_id = order.get("company_id") or company_id
         return company_id
 
+    # TODO: add tests
     @api.model
     def update_order_lines(self, parsed_order, order, price_source):
         chatter = parsed_order["chatter_msg"]
@@ -593,6 +597,7 @@ class SaleOrderImport(models.TransientModel):
         # Allows other module to update some fields on the line
         return {}
 
+    # TODO: add tests
     def update_order_button(self):
         self.ensure_one()
         bdio = self.env["business.document.import"]
