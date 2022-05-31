@@ -631,7 +631,7 @@ class AccountMove(models.Model):
                 product_classification_code = etree.SubElement(
                     product_classification, ns["ram"] + "ClassCode", listID="HS"
                 )
-                product_classification_code.text = product.hs_code_id.local_code
+                product_classification_code.text = product.get_hs_code_recursively().local_code
             # origin_country_id and hs_code_id are provided
             # by the OCA module product_harmonized_system
             if (
