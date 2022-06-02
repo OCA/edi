@@ -1056,15 +1056,21 @@ class AccountInvoiceImport(models.TransientModel):
                 # select first tax line
                 if mline.tax_line_id and not company_cur.is_zero(mline.amount_currency):
                     has_tax_line = True
-                    new_amount_currency = inv_cur.round(
-                        mline.amount_currency + diff_tax_amount
-                    )
+                    if mline.currency_id.compare_amounts(mline.amount_currency, 0) >= 0:
+                        new_amount_currency = inv_cur.round(
+                            mline.amount_currency + diff_tax_amount
+                        )
+                    else:
+                        new_amount_currency = inv_cur.round(
+                            mline.amount_currency - diff_tax_amount
+                        )
                     invoice.message_post(
                         body=_(
-                            "The tax amount has been forced to %s "
-                            "(amount computed by Odoo was: %s)."
+                            "The <b>tax amount</b> for tax %s has been <b>forced</b> "
+                            "to %s (amount computed by Odoo was: %s)."
                         )
                         % (
+                            mline.tax_line_id.display_name,
                             format_amount(
                                 self.env, new_amount_currency, invoice.currency_id
                             ),
