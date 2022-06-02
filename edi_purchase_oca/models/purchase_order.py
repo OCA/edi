@@ -19,3 +19,8 @@ class PurchaseOrder(models.Model):
         if self:
             self._event("on_button_cancel_purchase_order").notify(self)
         return result
+
+    def write(self, vals):
+        if self:
+            self._event("on_write_purchase_order").notify(self, vals)
+        return super().write(vals)
