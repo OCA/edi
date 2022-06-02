@@ -1,5 +1,4 @@
 factur-x
 lxml
-PyPDF2
 pyyaml
 xmlschema
