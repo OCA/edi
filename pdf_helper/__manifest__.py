@@ -15,5 +15,5 @@
     "depends": [
         "base",
     ],
-    "external_dependencies": {"python": ["PyPDF2"]},
+    "external_dependencies": {"python": ["PyPDF2<=1.28.4"]},
 }

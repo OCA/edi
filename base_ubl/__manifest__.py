@@ -10,6 +10,6 @@
     "author": "Akretion,Onestein,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": ["uom_unece", "account_tax_unece", "base_vat", "pdf_helper"],
-    "external_dependencies": {"python": ["PyPDF2"]},
+    "external_dependencies": {"python": ["PyPDF2<=1.28.4"]},
     "installable": True,
 }
