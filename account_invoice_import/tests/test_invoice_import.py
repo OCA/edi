@@ -5,9 +5,9 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import mock
+
 from odoo import fields
 from odoo.tests.common import SavepointCase
-from odoo.tools import float_compare
 
 
 class TestInvoiceImport(SavepointCase):
@@ -154,7 +154,6 @@ class TestInvoiceImport(SavepointCase):
             )
             self.assertEqual(inv.journal_id.id, self.pur_journal2.id)
 
-
     def test_import_out_invoice(self):
         parsed_inv = {
             "type": "out_invoice",
@@ -187,7 +186,6 @@ class TestInvoiceImport(SavepointCase):
                 .with_company(self.company.id)
                 .create_invoice(parsed_inv, import_config)
             )
-            prec = inv.currency_id.rounding
             self.assertFalse(inv.currency_id.compare_amounts(inv.amount_untaxed, 30.66))
             self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 30.97))
             self.assertEqual(
