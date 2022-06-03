@@ -17,5 +17,4 @@
         "account_tax_unece",
         "uom_unece",
     ],
-    "external_dependencies": {"python": ["PyPDF2"]},
 }
