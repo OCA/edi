@@ -600,9 +600,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 and len(sinfo.product_tmpl_id.product_variant_ids) == 1
             ):
                 return sinfo.product_tmpl_id.product_variant_ids[0]
-        raise self.user_error_wrap(
-            "_match_product",
-            product_dict,
+        chatter_msg.append(
             _(
                 "Odoo couldn't find any product corresponding to the "
                 "following information extracted from the business document:\n"
@@ -616,6 +614,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 seller and seller.name or "",
             ),
         )
+        return None
 
     @api.model
     def _match_product_search(self, product_dict):
