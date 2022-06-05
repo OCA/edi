@@ -13,9 +13,12 @@ import getpass
 import logging
 import mimetypes
 import os
+import ssl
 import sys
 
 import odoorpc
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 __author__ = "Alexis de Lattre <alexis.delattre@akretion.com>"
 __date__ = "March 2021"
@@ -167,6 +170,7 @@ def main(args):
         args.database,
         args.username,
     )
+
     try:
         odoo = odoorpc.ODOO(args.server, proto, args.port)
         odoo.login(args.database, args.username, pwd)

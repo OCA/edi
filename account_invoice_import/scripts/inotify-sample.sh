@@ -11,11 +11,11 @@
 # CUSTOMIZE the variables below
 INVOICE_DIR="/home/alexis/invoices2odoo"
 MASS_INVOICE_IMPORT_SCRIPT="/usr/local/bin/mass_invoice_import.py"
-ODOO_SERVER="localhost"
-ODOO_PORT=8069
-ODOO_DB="o4_test1"
+ODOO_SERVER="localhost" # or IP or Domain
+ODOO_PORT="8069" # 443 when using domain
+ODOO_DB="prod" # "prod" when using doodba
 ODOO_LOGIN="admin"
-ODOO_PASSWORD="admin"
+ODOO_PASSWORD='admin'
 
 echo "Start to monitor $INVOICE_DIR for new files"
 
@@ -24,6 +24,6 @@ inotifywait -m -e create -e moved_to --format "%e %w%f" "$INVOICE_DIR" |
         if [ -f "$filepath" ]; then
             echo "File '$filepath' appeared via $event"
             # do something with the file
-            "$MASS_INVOICE_IMPORT_SCRIPT" -s "$ODOO_SERVER" -p $ODOO_PORT -x -d "$ODOO_DB" -u "$ODOO_LOGIN" -w "$ODOO_PASSWORD" "$filepath"
+            "$MASS_INVOICE_IMPORT_SCRIPT" -s "$ODOO_SERVER" -p $ODOO_PORT -d "$ODOO_DB" -u "$ODOO_LOGIN" -w "$ODOO_PASSWORD" -k "./failed" "$filepath" dir_list "$INVOICE_DIR"
         fi
     done
