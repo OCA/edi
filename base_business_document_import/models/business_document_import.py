@@ -25,6 +25,62 @@ class BusinessDocumentImport(models.AbstractModel):
         assert error_msg
         raise UserError(error_msg)
 
+    def _direct_match(self, data_dict, model, raise_exception=True):
+        if data_dict.get("recordset"):
+            record = data_dict["recordset"]
+            if isinstance(record, type(model)):
+                return record
+            elif raise_exception:
+                raise UserError(
+                    _(
+                        "The record '{record}' is an instance of '{record_model}', "
+                        "not of '{target_model}'."
+                    ).format(
+                        record=record.display_name,
+                        record_model=record._name,
+                        target_model=model._name,
+                    )
+                )
+        if data_dict.get("id"):
+            record = False
+            try:
+                record = model.browse(data_dict["id"])
+                # Browsing an unexisting ID doesn't make Odoo crash
+                # So I read create_date to make it crash
+                record.create_date  # pylint: disable=pointless-statement
+            except Exception:
+                if raise_exception:
+                    raise UserError(
+                        _("ID {id} of '{model}' doesn't exist in Odoo.").format(
+                            id=data_dict["id"], model=model._name
+                        )
+                    )
+            if record:
+                return record
+        if data_dict.get("xmlid"):
+            xmlid = data_dict["xmlid"]
+            record = False
+            try:
+                record = self.env.ref(xmlid, raise_if_not_found=True)
+            except Exception:
+                if raise_exception:
+                    raise UserError(_("The XMLID '%s' doesn't exist in Odoo.") % xmlid)
+            if record:
+                if isinstance(record, type(model)):
+                    return record
+                elif raise_exception:
+                    raise UserError(
+                        _(
+                            "The record '{record}' is an instance of '{record_model}', "
+                            "not of '{target_model}'."
+                        ).format(
+                            record=record.display_name,
+                            record_model=record._name,
+                            target_model=model._name,
+                        )
+                    )
+        return None
+
     @api.model
     def _strip_cleanup_dict(self, match_dict):
         if match_dict:
@@ -229,10 +285,9 @@ class BusinessDocumentImport(models.AbstractModel):
         rpo = self.env["res.partner"]
         partner_dict = partner_dict.copy()
         self._strip_cleanup_dict(partner_dict)
-        if partner_dict.get("recordset"):
-            return partner_dict["recordset"]
-        if partner_dict.get("id"):
-            return rpo.browse(partner_dict["id"])
+        partner = self._direct_match(partner_dict, rpo, raise_exception=raise_exception)
+        if partner:
+            return partner
         company_id = self._context.get("force_company") or self.env.company.id
         domain = domain or []
         domain += ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
@@ -522,10 +577,9 @@ class BusinessDocumentImport(models.AbstractModel):
         """
         ppo = self.env["product.product"]
         self._strip_cleanup_dict(product_dict)
-        if product_dict.get("recordset"):
-            return product_dict["recordset"]
-        if product_dict.get("id"):
-            return ppo.browse(product_dict["id"])
+        product = self._direct_match(product_dict, ppo)
+        if product:
+            return product
         product = self._match_product_search(product_dict)
         if product:
             return product
@@ -602,10 +656,9 @@ class BusinessDocumentImport(models.AbstractModel):
             currency_dict = {}
         rco = self.env["res.currency"]
         self._strip_cleanup_dict(currency_dict)
-        if currency_dict.get("recordset"):
-            return currency_dict["recordset"]
-        if currency_dict.get("id"):
-            return rco.browse(currency_dict["id"])
+        currency = self._direct_match(currency_dict, rco)
+        if currency:
+            return currency
         if currency_dict.get("iso"):
             currency_iso = currency_dict["iso"].upper()
             currency = rco.search([("name", "=", currency_iso)], limit=1)
@@ -710,10 +763,9 @@ class BusinessDocumentImport(models.AbstractModel):
         if not uom_dict:
             uom_dict = {}
         self._strip_cleanup_dict(uom_dict)
-        if uom_dict.get("recordset"):
-            return uom_dict["recordset"]
-        if uom_dict.get("id"):
-            return uuo.browse(uom_dict["id"])
+        uom = self._direct_match(uom_dict, uuo)
+        if uom:
+            return uom
         if uom_dict.get("unece_code"):
             # Map NIU to Unit
             if uom_dict["unece_code"] == "NIU":
@@ -817,10 +869,9 @@ class BusinessDocumentImport(models.AbstractModel):
         """
         ato = self.env["account.tax"]
         self._strip_cleanup_dict(tax_dict)
-        if tax_dict.get("recordset"):
-            return tax_dict["recordset"]
-        if tax_dict.get("id"):
-            return ato.browse(tax_dict["id"])
+        tax = self._direct_match(tax_dict, ato)
+        if tax:
+            return tax
         domain = self._prepare_match_tax_domain(
             tax_dict, type_tax_use=type_tax_use, price_include=price_include
         )
@@ -1037,10 +1088,9 @@ class BusinessDocumentImport(models.AbstractModel):
         if speed_dict is None:
             speed_dict = self._prepare_account_speed_dict()
         self._strip_cleanup_dict(account_dict)
-        if account_dict.get("recordset"):
-            return account_dict["recordset"]
-        if account_dict.get("id"):
-            return aao.browse(account_dict["id"])
+        account = self._direct_match(account_dict, aao)
+        if account:
+            return account
         if account_dict.get("code"):
             acc_code = account_dict["code"].upper()
             if acc_code in speed_dict:
@@ -1102,10 +1152,9 @@ class BusinessDocumentImport(models.AbstractModel):
         if speed_dict is None:
             speed_dict = self._prepare_analytic_account_speed_dict()
         self._strip_cleanup_dict(aaccount_dict)
-        if aaccount_dict.get("recordset"):
-            return aaccount_dict["recordset"]
-        if aaccount_dict.get("id"):
-            return aaao.browse(aaccount_dict["id"])
+        aaccount = self._direct_match(aaccount_dict, aaao)
+        if aaccount:
+            return aaccount
         if aaccount_dict.get("code"):
             aacode = aaccount_dict["code"].upper()
             if aacode in speed_dict:
@@ -1146,10 +1195,9 @@ class BusinessDocumentImport(models.AbstractModel):
         if speed_dict is None:
             speed_dict = self._prepare_journal_speed_dict()
         self._strip_cleanup_dict(journal_dict)
-        if journal_dict.get("recordset"):
-            return journal_dict["recordset"]
-        if journal_dict.get("id"):
-            return ajo.browse(journal_dict["id"])
+        journal = self._direct_match(journal_dict, ajo)
+        if journal:
+            return journal
         if journal_dict.get("code"):
             jcode = journal_dict["code"].upper()
             if jcode in speed_dict:
@@ -1173,11 +1221,11 @@ class BusinessDocumentImport(models.AbstractModel):
     def _match_incoterm(self, incoterm_dict, chatter_msg):
         aio = self.env["account.incoterms"]
         if not incoterm_dict:
-            return False
-        if incoterm_dict.get("recordset"):
-            return incoterm_dict["recordset"]
-        if incoterm_dict.get("id"):
-            return aio.browse(incoterm_dict["id"])
+            incoterm_dict = {}
+        self._strip_cleanup_dict(incoterm_dict)
+        incoterm = self._direct_match(incoterm_dict, aio)
+        if incoterm:
+            return incoterm
         if incoterm_dict.get("code"):
             incoterm = aio.search(
                 [
