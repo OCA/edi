@@ -19,6 +19,15 @@ from odoo.tools.misc import format_date
 
 logger = logging.getLogger(__name__)
 
+NSMAP = {
+    "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+    "rsm": "urn:un:unece:uncefact:data:standard:" "CrossIndustryInvoice:100",
+    "ram": "urn:un:unece:uncefact:data:standard:"
+    "ReusableAggregateBusinessInformationEntity:100",
+    "qdt": "urn:un:unece:uncefact:data:standard:QualifiedDataType:100",
+    "udt": "urn:un:unece:uncefact:data:" "standard:UnqualifiedDataType:100",
+}
+
 try:
     from facturx import generate_from_binary, xml_check_xsd
 except ImportError:
@@ -241,6 +250,11 @@ class AccountMove(models.Model):
                 delivery_terms, ns["ram"] + "DeliveryTypeCode"
             )
             delivery_code.text = self.invoice_incoterm_id.code
+
+        tags = trade_transaction.xpath(".//ram:PaymentReference", namespaces=NSMAP)
+        for tag in tags:
+            tag.text = self.invoice_origin or tag.text
+
         self._cii_add_buyer_order_reference(trade_agreement, ns)
         self._cii_add_contract_reference(trade_agreement, ns)
 
