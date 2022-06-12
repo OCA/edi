@@ -39,9 +39,21 @@ class EDIExchangeRecord(models.Model):
         model_field="model",
     )
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
-    exchange_file = fields.Binary(attachment=True)
+    # here we store exchange file when needed (when no parent hold the file)
+    real_exchange_file = fields.Binary(attachment=True)
+    # here we give the exchange file (from parent exchange or self)
+    exchange_file = fields.Binary(
+        store=False,
+        compute="_compute_exchange_file",
+        inverse="_inverse_exchange_file",
+    )
+    has_exchange_file = fields.Boolean(
+        store=True,
+        compute="_compute_exchange_file",
+        help="True if the exchange_file is set on the record or on any parent record",
+    )
     exchange_filename = fields.Char(
-        compute="_compute_exchange_filename", readonly=False, store=True
+        store=True, compute="_compute_exchange_filename", readonly=False
     )
     exchanged_on = fields.Datetime(
         string="Exchanged on",
@@ -116,12 +128,30 @@ class EDIExchangeRecord(models.Model):
             related_record = rec.record
             rec.related_name = related_record.display_name if related_record else ""
 
-    @api.depends("model", "type_id")
+    @api.depends("parent_id", "real_exchange_file")
+    def _compute_exchange_file(self):
+        for rec in self:
+            if rec.real_exchange_file:
+                rec.exchange_file = rec.real_exchange_file
+            elif rec.parent_id:
+                rec.exchange_file = rec.parent_id.exchange_file
+            else:
+                rec.exchange_file = False
+            rec.has_exchange_file = True if rec.exchange_file else False
+
+    def _inverse_exchange_file(self):
+        for rec in self:
+            rec.real_exchange_file = rec.exchange_file
+            rec.has_exchange_file = True
+
+    @api.depends("model", "type_id", "parent_id")
     def _compute_exchange_filename(self):
         for rec in self:
-            if not rec.type_id:
+            if rec.exchange_filename:
                 continue
-            if not rec.exchange_filename:
+            if not rec.real_exchange_file and rec.parent_id.exchange_file:
+                rec.exchange_filename = rec.parent_id.exchange_filename
+            elif rec.type_id:
                 rec.exchange_filename = rec.type_id._make_exchange_filename(rec)
 
     @api.depends("edi_exchange_state")

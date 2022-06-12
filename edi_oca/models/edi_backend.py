@@ -383,7 +383,7 @@ class EDIBackend(models.Model):
             ("type_id.exchange_file_auto_generate", "=", True),
             ("type_id.direction", "=", "output"),
             ("edi_exchange_state", "=", "new"),
-            ("exchange_file", "=", False),
+            ("has_exchange_file", "=", False),
         ]
 
     def _output_pending_records_domain(self):
@@ -567,7 +567,7 @@ class EDIBackend(models.Model):
             ("backend_id", "=", self.id),
             ("type_id.direction", "=", "input"),
             ("edi_exchange_state", "=", "input_pending"),
-            ("exchange_file", "=", False),
+            ("has_exchange_file", "=", False),
         ]
 
     def _input_pending_process_records_domain(self):

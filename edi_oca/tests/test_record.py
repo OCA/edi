@@ -2,6 +2,8 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import base64
+
 from freezegun import freeze_time
 
 from odoo import exceptions, fields
@@ -103,6 +105,29 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         )
         self.assertFalse(record2.model)
         self.assertEqual(record.record, record2.record)
+
+    def test_record_no_file_with_parent(self):
+        """Simulate child record doesn't have a file."""
+        vals_parent = {
+            "exchange_file": base64.b64encode(b"1234"),
+            "exchange_filename": "1234.csv",
+        }
+        parent = self.backend.create_record("test_csv_input", vals_parent)
+        vals_child = {"parent_id": parent.id}
+        child = self.backend.create_record("test_csv_input", vals_child)
+        self.assertEqual(parent.exchange_file, child.exchange_file)
+        self.assertEqual(parent.exchange_filename, child.exchange_filename)
+        self.assertTrue(parent.has_exchange_file)
+        self.assertTrue(child.has_exchange_file)
+
+        # check if we can still assign a file explicitly
+        exchange_file = base64.b64encode(b"5678")
+        exchange_filename = "5678.csv"
+        child.exchange_file = exchange_file
+        child.exchange_filename = exchange_filename
+        self.assertTrue(parent.has_exchange_file)
+        self.assertEqual(child.exchange_file, exchange_file)
+        self.assertEqual(child.exchange_filename, exchange_filename)
 
     def test_with_delay_override(self):
         vals = {
