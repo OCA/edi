@@ -233,3 +233,27 @@ class TestEDIBackendOutput(TestEDIStorageBase):
         for rec in new_records:
             self.assertIn(rec.exchange_filename, file_names)
             self.assertEqual(rec.edi_exchange_state, "input_pending")
+
+        # run the cron to verify the exchange are not created again
+        with self._mock_storage_backend_find_files(found_files):
+            self._test_run_cron_pending_input(mocked_paths)
+        new_records = self.env["edi.exchange.record"].search(
+            [("backend_id", "=", self.backend.id), ("type_id", "=", exch_type.id)]
+        )
+
+        self.assertEqual(len(new_records), 2)
+        for rec in new_records:
+            self.assertIn(rec.exchange_filename, file_names)
+            self.assertEqual(rec.edi_exchange_state, "input_pending")
+
+        # allow multiple exchange with same file name
+        exch_type.exchange_file_forbid_duplicated = False
+
+        # run the cron to verify the exchange are created again this time
+        with self._mock_storage_backend_find_files(found_files):
+            self._test_run_cron_pending_input(mocked_paths)
+        new_records = self.env["edi.exchange.record"].search(
+            [("backend_id", "=", self.backend.id), ("type_id", "=", exch_type.id)]
+        )
+
+        self.assertEqual(len(new_records), 4)

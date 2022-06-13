@@ -19,6 +19,7 @@
         "data/queue_job_function_data.xml",
         "security/ir_model_access.xml",
         "views/edi_backend_views.xml",
+        "views/edi_exchange_type_views.xml",
     ],
     "demo": ["demo/edi_backend_demo.xml"],
 }

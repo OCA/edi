@@ -132,12 +132,13 @@ class EDIBackend(models.Model):
     def _storage_create_record_if_missing(self, exchange_type, remote_file_name):
         """Create a new exchange record for given type and file name if missing."""
         file_name = os.path.basename(remote_file_name)
-        extra_domain = [("exchange_filename", "=", file_name)]
-        existing = self._find_existing_exchange_records(
-            exchange_type, extra_domain=extra_domain, count_only=True
-        )
-        if existing:
-            return
+        if exchange_type.exchange_file_forbid_duplicated:
+            extra_domain = [("exchange_filename", "=", file_name)]
+            existing = self._find_existing_exchange_records(
+                exchange_type, extra_domain=extra_domain, count_only=True
+            )
+            if existing:
+                return
         record = self.create_record(
             exchange_type.code, self._storage_new_exchange_record_vals(file_name)
         )

@@ -19,3 +19,9 @@ class EDIExchangeType(models.Model):
         "the files to be fetched from the pending directory in the related "
         "storage. E.g: `.*my-type-[0-9]*.\\.csv`"
     )
+
+    exchange_file_forbid_duplicated = fields.Boolean(
+        default=True,
+        help="Create new echange only if no other exchange "
+        "with the same filename already exist.",
+    )
