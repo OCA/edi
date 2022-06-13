@@ -4,6 +4,7 @@
 import logging
 
 from odoo import models
+from odoo.osv.expression import AND
 
 _logger = logging.getLogger(__name__)
 
@@ -12,16 +13,20 @@ class ResPartner(models.Model):
 
     _inherit = "res.partner"
 
-    def get_active_contract(self, transmit_method):
+    def get_active_contract(self, transmit_method, domain=None):
         """Return the active contract for a specific transmit method."""
         self.ensure_one()
+        base_domain = [
+            ("is_valid", "=", True),
+            ("partner_id", "=", self.id),
+            ("transmit_method_id", "=", transmit_method.id),
+        ]
         contracts = self.env["ebill.payment.contract"].search(
-            [("is_valid", "=", True), ("partner_id", "=", self.id)],
-            limit=1,
+            AND([domain or [], base_domain]), limit=1
         )
         if not contracts:
             _logger.error(
-                "Paynet contract for {} on {} not found".format(
+                "eBill contract for {} on {} not found".format(
                     self.name, transmit_method.name
                 )
             )
