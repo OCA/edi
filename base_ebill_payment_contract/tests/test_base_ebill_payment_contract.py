@@ -13,6 +13,8 @@ class TestCrmOpportunityCurrency(SingleTransactionCase):
         cls.contract1 = cls.env.ref(
             "base_ebill_payment_contract.ebill_payment_contract_demo_1"
         )
+        cls.partner = cls.contract1.partner_id
+        cls.method_post = cls.env.ref("account_invoice_transmit_method.post")
 
     def test_contract_validity(self):
         self.contract1.state = "open"
@@ -56,3 +58,13 @@ class TestCrmOpportunityCurrency(SingleTransactionCase):
         with Form(self.contract1) as uiform:
             uiform.state = "cancel"
         self.assertEqual(date.today(), self.contract1.date_end)
+
+    def test_contract_valid_different_transmition_method(self):
+        self.contract1.state = "open"
+        self.contract1.date_start = date.today()
+        self.contract1.date_end = date.today() + timedelta(days=10)
+        self.assertTrue(self.contract1.is_valid)
+        self.assertTrue(
+            self.partner.get_active_contract(self.contract1.transmit_method_id)
+        )
+        self.assertFalse(self.partner.get_active_contract(self.method_post))
