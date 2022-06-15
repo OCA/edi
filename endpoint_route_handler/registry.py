@@ -2,7 +2,58 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-_REGISTRY_BY_DB = {}
+import importlib
+import json
+from functools import partial
+
+from psycopg2 import sql
+from psycopg2.extras import execute_values
+
+from odoo import http, tools
+from odoo.tools import DotDict
+
+from odoo.addons.base.models.ir_model import query_insert
+
+from .exceptions import EndpointHandlerNotFound
+
+
+def query_multi_update(cr, table_name, rows, cols):
+    """Update multiple rows at once.
+
+    :param `cr`: active db cursor
+    :param `table_name`: sql table to update
+    :param `rows`: list of dictionaries with write-ready values
+    :param `cols`: list of keys representing columns' names
+    """
+    # eg: key=c.key, route=c.route
+    keys = sql.SQL(",").join([sql.SQL("{0}=c.{0}".format(col)) for col in cols])
+    col_names = sql.SQL(",").join([sql.Identifier(col) for col in cols])
+    template = (
+        sql.SQL("(")
+        + sql.SQL(",").join([sql.SQL("%({})s".format(col)) for col in cols])
+        + sql.SQL(")")
+    )
+    query = sql.SQL(
+        """
+    UPDATE {table} AS t SET
+        {keys}
+    FROM (VALUES {values})
+        AS c({col_names})
+    WHERE c.key = t.key
+    RETURNING t.key
+    """
+    ).format(
+        table=sql.Identifier(table_name),
+        keys=keys,
+        col_names=col_names,
+        values=sql.Placeholder(),
+    )
+    execute_values(
+        cr,
+        query.as_string(cr._cnx),
+        rows,
+        template=template.as_string(cr._cnx),
+    )
 
 
 class EndpointRegistry:
@@ -11,103 +62,232 @@ class EndpointRegistry:
     Used to:
 
     * track registered endpoints
-    * track routes to be updated for specific ir.http instances
     * retrieve routing rules to load in ir.http routing map
     """
 
-    __slots__ = ("_mapping", "_http_ids", "_http_ids_to_update")
+    __slots__ = "cr"
+    _table = "endpoint_route"
+    _columns = (
+        # name, type, comment
+        ("key", "VARCHAR", ""),  # TODO: create index
+        ("route", "VARCHAR", ""),
+        ("opts", "text", ""),
+        ("routing", "text", ""),
+        ("endpoint_hash", "VARCHAR(32)", ""),  # TODO: add uniq constraint
+        ("route_group", "VARCHAR(32)", ""),
+    )
 
-    def __init__(self):
-        # collect EndpointRule objects
-        self._mapping = {}
-        # collect ids of ir.http instances
-        self._http_ids = set()
-        # collect ids of ir.http instances that need update
-        self._http_ids_to_update = set()
+    def __init__(self, cr):
+        self.cr = cr
 
-    def get_rules(self):
-        return self._mapping.values()
+    def get_rules(self, keys=None, where=None):
+        for row in self._get_rules(keys=keys, where=where):
+            yield EndpointRule.from_row(self.cr.dbname, row)
 
-    # TODO: add test
+    def _get_rules(self, keys=None, where=None):
+        query = "SELECT * FROM endpoint_route"
+        if keys and not where:
+            where = "key in (%s)"
+            self.cr.execute(query, keys)
+            return self.cr.fetchall()
+        elif where:
+            query += " " + where
+        self.cr.execute(query)
+        return self.cr.fetchall()
+
+    def _get_rule(self, key):
+        query = "SELECT * FROM endpoint_route WHERE key = %s"
+        self.cr.execute(query, (key,))
+        row = self.cr.fetchone()
+        if row:
+            return EndpointRule.from_row(self.cr.dbname, row)
+
+    def _lock_rows(self, keys):
+        sql = "SELECT id FROM endpoint_route WHERE key IN %s FOR UPDATE"
+        self.cr.execute(sql, (tuple(keys),), log_exceptions=False)
+
+    def _update(self, rows_mapping):
+        self._lock_rows(tuple(rows_mapping.keys()))
+        return query_multi_update(
+            self.cr,
+            self._table,
+            tuple(rows_mapping.values()),
+            EndpointRule._ordered_columns(),
+        )
+
+    def _create(self, rows_mapping):
+        return query_insert(self.cr, self._table, list(rows_mapping.values()))
+
     def get_rules_by_group(self, group):
-        for key, rule in self._mapping.items():
-            if rule.route_group == group:
-                yield (key, rule)
+        rules = self.get_rules(where=f"WHERE route_group='{group}'")
+        return rules
 
-    def add_or_update_rule(self, rule, force=False, init=False):
-        """Add or update an existing rule.
+    def update_rules(self, rules, init=False):
+        """Add or update rules.
 
-        :param rule: instance of EndpointRule
-        :param force: replace a rule forcedly
+        :param rule: list of instances of EndpointRule
+        :param force: replace rules forcedly
         :param init: given when adding rules for the first time
         """
-        key = rule.key
-        existing = self._mapping.get(key)
-        if not existing or force:
-            self._mapping[key] = rule
-            if not init:
-                self._refresh_update_required()
-            return True
-        if existing.endpoint_hash != rule.endpoint_hash:
-            # Override and set as to be updated
-            self._mapping[key] = rule
-            if not init:
-                self._refresh_update_required()
-            return True
+        keys = [x.key for x in rules]
+        existing = {x.key: x for x in self.get_rules(keys=keys)}
+        to_create = {}
+        to_update = {}
+        for rule in rules:
+            if rule.key in existing:
+                to_update[rule.key] = rule.to_row()
+            else:
+                to_create[rule.key] = rule.to_row()
+        res = False
+        if to_create:
+            self._create(to_create)
+            res = True
+        if to_update:
+            self._update(to_update)
+            res = True
+        return res
 
-    def drop_rule(self, key):
-        existing = self._mapping.pop(key, None)
-        if not existing:
-            return False
-        self._refresh_update_required()
+    def drop_rules(self, keys):
+        self.cr.execute("DELETE FROM endpoint_route WHERE key IN %s", (tuple(keys),))
         return True
 
-    def routing_update_required(self, http_id):
-        return http_id in self._http_ids_to_update
-
-    def _refresh_update_required(self):
-        for http_id in self._http_ids:
-            self._http_ids_to_update.add(http_id)
-
-    def reset_update_required(self, http_id):
-        self._http_ids_to_update.discard(http_id)
+    @classmethod
+    def registry_for(cls, cr):
+        return cls(cr)
 
     @classmethod
-    def registry_for(cls, dbname):
-        if dbname not in _REGISTRY_BY_DB:
-            _REGISTRY_BY_DB[dbname] = cls()
-        return _REGISTRY_BY_DB[dbname]
+    def wipe_registry_for(cls, cr):
+        cr.execute("TRUNCATE endpoint_route")
+
+    def make_rule(self, *a, **kw):
+        return EndpointRule(self.cr.dbname, *a, **kw)
 
     @classmethod
-    def wipe_registry_for(cls, dbname):
-        if dbname in _REGISTRY_BY_DB:
-            del _REGISTRY_BY_DB[dbname]
-
-    def ir_http_track(self, _id):
-        self._http_ids.add(_id)
-
-    def ir_http_seen(self, _id):
-        return _id in self._http_ids
-
-    @staticmethod
-    def make_rule(*a, **kw):
-        return EndpointRule(*a, **kw)
+    def _setup_table(cls, cr):
+        if not tools.sql.table_exists(cr, cls._table):
+            tools.sql.create_model_table(cr, cls._table, columns=cls._columns)
 
 
 class EndpointRule:
     """Hold information for a custom endpoint rule."""
 
-    __slots__ = ("key", "route", "endpoint", "routing", "endpoint_hash", "route_group")
+    __slots__ = (
+        "_dbname",
+        "key",
+        "route",
+        "opts",
+        "endpoint_hash",
+        "routing",
+        "route_group",
+    )
 
-    def __init__(self, key, route, endpoint, routing, endpoint_hash, route_group=None):
+    def __init__(
+        self, dbname, key, route, options, routing, endpoint_hash, route_group=None
+    ):
+        self._dbname = dbname
         self.key = key
         self.route = route
-        self.endpoint = endpoint
+        self.options = options
         self.routing = routing
         self.endpoint_hash = endpoint_hash
         self.route_group = route_group
 
     def __repr__(self):
-        return f"{self.key}: {self.route}" + (
-            f"[{self.route_group}]" if self.route_group else ""
+        # FIXME: use class name, remove key
+        return (
+            f"<{self.__class__.__name__}: {self.key}"
+            + (f" #{self.route_group}" if self.route_group else "nogroup")
+            + ">"
         )
+
+    @classmethod
+    def _ordered_columns(cls):
+        return [k for k in cls.__slots__ if not k.startswith("_")]
+
+    @property
+    def options(self):
+        return DotDict(self.opts)
+
+    @options.setter
+    def options(self, value):
+        """Validate options.
+
+        See `_get_handler` for more info.
+        """
+        assert "klass_dotted_path" in value["handler"]
+        assert "method_name" in value["handler"]
+        self.opts = value
+
+    @classmethod
+    def from_row(cls, dbname, row):
+        key, route, options, routing, endpoint_hash, route_group = row[1:]
+        # TODO: #jsonb-ref
+        options = json.loads(options)
+        routing = json.loads(routing)
+        init_args = (
+            dbname,
+            key,
+            route,
+            options,
+            routing,
+            endpoint_hash,
+            route_group,
+        )
+        return cls(*init_args)
+
+    def to_dict(self):
+        return {k: getattr(self, k) for k in self._ordered_columns()}
+
+    def to_row(self):
+        row = self.to_dict()
+        for k, v in row.items():
+            if isinstance(v, (dict, list)):
+                row[k] = json.dumps(v)
+        return row
+
+    @property
+    def endpoint(self):
+        """Lookup http.Endpoint to be used for the routing map."""
+        handler = self._get_handler()
+        pargs = self.handler_options.get("default_pargs", ())
+        kwargs = self.handler_options.get("default_kwargs", {})
+        method = partial(handler, *pargs, **kwargs)
+        return http.EndPoint(method, self.routing)
+
+    @property
+    def handler_options(self):
+        return self.options.handler
+
+    def _get_handler(self):
+        """Resolve endpoint handler lookup.
+
+        `options` must contain `handler` key to provide:
+
+            * the controller's klass via `klass_dotted_path`
+            * the controller's method to use via `method_name`
+
+        Lookup happens by:
+
+            1. importing the controller klass module
+            2. loading the klass
+            3. accessing the method via its name
+
+        If any of them is not found, a specific exception is raised.
+        """
+        mod_path, klass_name = self.handler_options.klass_dotted_path.rsplit(".", 1)
+        try:
+            mod = importlib.import_module(mod_path)
+        except ImportError as exc:
+            raise EndpointHandlerNotFound(f"Module `{mod_path}` not found") from exc
+        try:
+            klass = getattr(mod, klass_name)
+        except AttributeError as exc:
+            raise EndpointHandlerNotFound(f"Class `{klass_name}` not found") from exc
+        method_name = self.handler_options.method_name
+        try:
+            method = getattr(klass(), method_name)
+        except AttributeError as exc:
+            raise EndpointHandlerNotFound(
+                f"Method name `{method_name}` not found"
+            ) from exc
+        return method
