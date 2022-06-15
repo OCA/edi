@@ -1,14 +1,9 @@
 # Copyright 2021 Camptocamp SA
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-
-from functools import partial
-
 import werkzeug
 
 from odoo import _, api, exceptions, fields, models
-
-from ..controllers.main import EDIEndpointController
 
 
 class EDIEndpoint(models.Model):
@@ -18,7 +13,7 @@ class EDIEndpoint(models.Model):
     """
 
     _name = "edi.endpoint"
-    _inherit = "endpoint.mixin"
+    _inherit = ["endpoint.mixin"]
     _description = "EDI Endpoint"
 
     _endpoint_route_prefix = "/edi"
@@ -74,5 +69,11 @@ class EDIEndpoint(models.Model):
         self._check_endpoint_ready(request=True)
         return super()._handle_request(request)
 
-    def _default_endpoint_handler(self):
-        return partial(EDIEndpointController().auto_endpoint, self.route)
+    def _default_endpoint_options_handler(self):
+        return {
+            "klass_dotted_path": (
+                "odoo.addons.edi_endpoint_oca.controllers.main.EDIEndpointController"
+            ),
+            "method_name": "auto_endpoint",
+            "default_pargs": (self.route,),
+        }
