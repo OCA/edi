@@ -29,7 +29,7 @@
                     <p
                     >Some draft supplier invoices/refunds have been found for the supplier of the invoice you are importing; one of them may correspond to the invoice you are importing. You can either select an existing draft supplier invoice to update or create a new draft invoice.</p>
                 </div>
-                <group name="main" states="import,config,update,update-from-invoice">
+                <group name="main">
                     <field name="state" invisible="1" />
                     <field name="currency_id" invisible="1" />
                     <field
