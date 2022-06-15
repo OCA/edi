@@ -3,7 +3,6 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import textwrap
-from functools import partial
 
 import werkzeug
 
@@ -11,8 +10,6 @@ from odoo import _, api, exceptions, fields, http, models
 from odoo.tools import safe_eval
 
 from odoo.addons.rpc_helper.decorator import disable_rpc
-
-from ..controllers.main import EndpointController
 
 
 @disable_rpc()  # Block ALL RPC calls
@@ -134,8 +131,12 @@ class EndpointMixin(models.AbstractModel):
             ]
         )
 
-    def _default_endpoint_handler(self):
-        return partial(EndpointController().auto_endpoint, self.route)
+    def _default_endpoint_options_handler(self):
+        return {
+            "klass_dotted_path": "odoo.addons.endpoint.controllers.main.EndpointController",
+            "method_name": "auto_endpoint",
+            "default_pargs": (self.route,),
+        }
 
     def _validate_request(self, request):
         http_req = request.httprequest
