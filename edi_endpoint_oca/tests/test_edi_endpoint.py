@@ -48,3 +48,7 @@ class TestEndpoint(CommonEndpoint):
             backend.active = False
         backend.endpoint_ids.active = False
         backend.active = False
+
+    def test_sync(self):
+        # FIXME: just testing if the method here is available on GH
+        self.endpoint._handle_registry_sync()
