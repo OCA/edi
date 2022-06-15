@@ -4,9 +4,8 @@
 
 import logging
 
-from odoo import _, api, exceptions, fields, http, models
+from odoo import _, api, exceptions, fields, models
 
-# from odoo.addons.base_sparse_field.models.fields import Serialized
 from ..registry import EndpointRegistry
 
 ENDPOINT_ROUTE_CONSUMER_MODELS = {
@@ -47,8 +46,9 @@ class EndpointRouteHandler(models.AbstractModel):
     endpoint_hash = fields.Char(
         compute="_compute_endpoint_hash", help="Identify the route with its main params"
     )
-
     csrf = fields.Boolean(default=False)
+    # TODO: add flag to prevent route updates on save ->
+    # should be handled by specific actions + filter in a tree view + btn on form
 
     _sql_constraints = [
         (
@@ -209,6 +209,7 @@ class EndpointRouteHandler(models.AbstractModel):
                 self._unregister_controllers()
             return True
         if any([x in vals for x in self._controller_fields()]):
+            self._logger.info("Route modified for %s", self.ids)
             self._register_controllers()
             return True
         return False
@@ -217,26 +218,6 @@ class EndpointRouteHandler(models.AbstractModel):
         if not self._abstract:
             self._unregister_controllers()
         return super().unlink()
-
-    def _register_hook(self):
-        super()._register_hook()
-        if not self._abstract:
-            # Look explicitly for active records.
-            # Pass `init` to not set the registry as updated
-            # since this piece of code runs only when the model is loaded.
-            self.search([("active", "=", True)])._register_controllers(init=True)
-
-    def _register_controllers(self, init=False):
-        if self._abstract:
-            self._refresh_endpoint_data()
-        for rec in self:
-            rec._register_controller(init=init)
-
-    def _unregister_controllers(self):
-        if self._abstract:
-            self._refresh_endpoint_data()
-        for rec in self:
-            rec._unregister_controller()
 
     def _refresh_endpoint_data(self):
         """Enforce refresh of route computed fields.
@@ -248,39 +229,89 @@ class EndpointRouteHandler(models.AbstractModel):
 
     @property
     def _endpoint_registry(self):
-        return EndpointRegistry.registry_for(self.env.cr.dbname)
+        return EndpointRegistry.registry_for(self.env.cr)
 
-    def _register_controller(self, endpoint_handler=None, key=None, init=False):
-        rule = self._make_controller_rule(endpoint_handler=endpoint_handler, key=key)
-        self._endpoint_registry.add_or_update_rule(rule, init=init)
+    def _register_hook(self):
+        super()._register_hook()
+        if not self._abstract:
+            self._logger.info("Register controllers")
+            # Look explicitly for active records.
+            # Pass `init` to not set the registry as updated
+            # since this piece of code runs only when the model is loaded.
+            self.search([("active", "=", True)])._register_controllers(init=True)
+
+    def _register_controllers(self, init=False, options=None):
+        if self._abstract:
+            self._refresh_endpoint_data()
+
+        rules = [rec._make_controller_rule(options=options) for rec in self]
+        self._endpoint_registry.update_rules(rules, init=init)
+        if not init:
+            # When envs are already loaded we must signal changes
+            self._force_routing_map_refresh()
+        self._logger.debug(
+            "Registered controllers: %s", ", ".join(self.mapped("route"))
+        )
+
+    def _force_routing_map_refresh(self):
+        """Signal changes to make all routing maps refresh."""
+        self.env["ir.http"]._clear_routing_map()
+        self.env.registry.registry_invalidated = True
+        self.env.registry.signal_changes()
+
+    def _unregister_controllers(self):
+        if self._abstract:
+            self._refresh_endpoint_data()
+        keys = tuple([rec._endpoint_registry_unique_key() for rec in self])
+        self._endpoint_registry.drop_rules(keys)
+
+    def _endpoint_registry_unique_key(self):
+        return "{0._name}:{0.id}".format(self)
+
+    # TODO: consider if useful or not for single records
+    def _register_single_controller(self, options=None, key=None, init=False):
+        """Shortcut to register one single controller.
+
+        WARNING: as this triggers envs invalidation via `_force_routing_map_refresh`
+        do not abuse of this method to register more than one route.
+        """
+        rule = self._make_controller_rule(options=options, key=key)
+        self._endpoint_registry.update_rules([rule], init=init)
+        if not init:
+            self._force_routing_map_refresh()
         self._logger.debug(
             "Registered controller %s (auth: %s)", self.route, self.auth_type
         )
 
-    def _make_controller_rule(self, endpoint_handler=None, key=None):
+    def _make_controller_rule(self, options=None, key=None):
         key = key or self._endpoint_registry_unique_key()
         route, routing, endpoint_hash = self._get_routing_info()
-        endpoint_handler = endpoint_handler or self._default_endpoint_handler()
-        assert callable(endpoint_handler)
-        endpoint = http.EndPoint(endpoint_handler, routing)
-        rule = self._endpoint_registry.make_rule(
+        options = options or self._default_endpoint_options()
+        return self._endpoint_registry.make_rule(
             # fmt: off
             key,
             route,
-            endpoint,
+            options,
             routing,
             endpoint_hash,
             route_group=self.route_group
             # fmt: on
         )
-        return rule
 
-    def _default_endpoint_handler(self):
-        """Provide default endpoint handler.
+    def _default_endpoint_options(self):
+        options = {"handler": self._default_endpoint_options_handler()}
+        return options
 
-        :return: bound method of a controller (eg: MyController()._my_handler)
-        """
-        raise NotImplementedError("No default endpoint handler defined.")
+    def _default_endpoint_options_handler(self):
+        self._logger.warning(
+            "No specific endpoint handler options defined for: %s, falling back to default",
+            self._name,
+        )
+        base_path = "odoo.addons.endpoint_route_handler.controllers.main"
+        return {
+            "klass_dotted_path": f"{base_path}.EndpointNotFoundController",
+            "method_name": "auto_not_found",
+        }
 
     def _get_routing_info(self):
         route = self.route
@@ -292,10 +323,3 @@ class EndpointRouteHandler(models.AbstractModel):
             csrf=self.csrf,
         )
         return route, routing, self.endpoint_hash
-
-    def _endpoint_registry_unique_key(self):
-        return "{0._name}:{0.id}".format(self)
-
-    def _unregister_controller(self, key=None):
-        key = key or self._endpoint_registry_unique_key()
-        self._endpoint_registry.drop_rule(key)

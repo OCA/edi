@@ -36,9 +36,9 @@ class CommonEndpoint(SavepointCase):
 
     @contextlib.contextmanager
     def _get_mocked_request(
-        self, httprequest=None, extra_headers=None, request_attrs=None
+        self, env=None, httprequest=None, extra_headers=None, request_attrs=None
     ):
-        with MockRequest(self.env) as mocked_request:
+        with MockRequest(env or self.env) as mocked_request:
             mocked_request.httprequest = (
                 DotDict(httprequest) if httprequest else mocked_request.httprequest
             )

@@ -4,20 +4,11 @@
 
 import os
 import unittest
-from functools import partial
 
-from odoo.http import Controller
 from odoo.tests.common import HttpCase
 
 from ..registry import EndpointRegistry
-
-
-class TestController(Controller):
-    def _do_something1(self, foo=None):
-        return f"Got: {foo}"
-
-    def _do_something2(self, default_arg, foo=None):
-        return f"{default_arg} -> got: {foo}"
+from .fake_controllers import TestController
 
 
 @unittest.skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
@@ -27,11 +18,11 @@ class EndpointHttpCase(HttpCase):
         self.route_handler = self.env["endpoint.route.handler"]
 
     def tearDown(self):
-        EndpointRegistry.wipe_registry_for(self.env.cr.dbname)
+        EndpointRegistry.wipe_registry_for(self.env.cr)
         self.env["ir.http"]._clear_routing_map()
         super().tearDown()
 
-    def _make_new_route(self, register=True, **kw):
+    def _make_new_route(self, options=None, **kw):
         vals = {
             "name": "Test custom route",
             "request_method": "GET",
@@ -39,16 +30,17 @@ class EndpointHttpCase(HttpCase):
         vals.update(kw)
         new_route = self.route_handler.new(vals)
         new_route._refresh_endpoint_data()
+        new_route._register_controllers(options=options)
         return new_route
 
-    def _register_controller(self, route_obj, endpoint_handler=None):
-        endpoint_handler = endpoint_handler or TestController()._do_something1
-        route_obj._register_controller(endpoint_handler=endpoint_handler)
-
     def test_call(self):
-        new_route = self._make_new_route(route="/my/test/<string:foo>")
-        self._register_controller(new_route)
-
+        options = {
+            "handler": {
+                "klass_dotted_path": TestController._path,
+                "method_name": "_do_something1",
+            }
+        }
+        self._make_new_route(route="/my/test/<string:foo>", options=options)
         route = "/my/test/working"
         response = self.url_open(route)
         self.assertEqual(response.status_code, 401)
@@ -59,10 +51,14 @@ class EndpointHttpCase(HttpCase):
         self.assertEqual(response.content, b"Got: working")
 
     def test_call_advanced_endpoint_handler(self):
-        new_route = self._make_new_route(route="/my/advanced/test/<string:foo>")
-        endpoint_handler = partial(TestController()._do_something2, "DEFAULT")
-        self._register_controller(new_route, endpoint_handler=endpoint_handler)
-
+        options = {
+            "handler": {
+                "klass_dotted_path": TestController._path,
+                "method_name": "_do_something2",
+                "default_pargs": ("DEFAULT",),
+            }
+        }
+        self._make_new_route(route="/my/advanced/test/<string:foo>", options=options)
         route = "/my/advanced/test/working"
         response = self.url_open(route)
         self.assertEqual(response.status_code, 401)
