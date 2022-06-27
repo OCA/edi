@@ -36,6 +36,7 @@ setuptools.setup(
         'odoo14-addon-edi_sale_order_import',
         'odoo14-addon-edi_sale_order_import_ubl',
         'odoo14-addon-edi_sale_order_import_ubl_endpoint',
+        'odoo14-addon-edi_stock_oca',
         'odoo14-addon-edi_storage_oca',
         'odoo14-addon-edi_ubl_oca',
         'odoo14-addon-edi_webservice_oca',
