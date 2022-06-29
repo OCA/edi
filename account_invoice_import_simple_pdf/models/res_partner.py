@@ -82,6 +82,7 @@ class ResPartner(models.Model):
             ("space", "space"),
             ("dot", "dot"),
             ("comma", "comma"),
+            ("apostrophe", "apostrophe"),
         ],
         string="Thousand Separator",
         help="If empty, Odoo will use the thousand separator configured on "
@@ -315,6 +316,7 @@ class ResPartner(models.Model):
             "dot": ".",
             "comma": ",",
             "space": chr(32),  # regular space
+            "apostrophe": "'",
             "none": "",
         }
         char2separator = {val: key for key, val in separator2char.items()}
