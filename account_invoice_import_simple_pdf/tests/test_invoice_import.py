@@ -144,6 +144,11 @@ class TestInvoiceImport(TransactionCase):
                 "date_separator": "space",
                 "lang": "en",
             },
+            "july%s14th,%s2021": {
+                "date_format": "month-dd-y4",
+                "date_separator": "space",
+                "lang": "en",
+            },
         }
         for src, config in date_test.items():
             raw_text = "Debit 15.12\n%s\n12.99 Total" % src
@@ -178,6 +183,7 @@ class TestInvoiceImport(TransactionCase):
             "15 août 2021": "2021-08-15",
             "25 décembre 2021": "2021-12-25",  # use combining acute accent \u0301
             "15 août 2021": "2021-08-15",  # use combining circumflex accent \u0302
+            "1er février 2022": "2022-02-01",
         }
         self.date_field.write(
             {
