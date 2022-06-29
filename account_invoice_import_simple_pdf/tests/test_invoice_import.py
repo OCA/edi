@@ -272,6 +272,12 @@ class TestInvoiceImport(TransactionCase):
                 "result": 99459.32,
                 "currency": "EUR",
             },
+            "42'888.99 CHF": {
+                "decimal_separator": "dot",
+                "thousand_separator": "apostrophe",
+                "result": 42888.99,
+                "currency": "CHF",
+            },
             "14%s459 XPF": {
                 "decimal_separator": "comma",
                 "thousand_separator": "space",
