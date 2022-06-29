@@ -256,6 +256,9 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             pattern = self.regexp
         else:
             pattern = date_format
+            # Special case to support "1er Janvier 2022" or "July 5th, 2022"
+            if date_separator_char == chr(32) and "month" in pattern:
+                pattern = pattern.replace("dd", r"\d{1,2}\p{L}{0,2}")
             for src, dest in partner_config["date_format2regex"].items():
                 pattern = pattern.replace(src, dest)
 
