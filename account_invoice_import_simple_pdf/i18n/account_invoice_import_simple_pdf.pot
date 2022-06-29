@@ -841,6 +841,11 @@ msgid "You must upload a test PDF invoice."
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_thousand_separator__apostrophe
+msgid "apostrophe"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_decimal_separator__comma
 #: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_thousand_separator__comma
 msgid "comma"
