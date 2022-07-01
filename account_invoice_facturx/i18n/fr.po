@@ -8,19 +8,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 11:54+0000\n"
-"PO-Revision-Date: 2018-10-03 04:39+0000\n"
+"POT-Creation-Date: 2022-07-01 17:00+0000\n"
+"PO-Revision-Date: 2022-07-01 19:14+0200\n"
 "Last-Translator: William Olhasque <william.olhasque@scopea.fr>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:760
+#: code:addons/account_invoice_facturx/models/account_invoice.py:855
 #, python-format
 msgid "%s: %s %s dated %s"
 msgstr "%s : %s %s daté le %s"
@@ -41,20 +41,14 @@ msgid "Companies"
 msgstr "Sociétés"
 
 #. module: account_invoice_facturx
-#: model:ir.model,name:account_invoice_facturx.model_res_config_settings
-#, fuzzy
-msgid "Config Settings"
-msgstr "account.config.settings"
-
-#. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:50
+#: code:addons/account_invoice_facturx/models/account_invoice.py:53
 #, python-format
 msgid ""
 "Country is not set on partner '%s'. In the Factur-X standard, the country is "
 "required for buyer and seller."
 msgstr ""
 "Le pays n'est pas présent sur le partenaire %s .\n"
-"Le standard Factur-X, le pays est requis pour le vendeur et l'acheteur."
+"Dans le standard Factur-X, le pays est requis pour le vendeur et l'acheteur."
 
 #. module: account_invoice_facturx
 #: selection:res.company,facturx_level:0
@@ -64,46 +58,40 @@ msgstr "EN 16931 (Confort)"
 #. module: account_invoice_facturx
 #: selection:res.company,facturx_level:0
 msgid "Extended"
-msgstr ""
+msgstr "Étendu"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:759
+#: code:addons/account_invoice_facturx/models/account_invoice.py:854
 #, python-format
 msgid "Factur-X"
 msgstr "Factur-X"
 
 #. module: account_invoice_facturx
-#: selection:res.company,xml_format_in_pdf_invoice:0
-#, fuzzy
-msgid "Factur-X (CII)"
-msgstr "Factur-X"
-
-#. module: account_invoice_facturx
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_level
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings__facturx_level
+#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company_facturx_level
+#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings_facturx_level
 msgid "Factur-X Level"
 msgstr "Niveau Factur-X"
 
 #. module: account_invoice_facturx
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_logo
+#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company_facturx_logo
 msgid "Factur-X Logo"
 msgstr "Logo Factur-X"
 
 #. module: account_invoice_facturx
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_refund_type
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings__facturx_refund_type
+#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company_facturx_refund_type
+#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings_facturx_refund_type
 msgid "Factur-X Refund Type"
 msgstr "Type d'avoir Factur-X"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:756
+#: code:addons/account_invoice_facturx/models/account_invoice.py:851
 #: model:ir.model,name:account_invoice_facturx.model_account_invoice
 #, python-format
 msgid "Invoice"
 msgstr "Facture"
 
 #. module: account_invoice_facturx
-#: model:ir.model.fields,help:account_invoice_facturx.field_res_company__facturx_logo
+#: model:ir.model.fields,help:account_invoice_facturx.field_res_company_facturx_logo
 msgid "Logo to include in the visible part of Factur-X invoices"
 msgstr "Logo à inclure dans la partie visible des factures Factur-X"
 
@@ -113,50 +101,39 @@ msgid "Minimum"
 msgstr "Minimum"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:379
-#: code:addons/account_invoice_facturx/models/account_invoice.py:647
+#: code:addons/account_invoice_facturx/models/account_invoice.py:391
+#: code:addons/account_invoice_facturx/models/account_invoice.py:453
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr "Catégorie de taxe UNECE manquante sur la taxe %s"
+msgstr "Catégorie de taxe CEE-ONU  manquante sur la taxe %s"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:375
-#: code:addons/account_invoice_facturx/models/account_invoice.py:640
+#: code:addons/account_invoice_facturx/models/account_invoice.py:387
+#: code:addons/account_invoice_facturx/models/account_invoice.py:449
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr "Type de taxe UNECE manquante sur la taxe %s"
+msgstr "Type de taxe CEE-ONU  manquante sur la taxe %s"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:449
-#, fuzzy, python-format
+#: code:addons/account_invoice_facturx/models/account_invoice.py:542
+#, python-format
 msgid "Missing UNECE code on payment method '%s'"
-msgstr "Code UNECE manquant sur le type d'export de paiement %s"
+msgstr "Code CEE-ONU manquant sur le type d'export de paiement %s"
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:351
+#: code:addons/account_invoice_facturx/models/account_invoice.py:362
 #, python-format
 msgid "No specific payment term selected"
 msgstr "Aucun terme de paiement spécifique sélectionné"
 
 #. module: account_invoice_facturx
-#: selection:res.company,xml_format_in_pdf_invoice:0
-msgid "None"
-msgstr ""
-
-#. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:756
+#: code:addons/account_invoice_facturx/models/account_invoice.py:851
 #, python-format
 msgid "Refund"
 msgstr "Avoir"
 
 #. module: account_invoice_facturx
-#: model:ir.model,name:account_invoice_facturx.model_ir_actions_report
-#, fuzzy
-msgid "Report Action"
-msgstr "Rapport"
-
-#. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:557
+#: code:addons/account_invoice_facturx/models/account_invoice.py:662
 #, python-format
 msgid ""
 "The Factur-X standard specify that unit prices can't be negative. The unit "
@@ -168,13 +145,17 @@ msgstr ""
 "client pour cette ligne."
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:746
+#: code:addons/account_invoice_facturx/models/account_invoice.py:841
 #, python-format
 msgid ""
 "The factur-x.xml file is invalid against the official XML Schema definition. "
 "Here is the error which may give you an idea on the cause of the problem:\n"
 "%s"
 msgstr ""
+"Le fichier factur-x.xml est invalide vis-à-vis de la définition du Plan XML "
+"officiel. L'erreur ci-jointe devrait vous donner une idée de la raison de "
+"cet incident:\n"
+"%s"
 
 #. module: account_invoice_facturx
 #: selection:res.company,facturx_refund_type:0
@@ -187,13 +168,8 @@ msgid "Type 381 with positive amounts"
 msgstr "Type 381 avec montants positifs"
 
 #. module: account_invoice_facturx
-#: selection:res.company,xml_format_in_pdf_invoice:0
-msgid "Universal Business Language (UBL)"
-msgstr ""
-
-#. module: account_invoice_facturx
-#: model:ir.model.fields,help:account_invoice_facturx.field_res_company__facturx_level
-#: model:ir.model.fields,help:account_invoice_facturx.field_res_config_settings__facturx_level
+#: model:ir.model.fields,help:account_invoice_facturx.field_res_company_facturx_level
+#: model:ir.model.fields,help:account_invoice_facturx.field_res_config_settings_facturx_level
 msgid ""
 "Unless if you have a good reason, you should always select 'EN 16931 "
 "(Comfort)', which is the default value."
@@ -202,15 +178,28 @@ msgstr ""
 "qui est la valeur par défaut."
 
 #. module: account_invoice_facturx
-#: code:addons/account_invoice_facturx/models/account_invoice.py:294
+#: code:addons/account_invoice_facturx/models/account_invoice.py:305
 #, python-format
 msgid "Wire transfer"
 msgstr "Virement bancaire"
 
 #. module: account_invoice_facturx
-#: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__xml_format_in_pdf_invoice
-msgid "XML Format embedded in PDF invoice"
-msgstr ""
+#: model:ir.model,name:account_invoice_facturx.model_ir_actions_report
+msgid "ir.actions.report"
+msgstr "ir.actions.report"
+
+#. module: account_invoice_facturx
+#: model:ir.model,name:account_invoice_facturx.model_res_config_settings
+msgid "res.config.settings"
+msgstr "res.config.settings"
+
+#, fuzzy
+#~ msgid "Factur-X (CII)"
+#~ msgstr "Factur-X"
+
+#, fuzzy
+#~ msgid "Report Action"
+#~ msgstr "Rapport"
 
 #~ msgid "Factur-X Invoices"
 #~ msgstr "Factures Factur-X"
