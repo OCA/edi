@@ -51,6 +51,7 @@ class EDIBackend(models.Model):
     Usecase: the web service you send the file to processes it on the fly.
     """
     )
+    active = fields.Boolean(default=True)
 
     def _get_component(self, exchange_record, key):
         candidates = self._get_component_usage_candidates(exchange_record, key)
