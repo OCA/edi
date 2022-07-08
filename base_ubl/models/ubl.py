@@ -734,25 +734,24 @@ class BaseUbl(models.AbstractModel):
     @api.model
     def ubl_parse_delivery(self, delivery_node, ns):
         party_xpath = delivery_node.xpath("cac:DeliveryParty", namespaces=ns)
-        if party_xpath:
-            partner_dict = self.ubl_parse_party(party_xpath[0], ns)
+        delivery_location_address_xpath = delivery_node.xpath(
+            "cac:DeliveryLocation/cac:Address", namespaces=ns
+        )
+        delivery_address_xpath = delivery_node.xpath(
+            "cac:DeliveryAddress", namespaces=ns
+        )
+        if delivery_location_address_xpath:
+            partner_dict = self.ubl_parse_address(
+                delivery_location_address_xpath[0], ns
+            )
         else:
             partner_dict = {}
-        postal_xpath = delivery_node.xpath(
-            "cac:DeliveryParty/cac:PostalAddress", namespaces=ns
-        )
-        if not postal_xpath:
-            delivery_address_xpath = delivery_node.xpath(
-                "cac:DeliveryLocation/cac:Address", namespaces=ns
-            )
-            if not delivery_address_xpath:
-                delivery_address_xpath = delivery_node.xpath(
-                    "cac:DeliveryAddress", namespaces=ns
-                )
             if delivery_address_xpath:
                 partner_dict.update(
                     self.ubl_parse_address(delivery_address_xpath[0], ns)
                 )
+        if party_xpath:
+            partner_dict = {**self.ubl_parse_party(party_xpath[0], ns), **partner_dict}
         return partner_dict
 
     @api.model
