@@ -13,6 +13,12 @@
         <field name="arch" type="xml">
             <form string="EDI Backend">
                 <sheet>
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        attrs="{'invisible': [('active', '=', True)]}"
+                    />
                     <div class="oe_button_box" name="button_box">
                         <button
                             type="object"
@@ -39,6 +45,7 @@
                     </div>
                     <group>
                         <field name="output_sent_processed_auto" />
+                        <field name="active" invisible="1" />
                     </group>
                     <!-- Hook to add more config -->
                     <notebook />
@@ -56,6 +63,11 @@
                     name="group_by_backend_type_id"
                     string="Backend Type"
                     context="{'group_by': 'backend_type_id'}"
+                />
+                <filter
+                    string="Archived"
+                    name="Inactive"
+                    domain="[('active', '=', False)]"
                 />
             </search>
         </field>
