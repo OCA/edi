@@ -39,15 +39,14 @@ msgstr "<b>Notes dans le document importé:</b>"
 #, python-format
 msgid ""
 "<p>Odoo couldn't find any unit of measure corresponding to the following "
-"information extracted from the business document:</p><ul><li>UNECE code: "
-"%s</li><li>Name of the unit of measure: %s</li></ul><p>So the unit of "
-"measure 'Unit(s)' has been used. <em>You may have to change it "
-"manually.</em></p>"
+"information extracted from the business document:</p><ul><li>UNECE code: %s</"
+"li><li>Name of the unit of measure: %s</li></ul><p>So the unit of measure "
+"'Unit(s)' has been used. <em>You may have to change it manually.</em></p>"
 msgstr ""
 "<p>Odoo n'a pas trouvé d'unité de mesure correspondant aux informations "
 "suivantes extraites du document métier :</p><ul><li>Code UNECE : %s</"
-"li><li>Nom de l'unité de mesure : %s</li></ul><p>L'unité de mesure 'Unité(s)"
-"' a donc été utilisée. <em>Vous devrez peut-être la modifier "
+"li><li>Nom de l'unité de mesure : %s</li></ul><p>L'unité de mesure "
+"'Unité(s)' a donc été utilisée. <em>Vous devrez peut-être la modifier "
 "manuellement.</em></p>"
 
 #. module: base_business_document_import
@@ -98,6 +97,12 @@ msgid "ID"
 msgstr ""
 
 #. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+#, python-format
+msgid "ID {id} of '{model}' doesn't exist in Odoo."
+msgstr ""
+
+#. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import____last_update
 msgid "Last Modified on"
 msgstr "Dernière modification"
@@ -119,7 +124,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any %s corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any %s corresponding to the following information "
+"extracted from the business document:\n"
 "Name: %s\n"
 "VAT number: %s\n"
 "Reference: %s\n"
@@ -142,7 +148,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any account corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any account corresponding to the following information "
+"extracted from the business document:\n"
 "Account code: %s"
 msgstr ""
 "Odoo n'a pas trouvé de compte correspondant aux informations suivantes "
@@ -153,7 +160,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any analytic account corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any analytic account corresponding to the following "
+"information extracted from the business document:\n"
 "Analytic account code: %s"
 msgstr ""
 "Odoo n'a pas trouvé de compte analytique correspondant aux informations "
@@ -164,7 +172,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any journal corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any journal corresponding to the following information "
+"extracted from the business document:\n"
 "Journal code: %s"
 msgstr ""
 "Odoo n'a pas trouvé de journal correspondant aux informations suivantes "
@@ -175,7 +184,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any product corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any product corresponding to the following information "
+"extracted from the business document:\n"
 "Barcode: %s\n"
 "Product code: %s\n"
 "Supplier: %s\n"
@@ -190,7 +200,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any shipping partner corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any shipping partner corresponding to the following "
+"information extracted from the business document:\n"
 "Name: %s\n"
 "VAT number: %s\n"
 "Reference: %s\n"
@@ -221,7 +232,9 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any tax with 'Tax Application' = '%s' and 'Tax Included in Price' = '%s' which correspond to the following information extracted from the business document:\n"
+"Odoo couldn't find any tax with 'Tax Application' = '%s' and 'Tax Included "
+"in Price' = '%s' which correspond to the following information extracted "
+"from the business document:\n"
 "UNECE Tax Type code: %s\n"
 "UNECE Tax Category code: %s\n"
 "UNECE Due Date code: %s\n"
@@ -249,8 +262,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The %s has been identified by the domain name '%s' so please check carefully"
-" that the %s is correct."
+"The %s has been identified by the domain name '%s' so please check carefully "
+"that the %s is correct."
 msgstr ""
 "Le %s a été identifié par le nom de domaine '%s'. Veuillez vérifier "
 "soigneusement que le %s est correct."
@@ -259,13 +272,19 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The VAT number of the customer written in the business document (%s) doesn't"
-" match the VAT number of the company '%s' (%s) in which you are trying to "
+"The VAT number of the customer written in the business document (%s) doesn't "
+"match the VAT number of the company '%s' (%s) in which you are trying to "
 "import this document."
 msgstr ""
 "Le numéro de TVA du client indiqué dans le document commercial (%s) ne "
 "correspond pas au numéro de TVA de la société '%s' (%s) dans laquelle vous "
 "essayez d'importer ce document."
+
+#. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+#, python-format
+msgid "The XMLID '%s' doesn't exist in Odoo."
+msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -363,8 +382,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The bank account <b>IBAN %s</b> has been automatically added on the supplier"
-" <a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
+"The bank account <b>IBAN %s</b> has been automatically added on the supplier "
+"<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
 msgstr ""
 "Le compte bancaire <b>IBAN %s</b> a été automatiquement ajouté sur le "
 "fournisseur <a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
@@ -398,6 +417,14 @@ msgid ""
 msgstr ""
 "Le produit '%s' est utilisé sur plusieurs lignes importées, donc <b>les "
 "lignes n'ont pas été mises à jour</b>."
+
+#. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+#, python-format
+msgid ""
+"The record '{record}' is an instance of '{record_model}', not of "
+"'{target_model}'."
+msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
