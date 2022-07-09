@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "<p>Odoo n'a pas trouvé d'unité de mesure correspondant aux informations "
 "suivantes extraites du document métier :</p><ul><li>Code UNECE : %s</"
-"li><li>Nom de l'unité de mesure : %s</li></ul><p>L'unité de mesure 'Unité(s)"
-"' a donc été utilisée. <em>Vous devrez peut-être la modifier "
+"li><li>Nom de l'unité de mesure : %s</li></ul><p>L'unité de mesure "
+"'Unité(s)' a donc été utilisée. <em>Vous devrez peut-être la modifier "
 "manuellement.</em></p></em>"
 
 #. module: base_business_document_import
@@ -98,6 +98,12 @@ msgstr "IBAN <b>%s</b> n’est pas valide, il a donc été ignoré."
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__id
 msgid "ID"
 msgstr "ID"
+
+#. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+#, python-format
+msgid "ID {id} of '{model}' doesn't exist in Odoo."
+msgstr ""
 
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import____last_update
@@ -259,6 +265,12 @@ msgstr ""
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
+msgid "The XMLID '%s' doesn't exist in Odoo."
+msgstr ""
+
+#. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+#, python-format
 msgid ""
 "The analysis of the business document returned '%s' as country code. But "
 "there are no country with that code in Odoo."
@@ -388,6 +400,14 @@ msgid ""
 msgstr ""
 "Le produit '%s' est utilisé sur plusieurs lignes importées, donc <b>les "
 "lignes n'ont pas été mises à jour</b>."
+
+#. module: base_business_document_import
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+#, python-format
+msgid ""
+"The record '{record}' is an instance of '{record_model}', not of "
+"'{target_model}'."
+msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
