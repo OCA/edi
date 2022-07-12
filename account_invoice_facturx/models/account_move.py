@@ -235,16 +235,20 @@ class AccountMove(models.Model):
         self._cii_add_buyer_order_reference(trade_agreement, ns)
         self._cii_add_contract_reference(trade_agreement, ns)
 
+    def _get_buyer_order_ref(self):
+        return self.ref
+
     def _cii_add_buyer_order_reference(self, trade_agreement, ns):
         self.ensure_one()
-        if self.ref:
+        ref = self._get_buyer_order_ref()
+        if ref:
             buyer_order_ref = etree.SubElement(
                 trade_agreement, ns["ram"] + "BuyerOrderReferencedDocument"
             )
             buyer_order_id = etree.SubElement(
                 buyer_order_ref, ns["ram"] + "IssuerAssignedID"
             )
-            buyer_order_id.text = self.ref
+            buyer_order_id.text = ref
 
     def _cii_add_contract_reference(self, trade_agreement, ns):
         self.ensure_one()
