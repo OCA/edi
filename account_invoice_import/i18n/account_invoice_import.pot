@@ -78,6 +78,7 @@ msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__account_analytic_id
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
 msgid "Analytic Account"
 msgstr ""
 
@@ -211,6 +212,12 @@ msgid "Force Description"
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__journal_id
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Force Purchase Journal"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config__label
 msgid "Force supplier invoice line description"
 msgstr ""
@@ -240,6 +247,11 @@ msgstr ""
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_error
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config__journal_id
+msgid "If empty, Odoo will use the first purchase journal."
 msgstr ""
 
 #. module: account_invoice_import
@@ -551,6 +563,14 @@ msgid "Taxes"
 msgstr ""
 
 #. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The <b>tax amount</b> for tax %s has been <b>forced</b> to %s (amount "
+"computed by Odoo was: %s)."
+msgstr ""
+
+#. module: account_invoice_import
 #: code:addons/account_invoice_import/models/account_invoice_import_config.py:0
 #, python-format
 msgid ""
@@ -595,13 +615,6 @@ msgstr ""
 msgid ""
 "The supplier of the imported invoice (%s) is different from the supplier of "
 "the invoice to update (%s)."
-msgstr ""
-
-#. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#, python-format
-msgid ""
-"The tax amount has been forced to %s (amount computed by Odoo was: %s)."
 msgstr ""
 
 #. module: account_invoice_import
@@ -782,6 +795,22 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"You are importing a customer invoice/refund in journal '%s' which is not a "
+"sale journal."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"You are importing a vendor bill/refund in journal '%s' which is not a "
+"purchase journal."
 msgstr ""
 
 #. module: account_invoice_import
