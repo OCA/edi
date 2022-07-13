@@ -40,7 +40,7 @@ addon | version | maintainers | summary
 [edi_exchange_template](edi_exchange_template/) | 13.0.1.7.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
 [edi_purchase_oca](edi_purchase_oca/) | 13.0.1.0.0 |  | Define EDI Configuration for Purchase Orders
 [edi_stock_oca](edi_stock_oca/) | 13.0.1.0.1 |  | Define EDI Configuration for Stock
-[edi_storage](edi_storage/) | 13.0.1.8.1 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
+[edi_storage](edi_storage/) | 13.0.1.8.2 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_voxel](edi_voxel/) | 13.0.1.0.3 |  | Base module for connecting with Voxel
 [edi_voxel_account_invoice](edi_voxel_account_invoice/) | 13.0.1.1.3 |  | Sends account invoices to Voxel.
 [edi_voxel_sale_order_import](edi_voxel_sale_order_import/) | 13.0.1.0.5 |  | Import sale order from Voxel.
