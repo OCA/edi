@@ -8,6 +8,7 @@ import mock
 
 from odoo import fields
 from odoo.tests.common import SavepointCase
+from odoo.tools import file_open, float_is_zero
 
 
 class TestInvoiceImport(SavepointCase):
@@ -15,6 +16,7 @@ class TestInvoiceImport(SavepointCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.ref("base.main_company")
+        cls.company.invoice_import_email = "alexis.delattre@testme.com"
         cls.expense_account = cls.env["account.account"].create(
             {
                 "code": "612AII",
@@ -94,6 +96,35 @@ class TestInvoiceImport(SavepointCase):
                 "name": "Test Purchase Journal 2",
                 "sequence": 100,
                 "company_id": cls.company.id,
+            }
+        )
+        cls.partner_with_email = cls.env["res.partner"].create(
+            {
+                "is_company": True,
+                "name": "AgroMilk",
+                "email": "invoicing@agromilk.com",
+                "country_id": cls.env.ref("base.fr").id,
+            }
+        )
+        cls.partner_with_email_with_inv_config = cls.env["res.partner"].create(
+            {
+                "is_company": True,
+                "name": "Anevia",
+                "email": "invoicing@anevia.com",
+                "country_id": cls.env.ref("base.fr").id,
+                "invoice_import_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "Import config for Anevia",
+                            "company_id": cls.company.id,
+                            "invoice_line_method": "1line_static_product",
+                            "static_product_id": cls.product.id,
+                            "label": "Flamingo 220S",
+                        },
+                    )
+                ],
             }
         )
 
@@ -268,3 +299,79 @@ Nina
                 "No destination found for message_id ="
             )
             self.assertIn(expected_msg, watcher.output[0])
+
+    def prepare_email_with_attachment(self, sender_email):
+        file_name = "unknown_invoice.pdf"
+        file_path = "account_invoice_import/tests/pdf/%s" % file_name
+        with file_open(file_path, "rb") as f:
+            pdf_file = f.read()
+        msg_dict = {
+            "email_from": '"My supplier" <%s>' % sender_email,
+            "to": self.company.invoice_import_email,
+            "subject": "Invoice n°1242",
+            "body": "Please find enclosed your PDF invoice",
+            "message_id": "<v0214040cad98743824@foo.com>",
+            "attachments": [
+                self.env["mail.thread"]._Attachment(file_name, pdf_file, {})
+            ],
+        }
+        return msg_dict
+
+    def test_email_no_partner_match(self):
+        sender_email = "invoicing@unknownsupplier.com"
+        msg_dict = self.prepare_email_with_attachment(sender_email)
+        self.env["account.invoice.import"].message_new(msg_dict)
+        move = self.env["account.move"].search(
+            [
+                ("company_id", "=", self.company.id),
+                ("move_type", "=", "in_invoice"),
+                ("invoice_source_email", "like", sender_email),
+                ("state", "=", "draft"),
+            ]
+        )
+        self.assertEqual(len(move), 1)
+        self.assertFalse(move.partner_id)
+        self.assertTrue(self.company.currency_id.is_zero(move.amount_total))
+        self.assertFalse(move.invoice_date)
+
+    def test_email_partner_no_invoice_config(self):
+        sender_email = self.partner_with_email.email
+        msg_dict = self.prepare_email_with_attachment(sender_email)
+        self.env["account.invoice.import"].message_new(msg_dict)
+        move = self.env["account.move"].search(
+            [
+                ("company_id", "=", self.company.id),
+                ("move_type", "=", "in_invoice"),
+                ("partner_id", "=", self.partner_with_email.id),
+                ("state", "=", "draft"),
+            ]
+        )
+        self.assertEqual(len(move), 1)
+        self.assertTrue(self.company.currency_id.is_zero(move.amount_total))
+        self.assertFalse(move.invoice_date)
+        self.assertFalse(move.invoice_line_ids)
+
+    def test_email_partner_invoice_config(self):
+        partner = self.partner_with_email_with_inv_config
+        sender_email = partner.email
+        msg_dict = self.prepare_email_with_attachment(sender_email)
+        self.env["account.invoice.import"].message_new(msg_dict)
+        move = self.env["account.move"].search(
+            [
+                ("company_id", "=", self.company.id),
+                ("move_type", "=", "in_invoice"),
+                ("partner_id", "=", partner.id),
+                ("state", "=", "draft"),
+            ]
+        )
+        self.assertEqual(len(move), 1)
+        self.assertTrue(self.company.currency_id.is_zero(move.amount_total))
+        self.assertFalse(move.invoice_date)
+        self.assertEqual(len(move.invoice_line_ids), 1)
+        iline = move.invoice_line_ids
+        self.assertEqual(iline.product_id.id, self.product.id)
+        self.assertEqual(iline.quantity, 1)
+        self.assertEqual(iline.name, partner.invoice_import_ids[0].label)
+        price_prec = self.env["decimal.precision"].precision_get("Product Price")
+        self.assertTrue(float_is_zero(iline.price_unit, precision_digits=price_prec))
+        self.assertTrue(self.company.currency_id.is_zero(iline.price_subtotal))
