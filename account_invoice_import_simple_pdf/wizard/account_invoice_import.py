@@ -327,7 +327,7 @@ class AccountInvoiceImport(models.TransientModel):
         raw_text_dict = self.simple_pdf_text_extraction(file_data, test_info)
         partner_id = self.simple_pdf_match_partner(raw_text_dict["all_no_space"])
         if not partner_id:
-            raise UserError(_("Simple PDF Import: count not find Vendor."))
+            raise UserError(_("Simple PDF import: could not find vendor."))
         partner = rpo.browse(partner_id)
         raw_text = (
             partner.simple_pdf_pages == "first"
