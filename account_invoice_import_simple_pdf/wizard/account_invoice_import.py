@@ -37,7 +37,10 @@ class AccountInvoiceImport(models.TransientModel):
         """This method must be inherited by additional modules with
         the same kind of logic as the account_bank_statement_import_*
         modules"""
-        return self.simple_pdf_parse_invoice(file_data)
+        res = super().fallback_parse_pdf_invoice(file_data)
+        if not res:
+            res = self.simple_pdf_parse_invoice(file_data)
+        return res
 
     @api.model
     def _simple_pdf_text_extraction_pymupdf(self, fileobj, test_info):
@@ -327,7 +330,8 @@ class AccountInvoiceImport(models.TransientModel):
         raw_text_dict = self.simple_pdf_text_extraction(file_data, test_info)
         partner_id = self.simple_pdf_match_partner(raw_text_dict["all_no_space"])
         if not partner_id:
-            raise UserError(_("Simple PDF import: could not find vendor."))
+            parsed_inv = {"chatter_msg": ["Simple PDF Import: count not find Vendor."]}
+            return parsed_inv
         partner = rpo.browse(partner_id)
         raw_text = (
             partner.simple_pdf_pages == "first"
