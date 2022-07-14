@@ -342,7 +342,7 @@ class BusinessDocumentImport(models.AbstractModel):
             return partner
 
         if not raise_exception:
-            return
+            return None
         raise self.user_error_wrap(
             "_match_partner",
             partner_dict,
