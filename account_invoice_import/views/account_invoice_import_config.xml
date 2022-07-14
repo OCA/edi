@@ -47,7 +47,10 @@
                             name="label"
                             attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_no_product', '1line_static_product'))]}"
                         />
-                        <field name="journal_id" />
+                        <field
+                            name="journal_id"
+                            context="{'default_type': 'purchase', 'default_company_id': company_id}"
+                        />
                     </group>
                 </sheet>
             </form>
