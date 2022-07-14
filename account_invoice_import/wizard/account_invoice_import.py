@@ -4,9 +4,11 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import base64
+import html
 import logging
 import mimetypes
 from datetime import datetime
+from email.utils import parseaddr
 
 from lxml import etree
 
@@ -94,12 +96,7 @@ class AccountInvoiceImport(models.TransientModel):
                 return parsed_inv
         parsed_inv = self.fallback_parse_pdf_invoice(file_data)
         if not parsed_inv:
-            raise UserError(
-                _(
-                    "This type of PDF invoice is not supported. Did you install "
-                    "the module to support this type of file?"
-                )
-            )
+            parsed_inv = {}
         return parsed_inv
 
     def fallback_parse_pdf_invoice(self, file_data):
@@ -192,25 +189,18 @@ class AccountInvoiceImport(models.TransientModel):
         # create_invoice() but only with 'nline_*' invoice import methods.
 
     @api.model
-    def _prepare_create_invoice_vals(self, parsed_inv, import_config):
-        assert parsed_inv.get("pre-processed"), "pre-processing not done"
-        assert import_config
-        amo = self.env["account.move"]
-        company = (
-            self.env["res.company"].browse(self.env.context.get("force_company"))
-            or self.env.company
-        )
-        if parsed_inv["type"] in ("out_invoice", "out_refund"):
-            partner_type = "customer"
-        else:
-            partner_type = "supplier"
-        partner = self._match_partner(
-            parsed_inv["partner"], parsed_inv["chatter_msg"], partner_type=partner_type
-        )
-        partner = partner.commercial_partner_id
-        currency = self._match_currency(
-            parsed_inv.get("currency"), parsed_inv["chatter_msg"]
-        )
+    def _prepare_create_invoice_no_partner(self, parsed_inv, import_config, vals):
+        if parsed_inv.get("partner") and parsed_inv["partner"].get("email"):
+            source_email = parsed_inv["partner"]["email"]
+            if parsed_inv["partner"].get("name"):
+                source_email = "%s <%s>" % (
+                    parsed_inv["partner"]["name"],
+                    source_email,
+                )
+            vals["invoice_source_email"] = source_email
+
+    @api.model
+    def _prepare_create_invoice_journal(self, parsed_inv, import_config, company, vals):
         if parsed_inv["type"] in ("in_invoice", "in_refund") and import_config.get(
             "journal"
         ):
@@ -244,23 +234,54 @@ class AccountInvoiceImport(models.TransientModel):
             journal_id = journal.id
         else:
             journal_id = (
-                amo.with_context(
+                self.env["account.move"]
+                .with_context(
                     default_move_type=parsed_inv["type"], company_id=company.id
                 )
                 ._get_default_journal()
                 .id
             )
+        vals["journal_id"] = journal_id
+
+    @api.model
+    def _prepare_create_invoice_vals(self, parsed_inv, import_config):
+        assert parsed_inv.get("pre-processed"), "pre-processing not done"
+        amo = self.env["account.move"]
+        company = (
+            self.env["res.company"].browse(self.env.context.get("force_company"))
+            or self.env.company
+        )
         vals = {
-            "partner_id": partner.id,
-            "currency_id": currency.id,
             "move_type": parsed_inv["type"],
             "company_id": company.id,
             "invoice_origin": parsed_inv.get("origin"),
             "ref": parsed_inv.get("invoice_number"),
             "invoice_date": parsed_inv.get("date"),
-            "journal_id": journal_id,
-            "invoice_line_ids": [],
         }
+        if parsed_inv["type"] in ("out_invoice", "out_refund"):
+            partner_type = "customer"
+        else:
+            partner_type = "supplier"
+        partner = None
+        if parsed_inv.get("partner"):
+            partner = self._match_partner(
+                parsed_inv["partner"],
+                parsed_inv["chatter_msg"],
+                partner_type=partner_type,
+                raise_exception=False,
+            )
+        if not partner:
+            self._prepare_create_invoice_no_partner(parsed_inv, import_config, vals)
+            return vals
+        partner = partner.commercial_partner_id
+        vals["partner_id"] = partner.id
+        if parsed_inv.get("currency"):
+            currency = self._match_currency(
+                parsed_inv.get("currency"), parsed_inv["chatter_msg"]
+            )
+            vals["currency_id"] = currency.id
+        self._prepare_create_invoice_journal(parsed_inv, import_config, company, vals)
+        vals["invoice_line_ids"] = []
         vals = amo.play_onchanges(vals, ["partner_id"])
         # Force due date of the invoice
         if parsed_inv.get("date_due"):
@@ -281,10 +302,27 @@ class AccountInvoiceImport(models.TransientModel):
                 vals["partner_bank_id"] = partner_bank.id
         # get invoice line vals
         vals["invoice_line_ids"] = []
-        if import_config["invoice_line_method"].startswith("1line"):
-            self._prepare_line_vals_1line(partner, vals, parsed_inv, import_config)
-        elif import_config["invoice_line_method"].startswith("nline"):
-            self._prepare_line_vals_nline(partner, vals, parsed_inv, import_config)
+        if import_config.get("invoice_line_method"):
+            if import_config["invoice_line_method"].startswith("1line"):
+                self._prepare_line_vals_1line(partner, vals, parsed_inv, import_config)
+            elif import_config["invoice_line_method"].startswith("nline"):
+                if parsed_inv.get("lines"):
+                    self._prepare_line_vals_nline(
+                        partner, vals, parsed_inv, import_config
+                    )
+                else:
+                    parsed_inv["chatter_msg"].append(
+                        _(
+                            "You have selected a Multi Line method for this import "
+                            "but Odoo could not extract/read information about the "
+                            "lines of the invoice. You should update the Invoice Import "
+                            "Configuration of "
+                            "<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a> "
+                            "to set a Single Line method."
+                        )
+                        % (partner.id, partner.display_name)
+                    )
+
         # Write analytic account + fix syntax for taxes
         analytic_account = import_config.get("account_analytic", False)
         if analytic_account:
@@ -320,18 +358,11 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def _prepare_line_vals_nline(self, partner, vals, parsed_inv, import_config):
+        assert parsed_inv.get("lines")
         line_model = self.env["account.move.line"]
         start_end_dates_installed = hasattr(line_model, "start_date") and hasattr(
             line_model, "end_date"
         )
-        if not parsed_inv.get("lines"):
-            raise UserError(
-                _(
-                    "You have selected a Multi Line method for this import "
-                    "but Odoo could not extract/read any XML file inside "
-                    "the PDF invoice."
-                )
-            )
         if import_config["invoice_line_method"] == "nline_no_product":
             static_vals = {"account_id": import_config["account"].id}
         elif import_config["invoice_line_method"] == "nline_static_product":
@@ -427,7 +458,7 @@ class AccountInvoiceImport(models.TransientModel):
         return False
 
     @api.model
-    def parse_invoice(self, invoice_file_b64, invoice_filename):
+    def parse_invoice(self, invoice_file_b64, invoice_filename, email_from=None):
         assert invoice_file_b64, "No invoice file"
         assert isinstance(invoice_file_b64, bytes)
         logger.info("Starting to import invoice %s", invoice_filename)
@@ -459,6 +490,14 @@ class AccountInvoiceImport(models.TransientModel):
         if "attachments" not in parsed_inv:
             parsed_inv["attachments"] = {}
         parsed_inv["attachments"][invoice_filename] = invoice_file_b64
+        if email_from:
+            if "partner" not in parsed_inv:
+                parsed_inv["partner"] = {}
+            partner_name, email = parseaddr(email_from)
+            if not parsed_inv["partner"].get("email"):
+                parsed_inv["partner"]["email"] = email
+            if partner_name and not parsed_inv["partner"].get("name"):
+                parsed_inv["partner"]["name"] = partner_name
         # pre_process_parsed_inv() will be called again a second time,
         # but it's OK
         pp_parsed_inv = self.pre_process_parsed_inv(parsed_inv)
@@ -479,6 +518,10 @@ class AccountInvoiceImport(models.TransientModel):
         prec_uom = self.env["decimal.precision"].precision_get(
             "Product Unit of Measure"
         )
+        if "amount_total" not in parsed_inv:
+            # Designed to allow the import of an empty invoice with
+            # 1 invoice line at 0 that has the right account/product/analytic
+            parsed_inv["amount_total"] = 0
         if "amount_tax" in parsed_inv and "amount_untaxed" not in parsed_inv:
             parsed_inv["amount_untaxed"] = (
                 parsed_inv["amount_total"] - parsed_inv["amount_tax"]
@@ -492,6 +535,7 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv["type"] = "in_invoice"  # default value
         if (
             parsed_inv["type"] == "in_invoice"
+            and "amount_total" in parsed_inv
             and float_compare(
                 parsed_inv["amount_total"],
                 0,
@@ -724,87 +768,95 @@ class AccountInvoiceImport(models.TransientModel):
         company_id = self.env.context.get("force_company") or self.env.company.id
         parsed_inv = self.get_parsed_invoice()
         if not self.partner_id:
-            try:
-                partner = self._match_partner(
-                    parsed_inv["partner"], parsed_inv["chatter_msg"]
-                )
-            except UserError as e:
-                return self.goto_partner_not_found(parsed_inv, e)
+            if parsed_inv.get("partner"):
+                try:
+                    partner = self._match_partner(
+                        parsed_inv["partner"], parsed_inv["chatter_msg"]
+                    )
+                except UserError as e:
+                    return self.goto_partner_not_found(parsed_inv, e)
+            else:
+                partner = False
         else:
             partner = self.partner_id
-        partner = partner.commercial_partner_id
-        currency = self._match_currency(
-            parsed_inv.get("currency"), parsed_inv["chatter_msg"]
-        )
-        parsed_inv["partner"]["recordset"] = partner
-        parsed_inv["currency"]["recordset"] = currency
-        wiz_vals = {
-            "partner_id": partner.id,
-            "invoice_type": parsed_inv["type"],
-            "currency_id": currency.id,
-            "amount_untaxed": parsed_inv["amount_untaxed"],
-            "amount_total": parsed_inv["amount_total"],
-        }
-
-        existing_inv = self.invoice_already_exists(partner, parsed_inv)
-        if existing_inv:
-            raise UserError(
-                _(
-                    "This invoice already exists in Odoo. It's "
-                    "Supplier Invoice Number is '%s' and it's Odoo number "
-                    "is '%s'"
-                )
-                % (parsed_inv.get("invoice_number"), existing_inv.name)
+        if partner:
+            partner = partner.commercial_partner_id
+            currency = self._match_currency(
+                parsed_inv.get("currency"), parsed_inv["chatter_msg"]
             )
+            parsed_inv["partner"]["recordset"] = partner
+            parsed_inv["currency"]["recordset"] = currency
+            wiz_vals = {
+                "partner_id": partner.id,
+                "invoice_type": parsed_inv["type"],
+                "currency_id": currency.id,
+                "amount_untaxed": parsed_inv["amount_untaxed"],
+                "amount_total": parsed_inv["amount_total"],
+            }
 
-        if self.import_config_id:  # button called from 'config' step
-            wiz_vals["import_config_id"] = self.import_config_id.id
-            import_config = self.import_config_id.convert_to_import_config()
-        else:  # button called from 'import' step
-            import_configs = aiico.search(
-                [("partner_id", "=", partner.id), ("company_id", "=", company_id)]
-            )
-            if not import_configs:
+            existing_inv = self.invoice_already_exists(partner, parsed_inv)
+            if existing_inv:
                 raise UserError(
-                    _("Missing Invoice Import Configuration on partner '%s'.")
-                    % partner.display_name
-                )
-            elif len(import_configs) == 1:
-                wiz_vals["import_config_id"] = import_configs.id
-                import_config = import_configs.convert_to_import_config()
-            else:
-                logger.info(
-                    "There are %d invoice import configs for partner %s",
-                    len(import_configs),
-                    partner.display_name,
+                    _(
+                        "This invoice already exists in Odoo. It's "
+                        "Supplier Invoice Number is '%s' and it's Odoo number "
+                        "is '%s'"
+                    )
+                    % (parsed_inv.get("invoice_number"), existing_inv.name)
                 )
 
-        if not wiz_vals.get("import_config_id"):
-            wiz_vals["state"] = "config"
-            xmlid = "account_invoice_import.account_invoice_import_action"
-            action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
-            action["res_id"] = self.id
-        else:
-            draft_same_supplier_invs = amo.search(
-                [
-                    ("commercial_partner_id", "=", partner.id),
-                    ("move_type", "=", parsed_inv["type"]),
-                    ("state", "=", "draft"),
-                ]
-            )
-            logger.debug("draft_same_supplier_invs=%s", draft_same_supplier_invs)
-            if draft_same_supplier_invs:
-                wiz_vals["state"] = "update"
-                if len(draft_same_supplier_invs) == 1:
-                    wiz_vals["invoice_id"] = draft_same_supplier_invs[0].id
+            if self.import_config_id:  # button called from 'config' step
+                wiz_vals["import_config_id"] = self.import_config_id.id
+                import_config = self.import_config_id.convert_to_import_config()
+            else:  # button called from 'import' step
+                import_configs = aiico.search(
+                    [("partner_id", "=", partner.id), ("company_id", "=", company_id)]
+                )
+                if not import_configs:
+                    raise UserError(
+                        _("Missing Invoice Import Configuration on partner '%s'.")
+                        % partner.display_name
+                    )
+                elif len(import_configs) == 1:
+                    wiz_vals["import_config_id"] = import_configs.id
+                    import_config = import_configs.convert_to_import_config()
+                else:
+                    logger.info(
+                        "There are %d invoice import configs for partner %s",
+                        len(import_configs),
+                        partner.display_name,
+                    )
+
+            if not wiz_vals.get("import_config_id"):
+                wiz_vals["state"] = "config"
                 xmlid = "account_invoice_import.account_invoice_import_action"
                 action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
                 action["res_id"] = self.id
             else:
-                action = self.create_invoice_action(
-                    parsed_inv, import_config, _("Import Vendor Bill wizard")
+                draft_same_supplier_invs = amo.search(
+                    [
+                        ("commercial_partner_id", "=", partner.id),
+                        ("move_type", "=", parsed_inv["type"]),
+                        ("state", "=", "draft"),
+                    ]
                 )
-        self.write(wiz_vals)
+                logger.debug("draft_same_supplier_invs=%s", draft_same_supplier_invs)
+                if draft_same_supplier_invs:
+                    wiz_vals["state"] = "update"
+                    if len(draft_same_supplier_invs) == 1:
+                        wiz_vals["invoice_id"] = draft_same_supplier_invs[0].id
+                    xmlid = "account_invoice_import.account_invoice_import_action"
+                    action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+                    action["res_id"] = self.id
+                else:
+                    action = self.create_invoice_action(
+                        parsed_inv, import_config, _("Import Vendor Bill wizard")
+                    )
+            self.write(wiz_vals)
+        else:
+            action = self.create_invoice_action(
+                parsed_inv, {}, _("Import Vendor Bill wizard")
+            )
         return action
 
     def create_invoice_action_button(self):
@@ -854,7 +906,12 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def create_invoice_webservice(
-        self, invoice_file_b64, invoice_filename, origin, company_id=None
+        self,
+        invoice_file_b64,
+        invoice_filename,
+        origin,
+        company_id=None,
+        email_from=None,
     ):
         # for invoice_file_b64, we accept it as bytes AND str
         # to avoid "Object of type bytes is not JSON serializable"
@@ -871,42 +928,51 @@ class AccountInvoiceImport(models.TransientModel):
             invoice_filename,
             company_id,
         )
-        parsed_inv = self.parse_invoice(invoice_file_b64, invoice_filename)
-        partner = self._match_partner(parsed_inv["partner"], parsed_inv["chatter_msg"])
-        partner = partner.commercial_partner_id
-        existing_inv = self.invoice_already_exists(partner, parsed_inv)
-        if existing_inv:
-            logger.warning(
-                "This supplier invoice already exists "
-                "in Odoo (ID %d number %s supplier number %s)",
-                existing_inv.id,
-                existing_inv.name,
-                parsed_inv.get("invoice_number"),
-            )
-            return False
-        import_configs = aiico.search(
-            [("partner_id", "=", partner.id), ("company_id", "=", company_id)]
+        parsed_inv = self.parse_invoice(
+            invoice_file_b64, invoice_filename, email_from=email_from
         )
-        if not import_configs:
-            logger.warning(
-                "Missing invoice import configuration "
-                "for partner '%s' in company ID %d.",
-                partner.display_name,
-                company_id,
+        partner = self._match_partner(
+            parsed_inv["partner"], parsed_inv["chatter_msg"], raise_exception=False
+        )
+        if partner:
+            partner = partner.commercial_partner_id
+            # To avoid a second full _match_partner() inside create_invoice()
+            parsed_inv["partner"]["recordset"] = partner
+            existing_inv = self.invoice_already_exists(partner, parsed_inv)
+            if existing_inv:
+                logger.warning(
+                    "This supplier invoice already exists "
+                    "in Odoo (ID %d number %s supplier number %s)",
+                    existing_inv.id,
+                    existing_inv.name,
+                    parsed_inv.get("invoice_number"),
+                )
+                return False
+            import_configs = aiico.search(
+                [("partner_id", "=", partner.id), ("company_id", "=", company_id)]
             )
-            return False
-        elif len(import_configs) == 1:
-            import_config = import_configs.convert_to_import_config()
+            if not import_configs:
+                logger.warning(
+                    "Missing invoice import configuration "
+                    "for partner '%s' in company ID %d.",
+                    partner.display_name,
+                    company_id,
+                )
+                import_config = {}
+            elif len(import_configs) == 1:
+                import_config = import_configs.convert_to_import_config()
+            else:
+                logger.info(
+                    "There are %d invoice import configs for partner %s "
+                    "in company ID %d. Using the first one '%s'",
+                    len(import_configs),
+                    partner.display_name,
+                    company_id,
+                    import_configs[0].name,
+                )
+                import_config = import_configs[0].convert_to_import_config()
         else:
-            logger.info(
-                "There are %d invoice import configs for partner %s in company ID %d. "
-                "Using the first one '%s''",
-                len(import_configs),
-                partner.display_name,
-                company_id,
-                import_configs[0].name,
-            )
-            import_config = import_configs[0].convert_to_import_config()
+            import_config = {}
         invoice = self.create_invoice(parsed_inv, import_config, origin)
         return invoice.id
 
@@ -958,6 +1024,20 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def post_process_invoice(self, parsed_inv, invoice, import_config):
         if parsed_inv.get("type") in ("out_invoice", "out_refund"):
+            return
+        if not import_config:
+            if invoice.commercial_partner_id:
+                invoice.message_post(
+                    body=_(
+                        "<b>Missing Invoice Import Configuration</b> on partner "
+                        "<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>: "
+                        "the imported invoice is incomplete."
+                    )
+                    % (
+                        invoice.commercial_partner_id.id,
+                        invoice.commercial_partner_id.display_name,
+                    )
+                )
             return
         inv_cur = invoice.currency_id
         prec = inv_cur.rounding
@@ -1444,9 +1524,9 @@ class AccountInvoiceImport(models.TransientModel):
                     attach.fname,
                 )
                 origin = _("email sent by <b>%s</b> on %s with subject <i>%s</i>") % (
-                    msg_dict.get("email_from"),
+                    msg_dict.get("email_from") and html.escape(msg_dict["email_from"]),
                     msg_dict.get("date"),
-                    msg_dict.get("subject"),
+                    msg_dict.get("subject") and html.escape(msg_dict["subject"]),
                 )
                 try:
                     invoice_id = self.create_invoice_webservice(
@@ -1454,6 +1534,7 @@ class AccountInvoiceImport(models.TransientModel):
                         attach.fname,
                         origin,
                         company_id=company_id,
+                        email_from=msg_dict.get("email_from"),
                     )
                     logger.info(
                         "Invoice ID %d created from email attachment %s.",
