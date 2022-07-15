@@ -116,6 +116,8 @@ msgid "Use this to classify routes together"
 msgstr ""
 
 #. module: endpoint_route_handler
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_endpoint_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_mixin_endpoint_route_unique
 #: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_endpoint_route_unique
 msgid "You can register an endpoint route only once."
 msgstr ""
