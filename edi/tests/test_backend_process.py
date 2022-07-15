@@ -8,6 +8,7 @@ from freezegun import freeze_time
 
 from odoo import fields
 from odoo.exceptions import UserError
+from odoo.tools import mute_logger
 
 from .common import EDIBackendCommonComponentRegistryTestCase
 from .fake_components import FakeInputProcess
@@ -62,6 +63,7 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             ],
         )
 
+    @mute_logger("odoo.models.unlink")
     def test_process_no_file_record(self):
         self.record.write({"edi_exchange_state": "input_received"})
         self.record.exchange_file = False
