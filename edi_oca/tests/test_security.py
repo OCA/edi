@@ -5,6 +5,7 @@
 from odoo_test_helper import FakeModelLoader
 
 from odoo.exceptions import AccessError
+from odoo.tools import mute_logger
 
 from .common import EDIBackendCommonTestCase
 
@@ -81,21 +82,25 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         exchange_record = self.create_record()
         self.assertTrue(exchange_record)
 
+    @mute_logger("odoo.addons.base.models.ir_rule")
     def test_rule_no_create(self):
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
         with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
             self.create_record(self.user)
 
+    @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_create(self):
         with self.assertRaisesRegex(AccessError, "You are not allowed to modify"):
             self.create_record(self.user)
 
+    @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_read(self):
         exchange_record = self.create_record()
         with self.assertRaisesRegex(AccessError, "You are not allowed to access"):
             exchange_record.with_user(self.user).read()
 
+    @mute_logger("odoo.addons.base.models.ir_rule")
     def test_rule_no_read(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
@@ -104,16 +109,19 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
             exchange_record.with_user(self.user).read()
 
+    @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_unlink(self):
         exchange_record = self.create_record()
         with self.assertRaisesRegex(AccessError, "You are not allowed to modify"):
             exchange_record.with_user(self.user).unlink()
 
+    @mute_logger("odoo.models.unlink")
     def test_group_unlink(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.assertTrue(exchange_record.with_user(self.user).unlink())
 
+    @mute_logger("odoo.addons.base.models.ir_rule")
     def test_rule_no_unlink(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
@@ -151,6 +159,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
             .search_count([("id", "=", exchange_record.id)]),
         )
 
+    @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_write(self):
         exchange_record = self.create_record()
         with self.assertRaisesRegex(AccessError, "You are not allowed to modify"):
@@ -162,6 +171,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         exchange_record.with_user(self.user).write({"external_identifier": "1234"})
         self.assertEqual(exchange_record.external_identifier, "1234")
 
+    @mute_logger("odoo.addons.base.models.ir_rule")
     def test_rule_no_write(self):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
