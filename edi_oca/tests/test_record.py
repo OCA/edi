@@ -5,6 +5,7 @@
 from freezegun import freeze_time
 
 from odoo import exceptions, fields
+from odoo.tools import mute_logger
 
 from odoo.addons.queue_job.delay import DelayableRecordset
 
@@ -57,6 +58,7 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
                 fields.Datetime.to_string(record.exchanged_on), "2020-10-21 10:00:00"
             )
 
+    @mute_logger("odoo.models.unlink")
     def test_record_relation(self):
         # create new one to delete it later
         partner = self.partner.copy({"name": "Test EDI record rel"})
@@ -122,6 +124,9 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.exchange_type_in.job_channel_id = channel
         # re-enable job delayed feature
         delayed = record.with_context(test_queue_job_no_delay=False).with_delay()
+        # Silent useless warning
+        # `Delayable Delayable(edi.exchange.record*) was prepared but never delayed`
+        delayed.delayable._generated_job = object()
         self.assertTrue(isinstance(delayed, DelayableRecordset))
         self.assertEqual(delayed.recordset, record)
         self.assertEqual(delayed.delayable.channel, "root.parent_test_chan.test_chan")
