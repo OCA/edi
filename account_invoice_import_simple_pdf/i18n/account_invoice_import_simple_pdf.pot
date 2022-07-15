@@ -576,7 +576,7 @@ msgstr ""
 #. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
 #, python-format
-msgid "Simple PDF Import: count not find Vendor."
+msgid "Simple PDF import: could not find vendor."
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
