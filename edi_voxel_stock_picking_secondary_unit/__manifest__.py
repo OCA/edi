@@ -10,5 +10,9 @@
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "maintainers": ["ernestotejeda"],
     "license": "AGPL-3",
-    "depends": ["sale_stock_secondary_unit", "edi_voxel_stock_picking"],
+    "depends": [
+        "sale_stock_secondary_unit",
+        "edi_voxel_secondary_unit",
+        "edi_voxel_stock_picking",
+    ],
 }
