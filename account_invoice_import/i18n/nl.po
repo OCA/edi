@@ -81,6 +81,7 @@ msgstr "Aanpassing op %s"
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__account_analytic_id
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
 msgid "Analytic Account"
 msgstr "Analytisch account"
 
@@ -214,6 +215,12 @@ msgid "Force Description"
 msgstr "Forceer omschrijving"
 
 #. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__journal_id
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
+msgid "Force Purchase Journal"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config__label
 msgid "Force supplier invoice line description"
 msgstr "Forceer inkoopfactuur regel omschrijving"
@@ -244,6 +251,11 @@ msgstr "Indien aangevinkt, nieuwe berichten vereisen uw aandacht."
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Indien aangemerkt enkele berichten hebben afleveringsproblemen."
+
+#. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import_config__journal_id
+msgid "If empty, Odoo will use the first purchase journal."
+msgstr ""
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
@@ -305,7 +317,6 @@ msgid "Import Vendor Bill"
 msgstr "Importeer Inkoopfactuur"
 
 #. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Import Vendor Bill wizard"
@@ -533,9 +544,9 @@ msgstr "Enkele regel, vast Product"
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
-"Some draft supplier invoices/refunds have been found for the supplier of the"
-" invoice you are importing; one of them may correspond to the invoice you "
-"are importing. You can either select an existing draft supplier invoice to "
+"Some draft supplier invoices/refunds have been found for the supplier of the "
+"invoice you are importing; one of them may correspond to the invoice you are "
+"importing. You can either select an existing draft supplier invoice to "
 "update or create a new draft invoice."
 msgstr ""
 "Er zijn reeds enkele concept facturen/creditfacturen aanwezig van deze "
@@ -558,8 +569,8 @@ msgstr "Vast Product"
 #, python-format
 msgid ""
 "Static Product must be set on the invoice import configuration of supplier "
-"'%s' that has a Method for Invoice Line set to 'Single Line, Static Product'"
-" or 'Multi Line, Static Product'."
+"'%s' that has a Method for Invoice Line set to 'Single Line, Static Product' "
+"or 'Multi Line, Static Product'."
 msgstr ""
 "Het status product dient te worden opgegeven in de configuratie van de "
 "leverancier '%s' welke de importeer functie heeft volgens de methode 'Enkele "
@@ -569,6 +580,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__tax_ids
 msgid "Taxes"
 msgstr "Belastingen"
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"The <b>tax amount</b> for tax %s has been <b>forced</b> to %s (amount "
+"computed by Odoo was: %s)."
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/models/account_invoice_import_config.py:0
@@ -635,13 +654,6 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
-"The tax amount has been forced to %s (amount computed by Odoo was: %s)."
-msgstr "Het BTW bedrag is geforceerd naar %s (het berekende bedrag was: %s)."
-
-#. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#, python-format
-msgid ""
 "The total amount is different from the untaxed amount, but no tax has been "
 "configured !"
 msgstr ""
@@ -671,8 +683,8 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
-"The vendor to update '%s' already has a country (%s) which is different from"
-" the country of the vendor of the invoice (%s)."
+"The vendor to update '%s' already has a country (%s) which is different from "
+"the country of the vendor of the invoice (%s)."
 msgstr ""
 "De leverancier om bij te werken '%s' heeft al een land toegekend (%s) welke "
 "niet overeenkomt met de landsinformatie van de leverancier op de factuur "
@@ -843,13 +855,29 @@ msgstr "Gids voor het importeren van facturen/creditfacturen"
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
+"You are importing a customer invoice/refund in journal '%s' which is not a "
+"sale journal."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"You are importing a vendor bill/refund in journal '%s' which is not a "
+"purchase journal."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
 "You are importing an invoice in a company that cannot deduct VAT and the "
 "imported invoice has several VAT taxes on the same line (%s). We do not "
 "support this scenario for the moment."
 msgstr ""
 "U importeert een factuur van een bedrijf welke geen BTW kan aftrekken en de "
-"geimporteerde factuur heeft meerdere belastingsoorten op dezelfde regel. (%s)"
-". Dit wordt op dit moment niet ondersteund."
+"geimporteerde factuur heeft meerdere belastingsoorten op dezelfde regel. "
+"(%s). Dit wordt op dit moment niet ondersteund."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
@@ -907,3 +935,8 @@ msgstr "email verzonden door <b>%s</b> op %s met onderwerp <i>%s</i>"
 #, python-format
 msgid "unspecified"
 msgstr "ongespecificeerd"
+
+#~ msgid ""
+#~ "The tax amount has been forced to %s (amount computed by Odoo was: %s)."
+#~ msgstr ""
+#~ "Het BTW bedrag is geforceerd naar %s (het berekende bedrag was: %s)."
