@@ -1,25 +1,25 @@
 # Copyright 2019 Onestein (<https://www.onestein.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import HttpCase
+
+from odoo.tests.common import HttpSavepointCase
 from odoo.tools import mute_logger
 
 
-class TestUblInvoiceEmailAttachment(HttpCase):
-    def setUp(self):
-        super().setUp()
-
-        partner = self.env.ref("base.res_partner_3")
-        product = self.env.ref("product.product_product_5")
-        acc_type_revenue = self.env.ref("account.data_account_type_revenue")
-        account = self.env["account.account"].search(
+class TestUblInvoiceEmailAttachment(HttpSavepointCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        partner = cls.env.ref("base.res_partner_3")
+        product = cls.env.ref("product.product_product_5")
+        acc_type_revenue = cls.env.ref("account.data_account_type_revenue")
+        account = cls.env["account.account"].search(
             [("user_type_id", "=", acc_type_revenue.id)], limit=1
         )
-
-        self.invoice = self.env["account.move"].create(
+        cls.invoice = cls.env["account.move"].create(
             {
                 "name": "Test Customer Invoice",
-                "type": "out_invoice",
+                "move_type": "out_invoice",
                 "partner_id": partner.id,
                 "invoice_line_ids": [
                     (
@@ -37,17 +37,18 @@ class TestUblInvoiceEmailAttachment(HttpCase):
             }
         )
 
-        self.invoice.action_post()
-        action_invoice_sent = self.invoice.action_invoice_sent()
+        cls.invoice.action_post()
+        action_invoice_sent = cls.invoice.action_invoice_sent()
         template_id = action_invoice_sent["context"]["default_template_id"]
-        self.composer_ctx = dict(
-            default_res_id=self.invoice.id,
+        cls.composer_ctx = dict(
+            default_res_id=cls.invoice.id,
             default_use_template=bool(template_id),
             default_composition_mode="comment",
             mark_invoice_as_sent=True,
             force_email=True,
         )
-        self.composer_vals = {
+
+        cls.composer_vals = {
             "attachment_ids": [],
             "model": "account.move",
             "record_name": False,
