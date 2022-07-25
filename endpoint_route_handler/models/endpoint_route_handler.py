@@ -184,7 +184,7 @@ class EndpointRouteHandler(models.AbstractModel):
         for rec in self:
             if rec.request_method in ("POST", "PUT") and not rec.request_content_type:
                 raise exceptions.UserError(
-                    _("Request method is required for POST and PUT.")
+                    _("Request content type is required for POST and PUT.")
                 )
 
     def _refresh_endpoint_data(self):
