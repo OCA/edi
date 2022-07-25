@@ -14,6 +14,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/endpoint_view.xml",
+        "data/server_action.xml",
     ],
     "demo": [
         "demo/endpoint_demo.xml",
