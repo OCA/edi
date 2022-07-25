@@ -5,6 +5,7 @@
 import json
 import textwrap
 
+import mock
 import psycopg2
 import werkzeug
 
@@ -92,7 +93,7 @@ class TestEndpoint(CommonEndpoint):
         payload = result["payload"]
         self.assertEqual(json.loads(payload), {"a": 1, "b": 2})
 
-    @mute_logger("endpoint.endpoint")
+    @mute_logger("endpoint.endpoint", "odoo.modules.registry")
     def test_endpoint_validate_request(self):
         endpoint = self.endpoint.copy(
             {
@@ -111,6 +112,7 @@ class TestEndpoint(CommonEndpoint):
             ) as req:
                 endpoint._validate_request(req)
 
+    @mute_logger("odoo.modules.registry")
     def test_routing(self):
         route, info, __ = self.endpoint._get_routing_info()
         self.assertEqual(route, "/demo/one")
@@ -160,6 +162,7 @@ class TestEndpoint(CommonEndpoint):
         )
         type(endpoint)._endpoint_route_prefix = ""
 
+    @mute_logger("odoo.modules.registry")
     def test_unlink(self):
         endpoint = self.endpoint.copy(
             {
@@ -170,12 +173,15 @@ class TestEndpoint(CommonEndpoint):
                 "exec_as_user_id": self.env.user.id,
             }
         )
-        registry = endpoint._endpoint_registry
+        endpoint._handle_registry_sync(endpoint.ids)
+        key = endpoint._endpoint_registry_unique_key()
+        reg = endpoint._endpoint_registry
+        self.assertEqual(reg._get_rule(key).route, "/delete/this")
         endpoint.unlink()
-        http_id = self.env["ir.http"]._endpoint_make_http_id()
-        self.assertTrue(registry.routing_update_required(http_id))
+        self.assertEqual(reg._get_rule(key), None)
 
-    def test_archiving(self):
+    @mute_logger("odoo.modules.registry")
+    def test_archive(self):
         endpoint = self.endpoint.copy(
             {
                 "route": "/enable-disable/this",
@@ -185,14 +191,33 @@ class TestEndpoint(CommonEndpoint):
                 "exec_as_user_id": self.env.user.id,
             }
         )
+        endpoint._handle_registry_sync(endpoint.ids)
         self.assertTrue(endpoint.active)
-        registry = endpoint._endpoint_registry
-        http_id = self.env["ir.http"]._endpoint_make_http_id()
-        fake_2nd_http_id = id(2)
-        registry.ir_http_track(http_id)
-        self.assertFalse(registry.routing_update_required(http_id))
-        self.assertFalse(registry.routing_update_required(fake_2nd_http_id))
-
+        key = endpoint._endpoint_registry_unique_key()
+        reg = endpoint._endpoint_registry
+        self.assertEqual(reg._get_rule(key).route, "/enable-disable/this")
         endpoint.active = False
-        self.assertTrue(registry.routing_update_required(http_id))
-        self.assertFalse(registry.routing_update_required(fake_2nd_http_id))
+        endpoint._handle_registry_sync(endpoint.ids)
+        self.assertEqual(reg._get_rule(key), None)
+
+    def test_registry_sync(self):
+        endpoint = self.env["endpoint.endpoint"].create(
+            {
+                "name": "New",
+                "route": "/not/active/yet",
+                "exec_mode": "code",
+                "code_snippet": "foo = 1",
+                "request_method": "GET",
+                "auth_type": "user_endpoint",
+            }
+        )
+        self.assertFalse(endpoint.registry_sync)
+        key = endpoint._endpoint_registry_unique_key()
+        reg = endpoint._endpoint_registry
+        self.assertEqual(reg._get_rule(key), None)
+        with mock.patch.object(type(self.env.cr), "after") as mocked:
+            endpoint.registry_sync = True
+            self.assertEqual(mocked.call_args[0][0], "commit")
+            partial_func = mocked.call_args[0][1]
+            self.assertEqual(partial_func.args, ([endpoint.id],))
+            self.assertEqual(partial_func.func.__name__, "_handle_registry_sync")

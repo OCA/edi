@@ -10,13 +10,26 @@
             <form>
                 <header />
                 <field name="active" invisible="1" />
+                <field name="registry_sync" invisible="1" />
                 <widget
                     name="web_ribbon"
                     title="Archived"
-                    bg_color="bg-danger"
+                    bg_color="bg-warning"
                     attrs="{'invisible': [('active', '=', True)]}"
                 />
                 <sheet>
+                    <div
+                        class="alert alert-warning"
+                        role="alert"
+                        attrs="{'invisible': [('registry_sync', '=', True)]}"
+                    >
+                        <p>
+                            Registry out of sync. Likely the record has been modified but not sync'ed with the routing registry.
+                        </p>
+                        <p>
+                            Use the action "Sync route registry" to make changes effective once you are done with edits and creates.
+                        </p>
+                    </div>
                     <div name="title" class="oe_title">
                         <label for="name" class="oe_edit_only" />
                         <h1>
@@ -82,10 +95,16 @@
                 <field name="route" />
                 <field name="exec_mode" />
                 <field name="active" />
+                <field name="registry_sync" />
                 <filter
                     string="All"
                     name="all"
                     domain="['|', ('active', '=', False), ('active', '=', True)]"
+                />
+                <filter
+                    string="To sync"
+                    name="sync"
+                    domain="[('registry_sync', '=', False), ('active', 'in', (True, False))]"
                 />
                 <separator />
                 <filter
@@ -101,11 +120,15 @@
         <field name="name">endpoint.endpoint.tree</field>
         <field name="model">endpoint.endpoint</field>
         <field name="arch" type="xml">
-            <tree decoration-muted="(not active)">
+            <tree
+                decoration-muted="(not active)"
+                decoration-warning="(not registry_sync)"
+            >
                 <field name="name" />
                 <field name="route" />
                 <field name="exec_mode" />
                 <field name="active" widget="boolean_toggle" />
+                <field name="registry_sync" />
             </tree>
         </field>
     </record>
