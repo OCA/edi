@@ -4,14 +4,25 @@
 
 import json
 import os
-import unittest
+import time
+from unittest import mock, skipIf
 
-from odoo.tests.common import HttpCase
+from odoo.tests.common import HttpSavepointCase
 from odoo.tools.misc import mute_logger
 
 
-@unittest.skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
-class EndpointHttpCase(HttpCase):
+@skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
+class EndpointHttpCase(HttpSavepointCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # force sync for demo records
+        cls.env["endpoint.endpoint"].search([])._handle_registry_sync()
+
+    def tearDown(self):
+        self.env["ir.http"]._clear_routing_map()
+        super().tearDown()
+
     def test_call1(self):
         response = self.url_open("/demo/one")
         self.assertEqual(response.status_code, 401)
@@ -26,11 +37,17 @@ class EndpointHttpCase(HttpCase):
         self.authenticate("admin", "admin")
         endpoint = self.env.ref("endpoint.endpoint_demo_1")
         endpoint.route += "/new"
-        response = self.url_open("/demo/one")
-        self.assertEqual(response.status_code, 404)
-        response = self.url_open("/demo/one/new")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, b"ok")
+        # force sync
+        endpoint._handle_registry_sync()
+        with mock.patch.object(
+            type(self.env["ir.http"]), "_get_routing_map_last_update"
+        ) as mocked:
+            mocked.return_value = time.time() - 100000
+            response = self.url_open("/demo/one")
+            self.assertEqual(response.status_code, 404)
+            response = self.url_open("/demo/one/new")
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content, b"ok")
         # Archive it
         endpoint.active = False
         response = self.url_open("/demo/one/new")
