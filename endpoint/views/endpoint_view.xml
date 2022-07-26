@@ -21,13 +21,13 @@
                     <div
                         class="alert alert-warning"
                         role="alert"
-                        attrs="{'invisible': [('registry_sync', '=', True)]}"
+                        attrs="{'invisible': ['|', ('registry_sync', '=', True), ('id', '=', False)]}"
                     >
                         <p>
                             Registry out of sync. Likely the record has been modified but not sync'ed with the routing registry.
                         </p>
                         <p>
-                            Use the action "Sync route registry" to make changes effective once you are done with edits and creates.
+                            Use the action "Sync registry" to make changes effective once you are done with edits and creates.
                         </p>
                     </div>
                     <div name="title" class="oe_title">
