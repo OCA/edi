@@ -4,3 +4,5 @@ responses
 # Python Dependencies
 PyYAML
 xmlunittest
+
+odoo14-addon-endpoint_route_handler @ git+https://github.com/OCA/web-api@refs/pull/3/head#subdirectory=setup/endpoint_route_handler
