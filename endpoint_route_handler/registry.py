@@ -69,13 +69,40 @@ class EndpointRegistry:
     _table = "endpoint_route"
     _columns = (
         # name, type, comment
-        ("key", "VARCHAR", ""),  # TODO: create index
+        ("key", "VARCHAR", ""),
         ("route", "VARCHAR", ""),
         ("opts", "text", ""),
         ("routing", "text", ""),
-        ("endpoint_hash", "VARCHAR(32)", ""),  # TODO: add uniq constraint
+        ("endpoint_hash", "VARCHAR(32)", ""),
         ("route_group", "VARCHAR(32)", ""),
     )
+
+    @classmethod
+    def registry_for(cls, cr):
+        return cls(cr)
+
+    @classmethod
+    def wipe_registry_for(cls, cr):
+        cr.execute("TRUNCATE endpoint_route")
+
+    @classmethod
+    def _setup_table(cls, cr):
+        if not tools.sql.table_exists(cr, cls._table):
+            tools.sql.create_model_table(cr, cls._table, columns=cls._columns)
+            tools.sql.create_unique_index(
+                cr,
+                "endpoint_route__key_uniq",
+                cls._table,
+                [
+                    "key",
+                ],
+            )
+            tools.sql.add_constraint(
+                cr,
+                cls._table,
+                "endpoint_route__endpoint_hash_uniq",
+                "unique(endpoint_hash)",
+            )
 
     def __init__(self, cr):
         self.cr = cr
@@ -84,21 +111,19 @@ class EndpointRegistry:
         for row in self._get_rules(keys=keys, where=where):
             yield EndpointRule.from_row(self.cr.dbname, row)
 
-    def _get_rules(self, keys=None, where=None):
+    def _get_rules(self, keys=None, where=None, one=False):
         query = "SELECT * FROM endpoint_route"
+        pargs = ()
         if keys and not where:
-            where = "key in (%s)"
-            self.cr.execute(query, keys)
-            return self.cr.fetchall()
+            query += " WHERE key IN %s"
+            pargs = (tuple(keys),)
         elif where:
             query += " " + where
-        self.cr.execute(query)
-        return self.cr.fetchall()
+        self.cr.execute(query, pargs)
+        return self.cr.fetchone() if one else self.cr.fetchall()
 
     def _get_rule(self, key):
-        query = "SELECT * FROM endpoint_route WHERE key = %s"
-        self.cr.execute(query, (key,))
-        row = self.cr.fetchone()
+        row = self._get_rules(keys=(key,), one=True)
         if row:
             return EndpointRule.from_row(self.cr.dbname, row)
 
@@ -151,21 +176,8 @@ class EndpointRegistry:
         self.cr.execute("DELETE FROM endpoint_route WHERE key IN %s", (tuple(keys),))
         return True
 
-    @classmethod
-    def registry_for(cls, cr):
-        return cls(cr)
-
-    @classmethod
-    def wipe_registry_for(cls, cr):
-        cr.execute("TRUNCATE endpoint_route")
-
     def make_rule(self, *a, **kw):
         return EndpointRule(self.cr.dbname, *a, **kw)
-
-    @classmethod
-    def _setup_table(cls, cr):
-        if not tools.sql.table_exists(cr, cls._table):
-            tools.sql.create_model_table(cr, cls._table, columns=cls._columns)
 
 
 class EndpointRule:

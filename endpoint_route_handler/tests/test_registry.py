@@ -2,6 +2,8 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+from psycopg2.errors import UniqueViolation
+
 from odoo import http
 from odoo.tests.common import SavepointCase, tagged
 
@@ -74,7 +76,6 @@ class TestRegistry(SavepointCase):
     def test_get_rules(self):
         self._make_rules(stop=4)
         self.assertEqual(self._count_rules(), 3)
-        self.reg.get_rules()
         self.assertEqual(
             [x.key for x in self.reg.get_rules()], ["route1", "route2", "route3"]
         )
@@ -123,6 +124,22 @@ class TestRegistry(SavepointCase):
         self.assertEqual(
             self.reg._get_rule("route2").handler_options.method_name, "handler3"
         )
+
+    def test_rule_constraints(self):
+        rule1, rule2 = self._make_rules(stop=3)
+        msg = (
+            'duplicate key value violates unique constraint "endpoint_route__key_uniq"'
+        )
+        with self.assertRaisesRegex(UniqueViolation, msg), self.env.cr.savepoint():
+            self.reg._create({rule1.key: rule1.to_row()})
+        msg = (
+            "duplicate key value violates unique constraint "
+            '"endpoint_route__endpoint_hash_uniq"'
+        )
+        with self.assertRaisesRegex(UniqueViolation, msg), self.env.cr.savepoint():
+            rule2.endpoint_hash = rule1.endpoint_hash
+            rule2.key = "key3"
+            self.reg._create({rule2.key: rule2.to_row()})
 
     def test_drop_rule(self):
         rules = self._make_rules(stop=3)
