@@ -3,3 +3,5 @@ odoo_test_helper
 responses
 # Python Dependencies
 PyYAML
+
+odoo14-addon-endpoint_route_handler @ git+https://github.com/OCA/web-api@refs/pull/3/head#subdirectory=setup/endpoint_route_handler
