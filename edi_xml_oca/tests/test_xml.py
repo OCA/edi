@@ -23,7 +23,7 @@ class XMLTestCase(SavepointComponentCase, XMLTestCaseMixin):
         cls.handler = cls.backend._find_component(
             cls.backend._name,
             ["edi.xml"],
-            work_ctx={"schema_path": "edi_xml:tests/fixtures/Test.xsd"},
+            work_ctx={"schema_path": "edi_xml_oca:tests/fixtures/Test.xsd"},
         )
 
     def test_xml_schema_fail(self):
