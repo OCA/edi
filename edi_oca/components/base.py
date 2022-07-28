@@ -6,8 +6,9 @@ from odoo.addons.component.core import AbstractComponent
 
 
 class EDIBackendComponentMixin(AbstractComponent):
+    """Generic mixin for all EDI components."""
 
-    _name = "edi.component.mixin"
+    _name = "edi.component.base.mixin"
     _collection = "edi.backend"
     _usage = None
     _backend_type = None
@@ -16,9 +17,6 @@ class EDIBackendComponentMixin(AbstractComponent):
     def __init__(self, work_context):
         super().__init__(work_context)
         self.backend = work_context.backend
-        self.exchange_record = work_context.exchange_record
-        self.record = self.exchange_record.record
-        self.type_settings = self.exchange_record.type_id.get_settings()
 
     @staticmethod
     def _match_attrs():
@@ -59,3 +57,16 @@ class EDIBackendComponentMixin(AbstractComponent):
             return False
 
         return True
+
+
+class EDIBackendRecordComponentMixin(AbstractComponent):
+    """Generic mixin for record-bound components."""
+
+    _name = "edi.component.mixin"
+    _inherit = "edi.component.base.mixin"
+
+    def __init__(self, work_context):
+        super().__init__(work_context)
+        self.exchange_record = work_context.exchange_record
+        self.record = self.exchange_record.record
+        self.type_settings = self.exchange_record.type_id.get_settings()
