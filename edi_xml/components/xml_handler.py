@@ -14,11 +14,10 @@ from odoo.addons.component.core import Component
 
 
 class XMLHandler(Component):
-    """Validate and parse XML.
-    """
+    """Validate and parse XML."""
 
     _name = "edi.xml.handler"
-    _inherit = "edi.component.mixin"
+    _inherit = "edi.component.base.mixin"
     _usage = "edi.xml"
 
     _work_context_validate_attrs = ["schema_path"]

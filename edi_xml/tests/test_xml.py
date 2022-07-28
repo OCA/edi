@@ -15,11 +15,11 @@ TEST_XML = """<?xml version="1.0" encoding="UTF-8"?>
 """
 
 
-class BusinessHeaderTestCase(SavepointComponentCase, XMLTestCaseMixin):
+class XMLTestCase(SavepointComponentCase, XMLTestCaseMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.backend = cls.env.ref("edi.demo_edi_backend")
+        cls.backend = cls.env.ref("edi_oca.demo_edi_backend")
         cls.handler = cls.backend._find_component(
             cls.backend._name,
             ["edi.xml"],
