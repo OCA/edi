@@ -19,11 +19,6 @@ msgid "Active"
 msgstr ""
 
 #. module: edi_endpoint_oca
-#: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__auth_api_key_group_ids
-msgid "Allowed API key groups"
-msgstr ""
-
-#. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__auth_type
 msgid "Auth Type"
 msgstr ""
