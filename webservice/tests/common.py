@@ -10,9 +10,7 @@ from odoo.addons.component.tests.common import SavepointComponentCase
 class CommonWebService(SavepointComponentCase):
     @classmethod
     def _setup_context(cls):
-        return dict(
-            cls.env.context, tracking_disable=True, test_queue_job_no_delay=True
-        )
+        return dict(cls.env.context, tracking_disable=True)
 
     @classmethod
     def _setup_env(cls):

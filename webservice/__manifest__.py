@@ -4,7 +4,8 @@
 {
     "name": "WebService",
     "summary": """
-        Defines webservice abstract definition to be used generally""",
+    Provide unified way to handle external webservices configuration and calls.
+    """,
     "version": "14.0.1.1.0",
     "license": "AGPL-3",
     "development_status": "Beta",
@@ -12,5 +13,5 @@
     "website": "https://github.com/OCA/web-api",
     "depends": ["component", "server_environment"],
     "data": ["security/ir.model.access.csv", "views/webservice_backend.xml"],
-    "demo": [],
+    "maintainers": ["etobella", "simahawk"],
 }

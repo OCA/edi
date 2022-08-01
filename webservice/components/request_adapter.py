@@ -7,9 +7,11 @@ from odoo.addons.component.core import Component
 
 
 class BaseRestRequestsAdapter(Component):
-    _name = "base.requests"
-    _webservice_protocol = "http"
+    """Generic adapter for HTTP requests."""
+
+    _name = "base.request"
     _inherit = "base.webservice.adapter"
+    _webservice_protocol = "http"
 
     def _request(self, method, **kwargs):
         new_kwargs = kwargs.copy()
