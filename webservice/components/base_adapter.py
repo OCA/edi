@@ -12,8 +12,9 @@ class BaseWebServiceAdapter(AbstractComponent):
 
     @classmethod
     def _component_match(cls, work, usage=None, model_name=None, **kw):
-        """Override to customize match.
-        Registry lookup filtered by usage and model_name when landing here.
-        Now, narrow match to `_match_attrs` attributes.
+        """Match by protocol.
+
+        When landing here, registry lookup filtered already by usage and model_name.
+        Now, narrow match by webservice's protocol.
         """
         return kw.get("webservice_protocol") in (None, cls._webservice_protocol)
