@@ -1,4 +1,5 @@
 /* Copyright 2019 Tecnativa - David Vidal
+ * Copyright 2022 Camptocamp - Simone Orsi
  * License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). */
 
 odoo.define("edi_oca.FieldEdiConfiguration", function (require) {
@@ -13,18 +14,18 @@ odoo.define("edi_oca.FieldEdiConfiguration", function (require) {
         template: "edi_oca.FieldEdiConfiguration",
         supportedFieldTypes: ["serialized"],
         events: _.extend({}, AbstractField.prototype.events, {
-            "click button": "_onClickGenerateEdiConfiguration",
+            "click button": "_onClickCreateEDIRecord",
         }),
-        _onClickGenerateEdiConfiguration: function (ev) {
+        _onClickCreateEDIRecord: function (ev) {
             ev.preventDefault();
             ev.stopPropagation();
             var button = ev.target.closest("button");
-            var type = button.dataset.name;
+            var typeId = parseInt(button.dataset.typeId, 10);
             var self = this;
             this._rpc({
                 model: this.model,
                 method: "edi_create_exchange_record",
-                args: [[this.res_id], parseInt(type, 10)],
+                args: [[this.res_id], typeId],
                 context: this.record.getContext({}),
             }).then(function (action) {
                 self.trigger_up("do_action", {action: action});
