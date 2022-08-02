@@ -1,0 +1,7 @@
+<odoo noupdate="1">
+    <record id="job_fun_auto_handle" model="queue.job.function">
+        <field name="model_id" ref="sale.model_sale_order" />
+        <field name="method">_edi_auto_handle_generate</field>
+        <field name="channel_id" ref="edi_oca.channel_edi_exchange" />
+    </record>
+</odoo>
