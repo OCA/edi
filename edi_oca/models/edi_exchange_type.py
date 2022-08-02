@@ -130,6 +130,9 @@ class EDIExchangeType(models.Model):
             rec.advanced_settings = rec._load_advanced_settings()
 
     def _load_advanced_settings(self):
+        # TODO: validate settings w/ a schema.
+        # Could be done w/ Cerberus or JSON-schema.
+        # This would help documenting core and custom keys.
         return yaml.safe_load(self.advanced_settings_edit or "") or {}
 
     def get_settings(self):
