@@ -115,6 +115,11 @@ class EDIExchangeType(models.Model):
         It will be executed if variable result has been defined as True
         """,
     )
+    model_manual_btn = fields.Boolean(
+        string="Manual button on form",
+        help="Automatically display a button on related models' form."
+        # TODO: "Button settings can be configured via advanced settings."
+    )
 
     _sql_constraints = [
         (
