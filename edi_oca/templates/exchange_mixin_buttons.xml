@@ -6,14 +6,12 @@
             class="alert alert-warning"
             role="alert"
             style="margin-bottom:0px;"
-            attrs="{'invisible': [('has_expected_edi_configuration', '=', False)]}"
+            attrs="{'invisible': [('edi_has_form_config', '=', False)]}"
         >
             <div>
-                <i
-                    class="fa fa-retweet"
-                />The record has some pending EDIs to be generated
-                <field name="expected_edi_configuration" widget="edi_configuration" />
-                <field name="has_expected_edi_configuration" invisible="1" />
+                <i class="fa fa-retweet" />This record has EDI exchanges to handle
+                <field name="edi_config" widget="edi_configuration" />
+                <field name="edi_has_form_config" invisible="1" />
             </div>
         </div>
     </template>
