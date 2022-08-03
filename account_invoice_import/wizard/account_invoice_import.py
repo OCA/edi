@@ -1514,24 +1514,43 @@ class AccountInvoiceImport(models.TransientModel):
             company_id = all_companies[0]["id"]
 
         self = self.with_company(company_id)
-        i = 0
         if msg_dict.get("attachments"):
-            i += 1
+            i = 0
             for attach in msg_dict["attachments"]:
+                i += 1
+                filename = attach.fname
+                filetype = mimetypes.guess_type(filename)
+                if filetype[0] not in (
+                    "application/xml",
+                    "text/xml",
+                    "application/pdf",
+                ):
+                    logger.info(
+                        "Attachment %d: %s skipped because not an XML nor PDF.",
+                        i,
+                        filename,
+                    )
+                    continue
                 logger.info(
                     "Attachment %d: %s. Trying to import it as an invoice",
                     i,
-                    attach.fname,
+                    filename,
                 )
-                origin = _("email sent by <b>%s</b> on %s with subject <i>%s</i>") % (
+                # if it's an XML file, attach.content is a string
+                # if it's a PDF file, attach.content is a byte !
+                if isinstance(attach.content, str):
+                    attach_bytes = attach.content.encode("utf-8")
+                else:
+                    attach_bytes = attach.content
+                origin = _("email sent by <b>%s</b> on %s with subject <b>%s</b>") % (
                     msg_dict.get("email_from") and html.escape(msg_dict["email_from"]),
                     msg_dict.get("date"),
                     msg_dict.get("subject") and html.escape(msg_dict["subject"]),
                 )
                 try:
                     invoice_id = self.create_invoice_webservice(
-                        base64.b64encode(attach.content),
-                        attach.fname,
+                        base64.b64encode(attach_bytes),
+                        filename,
                         origin,
                         company_id=company_id,
                         email_from=msg_dict.get("email_from"),
@@ -1539,12 +1558,12 @@ class AccountInvoiceImport(models.TransientModel):
                     logger.info(
                         "Invoice ID %d created from email attachment %s.",
                         invoice_id,
-                        attach.fname,
+                        filename,
                     )
                 except Exception as e:
                     logger.error(
                         "Failed to import invoice from mail attachment %s. Error: %s",
-                        attach.fname,
+                        filename,
                         e,
                     )
         else:
