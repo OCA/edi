@@ -49,7 +49,6 @@ setuptools.setup(
         'odoo14-addon-sale_order_import_ubl_customer_free_ref',
         'odoo14-addon-sale_order_packaging_import',
         'odoo14-addon-sale_order_ubl',
-        'odoo14-addon-webservice',
     ],
     classifiers=[
         'Programming Language :: Python',
