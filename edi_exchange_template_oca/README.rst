@@ -54,6 +54,7 @@ Authors
 ~~~~~~~
 
 * ACSONE
+* Camptocamp
 
 Contributors
 ~~~~~~~~~~~~
