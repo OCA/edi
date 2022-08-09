@@ -1,3 +1,8 @@
+# Copyright 2020 ACSONE SA/NV
+# Copyright 2022 Camptocamp SA
+# @author Simone Orsi <simahawk@gmail.com>
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+
 from lxml import etree
 
 from odoo.tools import pycompat
