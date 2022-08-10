@@ -13,6 +13,7 @@ setuptools.setup(
         'odoo-addon-base_edi>=15.0dev,<15.1dev',
         'odoo-addon-base_facturx>=15.0dev,<15.1dev',
         'odoo-addon-edi_account_oca>=15.0dev,<15.1dev',
+        'odoo-addon-edi_backend_partner_oca>=15.0dev,<15.1dev',
         'odoo-addon-edi_exchange_template_oca>=15.0dev,<15.1dev',
         'odoo-addon-edi_oca>=15.0dev,<15.1dev',
         'odoo-addon-edi_storage_oca>=15.0dev,<15.1dev',
