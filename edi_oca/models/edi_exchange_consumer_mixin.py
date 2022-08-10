@@ -69,7 +69,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return conf
 
     def _get_eval_context(self):
-        """Prepare the context used when evaluating python code
+        """Prepare context to evalue python code snippet.
+
         :returns: dict -- evaluation context given to safe_eval
         """
         return {
@@ -154,8 +155,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return action
 
     def _has_exchange_record(self, exchange_type, backend=False, extra_domain=False):
-        """Check if there is a related exchange record following with a specific
-        exchange type"""
+        """Check presence of related exchange record with a specific exchange type"""
         return bool(
             self.env["edi.exchange.record"].search_count(
                 self._has_exchange_record_domain(
@@ -179,9 +179,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return domain
 
     def _get_exchange_record(self, exchange_type, backend=False, extra_domain=False):
-        """Obtain all the exchange record related to this record with the expected
-        exchange type"""
-
+        """Get all related exchange records matching give exchange type."""
         return self.env["edi.exchange.record"].search(
             self._has_exchange_record_domain(
                 exchange_type, backend=backend, extra_domain=extra_domain
@@ -203,6 +201,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     @api.model
     def get_edi_access(self, doc_ids, operation, model_name=False):
         """Retrieve access policy.
+
         The behavior is similar to `mail.thread` and `mail.message`
         and it relies on the access rules defines on the related record.
         The behavior can be customized on the related model
