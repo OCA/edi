@@ -342,10 +342,10 @@ class EDIExchangeRecord(models.Model):
             suffix=("_" + suffix) if suffix else "",
         )
 
-    def _trigger_edi_event(self, name, suffix=None):
+    def _trigger_edi_event(self, name, suffix=None, **kw):
         """Trigger a component event linked to this backend and edi exchange."""
         name = self._trigger_edi_event_make_name(name, suffix=suffix)
-        self._event(name).notify(self)
+        self._event(name).notify(self, **kw)
 
     def _notify_done(self):
         self._notify_related_record(self._exchange_status_message("process_ok"))
