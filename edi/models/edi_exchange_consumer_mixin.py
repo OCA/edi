@@ -115,12 +115,12 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             "res_id": self.id,
         }
 
-    def _edi_create_exchange_record(self, exchange_type, backend):
-        exchange_record = backend.create_record(
-            exchange_type.code, self._edi_create_exchange_record_vals(exchange_type)
-        )
-        self._event("on_edi_generate_manual").notify(self, exchange_record)
-        return exchange_record.get_formview_action()
+    def _edi_create_exchange_record(self, exchange_type, backend=None, vals=None):
+        backend = exchange_type.backend_id or backend
+        assert backend
+        vals = vals or {}
+        vals.update(self._edi_create_exchange_record_vals(exchange_type))
+        return backend.create_record(exchange_type.code, vals)
 
     def edi_create_exchange_record(self, exchange_type_id):
         self.ensure_one()
@@ -137,8 +137,15 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 [("backend_type_id", "=", exchange_type.backend_type_id.id)]
             )
         if backend:
-            return self._edi_create_exchange_record(exchange_type, backend)
-        action = self.env.ref("edi.edi_exchange_record_create_act_window").read()[0]
+            exchange_record = self._edi_create_exchange_record(exchange_type, backend)
+            self._event("on_edi_generate_manual").notify(self, exchange_record)
+            return exchange_record.get_formview_action()
+        return self._edi_get_create_record_wiz_action(exchange_type_id)
+
+    def _edi_get_create_record_wiz_action(self, exchange_type_id):
+        action = self.env["ir.actions.act_window"].for_xml_id(
+            "edi", "edi_exchange_record_create_act_window"
+        )
         action["context"] = {
             "default_res_id": self.id,
             "default_model": self._name,
@@ -163,8 +170,10 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         domain = [
             ("model", "=", self._name),
             ("res_id", "=", self.id),
-            ("type_id.code", "=", exchange_type),
+            ("type_id", "=", exchange_type.id),
         ]
+        if backend is None:
+            backend = exchange_type.backend_id
         if backend:
             domain.append(("backend_id", "=", backend.id))
         if extra_domain:
