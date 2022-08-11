@@ -252,9 +252,9 @@ class EDIExchangeRecord(models.Model):
     def _exchange_status_message(self, key):
         return self._exchange_status_messages[key]
 
-    def action_exchange_generate(self):
+    def action_exchange_generate(self, **kw):
         self.ensure_one()
-        return self.backend_id.exchange_generate(self)
+        return self.backend_id.exchange_generate(self, **kw)
 
     def action_exchange_send(self):
         self.ensure_one()
