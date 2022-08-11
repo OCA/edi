@@ -622,3 +622,12 @@ class EDIBackend(models.Model):
             "default_backend_type_id": self.backend_type_id.id,
         }
         return action
+
+    def _is_valid_edi_action(self, action, raise_if_not=False):
+        try:
+            assert action in ("generate", "send", "process", "receive", "check")
+            return True
+        except AssertionError:
+            if raise_if_not:
+                raise
+            return False
