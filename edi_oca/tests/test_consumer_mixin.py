@@ -45,8 +45,9 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
             exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
             model_ids=[(4, cls.env["ir.model"]._get_id(cls.consumer_record._name))],
             enable_domain="[]",
-            enable_snippet="""result = not   record._has_exchange_record(
-            exchange_type.code)""",
+            enable_snippet="""
+result = not record._has_exchange_record(exchange_type)
+""",
         )
         cls.exchange_type_out.write(
             {
@@ -57,8 +58,9 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
                     )
                 ],
                 "enable_domain": "[]",
-                "enable_snippet": """result = not   record._has_exchange_record(
-            exchange_type.code, exchange_type.backend_id)""",
+                "enable_snippet": """
+result = not record._has_exchange_record(exchange_type, exchange_type.backend_id)
+""",
             }
         )
         cls.backend_02 = cls.backend.copy()
@@ -74,8 +76,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
             "model": self.consumer_record._name,
             "res_id": self.consumer_record.id,
         }
-        exchange_type = "test_csv_output"
-        exchange_record = self.backend.create_record(exchange_type, vals)
+        exchange_record = self.backend.create_record("test_csv_output", vals)
         self.consumer_record.refresh()
         self.assertEqual(1, self.consumer_record.exchange_record_count)
         action = self.consumer_record.action_view_edi_records()
@@ -83,7 +84,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
         self.assertEqual(
             exchange_record, self.env["edi.exchange.record"].search(action["domain"])
         )
-        self.consumer_record._has_exchange_record(exchange_type, self.backend)
+        self.consumer_record._has_exchange_record(exchange_record.type_id, self.backend)
 
     def test_expected_configuration(self):
         # no btn enabled
