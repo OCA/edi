@@ -16,10 +16,16 @@ class EDIBackend(models.Model):
     )
     endpoints_count = fields.Integer(compute="_compute_endpoints_count")
 
-    @api.depends("endpoint_ids")
+    @api.depends("endpoint_ids.active")
     def _compute_endpoints_count(self):
+        data = self.env["edi.endpoint"].read_group(
+            [("backend_id", "in", self.ids), ("active", "=", True)],
+            ["backend_id"],
+            ["backend_id"],
+        )
+        by_backend_id = {x["backend_id"][0]: x["backend_id_count"] for x in data}
         for record in self:
-            record.endpoints_count = len(record.endpoint_ids)
+            record.endpoints_count = by_backend_id.get(record.id)
 
     def action_manage_endpoints(self):
         xmlid = "edi_endpoint_oca.edi_endpoint_act_window"
