@@ -3,7 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 {
-    "name": "EDI endpoint",
+    "name": "EDI endpoint TEST",
     "summary": """
     Base module allowing configuration of custom endpoints for EDI framework.
     """,
