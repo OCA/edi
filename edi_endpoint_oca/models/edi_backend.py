@@ -2,7 +2,7 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import api, fields, models
+from odoo import _, api, exceptions, fields, models
 
 
 class EDIBackend(models.Model):
@@ -35,3 +35,19 @@ class EDIBackend(models.Model):
             "default_backend_type_id": self.backend_type_id.id,
         }
         return action
+
+    @api.constrains("active")
+    def _check_archive(self):
+        to_check = [
+            x
+            for x in self
+            if not x.active and x.endpoint_ids.filtered(lambda x: x.active)
+        ]
+        if to_check:
+            raise exceptions.UserError(self._check_archive_error_msg(to_check))
+
+    def _check_archive_error_msg(self, backends):
+        return _(
+            "The following backend(s) have endpoints attached. "
+            "Please archive them before:\n\n%s"
+        ) % "\n- ".join([x.name for x in backends])
