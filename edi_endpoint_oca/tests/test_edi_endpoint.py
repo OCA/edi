@@ -2,6 +2,7 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+from odoo import exceptions
 
 from odoo.addons.endpoint.tests.common import CommonEndpoint
 
@@ -27,3 +28,11 @@ class TestEndpoint(CommonEndpoint):
             }
         )
         self.assertEqual(rec.route, "/edi/noprefix")
+
+    def test_archive_check(self):
+        backend = self.endpoint.backend_id
+        msg = r"The following backend\(s\) have endpoints attached*"
+        with self.assertRaisesRegex(exceptions.UserError, msg):
+            backend.active = False
+        backend.endpoint_ids.active = False
+        backend.active = False
