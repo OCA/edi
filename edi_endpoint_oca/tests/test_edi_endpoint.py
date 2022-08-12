@@ -29,6 +29,18 @@ class TestEndpoint(CommonEndpoint):
         )
         self.assertEqual(rec.route, "/edi/noprefix")
 
+    def test_endpoint_count(self):
+        backend = self.endpoint.backend_id
+        self.assertEqual(backend.endpoints_count, 1)
+        rec = self.endpoint.copy(
+            {
+                "route": "/another",
+            }
+        )
+        self.assertEqual(backend.endpoints_count, 2)
+        rec.active = False
+        self.assertEqual(backend.endpoints_count, 1)
+
     def test_archive_check(self):
         backend = self.endpoint.backend_id
         msg = r"The following backend\(s\) have endpoints attached*"
