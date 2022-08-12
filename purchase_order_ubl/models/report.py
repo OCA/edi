@@ -31,7 +31,14 @@ class IrActionsReport(models.Model):
         """
         This is only necessary when tests are enabled.
         It forces the creation of pdf instead of html."""
-        if len(res_ids or []) == 1 and not self.env.context.get("no_embedded_ubl_xml"):
+        # Even if not expected, we might get an ID.
+        # Eg https://github.com/odoo/odoo/blob/10378872eddd6037f479fa8cbb3ed65d5e4b52c6
+        # /addons/account/models/account_bank_statement.py#L440
+        if (
+            isinstance(res_ids, int)
+            or len(res_ids or []) == 1
+            and not self.env.context.get("no_embedded_ubl_xml")
+        ):
             if len(self) == 1 and self.is_ubl_xml_to_embed_in_purchase_order():
                 self = self.with_context(force_report_rendering=True)
         return super()._render_qweb_pdf(res_ids, data)
