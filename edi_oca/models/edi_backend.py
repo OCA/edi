@@ -168,7 +168,7 @@ class EDIBackend(models.Model):
         exchange_type = self.env["edi.exchange.type"].search(
             self._get_exchange_type_domain(type_code), limit=1
         )
-        exchange_type.ensure_one()
+        assert exchange_type, f"Exchange type not found: {type_code}"
         res["type_id"] = exchange_type.id
         res["backend_id"] = self.id
         return res
