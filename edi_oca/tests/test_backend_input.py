@@ -29,7 +29,11 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
 
     @classmethod
     def _setup_context(cls):
-        return dict(super()._setup_context(), _edi_receive_break_on_error=True)
+        return dict(
+            super()._setup_context(),
+            _edi_receive_break_on_error=True,
+            _edi_process_break_on_error=True,
+        )
 
     def setUp(self):
         super().setUp()
