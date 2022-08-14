@@ -2,6 +2,7 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+# TODO: deprecate
 {
     "name": "EDI Sale order import UBL",
     "summary": """Plug sale_order_import_ubl into EDI machinery.""",
