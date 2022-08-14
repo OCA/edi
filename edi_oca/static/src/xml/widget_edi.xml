@@ -3,14 +3,18 @@
     <t t-name="edi_oca.FieldEdiConfiguration">
         <div>
             <t t-foreach="widget.value" t-as="key">
-                <t t-set="data" t-as="widget.value[key]" />
-                <button
-                    t-att-data-name="key"
-                    class="o_edi_create_exchange_record btn btn-icon btn-primary"
-                    type="object"
-                >
-                    <t t-esc="widget.value[key]" />
-                </button>
+                <t t-set="data" t-value="widget.value[key]" />
+                <t t-if="!_.isEmpty(data.form)">
+                    <t t-set="btn" t-value="data.form.btn" />
+                    <button
+                        t-if="btn"
+                        t-att-data-type-id="key"
+                        t-attf-class="o_edi_create_exchange_record btn #{btn.class != null ? btn.class : 'btn-sm btn-secondary'}"
+                        type="object"
+                    >
+                        <t t-esc="btn.label" />
+                    </button>
+                </t>
             </t>
         </div>
     </t>
