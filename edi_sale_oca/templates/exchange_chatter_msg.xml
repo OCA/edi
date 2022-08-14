@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="message_already_imported">
+        <t
+            t-set="message_color_klass"
+            t-value="{'error': 'text-danger', 'warning': 'text-warning'}"
+        />
+        <p t-attf-class="edi-exchange level-#{level}">
+            <span t-attf-class="exchange-message #{message_color_klass.get(level)}">
+                <strong>Message:</strong>
+                <span t-esc="message" />
+            </span>
+            <br />
+            <span class="order-ref">
+                <strong>Order:</strong>
+                <a
+                    t-attf-href="/web#id=#{order.id}&amp;model=#{order._name}&amp;view_type=form"
+                    t-att-data-oe-model="order._name"
+                    t-att-data-oe-id="order.id"
+                >
+                    <span t-field="order.display_name" />
+                </a>
+            </span>
+            <br />
+            <span class="edi-exchange-ref" t-if="prev_record">
+                <strong>Previous record:</strong>
+                <a
+                    t-attf-href="/web#id=#{prev_record.id}&amp;model=#{prev_record._name}&amp;view_type=form"
+                    t-att-data-oe-model="prev_record._name"
+                    t-att-data-oe-id="prev_record.id"
+                >
+                    <span t-field="prev_record.display_name" />
+                </a>
+            </span>
+        </p>
+    </template>
+</odoo>

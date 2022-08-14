@@ -11,6 +11,7 @@
                 <page name="edi" string="EDI">
                     <group name="edi_main">
                         <field name="disable_edi_auto" string="Disable" />
+                        <field name="origin_exchange_record_id" />
                     </group>
                 </page>
             </xpath>
