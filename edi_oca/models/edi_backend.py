@@ -436,7 +436,7 @@ class EDIBackend(models.Model):
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
-            if self.env.context.get("_edi_receive_break_on_error"):
+            if self.env.context.get("_edi_process_break_on_error"):
                 raise
             error = _get_exception_msg(err)
             state = "input_processed_error"
