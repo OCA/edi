@@ -12,10 +12,16 @@
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "website": "https://github.com/OCA/edi",
-    "depends": ["sale", "edi_oca", "component_event"],
+    "depends": [
+        "edi_oca",
+        "edi_exchange_type_auto",
+        "sale_order_import",
+    ],
     "data": [
+        "data/job_function.xml",
         "views/res_partner.xml",
         "views/sale_order.xml",
         "views/edi_exchange_record.xml",
+        "templates/exchange_chatter_msg.xml",
     ],
 }
