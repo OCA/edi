@@ -216,6 +216,15 @@ msgid "Route Type"
 msgstr ""
 
 #. module: edi_endpoint_oca
+#: code:addons/edi_endpoint_oca/models/edi_backend.py:0
+#, python-format
+msgid ""
+"The following backend(s) have endpoints attached. Please archive them before:\n"
+"\n"
+"%s"
+msgstr ""
+
+#. module: edi_endpoint_oca
 #: model:ir.model.fields,help:edi_endpoint_oca.field_edi_endpoint__route_group
 msgid "Use this to classify routes together"
 msgstr ""
