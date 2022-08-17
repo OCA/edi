@@ -12,6 +12,6 @@
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "depends": ["edi_sale_order_import", "sale_order_import_ubl", "edi_endpoint_oca"],
-    "auto_install": True,
+    "auto_install": False,
     "data": ["data/endpoint.xml"],
 }
