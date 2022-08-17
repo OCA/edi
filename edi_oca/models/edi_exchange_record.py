@@ -268,10 +268,23 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         return self.backend_id.exchange_receive(self)
 
-    def exchange_create_ack_record(self):
-        ack_type = self.type_id.ack_type_id
-        values = {"parent_id": self.id}
-        return self.backend_id.create_record(ack_type.code, values)
+    def exchange_create_ack_record(self, **kw):
+        return self.exchange_create_child_record(
+            exc_type=self.type_id.ack_type_id, **kw
+        )
+
+    def exchange_create_child_record(self, exc_type=None, **kw):
+        exc_type = exc_type or self.type_id
+        values = self._exchange_child_record_values()
+        values.update(**kw)
+        return self.backend_id.create_record(exc_type.code, values)
+
+    def _exchange_child_record_values(self):
+        return {
+            "parent_id": self.id,
+            "model": self.model,
+            "res_id": self.res_id,
+        }
 
     def action_retry(self):
         for rec in self:
