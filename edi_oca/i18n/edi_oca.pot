@@ -146,6 +146,11 @@ msgid "Action retry: state moved back to '%s'"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_backend__active
+msgid "Active"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__advanced_settings
 msgid "Advanced Settings"
 msgstr ""
@@ -169,6 +174,12 @@ msgstr ""
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "An error happened while sending. Please check exchange record info."
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_form
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_search
+msgid "Archived"
 msgstr ""
 
 #. module: edi_oca
