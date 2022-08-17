@@ -67,7 +67,13 @@ class XMLHandler(Component):
         """
         try:
             return self.schema.validate(xml_content)
-        except xmlschema.validators.exceptions.XMLSchemaValidationError as err:
+        except self._validate_swallable_exceptions() as err:
             if raise_on_fail:
                 raise
             return str(err)
+
+    def _validate_swallable_exceptions(self):
+        return (
+            xmlschema.exceptions.XMLSchemaValueError,
+            xmlschema.validators.exceptions.XMLSchemaValidationError,
+        )
