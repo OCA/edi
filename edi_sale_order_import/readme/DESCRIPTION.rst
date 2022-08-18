@@ -1,3 +1,5 @@
+DEPRECATED: use `edi_sale_oca`.
+
 Plug sale_order_import into EDI machinery.
 
 
