@@ -1,0 +1,1 @@
+Rename to `*_example`.
