@@ -168,7 +168,7 @@ class EDIBackend(models.Model):
         exchange_type = self.env["edi.exchange.type"].search(
             self._get_exchange_type_domain(type_code), limit=1
         )
-        exchange_type.ensure_one()
+        assert exchange_type, f"Exchange type not found: {type_code}"
         res["type_id"] = exchange_type.id
         res["backend_id"] = self.id
         return res
@@ -431,7 +431,7 @@ class EDIBackend(models.Model):
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
-            if self.env.context.get("_edi_receive_break_on_error"):
+            if self.env.context.get("_edi_process_break_on_error"):
                 raise
             error = _get_exception_msg(err)
             state = "input_processed_error"
@@ -617,3 +617,12 @@ class EDIBackend(models.Model):
             "default_backend_type_id": self.backend_type_id.id,
         }
         return action
+
+    def _is_valid_edi_action(self, action, raise_if_not=False):
+        try:
+            assert action in ("generate", "send", "process", "receive", "check")
+            return True
+        except AssertionError:
+            if raise_if_not:
+                raise
+            return False

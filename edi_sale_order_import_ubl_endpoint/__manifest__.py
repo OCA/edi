@@ -1,7 +1,7 @@
 # Copyright 2021 Camptocamp SA
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
+# TODO: rename to `*_example`
 {
     "name": "EDI Sale order import UBL endpoint",
     "summary": """Provide a default endpoint to import SO in UBL format.""",

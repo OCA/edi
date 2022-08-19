@@ -7,7 +7,7 @@
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Import UBL XML sale order files",
-    "author": "Akretion,Odoo Community Association (OCA)",
+    "author": "Akretion,Camptocamp,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": ["sale_order_import", "base_ubl"],
     "demo": ["demo/demo_data.xml"],
