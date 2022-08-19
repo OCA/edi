@@ -8,6 +8,8 @@
                 <field name="name" />
                 <field name="code" />
                 <field name="direction" />
+                <field name="ack_type_id" />
+                <field name="ack_for_type_ids" optional="hide" />
             </tree>
         </field>
     </record>
@@ -34,6 +36,7 @@
                             <field name="exchange_file_ext" />
                             <field name="exchange_file_auto_generate" />
                             <field name="ack_type_id" />
+                            <field name="ack_for_type_ids" widget="many2many_tags" />
                             <field name="job_channel_id" />
                         </group>
                     </group>
