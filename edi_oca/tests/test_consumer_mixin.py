@@ -71,20 +71,24 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
         super().tearDownClass()
 
     def test_mixin(self):
-        self.assertEqual(0, self.consumer_record.exchange_record_count)
+        self.assertEqual(self.consumer_record.exchange_record_count, 0)
         vals = {
             "model": self.consumer_record._name,
             "res_id": self.consumer_record.id,
         }
         exchange_record = self.backend.create_record("test_csv_output", vals)
         self.consumer_record.refresh()
-        self.assertEqual(1, self.consumer_record.exchange_record_count)
+        self.assertEqual(self.consumer_record.exchange_record_count, 1)
         action = self.consumer_record.action_view_edi_records()
         self.consumer_record.refresh()
         self.assertEqual(
             exchange_record, self.env["edi.exchange.record"].search(action["domain"])
         )
-        self.consumer_record._has_exchange_record(exchange_record.type_id, self.backend)
+        self.assertTrue(
+            self.consumer_record._has_exchange_record(
+                exchange_record.type_id, self.backend
+            )
+        )
 
     def test_expected_configuration(self):
         # no btn enabled
