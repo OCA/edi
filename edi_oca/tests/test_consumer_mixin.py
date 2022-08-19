@@ -90,6 +90,18 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
             )
         )
 
+    def test_origin(self):
+        vals = {
+            "model": self.consumer_record._name,
+            "res_id": self.consumer_record.id,
+        }
+        exchange_record = self.backend.create_record("test_csv_output", vals)
+        self.consumer_record._edi_set_origin(exchange_record)
+        self.assertEqual(
+            self.consumer_record.origin_exchange_record_id, exchange_record
+        )
+        self.assertEqual(self.consumer_record._edi_get_origin(), exchange_record)
+
     def test_expected_configuration(self):
         # no btn enabled
         self.assertFalse(self.consumer_record.edi_has_form_config)
