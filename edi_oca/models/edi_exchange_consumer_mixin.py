@@ -19,6 +19,12 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     _name = "edi.exchange.consumer.mixin"
     _description = "Abstract record where exchange records can be assigned"
 
+    origin_exchange_record_id = fields.Many2one(
+        string="EDI origin record",
+        comodel_name="edi.exchange.record",
+        ondelete="set null",
+        help="EDI record that originated this document.",
+    )
     exchange_record_ids = fields.One2many(
         "edi.exchange.record",
         inverse_name="res_id",
@@ -232,3 +238,10 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         else:
             check_operation = operation
         return check_operation
+
+    def _edi_set_origin(self, exc_record):
+        self.sudo().update({"origin_exchange_record_id": exc_record.id})
+
+    def _edi_get_origin(self):
+        self.ensure_one()
+        return self.origin_exchange_record_id
