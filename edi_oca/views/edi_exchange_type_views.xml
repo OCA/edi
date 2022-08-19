@@ -81,6 +81,17 @@
                 <field name="backend_id" />
                 <field name="code" />
                 <field name="direction" />
+                <field name="ack_type_id" />
+                <filter
+                    name="inbound"
+                    string="Inbound"
+                    domain="[('direction', '=', 'input')]"
+                />
+                <filter
+                    name="outbound"
+                    string="Outbound"
+                    domain="[('direction', '=', 'output')]"
+                />
                 <group expand="0" string="Group By">
                     <filter
                         name="group_by_backend_id"
