@@ -1,4 +1,5 @@
 # Copyright 2020 ACSONE
+# Copyright 2022 Camptocamp SA
 # @author: Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
@@ -130,3 +131,55 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.assertTrue(isinstance(delayed, DelayableRecordset))
         self.assertEqual(delayed.recordset, record)
         self.assertEqual(delayed.delayable.channel, "root.parent_test_chan.test_chan")
+
+    def test_create_child(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record0 = self.backend.create_record("test_csv_output", vals)
+        record1 = record0.exchange_create_child_record()
+        record2 = record0.exchange_create_child_record()
+        record3 = record2.exchange_create_child_record(model="sale.order", res_id=1)
+        record0.invalidate_cache()
+        record2.invalidate_cache()
+        self.assertIn(record1, record0.related_exchange_ids)
+        self.assertIn(record2, record0.related_exchange_ids)
+        self.assertIn(record3, record2.related_exchange_ids)
+        self.assertRecordValues(
+            record1 + record2 + record3,
+            [
+                {
+                    "parent_id": record0.id,
+                    "model": "res.partner",
+                    "res_id": self.partner.id,
+                },
+                {
+                    "parent_id": record0.id,
+                    "model": "res.partner",
+                    "res_id": self.partner.id,
+                },
+                {"parent_id": record2.id, "model": "sale.order", "res_id": 1},
+            ],
+        )
+
+    def test_create_ack(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record0 = self.backend.create_record("test_csv_output", vals)
+        ack = record0.exchange_create_ack_record()
+        record0.invalidate_cache()
+        self.assertIn(ack, record0.related_exchange_ids)
+        self.assertRecordValues(
+            ack,
+            [
+                {
+                    "parent_id": record0.id,
+                    "model": "res.partner",
+                    "res_id": self.partner.id,
+                    "type_id": self.exchange_type_out_ack.id,
+                },
+            ],
+        )
