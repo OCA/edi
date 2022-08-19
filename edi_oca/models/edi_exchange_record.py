@@ -89,7 +89,7 @@ class EDIExchangeRecord(models.Model):
     ack_exchange_id = fields.Many2one(
         string="ACK exchange",
         comodel_name="edi.exchange.record",
-        help="ACK for this exchange",
+        help="ACK generated for current exchange.",
         compute="_compute_ack_exchange_id",
         store=True,
     )
