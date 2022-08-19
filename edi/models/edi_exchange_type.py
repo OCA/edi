@@ -4,6 +4,7 @@
 import logging
 
 from odoo import _, api, exceptions, fields, models
+from odoo.tools import groupby
 
 from odoo.addons.base_sparse_field.models.fields import Serialized
 from odoo.addons.http_routing.models.ir_http import slugify
@@ -53,6 +54,11 @@ class EDIExchangeType(models.Model):
         ondelete="set null",
         help="Identify the type of the ack. "
         "If this field is valued it means an hack is expected.",
+    )
+    ack_for_type_ids = fields.Many2many(
+        string="Ack for exchange type",
+        comodel_name="edi.exchange.type",
+        compute="_compute_ack_for_type_ids",
     )
     advanced_settings_edit = fields.Text(
         string="Advanced YAML settings",
@@ -113,6 +119,12 @@ class EDIExchangeType(models.Model):
 
     def _load_advanced_settings(self):
         return yaml.safe_load(self.advanced_settings_edit or "") or {}
+
+    def _compute_ack_for_type_ids(self):
+        ack_for = self.search([("ack_type_id", "in", self.ids)])
+        by_type_id = dict(groupby(ack_for, lambda x: x.ack_type_id.id))
+        for rec in self:
+            rec.ack_for_type_ids = [x.id for x in by_type_id.get(rec.id, [])]
 
     def get_settings(self):
         return self.advanced_settings
