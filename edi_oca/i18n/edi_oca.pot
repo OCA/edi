@@ -314,6 +314,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__display_name
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__display_name
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__display_name
+#: model:ir.model.fields,field_description:edi_oca.field_edi_id_mixin__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -364,6 +365,11 @@ msgid "EDI Exchange Type"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model,name:edi_oca.model_edi_id_mixin
+msgid "EDI ID mixin"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model,name:edi_oca.model_edi_exchange_record
 msgid "EDI exchange Record"
 msgstr ""
@@ -380,6 +386,11 @@ msgstr ""
 #: model:ir.cron,cron_name:edi_oca.cron_edi_backend_check_input_exchange
 #: model:ir.cron,name:edi_oca.cron_edi_backend_check_input_exchange
 msgid "EDI exchange input status"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_id_mixin__edi_id
+msgid "Edi"
 msgstr ""
 
 #. module: edi_oca
@@ -652,6 +663,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__id
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__id
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__id
+#: model:ir.model.fields,field_description:edi_oca.field_edi_id_mixin__id
 msgid "ID"
 msgstr ""
 
@@ -691,6 +703,11 @@ msgid "Input"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_id_mixin__edi_id
+msgid "Internal or external identifier for records."
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_is_follower
 msgid "Is Follower"
 msgstr ""
@@ -707,6 +724,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record____last_update
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz____last_update
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type____last_update
+#: model:ir.model.fields,field_description:edi_oca.field_edi_id_mixin____last_update
 msgid "Last Modified on"
 msgstr ""
 
