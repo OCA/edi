@@ -183,3 +183,5 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
                 },
             ],
         )
+        ack2 = record0.exchange_create_ack_record()
+        self.assertEqual(record0.ack_exchange_id, ack2)
