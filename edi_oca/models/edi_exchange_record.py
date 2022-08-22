@@ -17,7 +17,7 @@ class EDIExchangeRecord(models.Model):
     _name = "edi.exchange.record"
     _inherit = "mail.thread"
     _description = "EDI exchange Record"
-    _order = "exchanged_on desc"
+    _order = "exchanged_on desc, id desc"
     _rec_name = "identifier"
 
     identifier = fields.Char(required=True, index=True, readonly=True)
