@@ -148,8 +148,10 @@ class EDIExchangeRecord(models.Model):
     def _get_ack_record(self):
         if not self.type_id.ack_type_id:
             return None
-        return self.related_exchange_ids.filtered(
-            lambda x: x.type_id == self.type_id.ack_type_id
+        return fields.first(
+            self.related_exchange_ids.filtered(
+                lambda x: x.type_id == self.type_id.ack_type_id
+            ).sorted("id", reverse=True)
         )
 
     def _compute_ack_expected(self):
