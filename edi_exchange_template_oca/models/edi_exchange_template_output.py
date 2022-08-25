@@ -94,12 +94,11 @@ class EDIExchangeOutputTemplate(models.Model):
             "record": exchange_record.record,
             "backend": exchange_record.backend_id,
             "template": self,
-            "utc_now": self._utc_now,
-            "date_to_string": self._date_to_string,
             "render_edi_template": self._render_template,
             "get_info_provider": self._get_info_provider,
             "info": {},
         }
+        values.update(self._time_utils())
         values.update(self._evaluate_code_snippet(**values))
         values.update(kw)
         return values
