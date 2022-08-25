@@ -45,7 +45,7 @@ class EDIExchangeType(models.Model):
         comodel_name="queue.job.channel",
     )
     name = fields.Char(required=True)
-    code = fields.Char(required=True)
+    code = fields.Char(required=True, copy=False)
     direction = fields.Selection(
         selection=[("input", "Input"), ("output", "Output")], required=True
     )
