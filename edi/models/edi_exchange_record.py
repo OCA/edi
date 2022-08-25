@@ -19,8 +19,8 @@ class EDIExchangeRecord(models.Model):
     _order = "exchanged_on desc"
     _rec_name = "identifier"
 
-    identifier = fields.Char(required=True, index=True, readonly=True)
-    external_identifier = fields.Char(index=True, readonly=True)
+    identifier = fields.Char(required=True, index=True, readonly=True, copy=False)
+    external_identifier = fields.Char(index=True, readonly=True, copy=False)
     type_id = fields.Many2one(
         string="Exchange type",
         comodel_name="edi.exchange.type",
@@ -32,10 +32,15 @@ class EDIExchangeRecord(models.Model):
     backend_id = fields.Many2one(comodel_name="edi.backend", required=True)
     model = fields.Char(index=True, required=False, readonly=True)
     res_id = fields.Many2oneReference(
-        string="Record", index=True, required=False, readonly=True, model_field="model",
+        string="Record",
+        index=True,
+        required=False,
+        readonly=True,
+        model_field="model",
+        copy=False,
     )
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
-    exchange_file = fields.Binary(attachment=True)
+    exchange_file = fields.Binary(attachment=True, copy=False)
     exchange_filename = fields.Char(
         compute="_compute_exchange_filename", readonly=False, store=True
     )
@@ -49,6 +54,7 @@ class EDIExchangeRecord(models.Model):
     edi_exchange_state = fields.Selection(
         string="Exchange state",
         readonly=True,
+        copy=False,
         default="new",
         selection=[
             # Common states
@@ -68,7 +74,7 @@ class EDIExchangeRecord(models.Model):
             ("input_processed_error", "Error on process"),
         ],
     )
-    exchange_error = fields.Text(string="Exchange error", readonly=True)
+    exchange_error = fields.Text(string="Exchange error", readonly=True, copy=False)
     # Relations w/ other records
     parent_id = fields.Many2one(
         comodel_name="edi.exchange.record",

@@ -37,7 +37,7 @@ class EDIExchangeType(models.Model):
     )
     job_channel_id = fields.Many2one(comodel_name="queue.job.channel",)
     name = fields.Char(required=True)
-    code = fields.Char(required=True)
+    code = fields.Char(required=True, copy=False)
     direction = fields.Selection(
         selection=[("input", "Input"), ("output", "Output")], required=True
     )
