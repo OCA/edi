@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="demo_ws_backend" model="webservice.backend">
+        <field name="name">Demo backend</field>
+        <field name="tech_name">edi_demo_ws</field>
+        <field name="protocol">http</field>
+        <field name="url">https://foo.test/{endpoint}</field>
+        <field name="content_type">application/xml</field>
+    </record>
+    <record id="demo_edi_backend_type" model="edi.backend.type">
+        <field name="name">Demo backend type ws</field>
+        <field name="code">demo_ws_backend</field>
+    </record>
+    <record id="demo_edi_backend" model="edi.backend">
+        <field name="name">Demo backend w/ WS</field>
+        <field name="backend_type_id" ref="demo_edi_backend_type" />
+        <field name="webservice_backend_id" ref="demo_ws_backend" />
+    </record>
+</odoo>
