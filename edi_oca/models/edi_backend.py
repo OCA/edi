@@ -252,7 +252,7 @@ class EDIBackend(models.Model):
             )
         if exchange_record.exchange_file:
             raise exceptions.UserError(
-                _("Exchabge record ID=%d already has a file to process!")
+                _("Exchange record ID=%d already has a file to process!")
                 % exchange_record.id
             )
 
