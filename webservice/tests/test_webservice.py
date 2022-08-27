@@ -32,7 +32,7 @@ class TestWebService(CommonWebService):
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get")
         self.assertEqual(result, b"{}")
-        self.assertEqual(1, len(responses.calls))
+        self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
@@ -63,7 +63,7 @@ class TestWebService(CommonWebService):
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get")
         self.assertEqual(result, b"{}")
-        self.assertEqual(1, len(responses.calls))
+        self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
@@ -76,7 +76,7 @@ class TestWebService(CommonWebService):
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get", auth=("user2", "pass2"))
         self.assertEqual(result, b"{}")
-        self.assertEqual(1, len(responses.calls))
+        self.assertEqual(len(responses.calls), 1)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
@@ -88,7 +88,36 @@ class TestWebService(CommonWebService):
         responses.add(responses.GET, self.url, body="{}")
         result = self.webservice.call("get", headers={"demo_header": "HEADER"})
         self.assertEqual(result, b"{}")
-        self.assertEqual(1, len(responses.calls))
+        self.assertEqual(len(responses.calls), 1)
+        self.assertEqual(
+            responses.calls[0].request.headers["Content-Type"], "application/xml"
+        )
+        self.assertEqual(responses.calls[0].request.headers["demo_header"], "HEADER")
+
+    @responses.activate
+    def test_web_service_call_args(self):
+        url = "https://custom.url"
+        responses.add(responses.POST, url, body="{}")
+        result = self.webservice.call(
+            "post", url=url, headers={"demo_header": "HEADER"}
+        )
+        self.assertEqual(result, b"{}")
+        self.assertEqual(len(responses.calls), 1)
+        self.assertEqual(
+            responses.calls[0].request.headers["Content-Type"], "application/xml"
+        )
+        self.assertEqual(responses.calls[0].request.headers["demo_header"], "HEADER")
+
+        url = self.url + "custom/path"
+        self.webservice.url += "{endpoint}"
+        responses.add(responses.POST, url, body="{}")
+        result = self.webservice.call(
+            "post",
+            url_params={"endpoint": "custom/path"},
+            headers={"demo_header": "HEADER"},
+        )
+        self.assertEqual(result, b"{}")
+        self.assertEqual(len(responses.calls), 2)
         self.assertEqual(
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )

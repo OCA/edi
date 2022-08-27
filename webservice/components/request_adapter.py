@@ -11,7 +11,9 @@ class BaseRestRequestsAdapter(Component):
     _webservice_protocol = "http"
     _inherit = "base.webservice.adapter"
 
-    def _request(self, method, **kwargs):
+    # TODO: url and url_params could come from work_ctx
+    def _request(self, method, url=None, url_params=None, **kwargs):
+        url = self._get_url(url=url, url_params=url_params)
         new_kwargs = kwargs.copy()
         new_kwargs.update(
             {
@@ -21,9 +23,7 @@ class BaseRestRequestsAdapter(Component):
             }
         )
         # pylint: disable=E8106
-        request = requests.request(
-            method, self.collection.url.format(**kwargs), **new_kwargs
-        )
+        request = requests.request(method, url, **new_kwargs)
         request.raise_for_status()
         return request.content
 
@@ -50,3 +50,11 @@ class BaseRestRequestsAdapter(Component):
         if isinstance(headers, dict):
             result.update(headers)
         return result
+
+    def _get_url(self, url=None, url_params=None, **kwargs):
+        if not url:
+            # TODO: if url is given, we should validate the domain
+            # to avoid abusing a webservice backend for different calls.
+            url = self.collection.url
+        url_params = url_params or kwargs
+        return url.format(**url_params)
