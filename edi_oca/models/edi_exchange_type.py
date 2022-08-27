@@ -154,6 +154,9 @@ class EDIExchangeType(models.Model):
     def get_settings(self):
         return self.advanced_settings
 
+    def set_settings(self, val):
+        self.advanced_settings_edit = val
+
     @api.constrains("backend_id", "backend_type_id")
     def _check_backend(self):
         for rec in self:
