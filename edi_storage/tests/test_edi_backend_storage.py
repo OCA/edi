@@ -148,6 +148,8 @@ class TestEDIBackendOutput(TestEDIStorageBase):
                 "model": partner2._name,
                 "res_id": partner2.id,
                 "exchange_filename": "rec2.csv",
+                "exchange_file": rec1.exchange_file,
+                "edi_exchange_state": rec1.edi_exchange_state,
             }
         )
         rec3 = self.record.copy(
@@ -156,6 +158,7 @@ class TestEDIBackendOutput(TestEDIStorageBase):
                 "res_id": partner3.id,
                 "exchange_filename": "rec3.csv",
                 "edi_exchange_state": "output_sent_and_error",
+                "exchange_file": rec1.exchange_file,
             }
         )
         mocked_paths = {
