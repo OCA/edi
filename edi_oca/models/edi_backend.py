@@ -346,13 +346,14 @@ class EDIBackend(models.Model):
             backend._check_output_exchange_sync(**kw)
 
     # TODO: consider splitting cron in 2 (1 for receiving, 1 for processing)
-    def _check_output_exchange_sync(self, skip_send=False):
+    def _check_output_exchange_sync(self, skip_send=False, skip_sent=True):
         """Lookup for pending output records and take care of them.
 
         First work on records that need output generation.
         Then work on records waiting for a state update.
 
         :param skip_send: only generate missing output.
+        :param skip_sent: ignore records that were already sent.
         """
         # Generate output files
         new_records = self.exchange_record_model.search(
@@ -368,7 +369,7 @@ class EDIBackend(models.Model):
         if skip_send:
             return
         pending_records = self.exchange_record_model.search(
-            self._output_pending_records_domain()
+            self._output_pending_records_domain(skip_sent=skip_sent)
         )
         _logger.info(
             "EDI Exchange output sync: found %d pending records to process.",
@@ -393,10 +394,15 @@ class EDIBackend(models.Model):
             ("exchange_file", "=", False),
         ]
 
-    def _output_pending_records_domain(self):
-        """Domain for output records needing to be sent or have errors or
-        ack to handle."""
-        states = ("output_pending", "output_sent", "output_sent_and_error")
+    def _output_pending_records_domain(self, skip_sent=True):
+        """Domain for pending output records.
+
+        Records might be waiting to be sent or have errors or have ack to handle."""
+        states = ("output_pending", "output_sent_and_error")
+        if not skip_sent:
+            # If you want to update sent records
+            # you'll have to provide a `check` component.
+            states += ("output_sent",)
         return [
             ("type_id.direction", "=", "output"),
             ("backend_id", "=", self.id),
