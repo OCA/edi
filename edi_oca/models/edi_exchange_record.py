@@ -17,11 +17,11 @@ class EDIExchangeRecord(models.Model):
     _name = "edi.exchange.record"
     _inherit = "mail.thread"
     _description = "EDI exchange Record"
-    _order = "exchanged_on desc"
+    _order = "exchanged_on desc, id desc"
     _rec_name = "identifier"
 
-    identifier = fields.Char(required=True, index=True, readonly=True)
-    external_identifier = fields.Char(index=True, readonly=True)
+    identifier = fields.Char(required=True, index=True, readonly=True, copy=False)
+    external_identifier = fields.Char(index=True, readonly=True, copy=False)
     type_id = fields.Many2one(
         string="Exchange type",
         comodel_name="edi.exchange.type",
@@ -38,9 +38,10 @@ class EDIExchangeRecord(models.Model):
         required=False,
         readonly=True,
         model_field="model",
+        copy=False,
     )
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
-    exchange_file = fields.Binary(attachment=True)
+    exchange_file = fields.Binary(attachment=True, copy=False)
     exchange_filename = fields.Char(
         compute="_compute_exchange_filename", readonly=False, store=True
     )
@@ -54,6 +55,7 @@ class EDIExchangeRecord(models.Model):
     edi_exchange_state = fields.Selection(
         string="Exchange state",
         readonly=True,
+        copy=False,
         default="new",
         selection=[
             # Common states
@@ -73,7 +75,7 @@ class EDIExchangeRecord(models.Model):
             ("input_processed_error", "Error on process"),
         ],
     )
-    exchange_error = fields.Text(string="Exchange error", readonly=True)
+    exchange_error = fields.Text(string="Exchange error", readonly=True, copy=False)
     # Relations w/ other records
     parent_id = fields.Many2one(
         comodel_name="edi.exchange.record",
@@ -90,7 +92,7 @@ class EDIExchangeRecord(models.Model):
     ack_exchange_id = fields.Many2one(
         string="ACK exchange",
         comodel_name="edi.exchange.record",
-        help="ACK for this exchange",
+        help="ACK generated for current exchange.",
         compute="_compute_ack_exchange_id",
         store=True,
     )
@@ -149,8 +151,10 @@ class EDIExchangeRecord(models.Model):
     def _get_ack_record(self):
         if not self.type_id.ack_type_id:
             return None
-        return self.related_exchange_ids.filtered(
-            lambda x: x.type_id == self.type_id.ack_type_id
+        return fields.first(
+            self.related_exchange_ids.filtered(
+                lambda x: x.type_id == self.type_id.ack_type_id
+            ).sorted("id", reverse=True)
         )
 
     def _compute_ack_expected(self):
