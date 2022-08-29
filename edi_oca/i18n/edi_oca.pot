@@ -82,6 +82,11 @@ msgid "<strong>State:</strong>"
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.message_edi_exchange_link
+msgid "<strong>Type:</strong>"
+msgstr ""
+
+#. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
 msgid "ACK"
 msgstr ""
@@ -111,7 +116,7 @@ msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__ack_exchange_id
-msgid "ACK for this exchange"
+msgid "ACK generated for current exchange."
 msgstr ""
 
 #. module: edi_oca
@@ -132,6 +137,11 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__ack_type_id
 msgid "Ack exchange type"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__ack_for_type_ids
+msgid "Ack for exchange type"
 msgstr ""
 
 #. module: edi_oca
@@ -389,6 +399,16 @@ msgid "EDI exchange input status"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin__origin_exchange_record_id
+msgid "EDI origin record"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_consumer_mixin__origin_exchange_record_id
+msgid "EDI record that originated this document."
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_id_mixin__edi_id
 msgid "Edi"
 msgstr ""
@@ -431,12 +451,6 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__validate_error
 msgid "Error on validation"
-msgstr ""
-
-#. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
-#, python-format
-msgid "Exchabge record ID=%d already has a file to process!"
 msgstr ""
 
 #. module: edi_oca
@@ -517,6 +531,12 @@ msgstr ""
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "Exchange received successfully "
+msgstr ""
+
+#. module: edi_oca
+#: code:addons/edi_oca/models/edi_backend.py:0
+#, python-format
+msgid "Exchange record ID=%d already has a file to process!"
 msgstr ""
 
 #. module: edi_oca
@@ -694,6 +714,7 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_inbound
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_search
 msgid "Inbound"
 msgstr ""
 
@@ -829,6 +850,7 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_outbound
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_search
 msgid "Outbound"
 msgstr ""
 
