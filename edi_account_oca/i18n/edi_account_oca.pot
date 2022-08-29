@@ -47,6 +47,16 @@ msgid "EDI Configuration"
 msgstr ""
 
 #. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_exchange_record_id
+msgid "EDI origin record"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,help:edi_account_oca.field_account_move__origin_exchange_record_id
+msgid "EDI record that originated this document."
+msgstr ""
+
+#. module: edi_account_oca
 #: model:ir.model.fields,field_description:edi_account_oca.field_account_move__edi_config
 msgid "Edi Config"
 msgstr ""
