@@ -39,6 +39,16 @@ msgid "EDI Configuration"
 msgstr ""
 
 #. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__origin_exchange_record_id
+msgid "EDI origin record"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,help:edi_stock_oca.field_stock_picking__origin_exchange_record_id
+msgid "EDI record that originated this document."
+msgstr ""
+
+#. module: edi_stock_oca
 #: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__edi_auto_disabled
 msgid "Edi Auto Disabled"
 msgstr ""
