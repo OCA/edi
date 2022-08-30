@@ -1,5 +1,5 @@
 ==============
-Edi WebService
+EDI WebService
 ==============
 
 .. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -25,7 +25,8 @@ Edi WebService
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
 
-This module creates WebService frameworks to be used on EDI
+Plug `webservice` module within EDI framework.
+Allows to configure attach webservices on an EDI backend and/or on an exchange type.
 
 **Table of contents**
 
@@ -49,11 +50,13 @@ Authors
 ~~~~~~~
 
 * Creu Blanca
+* Camptocamp
 
 Contributors
 ~~~~~~~~~~~~
 
 * Enric Tobella <etobella@creublanca.es>
+* Simone Orsi <simone.orsi@camptocamp.com>
 
 Maintainers
 ~~~~~~~~~~~
@@ -67,6 +70,17 @@ This module is maintained by the OCA.
 OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
+
+.. |maintainer-etobella| image:: https://github.com/etobella.png?size=40px
+    :target: https://github.com/etobella
+    :alt: etobella
+.. |maintainer-simahawk| image:: https://github.com/simahawk.png?size=40px
+    :target: https://github.com/simahawk
+    :alt: simahawk
+
+Current `maintainers <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-etobella| |maintainer-simahawk| 
 
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/edi_webservice_oca>`_ project on GitHub.
 
