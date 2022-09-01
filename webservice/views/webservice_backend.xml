@@ -23,9 +23,40 @@
                     <group name="config">
                         <field name="protocol" />
                         <field name="url" />
-                        <field name="username" />
-                        <field name="password" password="True" />
                         <field name="content_type" />
+                    </group>
+                    <group name="auth">
+                        <field name="auth_type" />
+                        <field
+                            name="username"
+                            attrs="{
+                                'invisible': [('auth_type', '!=', 'user_pwd')],
+                                'required': [('auth_type', '=', 'user_pwd')],
+                            }"
+                        />
+                        <field
+                            name="password"
+                            attrs="{
+                                'invisible': [('auth_type', '!=', 'user_pwd')],
+                                'required': [('auth_type', '=', 'user_pwd')],
+                            }"
+                            password="True"
+                        />
+                        <field
+                            name="api_key"
+                            attrs="{
+                                'invisible': [('auth_type', '!=', 'api_key')],
+                                'required': [('auth_type', '=', 'api_key')],
+                            }"
+                            password="True"
+                        />
+                        <field
+                            name="api_key_header"
+                            attrs="{
+                                'invisible': [('auth_type', '!=', 'api_key')],
+                                'required': [('auth_type', '=', 'api_key')],
+                            }"
+                        />
                     </group>
                 </sheet>
             </form>
