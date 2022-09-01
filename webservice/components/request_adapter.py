@@ -1,4 +1,6 @@
 # Copyright 2020 Creu Blanca
+# Copyright 2022 Camptocamp SA
+# @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import requests
@@ -36,17 +38,27 @@ class BaseRestRequestsAdapter(Component):
     def _get_auth(self, auth=False, **kwargs):
         if auth:
             return auth
+        handler = getattr(self, "_get_auth_for_" + self.collection.auth_type, None)
+        return handler(**kwargs) if handler else None
+
+    def _get_auth_for_user_pwd(self, **kw):
         if self.collection.username and self.collection.password:
             return self.collection.username, self.collection.password
         return None
 
     def _get_headers(self, content_type=False, headers=False, **kwargs):
+        headers = headers or {}
         result = {
             "Content-Type": content_type or self.collection.content_type,
         }
-        if isinstance(headers, dict):
-            result.update(headers)
+        handler = getattr(self, "_get_headers_for_" + self.collection.auth_type, None)
+        if handler:
+            headers.update(handler(**kwargs))
+        result.update(headers)
         return result
+
+    def _get_headers_for_api_key(self, **kw):
+        return {self.collection.api_key_header: self.collection.api_key}
 
     def _get_url(self, url=None, url_params=None, **kwargs):
         if not url:
