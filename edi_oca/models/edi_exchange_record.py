@@ -28,6 +28,7 @@ class EDIExchangeRecord(models.Model):
         required=True,
         ondelete="cascade",
         auto_join=True,
+        index=True,
     )
     direction = fields.Selection(related="type_id.direction")
     backend_id = fields.Many2one(comodel_name="edi.backend", required=True)
@@ -56,6 +57,7 @@ class EDIExchangeRecord(models.Model):
         readonly=True,
         copy=False,
         default="new",
+        index=True,
         selection=[
             # Common states
             ("new", "New"),
