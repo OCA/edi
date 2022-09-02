@@ -346,7 +346,9 @@ class EDIBackend(models.Model):
             backend._check_output_exchange_sync(**kw)
 
     # TODO: consider splitting cron in 2 (1 for receiving, 1 for processing)
-    def _check_output_exchange_sync(self, skip_send=False, skip_sent=True):
+    def _check_output_exchange_sync(
+        self, skip_send=False, skip_sent=True, record_ids=None
+    ):
         """Lookup for pending output records and take care of them.
 
         First work on records that need output generation.
@@ -357,7 +359,7 @@ class EDIBackend(models.Model):
         """
         # Generate output files
         new_records = self.exchange_record_model.search(
-            self._output_new_records_domain()
+            self._output_new_records_domain(record_ids=record_ids)
         )
         _logger.info(
             "EDI Exchange output sync: found %d new records to process.",
@@ -369,7 +371,9 @@ class EDIBackend(models.Model):
         if skip_send:
             return
         pending_records = self.exchange_record_model.search(
-            self._output_pending_records_domain(skip_sent=skip_sent)
+            self._output_pending_records_domain(
+                skip_sent=skip_sent, record_ids=record_ids
+            )
         )
         _logger.info(
             "EDI Exchange output sync: found %d pending records to process.",
@@ -384,17 +388,20 @@ class EDIBackend(models.Model):
 
         self._exchange_check_ack_needed(pending_records)
 
-    def _output_new_records_domain(self):
+    def _output_new_records_domain(self, record_ids=None):
         """Domain for output records needing output content generation."""
-        return [
+        domain = [
             ("backend_id", "=", self.id),
             ("type_id.exchange_file_auto_generate", "=", True),
             ("type_id.direction", "=", "output"),
             ("edi_exchange_state", "=", "new"),
             ("exchange_file", "=", False),
         ]
+        if record_ids:
+            domain.append(("id", "in", record_ids))
+        return domain
 
-    def _output_pending_records_domain(self, skip_sent=True):
+    def _output_pending_records_domain(self, skip_sent=True, record_ids=None):
         """Domain for pending output records.
 
         Records might be waiting to be sent or have errors or have ack to handle."""
@@ -403,11 +410,14 @@ class EDIBackend(models.Model):
             # If you want to update sent records
             # you'll have to provide a `check` component.
             states += ("output_sent",)
-        return [
+        domain = [
             ("type_id.direction", "=", "output"),
             ("backend_id", "=", self.id),
             ("edi_exchange_state", "in", states),
         ]
+        if record_ids:
+            domain.append(("id", "in", record_ids))
+        return domain
 
     def _exchange_output_check_state(self, exchange_record):
         component = self._get_component(exchange_record, "check")
@@ -546,14 +556,14 @@ class EDIBackend(models.Model):
 
     # TODO: add tests
     # TODO: consider splitting cron in 2 (1 for receiving, 1 for processing)
-    def _check_input_exchange_sync(self, **kw):
+    def _check_input_exchange_sync(self, record_ids=None, **kw):
         """Lookup for pending input records and take care of them.
 
         First work on records that need to receive input.
         Then work on records waiting to be processed.
         """
         pending_records = self.exchange_record_model.search(
-            self._input_pending_records_domain()
+            self._input_pending_records_domain(record_ids=record_ids)
         )
         _logger.info(
             "EDI Exchange input sync: found %d pending records to receive.",
@@ -563,7 +573,7 @@ class EDIBackend(models.Model):
             rec.with_delay().action_exchange_receive()
 
         pending_process_records = self.exchange_record_model.search(
-            self._input_pending_process_records_domain()
+            self._input_pending_process_records_domain(record_ids=record_ids)
         )
         _logger.info(
             "EDI Exchange input sync: found %d pending records to process.",
@@ -575,21 +585,27 @@ class EDIBackend(models.Model):
         # TODO: test it!
         self._exchange_check_ack_needed(pending_process_records)
 
-    def _input_pending_records_domain(self):
-        return [
+    def _input_pending_records_domain(self, record_ids=None):
+        domain = [
             ("backend_id", "=", self.id),
             ("type_id.direction", "=", "input"),
             ("edi_exchange_state", "=", "input_pending"),
             ("exchange_file", "=", False),
         ]
+        if record_ids:
+            domain.append(("id", "in", record_ids))
+        return domain
 
-    def _input_pending_process_records_domain(self):
+    def _input_pending_process_records_domain(self, record_ids=None):
         states = ("input_received", "input_processed_error")
-        return [
+        domain = [
             ("backend_id", "=", self.id),
             ("type_id.direction", "=", "input"),
             ("edi_exchange_state", "in", states),
         ]
+        if record_ids:
+            domain.append(("id", "in", record_ids))
+        return domain
 
     def _exchange_check_ack_needed(self, pending_records):
         ack_pending_records = pending_records.filtered(lambda x: x.needs_ack())
