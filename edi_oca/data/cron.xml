@@ -5,7 +5,7 @@
         model="ir.cron"
         forcecreate="True"
     >
-        <field name="name">EDI exchange check status</field>
+        <field name="name">EDI exchange check output sync</field>
         <field name="active" eval="True" />
         <field name="user_id" ref="base.user_root" />
         <field name="interval_number">1</field>
@@ -22,7 +22,7 @@
         model="ir.cron"
         forcecreate="True"
     >
-        <field name="name">EDI exchange input status</field>
+        <field name="name">EDI exchange check input sync</field>
         <field name="active" eval="True" />
         <field name="user_id" ref="base.user_root" />
         <field name="interval_number">1</field>
