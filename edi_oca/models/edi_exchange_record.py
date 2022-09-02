@@ -173,6 +173,7 @@ class EDIExchangeRecord(models.Model):
         "input_processed_error": "input_received",
     }
 
+    @api.depends("edi_exchange_state")
     def _compute_retryable(self):
         for rec in self:
             rec.retryable = rec.edi_exchange_state in self._rollback_state_mapping
