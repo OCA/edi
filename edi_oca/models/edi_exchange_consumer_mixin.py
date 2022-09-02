@@ -213,8 +213,14 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     @api.depends("exchange_record_ids")
     def _compute_exchange_record_count(self):
-        for record in self:
-            record.exchange_record_count = len(record.exchange_record_ids)
+        data = self.env["edi.exchange.record"].read_group(
+            [("res_id", "in", self.ids)],
+            ["res_id"],
+            ["res_id"],
+        )
+        mapped_data = {x["res_id"]: x["res_id_count"] for x in data}
+        for rec in self:
+            rec.exchange_record_count = mapped_data.get(rec.id, 0)
 
     def action_view_edi_records(self):
         self.ensure_one()
