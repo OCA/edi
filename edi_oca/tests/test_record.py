@@ -185,3 +185,16 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         )
         ack2 = record0.exchange_create_ack_record()
         self.assertEqual(record0.ack_exchange_id, ack2)
+
+    def test_retry(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record0 = self.backend.create_record("test_csv_output", vals)
+        self.assertFalse(record0.retryable)
+        record0.edi_exchange_state = "output_error_on_send"
+        self.assertTrue(record0.retryable)
+        record0.action_retry()
+        self.assertEqual(record0.edi_exchange_state, "output_pending")
+        self.assertFalse(record0.retryable)
