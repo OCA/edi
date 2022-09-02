@@ -221,6 +221,15 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         xmlid = "edi_oca.act_open_edi_exchange_record_view"
         action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
+        # Purge default search filters from ctx to avoid hiding records
+        ctx = action.get("context", {})
+        if isinstance(ctx, str):
+            ctx = safe_eval.safe_eval(ctx, self.env.context)
+        action["context"] = {
+            k: v for k, v in ctx.items() if not k.startswith("search_default_")
+        }
+        # Drop ID otherwise the context will be loaded from the action's record :S
+        action.pop("id")
         return action
 
     @api.model
