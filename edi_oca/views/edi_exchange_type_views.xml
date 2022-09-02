@@ -38,6 +38,7 @@
                             <field name="ack_type_id" />
                             <field name="ack_for_type_ids" widget="many2many_tags" />
                             <field name="job_channel_id" />
+                            <field name="quick_exec" />
                         </group>
                     </group>
                     <notebook>
