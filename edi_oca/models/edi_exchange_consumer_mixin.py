@@ -25,6 +25,14 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         ondelete="set null",
         help="EDI record that originated this document.",
     )
+    origin_exchange_type_id = fields.Many2one(
+        string="EDI origin exchange type",
+        comodel_name="edi.exchange.type",
+        ondelete="set null",
+        related="origin_exchange_record_id.type_id",
+        # Store it to ease searching by type
+        store=True,
+    )
     exchange_record_ids = fields.One2many(
         "edi.exchange.record",
         inverse_name="res_id",
