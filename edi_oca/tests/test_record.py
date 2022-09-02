@@ -3,6 +3,7 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import mock
 from freezegun import freeze_time
 
 from odoo import exceptions, fields
@@ -195,6 +196,9 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.assertFalse(record0.retryable)
         record0.edi_exchange_state = "output_error_on_send"
         self.assertTrue(record0.retryable)
-        record0.action_retry()
+        with mock.patch.object(type(record0), "_execute_next_action") as mocked:
+            record0.action_retry()
+            # quick exec is off, we should not get any call
+            mocked.assert_not_called()
         self.assertEqual(record0.edi_exchange_state, "output_pending")
         self.assertFalse(record0.retryable)
