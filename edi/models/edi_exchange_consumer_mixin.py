@@ -186,10 +186,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             type_leaf = [("type_id.code", "=", exchange_type)]
         else:
             type_leaf = [("type_id", "=", exchange_type.id)]
-        domain = [
-            ("model", "=", self._name),
-            ("res_id", "=", self.id),
-        ] + type_leaf
+        domain = [("model", "=", self._name), ("res_id", "=", self.id)] + type_leaf
         if backend is None:
             backend = exchange_type.backend_id
         if backend:
@@ -217,6 +214,15 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         self.ensure_one()
         action = self.env.ref("edi.act_open_edi_exchange_record_view").read()[0]
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
+        # Purge default search filters from ctx to avoid hiding records
+        ctx = action.get("context", {})
+        if isinstance(ctx, str):
+            ctx = safe_eval(ctx, self.env.context)
+        action["context"] = {
+            k: v for k, v in ctx.items() if not k.startswith("search_default_")
+        }
+        # Drop ID otherwise the context will be loaded from the action's record :S
+        action.pop("id")
         return action
 
     @api.model
