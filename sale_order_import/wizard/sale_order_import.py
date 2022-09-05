@@ -252,7 +252,7 @@ class SaleOrderImport(models.TransientModel):
 
         if parsed_order.get("invoice_to"):
             invoicing_partner = bdio._match_partner(
-                parsed_order["partner"], parsed_order["chatter_msg"], partner_type=""
+                parsed_order["invoice_to"], parsed_order["chatter_msg"], partner_type=""
             )
             so_vals["partner_invoice_id"] = invoicing_partner.id
         if parsed_order.get("date"):
