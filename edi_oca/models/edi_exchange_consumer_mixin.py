@@ -178,11 +178,15 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     def _has_exchange_record_domain(
         self, exchange_type, backend=False, extra_domain=False
     ):
+        if isinstance(exchange_type, str):
+            # Backward compat: allow passing the code when this method is called directly
+            type_leaf = [("type_id.code", "=", exchange_type)]
+        else:
+            type_leaf = [("type_id", "=", exchange_type.id)]
         domain = [
             ("model", "=", self._name),
             ("res_id", "=", self.id),
-            ("type_id", "=", exchange_type.id),
-        ]
+        ] + type_leaf
         if backend is None:
             backend = exchange_type.backend_id
         if backend:
