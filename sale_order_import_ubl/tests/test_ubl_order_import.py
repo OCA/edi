@@ -37,6 +37,8 @@ class TestUblOrderImport(TransactionCase):
                 self.assertEqual(date_order[:10], expected["date_order"])
             if expected.get("shipping_partner"):
                 self.assertEqual(so.partner_shipping_id, expected["shipping_partner"])
+            if expected.get("invoicing_partner"):
+                self.assertEqual(so.partner_invoice_id, expected["invoicing_partner"])
             if filename in ("UBL-Order-2.1-Example.xml", "UBL-Order-2.0-Example.xml"):
                 self.assertTrue(expected.get("commitment_date"))
                 self.assertEqual(
