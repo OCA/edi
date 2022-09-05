@@ -52,6 +52,10 @@ class EDIExchangeType(models.Model):
     exchange_filename_pattern = fields.Char(default="{record_name}-{type.code}-{dt}")
     # TODO make required if exchange_filename_pattern is
     exchange_file_ext = fields.Char()
+    # TODO: this flag should be probably deprecated
+    # because when an exchange w/o file is pending
+    # there's no reason not to generate it.
+    # Also this could be controlled more generally w/ edi auto settings.
     exchange_file_auto_generate = fields.Boolean(
         help="Auto generate output for records missing their payload. "
         "If active, a cron will take care of generating the output when not set yet. "
