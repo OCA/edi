@@ -129,6 +129,11 @@ class EDIExchangeType(models.Model):
         help="Automatically display a button on related models' form."
         # TODO: "Button settings can be configured via advanced settings."
     )
+    quick_exec = fields.Boolean(
+        string="Quick execution",
+        help="When active, records of this type will be processed immediately "
+        "without waiting for the cron to pass by.",
+    )
 
     _sql_constraints = [
         (
