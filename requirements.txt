@@ -5,7 +5,7 @@ invoice2data
 ovh
 pdfplumber
 phonenumbers
-PyPDF2
+PyPDF2==1.26.0
 pyyaml
 regex
 requests
