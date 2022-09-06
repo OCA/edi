@@ -385,17 +385,22 @@ msgid "EDI exchange Record"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.actions.server,name:edi_oca.cron_edi_backend_check_output_exchange_ir_actions_server
-#: model:ir.cron,cron_name:edi_oca.cron_edi_backend_check_output_exchange
-#: model:ir.cron,name:edi_oca.cron_edi_backend_check_output_exchange
-msgid "EDI exchange check status"
-msgstr ""
-
-#. module: edi_oca
 #: model:ir.actions.server,name:edi_oca.cron_edi_backend_check_input_exchange_ir_actions_server
 #: model:ir.cron,cron_name:edi_oca.cron_edi_backend_check_input_exchange
 #: model:ir.cron,name:edi_oca.cron_edi_backend_check_input_exchange
-msgid "EDI exchange input status"
+msgid "EDI exchange check input sync"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.actions.server,name:edi_oca.cron_edi_backend_check_output_exchange_ir_actions_server
+#: model:ir.cron,cron_name:edi_oca.cron_edi_backend_check_output_exchange
+#: model:ir.cron,name:edi_oca.cron_edi_backend_check_output_exchange
+msgid "EDI exchange check output sync"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin__origin_exchange_type_id
+msgid "EDI origin exchange type"
 msgstr ""
 
 #. module: edi_oca
