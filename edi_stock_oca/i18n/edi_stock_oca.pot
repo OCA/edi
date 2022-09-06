@@ -39,6 +39,11 @@ msgid "EDI Configuration"
 msgstr ""
 
 #. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__origin_exchange_type_id
+msgid "EDI origin exchange type"
+msgstr ""
+
+#. module: edi_stock_oca
 #: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__origin_exchange_record_id
 msgid "EDI origin record"
 msgstr ""
