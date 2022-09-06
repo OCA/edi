@@ -168,8 +168,10 @@ class EDIBackend(models.Model):
     def _storage_new_exchange_record_vals(self, file_name):
         return {"exchange_filename": file_name, "edi_exchange_state": "input_pending"}
 
-    def _check_output_exchange_sync(self, skip_send=False, skip_sent=True):
+    def _check_output_exchange_sync(self, **kw):
         # Do not skip sent records when dealing w/ storage related exchanges,
         # because we want to update the file state
         # depending on where they are in the external folder.
-        return super()._check_output_exchange_sync(skip_sent=not self.storage_id)
+        if self.storage_id:
+            kw["skip_sent"] = False
+        return super()._check_output_exchange_sync(**kw)
