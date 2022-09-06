@@ -47,6 +47,11 @@ msgid "EDI Configuration"
 msgstr ""
 
 #. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_exchange_type_id
+msgid "EDI origin exchange type"
+msgstr ""
+
+#. module: edi_account_oca
 #: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_exchange_record_id
 msgid "EDI origin record"
 msgstr ""
