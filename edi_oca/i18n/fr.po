@@ -909,6 +909,11 @@ msgid "Processed"
 msgstr "Traité"
 
 #. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__quick_exec
+msgid "Quick execution"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__input_received
 msgid "Received"
 msgstr "Reçu"
@@ -1090,6 +1095,13 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__website_message_ids
 msgid "Website communication history"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__quick_exec
+msgid ""
+"When active, records of this type will be processed immediately without "
+"waiting for the cron to pass by."
 msgstr ""
 
 #. module: edi_oca
