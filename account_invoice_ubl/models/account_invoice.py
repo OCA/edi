@@ -77,11 +77,9 @@ class AccountInvoice(models.Model):
             binary_node = etree.SubElement(
                 attach_node, ns['cbc'] + 'EmbeddedDocumentBinaryObject',
                 mimeCode="application/pdf", filename=filename)
-            ctx = self._context.copy()
-            ctx['no_embedded_ubl_xml'] = True
-            pdf_inv = self.pool['report'].get_pdf(
-                self._cr, self._uid, [self.id], 'account.report_invoice',
-                context=ctx)
+            pdf_inv = self.with_context(
+                no_embedded_ubl_xml=True
+            ).env['report'].get_pdf([self.id], 'account.report_invoice')
             binary_node.text = pdf_inv.encode('base64')
 
     def _ubl_add_legal_monetary_total(self, parent_node, ns, version='2.1'):
