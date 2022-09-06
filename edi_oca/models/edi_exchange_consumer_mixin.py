@@ -25,6 +25,14 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         ondelete="set null",
         help="EDI record that originated this document.",
     )
+    origin_exchange_type_id = fields.Many2one(
+        string="EDI origin exchange type",
+        comodel_name="edi.exchange.type",
+        ondelete="set null",
+        related="origin_exchange_record_id.type_id",
+        # Store it to ease searching by type
+        store=True,
+    )
     exchange_record_ids = fields.One2many(
         "edi.exchange.record",
         inverse_name="res_id",
@@ -205,14 +213,29 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     @api.depends("exchange_record_ids")
     def _compute_exchange_record_count(self):
-        for record in self:
-            record.exchange_record_count = len(record.exchange_record_ids)
+        data = self.env["edi.exchange.record"].read_group(
+            [("res_id", "in", self.ids)],
+            ["res_id"],
+            ["res_id"],
+        )
+        mapped_data = {x["res_id"]: x["res_id_count"] for x in data}
+        for rec in self:
+            rec.exchange_record_count = mapped_data.get(rec.id, 0)
 
     def action_view_edi_records(self):
         self.ensure_one()
         xmlid = "edi_oca.act_open_edi_exchange_record_view"
         action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
+        # Purge default search filters from ctx to avoid hiding records
+        ctx = action.get("context", {})
+        if isinstance(ctx, str):
+            ctx = safe_eval.safe_eval(ctx, self.env.context)
+        action["context"] = {
+            k: v for k, v in ctx.items() if not k.startswith("search_default_")
+        }
+        # Drop ID otherwise the context will be loaded from the action's record :S
+        action.pop("id")
         return action
 
     @api.model
