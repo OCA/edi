@@ -9,7 +9,7 @@
     "summary": """
     Provide unified way to handle external webservices configuration and calls.
     """,
-    "version": "14.0.1.3.0",
+    "version": "14.0.1.4.0",
     "license": "AGPL-3",
     "development_status": "Beta",
     "author": "Creu Blanca, Camptocamp, Odoo Community Association (OCA)",
