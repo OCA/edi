@@ -59,6 +59,7 @@ Authors
 ~~~~~~~
 
 * Creu Blanca
+* Camptocamp
 
 Contributors
 ~~~~~~~~~~~~
