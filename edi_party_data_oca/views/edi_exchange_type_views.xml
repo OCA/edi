@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_type_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.type</field>
+        <field name="inherit_id" ref="edi_oca.edi_exchange_type_view_form" />
+        <field name="arch" type="xml">
+            <group name="config" position="after">
+                <group name="party_config">
+                    <field name="id_category_ids" widget="many2many_tags" />
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>
