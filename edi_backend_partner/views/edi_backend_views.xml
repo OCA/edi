@@ -7,7 +7,7 @@
         <field name="model">edi.backend</field>
         <field name="inherit_id" ref="edi.edi_backend_view_form" />
         <field name="arch" type="xml">
-            <field name="backend_type_id" position="after">
+            <field name="output_sent_processed_auto" position="before">
                 <field name="partner_id" />
             </field>
         </field>

@@ -7,4 +7,4 @@ from odoo import fields, models
 class EdiBackend(models.Model):
     _inherit = "edi.backend"
 
-    partner_id = fields.Many2one(comodel_name="res.partner")
+    partner_id = fields.Many2one(comodel_name="res.partner", string="Partner")
