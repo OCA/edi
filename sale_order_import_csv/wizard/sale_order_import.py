@@ -21,7 +21,7 @@ class SaleOrderImport(models.TransientModel):
     @api.model
     def parse_csv_order(self, order_file, partner):
         assert partner, "missing partner"
-        fileobj = TemporaryFile("wb+")
+        fileobj = TemporaryFile("w+")
         fileobj.write(order_file)
         fileobj.seek(0)
         reader = unicodecsv.reader(
