@@ -9,7 +9,7 @@
             <notebook position="inside">
                 <page name="webservice_config">
                     <group>
-                        <field name="webservice_backend_id" string="Webservice"/>
+                        <field name="webservice_backend_id" string="Webservice" />
                     </group>
                 </page>
             </notebook>
