@@ -3,7 +3,7 @@
 
 {
     "name": "Sale Order CSV Import",
-    "version": "10.0.1.0.0",
+    "version": "12.0.1.0.0",
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Import CSV sale order files",
