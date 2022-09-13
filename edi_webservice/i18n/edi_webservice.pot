@@ -19,6 +19,11 @@ msgid "EDI Backend"
 msgstr ""
 
 #. module: edi_webservice
+#: model_terms:ir.ui.view,arch_db:edi_webservice.edi_backend_view_form
+msgid "Webservice"
+msgstr ""
+
+#. module: edi_webservice
 #: model:ir.model.fields,field_description:edi_webservice.field_edi_backend__webservice_backend_id
 msgid "Webservice Backend"
 msgstr ""
