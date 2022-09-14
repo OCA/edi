@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- TODO: no update -->
+<!--
+    TODO: no update.
+-->
 <odoo>
     <template id="qwb_tmpl_ubl_order_response_out" name="Render UBL OrderResponse out">
 
@@ -15,19 +17,30 @@
                 schemeAgencyID="BII"
                 schemeID="Profile"
             >urn:www.cenbii.eu:profile:BIIXYZ:ver1.0</cbc:ProfileID>
-            <cbc:ID t-esc="exchange_record.identifier" />
+            <cbc:ID t-esc="record.client_order_ref" />
+            <cbc:UUID t-esc="exchange_record.identifier" />
             <cbc:IssueDate
-                t-esc="date_to_string(datetime.date.today())"
+                t-esc="date_to_string(record.date_order)"
             >2010-01-21</cbc:IssueDate>
             <cbc:IssueTime
-                t-esc="time_to_string(datetime.datetime.now())"
+                t-esc="time_to_string(record.date_order)"
             >12:30:00</cbc:IssueTime>
             <cbc:Note t-esc="record.note" />
             <cbc:DocumentCurrencyCode
                 t-esc="record.currency_id.name"
             >EUR</cbc:DocumentCurrencyCode>
+            <!--
+                FIXME: don't know why adding this breaks validation like
+
+                `Unexpected child with tag 'cac:LineCountNumeric' at position 9. Tag 'cac:OrderReference' expected`
+
+                which makes no sense since according to XSD the order is correct.
+            
+                <cac:LineCountNumeric t-esc="len(record.order_line)" />
+            -->
             <cac:OrderReference>
-                <cbc:ID t-esc="record.name">34</cbc:ID>
+                <cbc:ID t-esc="record.client_order_ref">XYZ123</cbc:ID>
+                <cbc:SalesOrderID t-esc="record.name">SO1234</cbc:SalesOrderID>
             </cac:OrderReference>
             <cac:SellerSupplierParty>
                 <t t-call="edi_sale_ubl_oca.qweb_tmpl_ubl_party">
@@ -41,41 +54,43 @@
             </cac:BuyerCustomerParty>
             <cac:Delivery>
                 <cbc:ID t-esc="delivery.name" />
-                <!-- TODO: get lines.product_uom_id.unece_code but what if is not unique?-->
-                <t t-set="uom" t-value="delivery.move_line_ids.product_uom_id[0]" />
+                <t
+                    t-set="uoms"
+                    t-value="delivery.move_line_ids.mapped('product_uom_id')"
+                />
+                <!-- Use UOM only if homogeneus -->
+                <t t-set="uom" t-value="first_of(uoms) if len(uoms) == 1 else None" />
                 <!-- TODO: get pkg qty instead? -->
                 <t
+                    t-if="uom"
                     t-set="total_qty"
                     t-value="sum(delivery.move_line_ids.mapped('product_uom_qty'))"
                 />
                 <cbc:Quantity
+                    t-if="uom"
                     t-att-unitCode="uom.unece_code"
                     t-esc="total_qty"
                 >1.0</cbc:Quantity>
-                <!-- <cbc:MinimumQuantity />
-                <cbc:MaximumQuantity /> -->
                 <cbc:ActualDeliveryDate
                     t-esc="date_to_string(record.commitment_date)"
                 />
                 <cbc:ActualDeliveryTime
                     t-esc="time_to_string(record.commitment_date)"
                 />
+                <cac:DeliveryAddress t-if="delivery.partner_id">
+                    <t t-call="edi_sale_ubl_oca.qweb_tmpl_ubl_address">
+                        <t t-set="partner" t-value="delivery.partner_id" />
+                    </t>
+                </cac:DeliveryAddress>
                 <!-- TODO -->
-                <!-- <cac:DeliveryAddress>
-                    <cbc:StreetName>Avon Way</cbc:StreetName>
-                    <cbc:BuildingName>Thereabouts</cbc:BuildingName>
-                    <cbc:BuildingNumber>56A</cbc:BuildingNumber>
-                    <cbc:CityName>Bridgtow</cbc:CityName>
-                    <cbc:PostalZone>ZZ99 1ZZ</cbc:PostalZone>
-                    <cbc:CountrySubentity>Avon</cbc:CountrySubentity>
-                    <cac:AddressLine>
-                        <cbc:Line>3rd Floor, Room 5</cbc:Line>
-                    </cac:AddressLine>
-                    <cac:Country>
-                        <cbc:IdentificationCode>GB</cbc:IdentificationCode>
-                    </cac:Country>
-                </cac:DeliveryAddress> -->
+                <!-- <cac:RequestedDeliveryPeriod>
+                    <cbc:StartDate>2010-02-10</cbc:StartDate>
+                    <cbc:EndDate>2010-02-25</cbc:EndDate>
+                </cac:RequestedDeliveryPeriod> -->
             </cac:Delivery>
+            <cac:TaxTotal>
+                <cbc:TaxAmount t-att-currencyID="record.currency_id.name" t-esc="record.amount_tax" />
+            </cac:TaxTotal>
             <t t-foreach="record.order_line" t-as="line">
                 <cac:OrderLine>
                     <cbc:SubstitutionStatusCode />
@@ -83,31 +98,42 @@
                     <cac:LineItem>
                         <cbc:ID t-esc="line.edi_id">1</cbc:ID>
                         <cbc:SalesOrderID />
-                        <cbc:UUID />
+                        <cbc:UUID t-esc="line.id" />
                         <cbc:Note />
+                        <!-- TODO -->
                         <cbc:LineStatusCode
                             listAgencyID="UBL"
                             listName="Line Status"
-                        >TODO</cbc:LineStatusCode>
+                        />
                         <cbc:Quantity
                             t-att-unitCode="line.product_uom.unece_code"
                             t-esc="line.product_uom_qty"
                         >1</cbc:Quantity>
+                        <cbc:LineExtensionAmount t-att-currencyID="record.currency_id.name" t-esc="line.price_subtotal" />
+                        <cbc:TotalTaxAmount t-att-currencyID="record.currency_id.name" t-esc="line.price_tax" />
+                        <cac:Price>
+                            <cbc:PriceAmount t-att-currencyID="record.currency_id.name" t-field="line.price_unit" />
+                            <cbc:BaseQuantity>1</cbc:BaseQuantity>	
+                        </cac:Price>
                         <cac:Item>
-                            <cbc:Description
-                                t-esc="line.name"
-                            >Red paint</cbc:Description>
+                            <cbc:Description t-esc="line.name" />
                             <cac:SellersItemIdentification>
-                                <cbc:ID>TODO</cbc:ID>
+                                <cbc:ID t-esc="line.product_id.default_code or line.product_id.barcode" />
                             </cac:SellersItemIdentification>
+                            <!--
+                                TODO: use main_seller_id.product_code
+                            <cac:ManufacturersItemIdentification>
+                                <cbc:ID t-esc="line.product_id.default_code"/>
+                            </cac:ManufacturersItemIdentification>
+                            -->
+                            <cac:StandardItemIdentification>
+                                <cbc:ID t-esc="line.product_id.barcode"/>
+                            </cac:StandardItemIdentification>
+                            <!-- TODO: requires TaxScheme -->
+                            <!-- <cac:ClassifiedTaxCategory>
+                                <cbc:ID t-esc=""/>
+                            </cac:ClassifiedTaxCategory> -->
                         </cac:Item>
-                        <!-- TODO -->
-                        <!-- <cac:Delivery>
-                            <cac:RequestedDeliveryPeriod>
-                                <cbc:StartDate>2010-02-10</cbc:StartDate>
-                                <cbc:EndDate>2010-02-25</cbc:EndDate>
-                            </cac:RequestedDeliveryPeriod>
-                        </cac:Delivery> -->
                     </cac:LineItem>
                 </cac:OrderLine>
             </t>
@@ -115,7 +141,3 @@
 
     </template>
 </odoo>
-<!-- TODO: -->
-<!-- <cac:OrderLine> -->
-<!-- <cac:PackQuantity> -->
-<!-- <cac:LineReference> -->

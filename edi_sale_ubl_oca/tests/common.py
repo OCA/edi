@@ -106,6 +106,7 @@ class TestCaseBase(XMLBaseTestCase, OrderMixin):
         for line in lines:
             cls._create_sale_order_line(cls.sale, **line)
 
+        cls.sale.client_order_ref = "ABC123"
         cls.sale.action_confirm()
 
 
@@ -122,6 +123,10 @@ class OrderInboundTestMixin:
             cls.exc_type_in.code, {"edi_exchange_state": "input_received"}
         )
         cls.ubl_data = get_test_data(cls.env)
+        # Ensure all products have a barcode
+        for data in cls.ubl_data.values():
+            for prod in data.products:
+                prod.barcode = prod.id * 14
         fname = "UBL-Order-2.1-Example.xml"
         cls.order_data = cls.ubl_data[fname]
         fcontent = cls.order_data._get_content()
