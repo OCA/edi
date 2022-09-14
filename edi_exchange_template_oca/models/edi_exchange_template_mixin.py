@@ -126,6 +126,7 @@ class EDIExchangeTemplateMixin(models.AbstractModel):
             "date_to_string": self._date_to_string,
             "datetime_to_string": self._datetime_to_string,
             "time_to_string": lambda dt: dt.strftime("%H:%M:%S") if dt else "",
+            "first_of": fields.first,
         }
 
     def _evaluate_code_snippet(self, **render_values):
