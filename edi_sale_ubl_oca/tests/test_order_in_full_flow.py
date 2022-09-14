@@ -34,25 +34,19 @@ class TestOrderInboundFull(SavepointCase, EDIBackendTestMixin, OrderInboundTestM
         order_msg = order.message_ids[0]
         self.assertIn("Exchange processed successfully", order_msg.body)
         self.assertIn(self.exc_record_in.identifier, order_msg.body)
-        # Test ack generated
-        self.assertEqual(self.exc_record_in.ack_exchange_id.type_id, self.exc_type_out)
         order.invalidate_cache()
         # Test relations
-        self.assertEqual(len(order.exchange_record_ids), 2)
+        self.assertEqual(len(order.exchange_record_ids), 1)
         exc_record = order.exchange_record_ids.filtered(
             lambda x: x.type_id == self.exc_type_in
         )
+        self.assertEqual(exc_record, self.exc_record_in)
+        # Confirm the order
+        order.action_confirm()
+        # Should give us a valid order response ack record
         ack_exc_record = order.exchange_record_ids.filtered(
             lambda x: x.type_id == self.exc_type_out
         )
-        self.assertEqual(exc_record, self.exc_record_in)
-        self.assertEqual(ack_exc_record.parent_id, self.exc_record_in)
-        self.assertEqual(ack_exc_record.edi_exchange_state, "new")
-        # No ack generated
-        self.assertFalse(ack_exc_record._get_file_content())
-        # Confirm the order
-        order.action_confirm()
-        # Should give us a valid order response
         file_content = ack_exc_record._get_file_content()
         self.assertTrue(file_content)
         # TMP /
@@ -83,4 +77,4 @@ class TestOrderInboundFull(SavepointCase, EDIBackendTestMixin, OrderInboundTestM
         # Subsequent updates on some fields should trigger new exchanges
         xml_data = handler.parse_xml(file_content)
         new_qty = xml_data["cac:OrderLine"][0]["cac:LineItem"]["cbc:Quantity"]
-        self.assertGreater(old_qty, new_qty)
+        self.assertGreater(old_qty["$"], new_qty["$"])

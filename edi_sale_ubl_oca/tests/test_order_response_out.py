@@ -61,6 +61,8 @@ class TestOrderResponseOutbound(TestCaseBase):
     def test_xml(self):
         self.record.action_exchange_generate()
         file_content = self.record._get_file_content()
+        with open("/tmp/ordrsp.test.xml", "w") as ff:
+            ff.write(file_content)
         handler = get_xml_handler(self.backend, self._schema_path)
         err = handler.validate(file_content)
         self.assertEqual(err, None, err)

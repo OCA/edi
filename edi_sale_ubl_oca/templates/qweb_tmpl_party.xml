@@ -1,37 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-<!-- TODO: move to edi_ubl? -->
+    <!--
+        `nswrapper` is a trick to be able to import these templates
+        as XML because a namespace is mandatory for element prefixes.
+        `nswrapper` elements are purged afterwards in post-processing.
+        -->
+    <!-- TODO: move to edi_ubl? -->
     <template id="qweb_tmpl_ubl_party" name="Render UBL party">
-        <!--
-            `nswrapper` is a trick to be able to import these templates
-            as XML because a namespace is mandatory for element prefixes.
-            `nswrapper` elements are purged afterwards in post-processing.
-         -->
         <nswrapper
-            xmlns="urn:oasis:names:specification:ubl:schema:xsd:OrderResponse-2"
             xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
             xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
         >
-
-                <cac:Party>
-                    <t t-if="party.endpoint">
-                        <cbc:EndpointID
+            <cac:Party>
+                <t t-if="party.endpoint">
+                    <cbc:EndpointID
                         t-att="party.endpoint.attrs"
                         t-esc="party.endpoint.value"
                     >7302347231111</cbc:EndpointID>
-                    </t>
-                    <t t-foreach="party.identifiers" t-as="identifier">
-                        <cac:PartyIdentification>
-                            <cbc:ID
+                </t>
+                <t t-foreach="party.identifiers" t-as="identifier">
+                    <cac:PartyIdentification>
+                        <cbc:ID
                             t-att="identifier.attrs"
                             t-esc="identifier.value"
                         >7300070011115</cbc:ID>
-                        </cac:PartyIdentification>
-                    </t>
-                    <cac:PartyName t-if="party.name">
-                        <cbc:Name t-esc="party.name">Moderna Produkter AB</cbc:Name>
-                    </cac:PartyName>
-                </cac:Party>
+                    </cac:PartyIdentification>
+                </t>
+                <cac:PartyName t-if="party.name">
+                    <cbc:Name t-esc="party.name">Moderna Produkter AB</cbc:Name>
+                </cac:PartyName>
+            </cac:Party>
+        </nswrapper>
+    </template>
+
+    <template id="qweb_tmpl_ubl_address" name="Render UBL party">
+        <nswrapper
+            xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+            xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+        >
+            <cbc:StreetName t-if="partner.street" t-esc="partner.street" />
+            <cbc:CityName t-if="partner.city" t-esc="partner.city" />
+            <cbc:PostalZone t-if="partner.zip" t-esc="partner.zip" />
+            <cac:AddressLine t-if="partner.street2">
+                <cbc:Line t-if="partner.street2" t-esc="partner.street2" />
+            </cac:AddressLine>
+            <cac:Country t-if="partner.country_id">
+                <cbc:IdentificationCode t-field="partner.country_id" />
+            </cac:Country>
         </nswrapper>
     </template>
 </odoo>

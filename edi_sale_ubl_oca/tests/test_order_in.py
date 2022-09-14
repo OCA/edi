@@ -39,17 +39,15 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin
 
     def test_existing_order(self):
         self.assertEqual(self.exc_record_in.edi_exchange_state, "input_received")
-        order = self.env["sale.order"].create(
+        self.env["sale.order"].create(
             {
                 "partner_id": self.order_data.partner.id,
                 "client_order_ref": self.order_data.client_order_ref,
             }
         )
-        orig_rec_msgs = self.exc_record_in.message_ids
         # Test w/ error handling
         self.exc_record_in.action_exchange_process()
         self.assertEqual(self.exc_record_in.edi_exchange_state, "input_processed_error")
-        exc_rec_new_msg = self.exc_record_in.message_ids - orig_rec_msgs
         err_msg = "Sales order has already been imported before"
         self.assertEqual(self.exc_record_in.exchange_error, err_msg)
 
@@ -69,6 +67,8 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin
             f"/web#id={self.exc_record_in.id}&amp;model=edi.exchange.record&amp;view_type=form",
             order_msg.body,
         )
+        # TODO: test order data. To do so, first add such tests to sale_order_import
+        self.assertEqual(order.order_line.mapped("edi_id"), ["1", "2"])
 
     def _find_order(self):
         return self.env["sale.order"].search(
