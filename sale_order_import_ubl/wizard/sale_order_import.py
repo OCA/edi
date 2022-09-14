@@ -48,11 +48,13 @@ class SaleOrderImport(models.TransientModel):
             price_xpath = line_item.xpath("cac:Price/cbc:PriceAmount", namespaces=ns)
             if price_xpath:
                 price_unit = float(price_xpath[0].text)
+        line_ref = line_item.xpath("cbc:ID", namespaces=ns)[0]
         res_line = {
             "product": self.ubl_parse_product(line_item, ns),
             "qty": qty,
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
             "price_unit": price_unit,
+            "order_line_ref": line_ref.text,
         }
         return res_line
 
