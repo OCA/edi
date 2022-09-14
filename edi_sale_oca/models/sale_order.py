@@ -7,7 +7,7 @@ from odoo import fields, models
 
 class SaleOrder(models.Model):
     _name = "sale.order"
-    _inherit = ["sale.order", "edi.auto.exchange.consumer.mixin", "edi.id.mixin"]
+    _inherit = ["sale.order", "edi.auto.exchange.consumer.mixin"]
 
     # TODO: this field should be moved to the consumer mixin
     # Each extending module should then override `states` as needed.
