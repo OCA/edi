@@ -15,5 +15,4 @@
     "depends": [
         "base",
     ],
-    "external_dependencies": {"python": ["PyPDF2"]},
 }
