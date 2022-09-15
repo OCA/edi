@@ -12,7 +12,7 @@
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_download"],
-    "external_dependencies": {"python": ["requests", "ovh"]},
+    "external_dependencies": {"python": ["ovh"]},
     "data": [
         "wizard/ovh_api_credentials_view.xml",
         "views/account_invoice_download_config.xml",
