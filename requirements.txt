@@ -7,5 +7,4 @@ pdfplumber
 phonenumbers
 pyyaml
 regex
-requests
 xmlschema
