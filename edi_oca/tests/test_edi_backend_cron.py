@@ -75,8 +75,6 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
                 rec._get_file_content(), FakeOutputGenerator._call_key(rec)
             )
             self.assertTrue(FakeOutputSender.check_called_for(rec))
-            # TODO: test better?
-            self.assertTrue(rec.ack_exchange_id)
 
     @mute_logger(*LOGGERS)
     def test_exchange_generate_output_ready_auto_send(self):
@@ -94,6 +92,3 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
         self.assertTrue(FakeOutputGenerator.check_not_called_for(self.record1))
         self.assertTrue(FakeOutputSender.check_not_called_for(self.record1))
         self.assertTrue(FakeOutputChecker.check_called_for(self.record1))
-
-        # TODO: test better?
-        self.assertTrue(self.record1.ack_exchange_id)
