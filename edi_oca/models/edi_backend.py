@@ -386,8 +386,6 @@ class EDIBackend(models.Model):
                 # TODO: run in job as well?
                 self._exchange_output_check_state(rec)
 
-        self._exchange_check_ack_needed(pending_records)
-
     def _output_new_records_domain(self, record_ids=None):
         """Domain for output records needing output content generation."""
         domain = [
@@ -582,9 +580,6 @@ class EDIBackend(models.Model):
         for rec in pending_process_records:
             rec.with_delay().action_exchange_process()
 
-        # TODO: test it!
-        self._exchange_check_ack_needed(pending_process_records)
-
     def _input_pending_records_domain(self, record_ids=None):
         domain = [
             ("backend_id", "=", self.id),
@@ -606,15 +601,6 @@ class EDIBackend(models.Model):
         if record_ids:
             domain.append(("id", "in", record_ids))
         return domain
-
-    def _exchange_check_ack_needed(self, pending_records):
-        ack_pending_records = pending_records.filtered(lambda x: x.needs_ack())
-        _logger.info(
-            "EDI Exchange output sync: found %d records needing ack record.",
-            len(ack_pending_records),
-        )
-        for rec in ack_pending_records:
-            rec.with_delay().exchange_create_ack_record()
 
     def _find_existing_exchange_records(
         self, exchange_type, extra_domain=None, count_only=False
