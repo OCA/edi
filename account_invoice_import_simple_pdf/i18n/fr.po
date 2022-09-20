@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-08-05 18:06+0000\n"
-"Last-Translator: Claude R Perrin <claude@perrin.it>\n"
+"PO-Revision-Date: 2022-09-20 14:07+0000\n"
+"Last-Translator: Alexis de Lattre <alexis@via.ecp.fr>\n"
 "Language-Team: none\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -362,7 +362,7 @@ msgstr "Format du numéro de la facture à importer"
 #. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__invoice_number
 msgid "Invoice Number"
-msgstr "Numéro de facture à importer"
+msgstr "Numéro de facture"
 
 #. module: account_invoice_import_simple_pdf
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
@@ -821,7 +821,7 @@ msgstr "Séparateur de milliers :"
 #. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__amount_total
 msgid "Total"
-msgstr "Total"
+msgstr "Total TTC"
 
 #. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__string_type
@@ -854,7 +854,7 @@ msgstr "Fournisseur"
 #. module: account_invoice_import_simple_pdf
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
 msgid "Vendor Bill Import"
-msgstr "Import factures Fournisseurs"
+msgstr "Import factures fournisseurs"
 
 #. module: account_invoice_import_simple_pdf
 #: model:ir.model,name:account_invoice_import_simple_pdf.model_account_invoice_import
