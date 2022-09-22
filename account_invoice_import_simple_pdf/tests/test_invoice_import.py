@@ -61,11 +61,118 @@ class TestInvoiceImport(TransactionCase):
         self.module = "account_invoice_import_simple_pdf"
         self.product = self.env.ref("%s.mobile_phone" % self.module)
         self.product.supplier_taxes_id = [(6, 0, [frtax.id])]
-        self.demo_partner = self.env.ref("%s.bouygues_telecom" % self.module)
-        self.filename = "bouygues_telecom-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (self.module, self.filename), "rb") as f:
-            self.pdf_file = f.read()
-            self.pdf_file_b64 = base64.b64encode(self.pdf_file)
+
+        # for the full test with a PDF invoice
+        self.partner_ak = self.env["res.partner"].create(
+            {
+                "name": "Akretion France",
+                "is_company": True,
+                "country_id": self.env.ref("base.fr").id,
+                "simple_pdf_date_format": "dd-mm-y4",
+                "simple_pdf_date_separator": "slash",
+                "vat": "FR86792377731",
+                "simple_pdf_currency_id": self.env.ref("base.EUR").id,
+                "simple_pdf_decimal_separator": "dot",
+                "simple_pdf_thousand_separator": "comma",
+                "simple_pdf_invoice_number_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "string_type": "fixed",
+                            "fixed_char": "VT/",
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "string_type": "year4",
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "string_type": "fixed",
+                            "fixed_char": "/",
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "string_type": "digit",
+                            "occurrence_min": 4,
+                            "occurrence_max": 4,
+                        },
+                    ),
+                ],
+                "simple_pdf_field_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "amount_total",
+                            "extract_rule": "last",
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "amount_untaxed",
+                            "extract_rule": "first",
+                            "start": "Subtotal",
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "date",
+                            "extract_rule": "first",
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "date_due",
+                            "extract_rule": "position_start",
+                            "position": 2,
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "name": "invoice_number",
+                            "extract_rule": "first",
+                        },
+                    ),
+                ],
+            }
+        )
+        self.ak_invoice_config = self.env["account.invoice.import.config"].create(
+            {
+                "name": "Akretion France",
+                "partner_id": self.partner_ak.id,
+                "invoice_line_method": "1line_static_product",
+                "label": "My custom line label",
+                "static_product_id": self.product.id,
+            }
+        )
+
+        self.ak_filename = "akretion_france-test.pdf"
+        with file_open("%s/tests/pdf/%s" % (self.module, self.ak_filename), "rb") as f:
+            self.ak_pdf_file = f.read()
+            self.ak_pdf_file_b64 = base64.b64encode(self.ak_pdf_file)
+
+        self.bt_filename = "bouygues_telecom-test.pdf"
+        with file_open("%s/tests/pdf/%s" % (self.module, self.bt_filename), "rb") as f:
+            self.bt_pdf_file = f.read()
+            self.bt_pdf_file_b64 = base64.b64encode(self.bt_pdf_file)
 
     def test_date_parsing(self):
         date_test = {
@@ -398,7 +505,7 @@ class TestInvoiceImport(TransactionCase):
 
     def test_raw_extraction(self):
         aiio = self.env["account.invoice.import"]
-        res = aiio.simple_pdf_text_extraction(self.pdf_file, self.test_info)
+        res = aiio.simple_pdf_text_extraction(self.bt_pdf_file, self.test_info)
         self.assertIsInstance(res, dict)
         self.assertTrue(len(res["all"]) >= len(res["first"]))
         self.assertIn("FR 74 397 480 930", res["first"])
@@ -407,35 +514,36 @@ class TestInvoiceImport(TransactionCase):
     def test_complete_import(self):
         wiz = self.env["account.invoice.import"].create(
             {
-                "invoice_file": self.pdf_file_b64,
-                "invoice_filename": self.filename,
+                "invoice_file": self.ak_pdf_file_b64,
+                "invoice_filename": self.ak_filename,
             }
         )
         wiz.import_invoice()
         # Check result of invoice creation
         invoices = self.env["account.move"].search(
             [
-                ("partner_id", "=", self.demo_partner.id),
+                ("partner_id", "=", self.partner_ak.id),
                 ("state", "=", "draft"),
                 ("move_type", "=", "in_invoice"),
-                ("ref", "=", "11608848301659"),
+                ("ref", "=", "VT/2022/0001"),
             ]
         )
-        inv_config = self.env.ref("%s.bouygues_telecom_import_config" % self.module)
+        inv_config = self.ak_invoice_config
         self.assertEqual(len(invoices), 1)
         inv = invoices[0]
-        self.assertEqual(fields.Date.to_string(inv.invoice_date), "2019-11-02")
+        self.assertEqual(fields.Date.to_string(inv.invoice_date), "2022-09-21")
+        self.assertEqual(fields.Date.to_string(inv.invoice_date_due), "2022-10-21")
         self.assertEqual(inv.journal_id.type, "purchase")
         self.assertEqual(inv.currency_id, self.env.ref("base.EUR"))
-        self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 12.99))
-        self.assertFalse(inv.currency_id.compare_amounts(inv.amount_untaxed, 10.83))
+        self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 1810.80))
+        self.assertFalse(inv.currency_id.compare_amounts(inv.amount_untaxed, 1509))
         self.assertEqual(len(inv.invoice_line_ids), 1)
         iline = inv.invoice_line_ids[0]
         self.assertEqual(iline.name, inv_config.label)
         self.assertEqual(iline.product_id, self.product)
         self.assertEqual(iline.tax_ids, self.product.supplier_taxes_id)
         self.assertEqual(float_compare(iline.quantity, 1.0, precision_digits=2), 0)
-        self.assertEqual(float_compare(iline.price_unit, 10.83, precision_digits=2), 0)
+        self.assertEqual(float_compare(iline.price_unit, 1509, precision_digits=2), 0)
         inv.unlink()
 
     def test_complete_import_pdfplumber(self):
@@ -450,16 +558,16 @@ class TestInvoiceImport(TransactionCase):
         self.test_complete_import()
 
     def test_test_mode(self):
-        self.demo_partner.write(
+        self.partner_ak.write(
             {
-                "simple_pdf_test_file": self.pdf_file_b64,
-                "simple_pdf_test_filename": self.filename,
+                "simple_pdf_test_file": self.ak_pdf_file_b64,
+                "simple_pdf_test_filename": self.ak_filename,
             }
         )
-        self.demo_partner.pdf_simple_test_run()
-        self.assertTrue(self.demo_partner.simple_pdf_test_results)
-        self.assertTrue(self.demo_partner.simple_pdf_test_raw_text)
-        self.demo_partner.pdf_simple_test_cleanup()
-        self.assertFalse(self.demo_partner.simple_pdf_test_results)
-        self.assertFalse(self.demo_partner.simple_pdf_test_raw_text)
-        self.assertFalse(self.demo_partner.simple_pdf_test_file)
+        self.partner_ak.pdf_simple_test_run()
+        self.assertTrue(self.partner_ak.simple_pdf_test_results)
+        self.assertTrue(self.partner_ak.simple_pdf_test_raw_text)
+        self.partner_ak.pdf_simple_test_cleanup()
+        self.assertFalse(self.partner_ak.simple_pdf_test_results)
+        self.assertFalse(self.partner_ak.simple_pdf_test_raw_text)
+        self.assertFalse(self.partner_ak.simple_pdf_test_file)
