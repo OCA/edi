@@ -10,7 +10,7 @@
     "author": "Creu Blanca,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": ["edi"],
-    "external_dependencies": {"python": ["invoice2data", "PyMuPDF"]},
+    "external_dependencies": {"python": ["PyMuPDF"]},
     "maintainers": ["etobella"],
     "data": [
         "data/edi_data.xml",
