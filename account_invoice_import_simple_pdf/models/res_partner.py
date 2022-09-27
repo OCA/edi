@@ -363,6 +363,20 @@ class ResPartner(models.Model):
                 thousand_sep = chr(32)  # regular space
         else:
             thousand_sep = ""
+        if thousand_sep == decimal_sep:
+            raise UserError(
+                _(
+                    "For partner '%s', the decimal separator (%s) is the same as "
+                    "the thousand separator (%s). Keep in mind that, if not set "
+                    "explicitly, decimal and thousand separator are read from the "
+                    "language of the partner."
+                )
+                % (
+                    self.display_name,
+                    char2separator.get(decimal_sep),
+                    char2separator.get(thousand_sep),
+                )
+            )
         logger.debug("decimal_sep=|%s| thousand_sep=|%s|", decimal_sep, thousand_sep)
         partner_config = {
             "recordset": self,
