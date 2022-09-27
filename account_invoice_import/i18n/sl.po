@@ -40,6 +40,14 @@ msgstr ""
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid ""
+"<b>Missing Invoice Import Configuration</b> on partner <a href=# data-oe-"
+"model=res.partner data-oe-id=%d>%s</a>: the imported invoice is incomplete."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "Account missing on product '%s' or on it's related category '%s'."
 msgstr ""
 
@@ -698,14 +706,6 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
-"This type of PDF invoice is not supported. Did you install the module to "
-"support this type of file?"
-msgstr ""
-
-#. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#, python-format
-msgid ""
 "This type of XML invoice is not supported. Did you install the module to "
 "support this type of file?"
 msgstr ""
@@ -832,7 +832,9 @@ msgstr ""
 #, python-format
 msgid ""
 "You have selected a Multi Line method for this import but Odoo could not "
-"extract/read any XML file inside the PDF invoice."
+"extract/read information about the lines of the invoice. You should update "
+"the Invoice Import Configuration of <a href=# data-oe-model=res.partner data-"
+"oe-id=%d>%s</a> to set a Single Line method."
 msgstr ""
 
 #. module: account_invoice_import
@@ -872,7 +874,7 @@ msgstr ""
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "email sent by <b>%s</b> on %s with subject <i>%s</i>"
+msgid "email sent by <b>%s</b> on %s with subject <b>%s</b>"
 msgstr ""
 
 #. module: account_invoice_import
