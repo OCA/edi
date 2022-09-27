@@ -26,7 +26,10 @@ class AccountInvoiceImport(models.TransientModel):
         """This method must be inherited by additional modules with
         the same kind of logic as the account_bank_statement_import_*
         modules"""
-        return self.invoice2data_parse_invoice(file_data)
+        res = super().fallback_parse_pdf_invoice(file_data)
+        if not res:
+            res = self.invoice2data_parse_invoice(file_data)
+        return res
 
     @api.model
     def invoice2data_parse_invoice(self, file_data):
@@ -54,12 +57,7 @@ class AccountInvoiceImport(models.TransientModel):
         except Exception as e:
             raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
         if not invoice2data_res:
-            raise UserError(
-                _(
-                    "This PDF invoice doesn't match a known template of "
-                    "the invoice2data lib."
-                )
-            )
+            return False
         logger.info("Result of invoice2data PDF extraction: %s", invoice2data_res)
         return self.invoice2data_to_parsed_inv(invoice2data_res)
 
