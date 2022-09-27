@@ -248,6 +248,15 @@ msgstr ""
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid ""
+"For partner '%s', the decimal separator (%s) is the same as the thousand "
+"separator (%s). Keep in mind that, if not set explicitly, decimal and "
+"thousand separator are read from the language of the partner."
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid ""
 "For partner '%s', the decimal separator cannot be the same as the thousand "
 "separator."
 msgstr ""
@@ -304,8 +313,8 @@ msgstr ""
 #: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_thousand_separator
 #: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_users__simple_pdf_thousand_separator
 msgid ""
-"If empty, Odoo will use the thousand separator configured on the language of"
-" the partner."
+"If empty, Odoo will use the thousand separator configured on the language of "
+"the partner."
 msgstr ""
 "S’il est vide, Odoo utilisera le séparateur de milliers configuré pour la "
 "langue du partenaire."
@@ -533,8 +542,8 @@ msgstr "Aucun"
 #, python-format
 msgid ""
 "Odoo could not extract the text from the PDF invoice with the method %s. "
-"Refer to the Odoo server logs for more technical information about the cause"
-" of the failure."
+"Refer to the Odoo server logs for more technical information about the cause "
+"of the failure."
 msgstr ""
 "Odoo n’a pas pu extraire le texte de la facture PDF avec la méthode %s. "
 "Reportez-vous aux journaux du serveur Odoo pour plus d’informations "
@@ -565,7 +574,6 @@ msgstr "Analyse des pages"
 
 #. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
-#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #, python-format
 msgid ""
 "Partner '%s' is configured with an extract rule '%s' with position %d for "
@@ -594,7 +602,6 @@ msgstr "Expression régulière"
 
 #. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
-#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid "Result:"
 msgstr "Résultat :"
@@ -615,12 +622,6 @@ msgstr "Recherche du partenaire"
 #: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__sequence
 msgid "Sequence"
 msgstr "Séquence"
-
-#. module: account_invoice_import_simple_pdf
-#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
-#, python-format
-msgid "Simple PDF import: could not find vendor."
-msgstr "Simple PDF Import : Impossible de trouver le Vendeur."
 
 #. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_keyword
@@ -677,13 +678,11 @@ msgstr "Chaîne de début"
 
 #. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
-#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #, python-format
 msgid "String '%s' not found"
 msgstr "Chaîne '%s' introuvable"
 
 #. module: account_invoice_import_simple_pdf
-#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #, python-format
 msgid "Successful cut on '%s'"
@@ -871,8 +870,7 @@ msgstr "AAAA MM JJ"
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid ""
-"You must configure a field extraction rule for field 'Date' for partner "
-"'%s'."
+"You must configure a field extraction rule for field 'Date' for partner '%s'."
 msgstr ""
 "Vous devez configurer une règle d’extraction de champ pour le champ 'Date' "
 "pour le partenaire '%s'."
@@ -932,7 +930,9 @@ msgstr "espace"
 
 #. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
-#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid "unknown"
 msgstr "inconnu"
+
+#~ msgid "Simple PDF import: could not find vendor."
+#~ msgstr "Simple PDF Import : Impossible de trouver le Vendeur."
