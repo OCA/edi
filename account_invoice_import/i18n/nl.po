@@ -37,6 +37,14 @@ msgstr "%d nieuwe factuur regel(s) aangemaakt: %s"
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid ""
+"<b>Missing Invoice Import Configuration</b> on partner <a href=# data-oe-"
+"model=res.partner data-oe-id=%d>%s</a>: the imported invoice is incomplete."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "Account missing on product '%s' or on it's related category '%s'."
 msgstr "Account ontbreekt bij '%s' of de daaraan gerelateerde categorie '%s'."
 
@@ -740,16 +748,6 @@ msgstr "Dit e-mail adres voor het importeren van facturen bestaat reeds!"
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
-"This type of PDF invoice is not supported. Did you install the module to "
-"support this type of file?"
-msgstr ""
-"Dit type PDF factuur is niet ondersteund. Wilt u de ondersteuning voor dit "
-"type installeren?"
-
-#. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#, python-format
-msgid ""
 "This type of XML invoice is not supported. Did you install the module to "
 "support this type of file?"
 msgstr ""
@@ -884,10 +882,10 @@ msgstr ""
 #, python-format
 msgid ""
 "You have selected a Multi Line method for this import but Odoo could not "
-"extract/read any XML file inside the PDF invoice."
+"extract/read information about the lines of the invoice. You should update "
+"the Invoice Import Configuration of <a href=# data-oe-model=res.partner data-"
+"oe-id=%d>%s</a> to set a Single Line method."
 msgstr ""
-"Er is ingesteld om een \"meerdere regel\" methode te gebruiken voor deze "
-"import. Maar er kon geen XML bestand worden gevonden binnen het PDF bestand."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
@@ -927,14 +925,32 @@ msgstr "Er moet een importeer instelling worden geselecteerd."
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "email sent by <b>%s</b> on %s with subject <i>%s</i>"
-msgstr "email verzonden door <b>%s</b> op %s met onderwerp <i>%s</i>"
+msgid "email sent by <b>%s</b> on %s with subject <b>%s</b>"
+msgstr ""
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "unspecified"
 msgstr "ongespecificeerd"
+
+#~ msgid ""
+#~ "This type of PDF invoice is not supported. Did you install the module to "
+#~ "support this type of file?"
+#~ msgstr ""
+#~ "Dit type PDF factuur is niet ondersteund. Wilt u de ondersteuning voor "
+#~ "dit type installeren?"
+
+#~ msgid ""
+#~ "You have selected a Multi Line method for this import but Odoo could not "
+#~ "extract/read any XML file inside the PDF invoice."
+#~ msgstr ""
+#~ "Er is ingesteld om een \"meerdere regel\" methode te gebruiken voor deze "
+#~ "import. Maar er kon geen XML bestand worden gevonden binnen het PDF "
+#~ "bestand."
+
+#~ msgid "email sent by <b>%s</b> on %s with subject <i>%s</i>"
+#~ msgstr "email verzonden door <b>%s</b> op %s met onderwerp <i>%s</i>"
 
 #~ msgid ""
 #~ "The tax amount has been forced to %s (amount computed by Odoo was: %s)."
