@@ -24,28 +24,36 @@ msgid "<b>regular PDF</b> file without any embedded XML file via the"
 msgstr ""
 
 #. module: account_invoice_import_invoice2data
+#: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
+#: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import__id
+msgid "ID"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
 #: model:product.product,name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Internet Access"
 msgstr "Acceso a internet"
 
 #. module: account_invoice_import_invoice2data
-#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:57
+#: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
+#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
 #, python-format
 msgid "PDF Invoice parsing failed. Error message: %s"
 msgstr ""
 
 #. module: account_invoice_import_invoice2data
-#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:60
-#, python-format
-msgid ""
-"This PDF invoice doesn't match a known template of the invoice2data lib."
-msgstr ""
-
-#. module: account_invoice_import_invoice2data
 #: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
-msgid "Unit(s)"
+msgid "Units"
 msgstr ""
 
 #. module: account_invoice_import_invoice2data
@@ -56,12 +64,6 @@ msgstr ""
 #. module: account_invoice_import_invoice2data
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "invoice2data"
-msgstr ""
-
-#. module: account_invoice_import_invoice2data
-#: model:product.product,weight_uom_name:account_invoice_import_invoice2data.internet_access
-#: model:product.template,weight_uom_name:account_invoice_import_invoice2data.internet_access_product_template
-msgid "kg"
 msgstr ""
 
 #. module: account_invoice_import_invoice2data
