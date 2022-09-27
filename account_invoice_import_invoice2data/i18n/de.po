@@ -22,30 +22,37 @@ msgid "<b>regular PDF</b> file without any embedded XML file via the"
 msgstr "<b>reguläre PDF</b> Datei ohne eingebettete XML Datei per"
 
 #. module: account_invoice_import_invoice2data
+#: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
+#: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import__id
+msgid "ID"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
 #: model:product.product,name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Internet Access"
 msgstr "Internet Zugang"
 
 #. module: account_invoice_import_invoice2data
-#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:57
+#: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: account_invoice_import_invoice2data
+#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
 #, python-format
 msgid "PDF Invoice parsing failed. Error message: %s"
 msgstr "PDF Rechnungsverarbeitung ist gescheitert. Fehler Meldung: %s"
 
 #. module: account_invoice_import_invoice2data
-#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:60
-#, python-format
-msgid ""
-"This PDF invoice doesn't match a known template of the invoice2data lib."
-msgstr ""
-"Diese PDF Rechnung entspricht keinem Template der invoice2data Bibliothek."
-
-#. module: account_invoice_import_invoice2data
 #: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
-msgid "Unit(s)"
-msgstr "Einheit(en)"
+msgid "Units"
+msgstr ""
 
 #. module: account_invoice_import_invoice2data
 #: model:ir.model,name:account_invoice_import_invoice2data.model_account_invoice_import
@@ -58,12 +65,6 @@ msgid "invoice2data"
 msgstr "invoice2data"
 
 #. module: account_invoice_import_invoice2data
-#: model:product.product,weight_uom_name:account_invoice_import_invoice2data.internet_access
-#: model:product.template,weight_uom_name:account_invoice_import_invoice2data.internet_access_product_template
-msgid "kg"
-msgstr "kg"
-
-#. module: account_invoice_import_invoice2data
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid ""
 "library (reads the text of the PDF and get the information). It will work "
@@ -73,3 +74,14 @@ msgstr ""
 "Bibliothek (liest den Text der PDF und erhält die Informationen). Dies "
 "funktioniert nur, wenn die Bibliothek invoice2data eine Vorlage für die "
 "Rechnungen dieses Lieferanten enthält."
+
+#~ msgid ""
+#~ "This PDF invoice doesn't match a known template of the invoice2data lib."
+#~ msgstr ""
+#~ "Diese PDF Rechnung entspricht keinem Template der invoice2data Bibliothek."
+
+#~ msgid "Unit(s)"
+#~ msgstr "Einheit(en)"
+
+#~ msgid "kg"
+#~ msgstr "kg"
