@@ -479,9 +479,17 @@ sudo pip3 install --upgrade pdfplumber
 <li><a class="reference external" href="https://pypi.org/project/regex/">regex</a> which is backward-compatible with the <em>re</em> module of the Python standard library, but has additional functionalities.</li>
 <li><a class="reference external" href="https://github.com/scrapinghub/dateparser">dateparser</a> which is a powerful date parsing library.</li>
 </ul>
-<p>You can install these Python libraries via pip:</p>
+<p>The dateparser lib depends itself on regex. So you can install these Python libraries via pip with the following command:</p>
 <pre class="code literal-block">
-sudo pip3 install --upgrade regex dateparser
+sudo pip3 install --upgrade dateparser
+</pre>
+<p>The dateparser lib is not compatible with all regex lib versions. As of September 2022, the <a class="reference external" href="https://github.com/scrapinghub/dateparser/blob/master/setup.py#L30">version requirement</a> declared by dateparser for regex is <strong>!=2019.02.19, !=2021.8.27, &lt;2022.3.15</strong>. So the latest version of regex which is compatible with dateparser is <strong>2022.3.2</strong>. To know the version of regex installed in your environment, run:</p>
+<pre class="code literal-block">
+sudo pip3 show regex
+</pre>
+<p>To force regex to version 2022.3.2, run:</p>
+<pre class="code literal-block">
+sudo pip3 install regex==2022.3.2
 </pre>
 </div>
 </div>
