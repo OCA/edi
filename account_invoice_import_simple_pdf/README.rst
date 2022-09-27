@@ -143,11 +143,24 @@ This module also requires the following Python libraries:
 * `regex <https://pypi.org/project/regex/>`_ which is backward-compatible with the *re* module of the Python standard library, but has additional functionalities.
 * `dateparser <https://github.com/scrapinghub/dateparser>`_ which is a powerful date parsing library.
 
-You can install these Python libraries via pip:
+The dateparser lib depends itself on regex. So you can install these Python libraries via pip with the following command:
 
 .. code::
 
-  sudo pip3 install --upgrade regex dateparser
+  sudo pip3 install --upgrade dateparser
+
+The dateparser lib is not compatible with all regex lib versions. As of September 2022, the `version requirement <https://github.com/scrapinghub/dateparser/blob/master/setup.py#L30>`_ declared by dateparser for regex is **!=2019.02.19, !=2021.8.27, <2022.3.15**. So the latest version of regex which is compatible with dateparser is **2022.3.2**. To know the version of regex installed in your environment, run:
+
+
+.. code::
+
+  sudo pip3 show regex
+
+To force regex to version 2022.3.2, run:
+
+.. code::
+
+  sudo pip3 install regex==2022.3.2
 
 Configuration
 =============
