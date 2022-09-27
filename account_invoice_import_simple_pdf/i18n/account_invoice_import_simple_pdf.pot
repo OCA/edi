@@ -239,6 +239,15 @@ msgstr ""
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid ""
+"For partner '%s', the decimal separator (%s) is the same as the thousand "
+"separator (%s). Keep in mind that, if not set explicitly, decimal and "
+"thousand separator are read from the language of the partner."
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid ""
 "For partner '%s', the decimal separator cannot be the same as the thousand "
 "separator."
 msgstr ""
@@ -571,12 +580,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__sequence
 #: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__sequence
 msgid "Sequence"
-msgstr ""
-
-#. module: account_invoice_import_simple_pdf
-#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
-#, python-format
-msgid "Simple PDF import: could not find vendor."
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
