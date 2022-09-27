@@ -40,6 +40,14 @@ msgstr "%d nouvelle(s) ligne(s) de facturation créée(s) : %s"
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid ""
+"<b>Missing Invoice Import Configuration</b> on partner <a href=# data-oe-"
+"model=res.partner data-oe-id=%d>%s</a>: the imported invoice is incomplete."
+msgstr ""
+
+#. module: account_invoice_import
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "Account missing on product '%s' or on it's related category '%s'."
 msgstr "Compte manquant sur le produit '%s' ou sur sa catégorie connexe '%s'."
 
@@ -736,16 +744,6 @@ msgstr "Cet e-mail d'importation de facture existe déjà !"
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
-"This type of PDF invoice is not supported. Did you install the module to "
-"support this type of file?"
-msgstr ""
-"Ce type de facture PDF n'est pas pris en charge. Avez-vous installé le "
-"module pour supporter ce type de fichier ?"
-
-#. module: account_invoice_import
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#, python-format
-msgid ""
 "This type of XML invoice is not supported. Did you install the module to "
 "support this type of file?"
 msgstr ""
@@ -877,10 +875,10 @@ msgstr ""
 #, python-format
 msgid ""
 "You have selected a Multi Line method for this import but Odoo could not "
-"extract/read any XML file inside the PDF invoice."
+"extract/read information about the lines of the invoice. You should update "
+"the Invoice Import Configuration of <a href=# data-oe-model=res.partner data-"
+"oe-id=%d>%s</a> to set a Single Line method."
 msgstr ""
-"Vous avez sélectionné la méthode Multi Line pour cette importation mais Odoo "
-"n'a pu extraire/lire aucun fichier XML dans la facture PDF."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
@@ -925,7 +923,7 @@ msgstr "Vous devez sélectionner une configuration d'importation de factures."
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "email sent by <b>%s</b> on %s with subject <i>%s</i>"
+msgid "email sent by <b>%s</b> on %s with subject <b>%s</b>"
 msgstr ""
 
 #. module: account_invoice_import
@@ -933,6 +931,20 @@ msgstr ""
 #, python-format
 msgid "unspecified"
 msgstr ""
+
+#~ msgid ""
+#~ "This type of PDF invoice is not supported. Did you install the module to "
+#~ "support this type of file?"
+#~ msgstr ""
+#~ "Ce type de facture PDF n'est pas pris en charge. Avez-vous installé le "
+#~ "module pour supporter ce type de fichier ?"
+
+#~ msgid ""
+#~ "You have selected a Multi Line method for this import but Odoo could not "
+#~ "extract/read any XML file inside the PDF invoice."
+#~ msgstr ""
+#~ "Vous avez sélectionné la méthode Multi Line pour cette importation mais "
+#~ "Odoo n'a pu extraire/lire aucun fichier XML dans la facture PDF."
 
 #~ msgid " Amount w/o tax: %s %s"
 #~ msgstr " Montant hors taxe : %s %s"
