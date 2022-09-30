@@ -4,23 +4,19 @@
 import base64
 import logging
 import os
+import re
+import shutil
+import subprocess
 from collections import OrderedDict
 from tempfile import NamedTemporaryFile
 
 import dateparser
+import yaml
+from unidecode import unidecode
 
 from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
-import re
-
-import yaml
-from unidecode import unidecode
-
-try:
-    import fitz
-except ImportError:
-    _logger.debug("Cannot import PyMuPDF")
 
 
 class Pdf2dataTemplate(models.Model):
@@ -30,15 +26,16 @@ class Pdf2dataTemplate(models.Model):
 
     name = fields.Char()
     code = fields.Char(related="type_id.code")
-    type_id = fields.Many2one("pdf2data.template.type", required=True)
+    type_id = fields.Many2one("pdf2data.template.type")
+    exchange_type_id = fields.Many2one("edi.exchange.type", required=True)
     pdf2data_template_yml = fields.Text(
         compute="_compute_template_yml", inverse="_inverse_template_yml"
     )
     pdf2data_template_dict = fields.Serialized()
+    pdf2data_options_dict = fields.Serialized()
     pdf_file = fields.Binary(attachment=True)
     pdf_filename = fields.Char()
     file_result = fields.Char(readonly=True)
-    file_processed_result = fields.Html(readonly=True)
     sequence = fields.Integer(default=20)
     extracted_text = fields.Text(readonly=True)
 
@@ -47,9 +44,22 @@ class Pdf2dataTemplate(models.Model):
         for record in self:
             record.pdf2data_template_yml = yaml.dump(record.pdf2data_template_dict)
 
+    @api.model
+    def _get_pdf2data_options(self):
+        return {
+            "remove_whitespace": False,
+            "remove_accents": False,
+            "lowercase": False,
+            "currency": "EUR",
+            "date_formats": [],
+            "language": "en",
+            "replace": [],
+            "required_fields": [],
+        }
+
     def _inverse_template_yml(self):
         for record in self:
-            tpl = yaml.load(record.pdf2data_template_yml)
+            tpl = yaml.load(record.pdf2data_template_yml, Loader=yaml.SafeLoader)
             assert "keywords" in tpl.keys(), "Missing keywords field."
             # Keywords as list, if only one.
             if type(tpl["keywords"]) is not list:
@@ -62,18 +72,28 @@ class Pdf2dataTemplate(models.Model):
             ):
                 tpl["exclude_keywords"] = [tpl["exclude_keywords"]]
             record.pdf2data_template_dict = tpl
+            options = self._get_pdf2data_options()
+            options.update(tpl.get("options", {}))
+            record.pdf2data_options_dict = options
 
-    def _parse_pdf(self, data):
+    def _extract_pdf(self, data):
         data_file = NamedTemporaryFile(
             delete=False, prefix="odoo-simple-pdf-", suffix=".pdf"
         )
         try:
             data_file.write(base64.b64decode(data))
             data_file.close()
-            extracted_str = ""
-            doc = fitz.open(data_file.name)
-            for page in doc:
-                extracted_str += page.getText("text")
+            if shutil.which("pdftotext"):
+                extracted_str, err = subprocess.Popen(
+                    ["pdftotext", "-layout", "-enc", "UTF-8", data_file.name, "-"],
+                    stdout=subprocess.PIPE,
+                ).communicate()
+                extracted_str = extracted_str.decode("utf-8")
+            else:
+                raise EnvironmentError(
+                    "pdftotext not installed. Can be downloaded "
+                    "from https://poppler.freedesktop.org/"
+                )
         finally:
             os.unlink(data_file.name)
         _logger.debug("START pdftotext result ===========================")
@@ -82,34 +102,32 @@ class Pdf2dataTemplate(models.Model):
 
         _logger.debug("Testing {} template files".format(len(self)))
         for template in self:
-            print(extracted_str)
-            optimized_str = self.prepare_input(extracted_str)
-            print(optimized_str)
-            if self.matches_input(optimized_str):
-                return optimized_str, self.extract_data(optimized_str), template
+            optimized_str = template._prepare_input(extracted_str)
+            if template._matches_input(optimized_str):
+                return optimized_str, template._extract_data(optimized_str), template
         return False, False, False
 
-    def prepare_input(self, extracted_str):
+    def _prepare_input(self, extracted_str):
         """
         Input raw string and do transformations, as set in template file.
         """
 
         # Remove withspace
-        if self.pdf2data_template_dict["options"].get("remove_whitespace"):
+        if self.pdf2data_options_dict["remove_whitespace"]:
             optimized_str = re.sub(" +", "", extracted_str)
         else:
             optimized_str = extracted_str
 
         # Remove accents
-        if self.pdf2data_template_dict["options"].get("remove_accents"):
+        if self.pdf2data_options_dict["remove_accents"]:
             optimized_str = unidecode(optimized_str)
 
         # convert to lower case
-        if self.pdf2data_template_dict["options"].get("lowercase"):
+        if self.pdf2data_options_dict["lowercase"]:
             optimized_str = optimized_str.lower()
 
         # specific replace
-        for replace in self.pdf2data_template_dict["options"].get("replace", []):
+        for replace in self.pdf2data_options_dict["replace"]:
             assert (
                 len(replace) == 2
             ), "A replace should be a list of exactly 2 elements."
@@ -117,14 +135,18 @@ class Pdf2dataTemplate(models.Model):
 
         return optimized_str
 
-    def matches_input(self, optimized_str):
-        """See if string matches all keyword patterns and no exclude_keyword patterns set in template file.
+    def _matches_input(self, optimized_str):
+        """See if string matches all keyword patterns and no exclude_keyword
+        patterns set in template file.
         Args:
-        optimized_str: String of the text from OCR of the pdf after applying options defined in the template.
+        optimized_str: String of the text from OCR of the pdf after applying
+        options defined in the template.
         Return:
         Boolean
-            - True if all keywords are found and none of the exclude_keywords are found.
-            - False if either not all keywords are found or at least one exclude_keyword is found."""
+            - True if all keywords are found and none of the exclude_keywords
+                are found.
+            - False if either not all keywords are found or at least one
+                exclude_keyword is found."""
         if all(
             [
                 re.search(keyword, optimized_str)
@@ -155,7 +177,7 @@ class Pdf2dataTemplate(models.Model):
             _logger.debug("Template: %s. Failed to match all keywords.", self.name)
             return False
 
-    def extract_data(self, optimized_str):
+    def _extract_data(self, optimized_str):
 
         """
         Given a template file and a string, extract matching data fields.
@@ -165,73 +187,21 @@ class Pdf2dataTemplate(models.Model):
         _logger.debug(optimized_str)
         _logger.debug("END optimized_str ==========================")
         _logger.debug(
-            "Date parsing: languages=%s date_formats=%s",
-            self.pdf2data_template_dict["options"].get("languages"),
-            self.pdf2data_template_dict["options"].get("date_formats"),
-        )
-        _logger.debug(
-            "Float parsing: decimal separator=%s",
-            self.pdf2data_template_dict["options"].get("decimal_separator", "."),
+            "Date parsing: language=%s date_formats=%s",
+            self.pdf2data_options_dict["language"],
+            self.pdf2data_options_dict["date_formats"],
         )
         _logger.debug("keywords=%s", self.pdf2data_template_dict["keywords"])
         _logger.debug(self.pdf2data_template_dict)
 
         # Try to find data for each field.
-        output = {}
-        output["issuer"] = self.name
+        output = {
+            "issuer": self.name,
+            "currency": self.pdf2data_options_dict["currency"],
+        }
 
-        for k, v in self.pdf2data_template_dict["fields"].items():
-            if isinstance(v, dict):
-                if "parser" in v:
-                    if hasattr(self, "_parse_%s" % v["parser"]):
-                        parser = getattr(self, "_parse_%s" % v["parser"])
-                        value = parser(k, v, optimized_str)
-                        if value is not None:
-                            output[k] = value
-                        else:
-                            _logger.error(
-                                "Failed to parse field %s with parser %s",
-                                k,
-                                v["parser"],
-                            )
-                    else:
-                        _logger.warning(
-                            "Field %s has unknown parser %s set", k, v["parser"]
-                        )
-                else:
-                    _logger.warning("Field %s doesn't have parser specified", k)
-            elif k.startswith("static_"):
-                _logger.debug("field=%s | static value=%s", k, v)
-                output[k.replace("static_", "")] = v
-            else:
-                # Legacy syntax support (backward compatibility)
-                result = None
-                if k.startswith("sum_amount") and type(v) is list:
-                    k = k[4:]
-                    result = self._parse_regex(
-                        k,
-                        {"regex": v, "type": "float", "group": "sum"},
-                        optimized_str,
-                        True,
-                    )
-                elif k.startswith("date") or k.endswith("date"):
-                    result = self._parse_regex(
-                        k, {"regex": v, "type": "date"}, optimized_str, True
-                    )
-                elif k.startswith("amount"):
-                    result = self._parse_regex(
-                        k, {"regex": v, "type": "float"}, optimized_str, True
-                    )
-                else:
-                    result = self._parse_regex(k, {"regex": v}, optimized_str, True)
-
-                if result is None:
-                    _logger.warning("regexp for field %s didn't match", k)
-                else:
-                    output[k] = result
-
-        output["currency"] = self.pdf2data_template_dict["options"].get(
-            "currency", "EUR"
+        output.update(
+            self._extract_fields(optimized_str, self.pdf2data_template_dict["fields"])
         )
 
         # Run plugins:
@@ -240,13 +210,9 @@ class Pdf2dataTemplate(models.Model):
         #        plugin_func.extract(self, optimized_str, output)
 
         # If required fields were found, return output, else log error.
-        required_fields = self.pdf2data_template_dict["options"].get(
-            "required_fields", []
-        )
+        required_fields = self.pdf2data_options_dict["required_fields"]
 
         if set(required_fields).issubset(output.keys()):
-            output["desc"] = "Invoice from %s" % (self.name)
-            _logger.debug(output)
             return output
         else:
             fields = list(set(output.keys()))
@@ -259,7 +225,29 @@ class Pdf2dataTemplate(models.Model):
             )
             return None
 
-    def _parse_regex(self, field, settings, content, legacy=False):
+    def _extract_fields(self, optimized_str, fields):
+        output = {}
+        for field, field_settings in fields.items():
+            if isinstance(field_settings, dict):
+                parser_key = field_settings.get("parser", "regex")
+                if hasattr(self, "_parse_%s" % parser_key):
+                    parser = getattr(self, "_parse_%s" % parser_key)
+                    value = parser(field, field_settings, optimized_str)
+                    if value is not None:
+                        output[field] = value
+                    else:
+                        _logger.error(
+                            "Failed to parse field %s with parser %s",
+                            field,
+                            field_settings["parser"],
+                        )
+                else:
+                    _logger.warning(
+                        "Field %s has unknown parser %s set", field, parser_key
+                    )
+        return output
+
+    def _parse_regex(self, field, settings, content):
         if "regex" not in settings:
             _logger.warning('Field "%s" doesn\'t have regex specified', field)
             return None
@@ -285,11 +273,21 @@ class Pdf2dataTemplate(models.Model):
                         )
                         return None
                 result += matches
-
-        if "type" in settings:
-            for k, v in enumerate(result):
-                result[k] = self.coerce_type(v, settings["type"])
-
+        settings_type = settings.get("type", "str")
+        converted_result = []
+        for v in result:
+            if hasattr(self, "_convert_type_%s" % settings_type):
+                converted_value = getattr(self, "_convert_type_%s" % settings_type)(
+                    v, settings
+                )
+                if isinstance(converted_value, list):
+                    converted_result += converted_value
+                else:
+                    converted_result.append(converted_value)
+            else:
+                converted_result.append(v)
+                _logger.warning("Unsupported type %s" % settings_type)
+        result = converted_result
         if "group" in settings:
             if settings["group"] == "sum":
                 result = sum(result)
@@ -297,96 +295,99 @@ class Pdf2dataTemplate(models.Model):
                 _logger.warning("Unsupported grouping method: " + settings["group"])
                 return None
         else:
-            # Remove duplicates maintaining the order by default (it's more
-            # natural). Don't do that for legacy parsing to keep backward
-            # compatibility.
-            if legacy:
-                result = list(set(result))
-            else:
-                result = list(OrderedDict.fromkeys(result))
-
+            result = list(OrderedDict.fromkeys(result))
         if isinstance(result, list) and len(result) == 1:
             result = result[0]
-
         return result
 
-    def coerce_type(self, value, target_type):
-        if target_type == "int":
-            if not value.strip():
-                return 0
-            return int(self.parse_number(value))
-        elif target_type == "float":
-            if not value.strip():
-                return 0.0
-            return float(self.parse_number(value))
-        elif target_type == "date":
-            return self.parse_date(value)
-        assert False, "Unknown type"
+    def _parse_static(self, field, settings, content):
+        if "value" not in settings:
+            _logger.warning("Field %s doesn't have value key defined" % field)
+        return settings["value"]
 
-    def parse_number(self, value):
+    @api.model
+    def _default_line_settings(self):
+        return {"line_separator": r"\n"}
+
+    def _parse_line(self, field, settings, content):
+        line_settings = self._default_line_settings()
+        line_settings.update(settings)
+        assert "start_block" in line_settings, "Lines block start regex missing"
+        assert "end_block" in line_settings, "Lines block end regex missing"
+        assert "start" in line_settings, "Start regex missing"
+        assert "end" in line_settings, "End regex missing"
+        assert "fields" in line_settings, "Fields missing"
+        start = re.search(line_settings["start_block"], content)
+        end = re.search(line_settings["end_block"], content)
+        if not start or not end:
+            _logger.warning(f"No lines found. Start match: {start}. End match: {end}")
+            return
+        content = content[start.end() : end.start()]
+        lines = []
+        line_content = []
+        for line in re.split(line_settings["line_separator"], content):
+            if not line.strip("").strip("\n").strip("\r") or not line:
+                continue
+            if not line_content and re.search(settings["start"], line):
+                line_content.append(line)
+                continue
+            if not line_content:
+                continue
+            line_content.append(line)
+            if re.search(settings["end"], line):
+                lines.append(
+                    self._extract_fields(
+                        line_settings["line_separator"].join(line_content),
+                        line_settings["fields"],
+                    )
+                )
+                line_content = []
+        return lines
+
+    def _convert_type_str(self, value, settings):
+        val = value.strip()
+        if settings.get("split_separator", False):
+            return [v.strip() for v in val.split(settings["split_separator"])]
+        return val
+
+    def _convert_type_int(self, value, settings):
+        return int(self._convert_type_float(value, settings))
+
+    def _convert_type_float(self, value, settings):
+        if not value.strip():
+            return 0.0
         assert (
-            value.count(self.options["decimal_separator"]) < 2
+            value.count(self.pdf2data_options_dict["decimal_separator"]) < 2
         ), "Decimal separator cannot be present several times"
         # replace decimal separator by a |
         amount_pipe = value.replace(
-            self.pdf2data_template_dict["options"].get("decimal_separator", "."), "|"
+            self.pdf2data_options_dict["decimal_separator"], "|"
         )
         # remove all possible thousands separators
         amount_pipe_no_thousand_sep = re.sub(r"[.,'\s]", "", amount_pipe)
         # put dot as decimal sep
         return float(amount_pipe_no_thousand_sep.replace("|", "."))
 
-    def parse_date(self, value):
-        """Parses date and returns date after parsing"""
-        res = dateparser.parse(
+    def _convert_type_date(self, value, settings):
+        return dateparser.parse(
             value,
-            date_formats=self.pdf2data_template_dict["options"].get("date_formats", []),
-            languages=self.pdf2data_template_dict["options"].get("languages", []),
+            date_formats=self.pdf2data_options_dict["date_formats"],
+            languages=[self.pdf2data_options_dict["language"]],
         )
-        _logger.debug("result of date parsing=%s", res)
-        return res
 
     def check_pdf(self):
         self.ensure_one()
-        extracted_text, data, template = self._parse_pdf(self.pdf_file)
+        extracted_text, data, template = self._extract_pdf(self.pdf_file)
         if not template:
             self.write(
                 {
-                    "file_result": False,
-                    "file_processed_result": "Data cannot be processed",
+                    "file_result": "Data cannot be processed",
                     "extracted_text": "No text extracted",
                 }
             )
             return
         self.extracted_text = extracted_text
-        self.file_result = data
-        backend = self.env.ref("edi_pdf2data.pdf2data_backend")
-        component = backend._find_component(
-            self._name,
-            ["process_data"],
-            backend_type=backend.backend_type_id.code,
-            process_type=self.type_id.code,
-        )
-        if component and hasattr(component, "preview_data"):
-            self.file_processed_result = component.preview_data(data, self)
-        else:
-            self.file_processed_result = self._preview_data(data)
-
-    def _preview_data(self, data):
-        result = ""
-        for key in data:
-            value = data[key]
-            if isinstance(value, list):
-                result += "<li>{}:{}</li>".format(
-                    key,
-                    "".join(
-                        "<ul><li>Item: %s</li></ul>" % self._preview_data(val)
-                        for val in value
-                    ),
-                )
-            else:
-                result += "<li>{}: {}</li>".format(key, value)
-        return "<ul>%s</ul>" % result
+        self.file_result = yaml.dump(data)
 
 
 class Pdf2dataTemplateType(models.Model):

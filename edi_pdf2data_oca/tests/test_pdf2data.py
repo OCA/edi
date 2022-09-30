@@ -25,8 +25,13 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
                 "pdf_file_name": "AmazonWebServices.pdf",
             }
         )
-        cls.template_type = cls.env["pdf2data.template.type"].create(
-            {"code": "invoice.demo", "name": "Standard invoice"}
+        cls.exchange_type = cls.env["edi.exchange.type"].create(
+            {
+                "name": "Test CSV exchange",
+                "code": "pdf2data",
+                "direction": "input",
+                "backend_type_id": cls.env.ref("edi_pdf2data.backend_type").id,
+            }
         )
 
     def import_template(self, file="com.amazon.aws.yml"):
@@ -37,7 +42,7 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
             {
                 "pdf2data_template_yml": template,
                 "name": "Amazon WS",
-                "type_id": self.template_type.id,
+                "exchange_type_id": self.exchange_type.id,
             }
         )
 
@@ -66,11 +71,8 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
             {"pdf_file": base64.b64encode(self.file), "pdf_filename": "amazon.pdf"}
         )
         self.assertFalse(template.file_result)
-        self.assertFalse(template.file_processed_result)
         template.check_pdf()
         self.assertTrue(template.file_result)
-        self.assertTrue(template.file_processed_result)
-        self.assertNotEqual(template.file_processed_result, template.file_result)
 
     def test_check_data_no_template(self):
         template = self.import_template("com.amazon.aws-include.yml")
@@ -78,7 +80,5 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
             {"pdf_file": base64.b64encode(self.file), "pdf_filename": "amazon.pdf"}
         )
         self.assertFalse(template.file_result)
-        self.assertFalse(template.file_processed_result)
         template.check_pdf()
-        self.assertFalse(template.file_result)
-        self.assertTrue(template.file_processed_result)
+        self.assertTrue(template.file_result)

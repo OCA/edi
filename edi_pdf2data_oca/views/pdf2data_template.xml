@@ -24,6 +24,11 @@
                             name="type_id"
                             options="{'no_open': 1, 'no_create': 1}"
                         />
+                        <field
+                            name="exchange_type_id"
+                            options="{'no_open': 1, 'no_create': 1}"
+                            domain="[('backend_type_id', '=', %(edi_pdf2data.backend_type)s)]"
+                        />
                         <field name="sequence" />
                         <field name="pdf_file" filename="pdf_filename" />
                         <field name="pdf_filename" invisible="1" />
@@ -33,12 +38,7 @@
                             <field name="pdf2data_template_yml" widget="ace" />
                         </page>
                         <page name="result" string="Result">
-                            <field
-                                name="file_result"
-                                widget="ace"
-                                options="{'mode': 'json'}"
-                            />
-                            <field name="file_processed_result" />
+                            <field name="file_result" widget="ace" />
                         </page>
                         <page name="extracted_text" string="Extracted Text">
                             <field name="extracted_text" />

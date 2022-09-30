@@ -5,25 +5,44 @@
 from odoo.addons.component.core import Component
 
 
-class EdiInputPdf2DataProcess(Component):
-    _name = "edi.input.process.pdf2data.import_data"
+class EdiInputPdf2DataProcessAbstract(Component):
+    _name = "edi.input.process.pdf2data.abstract"
     _inherit = "edi.component.input.mixin"
     _usage = "input.process"
-    _backend_type = "import_data"
-    _exchange_type = "pdf2data"
+    _backend_type = "pdf2data"
+    _exchange_type = False
+
+    def _pdf2data_template_domain(self):
+        return [("exchange_type_id", "=", self.exchange_record.exchange_type_id.id)]
 
     def process(self):
-        extracted_text, data, template = (
+        _extracted_text, data, template = (
             self.env["pdf2data.template"]
-            .search([])
-            ._parse_pdf(self.exchange_record.exchange_file)
+            .search(self._pdf2data_template_domain())
+            ._extract_pdf(self.exchange_record.exchange_file)
         )
         if not template:
             return
-        component = self.component(
-            usage="process_data",
-            backend_type=self.exchange_record.backend_id.backend_type_id.code,
-            exchange_type=self.exchange_record.type_id.code,
-            process_type=template.type_id.code,
-        )
-        component.process_data(data, template, self.exchange_record.exchange_file)
+        self.process_data(data, template)
+
+    def process_data(self, data, template):
+        pass
+
+
+class EdiInputPdf2DataProcess(Component):
+    _name = "edi.input.process.pdf2data"
+    _inherit = "edi.input.process.pdf2data.abstract"
+    _exchange_type = "pdf2data_generic"
+
+    def _pdf2data_template_domain(self):
+        return []
+
+    def process_data(self, data, template):
+        if template.exchange_type_id.code == self._exchange_type:
+            return
+        self.exchange_record.exchange_type_id = template.exchange_type_id
+        self.component(
+            usage=self._usage,
+            backend_type=self._backend_type,
+            exchange_type=template.exchange_type_id.code,
+        ).process_data(data, template)
