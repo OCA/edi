@@ -3,6 +3,8 @@
 
 import base64
 
+import yaml
+
 from odoo import tools
 
 from odoo.addons.component.core import Component
@@ -25,34 +27,33 @@ class Pdf2DataComponentTestCase(common.EDIBackendCommonComponentRegistryTestCase
             }
         )
 
+        cls.exchange_type = cls.env["edi.exchange.type"].create(
+            {
+                "name": "Test CSV exchange",
+                "code": "invoice.demo",
+                "direction": "input",
+                "backend_type_id": cls.env.ref("edi_pdf2data.backend_type").id,
+            }
+        )
         template = tools.file_open(
             "com.amazon.aws.yml", mode="r", subdir="addons/edi_pdf2data/tests",
         ).read()
-        template_type = cls.env["pdf2data.template.type"].create(
-            {"code": "invoice.demo", "name": "Standard invoice"}
-        )
         cls.template = cls.env["pdf2data.template"].create(
             {
                 "pdf2data_template_yml": template,
                 "name": "Amazon WS",
-                "type_id": template_type.id,
+                "exchange_type_id": cls.exchange_type.id,
             }
         )
 
         class DemoComponent(Component):
-            _inherit = "edi.component.process_data.mixin"
             _name = "edi.component.process_data.demo"
-            _usage = "process_data"
-            _backend_type = "import_data"
-            _exchange_type = None
-            _process_type = "invoice.demo"
+            _inherit = "edi.input.process.pdf2data.abstract"
+            _exchange_type = "invoice.demo"
 
-            def process_data(self, data, template, file):
+            def process_data(self, data, template):
                 record = self.env.user.partner_id
                 self.exchange_record.write({"model": record._name, "res_id": record.id})
-
-            def preview_data(self, data, template):
-                return data
 
         cls._build_components(
             cls, DemoComponent,
@@ -73,9 +74,11 @@ class Pdf2DataComponentTestCase(common.EDIBackendCommonComponentRegistryTestCase
             }
         )
         self.assertFalse(self.template.file_result)
-        self.assertFalse(self.template.file_processed_result)
         self.template.check_pdf()
         self.assertTrue(self.template.file_result)
-        self.assertTrue(self.template.file_processed_result)
-        self.assertIn(self.template.file_result, self.template.file_processed_result)
+        self.assertTrue(
+            isinstance(
+                yaml.load(self.template.file_result, Loader=yaml.SafeLoader), dict
+            )
+        )
         # Some html items have been added, so, we check that the data is contained

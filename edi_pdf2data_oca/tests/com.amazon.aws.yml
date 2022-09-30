@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 issuer: Amazon Web Services
 fields:
-  amount: TOTAL AMOUNT DUE ON.*\$(\d+\.\d+)
-  amount_untaxed: TOTAL AMOUNT DUE ON.*\$(\d+\.\d+)
-  date: Invoice Date:\s+([a-zA-Z]+ \d+ , \d+)
-  invoice_number: Invoice Number:\s+(\d+)
-  partner_name: (Amazon Web Services, Inc\.)
+  amount:
+    regex: TOTAL AMOUNT DUE ON.*\$(\d+\.\d+)
+    type: float
+  amount_untaxed:
+    regex: TOTAL AMOUNT DUE ON.*\$(\d+\.\d+)
+    type: float
+  date:
+    regex: Invoice Date:\s+([a-zA-Z]+ \d+ , \d+)
+    type: date
+  invoice_number:
+    regex: Invoice Number:\s+(\d+)
+  partner_name:
+    regex: (Amazon Web Services, Inc\.)
   static_partner_website: aws.amazon.com
 keywords:
   - Amazon Web Services
@@ -21,6 +29,5 @@ options:
   currency: USD
   date_formats:
     - "%B %d, %Y"
-  languages:
-    - en
+  language: en
   decimal_separator: "."
