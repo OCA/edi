@@ -1,0 +1,56 @@
+{
+    "13.0": {
+        "14.0": {
+            "base_ubl": {
+                "blacklist_pull_requests": {
+                    "236": true,
+                    "277": true,
+                    "421": true,
+                    "384": true,
+                    "423": true
+                }
+            },
+            "partner_identification_import": {
+                "blacklist_pull_requests": {
+                    "236": true,
+                    "384": true
+                }
+            },
+            "sale_order_import": {
+                "blacklist_pull_requests": {
+                    "201": true,
+                    "236": true,
+                    "384": true
+                }
+            },
+            "sale_order_import_ubl": {
+                "blacklist_pull_requests": {
+                    "236": true,
+                    "384": true,
+                    "508": true
+                }
+            },
+            "sale_order_customer_free_ref": {
+                "blacklist_pull_requests": {
+                    "328": true,
+                    "384": true
+                }
+            },
+            "base_business_document_import": {
+                "blacklist_pull_requests": {
+                    "236": true
+                }
+            },
+            "base_ubl_payment": {
+                "blacklist_pull_requests": {
+                    "384": true
+                }
+            },
+            "account_invoice_ubl": {
+                "blacklist_pull_requests": {
+                    "421": true
+                }
+            }
+        }
+    }
+}
