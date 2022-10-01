@@ -40,6 +40,7 @@ setuptools.setup(
         'odoo14-addon-edi_stock_oca',
         'odoo14-addon-edi_storage_oca',
         'odoo14-addon-edi_ubl_oca',
+        'odoo14-addon-edi_voxel_oca',
         'odoo14-addon-edi_webservice_oca',
         'odoo14-addon-edi_xml_oca',
         'odoo14-addon-partner_identification_import',
