@@ -16,7 +16,6 @@ class ResPartner(models.Model):
     invoice_import_count = fields.Integer(
         compute="_compute_invoice_import_count",
         string="Number of Invoice Import Configurations",
-        readonly=True,
     )
 
     def _compute_invoice_import_count(self):
