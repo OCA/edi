@@ -7,11 +7,11 @@
 import mock
 
 from odoo import fields
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_is_zero
 
 
-class TestInvoiceImport(SavepointCase):
+class TestInvoiceImport(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
