@@ -317,10 +317,12 @@ class AccountInvoiceImport(models.TransientModel):
                             "but Odoo could not extract/read information about the "
                             "lines of the invoice. You should update the Invoice Import "
                             "Configuration of "
-                            "<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a> "
-                            "to set a Single Line method."
+                            "<a href=# data-oe-model=res.partner "
+                            "data-oe-id={partner_id}>{partner_name}</a> "
+                            "to set a Single Line method.",
+                            partner_id=partner.id,
+                            partner_name=partner.display_name,
                         )
-                        % (partner.id, partner.display_name)
                     )
 
         # Write analytic account + fix syntax for taxes
@@ -388,10 +390,11 @@ class AccountInvoiceImport(models.TransientModel):
                 product = self.env["product.product"].browse(il_vals["product_id"])
                 raise UserError(
                     _(
-                        "Account missing on product '%s' or on it's related "
-                        "category '%s'."
+                        "Account missing on product '{product}' or on it's related "
+                        "category '{product_categ}'.",
+                        product=product.display_name,
+                        product_categ=product.categ_id.display_name,
                     )
-                    % (product.display_name, product.categ_id.display_name)
                 )
             if line.get("name"):
                 il_vals["name"] = line["name"]
@@ -469,7 +472,9 @@ class AccountInvoiceImport(models.TransientModel):
             try:
                 xml_root = etree.fromstring(file_data)
             except Exception as e:
-                raise UserError(_("This XML file is not XML-compliant. Error: %s") % e)
+                raise UserError(
+                    _("This XML file is not XML-compliant. Error: %s") % e
+                ) from None
             pretty_xml_bytes = etree.tostring(
                 xml_root, pretty_print=True, encoding="UTF-8", xml_declaration=True
             )
@@ -655,14 +660,13 @@ class AccountInvoiceImport(models.TransientModel):
             if self.partner_id.vat != self.partner_vat:
                 raise UserError(
                     _(
-                        "The vendor to update '%s' already has a VAT number (%s) "
+                        "The vendor to update '{partner_name}' already "
+                        "has a VAT number ({partner_vat}) "
                         "which is different from the vendor VAT number "
-                        "of the invoice (%s)."
-                    )
-                    % (
-                        self.partner_id.display_name,
-                        self.partner_id.vat,
-                        self.partner_vat,
+                        "of the invoice ({invoice_vat}).",
+                        partner_name=self.partner_id.display_name,
+                        partner_vat=self.partner_id.vat,
+                        invoice_vat=self.partner_vat,
                     )
                 )
 
@@ -673,14 +677,13 @@ class AccountInvoiceImport(models.TransientModel):
                 if self.partner_id.country_id != self.partner_country_id:
                     raise UserError(
                         _(
-                            "The vendor to update '%s' already has a country (%s) "
+                            "The vendor to update '{partner_name}' already "
+                            "has a country ({partner_country}) "
                             "which is different from the country of the vendor "
-                            "of the invoice (%s)."
-                        )
-                        % (
-                            self.partner_id.display_name,
-                            self.partner_id.country_id.display_name,
-                            self.partner_country_id.display_name,
+                            "of the invoice ({invoice_country}).",
+                            partner_name=self.partner_id.display_name,
+                            partner_country=self.partner_id.country_id.display_name,
+                            invoice_country=self.partner_country_id.display_name,
                         )
                     )
             else:
@@ -799,12 +802,12 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(
                     _(
                         "This invoice already exists in Odoo. It's "
-                        "Supplier Invoice Number is '%s' and it's Odoo number "
-                        "is '%s'"
+                        "Supplier Invoice Number is '{invoice_number}' and it's Odoo number "
+                        "is '{odoo_invoice_number}'",
+                        invoice_number=parsed_inv.get("invoice_number"),
+                        odoo_invoice_number=existing_inv.name,
                     )
-                    % (parsed_inv.get("invoice_number"), existing_inv.name)
                 )
-
             if self.import_config_id:  # button called from 'config' step
                 wiz_vals["import_config_id"] = self.import_config_id.id
                 import_config = self.import_config_id.convert_to_import_config()
@@ -1030,12 +1033,11 @@ class AccountInvoiceImport(models.TransientModel):
                 invoice.message_post(
                     body=_(
                         "<b>Missing Invoice Import Configuration</b> on partner "
-                        "<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>: "
-                        "the imported invoice is incomplete."
-                    )
-                    % (
-                        invoice.commercial_partner_id.id,
-                        invoice.commercial_partner_id.display_name,
+                        "<a href=# data-oe-model=res.partner "
+                        "data-oe-id={invoice_id}>{invoice_display_name}</a>: "
+                        "the imported invoice is incomplete.",
+                        invoice_id=invoice.commercial_partner_id.id,
+                        invoice_display_name=invoice.commercial_partner_id.display_name,
                     )
                 )
             return
@@ -1146,15 +1148,14 @@ class AccountInvoiceImport(models.TransientModel):
                         )
                     invoice.message_post(
                         body=_(
-                            "The <b>tax amount</b> for tax %s has been <b>forced</b> "
-                            "to %s (amount computed by Odoo was: %s)."
-                        )
-                        % (
-                            mline.tax_line_id.display_name,
-                            format_amount(
+                            "The <b>tax amount</b> for tax {tax_name} has been "
+                            "<b>forced</b> to {forced_amount} (amount computed by "
+                            "Odoo was: {initial_amount}).",
+                            tax_name=mline.tax_line_id.display_name,
+                            forced_amount=format_amount(
                                 self.env, new_amount_currency, invoice.currency_id
                             ),
-                            format_amount(
+                            initial_amount=format_amount(
                                 self.env, mline.amount_currency, invoice.currency_id
                             ),
                         )
@@ -1227,13 +1228,12 @@ class AccountInvoiceImport(models.TransientModel):
                 chatter.append(
                     _(
                         "The quantity has been updated on the invoice line "
-                        "with product '%s' from %s to %s %s"
-                    )
-                    % (
-                        eline.product_id.display_name,
-                        cdict["qty"][0],
-                        cdict["qty"][1],
-                        eline.product_uom_id.name,
+                        "with product '{product_name}' from {initial_qty} to "
+                        "{new_qty} {uom_name}",
+                        product_name=eline.product_id.display_name,
+                        initial_qty=cdict["qty"][0],
+                        new_qty=cdict["qty"][1],
+                        uom_name=eline.product_uom_id.name,
                     )
                 )
                 write_vals["quantity"] = cdict["qty"][1]
@@ -1241,13 +1241,12 @@ class AccountInvoiceImport(models.TransientModel):
                 chatter.append(
                     _(
                         "The unit price has been updated on the invoice "
-                        "line with product '%s' from %s to %s %s"
-                    )
-                    % (
-                        eline.product_id.display_name,
-                        eline.price_unit,
-                        cdict["price_unit"][1],  # TODO fix
-                        invoice.currency_id.name,
+                        "line with product '{product_name}' from {initial_price} "
+                        "to {new_price} {currency_name}",
+                        product_name=eline.product_id.display_name,
+                        initial_price=eline.price_unit,
+                        new_price=cdict["price_unit"][1],
+                        currency_name=invoice.currency_id.name,
                     )
                 )
                 write_vals["price_unit"] = cdict["price_unit"][1]
@@ -1261,8 +1260,11 @@ class AccountInvoiceImport(models.TransientModel):
                 for line in compare_res["to_remove"]
             ]
             chatter.append(
-                _("%d invoice line(s) deleted: %s")
-                % (len(compare_res["to_remove"]), ", ".join(to_remove_label))
+                _(
+                    "{count} invoice line(s) deleted: {line_list}",
+                    count=len(compare_res["to_remove"]),
+                    line_list=", ".join(to_remove_label),
+                )
             )
             compare_res["to_remove"].unlink()
         if compare_res["to_add"]:
@@ -1277,8 +1279,11 @@ class AccountInvoiceImport(models.TransientModel):
                     % (new_line.quantity, new_line.product_uom_id.name, new_line.name)
                 )
             chatter.append(
-                _("%d new invoice line(s) created: %s")
-                % (len(compare_res["to_add"]), ", ".join(to_create_label))
+                _(
+                    "{count} new invoice line(s) created: {line_list}",
+                    count=len(compare_res["to_add"]),
+                    line_list=", ".join(to_create_label),
+                )
             )
         invoice.compute_taxes()
         return True
@@ -1341,10 +1346,13 @@ class AccountInvoiceImport(models.TransientModel):
         if partner != invoice.commercial_partner_id:
             raise UserError(
                 _(
-                    "The supplier of the imported invoice (%s) is different from "
-                    "the supplier of the invoice to update (%s)."
+                    "The supplier of the imported invoice "
+                    "({import_invoice_partner_name}) is different from "
+                    "the supplier of the invoice to update "
+                    "({update_invoice_partner_name}).",
+                    import_invoice_partner_name=partner.name,
+                    update_invoice_partner_name=invoice.commercial_partner_id.name,
                 )
-                % (partner.name, invoice.commercial_partner_id.name)
             )
         if not self.import_config_id:
             raise UserError(_("You must select an Invoice Import Configuration."))
@@ -1355,10 +1363,12 @@ class AccountInvoiceImport(models.TransientModel):
         if currency != invoice.currency_id:
             raise UserError(
                 _(
-                    "The currency of the imported invoice (%s) is different from "
-                    "the currency of the existing invoice (%s)"
+                    "The currency of the imported invoice ({import_invoice_currency}) "
+                    "is different from the currency of the existing invoice "
+                    "({update_invoice_currency})",
+                    import_invoice_currency=currency.name,
+                    update_invoice_currency=invoice.currency_id.name,
                 )
-                % (currency.name, invoice.currency_id.name)
             )
         vals = self._prepare_update_invoice_vals(parsed_inv, invoice)
         logger.debug("Updating supplier invoice with vals=%s", vals)
@@ -1542,10 +1552,13 @@ class AccountInvoiceImport(models.TransientModel):
                     attach_bytes = attach.content.encode("utf-8")
                 else:
                     attach_bytes = attach.content
-                origin = _("email sent by <b>%s</b> on %s with subject <b>%s</b>") % (
-                    msg_dict.get("email_from") and html.escape(msg_dict["email_from"]),
-                    msg_dict.get("date"),
-                    msg_dict.get("subject") and html.escape(msg_dict["subject"]),
+                origin = _(
+                    "email sent by <b>{email_from}</b> on {date} with subject <b>{subject}</b>",
+                    email_from=msg_dict.get("email_from")
+                    and html.escape(msg_dict["email_from"]),
+                    date=msg_dict.get("date"),
+                    subject=msg_dict.get("subject")
+                    and html.escape(msg_dict["subject"]),
                 )
                 try:
                     invoice_id = self.create_invoice_webservice(
