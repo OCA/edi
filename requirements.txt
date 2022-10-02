@@ -1,3 +1,6 @@
 # generated from manifests external_dependencies
+dateparser==1.1.1
 factur-x
+pdfplumber
 PyYAML
+regex
