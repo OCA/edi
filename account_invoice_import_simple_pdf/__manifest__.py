@@ -1,10 +1,10 @@
-# Copyright 2021 Akretion France (http://www.akretion.com/)
+# Copyright 2021-2022 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
     "name": "Account Invoice Import Simple PDF",
-    "version": "14.0.3.0.0",
+    "version": "15.0.1.0.0",
     "category": "Accounting/Accounting",
     "license": "AGPL-3",
     "summary": "Import simple PDF vendor bills",
@@ -12,7 +12,6 @@
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import"],
-    # "excludes": ["account_invoice_import_invoice2data"],
     "external_dependencies": {
         "python": ["pdfplumber", "regex", "dateparser==1.1.1"],
         "deb": ["libmupdf-dev", "mupdf", "mupdf-tools", "poppler-utils"],

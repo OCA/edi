@@ -71,7 +71,6 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             ("position_min", "Specific Position from Min"),
             ("position_max", "Specific Position from Max"),
         ],
-        string="Extract Rule",
         required=True,
     )
     position = fields.Integer(default=2)
@@ -150,15 +149,15 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         elif self.extract_rule in ("position_min", "position_max"):
             if len(data_list) < self.position:
                 error_msg = _(
-                    "Partner '%s' is configured with an extract rule '%s' with "
-                    "position %d for field '%s' but the list of "
-                    "extracted valid data only has %d entries."
-                ) % (
-                    self.partner_id.display_name,
-                    test_info["extract_rule_sel"][self.extract_rule],
-                    self.position,
-                    test_info["field_name_sel"][self.name],
-                    len(data_list),
+                    "Partner '%(partner_name)s' is configured with an extract rule "
+                    "'%(extract_rule)s' with position %(position)s for field "
+                    "'%(field_name)s' but the list of extracted valid data only "
+                    "has %(entries_count)s entries.",
+                    partner_name=self.partner_id.display_name,
+                    extract_rule=test_info["extract_rule_sel"][self.extract_rule],
+                    position=self.position,
+                    field_name=test_info["field_name_sel"][self.name],
+                    entries_count=len(data_list),
                 )
                 if raise_if_none:
                     raise UserError(error_msg)
@@ -177,15 +176,15 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         elif self.extract_rule in ("position_start", "position_end"):
             if len(data_list) < self.position:
                 error_msg = _(
-                    "Partner '%s' is configured with an extract rule '%s' with "
-                    "position %d for field '%s' but the list of extracted "
-                    "valid data only has %d entries."
-                ) % (
-                    self.partner_id.display_name,
-                    test_info["extract_rule_sel"][self.extract_rule],
-                    self.position,
-                    test_info["field_name_sel"][self.name],
-                    len(data_list),
+                    "Partner '%(partner_name)s' is configured with an extract rule "
+                    "'%(extract_rule)s' with position %(position)s for field "
+                    "'%(field_name)s' but the list of extracted "
+                    "valid data only has %(entries_count)s entries.",
+                    partner_name=self.partner_id.display_name,
+                    extract_rule=test_info["extract_rule_sel"][self.extract_rule],
+                    position=self.position,
+                    field_name=test_info["field_name_sel"][self.name],
+                    entries_count=len(data_list),
                 )
                 if raise_if_none:
                     raise UserError(error_msg)
@@ -235,20 +234,26 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
 
     def _get_date(self, parsed_inv, raw_text, partner_config, test_info):
         date_format = self.date_format or partner_config["date_format"]
-        error_arg = (
-            partner_config["display_name"],
-            test_info["field_name_sel"][self.name],
-        )
+        partner_name = partner_config["display_name"]
+        field_name = test_info["field_name_sel"][self.name]
         if not date_format:
             raise UserError(
-                _("No date format configured on partner '%s' nor on the field '%s'.")
-                % error_arg
+                _(
+                    "No date format configured on partner '%(partner_name)s' "
+                    "nor on the field '%(field_name)s'.",
+                    partner_name=partner_name,
+                    field_name=field_name,
+                )
             )
         date_separator = self.date_separator or partner_config["date_separator"]
         if not date_separator:
             raise UserError(
-                _("No date separator configured on partner '%s' nor on the field '%s'.")
-                % error_arg
+                _(
+                    "No date separator configured on partner '%(partner_name)s' "
+                    "nor on the field '%(field_name)s'.",
+                    partner_name=partner_name,
+                    field_name=field_name,
+                )
             )
         date_separator_char = partner_config["separator2char"][date_separator]
 
