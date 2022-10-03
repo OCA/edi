@@ -197,13 +197,16 @@ class EDIExchangeRecord(models.Model):
             output_string = bytes(output_string, encoding)
         self[field_name] = base64.b64encode(output_string)
 
-    def _get_file_content(self, field_name="exchange_file", binary=True):
+    def _get_file_content(
+        self, field_name="exchange_file", binary=True, as_bytes=False
+    ):
         """Handy method to not have to convert b64 back and forth."""
         self.ensure_one()
         if not self[field_name]:
             return ""
         if binary:
-            return base64.b64decode(self[field_name]).decode()
+            res = base64.b64decode(self[field_name])
+            return res.decode() if not as_bytes else res
         return self[field_name]
 
     def name_get(self):
