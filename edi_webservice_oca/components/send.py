@@ -23,11 +23,11 @@ class EDIWebserviceSend(Component):
     def __init__(self, work_context):
         super().__init__(work_context)
         self.ws_settings = getattr(work_context, "webservice", {})
+        self.webservice_backend = self.backend.webservice_backend_id
 
     def send(self):
-        webservice_backend = self.backend.webservice_backend_id
         method, pargs, kwargs = self._get_call_params()
-        return webservice_backend.call(method, *pargs, **kwargs)
+        return self.webservice_backend.call(method, *pargs, **kwargs)
 
     def _get_call_params(self):
         try:
@@ -42,4 +42,7 @@ class EDIWebserviceSend(Component):
         return method, pargs, kwargs
 
     def _get_data(self):
-        return self.exchange_record._get_file_content()
+        # By sending as bytes `requests` won't try to guess and/or alter the encoding.
+        # TODO: add tests
+        as_bytes = self.ws_settings.get("send_as_bytes")
+        return self.exchange_record._get_file_content(as_bytes=as_bytes)
