@@ -25,3 +25,10 @@ For each call related to this type, you'll get a POST request against
 
 In addition, you can user ``url`` to override the full url used for the call
 per exchange type.
+
+If you want to send data as bytes you can use the option `send_as_bytes` like::
+
+  [...]
+        webservice:
+          send_as_bytes: true
+  [...]
