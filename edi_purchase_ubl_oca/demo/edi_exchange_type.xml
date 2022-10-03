@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="demo_edi_exc_type_order_out" model="edi.exchange.type">
+        <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
+        <field name="name">UBL PO out</field>
+        <field name="code">UBL_PO_out</field>
+        <field name="direction">output</field>
+        <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <field
+            name="model_ids"
+            eval="[(6, 0, [ref('purchase.model_purchase_order')])]"
+        />
+        <field name="advanced_settings_edit">
+components:
+  generate:
+    usage: output.generate.purchase.order
+        </field>
+    </record>
+</odoo>
