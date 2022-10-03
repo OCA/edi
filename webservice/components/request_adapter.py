@@ -3,9 +3,15 @@
 # @author Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import logging
+
 import requests
 
 from odoo.addons.component.core import Component
+
+from ..utils import sanitize_url_for_log
+
+_logger = logging.getLogger(__name__)
 
 
 class BaseRestRequestsAdapter(Component):
@@ -18,6 +24,9 @@ class BaseRestRequestsAdapter(Component):
     # TODO: url and url_params could come from work_ctx
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
+        # TODO: turn on/off debug from webservice setting?
+        url_to_log = self._sanitize_url_for_log(url)
+        _logger.info("%s call to %s", method, url_to_log)
         new_kwargs = kwargs.copy()
         new_kwargs.update(
             {"auth": self._get_auth(**kwargs), "headers": self._get_headers(**kwargs)}
@@ -25,6 +34,9 @@ class BaseRestRequestsAdapter(Component):
         request = requests.request(method, url, **new_kwargs)
         request.raise_for_status()
         return request.content
+
+    def _sanitize_url_for_log(self, url):
+        return sanitize_url_for_log(url)
 
     def get(self, **kwargs):
         return self._request("get", **kwargs)
