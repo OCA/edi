@@ -35,16 +35,15 @@ class Pdf2DataComponentTestCase(common.EDIBackendCommonComponentRegistryTestCase
                 "backend_type_id": cls.env.ref("edi_pdf2data.backend_type").id,
             }
         )
-        template = tools.file_open(
+        template_yml = tools.file_open(
             "com.amazon.aws.yml", mode="r", subdir="addons/edi_pdf2data/tests",
         ).read()
         cls.template = cls.env["pdf2data.template"].create(
-            {
-                "pdf2data_template_yml": template,
-                "name": "Amazon WS",
-                "exchange_type_id": cls.exchange_type.id,
-            }
+            {"name": "Amazon WS", "exchange_type_id": cls.exchange_type.id}
         )
+        cls.env["pdf2data.template.import.yml"].create(
+            {"template_id": cls.template.id, "data": template_yml}
+        ).import_data()
 
         class DemoComponent(Component):
             _name = "edi.component.process_data.demo"
