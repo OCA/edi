@@ -54,20 +54,21 @@ class EDIBackend(models.Model):
     active = fields.Boolean(default=True)
 
     def _get_component(self, exchange_record, key):
-        candidates = self._get_component_usage_candidates(exchange_record, key)
-        work_ctx = {"exchange_record": exchange_record}
-        # Inject work context from advanced settings
         record_conf = self._get_component_conf_for_record(exchange_record, key)
-        work_ctx.update(record_conf.get("work_ctx", {}))
-        match_attrs = self._component_match_attrs(exchange_record, key)
-        # Model is not granted to be there
-        model = exchange_record.model or self._name
         # Load additional ctx keys if any
         collection = self
-        # TODO: document this
+        # TODO: document/test this
         env_ctx = record_conf.get("env_ctx", {})
         if env_ctx:
             collection = collection.with_context(**env_ctx)
+            exchange_record = exchange_record.with_context(**env_ctx)
+        work_ctx = {"exchange_record": exchange_record}
+        # Inject work context from advanced settings
+        work_ctx.update(record_conf.get("work_ctx", {}))
+        # Model is not granted to be there
+        model = exchange_record.model or self._name
+        candidates = self._get_component_usage_candidates(exchange_record, key)
+        match_attrs = self._component_match_attrs(exchange_record, key)
         return collection._find_component(
             model,
             candidates,
