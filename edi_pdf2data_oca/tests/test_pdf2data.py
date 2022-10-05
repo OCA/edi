@@ -35,16 +35,16 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
         )
 
     def import_template(self, file="com.amazon.aws.yml"):
-        template = tools.file_open(
+        template_yml = tools.file_open(
             file, mode="r", subdir="addons/edi_pdf2data/tests"
         ).read()
-        return self.env["pdf2data.template"].create(
-            {
-                "pdf2data_template_yml": template,
-                "name": "Amazon WS",
-                "exchange_type_id": self.exchange_type.id,
-            }
+        template = self.env["pdf2data.template"].create(
+            {"name": "Amazon WS", "exchange_type_id": self.exchange_type.id}
         )
+        self.env["pdf2data.template.import.yml"].create(
+            {"template_id": template.id, "data": template_yml}
+        ).import_data()
+        return template
 
     def test_error_01(self):
         with self.assertRaises(ValidationError):
