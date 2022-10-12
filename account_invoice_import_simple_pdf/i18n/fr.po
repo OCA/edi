@@ -697,8 +697,8 @@ msgstr "Correspondance réussie avec %d mots-clés (%s)"
 #. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
 #, python-format
-msgid "Successful match on VAT number '%s'"
-msgstr "Correspondance réussie avec le numéro de TVA '%s'"
+msgid "Successful match on {label} '{value}'"
+msgstr ""
 
 #. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
@@ -839,6 +839,12 @@ msgid "Untaxed Amount"
 msgstr "Montant HT"
 
 #. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "VAT number"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid "Valid-data Filtered List"
@@ -933,6 +939,9 @@ msgstr "espace"
 #, python-format
 msgid "unknown"
 msgstr "inconnu"
+
+#~ msgid "Successful match on VAT number '%s'"
+#~ msgstr "Correspondance réussie avec le numéro de TVA '%s'"
 
 #~ msgid "Simple PDF import: could not find vendor."
 #~ msgstr "Simple PDF Import : Impossible de trouver le Vendeur."
