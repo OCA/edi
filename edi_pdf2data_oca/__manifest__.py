@@ -12,7 +12,7 @@
     "depends": ["edi", "account"],
     "external_dependencies": {
         "python": ["dateparser", "unidecode"],
-        "deb": ["poppler-utils", "xpdf"],
+        "deb": ["poppler-utils"],
     },
     "maintainers": ["etobella"],
     "data": [
