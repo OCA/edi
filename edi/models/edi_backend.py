@@ -611,6 +611,14 @@ class EDIBackend(models.Model):
             "res_id": exchange_record.res_id,
             "model": exchange_record.model,
         }
+        domain = [
+            ('type_id.code', '=', ack_type.code),
+            ('backend_id', '=', self.id),
+        ]
+        # If the ACK already exist, we don't have to create a new one.
+        ack_record = fields.first(exchange_record.related_exchange_ids.filtered_domain(domain))
+        if ack_record:
+            return ack_record
         return self.create_record(ack_type.code, values)
 
     def _find_existing_exchange_records(
