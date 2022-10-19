@@ -4,17 +4,17 @@ from odoo import fields, models
 
 
 class ResConfigSettings(models.TransientModel):
-    _inherit = 'res.config.settings'
+    _inherit = "res.config.settings"
 
     gs1_main_uom_id = fields.Many2one(
         comodel_name="uom.uom",
         help="Main UoM for GS1 files",
         related="company_id.gs1_main_uom_id",
-        readonly=False
+        readonly=False,
     )
     gs1_second_uom_id = fields.Many2one(
         comodel_name="uom.uom",
         help="Second UoM for GS1 files",
         related="company_id.gs1_second_uom_id",
-        readonly=False
+        readonly=False,
     )

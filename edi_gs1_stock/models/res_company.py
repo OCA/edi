@@ -4,16 +4,12 @@ from odoo import fields, models
 
 
 class ResCompany(models.Model):
-    _inherit = 'res.company'
+    _inherit = "res.company"
 
     gs1_main_uom_id = fields.Many2one(
-        comodel_name="uom.uom",
-        string="GS1 main UoM",
-        help="Main UoM for GS1 files"
+        comodel_name="uom.uom", string="GS1 main UoM", help="Main UoM for GS1 files"
     )
 
     gs1_second_uom_id = fields.Many2one(
-        comodel_name="uom.uom",
-        string="GS1 second UoM",
-        help="Second UoM for GS1 files"
+        comodel_name="uom.uom", string="GS1 second UoM", help="Second UoM for GS1 files"
     )
