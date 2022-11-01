@@ -216,15 +216,9 @@ class EndpointRouteHandler(models.AbstractModel):
 
     # TODO: consider if useful or not for single records
     def _register_single_controller(self, options=None, key=None, init=False):
-        """Shortcut to register one single controller.
-
-        WARNING: as this triggers envs invalidation via `_force_routing_map_refresh`
-        do not abuse of this method to register more than one route.
-        """
+        """Shortcut to register one single controller."""
         rule = self._make_controller_rule(options=options, key=key)
         self._endpoint_registry.update_rules([rule], init=init)
-        if not init:
-            self._force_routing_map_refresh()
         self._logger.debug(
             "Registered controller %s (auth: %s)", self.route, self.auth_type
         )

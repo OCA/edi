@@ -98,20 +98,11 @@ class EndpointRouteSyncMixin(models.AbstractModel):
             return
         rules = self._prepare_endpoint_rules(options=options)
         self._endpoint_registry.update_rules(rules, init=init)
-        if not init:
-            # When envs are already loaded we must signal changes
-            self._force_routing_map_refresh()
         _logger.debug(
             "%s registered controllers: %s",
             self._name,
             ", ".join([r.route for r in rules]),
         )
-
-    def _force_routing_map_refresh(self):
-        """Signal changes to make all routing maps refresh."""
-        self.env["ir.http"]._clear_routing_map()  # TODO: redundant?
-        self.env.registry.registry_invalidated = True
-        self.env.registry.signal_changes()
 
     def _unregister_controllers(self):
         if not self:

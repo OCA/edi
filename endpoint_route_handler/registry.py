@@ -75,6 +75,7 @@ class EndpointRegistry:
         ("routing", "text", ""),
         ("endpoint_hash", "VARCHAR(32)", ""),
         ("route_group", "VARCHAR(32)", ""),
+        ("updated_at", "TIMESTAMP NOT NULL DEFAULT NOW()", ""),
     )
 
     @classmethod
@@ -102,6 +103,26 @@ class EndpointRegistry:
                 cls._table,
                 "endpoint_route__endpoint_hash_uniq",
                 "unique(endpoint_hash)",
+            )
+
+            cr.execute(
+                """
+                CREATE OR REPLACE FUNCTION endpoint_route_set_timestamp()
+                    RETURNS TRIGGER AS $$
+                BEGIN
+                    NEW.updated_at = NOW();
+                    RETURN NEW;
+                END;
+                $$ LANGUAGE plpgsql;
+            """
+            )
+            cr.execute(
+                """
+                CREATE TRIGGER trigger_endpoint_route_set_timestamp
+                BEFORE UPDATE ON endpoint_route
+                FOR EACH ROW
+                EXECUTE PROCEDURE endpoint_route_set_timestamp();
+            """
             )
 
     def __init__(self, cr):
@@ -179,6 +200,20 @@ class EndpointRegistry:
     def make_rule(self, *a, **kw):
         return EndpointRule(self.cr.dbname, *a, **kw)
 
+    def last_update(self):
+        self.cr.execute(
+            """
+            SELECT updated_at
+            FROM endpoint_route
+            ORDER BY updated_at DESC
+            LIMIT 1
+        """
+        )
+        res = self.cr.fetchone()
+        if res:
+            return res[0].timestamp()
+        return 0.0
+
 
 class EndpointRule:
     """Hold information for a custom endpoint rule."""
@@ -232,7 +267,7 @@ class EndpointRule:
 
     @classmethod
     def from_row(cls, dbname, row):
-        key, route, options, routing, endpoint_hash, route_group = row[1:]
+        key, route, options, routing, endpoint_hash, route_group = row[1:-1]
         # TODO: #jsonb-ref
         options = json.loads(options)
         routing = json.loads(routing)

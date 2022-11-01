@@ -2,10 +2,11 @@
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from psycopg2.errors import UniqueViolation
+from psycopg2 import DatabaseError
 
 from odoo import http
 from odoo.tests.common import SavepointCase, tagged
+from odoo.tools import mute_logger
 
 from odoo.addons.endpoint_route_handler.exceptions import EndpointHandlerNotFound
 from odoo.addons.endpoint_route_handler.registry import EndpointRegistry
@@ -18,8 +19,11 @@ class TestRegistry(SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        EndpointRegistry.wipe_registry_for(cls.env.cr)
         cls.reg = EndpointRegistry.registry_for(cls.env.cr)
+
+    def setUp(self):
+        super().setUp()
+        EndpointRegistry.wipe_registry_for(self.env.cr)
 
     def tearDown(self):
         EndpointRegistry.wipe_registry_for(self.env.cr)
@@ -36,6 +40,31 @@ class TestRegistry(SavepointCase):
     def test_registry_empty(self):
         self.assertEqual(list(self.reg.get_rules()), [])
         self.assertEqual(self._count_rules(), 0)
+
+    def test_last_update(self):
+        self.assertEqual(self.reg.last_update(), 0.0)
+        rule1, rule2 = self._make_rules(stop=3)
+        last_update0 = self.reg.last_update()
+        self.assertTrue(last_update0 > 0)
+        rule1.options = {
+            "handler": {
+                "klass_dotted_path": CTRLFake._path,
+                "method_name": "handler2",
+            }
+        }
+        # FIXME: to test timestamp we have to mock psql datetime.
+        # self.reg.update_rules([rule1])
+        # last_update1 = self.reg.last_update()
+        # self.assertTrue(last_update1 > last_update0)
+        # rule2.options = {
+        #     "handler": {
+        #         "klass_dotted_path": CTRLFake._path,
+        #         "method_name": "handler2",
+        #     }
+        # }
+        # self.reg.update_rules([rule2])
+        # last_update2 = self.reg.last_update()
+        # self.assertTrue(last_update2 > last_update1)
 
     def _make_rules(self, stop=5, start=1, **kw):
         res = []
@@ -125,18 +154,19 @@ class TestRegistry(SavepointCase):
             self.reg._get_rule("route2").handler_options.method_name, "handler3"
         )
 
+    @mute_logger("odoo.sql_db")
     def test_rule_constraints(self):
         rule1, rule2 = self._make_rules(stop=3)
         msg = (
             'duplicate key value violates unique constraint "endpoint_route__key_uniq"'
         )
-        with self.assertRaisesRegex(UniqueViolation, msg), self.env.cr.savepoint():
+        with self.assertRaisesRegex(DatabaseError, msg), self.env.cr.savepoint():
             self.reg._create({rule1.key: rule1.to_row()})
         msg = (
             "duplicate key value violates unique constraint "
             '"endpoint_route__endpoint_hash_uniq"'
         )
-        with self.assertRaisesRegex(UniqueViolation, msg), self.env.cr.savepoint():
+        with self.assertRaisesRegex(DatabaseError, msg), self.env.cr.savepoint():
             rule2.endpoint_hash = rule1.endpoint_hash
             rule2.key = "key3"
             self.reg._create({rule2.key: rule2.to_row()})
