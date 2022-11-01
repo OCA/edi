@@ -8,8 +8,8 @@ class VoxelLogin(models.Model):
     _name = "voxel.login"
     _description = "Voxel login"
 
-    name = fields.Char(string="Name", required=True)
+    name = fields.Char(required=True)
     url = fields.Char(string="URL", required=True)
-    user = fields.Char(string="User", required=True)
-    password = fields.Char(string="Password", required=True)
+    user = fields.Char(required=True)
+    password = fields.Char(required=True)
     company_id = fields.Many2one(comodel_name="res.company", string="Company")
