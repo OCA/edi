@@ -45,8 +45,8 @@ class VoxelMixin(models.AbstractModel):
         help="Indicates the status of sending report to Voxel",
     )
     voxel_xml_report = fields.Text(string="XML Report", readonly=True)
-    voxel_filename = fields.Char(string="Voxel filename", readonly=True)
-    processing_error = fields.Text(string="Processing error", readonly=True)
+    voxel_filename = fields.Char(readonly=True)
+    processing_error = fields.Text(readonly=True)
 
     # Export methods
     # --------------
@@ -221,8 +221,10 @@ class VoxelMixin(models.AbstractModel):
     def _list_voxel_document_filenames(self, folder, company):
         try:
             response = self._request_to_voxel(requests.get, folder, company)
-        except Exception:
-            raise Exception("Error reading '{}' folder from Voxel".format(folder))
+        except Exception as exc:
+            raise Exception(
+                "Error reading '{}' folder from Voxel".format(folder)
+            ) from exc
         # if no error, return list of documents file names
         content = response.content
         return content and content.decode("utf-8").split("\n") or []
@@ -230,10 +232,10 @@ class VoxelMixin(models.AbstractModel):
     def _read_voxel_document(self, folder, company, filename, encoding="utf-8"):
         try:
             response = self._request_to_voxel(requests.get, folder, company, filename)
-        except Exception:
+        except Exception as exc:
             raise Exception(
                 "Error reading document {} from folder {}".format(filename, folder)
-            )
+            ) from exc
         # Getting xml content with utf8 there are characters that can not
         # be decoded, so 'ISO-8859-1' is used
         return response.content.decode(encoding)
@@ -241,12 +243,12 @@ class VoxelMixin(models.AbstractModel):
     def _delete_voxel_document(self, folder, voxel_filename, company):
         try:
             self._request_to_voxel(requests.delete, folder, company, voxel_filename)
-        except Exception:
+        except Exception as exc:
             raise Exception(
                 "Error deleting document {} from folder {}".format(
                     voxel_filename, folder
                 )
-            )
+            ) from exc
 
     # auxiliary methods
     # -----------------
