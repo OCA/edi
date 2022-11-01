@@ -18,6 +18,10 @@ class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
 
     @classmethod
+    def _endpoint_route_registry(cls, env):
+        return EndpointRegistry.registry_for(env.cr)
+
+    @classmethod
     def _generate_routing_rules(cls, modules, converters):
         # Override to inject custom endpoint rules.
         return chain(
@@ -28,13 +32,35 @@ class IrHttp(models.AbstractModel):
     @classmethod
     def _endpoint_routing_rules(cls):
         """Yield custom endpoint rules"""
-        cr = http.request.env.cr
-        e_registry = EndpointRegistry.registry_for(cr)
+        e_registry = cls._endpoint_route_registry(http.request.env)
         for endpoint_rule in e_registry.get_rules():
             _logger.debug("LOADING %s", endpoint_rule)
             endpoint = endpoint_rule.endpoint
             for url in endpoint_rule.routing["routes"]:
                 yield (url, endpoint, endpoint_rule.routing)
+
+    @classmethod
+    def routing_map(cls, key=None):
+        last_update = cls._get_routing_map_last_update(http.request.env)
+        if not hasattr(cls, "_routing_map"):
+            # routing map just initialized, store last update for this env
+            cls._endpoint_route_last_update = last_update
+        elif cls._endpoint_route_last_update < last_update:
+            _logger.info("Endpoint registry updated, reset routing map")
+            cls._routing_map = {}
+            cls._rewrite_len = {}
+            cls._endpoint_route_last_update = last_update
+        return super().routing_map(key=key)
+
+    @classmethod
+    def _get_routing_map_last_update(cls, env):
+        return cls._endpoint_route_registry(env).last_update()
+
+    @classmethod
+    def _clear_routing_map(cls):
+        super()._clear_routing_map()
+        if hasattr(cls, "_endpoint_route_last_update"):
+            cls._endpoint_route_last_update = 0
 
     @classmethod
     def _auth_method_user_endpoint(cls):

@@ -1,8 +1,10 @@
 # Copyright 2021 Camptocamp SA
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-
+import time
 from contextlib import contextmanager
+
+import mock
 
 import odoo
 from odoo.tools import mute_logger
@@ -25,25 +27,27 @@ def new_rollbacked_env():
         cr.close()
 
 
+def make_new_route(env, **kw):
+    model = env["endpoint.route.handler"]
+    vals = {
+        "name": "Test custom route",
+        "route": "/my/test/route",
+        "request_method": "GET",
+    }
+    vals.update(kw)
+    new_route = model.new(vals)
+    new_route._refresh_endpoint_data()
+    return new_route
+
+
 class TestEndpoint(CommonEndpoint):
     def tearDown(self):
         self.env["ir.http"]._clear_routing_map()
         EndpointRegistry.wipe_registry_for(self.env.cr)
         super().tearDown()
 
-    def _make_new_route(self, **kw):
-        vals = {
-            "name": "Test custom route",
-            "route": "/my/test/route",
-            "request_method": "GET",
-        }
-        vals.update(kw)
-        new_route = self.route_handler.new(vals)
-        new_route._refresh_endpoint_data()
-        return new_route
-
     def test_as_tool_base_data(self):
-        new_route = self._make_new_route()
+        new_route = make_new_route(self.env)
         self.assertEqual(new_route.route, "/my/test/route")
         first_hash = new_route.endpoint_hash
         self.assertTrue(first_hash)
@@ -53,7 +57,7 @@ class TestEndpoint(CommonEndpoint):
 
     @mute_logger("odoo.addons.base.models.ir_http")
     def test_as_tool_register_single_controller(self):
-        new_route = self._make_new_route()
+        new_route = make_new_route(self.env)
         options = {
             "handler": {
                 "klass_dotted_path": CTRLFake._path,
@@ -79,7 +83,7 @@ class TestEndpoint(CommonEndpoint):
 
     @mute_logger("odoo.addons.base.models.ir_http")
     def test_as_tool_register_controllers(self):
-        new_route = self._make_new_route()
+        new_route = make_new_route(self.env)
         options = {
             "handler": {
                 "klass_dotted_path": CTRLFake._path,
@@ -106,8 +110,7 @@ class TestEndpoint(CommonEndpoint):
     @mute_logger("odoo.addons.base.models.ir_http")
     def test_as_tool_register_controllers_dynamic_route(self):
         route = "/my/app/<model(app.model):foo>"
-        new_route = self._make_new_route(route=route)
-
+        new_route = make_new_route(self.env, route=route)
         options = {
             "handler": {
                 "klass_dotted_path": CTRLFake._path,
@@ -121,12 +124,18 @@ class TestEndpoint(CommonEndpoint):
             rmap = self.env["ir.http"].routing_map()
             self.assertIn(route, [x.rule for x in rmap._rules])
 
+
+class TestEndpointCrossEnv(CommonEndpoint):
+    def setUp(self):
+        super().setUp()
+        self.env["ir.http"]._clear_routing_map()
+        EndpointRegistry.wipe_registry_for(self.env.cr)
+
     @mute_logger("odoo.addons.base.models.ir_http", "odoo.modules.registry")
     def test_cross_env_consistency(self):
         """Ensure route updates are propagated to all envs."""
         route = "/my/app/<model(app.model):foo>"
-        new_route = self._make_new_route(route=route)
-
+        new_route = make_new_route(self.env, route=route)
         options = {
             "handler": {
                 "klass_dotted_path": CTRLFake._path,
@@ -135,27 +144,47 @@ class TestEndpoint(CommonEndpoint):
         }
 
         env1 = self.env
+        EndpointRegistry.registry_for(self.env.cr)
+        new_route._register_controllers(options=options)
+
+        # Simulate 1st route created in the past
+        last_update0 = time.time() - 10000
+        path = "odoo.addons.endpoint_route_handler.registry.EndpointRegistry"
         with self._get_mocked_request():
             with new_rollbacked_env() as env2:
-                # Load maps
-                env1["ir.http"].routing_map()
-                env2["ir.http"].routing_map()
-                # Register route in current env.
-                # By using `init=True` we don't trigger env signals
-                # (simulating when the registry is loaded for the 1st time
-                # by `_register_hook`).
-                # In this case we expect the test to fail
-                # as there's no propagation to the other env.
-                new_route._register_controllers(options=options, init=True)
-                rmap = self.env["ir.http"].routing_map()
-                self.assertNotIn(route, [x.rule for x in rmap._rules])
-                rmap = env2["ir.http"].routing_map()
-                self.assertNotIn(route, [x.rule for x in rmap._rules])
-                # Now w/out init -> works
+                with mock.patch(path + ".last_update") as mocked:
+                    mocked.return_value = last_update0
+                    # Load maps
+                    env1["ir.http"].routing_map()
+                    env2["ir.http"].routing_map()
+                    self.assertEqual(
+                        env1["ir.http"]._endpoint_route_last_update, last_update0
+                    )
+                    self.assertEqual(
+                        env2["ir.http"]._endpoint_route_last_update, last_update0
+                    )
+                    rmap = self.env["ir.http"].routing_map()
+                    self.assertIn(route, [x.rule for x in rmap._rules])
+                    rmap = env2["ir.http"].routing_map()
+                    self.assertIn(route, [x.rule for x in rmap._rules])
+
+                # add new route
+                route = "/my/new/<model(app.model):foo>"
+                new_route = make_new_route(self.env, route=route)
                 new_route._register_controllers(options=options)
+
+                # with mock.patch(path + ".last_update") as mocked:
+                #     mocked.return_value = last_update0 + 1000
+
                 rmap = self.env["ir.http"].routing_map()
                 self.assertIn(route, [x.rule for x in rmap._rules])
                 rmap = env2["ir.http"].routing_map()
                 self.assertIn(route, [x.rule for x in rmap._rules])
+                self.assertTrue(
+                    env1["ir.http"]._endpoint_route_last_update > last_update0
+                )
+                self.assertTrue(
+                    env2["ir.http"]._endpoint_route_last_update > last_update0
+                )
 
     # TODO: test unregister
