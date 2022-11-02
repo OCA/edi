@@ -2,15 +2,15 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Voxel sale order",
+    "name": "Voxel sale order oca",
     "summary": "Import sale order from Voxel.",
-    "version": "13.0.1.0.3",
+    "version": "15.0.1.0.0",
     "category": "Sale",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "depends": [
-        "edi_voxel",
+        "edi_voxel_oca",
         "onchange_helper",  # See server-side forms (SSF) on v12
         "sale",
     ],

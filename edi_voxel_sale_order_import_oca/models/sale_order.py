@@ -53,17 +53,18 @@ class SaleOrder(models.Model):
             xml_content, voxel_filename, error_msgs, company
         )
         # Add internal note to the created sale order
-        create_msg = _(
-            "Created automatically via voxel import (%s)." % (voxel_filename)
-        )
+        create_msg = _("Created automatically via voxel import (%s).") % voxel_filename
         if error_msgs:
             str_error_msgs = ""
             for error_msg in error_msgs:
-                str_error_msgs += "<li>%s</li>" % (error_msg)
-            create_msg += _(
-                "<br/><span style='font-weight: bold;'>"
-                "The following errors were found:</span><br/>"
-                "<ul>%s</ul>" % (str_error_msgs)
+                str_error_msgs += "<li>%s</li>" % error_msg
+            create_msg += (
+                _(
+                    "<br/><span style='font-weight: bold;'>"
+                    "The following errors were found:</span><br/>"
+                    "<ul>%s</ul>"
+                )
+                % str_error_msgs
             )
         order.message_post(body=create_msg)
         return order
@@ -75,8 +76,8 @@ class SaleOrder(models.Model):
         if filetype in ["application/xml", "text/xml"]:
             try:
                 xml_root = etree.fromstring(order_file)
-            except Exception:
-                raise UserError(_("This XML file is not XML-compliant"))
+            except Exception as exc:
+                raise UserError(_("This XML file is not XML-compliant")) from exc
         else:
             raise UserError(_("'%s' is not recognised as an XML file") % order_filename)
         _logger.debug("Starting to import:%s" % (order_filename))
@@ -230,8 +231,12 @@ class SaleOrder(models.Model):
             return partner  # return the unique partner matching
         if raise_error:
             raise UserError(
-                _("Can't find a suitable partner for this data:\n\n%s" "\nResults: %s")
-                % (data, len(partner))
+                _(
+                    "Can't find a suitable partner for this data:\n\n%(data)s"
+                    "\nResults: %(partner_count)s",
+                    data=data,
+                    partner_count=len(partner),
+                )
             )
         return self.env["res.partner"]
 
@@ -253,7 +258,7 @@ class SaleOrder(models.Model):
             line_vals = {"order_id": order.id}
             self._parse_product_voxel(line_vals, line_element)
             self._parse_qty_uom_voxel(line_vals, line_element)
-            line_vals = so_line_obj.play_onchanges(line_vals, list(line_vals)[1:])
+            line_vals = so_line_obj.play_onchanges(line_vals, list(line_vals))
             self._parse_discounts_product_voxel(line_vals, line_element, error_msgs)
             self._parse_taxes_product_voxel(line_vals, line_element, error_msgs)
             if line_vals:
@@ -296,8 +301,12 @@ class SaleOrder(models.Model):
                 product = self.env["product.product"].search(domain)
         if len(product) != 1:
             raise UserError(
-                _("Can't find a suitable product for this data:\n\n%s" "\nResults: %s")
-                % (product_data, len(product))
+                _(
+                    "Can't find a suitable product for this data:\n\n%(product_data)s"
+                    "\nResults: %(product_count)s",
+                    product_data=product_data,
+                    product_count=len(product),
+                )
             )
         line_vals.update(product_id=product.id)
 
@@ -309,10 +318,11 @@ class SaleOrder(models.Model):
         if len(product_uom) != 1:
             raise UserError(
                 _(
-                    "Can't find a suitable Unit of Measure for this data:\n\n%s"
-                    "\nResults: %s"
+                    "Can't find a suitable Unit of Measure for this data:\n\n%(product_data)s"
+                    "\nResults: %(product_uom_count)s",
+                    product_data=product_data,
+                    product_uom_count=len(product_uom),
                 )
-                % (product_data, len(product_uom))
             )
         line_vals.update(product_uom_qty=qty, product_uom=product_uom.id)
 
