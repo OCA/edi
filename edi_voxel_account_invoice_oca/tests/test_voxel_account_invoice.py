@@ -3,10 +3,10 @@
 
 from datetime import date, datetime
 
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 
 
-class TestVoxelAccountInvoice(SavepointCase):
+class TestVoxelAccountInvoice(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super(TestVoxelAccountInvoice, cls).setUpClass()
@@ -25,6 +25,10 @@ class TestVoxelAccountInvoice(SavepointCase):
                 "country_id": cls.env.ref("base.es").id,
                 "email": "info@yourcompany.example.com",
             }
+        )
+        # Set to false to avoid compare distinct data than expected
+        cls.env["ir.config_parameter"].sudo().set_param(
+            "account.use_invoice_terms", False
         )
         # Invoice client
         partner = cls.env["res.partner"].create(
@@ -83,7 +87,7 @@ class TestVoxelAccountInvoice(SavepointCase):
         cls.invoice = cls.env["account.move"].create(
             {
                 "partner_id": partner.id,
-                "type": "out_invoice",
+                "move_type": "out_invoice",
                 "currency_id": cls.main_company.currency_id.id,
                 "invoice_date": date(2019, 4, 13),
                 "company_id": cls.main_company.id,
@@ -146,7 +150,7 @@ class TestVoxelAccountInvoice(SavepointCase):
 
     def test_get_report_values(self):
         # Get report data
-        model_name = "report.edi_voxel_account_invoice.template_voxel_invoice"
+        model_name = "report.edi_voxel_account_invoice_oca.template_voxel_invoice"
         report_edi_obj = self.env[model_name]
         report_data = report_edi_obj._get_report_values(self.invoice.ids)
         # Get expected data
@@ -172,7 +176,7 @@ class TestVoxelAccountInvoice(SavepointCase):
     def _get_general_data(self):
         return {
             "Type": "FacturaComercial",
-            "Ref": "/",
+            "Ref": "INV/2019/00001",
             "Date": "2019-04-13",
             # Set currency code from company for resilient tests
             "Currency": self.main_company.currency_id.name,

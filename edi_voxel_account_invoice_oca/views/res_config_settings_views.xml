@@ -5,8 +5,11 @@
     <record id="res_config_settings_view_form" model="ir.ui.view">
         <field name="name">res.config.settings.view.form.voxel.invoice</field>
         <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="edi_voxel.res_config_settings_view_form" />
-        <field name="groups_id" eval="[(4, ref('edi_voxel.group_voxel_manager'))]" />
+        <field name="inherit_id" ref="edi_voxel_oca.res_config_settings_view_form" />
+        <field
+            name="groups_id"
+            eval="[(4, ref('edi_voxel_oca.group_voxel_manager'))]"
+        />
         <field name="arch" type="xml">
             <xpath expr="//div[@name='voxel_login_config']" position="inside">
                 <div class="row mt16">

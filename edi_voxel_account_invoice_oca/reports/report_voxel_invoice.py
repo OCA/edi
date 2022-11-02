@@ -8,7 +8,7 @@ from odoo import api, fields, models
 
 
 class ReportVoxelInvoice(models.AbstractModel):
-    _name = "report.edi_voxel_account_invoice.template_voxel_invoice"
+    _name = "report.edi_voxel_account_invoice_oca.template_voxel_invoice"
     _inherit = "report.report_xml.abstract"
     _description = "Edi Voxel Account Invoice Report"
 
@@ -32,7 +32,7 @@ class ReportVoxelInvoice(models.AbstractModel):
     def _get_general_data(self, invoice):
         type_mapping = {"out_invoice": "FacturaComercial", "out_refund": "FacturaAbono"}
         return {
-            "Type": type_mapping.get(invoice.type),
+            "Type": type_mapping.get(invoice.move_type),
             "Ref": invoice.name,
             "Date": invoice.invoice_date
             and datetime.strftime(invoice.invoice_date, "%Y-%m-%d"),

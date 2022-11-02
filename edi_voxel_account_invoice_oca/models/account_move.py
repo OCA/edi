@@ -63,7 +63,7 @@ class AccountMove(models.Model):
         )
         if invoices:
             invoices.enqueue_voxel_report(
-                "edi_voxel_account_invoice.report_voxel_invoice"
+                "edi_voxel_account_invoice_oca.report_voxel_invoice"
             )
 
     def get_document_type(self):
