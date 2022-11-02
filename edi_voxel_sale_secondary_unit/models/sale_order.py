@@ -8,7 +8,7 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     def _parse_qty_uom_voxel(self, line_vals, line_element):
-        """ Override to use secondary unit instead standard UoM """
+        """Override to use secondary unit instead standard UoM"""
         product_data = line_element.attrib
         product_id = line_vals.get("product_id")
         product = self.env["product.product"].browse(product_id)
