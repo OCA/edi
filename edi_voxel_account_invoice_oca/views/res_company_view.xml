@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2019 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_company_form" model="ir.ui.view">
+        <field name="name">res.company.voxel.invoice.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="edi_voxel_oca.view_company_form" />
+        <field name="arch" type="xml">
+            <group name="voxel_login_config" position="inside">
+                <field name="voxel_invoice_login_id" options="{'no_create': True}" />
+            </group>
+        </field>
+    </record>
+</odoo>

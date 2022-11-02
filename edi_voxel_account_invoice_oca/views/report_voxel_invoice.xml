@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="report_voxel_invoice" model="ir.actions.report">
+        <field name="name">Voxel invoice</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-xml</field>
+        <field
+            name="report_name"
+        >edi_voxel_account_invoice_oca.template_voxel_invoice</field>
+        <field name="binding_model_id" ref="model_account_move" />
+        <field name="binding_type">report</field>
+        <field name="print_report_name">object._get_voxel_filename()</field>
+    </record>
+    <template id="template_voxel_invoice">
+        <t t-call="edi_voxel_oca.voxel_template" />
+    </template>
+</odoo>
