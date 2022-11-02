@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2019 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">sale.order.view.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field
+            name="groups_id"
+            eval="[(4, ref('edi_voxel_oca.group_voxel_manager'))]"
+        />
+        <field name="arch" type="xml">
+            <notebook>
+                <page
+                    string="Voxel"
+                    name="page_voxel"
+                    attrs="{'invisible': [('voxel_xml_report', '=', False)]}"
+                >
+                    <group name="group_voxel">
+                        <group>
+                            <field name="voxel_filename" />
+                        </group>
+                        <group colspan="4">
+                            <field
+                                name="voxel_xml_report"
+                                widget="ace"
+                                options="{'mode': 'xml'}"
+                                nolabel="1"
+                            />
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+    <record id="sale_order_view_search_inherit_quotation" model="ir.ui.view">
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation" />
+        <field name="arch" type="xml">
+            <filter name="sales" position="after">
+                <filter
+                    name="voxel"
+                    string="Voxel Quotations"
+                    domain="[('voxel_filename', '!=', False)]"
+                />
+            </filter>
+        </field>
+    </record>
+    <record id="action_voxel_queue_job" model="ir.actions.act_window">
+        <field name="name">Voxel order Jobs</field>
+        <field name="res_model">queue.job</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_failed': 1}</field>
+        <field
+            name="domain"
+        >[('channel', '=', 'root.voxel_import'), ('model_name', '=', 'sale.order')]</field>
+    </record>
+    <menuitem
+        id="menu_voxel_queue_job"
+        action="action_voxel_queue_job"
+        sequence="10"
+        parent="sale.menu_sale_report"
+        groups="edi_voxel_oca.group_voxel_manager"
+    />
+</odoo>
