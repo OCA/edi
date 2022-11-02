@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<Transaction
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+    <GeneralData
+        Ref="1111"
+        Type="Pedido"
+        Currency="EUR"
+        BeginDate="2019-06-19"
+        EndDate="2019-06-19"
+    />
+    <Supplier
+        CustomerSupplierID="222-3333"
+        CIF="ESA12345674"
+        Company="COMPANY TEST, S.A."
+        Address="c/ Principal, s/n"
+        City="Reus"
+        PC="43111"
+        Province="Tarragona"
+        Country="ESP"
+        Email=""
+    >
+  </Supplier>
+    <Client
+        ClientID="1"
+        CIF=""
+        Company=""
+        Address=""
+        City=""
+        PC=""
+        Province=""
+        Country=""
+    />
+    <Customers>
+        <Customer
+            CustomerID="F111"
+            SupplierClientID=""
+            SupplierCustomerID=""
+            Customer="CUSTOMER TEST"
+            Address="Av Alcalde Pere Molas"
+            City="Vila-seca"
+            PC="43222"
+            Province="Tarragona"
+            Country="ESP"
+        >
+    </Customer>
+    </Customers>
+    <ProductList>
+        <Product
+            SupplierSKU="SP11111"
+            CustomerSKU="005555"
+            Item="PRODUCT TEST"
+            Qty="2.0"
+            MU="Cajas"
+        />
+        <Product
+            SupplierSKU="222222"
+            CustomerSKU="006666"
+            Item="PRODUCT TEST 2"
+            Qty="2.0"
+            MU="Unidades"
+        />
+    </ProductList>
+</Transaction>
