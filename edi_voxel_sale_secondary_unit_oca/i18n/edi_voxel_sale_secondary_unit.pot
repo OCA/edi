@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* edi_voxel_sale_secondary_unit
+# 	* edi_voxel_sale_secondary_unit_oca
 #
 msgid ""
 msgstr ""
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: edi_voxel_sale_secondary_unit
-#: model:ir.model,name:edi_voxel_sale_secondary_unit.model_sale_order
+#. module: edi_voxel_sale_secondary_unit_oca
+#: model:ir.model,name:edi_voxel_sale_secondary_unit_oca.model_sale_order
 msgid "Sales Order"
 msgstr ""
