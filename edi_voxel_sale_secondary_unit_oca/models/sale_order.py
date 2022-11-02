@@ -20,4 +20,4 @@ class SaleOrder(models.Model):
                 secondary_uom_qty=qty, secondary_uom_id=secondary_uom[0].id
             )
         else:
-            super()._parse_qty_uom_voxel(line_vals, line_element)
+            return super()._parse_qty_uom_voxel(line_vals, line_element)
