@@ -3,7 +3,7 @@
 
 from odoo import fields, models
 
-from odoo.addons.edi_voxel.models.uom_uom import VOXEL_CODE
+from odoo.addons.edi_voxel_oca.models.uom_uom import VOXEL_CODE
 
 
 class ProductSecondaryUnit(models.Model):
