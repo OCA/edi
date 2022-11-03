@@ -5,7 +5,7 @@ from odoo import models
 
 
 class ReportVoxelPicking(models.AbstractModel):
-    _inherit = "report.edi_voxel_stock_picking.template_voxel_picking"
+    _inherit = "report.edi_voxel_stock_picking_oca.template_voxel_picking"
 
     def _get_product_data(self, line):
         res = super()._get_product_data(line)

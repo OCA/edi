@@ -3,7 +3,7 @@
 
 from odoo.tests import Form
 
-from odoo.addons.edi_voxel_stock_picking.tests.test_voxel_stock_picking import (
+from odoo.addons.edi_voxel_stock_picking_oca.tests.test_voxel_stock_picking import (
     TestVoxelStockPickingCommon,
 )
 
@@ -32,7 +32,7 @@ class TestVoxelStockPickingSecondaryUnit(TestVoxelStockPickingCommon):
     def test_get_report_values(self):
         # Get report data
         report_edi_obj = self.env[
-            "report.edi_voxel_stock_picking.template_voxel_picking"
+            "report.edi_voxel_stock_picking_oca.template_voxel_picking"
         ]
         report_data = report_edi_obj._get_report_values(self.picking.ids)
         # Check product data
