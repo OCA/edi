@@ -3,10 +3,11 @@
 
 from datetime import datetime
 
-from odoo.tests import common
+from odoo.tests import Form
+from odoo.tests.common import TransactionCase
 
 
-class TestVoxelStockPickingCommon(common.SavepointCase):
+class TestVoxelStockPickingCommon(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -67,7 +68,7 @@ class TestVoxelStockPickingCommon(common.SavepointCase):
             {
                 "name": "LOT01",
                 "product_id": cls.product2.id,
-                "life_date": "2020-01-01 12:05:23",
+                "expiration_date": "2020-01-01 12:05:23",
                 "company_id": cls.main_company.id,
             }
         )
@@ -90,7 +91,14 @@ class TestVoxelStockPickingCommon(common.SavepointCase):
         sm = cls.picking.move_lines[1]
         sm.write({"quantity_done": sm.product_uom_qty})
         sm.move_line_ids.lot_id = cls.lot.id
-        cls.picking.button_validate()
+        backorder_wizard_dict = cls.picking.button_validate()
+        # pylint: disable=W8121
+        backorder_wizard = Form(
+            cls.env[backorder_wizard_dict["res_model"]].with_context(
+                backorder_wizard_dict["context"]
+            )
+        ).save()
+        backorder_wizard.process()
 
     @classmethod
     def _create_sale_order(cls):
@@ -146,7 +154,7 @@ class TestVoxelStockPicking(TestVoxelStockPickingCommon):
 
     def test_get_report_values(self):
         # Get report data
-        model_name = "report.edi_voxel_stock_picking.template_voxel_picking"
+        model_name = "report.edi_voxel_stock_picking_oca.template_voxel_picking"
         report_edi_obj = self.env[model_name]
         report_data = report_edi_obj._get_report_values(self.picking.ids)
         # Get expected data
@@ -221,7 +229,7 @@ class TestVoxelStockPicking(TestVoxelStockPickingCommon):
         ]
 
     def _get_comments_data(self):
-        return [{"Msg": "Picking note (test)"}]
+        return [{"Msg": "<p>Picking note (test)</p>"}]
 
     def _get_references_data(self):
         return [{"PORef": "Sale order name (test)"}]

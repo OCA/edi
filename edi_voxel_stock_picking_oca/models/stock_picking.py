@@ -76,7 +76,7 @@ class Picking(models.Model):
         pickings = self.filtered(able_to_voxel)
         if pickings:
             pickings.enqueue_voxel_report(
-                "edi_voxel_stock_picking.report_voxel_picking"
+                "edi_voxel_stock_picking_oca.report_voxel_picking"
             )
 
     def get_document_type(self):

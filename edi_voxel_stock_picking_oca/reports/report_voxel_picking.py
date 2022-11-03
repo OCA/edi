@@ -5,7 +5,7 @@ from odoo import api, models
 
 
 class ReportVoxelPicking(models.AbstractModel):
-    _name = "report.edi_voxel_stock_picking.template_voxel_picking"
+    _name = "report.edi_voxel_stock_picking_oca.template_voxel_picking"
     _inherit = "report.report_xml.abstract"
     _description = "Edi Voxel Stock picking Report"
 
@@ -114,8 +114,8 @@ class ReportVoxelPicking(models.AbstractModel):
             {
                 "BatchNumber": ml.lot_id.name,
                 "ExpirationDate": (
-                    ml.lot_id.life_date
-                    and ml.lot_id.life_date.strftime("%Y-%m-%d")
+                    ml.lot_id.expiration_date
+                    and ml.lot_id.expiration_date.strftime("%Y-%m-%d")
                     or ""
                 ),
                 "Quantity": ml.qty_done,

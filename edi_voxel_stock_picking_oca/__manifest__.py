@@ -3,13 +3,12 @@
 {
     "name": "Voxel stock picking",
     "summary": "Sends stock picking report to Voxel.",
-    "version": "13.0.1.0.5",
-    "development_status": "Production/Stable",
+    "version": "15.0.1.0.0",
     "category": "Warehouse Management",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
-    "depends": ["edi_voxel", "product_expiry", "sale_stock"],
+    "depends": ["edi_voxel_oca", "product_expiry", "sale_stock"],
     "data": [
         "data/ir_cron_data.xml",
         "views/report_voxel_picking.xml",
