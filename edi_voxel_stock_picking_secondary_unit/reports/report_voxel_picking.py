@@ -11,6 +11,7 @@ class ReportVoxelPicking(models.AbstractModel):
         res = super()._get_product_data(line)
         if line.secondary_uom_id and line.secondary_uom_id.voxel_code:
             res.update(
-                Qty=str(line.secondary_uom_qty), MU=line.secondary_uom_id.voxel_code,
+                Qty=str(line.secondary_uom_qty),
+                MU=line.secondary_uom_id.voxel_code,
             )
         return res
