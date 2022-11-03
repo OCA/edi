@@ -9,7 +9,8 @@ class Picking(models.Model):
     _inherit = ["stock.picking", "voxel.mixin"]
 
     voxel_enabled = fields.Boolean(
-        compute="_compute_voxel_enabled", search="_search_voxel_enabled",
+        compute="_compute_voxel_enabled",
+        search="_search_voxel_enabled",
     )
     voxel_job_ids = fields.Many2many(
         comodel_name="queue.job",
@@ -21,7 +22,7 @@ class Picking(models.Model):
     )
 
     def get_voxel_login(self, company=None):
-        """ This method overwrites the one defined in voxel.mixin to provide
+        """This method overwrites the one defined in voxel.mixin to provide
         the login for this specific model (stock.picking)
         """
         return (company or self.company_id).voxel_picking_login_id
@@ -79,5 +80,5 @@ class Picking(models.Model):
             )
 
     def get_document_type(self):
-        """ Document type name to be used in the name of the Voxel report"""
+        """Document type name to be used in the name of the Voxel report"""
         return "Albaran"
