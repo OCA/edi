@@ -1,5 +1,4 @@
 from odoo import _
-from odoo.exceptions import UserError
 
 from odoo.addons.component.core import Component
 
@@ -18,19 +17,16 @@ class EDIExchangeSOInput(Component):
     def process(self):
         wiz = self._setup_wizard()
         res = wiz.import_file_button()
-        account_statement = wiz.id
         statement_id = res["res_id"]
         statement = self.env["account.bank.statement"].browse(statement_id)
         self.exchange_record.sudo()._set_related_record(statement)
         return _("Account Statement %s created") % statement.name
-        #raise UserError(_("Something went wrong with the importing wizard."))
+        # raise UserError(_("Something went wrong with the importing wizard."))
 
     def _setup_wizard(self):
         """Init a `account.statement.import` instance for current record."""
         ctx = self.settings.get("wiz_ctx", {})
-        wiz = self.env["account.statement.import"].with_context(
-            **ctx).sudo().create({})
-        wiz.statement_file = self.exchange_record._get_file_content(
-            binary=False)
+        wiz = self.env["account.statement.import"].with_context(**ctx).sudo().create({})
+        wiz.statement_file = self.exchange_record._get_file_content(binary=False)
         wiz.statement_filename = self.exchange_record.exchange_filename
         return wiz
