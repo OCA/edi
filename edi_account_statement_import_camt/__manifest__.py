@@ -5,7 +5,7 @@
     "development_status": "Alpha",
     "license": "AGPL-3",
     "website": "https://github.com/OCA/edi",
-    # "author": "Cybrosys,Odoo Community Association (OCA)",
+    "author": "Cybrosys,Odoo Community Association (OCA)",
     "maintainers": ["Cybrosys"],
     "depends": ["edi_ubl_oca", "edi_account_statement_import", "account_statement_import_camt"],
     "auto_install": True,

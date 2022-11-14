@@ -10,7 +10,6 @@
     "license": "AGPL-3",
     "website": "https://github.com/OCA/edi",
     "author": "Cybrosys,Odoo Community Association (OCA)",
-    "maintainers": ["simahawk"],
     "depends": ["edi_oca", "account_statement_import"],
     "auto_install": True,
     "data": ["templates/exchange_chatter_msg.xml"],
