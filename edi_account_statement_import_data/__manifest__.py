@@ -10,8 +10,7 @@
     "website": "https://github.com/OCA/edi",
     "author": "Cybrosys,Odoo Community Association (OCA)",
     "maintainers": ["appstogrow"],
-    "depends": ["edi_account_statement_import", "account_statement_import_camt"],
-    "auto_install": True,
+    "depends": ["edi_account_statement_import"],
     "data": [
         "data/edi_backend_type.xml",
         "data/edi_exchange_type.xml",
