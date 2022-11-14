@@ -34,20 +34,22 @@ class EDIExchangeSOInput(Component):
             binary=False)
         wiz.statement_filename = self.exchange_record.exchange_filename
         return wiz
+
     def _handle_existing_order(self, order, message):
-    prev_record = self._get_previous_record(order)
-    self.exchange_record.message_post_with_view(
-          "edi_account_statement_import.message_already_imported",
-       values={
-	"order": order,
-	"prev_record": prev_record,
-	"message": message,
-	"level": "info",
-          },
-       subtype_id=self.env.ref("mail.mt_note").id,
-       )
+        prev_record = self._get_previous_record(order)
+        self.exchange_record.message_post_with_view(
+            "edi_account_statement_import.message_already_imported",
+            values={
+                "order": order,
+                "prev_record": prev_record,
+                "message": message,
+                "level": "info",
+            },
+            subtype_id=self.env.ref("mail.mt_note").id,
+        )
 
     def _get_previous_record(self, order):
         return self.env["edi.exchange.record"].search(
-            [("model", "=", "account.statement.import"), ("res_id", "=", order.id)], limit=1
+            [("model", "=", "account.statement.import"),
+             ("res_id", "=", order.id)], limit=1
         )
