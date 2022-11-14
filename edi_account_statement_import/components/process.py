@@ -23,7 +23,7 @@ class EDIExchangeSOInput(Component):
         statement = self.env["account.bank.statement"].browse(statement_id)
         self.exchange_record.sudo()._set_related_record(statement)
         return _("Account Statement %s created") % statement.name
-        raise UserError(_("Something went wrong with the importing wizard."))
+        #raise UserError(_("Something went wrong with the importing wizard."))
 
     def _setup_wizard(self):
         """Init a `account.statement.import` instance for current record."""
