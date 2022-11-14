@@ -14,7 +14,7 @@ EDI Account statement import
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/14.0/edi_sale_order_import
+    :target: https://github.com/OCA/edi/tree/14.0/edi_account_statement_import
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
     :target: https://translation.odoo-community.org/projects/edi-14-0/edi-14-0-edi_sale_order_import
