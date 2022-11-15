@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Catalogue xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+           xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+           xmlns="urn:oasis:names:specification:ubl:schema:xsd:Catalogue-2">
+<!-- pylint: disable=wrong-tabs-instead-of-spaces -->
+
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+    <cbc:ID>1387</cbc:ID>
+    <cbc:Name>Spring Catalogue</cbc:Name>
+    <cbc:IssueDate>2016-08-01</cbc:IssueDate>
+    <cbc:VersionID>2.0</cbc:VersionID>
+    <cac:ProviderParty>
+        <cac:PartyName>
+            <cbc:Name>Some catalogue provider</cbc:Name>
+        </cac:PartyName>
+    </cac:ProviderParty>
+    <cac:ReceiverParty>
+        <cac:PartyName>
+            <cbc:Name>My Company (San Francisco)</cbc:Name>
+        </cac:PartyName>
+    </cac:ReceiverParty>
+    <cac:SellerSupplierParty>
+        <cac:Party>
+            <cac:PartyName>
+                <cbc:Name>Medical</cbc:Name>
+            </cac:PartyName>
+        </cac:Party>
+    </cac:SellerSupplierParty>
+    <cac:CatalogueLine>
+        <cbc:ID>101</cbc:ID>
+        <cbc:ActionCode>Update</cbc:ActionCode>
+        <cac:RequiredItemLocationQuantity>
+            <cbc:MinimumQuantity unitCode="C62">1</cbc:MinimumQuantity>
+            <cac:Price>
+                <cbc:PriceAmount currencyID="EUR">1.35</cbc:PriceAmount>
+                <cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+            </cac:Price>
+        </cac:RequiredItemLocationQuantity>
+        <cac:Item>
+            <cbc:Name>First product</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>998000924</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:ManufacturersItemIdentification>
+                <cbc:ID>BOCAP-B</cbc:ID>
+            </cac:ManufacturersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeAgencyID="6" schemeID="GTIN">1234567890924</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:AdditionalItemIdentification>
+                <cbc:ID schemeAgencyID="ZZZ" schemeID="Product category">OPS / Masken und Hauben / Hauben</cbc:ID>
+            </cac:AdditionalItemIdentification>
+        </cac:Item>
+    </cac:CatalogueLine>
+    <cac:CatalogueLine>
+        <cbc:ID>102</cbc:ID>
+        <cbc:ActionCode>Update</cbc:ActionCode>
+        <cac:RequiredItemLocationQuantity>
+            <cbc:MinimumQuantity unitCode="C62">1</cbc:MinimumQuantity>
+            <cac:Price>
+                <cbc:PriceAmount currencyID="EUR">12.55</cbc:PriceAmount>
+                <cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+            </cac:Price>
+        </cac:RequiredItemLocationQuantity>
+        <cac:Item>
+            <cbc:Description>Photo copy paper 80g A4, package of 500 sheets.</cbc:Description>
+            <cbc:Name>Copy paper</cbc:Name>
+            <cbc:BrandName>Some brand</cbc:BrandName>
+            <cac:SellersItemIdentification>
+                <cbc:ID>MNTR011X1</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:ManufacturersItemIdentification>
+                <cbc:ID>MNTR01349087911</cbc:ID>
+            </cac:ManufacturersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeAgencyID="6" schemeID="GTIN">1234567890114</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:AdditionalItemIdentification>
+                <cbc:ID schemeAgencyID="ZZZ" schemeID="Product category">OPS / Masken und Hauben / Hauben</cbc:ID>
+            </cac:AdditionalItemIdentification>
+            <cac:ManufacturerParty>
+                <cac:PartyName>
+                    <cbc:Name>Manufacturer AG</cbc:Name>
+                </cac:PartyName>
+            </cac:ManufacturerParty>
+            <cac:Dimension>
+                <cbc:AttributeID>Weight</cbc:AttributeID>
+                <cbc:Measure unitCode="GRM">23.5</cbc:Measure>
+            </cac:Dimension>
+        </cac:Item>
+    </cac:CatalogueLine>
+    <cac:CatalogueLine>
+        <cbc:ID>103</cbc:ID>
+        <cbc:ActionCode>Update</cbc:ActionCode>
+        <cbc:OrderableIndicator>true</cbc:OrderableIndicator>
+        <cbc:OrderableUnit>C62</cbc:OrderableUnit>
+        <cbc:ContentUnitQuantity unitCode="C62">20</cbc:ContentUnitQuantity>
+        <cbc:MinimumOrderQuantity unitCode="C62">20</cbc:MinimumOrderQuantity>
+        <cac:RequiredItemLocationQuantity>
+            <cbc:MinimumQuantity unitCode="C62">20</cbc:MinimumQuantity>
+            <cac:Price>
+                <cbc:PriceAmount currencyID="EUR">91.50</cbc:PriceAmount>
+                <cbc:BaseQuantity unitCode="C62">20</cbc:BaseQuantity>
+            </cac:Price>
+        </cac:RequiredItemLocationQuantity>
+        <cac:Item>
+            <cbc:Description>Photo copy paper 80g A4, carton of 10 units with 500 sheets each</cbc:Description>
+            <cbc:Name>Copy paper</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>MNTR012X2</cbc:ID>
+            </cac:SellersItemIdentification>
+            <cac:ManufacturersItemIdentification>
+                <cbc:ID>MNTR01349087912</cbc:ID>
+            </cac:ManufacturersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeAgencyID="6" schemeID="GTIN">1234567890124</cbc:ID>
+            </cac:StandardItemIdentification>
+            <cac:Dimension>
+                <cbc:AttributeID>Weight</cbc:AttributeID>
+                <cbc:Measure unitCode="GRM">7.2</cbc:Measure>
+            </cac:Dimension>
+        </cac:Item>
+    </cac:CatalogueLine>
+    <cac:CatalogueLine>
+        <cbc:ID>104</cbc:ID>
+        <cbc:OrderableIndicator>false</cbc:OrderableIndicator>
+        <cac:Item>
+            <cbc:Name>Copy paper, outdated</cbc:Name>
+            <cac:SellersItemIdentification>
+                <cbc:ID>MNTR010X9</cbc:ID>
+            </cac:SellersItemIdentification>
+        </cac:Item>
+    </cac:CatalogueLine>
+</Catalogue>
