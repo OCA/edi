@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 <!-- TODO: noupdate OR better create via post init hook   -->
-    <record id="edi_exc_type_order_response_out" model="edi.exchange.type">
+    <record id="demo_edi_exc_type_order_response_out" model="edi.exchange.type">
         <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
         <field name="name">UBL Sale Order Response</field>
         <field name="code">UBL_SaleOrderResponse_out</field>
@@ -33,22 +33,12 @@ auto:
         tracked_fields:
           - state
           - commitment_date
-  "sale.order.line":
-    actions:
-      generate:
-        when:
-          - write
-        trigger_fields:
-          - product_uom_qty
-        tracked_fields:
-          - product_uom_qty
-        target_record: order_id
         </field>
     </record>
 
-    <record id="edi_exc_type_order_in" model="edi.exchange.type">
+    <record id="demo_edi_exc_type_order_in" model="edi.exchange.type">
         <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
-        <field name="ack_type_id" ref="edi_exc_type_order_response_out" />
+        <field name="ack_type_id" ref="demo_edi_exc_type_order_response_out" />
         <field name="name">UBL Sale Order</field>
         <field name="code">UBL_SaleOrder_in</field>
         <field name="direction">input</field>
