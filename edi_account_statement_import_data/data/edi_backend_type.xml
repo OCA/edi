@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="edi_backend_type_bank_statement" model="edi.backend.type">
+        <field name="name">Bank Statement</field>
+        <field name="code">bank_statement</field>
+    </record>
+</odoo>
