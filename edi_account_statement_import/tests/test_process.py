@@ -37,17 +37,14 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
 
     def test_wizard_setup(self):
         comp = self.backend._get_component(self.record, "process")
-        with mock.patch.object(
-            type(self.wiz_model)
-        ) as md_onchange:
+        with mock.patch.object(type(self.wiz_model)) as md_onchange:
             wiz = comp._setup_wizard()
             self.assertEqual(wiz._name, self.wiz_model._name)
             self.assertEqual(wiz.env.context["random_key"], "custom")
             self.assertEqual(
                 base64.b64decode(wiz.statement_file),
             )
-            self.assertEqual(wiz.statement_filename,
-                             self.record.exchange_filename)
+            self.assertEqual(wiz.statement_filename, self.record.exchange_filename)
             md_onchange.assert_called()
 
     def test_settings(self):
@@ -62,8 +59,8 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
     def test_new_statement(self):
         statement = self.env["account.bank.statement"].create(
             {
-                'journal_id': 7,
-                'date': self.field.Date.today(),
+                 "journal_id": 7,
+                "date": self.field.Date.today(),
             }
         )
         comp = self.backend._get_component(self.record, "process")
