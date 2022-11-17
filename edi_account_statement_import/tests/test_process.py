@@ -59,7 +59,7 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
     def test_new_statement(self):
         statement = self.env["account.bank.statement"].create(
             {
-                 "journal_id": 7,
+                "journal_id": 7,
                 "date": self.field.Date.today(),
             }
         )
