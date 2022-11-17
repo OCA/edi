@@ -15,7 +15,9 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.file = tools.file_open(
-            "AmazonWebServices.pdf", mode="rb", subdir="addons/edi_pdf2data/tests",
+            "AmazonWebServices.pdf",
+            mode="rb",
+            subdir="addons/edi_pdf2data/tests",
         ).read()
         cls._load_module_components(cls, "edi")
         cls._load_module_components(cls, "edi_pdf2data")
