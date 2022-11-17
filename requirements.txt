@@ -1,4 +1,5 @@
 # generated from manifests external_dependencies
+dateparser
 dateparser==1.1.1
 factur-x
 invoice2data
@@ -7,4 +8,5 @@ pdfplumber
 phonenumbers
 pyyaml
 regex
+unidecode
 xmlschema

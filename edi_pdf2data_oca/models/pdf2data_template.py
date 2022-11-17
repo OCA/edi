@@ -52,7 +52,8 @@ class Pdf2dataTemplate(models.Model):
         domain=[("exclude", "=", True)],
     )
     replace_ids = fields.One2many(
-        "pdf2data.template.replace", inverse_name="template_id",
+        "pdf2data.template.replace",
+        inverse_name="template_id",
     )
 
     @api.model
