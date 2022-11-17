@@ -433,7 +433,8 @@ class BaseUbl(models.AbstractModel):
                 taxes = product.taxes_id
             else:
                 taxes = product.supplier_taxes_id
-            if taxes:
+            skip_taxes = self.env.context.get("ubl_add_item__skip_taxes")
+            if taxes and not skip_taxes:
                 for tax in taxes:
                     self._ubl_add_tax_category(
                         tax,
