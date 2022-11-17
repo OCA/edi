@@ -11,5 +11,5 @@ accesss_pdf2data_template_keyword_manager,accesss.pdf2data.template.keyword.mana
 accesss_pdf2data_template_replace_viewer,accesss.pdf2data.template.replace.viewer,model_pdf2data_template_replace,base.group_user,1,0,0,0
 accesss_pdf2data_template_replace_manager,accesss.pdf2data.template.replace.manager,model_pdf2data_template_replace,base_edi.group_edi_manager,1,1,1,1
 
-accesss_pdf2data_template_type_viewer,accesss.pdf2data.template.type.viewer,model_pdf2data_template_type,base.group_user,1,0,0,0
-accesss_pdf2data_template_type_manager,accesss.pdf2data.template.type.manager,model_pdf2data_template_type,base_edi.group_edi_manager,1,1,1,1
+access_pdf2data_import,access_pdf2data_import,model_pdf2data_import,base.group_user,1,0,0,0
+access_pdf2data_template_import_yml,access_pdf2data_template_import_yml,model_pdf2data_template_import_yml,base_edi.group_edi_manager,1,1,1,0

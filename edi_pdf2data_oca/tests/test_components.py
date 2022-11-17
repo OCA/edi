@@ -1,5 +1,5 @@
 # Copyright 2021 Creu Blanca
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import base64
 
@@ -8,7 +8,7 @@ import yaml
 from odoo import tools
 
 from odoo.addons.component.core import Component
-from odoo.addons.edi.tests import common
+from odoo.addons.edi_oca.tests import common
 
 
 class Pdf2DataComponentTestCase(common.EDIBackendCommonComponentRegistryTestCase):
@@ -18,10 +18,10 @@ class Pdf2DataComponentTestCase(common.EDIBackendCommonComponentRegistryTestCase
         cls.file = tools.file_open(
             "AmazonWebServices.pdf",
             mode="rb",
-            subdir="addons/edi_pdf2data/tests",
+            subdir="addons/edi_pdf2data_oca/tests",
         ).read()
-        cls._load_module_components(cls, "edi")
-        cls._load_module_components(cls, "edi_pdf2data")
+        cls._load_module_components(cls, "edi_oca")
+        cls._load_module_components(cls, "edi_pdf2data_oca")
         cls.import_file = cls.env["pdf2data.import"].create(
             {
                 "pdf_file": base64.b64encode(cls.file),
@@ -34,13 +34,13 @@ class Pdf2DataComponentTestCase(common.EDIBackendCommonComponentRegistryTestCase
                 "name": "Test CSV exchange",
                 "code": "invoice.demo",
                 "direction": "input",
-                "backend_type_id": cls.env.ref("edi_pdf2data.backend_type").id,
+                "backend_type_id": cls.env.ref("edi_pdf2data_oca.backend_type").id,
             }
         )
         template_yml = tools.file_open(
             "com.amazon.aws.yml",
             mode="r",
-            subdir="addons/edi_pdf2data/tests",
+            subdir="addons/edi_pdf2data_oca/tests",
         ).read()
         cls.template = cls.env["pdf2data.template"].create(
             {"name": "Amazon WS", "exchange_type_id": cls.exchange_type.id}
@@ -51,7 +51,7 @@ class Pdf2DataComponentTestCase(common.EDIBackendCommonComponentRegistryTestCase
 
         class DemoComponent(Component):
             _name = "edi.component.process_data.demo"
-            _inherit = "edi.input.process.pdf2data.abstract"
+            _inherit = "edi.input.process.pdf2data.base"
             _exchange_type = "invoice.demo"
 
             def process_data(self, data, template):
