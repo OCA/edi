@@ -1,5 +1,5 @@
 # Copyright 2021 Creu Blanca
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import base64
 import logging
@@ -7,12 +7,12 @@ import os
 import re
 import shutil
 import subprocess
+import unicodedata
 from collections import OrderedDict
 from tempfile import NamedTemporaryFile
 
 import dateparser
 import yaml
-from unidecode import unidecode
 
 from odoo import api, fields, models
 
@@ -25,8 +25,6 @@ class Pdf2dataTemplate(models.Model):
     _order = "sequence"
 
     name = fields.Char()
-    code = fields.Char(related="type_id.code")
-    type_id = fields.Many2one("pdf2data.template.type")
     exchange_type_id = fields.Many2one("edi.exchange.type", required=True)
     pdf2data_template_dict = fields.Serialized()
     pdf2data_options_dict = fields.Serialized()
@@ -103,7 +101,11 @@ class Pdf2dataTemplate(models.Model):
 
         # Remove accents
         if self.remove_accents:
-            optimized_str = unidecode(optimized_str)
+            optimized_str = (
+                unicodedata.normalize("NFKC", optimized_str)
+                .encode("ascii", "ignore")
+                .decode("ascii")
+            )
 
         # convert to lower case
         if self.lowercase:
@@ -277,6 +279,7 @@ class Pdf2dataTemplate(models.Model):
 
 class Pdf2dataTemplateField(models.Model):
     _name = "pdf2data.template.field"
+    _description = "Field for Pdf2data Template"
 
     template_id = fields.Many2one("pdf2data.template", ondelete="cascade")
     field_id = fields.Many2one("pdf2data.template.field", ondelete="cascade")
@@ -298,7 +301,9 @@ class Pdf2dataTemplateField(models.Model):
     end_block = fields.Char()
     start = fields.Char()
     end = fields.Char()
-    field_ids = fields.One2many("pdf2data.template.field", inverse_name="field_id")
+    field_ids = fields.One2many(
+        "pdf2data.template.field", inverse_name="field_id", string="Child Fields"
+    )
 
     def _extract_data(self, optimized_str, template):
         return getattr(self, "_extract_data_%s" % self.parse_mode)(
@@ -408,6 +413,7 @@ class Pdf2dataTemplateField(models.Model):
 
 class Pdf2dataTemplateKeyword(models.Model):
     _name = "pdf2data.template.keyword"
+    _description = "Keyword for Pdf2data Template"
 
     template_id = fields.Many2one(
         "pdf2data.template", required=True, ondelete="cascade"
@@ -418,17 +424,10 @@ class Pdf2dataTemplateKeyword(models.Model):
 
 class Pdf2dataTemplateReplace(models.Model):
     _name = "pdf2data.template.replace"
+    _description = "Replace rule for Pdf2data Template"
 
-    template_id = fields.Many2one("pdf2dta.template", required=True, ondelete="cascade")
+    template_id = fields.Many2one(
+        "pdf2data.template", required=True, ondelete="cascade"
+    )
     from_char = fields.Char()
     to_char = fields.Char()
-
-
-# TODO: Remove
-class Pdf2dataTemplateType(models.Model):
-
-    _name = "pdf2data.template.type"
-    _description = "Pdf2data Template Type"
-
-    name = fields.Char(required=True)
-    code = fields.Char(required=True)

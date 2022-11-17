@@ -1,5 +1,5 @@
 # Copyright 2021 Creu Blanca
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import base64
 
@@ -7,7 +7,7 @@ from odoo import tools
 from odoo.exceptions import ValidationError
 
 from odoo.addons.component.exception import NoComponentError
-from odoo.addons.edi.tests import common
+from odoo.addons.edi_oca.tests import common
 
 
 class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
@@ -17,10 +17,10 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
         cls.file = tools.file_open(
             "AmazonWebServices.pdf",
             mode="rb",
-            subdir="addons/edi_pdf2data/tests",
+            subdir="addons/edi_pdf2data_oca/tests",
         ).read()
-        cls._load_module_components(cls, "edi")
-        cls._load_module_components(cls, "edi_pdf2data")
+        cls._load_module_components(cls, "edi_oca")
+        cls._load_module_components(cls, "edi_pdf2data_oca")
         cls.import_file = cls.env["pdf2data.import"].create(
             {
                 "pdf_file": base64.b64encode(cls.file),
@@ -32,13 +32,13 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
                 "name": "Test CSV exchange",
                 "code": "pdf2data",
                 "direction": "input",
-                "backend_type_id": cls.env.ref("edi_pdf2data.backend_type").id,
+                "backend_type_id": cls.env.ref("edi_pdf2data_oca.backend_type").id,
             }
         )
 
     def import_template(self, file="com.amazon.aws.yml"):
         template_yml = tools.file_open(
-            file, mode="r", subdir="addons/edi_pdf2data/tests"
+            file, mode="r", subdir="addons/edi_pdf2data_oca/tests"
         ).read()
         template = self.env["pdf2data.template"].create(
             {"name": "Amazon WS", "exchange_type_id": self.exchange_type.id}

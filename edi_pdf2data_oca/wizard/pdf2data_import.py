@@ -1,5 +1,5 @@
 # Copyright 2021 Creu Blanca
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -17,7 +17,7 @@ class Pdf2dataImport(models.TransientModel):
 
     @api.model
     def _default_backend(self):
-        return self.env.ref("edi_pdf2data.pdf2data_backend").id
+        return self.env.ref("edi_pdf2data_oca.pdf2data_backend").id
 
     def import_pdf(self):
         exchange_record = self.backend_id.create_record(

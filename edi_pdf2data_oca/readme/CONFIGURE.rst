@@ -5,8 +5,8 @@ kind of component
 
     class MyComponent(Component):
         _name = "component.name"
-        _inherit = "edi.component.process_data.mixin"
-        _process_type = "template type code"
+        _inherit = "edi.input.process.pdf2data.base"
+        _exchange_type = "My template code"
 
         def process_data(self, data, template, file):
             "To implement what it should do"

@@ -1,13 +1,13 @@
 # Copyright 2021 Creu Blanca
 # @author: Enric Tobella
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 from odoo.addons.component.core import Component
 
 
 class EdiInputPdf2DataProcessAbstract(Component):
-    _name = "edi.input.process.pdf2data.abstract"
-    _inherit = "edi.component.input.mixin"
+    _name = "edi.input.process.pdf2data.base"
+    _inherit = "edi.component.mixin"
     _usage = "input.process"
     _backend_type = "pdf2data"
     _exchange_type = False
@@ -31,7 +31,7 @@ class EdiInputPdf2DataProcessAbstract(Component):
 
 class EdiInputPdf2DataProcess(Component):
     _name = "edi.input.process.pdf2data"
-    _inherit = "edi.input.process.pdf2data.abstract"
+    _inherit = "edi.input.process.pdf2data.base"
     _exchange_type = "pdf2data_generic"
 
     def _pdf2data_template_domain(self):
@@ -40,7 +40,7 @@ class EdiInputPdf2DataProcess(Component):
     def process_data(self, data, template):
         if template.exchange_type_id.code == self._exchange_type:
             return
-        self.exchange_record.exchange_type_id = template.exchange_type_id
+        self.exchange_record.type_id = template.exchange_type_id
         self.component(
             usage=self._usage,
             backend_type=self._backend_type,

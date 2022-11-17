@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2021 Creu Blanca
-     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
     <record model="ir.ui.view" id="pdf2data_template_form_view">
         <field name="name">pdf2data.template.form (in edi_pdf2data)</field>
@@ -28,13 +28,9 @@
                     <group>
                         <field name="name" />
                         <field
-                            name="type_id"
-                            options="{'no_open': 1, 'no_create': 1}"
-                        />
-                        <field
                             name="exchange_type_id"
                             options="{'no_open': 1, 'no_create': 1}"
-                            domain="[('backend_type_id', '=', %(edi_pdf2data.backend_type)s)]"
+                            domain="[('backend_type_id', '=', %(edi_pdf2data_oca.backend_type)s)]"
                         />
                         <field name="sequence" />
                         <field name="pdf_file" filename="pdf_filename" />
@@ -209,7 +205,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name" />
-                <field name="type_id" />
+                <field name="exchange_type_id" />
             </search>
         </field>
     </record>
@@ -219,7 +215,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name" />
-                <field name="type_id" />
+                <field name="exchange_type_id" />
             </tree>
         </field>
     </record>
