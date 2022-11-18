@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="edi_exchange_type_invoice_ubl" model="edi.exchange.type">
+        <field name="name">UBL import invoice</field>
+        <field name="code">ubl_import_invoice</field>
+        <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
+        <field name="direction">input</field>
+        <field name="exchange_file_ext">xml</field>
+        <field name="advanced_settings_edit">
+components:
+    process:
+        usage: input.process.account.invoice
+        </field>
+    </record>
+</odoo>
