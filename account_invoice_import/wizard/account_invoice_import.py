@@ -390,11 +390,13 @@ class AccountInvoiceImport(models.TransientModel):
                 product = self.env["product.product"].browse(il_vals["product_id"])
                 raise UserError(
                     _(
-                        "Account missing on product '{product}' or on it's related "
-                        "category '{product_categ}'.",
-                        product=product.display_name,
-                        product_categ=product.categ_id.display_name,
+                        "Account missing on product '%(product)s' or on it's related "
+                        "category '%(product_categ)s'."
                     )
+                    % {
+                        "product": product.display_name,
+                        "product_categ": product.categ_id.display_name,
+                    }
                 )
             if line.get("name"):
                 il_vals["name"] = line["name"]
@@ -660,14 +662,16 @@ class AccountInvoiceImport(models.TransientModel):
             if self.partner_id.vat != self.partner_vat:
                 raise UserError(
                     _(
-                        "The vendor to update '{partner_name}' already "
-                        "has a VAT number ({partner_vat}) "
+                        "The vendor to update '%(partner_name)s' already "
+                        "has a VAT number (%(partner_vat)s) "
                         "which is different from the vendor VAT number "
-                        "of the invoice ({invoice_vat}).",
-                        partner_name=self.partner_id.display_name,
-                        partner_vat=self.partner_id.vat,
-                        invoice_vat=self.partner_vat,
+                        "of the invoice (%(invoice_vat)s)."
                     )
+                    % {
+                        "partner_name": self.partner_id.display_name,
+                        "partner_vat": self.partner_id.vat,
+                        "invoice_vat": self.partner_vat,
+                    }
                 )
 
         else:
@@ -677,14 +681,16 @@ class AccountInvoiceImport(models.TransientModel):
                 if self.partner_id.country_id != self.partner_country_id:
                     raise UserError(
                         _(
-                            "The vendor to update '{partner_name}' already "
-                            "has a country ({partner_country}) "
+                            "The vendor to update '%(partner_name)s' already "
+                            "has a country (%(partner_country)s) "
                             "which is different from the country of the vendor "
-                            "of the invoice ({invoice_country}).",
-                            partner_name=self.partner_id.display_name,
-                            partner_country=self.partner_id.country_id.display_name,
-                            invoice_country=self.partner_country_id.display_name,
+                            "of the invoice (%(invoice_country)s)."
                         )
+                        % {
+                            "partner_name": self.partner_id.display_name,
+                            "partner_country": self.partner_id.country_id.display_name,
+                            "invoice_country": self.partner_country_id.display_name,
+                        }
                     )
             else:
                 vals["country_id"] = self.partner_country_id.id
@@ -802,11 +808,13 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(
                     _(
                         "This invoice already exists in Odoo. It's "
-                        "Supplier Invoice Number is '{invoice_number}' and it's Odoo number "
-                        "is '{odoo_invoice_number}'",
-                        invoice_number=parsed_inv.get("invoice_number"),
-                        odoo_invoice_number=existing_inv.name,
+                        "Supplier Invoice Number is '%(invoice_number)s' and it's Odoo number "
+                        "is '%(odoo_invoice_number)s'."
                     )
+                    % {
+                        "invoice_number": parsed_inv.get("invoice_number"),
+                        "odoo_invoice_number": existing_inv.name,
+                    }
                 )
             if self.import_config_id:  # button called from 'config' step
                 wiz_vals["import_config_id"] = self.import_config_id.id
@@ -1034,11 +1042,13 @@ class AccountInvoiceImport(models.TransientModel):
                     body=_(
                         "<b>Missing Invoice Import Configuration</b> on partner "
                         "<a href=# data-oe-model=res.partner "
-                        "data-oe-id={invoice_id}>{invoice_display_name}</a>: "
-                        "the imported invoice is incomplete.",
-                        invoice_id=invoice.commercial_partner_id.id,
-                        invoice_display_name=invoice.commercial_partner_id.display_name,
+                        "data-oe-id=%(invoice_id)s>%(invoice_display_name)s</a>: "
+                        "the imported invoice is incomplete."
                     )
+                    % {
+                        "invoice_id": invoice.commercial_partner_id.id,
+                        "invoice_display_name": invoice.commercial_partner_id.display_name,
+                    }
                 )
             return
         inv_cur = invoice.currency_id
@@ -1148,17 +1158,19 @@ class AccountInvoiceImport(models.TransientModel):
                         )
                     invoice.message_post(
                         body=_(
-                            "The <b>tax amount</b> for tax {tax_name} has been "
-                            "<b>forced</b> to {forced_amount} (amount computed by "
-                            "Odoo was: {initial_amount}).",
-                            tax_name=mline.tax_line_id.display_name,
-                            forced_amount=format_amount(
+                            "The <b>tax amount</b> for tax %(tax_name)s has been "
+                            "<b>forced</b> to %(forced_amount)s (amount computed by "
+                            "Odoo was: %(initial_amount)s)."
+                        )
+                        % {
+                            "tax_name": mline.tax_line_id.display_name,
+                            "forced_amount": format_amount(
                                 self.env, new_amount_currency, invoice.currency_id
                             ),
-                            initial_amount=format_amount(
+                            "initial_amount": format_amount(
                                 self.env, mline.amount_currency, invoice.currency_id
                             ),
-                        )
+                        }
                     )
                     new_balance = invoice.currency_id._convert(
                         new_amount_currency,
@@ -1334,7 +1346,9 @@ class AccountInvoiceImport(models.TransientModel):
         self.ensure_one()
         invoice = self.invoice_id
         if not invoice:
-            raise UserError(_("You must select a supplier invoice or refund to update"))
+            raise UserError(
+                _("You must select a supplier invoice or refund to update.")
+            )
         parsed_inv = self.get_parsed_invoice()
         if self.partner_id:
             # True if state='update' ; False when state='update-from-invoice'
@@ -1347,12 +1361,14 @@ class AccountInvoiceImport(models.TransientModel):
             raise UserError(
                 _(
                     "The supplier of the imported invoice "
-                    "({import_invoice_partner_name}) is different from "
+                    "(%(import_invoice_partner_name)s) is different from "
                     "the supplier of the invoice to update "
-                    "({update_invoice_partner_name}).",
-                    import_invoice_partner_name=partner.name,
-                    update_invoice_partner_name=invoice.commercial_partner_id.name,
+                    "(%(update_invoice_partner_name)s)."
                 )
+                % {
+                    "import_invoice_partner_name": partner.display_name,
+                    "update_invoice_partner_name": invoice.commercial_partner_id.display_name,
+                }
             )
         if not self.import_config_id:
             raise UserError(_("You must select an Invoice Import Configuration."))
@@ -1363,12 +1379,14 @@ class AccountInvoiceImport(models.TransientModel):
         if currency != invoice.currency_id:
             raise UserError(
                 _(
-                    "The currency of the imported invoice ({import_invoice_currency}) "
+                    "The currency of the imported invoice (%(import_invoice_currency)s) "
                     "is different from the currency of the existing invoice "
-                    "({update_invoice_currency})",
-                    import_invoice_currency=currency.name,
-                    update_invoice_currency=invoice.currency_id.name,
+                    "(%(update_invoice_currency)s)."
                 )
+                % {
+                    "import_invoice_currency": currency.name,
+                    "update_invoice_currency": invoice.currency_id.name,
+                }
             )
         vals = self._prepare_update_invoice_vals(parsed_inv, invoice)
         logger.debug("Updating supplier invoice with vals=%s", vals)
@@ -1438,7 +1456,7 @@ class AccountInvoiceImport(models.TransientModel):
                         xpath_res[0].attrib
                         and xpath_res[0].attrib.get("format") != "102"
                     ):
-                        raise UserError(_("Only the date format 102 is supported "))
+                        raise UserError(_("Only the date format 102 is supported."))
                     date_dt = datetime.strptime(xpath_res[0].text, "%Y%m%d")
                     date_str = fields.Date.to_string(date_dt)
                     return date_str
