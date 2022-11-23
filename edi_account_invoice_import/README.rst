@@ -43,8 +43,6 @@ On your exchange type, go to advanced settings and add the following::
     account_invoice:
         post_invoice: true
 
-
-
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
    Only for development or testing purpose, do not use in production.
