@@ -329,9 +329,12 @@ class EDIBackend(models.Model):
                 _("Record ID=%d is not meant to be sent!") % exchange_record.id
             )
         if not exchange_record.exchange_file:
-            raise exceptions.UserError(
-                _("Record ID=%d has no file to send!") % exchange_record.id
-            )
+            if exchange_record.direction == "output":
+                self.exchange_generate(exchange_record)
+            else:
+                raise exceptions.UserError(
+                    _("Record ID=%d has no file to send!") % exchange_record.id
+                )
         return exchange_record.edi_exchange_state in [
             "output_pending",
             "output_error_on_send",
