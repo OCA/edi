@@ -92,9 +92,30 @@ class ProductImport(models.TransientModel):
         return catalogue
 
     @api.model
+    def _get_company_id(self, catalogue):
+        company_vals = catalogue.get("company")
+        if not company_vals:
+            return False
+        part = self._bdimport._match_partner(
+            company_vals,
+            catalogue["chatter_msg"],
+            partner_type="contact",
+            domain=[("is_company", "=", True)],
+            raise_exception=False,
+        )
+        if not part:
+            return False
+        company = self.env["res.company"].search(
+            [("partner_id", "=", part.id)], limit=1
+        )
+        return company.id
+
+    @api.model
     def _get_seller(self, catalogue):
         return self._bdimport._match_partner(
-            catalogue["seller"], catalogue["chatter_msg"], partner_type="supplier"
+            catalogue["seller"],
+            catalogue["chatter_msg"],
+            partner_type="supplier",
         )
 
     @api.model
@@ -111,7 +132,8 @@ class ProductImport(models.TransientModel):
                 if s_info.date_end and s_info.date_end < today:
                     continue
                 if (
-                    s_info.min_qty == seller_info["min_qty"]
+                    s_info.product_code == seller_info["product_code"]
+                    and s_info.min_qty == seller_info["min_qty"]
                     and s_info.price == seller_info["price"]
                     and s_info.currency_id.id == seller_info["currency_id"]
                 ):
@@ -126,7 +148,7 @@ class ProductImport(models.TransientModel):
     @api.model
     def _prepare_product(self, parsed_product, chatter_msg, seller=None):
         try:
-            product = self._bdimport._match_product(
+            product = self._bdimport.with_context(active_test=False)._match_product(
                 parsed_product, chatter_msg, seller=seller
             )
         except UserError:
@@ -137,6 +159,7 @@ class ProductImport(models.TransientModel):
         )
 
         product_vals = {
+            "active": parsed_product.get("active", True),
             "default_code": parsed_product["code"],
             "barcode": parsed_product["barcode"],
             "name": parsed_product["name"],
@@ -144,6 +167,7 @@ class ProductImport(models.TransientModel):
             "type": "product",
             "uom_id": uom.id,
             "uom_po_id": uom.id,
+            "company_id": self.env.context.get("company_id") or False,
         }
         seller_info = {
             "name": seller and seller.id or False,
@@ -189,6 +213,9 @@ class ProductImport(models.TransientModel):
         catalogue = self.parse_product_catalogue(file_content, self.product_filename)
         if not catalogue.get("products"):
             raise UserError(_("This catalogue doesn't have any product!"))
+        company_id = self._get_company_id(catalogue)
         seller = self._get_seller(catalogue)
-        self._create_products(catalogue, seller, filename=self.product_filename)
+        self.with_context(company_id=company_id)._create_products(
+            catalogue, seller, filename=self.product_filename
+        )
         return {"type": "ir.actions.act_window_close"}

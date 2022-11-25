@@ -2,11 +2,9 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import base64
 
-import mock
 from lxml import etree
 
 from odoo import exceptions
-from odoo.tests.common import Form
 
 from .common import TestCommon
 
@@ -14,12 +12,9 @@ from .common import TestCommon
 class TestParsingValidation(TestCommon):
     """Mostly unit tests on wizard parsing methods."""
 
-    def _mock(self, method_name):
-        return mock.patch.object(type(self.wiz_model), method_name)
-
     def test_onchange_validation_none(self):
         csv_data = base64.b64encode(b"id,name\n,1,Foo")
-        with self._mock("_parse_xml") as mocked, Form(self.wiz_model) as form:
+        with self._mock("_parse_xml") as mocked, self.wiz_form as form:
             mocked.return_value = "", "Error"
             form.product_file = csv_data
             # no filename, not called
@@ -27,7 +22,7 @@ class TestParsingValidation(TestCommon):
 
     def test_onchange_validation_not_supported(self):
         # Check method "_parse_xml" is called
-        with self._mock("_parse_xml") as mocked, Form(self.wiz_model) as form:
+        with self._mock("_parse_xml") as mocked, self.wiz_form as form:
             mocked.return_value = None, "Error"
             form.product_filename = "test.csv"
             with self.assertRaises(exceptions.UserError):
@@ -36,7 +31,7 @@ class TestParsingValidation(TestCommon):
         # Check method "_unsupported_file_msg" works
         self.assertTrue(self.wiz_model._unsupported_file_msg("fname.omg"))
         # Check correct error is raised
-        with Form(self.wiz_model) as form:
+        with self.wiz_form as form:
             form.product_filename = "test.csv"
             with self.assertRaises(exceptions.UserError) as cm:
                 form.product_file = "00100000"
@@ -47,7 +42,7 @@ class TestParsingValidation(TestCommon):
             b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
         )
 
-        with Form(self.wiz_model) as form:
+        with self.wiz_form as form:
             form.product_filename = "test.xml"
             with self._mock("_parse_xml") as mocked:
                 # Simulate bad file handling
@@ -57,7 +52,7 @@ class TestParsingValidation(TestCommon):
                 self.assertEqual(str(cm.exception), "I don't like this file")
                 mocked.assert_called()
 
-        with Form(self.wiz_model) as form:
+        with self.wiz_form as form:
             form.product_filename = "test.xml"
             with self._mock("parse_xml_catalogue") as mocked:
                 mocked.return_value = None

@@ -71,6 +71,17 @@ class TestProductImport(TestCommon):
         seller = self.wiz_model._get_seller(self.parsed_catalog)
         self.assertEqual(seller, self.supplier)
 
+    def test_get_company_id(self):
+        # Test not found company_id
+        company_id = self.wiz_model._get_company_id(self.parsed_catalog)
+        self.assertIs(company_id, False)
+        # Test found company_id
+        new_catalog = dict(
+            self.parsed_catalog, company={"name": "My Company (San Francisco)"}
+        )
+        company_id = self.wiz_model._get_company_id(new_catalog)
+        self.assertEqual(company_id, self.env.ref("base.main_company").id)
+
     def test_product_import(self):
         products = self.wiz_model._create_products(
             self.parsed_catalog, seller=self.supplier
@@ -102,3 +113,18 @@ class TestProductImport(TestCommon):
                 expected[key] = parsed[key]
                 p_values[key] = getattr(product, key)
             self.assertEqual(p_values, expected)
+
+    def test_import_button(self):
+        form = self.wiz_form
+        with self._mock("_parse_file") as mocked:
+            mocked.return_value = self.parsed_catalog
+            form.product_filename = "test.xml"
+            mocked.assert_not_called()
+            form.product_file = "AA=="
+            mocked.assert_called()
+            mocked.reset_mock()
+
+            wiz = form.save()
+            mocked.assert_not_called()
+            wiz.import_button()
+            mocked.assert_called()
