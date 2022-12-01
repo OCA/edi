@@ -32,6 +32,10 @@
                             <field name="output_type" />
                             <field name="generator" />
                             <field
+                                name="prettify"
+                                attrs="{'invisible': [('generator', '!=', 'qweb')]}"
+                            />
+                            <field
                                 name="template_id"
                                 attrs="{'required': [('generator', '=', 'qweb')], 'invisible': [('generator', '!=', 'qweb')]}"
                             />
