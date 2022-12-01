@@ -17,16 +17,21 @@ from .common import EDIBackendCommonTestCase
 # If you still want to run `edi` tests w/ pytest when this happens, set this env var.
 @unittest.skipIf(os.getenv("SKIP_EDI_CONSUMER_CASE"), "Consumer test case disabled.")
 class TestConsumerMixinCase(EDIBackendCommonTestCase):
-    # pylint: disable=W8110
     @classmethod
-    def _setup_records(cls):
-        super()._setup_records()
+    def _setup_env(cls):
+        super()._setup_env()
         # Load fake models ->/
         cls.loader = FakeModelLoader(cls.env, cls.__module__)
         cls.loader.backup_registry()
         from .fake_models import EdiExchangeConsumerTest
 
         cls.loader.update_registry((EdiExchangeConsumerTest,))
+        return super()._setup_env()
+
+    # pylint: disable=W8110
+    @classmethod
+    def _setup_records(cls):
+        super()._setup_records()
         cls.consumer_record = cls.env["edi.exchange.consumer.test"].create(
             {"name": "Test Consumer"}
         )

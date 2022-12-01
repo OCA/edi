@@ -10,17 +10,20 @@ from .common import EDIBackendCommonTestCase
 
 
 class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
-    # pylint: disable=W8110
     @classmethod
-    def _setup_records(cls):
-        super()._setup_records()
+    def _setup_env(cls):
         # Load fake models ->/
         cls.loader = FakeModelLoader(cls.env, cls.__module__)
         cls.loader.backup_registry()
         from .fake_models import EdiExchangeConsumerTest
 
         cls.loader.update_registry((EdiExchangeConsumerTest,))
+        return super()._setup_env()
 
+    # pylint: disable=W8110
+    @classmethod
+    def _setup_records(cls):
+        super()._setup_records()
         cls.group = cls.env["res.groups"].create({"name": "Demo Group"})
         cls.ir_access = cls.env["ir.model.access"].create(
             {
