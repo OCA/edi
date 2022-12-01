@@ -30,6 +30,7 @@ addon | version | maintainers | summary
 [edi_exchange_template_oca](edi_exchange_template_oca/) | 15.0.1.0.1 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
 [edi_oca](edi_oca/) | 15.0.1.3.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_storage_oca](edi_storage_oca/) | 15.0.1.2.0 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
+[edi_voxel_oca](edi_voxel_oca/) | 15.0.1.0.0 |  | Base module for connecting with Voxel
 [edi_webservice_oca](edi_webservice_oca/) | 15.0.1.1.0 |  | Defines webservice integration from EDI Exchange records
 
 [//]: # (end addons)
