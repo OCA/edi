@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -197,14 +197,7 @@ msgid "Delay time"
 msgstr ""
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_queue_job__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_partner__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_uom_uom__display_name
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -221,14 +214,7 @@ msgid "Hours"
 msgstr ""
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_queue_job__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_partner__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_uom_uom__id
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__id
 msgid "ID"
 msgstr ""
 
@@ -243,14 +229,7 @@ msgid "Kgs"
 msgstr ""
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_queue_job____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_partner____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_uom_uom____last_update
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin____last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -326,6 +305,10 @@ msgstr ""
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__processing_error
+msgid "Processing Error"
+msgstr ""
+
+#. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__processing_error
 msgid "Processing error"
 msgstr ""
@@ -417,13 +400,13 @@ msgid "Voxel Code"
 msgstr ""
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__voxel_tax_code
-msgid "Voxel Tax Code"
+#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_filename
+msgid "Voxel Filename"
 msgstr ""
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_filename
-msgid "Voxel filename"
+#: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__voxel_tax_code
+msgid "Voxel Tax Code"
 msgstr ""
 
 #. module: edi_voxel_oca
