@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template id="voxel_template">
+        <Transaction
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
+            <GeneralData t-att="general" t-if="general" />
+            <Supplier t-att="supplier" t-if="supplier" />
+            <Client t-att="client" t-if="client" />
+            <Customers t-if="customers">
+                <Customer t-foreach="customers" t-as="customer" t-att="customer" />
+            </Customers>
+            <Comments t-if="comments">
+                <Comment t-foreach="comments" t-as="comment" t-att="comment" />
+            </Comments>
+            <References t-if="references">
+                <Reference t-foreach="references" t-as="reference" t-att="reference" />
+            </References>
+            <ProductList t-if="products">
+                <Product t-foreach="products" t-as="product" t-att="product['product']">
+                    <Discounts t-if="product.get('discounts')">
+                        <Discount
+                            t-foreach="product['discounts']"
+                            t-as="discount"
+                            t-att="discount"
+                        />
+                    </Discounts>
+                    <Taxes t-if="product.get('taxes')">
+                        <Tax t-foreach="product['taxes']" t-as="tax" t-att="tax" />
+                    </Taxes>
+                </Product>
+            </ProductList>
+            <TaxSummary t-if="taxes">
+                <Tax t-foreach="taxes" t-as="tax" t-att="tax" />
+            </TaxSummary>
+            <TotalSummary t-att="tota_summary" t-if="tota_summary" />
+        </Transaction>
+    </template>
+</odoo>
