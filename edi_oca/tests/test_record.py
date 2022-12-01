@@ -6,7 +6,7 @@ from freezegun import freeze_time
 
 from odoo import exceptions, fields
 
-from odoo.addons.queue_job.job import DelayableRecordset
+from odoo.addons.queue_job.delay import DelayableRecordset
 
 from .common import EDIBackendCommonTestCase
 
@@ -124,4 +124,4 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         delayed = record.with_context(test_queue_job_no_delay=False).with_delay()
         self.assertTrue(isinstance(delayed, DelayableRecordset))
         self.assertEqual(delayed.recordset, record)
-        self.assertEqual(delayed.channel, "root.parent_test_chan.test_chan")
+        self.assertEqual(delayed.delayable.channel, "root.parent_test_chan.test_chan")
