@@ -153,6 +153,16 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         self.assertEqual(doc.getchildren()[1].text, "2")
         self.assertEqual(doc.getchildren()[1].attrib, {"bit": "custom_var"})
 
+    def test_prettify(self):
+        self.tmpl_out2.template_id.arch = (
+            '<t t-name="edi_exchange.test_output2"><root><a>1</a></root></t>'
+        )
+        result = self.tmpl_out2.exchange_generate(self.record2)
+        self.assertEqual(result, b"<root><a>1</a></root>")
+        self.tmpl_out2.prettify = True
+        result = self.tmpl_out2.exchange_generate(self.record2)
+        self.assertEqual(result, b"<root>\n  <a>1</a>\n</root>\n")
+
     def test_generate_file_report(self):
         output = self.backend.exchange_generate(self.record3)
         self.assertTrue(output)
