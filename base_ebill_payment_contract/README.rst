@@ -87,6 +87,14 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
+.. |maintainer-TDu| image:: https://github.com/TDu.png?size=40px
+    :target: https://github.com/TDu
+    :alt: TDu
+
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-TDu| 
+
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/base_ebill_payment_contract>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
