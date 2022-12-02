@@ -5,7 +5,7 @@
 import mock
 from freezegun import freeze_time
 
-from odoo import fields
+from odoo import fields, tools
 from odoo.exceptions import UserError
 
 from .common import EDIBackendCommonComponentRegistryTestCase
@@ -38,6 +38,10 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
     def test_generate_record_output(self):
         self.backend.with_context(fake_output="yeah!").exchange_generate(self.record)
         self.assertEqual(self.record._get_file_content(), "yeah!")
+
+    def test_generate_record_output_pdf(self):
+        result = tools.file_open("addons/edi_oca/tests/result.pdf", mode="rb").read()
+        self.backend.with_context(fake_output=result).exchange_generate(self.record)
 
     def test_send_record(self):
         self.record.write({"edi_exchange_state": "output_pending"})
