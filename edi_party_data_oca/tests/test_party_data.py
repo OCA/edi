@@ -18,10 +18,19 @@ class PartyDataTestCase(EDIBackendCommonComponentTestCase):
             rec = cls.cat_model.create({"code": f"cat{i}", "name": f"Cat {i}"})
             cls.all_cat += rec
             setattr(cls, f"category{i}", rec)
+
+        parent = cls.env["res.partner"].create(
+            {
+                "name": "ACME inc",
+                "is_company": True,
+            }
+        )
+
         for i in range(1, 4):
             rec = cls.env["res.partner"].create(
                 {
                     "name": f"Test Partner {i}",
+                    "parent_id": parent.id,
                     "id_numbers": [
                         (
                             0,
@@ -45,12 +54,14 @@ class PartyDataTestCase(EDIBackendCommonComponentTestCase):
         )
         cls.exc_record = cls.backend.create_record("id_out_test", {})
 
-    def _get_provider(self, partner):
-        return get_party_data_component(self.exc_record, partner)
+    def _get_provider(self, partner, **kw):
+        return get_party_data_component(self.exc_record, partner, **kw)
 
-    def _make_expected_data(self, partner, number, allowed_codes=None, **kw):
+    def _make_expected_data(
+        self, partner, number, allowed_codes=None, name_field="display_name", **kw
+    ):
         data = {
-            "name": partner.name,
+            "name": partner[name_field],
             "identifiers": [
                 {"attrs": {"schemeID": "cat1"}, "value": f"cat1-p{number}"},
                 {"attrs": {"schemeID": "cat2"}, "value": f"cat2-p{number}"},
@@ -88,6 +99,32 @@ class PartyDataTestCase(EDIBackendCommonComponentTestCase):
         )
         for partner, expected_data in expected:
             provider = self._get_provider(partner)
+            res = provider.get_party()
+            self.assertEqual(res, expected_data)
+
+    def test_data_no_fullname(self):
+        expected = (
+            (
+                self.partner1,
+                self._make_expected_data(self.partner1, 1, name_field="name"),
+            ),
+            (
+                self.partner2,
+                self._make_expected_data(
+                    self.partner2, 2, allowed_codes=["cat2", "cat3"], name_field="name"
+                ),
+            ),
+            (
+                self.partner3,
+                self._make_expected_data(
+                    self.partner3, 3, allowed_codes=["cat3"], name_field="name"
+                ),
+            ),
+        )
+        for partner, expected_data in expected:
+            provider = self._get_provider(
+                partner, work_ctx={"party_data_name_field": "name"}
+            )
             res = provider.get_party()
             self.assertEqual(res, expected_data)
 

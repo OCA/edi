@@ -47,7 +47,8 @@ class EDIExchangePartyDataMixin(AbstractComponent):
         return party
 
     def _get_name(self):
-        return self.partner.name
+        name_field = getattr(self.work, "party_data_name_field", "display_name")
+        return self.partner[name_field]
 
     def _get_endpoint(self):
         return {}
