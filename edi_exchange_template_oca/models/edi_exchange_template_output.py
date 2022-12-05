@@ -1,15 +1,11 @@
 # Copyright 2020 ACSONE SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-import logging
-
 import lxml.etree as etree
 
 from odoo import fields, models
 
 from ..utils import xml_purge_nswrapper
-
-_logger = logging.getLogger(__name__)
 
 
 class EDIExchangeOutputTemplate(models.Model):
