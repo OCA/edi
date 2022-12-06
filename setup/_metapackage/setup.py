@@ -49,6 +49,7 @@ setuptools.setup(
         'odoo14-addon-partner_identification_import',
         'odoo14-addon-pdf_helper',
         'odoo14-addon-product_import',
+        'odoo14-addon-product_import_ubl',
         'odoo14-addon-purchase_order_ubl',
         'odoo14-addon-purchase_stock_ubl',
         'odoo14-addon-sale_order_customer_free_ref',
