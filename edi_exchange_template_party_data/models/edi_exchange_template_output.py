@@ -13,9 +13,8 @@ class EDIExchangeOutputTemplate(models.Model):
     _inherit = "edi.exchange.template.output"
 
     def _get_render_values(self, exchange_record, **kw):
-        values = super()._get_render_values(exchange_record, **kw)
-        values["get_party_data"] = self._get_party_data
-        return values
+        kw["get_party_data"] = self._get_party_data
+        return super()._get_render_values(exchange_record, **kw)
 
     def _get_party_data(self, exchange_record, partner, raise_if_not_found=True):
         """Shortcut to lookup an info provider for parties."""
