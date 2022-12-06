@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- pylint: disable=wrong-tabs-instead-of-spaces -->
+
+<Catalogue xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+		   xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+		   xmlns="urn:oasis:names:specification:ubl:schema:xsd:Catalogue-2">
+	<cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+	<cbc:CustomizationID>urn:fdc:peppol.eu:poacc:trns:catalogue:3</cbc:CustomizationID>
+	<cbc:ProfileID>urn:fdc:peppol.eu:poacc:bis:catalogue_only:3</cbc:ProfileID>
+	<cbc:ID>1387</cbc:ID>
+	<cbc:ActionCode>Add</cbc:ActionCode>
+	<cbc:Name>Spring Catalogue</cbc:Name>
+	<cbc:IssueDate>2016-08-01</cbc:IssueDate>
+	<cbc:VersionID>2.0</cbc:VersionID>
+	<cac:ValidityPeriod>
+		<cbc:StartDate>2018-09-01</cbc:StartDate>
+		<cbc:EndDate>2019-08-31</cbc:EndDate>
+	</cac:ValidityPeriod>
+	<cac:ReferencedContract>
+		<cbc:ID>CRT1387</cbc:ID>
+	</cac:ReferencedContract>
+	<cac:SourceCatalogueReference>
+		<cbc:ID>1.0</cbc:ID>
+	</cac:SourceCatalogueReference>
+	<cac:ProviderParty>
+		<cbc:EndpointID schemeID="0192">987654325</cbc:EndpointID>
+		<cac:PartyIdentification>
+			<cbc:ID schemeID="0088">5790000435951</cbc:ID>
+		</cac:PartyIdentification>
+		<cac:PostalAddress>
+			<cbc:StreetName>Sinsenveien 40</cbc:StreetName>
+			<cbc:AdditionalStreetName>Oppgang B</cbc:AdditionalStreetName>
+			<cbc:CityName>Oslo</cbc:CityName>
+			<cbc:PostalZone>0501</cbc:PostalZone>
+			<cbc:CountrySubentity>Region</cbc:CountrySubentity>
+			<cac:AddressLine>
+				<cbc:Line>Address Line 3</cbc:Line>
+			</cac:AddressLine>
+			<cac:Country>
+				<cbc:IdentificationCode>NO</cbc:IdentificationCode>
+			</cac:Country>
+		</cac:PostalAddress>
+		<cac:PartyLegalEntity>
+			<cbc:RegistrationName>Helseforetak AS</cbc:RegistrationName>
+			<cbc:CompanyID schemeID="0192">123456785</cbc:CompanyID>
+			<cac:RegistrationAddress>
+				<cbc:CityName>Oslo</cbc:CityName>
+				<cac:Country>
+					<cbc:IdentificationCode>NO</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:RegistrationAddress>
+		</cac:PartyLegalEntity>
+	</cac:ProviderParty>
+	<cac:ReceiverParty>
+		<cbc:EndpointID schemeID="0192">987654325</cbc:EndpointID>
+		<cac:PartyIdentification>
+			<cbc:ID schemeID="0088">5790000435944</cbc:ID>
+		</cac:PartyIdentification>
+		<cac:PostalAddress>
+			<cbc:StreetName>Storgt. 12</cbc:StreetName>
+			<cbc:AdditionalStreetName>4. etasje</cbc:AdditionalStreetName>
+			<cbc:CityName>Oslo</cbc:CityName>
+			<cbc:PostalZone>0585</cbc:PostalZone>
+			<cbc:CountrySubentity>Region</cbc:CountrySubentity>
+			<cac:AddressLine>
+				<cbc:Line>Address Line 3</cbc:Line>
+			</cac:AddressLine>
+			<cac:Country>
+				<cbc:IdentificationCode>NO</cbc:IdentificationCode>
+			</cac:Country>
+		</cac:PostalAddress>
+		<cac:PartyLegalEntity>
+			<cbc:RegistrationName>Medical AS</cbc:RegistrationName>
+			<cbc:CompanyID schemeID="0192">123456785</cbc:CompanyID>
+			<cac:RegistrationAddress>
+				<cbc:CityName>Oslo</cbc:CityName>
+				<cac:Country>
+					<cbc:IdentificationCode>NO</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:RegistrationAddress>
+		</cac:PartyLegalEntity>
+	</cac:ReceiverParty>
+	<cac:SellerSupplierParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="0192">987654325</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="0088">5790000435951</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Medical</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Storgt. 12</cbc:StreetName>
+				<cbc:AdditionalStreetName>4. etasje</cbc:AdditionalStreetName>
+				<cbc:CityName>Oslo</cbc:CityName>
+				<cbc:PostalZone>0585</cbc:PostalZone>
+				<cbc:CountrySubentity>Region</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Address Line 3</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>NO</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:Contact>
+				<cbc:Name>Nils Nilsen</cbc:Name>
+				<cbc:Telephone>22150510</cbc:Telephone>
+				<cbc:ElectronicMail>post@medical.no</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:SellerSupplierParty>
+	<cac:ContractorCustomerParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="0192">123456785</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="0088">5790000435951</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Medical</cbc:Name>
+			</cac:PartyName>
+			<cac:Contact>
+				<cbc:Name>Nils Nilsen</cbc:Name>
+				<cbc:Telephone>22150510</cbc:Telephone>
+				<cbc:ElectronicMail>post@medical.no</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:ContractorCustomerParty>
+	<cac:TradingTerms>
+		<cbc:Information>Net within 30 days</cbc:Information>
+	</cac:TradingTerms>
+	<cac:CatalogueLine>
+		<cbc:ID>1</cbc:ID>
+		<cbc:ActionCode>Update</cbc:ActionCode>
+		<cbc:OrderableIndicator>true</cbc:OrderableIndicator>
+		<cbc:OrderableUnit>LBR</cbc:OrderableUnit>
+		<cbc:ContentUnitQuantity unitCode="C62">10</cbc:ContentUnitQuantity>
+		<cbc:OrderQuantityIncrementNumeric>1</cbc:OrderQuantityIncrementNumeric>
+		<cbc:MinimumOrderQuantity unitCode="LBR">1</cbc:MinimumOrderQuantity>
+		<cbc:MaximumOrderQuantity unitCode="LBR">100</cbc:MaximumOrderQuantity>
+		<cbc:WarrantyInformation>text</cbc:WarrantyInformation>
+		<cbc:PackLevelCode>TU</cbc:PackLevelCode>
+		<cac:LineValidityPeriod>
+			<cbc:StartDate>2018-09-26</cbc:StartDate>
+			<cbc:EndDate>2019-08-31</cbc:EndDate>
+		</cac:LineValidityPeriod>
+		<cac:ItemComparison>
+			<cbc:PriceAmount currencyID="EUR">9.00</cbc:PriceAmount>
+			<cbc:Quantity unitCode="LBR">1</cbc:Quantity>
+		</cac:ItemComparison>
+		<cac:ComponentRelatedItem>
+			<cbc:ID>2345</cbc:ID>
+			<cbc:Quantity unitCode="LBR">1</cbc:Quantity>
+		</cac:ComponentRelatedItem>
+		<cac:AccessoryRelatedItem>
+			<cbc:ID>54584</cbc:ID>
+			<cbc:Quantity unitCode="LBR">1</cbc:Quantity>
+		</cac:AccessoryRelatedItem>
+		<cac:RequiredRelatedItem>
+			<cbc:ID>5564540</cbc:ID>
+			<cbc:Quantity unitCode="LBR">1</cbc:Quantity>
+		</cac:RequiredRelatedItem>
+		<cac:RequiredItemLocationQuantity>
+			<cbc:LeadTimeMeasure unitCode="DAY">2</cbc:LeadTimeMeasure>
+			<cbc:MinimumQuantity unitCode="LBR">1</cbc:MinimumQuantity>
+			<cbc:MaximumQuantity unitCode="LBR">10</cbc:MaximumQuantity>
+			<cac:ApplicableTerritoryAddress>
+				<cbc:StreetName>Storgt. 12</cbc:StreetName>
+				<cbc:AdditionalStreetName>4. etasje</cbc:AdditionalStreetName>
+				<cbc:CityName>Oslo</cbc:CityName>
+				<cbc:PostalZone>0585</cbc:PostalZone>
+				<cbc:CountrySubentity>Region</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Address Line 3</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>NO</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:ApplicableTerritoryAddress>
+			<cac:Price>
+				<cbc:PriceAmount currencyID="EUR">10.00</cbc:PriceAmount>
+				<cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+				<cbc:PriceType>AAA</cbc:PriceType>
+				<cbc:OrderableUnitFactorRate>1</cbc:OrderableUnitFactorRate>
+				<cac:ValidityPeriod>
+					<cbc:StartDate>2018-10-01</cbc:StartDate>
+					<cbc:EndDate>2018-12-31</cbc:EndDate>
+				</cac:ValidityPeriod>
+			</cac:Price>
+		</cac:RequiredItemLocationQuantity>
+		<cac:Item>
+			<cbc:Description>Photo copy paper 80g A4, package of 500 sheets.</cbc:Description>
+			<cbc:PackQuantity unitCode="LBR">1</cbc:PackQuantity>
+			<cbc:PackSizeNumeric>10</cbc:PackSizeNumeric>
+			<cbc:Name>Copy paper</cbc:Name>
+			<cbc:Keyword>text</cbc:Keyword>
+			<cbc:BrandName>text</cbc:BrandName>
+			<cac:SellersItemIdentification>
+				<cbc:ID>MNTR011</cbc:ID>
+			</cac:SellersItemIdentification>
+			<cac:ManufacturersItemIdentification>
+				<cbc:ID>MNTR01349087911</cbc:ID>
+			</cac:ManufacturersItemIdentification>
+			<cac:StandardItemIdentification>
+				<cbc:ID schemeID="0160">1234567890114</cbc:ID>
+			</cac:StandardItemIdentification>
+			<cac:ItemSpecificationDocumentReference>
+				<cbc:ID>12345</cbc:ID>
+				<cac:Attachment>
+					<cbc:EmbeddedDocumentBinaryObject mimeCode="image/png" filename="image1.png">UjBsR09EbGhjZ0dTQUxNQUFBUUNBRU1tQ1p0dU1GUXhEUzhi</cbc:EmbeddedDocumentBinaryObject>
+					<cac:ExternalReference>
+						<cbc:URI>http://www.supplier.com/image1.png</cbc:URI>
+					</cac:ExternalReference>
+				</cac:Attachment>
+			</cac:ItemSpecificationDocumentReference>
+			<cac:OriginCountry>
+				<cbc:IdentificationCode>NO</cbc:IdentificationCode>
+			</cac:OriginCountry>
+			<cac:CommodityClassification>
+				<cbc:ItemClassificationCode listID="MP" listVersionID="19.0501" name="Office furniture">20101601</cbc:ItemClassificationCode>
+			</cac:CommodityClassification>
+			<cac:TransactionConditions>
+				<cbc:ActionCode>CT</cbc:ActionCode>
+			</cac:TransactionConditions>
+			<cac:HazardousItem>
+				<cbc:UNDGCode>ADR</cbc:UNDGCode>
+				<cbc:HazardClassID>Code</cbc:HazardClassID>
+			</cac:HazardousItem>
+			<cac:ClassifiedTaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>18</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:ClassifiedTaxCategory>
+			<cac:AdditionalItemProperty>
+				<cbc:Name>Paper weight in grams</cbc:Name>
+				<cbc:NameCode listID="NN">test</cbc:NameCode>
+				<cbc:Value>18</cbc:Value>
+				<cbc:ValueQuantity unitCode="GRM">18</cbc:ValueQuantity>
+				<cbc:ValueQualifier>text</cbc:ValueQualifier>
+			</cac:AdditionalItemProperty>
+			<cac:ManufacturerParty>
+				<cac:PartyName>
+					<cbc:Name>Manufacturer AS</cbc:Name>
+				</cac:PartyName>
+			</cac:ManufacturerParty>
+			<cac:ItemInstance>
+				<cbc:BestBeforeDate>2018-12-31</cbc:BestBeforeDate>
+				<cac:LotIdentification>
+					<cbc:LotNumberID>123456789</cbc:LotNumberID>
+				</cac:LotIdentification>
+			</cac:ItemInstance>
+			<cac:Certificate>
+				<cbc:ID>123450</cbc:ID>
+				<cbc:CertificateTypeCode>NA</cbc:CertificateTypeCode>
+				<cbc:CertificateType>Environmental</cbc:CertificateType>
+				<cbc:Remarks>tekst</cbc:Remarks>
+				<cac:IssuerParty>
+					<cac:PartyName>
+						<cbc:Name>NA</cbc:Name>
+					</cac:PartyName>
+				</cac:IssuerParty>
+			</cac:Certificate>
+			<cac:Dimension>
+				<cbc:AttributeID>LN</cbc:AttributeID>
+				<cbc:Measure unitCode="MTR">0.1</cbc:Measure>
+			</cac:Dimension>
+		</cac:Item>
+	</cac:CatalogueLine>
+	<cac:CatalogueLine>
+		<cbc:ID>2</cbc:ID>
+		<cac:RequiredItemLocationQuantity>
+			<cac:Price>
+				<cbc:PriceAmount currencyID="EUR">90.00</cbc:PriceAmount>
+				<cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+			</cac:Price>
+		</cac:RequiredItemLocationQuantity>
+		<cac:Item>
+			<cbc:Description>Photo copy paper 80g A4, carton of 10 units with 500 sheets each</cbc:Description>
+			<cbc:Name>Copy paper</cbc:Name>
+			<cac:SellersItemIdentification>
+				<cbc:ID>MNTR012</cbc:ID>
+			</cac:SellersItemIdentification>
+			<cac:ManufacturersItemIdentification>
+				<cbc:ID>MNTR01349087912</cbc:ID>
+			</cac:ManufacturersItemIdentification>
+			<cac:StandardItemIdentification>
+				<cbc:ID schemeID="0160">1234567890124</cbc:ID>
+			</cac:StandardItemIdentification>
+			<cac:CommodityClassification>
+				<cbc:ItemClassificationCode listID="MP" listVersionID="19.0501">20101601</cbc:ItemClassificationCode>
+			</cac:CommodityClassification>
+			<cac:ClassifiedTaxCategory>
+				<cbc:ID>S</cbc:ID>
+				<cbc:Percent>18</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>VAT</cbc:ID>
+				</cac:TaxScheme>
+			</cac:ClassifiedTaxCategory>
+			<cac:AdditionalItemProperty>
+				<cbc:Name>Paper weight in grams</cbc:Name>
+				<cbc:Value>18</cbc:Value>
+			</cac:AdditionalItemProperty>
+		</cac:Item>
+	</cac:CatalogueLine>
+</Catalogue>
