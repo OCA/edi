@@ -2,6 +2,7 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo import fields
 from odoo.tests.common import SavepointCase
 
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
@@ -62,9 +63,13 @@ class TestOrderInboundFull(SavepointCase, EDIBackendTestMixin, OrderInboundTestM
         # TODO: new test
         # Subsequent updates on some fields should trigger new exchanges
         xml_data = handler.parse_xml(file_content)
-        old_qty = xml_data["cac:OrderLine"][0]["cac:LineItem"]["cbc:Quantity"]
-        line0 = order.order_line[0]
-        line0.write({"product_uom_qty": line0.product_uom_qty - 1})
+        old_date = order.commitment_date
+        new_date = fields.Date.add(order.commitment_date, days=2)
+        self.assertEqual(
+            xml_data["cac:Delivery"][0]["cbc:ActualDeliveryDate"],
+            fields.Date.to_string(old_date),
+        )
+        order.write({"commitment_date": new_date})
         ack_exc_record = order.exchange_record_ids.filtered(
             lambda x: x.type_id == self.exc_type_out and x != ack_exc_record
         )
@@ -76,5 +81,7 @@ class TestOrderInboundFull(SavepointCase, EDIBackendTestMixin, OrderInboundTestM
         self.assertEqual(err, None, err)
         # Subsequent updates on some fields should trigger new exchanges
         xml_data = handler.parse_xml(file_content)
-        new_qty = xml_data["cac:OrderLine"][0]["cac:LineItem"]["cbc:Quantity"]
-        self.assertGreater(old_qty["$"], new_qty["$"])
+        self.assertEqual(
+            xml_data["cac:Delivery"][0]["cbc:ActualDeliveryDate"],
+            fields.Date.to_string(new_date),
+        )
