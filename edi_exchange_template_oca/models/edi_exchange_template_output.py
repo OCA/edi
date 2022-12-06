@@ -97,9 +97,9 @@ class EDIExchangeOutputTemplate(models.Model):
             "get_info_provider": self._get_info_provider,
             "info": {},
         }
+        values.update(kw)
         values.update(self._time_utils())
         values.update(self._evaluate_code_snippet(**values))
-        values.update(kw)
         return values
 
     def _render_template(self, exchange_record, code, **kw):
