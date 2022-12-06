@@ -17,9 +17,11 @@ class TestOrderResponseOutbound(TestCaseBase):
     def setUpClass(cls):
         super().setUpClass()
         cls._setup_order()
-        cls.exc_type = cls.env.ref("edi_sale_ubl_oca.edi_exc_type_order_response_out")
+        cls.exc_type = cls.env.ref(
+            "edi_sale_ubl_oca.demo_edi_exc_type_order_response_out"
+        )
         cls.exc_tmpl = cls.env.ref(
-            "edi_sale_ubl_oca.edi_exc_template_order_response_out"
+            "edi_sale_ubl_oca.demo_edi_exc_template_order_response_out"
         )
         vals = {
             "model": cls.sale._name,
