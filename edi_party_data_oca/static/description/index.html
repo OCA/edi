@@ -383,25 +383,45 @@ Only for development or testing purpose, do not use in production.
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#configuration" id="id1">Configuration</a></li>
-<li><a class="reference internal" href="#usage" id="id2">Usage</a></li>
-<li><a class="reference internal" href="#bug-tracker" id="id3">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="id4">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="id5">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="id6">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="id7">Maintainers</a></li>
+<li><a class="reference internal" href="#configuration" id="id1">Configuration</a><ul>
+<li><a class="reference internal" href="#id-numbers-selection" id="id2">ID numbers selection</a></li>
+<li><a class="reference internal" href="#name-field" id="id3">Name field</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="id5">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="id6">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="id7">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="id8">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="id9">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="configuration">
 <h1><a class="toc-backref" href="#id1">Configuration</a></h1>
+<div class="section" id="id-numbers-selection">
+<h2><a class="toc-backref" href="#id2">ID numbers selection</a></h2>
 <p>On the exchange type form, find the field “ID categories”
 and set the categories allowed for that exchange type.</p>
 <p>If not set, <em>all the IDs</em> of the partner will be exposed.</p>
 </div>
+<div class="section" id="name-field">
+<h2><a class="toc-backref" href="#id3">Name field</a></h2>
+<p>On the exchange type form, modify the advanced settings
+so that the work context of the component that is used (eg: generate)
+contains <cite>party_data_name_field</cite>. For instance:</p>
+<pre class="literal-block">
+components:
+    generate:
+        usage: my.generate
+        work_ctx:
+            party_data_name_field: name
+</pre>
+</div>
+</div>
 <div class="section" id="usage">
-<h1><a class="toc-backref" href="#id2">Usage</a></h1>
+<h1><a class="toc-backref" href="#id4">Usage</a></h1>
 <p>An handy util method is to retrive the component:</p>
 <pre class="literal-block">
 from odoo.addons.edi_party_data_oca.utils import get_party_data_component
@@ -412,7 +432,7 @@ data = component.get_party()
 </pre>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#id3">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#id5">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
@@ -420,21 +440,21 @@ If you spotted it first, help us smashing it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#id4">Credits</a></h1>
+<h1><a class="toc-backref" href="#id6">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#id5">Authors</a></h2>
+<h2><a class="toc-backref" href="#id7">Authors</a></h2>
 <ul class="simple">
 <li>Camptocamp</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#id6">Contributors</a></h2>
+<h2><a class="toc-backref" href="#id8">Contributors</a></h2>
 <ul class="simple">
 <li>Simone Orsi &lt;<a class="reference external" href="mailto:simone.orsi&#64;camptocamp.com">simone.orsi&#64;camptocamp.com</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#id7">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#id9">Maintainers</a></h2>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org"><img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" /></a>
 <p>OCA, or the Odoo Community Association, is a nonprofit organization whose
