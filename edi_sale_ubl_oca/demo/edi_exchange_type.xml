@@ -29,10 +29,8 @@ auto:
           - write
         trigger_fields:
           - state
-          - commitment_date
         tracked_fields:
           - state
-          - commitment_date
         </field>
     </record>
 

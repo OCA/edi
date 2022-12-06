@@ -3,7 +3,10 @@
     TODO: no update.
 -->
 <odoo>
-    <template id="qwb_tmpl_ubl_order_response_out" name="Render UBL OrderResponse out">
+    <template
+        id="qwb_tmpl_ubl_order_response_out"
+        name="Render UBL OrderResponse out - EXAMPLE"
+    >
 
         <OrderResponse
             xmlns="urn:oasis:names:specification:ubl:schema:xsd:OrderResponse-2"

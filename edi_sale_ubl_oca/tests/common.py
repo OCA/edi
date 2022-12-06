@@ -113,9 +113,9 @@ class TestCaseBase(XMLBaseTestCase, OrderMixin):
 class OrderInboundTestMixin:
     @classmethod
     def _setup_inbound_order(cls, backend):
-        cls.exc_type_in = cls.env.ref("edi_sale_ubl_oca.edi_exc_type_order_in")
+        cls.exc_type_in = cls.env.ref("edi_sale_ubl_oca.demo_edi_exc_type_order_in")
         cls.exc_type_out = cls.env.ref(
-            "edi_sale_ubl_oca.edi_exc_type_order_response_out"
+            "edi_sale_ubl_oca.demo_edi_exc_type_order_response_out"
         )
         cls.exc_type_in.backend_id = backend
         cls.exc_type_out.backend_id = backend
