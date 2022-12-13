@@ -84,6 +84,7 @@
                                 t-esc="package_total.totalPackageQuantity"
                             >2</totalPackageQuantity>
                             <totalGrossWeight
+                                t-if="package_total.totalGrossWeight"
                                 t-att="package_total.totalGrossWeight.attrs"
                                 t-esc="package_total.totalGrossWeight.value"
                             >6.0</totalGrossWeight>

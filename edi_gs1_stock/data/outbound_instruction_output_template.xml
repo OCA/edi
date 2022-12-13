@@ -21,10 +21,7 @@ buyer = exchange_record.record.partner_id
 # TODO: Pick the SO partner customer.
 seller = backend.lsc_partner_id
 # TODO: get a default carrier somehow?
-shipper = env['res.partner'].new({
-    'name': "NO_CARRIER_SPECIFIED",
-    'gln_code': "0" * 13,
-})
+shipper = exchange_record.record.carrier_id.partner_id
 
 _result = {
     "sender": sender,

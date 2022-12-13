@@ -10,8 +10,11 @@
         <field name="arch" type="xml">
             <xpath expr="//div[@data-key='stock']" position="inside">
                 <h2>GS1</h2>
-                <div class="row mt16 o_settings_container">
-                    <div class="col-12 col-lg-6 o_setting_box">
+                <div class="row mt16 o_settings_container" name="gs1_stock">
+                    <div
+                        class="col-12 col-lg-6 o_setting_box"
+                        name="gs1_stock_settings"
+                    >
                         <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">
                             <label for="gs1_main_uom_id" />

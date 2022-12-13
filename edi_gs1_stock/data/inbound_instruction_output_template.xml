@@ -18,11 +18,7 @@ logistic_service_buyer = sender
 # FIXME: this is probably wrong or not always true
 buyer = sender
 seller = exchange_record.record.purchase_id.partner_id
-# TODO: get a default carrier somehow?
-shipper = env['res.partner'].new({
-    'name': "NO_CARRIER_SPECIFIED",
-    'gln_code': "0" * 13,
-})
+shipper = exchange_record.record.carrier_id.partner_id
 
 _result = {
     "sender": sender,
