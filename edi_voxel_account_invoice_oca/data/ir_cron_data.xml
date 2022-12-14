@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2020 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="ir_cron_check_invoice_export_status" model="ir.cron">
+        <field name="name">Edi Voxel: Update invoice export status</field>
+        <field name="model_id" ref="sale.model_account_move" />
+        <field name="state">code</field>
+        <field name="code">model._cron_update_voxel_export_status()</field>
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">10</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall" />
+    </record>
+</odoo>
