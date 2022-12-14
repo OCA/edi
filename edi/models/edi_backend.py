@@ -202,8 +202,10 @@ class EDIBackend(models.Model):
         if output and store:
             if not isinstance(output, bytes):
                 output = output.encode()
+            filename = exchange_record.type_id._make_exchange_filename(exchange_record)
             exchange_record.update(
                 {
+                    "exchange_filename": filename,
                     "exchange_file": base64.b64encode(output),
                     "edi_exchange_state": "output_pending",
                 }
