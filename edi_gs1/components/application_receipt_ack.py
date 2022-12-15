@@ -14,7 +14,6 @@ class ApplicationReceiptAcknowledgement(Component):
     _name = "gs1.input.applicationReceiptAcknowledgement"
     _inherit = "edi.gs1.input.mixin"
     _usage = "gs1.in.ApplicationReceiptAcknowledgement"
-    _xsd_schema_path = "static/schemas/gs1/ecom/ApplicationReceiptAcknowledgement.xsd"
 
     def _process_data(self, data):
         if not self.is_ok(data):
