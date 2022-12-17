@@ -20,8 +20,8 @@
                 schemeAgencyID="BII"
                 schemeID="Profile"
             >urn:www.cenbii.eu:profile:BIIXYZ:ver1.0</cbc:ProfileID>
-            <cbc:ID t-esc="record.client_order_ref" />
-            <cbc:UUID t-esc="exchange_record.identifier" />
+            <cbc:ID t-esc="info.get('cbc:ID', record.client_order_ref)" />
+            <cbc:UUID t-esc="info.get('cbc:UUID', exchange_record.identifier)" />
             <cbc:IssueDate
                 t-esc="date_to_string(record.date_order)"
             >2010-01-21</cbc:IssueDate>
@@ -41,8 +41,11 @@
 
                 <cac:LineCountNumeric t-esc="len(record.order_line)" />
             -->
+            <t t-set="order_ref_info" t-value="info.get('cac:OrderReference', {})" />
             <cac:OrderReference>
-                <cbc:ID t-esc="record.client_order_ref">XYZ123</cbc:ID>
+                <cbc:ID
+                    t-esc="order_ref_info.get('cbc:ID', record.client_order_ref)"
+                >XYZ123</cbc:ID>
                 <cbc:SalesOrderID t-esc="record.name">SO1234</cbc:SalesOrderID>
             </cac:OrderReference>
             <cac:SellerSupplierParty>
