@@ -12,7 +12,7 @@ class EDIExchangeInfoMixin(AbstractComponent):
     # A `data` component could be used for both incoming and outgoing.
 
     _name = "edi.info.provider.mixin"
-    _collection = "edi.backend"
+    _inherit = "edi.component.base.mixin"
     # Enable validation of work context attributes
     _work_context_validate_attrs = []
 
