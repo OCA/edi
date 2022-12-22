@@ -1,16 +1,19 @@
 # Copyright 2022 Creu Blanca
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+from odoo.tests.common import tagged
 
 from odoo.addons.component.core import Component
-from odoo.addons.component.tests.common import SavepointComponentRegistryCase
+from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 from odoo.addons.stock.tests.common import TestStockCommon
 
 
-class EDIBackendTestCase(TestStockCommon, SavepointComponentRegistryCase):
+@tagged("-at_install", "post_install")
+class EDIBackendTestCase(TestStockCommon, TransactionComponentRegistryCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls._setup_registry(cls)
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
 
         class StockPickingEventListenerDemo(Component):

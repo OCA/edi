@@ -6,7 +6,6 @@ from odoo import fields, models
 
 class StockPicking(models.Model):
     _name = "stock.picking"
-
     _inherit = ["stock.picking", "edi.exchange.consumer.mixin"]
 
     edi_auto_disabled = fields.Boolean(
