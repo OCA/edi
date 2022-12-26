@@ -1,10 +1,10 @@
-# Copyright 2018-2021 Akretion France (http://www.akretion.com)
+# Copyright 2018-2022 Akretion France (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
     "name": "Account e-invoice Generate",
-    "version": "15.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Technical module to generate PDF invoices with " "embedded XML file",
