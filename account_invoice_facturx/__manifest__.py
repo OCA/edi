@@ -1,10 +1,10 @@
-# Copyright 2016-2021 Akretion France (http://www.akretion.com/)
+# Copyright 2016-2022 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
     "name": "Account Invoice Factur-X",
-    "version": "15.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Invoicing Management",
     "license": "AGPL-3",
     "summary": "Generate Factur-X/ZUGFeRD customer invoices",
@@ -21,7 +21,6 @@
     "data": [
         "views/res_partner.xml",
         "views/res_config_settings.xml",
-        "views/report_invoice.xml",
     ],
     "post_init_hook": "set_xml_format_in_pdf_invoice_to_facturx",
     "installable": True,

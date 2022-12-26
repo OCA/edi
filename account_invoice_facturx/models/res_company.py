@@ -1,4 +1,4 @@
-# Copyright 2017-2021 Akretion France (http://www.akretion.com/)
+# Copyright 2017-2022 Akretion France (http://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -41,6 +41,10 @@ class ResCompany(models.Model):
         string="Factur-X Logo",
         help="Logo to include in the visible part of Factur-X invoices",
     )
+    # up to v15, this module inherited the invoice report to add the
+    # facturx logo. In v16, I decided to stop inheriting the invoice report
+    # because I think many users may not want to have the facturx logo,
+    # but I continue to provide the field 'facturx_logo'
 
     def _compute_facturx_logo(self):
         level2logo = {

@@ -18,6 +18,21 @@ class TestFacturXInvoice(TransactionCase):
         self.company = self.env.ref("base.main_company")
         self.product1 = self.env.ref("product.product_product_4")
         self.product2 = self.env.ref("product.product_product_1")
+        sale_taxes = self.env["account.tax"].search(
+            [
+                ("company_id", "=", self.company.id),
+                ("type_tax_use", "=", "sale"),
+                "|",
+                ("unece_type_id", "=", False),
+                ("unece_categ_id", "=", False),
+            ]
+        )
+        sale_taxes.write(
+            {
+                "unece_type_id": self.env.ref("account_tax_unece.tax_type_vat").id,
+                "unece_categ_id": self.env.ref("account_tax_unece.tax_categ_s").id,
+            }
+        )
         self.invoice = self.env["account.move"].create(
             {
                 "company_id": self.company.id,

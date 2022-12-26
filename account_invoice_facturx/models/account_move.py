@@ -1,4 +1,4 @@
-# Copyright 2016-2021 Akretion France (http://www.akretion.com)
+# Copyright 2016-2022 Akretion France (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -20,7 +20,7 @@ from odoo.tools.misc import format_date
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import generate_from_binary, xml_check_xsd
+    from facturx import generate_from_file, xml_check_xsd
 except ImportError:
     logger.debug("Cannot import facturx")
 
@@ -508,11 +508,15 @@ class AccountMove(models.Model):
 
         at_least_one_tax = False
         tax_basis_total = 0.0
+        # move_type == 'out_invoice': tline.amount_currency < 0
+        # move_type == 'out_refund': tline.amount_currency > 0
+        tax_amount_sign = self.move_type == "out_invoice" and -1 or 1
         for tline in self.line_ids.filtered(lambda x: x.tax_line_id):
             tax_base_amount = tline.tax_base_amount
+            tax_amount = tline.amount_currency * tax_amount_sign
             self._cii_total_applicable_trade_tax_block(
                 tline.tax_line_id,
-                tline.price_subtotal,
+                tax_amount,
                 tax_base_amount,
                 trade_settlement,
                 ns,
@@ -854,7 +858,9 @@ class AccountMove(models.Model):
 
         if ns["level"] in ("extended", "en16931", "basic"):
             line_number = 0
-            for iline in self.invoice_line_ids.filtered(lambda x: not x.display_type):
+            for iline in self.invoice_line_ids.filtered(
+                lambda x: x.display_type == "product"
+            ):
                 line_number += 1
                 self._cii_add_invoice_line_block(
                     trade_transaction, iline, line_number, ns
@@ -912,9 +918,9 @@ class AccountMove(models.Model):
         self.ensure_one()
         return {}
 
-    def regular_pdf_invoice_to_facturx_invoice(self, pdf_content):
+    def regular_pdf_invoice_to_facturx_invoice(self, pdf_bytesio):
         self.ensure_one()
-        assert pdf_content, "Missing pdf_content"
+        assert pdf_bytesio, "Missing pdf_bytesio"
         if self.move_type in ("out_invoice", "out_refund"):
             facturx_xml_bytes, level = self.generate_facturx_xml()
             pdf_metadata = self._prepare_pdf_metadata()
@@ -923,8 +929,8 @@ class AccountMove(models.Model):
             )
             # Generate a new PDF with XML file as attachment
             attachments = self._prepare_facturx_attachments()
-            pdf_content = generate_from_binary(
-                pdf_content,
+            generate_from_file(
+                pdf_bytesio,
                 facturx_xml_bytes,
                 flavor="factur-x",
                 level=level,
@@ -934,4 +940,3 @@ class AccountMove(models.Model):
                 attachments=attachments,
             )
             logger.info("%s file added to PDF invoice", FACTURX_FILENAME)
-        return pdf_content

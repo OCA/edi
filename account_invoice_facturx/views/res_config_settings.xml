@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-  Copyright 2017-2021 Akretion France (http://www.akretion.com/)
+  Copyright 2017-2022 Akretion France (http://www.akretion.com/)
   @author: Alexis de Lattre <alexis.delattre@akretion.com>
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
@@ -17,7 +17,11 @@
                 <div class="col-xs-12 col-md-6 o_setting_box" id="facturx">
                     <div class="o_setting_left_pane" />
                     <div class="o_setting_right_pane">
-                        <div class="content-group" name="facturx_level">
+                            <div
+                            class="content-group"
+                            name="facturx_level"
+                            attrs="{'invisible': [('xml_format_in_pdf_invoice', '!=', 'factur-x')]}"
+                        >
                             <div class="row mt16">
                                 <label for="facturx_level" class="col-md-5" />
                                 <field
@@ -26,7 +30,11 @@
                                 />
                             </div>
                         </div>
-                        <div class="content-group" name="facturx_refund_type">
+                        <div
+                            class="content-group"
+                            name="facturx_refund_type"
+                            attrs="{'invisible': [('xml_format_in_pdf_invoice', '!=', 'factur-x')]}"
+                        >
                             <div class="row mt16">
                                 <label for="facturx_refund_type" class="col-md-5" />
                                 <field
