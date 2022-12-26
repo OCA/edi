@@ -36,7 +36,7 @@ addon | version | maintainers | summary
 [base_ubl_payment](base_ubl_payment/) | 13.0.1.0.1 |  | Payment-related code for Universal Business Language (UBL)
 [edi](edi/) | 13.0.1.24.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_account](edi_account/) | 13.0.2.0.1 |  | Define EDI Configuration for Account Moves
-[edi_backend_partner](edi_backend_partner/) | 13.0.1.0.0 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
+[edi_backend_partner](edi_backend_partner/) | 13.0.1.0.1 | [![LoisRForgeFlow](https://github.com/LoisRForgeFlow.png?size=30px)](https://github.com/LoisRForgeFlow) | add the a partner field in EDI backend
 [edi_exchange_template](edi_exchange_template/) | 13.0.1.7.2 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Allows definition of exchanges via templates.
 [edi_purchase_oca](edi_purchase_oca/) | 13.0.1.0.0 |  | Define EDI Configuration for Purchase Orders
 [edi_stock_oca](edi_stock_oca/) | 13.0.1.0.1 |  | Define EDI Configuration for Stock
