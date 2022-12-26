@@ -1,4 +1,4 @@
-# Copyright 2018-2020 Akretion France
+# Copyright 2018-2022 Akretion France
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -30,7 +30,7 @@ class AccountMove(models.Model):
             and self.move_type in ("out_invoice", "out_refund")
             and self.partner_id
             and self.state != "cancel"
-            and self.invoice_line_ids.filtered(lambda x: not x.display_type)
+            and self.invoice_line_ids.filtered(lambda x: x.display_type == "product")
         ):
             return xml_format
         else:
