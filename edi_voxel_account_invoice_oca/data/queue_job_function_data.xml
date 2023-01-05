@@ -1,0 +1,14 @@
+<!-- Copyright 2023 Tecnativa - Ernesto tejeda
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <record id="job_function_get_and_send_voxel_report" model="queue.job.function">
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="method">_get_and_send_voxel_report</field>
+        <field name="channel_id" ref="edi_voxel_oca.channel_voxel_export" />
+    </record>
+    <record id="job_function_update_error_status" model="queue.job.function">
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="method">_update_error_status</field>
+        <field name="channel_id" ref="edi_voxel_oca.channel_voxel_status" />
+    </record>
+</odoo>
