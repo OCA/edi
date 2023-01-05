@@ -70,11 +70,10 @@ class VoxelMixin(models.AbstractModel):
             job = queue_obj.search([("uuid", "=", new_delay.uuid)], limit=1)
             record.voxel_job_ids |= job
 
-    @job(default_channel="root.voxel_export")
     def _get_and_send_voxel_report(self, report_name):
         self.ensure_one()
         report = self.env.ref(report_name)
-        report_xml = report.render_qweb_xml(self.ids, {})[0]
+        report_xml = report._render_qweb_xml(self.ids, {})[0]
         # Remove blank spaces
         tree = etree.fromstring(report_xml, etree.XMLParser(remove_blank_text=True))
         clean_report_xml = etree.tostring(tree, xml_declaration=True, encoding="UTF-8")
@@ -133,7 +132,6 @@ class VoxelMixin(models.AbstractModel):
         # Update state of accepted documents
         (processed - with_errors).write({"voxel_state": "accepted"})
 
-    @job(default_channel="root.voxel_status")
     def _update_error_status(self, company, filename):
         processing_error_log = self._read_voxel_document(
             "Error", company, filename, "ISO-8859-1"
@@ -168,7 +166,6 @@ class VoxelMixin(models.AbstractModel):
                     company_id=company.id
                 ).with_delay()._import_voxel_document(voxel_filename, company)
 
-    @job(default_channel="root.voxel_import")
     def _import_voxel_document(self, voxel_filename, company):
         content = self._read_voxel_document("Inbox", company, voxel_filename)
         # call method that parse and create the document from the content
