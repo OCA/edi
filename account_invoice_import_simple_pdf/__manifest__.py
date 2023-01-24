@@ -14,7 +14,7 @@
     "depends": ["account_invoice_import"],
     # "excludes": ["account_invoice_import_invoice2data"],
     "external_dependencies": {
-        "python": ["pdfplumber", "regex", "dateparser==1.1.1"],
+        "python": ["pdfplumber", "regex", "dateparser"],
         "deb": ["libmupdf-dev", "mupdf", "mupdf-tools", "poppler-utils"],
     },
     "data": [
