@@ -1,5 +1,5 @@
 # generated from manifests external_dependencies
-dateparser==1.1.1
+dateparser
 factur-x
 invoice2data
 ovh
