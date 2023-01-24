@@ -16,8 +16,7 @@
     "external_dependencies": {
         "python": [
             "invoice2data",
-            # https://github.com/OCA/edi/issues/544
-            "dateparser==1.1.1",
+            "dateparser",
         ],
         "deb": ["poppler-utils"],
     },
