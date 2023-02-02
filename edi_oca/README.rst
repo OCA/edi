@@ -135,6 +135,7 @@ Authors
 
 * ACSONE
 * Creu Blanca
+* Camptocamp
 
 Contributors
 ~~~~~~~~~~~~
