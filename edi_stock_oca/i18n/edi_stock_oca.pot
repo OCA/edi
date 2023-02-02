@@ -39,6 +39,16 @@ msgid "Edi Auto Disabled"
 msgstr ""
 
 #. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__edi_config
+msgid "Edi Config"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__edi_has_form_config
+msgid "Edi Has Form Config"
+msgstr ""
+
+#. module: edi_stock_oca
 #: model_terms:ir.ui.view,arch_db:edi_stock_oca.stock_picking_form_view
 msgid "Electronic Data Interchange"
 msgstr ""
@@ -51,16 +61,6 @@ msgstr ""
 #. module: edi_stock_oca
 #: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__exchange_record_count
 msgid "Exchange Record Count"
-msgstr ""
-
-#. module: edi_stock_oca
-#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__expected_edi_configuration
-msgid "Expected Edi Configuration"
-msgstr ""
-
-#. module: edi_stock_oca
-#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__has_expected_edi_configuration
-msgid "Has Expected Edi Configuration"
 msgstr ""
 
 #. module: edi_stock_oca
