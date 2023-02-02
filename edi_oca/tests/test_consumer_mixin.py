@@ -45,8 +45,9 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
             exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
             model_ids=[(4, cls.env["ir.model"]._get_id(cls.consumer_record._name))],
             enable_domain="[]",
-            enable_snippet="""result = not   record._has_exchange_record(
-            exchange_type.code)""",
+            enable_snippet="""
+result = not record._has_exchange_record(exchange_type)
+""",
         )
         cls.exchange_type_out.write(
             {
@@ -57,8 +58,9 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
                     )
                 ],
                 "enable_domain": "[]",
-                "enable_snippet": """result = not   record._has_exchange_record(
-            exchange_type.code, exchange_type.backend_id)""",
+                "enable_snippet": """
+result = not record._has_exchange_record(exchange_type, exchange_type.backend_id)
+""",
             }
         )
         cls.backend_02 = cls.backend.copy()
@@ -74,8 +76,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
             "model": self.consumer_record._name,
             "res_id": self.consumer_record.id,
         }
-        exchange_type = "test_csv_output"
-        exchange_record = self.backend.create_record(exchange_type, vals)
+        exchange_record = self.backend.create_record("test_csv_output", vals)
         self.consumer_record.refresh()
         self.assertEqual(1, self.consumer_record.exchange_record_count)
         action = self.consumer_record.action_view_edi_records()
@@ -83,19 +84,21 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
         self.assertEqual(
             exchange_record, self.env["edi.exchange.record"].search(action["domain"])
         )
-        self.consumer_record._has_exchange_record(exchange_type, self.backend)
+        self.consumer_record._has_exchange_record(exchange_record.type_id, self.backend)
 
     def test_expected_configuration(self):
-        self.assertTrue(self.consumer_record.has_expected_edi_configuration)
-        self.assertIn(
-            str(self.exchange_type_out.id),
-            self.consumer_record.expected_edi_configuration,
-        )
+        # no btn enabled
+        self.assertFalse(self.consumer_record.edi_has_form_config)
         self.assertEqual(
-            self.consumer_record.expected_edi_configuration[
-                str(self.exchange_type_out.id)
-            ],
-            self.exchange_type_out.name,
+            self.consumer_record.edi_config[str(self.exchange_type_out.id)],
+            {"form": {}},
+        )
+        # enable it
+        self.exchange_type_out.model_manual_btn = True
+        self.consumer_record.invalidate_cache(["edi_has_form_config", "edi_config"])
+        self.assertEqual(
+            self.consumer_record.edi_config[str(self.exchange_type_out.id)],
+            {"form": {"btn": {"label": self.exchange_type_out.name}}},
         )
         action = self.consumer_record.edi_create_exchange_record(
             self.exchange_type_out.id
@@ -104,7 +107,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
         self.consumer_record.refresh()
         self.assertNotIn(
             str(self.exchange_type_out.id),
-            self.consumer_record.expected_edi_configuration,
+            self.consumer_record.edi_config,
         )
         self.assertTrue(self.consumer_record.exchange_record_ids)
         self.assertEqual(
@@ -114,7 +117,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
     def test_multiple_backend(self):
         self.assertIn(
             str(self.exchange_type_new.id),
-            self.consumer_record.expected_edi_configuration,
+            self.consumer_record.edi_config,
         )
         action = self.consumer_record.edi_create_exchange_record(
             self.exchange_type_new.id
@@ -130,7 +133,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
         self.consumer_record.refresh()
         self.assertNotIn(
             str(self.exchange_type_new.id),
-            self.consumer_record.expected_edi_configuration,
+            self.consumer_record.edi_config,
         )
         self.assertTrue(self.consumer_record.exchange_record_ids)
         self.assertEqual(
@@ -142,10 +145,8 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
         Unfortunately we are unable to test the buttons here
         """
         with Form(self.consumer_record) as f:
-            self.assertIn("has_expected_edi_configuration", f._values)
-            self.assertIn("expected_edi_configuration", f._values)
+            self.assertIn("edi_has_form_config", f._values)
+            self.assertIn("edi_config", f._values)
             form = etree.fromstring(f._view["arch"])
-            self.assertTrue(
-                form.xpath("//field[@name='has_expected_edi_configuration']")
-            )
-            self.assertTrue(form.xpath("//field[@name='expected_edi_configuration']"))
+            self.assertTrue(form.xpath("//field[@name='edi_has_form_config']"))
+            self.assertTrue(form.xpath("//field[@name='edi_config']"))

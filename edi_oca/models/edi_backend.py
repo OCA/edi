@@ -1,5 +1,6 @@
 # Copyright 2020 ACSONE SA
 # Copyright 2020 Creu Blanca
+# Copyright 2021 Camptocamp SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
@@ -50,6 +51,7 @@ class EDIBackend(models.Model):
     Usecase: the web service you send the file to processes it on the fly.
     """
     )
+    active = fields.Boolean(default=True)
 
     def _get_component(self, exchange_record, key):
         candidates = self._get_component_usage_candidates(exchange_record, key)
@@ -166,7 +168,7 @@ class EDIBackend(models.Model):
         exchange_type = self.env["edi.exchange.type"].search(
             self._get_exchange_type_domain(type_code), limit=1
         )
-        exchange_type.ensure_one()
+        assert exchange_type, f"Exchange type not found: {type_code}"
         res["type_id"] = exchange_type.id
         res["backend_id"] = self.id
         return res
@@ -434,7 +436,7 @@ class EDIBackend(models.Model):
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
-            if self.env.context.get("_edi_receive_break_on_error"):
+            if self.env.context.get("_edi_process_break_on_error"):
                 raise
             error = _get_exception_msg(err)
             state = "input_processed_error"
@@ -620,3 +622,12 @@ class EDIBackend(models.Model):
             "default_backend_type_id": self.backend_type_id.id,
         }
         return action
+
+    def _is_valid_edi_action(self, action, raise_if_not=False):
+        try:
+            assert action in ("generate", "send", "process", "receive", "check")
+            return True
+        except AssertionError:
+            if raise_if_not:
+                raise
+            return False

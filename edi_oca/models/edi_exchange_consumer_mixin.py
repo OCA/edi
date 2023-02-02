@@ -1,5 +1,6 @@
 # Copyright 2020 ACSONE SA
 # Copyright 2020 Creu Blanca
+# Copyright 2022 Camptocamp SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
@@ -24,21 +25,19 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         domain=lambda r: [("model", "=", r._name)],
     )
     exchange_record_count = fields.Integer(compute="_compute_exchange_record_count")
-    expected_edi_configuration = Serialized(
-        compute="_compute_expected_edi_configuration",
+    edi_config = Serialized(
+        compute="_compute_edi_config",
         default={},
     )
-    has_expected_edi_configuration = fields.Boolean(
-        compute="_compute_expected_edi_configuration"
-    )
+    edi_has_form_config = fields.Boolean(compute="_compute_edi_config")
 
-    def _compute_expected_edi_configuration(self):
+    def _compute_edi_config(self):
         for record in self:
-            configurations = record._get_expected_edi_configuration()
-            record.expected_edi_configuration = configurations
-            record.has_expected_edi_configuration = bool(configurations)
+            config = record._edi_get_exchange_type_config()
+            record.edi_config = config
+            record.edi_has_form_config = any([x.get("form") for x in config.values()])
 
-    def _get_expected_edi_configuration(self):
+    def _edi_get_exchange_type_config(self):
         exchange_types = (
             self.env["edi.exchange.type"]
             .sudo()
@@ -58,11 +57,20 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
                 )
                 if not eval_ctx.get("result", False):
                     continue
-            result[exchange_type.id] = exchange_type.name
+
+            result[exchange_type.id] = self._edi_get_exchange_type_conf(exchange_type)
         return result
 
+    @api.model
+    def _edi_get_exchange_type_conf(self, exchange_type):
+        conf = {"form": {}}
+        if exchange_type.model_manual_btn:
+            conf.update({"form": {"btn": {"label": exchange_type.name}}})
+        return conf
+
     def _get_eval_context(self):
-        """Prepare the context used when evaluating python code
+        """Prepare context to evalue python code snippet.
+
         :returns: dict -- evaluation context given to safe_eval
         """
         return {
@@ -83,6 +91,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         if view_type == "form":
             doc = etree.XML(res["arch"])
             for node in doc.xpath("//sheet"):
+                # TODO: add a default group
                 group = False
                 if hasattr(self, "_edi_generate_group"):
                     group = self._edi_generate_group
@@ -110,12 +119,12 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             "res_id": self.id,
         }
 
-    def _edi_create_exchange_record(self, exchange_type, backend):
-        exchange_record = backend.create_record(
-            exchange_type.code, self._edi_create_exchange_record_vals(exchange_type)
-        )
-        self._event("on_edi_generate_manual").notify(self, exchange_record)
-        return exchange_record.get_formview_action()
+    def _edi_create_exchange_record(self, exchange_type, backend=None, vals=None):
+        backend = exchange_type.backend_id or backend
+        assert backend
+        vals = vals or {}
+        vals.update(self._edi_create_exchange_record_vals(exchange_type))
+        return backend.create_record(exchange_type.code, vals)
 
     def edi_create_exchange_record(self, exchange_type_id):
         self.ensure_one()
@@ -131,9 +140,18 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             backend = self.env["edi.backend"].search(
                 [("backend_type_id", "=", exchange_type.backend_type_id.id)]
             )
+            # FIXME: here you can still have more than one backend per type.
+            # We should always get to the wizard w/ pre-populated values.
+            # Maybe this behavior can be controlled by exc type adv param.
         if backend:
-            return self._edi_create_exchange_record(exchange_type, backend)
-        action = self.env.ref("edi_oca.edi_exchange_record_create_act_window").read()[0]
+            exchange_record = self._edi_create_exchange_record(exchange_type, backend)
+            self._event("on_edi_generate_manual").notify(self, exchange_record)
+            return exchange_record.get_formview_action()
+        return self._edi_get_create_record_wiz_action(exchange_type_id)
+
+    def _edi_get_create_record_wiz_action(self, exchange_type_id):
+        xmlid = "edi_oca.edi_exchange_record_create_act_window"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["context"] = {
             "default_res_id": self.id,
             "default_model": self._name,
@@ -142,8 +160,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return action
 
     def _has_exchange_record(self, exchange_type, backend=False, extra_domain=False):
-        """Check if there is a related exchange record following with a specific
-        exchange type"""
+        """Check presence of related exchange record with a specific exchange type"""
         return bool(
             self.env["edi.exchange.record"].search_count(
                 self._has_exchange_record_domain(
@@ -158,8 +175,10 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         domain = [
             ("model", "=", self._name),
             ("res_id", "=", self.id),
-            ("type_id.code", "=", exchange_type),
+            ("type_id", "=", exchange_type.id),
         ]
+        if backend is None:
+            backend = exchange_type.backend_id
         if backend:
             domain.append(("backend_id", "=", backend.id))
         if extra_domain:
@@ -167,9 +186,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return domain
 
     def _get_exchange_record(self, exchange_type, backend=False, extra_domain=False):
-        """Obtain all the exchange record related to this record with the expected
-        exchange type"""
-
+        """Get all related exchange records matching give exchange type."""
         return self.env["edi.exchange.record"].search(
             self._has_exchange_record_domain(
                 exchange_type, backend=backend, extra_domain=extra_domain
@@ -183,13 +200,15 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     def action_view_edi_records(self):
         self.ensure_one()
-        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view").read()[0]
+        xmlid = "edi_oca.act_open_edi_exchange_record_view"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
         return action
 
     @api.model
     def get_edi_access(self, doc_ids, operation, model_name=False):
         """Retrieve access policy.
+
         The behavior is similar to `mail.thread` and `mail.message`
         and it relies on the access rules defines on the related record.
         The behavior can be customized on the related model

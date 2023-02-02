@@ -1,4 +1,5 @@
 # Copyright 2020 ACSONE SA
+# Copyright 2021 Camptocamp SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
@@ -251,9 +252,9 @@ class EDIExchangeRecord(models.Model):
     def _exchange_status_message(self, key):
         return self._exchange_status_messages[key]
 
-    def action_exchange_generate(self):
+    def action_exchange_generate(self, **kw):
         self.ensure_one()
-        return self.backend_id.exchange_generate(self)
+        return self.backend_id.exchange_generate(self, **kw)
 
     def action_exchange_send(self):
         self.ensure_one()
@@ -267,10 +268,23 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         return self.backend_id.exchange_receive(self)
 
-    def exchange_create_ack_record(self):
-        ack_type = self.type_id.ack_type_id
-        values = {"parent_id": self.id}
-        return self.backend_id.create_record(ack_type.code, values)
+    def exchange_create_ack_record(self, **kw):
+        return self.exchange_create_child_record(
+            exc_type=self.type_id.ack_type_id, **kw
+        )
+
+    def exchange_create_child_record(self, exc_type=None, **kw):
+        exc_type = exc_type or self.type_id
+        values = self._exchange_child_record_values()
+        values.update(**kw)
+        return self.backend_id.create_record(exc_type.code, values)
+
+    def _exchange_child_record_values(self):
+        return {
+            "parent_id": self.id,
+            "model": self.model,
+            "res_id": self.res_id,
+        }
 
     def action_retry(self):
         for rec in self:
@@ -302,7 +316,8 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         if not self.related_exchange_ids:
             return {}
-        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view").read()[0]
+        xmlid = "edi_oca.act_open_edi_exchange_record_view"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["domain"] = [("id", "in", self.related_exchange_ids.ids)]
         return action
 
@@ -327,10 +342,10 @@ class EDIExchangeRecord(models.Model):
             suffix=("_" + suffix) if suffix else "",
         )
 
-    def _trigger_edi_event(self, name, suffix=None):
+    def _trigger_edi_event(self, name, suffix=None, **kw):
         """Trigger a component event linked to this backend and edi exchange."""
         name = self._trigger_edi_event_make_name(name, suffix=suffix)
-        self._event(name).notify(self)
+        self._event(name).notify(self, **kw)
 
     def _notify_done(self):
         self._notify_related_record(self._exchange_status_message("process_ok"))
