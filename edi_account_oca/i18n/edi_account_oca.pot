@@ -42,6 +42,16 @@ msgid "EDI Configuration"
 msgstr ""
 
 #. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__edi_config
+msgid "Edi Config"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__edi_has_form_config
+msgid "Edi Has Form Config"
+msgstr ""
+
+#. module: edi_account_oca
 #: model_terms:ir.ui.view,arch_db:edi_account_oca.account_move_form_view
 msgid "Electronic Data Interchange"
 msgstr ""
@@ -59,16 +69,6 @@ msgstr ""
 #. module: edi_account_oca
 #: model:ir.ui.menu,name:edi_account_oca.menu_account_edi_root
 msgid "Exchange records"
-msgstr ""
-
-#. module: edi_account_oca
-#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__expected_edi_configuration
-msgid "Expected Edi Configuration"
-msgstr ""
-
-#. module: edi_account_oca
-#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__has_expected_edi_configuration
-msgid "Has Expected Edi Configuration"
 msgstr ""
 
 #. module: edi_account_oca
