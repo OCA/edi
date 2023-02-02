@@ -67,11 +67,8 @@ msgstr ""
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_consumer_mixin_buttons
-msgid ""
-"<i class=\"fa fa-retweet\"/>The record has some pending EDIs to be generated"
+msgid "<i class=\"fa fa-retweet\"/>This record has EDI exchanges to handle"
 msgstr ""
-"<i class=\"fa-retweet\"/>L'enregistrement a des EDIs en attente d'être "
-"générés"
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.message_edi_exchange_link
@@ -156,6 +153,11 @@ msgid "Action retry: state moved back to '%s'"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_backend__active
+msgid "Active"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__advanced_settings
 msgid "Advanced Settings"
 msgstr "Paramètres avancés"
@@ -184,6 +186,12 @@ msgstr ""
 "informations sur l'enregistrement de l'échange."
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_form
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_search
+msgid "Archived"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_attachment_count
 msgid "Attachment Count"
 msgstr "Nombre de pièces jointes"
@@ -197,6 +205,11 @@ msgstr ""
 "Génère automatiquement la sortie pour les enregistrements dont la charge "
 "utile est manquante. Si cette option est active, un cron se chargera de "
 "générer la sortie lorsqu'elle n'est pas encore définie. "
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__model_manual_btn
+msgid "Automatically display a button on related models' form."
+msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__backend_id
@@ -358,6 +371,11 @@ msgid "EDI Exchange Type"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model,name:edi_oca.model_edi_id_mixin
+msgid "EDI ID mixin"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model,name:edi_oca.model_edi_exchange_record
 msgid "EDI exchange Record"
 msgstr ""
@@ -374,6 +392,21 @@ msgstr ""
 #: model:ir.cron,cron_name:edi_oca.cron_edi_backend_check_input_exchange
 #: model:ir.cron,name:edi_oca.cron_edi_backend_check_input_exchange
 msgid "EDI exchange input status"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_id_mixin__edi_id
+msgid "Edi"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin__edi_config
+msgid "Edi Config"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin__edi_has_form_config
+msgid "Edi Has Form Config"
 msgstr ""
 
 #. module: edi_oca
@@ -577,11 +610,6 @@ msgid "Exchanges - pending"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin__expected_edi_configuration
-msgid "Expected Edi Configuration"
-msgstr "Configuration Edi attendue"
-
-#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__external_identifier
 msgid "External Identifier"
 msgstr "Lien externe"
@@ -637,11 +665,6 @@ msgid "Group By"
 msgstr "Grouper par"
 
 #. module: edi_oca
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin__has_expected_edi_configuration
-msgid "Has Expected Edi Configuration"
-msgstr ""
-
-#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__has_message
 #, fuzzy
 msgid "Has Message"
@@ -693,6 +716,11 @@ msgid "Input"
 msgstr "Entrée"
 
 #. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_id_mixin__edi_id
+msgid "Internal or external identifier for records."
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_is_follower
 msgid "Is Follower"
 msgstr "est un abonné"
@@ -733,6 +761,11 @@ msgstr "Dernière mise à jour le"
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_main_attachment_id
 msgid "Main Attachment"
 msgstr "Pièce jointe principale"
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__model_manual_btn
+msgid "Manual button on form"
+msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_has_error
@@ -1029,6 +1062,16 @@ msgstr ""
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_error_on_send
 msgid "error on send"
 msgstr ""
+
+#~ msgid ""
+#~ "<i class=\"fa fa-retweet\"/>The record has some pending EDIs to be "
+#~ "generated"
+#~ msgstr ""
+#~ "<i class=\"fa-retweet\"/>L'enregistrement a des EDIs en attente d'être "
+#~ "générés"
+
+#~ msgid "Expected Edi Configuration"
+#~ msgstr "Configuration Edi attendue"
 
 #~ msgid "File %s processed successfully "
 #~ msgstr "Échange traité avec succès "
