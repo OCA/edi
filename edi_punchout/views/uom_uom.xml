@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Hunki Enterprises BV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+<record id="view_uom_uom_form" model="ir.ui.view">
+    <field name="model">uom.uom</field>
+    <field name="inherit_id" ref="uom.product_uom_form_view" />
+    <field name="arch" type="xml">
+        <group position="inside">
+            <group name="edi_punchout">
+                <field name="ids_name" />
+                <field name="ids_name_alternative" groups="base.group_no_one" />
+            </group>
+        </group>
+    </field>
+</record>
+
+</odoo>
