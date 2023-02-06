@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Hunki Enterprises BV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="uom.product_uom_unit" model="uom.uom">
+        <field name="ids_name">PCE</field>
+    </record>
+    <record id="uom.product_uom_dozen" model="uom.uom">
+        <field name="ids_name">DZN</field>
+    </record>
+    <record id="uom.product_uom_kgm" model="uom.uom">
+        <field name="ids_name">KGM</field>
+    </record>
+    <record id="uom.product_uom_gram" model="uom.uom">
+        <field name="ids_name">GRM</field>
+    </record>
+    <record id="uom.product_uom_ton" model="uom.uom">
+        <field name="ids_name">TNE</field>
+    </record>
+    <record id="uom.product_uom_meter" model="uom.uom">
+        <field name="ids_name">MTR</field>
+    </record>
+    <record id="uom.product_uom_km" model="uom.uom">
+        <field name="ids_name">KTM</field>
+    </record>
+    <record id="uom.product_uom_cm" model="uom.uom">
+        <field name="ids_name">CMT</field>
+    </record>
+    <record id="uom.product_uom_litre" model="uom.uom">
+        <field name="ids_name">LTR</field>
+    </record>
+
+</odoo>
