@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-07-16 23:06+0000\n"
+"PO-Revision-Date: 2023-02-07 12:22+0000\n"
 "Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
 "Language-Team: none\n"
 "Language: nl\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -52,7 +52,7 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "Approximate match: account %s has been matched with account %s"
-msgstr "Geschatte overeenkomt: rekening %s is gematched met rekening %s"
+msgstr "Geschatte overeenkomst: rekening %s is gematched met rekening %s"
 
 #. module: base_business_document_import
 #: model:ir.model,name:base_business_document_import.model_business_document_import
@@ -98,7 +98,7 @@ msgstr "ID"
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "ID {id} of '{model}' doesn't exist in Odoo."
-msgstr ""
+msgstr "ID {id} van '{model}' bestaat niet."
 
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import____last_update
