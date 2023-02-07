@@ -18,15 +18,23 @@ class EdiStorageListener(Component):
             # The file might have been moved after a previous error.
             return False
         self._add_after_commit_hook(
-            storage._move_files, [(from_dir / filename).as_posix()], to_dir.as_posix()
+            storage.move_files, [(from_dir / filename).as_posix()], to_dir.as_posix()
         )
         return True
 
-    def _add_after_commit_hook(self, move_func, sftp_filepath, sftp_destination_path):
+    def _remove_file(self, storage, from_dir_str, filename):
+        from_dir = PurePath(from_dir_str)
+        if filename not in storage.list_files(from_dir.as_posix()):
+            # The file might have been moved after a previous error.
+            return False
+        self._add_after_commit_hook(storage.delete, (from_dir / filename).as_posix())
+        return True
+
+    def _add_after_commit_hook(self, partial_func, *args):
         """Add hook after commit to move the file when transaction is over."""
         self.env.cr.after(
             "commit",
-            functools.partial(move_func, sftp_filepath, sftp_destination_path),
+            functools.partial(partial_func, *args),
         )
 
     def on_edi_exchange_done(self, record):
@@ -43,6 +51,11 @@ class EdiStorageListener(Component):
             error_dir = record.type_id._storage_fullpath(
                 record.backend_id.input_dir_error
             ).as_posix()
+            if record.backend_id.input_dir_remove:
+                res = self._remove_file(storage, pending_dir, file)
+                if not res:
+                    res = self._remove_file(storage, error_dir, file)
+                return res
             if not done_dir:
                 return res
             res = self._move_file(storage, pending_dir, done_dir, file)

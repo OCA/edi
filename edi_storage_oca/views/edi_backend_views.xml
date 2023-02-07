@@ -9,7 +9,11 @@
                     <group name="storage_config">
                         <field name="storage_id" />
                         <field name="input_dir_pending" />
-                        <field name="input_dir_done" />
+                        <field name="input_dir_remove" />
+                        <field
+                            name="input_dir_done"
+                            attrs="{'invisible': [('input_dir_remove', '=', True)]}"
+                        />
                         <field name="input_dir_error" />
                         <field name="output_dir_pending" />
                         <field name="output_dir_done" />
