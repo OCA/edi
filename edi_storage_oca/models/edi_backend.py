@@ -42,6 +42,7 @@ class EDIBackend(models.Model):
     input_dir_pending = fields.Char(
         "Input pending directory", help="Path to folder for pending operations"
     )
+    input_dir_remove = fields.Boolean("Remove input after done")
     input_dir_done = fields.Char(
         "Input done directory", help="Path to folder for doneful operations"
     )
