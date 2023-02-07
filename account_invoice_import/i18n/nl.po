@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-05-15 21:05+0000\n"
+"PO-Revision-Date: 2023-02-07 12:22+0000\n"
 "Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
 "Language-Team: none\n"
 "Language: nl\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/models/account_move.py:0
@@ -286,7 +286,7 @@ msgid ""
 "draft invoice for that supplier, Odoo will propose you to update that draft "
 "invoice or create a new draft invoice."
 msgstr ""
-"Indien er meerdere importeer configuraties aanwezig zijn, zak het systeem "
+"Indien er meerdere importeer configuraties aanwezig zijn, zal het systeem "
 "vragen om er een te selecteren. Indien er reeds een bestaande concept "
 "factuur bestaand van de leverancier, dan zal het systeem voorstellen om de "
 "bestaande factuur aantepassen of een nieuwe concept factuur aan te maken."
@@ -856,6 +856,8 @@ msgid ""
 "You are importing a customer invoice/refund in journal '%s' which is not a "
 "sale journal."
 msgstr ""
+"U importeerd in klantfactuur / creditfactuur in dagboek '%s' wat geen "
+"verkoop dagboek is."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
@@ -864,6 +866,8 @@ msgid ""
 "You are importing a vendor bill/refund in journal '%s' which is not a "
 "purchase journal."
 msgstr ""
+"U importeerd in leveranciersfactuur / creditfactuur in dagboek '%s' wat geen "
+"inkoop dagboek is."
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
@@ -926,7 +930,7 @@ msgstr "Er moet een importeer instelling worden geselecteerd."
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "email sent by <b>%s</b> on %s with subject <b>%s</b>"
-msgstr ""
+msgstr "email verzonden door <b>%s</b> op %s met als onderwerp <b>%s</b>"
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
