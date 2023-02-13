@@ -312,14 +312,6 @@ msgstr ""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-#, fuzzy, python-format
-msgid ""
-"The bank account <b>IBAN %s</b> has been automatically added on the supplier "
-"<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
-msgstr "Bankovní účet 1IBAN %s  byl automaticky přidán na dodavatele %s"
-
-#. module: base_business_document_import
-#: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
 "The existing line '%s' doesn't have any product, so <b>the lines haven't "
