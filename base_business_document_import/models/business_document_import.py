@@ -21,7 +21,7 @@ class BusinessDocumentImport(models.AbstractModel):
     @api.model
     def user_error_wrap(self, method, data_dict, error_msg):
         """The method and data_dict arguments are useful when you want to
-        inherit this method to update the error message"""
+        inherit this method to update the error messag_match_currencye"""
         assert error_msg
         raise UserError(error_msg)
 
@@ -48,13 +48,13 @@ class BusinessDocumentImport(models.AbstractModel):
                 # Browsing an unexisting ID doesn't make Odoo crash
                 # So I read create_date to make it crash
                 record.create_date  # pylint: disable=pointless-statement
-            except Exception:
+            except Exception as e:
                 if raise_exception:
                     raise UserError(
                         _("ID {id} of '{model}' doesn't exist in Odoo.").format(
                             id=data_dict["id"], model=model._name
                         )
-                    )
+                    ) from e
             if record:
                 return record
         if data_dict.get("xmlid"):
@@ -62,9 +62,11 @@ class BusinessDocumentImport(models.AbstractModel):
             record = False
             try:
                 record = self.env.ref(xmlid, raise_if_not_found=True)
-            except Exception:
+            except Exception as e:
                 if raise_exception:
-                    raise UserError(_("The XMLID '%s' doesn't exist in Odoo.") % xmlid)
+                    raise UserError(
+                        _("The XMLID '%s' doesn't exist in Odoo.") % xmlid
+                    ) from e
             if record:
                 if isinstance(record, type(model)):
                     return record
@@ -83,14 +85,16 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _strip_cleanup_dict(self, match_dict):
-        if match_dict:
-            for key, value in match_dict.items():
-                if value and isinstance(value, str):
-                    match_dict[key] = value.strip()
-            if match_dict.get("country_code"):
-                match_dict["country_code"] = match_dict["country_code"].upper()
-            if match_dict.get("state_code"):
-                match_dict["state_code"] = match_dict["state_code"].upper()
+        if not match_dict:
+            return
+
+        for key, value in match_dict.items():
+            if value and isinstance(value, str):
+                match_dict[key] = value.strip()
+        if match_dict.get("country_code"):
+            match_dict["country_code"] = match_dict["country_code"].upper()
+        if match_dict.get("state_code"):
+            match_dict["state_code"] = match_dict["state_code"].upper()
 
     @api.model
     def _get_match_partner_order(self, partner_type):
@@ -111,7 +115,6 @@ class BusinessDocumentImport(models.AbstractModel):
     @api.model
     def _get_country_filter(self, partner_dict, chatter_msg):
         """Generate filter by country"""
-        country = False
         if partner_dict.get("country_code"):
             country = self.env["res.country"].search(
                 [("code", "=", partner_dict["country_code"])], limit=1
@@ -204,14 +207,15 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _get_partner_website_domain(self, partner_dict):
-        if partner_dict.get("website"):
-            urlp = urlparse(partner_dict["website"])
-            netloc = urlp.netloc
-            if not urlp.scheme and not netloc:
-                netloc = urlp.path
-            if netloc and len(netloc.split(".")) >= 2:
-                return ".".join(netloc.split(".")[-2:])
-        return False
+        if not partner_dict.get("website"):
+            return False
+
+        urlp = urlparse(partner_dict["website"])
+        netloc = urlp.netloc
+        if not urlp.scheme and not netloc:
+            netloc = urlp.path
+        if netloc and len(netloc.split(".")) >= 2:
+            return ".".join(netloc.split(".")[-2:])
 
     @api.model
     def _match_partner_website(self, partner_dict, chatter_msg, domain, order):
@@ -254,10 +258,12 @@ class BusinessDocumentImport(models.AbstractModel):
                 partner_type_label = partner_dict["type_label"]
                 chatter_msg.append(
                     _(
-                        "The %s has been identified by the domain name '%s' "
-                        "so please check carefully that the %s is correct."
+                        "The %(label)s has been identified by the domain name "
+                        "'%(domain)s' so please check carefully that the "
+                        "%(label)s is correct.",
+                        label=partner_type_label,
+                        domain=domain,
                     )
-                    % (partner_type_label, domain, partner_type_label)
                 )
                 return partner
 
@@ -311,7 +317,7 @@ class BusinessDocumentImport(models.AbstractModel):
 
         # Search on VAT
         if partner_dict.get("vat"):
-            vat = partner_dict["vat"]
+            vat = partner_dict["vat"].replace(" ", "").upper()
             partner = rpo.search(domain + [("vat", "=", vat)], limit=1, order=order)
             if partner:
                 return partner
@@ -347,25 +353,23 @@ class BusinessDocumentImport(models.AbstractModel):
             "_match_partner",
             partner_dict,
             _(
-                "Odoo couldn't find any %s corresponding to the following "
+                "Odoo couldn't find any %(label)s corresponding to the following "
                 "information extracted from the business document:\n"
-                "Name: %s\n"
-                "VAT number: %s\n"
-                "Reference: %s\n"
-                "E-mail: %s\n"
-                "Website: %s\n"
-                "State code: %s\n"
-                "Country code: %s\n"
-            )
-            % (
-                partner_type_label,
-                partner_dict.get("name") or "",
-                partner_dict.get("vat") or "",
-                partner_dict.get("ref") or "",
-                partner_dict.get("email") or "",
-                partner_dict.get("website") or "",
-                partner_dict.get("state_code") or "",
-                partner_dict.get("country_code") or "",
+                "Name: %(name)s \n"
+                "VAT number: %(vat)s \n"
+                "Reference: %(ref)s \n"
+                "E-mail: %(email)s \n"
+                "Website: %(website)s \n"
+                "State code: %(state)s \n"
+                "Country code: %(country)s \n",
+                label=partner_type_label,
+                name=partner_dict.get("name") or "",
+                vat=partner_dict.get("vat") or "",
+                ref=partner_dict.get("ref") or "",
+                email=partner_dict.get("email") or "",
+                website=partner_dict.get("website") or "",
+                state=partner_dict.get("state_code") or "",
+                country=partner_dict.get("country_code") or "",
             ),
         )
 
@@ -462,30 +466,28 @@ class BusinessDocumentImport(models.AbstractModel):
             _(
                 "Odoo couldn't find any shipping partner corresponding to the "
                 "following information extracted from the business document:\n"
-                "Name: %s\n"
-                "VAT number: %s\n"
-                "Reference: %s\n"
-                "E-mail: %s\n"
-                "Website: %s\n"
-                "Street: %s\n"
-                "Street2: %s\n"
-                "City: %s\n"
-                "ZIP: %s\n"
-                "State code: %s\n"
-                "Country code: %s\n"
-            )
-            % (
-                partner_dict.get("name") or "",
-                partner_dict.get("vat") or "",
-                partner_dict.get("ref") or "",
-                partner_dict.get("email") or "",
-                partner_dict.get("website") or "",
-                partner_dict.get("street") or "",
-                partner_dict.get("street2") or "",
-                partner_dict.get("city") or "",
-                partner_dict.get("zip") or "",
-                partner_dict.get("state_code") or "",
-                partner_dict.get("country_code") or "",
+                "Name: %(name)s\n"
+                "VAT number: %(vat)s\n"
+                "Reference: %(ref)s\n"
+                "E-mail: %(email)s\n"
+                "Website: %(website)s\n"
+                "Street: %(street)s\n"
+                "Street2: %(street2)s\n"
+                "City: %(city)s\n"
+                "ZIP: %(zip)s\n"
+                "State code: %(state)s\n"
+                "Country code: %(country)s\n",
+                name=partner_dict.get("name") or "",
+                vat=partner_dict.get("vat") or "",
+                ref=partner_dict.get("ref") or "",
+                email=partner_dict.get("email") or "",
+                website=partner_dict.get("website") or "",
+                street=partner_dict.get("street") or "",
+                street2=partner_dict.get("street2") or "",
+                city=partner_dict.get("city") or "",
+                zip=partner_dict.get("zip") or "",
+                state=partner_dict.get("state_code") or "",
+                country=partner_dict.get("country_code") or "",
             ),
         )
 
@@ -536,24 +538,30 @@ class BusinessDocumentImport(models.AbstractModel):
             )
             chatter_msg.append(
                 _(
-                    "The bank account <b>IBAN %s</b> has been automatically "
+                    "The bank account <b>IBAN %(iban)s</b> has been automatically "
                     "added on the supplier "
-                    "<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
+                    "<a href=# data-oe-model=res.partner "
+                    "data-oe-id=%(partner_id)d>%(partner)s</a>",
+                    iban=iban,
+                    partner_id=partner.id,
+                    partner=partner.display_name,
                 )
-                % (iban, partner.id, partner.display_name)
             )
             return partner_bank
         else:
             chatter_msg.append(
                 _(
                     "The analysis of the business document returned "
-                    "<b>IBAN %s</b> as bank account, but there is no such "
+                    "<b>IBAN %(iban)s</b> as bank account, but there is no such "
                     "bank account in Odoo linked to partner "
-                    "<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a> and "
+                    "<a href=# data-oe-model=res.partner "
+                    "data-oe-id=%(partner_id)d>%(partner)s</a> and "
                     "the option to automatically create bank "
-                    "accounts upon import is disabled."
+                    "accounts upon import is disabled.",
+                    iban=iban,
+                    partner_id=partner.id,
+                    partner=partner.display_name,
                 )
-                % (iban, partner.id, partner.display_name)
             )
 
     @api.model
@@ -589,7 +597,7 @@ class BusinessDocumentImport(models.AbstractModel):
             sinfo = self.env["product.supplierinfo"].search(
                 self._match_company_domain()
                 + [
-                    ("name", "=", seller.id),
+                    ("partner_id", "=", seller.id),
                     ("product_code", "=", product_dict["code"]),
                 ],
                 limit=1,
@@ -606,14 +614,12 @@ class BusinessDocumentImport(models.AbstractModel):
             _(
                 "Odoo couldn't find any product corresponding to the "
                 "following information extracted from the business document:\n"
-                "Barcode: %s\n"
-                "Product code: %s\n"
-                "Supplier: %s\n"
-            )
-            % (
-                product_dict.get("barcode") or "",
-                product_dict.get("code") or "",
-                seller and seller.name or "",
+                "Barcode: %(barcode)s\n"
+                "Product code: %(product_code)s\n"
+                "Supplier: %(supplier)s\n",
+                barcode=product_dict.get("barcode") or "",
+                product_code=product_dict.get("code") or "",
+                supplier=seller and seller.name or "",
             ),
         )
 
@@ -650,6 +656,7 @@ class BusinessDocumentImport(models.AbstractModel):
             'iso': 'USD',  # If we have ISO, no need to have more keys
             'symbol': '$',
             'country_code': 'US',
+            'iso_or_symbol': '$',
             }
         """
         if not currency_dict:
@@ -703,11 +710,11 @@ class BusinessDocumentImport(models.AbstractModel):
                     "_match_currency",
                     currency_dict,
                     _(
-                        "The analysis of the business document returned '%s' as "
+                        "The analysis of the business document returned '%(code)s' as "
                         "the currency symbol or ISO code. But there are none or "
-                        "several currencies with the symbol/ISO code in Odoo."
-                    )
-                    % currency_dict["iso_or_symbol"],
+                        "several currencies with the symbol/ISO code in Odoo.",
+                        code=currency_dict["iso_or_symbol"],
+                    ),
                 )
         if currency_dict.get("country_code"):
             country_code = currency_dict["country_code"]
@@ -722,12 +729,13 @@ class BusinessDocumentImport(models.AbstractModel):
                         "_match_currency",
                         currency_dict,
                         _(
-                            "The analysis of the business document returned '%s' "
+                            "The analysis of the business document returned '%(code)s' "
                             "as the country code to find the related currency. "
-                            "But the country '%s' doesn't have any related "
-                            "currency configured in Odoo."
-                        )
-                        % (country_code, country.name),
+                            "But the country '%(name)s' doesn't have any related "
+                            "currency configured in Odoo.",
+                            code=country_code,
+                            name=country.name,
+                        ),
                     )
             else:
                 raise self.user_error_wrap(
@@ -776,13 +784,13 @@ class BusinessDocumentImport(models.AbstractModel):
             else:
                 chatter_msg.append(
                     _(
-                        "The analysis of the business document returned '%s' "
+                        "The analysis of the business document returned '%(code)s' "
                         "as the unit of measure UNECE code, but there is no "
                         "unit of measure with that UNECE code in Odoo. Please "
                         "check the configuration of the units of measures in "
-                        "Odoo."
+                        "Odoo.",
+                        code=uom_dict["unece_code"],
                     )
-                    % uom_dict["unece_code"]
                 )
         if uom_dict.get("name"):
             uom = uuo.search([("name", "=ilike", uom_dict["name"] + "%")], limit=1)
@@ -794,12 +802,13 @@ class BusinessDocumentImport(models.AbstractModel):
             _(
                 "<p>Odoo couldn't find any unit of measure corresponding to the "
                 "following information extracted from the business document:</p>"
-                "<ul><li>UNECE code: %s</li>"
-                "<li>Name of the unit of measure: %s</li></ul>"
+                "<ul><li>UNECE code: %(code)s</li>"
+                "<li>Name of the unit of measure: %(name)s</li></ul>"
                 "<p>So the unit of measure 'Unit(s)' has been used. <em>You may "
-                "have to change it manually.</em></p>"
+                "have to change it manually.</em></p>",
+                code=uom_dict.get("unece_code"),
+                name=uom_dict.get("name"),
             )
-            % (uom_dict.get("unece_code"), uom_dict.get("name"))
         )
         return self.env.ref("uom.product_uom_unit")
 
@@ -835,7 +844,10 @@ class BusinessDocumentImport(models.AbstractModel):
             domain.append(("price_include", "=", True))
         # with the code above, if you set price_include=None, it will
         # won't depend on the value of the price_include parameter
-        assert tax_dict.get("amount_type") in ["fixed", "percent"], "bad tax type"
+        assert tax_dict.get("amount_type") in [
+            "fixed",
+            "percent",
+        ], "bad tax type, has to be fixed or percent"
         assert "amount" in tax_dict, "Missing amount key in tax_dict"
         domain.append(("amount_type", "=", tax_dict["amount_type"]))
         if tax_dict.get("unece_type_code"):
@@ -884,22 +896,22 @@ class BusinessDocumentImport(models.AbstractModel):
             "_match_tax",
             tax_dict,
             _(
-                "Odoo couldn't find any tax with 'Tax Application' = '%s' "
-                "and 'Tax Included in Price' = '%s' which correspond to the "
+                "Odoo couldn't find any tax with 'Tax Application' = '%(tax)s' "
+                "and 'Tax Included in Price' = '%(price)s' which correspond to the "
                 "following information extracted from the business document:\n"
-                "UNECE Tax Type code: %s\n"
-                "UNECE Tax Category code: %s\n"
-                "UNECE Due Date code: %s\n"
-                "Tax amount: %s %s"
-            )
-            % (
-                type_tax_use,
-                price_include,
-                tax_dict.get("unece_type_code") or "",
-                tax_dict.get("unece_categ_code") or "",
-                tax_dict.get("unece_due_date_code") or "",
-                tax_dict["amount"],
-                tax_dict["amount_type"] == "percent" and "%" or _("(fixed)"),
+                "UNECE Tax Type code: %(tax_type)s\n"
+                "UNECE Tax Category code: %(tax_cat)s\n"
+                "UNECE Due Date code: %s(tax_due_date)\n"
+                "Tax amount: %(amount)s %(amount_type)s",
+                tax=type_tax_use,
+                price=price_include,
+                tax_type=tax_dict.get("unece_type_code") or "",
+                tax_cat=tax_dict.get("unece_categ_code") or "",
+                tax_due_date=tax_dict.get("unece_due_date_code") or "",
+                amount=tax_dict["amount"],
+                amount_type=tax_dict["amount_type"] == "percent"
+                and "%"
+                or _("(fixed)"),
             ),
         )
 
@@ -1012,15 +1024,14 @@ class BusinessDocumentImport(models.AbstractModel):
                 if uom != existing_lines_dict[product]["uom"]:
                     chatter_msg.append(
                         _(
-                            "For product '%s', the unit of measure is %s on the "
-                            "existing line, but it is %s on the imported line. "
+                            "For product '%(product)s', the unit of measure is "
+                            "%(uom_product)s on the existing line, but it is "
+                            "%(uom_imported)s on the imported line."
                             "We don't support this scenario for the moment, so "
-                            "<b>the lines haven't been updated</b>."
-                        )
-                        % (
-                            product.display_name,
-                            existing_lines_dict[product]["uom"].name,
-                            uom.name,
+                            "<b>the lines haven't been updated</b>.",
+                            product=product.display_name,
+                            uom_product=existing_lines_dict[product]["uom"].name,
+                            uom_imported=uom.name,
                         )
                     )
                     return False
@@ -1109,10 +1120,11 @@ class BusinessDocumentImport(models.AbstractModel):
                 if code.startswith(acc_code):
                     chatter_msg.append(
                         _(
-                            "Approximate match: account %s has been matched "
-                            "with account %s"
+                            "Approximate match: account %(account)s has been matched "
+                            "with account %(matched_account)s",
+                            account=account_dict["code"],
+                            matched_account=code,
                         )
-                        % (account_dict["code"], code)
                     )
                     return aao.browse(account_id)
         raise self.user_error_wrap(
@@ -1264,14 +1276,12 @@ class BusinessDocumentImport(models.AbstractModel):
                         company_dict,
                         _(
                             "The VAT number of the customer written in the "
-                            "business document (%s) doesn't match the VAT number "
-                            "of the company '%s' (%s) in which you are trying to "
-                            "import this document."
-                        )
-                        % (
-                            parsed_company_vat,
-                            company.display_name,
-                            company.partner_id.vat,
+                            "business document (%(parsed_vat)s) doesn't match "
+                            "the VAT number of the company '%(company)s' (%(vat)s) "
+                            "in which you are trying to import this document.",
+                            parsed_vat=parsed_company_vat,
+                            company=company.display_name,
+                            vat=company.partner_id.vat,
                         ),
                     )
             else:
