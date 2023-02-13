@@ -3,9 +3,13 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import logging
+
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+
+logger = logging.getLogger(__name__)
 
 
 @tagged("post_install", "-at_install")
@@ -29,6 +33,184 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         partner_dict = {"ref": "COGIP"}
         res = bdio._match_partner(partner_dict, [], partner_type=False)
         self.assertEqual(res, partner1)
+
+    def test_direct_match_recordset(self):
+        partner = self.env["res.partner"].create(
+            {
+                "name": "Alexis Delattre",
+                "email": "alexis.delattre@example.com",
+                "ref": "C1242",
+            }
+        )
+        partner_dict = {
+            "recordset": partner,
+        }
+        bdio = self.env["business.document.import"]
+        partner_match = bdio._direct_match(partner_dict, self.env["res.partner"], True)
+        self.assertEqual(partner, partner_match)
+
+        with self.assertRaises(UserError):
+            bdio._direct_match(partner_dict, self.env["res.partner.bank"], True)
+
+        partner_match = bdio._direct_match(
+            partner_dict, self.env["res.partner.bank"], False
+        )
+        self.assertEqual(None, partner_match)
+
+    def test_direct_match_id(self):
+        partner = self.env["res.partner"].create(
+            {
+                "name": "Alexis Delattre",
+                "email": "alexis.delattre@example.com",
+                "ref": "C1242",
+            }
+        )
+        partner_dict = {
+            "id": partner.id,
+        }
+        bdio = self.env["business.document.import"]
+        partner_match = bdio._direct_match(partner_dict, self.env["res.partner"], True)
+        self.assertEqual(partner, partner_match)
+
+        partner_dict = {
+            "id": 234234234234231,
+        }
+        with self.assertRaises(UserError):
+            bdio._direct_match(partner_dict, self.env["res.partner"], True)
+
+    def test_direct_match_xmlid(self):
+        partner_dict = {
+            "xmlid": "i.dont.exist.odoo",
+        }
+        bdio = self.env["business.document.import"]
+        with self.assertRaises(UserError):
+            bdio._direct_match(partner_dict, self.env["res.partner"], True)
+
+        partner_dict = {
+            "xmlid": "base.fr",
+        }
+        with self.assertRaises(UserError):
+            bdio._direct_match(partner_dict, self.env["res.partner"], True)
+
+        partner_dict = {
+            "xmlid": "base.main_partner",
+        }
+        partner = bdio._direct_match(partner_dict, self.env["res.partner"], True)
+        self.assertEqual(partner.name, "YourCompany")
+
+    def test_match_partner_ref(self):
+        partner1 = self.env["res.partner"].create(
+            {
+                "name": "Alexis Delattre",
+                "email": "alexis.delattre@example.com",
+                "ref": "C1242",
+            }
+        )
+        bdio = self.env["business.document.import"]
+        partner_dict = {
+            "name": "Alexis Delattre",
+            "email": "alexis.delattre@example.com",
+            "ref": "C1242",
+        }
+        chatter_msg = []
+        domain = []
+        order = ""
+        partner = bdio._match_partner_ref(partner_dict, chatter_msg, domain, order)
+        self.assertEqual(partner, partner1)
+
+    def test_match_partner_contact(self):
+        partner_email = self.env["res.partner"].create(
+            {
+                "email": "alexis.email@example.com",
+                "name": "Alexis email",
+            }
+        )
+        partner_contact = self.env["res.partner"].create(
+            {
+                "email": "alexis.name@example.com",
+                "name": "Alexis name",
+            }
+        )
+        partner_phone = self.env["res.partner"].create(
+            {
+                "email": "alexis.phone@example.com",
+                "phone": "01.41.98.12.42",
+                "name": "Alexis phone",
+            }
+        )
+        bdio = self.env["business.document.import"]
+        chatter_msg = []
+        domain = []
+        order = ""
+
+        partner_dict = {
+            "name": "Alexis email",
+            "email": "alexis.email@example.com",
+        }
+        partner = bdio._match_partner_contact(partner_dict, chatter_msg, domain, order)
+        self.assertEqual(partner, partner_email)
+
+        partner_dict = {
+            "contact": "Alexis name",
+            "email": "alexis.name@example.com",
+        }
+        partner = bdio._match_partner_contact(partner_dict, chatter_msg, domain, order)
+        self.assertEqual(partner, partner_contact)
+
+        partner_dict = {
+            "name": "Alexis phone",
+            "email": "alexis.phone@example.com",
+            "phone": "01.41.98.12.42",
+        }
+        partner = bdio._match_partner_contact(partner_dict, chatter_msg, domain, order)
+        self.assertEqual(partner, partner_phone)
+
+    def test_match_partner_name(self):
+        partner_name = self.env["res.partner"].create(
+            {
+                "email": "alexis.name@example.com",
+                "name": "Alexis name",
+            }
+        )
+        bdio = self.env["business.document.import"]
+        chatter_msg = []
+        domain = []
+        order = ""
+
+        partner_dict = {
+            "name": "Alexis name",
+            "email": "alexis.name@example.com",
+        }
+        partner = bdio._match_partner_name(partner_dict, chatter_msg, domain, order)
+        self.assertEqual(partner, partner_name)
+
+    def test_get_partner_website_domain(self):
+        bdio = self.env["business.document.import"]
+
+        www_website = {"website": "www.example.com"}
+        website_domain = bdio._get_partner_website_domain(www_website)
+        self.assertEqual(website_domain, "example.com")
+
+        no_website = bdio._get_partner_website_domain({})
+        self.assertEqual(False, no_website)
+
+        https_www_website = {"website": "https://www.example.com"}
+        website_domain = bdio._get_partner_website_domain(https_www_website)
+        self.assertEqual(website_domain, "example.com")
+
+        https_website = {"website": "https://example.com"}
+        website_domain = bdio._get_partner_website_domain(https_website)
+        self.assertEqual(website_domain, "example.com")
+
+        https_path_website = {"website": "https://subdomain.example.com/bla/bla"}
+        website_domain = bdio._get_partner_website_domain(https_path_website)
+        self.assertEqual(website_domain, "example.com")
+
+        https_big_subdomain_website = {
+            "website": "https://just.a.big.subdomain.example.com"
+        }
+        website_domain = bdio._get_partner_website_domain(https_big_subdomain_website)
+        self.assertEqual(website_domain, "example.com")
 
     def test_match_shipping_partner(self):
         rpo = self.env["res.partner"]
@@ -77,6 +259,12 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         shipping_dict["zip"] = "92500"
         with self.assertRaises(UserError):
             bdio._match_shipping_partner(shipping_dict, None, [])
+
+        no_error = bdio._match_shipping_partner(
+            shipping_dict, None, [], raise_exception=False
+        )
+        self.assertEqual(no_error, None)
+
         partner2 = rpo.create(
             {
                 "name": "Alex Corp",
@@ -137,7 +325,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                         0,
                         0,
                         {
-                            "name": self.env.ref("base.res_partner_2").id,
+                            "partner_id": self.env.ref("base.res_partner_2").id,
                             "product_code": "TEST1242",
                         },
                     ),
@@ -168,7 +356,8 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             bdio._match_product(product_dict, [], seller=False)
             raise_test = False
         except Exception:
-            pass
+            logger.info("Exception catched.")
+
         self.assertTrue(raise_test)
 
     def test_match_uom(self):
@@ -182,9 +371,9 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         uom_dict = {"name": "day"}
         res = bdio._match_uom(uom_dict, [])
         self.assertEqual(res, self.env.ref("uom.product_uom_day"))
-        uom_dict = {"name": "L"}
+        uom_dict = {"name": "lb"}
         res = bdio._match_uom(uom_dict, [])
-        self.assertEqual(res, self.env.ref("uom.product_uom_litre"))
+        self.assertEqual(res, self.env.ref("uom.product_uom_lb"))
         uom_dict = {}
         product = self.env.ref("product.product_product_1")
         res = bdio._match_uom(uom_dict, [], product=product)
@@ -260,7 +449,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             {
                 "name": "Test 898999",
                 "code": "898999",
-                "user_type_id": self.env.ref("account.data_account_type_expenses").id,
+                "account_type": "expense",
             }
         )
         res = bdio._match_account({"code": "898999"}, [])
@@ -272,7 +461,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             {
                 "name": "Test 898999",
                 "code": "898999",
-                "user_type_id": self.env.ref("account.data_account_type_expenses").id,
+                "account_type": "expense",
             }
         )
         res = bdio._match_account({"code": "89899900"}, [])
@@ -284,7 +473,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             {
                 "name": "Test 89899910",
                 "code": "89899910",
-                "user_type_id": self.env.ref("account.data_account_type_expenses").id,
+                "account_type": "expense",
             }
         )
         chatter = []
