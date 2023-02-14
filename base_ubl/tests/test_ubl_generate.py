@@ -13,8 +13,7 @@ class TestUblInvoice(HttpCase):
         content, doc_type = (
             self.env.ref("account.account_invoices")
             .with_context(no_embedded_ubl_xml=True, force_report_rendering=True)
-            .env.ref("account.account_invoices")
-            ._render_qweb_pdf(invoice.ids)
+            ._render_qweb_pdf("account.account_invoices", invoice.ids)
         )
         self.assertTrue(content)
         self.assertEqual(doc_type, "pdf")
@@ -47,9 +46,7 @@ class TestUblInvoice(HttpCase):
                     "code": "707100",
                     "name": "Product Sales - (test)",
                     "company_id": company.id,
-                    "user_type_id": self.env.ref(
-                        "account.data_account_type_revenue"
-                    ).id,
+                    "account_type": "income",
                 }
             )
         taxes = ato.search(
