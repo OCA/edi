@@ -488,7 +488,12 @@ class BaseUbl(models.AbstractModel):
     ):
         tax_category = etree.SubElement(parent_node, ns["cac"] + node_name)
         if not tax.unece_categ_id:
-            raise UserError(_("Missing UNECE Tax Category on tax '%s'" % tax.name))
+            raise UserError(
+                _(
+                    "Missing UNECE Tax Category on tax '%(tax_name)s'",
+                    tax_name=tax.name,
+                )
+            )
         tax_category_id = etree.SubElement(
             tax_category, ns["cbc"] + "ID", schemeID="UN/ECE 5305", schemeAgencyID="6"
         )
@@ -504,7 +509,12 @@ class BaseUbl(models.AbstractModel):
     @api.model
     def _ubl_get_tax_scheme_dict_from_tax(self, tax):
         if not tax.unece_type_id:
-            raise UserError(_("Missing UNECE Tax Type on tax '%s'" % tax.name))
+            raise UserError(
+                _(
+                    "Missing UNECE Tax Type on tax '%(tax_name)s'",
+                    tax_name=tax.name,
+                )
+            )
         tax_scheme_dict = {"id": tax.unece_type_code, "name": False, "type_code": False}
         return tax_scheme_dict
 
@@ -579,10 +589,10 @@ class BaseUbl(models.AbstractModel):
                     "XML Schema Definition. The XML file and the "
                     "full error have been written in the server logs. "
                     "Here is the error, which may give you an idea on the "
-                    "cause of the problem : %s."
+                    "cause of the problem : %(error)s.",
+                    error=str(e),
                 )
-                % str(e)
-            )
+            ) from e
         return True
 
     # TODO: move to pdf_helper
