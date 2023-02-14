@@ -23,40 +23,28 @@ msgid "Common methods to generate and parse UBL XML files"
 msgstr "Uobičajene metode za generiranje i parsiranje UBL XML datoteka"
 
 #. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__display_name
-msgid "Display Name"
-msgstr "Naziv"
-
-#. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__id
-#, fuzzy
-msgid "ID"
-msgstr "ID"
-
-#. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl____last_update
-msgid "Last Modified on"
-msgstr "Zadnja modifikacija"
-
-#. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
-msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr "Nedostaje UNECE kategorija poreza na porezu '%s'"
+msgid "Missing UNECE Tax Category on tax '%(tax_name)s'"
+msgstr ""
 
 #. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
-msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr "Nedostaje UNECE tip poreza na porezu '%s'"
+msgid "Missing UNECE Tax Type on tax '%(tax_name)s'"
+msgstr ""
 
 #. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
 msgstr "Nedostaje UNECE šifra jedinice mjere za '%s'"
 
 #. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid ""
@@ -65,13 +53,41 @@ msgid ""
 msgstr ""
 
 #. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid ""
 "The UBL XML file is not valid against the official XML Schema Definition. "
 "The XML file and the full error have been written in the server logs. Here "
-"is the error, which may give you an idea on the cause of the problem : %s."
+"is the error, which may give you an idea on the cause of the problem : "
+"%(error)s."
 msgstr ""
-"UBL datoteka nije valjana prema službenoj XML schemi. XML datoteka i puni "
-"opis greške je zapisan u  serverski log. Ovo je greška, možda imate ideju "
-"što nije u redu ili što je uzrok problemu: %s."
+
+#~ msgid "Display Name"
+#~ msgstr "Naziv"
+
+#, fuzzy
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Zadnja modifikacija"
+
+#, python-format
+#~ msgid "Missing UNECE Tax Category on tax '%s'"
+#~ msgstr "Nedostaje UNECE kategorija poreza na porezu '%s'"
+
+#, python-format
+#~ msgid "Missing UNECE Tax Type on tax '%s'"
+#~ msgstr "Nedostaje UNECE tip poreza na porezu '%s'"
+
+#, python-format
+#~ msgid ""
+#~ "The UBL XML file is not valid against the official XML Schema Definition. "
+#~ "The XML file and the full error have been written in the server logs. "
+#~ "Here is the error, which may give you an idea on the cause of the "
+#~ "problem : %s."
+#~ msgstr ""
+#~ "UBL datoteka nije valjana prema službenoj XML schemi. XML datoteka i puni "
+#~ "opis greške je zapisan u  serverski log. Ovo je greška, možda imate ideju "
+#~ "što nije u redu ili što je uzrok problemu: %s."
