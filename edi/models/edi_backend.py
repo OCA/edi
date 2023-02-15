@@ -584,7 +584,8 @@ class EDIBackend(models.Model):
         return [
             ("backend_id", "=", self.id),
             ("type_id.direction", "=", "input"),
-            # Include 'input_receive_error' to automatically retry when file is not already on storage
+            # Include 'input_receive_error'
+            # to automatically retry when file is not already on storage
             ("edi_exchange_state", "in", ("input_pending", "input_receive_error")),
             ("exchange_file", "=", False),
         ]

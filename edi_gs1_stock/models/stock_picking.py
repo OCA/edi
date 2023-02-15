@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import api, models
+from odoo import _, api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -58,3 +58,28 @@ class StockPicking(models.Model):
     def action_send_wh_outbound_instruction(self):
         # TODO: return action compat dict
         return self.send_wh_outbound_instruction()
+
+    def action_stop_gs1(self):
+        exchange_records = self.env["edi.exchange.record"].search(
+            [("model", "=", self._name), ("res_id", "in", self.ids)]
+        )
+        if exchange_records:
+            exchange_records.action_exchange_stop()
+        return {}
+
+    def unlink(self):
+        """
+
+        :return: bool
+        """
+        picking_ids = self.ids
+        result = super().unlink()
+        exchange_records = self.env["edi.exchange.record"].search(
+            [("model", "=", self._name), ("res_id", "in", picking_ids)]
+        )
+        exchange_records.write({"model": False, "res_id": False})
+        if exchange_records:
+            exchange_records.action_exchange_stop()
+        for exchange_record in exchange_records:
+            exchange_record.message_post(body=_("Related picking deleted"))
+        return result
