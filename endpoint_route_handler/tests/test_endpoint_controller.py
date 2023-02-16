@@ -15,7 +15,7 @@ from .fake_controllers import TestController
 class EndpointHttpCase(HttpCase):
     def setUp(self):
         super().setUp()
-        self.route_handler = self.env["endpoint.route.handler"]
+        self.route_handler = self.env["endpoint.route.handler.tool"]
 
     def tearDown(self):
         EndpointRegistry.wipe_registry_for(self.env.cr)
@@ -29,7 +29,6 @@ class EndpointHttpCase(HttpCase):
         }
         vals.update(kw)
         new_route = self.route_handler.new(vals)
-        new_route._refresh_endpoint_data()
         new_route._register_controllers(options=options)
         return new_route
 

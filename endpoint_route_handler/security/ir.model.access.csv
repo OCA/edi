@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_endpoint_route_handler_mngr_edit,endpoint_route_handler mngr edit,model_endpoint_route_handler,base.group_system,1,1,1,1
-access_endpoint_route_handler_edit,endpoint_route_handler edit,model_endpoint_route_handler,,1,0,0,0
+access_endpoint_route_handler_tool_mngr_edit,endpoint_route_handler mngr edit,model_endpoint_route_handler,base.group_system,1,1,1,1
+access_endpoint_route_handler_tool_edit,endpoint_route_handler edit,model_endpoint_route_handler,,1,0,0,0
+access_endpoint_route_handler_mngr_edit,endpoint_route_handler_tool mngr edit,model_endpoint_route_handler_tool,base.group_system,1,1,1,1
+access_endpoint_route_handler_edit,endpoint_route_handler_tool edit,model_endpoint_route_handler_tool,,1,0,0,0
