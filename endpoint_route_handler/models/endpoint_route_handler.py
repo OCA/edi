@@ -187,24 +187,6 @@ class EndpointRouteHandler(models.AbstractModel):
                     _("Request content type is required for POST and PUT.")
                 )
 
-    def _refresh_endpoint_data(self):
-        """Enforce refresh of route computed fields.
-
-        Required for NewId records when using this model as a tool.
-        """
-        self._compute_endpoint_hash()
-        self._compute_route()
-
-    def _register_controllers(self, init=False, options=None):
-        if self and self._abstract:
-            self._refresh_endpoint_data()
-        super()._register_controllers(init=init, options=options)
-
-    def _unregister_controllers(self):
-        if self and self._abstract:
-            self._refresh_endpoint_data()
-        super()._unregister_controllers()
-
     def _prepare_endpoint_rules(self, options=None):
         return [rec._make_controller_rule(options=options) for rec in self]
 

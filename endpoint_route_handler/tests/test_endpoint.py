@@ -28,7 +28,7 @@ def new_rollbacked_env():
 
 
 def make_new_route(env, **kw):
-    model = env["endpoint.route.handler"]
+    model = env["endpoint.route.handler.tool"]
     vals = {
         "name": "Test custom route",
         "route": "/my/test/route",
@@ -36,7 +36,6 @@ def make_new_route(env, **kw):
     }
     vals.update(kw)
     new_route = model.new(vals)
-    new_route._refresh_endpoint_data()
     return new_route
 
 
@@ -52,7 +51,6 @@ class TestEndpoint(CommonEndpoint):
         first_hash = new_route.endpoint_hash
         self.assertTrue(first_hash)
         new_route.route += "/new"
-        new_route._refresh_endpoint_data()
         self.assertNotEqual(new_route.endpoint_hash, first_hash)
 
     @mute_logger("odoo.addons.base.models.ir_http")
@@ -73,7 +71,6 @@ class TestEndpoint(CommonEndpoint):
 
         # Ensure is updated when needed
         new_route.route += "/new"
-        new_route._refresh_endpoint_data()
         with self._get_mocked_request():
             new_route._register_single_controller(options=options, init=True)
             rmap = self.env["ir.http"]._clear_routing_map()
@@ -99,7 +96,6 @@ class TestEndpoint(CommonEndpoint):
 
         # Ensure is updated when needed
         new_route.route += "/new"
-        new_route._refresh_endpoint_data()
         with self._get_mocked_request():
             new_route._register_controllers(options=options, init=True)
             rmap = self.env["ir.http"]._clear_routing_map()
