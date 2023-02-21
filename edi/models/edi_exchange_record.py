@@ -317,16 +317,23 @@ class EDIExchangeRecord(models.Model):
         """Post notification on the original record."""
         if not hasattr(self.record, "message_post_with_view"):
             return
-        self.record.message_post_with_view(
-            "edi.message_edi_exchange_link",
-            values={
-                "backend": self.backend_id,
-                "exchange_record": self,
-                "message": message,
-                "level": level,
-            },
-            subtype_id=self.env.ref("mail.mt_note").id,
+        last_message = (
+            fields.first(
+                self.record.message_ids.filtered(lambda m: "EDI exchange" in m.body)
+            ).body
+            or ""
         )
+        if message not in last_message:
+            self.record.message_post_with_view(
+                "edi.message_edi_exchange_link",
+                values={
+                    "backend": self.backend_id,
+                    "exchange_record": self,
+                    "message": message,
+                    "level": level,
+                },
+                subtype_id=self.env.ref("mail.mt_note").id,
+            )
 
     def _trigger_edi_event_make_name(self, name, suffix=None):
         return "on_edi_exchange_{name}{suffix}".format(
