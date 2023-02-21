@@ -20,9 +20,10 @@
         </cac:PartyName>
     </cac:ReceiverParty>
     <cac:SellerSupplierParty>
+        <cbc:CustomerAssignedAccountID>78456123</cbc:CustomerAssignedAccountID>
         <cac:Party>
             <cac:PartyName>
-                <cbc:Name>Medical</cbc:Name>
+                <cbc:Name>Find vendor by reference</cbc:Name>
             </cac:PartyName>
         </cac:Party>
     </cac:SellerSupplierParty>

@@ -12,7 +12,9 @@ class TestUblOrderImport(SavepointCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
-        cls.supplier = cls.env["res.partner"].create({"name": "Medical"})
+        cls.supplier = cls.env["res.partner"].create(
+            {"name": "Medical", "ref": "78456123"}
+        )
 
     def _all_products(self):
         return (

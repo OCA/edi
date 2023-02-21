@@ -117,8 +117,8 @@ class ProductImport(models.TransientModel):
         xroot = XPathGetter(xml_root, ns)
         company_xpath = xroot.get(f"/{root_name}/cac:ReceiverParty")
         company_dict = ubl.ubl_parse_party(company_xpath, ns)
-        supplier_xpath = xroot.get(f"/{root_name}/cac:SellerSupplierParty/cac:Party")
-        supplier_dict = ubl.ubl_parse_party(supplier_xpath, ns)
+        supplier_xpath = xroot.get(f"/{root_name}/cac:SellerSupplierParty")
+        supplier_dict = ubl.ubl_parse_supplier_party(supplier_xpath, ns)
 
         res_lines = [
             self.parse_ubl_catalogue_line(line, ns)
