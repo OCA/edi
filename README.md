@@ -28,6 +28,7 @@ addon | version | maintainers | summary
 [account_invoice_facturx_py3o](account_invoice_facturx_py3o/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X invoices with Py3o reporting engine
 [account_invoice_ubl](account_invoice_ubl/) | 13.0.1.0.7 |  | Generate UBL XML file for customer invoices/refunds
 [account_invoice_ubl_email_attachment](account_invoice_ubl_email_attachment/) | 13.0.1.1.1 |  | Automatically adds the UBL file to the email.
+[account_invoice_ubl_peppol](account_invoice_ubl_peppol/) | 13.0.1.0.0 |  | Generate invoices in PEPPOL 3.0 BIS dialect
 [base_business_document_import](base_business_document_import/) | 13.0.2.1.1 |  | Provides technical tools to import sale orders or supplier invoices
 [base_ebill_payment_contract](base_ebill_payment_contract/) | 13.0.1.0.0 |  | Base for managing e-billing contracts
 [base_edi](base_edi/) | 13.0.1.0.3 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module to aggregate EDI features.
