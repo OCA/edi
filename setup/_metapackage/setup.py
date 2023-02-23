@@ -15,6 +15,7 @@ setuptools.setup(
         'odoo13-addon-account_invoice_facturx_py3o',
         'odoo13-addon-account_invoice_ubl',
         'odoo13-addon-account_invoice_ubl_email_attachment',
+        'odoo13-addon-account_invoice_ubl_peppol',
         'odoo13-addon-base_business_document_import',
         'odoo13-addon-base_ebill_payment_contract',
         'odoo13-addon-base_edi',
