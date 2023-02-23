@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice UBL",
-    "version": "13.0.1.0.7",
+    "version": "13.0.1.1.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Generate UBL XML file for customer invoices/refunds",
