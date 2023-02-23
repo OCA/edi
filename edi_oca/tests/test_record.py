@@ -5,8 +5,7 @@
 from freezegun import freeze_time
 
 from odoo import exceptions, fields
-
-from odoo.addons.queue_job.delay import DelayableRecordset
+from odoo.addons.queue_job.job import DelayableRecordset
 
 from .common import EDIBackendCommonTestCase
 
