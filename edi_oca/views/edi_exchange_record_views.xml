@@ -34,6 +34,7 @@
                         type="object"
                         string="Related record"
                         attrs="{'invisible': [('res_id', '=', False)]}"
+                        groups="base.group_no_one"
                     />
                     <!-- FIXME: this `invisible` domain does not work -->
                     <button
