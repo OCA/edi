@@ -4,7 +4,8 @@
 
 import logging
 import os
-from tempfile import mkstemp
+import shutil
+from tempfile import NamedTemporaryFile
 
 from odoo import _, api, fields, models, tools
 from odoo.exceptions import UserError
@@ -16,6 +17,10 @@ try:
     from invoice2data.main import extract_data, logger as loggeri2data
 except ImportError:
     logger.debug("Cannot import invoice2data")
+try:
+    from invoice2data.input import tesseract
+except ImportError:
+    logger.debug("Cannot import tesseract")
 
 
 class AccountInvoiceImport(models.TransientModel):
@@ -34,12 +39,10 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def invoice2data_parse_invoice(self, file_data):
         logger.info("Trying to analyze PDF invoice with invoice2data lib")
-        fd, file_name = mkstemp()
-        try:
-            os.write(fd, file_data)
-        finally:
-            os.close(fd)
-        # Transfer log level of Odoo to invoice2data
+        fileobj = NamedTemporaryFile(
+            "wb", prefix="odoo-aii-inv2data-pdf-", suffix=".pdf"
+        )
+        fileobj.write(file_data)
         loggeri2data.setLevel(logger.getEffectiveLevel())
         local_templates_dir = tools.config.get("invoice2data_templates_dir", False)
         logger.debug("invoice2data local_templates_dir=%s", local_templates_dir)
@@ -53,12 +56,38 @@ class AccountInvoiceImport(models.TransientModel):
             templates += read_templates()
         logger.debug("Calling invoice2data.extract_data with templates=%s", templates)
         try:
-            invoice2data_res = extract_data(file_name, templates=templates)
+            invoice2data_res = extract_data(fileobj.name, templates=templates)
         except Exception as e:
+            fileobj.close()
             raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
         if not invoice2data_res:
-            return False
+            if not shutil.which("tesseract"):
+                logger.warning(
+                    "Fallback on tesseract impossible, Could not find the utility. "
+                    "Hint: sudo apt install tesseract-ocr"
+                )
+                fileobj.close()
+                return False
+            # Fallback on tesseract
+            logger.info("PDF Invoice parsing failed: Falling back on Tesseract ocr")
+            try:
+                # from invoice2data.input import tesseract
+                invoice2data_res = extract_data(
+                    fileobj.name, templates=templates, input_module=tesseract
+                )
+            except Exception as e:
+                fileobj.close()
+                raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
+            if not invoice2data_res:
+                fileobj.close()
+                raise UserError(
+                    _(
+                        "This PDF invoice doesn't match a known template of "
+                        "the invoice2data lib."
+                    )
+                )
         logger.info("Result of invoice2data PDF extraction: %s", invoice2data_res)
+        fileobj.close()
         return self.invoice2data_to_parsed_inv(invoice2data_res)
 
     @api.model
