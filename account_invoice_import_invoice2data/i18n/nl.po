@@ -49,6 +49,15 @@ msgid "PDF Invoice parsing failed. Error message: %s"
 msgstr "Het is niet gelukt om de PDF factuur te verwerken. Fout melding: %s"
 
 #. module: account_invoice_import_invoice2data
+#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"This PDF invoice doesn't match a known template of the invoice2data lib."
+msgstr ""
+"Deze PDF factuur heeft geen overeenkomstig herkennings sjabloon van de "
+"invoice2data library."
+
+#. module: account_invoice_import_invoice2data
 #: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Units"
@@ -74,12 +83,6 @@ msgstr ""
 "bibliotheek (extraheert de teksten in de PDF voor het verkrijgen van de "
 "informatie). Het werkt enkel wanneer er een sjabloon beschikbaar is voor de "
 "betreffende leverancier."
-
-#~ msgid ""
-#~ "This PDF invoice doesn't match a known template of the invoice2data lib."
-#~ msgstr ""
-#~ "Deze PDF factuur heeft geen overeenkomstig herkennings sjabloon van de "
-#~ "invoice2data library."
 
 #~ msgid "Unit(s)"
 #~ msgstr "Stuk(s)"
