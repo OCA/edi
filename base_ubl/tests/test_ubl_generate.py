@@ -20,12 +20,6 @@ class TestUblInvoice(AccountTestInvoicingCommon, HttpCase):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
         super().setUpClass(chart_template_ref=chart_template_ref)
-        for company in (
-            cls.company_data["company"],
-            cls.company_data_2["company"],
-        ):
-            if not company.country_id:
-                company.country_id = cls.env["res.country"].search([], limit=1)
         cls.internal_user = cls.env["res.users"].create(
             {
                 "name": "Internal User",
@@ -58,7 +52,15 @@ class TestUblInvoice(AccountTestInvoicingCommon, HttpCase):
         cls.invoice.partner_id.street2 = "Test Street 2"
         cls.invoice.partner_id.parent_id = cls.invoice.company_id.partner_id
 
+    def disable_other_embeddings(self, company):
+        # In a test context, we may be running with other modules from this
+        # same repository that have activated embedding documents that we are
+        # not testing. So for our tests we turn them off if we know about them.
+        if "xml_format_in_pdf_invoice" in company._fields:
+            company.xml_format_in_pdf_invoice = "none"
+
     def test_pdf_generate(self):
+        self.disable_other_embeddings(self.company_data["company"])
         content, doc_type = (
             self.env.ref("account.account_invoices")
             .with_context(no_embedded_ubl_xml=True, force_report_rendering=True)
@@ -146,6 +148,7 @@ class TestUblInvoice(AccountTestInvoicingCommon, HttpCase):
         self.env["base.ubl"]._ubl_add_tax_scheme(tax_scheme_dict, tax_category, self.ns)
 
     def test_get_xml_files_from_pdf(self):
+        self.disable_other_embeddings(self.company_data["company"])
         content, doc_type = (
             self.env.ref("account.account_invoices")
             .with_context(no_embedded_ubl_xml=True, force_report_rendering=True)
@@ -160,6 +163,7 @@ class TestUblInvoice(AccountTestInvoicingCommon, HttpCase):
             _ubl_check_xml_schema
             embed_xml_in_pdf
         """
+        self.disable_other_embeddings(self.company_data["company"])
         content, doc_type = (
             self.env.ref("account.account_invoices")
             .with_context(no_embedded_ubl_xml=True, force_report_rendering=True)
