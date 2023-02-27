@@ -82,9 +82,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         }
 
     @api.model
-    def get_view(
-        self, view_id=None, view_type="form", toolbar=False, submenu=False
-    ):
+    def get_view(self, view_id=None, view_type="form", toolbar=False, submenu=False):
         res = super().get_view(
             view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu
         )
