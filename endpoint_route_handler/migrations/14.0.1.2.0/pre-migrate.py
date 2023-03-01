@@ -17,4 +17,4 @@ def migrate(cr, version):
     if not version:
         return
 
-    EndpointRegistry._setup_table(cr)
+    EndpointRegistry._setup_db(cr)

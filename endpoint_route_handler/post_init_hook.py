@@ -11,4 +11,4 @@ _logger = logging.getLogger(__name__)
 def post_init_hook(cr, registry):
     # this is the trigger that sends notifications when jobs change
     _logger.info("Create table")
-    EndpointRegistry._setup_table(cr)
+    EndpointRegistry._setup_db(cr)

@@ -41,26 +41,26 @@ class IrHttp(models.AbstractModel):
 
     @classmethod
     def routing_map(cls, key=None):
-        last_update = cls._get_routing_map_last_update(http.request.env)
+        last_version = cls._get_routing_map_last_version(http.request.env)
         if not hasattr(cls, "_routing_map"):
             # routing map just initialized, store last update for this env
-            cls._endpoint_route_last_update = last_update
-        elif cls._endpoint_route_last_update < last_update:
+            cls._endpoint_route_last_version = last_version
+        elif cls._endpoint_route_last_version < last_version:
             _logger.info("Endpoint registry updated, reset routing map")
             cls._routing_map = {}
             cls._rewrite_len = {}
-            cls._endpoint_route_last_update = last_update
+            cls._endpoint_route_last_version = last_version
         return super().routing_map(key=key)
 
     @classmethod
-    def _get_routing_map_last_update(cls, env):
-        return cls._endpoint_route_registry(env).last_update()
+    def _get_routing_map_last_version(cls, env):
+        return cls._endpoint_route_registry(env).last_version()
 
     @classmethod
     def _clear_routing_map(cls):
         super()._clear_routing_map()
-        if hasattr(cls, "_endpoint_route_last_update"):
-            cls._endpoint_route_last_update = 0
+        if hasattr(cls, "_endpoint_route_last_version"):
+            cls._endpoint_route_last_version = 0
 
     @classmethod
     def _auth_method_user_endpoint(cls):
