@@ -1,10 +1,7 @@
 # Copyright 2021 Camptocamp SA
 # @author: Simone Orsi <simone.orsi@camptocamp.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-import time
 from contextlib import contextmanager
-
-import mock
 
 import odoo
 from odoo.tools import mute_logger
@@ -140,47 +137,40 @@ class TestEndpointCrossEnv(CommonEndpoint):
         }
 
         env1 = self.env
-        EndpointRegistry.registry_for(self.env.cr)
+        reg = EndpointRegistry.registry_for(self.env.cr)
         new_route._register_controllers(options=options)
 
-        # Simulate 1st route created in the past
-        last_update0 = time.time() - 10000
-        path = "odoo.addons.endpoint_route_handler.registry.EndpointRegistry"
+        last_version0 = reg.last_version()
         with self._get_mocked_request():
             with new_rollbacked_env() as env2:
-                with mock.patch(path + ".last_update") as mocked:
-                    mocked.return_value = last_update0
-                    # Load maps
-                    env1["ir.http"].routing_map()
-                    env2["ir.http"].routing_map()
-                    self.assertEqual(
-                        env1["ir.http"]._endpoint_route_last_update, last_update0
-                    )
-                    self.assertEqual(
-                        env2["ir.http"]._endpoint_route_last_update, last_update0
-                    )
-                    rmap = self.env["ir.http"].routing_map()
-                    self.assertIn(route, [x.rule for x in rmap._rules])
-                    rmap = env2["ir.http"].routing_map()
-                    self.assertIn(route, [x.rule for x in rmap._rules])
+                # Load maps
+                env1["ir.http"].routing_map()
+                env2["ir.http"].routing_map()
+                self.assertEqual(
+                    env1["ir.http"]._endpoint_route_last_version, last_version0
+                )
+                self.assertEqual(
+                    env2["ir.http"]._endpoint_route_last_version, last_version0
+                )
+                rmap = self.env["ir.http"].routing_map()
+                self.assertIn(route, [x.rule for x in rmap._rules])
+                rmap = env2["ir.http"].routing_map()
+                self.assertIn(route, [x.rule for x in rmap._rules])
 
                 # add new route
                 route = "/my/new/<model(app.model):foo>"
                 new_route = make_new_route(self.env, route=route)
                 new_route._register_controllers(options=options)
 
-                # with mock.patch(path + ".last_update") as mocked:
-                #     mocked.return_value = last_update0 + 1000
-
                 rmap = self.env["ir.http"].routing_map()
                 self.assertIn(route, [x.rule for x in rmap._rules])
                 rmap = env2["ir.http"].routing_map()
                 self.assertIn(route, [x.rule for x in rmap._rules])
                 self.assertTrue(
-                    env1["ir.http"]._endpoint_route_last_update > last_update0
+                    env1["ir.http"]._endpoint_route_last_version > last_version0
                 )
                 self.assertTrue(
-                    env2["ir.http"]._endpoint_route_last_update > last_update0
+                    env2["ir.http"]._endpoint_route_last_version > last_version0
                 )
 
     # TODO: test unregister

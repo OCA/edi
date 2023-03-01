@@ -66,6 +66,12 @@ class TestRegistry(SavepointCase):
         # last_update2 = self.reg.last_update()
         # self.assertTrue(last_update2 > last_update1)
 
+    def test_last_version(self):
+        last_version0 = self.reg.last_version()
+        self._make_rules(stop=3)
+        last_version1 = self.reg.last_version()
+        self.assertTrue(last_version1 > last_version0)
+
     def _make_rules(self, stop=5, start=1, **kw):
         res = []
         for i in range(start, stop):
