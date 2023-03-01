@@ -4,8 +4,7 @@
 
 import json
 import os
-import time
-from unittest import mock, skipIf
+from unittest import skipIf
 
 from odoo.tests.common import HttpSavepointCase
 from odoo.tools.misc import mute_logger
@@ -39,15 +38,11 @@ class EndpointHttpCase(HttpSavepointCase):
         endpoint.route += "/new"
         # force sync
         endpoint._handle_registry_sync()
-        with mock.patch.object(
-            type(self.env["ir.http"]), "_get_routing_map_last_update"
-        ) as mocked:
-            mocked.return_value = time.time() - 100000
-            response = self.url_open("/demo/one")
-            self.assertEqual(response.status_code, 404)
-            response = self.url_open("/demo/one/new")
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content, b"ok")
+        response = self.url_open("/demo/one")
+        self.assertEqual(response.status_code, 404)
+        response = self.url_open("/demo/one/new")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, b"ok")
         # Archive it
         endpoint.active = False
         response = self.url_open("/demo/one/new")
