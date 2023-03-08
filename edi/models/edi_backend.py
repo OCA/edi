@@ -183,6 +183,14 @@ class EDIBackend(models.Model):
         channel = exchange_record.type_id.job_channel_id
         if channel:
             params["channel"] = channel.complete_name
+        # Create an identity_key to avoid create more than one job for the same
+        # record with the same state.
+        identity_key = "{model}_{id}_{state}".format(
+            model=exchange_record._name,
+            id=exchange_record.id,
+            state=exchange_record.edi_exchange_state,
+        )
+        params.update({"identity_key": identity_key})
         return params
 
     def _delay_action(self, rec):
