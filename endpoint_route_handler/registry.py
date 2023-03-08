@@ -4,6 +4,7 @@
 
 import importlib
 import json
+import logging
 from functools import partial
 
 from psycopg2 import sql
@@ -16,6 +17,8 @@ from odoo.tools import DotDict
 from odoo.addons.base.models.ir_model import query_insert
 
 from .exceptions import EndpointHandlerNotFound
+
+_logger = logging.getLogger(__name__)
 
 
 def query_multi_update(cr, table_name, rows, cols):
@@ -86,6 +89,7 @@ class EndpointRegistry:
     @classmethod
     def wipe_registry_for(cls, cr):
         cr.execute("TRUNCATE endpoint_route")
+        _logger.info("endpoint_route wiped")
 
     @classmethod
     def _setup_db(cls, cr):
@@ -93,6 +97,7 @@ class EndpointRegistry:
             cls._setup_db_table(cr)
             cls._setup_db_timestamp(cr)
             cls._setup_db_version(cr)
+            _logger.info("endpoint_route table set up")
 
     @classmethod
     def _setup_db_table(cls, cr):
