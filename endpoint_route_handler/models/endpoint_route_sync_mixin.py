@@ -5,7 +5,7 @@
 import logging
 from functools import partial
 
-from odoo import api, fields, models
+from odoo import api, fields, models, tools
 
 from ..registry import EndpointRegistry
 
@@ -82,6 +82,8 @@ class EndpointRouteSyncMixin(models.AbstractModel):
     def _register_hook(self):
         super()._register_hook()
         if not self._abstract and not self._transient:
+            if not is_registry_sync_column_ready(self.env.cr, self._table):
+                return
             # Ensure existing active records are loaded at startup.
             # Pass `init` to bypass routing map refresh
             # since this piece of code runs only when the model is loaded.
@@ -120,3 +122,20 @@ class EndpointRouteSyncMixin(models.AbstractModel):
     def _registered_endpoint_rule_keys(self):
         """Return list of registered `EndpointRule` unique keys for current record."""
         raise NotImplementedError()
+
+
+def is_registry_sync_column_ready(cr, table):
+    if tools.sql.column_exists(cr, table, "registry_sync"):
+        return True
+    # Depending on your modules inheritance and upgrade order
+    # when you introduce this mixin on an existing model
+    # it might happen that `_register_hook`
+    # gets called before the model's table is ready
+    # (eg: another odoo service loading the env before the upgrade happens).
+    # Let if fail gracefully since the hook will be called again later.
+    _logger.warning(
+        "Column %s.registry_sync is not ready yet. "
+        "Controllers registration skipped.",
+        table,
+    )
+    return False
