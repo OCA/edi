@@ -119,7 +119,9 @@ class AccountInvoiceImport(models.TransientModel):
         #                              # a specific journal
         # "currency": {
         #    "iso": "EUR",
-        #    "currency_symbol": u"€",  # The one or the other
+        #    "iso_or_symbol": "€",  # The one or the other
+        #    "symbol": "$",
+        #    "country_code": "US",
         #    },
         # 'date': '2015-10-08',  # Must be a string
         # 'date_due': '2015-11-07',
@@ -134,11 +136,16 @@ class AccountInvoiceImport(models.TransientModel):
         #       'name': 'Capitaine Train',
         #       'street': '27 rue Henri Rolland',
         #       'street2': 'ZAC des cactus',
+        #       'street3': '3rd floor',
         #       'city': 'Villeurbanne',
         #       'zip': '69100',
         #       'country_code': 'FR',
         #       'state_code': False,
         #       'phone': '+33 4 72 42 24 42',
+        #       'mobile': '+33 4 72 42 24 43',
+        #       'ref': 'C1242',
+        #       'siren': '123456789',
+        #       'coc_registration_number': '123456789',
         #       },
         # 'company': {'vat': 'FR12123456789'}, # Rarely set in invoices
         #                                      # Only used to check we are not
@@ -742,6 +749,7 @@ class AccountInvoiceImport(models.TransientModel):
             "default_city": partner_dict.get("city"),
             "default_website": partner_dict.get("website"),
             "default_siren": partner_dict.get("siren"),
+            "default_ref": partner_dict.get("ref"),
             "default_coc_registration_number": partner_dict.get(
                 "coc_registration_number"
             ),
