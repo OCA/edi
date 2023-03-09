@@ -119,7 +119,9 @@ class AccountInvoiceImport(models.TransientModel):
         #                              # a specific journal
         # "currency": {
         #    "iso": "EUR",
-        #    "currency_symbol": u"€",  # The one or the other
+        #    "iso_or_symbol": "€",  # The one or the other
+        #    "symbol": "$",
+        #    "country_code": "US",
         #    },
         # 'date': '2015-10-08',  # Must be a string
         # 'date_due': '2015-11-07',
