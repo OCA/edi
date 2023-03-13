@@ -33,6 +33,7 @@ addon | version | maintainers | summary
 [edi_storage_oca](edi_storage_oca/) | 15.0.1.2.0 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_voxel_account_invoice_oca](edi_voxel_account_invoice_oca/) | 15.0.1.0.0 |  | Sends account invoices to Voxel.
 [edi_voxel_oca](edi_voxel_oca/) | 15.0.1.0.0 |  | Base module for connecting with Voxel
+[edi_voxel_stock_picking_oca](edi_voxel_stock_picking_oca/) | 15.0.1.0.0 |  | Sends stock picking report to Voxel.
 [edi_webservice_oca](edi_webservice_oca/) | 15.0.1.1.0 |  | Defines webservice integration from EDI Exchange records
 
 [//]: # (end addons)
