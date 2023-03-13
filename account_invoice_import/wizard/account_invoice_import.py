@@ -136,11 +136,15 @@ class AccountInvoiceImport(models.TransientModel):
         #       'name': 'Capitaine Train',
         #       'street': '27 rue Henri Rolland',
         #       'street2': 'ZAC des cactus',
+        #       'street3': '3rd floor',
         #       'city': 'Villeurbanne',
         #       'zip': '69100',
         #       'country_code': 'FR',
         #       'state_code': False,
         #       'phone': '+33 4 72 42 24 42',
+        #       'mobile': '+33 4 72 42 24 43',
+        #       'siren': '123456789',
+        #       'coc_registration_number': '123456789',
         #       },
         # 'company': {'vat': 'FR12123456789'}, # Rarely set in invoices
         #                                      # Only used to check we are not
