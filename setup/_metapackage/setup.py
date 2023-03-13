@@ -20,6 +20,7 @@ setuptools.setup(
         'odoo-addon-edi_storage_oca>=15.0dev,<15.1dev',
         'odoo-addon-edi_voxel_account_invoice_oca>=15.0dev,<15.1dev',
         'odoo-addon-edi_voxel_oca>=15.0dev,<15.1dev',
+        'odoo-addon-edi_voxel_stock_picking_oca>=15.0dev,<15.1dev',
         'odoo-addon-edi_webservice_oca>=15.0dev,<15.1dev',
     ],
     classifiers=[
