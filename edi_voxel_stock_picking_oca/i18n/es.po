@@ -40,11 +40,6 @@ msgid "Config Settings"
 msgstr "Configuración"
 
 #. module: edi_voxel_stock_picking_oca
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_report_edi_voxel_stock_picking_oca_template_voxel_picking__display_name
-msgid "Display Name"
-msgstr "Nombre mostrado"
-
-#. module: edi_voxel_stock_picking_oca
 #: model:ir.model,name:edi_voxel_stock_picking_oca.model_report_edi_voxel_stock_picking_oca_template_voxel_picking
 #, fuzzy
 msgid "Edi Voxel Stock picking Report"
@@ -58,9 +53,9 @@ msgid "Edi Voxel: Update stock picking export status"
 msgstr "Edi Voxel: Actualizar estado de la exportación a Albaranes a Voxel"
 
 #. module: edi_voxel_stock_picking_oca
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_report_edi_voxel_stock_picking_oca_template_voxel_picking__id
-msgid "ID"
-msgstr "ID (identificación)"
+#: model:ir.model.fields,help:edi_voxel_stock_picking_oca.field_stock_picking__voxel_state
+msgid "Indicates the status of sending report to Voxel"
+msgstr ""
 
 #. module: edi_voxel_stock_picking_oca
 #: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_stock_picking__voxel_job_ids
@@ -68,9 +63,9 @@ msgid "Jobs"
 msgstr "Trabajos"
 
 #. module: edi_voxel_stock_picking_oca
-#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_report_edi_voxel_stock_picking_oca_template_voxel_picking____last_update
-msgid "Last Modified on"
-msgstr "Última modificación en"
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_stock_picking__processing_error
+msgid "Processing Error"
+msgstr ""
 
 #. module: edi_voxel_stock_picking_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking_oca.view_picking_form
@@ -122,6 +117,11 @@ msgstr "Voxel"
 #: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_stock_picking__voxel_enabled
 msgid "Voxel Enabled"
 msgstr "Voxel habilitado"
+
+#. module: edi_voxel_stock_picking_oca
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_stock_picking__voxel_filename
+msgid "Voxel Filename"
+msgstr ""
 
 #. module: edi_voxel_stock_picking_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_stock_picking_oca.view_picking_form
@@ -180,9 +180,28 @@ msgid "Voxel report processing error"
 msgstr "Envíos a Voxel con error de procesamiento"
 
 #. module: edi_voxel_stock_picking_oca
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_stock_picking__voxel_state
+msgid "Voxel send state"
+msgstr ""
+
+#. module: edi_voxel_stock_picking_oca
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_stock_picking__voxel_xml_report
+msgid "XML Report"
+msgstr ""
+
+#. module: edi_voxel_stock_picking_oca
 #: model:ir.actions.report,print_report_name:edi_voxel_stock_picking_oca.report_voxel_picking
 msgid "object._get_voxel_filename()"
 msgstr ""
+
+#~ msgid "Display Name"
+#~ msgstr "Nombre mostrado"
+
+#~ msgid "ID"
+#~ msgstr "ID (identificación)"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Última modificación en"
 
 #~ msgid ""
 #~ "You can not cancel this delivery order because there is a job running!"
