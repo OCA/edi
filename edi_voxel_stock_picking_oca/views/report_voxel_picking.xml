@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="report_voxel_picking" model="ir.actions.report">
+        <field name="name">Voxel Picking Operations</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-xml</field>
+        <field
+            name="report_name"
+        >edi_voxel_stock_picking_oca.template_voxel_picking</field>
+        <field name="binding_model_id" ref="model_stock_picking" />
+        <field name="binding_type">report</field>
+        <field name="print_report_name">object._get_voxel_filename()</field>
+    </record>
+    <template id="template_voxel_picking">
+        <t t-call="edi_voxel_oca.voxel_template" />
+    </template>
+</odoo>
