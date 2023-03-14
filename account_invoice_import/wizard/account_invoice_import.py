@@ -143,6 +143,7 @@ class AccountInvoiceImport(models.TransientModel):
         #       'state_code': False,
         #       'phone': '+33 4 72 42 24 42',
         #       'mobile': '+33 4 72 42 24 43',
+        #       'ref': 'C1242',
         #       'siren': '123456789',
         #       'coc_registration_number': '123456789',
         #       },
@@ -748,6 +749,7 @@ class AccountInvoiceImport(models.TransientModel):
             "default_city": partner_dict.get("city"),
             "default_website": partner_dict.get("website"),
             "default_siren": partner_dict.get("siren"),
+            "default_ref": partner_dict.get("ref"),
             "default_coc_registration_number": partner_dict.get(
                 "coc_registration_number"
             ),
