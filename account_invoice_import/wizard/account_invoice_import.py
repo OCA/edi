@@ -119,7 +119,8 @@ class AccountInvoiceImport(models.TransientModel):
         #                              # a specific journal
         # 'currency': {
         #    'iso': 'EUR',
-        #    'currency_symbol': u'€',  # The one or the other
+        #    'country_code': 'FR',
+        #    'currency_symbol': '€',  # The one or the other
         #    },
         # 'date': '2015-10-08',  # Must be a string
         # 'date_due': '2015-11-07',
@@ -139,6 +140,7 @@ class AccountInvoiceImport(models.TransientModel):
         #       'country_code': 'FR',
         #       'state_code': False,
         #       'phone': '+33 4 72 42 24 42',
+        #       'mobile': '+33 6 42 12 42 12',
         #       },
         # 'company': {'vat': 'FR12123456789'}, # Rarely set in invoices
         #                                      # Only used to check we are not
@@ -1021,7 +1023,7 @@ class AccountInvoiceImport(models.TransientModel):
                         )
                     )
                 il_vals["account_id"] = company.adjustment_credit_account_id.id
-        logger.debug("Prepared global ajustment invoice line %s", il_vals)
+        logger.debug("Prepared global adjustment invoice line %s", il_vals)
         return il_vals
 
     @api.model
@@ -1093,7 +1095,7 @@ class AccountInvoiceImport(models.TransientModel):
                     )._recompute_dynamic_lines(recompute_all_taxes=True)
                     invoice._check_balanced()
                     logger.info("Adjustment invoice line created")
-        # Fallback: create global ajustment line
+        # Fallback: create global adjustment line
         if float_compare(
             parsed_inv["amount_untaxed"],
             invoice.amount_untaxed,
