@@ -311,7 +311,7 @@ class BusinessDocumentImport(models.AbstractModel):
 
         # Search on VAT
         if partner_dict.get("vat"):
-            vat = partner_dict["vat"]
+            vat = partner_dict["vat"].replace(" ", "").upper()
             partner = rpo.search(domain + [("vat", "=", vat)], limit=1, order=order)
             if partner:
                 return partner
@@ -650,6 +650,7 @@ class BusinessDocumentImport(models.AbstractModel):
             'iso': 'USD',  # If we have ISO, no need to have more keys
             'symbol': '$',
             'country_code': 'US',
+            'iso_or_symbol': '$',
             }
         """
         if not currency_dict:
@@ -835,7 +836,10 @@ class BusinessDocumentImport(models.AbstractModel):
             domain.append(("price_include", "=", True))
         # with the code above, if you set price_include=None, it will
         # won't depend on the value of the price_include parameter
-        assert tax_dict.get("amount_type") in ["fixed", "percent"], "bad tax type"
+        assert tax_dict.get("amount_type") in [
+            "fixed",
+            "percent",
+        ], "bad tax type, has to be fixed or percent"
         assert "amount" in tax_dict, "Missing amount key in tax_dict"
         domain.append(("amount_type", "=", tax_dict["amount_type"]))
         if tax_dict.get("unece_type_code"):
