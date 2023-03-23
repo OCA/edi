@@ -318,7 +318,7 @@ class AccountInvoiceImport(models.TransientModel):
                             "lines of the invoice. You should update the Invoice Import "
                             "Configuration of "
                             "<a href=# data-oe-model=res.partner "
-                            "data-oe-id={partner_id}>{partner_name}</a> "
+                            "data-oe-id=%(partner_id)s>%(partner_name)s</a> "
                             "to set a Single Line method.",
                             partner_id=partner.id,
                             partner_name=partner.display_name,
@@ -391,12 +391,10 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(
                     _(
                         "Account missing on product '%(product)s' or on it's related "
-                        "category '%(product_categ)s'."
+                        "category '%(product_categ)s'.",
+                        product=product.display_name,
+                        product_categ=product.categ_id.display_name,
                     )
-                    % {
-                        "product": product.display_name,
-                        "product_categ": product.categ_id.display_name,
-                    }
                 )
             if line.get("name"):
                 il_vals["name"] = line["name"]
@@ -665,13 +663,11 @@ class AccountInvoiceImport(models.TransientModel):
                         "The vendor to update '%(partner_name)s' already "
                         "has a VAT number (%(partner_vat)s) "
                         "which is different from the vendor VAT number "
-                        "of the invoice (%(invoice_vat)s)."
+                        "of the invoice (%(invoice_vat)s).",
+                        partner_name=self.partner_id.display_name,
+                        partner_vat=self.partner_id.vat,
+                        invoice_vat=self.partner_vat,
                     )
-                    % {
-                        "partner_name": self.partner_id.display_name,
-                        "partner_vat": self.partner_id.vat,
-                        "invoice_vat": self.partner_vat,
-                    }
                 )
 
         else:
@@ -684,13 +680,11 @@ class AccountInvoiceImport(models.TransientModel):
                             "The vendor to update '%(partner_name)s' already "
                             "has a country (%(partner_country)s) "
                             "which is different from the country of the vendor "
-                            "of the invoice (%(invoice_country)s)."
+                            "of the invoice (%(invoice_country)s).",
+                            partner_name=self.partner_id.display_name,
+                            partner_country=self.partner_id.country_id.display_name,
+                            invoice_country=self.partner_country_id.display_name,
                         )
-                        % {
-                            "partner_name": self.partner_id.display_name,
-                            "partner_country": self.partner_id.country_id.display_name,
-                            "invoice_country": self.partner_country_id.display_name,
-                        }
                     )
             else:
                 vals["country_id"] = self.partner_country_id.id
@@ -808,13 +802,11 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(
                     _(
                         "This invoice already exists in Odoo. It's "
-                        "Supplier Invoice Number is '%(invoice_number)s' and it's Odoo number "
-                        "is '%(odoo_invoice_number)s'."
+                        "Supplier Invoice Number is '%(invoice_number)s' and it's "
+                        "Odoo number is '%(odoo_invoice_number)s'.",
+                        invoice_number=parsed_inv.get("invoice_number"),
+                        odoo_invoice_number=existing_inv.name,
                     )
-                    % {
-                        "invoice_number": parsed_inv.get("invoice_number"),
-                        "odoo_invoice_number": existing_inv.name,
-                    }
                 )
             if self.import_config_id:  # button called from 'config' step
                 wiz_vals["import_config_id"] = self.import_config_id.id
@@ -1043,12 +1035,10 @@ class AccountInvoiceImport(models.TransientModel):
                         "<b>Missing Invoice Import Configuration</b> on partner "
                         "<a href=# data-oe-model=res.partner "
                         "data-oe-id=%(invoice_id)s>%(invoice_display_name)s</a>: "
-                        "the imported invoice is incomplete."
+                        "the imported invoice is incomplete.",
+                        invoice_id=invoice.commercial_partner_id.id,
+                        invoice_display_name=invoice.commercial_partner_id.display_name,
                     )
-                    % {
-                        "invoice_id": invoice.commercial_partner_id.id,
-                        "invoice_display_name": invoice.commercial_partner_id.display_name,
-                    }
                 )
             return
         inv_cur = invoice.currency_id
@@ -1160,17 +1150,15 @@ class AccountInvoiceImport(models.TransientModel):
                         body=_(
                             "The <b>tax amount</b> for tax %(tax_name)s has been "
                             "<b>forced</b> to %(forced_amount)s (amount computed by "
-                            "Odoo was: %(initial_amount)s)."
-                        )
-                        % {
-                            "tax_name": mline.tax_line_id.display_name,
-                            "forced_amount": format_amount(
+                            "Odoo was: %(initial_amount)s).",
+                            tax_name=mline.tax_line_id.display_name,
+                            forced_amount=format_amount(
                                 self.env, new_amount_currency, invoice.currency_id
                             ),
-                            "initial_amount": format_amount(
+                            initial_amount=format_amount(
                                 self.env, mline.amount_currency, invoice.currency_id
                             ),
-                        }
+                        )
                     )
                     new_balance = invoice.currency_id._convert(
                         new_amount_currency,
@@ -1363,12 +1351,10 @@ class AccountInvoiceImport(models.TransientModel):
                     "The supplier of the imported invoice "
                     "(%(import_invoice_partner_name)s) is different from "
                     "the supplier of the invoice to update "
-                    "(%(update_invoice_partner_name)s)."
+                    "(%(update_invoice_partner_name)s).",
+                    import_invoice_partner_name=partner.display_name,
+                    update_invoice_partner_name=invoice.commercial_partner_id.display_name,
                 )
-                % {
-                    "import_invoice_partner_name": partner.display_name,
-                    "update_invoice_partner_name": invoice.commercial_partner_id.display_name,
-                }
             )
         if not self.import_config_id:
             raise UserError(_("You must select an Invoice Import Configuration."))
@@ -1381,12 +1367,10 @@ class AccountInvoiceImport(models.TransientModel):
                 _(
                     "The currency of the imported invoice (%(import_invoice_currency)s) "
                     "is different from the currency of the existing invoice "
-                    "(%(update_invoice_currency)s)."
+                    "(%(update_invoice_currency)s).",
+                    import_invoice_currency=currency.name,
+                    update_invoice_currency=invoice.currency_id.name,
                 )
-                % {
-                    "import_invoice_currency": currency.name,
-                    "update_invoice_currency": invoice.currency_id.name,
-                }
             )
         vals = self._prepare_update_invoice_vals(parsed_inv, invoice)
         logger.debug("Updating supplier invoice with vals=%s", vals)
