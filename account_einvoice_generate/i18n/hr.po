@@ -1,0 +1,99 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_e-invoice_generate
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2019-11-14 16:34+0000\n"
+"Last-Translator: Bole <bole@dajmi5.com>\n"
+"Language-Team: none\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.8\n"
+
+#. module: account_einvoice_generate
+#: model_terms:ir.ui.view,arch_db:account_einvoice_generate.view_account_config_settings
+#, fuzzy
+msgid ""
+"<span class=\"o_form_label\">Select Format</span>\n"
+"                            <span class=\"fa fa-lg fa-building-o\" title="
+"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
+"\"/>"
+msgstr ""
+"<span class=\"fa fa-lg fa-building-o\" title=\"Vrijednosti postavljene ovdje "
+"su specifične za svaku tvrtku\" groups=\"base.group_multi_company\"/>"
+
+#. module: account_einvoice_generate
+#: model:ir.model,name:account_einvoice_generate.model_res_company
+msgid "Companies"
+msgstr "Tvrtke"
+
+#. module: account_einvoice_generate
+#: model:ir.model,name:account_einvoice_generate.model_res_config_settings
+msgid "Config Settings"
+msgstr "Postavke"
+
+#. module: account_einvoice_generate
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_res_company__display_name
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_einvoice_generate
+#: model_terms:ir.ui.view,arch_db:account_einvoice_generate.view_account_config_settings
+msgid "Electronic Invoices"
+msgstr "Elektronički računi"
+
+#. module: account_einvoice_generate
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_account_move__id
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_res_company__id
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_res_config_settings__id
+msgid "ID"
+msgstr ""
+
+#. module: account_einvoice_generate
+#: model:ir.model,name:account_einvoice_generate.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: account_einvoice_generate
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_account_move____last_update
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_res_company____last_update
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_res_config_settings____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: account_einvoice_generate
+#: model:ir.model.fields.selection,name:account_einvoice_generate.selection__res_company__xml_format_in_pdf_invoice__none
+msgid "None"
+msgstr "Ništa"
+
+#. module: account_einvoice_generate
+#: model_terms:ir.ui.view,arch_db:account_einvoice_generate.view_account_config_settings
+msgid "Select the format of your e-invoices."
+msgstr "Odaberite format za vaše elektroničke račune."
+
+#. module: account_einvoice_generate
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_res_company__xml_format_in_pdf_invoice
+#: model:ir.model.fields,field_description:account_einvoice_generate.field_res_config_settings__xml_format_in_pdf_invoice
+msgid "XML Format embedded in PDF invoice"
+msgstr "XML format ugnježđen u PDF račun"
+
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#~ msgid "Invoice"
+#~ msgstr "Račun"
+
+#~ msgid "Select Format"
+#~ msgstr "Odabir formata"
+
+#~ msgid "Universal Business Language (UBL)"
+#~ msgstr "Universal Business Language (UBL)"
