@@ -167,7 +167,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         try:
             bdio._match_product(product_dict, [], seller=False)
             raise_test = False
-        except Exception:
+        except Exception:  # pylint: disable=except-pass
             pass
         self.assertTrue(raise_test)
 
