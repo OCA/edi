@@ -55,6 +55,10 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
     date_separator = fields.Selection(
         "_date_separator_sel",
         string="Specific Date Separator",
+        compute="_compute_date_separator",
+        readonly=False,
+        store=True,
+        precompute=True,
         help="Leave empty if the format used is the same as the format defined "
         "in the global section.",
     )
@@ -72,6 +76,10 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             ("position_max", "Specific Position from Max"),
         ],
         required=True,
+        compute="_compute_extract_rule",
+        readonly=False,
+        store=True,
+        precompute=True,
     )
     position = fields.Integer(default=2)
 
@@ -107,18 +115,17 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                     )
                 )
 
-    @api.onchange("name")
-    def field_change(self):
-        if not self.extract_rule:
-            if self.name == "amount_total":
-                self.extract_rule = "max"
-            elif self.name in ("invoice_number", "description", "date"):
-                self.extract_rule = "first"
+    @api.depends("name")
+    def _compute_extract_rule(self):
+        for field in self:
+            if field.name in ("invoice_number", "description", "date"):
+                field.extract_rule = "first"
 
-    @api.onchange("date_format")
-    def date_format_change(self):
-        if self.date_format and "month" in self.date_format:
-            self.date_separator = "space"
+    @api.depends("date_format")
+    def _compute_date_separator(self):
+        for field in self:
+            if field.date_format and "month" in field.date_format:
+                field.date_separator = "space"
 
     # This method is just 1 line over the complexity limit of C901
     # and I don't see a good way to split it
