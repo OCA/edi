@@ -4,10 +4,10 @@
 
 {
     "name": "Account Invoice Import Factur-X",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Invoicing Management",
     "license": "AGPL-3",
-    "summary": "Import Factur-X/ZUGFeRD supplier invoices/refunds",
+    "summary": "Import Factur-X/ZUGFeRD Vendor Bills",
     "author": "Akretion,Odoo Community Association (OCA)",
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
