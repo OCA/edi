@@ -9,69 +9,74 @@ from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_compare
 
 
-class TestInvoiceImport(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.partner = self.env["res.partner"].create(
+class TestInvoiceImportSimplePdf(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.company = cls.env.ref("base.main_company")
+        cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Test Partner",
                 "is_company": True,
-                "country_id": self.env.ref("base.fr").id,
+                "country_id": cls.env.ref("base.fr").id,
                 "simple_pdf_date_format": "dd-mm-y4",
                 "simple_pdf_date_separator": "slash",
             }
         )
-        aiispfo = self.env["account.invoice.import.simple.pdf.fields"]
-        self.date_field = aiispfo.create(
+        aiispfo = cls.env["account.invoice.import.simple.pdf.fields"]
+        cls.date_field = aiispfo.create(
             {
                 "name": "date",
                 "extract_rule": "first",
-                "partner_id": self.partner.id,
+                "partner_id": cls.partner.id,
             }
         )
-        self.amount_field = aiispfo.create(
+        cls.amount_field = aiispfo.create(
             {
                 "name": "amount_total",
                 "extract_rule": "first",
-                "partner_id": self.partner.id,
+                "partner_id": cls.partner.id,
             }
         )
-        self.inv_num_field = aiispfo.create(
+        cls.inv_num_field = aiispfo.create(
             {
                 "name": "invoice_number",
                 "extract_rule": "first",
-                "partner_id": self.partner.id,
+                "partner_id": cls.partner.id,
             }
         )
 
-        self.partner_config = self.partner._simple_pdf_partner_config()
-        self.test_info = {"test_mode": True}
-        self.env["account.invoice.import"]._simple_pdf_update_test_info(self.test_info)
-        aiispfo = self.env["account.invoice.import.simple.pdf.fields"]
-        self.space_chars = list(self.test_info["space_pattern"][1:-1])
-        frtax = self.env["account.tax"].create(
-            {
-                "name": "French VAT purchase 20.0%",
-                "description": "FR-VAT-buy-20.0",
-                "amount": 20,
-                "amount_type": "percent",
-                "type_tax_use": "purchase",
-            }
+        cls.partner_config = cls.partner._simple_pdf_partner_config()
+        cls.test_info = {"test_mode": True}
+        cls.env["account.invoice.import"]._simple_pdf_update_test_info(cls.test_info)
+        cls.space_chars = list(cls.test_info["space_pattern"][1:-1])
+        purchase_tax = cls.env["account.tax"].search(
+            [
+                ("type_tax_use", "=", "purchase"),
+                ("amount_type", "=", "percent"),
+                ("amount", ">", 5),
+                ("company_id", "=", cls.company.id),
+                ("price_include", "=", False),
+            ],
+            limit=1,
         )
-        self.module = "account_invoice_import_simple_pdf"
-        self.product = self.env.ref("%s.mobile_phone" % self.module)
-        self.product.supplier_taxes_id = [(6, 0, [frtax.id])]
+        cls.module = "account_invoice_import_simple_pdf"
+        cls.product = cls.env.ref("%s.mobile_phone" % cls.module)
+        cls.product.with_company(cls.company.id).write(
+            {"supplier_taxes_id": [(6, 0, [purchase_tax.id])]}
+        )
 
         # for the full test with a PDF invoice
-        self.partner_ak = self.env["res.partner"].create(
+        cls.partner_ak = cls.env["res.partner"].create(
             {
                 "name": "Akretion France",
                 "is_company": True,
-                "country_id": self.env.ref("base.fr").id,
+                "country_id": cls.env.ref("base.fr").id,
                 "simple_pdf_date_format": "dd-mm-y4",
                 "simple_pdf_date_separator": "slash",
                 "vat": "FR86792377731",
-                "simple_pdf_currency_id": self.env.ref("base.EUR").id,
+                "simple_pdf_currency_id": cls.env.ref("base.EUR").id,
                 "simple_pdf_decimal_separator": "dot",
                 "simple_pdf_thousand_separator": "comma",
                 "simple_pdf_invoice_number_ids": [
@@ -154,25 +159,26 @@ class TestInvoiceImport(TransactionCase):
                 ],
             }
         )
-        self.ak_invoice_config = self.env["account.invoice.import.config"].create(
+        cls.ak_invoice_config = cls.env["account.invoice.import.config"].create(
             {
                 "name": "Akretion France",
-                "partner_id": self.partner_ak.id,
+                "partner_id": cls.partner_ak.id,
                 "invoice_line_method": "1line_static_product",
                 "label": "My custom line label",
-                "static_product_id": self.product.id,
+                "static_product_id": cls.product.id,
+                "company_id": cls.company.id,
             }
         )
 
-        self.ak_filename = "akretion_france-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (self.module, self.ak_filename), "rb") as f:
-            self.ak_pdf_file = f.read()
-            self.ak_pdf_file_b64 = base64.b64encode(self.ak_pdf_file)
+        cls.ak_filename = "akretion_france-test.pdf"
+        with file_open("%s/tests/pdf/%s" % (cls.module, cls.ak_filename), "rb") as f:
+            cls.ak_pdf_file = f.read()
+            cls.ak_pdf_file_b64 = base64.b64encode(cls.ak_pdf_file)
 
-        self.bt_filename = "bouygues_telecom-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (self.module, self.bt_filename), "rb") as f:
-            self.bt_pdf_file = f.read()
-            self.bt_pdf_file_b64 = base64.b64encode(self.bt_pdf_file)
+        cls.bt_filename = "bouygues_telecom-test.pdf"
+        with file_open("%s/tests/pdf/%s" % (cls.module, cls.bt_filename), "rb") as f:
+            cls.bt_pdf_file = f.read()
+            cls.bt_pdf_file_b64 = base64.b64encode(cls.bt_pdf_file)
 
     def test_date_parsing(self):
         date_test = {
@@ -526,6 +532,7 @@ class TestInvoiceImport(TransactionCase):
                 ("state", "=", "draft"),
                 ("move_type", "=", "in_invoice"),
                 ("ref", "=", "VT/2022/0001"),
+                ("company_id", "=", self.company.id),
             ]
         )
         inv_config = self.ak_invoice_config

@@ -5,3 +5,6 @@ phonenumbers
 pydifact
 pytz
 xmltodict
+dateparser
+pdfplumber
+regex

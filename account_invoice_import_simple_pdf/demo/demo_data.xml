@@ -6,7 +6,7 @@
     <field name="categ_id" ref="product.product_category_5" />
     <field name="sale_ok" eval="False" />
     <field name="purchase_ok" eval="True" />
-    <field name="type">service</field>
+    <field name="detailed_type">service</field>
 </record>
 
 <record id="bouygues_telecom" model="res.partner">
@@ -62,6 +62,7 @@
 <record id="bouygues_telecom_import_config" model="account.invoice.import.config">
     <field name="name">Bouygues Telecom mobile</field>
     <field name="partner_id" ref="bouygues_telecom" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">1line_static_product</field>
     <field name="label">Mobile phone: subscription and communication</field>
     <field name="static_product_id" ref="mobile_phone" />
