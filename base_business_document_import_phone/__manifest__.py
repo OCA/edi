@@ -4,7 +4,7 @@
 
 {
     "name": "Base Business Document Import Phone",
-    "version": "14.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Hidden",
     "license": "AGPL-3",
     "summary": "Use phone numbers to match partners upon import of "
