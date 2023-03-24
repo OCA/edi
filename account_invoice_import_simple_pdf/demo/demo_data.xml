@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+<record id="mobile_phone" model="product.product">
+    <field name="name">Mobile phone</field>
+    <field name="categ_id" ref="product.product_category_5" />
+    <field name="sale_ok" eval="False" />
+    <field name="purchase_ok" eval="True" />
+    <field name="type">service</field>
+</record>
+
+<record id="bouygues_telecom" model="res.partner">
+    <field name="name">Bouygues Telecom</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="street">37 rue Boissière</field>
+    <field name="zip">75116</field>
+    <field name="city">Paris</field>
+    <field name="country_id" ref="base.fr" />
+    <field name="website">http://www.bouyguestelecom.fr</field>
+    <field name="vat">FR74397480930</field>
+    <field name="simple_pdf_date_format">dd-mm-y4</field>
+    <field name="simple_pdf_date_separator">slash</field>
+    <field name="simple_pdf_currency_id" ref="base.EUR" />
+    <field name="simple_pdf_pages">first</field>
+    <field name="simple_pdf_decimal_separator">comma</field>
+    <field name="simple_pdf_thousand_separator">space</field>
+</record>
+
+<record id="inv_number1" model="account.invoice.import.simple.pdf.invoice.number">
+    <field name="partner_id" ref="bouygues_telecom" />
+    <field name="string_type">digit</field>
+    <field name="occurrence_min">14</field>
+    <field name="occurrence_max">14</field>
+</record>
+
+<record id="inv_amount_total" model="account.invoice.import.simple.pdf.fields">
+    <field name="partner_id" ref="bouygues_telecom" />
+    <field name="name">amount_total</field>
+    <field name="extract_rule">max</field>
+</record>
+
+<record id="inv_amount_untaxed" model="account.invoice.import.simple.pdf.fields">
+    <field name="partner_id" ref="bouygues_telecom" />
+    <field name="name">amount_untaxed</field>
+    <field name="extract_rule">first</field>
+    <field name="start">Montant de la facture soumis à TVA</field>
+</record>
+
+<record id="inv_date" model="account.invoice.import.simple.pdf.fields">
+    <field name="partner_id" ref="bouygues_telecom" />
+    <field name="name">date</field>
+    <field name="extract_rule">first</field>
+</record>
+
+<record id="inv_invoice_number" model="account.invoice.import.simple.pdf.fields">
+    <field name="partner_id" ref="bouygues_telecom" />
+    <field name="name">invoice_number</field>
+    <field name="extract_rule">first</field>
+</record>
+
+<record id="bouygues_telecom_import_config" model="account.invoice.import.config">
+    <field name="name">Bouygues Telecom mobile</field>
+    <field name="partner_id" ref="bouygues_telecom" />
+    <field name="invoice_line_method">1line_static_product</field>
+    <field name="label">Mobile phone: subscription and communication</field>
+    <field name="static_product_id" ref="mobile_phone" />
+</record>
+
+</odoo>
