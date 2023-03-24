@@ -4,11 +4,12 @@
 
 {
     "name": "Account Invoice Import UBL",
-    "version": "14.0.1.0.1",
+    "version": "16.0.1.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Import UBL XML supplier invoices/refunds",
     "author": "Akretion,Odoo Community Association (OCA)",
+    "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import", "base_ubl"],
     "data": ["wizard/account_invoice_import_view.xml"],
