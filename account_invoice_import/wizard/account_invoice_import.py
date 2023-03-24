@@ -1010,7 +1010,6 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def _prepare_global_adjustment_line(self, diff_amount, invoice, import_config):
-        amlo = self.env["account.move.line"]
         prec = invoice.currency_id.rounding
         sign = diff_amount > 0 and 1 or -1
         il_vals = {
@@ -1022,12 +1021,13 @@ class AccountInvoiceImport(models.TransientModel):
         if import_config["invoice_line_method"] == "nline_no_product":
             il_vals["account_id"] = import_config["account"].id
         elif import_config["invoice_line_method"] == "nline_static_product":
-            account = amlo.get_invoice_line_account(
-                invoice.type,
-                import_config["product"],
-                invoice.fiscal_position_id,
-                invoice.company_id,
+            accounts = import_config["product"].product_tmpl_id.get_product_accounts(
+                fiscal_pos=invoice.fiscal_position_id
             )
+            if invoice.move_type in ("out_invoice", "out_refund"):
+                account = accounts["income"]
+            else:
+                account = accounts["expense"]
             il_vals["account_id"] = account.id
         elif import_config["invoice_line_method"] == "nline_auto_product":
             res_cmp = float_compare(diff_amount, 0, precision_rounding=prec)
