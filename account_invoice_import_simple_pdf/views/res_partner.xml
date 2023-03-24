@@ -69,54 +69,63 @@
                         name="invoice_import_simple_pdf_number"
                         string="Invoice Number Format"
                     >
-                            <field name="simple_pdf_invoice_number_ids" nolabel="1" />
+                            <field
+                            name="simple_pdf_invoice_number_ids"
+                            nolabel="1"
+                            colspan="2"
+                        />
                     </group>
                     <group
                         name="invoice_import_simple_pdf_fields"
                         string="Field Extraction Rules"
-                        col="1"
                     >
                         <button
                             name="pdf_simple_generate_default_fields"
                             type="object"
                             string="Generate Default Extract Rules"
                             attrs="{'invisible': [('simple_pdf_field_ids', '!=', [])]}"
+                            colspan="2"
                         />
-                        <field name="simple_pdf_field_ids" nolabel="1" />
+                        <field name="simple_pdf_field_ids" nolabel="1" colspan="2" />
                     </group>
-                    <group name="pdf_simple_test" string="Test" col="1">
-                            <group name="pdf_simple_test_file" col="3">
+                    <group name="pdf_simple_test" string="Test File" col="4">
                                 <field
-                                name="simple_pdf_test_file"
-                                filename="simple_pdf_test_filename"
-                            />
-                                <div name="pdf_simple_test_buttons">
+                            name="simple_pdf_test_file"
+                            filename="simple_pdf_test_filename"
+                        />
                                 <button
-                                    type="object"
-                                    name="pdf_simple_test_run"
-                                    string="Run Test"
-                                    class="btn-primary"
-                                />
+                            type="object"
+                            name="pdf_simple_test_run"
+                            string="Run Test"
+                            class="btn-primary"
+                        />
                                 <button
-                                    name="pdf_simple_test_cleanup"
-                                    type="object"
-                                    string="Cleanup Test Data"
-                                    attrs="{'invisible': [('simple_pdf_test_file', '=', False), ('simple_pdf_test_results', '=', False), ('simple_pdf_test_raw_text', '=', False)]}"
-                                />
+                            name="pdf_simple_test_cleanup"
+                            type="object"
+                            string="Cleanup Test Data"
+                            attrs="{'invisible': [('simple_pdf_test_file', '=', False), ('simple_pdf_test_results', '=', False), ('simple_pdf_test_raw_text', '=', False)]}"
+                        />
 
-                        </div>
                             </group>
-                        <group name="pdf_simple_test_results" string="Test Results">
-                                <field nolabel="1" name="simple_pdf_test_results" />
+                            <group name="pdf_simple_test_results" string="Test Results">
+                                <field
+                            nolabel="1"
+                            name="simple_pdf_test_results"
+                            colspan="2"
+                        />
                         </group>
                         <group
-                            name="pdf_simple_test_raw_text"
-                            string="Text Extraction from PDF"
-                        >
-                                <field nolabel="1" name="simple_pdf_test_raw_text" />
+                        name="pdf_simple_test_raw_text"
+                        string="Text Extraction from PDF"
+                        attrs="{'invisible': [('simple_pdf_test_raw_text', '=', False)]}"
+                    >
+                                <field
+                            nolabel="1"
+                            name="simple_pdf_test_raw_text"
+                            colspan="2"
+                        />
                         </group>
 
-                    </group>
                 </page>
             </page>
         </field>

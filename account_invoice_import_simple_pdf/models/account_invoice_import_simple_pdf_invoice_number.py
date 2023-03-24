@@ -27,7 +27,14 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
     string_type = fields.Selection("_string_type_sel", string="Type", required=True)
     fixed_char = fields.Char()
     occurrence_min = fields.Integer(string="Minimum Occurence", default=1)
-    occurrence_max = fields.Integer(string="Maximum Occurence", default=1)
+    occurrence_max = fields.Integer(
+        string="Maximum Occurence",
+        default=1,
+        compute="_compute_occurrence_max",
+        store=True,
+        precompute=True,
+        readonly=False,
+    )
 
     _sql_constraints = [
         (
@@ -73,10 +80,11 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
                         )
                     )
 
-    @api.onchange("occurrence_min")
-    def occurrence_min_change(self):
-        if self.occurrence_min > self.occurrence_max:
-            self.occurrence_max = self.occurrence_min
+    @api.depends("occurrence_min")
+    def _compute_occurrence_max(self):
+        for rec in self:
+            if rec.occurrence_min > rec.occurrence_max:
+                rec.occurrence_max = rec.occurrence_min
 
     def _prepare_invoice_number_regex(self, regex_list):
         self.ensure_one()

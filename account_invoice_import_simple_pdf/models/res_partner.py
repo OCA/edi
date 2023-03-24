@@ -11,6 +11,10 @@ from odoo.tools.misc import format_amount, format_date, format_datetime
 
 logger = logging.getLogger(__name__)
 ERROR_STYLE = ' style="color:red;"'
+SEPARATOR_INVERT_MAP = {
+    "comma": "dot",
+    "dot": "comma",
+}
 
 try:
     import regex
@@ -64,6 +68,10 @@ class ResPartner(models.Model):
         "_simple_pdf_date_separator_sel",
         # default="slash",
         string="Date Separator",
+        compute="_compute_simple_pdf_date_separator",
+        readonly=False,
+        precompute=True,
+        store=True,
         help="If the date looks like 'Sep. 4, 2021', use 'space' as date "
         "separator (Odoo will ignore the dot and comma).",
     )
@@ -73,6 +81,10 @@ class ResPartner(models.Model):
             ("comma", "comma"),
         ],
         string="Decimal Separator",
+        compute="_compute_simple_pdf_decimal_separator",
+        readonly=False,
+        precompute=True,
+        store=True,
         help="If empty, Odoo will use the decimal separator configured on "
         "the language of the partner.",
     )
@@ -85,6 +97,10 @@ class ResPartner(models.Model):
             ("apostrophe", "apostrophe"),
         ],
         string="Thousand Separator",
+        compute="_compute_simple_pdf_thousand_separator",
+        readonly=False,
+        precompute=True,
+        store=True,
         help="If empty, Odoo will use the thousand separator configured on "
         "the language of the partner.",
     )
@@ -135,18 +151,38 @@ class ResPartner(models.Model):
                     % partner.display_name
                 )
 
-    @api.onchange("simple_pdf_decimal_separator")
-    def simple_pdf_decimal_separator_change(self):
-        if (
-            self.simple_pdf_decimal_separator == "comma"
-            and self.simple_pdf_thousand_separator == "comma"
-        ):
-            self.simple_pdf_thousand_separator = "dot"
+    @api.depends("simple_pdf_decimal_separator")
+    def _compute_simple_pdf_thousand_separator(self):
+        for partner in self:
+            if (
+                partner.simple_pdf_decimal_separator
+                and partner.simple_pdf_decimal_separator
+                == partner.simple_pdf_thousand_separator
+            ):
+                partner.simple_pdf_thousand_separator = SEPARATOR_INVERT_MAP.get(
+                    partner.simple_pdf_decimal_separator
+                )
 
-    @api.onchange("simple_pdf_date_format")
-    def simple_pdf_date_format_change(self):
-        if self.simple_pdf_date_format and "month" in self.simple_pdf_date_format:
-            self.simple_pdf_date_separator = "space"
+    @api.depends("simple_pdf_thousand_separator")
+    def _compute_simple_pdf_decimal_separator(self):
+        for partner in self:
+            if (
+                partner.simple_pdf_thousand_separator
+                and partner.simple_pdf_thousand_separator
+                == partner.simple_pdf_decimal_separator
+            ):
+                partner.simple_pdf_decimal_separator = SEPARATOR_INVERT_MAP.get(
+                    partner.simple_pdf_thousand_separator
+                )
+
+    @api.depends("simple_pdf_date_format")
+    def _compute_simple_pdf_date_separator(self):
+        for partner in self:
+            if (
+                partner.simple_pdf_date_format
+                and "month" in partner.simple_pdf_date_format
+            ):
+                partner.simple_pdf_date_separator = "space"
 
     def _prepare_simple_pdf_invoice_number_regex(self):
         self.ensure_one()
