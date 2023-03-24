@@ -9,6 +9,7 @@ from tempfile import NamedTemporaryFile
 
 from odoo import _, api, models
 from odoo.exceptions import UserError
+from odoo.osv import expression
 
 logger = logging.getLogger(__name__)
 try:
@@ -220,6 +221,12 @@ class AccountInvoiceImport(models.TransientModel):
         return res
 
     @api.model
+    def _simple_pdf_keyword_fields(self):
+        return {
+            "vat": _("VAT number"),
+        }
+
+    @api.model
     def simple_pdf_match_partner(self, raw_text_no_space, test_results=None):
         if test_results is None:
             test_results = []
@@ -228,16 +235,19 @@ class AccountInvoiceImport(models.TransientModel):
         # Warning: invoices have the VAT number of the supplier, but they often
         # also have the VAT number of the customer (i.e. the VAT number of our company)
         # So we exclude it from the search
+        keyword_fields_dict = self._simple_pdf_keyword_fields()
+        keyword_fields_list = list(keyword_fields_dict.keys())
+        domain_or_list = [[(field, "!=", False)] for field in keyword_fields_list]
+        domain_or_list.append([("simple_pdf_keyword", "!=", False)])
+        field_domain = expression.OR(domain_or_list)
         partners = rpo.search_read(
-            [
-                "|",
-                ("vat", "!=", False),
-                ("simple_pdf_keyword", "!=", False),
+            field_domain
+            + [
                 ("parent_id", "=", False),
                 ("is_company", "=", True),
                 ("id", "!=", self.env.company.partner_id.id),
             ],
-            ["simple_pdf_keyword", "vat"],
+            ["simple_pdf_keyword"] + keyword_fields_list,
         )
         for partner in partners:
             if partner["simple_pdf_keyword"] and partner["simple_pdf_keyword"].strip():
@@ -252,11 +262,12 @@ class AccountInvoiceImport(models.TransientModel):
                     )
                     test_results.append("<li>%s</li>" % result_label)
                     break
-            elif partner["vat"]:
-                if partner["vat"] in raw_text_no_space:
+            for kfield, kfield_label in keyword_fields_dict.items():
+                if partner[kfield] and partner[kfield] in raw_text_no_space:
                     partner_id = partner["id"]
-                    result_label = (
-                        _("Successful match on VAT number '%s'") % partner["vat"]
+                    result_label = _("Successful match on {label} '{value}'").format(
+                        label=kfield_label,
+                        value=partner[kfield],
                     )
                     test_results.append("<li>%s</li>" % result_label)
                     break
