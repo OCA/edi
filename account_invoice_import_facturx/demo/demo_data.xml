@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
 
-<record id="charge_account" model="account.account">
-    <field name="code">606FACTURX</field>
-    <field name="name">Charge account Factur-X</field>
-    <field name="user_type_id" ref="account.data_account_type_expenses" />
-</record>
-
 <record id="jolie_boutique" model="res.partner">
     <field name="name">Ma jolie boutique</field>
     <field name="is_company" eval="True" />
@@ -27,13 +21,19 @@
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
 </record>
 
 <record id="jolie_boutique_import_config" model="account.invoice.import.config">
     <field name="name">Jolie Boutique</field>
     <field name="partner_id" ref="jolie_boutique" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">1line_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
     <field
             name="tax_ids"
             eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"
@@ -54,8 +54,13 @@
 <record id="lieferant_import_config" model="account.invoice.import.config">
     <field name="name">Lieferant</field>
     <field name="partner_id" ref="lieferant" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
 </record>
 
 
@@ -75,7 +80,12 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="name">MVM Musterhafter</field>
     <field name="partner_id" ref="mvm_musterhafter" />
     <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field name="company_id" ref="base.main_company" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
 </record>
 
 
@@ -94,8 +104,13 @@ Versicherungsverein Musterstadt a.G.</field>
 <record id="musterlieferant_import_config" model="account.invoice.import.config">
     <field name="name">MUSTERLIEFERANT</field>
     <field name="partner_id" ref="musterlieferant" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
 </record>
 
 
@@ -107,6 +122,7 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
 </record>
 
 <record id="de_vat_purchase_7" model="account.tax">
@@ -117,6 +133,14 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
+</record>
+
+<record id="tax_type_zf_insurance_tax" model="unece.code.list">
+    <field name="type">tax_type</field>
+    <field name="code">ZF_INSURANCE_TAX</field>
+    <field name="name">Insurance tax</field>
+    <field name="description">ZUGFeRD Code (temporary)</field>
 </record>
 
 <record id="de_insurance_purchase_19" model="account.tax">
@@ -125,8 +149,9 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="type_tax_use">purchase</field>
     <field name="amount">19</field>
     <field name="amount_type">percent</field>
-    <field name="unece_type_id" ref="base_facturx.tax_type_zf_insurance_tax" />
+    <field name="unece_type_id" ref="tax_type_zf_insurance_tax" />
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
 </record>
 
 <record id="de_insurance_purchase_16_34" model="account.tax">
@@ -135,8 +160,9 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="type_tax_use">purchase</field>
     <field name="amount">16.34</field>
     <field name="amount_type">percent</field>
-    <field name="unece_type_id" ref="base_facturx.tax_type_zf_insurance_tax" />
+    <field name="unece_type_id" ref="tax_type_zf_insurance_tax" />
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
 </record>
 
 <record id="test_noline" model="res.partner">
@@ -151,8 +177,13 @@ Versicherungsverein Musterstadt a.G.</field>
 <record id="test_noline_import_config" model="account.invoice.import.config">
     <field name="name">Test noline</field>
     <field name="partner_id" ref="test_noline" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">1line_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
     <field
             name="tax_ids"
             eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"
@@ -171,8 +202,13 @@ Versicherungsverein Musterstadt a.G.</field>
 <record id="test_line_import_config" model="account.invoice.import.config">
     <field name="name">Test line</field>
     <field name="partner_id" ref="test_line" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
     <field
             name="tax_ids"
             eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"

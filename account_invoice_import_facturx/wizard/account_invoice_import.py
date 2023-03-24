@@ -6,12 +6,12 @@ import logging
 
 from odoo import _, api, models
 from odoo.exceptions import UserError
-from odoo.tools import float_compare, float_is_zero
+from odoo.tools.misc import format_amount
 
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import xml_check_xsd
+    from facturx import get_level, xml_check_xsd
 except ImportError:
     logger.debug("Cannot import facturx")
 
@@ -236,7 +236,7 @@ class AccountInvoiceImport(models.TransientModel):
             if not acentry.get("name"):
                 acentry["name"] = _("Misc Charge")
         else:
-            raise UserError(_("Unknown ChargeIndicator %s", ch_indic))
+            raise UserError(_("Unknown ChargeIndicator '%s'.", ch_indic))
         acentry["name"] = "{} ({})".format(acentry["name"], label_suffix)
         taxes_xpath = self.raw_multi_xpath_helper(
             acline, ["ram:CategoryTradeTax"], namespaces
@@ -354,9 +354,17 @@ class AccountInvoiceImport(models.TransientModel):
         """Parse Cross Industry Invoice XML file"""
         logger.debug("Starting to parse XML file as Factur-X/ZUGFeRD file")
         namespaces = xml_root.nsmap
+        # reminder: level is the profile
+        try:
+            level = get_level(xml_root)
+        except Exception:
+            level = "autodetect"
+            # If it fails here, it will fail below in xml_check_xsd()
+            # with a nice error msg, so I don't raise here
+        logger.debug("level=%s", level)
         # Check XML schema to avoid headaches trying to import invalid files
         try:
-            xml_check_xsd(xml_root)
+            xml_check_xsd(xml_root, level=level)
         except Exception as e:
             raise UserError(
                 _(
@@ -364,8 +372,7 @@ class AccountInvoiceImport(models.TransientModel):
                     "according to the official XML Schema Definition. Error: %s."
                 )
                 % e
-            )
-        logger.debug("XML file namespaces=%s", namespaces)
+            ) from e
         doc_type = self.multi_xpath_helper(
             xml_root,
             [
@@ -395,13 +402,11 @@ class AccountInvoiceImport(models.TransientModel):
         # We're not supposed to use matching methods in this module,
         # but I want to get the decimal precision of the currency of the invoice
         # So I put it in a try/except...
-        prec = self.get_precision_rounding_from_currency_helper(res)
+        self.get_currency_helper(res)
+        currency = res["currency_rec"]
         amount_total = res["amount_total"]
         ac_qty_dict = {"charges": 1, "allowances": -1}
-        if (
-            float_compare(amount_total, 0, precision_rounding=prec) < 0
-            and inv_type == "in_invoice"
-        ):
+        if currency.compare_amounts(amount_total, 0) < 0 and inv_type == "in_invoice":
             ac_qty_dict = {"charges": -1, "allowances": 1}
 
         total_line = self.multi_xpath_helper(
@@ -458,16 +463,17 @@ class AccountInvoiceImport(models.TransientModel):
             isfloat=True,
         )
         # Check coherence
-        if total_line:
+        if level != "minimum":
             check_total = total_line + total_charge - total_tradeallowance + amount_tax
-            if float_compare(check_total, amount_total, precision_rounding=prec):
+            if currency.compare_amounts(check_total, amount_total):
                 raise UserError(
                     _(
-                        "The GrandTotalAmount is %s but the sum of "
+                        "The GrandTotalAmount is %(amount_total)s but the sum of "
                         "the lines plus the total charge plus the total trade "
-                        "allowance plus the total taxes is %s."
+                        "allowance plus the total taxes is %(check_total)s.",
+                        amount_total=format_amount(self.env, amount_total, currency),
+                        check_total=format_amount(self.env, check_total, currency),
                     )
-                    % (amount_total, check_total)
                 )
 
         amount_untaxed = amount_total - amount_tax
@@ -528,7 +534,9 @@ class AccountInvoiceImport(models.TransientModel):
                 continue
             res_lines += line_list
 
-        if float_compare(total_line, counters["lines"], precision_rounding=prec):
+        if level not in ("minimum", "basicwl") and currency.compare_amounts(
+            total_line, counters["lines"]
+        ):
             logger.warning(
                 "The global LineTotalAmount (%s) doesn't match the "
                 "sum of the LineTotalAmount of each line (%s). It can "
@@ -588,10 +596,8 @@ class AccountInvoiceImport(models.TransientModel):
             }
             res_lines.append(vals)
 
-        if float_compare(total_charge, counters["charges"], precision_rounding=prec):
-            if len(global_taxes) <= 1 and float_is_zero(
-                counters["charges"], precision_rounding=prec
-            ):
+        if currency.compare_amounts(total_charge, counters["charges"]):
+            if len(global_taxes) <= 1 and currency.is_zero(counters["charges"]):
                 res_lines.append(
                     {
                         "name": _("Misc Global Charge"),
@@ -603,21 +609,20 @@ class AccountInvoiceImport(models.TransientModel):
             else:
                 raise UserError(
                     _(
-                        "ChargeTotalAmount (%s) doesn't match the "
-                        "total of the charge lines (%s). Maybe it is "
+                        "ChargeTotalAmount (%(total_charge)s) doesn't match the "
+                        "sum of the charge lines (%(sum_lines)s). Maybe it is "
                         "because the Factur-X XML file is at BASIC level, "
                         "and we don't have the details of taxes for the "
-                        "charge lines."
+                        "charge lines.",
+                        total_charge=format_amount(self.env, total_charge, currency),
+                        sum_lines=format_amount(
+                            self.env, counters["charges"], currency
+                        ),
                     )
-                    % (total_charge, counters["charges"])
                 )
 
-        if float_compare(
-            abs(total_tradeallowance), counters["allowances"], precision_rounding=prec
-        ):
-            if len(global_taxes) <= 1 and float_is_zero(
-                counters["allowances"], precision_rounding=prec
-            ):
+        if currency.compare_amounts(abs(total_tradeallowance), counters["allowances"]):
+            if len(global_taxes) <= 1 and currency.is_zero(counters["allowances"]):
                 res_lines.append(
                     {
                         "name": _("Misc Global Allowance"),
@@ -629,13 +634,18 @@ class AccountInvoiceImport(models.TransientModel):
             else:
                 raise UserError(
                     _(
-                        "AllowanceTotalAmount (%s) doesn't match the "
-                        "total of the allowance lines (%s). Maybe it is "
+                        "AllowanceTotalAmount (%(total)s) doesn't match the "
+                        "sum of the allowance lines (%(sum_lines)s). Maybe it is "
                         "because the Factur-X XML file is at BASIC level, "
                         "and we don't have the details of taxes for the "
-                        "allowance lines."
+                        "allowance lines.",
+                        total=format_amount(
+                            self.env, abs(total_tradeallowance), currency
+                        ),
+                        sum_lines=format_amount(
+                            self.env, counters["allowances"], currency
+                        ),
                     )
-                    % (abs(total_tradeallowance), counters["allowances"])
                 )
 
         res.update(
