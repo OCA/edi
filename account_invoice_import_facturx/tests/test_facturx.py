@@ -6,10 +6,52 @@ import base64
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
-from odoo.tools import file_open, float_compare
+from odoo.tools import file_open
 
 
 class TestFacturx(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.company = cls.env.ref("base.main_company")
+        cls.expense_account = cls.env["account.account"].search(
+            [
+                ("company_id", "=", cls.company.id),
+                ("account_type", "=", "expense"),
+            ],
+            limit=1,
+        )
+        cls.purchase_tax = cls.env["account.tax"].search(
+            [
+                ("company_id", "=", cls.company.id),
+                ("type_tax_use", "=", "purchase"),
+                ("amount_type", "=", "percent"),
+                ("amount", ">", 5),
+            ],
+            limit=1,
+        )
+        # When creating a new demo DB, the CoA is installed
+        # AFTER account_invoice_import_facturx, so the search= on field account_id
+        # in the demo XML file of this module doesn't give any result.
+        # That's why we set the account_id field of account.invoice.import.config here
+        demo_import_configs = cls.env["account.invoice.import.config"].search(
+            [
+                ("company_id", "=", cls.company.id),
+                ("invoice_line_method", "in", ("1line_no_product", "nline_no_product")),
+                ("account_id", "=", False),
+            ]
+        )
+        demo_import_configs.write({"account_id": cls.expense_account.id})
+        demo_import_configs = cls.env["account.invoice.import.config"].search(
+            [
+                ("company_id", "=", cls.company.id),
+                ("invoice_line_method", "=", "1line_no_product"),
+                ("tax_ids", "=", False),
+            ]
+        )
+        demo_import_configs.write({"tax_ids": [(6, 0, [cls.purchase_tax.id])]})
+
     def test_import_facturx_invoice(self):
         sample_files = {
             # BASIC
@@ -162,7 +204,7 @@ class TestFacturx(TransactionCase):
             },
         }
         amo = self.env["account.move"]
-        cur_prec = self.env.ref("base.EUR").rounding
+        cur = self.env.ref("base.EUR")
         # We need precision of product price at 4
         # in order to import ZUGFeRD_1p0_EXTENDED_Kostenrechnung.pdf
         price_precision = self.env.ref("product.decimal_price")
@@ -205,17 +247,15 @@ class TestFacturx(TransactionCase):
                 ),
             )
             self.assertFalse(
-                float_compare(
+                cur.compare_amounts(
                     inv.amount_untaxed,
                     res_dict["amount_untaxed"],
-                    precision_rounding=cur_prec,
                 )
             )
             self.assertFalse(
-                float_compare(
+                cur.compare_amounts(
                     inv.amount_total,
                     res_dict["amount_total"],
-                    precision_rounding=cur_prec,
                 )
             )
             # Delete because several sample invoices have the same number
