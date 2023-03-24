@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
 
-<record id="charge_account" model="account.account">
-    <field name="code">606UBL</field>
-    <field name="name">Charge account UBL</field>
-    <field name="user_type_id" ref="account.data_account_type_expenses" />
-</record>
-
 <record id="ketentest" model="res.partner">
     <field name="name">UBL Ketentest BV</field>
     <field name="is_company" eval="True" />
@@ -23,8 +17,13 @@
 <record id="ketentest_import_config" model="account.invoice.import.config">
     <field name="name">UBL Ketentest BV</field>
     <field name="partner_id" ref="ketentest" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
 </record>
 
 <record id="nl_vat_purchase_21" model="account.tax">
@@ -35,6 +34,7 @@
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
 </record>
 
 <record id="nl_vat_purchase_6" model="account.tax">
@@ -45,6 +45,7 @@
     <field name="amount_type">percent</field>
     <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
     <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
 </record>
 
 <record id="exact_belgium" model="res.partner">
@@ -62,8 +63,13 @@
 <record id="exact_belgium_import_config" model="account.invoice.import.config">
     <field name="name">Exact Belgium</field>
     <field name="partner_id" ref="exact_belgium" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
 </record>
 
 <record id="multi_tank" model="res.partner">
@@ -81,8 +87,13 @@
 <record id="multi_tank_import_config" model="account.invoice.import.config">
     <field name="name">Multi Tank</field>
     <field name="partner_id" ref="multi_tank" />
+    <field name="company_id" ref="base.main_company" />
     <field name="invoice_line_method">nline_no_product</field>
-    <field name="account_id" ref="charge_account" />
+    <field
+            name="account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
 </record>
 
 </odoo>

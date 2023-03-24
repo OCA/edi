@@ -9,7 +9,6 @@ from lxml import etree
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools import float_compare
 
 logger = logging.getLogger(__name__)
 
@@ -146,7 +145,7 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(
                     _(
                         "This UBL XML file is not an invoice/refund file "
-                        "(InvoiceTypeCode is %s"
+                        "(InvoiceTypeCode is %s)."
                     )
                     % inv_type_code
                 )
@@ -252,10 +251,9 @@ class AccountInvoiceImport(models.TransientModel):
             "attachments": attachments,
         }
 
-        self.get_precision_rounding_from_currency_helper(res)
-        if float_compare(
-            total_line, counters["lines"], precision_rounding=res["currency_rounding"]
-        ):
+        self.get_currency_helper(res)
+        currency = res["currency_rec"]
+        if currency.compare_amounts(total_line, counters["lines"]):
             logger.warning(
                 "The gloabl LineExtensionAmount (%s) doesn't match the "
                 "sum of the amounts of each line (%s). It can "

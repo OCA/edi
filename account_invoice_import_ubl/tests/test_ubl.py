@@ -6,12 +6,54 @@ import base64
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
-from odoo.tools import file_open, float_compare, mute_logger
+from odoo.tools import file_open, mute_logger
 
 LOGGER = "odoo.addons.account_invoice_import_ubl.wizard.account_invoice_import"
 
 
 class TestUbl(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.company = cls.env.ref("base.main_company")
+        cls.expense_account = cls.env["account.account"].search(
+            [
+                ("company_id", "=", cls.company.id),
+                ("account_type", "=", "expense"),
+            ],
+            limit=1,
+        )
+        cls.purchase_tax = cls.env["account.tax"].search(
+            [
+                ("company_id", "=", cls.company.id),
+                ("type_tax_use", "=", "purchase"),
+                ("amount_type", "=", "percent"),
+                ("amount", ">", 5),
+            ],
+            limit=1,
+        )
+        # When creating a new demo DB, the CoA is installed
+        # AFTER account_invoice_import_facturx, so the search= on field account_id
+        # in the demo XML file of this module doesn't give any result.
+        # That's why we set the account_id field of account.invoice.import.config here
+        demo_import_configs = cls.env["account.invoice.import.config"].search(
+            [
+                ("company_id", "=", cls.company.id),
+                ("invoice_line_method", "in", ("1line_no_product", "nline_no_product")),
+                ("account_id", "=", False),
+            ]
+        )
+        demo_import_configs.write({"account_id": cls.expense_account.id})
+        demo_import_configs = cls.env["account.invoice.import.config"].search(
+            [
+                ("company_id", "=", cls.company.id),
+                ("invoice_line_method", "=", "1line_no_product"),
+                ("tax_ids", "=", False),
+            ]
+        )
+        demo_import_configs.write({"tax_ids": [(6, 0, [cls.purchase_tax.id])]})
+
     @mute_logger(LOGGER, "odoo.models.unlink")
     def test_import_ubl_invoice(self):
         sample_files = {
@@ -70,20 +112,18 @@ class TestUbl(TransactionCase):
             if res_dict.get("date_due"):
                 self.assertEqual(inv.invoice_date_due, res_dict["date_due"])
             self.assertEqual(inv.partner_id, self.env.ref(res_dict["partner_xmlid"]))
-            precision_rounding = inv.currency_id.rounding
+            cur = inv.currency_id
             self.assertEqual(
-                float_compare(
+                cur.compare_amounts(
                     inv.amount_untaxed,
                     res_dict["amount_untaxed"],
-                    precision_rounding=precision_rounding,
                 ),
                 0,
             )
             self.assertEqual(
-                float_compare(
+                cur.compare_amounts(
                     inv.amount_total,
                     res_dict["amount_total"],
-                    precision_rounding=precision_rounding,
                 ),
                 0,
             )
