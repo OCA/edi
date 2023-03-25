@@ -595,7 +595,7 @@ class BusinessDocumentImport(models.AbstractModel):
             sinfo = self.env["product.supplierinfo"].search(
                 self._match_company_domain()
                 + [
-                    ("partner_id", "=", seller.id),
+                    ("name", "=", seller.id),
                     ("product_code", "=", product_dict["code"]),
                 ],
                 limit=1,
