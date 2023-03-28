@@ -16,18 +16,6 @@ class TestVoxelSaleOrderImportCommon(common.SavepointCase):
         pricelist_test = cls.env["product.pricelist"].create(
             {"name": "pricelist test", "currency_id": cls.env.ref("base.EUR").id}
         )
-        cls.company_test = cls.env["res.company"].create(
-            {
-                "name": "COMPANY TEST, S.A.",
-                "street": "c/ Principal, s/n",
-                "city": "Reus",
-                "zip": "43111",
-                "state_id": cls.env.ref("base.state_es_t").id,
-                "country_id": cls.env.ref("base.es").id,
-                "currency_id": pricelist_test.currency_id.id,
-                "vat": "ESA12345674",
-            }
-        )
         cls.customer_test = cls.env["res.partner"].create(
             {
                 "name": "CUSTOMER TEST",
@@ -77,7 +65,7 @@ class TestVoxelSaleOrderImportCommon(common.SavepointCase):
             content = file.read()
         # call method
         so_obj = self.env["sale.order"]
-        return so_obj.create_document_from_xml(content, filename, self.company_test)
+        return so_obj.create_document_from_xml(content, filename, self.env.company)
 
 
 class TestVoxelSaleOrderImport(TestVoxelSaleOrderImportCommon):
@@ -91,7 +79,7 @@ class TestVoxelSaleOrderImport(TestVoxelSaleOrderImportCommon):
         self.assertEqual(sale_order.date_order, datetime(2019, 6, 19))
         self.assertEqual(sale_order.validity_date, date(2019, 6, 19))
         # check supplier, client and customer
-        self.assertEqual(sale_order.company_id, self.company_test)
+        self.assertEqual(sale_order.company_id, self.env.company)
         self.assertEqual(sale_order.partner_id, self.customer_test)
         self.assertEqual(sale_order.partner_shipping_id, self.customer_test)
         # check order line 1
