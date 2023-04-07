@@ -19,7 +19,7 @@
     <field name="city">Paris</field>
     <field name="country_id" ref="base.fr" />
     <field name="website">http://www.free.fr</field>
-    <field name="vat">FR 604 219 388 61</field>
+    <field name="vat">FR60421938861</field>
 </record>
 
 <record id="free_import_config" model="account.invoice.import.config">
