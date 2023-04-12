@@ -1,0 +1,1 @@
+odoo-addon-edi_oca @ git+https://github.com/DeineTuer-GmbH/OCA_edi.git@16.0-mig-edi_oca#subdirectory=setup/edi_oca
