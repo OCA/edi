@@ -4,7 +4,7 @@
 {
     "name": "EDI Backend Partner",
     "summary": "Add the a partner field to EDI backend",
-    "version": "15.0.1.0.0",
+    "version": "16.0.1.0.0",
     "license": "LGPL-3",
     "author": "ForgeFlow, Odoo Community Association (OCA)",
     "maintainers": ["LoisRForgeFlow"],
