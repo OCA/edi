@@ -157,6 +157,9 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         output = self.backend.exchange_generate(self.record3)
         self.assertTrue(output)
         self.assertEqual(
-            self.report._render([self.record3.res_id])[0].strip().decode("UTF-8"),
+            self.env["ir.actions.report"]
+            ._render(self.report, [self.record3.res_id])[0]
+            .strip()
+            .decode("UTF-8"),
             output.strip(),
         )

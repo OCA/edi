@@ -79,13 +79,13 @@ class EDIExchangeOutputTemplate(models.Model):
     def _generate_qweb(self, exchange_record, **kw):
         tmpl = self.template_id
         values = self._get_render_values(exchange_record, **kw)
-        return tmpl._render(values)
+        return self.env["ir.qweb"]._render(tmpl.id, values)
 
     def _generate_report(self, exchange_record, **kw):
         report = self.report_id
         values = self._get_render_values(exchange_record, **kw)
         res_ids = values.get("res_ids", [])
-        return report._render(res_ids, data=values)[0]
+        return self.env["ir.actions.report"]._render(report, res_ids, data=values)[0]
 
     def _get_render_values(self, exchange_record, **kw):
         """Collect values to render current template."""
