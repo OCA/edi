@@ -34,7 +34,6 @@
                         type="object"
                         string="Related record"
                         attrs="{'invisible': [('res_id', '=', False)]}"
-                        groups="base.group_no_one"
                     />
                     <!-- FIXME: this `invisible` domain does not work -->
                     <button
@@ -42,6 +41,7 @@
                         type="object"
                         string="Related exchanges"
                         attrs="{'invisible': [('related_exchange_ids', '=', False)]}"
+                        groups="base.group_no_one"
                     />
                     <button
                         name="action_retry"
