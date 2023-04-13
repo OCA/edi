@@ -41,6 +41,7 @@
                         type="object"
                         string="Related exchanges"
                         attrs="{'invisible': [('related_exchange_ids', '=', False)]}"
+                        groups="base.group_no_one"
                     />
                     <button
                         name="action_retry"
