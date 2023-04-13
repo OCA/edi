@@ -130,7 +130,7 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
             .create({"backend_id": self.backend_02.id})
         )
         wizard.create_edi()
-        self.consumer_record.refresh()
+        self.consumer_record.invalidate_model()
         self.assertNotIn(
             str(self.exchange_type_new.id),
             self.consumer_record.edi_config,
