@@ -2,7 +2,7 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-import mock
+from unittest import mock
 
 from .common import STORAGE_BACKEND_MOCK_PATH, TestEDIStorageBase
 

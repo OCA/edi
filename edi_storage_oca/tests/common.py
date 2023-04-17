@@ -2,8 +2,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 import base64
 import functools
-
-import mock
+from unittest import mock
 
 from odoo.addons.edi_oca.tests.common import EDIBackendCommonComponentTestCase
 
