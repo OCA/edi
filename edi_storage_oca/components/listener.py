@@ -17,17 +17,16 @@ class EdiStorageListener(Component):
         if filename not in storage.list_files(from_dir.as_posix()):
             # The file might have been moved after a previous error.
             return False
-        self._add_after_commit_hook(
-            storage._move_files, [(from_dir / filename).as_posix()], to_dir.as_posix()
-        )
-        return True
 
-    def _add_after_commit_hook(self, move_func, sftp_filepath, sftp_destination_path):
-        """Add hook after commit to move the file when transaction is over."""
-        self.env.cr.after(
-            "commit",
-            functools.partial(move_func, sftp_filepath, sftp_destination_path),
-        )
+        @self.env.cr.postcommit.add
+        def move_files_after_commit():
+            functools.partial(
+                storage._move_files,
+                [(from_dir / filename).as_posix()],
+                to_dir.as_posix(),
+            )
+
+        return True
 
     def on_edi_exchange_done(self, record):
         storage = record.backend_id.storage_id
