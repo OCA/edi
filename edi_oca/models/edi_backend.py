@@ -8,7 +8,7 @@
 import base64
 import logging
 
-from odoo import _, exceptions, fields, models, tools
+from odoo import _, exceptions, fields, models
 
 from odoo.addons.component.exception import NoComponentError
 
@@ -181,14 +181,6 @@ class EDIBackend(models.Model):
             ("backend_id", "=", self.id),
         ]
 
-    def _delay_action(self, rec):
-        # TODO: Remove this on 16.0
-        _logger.warning(
-            "This function has been replaced by rec.with_delay(). "
-            "It will be removed on 16.0."
-        )
-        return self.with_delay(**rec._job_delay_params())
-
     def exchange_generate(self, exchange_record, store=True, force=False, **kw):
         """Generate output content for given exchange record.
 
@@ -209,12 +201,6 @@ class EDIBackend(models.Model):
                     "edi_exchange_state": "output_pending",
                 }
             )
-        try:
-            # TODO: Remove this on 15.0, we will keep it in order to not break current
-            # installations
-            output = tools.pycompat.to_text(output)
-        except UnicodeDecodeError:
-            _logger.info("File is not a text, so it cannot be converted")
         if output:
             try:
                 self._validate_data(exchange_record, output)
