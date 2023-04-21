@@ -68,12 +68,3 @@ class EDIEndpoint(models.Model):
     def _handle_request(self, request):
         self._check_endpoint_ready(request=True)
         return super()._handle_request(request)
-
-    def _default_endpoint_options_handler(self):
-        return {
-            "klass_dotted_path": (
-                "odoo.addons.edi_endpoint_oca.controllers.main.EDIEndpointController"
-            ),
-            "method_name": "auto_endpoint",
-            "default_pargs": (self.route,),
-        }
