@@ -12,8 +12,8 @@ from odoo.http import Response, request
 
 
 class EndpointControllerMixin:
-    def _handle_endpoint(self, env, endpoint_route, **params):
-        endpoint = self._find_endpoint(env, endpoint_route)
+    def _handle_endpoint(self, env, model, endpoint_route, **params):
+        endpoint = self._find_endpoint(env, model, endpoint_route)
         if not endpoint:
             raise NotFound()
         endpoint._validate_request(request)
@@ -41,13 +41,13 @@ class EndpointControllerMixin:
         resp.status = str(status)
         return resp
 
-    def _find_endpoint(self, env, endpoint_route):
-        return env["endpoint.endpoint"]._find_endpoint(endpoint_route)
+    def _find_endpoint(self, env, model, endpoint_route):
+        return env[model]._find_endpoint(endpoint_route)
 
-    def auto_endpoint(self, endpoint_route, **params):
+    def auto_endpoint(self, model, endpoint_route, **params):
         """Default method to handle auto-generated endpoints"""
         env = request.env
-        return self._handle_endpoint(env, endpoint_route, **params)
+        return self._handle_endpoint(env, model, endpoint_route, **params)
 
 
 class EndpointController(http.Controller, EndpointControllerMixin):
