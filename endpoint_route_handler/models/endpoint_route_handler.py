@@ -233,6 +233,7 @@ class EndpointRouteHandler(models.AbstractModel):
         return {
             "klass_dotted_path": f"{base_path}.EndpointNotFoundController",
             "method_name": "auto_not_found",
+            "default_pargs": (self.route,),
         }
 
     def _get_routing_info(self):
