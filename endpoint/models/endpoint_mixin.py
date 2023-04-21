@@ -135,7 +135,7 @@ class EndpointMixin(models.AbstractModel):
         return {
             "klass_dotted_path": "odoo.addons.endpoint.controllers.main.EndpointController",
             "method_name": "auto_endpoint",
-            "default_pargs": (self.route,),
+            "default_pargs": (self._name, self.route),
         }
 
     def _validate_request(self, request):
