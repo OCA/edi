@@ -3,10 +3,9 @@
 # Copyright 2022 Camptocamp SA
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+from contextlib import contextmanager
 
-import mock
-
-from odoo import fields
+from odoo import api, fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_is_zero
 
@@ -15,13 +14,14 @@ class TestInvoiceImport(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.company = cls.env.ref("base.main_company")
         cls.company.invoice_import_email = "alexis.delattre@testme.com"
         cls.expense_account = cls.env["account.account"].create(
             {
                 "code": "612AII",
                 "name": "expense account invoice import",
-                "user_type_id": cls.env.ref("account.data_account_type_expenses").id,
+                "account_type": "expense",
                 "company_id": cls.company.id,
             }
         )
@@ -29,7 +29,7 @@ class TestInvoiceImport(TransactionCase):
             {
                 "code": "707AII",
                 "name": "revenue account invoice import",
-                "user_type_id": cls.env.ref("account.data_account_type_revenue").id,
+                "account_type": "income",
                 "company_id": cls.company.id,
             }
         )
@@ -96,6 +96,7 @@ class TestInvoiceImport(TransactionCase):
                 "name": "Test Purchase Journal 2",
                 "sequence": 100,
                 "company_id": cls.company.id,
+                "default_account_id": cls.expense_account.id,
             }
         )
         cls.partner_with_email = cls.env["res.partner"].create(
@@ -244,6 +245,17 @@ Nina
             mail_channel_noautofollow=True
         ).message_process("account.invoice.import", self._fake_email)
 
+    @contextmanager
+    def _force_message_parse(self, forced_value):
+        @api.model
+        def message_parse(this, message, save_original=False):
+            return forced_value
+
+        MailThread = self.env["mail.thread"]
+        MailThread._patch_method("message_parse", message_parse)
+        yield
+        MailThread._revert_method("message_parse")
+
     def test_email_gateway_multi_comp_1_matching(self):
         comp = self.env["res.company"].create(
             {
@@ -253,26 +265,24 @@ Nina
         )
         logger_name = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
 
-        mock_parse = mock.patch.object(type(self.env["mail.thread"]), "message_parse")
         with self.assertLogs(logger_name) as watcher:
             # NOTE: for some reason in tests the msg is not parsed properly
             # and message_dict is kind of empty.
             # Nevertheless, it doesn't really matter
             # because here we want to make sure that the code works as expected
             # when a msg is properly parsed.
-            with mock_parse as mocked:
-                mocked_msg = {
-                    "to": "project-discussion@example.com",
-                    "email_from": "Nina Marton <nina@example.com>",
-                    "message_id": "<v0214040cad6a13935723@foo.com>",
-                    "references": "",
-                    "in_reply_to": "",
-                    "subject": "Happy Birthday",
-                    "recipients": "project-discussion@example.com",
-                    "body": self._fake_email,
-                    "date": "2022-05-26 10:30:00",
-                }
-                mocked.return_value = mocked_msg
+            mocked_msg = {
+                "to": "project-discussion@example.com",
+                "email_from": "Nina Marton <nina@example.com>",
+                "message_id": "<v0214040cad6a13935723@foo.com>",
+                "references": "",
+                "in_reply_to": "",
+                "subject": "Happy Birthday",
+                "recipients": "project-discussion@example.com",
+                "body": self._fake_email,
+                "date": "2022-05-26 10:30:00",
+            }
+            with self._force_message_parse(forced_value=mocked_msg):
                 self.env["mail.thread"].with_context(
                     mail_channel_noautofollow=True
                 ).message_process("account.invoice.import", self._fake_email)

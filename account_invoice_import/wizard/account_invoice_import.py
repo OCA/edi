@@ -237,10 +237,8 @@ class AccountInvoiceImport(models.TransientModel):
         else:
             journal_id = (
                 self.env["account.move"]
-                .with_context(
-                    default_move_type=parsed_inv["type"], company_id=company.id
-                )
-                ._get_default_journal()
+                .new({"move_type": parsed_inv.get("type")})
+                ._search_default_journal()
                 .id
             )
         vals["journal_id"] = journal_id
@@ -371,8 +369,16 @@ class AccountInvoiceImport(models.TransientModel):
             static_vals = {"account_id": import_config["account"].id}
         elif import_config["invoice_line_method"] == "nline_static_product":
             sproduct = import_config["product"]
-            static_vals = {"product_id": sproduct.id, "move_id": vals}
-            static_vals = line_model.play_onchanges(static_vals, ["product_id"])
+            static_vals = {
+                "product_id": sproduct.id,
+                "move_id": vals,
+                "company_id": self.env.company.id,
+                "currency_id": self.env.company.currency_id.id,
+                "company_currency_id": self.env.company.currency_id.id,
+            }
+            static_vals = line_model.play_onchanges(
+                static_vals, ["product_id", "company_id"]
+            )
             static_vals.pop("move_id")
         else:
             static_vals = {}
@@ -382,8 +388,16 @@ class AccountInvoiceImport(models.TransientModel):
                 product = self._match_product(
                     line["product"], parsed_inv["chatter_msg"], seller=partner
                 )
-                il_vals = {"product_id": product.id, "move_id": vals}
-                il_vals = line_model.play_onchanges(il_vals, ["product_id"])
+                il_vals = {
+                    "product_id": product.id,
+                    "move_id": vals,
+                    "company_id": self.env.company.id,
+                    "currency_id": self.env.company.currency_id.id,
+                    "company_currency_id": self.env.company.currency_id.id,
+                }
+                il_vals = line_model.play_onchanges(
+                    il_vals, ["product_id", "company_id"]
+                )
                 il_vals.pop("move_id")
             elif import_config["invoice_line_method"] == "nline_no_product":
                 taxes = self._match_taxes(line.get("taxes"), parsed_inv["chatter_msg"])

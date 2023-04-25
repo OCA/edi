@@ -8,16 +8,16 @@
     <record id="view_partner_property_form" model="ir.ui.view">
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="account.view_partner_property_form" />
-        <field
-            name="groups_id"
-            eval="[(4, ref('account.group_account_invoice')), (4, ref('account.group_account_readonly'))]"
-        />
         <field name="arch" type="xml">
             <button
                 name="%(base.action_res_partner_bank_account_form)d"
                 position="after"
             >
-                <div name="invoice_import_configs" colspan="2">
+                <div
+                    name="invoice_import_configs"
+                    colspan="2"
+                    groups="account.group_account_invoice,account.group_account_readonly"
+                >
                     <button
                         type="object"
                         class="btn-link"

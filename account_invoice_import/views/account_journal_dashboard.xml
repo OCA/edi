@@ -10,7 +10,7 @@
         <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view" />
         <field name="arch" type="xml">
             <button
-                class="btn btn-primary o_button_upload_bill oe_kanban_action_button"
+                name="action_create_vendor_bill"
                 journal_type="purchase"
                 position="attributes"
             >
