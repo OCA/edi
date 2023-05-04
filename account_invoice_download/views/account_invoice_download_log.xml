@@ -10,7 +10,21 @@
     <field name="name">account.invoice.download.log.form</field>
     <field name="model">account.invoice.download.log</field>
     <field name="arch" type="xml">
-        <form string="Invoice Download Log">
+        <form>
+            <widget
+                    name="web_ribbon"
+                    title="Failure"
+                    bg_color="bg-danger"
+                    attrs="{'invisible': [('result', '!=', 'failure')]}"
+                    id="result_failure"
+                />
+            <widget
+                    name="web_ribbon"
+                    title="Success"
+                    bg_color="bg-success"
+                    attrs="{'invisible': [('result', '!=', 'success')]}"
+                    id="result_success"
+                />
             <group name="main">
                 <field name="create_date" string="Date" />
                 <field
@@ -20,11 +34,11 @@
                 <field name="import_config_id" />
                 <field name="partner_id" />
                 <field name="company_id" groups="base.group_multi_company" />
-                <field name="result" />
+                <field name="result" invisible="1" />
                 <field name="invoice_count" />
             </group>
             <group name="message" string="Message">
-                <field name="message" nolabel="1" />
+                <field name="message" nolabel="1" colspan="2" />
             </group>
         </form>
     </field>
@@ -34,7 +48,7 @@
     <field name="name">account.invoice.download.log.tree</field>
     <field name="model">account.invoice.download.log</field>
     <field name="arch" type="xml">
-        <tree string="Invoice Download Logs">
+        <tree>
             <field name="create_date" string="Date" />
             <field
                     name="partner_id"
@@ -60,7 +74,7 @@
     <field name="name">account.invoice.download.log.search</field>
     <field name="model">account.invoice.download.log</field>
     <field name="arch" type="xml">
-        <search string="Search Invoice Download Logs">
+        <search>
             <field
                     name="partner_id"
                     string="Partner or Download Config"
@@ -106,7 +120,7 @@
     <field name="name">account.invoice.download.log.pivot</field>
     <field name="model">account.invoice.download.log</field>
     <field name="arch" type="xml">
-        <pivot string="Invoice Download Logs">
+        <pivot>
             <field name="create_date" interval="month" type="col" />
             <field name="partner_id" type="row" />
             <field name="invoice_count" type="measure" />
@@ -118,7 +132,7 @@
     <field name="name">account.invoice.download.log.graph</field>
     <field name="model">account.invoice.download.log</field>
     <field name="arch" type="xml">
-        <graph string="Invoice Download Logs">
+        <graph>
             <field name="create_date" interval="month" />
             <field name="invoice_count" type="measure" />
         </graph>

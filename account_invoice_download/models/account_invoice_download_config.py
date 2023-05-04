@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import format_date
 
 logger = logging.getLogger(__name__)
 
@@ -15,12 +16,12 @@ logger = logging.getLogger(__name__)
 class AccountInvoiceDownloadConfig(models.Model):
     _name = "account.invoice.download.config"
     _description = "Configuration for the download of Supplier Invoices"
+    _check_company_auto = True
 
-    name = fields.Char(string="Name", required=True)
+    name = fields.Char(required=True)
     active = fields.Boolean(default=True)
     company_id = fields.Many2one(
         "res.company",
-        string="Company",
         required=True,
         default=lambda self: self.env.company,
     )
@@ -28,6 +29,8 @@ class AccountInvoiceDownloadConfig(models.Model):
         "account.invoice.import.config",
         string="Invoice Import Config",
         ondelete="cascade",
+        check_company=True,
+        domain="[('company_id', '=', company_id)]",
     )
     partner_id = fields.Many2one(
         related="import_config_id.partner_id", readonly=True, store=True
@@ -38,7 +41,6 @@ class AccountInvoiceDownloadConfig(models.Model):
     # Don't set last_run as readonly because sometimes we need to
     # manually fool the system
     backward_days = fields.Integer(
-        string="Backward Days",
         help="By default, Odoo will download all invoices that are "
         "after the last download date. But it may happen that invoices "
         "are available online for download several days after their "
@@ -48,8 +50,6 @@ class AccountInvoiceDownloadConfig(models.Model):
     )
     download_start_date = fields.Date(
         compute="_compute_download_start_date",
-        string="Download Start Date",
-        readonly=True,
         store=True,
     )
     method = fields.Selection(
@@ -117,9 +117,19 @@ class AccountInvoiceDownloadConfig(models.Model):
 
     @api.depends("name", "backend", "method")
     def name_get(self):
+        backend2label = dict(
+            self.fields_get("backend", "selection")["backend"]["selection"]
+        )
+        method2label = dict(
+            self.fields_get("method", "selection")["method"]["selection"]
+        )
         res = []
         for rec in self:
-            name = "%s (%s / %s)" % (rec.name, rec.backend, rec.method)
+            name = "%s (%s / %s)" % (
+                rec.name,
+                backend2label.get(rec.backend, "-"),
+                method2label.get(rec.method, "-"),
+            )
             res.append((rec.id, name))
         return res
 
@@ -147,12 +157,11 @@ class AccountInvoiceDownloadConfig(models.Model):
         self.ensure_one()
         if not self.backend:
             raise UserError(
-                _("No backend configured for download configuration " "'%s'.")
-                % self.name
+                _("No backend configured for download configuration '%s'.") % self.name
             )
         if not self.import_config_id:
             raise UserError(
-                _("No invoice import configuration for download configuration " "'%s'.")
+                _("No invoice import configuration for download configuration '%s'.")
                 % self.name
             )
         if self.credentials_stored():
@@ -161,7 +170,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             invoice_ids, log_id = self.run(credentials)
             if invoice_ids:
                 xmlid = "account.action_move_in_invoice_type"
-                action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+                action = self.env["ir.actions.actions"]._for_xml_id(xmlid)
                 action.update(
                     {
                         "views": False,
@@ -171,7 +180,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 )
             else:
                 xmlid = "account_invoice_download.account_invoice_download_log_action"
-                action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+                action = self.env["ir.actions.actions"]._for_xml_id(xmlid)
                 action.update(
                     {
                         "res_id": log_id,
@@ -184,9 +193,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             xmlid = (
                 "account_invoice_download.account_invoice_download_credentials_action"
             )
-            credentials_wiz_action = self.env["ir.actions.act_window"]._for_xml_id(
-                xmlid
-            )
+            credentials_wiz_action = self.env["ir.actions.actions"]._for_xml_id(xmlid)
             return credentials_wiz_action
 
     def run(self, credentials):
@@ -240,7 +247,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 parsed_inv = aiio.parse_invoice(invoice_file_b64, filename)
             else:
                 logger.error(
-                    "Technical error that should never happen: " "inv_struc is a %s",
+                    "Technical error that should never happen: inv_struc is a %s",
                     type(inv_struc),
                 )
                 continue
@@ -259,13 +266,11 @@ class AccountInvoiceDownloadConfig(models.Model):
                 )
                 logs["msg"].append(
                     _(
-                        "Skipping invoice %s dated %s because it already exists "
-                        "in Odoo (ID %d)."
-                    )
-                    % (
-                        parsed_inv["invoice_number"],
-                        parsed_inv.get("date"),
-                        existing_refs[parsed_inv["invoice_number"]],
+                        "Skipping invoice %(invoice)s dated %(date)s because it "
+                        "already exists in Odoo (ID %(invoice_id)s).",
+                        invoice=parsed_inv["invoice_number"],
+                        date=format_date(self.env, parsed_inv.get("date")),
+                        invoice_id=existing_refs[parsed_inv["invoice_number"]],
                     )
                 )
                 continue
@@ -278,20 +283,25 @@ class AccountInvoiceDownloadConfig(models.Model):
             except Exception as e:
                 logs["msg"].append(
                     _(
-                        "Failed to create invoice. Error: %s. (parsed_inv=%s "
-                        "import_config=%s)"
+                        "Failed to create invoice. Error: %(error)s. "
+                        "(parsed_inv=%(parsed_inv)s import_config=%(import_config)s)",
+                        error=e,
+                        parsed_inv=parsed_inv,
+                        import_config=import_config,
                     )
-                    % (e, parsed_inv, import_config)
                 )
                 logs["result"] = "failure"
                 continue
             invoice_ids.append(invoice.id)
             logs["msg"].append(
-                _("Invoice number %s dated %s created (ID %d).")
-                % (
-                    parsed_inv.get("invoice_number", "none"),
-                    parsed_inv.get("date", "none"),
-                    invoice.id,
+                _(
+                    "Invoice number '%(invoice_number)s' dated %(date)s "
+                    "created (ID %(invoice_id)d).",
+                    invoice_number=parsed_inv.get("invoice_number", "-"),
+                    date=parsed_inv.get("date")
+                    and format_date(self.env, parsed_inv["date"])
+                    or "-",
+                    invoice_id=invoice.id,
                 )
             )
         if logs["result"] == "success":
@@ -317,7 +327,7 @@ class AccountInvoiceDownloadConfig(models.Model):
     @api.model
     def run_cron(self):
         logger.info(
-            "Start cron that auto-download supplier invoices with " "user %s ID %d",
+            "Start cron that auto-download supplier invoices with user %s ID %d",
             self.env.user.name,
             self.env.user.id,
         )
@@ -342,7 +352,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 )
             else:
                 logger.warning(
-                    "Cannot run download config %s because of missing " "credentials",
+                    "Cannot run download config %s because of missing credentials",
                     config.display_name,
                 )
         logger.info("End of the cron that auto-download supplier invoices")

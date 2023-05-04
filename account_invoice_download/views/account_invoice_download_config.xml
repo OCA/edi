@@ -10,7 +10,7 @@
         <field name="name">account.invoice.download.config.form</field>
         <field name="model">account.invoice.download.config</field>
         <field name="arch" type="xml">
-            <form string="Invoice Download Configuration">
+            <form>
                 <header>
                     <button name="run_button" string="Run Now" type="object" />
                 </header>
@@ -22,6 +22,7 @@
                 />
                 <group name="main">
                     <field name="name" />
+                    <field name="company_id" invisible="1" />
                     <field name="company_id" groups="base.group_multi_company" />
                     <field
                         name="import_config_id"
@@ -52,8 +53,9 @@
                             name="next_run"
                             attrs="{'invisible': [('method', '!=', 'auto')], 'required': [('method', '=', 'auto')]}"
                         />
-                        <span
+                        <label
                             string="Download Every"
+                            for="interval_number"
                             class="oe_inline"
                             attrs="{'invisible': [('method', '!=', 'auto')]}"
                         />
@@ -66,7 +68,6 @@
                                 class="oe_inline"
                                 attrs="{'required': [('method', '=', 'auto')]}"
                             />
-                            <span string=" " class="oe_inline" />
                             <field
                                 name="interval_type"
                                 class="oe_inline"
@@ -76,7 +77,7 @@
                     </group>
                 </group>
                 <group name="logs" string="Logs">
-                    <field name="log_ids" nolabel="1" />
+                    <field name="log_ids" nolabel="1" colspan="2" />
                 </group>
             </form>
         </field>
@@ -86,7 +87,7 @@
         <field name="name">account.invoice.download.config.tree</field>
         <field name="model">account.invoice.download.config</field>
         <field name="arch" type="xml">
-            <tree string="Invoice Download Configurations">
+            <tree>
                 <field name="name" decoration-bf="1" />
                 <field
                     name="import_config_id"
@@ -123,7 +124,7 @@
         <field name="name">account.invoice.download.config.search</field>
         <field name="model">account.invoice.download.config</field>
         <field name="arch" type="xml">
-            <search string="Search Invoice Download Configurations">
+            <search>
                 <field name="name" />
                 <field name="import_config_id" />
                 <separator />

@@ -24,7 +24,7 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
         help="This field is a technical hack to be able to return "
         "the action with the created invoices"
     )
-    log_id = fields.Many2one("account.invoice.download.log", string="Log")
+    log_id = fields.Many2one("account.invoice.download.log")
 
     @api.model
     def default_get(self, fields_list):
@@ -55,29 +55,30 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
             vals.pop("password")
         return credentials
 
-    @api.model
-    def create(self, vals):
-        credentials = self.prepare_and_remove_credentials(vals)
-        if not vals.get("download_config_id"):
-            raise UserError(_("Missing Invoice Download Config"))
-        download_config = self.env["account.invoice.download.config"].browse(
-            vals["download_config_id"]
-        )
-        invoice_ids, log_id = download_config.run(credentials)
-        download_config.last_run = fields.Date.context_today(self)
-        vals["log_id"] = log_id
-        if invoice_ids:
-            vals["invoice_ids_str"] = "[%s]" % ",".join(
-                [str(inv_id) for inv_id in invoice_ids]
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            credentials = self.prepare_and_remove_credentials(vals)
+            if not vals.get("download_config_id"):
+                raise UserError(_("Missing Invoice Download Config."))
+            download_config = self.env["account.invoice.download.config"].browse(
+                vals["download_config_id"]
             )
-        return super().create(vals)
+            invoice_ids, log_id = download_config.run(credentials)
+            download_config.last_run = fields.Date.context_today(self)
+            vals["log_id"] = log_id
+            if invoice_ids:
+                vals["invoice_ids_str"] = "[%s]" % ",".join(
+                    [str(inv_id) for inv_id in invoice_ids]
+                )
+        return super().create(vals_list)
 
     def run(self):
         """The real work is made in create(), not here!"""
         self.ensure_one()
         if self.invoice_ids_str:
             xmlid = "account.action_move_in_invoice_type"
-            action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+            action = self.env["ir.actions.actions"]._for_xml_id(xmlid)
             action.update(
                 {
                     "views": False,
@@ -87,7 +88,7 @@ class AccountInvoiceDownloadCredentials(models.TransientModel):
             )
         else:
             xmlid = "account_invoice_download.account_invoice_download_log_action"
-            action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+            action = self.env["ir.actions.actions"]._for_xml_id(xmlid)
             action.update(
                 {
                     "res_id": self.log_id.id,
