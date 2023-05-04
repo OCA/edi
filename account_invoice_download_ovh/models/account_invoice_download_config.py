@@ -10,6 +10,7 @@ import requests
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import format_date
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,8 @@ try:
     import ovh
 except ImportError:
     logger.debug("Cannot import ovh")
+
+OVH_INVOICE_DL_TIMEOUT = 60
 
 
 class AccountInvoiceDownloadConfig(models.Model):
@@ -81,7 +84,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             parsed_inv["date"],
         )
         logger.debug("OVH invoice download url: %s", pdf_invoice_url)
-        rpdf = requests.get(pdf_invoice_url)
+        rpdf = requests.get(pdf_invoice_url, timeout=OVH_INVOICE_DL_TIMEOUT)
         logger.info("OVH invoice PDF download HTTP code: %s", rpdf.status_code)
         res = False
         if rpdf.status_code == 200:
@@ -92,7 +95,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             )
         else:
             logger.warning(
-                "Could not download the PDF of the OVH invoice %s. HTTP " "error %d",
+                "Could not download the PDF of the OVH invoice %s. HTTP error %d",
                 parsed_inv["invoice_number"],
                 rpdf.status_code,
             )
@@ -117,10 +120,11 @@ class AccountInvoiceDownloadConfig(models.Model):
         except Exception as e:
             logs["msg"].append(
                 _(
-                    "Cannot connect to the OVH API with endpoint '%s'. "
-                    "The error message is: '%s'."
+                    "Cannot connect to the OVH API with endpoint '%(endpoint)s'. "
+                    "The error message is: '%(error)s'.",
+                    endpoint=self.ovh_endpoint,
+                    error=str(e),
                 )
-                % (self.ovh_endpoint, str(e))
             )
             logs["result"] = "failure"
             return []
@@ -144,17 +148,22 @@ class AccountInvoiceDownloadConfig(models.Model):
                 "priceWithTax"
             ].get("value"):
                 logs["msg"].append(
-                    _("Skipping OVH invoice %s dated %s because " "the amount is 0")
-                    % (oinv_num, oinv_date)
+                    _(
+                        "Skipping OVH invoice %(invoice_number)s dated %(date)s "
+                        "because the amount is 0",
+                        invoice_number=oinv_num,
+                        date=format_date(self.env, oinv_date),
+                    )
                 )
                 continue
             if oinv_num and oinv_num.startswith("PP_"):
                 logs["msg"].append(
                     _(
-                        "Skipping OVH invoice %s dated %s because it is a "
-                        "special pre-paid invoice"
+                        "Skipping OVH invoice %(invoice_number)s dated %(date)s "
+                        "because it is a special pre-paid invoice.",
+                        invoice_number=oinv_num,
+                        date=format_date(self.env, oinv_date),
                     )
-                    % (oinv_num, oinv_date)
                 )
                 continue
 

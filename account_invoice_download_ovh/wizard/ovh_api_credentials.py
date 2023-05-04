@@ -21,18 +21,15 @@ class OvhApiCredentials(models.TransientModel):
 
     download_config_id = fields.Many2one(
         "account.invoice.download.config",
-        string="Download Config",
         readonly=True,
         required=True,
     )
-    endpoint = fields.Selection(
-        "_ovh_get_endpoints", string="Endpoint", default="ovh-eu"
-    )
-    application_key = fields.Char(string="Application Key")
-    application_secret = fields.Char(string="Application Secret")
+    endpoint = fields.Selection("_ovh_get_endpoints", default="ovh-eu")
+    application_key = fields.Char()
+    application_secret = fields.Char()
     application_url = fields.Char(string="Application URL", readonly=True)
     validation_url = fields.Char(string="Validation URL", readonly=True)
-    consumer_key = fields.Char(string="Consumer Key", readonly=True)
+    consumer_key = fields.Char(readonly=True)
     validation_url_ok = fields.Boolean(string="Validation URL Done")
     state = fields.Selection(
         [
@@ -40,7 +37,6 @@ class OvhApiCredentials(models.TransientModel):
             ("step2", "Step2"),
             ("step3", "Step3"),
         ],
-        string="State",
         readonly=True,
         default="step1",
     )
@@ -64,7 +60,7 @@ class OvhApiCredentials(models.TransientModel):
     def action_continue_wizard(self):
         self.ensure_one()
         xmlid = "account_invoice_download_ovh.ovh_api_credentials_action"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action = self.env["ir.actions.actions"]._for_xml_id(xmlid)
         action["res_id"] = self.id
         return action
 
