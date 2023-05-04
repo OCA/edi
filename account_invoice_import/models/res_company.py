@@ -11,12 +11,14 @@ class ResCompany(models.Model):
     adjustment_credit_account_id = fields.Many2one(
         "account.account",
         check_company=True,
-        domain="[('deprecated', '=', False), ('company_id', '=', company_id)]",
+        domain="[('deprecated', '=', False), ('company_id', '=', company_id), "
+        "('account_type', '=', 'income')]",
     )
     adjustment_debit_account_id = fields.Many2one(
         "account.account",
         check_company=True,
-        domain="[('deprecated', '=', False), ('company_id', '=', company_id)]",
+        domain="[('deprecated', '=', False), ('company_id', '=', company_id), "
+        "('account_type', '=', 'expense')]",
     )
     invoice_import_email = fields.Char(
         "Mail Gateway: Destination E-mail",

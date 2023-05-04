@@ -12,24 +12,33 @@
             <xpath expr="//div[@id='invoicing_settings']" position="after">
                 <h2
                     attrs="{'invisible': [('has_accounting_entries','=',False)]}"
-                >Electronic Invoices Import</h2>
+                >Vendor Bill Import</h2>
         <div class="row mt16 o_settings_container" id="account_invoice_import">
-            <div class="col-xs-12 col-md-12 o_setting_box">
-            <div class="o_setting_left_pane" />
-            <div class="o_setting_right_pane">
+            <div
+                        class="col-xs-12 col-md-12 o_setting_box"
+                        id="account_invoice_import_misc"
+                    >
+                <div class="o_setting_left_pane" />
+                <div class="o_setting_right_pane">
                                 <div class="row">
                                     <label
                                     class="col-md-5"
                                     for="adjustment_debit_account_id"
                                 />
-                                    <field name="adjustment_debit_account_id" />
+                                    <field
+                                    name="adjustment_debit_account_id"
+                                    options="{'no_create': True}"
+                                />
                                 </div>
                                 <div class="row">
                                     <label
                                     class="col-md-5"
                                     for="adjustment_credit_account_id"
                                 />
-                                    <field name="adjustment_credit_account_id" />
+                                    <field
+                                    name="adjustment_credit_account_id"
+                                    options="{'no_create': True}"
+                                />
                                 </div>
                                 <div class="row">
                                     <label
@@ -38,14 +47,23 @@
                                 />
                                     <field name="invoice_import_email" />
                                 </div>
-                                <div class="row">
-                                    <label
+                            </div>
+                            </div>
+                <div
+                        class="col-xs-12 col-md-12 o_setting_box"
+                        id="account_invoice_import_bank_account"
+                    >
+                    <div class="o_setting_left_pane">
+                            <field name="invoice_import_create_bank_account" />
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <div class="row">
+                            <label
                                     class="col-md-5"
                                     for="invoice_import_create_bank_account"
                                 />
-                                    <field name="invoice_import_create_bank_account" />
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </xpath>
