@@ -17,7 +17,7 @@
                     >If the format you need is not listed above, you should install an additionnal Odoo module that adds support for that format (e.g. <i
                         >account_invoice_import_facturx</i>, <i
                         >account_invoice_import_ubl</i>, <i
-                        >account_invoice_import_invoice2data</i>, etc).</p>
+                        >account_invoice_import_simple_pdf</i>, etc).</p>
                     <p
                     >If there are several invoice import configurations for the supplier of the invoice, Odoo will ask you to choose one of them. If there is an existing draft invoice for that supplier, Odoo will propose you to update that draft invoice or create a new draft invoice.</p>
                 </div>

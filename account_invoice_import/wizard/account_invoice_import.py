@@ -14,7 +14,7 @@ from lxml import etree
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools import config, float_compare, float_is_zero, float_round
+from odoo.tools import config, float_is_zero, float_round
 from odoo.tools.misc import format_amount
 
 logger = logging.getLogger(__name__)
@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 class AccountInvoiceImport(models.TransientModel):
     _name = "account.invoice.import"
     _inherit = ["business.document.import", "mail.thread"]
+    # inherit mail.thread to allow import by mail gateway using message_new()
     _description = "Wizard to import supplier invoices/refunds"
 
     invoice_file = fields.Binary(string="PDF or XML Invoice")
@@ -88,7 +89,7 @@ class AccountInvoiceImport(models.TransientModel):
         """This method must be inherited by additional modules with
         the same kind of logic as the account_statement_import_*
         modules"""
-        xml_files_dict = self.get_xml_files_from_pdf(file_data)
+        xml_files_dict = self.env["pdf.helper"].pdf_get_xml_files(file_data)
         for xml_filename, xml_root in xml_files_dict.items():
             logger.info("Trying to parse XML file %s", xml_filename)
             parsed_inv = self.parse_xml_invoice(xml_root)
@@ -180,7 +181,7 @@ class AccountInvoiceImport(models.TransientModel):
         # IMPORT CONFIG
         # {
         # 'invoice_line_method': '1line_no_product',
-        # 'account_analytic': Analytic account recordset,
+        # 'analytic_distribution': Analytic distribution,
         # 'account': Account recordset,
         # 'taxes': taxes multi-recordset,
         # 'label': 'Force invoice line description',
@@ -206,7 +207,7 @@ class AccountInvoiceImport(models.TransientModel):
         if parsed_inv["type"] in ("in_invoice", "in_refund") and import_config.get(
             "journal"
         ):
-            journal_id = import_config["journal"].id
+            vals["journal_id"] = import_config["journal"].id
         elif parsed_inv.get("journal"):
             journal = self.with_company(company.id)._match_journal(
                 parsed_inv["journal"], parsed_inv["chatter_msg"]
@@ -233,22 +234,11 @@ class AccountInvoiceImport(models.TransientModel):
                     )
                     % journal.display_name
                 )
-            journal_id = journal.id
-        else:
-            journal_id = (
-                self.env["account.move"]
-                .with_context(
-                    default_move_type=parsed_inv["type"], company_id=company.id
-                )
-                ._get_default_journal()
-                .id
-            )
-        vals["journal_id"] = journal_id
+            vals["journal_id"] = journal.id
 
     @api.model
     def _prepare_create_invoice_vals(self, parsed_inv, import_config):
         assert parsed_inv.get("pre-processed"), "pre-processing not done"
-        amo = self.env["account.move"]
         company = (
             self.env["res.company"].browse(self.env.context.get("force_company"))
             or self.env.company
@@ -284,7 +274,6 @@ class AccountInvoiceImport(models.TransientModel):
             vals["currency_id"] = currency.id
         self._prepare_create_invoice_journal(parsed_inv, import_config, company, vals)
         vals["invoice_line_ids"] = []
-        vals = amo.play_onchanges(vals, ["partner_id"])
         # Force due date of the invoice
         if parsed_inv.get("date_due"):
             vals["invoice_date_due"] = parsed_inv["date_due"]
@@ -327,31 +316,31 @@ class AccountInvoiceImport(models.TransientModel):
                         )
                     )
 
-        # Write analytic account + fix syntax for taxes
-        analytic_account = import_config.get("account_analytic", False)
-        if analytic_account:
+        # Write analytic distribution + fix syntax for taxes
+        analytic_distribution = import_config.get("analytic_distribution", False)
+        if analytic_distribution:
             for line in vals["invoice_line_ids"]:
-                line[2]["analytic_account_id"] = analytic_account.id
+                line[2]["analytic_distribution"] = analytic_distribution
         return vals
 
     @api.model
     def _prepare_line_vals_1line(self, partner, vals, parsed_inv, import_config):
-        line_model = self.env["account.move.line"]
+        il_vals = {"display_type": "product"}
         if import_config["invoice_line_method"] == "1line_no_product":
             if import_config["taxes"]:
                 il_tax_ids = [(6, 0, import_config["taxes"].ids)]
             else:
                 il_tax_ids = False
-            il_vals = {
-                "account_id": import_config["account"].id,
-                "tax_ids": il_tax_ids,
-                "price_unit": parsed_inv.get("amount_untaxed"),
-            }
+            il_vals.update(
+                {
+                    "account_id": import_config["account"].id,
+                    "tax_ids": il_tax_ids,
+                    "price_unit": parsed_inv.get("amount_untaxed"),  # TODO REMOVE ????
+                }
+            )
         elif import_config["invoice_line_method"] == "1line_static_product":
             product = import_config["product"]
-            il_vals = {"product_id": product.id, "move_id": vals}
-            il_vals = line_model.play_onchanges(il_vals, ["product_id"])
-            il_vals.pop("move_id")
+            il_vals["product_id"] = product.id
         if import_config.get("label"):
             il_vals["name"] = import_config["label"]
         elif parsed_inv.get("description"):
@@ -367,37 +356,22 @@ class AccountInvoiceImport(models.TransientModel):
         start_end_dates_installed = hasattr(line_model, "start_date") and hasattr(
             line_model, "end_date"
         )
+        static_vals = {"display_type": "product"}
         if import_config["invoice_line_method"] == "nline_no_product":
-            static_vals = {"account_id": import_config["account"].id}
+            static_vals["account_id"] = import_config["account"].id
         elif import_config["invoice_line_method"] == "nline_static_product":
             sproduct = import_config["product"]
-            static_vals = {"product_id": sproduct.id, "move_id": vals}
-            static_vals = line_model.play_onchanges(static_vals, ["product_id"])
-            static_vals.pop("move_id")
-        else:
-            static_vals = {}
+            static_vals["product_id"] = sproduct.id
         for line in parsed_inv["lines"]:
             il_vals = static_vals.copy()
             if import_config["invoice_line_method"] == "nline_auto_product":
                 product = self._match_product(
                     line["product"], parsed_inv["chatter_msg"], seller=partner
                 )
-                il_vals = {"product_id": product.id, "move_id": vals}
-                il_vals = line_model.play_onchanges(il_vals, ["product_id"])
-                il_vals.pop("move_id")
+                il_vals["product_id"] = product.id
             elif import_config["invoice_line_method"] == "nline_no_product":
                 taxes = self._match_taxes(line.get("taxes"), parsed_inv["chatter_msg"])
                 il_vals["tax_ids"] = [(6, 0, taxes.ids)]
-            if not il_vals.get("account_id") and il_vals.get("product_id"):
-                product = self.env["product.product"].browse(il_vals["product_id"])
-                raise UserError(
-                    _(
-                        "Account missing on product '%(product)s' or on it's related "
-                        "category '%(product_categ)s'.",
-                        product=product.display_name,
-                        product_categ=product.categ_id.display_name,
-                    )
-                )
             if line.get("name"):
                 il_vals["name"] = line["name"]
             if start_end_dates_installed:
@@ -420,7 +394,8 @@ class AccountInvoiceImport(models.TransientModel):
         """For the moment, we only take into account the 'price_include'
         option of the first tax"""
         il_vals["quantity"] = 1
-        il_vals["price_unit"] = parsed_inv.get("amount_total")
+        #        il_vals["price_unit"] = parsed_inv.get("amount_total")
+        il_vals["price_unit"] = parsed_inv.get("amount_untaxed")
         if il_vals.get("tax_ids"):
             for tax_entry in il_vals["tax_ids"]:
                 if tax_entry:
@@ -519,8 +494,8 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv["chatter_msg"] = []
         if parsed_inv.get("type") in ("out_invoice", "out_refund"):
             return parsed_inv
-        if not parsed_inv.get("currency_rounding"):
-            self.get_precision_rounding_from_currency_helper(parsed_inv)
+        if not parsed_inv.get("currency_rec"):
+            self.get_currency_helper(parsed_inv)
         prec_pp = self.env["decimal.precision"].precision_get("Product Price")
         prec_uom = self.env["decimal.precision"].precision_get(
             "Product Unit of Measure"
@@ -543,10 +518,8 @@ class AccountInvoiceImport(models.TransientModel):
         if (
             parsed_inv["type"] == "in_invoice"
             and "amount_total" in parsed_inv
-            and float_compare(
-                parsed_inv["amount_total"],
-                0,
-                precision_rounding=parsed_inv["currency_rounding"],
+            and parsed_inv["currency_rec"].compare_amounts(
+                parsed_inv["amount_total"], 0
             )
             < 0
         ):
@@ -610,9 +583,7 @@ class AccountInvoiceImport(models.TransientModel):
                         line["taxes"] = []
         # Rounding work
         for entry in ["amount_untaxed", "amount_total"]:
-            parsed_inv[entry] = float_round(
-                parsed_inv[entry], precision_rounding=parsed_inv["currency_rounding"]
-            )
+            parsed_inv[entry] = parsed_inv["currency_rec"].round(parsed_inv[entry])
 
     @api.model
     def invoice_already_exists(self, commercial_partner, parsed_inv):
@@ -831,6 +802,7 @@ class AccountInvoiceImport(models.TransientModel):
                         len(import_configs),
                         partner.display_name,
                     )
+            logger.debug("import_config = %s", import_config)
 
             if not wiz_vals.get("import_config_id"):
                 wiz_vals["state"] = "config"
@@ -983,9 +955,10 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def _prepare_global_adjustment_line(self, diff_amount, invoice, import_config):
-        prec = invoice.currency_id.rounding
+        cur = invoice.currency_id
         sign = diff_amount > 0 and 1 or -1
         il_vals = {
+            "display_type": "product",
             "name": _("Adjustment"),
             "quantity": sign,
             "price_unit": diff_amount * sign,
@@ -1003,7 +976,7 @@ class AccountInvoiceImport(models.TransientModel):
                 account = accounts["expense"]
             il_vals["account_id"] = account.id
         elif import_config["invoice_line_method"] == "nline_auto_product":
-            res_cmp = float_compare(diff_amount, 0, precision_rounding=prec)
+            res_cmp = cur.compare_amounts(diff_amount, 0)
             company = invoice.company_id
             if res_cmp > 0:
                 if not company.adjustment_debit_account_id:
@@ -1044,17 +1017,13 @@ class AccountInvoiceImport(models.TransientModel):
                 )
             return
         inv_cur = invoice.currency_id
-        prec = inv_cur.rounding
         company_cur = invoice.company_id.currency_id
-        account_prec = company_cur.rounding
         # If untaxed amount is wrong, create adjustment lines
         if (
             import_config["invoice_line_method"].startswith("nline")
             and invoice.invoice_line_ids
-            and float_compare(
-                parsed_inv["amount_untaxed"],
-                invoice.amount_untaxed,
-                precision_rounding=prec,
+            and parsed_inv["currency_rec"].compare_amounts(
+                parsed_inv["amount_untaxed"], invoice.amount_untaxed
             )
         ):
             # Try to find the line that has a problem
@@ -1089,17 +1058,11 @@ class AccountInvoiceImport(models.TransientModel):
                     if import_config["invoice_line_method"] == "nline_auto_product":
                         copy_dict["product_id"] = False
                     # Add the adjustment line
-                    iline.with_context(check_move_validity=False).copy(copy_dict)
-                    invoice.with_context(
-                        check_move_validity=False
-                    )._recompute_dynamic_lines(recompute_all_taxes=True)
-                    invoice._check_balanced()
+                    iline.copy(copy_dict)
                     logger.info("Adjustment invoice line created")
         # Fallback: create global adjustment line
-        if float_compare(
-            parsed_inv["amount_untaxed"],
-            invoice.amount_untaxed,
-            precision_rounding=prec,
+        if parsed_inv["currency_rec"].compare_amounts(
+            parsed_inv["amount_untaxed"], invoice.amount_untaxed
         ):
             diff_amount = inv_cur.round(
                 parsed_inv["amount_untaxed"] - invoice.amount_untaxed
@@ -1114,24 +1077,14 @@ class AccountInvoiceImport(models.TransientModel):
                 diff_amount, invoice, import_config
             )
             il_vals["move_id"] = invoice.id
-            mline = (
-                self.env["account.move.line"]
-                .with_context(check_move_validity=False)
-                .create(il_vals)
-            )
-            invoice.with_context(check_move_validity=False)._recompute_dynamic_lines(
-                recompute_all_taxes=True
-            )
-            invoice._check_balanced()
+            mline = self.env["account.move.line"].create(il_vals)
             logger.info("Global adjustment invoice line created ID %d", mline.id)
-        assert not float_compare(
-            parsed_inv["amount_untaxed"],
-            invoice.amount_untaxed,
-            precision_rounding=prec,
+        assert not parsed_inv["currency_rec"].compare_amounts(
+            parsed_inv["amount_untaxed"], invoice.amount_untaxed
         )
         # Force tax amount if necessary
-        if float_compare(
-            invoice.amount_total, parsed_inv["amount_total"], precision_rounding=prec
+        if parsed_inv["currency_rec"].compare_amounts(
+            invoice.amount_total, parsed_inv["amount_total"]
         ):
             diff_tax_amount = parsed_inv["amount_total"] - invoice.amount_total
 
@@ -1169,21 +1122,14 @@ class AccountInvoiceImport(models.TransientModel):
                         invoice.date,
                     )
                     vals = {"amount_currency": new_amount_currency}
-                    if (
-                        float_compare(new_balance, 0, precision_rounding=account_prec)
-                        > 0
-                    ):
+                    if company_cur.compare_amounts(new_balance, 0) > 0:
                         vals["debit"] = new_balance
                         vals["credit"] = 0
                     else:
                         vals["debit"] = 0
                         vals["credit"] = new_balance * -1
                     logger.info("Force VAT amount with diff=%s", diff_tax_amount)
-                    mline.with_context(check_move_validity=False).write(vals)
-                    invoice.with_context(
-                        check_move_validity=False
-                    )._recompute_dynamic_lines()
-                    invoice._check_balanced()
+                    mline.write(vals)
                     break
             if not has_tax_line:
                 raise UserError(
@@ -1192,10 +1138,8 @@ class AccountInvoiceImport(models.TransientModel):
                         "but no tax has been configured !"
                     )
                 )
-        assert not float_compare(
-            parsed_inv["amount_total"],
-            invoice.amount_total,
-            precision_rounding=prec,
+        assert not inv_cur.compare_amounts(
+            parsed_inv["amount_total"], invoice.amount_total
         )
 
     def update_invoice_lines(self, parsed_inv, invoice, seller):
@@ -1383,9 +1327,9 @@ class AccountInvoiceImport(models.TransientModel):
         ):
             self.update_invoice_lines(parsed_inv, invoice, partner)
         self.post_process_invoice(parsed_inv, invoice, import_config)
-        if import_config["account_analytic"]:
+        if import_config["analytic_distribution"]:
             invoice.invoice_line_ids.write(
-                {"analytic_account_id": import_config["account_analytic"].id}
+                {"analytic_distribution": import_config["analytic_distribution"].id}
             )
         self.post_create_or_update(parsed_inv, invoice)
         logger.info(
@@ -1461,14 +1405,13 @@ class AccountInvoiceImport(models.TransientModel):
         return []
 
     @api.model
-    def get_precision_rounding_from_currency_helper(self, parsed_inv):
+    def get_currency_helper(self, parsed_inv):
         try:
             currency = self._match_currency(parsed_inv["currency"], [])
-            precision_rounding = currency.rounding
         except Exception:
-            precision_rounding = self.env.company.currency_id.rounding
-        parsed_inv["currency_rounding"] = precision_rounding
-        return precision_rounding
+            currency = self.env.company.currency_id
+        parsed_inv["currency_rec"] = currency
+        return currency
 
     @api.model
     def message_new(self, msg_dict, custom_values=None):

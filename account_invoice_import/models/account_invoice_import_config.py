@@ -8,6 +8,7 @@ from odoo.exceptions import ValidationError
 
 class AccountInvoiceImportConfig(models.Model):
     _name = "account.invoice.import.config"
+    _inherit = "analytic.mixin"
     _description = "Configuration for the import of Supplier Invoices"
     _order = "sequence"
     _check_company_auto = True
@@ -47,9 +48,6 @@ class AccountInvoiceImportConfig(models.Model):
         domain="[('deprecated', '=', False), ('company_id', '=', company_id)]",
         check_company=True,
     )
-    account_analytic_id = fields.Many2one(
-        "account.analytic.account", string="Analytic Account", check_company=True
-    )
     journal_id = fields.Many2one(
         "account.journal",
         string="Force Purchase Journal",
@@ -71,6 +69,23 @@ class AccountInvoiceImportConfig(models.Model):
         check_company=True,
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
     )
+
+    @api.depends("static_product_id", "account_id", "partner_id")
+    def _compute_analytic_distribution(self):
+        for config in self:
+            distribution = self.env[
+                "account.analytic.distribution.model"
+            ]._get_distribution(
+                {
+                    "partner_id": config.partner_id.id,
+                    "partner_category_id": config.partner_id.category_id.ids,
+                    "product_id": config.static_product_id.id,
+                    "product_categ_id": config.static_product_id.categ_id.id,
+                    "account_prefix": config.account_id.code,
+                    "company_id": config.company_id.id,
+                }
+            )
+            config.analytic_distribution = distribution or config.analytic_distribution
 
     @api.constrains("invoice_line_method", "account_id", "static_product_id")
     def _check_import_config(self):
@@ -110,7 +125,7 @@ class AccountInvoiceImportConfig(models.Model):
         self.ensure_one()
         vals = {
             "invoice_line_method": self.invoice_line_method,
-            "account_analytic": self.account_analytic_id or False,
+            "analytic_distribution": self.analytic_distribution or False,
             "journal": self.journal_id or False,
         }
         if self.invoice_line_method == "1line_no_product":

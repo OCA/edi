@@ -4,7 +4,7 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-import mock
+from unittest import mock
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
@@ -21,7 +21,7 @@ class TestInvoiceImport(TransactionCase):
             {
                 "code": "612AII",
                 "name": "expense account invoice import",
-                "user_type_id": cls.env.ref("account.data_account_type_expenses").id,
+                "account_type": "expense",
                 "company_id": cls.company.id,
             }
         )
@@ -29,10 +29,28 @@ class TestInvoiceImport(TransactionCase):
             {
                 "code": "707AII",
                 "name": "revenue account invoice import",
-                "user_type_id": cls.env.ref("account.data_account_type_revenue").id,
+                "account_type": "income",
                 "company_id": cls.company.id,
             }
         )
+        cls.adj_debit_account = cls.env["account.account"].create(
+            {
+                "code": "658AII",
+                "name": "Adjustment debit account",
+                "account_type": "expense",
+                "company_id": cls.company.id,
+            }
+        )
+        cls.adj_credit_account = cls.env["account.account"].create(
+            {
+                "code": "758AII",
+                "name": "Adjustment credit account",
+                "account_type": "income",
+                "company_id": cls.company.id,
+            }
+        )
+        cls.company.adjustment_debit_account_id = cls.adj_debit_account.id
+        cls.company.adjustment_credit_account_id = cls.adj_credit_account.id
         purchase_tax_vals = {
             "name": "Test 1% VAT",
             "description": "ZZ-VAT-buy-1.0",
@@ -50,15 +68,19 @@ class TestInvoiceImport(TransactionCase):
         sale_tax_vals = purchase_tax_vals.copy()
         sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
         cls.sale_tax = cls.env["account.tax"].create(sale_tax_vals)
-        cls.product = cls.env["product.product"].create(
-            {
-                "name": "Expense product",
-                "default_code": "AII-TEST-PRODUCT",
-                "taxes_id": [(6, 0, [cls.sale_tax.id])],
-                "supplier_taxes_id": [(6, 0, [cls.purchase_tax.id])],
-                "property_account_income_id": cls.income_account.id,
-                "property_account_expense_id": cls.expense_account.id,
-            }
+        cls.product = (
+            cls.env["product.product"]
+            .with_company(cls.company.id)
+            .create(
+                {
+                    "name": "Expense product",
+                    "default_code": "AII-TEST-PRODUCT",
+                    "taxes_id": [(6, 0, [cls.sale_tax.id])],
+                    "supplier_taxes_id": [(6, 0, [cls.purchase_tax.id])],
+                    "property_account_income_id": cls.income_account.id,
+                    "property_account_expense_id": cls.expense_account.id,
+                }
+            )
         )
         cls.all_import_config = [
             {
@@ -184,6 +206,53 @@ class TestInvoiceImport(TransactionCase):
                 fields.Date.to_string(inv.invoice_date_due), parsed_inv["date_due"]
             )
             self.assertEqual(inv.journal_id.id, self.pur_journal2.id)
+
+    def test_import_in_invoice_with_global_adjustment(self):
+        parsed_inv = {
+            "type": "in_invoice",
+            "journal": {"code": "XXXP2"},
+            "invoice_number": "TESTAIIGLOBAL",
+            "amount_untaxed": 100.05,
+            "amount_total": 101.0,
+            "date": "2023-04-08",
+            "date_due": "2023-05-07",
+            "partner": {"name": "Wood Corner"},
+            "lines": [
+                {
+                    "product": {"code": "AII-TEST-PRODUCT"},
+                    "name": "Super test product",
+                    "qty": 2,
+                    "price_unit": 50,
+                    "taxes": [
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                }
+            ],
+        }
+        import_config = {"invoice_line_method": "nline_auto_product"}
+        inv = (
+            self.env["account.invoice.import"]
+            .with_company(self.company.id)
+            .create_invoice(parsed_inv, import_config)
+        )
+        self.assertEqual(inv.move_type, parsed_inv["type"])
+        self.assertFalse(
+            inv.currency_id.compare_amounts(
+                inv.amount_untaxed, parsed_inv["amount_untaxed"]
+            )
+        )
+        self.assertFalse(
+            inv.currency_id.compare_amounts(
+                inv.amount_total, parsed_inv["amount_total"]
+            )
+        )
+        # Check that we have an adjustment line
+        self.assertEqual(len(inv.invoice_line_ids), 2)
 
     def test_import_out_invoice(self):
         parsed_inv = {
