@@ -34,7 +34,7 @@ class ResPartner(models.Model):
     def show_account_invoice_import_config(self):
         self.ensure_one()
         xmlid = "account_invoice_import.account_invoice_import_config_action"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action = self.env["ir.actions.actions"]._for_xml_id(xmlid)
         action["context"] = {
             "default_name": self.name,
             "default_partner_id": self.id,
