@@ -12,7 +12,7 @@ class AccountInvoiceDownloadLog(models.Model):
     _rec_name = "create_date"
 
     download_config_id = fields.Many2one(
-        "account.invoice.download.config", string="Download Config", readonly=True
+        "account.invoice.download.config", readonly=True
     )
     import_config_id = fields.Many2one(
         related="download_config_id.import_config_id", store=True
@@ -23,13 +23,12 @@ class AccountInvoiceDownloadLog(models.Model):
     company_id = fields.Many2one(
         "res.company", related="download_config_id.company_id", store=True
     )
-    message = fields.Text(string="Message", readonly=True)
+    message = fields.Text(readonly=True)
     result = fields.Selection(
         [
             ("success", "Success"),
             ("failure", "Failure"),
         ],
-        string="Result",
         readonly=True,
     )
     invoice_count = fields.Integer(
