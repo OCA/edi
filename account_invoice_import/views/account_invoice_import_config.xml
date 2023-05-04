@@ -22,6 +22,7 @@
                         <field name="name" />
                         <field name="partner_id" />
                         <field name="company_id" groups="base.group_multi_company" />
+                        <field name="company_id" invisible="1" />
                         <field name="active" invisible="1" />
                     </group>
                     <group string="Accounting Parameters" name="accounting">
@@ -40,8 +41,10 @@
                             attrs="{'invisible': [('invoice_line_method', 'not in', ('1line_static_product', 'nline_static_product'))], 'required': [('invoice_line_method', 'in', ('1line_static_product', 'nline_static_product'))]}"
                         />
                         <field
-                            name="account_analytic_id"
+                            name="analytic_distribution"
+                            widget="analytic_distribution"
                             groups="analytic.group_analytic_accounting"
+                            options="{'product_field': 'static_product_id', 'account_field': 'account_id', 'business_domain': 'bill', 'force_applicability': 'optional'}"
                         />
                         <field
                             name="label"
@@ -70,7 +73,8 @@
                 />
                 <field name="invoice_line_method" />
                 <field
-                    name="account_analytic_id"
+                    name="analytic_distribution"
+                    widget="analytic_distribution"
                     groups="analytic.group_analytic_accounting"
                     optional="show"
                 />
@@ -101,12 +105,6 @@
                         name="invoice_line_method_groupby"
                         string="Method for Invoice Line"
                         context="{'group_by': 'invoice_line_method'}"
-                    />
-                    <filter
-                        name="account_analytic_groupby"
-                        string="Analytic Account"
-                        context="{'group_by': 'account_analytic_id'}"
-                        groups="analytic.group_analytic_accounting"
                     />
                     <filter
                         name="journal_groupby"
