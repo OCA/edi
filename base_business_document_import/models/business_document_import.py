@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 
 from odoo import _, api, models
 from odoo.exceptions import UserError
+from odoo.osv import expression
 from odoo.tools import float_compare
 
 from odoo.addons.base_iban.models.res_partner_bank import validate_iban
@@ -42,19 +43,13 @@ class BusinessDocumentImport(models.AbstractModel):
                     )
                 )
         if data_dict.get("id"):
-            record = False
-            try:
-                record = model.browse(data_dict["id"])
-                # Browsing an unexisting ID doesn't make Odoo crash
-                # So I read create_date to make it crash
-                record.create_date  # pylint: disable=pointless-statement
-            except Exception as e:
-                if raise_exception:
-                    raise UserError(
-                        _("ID {id} of '{model}' doesn't exist in Odoo.").format(
-                            id=data_dict["id"], model=model._name
-                        )
-                    ) from e
+            record = model.browse(data_dict["id"]).exists()
+            if not record and raise_exception:
+                raise UserError(
+                    _("ID {id} of '{model}' doesn't exist in Odoo.").format(
+                        id=data_dict["id"], model=model._name
+                    )
+                )
             if record:
                 return record
         if data_dict.get("xmlid"):
@@ -141,14 +136,13 @@ class BusinessDocumentImport(models.AbstractModel):
             country = self.env["res.country"].search(
                 [("code", "=", partner_dict["country_code"])], limit=1
             )
-            state = self.env["res.country.state"].search(
+            if state := self.env["res.country.state"].search(
                 [
                     ("code", "=", partner_dict["state_code"]),
                     ("country_id", "=", country.id),
                 ],
                 limit=1,
-            )
-            if state:
+            ):
                 return ["|", ("state_id", "=", False), ("state_id", "=", state.id)]
         return False
 
@@ -156,53 +150,72 @@ class BusinessDocumentImport(models.AbstractModel):
     def _match_partner_ref(self, partner_dict, chatter_msg, domain, order):
         """If a ref is explicitly given, we just want to match that partner"""
         if partner_dict.get("ref"):
-            return self.env["res.partner"].search(
-                domain + [("ref", "=", partner_dict["ref"])], limit=1, order=order
+            domain = expression.AND(
+                [
+                    domain,
+                    [("ref", "=", partner_dict["ref"])],
+                ]
             )
+            return self.env["res.partner"].search(domain, limit=1, order=order)
         return False
 
     @api.model
     def _match_partner_contact(self, partner_dict, chatter_msg, domain, order):
         rpo = self.env["res.partner"]
         if partner_dict.get("email") and "@" in partner_dict["email"]:
-            partner = rpo.search(
-                domain + [("email", "=ilike", partner_dict["email"])],
+            if partner := rpo.search(
+                expression.AND(
+                    [
+                        domain,
+                        [("email", "=ilike", partner_dict["email"])],
+                    ]
+                ),
                 limit=1,
                 order=order,
-            )
-            if partner:
+            ):
                 return partner
         if partner_dict.get("contact"):
-            partner = rpo.search(
-                domain + [("name", "=ilike", partner_dict["contact"])],
+            if partner := rpo.search(
+                expression.AND(
+                    [
+                        domain,
+                        [("name", "=ilike", partner_dict["contact"])],
+                    ]
+                ),
                 limit=1,
                 order=order,
-            )
-            if partner:
+            ):
                 return partner
         if partner_dict.get("phone"):
-            partner = rpo.search(
-                domain
-                + [
-                    "|",
-                    ("mobile", "=", partner_dict["phone"]),
-                    ("phone", "=", partner_dict["phone"]),
-                ],
+            if partner := rpo.search(
+                expression.AND(
+                    [
+                        domain,
+                        [
+                            "|",
+                            ("mobile", "=", partner_dict["phone"]),
+                            ("phone", "=", partner_dict["phone"]),
+                        ],
+                    ]
+                ),
                 limit=1,
                 order=order,
-            )
-            if partner:
+            ):
                 return partner
         return False
 
     @api.model
     def _match_partner_name(self, partner_dict, chatter_msg, domain, order):
         if partner_dict.get("name"):
-            return self.env["res.partner"].search(
-                domain + [("name", "=ilike", partner_dict["name"])],
-                limit=1,
-                order=order,
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        ("name", "=ilike", partner_dict["name"]),
+                    ],
+                ]
             )
+            return self.env["res.partner"].search(domain, limit=1, order=order)
         return False
 
     @api.model
@@ -219,13 +232,16 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _match_partner_website(self, partner_dict, chatter_msg, domain, order):
-        website_domain = self._get_partner_website_domain(partner_dict)
-        if website_domain:
-            return self.env["res.partner"].search(
-                domain + [("website", "=ilike", "%" + website_domain + "%")],
-                limit=1,
-                order=order,
+        if website_domain := self._get_partner_website_domain(partner_dict):
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        ("website", "=ilike", "%" + website_domain + "%"),
+                    ],
+                ]
             )
+            return self.env["res.partner"].search(domain, limit=1, order=order)
         return False
 
     @api.model
@@ -244,13 +260,17 @@ class BusinessDocumentImport(models.AbstractModel):
         # @gmail.com, @yahoo.com that may match random partners
         if email_domain:
             partner = self.env["res.partner"].search(
-                domain + [("website", "=ilike", "%" + email_domain + "%")],
+                expression.AND(
+                    [domain, [("website", "=ilike", "%" + email_domain + "%")]]
+                ),
                 limit=1,
                 order=order,
             )
             if not partner:
                 partner = self.env["res.partner"].search(
-                    domain + [("email", "=ilike", "%@" + email_domain)],
+                    expression.AND(
+                        [domain, [("email", "=ilike", "%@" + email_domain)]]
+                    ),
                     limit=1,
                     order=order,
                 )
@@ -296,7 +316,16 @@ class BusinessDocumentImport(models.AbstractModel):
             return partner
         company_id = self._context.get("force_company") or self.env.company.id
         domain = domain or []
-        domain += ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
+        domain = expression.AND(
+            [
+                domain,
+                [
+                    "|",
+                    ("company_id", "=", False),
+                    ("company_id", "=", company_id),
+                ],
+            ]
+        )
         order = self._get_match_partner_order(partner_type)
         partner_type_label = self._get_match_partner_type_label(partner_type)
         partner_dict["type"] = partner_type
@@ -306,19 +335,22 @@ class BusinessDocumentImport(models.AbstractModel):
         if partner:
             return partner
 
-        country_domain = self._get_country_filter(partner_dict, chatter_msg)
+        if country_domain := self._get_country_filter(partner_dict, chatter_msg):
+            domain = expression.AND([domain, country_domain])
 
-        if country_domain:
-            domain += country_domain
-
-            state_domain = self._get_country_state_filter(partner_dict, chatter_msg)
-            if state_domain:
-                domain += state_domain
+            if state_domain := self._get_country_state_filter(
+                partner_dict, chatter_msg
+            ):
+                domain = expression.AND([domain, state_domain])
 
         # Search on VAT
         if partner_dict.get("vat"):
             vat = partner_dict["vat"].replace(" ", "").upper()
-            partner = rpo.search(domain + [("vat", "=", vat)], limit=1, order=order)
+            partner = rpo.search(
+                expression.AND([domain, [("vat", "=", vat)]]),
+                limit=1,
+                order=order,
+            )
             if partner:
                 return partner
 
@@ -397,40 +429,74 @@ class BusinessDocumentImport(models.AbstractModel):
         domain = domain or []
         if partner_dict.get("street"):
             if partner_dict.get("street_number"):
-                domain += [
-                    (
-                        "street",
-                        "in",
+                domain = expression.AND(
+                    [
+                        domain,
                         [
-                            "{} {}".format(
-                                partner_dict.get("street"),
-                                partner_dict.get("street_number"),
-                            ),
-                            "{} {}".format(
-                                partner_dict.get("street_number"),
-                                partner_dict.get("street"),
-                            ),
-                            "{}, {}".format(
-                                partner_dict.get("street"),
-                                partner_dict.get("street_number"),
-                            ),
-                            "{}, {}".format(
-                                partner_dict.get("street_number"),
-                                partner_dict.get("street"),
-                            ),
+                            (
+                                "street",
+                                "in",
+                                [
+                                    "{} {}".format(
+                                        partner_dict.get("street"),
+                                        partner_dict.get("street_number"),
+                                    ),
+                                    "{} {}".format(
+                                        partner_dict.get("street_number"),
+                                        partner_dict.get("street"),
+                                    ),
+                                    "{}, {}".format(
+                                        partner_dict.get("street"),
+                                        partner_dict.get("street_number"),
+                                    ),
+                                    "{}, {}".format(
+                                        partner_dict.get("street_number"),
+                                        partner_dict.get("street"),
+                                    ),
+                                ],
+                            )
                         ],
-                    )
-                ]
+                    ]
+                )
             else:
-                domain += [("street", "=", partner_dict.get("street"))]
-        if partner_dict.get("street2"):
-            domain += [("street2", "=", partner_dict.get("street2"))]
-        if partner_dict.get("city"):
-            domain += [("city", "=", partner_dict.get("city"))]
-        if partner_dict.get("zip"):
-            domain += [("zip", "=", partner_dict.get("zip"))]
+                domain = expression.AND(
+                    [
+                        domain,
+                        [
+                            ("street", "=", partner_dict.get("street")),
+                        ],
+                    ]
+                )
 
-        domain_delivery = domain + [("type", "=", "delivery")]
+        if partner_dict.get("street2"):
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        ("street2", "=", partner_dict.get("street2")),
+                    ],
+                ]
+            )
+        if partner_dict.get("city"):
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        ("city", "=", partner_dict.get("city")),
+                    ],
+                ]
+            )
+        if partner_dict.get("zip"):
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        ("zip", "=", partner_dict.get("zip")),
+                    ],
+                ]
+            )
+
+        domain_delivery = expression.AND([domain, [("type", "=", "delivery")]])
         partner = self._match_partner(
             partner_dict,
             chatter_msg,
@@ -628,19 +694,29 @@ class BusinessDocumentImport(models.AbstractModel):
         product = self.env["product.product"].browse()
         cdomain = self._match_company_domain()
         if product_dict.get("barcode"):
-            domain = cdomain + [
-                "|",
-                ("barcode", "=", product_dict["barcode"]),
-                ("packaging_ids.barcode", "=", product_dict["barcode"]),
-            ]
+            domain = expression.AND(
+                [
+                    cdomain,
+                    [
+                        "|",
+                        ("barcode", "=", product_dict["barcode"]),
+                        ("packaging_ids.barcode", "=", product_dict["barcode"]),
+                    ],
+                ]
+            )
             product = product.search(domain, limit=1)
         if not product and product_dict.get("code"):
             # TODO: this domain could be probably included in the former one
-            domain = cdomain + [
-                "|",
-                ("barcode", "=", product_dict["code"]),
-                ("default_code", "=", product_dict["code"]),
-            ]
+            domain = expression.AND(
+                [
+                    cdomain,
+                    [
+                        "|",
+                        ("barcode", "=", product_dict["code"]),
+                        ("default_code", "=", product_dict["code"]),
+                    ],
+                ]
+            )
             product = product.search(domain, limit=1)
         return product
 
@@ -685,7 +761,7 @@ class BusinessDocumentImport(models.AbstractModel):
         if currency_dict.get("symbol"):
             currencies = rco.search([("symbol", "=", currency_dict["symbol"])])
             if len(currencies) == 1:
-                return currencies[0]
+                return currencies
             else:
                 chatter_msg.append(
                     _(
@@ -859,7 +935,9 @@ class BusinessDocumentImport(models.AbstractModel):
                 tax_dict["unece_due_date_code"]
             )
             if tax_exigibility:
-                domain += [("tax_exigibility", "=", tax_exigibility)]
+                domain = expression.AND(
+                    [domain, [("tax_exigibility", "=", tax_exigibility)]]
+                )
         return domain
 
     @api.model
