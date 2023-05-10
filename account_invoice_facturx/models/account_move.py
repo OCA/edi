@@ -404,15 +404,11 @@ class AccountMove(models.Model):
             if (not "unece_type_code" in tax_dict) or (
                 "unece_type_code" in tax_dict and tax_dict["unece_type_code"] == None
             ):
-                tax_dict.update(
-                    {"unece_type_code": "VAT"}
-                )
+                tax_dict.update({"unece_type_code": "VAT"})
             if (not "unece_categ_code" in tax_dict) or (
                 "unece_categ_code" in tax_dict and tax_dict["unece_categ_code"] == None
             ):
-                tax_dict.update(
-                    {"unece_categ_code": "E"}
-                )
+                tax_dict.update({"unece_categ_code": "E"})
         if not tax_dict["unece_type_code"]:
             raise UserError(
                 _("Missing UNECE Tax Type on tax '%s'") % tax_dict["display_name"]
