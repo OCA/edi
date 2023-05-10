@@ -401,11 +401,15 @@ class AccountMove(models.Model):
             )
             # Hack Unit Tests
         if self.env.context.get("active_test", True):
-            if (not "unece_type_code" in tax_dict) or ("unece_type_code" in tax_dict and tax_dict["unece_type_code"] == None):
+            if (not "unece_type_code" in tax_dict) or (
+                "unece_type_code" in tax_dict and tax_dict["unece_type_code"] == None
+            ):
                 tax_dict.update(
                     {"unece_type_code": "VAT"}
                 )
-            if (not "unece_categ_code" in tax_dict) or ("unece_categ_code" in tax_dict and tax_dict["unece_categ_code"] == None):
+            if (not "unece_categ_code" in tax_dict) or (
+                "unece_categ_code" in tax_dict and tax_dict["unece_categ_code"] == None
+            ):
                 tax_dict.update(
                     {"unece_categ_code": "E"}
                 )
@@ -864,7 +868,9 @@ class AccountMove(models.Model):
 
         if ns["level"] in ("extended", "en16931", "basic"):
             line_number = 0
-            for iline in self.invoice_line_ids.filtered(lambda x: x.display_type == "product"):
+            for iline in self.invoice_line_ids.filtered(
+                lambda x: x.display_type == "product"
+            ):
                 line_number += 1
                 self._cii_add_invoice_line_block(
                     trade_transaction, iline, line_number, ns

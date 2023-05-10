@@ -13,7 +13,9 @@ class IrActionsReport(models.Model):
         # - when you click on the "Print" button or use the "Print" menu,
         # the XML file is regenerated even when the invoice is read from the attachment.
         # - when you open the invoice from the attachment, you get the "original" XML file
-        collected_streams = super()._render_qweb_pdf_prepare_streams(report_ref, data, res_ids=res_ids)
+        collected_streams = super()._render_qweb_pdf_prepare_streams(
+            report_ref, data, res_ids=res_ids
+        )
         amo = self.env["account.move"]
         invoice_reports = amo._get_invoice_report_names()
         if (
@@ -26,10 +28,8 @@ class IrActionsReport(models.Model):
             inv = amo.browse(res_ids)
             if inv._xml_format_in_pdf_invoice() == "factur-x":
                 # Add the attachments to the pdf file
-                pdf_stream = collected_streams[inv.id]['stream']
+                pdf_stream = collected_streams[inv.id]["stream"]
                 # Read pdf content
                 pdf_content = pdf_stream.getvalue()
-                inv.regular_pdf_invoice_to_facturx_invoice(
-                    pdf_content=pdf_content
-                )
+                inv.regular_pdf_invoice_to_facturx_invoice(pdf_content=pdf_content)
         return collected_streams

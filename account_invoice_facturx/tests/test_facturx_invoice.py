@@ -75,7 +75,9 @@ class TestFacturXInvoice(TransactionCase):
             # xml_root = etree.fromstring(xml_string)
             # facturx_level = get_facturx_level(xml_root)
             # self.assertEqual(facturx_level, level)
-            xml_bytes, fx_level = self.invoice.with_context(active_test=True).generate_facturx_xml()
+            xml_bytes, fx_level = self.invoice.with_context(
+                active_test=True
+            ).generate_facturx_xml()
             self.assertEqual(fx_level, level)
             xml_root = etree.fromstring(xml_bytes)
             facturx_level = get_facturx_level(xml_root)
