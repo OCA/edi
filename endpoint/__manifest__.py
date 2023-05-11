@@ -4,9 +4,9 @@
 {
     "name": "Endpoint",
     "summary": """Provide custom endpoint machinery.""",
-    "version": "14.0.1.4.0",
+    "version": "14.0.2.0.0",
     "license": "LGPL-3",
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "maintainers": ["simahawk"],
     "website": "https://github.com/OCA/web-api",
