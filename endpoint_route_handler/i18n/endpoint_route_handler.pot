@@ -15,27 +15,44 @@ msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__active
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__active
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__active
 msgid "Active"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__auth_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__auth_type
 msgid "Auth Type"
 msgstr ""
 
 #. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__csrf
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__csrf
 msgid "Csrf"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__display_name
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__display_name
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__display_name
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_ir_http__display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__endpoint_hash
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__endpoint_hash
 msgid "Endpoint Hash"
 msgstr ""
 
@@ -45,29 +62,55 @@ msgid "Endpoint Route handler"
 msgstr ""
 
 #. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_handler_tool
+msgid "Endpoint Route handler tool"
+msgstr ""
+
+#. module: endpoint_route_handler
+#: model:ir.model,name:endpoint_route_handler.model_endpoint_route_sync_mixin
+msgid "Endpoint Route sync mixin"
+msgstr ""
+
+#. module: endpoint_route_handler
 #: model:ir.model,name:endpoint_route_handler.model_ir_http
 msgid "HTTP Routing"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__id
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__id
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__id
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_ir_http__id
 msgid "ID"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__endpoint_hash
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__endpoint_hash
 msgid "Identify the route with its main params"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler____last_update
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool____last_update
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin____last_update
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_ir_http____last_update
 msgid "Last Modified on"
 msgstr ""
 
 #. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__name
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__name
 msgid "Name"
 msgstr ""
 
@@ -80,38 +123,62 @@ msgid ""
 msgstr ""
 
 #. module: endpoint_route_handler
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__registry_sync
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
+msgid ""
+"ON: the record has been modified and registry was not notified.\n"
+"No change will be active until this flag is set to false via proper action.\n"
+"\n"
+"OFF: record in line with the registry, nothing to do."
+msgstr ""
+
+#. module: endpoint_route_handler
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__registry_sync
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__registry_sync
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_sync_mixin__registry_sync
+msgid "Registry Sync"
+msgstr ""
+
+#. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__request_content_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__request_content_type
 msgid "Request Content Type"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__request_method
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__request_method
 msgid "Request Method"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: code:addons/endpoint_route_handler/models/endpoint_route_handler.py:0
 #, python-format
-msgid "Request method is required for POST and PUT."
+msgid "Request content type is required for POST and PUT."
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route
 msgid "Route"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route_group
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route_group
 msgid "Route Group"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler__route_type
+#: model:ir.model.fields,field_description:endpoint_route_handler.field_endpoint_route_handler_tool__route_type
 msgid "Route Type"
 msgstr ""
 
 #. module: endpoint_route_handler
 #: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler__route_group
+#: model:ir.model.fields,help:endpoint_route_handler.field_endpoint_route_handler_tool__route_group
 msgid "Use this to classify routes together"
 msgstr ""
 
@@ -119,6 +186,7 @@ msgstr ""
 #: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_endpoint_endpoint_route_unique
 #: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_mixin_endpoint_route_unique
 #: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_endpoint_route_unique
+#: model:ir.model.constraint,message:endpoint_route_handler.constraint_endpoint_route_handler_tool_endpoint_route_unique
 msgid "You can register an endpoint route only once."
 msgstr ""
 
