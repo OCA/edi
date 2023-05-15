@@ -11,4 +11,6 @@ class EDIIdMixin(models.AbstractModel):
     _name = "edi.id.mixin"
     _description = "EDI ID mixin"
 
-    edi_id = fields.Char(help="Internal or external identifier for records.")
+    edi_id = fields.Char(
+        string="EDI ID", help="Internal or external identifier for records."
+    )
