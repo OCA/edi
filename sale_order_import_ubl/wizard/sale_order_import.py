@@ -32,8 +32,6 @@ class SaleOrderImport(models.TransientModel):
     def parse_ubl_sale_order_line(self, line, ns):
         qty_prec = self.env["decimal.precision"].precision_get("Product UoS")
         line_item = line.xpath("cac:LineItem", namespaces=ns)[0]
-        # line_id_xpath = line_item.xpath('cbc:ID', namespaces=ns)
-        # line_id = line_id_xpath[0].text
         qty_xpath = line_item.xpath("cbc:Quantity", namespaces=ns)
         qty = float(qty_xpath[0].text)
         price_unit = 0.0
@@ -56,7 +54,19 @@ class SaleOrderImport(models.TransientModel):
             "price_unit": price_unit,
             "order_line_ref": line_ref.text,
         }
+        note = self.parse_ubl_sale_order_line_note(line, ns)
+        if note:
+            res_line["note"] = note
         return res_line
+
+    def parse_ubl_sale_order_line_note(self, line, ns):
+        """Collect all notes for a given order line."""
+        # OrderLine/cbc:Note
+        notes = line.xpath("cbc:Note", namespaces=ns)
+        # OrderLine/LineItem/cbc:Note
+        notes += line.xpath("cac:LineItem/cbc:Note", namespaces=ns)
+        notes = [x.text for x in notes if x.text and x.text.strip()]
+        return "\n".join(notes)
 
     @api.model
     def parse_ubl_sale_order(self, xml_root):
