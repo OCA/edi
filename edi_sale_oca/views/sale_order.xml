@@ -32,6 +32,18 @@
                     </div>
                 </button>
             </xpath>
+            <xpath
+                expr="//field[@name='order_line']/tree/field[@name='name']"
+                position="before"
+            >
+                <field name="edi_id" optional="hide" />
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/form//field[@name='analytic_tag_ids']"
+                position="after"
+            >
+                <field name="edi_id" />
+            </xpath>
         </field>
     </record>
 
