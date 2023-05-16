@@ -159,6 +159,33 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
             .search_count([("id", "=", exchange_record.id)]),
         )
 
+    def test_search_no_record(self):
+        # Consumer record no longer exists:
+        #  exchange_record is hidden in search
+        exchange_record = self.create_record()
+        exchange_record.res_id = -1
+        self.user.write({"groups_id": [(4, self.group.id)]})
+        self.assertEqual(
+            0,
+            self.env["edi.exchange.record"]
+            .with_user(self.user)
+            .search_count([("id", "=", exchange_record.id)]),
+        )
+
+    def test_search_no_record_admin(self):
+        # Consumer record no longer exists:
+        #  user with group "Settings" has access
+        exchange_record = self.create_record()
+        exchange_record.res_id = -1
+        admin_group = self.env.ref("base.group_system")
+        self.user.write({"groups_id": [(4, admin_group.id)]})
+        self.assertEqual(
+            1,
+            self.env["edi.exchange.record"]
+            .with_user(self.user)
+            .search_count([("id", "=", exchange_record.id)]),
+        )
+
     @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_write(self):
         exchange_record = self.create_record()
