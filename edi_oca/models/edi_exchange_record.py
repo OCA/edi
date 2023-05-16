@@ -422,8 +422,8 @@ class EDIExchangeRecord(models.Model):
             count=False,
             access_rights_uid=access_rights_uid,
         )
-        if self.env.is_superuser():
-            # rules do not apply for the superuser
+        if self.env.is_system():
+            # rules do not apply to group "Settings"
             return len(ids) if count else ids
 
         if not ids:
