@@ -470,6 +470,13 @@ class SaleOrderImport(models.TransientModel):
             vals["order_id"] = order
             vals = solo.play_onchanges(vals, ["product_id"])
             vals.pop("order_id")
+
+        # Handle additional fields dynamically if available.
+        # This way, if you add a field to a record and it's value is injected by a parser
+        # you won't have to override `_prepare_create_order_line` to let it propagate.
+        for k, v in import_line.items():
+            if k not in vals and k in solo._fields:
+                vals[k] = v
         return vals
 
     def _prepare_order_line_get_company_id(self, order):

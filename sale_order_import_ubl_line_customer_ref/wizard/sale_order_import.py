@@ -28,7 +28,11 @@ class SaleOrderImport(models.TransientModel):
         return vals
 
     def _get_order_line_customer_ref(self, vals):
-        """Extrapolate customer ref from cac:Item/cbc:Note"""
+        """Extrapolate customer ref notes
+
+        `sale_order_import_ubl` will extract notes from
+        `cac:OrderLine/cbc:Note` and `cac:OrderLine/cac:LineItem/cbc:Note`.
+        """
         customer_ref = ""
         note = vals.get("note", "").strip()
         if note:
