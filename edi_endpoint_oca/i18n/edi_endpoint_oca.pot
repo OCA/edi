@@ -230,6 +230,11 @@ msgid "Route Type"
 msgstr ""
 
 #. module: edi_endpoint_oca
+#: model:ir.actions.server,name:edi_endpoint_oca.server_action_registry_sync
+msgid "Sync registry"
+msgstr ""
+
+#. module: edi_endpoint_oca
 #: code:addons/edi_endpoint_oca/models/edi_backend.py:0
 #, python-format
 msgid ""
