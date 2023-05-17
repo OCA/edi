@@ -365,6 +365,9 @@ class EDIExchangeRecord(models.Model):
         if message:
             self._notify_related_record(message)
 
+        # Trigger generic action complete event
+        self._trigger_edi_event(f"{action}_complete")
+
     def _notify_related_record(self, message, level="info"):
         """Post notification on the original record."""
         if not hasattr(self.record, "message_post_with_view"):
