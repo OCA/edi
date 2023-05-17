@@ -353,6 +353,17 @@ class EDIExchangeRecord(models.Model):
         action["domain"] = [("id", "in", self.related_exchange_ids.ids)]
         return action
 
+    def notify_action_complete(self, action, message=None):
+        """Notify current record that an edi action has been completed.
+
+        Implementers should take care of calling this method
+        if they work on records w/o calling edi_backend methods (eg: action_send).
+
+        Implementers can hook to this method to do something after any action ends.
+        """
+        if message:
+            self._notify_related_record(message)
+
     def _notify_related_record(self, message, level="info"):
         """Post notification on the original record."""
         if not hasattr(self.record, "message_post_with_view"):
