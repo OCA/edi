@@ -165,12 +165,20 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         exchange_record = self.create_record()
         exchange_record.res_id = -1
         self.user.write({"groups_id": [(4, self.group.id)]})
-        self.assertEqual(
-            0,
-            self.env["edi.exchange.record"]
-            .with_user(self.user)
-            .search_count([("id", "=", exchange_record.id)]),
+        logger_name = "odoo.addons.edi_oca.models.edi_exchange_record"
+        expected_msg = (
+            f"WARNING:{logger_name}:"
+            f"Deleted record {exchange_record.model},{exchange_record.res_id} "
+            f"is referenced by edi.exchange.record [{exchange_record.id}]"
         )
+        with self.assertLogs(logger_name, "WARNING") as watcher:
+            self.assertEqual(
+                0,
+                self.env["edi.exchange.record"]
+                .with_user(self.user)
+                .search_count([("id", "=", exchange_record.id)]),
+            )
+            self.assertEqual(watcher.output, [expected_msg])
 
     def test_search_no_record_admin(self):
         # Consumer record no longer exists:

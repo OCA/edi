@@ -4,9 +4,12 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import base64
+import logging
 from collections import defaultdict
 
 from odoo import _, api, exceptions, fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class EDIExchangeRecord(models.Model):
@@ -424,8 +427,13 @@ class EDIExchangeRecord(models.Model):
             access_rights_uid=access_rights_uid,
         )
         if self.env.is_system():
-            # rules do not apply to group "Settings"
+            # restrictions do not apply to group "Settings"
             return len(ids) if count else ids
+
+        # TODO highlight orphaned EDI records in UI:
+        #  - self.model + self.res_id are set
+        #  - self.record returns empty recordset
+        # Remark: self.record is @property, not field
 
         if not ids:
             return 0 if count else []
@@ -453,11 +461,21 @@ class EDIExchangeRecord(models.Model):
         for model, targets in model_data.items():
             if not self.env[model].check_access_rights("read", False):
                 continue
-            target_ids = list(targets)
+            recs = self.env[model].browse(list(targets))
+            missing = recs - recs.exists()
+            if missing:
+                for res_id in missing.ids:
+                    _logger.warning(
+                        "Deleted record %s,%s is referenced by edi.exchange.record %s",
+                        model,
+                        res_id,
+                        list(targets[res_id]),
+                    )
+                recs = recs - missing
             allowed = (
                 self.env[model]
                 .with_context(active_test=False)
-                ._search([("id", "in", target_ids)])
+                ._search([("id", "in", recs.ids)])
             )
             for target_id in allowed:
                 result += list(targets[target_id])
