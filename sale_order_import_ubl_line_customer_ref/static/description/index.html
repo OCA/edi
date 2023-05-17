@@ -371,7 +371,8 @@ ul.auto-toc {
 <p>This is a glue module between <cite>sale_order_import_ubl</cite> and <cite>sale_stock_line_customer_ref</cite>.
 It extracts customer references for specific lines from the XML received.</p>
 <p>Since there’s no specific element for customer reference in the UBL line,
-the module will look into <cite>cac:OrderLine/cac:Item/cbc:Note</cite> for a string prefixed with <cite>customer_ref:</cite>.</p>
+the module will look into <cite>cac:OrderLine/cbc:Note</cite> and <cite>cac:OrderLine/cac:LineItem/cbc:Note</cite>
+for a string prefixed with <cite>customer_ref:</cite>.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
