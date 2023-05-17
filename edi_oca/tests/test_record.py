@@ -35,16 +35,14 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.assertNotEqual(new_record.identifier, record.identifier)
 
     def test_record_validate_state(self):
-        with self.assertRaises(exceptions.ValidationError) as err:
+        expected_err = "Exchange state must respect direction!"
+        with self.assertRaises(exceptions.ValidationError, msg=expected_err):
             vals = {
                 "model": self.partner._name,
                 "res_id": self.partner.id,
                 "edi_exchange_state": "output_pending",
             }
             self.backend.create_record("test_csv_input", vals)
-            self.assertEqual(
-                err.exception.name, "Exchange state must respect direction!"
-            )
 
     def test_record_exchange_date(self):
         vals = {
