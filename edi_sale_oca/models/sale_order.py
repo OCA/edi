@@ -28,6 +28,19 @@ class SaleOrder(models.Model):
     # and ask the sender to issue a new order request.
     # This approach seems suitable only for orders that do not get processed immediately.
 
+    # edi_record_metadata api
+    def _edi_get_metadata_to_store(self, orig_vals):
+        data = super()._edi_get_metadata_to_store(orig_vals)
+        # collect line values
+        line_vals_by_edi_id = {}
+        for line_vals in orig_vals.get("order_line", []):
+            # line_vals in the form `(0, 0, vals)`
+            vals = line_vals[-1]
+            line_vals_by_edi_id[vals["edi_id"]] = vals
+
+        data.update({"orig_values": {"lines": line_vals_by_edi_id}})
+        return data
+
 
 class SaleOrderLine(models.Model):
     _name = "sale.order.line"
