@@ -58,3 +58,10 @@ class TestOrderImport(TestCommon):
         self.wiz_model.update_order_lines(parsed_order_up, order, "pricelist")
         self.assertEqual(len(order.order_line), 2)
         self.assertEqual(int(order.order_line[0].product_uom_qty), 3)
+
+    def test_order_import_default_so_vals(self):
+        default = {"client_order_ref": "OVERRIDE"}
+        order = self.wiz_model.with_context(
+            sale_order_import__default_vals=dict(order=default)
+        ).create_order(self.parsed_order, "pricelist")
+        self.assertEqual(order.client_order_ref, "OVERRIDE")
