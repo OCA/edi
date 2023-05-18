@@ -362,8 +362,12 @@ class EDIExchangeRecord(models.Model):
         if message:
             self._notify_related_record(message)
 
-        # Trigger generic action complete event
-        self._trigger_edi_event(f"{action}_complete")
+        # Trigger generic action complete event on exchange record
+        event_name = f"{action}_complete"
+        self._trigger_edi_event(event_name)
+        if self.record:
+            # Trigger specific event on related record
+            self._trigger_edi_event(event_name, target=self.record)
 
     def _notify_related_record(self, message, level="info"):
         """Post notification on the original record."""
@@ -386,10 +390,11 @@ class EDIExchangeRecord(models.Model):
             suffix=("_" + suffix) if suffix else "",
         )
 
-    def _trigger_edi_event(self, name, suffix=None, **kw):
+    def _trigger_edi_event(self, name, suffix=None, target=None, **kw):
         """Trigger a component event linked to this backend and edi exchange."""
         name = self._trigger_edi_event_make_name(name, suffix=suffix)
-        self._event(name).notify(self, **kw)
+        target = target or self
+        target._event(name).notify(self, **kw)
 
     def _notify_done(self):
         self._notify_related_record(self._exchange_status_message("process_ok"))
