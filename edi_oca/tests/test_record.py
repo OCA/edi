@@ -44,6 +44,22 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
             }
             self.backend.create_record("test_csv_input", vals)
 
+    def test_record_same_type_code(self):
+        # Two record.exchange.type sharing same code "test_csv_input"
+        # Record should be created with the right backend
+        new_backend = self.backend.copy()
+        self.exchange_type_in.copy(
+            {"backend_id": new_backend.id, "code": "test_csv_input"}
+        )
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        rec1 = self.backend.create_record("test_csv_input", vals)
+        rec2 = new_backend.create_record("test_csv_input", vals)
+        self.assertEqual(rec1.backend_id, self.backend)
+        self.assertEqual(rec2.backend_id, new_backend)
+
     def test_record_exchange_date(self):
         vals = {
             "model": self.partner._name,
