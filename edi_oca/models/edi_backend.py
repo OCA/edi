@@ -58,10 +58,9 @@ class EDIBackend(models.Model):
         # Load additional ctx keys if any
         collection = self
         # TODO: document/test this
-        env_ctx = record_conf.get("env_ctx", {})
-        if env_ctx:
-            collection = collection.with_context(**env_ctx)
-            exchange_record = exchange_record.with_context(**env_ctx)
+        env_ctx = self._get_component_env_ctx(record_conf, key)
+        collection = collection.with_context(**env_ctx)
+        exchange_record = exchange_record.with_context(**env_ctx)
         work_ctx = {"exchange_record": exchange_record}
         # Inject work context from advanced settings
         work_ctx.update(record_conf.get("work_ctx", {}))
@@ -75,6 +74,12 @@ class EDIBackend(models.Model):
             work_ctx=work_ctx,
             **match_attrs,
         )
+
+    def _get_component_env_ctx(self, record_conf, key):
+        env_ctx = record_conf.get("env_ctx", {})
+        # You can use `edi_session` down in the stack to control logics.
+        env_ctx.update(dict(edi_framework_action=key))
+        return env_ctx
 
     def _component_match_attrs(self, exchange_record, key):
         """Attributes that will be used to lookup components.
