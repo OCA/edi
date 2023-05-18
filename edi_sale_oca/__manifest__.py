@@ -15,6 +15,7 @@
     "depends": [
         "edi_oca",
         "edi_exchange_type_auto",
+        "edi_record_metadata_oca",
         "sale_order_import",
     ],
     "data": [

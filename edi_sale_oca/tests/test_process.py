@@ -7,8 +7,6 @@ import textwrap
 
 import mock
 
-from odoo import exceptions
-
 from odoo.addons.component.tests.common import SavepointComponentCase
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
 
@@ -17,6 +15,7 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls._setup_env()
         cls.backend = cls._get_backend()
         cls.exc_type = cls._create_exchange_type(
             name="Test SO import",
@@ -36,7 +35,9 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
             """
             ),
         )
-        cls.record = cls.backend.create_record("test_so_import", {})
+        cls.record = cls.backend.create_record(
+            "test_so_import", {"edi_exchange_state": "input_received"}
+        )
         cls.record._set_file_content(b"<fake><order></order></fake>")
         cls.wiz_model = cls.env["sale.order.import"]
 
@@ -74,11 +75,12 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
         self.assertEqual(comp._get_default_price_source(), "order")
         self.assertTrue(comp._order_should_be_confirmed())
 
+    # In both tests here we don"t care about the specific format of the import.
+    # We only care that the wizard plugged with the component works as expected.
     def test_existing_order(self):
         order = self.env["sale.order"].create(
             {"partner_id": self.env["res.partner"].search([], limit=1).id}
         )
-        comp = self.backend._get_component(self.record, "process")
         m1 = mock.patch.object(type(self.wiz_model), "order_file_change")
         m2 = mock.patch.object(type(self.wiz_model), "import_order_button")
         m3 = mock.patch.object(
@@ -96,26 +98,65 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
         with m1 as md_onchange, m2 as md_btn, m3 as md_sale_id, m4 as md_state:
             md_sale_id.return_value = order
             md_state.return_value = "update"
-            with self.assertRaisesRegex(exceptions.UserError, err_msg):
-                comp.process()
-                md_onchange.assert_called()
-                md_btn.assert_called()
-        self.assertEqual(self.exc_record_in.exchange_error, err_msg)
+            self.record.action_exchange_process()
+            md_onchange.assert_called()
+            md_btn.assert_called()
+        self.assertEqual(self.record.exchange_error, err_msg)
 
     def test_new_order(self):
+        # Create the order manully and use it via the mock on md_btn
         order = self.env["sale.order"].create(
             {"partner_id": self.env["res.partner"].search([], limit=1).id}
         )
-        comp = self.backend._get_component(self.record, "process")
         mock1 = mock.patch.object(type(self.wiz_model), "order_file_change")
         mock2 = mock.patch.object(type(self.wiz_model), "import_order_button")
         self.assertFalse(self.record.record)
         # Simulate the wizard detected an existing order state
         with mock1 as md_onchange, mock2 as md_btn:
             md_btn.return_value = {"res_id": order.id}
-            res = comp.process()
+            self.record.action_exchange_process()
             md_onchange.assert_called()
             md_btn.assert_called()
-            self.assertEqual(res, f"Sales order {order.name} created")
 
+        self.assertEqual(self.record.edi_exchange_state, "input_processed")
         self.assertEqual(self.record.record, order)
+        self.assertIn(
+            "Exchange processed successfully",
+            "|".join(order.message_ids.mapped("body")),
+        )
+
+    def test_metadata(self):
+        parsed_order = {
+            "partner": {"email": "john.doe@example.com"},
+            "date": "2023-05-18",
+            "order_ref": "EDISALE",
+            "lines": [
+                {
+                    "product": {"code": "FURN_8888"},
+                    "qty": 1,
+                    "uom": {"unece_code": "C62"},
+                    "price_unit": 100,
+                    "order_line_ref": "1111",
+                }
+            ],
+            "chatter_msg": [],
+            "doc_type": "rfq",
+        }
+        self.wiz_model.with_context(
+            edi_framework_action="process",
+            sale_order_import__default_vals=dict(
+                origin_exchange_record_id=self.record.id
+            ),
+        ).create_order(parsed_order, "pricelist")
+        metadata = self.record.get_metadata()
+        # Lines are mapped via `edi_id` (coming from `order_line_ref` by default)
+        line_metadata = metadata["orig_values"]["lines"]["1111"]
+        for k in (
+            "product_id",
+            "product_uom_qty",
+            "product_uom",
+            "name",
+            "price_unit",
+            "edi_id",
+        ):
+            self.assertIn(k, line_metadata)
