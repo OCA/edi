@@ -340,7 +340,7 @@ class EDIExchangeRecord(models.Model):
         return self.record.get_formview_action()
 
     def _set_related_record(self, odoo_record):
-        self.update({"model": odoo_record._name, "res_id": odoo_record.id})
+        self.sudo().update({"model": odoo_record._name, "res_id": odoo_record.id})
 
     def action_open_related_exchanges(self):
         self.ensure_one()
