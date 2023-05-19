@@ -35,12 +35,7 @@ class EDIExchangeSOInput(Component):
             self._handle_existing_order(order, msg)
             raise UserError(msg)
         else:
-            order_id = res["res_id"]
-            order = self.env["sale.order"].browse(order_id)
-            if self._order_should_be_confirmed():
-                order.action_confirm()
-            self.exchange_record.sudo()._set_related_record(order)
-            order._edi_set_origin(self.exchange_record)
+            order = self._handle_create_order(res["res_id"])
             return self.msg_order_created % order.name
         raise UserError(self.msg_generic_error)
 
@@ -72,6 +67,14 @@ class EDIExchangeSOInput(Component):
 
     def _order_should_be_confirmed(self):
         return self.settings.get("confirm_order", False)
+
+    def _handle_create_order(self, order_id):
+        order = self.env["sale.order"].browse(order_id)
+        self.exchange_record._set_related_record(order)
+        order._edi_set_origin(self.exchange_record)
+        if self._order_should_be_confirmed():
+            order.action_confirm()
+        return order
 
     def _handle_existing_order(self, order, message):
         prev_record = self._get_previous_record(order)
