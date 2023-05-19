@@ -54,6 +54,11 @@ class EDIExchangeSOInput(Component):
     def _setup_wizard(self):
         """Init a `sale.order.import` instance for current record."""
         ctx = self.settings.get("wiz_ctx", {})
+        # Set the right EDI origin on both order and lines
+        edi_defaults = {"origin_exchange_record_id": self.exchange_record.id}
+        ctx["sale_order_import__default_vals"] = dict(
+            order=edi_defaults, lines=edi_defaults
+        )
         wiz = self.env["sale.order.import"].with_context(**ctx).sudo().create({})
         wiz.order_file = self.exchange_record._get_file_content(binary=False)
         wiz.order_filename = self.exchange_record.exchange_filename
@@ -71,7 +76,6 @@ class EDIExchangeSOInput(Component):
     def _handle_create_order(self, order_id):
         order = self.env["sale.order"].browse(order_id)
         self.exchange_record._set_related_record(order)
-        order._edi_set_origin(self.exchange_record)
         if self._order_should_be_confirmed():
             order.action_confirm()
         return order
