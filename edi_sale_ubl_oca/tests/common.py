@@ -64,48 +64,34 @@ class OrderMixin(object):
         """
         form = Form(cls.env["sale.order"], view=view)
         form.commitment_date = fields.Date.today()
+        lines = values.pop("order_line", [])
         for k, v in values.items():
             setattr(form, k, v)
+        for line_vals in lines:
+            with form.order_line.new() as form_line:
+                for k, v in line_vals.items():
+                    setattr(form_line, k, v)
         return form.save()
 
     @classmethod
-    def _create_sale_order_line(cls, order, view=None, **kw):
-        """
-        Create a sale order line for give order
-        :return: line
-        """
-        values = {}
-        values.update(kw)
-        form = Form(order, view=view)
-        with form.order_line.new() as form_line:
-            for k, v in values.items():
-                setattr(form_line, k, v)
-        return form.save()
-
-
-class TestCaseBase(XMLBaseTestCase, OrderMixin):
-    @classmethod
-    def _setup_order(cls):
+    def _setup_order(cls, **kw):
         cls.product_a = cls.env.ref("product.product_product_4")
         cls.product_a.barcode = "1" * 14
         cls.product_b = cls.env.ref("product.product_product_4b")
         cls.product_b.barcode = "2" * 14
         cls.product_c = cls.env.ref("product.product_product_4c")
         cls.product_c.barcode = "3" * 14
-        cls.sale = cls._create_sale_order(
-            {
-                "partner_id": cls.env.ref("base.res_partner_10"),
-                "commitment_date": "2022-07-29",
-            }
-        )
-        lines = [
-            {"product_id": cls.product_a, "product_uom_qty": 300},
-            {"product_id": cls.product_b, "product_uom_qty": 200},
-            {"product_id": cls.product_c, "product_uom_qty": 100},
+        vals = {
+            "partner_id": cls.env.ref("base.res_partner_10"),
+            "commitment_date": "2022-07-29",
+        }
+        vals.update(kw)
+        vals["order_line"] = [
+            {"product_id": cls.product_a, "product_uom_qty": 300, "edi_id": 1000},
+            {"product_id": cls.product_b, "product_uom_qty": 200, "edi_id": 2000},
+            {"product_id": cls.product_c, "product_uom_qty": 100, "edi_id": 3000},
         ]
-        for line in lines:
-            cls._create_sale_order_line(cls.sale, **line)
-
+        cls.sale = cls._create_sale_order(vals)
         cls.sale.client_order_ref = "ABC123"
         cls.sale.action_confirm()
 
