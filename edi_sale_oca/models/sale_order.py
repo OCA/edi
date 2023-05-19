@@ -7,15 +7,10 @@ from odoo import fields, models
 
 class SaleOrder(models.Model):
     _name = "sale.order"
-    _inherit = ["sale.order", "edi.auto.exchange.consumer.mixin"]
-
-    # TODO: this field should be moved to the consumer mixin
-    # Each extending module should then override `states` as needed.
-    disable_edi_auto = fields.Boolean(
-        help="When marked, EDI automatic processing will be avoided",
-        readonly=True,
-        states={"draft": [("readonly", False)]},
-    )
+    _inherit = [
+        "sale.order",
+        "edi.exchange.consumer.mixin",
+    ]
     # Receiver may send or not the response on create
     # then for each update IF required.
     # https://docs.oasis-open.org/ubl/os-UBL-2.3/UBL-2.3.html#S-ORDERING-POST-AWARD
@@ -27,6 +22,14 @@ class SaleOrder(models.Model):
     # Hence, we could block further modifications w/ sale exceptions
     # and ask the sender to issue a new order request.
     # This approach seems suitable only for orders that do not get processed immediately.
+
+    # TODO: this field should be moved to the consumer mixin
+    # Each extending module should then override `states` as needed.
+    disable_edi_auto = fields.Boolean(
+        help="When marked, EDI automatic processing will be avoided",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
 
     # edi_record_metadata api
     def _edi_get_metadata_to_store(self, orig_vals):
@@ -44,4 +47,8 @@ class SaleOrder(models.Model):
 
 class SaleOrderLine(models.Model):
     _name = "sale.order.line"
-    _inherit = ["sale.order.line", "edi.auto.exchange.consumer.mixin", "edi.id.mixin"]
+    _inherit = [
+        "sale.order.line",
+        "edi.exchange.consumer.mixin",
+        "edi.id.mixin",
+    ]
