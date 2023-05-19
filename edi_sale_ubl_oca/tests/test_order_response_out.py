@@ -4,10 +4,10 @@
 
 from freezegun import freeze_time
 
-from .common import TestCaseBase, get_xml_handler
+from .common import OrderMixin, XMLBaseTestCase, get_xml_handler
 
 
-class TestOrderResponseOutbound(TestCaseBase):
+class TestOrderResponseOutbound(XMLBaseTestCase, OrderMixin):
 
     maxDiff = None
 

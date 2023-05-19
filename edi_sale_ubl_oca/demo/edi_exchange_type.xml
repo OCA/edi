@@ -3,8 +3,8 @@
 <!-- TODO: noupdate OR better create via post init hook   -->
     <record id="demo_edi_exc_type_order_response_out" model="edi.exchange.type">
         <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
-        <field name="name">UBL Sale Order Response</field>
-        <field name="code">UBL_SaleOrderResponse_out</field>
+        <field name="name">Demo UBL Sale Order Response</field>
+        <field name="code">demo_UBL_SaleOrderResponse_out</field>
         <field name="direction">output</field>
         <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
         <field name="exchange_file_ext">xml</field>
