@@ -18,13 +18,16 @@
         "edi_xml_oca",
         "edi_exchange_template_oca",
         "edi_exchange_template_party_data",
+        "edi_state_oca",
         # This could be made optional
         # but the delivery part would need another source of data
         "sale_stock",
     ],
     "data": [
+        "data/edi_state.xml",
         "templates/qweb_tmpl_party.xml",
         "templates/qweb_tmpl_order_response.xml",
+        "views/sale_order.xml",
     ],
     "demo": [
         "demo/edi_exchange_type.xml",
