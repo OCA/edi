@@ -12,6 +12,13 @@
             name="model_ids"
             eval="[(6, 0, [ref('sale.model_sale_order'), ref('sale.model_sale_order_line')])]"
         />
+        <field
+            name="state_workflow_ids"
+            eval="[(6, 0, [
+              ref('edi_sale_ubl_oca.edi_sale_order_state_workflow'),
+              ref('edi_sale_ubl_oca.edi_sale_order_line_state_workflow')
+            ])]"
+        />
         <field name="advanced_settings_edit">
 components:
   generate:
@@ -39,10 +46,17 @@ auto:
     <record id="demo_edi_exc_type_order_in" model="edi.exchange.type">
         <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
         <field name="ack_type_id" ref="demo_edi_exc_type_order_response_out" />
-        <field name="name">UBL Sale Order</field>
-        <field name="code">UBL_SaleOrder_in</field>
+        <field name="name">Demo UBL Sale Order</field>
+        <field name="code">demo_UBL_SaleOrder_in</field>
         <field name="direction">input</field>
         <field name="exchange_file_ext">xml</field>
+        <field
+            name="state_workflow_ids"
+            eval="[(6, 0, [
+              ref('edi_sale_ubl_oca.edi_sale_order_state_workflow'),
+              ref('edi_sale_ubl_oca.edi_sale_order_line_state_workflow')
+            ])]"
+        />
         <field name="advanced_settings_edit">
 components:
     process:

@@ -56,6 +56,7 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin
         order = self._find_order()
         self.assertFalse(order)
         # Test w/ error handling
+        # .with_context(_edi_process_break_on_error=True)
         self.exc_record_in.action_exchange_process()
         self.assertEqual(self.exc_record_in.edi_exchange_state, "input_processed")
         order = self._find_order()
@@ -69,6 +70,11 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin
         )
         # TODO: test order data. To do so, first add such tests to sale_order_import
         self.assertEqual(order.order_line.mapped("edi_id"), ["1", "2"])
+        self.assertTrue(order.edi_state_id.code, order.EDI_STATE_ORDER_ACCEPTED)
+        self.assertTrue(
+            order.mapped("order_line.edi_state_id").code,
+            order.EDI_STATE_ORDER_LINE_ACCEPTED,
+        )
 
     def _find_order(self):
         return self.env["sale.order"].search(

@@ -17,7 +17,8 @@ class TestOrderResponseOutbound(TestCaseBase):
     def setUpClass(cls):
         super().setUpClass()
         cls._setup_order()
-        cls.exc_type = cls.env.ref(
+        cls.exc_type_in = cls.env.ref("edi_sale_ubl_oca.demo_edi_exc_type_order_in")
+        cls.exc_type_out = cls.env.ref(
             "edi_sale_ubl_oca.demo_edi_exc_type_order_response_out"
         )
         cls.exc_tmpl = cls.env.ref(
@@ -26,9 +27,12 @@ class TestOrderResponseOutbound(TestCaseBase):
         vals = {
             "model": cls.sale._name,
             "res_id": cls.sale.id,
-            "type_id": cls.exc_type.id,
+            "type_id": cls.exc_type_out.id,
         }
-        cls.record = cls.backend.create_record(cls.exc_type.code, vals)
+        cls.record = cls.backend.create_record(cls.exc_type_out.code, vals)
+        cls.sale.origin_exchange_record_id = cls.record
+        cls.sale.order_line.origin_exchange_record_id = cls.record
+        cls.sale._edi_update_state()
 
     @classmethod
     def _get_backend(cls):
@@ -68,3 +72,6 @@ class TestOrderResponseOutbound(TestCaseBase):
         handler = get_xml_handler(self.backend, self._schema_path)
         err = handler.validate(file_content)
         self.assertEqual(err, None, err)
+        data = handler.parse_xml(file_content)
+        # TODO: test all main data
+        self.assertEqual(data["cbc:OrderResponseCode"], "AP")
