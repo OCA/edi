@@ -24,39 +24,28 @@ msgstr ""
 "bestanden"
 
 #. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__display_name
-msgid "Display Name"
-msgstr "Weergave naam"
-
-#. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__id
-msgid "ID"
-msgstr "ID"
-
-#. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl____last_update
-msgid "Last Modified on"
-msgstr "Laatst gewijzigd op"
-
-#. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
-msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr "Ontbrekende UNECE belastings categorie '%s'"
+msgid "Missing UNECE Tax Category on tax '%(tax_name)s'"
+msgstr ""
 
 #. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
-msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr "Ontbrekend UNECE belastingstype op belasting '%s'"
+msgid "Missing UNECE Tax Type on tax '%(tax_name)s'"
+msgstr ""
 
 #. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
 msgstr "Ontbrekende UNECE code op maateenheid '%s'"
 
 #. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid ""
@@ -67,14 +56,41 @@ msgstr ""
 "schema."
 
 #. module: base_ubl
+#. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid ""
 "The UBL XML file is not valid against the official XML Schema Definition. "
 "The XML file and the full error have been written in the server logs. Here "
-"is the error, which may give you an idea on the cause of the problem : %s."
+"is the error, which may give you an idea on the cause of the problem : "
+"%(error)s."
 msgstr ""
-"Het UBL XML bestand voldoet niet aan de officiele XML schma definitie. Het "
-"XML bestand en de volledige foutomschrijving zijn opgenomen in de errorlog "
-"van de server. De volgende foutmelding kan een hint zijn richting de oorzaak "
-"van het probleem: '%s'."
+
+#~ msgid "Display Name"
+#~ msgstr "Weergave naam"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Laatst gewijzigd op"
+
+#, python-format
+#~ msgid "Missing UNECE Tax Category on tax '%s'"
+#~ msgstr "Ontbrekende UNECE belastings categorie '%s'"
+
+#, python-format
+#~ msgid "Missing UNECE Tax Type on tax '%s'"
+#~ msgstr "Ontbrekend UNECE belastingstype op belasting '%s'"
+
+#, python-format
+#~ msgid ""
+#~ "The UBL XML file is not valid against the official XML Schema Definition. "
+#~ "The XML file and the full error have been written in the server logs. "
+#~ "Here is the error, which may give you an idea on the cause of the "
+#~ "problem : %s."
+#~ msgstr ""
+#~ "Het UBL XML bestand voldoet niet aan de officiele XML schma definitie. "
+#~ "Het XML bestand en de volledige foutomschrijving zijn opgenomen in de "
+#~ "errorlog van de server. De volgende foutmelding kan een hint zijn "
+#~ "richting de oorzaak van het probleem: '%s'."
