@@ -1,0 +1,438 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_pdf2data_oca
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Add a line field"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_field_form_view
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Add a static field"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_field_form_view
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Add regex field"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__backend_id
+msgid "Backend"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.edi_pdf2data_wizard_form
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_import_yml_form_view
+msgid "Cancel"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Check PDF"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__field_ids
+msgid "Child Fields"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Configuration"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__create_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__create_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__create_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml__create_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__create_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__create_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__create_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__create_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml__create_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__create_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml__data
+msgid "Data"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields.selection,name:edi_pdf2data_oca.selection__pdf2data_template_field__kind__date
+msgid "Date"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__date_format
+msgid "Date Format"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__decimal_separator
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__decimal_separator
+msgid "Decimal Separator"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__display_name
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__display_name
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__display_name
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml__display_name
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__display_name
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__end
+msgid "End"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__end_block
+msgid "End Block"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__exchange_type_id
+msgid "Exchange Type"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__exclude
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Exclude"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__exclude_keyword_ids
+msgid "Exclude Keyword"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__extracted_text
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Extracted Text"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__field_ids
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__field_id
+msgid "Field"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model,name:edi_pdf2data_oca.model_pdf2data_template_field
+msgid "Field for Pdf2data Template"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_field_form_view
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Fields"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__file_result
+msgid "File Result"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields.selection,name:edi_pdf2data_oca.selection__pdf2data_template_field__kind__float
+msgid "Float"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__from_char
+msgid "From Char"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__id
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__id
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__id
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml__id
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__id
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__id
+msgid "ID"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.edi_pdf2data_wizard_form
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_import_yml_form_view
+msgid "Import"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.actions.act_window,name:edi_pdf2data_oca.edi_pdf2data_wizard_action
+#: model:ir.ui.menu,name:edi_pdf2data_oca.edi_pdf2data_wizard_menu
+msgid "Import PDF"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.edi_pdf2data_wizard_form
+msgid "Import PDF to data extract"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Import YAML"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model,name:edi_pdf2data_oca.model_pdf2data_template_import_yml
+msgid "Import YML on a template"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Include"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields.selection,name:edi_pdf2data_oca.selection__pdf2data_template_field__kind__int
+msgid "Integer"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__keyword_ids
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__keyword
+msgid "Keyword"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model,name:edi_pdf2data_oca.model_pdf2data_template_keyword
+msgid "Keyword for Pdf2data Template"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Keywords"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__kind
+msgid "Kind"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__lang
+msgid "Language"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import____last_update
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template____last_update
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field____last_update
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml____last_update
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword____last_update
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__write_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__write_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__write_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml__write_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__write_uid
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__write_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__write_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__write_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml__write_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__write_date
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields.selection,name:edi_pdf2data_oca.selection__pdf2data_template_field__parse_mode__line
+msgid "Line"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__line_separator
+msgid "Line Separator"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__lowercase
+msgid "Lowercase"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__name
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__name
+msgid "Name"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: code:addons/edi_pdf2data_oca/wizard/pdf2data_import.py:0
+#, python-format
+msgid "No templates found for this document"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__pdf_file
+msgid "PDF"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__parse_mode
+msgid "Parse Mode"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__pdf_file
+msgid "Pdf File"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_import__pdf_file_name
+msgid "Pdf File Name"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__pdf_filename
+msgid "Pdf Filename"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__pdf2data_options_dict
+msgid "Pdf2Data Options Dict"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__pdf2data_template_dict
+msgid "Pdf2Data Template Dict"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.actions.act_window,name:edi_pdf2data_oca.pdf2data_template_act_window
+#: model:ir.model,name:edi_pdf2data_oca.model_pdf2data_template
+msgid "Pdf2data Template"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.actions.act_window,name:edi_pdf2data_oca.pdf2data_template_import_yml_act_window
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_import_yml_form_view
+msgid "Pdf2data Template Import Yml"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.ui.menu,name:edi_pdf2data_oca.pdf2data_template_menu
+msgid "Pdf2data Templates"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields.selection,name:edi_pdf2data_oca.selection__pdf2data_template_field__parse_mode__regex
+msgid "Regex"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__remove_accents
+msgid "Remove Accents"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__remove_whitespace
+msgid "Remove Whitespace"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__replace_ids
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Replace"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model,name:edi_pdf2data_oca.model_pdf2data_template_replace
+msgid "Replace rule for Pdf2data Template"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model_terms:ir.ui.view,arch_db:edi_pdf2data_oca.pdf2data_template_form_view
+msgid "Result"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__split_separator
+msgid "Split Separator"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__start
+msgid "Start"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__start_block
+msgid "Start Block"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields.selection,name:edi_pdf2data_oca.selection__pdf2data_template_field__parse_mode__static
+msgid "Static"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields.selection,name:edi_pdf2data_oca.selection__pdf2data_template_field__kind__str
+msgid "String"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__template_id
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_import_yml__template_id
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_keyword__template_id
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__template_id
+msgid "Template"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_replace__to_char
+msgid "To Char"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model.fields,field_description:edi_pdf2data_oca.field_pdf2data_template_field__value
+msgid "Value"
+msgstr ""
+
+#. module: edi_pdf2data_oca
+#: model:ir.model,name:edi_pdf2data_oca.model_pdf2data_import
+msgid "Wizard to import pdf and extract data"
+msgstr ""
