@@ -1,0 +1,77 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* base_ubl
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2019-11-12 17:34+0000\n"
+"Last-Translator: Bole <bole@dajmi5.com>\n"
+"Language-Team: none\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.8\n"
+
+#. module: base_ubl
+#: model:ir.model,name:base_ubl.model_base_ubl
+msgid "Common methods to generate and parse UBL XML files"
+msgstr "Uobičajene metode za generiranje i parsiranje UBL XML datoteka"
+
+#. module: base_ubl
+#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__display_name
+msgid "Display Name"
+msgstr "Naziv"
+
+#. module: base_ubl
+#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__id
+#, fuzzy
+msgid "ID"
+msgstr "ID"
+
+#. module: base_ubl
+#: model:ir.model.fields,field_description:base_ubl.field_base_ubl____last_update
+msgid "Last Modified on"
+msgstr "Zadnja modifikacija"
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:0
+#, python-format
+msgid "Missing UNECE Tax Category on tax '%s'"
+msgstr "Nedostaje UNECE kategorija poreza na porezu '%s'"
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:0
+#, python-format
+msgid "Missing UNECE Tax Type on tax '%s'"
+msgstr "Nedostaje UNECE tip poreza na porezu '%s'"
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:0
+#, python-format
+msgid "Missing UNECE code on unit of measure '%s'"
+msgstr "Nedostaje UNECE šifra jedinice mjere za '%s'"
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:0
+#, python-format
+msgid ""
+"The UBL XML file does not contain the version for validating the content "
+"according to the schema."
+msgstr ""
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:0
+#, python-format
+msgid ""
+"The UBL XML file is not valid against the official XML Schema Definition. "
+"The XML file and the full error have been written in the server logs. Here "
+"is the error, which may give you an idea on the cause of the problem : %s."
+msgstr ""
+"UBL datoteka nije valjana prema službenoj XML schemi. XML datoteka i puni "
+"opis greške je zapisan u  serverski log. Ovo je greška, možda imate ideju "
+"što nije u redu ili što je uzrok problemu: %s."
