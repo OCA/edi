@@ -1,0 +1,33 @@
+issuer: Amazon Web Services
+fields:
+  amount:
+    regex: TOTAL AMOUNT DUE ON.*\$(\d+\.\d+)
+    type: float
+  amount_untaxed:
+    regex: TOTAL AMOUNT DUE ON.*\$(\d+\.\d+)
+    type: float
+  date:
+    regex: Invoice Date:\s+([a-zA-Z]+ \d+ , \d+)
+    type: date
+  invoice_number:
+    regex: Invoice Number:\s+(\d+)
+  partner_name:
+    regex: (Amazon Web Services, Inc\.)
+  static_partner_website: aws.amazon.com
+keywords:
+  - Amazon Web Services
+  - $
+  - Invoice
+exclude_keywords: billing
+lines:
+  start: Detail
+  end: \* May include estimated US sales tax
+  first_line: ^    (?P<description>\w+.*)\$(?P<price_unit>\d+\.\d+)
+  line: (.*)\$(\d+\.\d+)
+  last_line: VAT \*\*
+options:
+  currency: USD
+  date_formats:
+    - "%B %d, %Y"
+  language: en
+  decimal_separator: "."
