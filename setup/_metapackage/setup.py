@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo-addon-account_einvoice_generate>=16.0dev,<16.1dev',
         'odoo-addon-base_edi>=16.0dev,<16.1dev',
         'odoo-addon-base_facturx>=16.0dev,<16.1dev',
+        'odoo-addon-base_ubl>=16.0dev,<16.1dev',
         'odoo-addon-pdf_helper>=16.0dev,<16.1dev',
     ],
     classifiers=[
