@@ -24,21 +24,6 @@ msgstr ""
 "bestanden"
 
 #. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__display_name
-msgid "Display Name"
-msgstr "Weergave naam"
-
-#. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__id
-msgid "ID"
-msgstr "ID"
-
-#. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl____last_update
-msgid "Last Modified on"
-msgstr "Laatst gewijzigd op"
-
-#. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
@@ -55,6 +40,12 @@ msgstr "Ontbrekend UNECE belastingstype op belasting '%s'"
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
 msgstr "Ontbrekende UNECE code op maateenheid '%s'"
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:0
+#, python-format
+msgid "Missing company!"
+msgstr ""
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
@@ -78,3 +69,12 @@ msgstr ""
 "XML bestand en de volledige foutomschrijving zijn opgenomen in de errorlog "
 "van de server. De volgende foutmelding kan een hint zijn richting de oorzaak "
 "van het probleem: '%s'."
+
+#~ msgid "Display Name"
+#~ msgstr "Weergave naam"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Laatst gewijzigd op"

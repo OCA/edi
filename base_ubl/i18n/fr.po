@@ -25,21 +25,6 @@ msgid "Common methods to generate and parse UBL XML files"
 msgstr "Méthodes courantes pour générer et analyser les fichiers UBL XML"
 
 #. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__display_name
-msgid "Display Name"
-msgstr "Afficher Nom"
-
-#. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl__id
-msgid "ID"
-msgstr "ID"
-
-#. module: base_ubl
-#: model:ir.model.fields,field_description:base_ubl.field_base_ubl____last_update
-msgid "Last Modified on"
-msgstr "Dernière modification le"
-
-#. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
@@ -56,6 +41,12 @@ msgstr "Type de taxe CEE-ONU manquant pour la taxe '%s'."
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
 msgstr "Code CEE-ONU manquant pour l'unité de mesure '%s'."
+
+#. module: base_ubl
+#: code:addons/base_ubl/models/ubl.py:0
+#, python-format
+msgid "Missing company!"
+msgstr ""
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
@@ -79,3 +70,12 @@ msgstr ""
 "du schéma XML. Le fichier XML et l'erreur complète ont été écrits dans les "
 "journaux du serveur. Voici l'erreur, qui peut vous donner une idée de la "
 "cause du problème : %s."
+
+#~ msgid "Display Name"
+#~ msgstr "Afficher Nom"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Dernière modification le"
