@@ -266,6 +266,20 @@
             </search>
         </field>
     </record>
+
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_record_recent_view">
+        <field name="name">Recent exchanges</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field
+            name="domain"
+            eval="[('create_date', '>=', (DateTime.today() - relativedelta(days=15)).strftime('%Y-%m-%d %H:%M:%S'))]"
+        />
+        <field name="context">{'search_default_filter_created_today': 1}</field>
+    </record>
+
     <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view">
         <field name="name">Exchanges</field>
         <field name="type">ir.actions.act_window</field>
@@ -286,7 +300,9 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_pending': 1}</field>
+        <field
+            name="context"
+        >{'search_default_filter_pending': 1, 'search_default_filter_created_today': 1}</field>
     </record>
 
     <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view_failed">
@@ -296,7 +312,9 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_failed': 1}</field>
+        <field
+            name="context"
+        >{'search_default_filter_failed': 1, 'search_default_filter_created_today': 1}</field>
     </record>
 
     <record
@@ -309,7 +327,9 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_inbound': 1}</field>
+        <field
+            name="context"
+        >{'search_default_filter_inbound': 1, 'search_default_filter_created_today': 1}</field>
     </record>
 
     <record
@@ -322,7 +342,9 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_outbound': 1}</field>
+        <field
+            name="context"
+        >{'search_default_filter_outbound': 1, 'search_default_filter_created_today': 1}</field>
     </record>
     <record
         model="ir.actions.act_window.view"
