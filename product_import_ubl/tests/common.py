@@ -25,7 +25,7 @@ def get_test_data(env):
                         "active": True,
                         "name": "Copy paper",
                         "code": "MNTR011",
-                        "barcode": False,
+                        "barcode": "1234567890884",
                         "product_code": "MNTR01349087911",
                         "description": "Photo copy paper 80g A4, package of 500 sheets.",
                         "uom": ref("uom.product_uom_lb"),
@@ -38,7 +38,7 @@ def get_test_data(env):
                         "active": True,
                         "name": "Copy paper",
                         "code": "MNTR012",
-                        "barcode": False,
+                        "barcode": "1234567890885",
                         "product_code": "MNTR01349087912",
                         "description": (
                             "Photo copy paper 80g A4, carton of 10 units "
@@ -103,7 +103,7 @@ def get_test_data(env):
                         "active": False,
                         "name": "Copy paper, outdated",
                         "code": "MNTR010X9",
-                        "barcode": False,
+                        "barcode": "1234567890991",
                         "product_code": False,
                         "description": False,
                         "uom": ref("uom.product_uom_unit"),

@@ -201,7 +201,7 @@
 				<cbc:ID>MNTR01349087911</cbc:ID>
 			</cac:ManufacturersItemIdentification>
 			<cac:StandardItemIdentification>
-				<cbc:ID schemeID="0160">1234567890114</cbc:ID>
+				<cbc:ID schemeAgencyID="6" schemeID="GTIN">1234567890884</cbc:ID>
 			</cac:StandardItemIdentification>
 			<cac:ItemSpecificationDocumentReference>
 				<cbc:ID>12345</cbc:ID>
@@ -285,7 +285,7 @@
 				<cbc:ID>MNTR01349087912</cbc:ID>
 			</cac:ManufacturersItemIdentification>
 			<cac:StandardItemIdentification>
-				<cbc:ID schemeID="0160">1234567890124</cbc:ID>
+				<cbc:ID schemeAgencyID="6" schemeID="GTIN">1234567890885</cbc:ID>
 			</cac:StandardItemIdentification>
 			<cac:CommodityClassification>
 				<cbc:ItemClassificationCode listID="MP" listVersionID="19.0501">20101601</cbc:ItemClassificationCode>
