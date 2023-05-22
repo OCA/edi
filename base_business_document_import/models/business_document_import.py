@@ -288,9 +288,8 @@ class BusinessDocumentImport(models.AbstractModel):
         partner = self._direct_match(partner_dict, rpo, raise_exception=raise_exception)
         if partner:
             return partner
-        company_id = self._context.get("force_company") or self.env.company.id
         domain = domain or []
-        domain += ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
+        domain += self._match_company_domain()
         order = self._get_match_partner_order(partner_type)
         partner_type_label = self._get_match_partner_type_label(partner_type)
         partner_dict["type"] = partner_type
@@ -506,12 +505,9 @@ class BusinessDocumentImport(models.AbstractModel):
                 _("IBAN <b>%s</b> is not valid, so it has been ignored.") % iban
             )
             return False
-        company_id = self._context.get("force_company") or self.env.company.id
         bankaccount = rpbo.search(
-            [
-                "|",
-                ("company_id", "=", False),
-                ("company_id", "=", company_id),
+            self._match_company_domain()
+            + [
                 ("sanitized_acc_number", "=", iban),
                 ("partner_id", "=", partner.id),
             ],
@@ -640,7 +636,7 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _match_company_domain(self):
-        company_id = self._context.get("force_company") or self.env.user.company_id.id
+        company_id = self._context.get("force_company") or self.env.company.id
         return ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
 
     @api.model
