@@ -114,7 +114,7 @@
                 />
             </cac:LegalMonetaryTotal>
             <t t-foreach="record.order_line" t-as="line">
-                <cac:OrderLine>
+                <cac:OrderLine t-if="line.edi_exchange_ready">
                     <cbc:SubstitutionStatusCode />
                     <cbc:Note />
                     <cac:LineItem>
