@@ -2,7 +2,7 @@
 # @author: Simone Orsi <simahaw@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class SaleOrder(models.Model):
@@ -52,3 +52,22 @@ class SaleOrderLine(models.Model):
         "edi.exchange.consumer.mixin",
         "edi.id.mixin",
     ]
+
+    # TODO: add test
+    edi_exchange_ready = fields.Boolean(compute="_compute_edi_exchange_ready")
+
+    @api.depends()
+    def _compute_edi_exchange_ready(self):
+        for rec in self:
+            rec.edi_exchange_ready = rec._edi_exchange_ready()
+
+    def _edi_exchange_ready(self):
+        # TODO: not sure we want to exclude lines w/o qty.
+        # We could have lines that are replaced and kept w/ no qty.
+        # ATM we don't give full info on replacements on such lines.
+        # Lines are simply marked as changed.
+        return (
+            not self._is_delivery()
+            and not self.display_type
+            and bool(self.product_uom_qty)
+        )
