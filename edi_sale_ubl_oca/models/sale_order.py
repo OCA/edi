@@ -79,6 +79,8 @@ class SaleOrderLine(models.Model):
         state_code = self.order_id.EDI_STATE_ORDER_LINE_ACCEPTED
         state = self.edi_find_state(code=state_code)
         for line in self:
+            if not line.edi_exchange_ready:
+                continue
             satisfied = line._edi_compare_orig_values(orig_vals)
             if not satisfied:
                 state_code = self.order_id.EDI_STATE_ORDER_LINE_CHANGED
