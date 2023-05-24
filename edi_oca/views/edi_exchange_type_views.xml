@@ -3,13 +3,14 @@
     <record id="edi_exchange_type_view_tree" model="ir.ui.view">
         <field name="model">edi.exchange.type</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree decoration-muted="(not active)">
                 <field name="backend_id" />
                 <field name="name" />
                 <field name="code" />
                 <field name="direction" />
                 <field name="ack_type_id" />
                 <field name="ack_for_type_ids" optional="hide" />
+                <field name="active" />
             </tree>
         </field>
     </record>
@@ -18,6 +19,13 @@
         <field name="arch" type="xml">
             <form string="EDI Exchange Type">
                 <sheet>
+                    <field name="active" invisible="1" />
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        attrs="{'invisible': [('active', '=', True)]}"
+                    />
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" />
                         <h1>
@@ -84,14 +92,29 @@
                 <field name="direction" />
                 <field name="ack_type_id" />
                 <filter
-                    name="inbound"
+                    name="filter_inbound"
                     string="Inbound"
                     domain="[('direction', '=', 'input')]"
                 />
                 <filter
-                    name="outbound"
+                    name="filter_outbound"
                     string="Outbound"
                     domain="[('direction', '=', 'output')]"
+                />
+                <filter
+                    name="filter_all"
+                    string="All"
+                    domain="['|', ('active', '=', True), ('active', '=', False)]"
+                />
+                <filter
+                    name="filter_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="filter_archived"
+                    string="Archived"
+                    domain="[('active', '=', False)]"
                 />
                 <group expand="0" string="Group By">
                     <filter
@@ -110,7 +133,7 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_type_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{}</field>
+        <field name="context">{'search_default_filter_all': 1}</field>
     </record>
     <record
         model="ir.actions.act_window.view"
