@@ -222,3 +222,7 @@ class TestEndpoint(CommonEndpoint):
             self.assertEqual(
                 partial_func.func.__name__, "_handle_registry_sync_post_commit"
             )
+
+    def test_duplicate(self):
+        endpoint = self.endpoint.copy()
+        self.assertTrue(endpoint.route.endswith("/COPY_FIXME"))
