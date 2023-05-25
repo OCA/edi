@@ -180,3 +180,12 @@ class EndpointMixin(models.AbstractModel):
 
     def _find_endpoint_domain(self, endpoint_route):
         return [("route", "=", endpoint_route)]
+
+    def copy_data(self, default=None):
+        result = super().copy_data(default=default)
+        # `route` cannot be copied as it must me unique.
+        # Yet, we want to be able to duplicate a record from the UI.
+        for rec, data in zip(self, result):
+            if not data.get("route"):
+                data["route"] = f"{rec.route}/COPY_FIXME"
+        return result
