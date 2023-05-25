@@ -58,10 +58,9 @@ class EDIBackend(models.Model):
         # Load additional ctx keys if any
         collection = self
         # TODO: document/test this
-        env_ctx = record_conf.get("env_ctx", {})
-        if env_ctx:
-            collection = collection.with_context(**env_ctx)
-            exchange_record = exchange_record.with_context(**env_ctx)
+        env_ctx = self._get_component_env_ctx(record_conf, key)
+        collection = collection.with_context(**env_ctx)
+        exchange_record = exchange_record.with_context(**env_ctx)
         work_ctx = {"exchange_record": exchange_record}
         # Inject work context from advanced settings
         work_ctx.update(record_conf.get("work_ctx", {}))
@@ -75,6 +74,12 @@ class EDIBackend(models.Model):
             work_ctx=work_ctx,
             **match_attrs,
         )
+
+    def _get_component_env_ctx(self, record_conf, key):
+        env_ctx = record_conf.get("env_ctx", {})
+        # You can use `edi_session` down in the stack to control logics.
+        env_ctx.update(dict(edi_framework_action=key))
+        return env_ctx
 
     def _component_match_attrs(self, exchange_record, key):
         """Attributes that will be used to lookup components.
@@ -203,6 +208,7 @@ class EDIBackend(models.Model):
         self.ensure_one()
         self._check_exchange_generate(exchange_record, force=force)
         output = self._exchange_generate(exchange_record, **kw)
+        message = None
         if output and store:
             if not isinstance(output, bytes):
                 output = output.encode()
@@ -228,7 +234,7 @@ class EDIBackend(models.Model):
                 exchange_record.update(
                     {"edi_exchange_state": state, "exchange_error": error}
                 )
-                exchange_record._notify_related_record(message)
+        exchange_record.notify_action_complete("generate", message=message)
         return output
 
     def _check_exchange_generate(self, exchange_record, force=False):
@@ -311,8 +317,7 @@ class EDIBackend(models.Model):
                     "exchanged_on": fields.Datetime.now(),
                 }
             )
-            if message:
-                exchange_record._notify_related_record(message)
+        exchange_record.notify_action_complete("send", message=message)
         return res
 
     def _swallable_exceptions(self):
@@ -450,6 +455,7 @@ class EDIBackend(models.Model):
             return False
         state = exchange_record.edi_exchange_state
         error = False
+        message = None
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
@@ -476,6 +482,7 @@ class EDIBackend(models.Model):
                 exchange_record._notify_error("process_ko")
             elif state == "input_processed":
                 exchange_record._notify_done()
+        exchange_record.notify_action_complete("process", message=message)
         return res
 
     def _exchange_process(self, exchange_record):
@@ -528,8 +535,7 @@ class EDIBackend(models.Model):
                     "exchanged_on": fields.Datetime.now(),
                 }
             )
-            if message:
-                exchange_record._notify_related_record(message)
+        exchange_record.notify_action_complete("receive", message=message)
         return res
 
     def _exchange_receive_check(self, exchange_record):
