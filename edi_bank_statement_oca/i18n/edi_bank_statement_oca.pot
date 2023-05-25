@@ -1,0 +1,39 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_bank_statement_oca
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_bank_statement_oca
+#: model_terms:ir.ui.view,arch_db:edi_bank_statement_oca.view_bank_statement_form
+msgid "<span class=\"o_stat_text\">EDI</span>"
+msgstr ""
+
+#. module: edi_bank_statement_oca
+#: model:ir.model,name:edi_bank_statement_oca.model_account_bank_statement
+msgid "Bank Statement"
+msgstr ""
+
+#. module: edi_bank_statement_oca
+#: model:ir.actions.act_window,name:edi_bank_statement_oca.act_open_edi_exchange_record_account_bank_statement_view
+msgid "Bank Statement Exchange Record"
+msgstr ""
+
+#. module: edi_bank_statement_oca
+#: model:ir.ui.menu,name:edi_bank_statement_oca.menu_bank_statement_edi_exchange_record
+msgid "Bank Statements"
+msgstr ""
+
+#. module: edi_bank_statement_oca
+#: model:ir.ui.menu,name:edi_bank_statement_oca.menu_bank_statement_edi_root
+msgid "Exchange records"
+msgstr ""
