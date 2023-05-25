@@ -83,6 +83,34 @@ class AccountInvoice(models.Model):
                 [self.id], "account.report_invoice")
             binary_node.text = pdf_inv.encode('base64')
 
+    def _ubl_get_invoice_vat_exclusive_amount(self):
+        amount = self.amount_untaxed
+        # Add also non-VAT taxes that are not subjected to VAT
+        for invoice_tax in self.tax_line_ids:
+            tax = invoice_tax.tax_id
+            if tax.unece_type_id.code != "VAT":
+                amount += invoice_tax.amount
+        return amount
+
+    def _ubl_get_invoice_vat_amount(self):
+        amount = self.amount_tax
+        # Add also non-VAT taxes that are not subjected to VAT
+        for invoice_tax in self.tax_line_ids:
+            tax = invoice_tax.tax_id
+            if tax.unece_type_id.code != "VAT":
+                amount -= invoice_tax.amount
+        return amount
+
+    def _ubl_get_charge_total_amount(self):
+        amount = 0.0
+        for tline in self.tax_line_ids:
+            if tline.tax_id.unece_type_id.code != "VAT":
+                if not tline.tax_id.include_base_amount:
+                    # For non-VAT taxes, not subject to VAT, they are declared
+                    # as AllowanceCharge
+                    amount += tline.amount
+        return amount
+
     def _ubl_add_legal_monetary_total(self, parent_node, ns, version='2.1'):
         monetary_total = etree.SubElement(
             parent_node, ns['cac'] + 'LegalMonetaryTotal')
@@ -95,11 +123,19 @@ class AccountInvoice(models.Model):
         tax_excl_total = etree.SubElement(
             monetary_total, ns['cbc'] + 'TaxExclusiveAmount',
             currencyID=cur_name)
-        tax_excl_total.text = '%0.*f' % (prec, self.amount_untaxed)
+        tax_excl_total.text = "%0.*f" % (
+            prec, self._ubl_get_invoice_vat_exclusive_amount())
         tax_incl_total = etree.SubElement(
             monetary_total, ns['cbc'] + 'TaxInclusiveAmount',
             currencyID=cur_name)
         tax_incl_total.text = '%0.*f' % (prec, self.amount_total)
+        charge_total_amount = self._ubl_get_charge_total_amount()
+        if charge_total_amount:
+            el_charge_total_amount = etree.SubElement(
+                monetary_total, ns["cbc"] + "ChargeTotalAmount",
+                currencyID=cur_name)
+            el_charge_total_amount.text = "%0.*f" % (
+                prec, charge_total_amount)
         prepaid_amount = etree.SubElement(
             monetary_total, ns['cbc'] + 'PrepaidAmount',
             currencyID=cur_name)
@@ -110,6 +146,50 @@ class AccountInvoice(models.Model):
             currencyID=cur_name)
         payable_amount.text = '%0.*f' % (prec, self.residual)
 
+    def _ubl_get_invoice_line_price_unit(self, iline):
+        """Compute the base unit price without taxes"""
+        price = iline.price_unit
+        qty = 1.0
+        if iline.invoice_line_tax_ids:
+            tax_incl = any(t.price_include for t in iline.invoice_line_tax_ids)
+            if tax_incl:
+                # To prevent rounding issue, we must declare tax excluded price
+                # for the total quantity
+                qty = iline.quantity
+            taxes = iline.invoice_line_tax_ids.compute_all(
+                price, self.currency_id, qty, product=iline.product_id,
+                partner=self.partner_id)
+            if taxes:
+                price = taxes['total_excluded']
+        dpo = self.env["decimal.precision"]
+        price_precision = dpo.precision_get("Product Price")
+        return price, price_precision, qty
+
+    def _ubl_get_invoice_line_discount(self, iline, base_price, base_qty):
+        # Formula: Net amount = Invoiced quantity * (Item net price/item price
+        #   base quantity) + Sum of invoice line charge amount - sum of invoice
+        #   line allowance amount
+        discount = iline.quantity / base_qty * base_price - iline.price_subtotal
+        dpo = self.env["decimal.precision"]
+        price_precision = dpo.precision_get("Product Price")
+        discount = float_round(discount, precision_digits=price_precision)
+        return discount, price_precision
+
+    def _ubl_add_invoice_line_discount(self, xml_root, iline, base_price, base_qty, ns, version='2.1'):
+        discount, prec = self._ubl_get_invoice_line_discount(iline, base_price, base_qty)
+        if float_is_zero(discount, precision_digits=prec):
+            return
+        charge_node = etree.SubElement(xml_root, ns["cac"] + "AllowanceCharge")
+        charge_indicator_node = etree.SubElement(charge_node, ns["cbc"] + "ChargeIndicator")
+        charge_indicator_node.text = "false"
+        charge_reason_code_node = etree.SubElement(charge_node, ns["cbc"] + "AllowanceChargeReasonCode")
+        charge_reason_code_node.text = "95"
+        charge_reason_node = etree.SubElement(charge_node, ns["cbc"] + "AllowanceChargeReason")
+        charge_reason_node.text = "Discount"
+        charge_amount_node = etree.SubElement(
+            charge_node, ns["cbc"] + "Amount", currencyID=self.currency_id.name)
+        charge_amount_node.text = "%0.*f" % (prec, discount)
+
     def _ubl_add_invoice_line(
             self, parent_node, iline, line_number, ns, version='2.1'):
         cur_name = self.currency_id.name
@@ -117,7 +197,6 @@ class AccountInvoice(models.Model):
             parent_node, ns['cac'] + 'InvoiceLine')
         dpo = self.env['decimal.precision']
         qty_precision = dpo.precision_get('Product Unit of Measure')
-        price_precision = dpo.precision_get('Product Price')
         account_precision = self.currency_id.decimal_places
         line_id = etree.SubElement(line_root, ns['cbc'] + 'ID')
         line_id.text = unicode(line_number)
@@ -134,10 +213,13 @@ class AccountInvoice(models.Model):
                 line_root, ns['cbc'] + 'InvoicedQuantity')
         qty = iline.quantity
         quantity.text = '%0.*f' % (qty_precision, qty)
+        base_price, price_precision, base_qty = self._ubl_get_invoice_line_price_unit(iline)
         line_amount = etree.SubElement(
             line_root, ns['cbc'] + 'LineExtensionAmount',
             currencyID=cur_name)
         line_amount.text = '%0.*f' % (account_precision, iline.price_subtotal)
+        self._ubl_add_invoice_line_discount(
+            line_root, iline, base_price, base_qty, ns, version=version)
         self._ubl_add_invoice_line_tax_total(
             iline, line_root, ns, version=version)
         self._ubl_add_item(
@@ -146,30 +228,26 @@ class AccountInvoice(models.Model):
         price_node = etree.SubElement(line_root, ns['cac'] + 'Price')
         price_amount = etree.SubElement(
             price_node, ns['cbc'] + 'PriceAmount', currencyID=cur_name)
-        price_unit = 0.0
-        # Use price_subtotal/qty to compute price_unit to be sure
-        # to get a *tax_excluded* price unit
-        if not float_is_zero(qty, precision_digits=qty_precision):
-            price_unit = float_round(
-                iline.price_subtotal / float(qty),
-                precision_digits=price_precision)
-        price_amount.text = '%0.*f' % (price_precision, price_unit)
+        price_amount.text = '%0.*f' % (price_precision, base_price)
         if uom_unece_code:
-            base_qty = etree.SubElement(
+            base_qty_node = etree.SubElement(
                 price_node, ns['cbc'] + 'BaseQuantity',
                 unitCode=uom_unece_code)
         else:
-            base_qty = etree.SubElement(price_node, ns['cbc'] + 'BaseQuantity')
-        base_qty.text = '%0.*f' % (qty_precision, qty)
+            base_qty_node = etree.SubElement(price_node, ns['cbc'] + 'BaseQuantity')
+        base_qty_node.text = '%0.*f' % (qty_precision, base_qty)
 
     def _ubl_add_invoice_line_tax_total(
             self, iline, parent_node, ns, version='2.1'):
         cur_name = self.currency_id.name
         prec = self.currency_id.decimal_places
         tax_total_node = etree.SubElement(parent_node, ns['cac'] + 'TaxTotal')
-        price = iline.price_unit * (1 - (iline.discount or 0.0) / 100.0)
-        res_taxes = iline.invoice_line_tax_ids.compute_all(
-            price, quantity=iline.quantity, product=iline.product_id,
+        # Peppol BIS Billing 3.0 supports only VAT taxes
+        # Other taxes must be defined as AllowanceCharge
+        vat_taxes = iline.invoice_line_tax_ids.filtered(
+            lambda t: t.unece_type_id.code == "VAT")
+        res_taxes = vat_taxes.compute_all(
+            iline.price_subtotal, quantity=1, product=iline.product_id,
             partner=self.partner_id)
         tax_total = float_round(
             res_taxes['total_included'] - res_taxes['total_excluded'],
@@ -180,24 +258,44 @@ class AccountInvoice(models.Model):
         if not float_is_zero(tax_total, precision_digits=prec):
             for res_tax in res_taxes['taxes']:
                 tax = self.env['account.tax'].browse(res_tax['id'])
-                # we don't have the base amount in res_tax :-(
                 self._ubl_add_tax_subtotal(
-                    False, res_tax['amount'], tax, cur_name, tax_total_node,
-                    ns, version=version)
+                    iline.price_subtotal, res_tax["amount"], tax, cur_name,
+                    tax_total_node, ns, version=version)
 
     def _ubl_add_tax_total(self, xml_root, ns, version='2.1'):
         self.ensure_one()
         cur_name = self.currency_id.name
+        prec = self.currency_id.decimal_places
+        for tline in self.tax_line_ids:
+            if tline.tax_id.unece_type_id.code != "VAT":
+                if not tline.tax_id.include_base_amount:
+                    # For non-VAT taxes, not subject to VAT, declare as AllowanceCharge
+                    charge_node = etree.SubElement(xml_root, ns["cac"] + "AllowanceCharge")
+                    charge_indicator_node = etree.SubElement(charge_node, ns["cbc"] + "ChargeIndicator")
+                    charge_indicator_node.text = "true"
+                    charge_reason_code_node = etree.SubElement(charge_node, ns["cbc"] + "AllowanceChargeReasonCode")
+                    charge_reason_code_node.text = "ABK"
+                    charge_reason_node = etree.SubElement(charge_node, ns["cbc"] + "AllowanceChargeReason")
+                    charge_reason_node.text = "Miscellaneous"
+                    charge_amount_node = etree.SubElement(
+                        charge_node, ns["cbc"] + "Amount", currencyID=cur_name)
+                    charge_amount_node.text = '%0.*f' % (prec, tline.amount)
+                    self._ubl_add_tax_category(tline.tax_id, charge_node, ns, version=version)
         tax_total_node = etree.SubElement(xml_root, ns['cac'] + 'TaxTotal')
         tax_amount_node = etree.SubElement(
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
-        prec = self.currency_id.decimal_places
-        tax_amount_node.text = '%0.*f' % (prec, self.amount_tax)
+        tax_amount_node.text = "%0.*f" % (prec, self._ubl_get_invoice_vat_amount())
         if not float_is_zero(self.amount_tax, precision_digits=prec):
             for tline in self.tax_line_ids:
-                self._ubl_add_tax_subtotal(
-                    tline.base, tline.amount, tline.tax_id, cur_name,
-                    tax_total_node, ns, version=version)
+                if tline.tax_id.unece_type_id.code == "VAT":
+                    self._ubl_add_tax_subtotal(
+                        tline.base, tline.amount, tline.tax_id, cur_name,
+                        tax_total_node, ns, version=version)
+                elif not tline.tax_id.include_base_amount:
+                    # For non-VAT taxes, not subject to VAT, declare as VAT exempted
+                    self._ubl_add_tax_subtotal(
+                        tline.amount, 0, tline.tax_id, cur_name,
+                        tax_total_node, ns, version=version)
 
     def generate_invoice_ubl_xml_etree(self, version='2.1'):
         nsmap, ns = self._ubl_get_nsmap_namespace('Invoice-2', version=version)

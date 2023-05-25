@@ -377,9 +377,11 @@ class BaseUbl(models.AbstractModel):
             # contains the taxes of the product without taking into
             # account the fiscal position
             if type == 'sale':
-                taxes = product.taxes_id
+                taxes = product.taxes_id.filtered(
+                    lambda t: t.unece_type_id.code == "VAT")
             else:
-                taxes = product.supplier_taxes_id
+                taxes = product.supplier_taxes_id.filtered(
+                    lambda t: t.unece_type_id.code == "VAT")
             if taxes:
                 for tax in taxes:
                     self._ubl_add_tax_category(
@@ -433,10 +435,16 @@ class BaseUbl(models.AbstractModel):
         tax_name = etree.SubElement(
             tax_category, ns['cbc'] + 'Name')
         tax_name.text = tax.name
-        if tax.amount_type == 'percent':
-            tax_percent = etree.SubElement(
-                tax_category, ns['cbc'] + 'Percent')
+        tax_percent = etree.SubElement(
+            tax_category, ns["cbc"] + "Percent")
+        if tax.amount_type == "percent":
             tax_percent.text = unicode(tax.amount)
+        else:
+            tax_percent.text = "0"
+        if tax.unece_categ_code == "E":
+            tax_exmption_reason = etree.SubElement(
+                tax_category, ns['cbc'] + "TaxExemptionReason")
+            tax_exmption_reason.text = "Exempt"
         tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_tax(tax)
         self._ubl_add_tax_scheme(
             tax_scheme_dict, tax_category, ns, version=version)
@@ -446,8 +454,9 @@ class BaseUbl(models.AbstractModel):
         if not tax.unece_type_id:
             raise UserError(_(
                 "Missing UNECE Tax Type on tax '%s'" % tax.name))
+        # Peppol BIS Billing 3.0 supports only VAT taxes
         tax_scheme_dict = {
-            'id': tax.unece_type_code,
+            'id': "VAT",  # tax.unece_type_code,
             'name': False,
             'type_code': False,
             }
