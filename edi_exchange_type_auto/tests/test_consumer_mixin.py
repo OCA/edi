@@ -65,7 +65,7 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
                 # Allow it
                 mocked.return_value = ("create",)
                 record.write(vals)
-                mocked_collect.assert_called_with("write", vals)
+                mocked_collect.assert_called_with("write", [vals])
 
     def test_no_conf_no_trigger(self):
         with mock.patch.object(

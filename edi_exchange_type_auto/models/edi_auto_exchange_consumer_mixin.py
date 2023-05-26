@@ -32,25 +32,35 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
         # "unlink",
     )
 
-    def create(self, vals):
-        rec = super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
         todo = None
         operation = "create"
-        if not self._edi_auto_skip(operation):
-            todo = rec._edi_auto_collect_todo(operation, vals)
+        candidates = self.browse()
+        for rec in records:
+            if not rec._edi_auto_skip(operation):
+                candidates |= rec
+        if candidates:
+            todo = candidates._edi_auto_collect_todo(operation, vals_list)
         if todo:
             # TODO: schedule call on post commit
-            rec._edi_auto_handle(todo)
+            candidates._edi_auto_handle(todo)
         return rec
 
     def write(self, vals):
         todo = None
         operation = "write"
-        if not self._edi_auto_skip(operation):
-            todo = self._edi_auto_collect_todo(operation, vals)
+        candidates = self.browse()
+        for rec in self:
+            if not rec._edi_auto_skip(operation):
+                candidates |= rec
+        if candidates:
+            todo_vals = [vals.copy() for x in candidates]
+            todo = candidates._edi_auto_collect_todo(operation, todo_vals)
         res = super().write(vals)
         if todo:
-            self._edi_auto_handle(todo)
+            candidates._edi_auto_handle(todo)
         return res
 
     # TODO
@@ -69,11 +79,11 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
             return True
         return False
 
-    def _edi_auto_collect_todo(self, operation, new_vals):
+    def _edi_auto_collect_todo(self, operation, new_vals_list):
         """Generate list of automatic actions to do.
 
         :param operation: valid edi action (see ``edi.backend._is_valid_edi_action``)
-        :param new_vals: new values for current record(s)
+        :param new_vals: list of new values for current record(s)
         """
         res = []
         # auto:
@@ -97,10 +107,11 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
         #           - state
         #           - expected_date
         #
-        rec_by_type = self._edi_auto_collect_records_by_type(operation)
+        rec_by_type = self._edi_auto_collect_records_by_type(operation, new_vals_list)
         for exc_type, data in rec_by_type.items():
             conf = data["conf"]
             records = data["records"]
+            new_vals = data["new_vals"]
             if not exc_type.backend_id:
                 # TODO: add validation on adv settings?
                 skip_reason = f"Backend required, not set on type={exc_type.code}"
@@ -174,10 +185,10 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
                         res.append(todo)
         return res
 
-    def _edi_auto_collect_records_by_type(self, operation):
+    def _edi_auto_collect_records_by_type(self, operation, new_vals_list):
         skip_type_ids = set()
         rec_by_type = {}
-        for rec in self:
+        for rec, new_vals in zip(self, new_vals_list):
             for type_id, conf in rec.edi_config.items():
                 if type_id in skip_type_ids:
                     continue
@@ -195,7 +206,11 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
                     self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
                     continue
                 if type_id not in rec_by_type:
-                    rec_by_type[exc_type] = {"conf": auto_conf, "records": []}
+                    rec_by_type[exc_type] = {
+                        "conf": auto_conf,
+                        "records": [],
+                        "new_vals": new_vals,
+                    }
                 rec_by_type[exc_type]["records"].append(rec)
         return rec_by_type
 
