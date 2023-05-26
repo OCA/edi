@@ -20,9 +20,10 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         cls.exc_record_in = cls.backend.create_record(
             cls.exc_type_in.code, {"edi_exchange_state": "input_received"}
         )
-        cls._setup_order()
-        cls.sale.origin_exchange_record_id = cls.exc_record_in
-        cls.sale.order_line.origin_exchange_record_id = cls.exc_record_in
+        cls._setup_order(
+            origin_exchange_record_id=cls.exc_record_in.id,
+            line_defaults=dict(origin_exchange_record_id=cls.exc_record_in.id),
+        )
 
     @classmethod
     def _get_backend(cls):
