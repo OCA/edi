@@ -3,7 +3,7 @@
 
 {
     "name": "Product Import",
-    "version": "14.0.1.1.0",
+    "version": "14.0.1.1.1",
     "development_status": "Alpha",
     "license": "AGPL-3",
     "summary": "Import product catalogues",
