@@ -8,7 +8,7 @@ import os
 import xmlunittest
 
 from odoo import fields
-from odoo.tests.common import Form, SavepointCase
+from odoo.tests.common import SavepointCase
 
 from odoo.addons.sale_order_import_ubl.tests.common import get_test_data
 
@@ -57,21 +57,18 @@ class XMLBaseTestCase(SavepointCase, xmlunittest.XmlTestMixin):
 
 class OrderMixin(object):
     @classmethod
-    def _create_sale_order(cls, values, view=None):
+    def _create_sale_order(cls, **kw):
         """Create a sale order
 
         :return: sale order
         """
-        form = Form(cls.env["sale.order"], view=view)
-        form.commitment_date = fields.Date.today()
-        lines = values.pop("order_line", [])
-        for k, v in values.items():
-            setattr(form, k, v)
-        for line_vals in lines:
-            with form.order_line.new() as form_line:
-                for k, v in line_vals.items():
-                    setattr(form_line, k, v)
-        return form.save()
+        model = cls.env["sale.order"]
+        vals = dict(commitment_date=fields.Date.today())
+        vals.update(kw)
+        so_vals = model.play_onchanges(vals, [])
+        if "order_line" in so_vals:
+            so_vals["order_line"] = [(0, 0, x) for x in vals["order_line"]]
+        return model.create(so_vals)
 
     @classmethod
     def _setup_order(cls, **kw):
@@ -81,17 +78,21 @@ class OrderMixin(object):
         cls.product_b.barcode = "2" * 14
         cls.product_c = cls.env.ref("product.product_product_4c")
         cls.product_c.barcode = "3" * 14
+        line_defaults = kw.pop("line_defaults", {})
         vals = {
-            "partner_id": cls.env.ref("base.res_partner_10"),
+            "partner_id": cls.env.ref("base.res_partner_10").id,
             "commitment_date": "2022-07-29",
         }
         vals.update(kw)
         vals["order_line"] = [
-            {"product_id": cls.product_a, "product_uom_qty": 300, "edi_id": 1000},
-            {"product_id": cls.product_b, "product_uom_qty": 200, "edi_id": 2000},
-            {"product_id": cls.product_c, "product_uom_qty": 100, "edi_id": 3000},
+            {"product_id": cls.product_a.id, "product_uom_qty": 300, "edi_id": 1000},
+            {"product_id": cls.product_b.id, "product_uom_qty": 200, "edi_id": 2000},
+            {"product_id": cls.product_c.id, "product_uom_qty": 100, "edi_id": 3000},
         ]
-        cls.sale = cls._create_sale_order(vals)
+        if line_defaults:
+            for line in vals["order_line"]:
+                line.update(line_defaults)
+        cls.sale = cls._create_sale_order(**vals)
         cls.sale.client_order_ref = "ABC123"
         cls.sale.action_confirm()
 
