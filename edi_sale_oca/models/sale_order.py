@@ -23,11 +23,7 @@ class SaleOrder(models.Model):
     # and ask the sender to issue a new order request.
     # This approach seems suitable only for orders that do not get processed immediately.
 
-    # TODO: this field should be moved to the consumer mixin
-    # Each extending module should then override `states` as needed.
     disable_edi_auto = fields.Boolean(
-        help="When marked, EDI automatic processing will be avoided",
-        readonly=True,
         states={"draft": [("readonly", False)]},
     )
 
@@ -52,6 +48,8 @@ class SaleOrderLine(models.Model):
         "edi.exchange.consumer.mixin",
         "edi.id.mixin",
     ]
+
+    disable_edi_auto = fields.Boolean(related="order_id.disable_edi_auto")
 
     # TODO: add test
     edi_exchange_ready = fields.Boolean(compute="_compute_edi_exchange_ready")
