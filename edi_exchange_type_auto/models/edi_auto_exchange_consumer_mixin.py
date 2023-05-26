@@ -197,7 +197,7 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
                 auto_conf = conf.get("auto", {})
                 actions = auto_conf.get("actions", {})
                 skip_reason = None
-                if not auto_conf:
+                if not auto_conf or auto_conf.get("disable"):
                     skip_reason = "Auto-conf not found or disabled"
                 elif not actions:
                     skip_reason = "Auto-conf has no action configured"
