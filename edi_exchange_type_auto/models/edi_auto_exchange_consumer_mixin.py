@@ -98,22 +98,22 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
             if not exc_type.backend_id:
                 # TODO: add validation on adv settings?
                 skip_reason = f"Backend required, not set on type={exc_type.code}"
-                self._edi_auto_log_skip(operation, exc_type, skip_reason)
+                self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
                 continue
             backend = exc_type.backend_id
             for action_name, action_conf in conf.get("actions", {}).items():
                 if not backend._is_valid_edi_action(action_name):
                     skip_reason = f"EDI action not allowed ={action_name}"
-                    self._edi_auto_log_skip(operation, exc_type, skip_reason)
+                    self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
                     continue
                 if operation not in action_conf.get("when", []):
                     skip_reason = f"Operation not allowed by action={action_name}"
-                    self._edi_auto_log_skip(operation, exc_type, skip_reason)
+                    self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
                     continue
                 triggers = action_conf.get("trigger_fields", [])
                 if not triggers:
                     skip_reason = f"No trigger set for action={action_name}"
-                    self._edi_auto_log_skip(operation, exc_type, skip_reason)
+                    self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
                     continue
                 tracked = action_conf.get("tracked_fields", [])
                 trigger = None
@@ -131,7 +131,9 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
                             checker = getattr(self, callable_name)
                         except AttributeError:
                             skip_reason = f"Invalid callable={callable_name}"
-                            self._edi_auto_log_skip(operation, exc_type, skip_reason)
+                            self._edi_auto_log_skip(
+                                operation, skip_reason, exc_type=exc_type
+                            )
                             continue
                     vals = frozendict(
                         {k: v for k, v in new_vals.items() if k in tracked}
@@ -159,7 +161,9 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
                             skip_reason = (
                                 f"Checker {checker.__func__.__name__} skip action"
                             )
-                            self._edi_auto_log_skip(operation, exc_type, skip_reason)
+                            self._edi_auto_log_skip(
+                                operation, skip_reason, exc_type=exc_type
+                            )
                             continue
                         res.append(todo)
         return res
@@ -182,23 +186,25 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
                     skip_reason = "Auto-conf has no action configured"
                 if skip_reason:
                     skip_type_ids.add(type_id)
-                    self._edi_auto_log_skip(operation, exc_type, skip_reason)
+                    self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
                     continue
                 if type_id not in rec_by_type:
                     rec_by_type[exc_type] = {"conf": auto_conf, "records": []}
                 rec_by_type[exc_type]["records"].append(rec)
         return rec_by_type
 
-    def _edi_auto_log_skip(self, operation, exc_type, reason):
-        _logger.debug(
-            "Skip model=%(model)s type=%(type_code)s op=%(op)s: %(reason)s",
-            {
-                "model": self._name,
-                "op": operation,
-                "type_code": exc_type.code,
-                "reason": reason,
-            },
-        )
+    def _edi_auto_log_skip(self, operation, reason, exc_type=None):
+        log_msg = "Skip model=%(model)s op=%(op)s"
+        log_args = {
+            "model": self._name,
+            "op": operation,
+            "reason": reason,
+        }
+        if exc_type:
+            log_msg += " type=%(type_code)s: "
+            log_args["type_code"] = exc_type.code
+        log_msg += ": %(reason)s"
+        _logger.debug(log_msg, log_args)
 
     def _edi_auto_get_target_record(self, rec, action_conf):
         target_record = rec
