@@ -129,6 +129,8 @@ class ProductImport(models.TransientModel):
             for s_info in product.seller_ids:
                 if s_info.name.id != seller_info["name"]:
                     continue
+                if s_info.company_id.id not in (seller_info["company_id"], False):
+                    continue
                 if s_info.date_end and s_info.date_end < today:
                     continue
                 if (
@@ -136,6 +138,7 @@ class ProductImport(models.TransientModel):
                     and s_info.min_qty == seller_info["min_qty"]
                     and s_info.price == seller_info["price"]
                     and s_info.currency_id.id == seller_info["currency_id"]
+                    and s_info.company_id.id == seller_info["company_id"]
                 ):
                     seller_id = s_info.id
                 else:
@@ -147,12 +150,20 @@ class ProductImport(models.TransientModel):
 
     @api.model
     def _prepare_product(self, parsed_product, chatter_msg, seller=None):
-        try:
-            product = self._bdimport.with_context(active_test=False)._match_product(
-                parsed_product, chatter_msg, seller=seller
+        # Important: barcode is unique key of product.template model
+        # So records product.product are created with company_id=False.
+        # Only the pricelist (product.supplierinfo) is company-specific.
+        product_company_id = self.env.context.get("product_company_id", False)
+        if not parsed_product["barcode"]:
+            chatter_msg.append(
+                _("Cannot import product without barcode: %s") % (parsed_product,)
             )
-        except UserError:
-            product = None
+            return False
+        product = (
+            self.env["product.product"]
+            .with_context(active_test=False)
+            .search([("barcode", "=", parsed_product["barcode"])], limit=1)
+        )
         uom = self._bdimport._match_uom(parsed_product["uom"], chatter_msg)
         currency = self._bdimport._match_currency(
             parsed_product["currency"], chatter_msg
@@ -167,7 +178,7 @@ class ProductImport(models.TransientModel):
             "type": "product",
             "uom_id": uom.id,
             "uom_po_id": uom.id,
-            "company_id": self.env.context.get("company_id") or False,
+            "company_id": False,
         }
         seller_info = {
             "name": seller and seller.id or False,
@@ -175,6 +186,7 @@ class ProductImport(models.TransientModel):
             "price": parsed_product["price"],
             "currency_id": currency.id,
             "min_qty": parsed_product["min_qty"],
+            "company_id": product_company_id,
         }
         product_vals["seller_ids"] = self._prepare_supplierinfo(seller_info, product)
         if product:
@@ -185,6 +197,8 @@ class ProductImport(models.TransientModel):
     @api.model
     def create_product(self, parsed_product, chatter_msg, seller=None):
         product_vals = self._prepare_product(parsed_product, chatter_msg, seller=seller)
+        if not product_vals:
+            return False
         product = product_vals.pop("recordset", None)
         if product:
             product.write(product_vals)
@@ -198,11 +212,13 @@ class ProductImport(models.TransientModel):
     def _create_products(self, catalogue, seller, filename=None):
         products = self.env["product.product"].browse()
         for product in catalogue.get("products"):
-            products |= self.create_product(
+            record = self.create_product(
                 product,
                 catalogue["chatter_msg"],
                 seller=seller,
             )
+            if record:
+                products |= record
         self._bdimport.post_create_or_update(catalogue, seller, doc_filename=filename)
         logger.info("Products updated for vendor %d", seller.id)
         return products
@@ -215,7 +231,7 @@ class ProductImport(models.TransientModel):
             raise UserError(_("This catalogue doesn't have any product!"))
         company_id = self._get_company_id(catalogue)
         seller = self._get_seller(catalogue)
-        self.with_context(company_id=company_id)._create_products(
+        self.with_context(product_company_id=company_id)._create_products(
             catalogue, seller, filename=self.product_filename
         )
         return {"type": "ir.actions.act_window_close"}

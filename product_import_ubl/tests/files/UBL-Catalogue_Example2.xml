@@ -130,6 +130,9 @@
             <cac:SellersItemIdentification>
                 <cbc:ID>MNTR010X9</cbc:ID>
             </cac:SellersItemIdentification>
+            <cac:StandardItemIdentification>
+                <cbc:ID schemeAgencyID="6" schemeID="GTIN">1234567890991</cbc:ID>
+            </cac:StandardItemIdentification>
         </cac:Item>
     </cac:CatalogueLine>
 </Catalogue>

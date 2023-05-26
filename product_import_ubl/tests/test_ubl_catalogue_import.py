@@ -45,10 +45,7 @@ class TestUblOrderImport(SavepointCase):
                 self.assertEqual(product.barcode, p_expect["barcode"])
                 self.assertEqual(product.description, p_expect["description"])
                 self.assertEqual(product.uom_id, p_expect["uom"])
-                if p_expect["company"]:
-                    self.assertEqual(product.company_id, p_expect["company"])
-                else:
-                    self.assertFalse(product.company_id)
+                self.assertFalse(product.company_id)
                 # Supplier info
                 [supplierinfo] = product.seller_ids
                 self.assertEqual(supplierinfo.name, self.supplier)
@@ -60,6 +57,7 @@ class TestUblOrderImport(SavepointCase):
                     supplierinfo.date_start, supplierinfo.create_date.date()
                 )
                 self.assertEqual(supplierinfo.date_end, False)
-                self.assertEqual(
-                    supplierinfo.company_id, p_expect["company"] or self.env.company
-                )
+                if p_expect["company"]:
+                    self.assertEqual(supplierinfo.company_id, p_expect["company"])
+                else:
+                    self.assertFalse(supplierinfo.company_id)
