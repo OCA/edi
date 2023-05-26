@@ -19,6 +19,12 @@ msgid "Cancel"
 msgstr ""
 
 #. module: product_import
+#: code:addons/product_import/wizard/product_import.py:0
+#, python-format
+msgid "Cannot import product without barcode: %s"
+msgstr ""
+
+#. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__create_uid
 msgid "Created by"
 msgstr ""
