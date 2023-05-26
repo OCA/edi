@@ -57,9 +57,15 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
     # def unlink(self):
 
     def _edi_auto_skip(self, operation):
+        skip_reason = None
         if self.env.context.get("edi__skip_auto_handle"):
-            return True
-        if operation in self._edi_no_auto_for_operation:
+            skip_reason = "edi__skip_auto_handle ctx key found"
+        elif operation in self._edi_no_auto_for_operation:
+            skip_reason = f"{operation} disabled attr _edi_no_auto_for_operation"
+        elif self.disable_edi_auto:
+            skip_reason = f"EDI auto disabled for rec={self.id}"
+        if skip_reason:
+            self._edi_auto_log_skip(operation, skip_reason)
             return True
         return False
 

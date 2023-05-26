@@ -122,6 +122,35 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
                 self.assertEqual(watcher.output[1], expected_msg % "write")
                 mocked_trigger.assert_not_called()
 
+    def test_edi_disable_flag_no_trigger(self):
+        self.auto_exchange_type.advanced_settings_edit = textwrap.dedent(
+            f"""
+        auto:
+            '{self.model._name}':
+                when:
+                    - write
+        """
+        )
+        with self.assertLogs("edi_exchange_auto", level="DEBUG") as watcher:
+            with mock.patch.object(
+                type(self.model), "_edi_auto_trigger_event"
+            ) as mocked_trigger:
+                record = self.model.create(
+                    {"name": "Test auto 2", "disable_edi_auto": True}
+                )
+                expected_msg = (
+                    f"DEBUG:edi_exchange_auto:"
+                    f"Skip model={self.model._name} "
+                    f"type={self.auto_exchange_type.code} "
+                    f"op=%s: EDI auto disabled for record={self.record.id}"
+                )
+                self.assertEqual(watcher.output[0], expected_msg % "create")
+                mocked_trigger.assert_not_called()
+                vals = {"name": "New name"}
+                record.write(vals)
+                self.assertEqual(watcher.output[1], expected_msg % "write")
+                mocked_trigger.assert_not_called()
+
     def test_conf_no_action_no_trigger(self):
         self.auto_exchange_type.advanced_settings_edit = textwrap.dedent(
             f"""
