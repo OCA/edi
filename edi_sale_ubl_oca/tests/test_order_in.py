@@ -76,6 +76,21 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin
             order.EDI_STATE_ORDER_LINE_ACCEPTED,
         )
 
+    def test_cancel(self):
+        self.assertEqual(self.exc_record_in.edi_exchange_state, "input_received")
+        order = self.env["sale.order"].create(
+            {
+                "partner_id": self.order_data.partner.id,
+                "client_order_ref": self.order_data.client_order_ref,
+                "origin_exchange_record_id": self.exc_record_in.id,
+            }
+        )
+        self.exc_record_in._set_related_record(order)
+        order.action_confirm()
+        self.assertTrue(order.edi_state_id.code, order.EDI_STATE_ORDER_ACCEPTED)
+        order.action_cancel()
+        self.assertTrue(order.edi_state_id.code, order.EDI_STATE_ORDER_REJECTED)
+
     def _find_order(self):
         return self.env["sale.order"].search(
             [
