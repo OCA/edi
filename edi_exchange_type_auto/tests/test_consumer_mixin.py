@@ -98,9 +98,10 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
 
     def test_conf_disable_no_trigger(self):
         self.auto_exchange_type.advanced_settings_edit = textwrap.dedent(
-            """
+            f"""
         auto:
-            disable: true
+            '{self.model._name}':
+                disable: true
         """
         )
         with self.assertLogs("edi_exchange_auto", level="DEBUG") as watcher:
@@ -123,9 +124,10 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
 
     def test_conf_no_action_no_trigger(self):
         self.auto_exchange_type.advanced_settings_edit = textwrap.dedent(
-            """
+            f"""
         auto:
-            actions:
+            '{self.model._name}':
+                actions:
         """
         )
         with self.assertLogs("edi_exchange_auto", level="DEBUG") as watcher:
