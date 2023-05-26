@@ -10,7 +10,10 @@
             <xpath expr="//page[last()]" position="after">
                 <page name="edi" string="EDI">
                     <group name="edi_main">
-                        <field name="disable_edi_auto" string="Disable" />
+                        <field
+                            name="disable_edi_auto"
+                            string="Disable automated actions"
+                        />
                         <field name="origin_exchange_record_id" />
                         <field name="origin_exchange_type_id" />
                     </group>
