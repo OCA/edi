@@ -207,7 +207,7 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
             "reason": reason,
         }
         if exc_type:
-            log_msg += " type=%(type_code)s: "
+            log_msg += " type=%(type_code)s"
             log_args["type_code"] = exc_type.code
         log_msg += ": %(reason)s"
         _logger.debug(log_msg, log_args)

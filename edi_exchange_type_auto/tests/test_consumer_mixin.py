@@ -86,8 +86,9 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
                 expected_msg = (
                     f"DEBUG:edi_exchange_auto:"
                     f"Skip model={self.model._name} "
-                    f"type={self.auto_exchange_type.code} "
-                    f"op=%s: Auto-conf not found or disabled"
+                    f"op=%s "
+                    f"type={self.auto_exchange_type.code}: "
+                    f"Auto-conf not found or disabled"
                 )
                 self.assertEqual(watcher.output[0], expected_msg % "create")
                 mocked_trigger.assert_not_called()
@@ -112,8 +113,9 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
                 expected_msg = (
                     f"DEBUG:edi_exchange_auto:"
                     f"Skip model={self.model._name} "
-                    f"type={self.auto_exchange_type.code} "
-                    f"op=%s: Auto-conf not found or disabled"
+                    f"op=%s "
+                    f"type={self.auto_exchange_type.code}: "
+                    f"Auto-conf not found or disabled"
                 )
                 self.assertEqual(watcher.output[0], expected_msg % "create")
                 mocked_trigger.assert_not_called()
@@ -141,8 +143,7 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
                 expected_msg = (
                     f"DEBUG:edi_exchange_auto:"
                     f"Skip model={self.model._name} "
-                    f"type={self.auto_exchange_type.code} "
-                    f"op=%s: EDI auto disabled for record={self.record.id}"
+                    f"op=%s: EDI auto disabled for rec={record.id}"
                 )
                 self.assertEqual(watcher.output[0], expected_msg % "create")
                 mocked_trigger.assert_not_called()
@@ -167,8 +168,9 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
                 expected_msg = (
                     f"DEBUG:edi_exchange_auto:"
                     f"Skip model={self.model._name} "
-                    f"type={self.auto_exchange_type.code} "
-                    f"op=%s: Auto-conf has no action configured"
+                    f"op=%s "
+                    f"type={self.auto_exchange_type.code}: "
+                    f"Auto-conf has no action configured"
                 )
                 self.assertEqual(watcher.output[0], expected_msg % "create")
                 mocked_trigger.assert_not_called()
