@@ -695,6 +695,8 @@ class AccountInvoice(models.Model):
             'udt': 'urn:un:unece:uncefact:data:'
                    'standard:UnqualifiedDataType:100',
             }
+        # Internal Odoo precision might be higher than the max accepted
+        price_prec = min(dpo.precision_get('Product Price'), 4)
         ns = {
             'rsm': '{urn:un:unece:uncefact:data:standard:'
                    'CrossIndustryInvoice:100}',
@@ -709,7 +711,7 @@ class AccountInvoice(models.Model):
             'sign': sign,
             'currency': self.currency_id.name,
             'cur_prec': self.currency_id.decimal_places,
-            'price_prec': dpo.precision_get('Product Price'),
+            'price_prec': price_prec,
             'disc_prec': dpo.precision_get('Discount'),
             'qty_prec': dpo.precision_get('Product Unit of Measure'),
             }
