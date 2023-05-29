@@ -29,12 +29,13 @@
             <form string="EDI Exchange Record">
                 <field name="direction" invisible="1" />
                 <field name="retryable" invisible="1" />
+                <field name="related_record_exists" invisible="1" />
                 <header>
                     <button
                         name="action_open_related_record"
                         type="object"
                         string="Related record"
-                        attrs="{'invisible': [('res_id', '=', False)]}"
+                        attrs="{'invisible': [('related_record_exists', '=', False)]}"
                     />
                     <!-- FIXME: this `invisible` domain does not work -->
                     <button
@@ -122,6 +123,13 @@
                         >
                           <field name="res_id" />
                           <field name="model" />
+                          <span
+                                class="text-warning"
+                                attrs="{'invisible': [('related_record_exists', '=', True)]}"
+                            >
+                            The related record is not available anymore.
+                            Consider deleting this record too or fixing its relation.
+                          </span>
                         </group>
                     </group>
                     <notebook>
