@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-29 11:54+0000\n"
-"PO-Revision-Date: 2022-08-07 07:07+0000\n"
+"PO-Revision-Date: 2023-05-29 11:08+0000\n"
 "Last-Translator: Claude R Perrin <claude@perrin.it>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_invoice.py:753
@@ -42,9 +42,8 @@ msgstr "Sociétés"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_res_config_settings
-#, fuzzy
 msgid "Config Settings"
-msgstr "account.config.settings"
+msgstr "Paramètres de configuration"
 
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_invoice.py:50
@@ -53,8 +52,8 @@ msgid ""
 "Country is not set on partner '%s'. In the Factur-X standard, the country is "
 "required for buyer and seller."
 msgstr ""
-"Le pays n'est pas présent sur le partenaire '%s'. Dans le standard Factur-X, "
-"le pays est requis pour le vendeur et l'acheteur."
+"Le pays n'est pas présent sur le contact '%s'. Dans le standard Factur-X, le "
+"pays est requis pour le vendeur et l'acheteur."
 
 #. module: account_invoice_facturx
 #: selection:res.company,facturx_level:0
@@ -116,14 +115,14 @@ msgstr "Minimum"
 #: code:addons/account_invoice_facturx/models/account_invoice.py:647
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr "Catégorie de taxe UNECE manquante pour la taxe %s"
+msgstr "Catégorie de taxe UNECE manquante pour la taxe ‘%s’"
 
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_invoice.py:375
 #: code:addons/account_invoice_facturx/models/account_invoice.py:640
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr "Type de taxe UNECE manquant pour la taxe %s"
+msgstr "Type de taxe UNECE manquant pour la taxe ‘%s’"
 
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_invoice.py:449
@@ -135,7 +134,7 @@ msgstr "Code UNECE manquant pour le mode de paiement '%s'"
 #: code:addons/account_invoice_facturx/models/account_invoice.py:351
 #, python-format
 msgid "No specific payment term selected"
-msgstr "Aucun terme de paiement spécifique sélectionné"
+msgstr "Aucun délai de paiement n’a été choisi"
 
 #. module: account_invoice_facturx
 #: selection:res.company,xml_format_in_pdf_invoice:0
@@ -150,9 +149,8 @@ msgstr "Avoir"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_ir_actions_report
-#, fuzzy
 msgid "Report Action"
-msgstr "Rapport"
+msgstr "Signaler l'action"
 
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_invoice.py:557
@@ -179,7 +177,7 @@ msgstr "Type 381 avec montants positifs"
 #. module: account_invoice_facturx
 #: selection:res.company,xml_format_in_pdf_invoice:0
 msgid "Universal Business Language (UBL)"
-msgstr ""
+msgstr "Universal Business Language (UBL)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,help:account_invoice_facturx.field_res_company__facturx_level
@@ -200,7 +198,7 @@ msgstr "Virement bancaire"
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
-msgstr ""
+msgstr "Format XML intégré dans la facture PDF"
 
 #~ msgid "Factur-X Invoices"
 #~ msgstr "Factures Factur-X"
