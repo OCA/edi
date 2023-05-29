@@ -8,6 +8,20 @@
         <field name="inherit_id" ref="endpoint.endpoint_endpoint_form_view" />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('alert')]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-retweet"
+                        name="action_view_edi_records"
+                    >
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_text">Exchanges</span>
+                        </div>
+                    </button>
+                </div>
+            </xpath>
             <notebook position="before">
                 <separator string="EDI" />
                 <div name="backend">

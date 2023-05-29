@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_record_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="inherit_id" ref="edi_oca.edi_exchange_record_view_form" />
+        <field name="arch" type="xml">
+            <group name="status" position="inside">
+                <field name="edi_endpoint_id" />
+            </group>
+        </field>
+    </record>
+
+    <record id="edi_exchange_record_view_search" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="inherit_id" ref="edi_oca.edi_exchange_record_view_search" />
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="edi_endpoint_id" string="Endpoint" />
+            </field>
+        </field>
+    </record>
+
+    <record id="edi_exchange_record_view_tree" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="inherit_id" ref="edi_oca.edi_exchange_record_view_tree" />
+        <field name="arch" type="xml">
+            <field name="edi_exchange_state" position="after">
+                <field name="edi_endpoint_id" string="Endpoint" />
+            </field>
+        </field>
+    </record>
+
+</odoo>
