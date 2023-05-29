@@ -34,6 +34,8 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
             enable_domain="[]",
             enable_snippet="",
         )
+        cls.partner1 = cls.env["res.partner"].create({"name": "Avg Customer 1"})
+        cls.partner2 = cls.env["res.partner"].create({"name": "Avg Customer 2"})
 
     @classmethod
     def tearDownClass(cls):
@@ -276,3 +278,39 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
                     f"Checker _edi_test_check_generate skip action"
                 )
                 self.assertEqual(watcher.output[0], expected_msg % "create")
+
+    def test_conf_skip_partner(self):
+        self.auto_exchange_type.advanced_settings_edit = textwrap.dedent(
+            f"""
+        auto:
+            '{self.model._name}':
+                actions:
+                    generate:
+                        when:
+                            - create
+                        trigger_fields:
+                            - name
+        """
+        )
+        self.auto_exchange_type.partner_ids += self.partner2
+        with self.assertLogs("edi_exchange_auto", level="DEBUG") as watcher:
+            with mock.patch.object(
+                type(self.model), "_edi_auto_handle"
+            ) as mocked_handler:
+                record = self.model.create(
+                    {"name": "Test auto 2", "partner_id": self.partner1.id}
+                )
+                expected_msg = (
+                    f"DEBUG:edi_exchange_auto:"
+                    f"Skip model={self.model._name} "
+                    f"op=%s "
+                    f"type={self.auto_exchange_type.code}: "
+                    f"Exchange not enabled for partner on rec={record.id}"
+                )
+                self.assertEqual(watcher.output[0], expected_msg % "create")
+                mocked_handler.assert_not_called()
+                mocked_handler.reset_mock()
+                self.model.create(
+                    {"name": "Test auto 3", "partner_id": self.partner2.id}
+                )
+                mocked_handler.assert_called()

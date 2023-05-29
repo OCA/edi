@@ -187,12 +187,22 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
 
     def _edi_auto_collect_records_by_type(self, operation, new_vals_list):
         skip_type_ids = set()
+        skip_rec_ids = set()
         rec_by_type = {}
         for rec, new_vals in zip(self, new_vals_list):
+            if rec.id in skip_rec_ids:
+                continue
             for type_id, conf in rec.edi_config.items():
                 if type_id in skip_type_ids:
                     continue
                 exc_type = self.env["edi.exchange.type"].browse(int(type_id))
+                if "partner_id" in rec._fields and not exc_type.is_partner_enabled(
+                    rec.partner_id
+                ):
+                    skip_rec_ids.add(rec.id)
+                    skip_reason = f"Exchange not enabled for partner on rec={rec.id}"
+                    self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
+                    continue
                 # Get auto conf for current model
                 auto_conf = conf.get("auto", {})
                 actions = auto_conf.get("actions", {})

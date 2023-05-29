@@ -15,7 +15,7 @@ class EdiAutoExchangeConsumerTest(models.Model):
     name = fields.Char()
     state = fields.Char()
     number = fields.Integer()
-    m2o = fields.Many2one("res.partner")
+    partner_id = fields.Many2one("res.partner")
 
     _edi_test_check_generate_called_with = []
 
