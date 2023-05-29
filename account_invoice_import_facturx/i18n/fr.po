@@ -9,24 +9,25 @@ msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-12 13:36+0000\n"
-"PO-Revision-Date: 2016-11-12 13:36+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"PO-Revision-Date: 2023-05-29 11:08+0000\n"
+"Last-Translator: Claude R Perrin <claude@perrin.it>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid "(also called ZUGFeRD 2.0) and"
-msgstr ""
+msgstr "(également appelé ZUGFeRD 2.0) et"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid ": PDF file with an XML attachment in CrossIndustryInvoice format."
-msgstr ""
+msgstr ": fichier PDF avec une pièce jointe XML au format CrossIndustryInvoice."
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:504
@@ -36,6 +37,10 @@ msgid ""
 "(%s). Maybe it is because the Factur-X XML file is at BASIC level, and we "
 "don't have the details of taxes for the allowance lines."
 msgstr ""
+"Le montant total des indemnités diverses (%s) ne correspond pas à la somme "
+"des lignes d’indemnités (%s). C'est peut-être parce que le fichier XML "
+"Factur-X est de type BASIC, et que nous n'avons pas les détails des taxes "
+"pour les lignes d’indemnités."
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:482
@@ -45,11 +50,14 @@ msgid ""
 "Maybe it is because the Factur-X XML file is at BASIC level, and we don't "
 "have the details of taxes for the charge lines."
 msgstr ""
+"Le montant total des frais (%s) ne correspond pas à la somme des lignes de "
+"frais (%s). Peut-être parce que le fichier XML Factur-X est de type BASIC, "
+"et que nous n'avons pas les détails des taxes pour les lignes de frais."
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid "Factur-X"
-msgstr ""
+msgstr "Factur-X"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:311
@@ -58,42 +66,44 @@ msgid ""
 "For the moment, in the Factur-X import, we only support type code 380 and "
 "381. (TypeCode is %s)"
 msgstr ""
+"Pour le moment, pour l'importation Factur-X, nous ne prenons en charge que "
+"les codes de type 380 et 381. (TypeCode est %s)"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:441
 #, python-format
 msgid "Global"
-msgstr ""
+msgstr "Général"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:455
 #, python-format
 msgid "Logistics Service"
-msgstr ""
+msgstr "Frais de logistique"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:181
 #, python-format
 msgid "Misc Allowance"
-msgstr ""
+msgstr "Indemnités diverses"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:188
 #, python-format
 msgid "Misc Charge"
-msgstr ""
+msgstr "Frais divers"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:498
 #, python-format
 msgid "Misc Global Allowance"
-msgstr ""
+msgstr "Total des Indemnités diverses"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:476
 #, python-format
 msgid "Misc Global Charge"
-msgstr ""
+msgstr "Total des Frais divers"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:370
@@ -102,6 +112,8 @@ msgid ""
 "The GrandTotalAmount is %s but the sum of the lines plus the total charge "
 "plus the total trade allowance plus the total taxes is %s."
 msgstr ""
+"Le montant total général est de %s mais la somme des lignes, du total des "
+"frais, du total des indemnités et du total des taxes est de %s."
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:293
@@ -110,19 +122,21 @@ msgid ""
 "The XML file embedded in the Factur-X invoice is invalid according to the "
 "official XML Schema Definition."
 msgstr ""
+"Le fichier XML intégré dans la facture Factur-X est invalide selon la "
+"définition de schéma XML officielle."
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:190
 #, python-format
 msgid "Unknown ChargeIndicator %s"
-msgstr ""
+msgstr "Indicateur de charge inconnu %s"
 
 #. module: account_invoice_import_facturx
 #: model:ir.model,name:account_invoice_import_facturx.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
-msgstr "Assistant pour importer les PDF de facture fournisseur"
+msgstr "Assistant pour importer les factures/avoirs des fournisseurs"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid "ZUGFeRD 1.0"
-msgstr ""
+msgstr "ZUGFeRD 1.0"
