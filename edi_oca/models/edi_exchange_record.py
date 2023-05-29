@@ -44,6 +44,7 @@ class EDIExchangeRecord(models.Model):
         model_field="model",
         copy=False,
     )
+    related_record_exists = fields.Boolean(compute="_compute_related_record_exists")
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
     exchange_file = fields.Binary(attachment=True, copy=False)
     exchange_filename = fields.Char(
@@ -165,6 +166,11 @@ class EDIExchangeRecord(models.Model):
     def _compute_ack_expected(self):
         for rec in self:
             rec.ack_expected = bool(self.type_id.ack_type_id)
+
+    @api.depends("res_id", "model")
+    def _compute_related_record_exists(self):
+        for rec in self:
+            rec.related_record_exists = bool(rec.record)
 
     def needs_ack(self):
         return self.type_id.ack_type_id and not self.ack_exchange_id
@@ -338,7 +344,7 @@ class EDIExchangeRecord(models.Model):
 
     def action_open_related_record(self):
         self.ensure_one()
-        if not self.model or not self.res_id:
+        if not self.related_record_exists:
             return {}
         return self.record.get_formview_action()
 
@@ -368,13 +374,15 @@ class EDIExchangeRecord(models.Model):
         # Trigger generic action complete event on exchange record
         event_name = f"{action}_complete"
         self._trigger_edi_event(event_name)
-        if self.record:
+        if self.related_record_exists:
             # Trigger specific event on related record
             self._trigger_edi_event(event_name, target=self.record)
 
     def _notify_related_record(self, message, level="info"):
         """Post notification on the original record."""
-        if not hasattr(self.record, "message_post_with_view"):
+        if not self.related_record_exists or not hasattr(
+            self.record, "message_post_with_view"
+        ):
             return
         self.record.message_post_with_view(
             "edi_oca.message_edi_exchange_link",
@@ -529,7 +537,7 @@ class EDIExchangeRecord(models.Model):
         by_model_rec_ids = defaultdict(set)
         by_model_checker = {}
         for exc_rec in self.sudo():
-            if not exc_rec.model or not exc_rec.res_id:
+            if not exc_rec.related_record_exists:
                 continue
             by_model_rec_ids[exc_rec.model].add(exc_rec.res_id)
             if exc_rec.model not in by_model_checker:
