@@ -179,71 +179,100 @@ class TestConsumerAutoMixinCase(EDIBackendCommonTestCase):
                 self.assertEqual(watcher.output[1], expected_msg % "write")
                 mocked_trigger.assert_not_called()
 
-    # def test_write(self):
-    #     self.assertEqual(0, self.consumer_record.exchange_record_count)
-    #     vals = {
-    #         "model": self.consumer_record._name,
-    #         "res_id": self.consumer_record.id,
-    #     }
-    #     exchange_type = "test_csv_output"
-    #     exchange_record = self.backend.create_record(exchange_type, vals)
-    #     self.consumer_record.refresh()
-    #     self.assertEqual(1, self.consumer_record.exchange_record_count)
-    #     action = self.consumer_record.action_view_edi_records()
-    #     self.consumer_record.refresh()
-    #     self.assertEqual(
-    #         exchange_record, self.env["edi.exchange.record"].search(action["domain"])
-    #     )
-    #     self.consumer_record._has_exchange_record(exchange_type, self.backend)
+    def test_conf_when_trigger(self):
+        self.auto_exchange_type.advanced_settings_edit = textwrap.dedent(
+            f"""
+        auto:
+            '{self.model._name}':
+                actions:
+                    generate:
+                        when:
+                            - create
+                        trigger_fields:
+                            - name
+        """
+        )
+        with self.assertLogs("edi_exchange_auto", level="DEBUG") as watcher:
+            with mock.patch.object(
+                type(self.model), "_edi_auto_handle"
+            ) as mocked_handler:
+                record = self.model.create({"name": "Test auto 2"})
+                mocked_handler.assert_called()
+                mocked_handler.reset_mock()
+                vals = {"name": "New name"}
+                record.write(vals)
+                expected_msg = (
+                    f"DEBUG:edi_exchange_auto:"
+                    f"Skip model={self.model._name} "
+                    f"op=%s "
+                    f"type={self.auto_exchange_type.code}: "
+                    f"Operation not allowed for action=generate"
+                )
+                self.assertEqual(watcher.output[0], expected_msg % "write")
+                mocked_handler.assert_not_called()
 
-    # def test_expected_configuration(self):
-    #     self.assertTrue(self.consumer_record.has_expected_edi_configuration)
-    #     self.assertIn(
-    #         str(self.exchange_type_out.id),
-    #         self.consumer_record.expected_edi_configuration,
-    #     )
-    #     self.assertEqual(
-    #         self.consumer_record.expected_edi_configuration[
-    #             str(self.exchange_type_out.id)
-    #         ],
-    #         {"btn": {"label": self.exchange_type_out.name}},
-    #     )
-    #     action = self.consumer_record.edi_create_exchange_record(
-    #         self.exchange_type_out.id
-    #     )
-    #     self.assertEqual(action["res_model"], "edi.exchange.record")
-    #     self.consumer_record.refresh()
-    #     self.assertNotIn(
-    #         str(self.exchange_type_out.id),
-    #         self.consumer_record.expected_edi_configuration,
-    #     )
-    #     self.assertTrue(self.consumer_record.exchange_record_ids)
-    #     self.assertEqual(
-    #         self.consumer_record.exchange_record_ids.type_id, self.exchange_type_out
-    #     )
-
-    # def test_multiple_backend(self):
-    #     self.assertIn(
-    #         str(self.exchange_type_new.id),
-    #         self.consumer_record.expected_edi_configuration,
-    #     )
-    #     action = self.consumer_record.edi_create_exchange_record(
-    #         self.exchange_type_new.id
-    #     )
-    #     self.assertNotEqual(action["res_model"], "edi.exchange.record")
-    #     self.assertEqual(action["res_model"], "edi.exchange.record.create.wiz")
-    #     wizard = (
-    #         self.env[action["res_model"]]
-    #         .with_context(**action["context"])
-    #         .create({"backend_id": self.backend_02.id})
-    #     )
-    #     wizard.create_edi()
-    #     self.consumer_record.refresh()
-    #     self.assertNotIn(
-    #         str(self.exchange_type_new.id),
-    #         self.consumer_record.expected_edi_configuration,
-    #     )
-    #     self.assertTrue(self.consumer_record.exchange_record_ids)
-    #     self.assertEqual(
-    #         self.consumer_record.exchange_record_ids.type_id, self.exchange_type_new
-    #     )
+    def test_conf_if_trigger(self):
+        self.auto_exchange_type.advanced_settings_edit = textwrap.dedent(
+            f"""
+        auto:
+            '{self.model._name}':
+                actions:
+                    generate:
+                        when:
+                            - create
+                        trigger_fields:
+                            - name
+                        if:
+                            callable: _edi_test_check_generate
+        """
+        )
+        with self.assertLogs("edi_exchange_auto", level="DEBUG") as watcher:
+            with mock.patch.object(
+                type(self.model), "_edi_auto_handle"
+            ) as mocked_handler:
+                record = self.model.with_context(
+                    _edi_test_check_generate_pass=True
+                ).create({"name": "Test auto 2"})
+                info = record._edi_test_check_generate_called_with.pop()
+                self.assertEqual(
+                    info.as_dict(),
+                    {
+                        "edi_type_id": self.auto_exchange_type.id,
+                        "edi_action": "generate",
+                        "conf": {
+                            "when": ["create"],
+                            "trigger_fields": ["name"],
+                            "if": {"callable": "_edi_test_check_generate"},
+                        },
+                        "triggered_by": "name",
+                        "_records": {
+                            "source": {
+                                "model": "edi.auto.exchange.consumer.test",
+                                "id": record.id,
+                            },
+                            "target": {
+                                "model": "edi.auto.exchange.consumer.test",
+                                "id": record.id,
+                            },
+                        },
+                        "vals": {"name": "Test auto 2"},
+                        "old_vals": {"name": "Test auto 2"},
+                        "force": False,
+                        "event_only": False,
+                    },
+                )
+                mocked_handler.assert_called()
+                mocked_handler.reset_mock()
+                record = self.model.with_context(
+                    _edi_test_check_generate_pass=False
+                ).create({"name": "Test auto 3"})
+                mocked_handler.assert_not_called()
+                info = record._edi_test_check_generate_called_with.pop()
+                expected_msg = (
+                    f"DEBUG:edi_exchange_auto:"
+                    f"Skip model={self.model._name} "
+                    f"op=%s "
+                    f"type={self.auto_exchange_type.code}: "
+                    f"Checker _edi_test_check_generate skip action"
+                )
+                self.assertEqual(watcher.output[0], expected_msg % "create")

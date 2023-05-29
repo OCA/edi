@@ -124,7 +124,7 @@ class EDIAutoExchangeConsumerMixin(models.AbstractModel):
                     self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
                     continue
                 if operation not in action_conf.get("when", []):
-                    skip_reason = f"Operation not allowed by action={action_name}"
+                    skip_reason = f"Operation not allowed for action={action_name}"
                     self._edi_auto_log_skip(operation, skip_reason, exc_type=exc_type)
                     continue
                 triggers = action_conf.get("trigger_fields", [])

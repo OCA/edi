@@ -16,3 +16,9 @@ class EdiAutoExchangeConsumerTest(models.Model):
     state = fields.Char()
     number = fields.Integer()
     m2o = fields.Many2one("res.partner")
+
+    _edi_test_check_generate_called_with = []
+
+    def _edi_test_check_generate(self, todo):
+        self._edi_test_check_generate_called_with.append(todo)
+        return self.env.context.get("_edi_test_check_generate_pass")
