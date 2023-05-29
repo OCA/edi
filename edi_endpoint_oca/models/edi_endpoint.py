@@ -4,6 +4,7 @@
 import werkzeug
 
 from odoo import _, api, exceptions, fields, models
+from odoo.tools import safe_eval
 
 
 class EDIEndpoint(models.Model):
@@ -39,6 +40,7 @@ class EDIEndpoint(models.Model):
         Just a shortcut.
         """
         self._check_endpoint_ready()
+        vals["edi_endpoint_id"] = self.id
         rec = self.backend_id.create_record(self.exchange_type_id.code, vals)
         if file_content:
             rec._set_file_content(file_content)
@@ -68,3 +70,19 @@ class EDIEndpoint(models.Model):
     def _handle_request(self, request):
         self._check_endpoint_ready(request=True)
         return super()._handle_request(request)
+
+    def action_view_edi_records(self):
+        self.ensure_one()
+        xmlid = "edi_oca.act_open_edi_exchange_record_view"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        action["domain"] = [("edi_endpoint_id", "=", self.id)]
+        # Purge default search filters from ctx to avoid hiding records
+        ctx = action.get("context", {})
+        if isinstance(ctx, str):
+            ctx = safe_eval.safe_eval(ctx, self.env.context)
+        action["context"] = {
+            k: v for k, v in ctx.items() if not k.startswith("search_default_")
+        }
+        # Drop ID otherwise the context will be loaded from the action's record :S
+        action.pop("id")
+        return action

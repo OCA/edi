@@ -18,6 +18,7 @@
         "security/ir.model.access.csv",
         "views/edi_backend_views.xml",
         "views/edi_endpoint_views.xml",
+        "views/edi_exchange_record_views.xml",
     ],
     "demo": ["demo/edi_backend_demo.xml"],
 }
