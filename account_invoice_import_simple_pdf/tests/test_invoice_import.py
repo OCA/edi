@@ -490,6 +490,15 @@ class TestInvoiceImport(TransactionCase):
                 {"string_type": "fixed", "fixed_char": "1J"},
                 {"string_type": "month"},
             ],
+            # Test inspired by supermetrics.com invoice number style
+            "txn_3Myqaj2mjH4XVMmx1J6MxTcZ": [
+                {"string_type": "fixed", "fixed_char": "txn_3"},
+                {
+                    "string_type": "char",
+                    "occurrence_min": 22,
+                    "occurrence_max": 24,
+                },
+            ],
         }
         for src, config_list in inv_num_test.items():
             raw_txt = "Invoice number: %s dated 20/08/2020" % src

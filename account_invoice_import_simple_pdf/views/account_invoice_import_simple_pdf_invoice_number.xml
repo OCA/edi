@@ -26,11 +26,11 @@
                     />
                                 <field
                         name="occurrence_min"
-                        attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'space'))]}"
+                        attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))]}"
                     />
                                 <field
                         name="occurrence_max"
-                        attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'space'))]}"
+                        attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))]}"
                     />
                         </group>
                 </form>
@@ -53,11 +53,11 @@
                 />
                                 <field
                     name="occurrence_min"
-                    attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'space'))]}"
+                    attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))]}"
                 />
                                 <field
                     name="occurrence_max"
-                    attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'space'))]}"
+                    attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))]}"
                 />
                 </tree>
         </field>
