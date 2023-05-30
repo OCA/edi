@@ -67,6 +67,15 @@ msgid "<i class=\"fa fa-retweet\"/>This record has EDI exchanges to handle"
 msgstr ""
 
 #. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
+msgid ""
+"<span class=\"text-warning\" attrs=\"{'invisible': [('related_record_exists', '=', True)]}\">\n"
+"                            The related record is not available anymore.\n"
+"                            Consider deleting this record too or fixing its relation.\n"
+"                          </span>"
+msgstr ""
+
+#. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.message_edi_exchange_link
 msgid "<strong>EDI exchange:</strong>"
 msgstr ""
@@ -950,6 +959,11 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__related_name
 msgid "Related Name"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__related_record_exists
+msgid "Related Record Exists"
 msgstr ""
 
 #. module: edi_oca
