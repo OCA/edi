@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ForgeFlow S.L. (https://www.forgeflow.com)
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_record_stock_view">
+        <field name="name">Inventory Exchange Record</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('model', '=', 'stock.picking')]</field>
+        <field name="context">{}</field>
+    </record>
+    <menuitem
+        id="menu_stock_edi_root"
+        name="Exchange records"
+        parent="stock.menu_stock_root"
+        sequence="20"
+    />
+    <menuitem
+        id="menu_stock_edi_exchange_record"
+        name="Transfers"
+        action="act_open_edi_exchange_record_stock_view"
+        parent="menu_stock_edi_root"
+        sequence="20"
+    />
+</odoo>
