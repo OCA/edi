@@ -27,4 +27,4 @@ class EDIExchangeRecord(models.Model):
 
     def _compute_ws_response_content_filename(self):
         for rec in self:
-            rec.ws_response_content_filename = _("response_") + self.exchange_filename
+            rec.ws_response_content_filename = _("response_") + rec.exchange_filename
