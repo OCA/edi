@@ -16,18 +16,19 @@ class EDIWebserviceSend(Component):
         self.webservice_backend = self.backend.webservice_backend_id
 
     def send(self):
-        response_content = None
-        status_code = 200
-        http_error = None
         try:
             response_content = super().send()
         except HTTPError as err:
             response_content = err.response.content
             status_code = err.response.status_code
             http_error = err
-        self.exchange_record._set_file_content(
-            response_content, field_name="ws_response_content"
-        )
-        self.exchange_record.ws_response_status_code = status_code
-        if http_error:
-            raise http_error from http_error
+        else:
+            status_code = 200
+            http_error = None
+        finally:
+            self.exchange_record._set_file_content(
+                response_content, field_name="ws_response_content"
+            )
+            self.exchange_record.ws_response_status_code = status_code
+            if http_error:
+                raise http_error from http_error
