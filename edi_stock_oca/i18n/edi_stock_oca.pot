@@ -44,8 +44,23 @@ msgid "Electronic Data Interchange"
 msgstr ""
 
 #. module: edi_stock_oca
+#: model:ir.ui.menu,name:edi_stock_oca.menu_stock_edi_root
+msgid "Exchange records"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.actions.act_window,name:edi_stock_oca.act_open_edi_exchange_record_stock_view
+msgid "Inventory Exchange Record"
+msgstr ""
+
+#. module: edi_stock_oca
 #: model:ir.model,name:edi_stock_oca.model_stock_picking
 msgid "Transfer"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.ui.menu,name:edi_stock_oca.menu_stock_edi_exchange_record
+msgid "Transfers"
 msgstr ""
 
 #. module: edi_stock_oca
