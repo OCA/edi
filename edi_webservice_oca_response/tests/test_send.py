@@ -62,3 +62,7 @@ class TestSend(TestEDIWebserviceBase):
         self.assertEqual(
             self.record._get_file_content(field_name="ws_response_content"), response
         )
+
+    def test_ws_response_content_filename(self):
+        self.record.exchange_filename = "test.json"
+        self.assertEqual(self.record.ws_response_content_filename, "response_test.json")

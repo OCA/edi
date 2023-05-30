@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import logging
 
-from odoo import fields, models
+from odoo import _, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -21,3 +21,10 @@ class EDIExchangeRecord(models.Model):
     ws_response_content = fields.Binary(
         "Response", attachment=True, copy=False, help="Web service response content"
     )
+    ws_response_content_filename = fields.Char(
+        compute="_compute_ws_response_content_filename"
+    )
+
+    def _compute_ws_response_content_filename(self):
+        for rec in self:
+            rec.ws_response_content_filename = _("response_") + self.exchange_filename

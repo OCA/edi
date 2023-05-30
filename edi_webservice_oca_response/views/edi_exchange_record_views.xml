@@ -15,7 +15,11 @@
                     attrs="{'invisible': [('ws_response_status_code', '=', False)]}"
                 >
                     <field name="ws_response_status_code" />
-                    <field name="ws_response_content" filename="response.json" />
+                    <field name="ws_response_content_filename" invisible="1" />
+                    <field
+                        name="ws_response_content"
+                        filename="ws_response_content_filename"
+                    />
                 </group>
             </xpath>
         </field>
