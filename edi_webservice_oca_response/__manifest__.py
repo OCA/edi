@@ -13,6 +13,6 @@
     "maintainers": ["pverkest"],
     "website": "https://github.com/OCA/edi",
     "depends": ["edi_webservice_oca"],
-    "data": [],
+    "data": ["views/edi_exchange_record_views.xml"],
     "demo": [],
 }
