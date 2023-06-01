@@ -24,6 +24,11 @@ msgid "Display Name"
 msgstr ""
 
 #. module: edi_purchase_oca
+#: model:ir.model.fields,field_description:edi_purchase_oca.field_purchase_order__origin_edi_endpoint_id
+msgid "EDI origin endpoint"
+msgstr ""
+
+#. module: edi_purchase_oca
 #: model:ir.model.fields,field_description:edi_purchase_oca.field_purchase_order__origin_exchange_type_id
 msgid "EDI origin exchange type"
 msgstr ""
@@ -86,4 +91,9 @@ msgstr ""
 #. module: edi_purchase_oca
 #: model:ir.ui.menu,name:edi_purchase_oca.menu_purchase_edi_exchange_record
 msgid "Purchase Orders"
+msgstr ""
+
+#. module: edi_purchase_oca
+#: model:ir.model.fields,help:edi_purchase_oca.field_purchase_order__origin_edi_endpoint_id
+msgid "Record generated via this endpoint"
 msgstr ""
