@@ -39,6 +39,11 @@ msgid "EDI Configuration"
 msgstr ""
 
 #. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__origin_edi_endpoint_id
+msgid "EDI origin endpoint"
+msgstr ""
+
+#. module: edi_stock_oca
 #: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__origin_exchange_type_id
 msgid "EDI origin exchange type"
 msgstr ""
@@ -91,6 +96,11 @@ msgstr ""
 #. module: edi_stock_oca
 #: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking____last_update
 msgid "Last Modified on"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,help:edi_stock_oca.field_stock_picking__origin_edi_endpoint_id
+msgid "Record generated via this endpoint"
 msgstr ""
 
 #. module: edi_stock_oca
