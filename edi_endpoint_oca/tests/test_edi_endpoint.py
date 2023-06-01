@@ -19,7 +19,8 @@ class TestEndpoint(CommonEndpoint):
         )
 
     def test_exchange_record(self):
-        self.endpoint.create_exchange_record()
+        rec = self.endpoint.create_exchange_record()
+        self.assertEqual(rec.edi_endpoint_id, self.endpoint)
 
     def test_route(self):
         rec = self.endpoint.copy(
