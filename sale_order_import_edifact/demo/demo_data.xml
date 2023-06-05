@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+
+    <record id="partner_edi_dm" model="res.partner">
+        <field name="name">AMATEST EU SARL</field>
+        <field name="is_company" eval="True" />
+        <field name="customer_rank" eval="1" />
+        <field name="street">38 Avenue J.F. Kennedy</field>
+        <field name="zip">1234</field>
+        <field name="city">Luxembourg</field>
+        <field name="country_id" ref="base.lu" />
+    </record>
+    <record id="partner_edi_shipto_dm" model="res.partner">
+        <field name="name">AMATEST EU (TST)</field>
+        <field name="parent_id" ref="partner_edi_dm" />
+        <field name="street">80 Bojsdoeisn</field>
+        <field name="zip">4321</field>
+        <field name="city">Gliwice</field>
+        <field name="country_id" ref="base.pl" />
+        <field name="email" />
+        <field name="type">delivery</field>
+    </record>
+    <record id="partner_edi_invoiceto_dm" model="res.partner">
+        <field name="name">AMATEST Invoice</field>
+        <field name="parent_id" ref="partner_edi_dm" />
+        <field name="function">Accountant</field>
+        <field name="customer_rank" eval="1" />
+        <field name="type">invoice</field>
+    </record>
+
+
+    <record id="res_partner_id_number_edi" model="res.partner.id_number">
+        <field
+            name="category_id"
+            ref="partner_identification_gln.partner_identification_gln_number_category"
+        />
+        <field name="partner_id" ref="partner_edi_dm" />
+        <field name="name">5450534000017</field>
+    </record>
+    <record id="res_partner_id_number_edi_shipto" model="res.partner.id_number">
+        <field
+            name="category_id"
+            ref="partner_identification_gln.partner_identification_gln_number_category"
+        />
+        <field name="partner_id" ref="partner_edi_shipto_dm" />
+        <field name="name">5450534008617</field>
+    </record>
+    <record id="res_partner_id_number_edi_invoiceto" model="res.partner.id_number">
+        <field
+            name="category_id"
+            ref="partner_identification_gln.partner_identification_gln_number_category"
+        />
+        <field name="partner_id" ref="partner_edi_invoiceto_dm" />
+        <field name="name">5450534008143</field>
+    </record>
+
+    <record id="product_product_edifact1_dm" model="product.product">
+        <field name="name">EDIFACT Demo 1</field>
+        <field name="sale_ok" eval="True" />
+        <field name="type">consu</field>
+        <field name="default_code">edifact1</field>
+        <field name="categ_id" ref="product.product_category_all" />
+        <field name="barcode">9783898307529</field>
+    </record>
+    <record id="product_product_edifact2_dm" model="product.product">
+        <field name="name">EDIFACT Demo 2</field>
+        <field name="sale_ok" eval="True" />
+        <field name="type">consu</field>
+        <field name="default_code">edifac2</field>
+        <field name="categ_id" ref="product.product_category_all" />
+        <field name="barcode">9783898307538</field>
+    </record>
+    <record id="product_product_edifact3_dm" model="product.product">
+        <field name="name">EDIFACT Demo 3</field>
+        <field name="sale_ok" eval="True" />
+        <field name="type">consu</field>
+        <field name="default_code">edifact</field>
+        <field name="categ_id" ref="product.product_category_all" />
+        <field name="barcode">9783898307645</field>
+    </record>
+</odoo>
