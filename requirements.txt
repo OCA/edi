@@ -5,6 +5,7 @@ invoice2data
 ovh
 pdfplumber
 phonenumbers
+pydifact
 pyyaml
 regex
 xmlschema
