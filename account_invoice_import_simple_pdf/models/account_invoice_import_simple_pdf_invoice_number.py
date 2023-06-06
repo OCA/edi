@@ -46,13 +46,14 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
     def _string_type_sel(self):
         return [
             ("fixed", "Fixed"),
-            ("letter_upper", "Upper Letter"),
-            ("letter_lower", "Lower Letter"),
-            ("digit", "Digit(s)"),
-            ("space", "Space"),
             ("year2", "Year on 2 digits"),
             ("year4", "Year on 4 digits"),
             ("month", "Month (2 digits)"),
+            ("digit", "Digit(s)"),
+            ("letter_upper", "Upper Letter"),
+            ("letter_lower", "Lower Letter"),
+            ("char", "Any Character"),
+            ("space", "Space"),
         ]
 
     @api.constrains("string_type", "fixed_char", "occurrence_min", "occurrence_max")
@@ -62,7 +63,13 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
                 fixed_char_stripped = rec.fixed_char and rec.fixed_char.strip()
                 if not fixed_char_stripped:
                     raise ValidationError(_("Missing fixed char."))
-            elif rec.string_type in ("letter_upper", "letter_lower", "digit", "space"):
+            elif rec.string_type in (
+                "letter_upper",
+                "letter_lower",
+                "digit",
+                "char",
+                "space",
+            ):
                 if rec.occurrence_max < rec.occurrence_min:
                     raise ValidationError(
                         _(
@@ -84,10 +91,17 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
             "letter_lower": "[a-z]",
             "digit": r"\d",
             "space": r"\s",
+            "char": r"\w",
         }
         if self.string_type == "fixed":
             regex_list.append(regex.escape(self.fixed_char.strip()))
-        elif self.string_type in ("letter_upper", "letter_lower", "digit", "space"):
+        elif self.string_type in (
+            "letter_upper",
+            "letter_lower",
+            "digit",
+            "char",
+            "space",
+        ):
             if self.occurrence_min == self.occurrence_max:
                 suffix = "{%d}" % self.occurrence_min
             else:
