@@ -30,9 +30,23 @@ class EDIExchangeRecord(models.Model):
     )
     direction = fields.Selection(related="type_id.direction")
     backend_id = fields.Many2one(comodel_name="edi.backend", required=True)
-    model = fields.Char(index=True, required=False, readonly=True)
+    model = fields.Char(
+        index=True,
+        required=False,
+        readonly=True,
+        compute="_compute_record_fields",
+        inverse="_inverse_record_fields",
+        store=True,
+    )
     res_id = fields.Many2oneReference(
-        string="Record", index=True, required=False, readonly=True, model_field="model",
+        string="Record",
+        index=True,
+        required=False,
+        readonly=True,
+        model_field="model",
+        compute="_compute_record_fields",
+        inverse="_inverse_record_fields",
+        store=True,
     )
     exchange_file = fields.Binary(attachment=True)
     exchange_filename = fields.Char(
@@ -98,6 +112,15 @@ class EDIExchangeRecord(models.Model):
     exchange_file_auto_generate = fields.Boolean(
         related="type_id.exchange_file_auto_generate"
     )
+    related_record_ids = fields.One2many(
+        comodel_name="edi.exchange.related.record",
+        string="Records",
+        inverse_name="exchange_record_id",
+        copy=False,
+        readonly=True,
+        auto_join=True,
+    )
+    related_record_count = fields.Integer(compute="_compute_related_record_count")
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -128,6 +151,34 @@ class EDIExchangeRecord(models.Model):
         for rec in self:
             if rec.edi_exchange_state in ("input_received", "output_sent"):
                 rec.exchanged_on = fields.Datetime.now()
+
+    @api.depends("related_record_ids")
+    def _compute_related_record_count(self):
+        for rec in self:
+            rec.related_record_count = len(self.related_record_ids)
+
+    @api.depends("related_record_ids.model", "related_record_ids.res_id")
+    def _compute_record_fields(self):
+        for rec in self:
+            if len(rec.related_record_ids) == 1:
+                rec.model = rec.related_record_ids[0].model
+                rec.res_id = rec.related_record_ids[0].res_id
+            else:
+                rec.model = False
+                rec.res_id = 0
+
+    def _inverse_record_fields(self):
+        for rec in self:
+            vals = {"model": rec.model, "res_id": rec.res_id}
+            if len(rec.related_record_ids) == 1:
+                rec.related_record_ids.write(vals)
+                continue
+            elif rec.related_record_ids:
+                rec.related_record_ids.unlink()
+            vals = vals.update({"exchange_record_id": rec.id})
+            rec.related_record_ids = self.env["edi.exchange.related.record"].create(
+                vals
+            )
 
     @api.constrains("edi_exchange_state")
     def _constrain_edi_exchange_state(self):
@@ -286,9 +337,16 @@ class EDIExchangeRecord(models.Model):
 
     def action_open_related_record(self):
         self.ensure_one()
-        if not self.model or not self.res_id:
+        if not self.related_record_ids:
             return {}
-        return self.record.get_formview_action()
+        if len(self.related_record_ids) == 1:
+            return self.related_record_ids.record.get_formview_action()
+        else:
+            action = self.env.ref("edi.edi_exchange_related_record_view_action").read()[
+                0
+            ]
+            action["domain"] = [("id", "in", self.related_record_ids.ids)]
+            return action
 
     def _set_related_record(self, odoo_record):
         self.update({"model": odoo_record._name, "res_id": odoo_record.id})
@@ -297,24 +355,38 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         if not self.related_exchange_ids:
             return {}
-        action = self.env.ref("edi.act_open_edi_exchange_record_view").read()[0]
+        if len(self.related_exchange_ids) == 1:
+            return self.related_exchange_ids.get_formview_action()
+        action = self.env.ref("edi.edi_exchange_related_record_view_action").read()[0]
         action["domain"] = [("id", "in", self.related_exchange_ids.ids)]
         return action
 
     def _notify_related_record(self, message, level="info"):
         """Post notification on the original record."""
-        if not hasattr(self.record, "message_post_with_view"):
-            return
-        self.record.message_post_with_view(
-            "edi.message_edi_exchange_link",
-            values={
-                "backend": self.backend_id,
-                "exchange_record": self,
-                "message": message,
-                "level": level,
-            },
-            subtype_id=self.env.ref("mail.mt_note").id,
-        )
+        for related_record in self.related_record_ids:
+            if not hasattr(self.record, "message_post_with_view"):
+                continue
+            related_record.record.message_post_with_view(
+                "edi.message_edi_exchange_link",
+                values={
+                    "backend": self.backend_id,
+                    "exchange_record": self,
+                    "message": message,
+                    "level": level,
+                },
+                subtype_id=self.env.ref("mail.mt_note").id,
+            )
+
+    def relate_records(self, records):
+        """This method can be used in components to realte records to exchanges"""
+        for record in records:
+            self.env["edi.exchange.related.record"].create(
+                {
+                    "exchange_record_id": self.id,
+                    "model": record._name,
+                    "res_id": record.id,
+                }
+            )
 
     def _trigger_edi_event_make_name(self, name, suffix=None):
         return "on_edi_exchange_{name}{suffix}".format(
@@ -437,13 +509,14 @@ class EDIExchangeRecord(models.Model):
         by_model_rec_ids = defaultdict(set)
         by_model_checker = {}
         for exc_rec in self.sudo():
-            if not exc_rec.model or not exc_rec.res_id:
-                continue
-            by_model_rec_ids[exc_rec.model].add(exc_rec.res_id)
-            if exc_rec.model not in by_model_checker:
-                by_model_checker[exc_rec.model] = getattr(
-                    self.env[exc_rec.model], "get_edi_access", default_checker
-                )
+            for related_record in exc_rec.related_record_ids:
+                by_model_rec_ids[related_record.model].add(related_record.res_id)
+                if exc_rec.model not in by_model_checker:
+                    by_model_checker[related_record.model] = getattr(
+                        self.env[related_record.model],
+                        "get_edi_access",
+                        default_checker,
+                    )
 
         for model, rec_ids in by_model_rec_ids.items():
             records = self.env[model].browse(rec_ids).with_user(self._uid)

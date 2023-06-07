@@ -21,12 +21,15 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     _name = "edi.exchange.consumer.mixin"
     _description = "Abstract record where exchange records can be assigned"
 
-    exchange_record_ids = fields.One2many(
-        "edi.exchange.record",
+    related_record_ids = fields.One2many(
+        "edi.exchange.related.record",
         inverse_name="res_id",
         domain=lambda r: [("model", "=", r._name)],
     )
-    exchange_record_count = fields.Integer(compute="_compute_exchange_record_count")
+    exchange_record_ids = fields.One2many(
+        comodel_name="edi.exchange.record", compute="_compute_exchange_record_ids"
+    )
+    exchange_record_count = fields.Integer(compute="_compute_exchange_record_ids")
     expected_edi_configuration = Serialized(
         compute="_compute_expected_edi_configuration", default={},
     )
@@ -181,15 +184,21 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             )
         )
 
-    @api.depends("exchange_record_ids")
-    def _compute_exchange_record_count(self):
-        for record in self:
-            record.exchange_record_count = len(record.exchange_record_ids)
+    @api.depends("related_record_ids")
+    def _compute_exchange_record_ids(self):
+        for rec in self:
+            rec.exchange_record_ids = rec.related_record_ids.mapped(
+                "exchange_record_id"
+            )
+            rec.exchange_record_count = len(rec.exchange_record_ids)
 
     def action_view_edi_records(self):
         self.ensure_one()
         action = self.env.ref("edi.act_open_edi_exchange_record_view").read()[0]
-        action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
+        action["domain"] = [
+            ("related_record_ids.model", "=", self._name),
+            ("related_record_ids.res_id", "=", self.id),
+        ]
         return action
 
     @api.model

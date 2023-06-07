@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_related_record_view_search" model="ir.ui.view">
+        <field name="name">edi.exchange.related.record.search</field>
+        <field name="model">edi.exchange.related.record</field>
+        <field name="arch" type="xml">
+            <search string="EDI Exchange Related Record">
+                <group expand="0" string="Group By...">
+                    <filter
+                        string='Model'
+                        name="default_model"
+                        domain="[]"
+                        context="{'group_by' : 'model'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="edi_exchange_related_record_view_tree" model="ir.ui.view">
+        <field name="name">edi.exchange.related.record.tree</field>
+        <field name="model">edi.exchange.related.record</field>
+        <field name="arch" type="xml">
+            <tree string="EDI Exchange Related Record">
+                <field name="name" />
+                <field name="model_name" optional="hide" />
+                <field name="model" />
+                <field name="res_id" />
+                <button
+                    name="action_open_related_record"
+                    string="Open"
+                    type="object"
+                    icon="fa-share-square-o"
+                />
+            </tree>
+        </field>
+    </record>
+    <record id="edi_exchange_related_record_view_action" model="ir.actions.act_window">
+        <field name="name">Related Records</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.related.record</field>
+        <field name="domain">[]</field> <!-- force empty -->
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="edi_exchange_related_record_view_search" />
+        <field name="context">{'search_default_model': 1}</field>
+    </record>
+</odoo>

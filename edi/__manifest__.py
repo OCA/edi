@@ -8,7 +8,7 @@
     Define backends, exchange types, exchange records,
     basic automation and views for handling EDI exchanges.
     """,
-    "version": "13.0.1.24.0",
+    "version": "13.0.2.0.0",
     "development_status": "Beta",
     "license": "LGPL-3",
     "author": "ACSONE,Odoo Community Association (OCA)",
@@ -33,6 +33,7 @@
         "views/edi_backend_views.xml",
         "views/edi_backend_type_views.xml",
         "views/edi_exchange_record_views.xml",
+        "views/edi_exchange_related_record_views.xml",
         "views/edi_exchange_type_views.xml",
         "views/menuitems.xml",
         "templates/exchange_chatter_msg.xml",
