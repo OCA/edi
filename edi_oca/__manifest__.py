@@ -22,7 +22,7 @@
         "base_sparse_field",
         "queue_job",
     ],
-    "external_dependencies": {"python": ["PyYAML"]},
+    "external_dependencies": {"python": ["PyYAML", "odoo-test-helper"]},
     "data": [
         "wizards/edi_exchange_record_create_wiz.xml",
         "data/cron.xml",
