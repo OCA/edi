@@ -42,7 +42,7 @@ class TestConsumerMixinCase(EDIBackendCommonTestCase):
             direction="output",
             exchange_file_ext="csv",
             backend_id=False,
-            exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
+            exchange_filename_pattern="{record.name}-{type.code}-{dt}",
             model_ids=[(4, cls.env["ir.model"]._get_id(cls.consumer_record._name))],
             enable_domain="[]",
             enable_snippet="""
@@ -77,10 +77,10 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
             "res_id": self.consumer_record.id,
         }
         exchange_record = self.backend.create_record("test_csv_output", vals)
-        self.consumer_record.refresh()
+        self.env.invalidate_all()
         self.assertEqual(1, self.consumer_record.exchange_record_count)
         action = self.consumer_record.action_view_edi_records()
-        self.consumer_record.refresh()
+        self.env.invalidate_all()
         self.assertEqual(
             exchange_record, self.env["edi.exchange.record"].search(action["domain"])
         )
@@ -95,7 +95,7 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
         )
         # enable it
         self.exchange_type_out.model_manual_btn = True
-        self.consumer_record.invalidate_cache(["edi_has_form_config", "edi_config"])
+        self.consumer_record.invalidate_model(["edi_has_form_config", "edi_config"])
         self.assertEqual(
             self.consumer_record.edi_config[str(self.exchange_type_out.id)],
             {"form": {"btn": {"label": self.exchange_type_out.name}}},
@@ -104,7 +104,7 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
             self.exchange_type_out.id
         )
         self.assertEqual(action["res_model"], "edi.exchange.record")
-        self.consumer_record.refresh()
+        self.env.invalidate_all()
         self.assertNotIn(
             str(self.exchange_type_out.id),
             self.consumer_record.edi_config,
@@ -130,7 +130,7 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
             .create({"backend_id": self.backend_02.id})
         )
         wizard.create_edi()
-        self.consumer_record.refresh()
+        self.env.invalidate_all()
         self.assertNotIn(
             str(self.exchange_type_new.id),
             self.consumer_record.edi_config,
