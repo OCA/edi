@@ -21,14 +21,15 @@ class EDIWebserviceSend(Component):
         except HTTPError as err:
             response_content = err.response.content
             status_code = err.response.status_code
-            http_error = err
+            raise err from err
+        except Exception as ex:
+            status_code = False
+            response_content = ""
+            raise ex from ex
         else:
             status_code = 200
-            http_error = None
         finally:
             self.exchange_record._set_file_content(
                 response_content, field_name="ws_response_content"
             )
             self.exchange_record.ws_response_status_code = status_code
-            if http_error:
-                raise http_error from http_error

@@ -1,6 +1,8 @@
 # Copyright 2022 Foodles (http://www.foodles.co).
 # @author Pierre Verkest <pierreverkest84@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from unittest import mock
+
 import responses
 
 from odoo.addons.edi_webservice_oca.tests.common import TestEDIWebserviceBase
@@ -61,6 +63,24 @@ class TestSend(TestEDIWebserviceBase):
         self.assertEqual(responses.calls[0].request.body, "This is a simple file")
         self.assertEqual(
             self.record._get_file_content(field_name="ws_response_content"), response
+        )
+
+    def test_not_http_exception(self):
+        self.record.type_id.set_settings(self.settings)
+        self.record.ws_response_status_code = 200
+        self.record._set_file_content(
+            "first call content", field_name="ws_response_content"
+        )
+        with mock.patch(
+            "odoo.addons.edi_webservice_oca.components.send.EDIWebserviceSend.send",
+            side_effect=Exception("Not an HTTPError"),
+        ):
+            with self.assertRaisesRegex(Exception, "Not an HTTPError"):
+                self.backend._check_output_exchange_sync()
+
+        self.assertFalse(self.record.ws_response_status_code)
+        self.assertFalse(
+            self.record._get_file_content(field_name="ws_response_content")
         )
 
     def test_ws_response_content_filename(self):
