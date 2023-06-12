@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ForgeFlow S.L. (https://www.forgeflow.com)
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_account_payment_orderview"
+    >
+        <field name="name">Bank Statement Exchange Record</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('model', '=', 'account.payment.order')]</field>
+        <field name="context">{}</field>
+    </record>
+    <menuitem
+        id="menu_payment_orderedi_exchange_record"
+        name="Bank Statements"
+        action="act_open_edi_exchange_record_account_payment_orderview"
+        parent="edi_account.menu_account_edi_root"
+        sequence="20"
+    />
+</odoo>
