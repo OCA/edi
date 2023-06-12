@@ -9,7 +9,7 @@
     "license": "LGPL-3",
     "author": "ForgeFlow, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
-    "depends": ["account", "edi", "component_event"],
+    "depends": ["edi_account", "component_event"],
     "data": [
         "views/account_bank_statement_views.xml",
         "views/edi_exchange_record_views.xml",

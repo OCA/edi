@@ -15,16 +15,10 @@
         <field name="context">{}</field>
     </record>
     <menuitem
-        id="menu_bank_statement_edi_root"
-        name="Exchange records"
-        parent="account.menu_finance_configuration"
-        sequence="20"
-    />
-    <menuitem
         id="menu_bank_statement_edi_exchange_record"
         name="Bank Statements"
         action="act_open_edi_exchange_record_account_bank_statement_view"
-        parent="menu_bank_statement_edi_root"
+        parent="edi_account.menu_account_edi_root"
         sequence="20"
     />
 </odoo>
