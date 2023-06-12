@@ -17,7 +17,7 @@
     <menuitem
         id="menu_account_edi_root"
         name="Exchange records"
-        parent="account.menu_finance_entries"
+        parent="account.menu_finance"
         sequence="20"
     />
     <menuitem
