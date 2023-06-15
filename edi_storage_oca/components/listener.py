@@ -77,6 +77,11 @@ class EdiStorageListener(Component):
             error_dir = record.type_id._storage_fullpath(
                 record.backend_id.input_dir_error
             ).as_posix()
+            if record.backend_id.input_dir_remove:
+                res = self._remove_file(storage, pending_dir, file)
+                if not res:
+                    res = self._remove_file(storage, error_dir, file)
+                return res
             if error_dir:
                 res = self._move_file(storage, pending_dir, error_dir, file)
         return res
