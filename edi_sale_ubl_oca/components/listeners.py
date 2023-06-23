@@ -4,27 +4,33 @@
 
 import logging
 
-from odoo.addons.component.core import Component
-from odoo.addons.component_event import skip_if
+from odoo.addons.component.core import AbstractComponent, Component
 
 _logger = logging.getLogger(__file__)
 
 
-class EDISOEventListener(Component):
-    _name = "edi.sale.order.event.listener"
+class EDISOEventListenerMixin(AbstractComponent):
+    _name = "edi.sale.order.event.listener.mixin"
     _inherit = "base.event.listener"
-    _apply_on = ["sale.order"]
+    _apply_on = ["sale.order", "sale.order.line"]
 
-    @skip_if(lambda self, record, **kw: self._skip_state_update(record, **kw))
     def on_record_create(self, record, fields=None):
-        self._handle_order_state(record.with_context(edi_sale_skip_state_update=True))
+        if self._skip_state_update(record):
+            return
+        order = self._get_order(record)
+        self._handle_order_state(order.with_context(edi_sale_skip_state_update=True))
 
-    @skip_if(lambda self, record, **kw: self._skip_state_update(record, **kw))
     def on_record_write(self, record, fields=None):
-        self._handle_order_state(record.with_context(edi_sale_skip_state_update=True))
+        if self._skip_state_update(record):
+            return
+        order = self._get_order(record)
+        self._handle_order_state(order.with_context(edi_sale_skip_state_update=True))
 
     # TODO: what to do?
     # def on_record_unlink(self, record):
+
+    def _get_order(self, record):
+        raise NotImplementedError()
 
     def _handle_order_state(self, order):
         state = order._edi_update_state()
@@ -32,10 +38,11 @@ class EDISOEventListener(Component):
             self._handle_order_state_no_state(order)
 
     def _skip_state_update(self, record, fields=None):
-        if record.env.context.get("edi_sale_skip_state_update"):
+        if record.env.context.get(
+            "edi_sale_skip_state_update"
+        ) or not self._is_ubl_exchange(record):
             return True
-        fields = fields or []
-        return "state" not in fields and not self._is_ubl_exchange(record)
+        return False
 
     def _is_ubl_exchange(self, record):
         return record.origin_exchange_type_id.backend_type_id == self.env.ref(
@@ -50,3 +57,41 @@ class EDISOEventListener(Component):
             msg += ". No workflow configured on exc type " "%(type_name)s'"
             msg_args["type_name"] = exc_type.name
         _logger.error(msg, msg_args)
+
+
+class EDISOEventListener(Component):
+    _name = "edi.sale.order.event.listener"
+    _inherit = "edi.sale.order.event.listener.mixin"
+    _apply_on = ["sale.order"]
+
+    def _get_order(self, record):
+        return record
+
+    def _skip_state_update(self, record, fields=None):
+        res = super()._skip_state_update(record, fields=fields)
+        if res:
+            return res
+        fields = fields or []
+        # EDI state will be recomputed only at state change
+        return "state" not in fields
+
+
+class EDISOLineEventListener(Component):
+    _name = "edi.sale.order.line.event.listener"
+    _inherit = "edi.sale.order.event.listener.mixin"
+    _apply_on = ["sale.order.line"]
+
+    def _get_order(self, record):
+        return record.order_id
+
+    def _skip_state_update(self, record, fields=None):
+        res = super()._skip_state_update(record, fields=fields)
+        if res:
+            return res
+        fields = fields or []
+        # EDI state will be recomputed when critical line info has changed
+        # TODO: tie this list w/ the fields in `s.o.l._edi_compare_orig_values`
+        trigger_fields = ("product_id", "product_uom_qty")
+        for fname in trigger_fields:
+            if fname in fields:
+                return False
