@@ -81,6 +81,15 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
             "res_id": self.consumer_record.id,
         }
         exchange_record = self.backend.create_record("test_csv_output", vals)
+        self.assertEqual(self.consumer_record.exchange_record_count, 1)
+        self.env["edi.exchange.record"].create(
+            {
+                "backend_id": self.backend.id,
+                "type_id": self.exchange_type_new.id,
+                "model": "an.other.model.with.same.id",
+                "res_id": self.consumer_record.id,
+            }
+        )
         self.consumer_record.refresh()
         self.assertEqual(self.consumer_record.exchange_record_count, 1)
         action = self.consumer_record.action_view_edi_records()
