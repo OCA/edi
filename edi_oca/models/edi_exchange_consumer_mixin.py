@@ -231,7 +231,7 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     @api.depends("exchange_record_ids")
     def _compute_exchange_record_count(self):
         data = self.env["edi.exchange.record"].read_group(
-            [("res_id", "in", self.ids)],
+            [("res_id", "in", self.ids), ("model", "=", self._name)],
             ["res_id"],
             ["res_id"],
         )
