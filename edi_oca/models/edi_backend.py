@@ -445,6 +445,10 @@ class EDIBackend(models.Model):
             "input_processed_error",
         ]
 
+    def _update_related_ack(self, exchange_record):
+        if exchange_record.parent_id and exchange_record.type_id.ack_for_type_ids:
+            return True
+
     def exchange_process(self, exchange_record):
         """Process an incoming document."""
         self.ensure_one()
@@ -456,6 +460,7 @@ class EDIBackend(models.Model):
         state = exchange_record.edi_exchange_state
         error = False
         message = None
+        origin_output_state = False
         try:
             self._exchange_process(exchange_record)
         except self._swallable_exceptions() as err:
@@ -464,20 +469,30 @@ class EDIBackend(models.Model):
             error = _get_exception_msg(err)
             state = "input_processed_error"
             res = False
+            if self._update_related_ack(exchange_record):
+                origin_output_state = "output_sent_and_error"
         else:
             error = None
             state = "input_processed"
             res = True
+            if self._update_related_ack(exchange_record):
+                origin_output_state = "output_sent_and_processed"
         finally:
             exchange_record.write(
                 {
                     "edi_exchange_state": state,
                     "exchange_error": error,
                     # FIXME: this should come from _compute_exchanged_on
+                    # TODO: shouldn't this update processed_on ?
                     # but somehow it's failing in send tests (in record tests it works).
                     "exchanged_on": fields.Datetime.now(),
                 }
             )
+            if origin_output_state:
+                exchange_record.parent_id.write({
+                    "edi_exchange_state": origin_output_state,
+                    "exchange_error": error,
+                })
             if state == "input_processed_error":
                 exchange_record._notify_error("process_ko")
             elif state == "input_processed":
@@ -615,9 +630,9 @@ class EDIBackend(models.Model):
         self, exchange_type, extra_domain=None, count_only=False
     ):
         domain = [
-            ("backend_id", "=", self.id),
-            ("type_id", "=", exchange_type.id),
-        ] + extra_domain or []
+                     ("backend_id", "=", self.id),
+                     ("type_id", "=", exchange_type.id),
+                 ] + extra_domain or []
         return self.env["edi.exchange.record"].search(domain, count=count_only)
 
     def action_view_exchanges(self):
