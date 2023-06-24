@@ -462,6 +462,19 @@ class TestInvoiceImport(TransactionCase):
                 {"string_type": "year2"},
                 {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
             ],
+            "ATS-20230522181307737": [
+                {"string_type": "fixed", "fixed_char": "ATS-"},
+                {"string_type": "year4"},
+                {"string_type": "month"},
+                {"string_type": "day"},
+                {"string_type": "digit", "occurrence_min": 9, "occurrence_max": 9},
+            ],
+            "C3061235": [
+                {"string_type": "fixed", "fixed_char": "C"},
+                {"string_type": "year1"},
+                {"string_type": "month"},
+                {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
+            ],
             "INV2107ZB0042": [
                 {"string_type": "fixed", "fixed_char": "INV"},
                 {"string_type": "year2"},
