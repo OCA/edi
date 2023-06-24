@@ -437,6 +437,78 @@ msgid "Missing fixed char."
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Fixed"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Year on 2 digits"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Year on 4 digits"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Year on 1 digit"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Month (2 digits)"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Day on 2 digits"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Digit(s)"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Upper Letter"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Lower Letter"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Any Character"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Space"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "The maximum occurence (%d) must be equal to or above the minimum occurence (%d)."
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid "Missing invoice number format configuration on partner '%s'."

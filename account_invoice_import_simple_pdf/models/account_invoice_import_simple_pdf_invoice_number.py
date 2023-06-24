@@ -45,17 +45,17 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
     @api.model
     def _string_type_sel(self):
         return [
-            ("fixed", "Fixed"),
-            ("year2", "Year on 2 digits"),
-            ("year4", "Year on 4 digits"),
-            ("year1", "Year on 1 digit"),
-            ("month", "Month (2 digits)"),
-            ("day", "Day (2 digits)"),
-            ("digit", "Digit(s)"),
-            ("letter_upper", "Upper Letter"),
-            ("letter_lower", "Lower Letter"),
-            ("char", "Any Character"),
-            ("space", "Space"),
+            ("fixed", _("Fixed")),
+            ("year2", _("Year on 2 digits")),
+            ("year4", _("Year on 4 digits")),
+            ("year1", _("Year on 1 digit")),
+            ("month", _("Month (2 digits)")),
+            ("day", _("Day on 2 digits")),
+            ("digit", _("Digit(s)")),
+            ("letter_upper", _("Upper Letter")),
+            ("letter_lower", _("Lower Letter")),
+            ("char", _("Any Character")),
+            ("space", _("Space")),
         ]
 
     @api.constrains("string_type", "fixed_char", "occurrence_min", "occurrence_max")
