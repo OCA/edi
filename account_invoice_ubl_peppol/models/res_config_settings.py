@@ -16,5 +16,7 @@ class ResConfigSettings(models.TransientModel):
         readonly=False,
     )
     ubl_default_uom_id = fields.Many2one(
-        comodel_name="uom.uom", related="company_id.ubl_default_uom_id", readonly=False,
+        comodel_name="uom.uom",
+        related="company_id.ubl_default_uom_id",
+        readonly=False,
     )

@@ -19,7 +19,13 @@ class PeppolEasList(models.Model):
     display_name = fields.Char(compute="_compute_display_name", store=True)
     active = fields.Boolean(default=True)
 
-    _sql_constraints = [("code_uniq", "unique(code)", "This EAS code already exists",)]
+    _sql_constraints = [
+        (
+            "code_uniq",
+            "unique(code)",
+            "This EAS code already exists",
+        )
+    ]
 
     def name_get(self):
         res = []

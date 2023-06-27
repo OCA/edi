@@ -10,7 +10,7 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     def _account_invoice_ubl_use_peppol(self):
-        """ Returns True when we should use PEPPOL """
+        """Returns True when we should use PEPPOL"""
         domain = self.company_id.get_ubl_domain_peppol()
         return bool(self.filtered_domain(domain))
 
@@ -335,7 +335,9 @@ class AccountMove(models.Model):
 
     def _ubl_add_tax_total(self, xml_root, ns, version="2.1"):
         res = super(AccountMove, self)._ubl_add_tax_total(
-            xml_root, ns, version=version,
+            xml_root,
+            ns,
+            version=version,
         )
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
             return res
