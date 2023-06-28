@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-29 11:54+0000\n"
-"PO-Revision-Date: 2018-10-03 04:39+0000\n"
-"Last-Translator: William Olhasque <william.olhasque@scopea.fr>\n"
+"PO-Revision-Date: 2023-06-28 09:10+0000\n"
+"Last-Translator: Alexis de Lattre <alexis@via.ecp.fr>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.1.1\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -43,9 +43,8 @@ msgstr "Sociétés"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_res_config_settings
-#, fuzzy
 msgid "Config Settings"
-msgstr "account.config.settings"
+msgstr "Configuration"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -55,8 +54,8 @@ msgid ""
 "Country is not set on partner '%s'. In the Factur-X standard, the country is "
 "required for buyer and seller."
 msgstr ""
-"Le pays n'est pas présent sur le partenaire %s .\n"
-"Le standard Factur-X, le pays est requis pour le vendeur et l'acheteur."
+"Le pays n'est pas configuré sur le partenaire '%s'. Dans la norme Factur-X, "
+"l'information du pays est obligatoire pour le vendeur et l'acheteur."
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__en16931
@@ -66,7 +65,7 @@ msgstr "EN 16931 (Confort)"
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__extended
 msgid "Extended"
-msgstr ""
+msgstr "Étendu"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -77,9 +76,8 @@ msgstr "Factur-X"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__xml_format_in_pdf_invoice__factur-x
-#, fuzzy
 msgid "Factur-X (CII)"
-msgstr "Factur-X"
+msgstr "Factur-X (CII)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_level
@@ -134,28 +132,28 @@ msgstr "Minimum"
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr "Catégorie de taxe UNECE manquante sur la taxe %s"
+msgstr "Catégorie de taxe UNECE manquante sur la taxe '%s'"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr "Type de taxe UNECE manquante sur la taxe %s"
+msgstr "Type de taxe UNECE manquante sur la taxe '%s'"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Missing UNECE code on payment method '%s'"
-msgstr "Code UNECE manquant sur le type d'export de paiement %s"
+msgstr "Code UNECE manquant sur la méthode de paiement '%s'"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "No specific payment term selected"
-msgstr "Aucun terme de paiement spécifique sélectionné"
+msgstr "Aucune condition de paiement sélectionnée"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -166,9 +164,8 @@ msgstr "Avoir"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_ir_actions_report
-#, fuzzy
 msgid "Report Action"
-msgstr "Rapport"
+msgstr "Rapport Action"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -179,8 +176,8 @@ msgid ""
 "price of line '%s' is negative. You should generate a customer refund for "
 "that line."
 msgstr ""
-"Le standard Factur-X précise que le prix unitaire ne peut être négatif. Le "
-"prix unitaire de la ligne %s est négatif. Vous devriez générer un avoir "
+"La norme Factur-X spécifie que le prix unitaire ne peut être négatif. Le "
+"prix unitaire de la ligne '%s' est négatif. Vous devriez générer un avoir "
 "client pour cette ligne."
 
 #. module: account_invoice_facturx
@@ -213,7 +210,7 @@ msgstr "Virement bancaire"
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
-msgstr ""
+msgstr "Format XML embarqué dans la facture PDF"
 
 #. module: account_invoice_facturx
 #. odoo-python
