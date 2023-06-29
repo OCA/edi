@@ -3,6 +3,13 @@
 
 
 from odoo.tests.common import TransactionCase
+from odoo.tools import file_open
+
+
+def _get_file_content(filename):
+    path = "base_edifact/tests/files/" + filename
+    with file_open(path, "rb") as fd:
+        return fd.read()
 
 
 class TestBaseEdifact(TransactionCase):
@@ -20,6 +27,11 @@ class TestBaseEdifact(TransactionCase):
 
     def tearDown(self):
         return super().tearDown()
+
+    def test_pydifact_obj(self):
+        edifact_docu = _get_file_content("Retail_EDIFACT_ORDERS_sample1.txt")
+        obj = self.base_edifact_model.pydifact_obj(edifact_docu)
+        self.assertEqual(obj["order"]["order_ref"], "1AA1TEST")
 
     def test_map2odoo_address(self):
         """Address segment
