@@ -31,7 +31,10 @@ class AccountMove(models.Model):
         if self.invoice_date_due and version >= "2.1":
             due_date = etree.SubElement(parent_node, ns["cbc"] + "DueDate")
             due_date.text = fields.Date.to_string(self.invoice_date_due)
-        type_code = etree.SubElement(parent_node, ns["cbc"] + "InvoiceTypeCode")
+        if self.move_type == "out_invoice":
+            type_code = etree.SubElement(parent_node, ns["cbc"] + "InvoiceTypeCode")
+        elif self.move_type == "out_refund":
+            type_code = etree.SubElement(parent_node, ns["cbc"] + "CreditNoteTypeCode")
         type_code.text = self._ubl_get_invoice_type_code()
         if self.narration:
             note = etree.SubElement(parent_node, ns["cbc"] + "Note")
@@ -251,7 +254,10 @@ class AccountMove(models.Model):
     def _ubl_add_invoice_line(self, parent_node, iline, line_number, ns, version="2.1"):
         self.ensure_one()
         cur_name = self.currency_id.name
-        line_root = etree.SubElement(parent_node, ns["cac"] + "InvoiceLine")
+        if self.move_type == "out_invoice":
+            line_root = etree.SubElement(parent_node, ns["cac"] + "InvoiceLine")
+        elif self.move_type == "out_refund":
+            line_root = etree.SubElement(parent_node, ns["cac"] + "CreditNoteLine")
         dpo = self.env["decimal.precision"]
         qty_precision = dpo.precision_get("Product Unit of Measure")
         account_precision = self.currency_id.decimal_places
@@ -259,13 +265,17 @@ class AccountMove(models.Model):
         line_id.text = str(line_number)
         uom_unece_code = False
         # product_uom_id is not a required field on account.move.line
+        if self.move_type == "out_invoice":
+            qty_element_name = "InvoicedQuantity"
+        elif self.move_type == "out_refund":
+            qty_element_name = "CreditedQuantity"
         if iline.product_uom_id.unece_code:
             uom_unece_code = iline.product_uom_id.unece_code
             quantity = etree.SubElement(
-                line_root, ns["cbc"] + "InvoicedQuantity", unitCode=uom_unece_code
+                line_root, ns["cbc"] + qty_element_name, unitCode=uom_unece_code
             )
         else:
-            quantity = etree.SubElement(line_root, ns["cbc"] + "InvoicedQuantity")
+            quantity = etree.SubElement(line_root, ns["cbc"] + qty_element_name)
         qty = iline.quantity
         quantity.text = "%0.*f" % (qty_precision, qty)
         base_price, price_precision, base_qty = self._ubl_get_invoice_line_price_unit(
@@ -278,7 +288,6 @@ class AccountMove(models.Model):
         self._ubl_add_invoice_line_discount(
             line_root, iline, base_price, base_qty, ns, version=version
         )
-        self._ubl_add_invoice_line_tax_total(iline, line_root, ns, version=version)
         self._ubl_add_item(
             iline.name,
             iline.product_id,
@@ -386,8 +395,12 @@ class AccountMove(models.Model):
 
     def generate_invoice_ubl_xml_etree(self, version="2.1"):
         self.ensure_one()
-        nsmap, ns = self._ubl_get_nsmap_namespace("Invoice-2", version=version)
-        xml_root = etree.Element("Invoice", nsmap=nsmap)
+        if self.move_type == "out_invoice":
+            nsmap, ns = self._ubl_get_nsmap_namespace("Invoice-2", version=version)
+            xml_root = etree.Element("Invoice", nsmap=nsmap)
+        elif self.move_type == "out_refund":
+            nsmap, ns = self._ubl_get_nsmap_namespace("CreditNote-2", version=version)
+            xml_root = etree.Element("CreditNote", nsmap=nsmap)
         self._ubl_add_header(xml_root, ns, version=version)
         if version == "2.1":
             self._ubl_add_buyer_reference(xml_root, ns, version=version)
@@ -457,7 +470,10 @@ class AccountMove(models.Model):
         xml_string = etree.tostring(
             xml_root, pretty_print=True, encoding="UTF-8", xml_declaration=True
         )
-        self._ubl_check_xml_schema(xml_string, "Invoice", version=version)
+        if self.move_type == "out_invoice":
+            self._ubl_check_xml_schema(xml_string, "Invoice", version=version)
+        elif self.move_type == "out_refund":
+            self._ubl_check_xml_schema(xml_string, "CreditNote", version=version)
         logger.debug(
             "Invoice UBL XML file generated for account invoice ID %d " "(state %s)",
             self.id,
@@ -468,7 +484,10 @@ class AccountMove(models.Model):
 
     def get_ubl_filename(self, version="2.1"):
         """This method is designed to be inherited"""
-        return "UBL-Invoice-%s.xml" % version
+        if self.move_type == "out_invoice":
+            return "UBL-Invoice-%s.xml" % version
+        elif self.move_type == "out_refund":
+            return "UBL-CreditNote-%s.xml" % version
 
     def get_ubl_version(self):
         return self.env.context.get("ubl_version") or "2.1"
