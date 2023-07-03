@@ -31,7 +31,6 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
 
     def test_state_accepted(self):
         order = self.sale
-        order._edi_update_state()
         self.assertEqual(order.edi_state_id.code, order.EDI_STATE_ORDER_ACCEPTED)
         self.assertTrue(
             order.mapped("order_line.edi_state_id").code,
@@ -46,7 +45,6 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         line1, line2, line3 = order.order_line
         # change line 1
         line1.product_uom_qty = orig_qties[line1.id] - 1
-        order._edi_update_state()
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
@@ -60,7 +58,6 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         )
         # change line 2
         line2.product_uom_qty = orig_qties[line2.id] - 1
-        order._edi_update_state()
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
@@ -74,7 +71,6 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         )
         # change line 3
         line3.product_uom_qty = orig_qties[line3.id] - 1
-        order._edi_update_state()
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
@@ -88,7 +84,6 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         )
         # restore line 1
         line1.product_uom_qty = orig_qties[line1.id]
-        order._edi_update_state()
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
@@ -104,7 +99,6 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
     def test_state_rejected(self):
         order = self.sale
         order.action_cancel()
-        order._edi_update_state()
         self.assertEqual(order.edi_state_id.code, order.EDI_STATE_ORDER_REJECTED)
 
     def test_state_accepted_add_line(self):
