@@ -28,7 +28,7 @@ class SaleOrder(models.Model):
     EDI_STATE_ORDER_LINE_NOT_ACCEPTED = "7"
     EDI_STATE_ORDER_LINE_ALREADY_DELIVERED = "42"
 
-    def _edi_update_state(self):
+    def _edi_update_state(self, lines=None):
         metadata = self._edi_get_metadata()
         orig_vals = metadata.get("orig_values", {})
         line_vals = orig_vals.get("lines", {})
@@ -36,7 +36,9 @@ class SaleOrder(models.Model):
             _logger.debug(
                 "_edi_update_state: no line value found for order %s", self.id
             )
-        self.order_line._edi_determine_lines_state(line_vals)
+        # TODO: test
+        lines = lines or self.order_line
+        lines._edi_determine_lines_state(line_vals)
         state_code = self._edi_update_state_code(orig_vals)
         state = self.edi_find_state(code=state_code)
         self._edi_set_state(state)

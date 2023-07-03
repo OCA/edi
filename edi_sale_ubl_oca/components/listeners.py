@@ -15,25 +15,27 @@ class EDISOEventListenerMixin(AbstractComponent):
     _apply_on = ["sale.order", "sale.order.line"]
 
     def on_record_create(self, record, fields=None):
-        if self._skip_state_update(record):
-            return
-        order = self._get_order(record)
-        self._handle_order_state(order.with_context(edi_sale_skip_state_update=True))
+        self._on_record_action(record, fields=fields)
 
     def on_record_write(self, record, fields=None):
-        if self._skip_state_update(record):
+        self._on_record_action(record, fields=fields)
+
+    def _on_record_action(self, record, fields=None):
+        if self._skip_state_update(record, fields=fields):
             return
-        order = self._get_order(record)
-        self._handle_order_state(order.with_context(edi_sale_skip_state_update=True))
+        order, lines = self._get_records(record)
+        order = order.with_context(edi_sale_skip_state_update=True)
+        lines = lines.with_context(edi_sale_skip_state_update=True)
+        self._handle_order_state(order, lines=lines)
 
     # TODO: what to do?
     # def on_record_unlink(self, record):
 
-    def _get_order(self, record):
+    def _get_records(self, record):
         raise NotImplementedError()
 
-    def _handle_order_state(self, order):
-        state = order._edi_update_state()
+    def _handle_order_state(self, order, lines=None):
+        state = order._edi_update_state(lines=lines)
         if not state:
             self._handle_order_state_no_state(order)
 
@@ -64,8 +66,8 @@ class EDISOEventListener(Component):
     _inherit = "edi.sale.order.event.listener.mixin"
     _apply_on = ["sale.order"]
 
-    def _get_order(self, record):
-        return record
+    def _get_records(self, record):
+        return record, record.order_line
 
     def _skip_state_update(self, record, fields=None):
         res = super()._skip_state_update(record, fields=fields)
@@ -81,8 +83,8 @@ class EDISOLineEventListener(Component):
     _inherit = "edi.sale.order.event.listener.mixin"
     _apply_on = ["sale.order.line"]
 
-    def _get_order(self, record):
-        return record.order_id
+    def _get_records(self, record):
+        return record.order_id, record
 
     def _skip_state_update(self, record, fields=None):
         res = super()._skip_state_update(record, fields=fields)
