@@ -27,6 +27,12 @@ class SaleOrder(models.Model):
     EDI_STATE_ORDER_LINE_ACCEPTED = "5"
     EDI_STATE_ORDER_LINE_NOT_ACCEPTED = "7"
     EDI_STATE_ORDER_LINE_ALREADY_DELIVERED = "42"
+    # Line states that make the order not fully accepted
+    EDI_STATE_ORDER_LINE_ALTERED_STATES = (
+        EDI_STATE_ORDER_LINE_ADDED,
+        EDI_STATE_ORDER_LINE_CHANGED,
+        EDI_STATE_ORDER_LINE_NOT_ACCEPTED,
+    )
 
     def _edi_update_state(self, lines=None):
         metadata = self._edi_get_metadata()
@@ -62,7 +68,7 @@ class SaleOrder(models.Model):
     def _edi_compare_orig_values(self, orig_vals):
         # ATM check only if lines have changes
         for rec in self.order_line:
-            if rec.edi_state_id.code == self.EDI_STATE_ORDER_LINE_CHANGED:
+            if rec.edi_state_id.code in self.EDI_STATE_ORDER_LINE_ALTERED_STATES:
                 return False
         return True
 
