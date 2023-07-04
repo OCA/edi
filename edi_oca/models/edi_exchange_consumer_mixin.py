@@ -93,7 +93,10 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             },
         }
         if rule.kind == "form_btn":
-            conf.update({"form": {"btn": {"label": rule.type_id.name}}})
+            label = rule.form_btn_label or rule.type_id.name
+            conf.update(
+                {"form": {"btn": {"label": label, "tooltip": rule.form_btn_tooltip}}}
+            )
         return conf
 
     def _get_eval_context(self):
