@@ -40,7 +40,14 @@
                             <field name="model" invisible="1" />
                             <field name="kind" />
                         </group>
-                            <field name="enable_snippet" />
+                        <group
+                            name="form"
+                            string="Form"
+                            attrs="{'invisible': [('kind', '!=', 'form_btn')]}"
+                        >
+                            <field name="form_btn_label" />
+                            <field name="form_btn_tooltip" />
+                        </group>
                     </group>
                     <notebook>
                         <page
