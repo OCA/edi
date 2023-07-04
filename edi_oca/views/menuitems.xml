@@ -73,4 +73,11 @@
         sequence="30"
         action="act_open_edi_exchange_type_view"
     />
+    <menuitem
+        id="menu_edi_exchange_type_rule"
+        parent="menu_edi_config"
+        name="Exchange type rules"
+        sequence="40"
+        action="act_open_edi_exchange_type_rule_view"
+    />
 </odoo>

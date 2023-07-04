@@ -58,34 +58,42 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             record.edi_has_form_config = any([x.get("form") for x in config.values()])
 
     def _edi_get_exchange_type_config(self):
-        exchange_types = (
-            self.env["edi.exchange.type"]
+        # TODO: move this machinery to the rule model
+        rules = (
+            self.env["edi.exchange.type.rule"]
             .sudo()
-            .search([("model_ids.model", "=", self._name)])
+            .search([("model_id.model", "=", self._name)])
         )
         result = {}
-        for exchange_type in exchange_types:
+        for rule in rules:
+            exchange_type = rule.type_id
             eval_ctx = dict(
                 self._get_eval_context(), record=self, exchange_type=exchange_type
             )
-            domain = safe_eval.safe_eval(exchange_type.enable_domain or "[]", eval_ctx)
+            domain = safe_eval.safe_eval(rule.enable_domain or "[]", eval_ctx)
             if not self.filtered_domain(domain):
                 continue
-            if exchange_type.enable_snippet:
+            if rule.enable_snippet:
                 safe_eval.safe_eval(
-                    exchange_type.enable_snippet, eval_ctx, mode="exec", nocopy=True
+                    rule.enable_snippet, eval_ctx, mode="exec", nocopy=True
                 )
                 if not eval_ctx.get("result", False):
                     continue
 
-            result[exchange_type.id] = self._edi_get_exchange_type_conf(exchange_type)
+            result[rule.id] = self._edi_get_exchange_type_rule_conf(rule)
         return result
 
     @api.model
-    def _edi_get_exchange_type_conf(self, exchange_type):
-        conf = {"form": {}}
-        if exchange_type.model_manual_btn:
-            conf.update({"form": {"btn": {"label": exchange_type.name}}})
+    def _edi_get_exchange_type_rule_conf(self, rule):
+        conf = {
+            "form": {},
+            "type": {
+                "id": rule.type_id.id,
+                "name": rule.type_id.name,
+            },
+        }
+        if rule.kind == "form_btn":
+            conf.update({"form": {"btn": {"label": rule.type_id.name}}})
         return conf
 
     def _get_eval_context(self):

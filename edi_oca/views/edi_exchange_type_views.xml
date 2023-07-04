@@ -67,16 +67,17 @@
                             string="Model rules"
                             groups="edi_oca.group_edi_advanced_settings_manager"
                         >
-                            <group>
-                                <field name="model_ids" widget="many2many_tags" />
-                                <field name="enable_domain" />
-                                <field
-                                    name="enable_snippet"
-                                    widget="ace"
-                                    options="{'mode': 'python'}"
-                                />
-                                <field name="model_manual_btn" />
-                            </group>
+                            <field
+                                name="rule_ids"
+                                context="{'default_type_id': active_id}"
+                            >
+                                <tree decoration-muted="(not active)">
+                                    <field name="active" invisible="1" />
+                                    <field name="name" />
+                                    <field name="model_id" />
+                                    <field name="kind" />
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
