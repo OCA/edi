@@ -111,24 +111,10 @@ class EDIExchangeType(models.Model):
         """,
     )
     advanced_settings = Serialized(default={}, compute="_compute_advanced_settings")
-    model_ids = fields.Many2many(
-        "ir.model",
-        help="""Modules to be checked for manual EDI generation""",
-    )
-    enable_domain = fields.Char(
-        string="Enable on domain", help="""Filter domain to be checked on Models"""
-    )
-    enable_snippet = fields.Char(
-        string="Enable on snippet",
-        help="""Snippet of code to be checked on Models,
-        You can use `record` and `exchange_type` here.
-        It will be executed if variable result has been defined as True
-        """,
-    )
-    model_manual_btn = fields.Boolean(
-        string="Manual button on form",
-        help="Automatically display a button on related models' form."
-        # TODO: "Button settings can be configured via advanced settings."
+    rule_ids = fields.One2many(
+        comodel_name="edi.exchange.type.rule",
+        inverse_name="type_id",
+        help="Rules to handle exchanges and UI automatically",
     )
     quick_exec = fields.Boolean(
         string="Quick execution",
