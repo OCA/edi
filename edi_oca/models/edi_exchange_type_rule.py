@@ -52,3 +52,11 @@ class EDIExchangeTypeRule(models.Model):
         default="form_btn",
         help=KIND_HELP,
     )
+    form_btn_label = fields.Char(
+        string="Form button label", translate=True, help="Type name used by default"
+    )
+    form_btn_tooltip = fields.Text(
+        string="Form button tooltip",
+        translate=True,
+        help="Help message visible as tooltip on button h-over",
+    )
