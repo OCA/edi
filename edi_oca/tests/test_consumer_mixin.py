@@ -131,7 +131,9 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
         self.consumer_record.invalidate_cache(["edi_has_form_config", "edi_config"])
         self.assertEqual(
             self.consumer_record.edi_config[str(rule.id)],
-            make_config_data(form={"btn": {"label": self.exchange_type_out.name}}),
+            make_config_data(
+                form={"btn": {"label": self.exchange_type_out.name, "tooltip": False}}
+            ),
         )
         action = self.consumer_record.edi_create_exchange_record(
             self.exchange_type_out.id
