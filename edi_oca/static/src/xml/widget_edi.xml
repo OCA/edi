@@ -2,13 +2,13 @@
 <templates id="template" xml:space="preserve">
     <t t-name="edi_oca.FieldEdiConfiguration">
         <div>
-            <t t-foreach="widget.value" t-as="key">
-                <t t-set="data" t-value="widget.value[key]" />
-                <t t-if="!_.isEmpty(data.form)">
-                    <t t-set="btn" t-value="data.form.btn" />
+            <t t-foreach="widget.value" t-as="rule_id">
+                <t t-set="rule" t-value="widget.value[rule_id]" />
+                <t t-if="!_.isEmpty(rule.form)">
+                    <t t-set="btn" t-value="rule.form.btn" />
                     <button
                         t-if="btn"
-                        t-att-data-type-id="key"
+                        t-att-data-type-id="rule.type.id"
                         t-attf-class="o_edi_create_exchange_record btn #{btn.class != null ? btn.class : 'btn-sm btn-secondary'}"
                         type="object"
                     >
