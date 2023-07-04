@@ -9,6 +9,7 @@
                     <button
                         t-if="btn"
                         t-att-data-type-id="rule.type.id"
+                        t-att-title="btn.tooltip"
                         t-attf-class="o_edi_create_exchange_record btn #{btn.class != null ? btn.class : 'btn-sm btn-secondary'}"
                         type="object"
                     >

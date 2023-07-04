@@ -9,7 +9,7 @@
             attrs="{'invisible': [('edi_has_form_config', '=', False)]}"
         >
             <div>
-                <i class="fa fa-retweet" />This record has EDI exchanges to handle
+                <span class="pr-4"><i class="fa fa-retweet" /> EDI actions</span>
                 <field name="edi_config" widget="edi_configuration" />
                 <field name="edi_has_form_config" invisible="1" />
             </div>
