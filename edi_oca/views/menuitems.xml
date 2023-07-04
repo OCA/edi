@@ -64,12 +64,14 @@
     <menuitem
         id="menu_edi_backend_type"
         parent="menu_edi_config"
+        name="Backend types"
         sequence="20"
         action="act_open_edi_backend_type_view"
     />
     <menuitem
         id="menu_edi_exchange_type"
         parent="menu_edi_config"
+        name="Exchange types"
         sequence="30"
         action="act_open_edi_exchange_type_view"
     />
