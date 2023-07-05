@@ -273,6 +273,7 @@ class EDIExchangeRecord(models.Model):
     def _exchange_status_messages(self):
         return {
             # status: message
+            "generate_ok": _("Exchange data generated"),
             "send_ok": _("Exchange sent"),
             "send_ko": _(
                 "An error happened while sending. Please check exchange record info."

@@ -38,7 +38,7 @@ class EDIBackendTestJobsCase(EDIBackendCommonTestCase, JobMixin):
             mocked_generate.return_value = "filecontent"
             mocked_validate.return_value = None
             res = job.perform()
-            self.assertEqual(res, None)
+            self.assertEqual(res, "Exchange data generated")
             self.assertEqual(record.edi_exchange_state, "output_pending")
         job = self.backend.with_delay().exchange_send(record)
         created = job_counter.search_created()
