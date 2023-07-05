@@ -391,7 +391,11 @@ class EDIBackend(models.Model):
             len(new_records),
         )
         for rec in new_records:
-            rec.with_delay().action_exchange_generate()
+            job1 = rec.delayable().action_exchange_generate()
+            if not skip_send:
+                # Chain send job
+                job1.on_done(rec.delayable().action_exchange_send())
+            job1.delay()
 
         if skip_send:
             return

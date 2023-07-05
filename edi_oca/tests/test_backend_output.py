@@ -1,4 +1,5 @@
 # Copyright 2020 ACSONE
+# Copyright 2021 Camptocamp
 # @author: Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
@@ -7,6 +8,8 @@ from freezegun import freeze_time
 
 from odoo import fields, tools
 from odoo.exceptions import UserError
+
+from odoo.addons.queue_job.tests.common import trap_jobs
 
 from .common import EDIBackendCommonComponentRegistryTestCase
 from .fake_components import FakeOutputChecker, FakeOutputGenerator, FakeOutputSender
@@ -17,7 +20,6 @@ class EDIBackendTestOutputCase(EDIBackendCommonComponentRegistryTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls._build_components(
-            # TODO: test all components lookup
             cls,
             FakeOutputGenerator,
             FakeOutputSender,
@@ -105,3 +107,34 @@ class EDIBackendTestOutputCase(EDIBackendCommonComponentRegistryTestCase):
                 err.exception.args[0], "Record ID=%d has no file to send!" % record.id
             )
             mocked.assert_not_called()
+
+
+class EDIBackendTestOutputJobsCase(EDIBackendCommonComponentRegistryTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._build_components(
+            cls,
+            FakeOutputGenerator,
+            FakeOutputSender,
+            FakeOutputChecker,
+        )
+        vals = {
+            "model": cls.partner._name,
+            "res_id": cls.partner.id,
+        }
+        cls.record = cls.backend.create_record("test_csv_output", vals)
+        cls.record.type_id.exchange_file_auto_generate = True
+
+    @classmethod
+    def _setup_context(cls):
+        # Re-enable jobs
+        return dict(super()._setup_context(), test_queue_job_no_delay=False)
+
+    def test_job(self):
+        with trap_jobs() as trap:
+            self.backend._check_output_exchange_sync(record_ids=self.record.ids)
+            trap.assert_jobs_count(2)
+            trap.assert_enqueued_job(
+                self.backend.exchange_record_model.action_exchange_generate,
+            )
