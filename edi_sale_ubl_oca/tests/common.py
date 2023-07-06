@@ -84,6 +84,8 @@ class OrderMixin(object):
             "commitment_date": "2022-07-29",
         }
         vals.update(kw)
+        if "client_order_ref" not in vals:
+            vals["client_order_ref"] = "ABC123"
         vals["order_line"] = [
             {"product_id": cls.product_a.id, "product_uom_qty": 300, "edi_id": 1000},
             {"product_id": cls.product_b.id, "product_uom_qty": 200, "edi_id": 2000},
@@ -93,7 +95,6 @@ class OrderMixin(object):
             for line in vals["order_line"]:
                 line.update(line_defaults)
         cls.sale = cls._create_sale_order(**vals)
-        cls.sale.client_order_ref = "ABC123"
         cls.sale.action_confirm()
 
 
