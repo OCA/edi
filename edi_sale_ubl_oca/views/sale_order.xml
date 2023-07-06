@@ -11,7 +11,7 @@
                 expr="//field[@name='order_line']/tree/field[@name='name']"
                 position="before"
             >
-                <field name="edi_state_id" optional="hide" />
+                <field name="edi_state_id" optional="hide" readonly="1" />
             </xpath>
             <xpath
                 expr="//field[@name='order_line']/form//field[@name='analytic_tag_ids']"
@@ -27,7 +27,7 @@
         <field name="inherit_id" ref="edi_sale_oca.view_order_form" />
         <field name="arch" type="xml">
             <field name="origin_exchange_type_id" position="after">
-                <field name="edi_state_id" />
+                <field name="edi_state_id" optional="hide" readonly="1" />
             </field>
         </field>
     </record>
