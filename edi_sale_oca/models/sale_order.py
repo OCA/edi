@@ -60,12 +60,4 @@ class SaleOrderLine(models.Model):
             rec.edi_exchange_ready = rec._edi_exchange_ready()
 
     def _edi_exchange_ready(self):
-        # TODO: not sure we want to exclude lines w/o qty.
-        # We could have lines that are replaced and kept w/ no qty.
-        # ATM we don't give full info on replacements on such lines.
-        # Lines are simply marked as changed.
-        return (
-            not self._is_delivery()
-            and not self.display_type
-            and bool(self.product_uom_qty)
-        )
+        return not self._is_delivery() and not self.display_type
