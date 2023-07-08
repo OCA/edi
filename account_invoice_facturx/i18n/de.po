@@ -6,22 +6,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2019-05-24 15:19+0000\n"
-"Last-Translator: Frederik Kramer <frederik.kramer@initos.com>\n"
+"PO-Revision-Date: 2023-07-08 15:11+0000\n"
+"Last-Translator: Nils Coenen <nils.coenen@nico-solutions.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "(no date)"
-msgstr ""
+msgstr "(kein Datum)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__basic
@@ -40,9 +40,8 @@ msgstr "Firmen"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_res_config_settings
-#, fuzzy
 msgid "Config Settings"
-msgstr "account.config.settings"
+msgstr "Konfigurationseinstellungen"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -63,7 +62,7 @@ msgstr "EN 16931 (Komfort)"
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__extended
 msgid "Extended"
-msgstr ""
+msgstr "Erweitert"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -74,9 +73,8 @@ msgstr "Factur-X"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__xml_format_in_pdf_invoice__factur-x
-#, fuzzy
 msgid "Factur-X (CII)"
-msgstr "Factur-X"
+msgstr "Factur-X (CII)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_level
@@ -103,6 +101,8 @@ msgid ""
 "Factur-X {invoice_type} {invoice_number} dated {invoice_date} issued by "
 "{company_name}"
 msgstr ""
+"Factur-X {invoice_type} {invoice_number} vom {invoice_date} ausgestellt von "
+"{company_name}"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -114,7 +114,7 @@ msgstr "Rechnung"
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_account_move
 msgid "Journal Entry"
-msgstr ""
+msgstr "Journaleintrag"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,help:account_invoice_facturx.field_res_company__facturx_logo
@@ -143,9 +143,9 @@ msgstr "Fehlende UNECE Steuerkategorie für Steuer '%s'"
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, fuzzy, python-format
+#, python-format
 msgid "Missing UNECE code on payment method '%s'"
-msgstr "Fehlender UNECE Schlüssel für den Zahlungsexporttyp '%s'"
+msgstr "Fehlender UNECE-Code für Zahlungsmethode '%s'"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -197,8 +197,8 @@ msgid ""
 "Unless if you have a good reason, you should always select 'EN 16931 "
 "(Comfort)', which is the default value."
 msgstr ""
-"Sofern Sie keinen guten Grund haben anders zu handeln, sollten Sie stets die "
-"Voreinstellung 'EN 16931 (Comfort)'  verwenden."
+"Sofern Sie keinen triftigen Grund haben, sollten Sie immer 'EN 16931 "
+"(Comfort)' auswählen, was der Standardwert ist."
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -210,14 +210,14 @@ msgstr "Bargeldlose Bezahlung"
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
-msgstr ""
+msgstr "XML-Format in PDF-Rechnung eingebettet"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "{company_name}: {invoice_type} {invoice_number} dated {invoice_date}"
-msgstr ""
+msgstr "{company_name}: {invoice_type} {invoice_number} vom {invoice_date}"
 
 #, python-format
 #~ msgid "%s: %s %s dated %s"
