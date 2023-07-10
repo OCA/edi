@@ -97,24 +97,19 @@ class SaleOrderLine(models.Model):
         for line in self:
             if not line.edi_exchange_ready:
                 continue
-            state_code = self.order_id.EDI_STATE_ORDER_LINE_ACCEPTED
-            satisfied = line._edi_compare_orig_values(orig_vals)
-            if satisfied is None:
-                # Brand new line
-                state_code = self.order_id.EDI_STATE_ORDER_LINE_ADDED
-            elif not satisfied:
-                state_code = self.order_id.EDI_STATE_ORDER_LINE_CHANGED
+            state_code = line._edi_get_line_state_code(orig_vals)
             state = self.edi_find_state(code=state_code)
             line._edi_set_state(state)
 
-    def _edi_compare_orig_values(self, vals_by_edi_id):
-        qty_ok = True
-        prod_ok = True
+    def _edi_get_line_state_code(self, vals_by_edi_id):
         vals = vals_by_edi_id.get(self.edi_id)
         if not vals:
-            return None
+            # Brand new line
+            return self.order_id.EDI_STATE_ORDER_LINE_ADDED
+        if not self.product_uom_qty:
+            return self.order_id.EDI_STATE_ORDER_LINE_NOT_ACCEPTED
         if self.product_uom_qty < vals["product_uom_qty"]:
-            qty_ok = False
+            return self.order_id.EDI_STATE_ORDER_LINE_CHANGED
         if self.product_id.id != vals["product_id"]:
-            prod_ok = False
-        return qty_ok and prod_ok
+            return self.order_id.EDI_STATE_ORDER_LINE_CHANGED
+        return self.order_id.EDI_STATE_ORDER_LINE_ACCEPTED

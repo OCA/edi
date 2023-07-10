@@ -95,6 +95,19 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
                 order.EDI_STATE_ORDER_LINE_CHANGED,
             ],
         )
+        # discard line 1
+        line1.product_uom_qty = 0
+        self.assertEqual(
+            order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
+        )
+        self.assertTrue(
+            order.mapped("order_line.edi_state_id.code"),
+            [
+                order.EDI_STATE_ORDER_LINE_NOT_ACCEPTED,
+                order.EDI_STATE_ORDER_LINE_CHANGED,
+                order.EDI_STATE_ORDER_LINE_CHANGED,
+            ],
+        )
 
     def test_state_rejected(self):
         order = self.sale
