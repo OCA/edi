@@ -16,6 +16,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "views/res_config_settings.xml",
         "wizard/product_import_view.xml",
     ],
 }
