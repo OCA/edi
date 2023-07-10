@@ -127,9 +127,7 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
             }
         )
         new_line = order.order_line - lines
-        self.assertEqual(
-            new_line.edi_state_id.code, order.EDI_STATE_ORDER_LINE_ACCEPTED
-        )
+        self.assertEqual(new_line.edi_state_id.code, order.EDI_STATE_ORDER_LINE_ADDED)
         new_line = order.order_line.create(
             {
                 "order_id": order.id,
@@ -139,6 +137,4 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
                 "origin_exchange_record_id": self.exc_record_in.id,
             }
         )
-        self.assertEqual(
-            new_line.edi_state_id.code, order.EDI_STATE_ORDER_LINE_ACCEPTED
-        )
+        self.assertEqual(new_line.edi_state_id.code, order.EDI_STATE_ORDER_LINE_ADDED)

@@ -15,13 +15,13 @@ class EDISOEventListenerMixin(AbstractComponent):
     _apply_on = ["sale.order", "sale.order.line"]
 
     def on_record_create(self, record, fields=None):
-        self._on_record_action(record, fields=fields)
+        self._on_record_operation(record, fields=fields, operation="create")
 
     def on_record_write(self, record, fields=None):
-        self._on_record_action(record, fields=fields)
+        self._on_record_operation(record, fields=fields, operation="write")
 
-    def _on_record_action(self, record, fields=None):
-        if self._skip_state_update(record, fields=fields):
+    def _on_record_operation(self, record, fields=None, operation=None):
+        if self._skip_state_update(record, fields=fields, operation=operation):
             return
         order, lines = self._get_records(record)
         order = order.with_context(edi_sale_skip_state_update=True)
@@ -39,7 +39,7 @@ class EDISOEventListenerMixin(AbstractComponent):
         if not state:
             self._handle_order_state_no_state(order)
 
-    def _skip_state_update(self, record, fields=None):
+    def _skip_state_update(self, record, fields=None, operation=None):
         if record.env.context.get(
             "edi_sale_skip_state_update"
         ) or not self._is_ubl_exchange(record):
@@ -69,13 +69,16 @@ class EDISOEventListener(Component):
     def _get_records(self, record):
         return record, record.order_line
 
-    def _skip_state_update(self, record, fields=None):
-        res = super()._skip_state_update(record, fields=fields)
+    def _skip_state_update(self, record, fields=None, operation=None):
+        res = super()._skip_state_update(record, fields=fields, operation=operation)
         if res:
             return res
         fields = fields or []
-        # EDI state will be recomputed only at state change
-        return "state" not in fields
+        # EDI state will be recomputed only at state change on write or in any case at creation
+        skip = operation == "write" and (
+            "state" not in fields or fields == ["edi_state_id"]
+        )
+        return skip
 
 
 class EDISOLineEventListener(Component):
@@ -86,10 +89,14 @@ class EDISOLineEventListener(Component):
     def _get_records(self, record):
         return record.order_id, record
 
-    def _skip_state_update(self, record, fields=None):
-        res = super()._skip_state_update(record, fields=fields)
+    def _skip_state_update(self, record, fields=None, operation=None):
+        res = super()._skip_state_update(record, fields=fields, operation=operation)
         if res:
             return res
+        if self.env.context.get("evt_from_create") == "sale.order":
+            # If lines are created from an SO creation straight
+            # bypass check and state compute because it will be done anyway at create.
+            return True
         fields = fields or []
         # EDI state will be recomputed when critical line info has changed
         # TODO: tie this list w/ the fields in `s.o.l._edi_compare_orig_values`

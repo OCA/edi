@@ -72,6 +72,16 @@ class SaleOrder(models.Model):
                 return False
         return True
 
+    def create(self, vals):
+        # Inject a key to check if we are in a SO create session
+        # to not mess up w/ lines when not needed.
+        # The key is removed right aftewards.
+        return (
+            super(SaleOrder, self.with_context(evt_from_create=self._name))
+            .create(vals)
+            .with_context(evt_from_create=None)
+        )
+
 
 class SaleOrderLine(models.Model):
     _name = "sale.order.line"
@@ -96,7 +106,6 @@ class SaleOrderLine(models.Model):
                 state_code = self.order_id.EDI_STATE_ORDER_LINE_CHANGED
             state = self.edi_find_state(code=state_code)
             line._edi_set_state(state)
-        return state
 
     def _edi_compare_orig_values(self, vals_by_edi_id):
         qty_ok = True
