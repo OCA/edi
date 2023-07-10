@@ -14,8 +14,13 @@ class BaseRestRequestsAdapter(Component):
     def _request(self, method, **kwargs):
         new_kwargs = kwargs.copy()
         new_kwargs.update(
-            {"auth": self._get_auth(**kwargs), "headers": self._get_headers(**kwargs)}
+            {
+                "auth": self._get_auth(**kwargs),
+                "headers": self._get_headers(**kwargs),
+                "timeout": None,
+            }
         )
+        # pylint: disable=E8106
         request = requests.request(
             method, self.collection.url.format(**kwargs), **new_kwargs
         )
