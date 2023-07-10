@@ -295,6 +295,8 @@ class AccountInvoice(models.Model):
             tax_total_node, ns['cbc'] + 'TaxAmount', currencyID=cur_name)
         tax_amount_node.text = "%0.*f" % (prec, self._ubl_get_invoice_vat_amount())
         if not float_is_zero(self.amount_tax, precision_digits=prec):
+            exempt = 0.0
+            exempt_taxes = []
             for tline in self.tax_line_ids:
                 if tline.tax_id.unece_type_id.code == "VAT":
                     self._ubl_add_tax_subtotal(
@@ -302,9 +304,19 @@ class AccountInvoice(models.Model):
                         tax_total_node, ns, version=version)
                 elif not tline.tax_id.include_base_amount:
                     # For non-VAT taxes, not subject to VAT, declare as VAT exempted
-                    self._ubl_add_tax_subtotal(
-                        tline.amount, 0, tline.tax_id, cur_name,
-                        tax_total_node, ns, version=version)
+                    # Only one exempt line is allowed, regroup if multiple
+                    exempt += tline.amount
+                    exempt_taxes.append(tline.tax_id)
+            if not float_is_zero(exempt, precision_digits=prec):
+                self._ubl_add_tax_subtotal(
+                    exempt, 0, exempt_taxes[0], cur_name,
+                    tax_total_node, ns, version=version)
+                if len(exempt_taxes) > 1:
+                    # xpath cac:TaxCategory/cbc:Name
+                    exempt_node = tax_total_node[-1]
+                    exempt_node = [e for e in list(exempt_node) if e.tag == ns["cac"] + "TaxCategory"][0]
+                    exempt_node = [e for e in list(exempt_node) if e.tag == ns["cbc"] + "Name"][0]
+                    exempt_node.text = " + ".join([e.name for e in exempt_taxes])
 
     def generate_invoice_ubl_xml_etree(self, version='2.1'):
         if self.type == 'out_invoice':
