@@ -9,6 +9,7 @@
     "license": "AGPL-3",
     "summary": "Generate UBL purchase orders with Py3o reporting engine",
     "author": "Akretion,Odoo Community Association (OCA)",
+    "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": ["purchase_order_ubl", "report_py3o_fusion_server"],
     "installable": True,
