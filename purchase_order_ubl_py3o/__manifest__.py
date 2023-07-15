@@ -4,7 +4,7 @@
 
 {
     "name": "Py3o UBL Purchase Order",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.1.0",
     "category": "Purchases",
     "license": "AGPL-3",
     "summary": "Generate UBL purchase orders with Py3o reporting engine",
