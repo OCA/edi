@@ -66,6 +66,7 @@ addon | version | maintainers | summary
 [product_import](product_import/) | 14.0.1.1.1 |  | Import product catalogues
 [product_import_ubl](product_import_ubl/) | 14.0.1.1.1 |  | Import UBL XML catalogue files
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.0.1 |  | Embed UBL XML file inside the PDF purchase order
+[purchase_order_ubl_py3o](purchase_order_ubl_py3o/) | 14.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate UBL purchase orders with Py3o reporting engine
 [purchase_stock_ubl](purchase_stock_ubl/) | 14.0.1.0.0 |  | Glue module for Purchase Order UBL and Stock/Inventory
 [sale_order_customer_free_ref](sale_order_customer_free_ref/) | 14.0.1.0.0 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
 [sale_order_import](sale_order_import/) | 14.0.1.5.0 |  | Import RFQ or sale orders from files
