@@ -53,6 +53,7 @@ setuptools.setup(
         'odoo14-addon-product_import',
         'odoo14-addon-product_import_ubl',
         'odoo14-addon-purchase_order_ubl',
+        'odoo14-addon-purchase_order_ubl_py3o',
         'odoo14-addon-purchase_stock_ubl',
         'odoo14-addon-sale_order_customer_free_ref',
         'odoo14-addon-sale_order_import',
