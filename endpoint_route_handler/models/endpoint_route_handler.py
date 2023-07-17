@@ -129,6 +129,7 @@ class EndpointRouteHandler(models.AbstractModel):
             ("application/json", "JSON"),
             ("application/xml", "XML"),
             ("application/x-www-form-urlencoded", "Form"),
+            ("application/json; charset=utf-8", "JSON_UTF8 (Deprecated)"),
         ]
 
     @api.depends(lambda self: self._routing_impacting_fields())
