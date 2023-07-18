@@ -493,7 +493,7 @@ class EDIBackend(models.Model):
                     {
                         "edi_exchange_state": origin_output_state,
                         "exchange_error": error,
-                }
+                    }
                 )
             if state == "input_processed_error":
                 exchange_record._notify_error("process_ko")
@@ -632,8 +632,8 @@ class EDIBackend(models.Model):
         self, exchange_type, extra_domain=None, count_only=False
     ):
         domain = [
-             ("backend_id", "=", self.id),
-             ("type_id", "=", exchange_type.id),
+            ("backend_id", "=", self.id),
+            ("type_id", "=", exchange_type.id),
         ] + extra_domain or []
         return self.env["edi.exchange.record"].search(domain, count=count_only)
 
