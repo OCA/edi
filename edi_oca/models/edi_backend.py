@@ -489,10 +489,12 @@ class EDIBackend(models.Model):
                 }
             )
             if origin_output_state:
-                exchange_record.parent_id.write({
-                    "edi_exchange_state": origin_output_state,
-                    "exchange_error": error,
-                })
+                exchange_record.parent_id.write(
+                    {
+                        "edi_exchange_state": origin_output_state,
+                        "exchange_error": error,
+                }
+                )
             if state == "input_processed_error":
                 exchange_record._notify_error("process_ko")
             elif state == "input_processed":
@@ -630,9 +632,9 @@ class EDIBackend(models.Model):
         self, exchange_type, extra_domain=None, count_only=False
     ):
         domain = [
-                     ("backend_id", "=", self.id),
-                     ("type_id", "=", exchange_type.id),
-                 ] + extra_domain or []
+             ("backend_id", "=", self.id),
+             ("type_id", "=", exchange_type.id),
+        ] + extra_domain or []
         return self.env["edi.exchange.record"].search(domain, count=count_only)
 
     def action_view_exchanges(self):
