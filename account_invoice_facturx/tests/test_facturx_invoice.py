@@ -33,11 +33,16 @@ class TestFacturXInvoice(TransactionCase):
                 "unece_categ_id": self.env.ref("account_tax_unece.tax_categ_s").id,
             }
         )
+        partner = self.env.ref("base.res_partner_2")
+        # Reset payment method to avoid conflict with account_banking_sepa_direct_debit
+        partner.customer_payment_mode_id = self.env.ref(
+            "account_payment_mode.payment_mode_inbound_ct1"
+        )
         self.invoice = self.env["account.move"].create(
             {
                 "company_id": self.company.id,
                 "move_type": "out_invoice",
-                "partner_id": self.env.ref("base.res_partner_2").id,
+                "partner_id": partner.id,
                 "currency_id": self.company.currency_id.id,
                 "invoice_line_ids": [
                     (
