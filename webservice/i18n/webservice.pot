@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -14,17 +14,59 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: webservice
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_default
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_default
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_default
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_default
-#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_default
-msgid " Env Default"
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__api_key
+msgid "API Key"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_env_default
+msgid "API Key Env Default"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header
+msgid "API Key header"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header_env_default
+msgid "API Key header Env Default"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_env_is_editable
+msgid "Api Key Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header_env_is_editable
+msgid "Api Key Header Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type
+msgid "Auth Type"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type_env_default
+msgid "Auth Type Env Default"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__auth_type_env_is_editable
+msgid "Auth Type Env Is Editable"
 msgstr ""
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
 msgid "Content Type"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type_env_default
+msgid "Content Type Env Default"
 msgstr ""
 
 #. module: webservice
@@ -93,6 +135,11 @@ msgid "Password"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_default
+msgid "Password Env Default"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__password_env_is_editable
 msgid "Password Env Is Editable"
 msgstr ""
@@ -103,8 +150,18 @@ msgid "Protocol"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_default
+msgid "Protocol Env Default"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__protocol_env_is_editable
 msgid "Protocol Env Is Editable"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__none
+msgid "Public"
 msgstr ""
 
 #. module: webservice
@@ -128,6 +185,11 @@ msgid "Url"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_default
+msgid "Url Env Default"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__url_env_is_editable
 msgid "Url Env Is Editable"
 msgstr ""
@@ -135,6 +197,16 @@ msgstr ""
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__username
 msgid "Username"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields.selection,name:webservice.selection__webservice_backend__auth_type__user_pwd
+msgid "Username & password"
+msgstr ""
+
+#. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__username_env_default
+msgid "Username Env Default"
 msgstr ""
 
 #. module: webservice
@@ -147,6 +219,15 @@ msgstr ""
 #: model:ir.model,name:webservice.model_webservice_backend
 #: model:ir.ui.menu,name:webservice.webservice_backend_menu
 msgid "WebService Backend"
+msgstr ""
+
+#. module: webservice
+#. odoo-python
+#: code:addons/webservice/models/webservice_backend.py:0
+#, python-format
+msgid ""
+"Webservice '%(name)s' requires '%(auth_type)s' authentication. However, the "
+"following field(s) are not valued: %(fields)s"
 msgstr ""
 
 #. module: webservice
