@@ -106,9 +106,10 @@ class SaleOrderLine(models.Model):
         if not vals:
             # Brand new line
             return self.order_id.EDI_STATE_ORDER_LINE_ADDED
-        if not self.product_uom_qty:
+        qty = self.product_uom_qty
+        if not qty:
             return self.order_id.EDI_STATE_ORDER_LINE_NOT_ACCEPTED
-        if self.product_uom_qty < vals["product_uom_qty"]:
+        if qty > vals["product_uom_qty"] or qty < vals["product_uom_qty"]:
             return self.order_id.EDI_STATE_ORDER_LINE_CHANGED
         if self.product_id.id != vals["product_id"]:
             return self.order_id.EDI_STATE_ORDER_LINE_CHANGED
