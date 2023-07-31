@@ -48,8 +48,8 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
-        self.assertTrue(
-            order.mapped("order_line.edi_state_id.code"),
+        self.assertEqual(
+            [x.edi_state_id.code for x in order.order_line],
             [
                 order.EDI_STATE_ORDER_LINE_CHANGED,
                 order.EDI_STATE_ORDER_LINE_ACCEPTED,
@@ -61,8 +61,8 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
-        self.assertTrue(
-            order.mapped("order_line.edi_state_id.code"),
+        self.assertEqual(
+            [x.edi_state_id.code for x in order.order_line],
             [
                 order.EDI_STATE_ORDER_LINE_CHANGED,
                 order.EDI_STATE_ORDER_LINE_CHANGED,
@@ -74,8 +74,8 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
-        self.assertTrue(
-            order.mapped("order_line.edi_state_id.code"),
+        self.assertEqual(
+            [x.edi_state_id.code for x in order.order_line],
             [
                 order.EDI_STATE_ORDER_LINE_CHANGED,
                 order.EDI_STATE_ORDER_LINE_CHANGED,
@@ -87,10 +87,23 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
-        self.assertTrue(
-            order.mapped("order_line.edi_state_id.code"),
+        self.assertEqual(
+            [x.edi_state_id.code for x in order.order_line],
             [
                 order.EDI_STATE_ORDER_LINE_ACCEPTED,
+                order.EDI_STATE_ORDER_LINE_CHANGED,
+                order.EDI_STATE_ORDER_LINE_CHANGED,
+            ],
+        )
+        # get more qty for line 1
+        line1.product_uom_qty = orig_qties[line1.id] + 1
+        self.assertEqual(
+            order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
+        )
+        self.assertEqual(
+            [x.edi_state_id.code for x in order.order_line],
+            [
+                order.EDI_STATE_ORDER_LINE_CHANGED,
                 order.EDI_STATE_ORDER_LINE_CHANGED,
                 order.EDI_STATE_ORDER_LINE_CHANGED,
             ],
@@ -100,8 +113,8 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
         self.assertEqual(
             order.edi_state_id.code, order.EDI_STATE_ORDER_CONDITIONALLY_ACCEPTED
         )
-        self.assertTrue(
-            order.mapped("order_line.edi_state_id.code"),
+        self.assertEqual(
+            [x.edi_state_id.code for x in order.order_line],
             [
                 order.EDI_STATE_ORDER_LINE_NOT_ACCEPTED,
                 order.EDI_STATE_ORDER_LINE_CHANGED,
