@@ -8,8 +8,7 @@ class AccountMove(models.Model):
     _name = "account.move"
     _inherit = ["account.move", "edi.exchange.consumer.mixin"]
 
-    disable_edi_auto = fields.Boolean(
-        help="When marked, EDI could be avoided",
+    edi_disable_auto = fields.Boolean(
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
@@ -29,9 +28,9 @@ class AccountMove(models.Model):
             self._event("on_cancel_account_move").notify(self)
         return result
 
-    def action_invoice_paid(self):
+    def _invoice_paid_hook(self):
         """This could be used to notify our provider that we are paying"""
-        result = super().action_invoice_paid()
+        result = super()._invoice_paid_hook()
         if self:
             self._event("on_paid_account_move").notify(self)
         return result

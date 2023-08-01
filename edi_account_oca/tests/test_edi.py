@@ -76,7 +76,7 @@ class EDIBackendTestCase(AccountTestInvoicingCommon, TransactionComponentRegistr
                 }
             )
         )
-        cls.test_move.refresh()
+        cls.test_move.invalidate_recordset()
 
     def test_paid_move(self):
         self.test_move.action_post()

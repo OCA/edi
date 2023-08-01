@@ -9,7 +9,7 @@
         <field name="arch" type="xml">
             <group name="accounting_info_group" position="after">
                 <group name="edi_invoice_group" string="Electronic Data Interchange">
-                    <field name="disable_edi_auto" string="Disable" />
+                    <field name="edi_disable_auto" />
                 </group>
             </group>
             <xpath expr="//div[@name='button_box']" position="inside">
