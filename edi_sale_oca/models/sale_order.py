@@ -61,3 +61,13 @@ class SaleOrderLine(models.Model):
 
     def _edi_exchange_ready(self):
         return not self._is_delivery() and not self.display_type
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # Set default origin if not passed
+        for vals in vals_list:
+            orig_id = vals.get("origin_exchange_record_id")
+            if not orig_id and "order_id" in vals:
+                order = self.env["sale.order"].browse(vals["order_id"])
+                vals["origin_exchange_record_id"] = order.origin_exchange_record_id.id
+        return super().create(vals_list)
