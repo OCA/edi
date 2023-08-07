@@ -145,7 +145,7 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
         self.wiz_model.with_context(
             edi_framework_action="process",
             sale_order_import__default_vals=dict(
-                origin_exchange_record_id=self.record.id
+                order=dict(origin_exchange_record_id=self.record.id)
             ),
         ).create_order(parsed_order, "pricelist")
         metadata = self.record.get_metadata()
