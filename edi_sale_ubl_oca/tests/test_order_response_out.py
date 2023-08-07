@@ -4,7 +4,9 @@
 
 from freezegun import freeze_time
 
-from .common import OrderMixin, XMLBaseTestCase, get_xml_handler
+from odoo.addons.edi_sale_oca.tests.common import OrderMixin
+
+from .common import XMLBaseTestCase, get_xml_handler
 
 
 class TestOrderResponseOutbound(XMLBaseTestCase, OrderMixin):

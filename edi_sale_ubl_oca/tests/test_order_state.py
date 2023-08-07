@@ -5,8 +5,7 @@
 from odoo.tests.common import SavepointCase
 
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
-
-from .common import OrderMixin
+from odoo.addons.edi_sale_oca.tests.common import OrderMixin
 
 
 class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
