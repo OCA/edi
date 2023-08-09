@@ -116,6 +116,28 @@ class EDIExchangeType(models.Model):
         inverse_name="type_id",
         help="Rules to handle exchanges and UI automatically",
     )
+    # Deprecated fields for rules - begin
+    # These fields have been deprecated in
+    # https://github.com/OCA/edi/pull/797
+    # but are kept for backward compat.
+    # If you can stop using them now.
+    # Anyway, annoying warning messages will be logged.
+    # See inverse methods.
+    # NOTE: old configurations are migrated automatically on upgrade
+    # Yet, if you have data files they might be broken
+    # if we delete these fields.
+    model_ids = fields.Many2many(
+        "ir.model", inverse="_inverse_deprecated_rules_model_ids"
+    )
+    enable_domain = fields.Char(inverse="_inverse_deprecated_rules_enable_domain")
+    enable_snippet = fields.Char(inverse="_inverse_deprecated_rules_enable_snippet")
+    model_manual_btn = fields.Boolean(
+        inverse="_inverse_deprecated_rules_model_manual_btn"
+    )
+    deprecated_rule_fields_still_used = fields.Boolean(
+        compute="_compute_deprecated_rule_fields_still_used"
+    )
+    # Deprecated fields for rules - end
     quick_exec = fields.Boolean(
         string="Quick execution",
         help="When active, records of this type will be processed immediately "
@@ -226,3 +248,115 @@ class EDIExchangeType(models.Model):
         if exc_type.partner_ids:
             return partner.id in exc_type.partner_ids.ids
         return True
+
+    # API to support deprecated model rules fields - begin
+    def _inverse_deprecated_rules_warning(self):
+        _fields = ", ".join(
+            ["model_ids", "enable_domain", "enable_snippet", "model_manual_btn"]
+        )
+        _logger.warning(
+            "The fields %s are deprecated, "
+            "please stop using them in favor of edi.exchange.type.rule",
+            _fields,
+        )
+
+    def _inverse_deprecated_rules_model_ids(self):
+        if self.env.context.get("deprecated_rule_fields_bypass_inverse"):
+            return
+        self._inverse_deprecated_rules_warning()
+        for rec in self:
+            for model in rec.model_ids:
+                rule = rec._get_rule_by_model(model)
+                if not rule:
+                    _logger.warning(
+                        "New rule for %s created from deprecated `model_ids`",
+                        model.model,
+                    )
+                    rec.rule_ids += rec._inverse_deprecated_rules_create(model)
+            rules_to_delete = rec.rule_ids.browse()
+            for rule in rec.rule_ids:
+                if rule.model_id not in rec.model_ids:
+                    _logger.warning(
+                        "Rule for %s deleted from deprecated `model_ids`",
+                        rule.model_id.model,
+                    )
+                    rules_to_delete |= rule
+            rules_to_delete.unlink()
+
+    def _inverse_deprecated_rules_enable_domain(self):
+        if self.env.context.get("deprecated_rule_fields_bypass_inverse"):
+            return
+        self._inverse_deprecated_rules_warning()
+        for rec in self:
+            for model in rec.model_ids:
+                rule = rec._get_rule_by_model(model)
+                if rule:
+                    _logger.warning(
+                        "Rule for %s domain updated from deprecated `enable_domain`",
+                        model.model,
+                    )
+                    rule.enable_domain = rec.enable_domain
+
+    def _inverse_deprecated_rules_enable_snippet(self):
+        if self.env.context.get("deprecated_rule_fields_bypass_inverse"):
+            return
+        self._inverse_deprecated_rules_warning()
+        for rec in self:
+            for model in rec.model_ids:
+                rule = rec._get_rule_by_model(model)
+                if rule:
+                    _logger.warning(
+                        "Rule for %s snippet updated from deprecated `enable_snippet`",
+                        model.model,
+                    )
+                    rule.enable_snippet = rec.enable_snippet
+
+    def _inverse_deprecated_rules_model_manual_btn(self):
+        if self.env.context.get("deprecated_rule_fields_bypass_inverse"):
+            return
+        self._inverse_deprecated_rules_warning()
+        for rec in self:
+            for model in rec.model_ids:
+                rule = rec._get_rule_by_model(model)
+                if rule:
+                    _logger.warning(
+                        "Rule for %s btn updated from deprecated `model_manual_btn`",
+                        model.model,
+                    )
+                    rule.kind = "form_btn" if self.model_manual_btn else "custom"
+
+    def _get_rule_by_model(self, model):
+        return self.rule_ids.filtered(lambda x: x.model_id == model)
+
+    def _inverse_deprecated_rules_create(self, model):
+        kind = "form_btn" if self.model_manual_btn else "custom"
+        vals = {
+            "type_id": self.id,
+            "model_id": model.id,
+            "kind": kind,
+            "name": "Default",
+            "enable_snippet": self.enable_snippet,
+            "enable_domain": self.enable_domain,
+        }
+        return self.rule_ids.create(vals)
+
+    @api.depends("model_ids", "enable_domain", "enable_snippet", "model_manual_btn")
+    def _compute_deprecated_rule_fields_still_used(self):
+        for rec in self:
+            rec.deprecated_rule_fields_still_used = (
+                rec._deprecated_rule_fields_still_used()
+            )
+
+    def _deprecated_rule_fields_still_used(self):
+        for fname in ("model_ids", "enable_snippet", "enable_domain"):
+            if self[fname]:
+                return True
+
+    def button_wipe_deprecated_rule_fields(self):
+        _fields = ["model_ids", "enable_domain", "enable_snippet", "model_manual_btn"]
+        deprecated_vals = {}.fromkeys(_fields, None)
+        self.with_context(deprecated_rule_fields_bypass_inverse=True).write(
+            deprecated_vals
+        )
+
+    # API to support deprecated model rules fields - end

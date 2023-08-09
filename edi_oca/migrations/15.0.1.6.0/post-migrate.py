@@ -28,7 +28,8 @@ def migrate(cr, version):
     for item in res:
         kind = "form_btn" if item.pop("form_btn", False) else "custom"
         vals = dict(item, name="Default", kind=kind)
-        model.create(vals)
+        rec = model.create(vals)
+        rec.type_id.button_wipe_deprecated_rule_fields()
 
     cr.execute("DROP TABLE exc_type_model_rel_bkp")
     _logger.info("edi.exchange.type.rule created")

@@ -50,6 +50,7 @@
                             <field name="quick_exec" />
                         </group>
                     </group>
+                    <field name="deprecated_rule_fields_still_used" invisible="1" />
                     <notebook>
                         <page
                             name="adv_settings"
@@ -78,6 +79,38 @@
                                     <field name="kind" />
                                 </tree>
                             </field>
+                        </page>
+                        <page
+                            name="deprecated_model_rules"
+                            string="DEPRECATED Model rules"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                            attrs="{'invisible': [('deprecated_rule_fields_still_used', '=', False)]}"
+                        >
+                            <div class="alert alert-warning" role="alert">
+                              Warning: these fields are deprecated.
+                              If you rely on them for configuring rules via data files,
+                              it's strongly recommended to rework such files
+                              to use `edi.exchange.type.rule` records.
+                              Please note that, due to backward compat,
+                              removing a model from here will cause deletion
+                              of any existing rule for the model.
+                              You can use the button "Wipe" to clean them properly.
+                            </div>
+                            <group>
+                              <field name="model_ids" widget="many2many_tags" />
+                              <field name="enable_domain" />
+                              <field
+                                    name="enable_snippet"
+                                    widget="ace"
+                                    options="{'mode': 'python'}"
+                                />
+                              <field name="model_manual_btn" />
+                            </group>
+                            <button
+                                type="object"
+                                name="button_wipe_deprecated_rule_fields"
+                                string="Wipe"
+                            />
                         </page>
                     </notebook>
                 </sheet>
