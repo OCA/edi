@@ -334,6 +334,11 @@ msgid "Direction"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin__disable_edi_auto
+msgid "Disable auto"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend__display_name
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend_type__display_name
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_consumer_mixin__display_name
@@ -452,6 +457,11 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__enable_snippet
 msgid "Enable on snippet"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__partner_ids
+msgid "Enabled for partners"
 msgstr ""
 
 #. module: edi_oca
@@ -1116,6 +1126,18 @@ msgstr ""
 msgid ""
 "When active, records of this type will be processed immediately without "
 "waiting for the cron to pass by."
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_consumer_mixin__disable_edi_auto
+msgid "When marked, EDI automatic processing will be avoided"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__partner_ids
+msgid ""
+"You can use this field to limit generating/processing exchanges for specific"
+" partners. Use it directly or within models rules (domain or snippet)."
 msgstr ""
 
 #. module: edi_oca
