@@ -7,7 +7,7 @@ from freezegun import freeze_time
 from .common import EDIBackendCommonTestCase
 
 
-class EDIBackendTestCase(EDIBackendCommonTestCase):
+class EDIBackendTestCaseBase(EDIBackendCommonTestCase):
     @freeze_time("2020-10-21 10:00:00")
     def test_create_record(self):
         self.env.user.tz = None  # Have no timezone used in generated filename
