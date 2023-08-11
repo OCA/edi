@@ -135,6 +135,15 @@ class EDIExchangeType(models.Model):
         help="When active, records of this type will be processed immediately "
         "without waiting for the cron to pass by.",
     )
+    partner_ids = fields.Many2many(
+        string="Enabled for partners",
+        comodel_name="res.partner",
+        help=(
+            "You can use this field to limit generating/processing exchanges "
+            "for specific partners. "
+            "Use it directly or within models rules (domain or snippet)."
+        ),
+    )
 
     _sql_constraints = [
         (
@@ -218,3 +227,16 @@ class EDIExchangeType(models.Model):
         if hasattr(exchange_record.record, "_get_edi_exchange_record_name"):
             return exchange_record.record._get_edi_exchange_record_name(exchange_record)
         return slugify(exchange_record.record.display_name)
+
+    def is_partner_enabled(self, partner):
+        """Check if given partner record is allowed for the current type.
+
+        You can leverage this in your own logic to trigger or not
+        certain exchanges for specific partners.
+
+        For instance: a customer might require an ORDRSP while another does not.
+        """
+        exc_type = self.sudo()
+        if exc_type.partner_ids:
+            return partner.id in exc_type.partner_ids.ids
+        return True
