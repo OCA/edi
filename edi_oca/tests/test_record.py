@@ -142,7 +142,7 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         )
         self.exchange_type_in.job_channel_id = channel
         # re-enable job delayed feature
-        delayed = record.with_context(test_queue_job_no_delay=False).with_delay()
+        delayed = record.with_context(queue_job__no_delay=False).with_delay()
         # Silent useless warning
         # `Delayable Delayable(edi.exchange.record*) was prepared but never delayed`
         delayed.delayable._generated_job = object()

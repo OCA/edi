@@ -14,7 +14,7 @@ from .common import EDIBackendCommonTestCase
 class EDIBackendTestJobsCase(EDIBackendCommonTestCase, JobMixin):
     @classmethod
     def _setup_context(cls):
-        return dict(super()._setup_context(), test_queue_job_no_delay=None)
+        return dict(super()._setup_context(), queue_job__no_delay=None)
 
     def test_output(self):
         job_counter = self.job_counter()

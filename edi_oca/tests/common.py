@@ -17,7 +17,7 @@ class EDIBackendTestMixin(object):
     @classmethod
     def _setup_context(cls, **kw):
         return dict(
-            cls.env.context, tracking_disable=True, test_queue_job_no_delay=True, **kw
+            cls.env.context, tracking_disable=True, queue_job__no_delay=True, **kw
         )
 
     @classmethod
