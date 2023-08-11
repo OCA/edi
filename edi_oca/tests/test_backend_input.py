@@ -2,17 +2,11 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-# import mock
-# from freezegun import freeze_time
-
-# from odoo import fields
-# from odoo.exceptions import UserError
-
 from .common import EDIBackendCommonComponentRegistryTestCase
 from .fake_components import FakeInputReceive
 
 
-class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
+class EDIBackendTestInputCase(EDIBackendCommonComponentRegistryTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

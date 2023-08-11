@@ -14,7 +14,7 @@ from .common import EDIBackendCommonComponentRegistryTestCase
 from .fake_components import FakeInputProcess
 
 
-class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
+class EDIBackendTestProcessCase(EDIBackendCommonComponentRegistryTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
