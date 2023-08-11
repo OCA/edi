@@ -24,6 +24,11 @@ msgid "Disable"
 msgstr ""
 
 #. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__disable_edi_auto
+msgid "Disable auto"
+msgstr ""
+
+#. module: edi_stock_oca
 #: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__display_name
 msgid "Display Name"
 msgstr ""
@@ -106,4 +111,9 @@ msgstr ""
 #. module: edi_stock_oca
 #: model:ir.model,name:edi_stock_oca.model_stock_picking
 msgid "Transfer"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,help:edi_stock_oca.field_stock_picking__disable_edi_auto
+msgid "When marked, EDI automatic processing will be avoided"
 msgstr ""
