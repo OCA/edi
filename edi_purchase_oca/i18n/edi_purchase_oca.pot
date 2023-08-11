@@ -19,6 +19,11 @@ msgid "<span class=\"o_stat_text\">EDI</span>"
 msgstr ""
 
 #. module: edi_purchase_oca
+#: model:ir.model.fields,field_description:edi_purchase_oca.field_purchase_order__disable_edi_auto
+msgid "Disable auto"
+msgstr ""
+
+#. module: edi_purchase_oca
 #: model:ir.model.fields,field_description:edi_purchase_oca.field_purchase_order__display_name
 msgid "Display Name"
 msgstr ""
@@ -96,4 +101,9 @@ msgstr ""
 #. module: edi_purchase_oca
 #: model:ir.model.fields,help:edi_purchase_oca.field_purchase_order__origin_edi_endpoint_id
 msgid "Record generated via this endpoint"
+msgstr ""
+
+#. module: edi_purchase_oca
+#: model:ir.model.fields,help:edi_purchase_oca.field_purchase_order__disable_edi_auto
+msgid "When marked, EDI automatic processing will be avoided"
 msgstr ""
