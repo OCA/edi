@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+<record id="scaleway" model="res.partner">
+    <field name="name">Scaleway SAS</field>
+    <field name="is_company" eval="1" />
+    <field name="supplier_rank">1</field>
+    <field name="street">8 rue de la Ville-l'Évêque</field>
+    <field name="zip">75008</field>
+    <field name="city">Paris</field>
+    <field name="country_id" ref="base.fr" />
+    <field name="phone">+33 1 84 13 00 00</field>
+    <field name="website">www.scaleway.com</field>
+    <field name="vat">FR35433115904</field>
+</record>
+
+</odoo>
