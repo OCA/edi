@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo14-addon-account_einvoice_generate',
         'odoo14-addon-account_invoice_download',
         'odoo14-addon-account_invoice_download_ovh',
+        'odoo14-addon-account_invoice_download_scaleway',
         'odoo14-addon-account_invoice_export',
         'odoo14-addon-account_invoice_export_server_env',
         'odoo14-addon-account_invoice_facturx',
