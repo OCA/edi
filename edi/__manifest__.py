@@ -18,7 +18,7 @@
         "base_edi",
         "component_event",
         "mail",
-        "base_sparse_field",
+        "base_sparse_field_list_support",
         "queue_job",
     ],
     "external_dependencies": {"python": ["pyyaml"]},
