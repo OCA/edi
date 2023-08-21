@@ -383,22 +383,23 @@ ul.auto-toc {
 <li><a class="reference internal" href="#configuration" id="id2">Configuration</a><ul>
 <li><a class="reference internal" href="#component-definition" id="id3">Component definition</a></li>
 <li><a class="reference internal" href="#user-edi-generation" id="id4">User EDI generation</a></li>
+<li><a class="reference internal" href="#exchange-type-rules-configuration" id="id5">Exchange type rules configuration</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#usage" id="id5">Usage</a><ul>
-<li><a class="reference internal" href="#output-exchange-records" id="id6">Output Exchange records</a></li>
-<li><a class="reference internal" href="#input-exchange-records" id="id7">Input Exchange records</a></li>
+<li><a class="reference internal" href="#usage" id="id6">Usage</a><ul>
+<li><a class="reference internal" href="#output-exchange-records" id="id7">Output Exchange records</a></li>
+<li><a class="reference internal" href="#input-exchange-records" id="id8">Input Exchange records</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#known-issues-roadmap" id="id8">Known issues / Roadmap</a><ul>
-<li><a class="reference internal" href="#id1" id="id9">14.0.1.0.0</a></li>
+<li><a class="reference internal" href="#known-issues-roadmap" id="id9">Known issues / Roadmap</a><ul>
+<li><a class="reference internal" href="#id1" id="id10">14.0.1.0.0</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="id10">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="id11">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="id12">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="id13">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="id14">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="id11">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="id12">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="id13">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="id14">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="id15">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -433,15 +434,33 @@ After defining this fields, we will automatically see buttons on the view to gen
 the exchange records.
 This configuration is useful to define a way of generation managed by user.</p>
 </div>
+<div class="section" id="exchange-type-rules-configuration">
+<h2><a class="toc-backref" href="#id5">Exchange type rules configuration</a></h2>
+<p>Exchange types can be further configured with rules.
+You can use rules to:</p>
+<ol class="arabic simple">
+<li>make buttons automatically appear in forms</li>
+<li>define your own custom logic</li>
+</ol>
+<p>Go to an exchange type and go to the tab “Model rules”.
+There you can add one or more rule, one per model.
+On each rule you can define a domain or a snippet to activate it.
+In case of a “Form button” kind, if the domain and/ the snippet is/are satisfied,
+a form btn will appear on the top of the form.
+This button can be used by the end user to manually generate an exchange.
+If there’s more than a backend and the exchange type has not a backend set,
+a wizard will appear asking to select a backend to be used for the exchange.</p>
+<p>In case of “Custom” kind, you’ll have to define your own logic to do something.</p>
+</div>
 </div>
 <div class="section" id="usage">
-<h1><a class="toc-backref" href="#id5">Usage</a></h1>
+<h1><a class="toc-backref" href="#id6">Usage</a></h1>
 <p>After certain operations or manual execution, Exchange records will be generated.
 This Exchange records might be input records or outputs records.</p>
 <p>The change of state can be manually executed by the system or be managed through by
 <cite>ir.cron</cite>.</p>
 <div class="section" id="output-exchange-records">
-<h2><a class="toc-backref" href="#id6">Output Exchange records</a></h2>
+<h2><a class="toc-backref" href="#id7">Output Exchange records</a></h2>
 <p>An output record is intended to be used for exchange information from Odoo to another
 system.</p>
 <p>The flow of an output record should be:</p>
@@ -454,7 +473,7 @@ system.</p>
 </ul>
 </div>
 <div class="section" id="input-exchange-records">
-<h2><a class="toc-backref" href="#id7">Input Exchange records</a></h2>
+<h2><a class="toc-backref" href="#id8">Input Exchange records</a></h2>
 <p>An input record is intended to be used for exchange information another system to odoo.</p>
 <p>The flow of an input record should be:</p>
 <ul class="simple">
@@ -466,14 +485,14 @@ system.</p>
 </div>
 </div>
 <div class="section" id="known-issues-roadmap">
-<h1><a class="toc-backref" href="#id8">Known issues / Roadmap</a></h1>
+<h1><a class="toc-backref" href="#id9">Known issues / Roadmap</a></h1>
 <div class="section" id="id1">
-<h2><a class="toc-backref" href="#id9">14.0.1.0.0</a></h2>
+<h2><a class="toc-backref" href="#id10">14.0.1.0.0</a></h2>
 <p>The module name has been changed from edi to edi_oca.</p>
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#id10">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#id11">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
@@ -481,9 +500,9 @@ If you spotted it first, help us smashing it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#id11">Credits</a></h1>
+<h1><a class="toc-backref" href="#id12">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#id12">Authors</a></h2>
+<h2><a class="toc-backref" href="#id13">Authors</a></h2>
 <ul class="simple">
 <li>ACSONE</li>
 <li>Creu Blanca</li>
@@ -491,14 +510,14 @@ If you spotted it first, help us smashing it by providing a detailed and welcome
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#id13">Contributors</a></h2>
+<h2><a class="toc-backref" href="#id14">Contributors</a></h2>
 <ul class="simple">
 <li>Simone Orsi &lt;<a class="reference external" href="mailto:simahawk&#64;gmail.com">simahawk&#64;gmail.com</a>&gt;</li>
 <li>Enric Tobella &lt;<a class="reference external" href="mailto:etobella&#64;creublanca.es">etobella&#64;creublanca.es</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#id14">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#id15">Maintainers</a></h2>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org"><img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" /></a>
 <p>OCA, or the Odoo Community Association, is a nonprofit organization whose
