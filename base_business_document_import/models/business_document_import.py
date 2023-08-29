@@ -979,7 +979,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 "following information extracted from the business document:\n"
                 "UNECE Tax Type code: %(tax_type)s\n"
                 "UNECE Tax Category code: %(tax_cat)s\n"
-                "UNECE Due Date code: %s(tax_due_date)\n"
+                "UNECE Due Date code: %(tax_due_date)s\n"
                 "Tax amount: %(amount)s %(amount_type)s",
                 tax=type_tax_use,
                 price=price_include,
