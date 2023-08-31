@@ -32,7 +32,7 @@ class EDIExchangeTypeRule(models.Model):
         help="Apply to this model",
         ondelete="cascade",
     )
-    model = fields.Char(related="model_id.model")  # Tech field
+    model = fields.Char("Model code", related="model_id.model")  # Tech field
     enable_domain = fields.Char(
         string="Enable on domain", help="Filter domain to be checked on Models"
     )
