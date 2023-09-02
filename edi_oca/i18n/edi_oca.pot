@@ -921,7 +921,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__model
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__model
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__model_ids
-#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type_rule__model
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type_rule__model_id
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_rule_view_search
@@ -931,6 +930,11 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__model_manual_btn
 msgid "Model Manual Btn"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type_rule__model
+msgid "Model code"
 msgstr ""
 
 #. module: edi_oca
