@@ -11,7 +11,7 @@
     "website": "https://github.com/OCA/edi",
     "depends": ["edi_oca"],
     "external_dependencies": {
-        "python": ["dateparser==1.1.1"],
+        "python": ["dateparser"],
         "deb": ["poppler-utils"],
     },
     "maintainers": ["etobella"],
