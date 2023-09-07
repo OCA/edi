@@ -123,3 +123,25 @@ class EDIExchangeTypeTestCase(EDIBackendCommonTestCase):
             date_pattern: '%Y-%m-%d-%H-%M'
         """
         self._test_exchange_filename("Test-File-2022-04-28-10-37.csv")
+
+    def test_archive_rules(self):
+        exc_type = self.exchange_type_out
+        rule1 = exc_type.rule_ids.create(
+            {
+                "type_id": exc_type.id,
+                "name": "Fake partner rule",
+                "model_id": self.env["ir.model"]._get("res.partner").id,
+            }
+        )
+        rule2 = exc_type.rule_ids.create(
+            {
+                "type_id": exc_type.id,
+                "name": "Fake user rule",
+                "model_id": self.env["ir.model"]._get("res.users").id,
+            }
+        )
+        exc_type.active = False
+        rule1.invalidate_cache()
+        rule2.invalidate_cache()
+        self.assertFalse(rule1.active)
+        self.assertFalse(rule2.active)
