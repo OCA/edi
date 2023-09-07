@@ -30,7 +30,7 @@ class EDIExchangeType(models.Model):
     _name = "edi.exchange.type"
     _description = "EDI Exchange Type"
 
-    active = fields.Boolean(default=True)
+    active = fields.Boolean(default=True, inverse="_inverse_active")
     backend_id = fields.Many2one(
         string="Backend",
         comodel_name="edi.backend",
@@ -160,6 +160,12 @@ class EDIExchangeType(models.Model):
             "The code must be unique per backend",
         )
     ]
+
+    def _inverse_active(self):
+        for rec in self:
+            # Disable rules if type gets disabled
+            if not rec.active:
+                rec.rule_ids.active = False
 
     @api.depends("advanced_settings_edit")
     def _compute_advanced_settings(self):
