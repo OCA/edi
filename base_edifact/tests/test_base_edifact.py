@@ -31,7 +31,8 @@ class TestBaseEdifact(TransactionCase):
     def test_pydifact_obj(self):
         edifact_docu = _get_file_content("Retail_EDIFACT_ORDERS_sample1.txt")
         obj = self.base_edifact_model.pydifact_obj(edifact_docu)
-        self.assertEqual(obj["order"]["order_ref"], "1AA1TEST")
+        # [1]: to get the list messages, [0]: to get the first list value of the segments
+        self.assertEqual(obj[1]["segments"][0]["BGM"][1], "1AA1TEST")
 
     def test_map2odoo_address(self):
         """Address segment
