@@ -19,7 +19,7 @@
         "bin": [],
     },
     "depends": [
-        # "edi_party_data_oca"
+        "edi_party_data_oca",
         # for configuration
         "account",
         "partner_identification",
