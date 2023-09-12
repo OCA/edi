@@ -1,0 +1,2 @@
+odoo_test_helper
+odoo-addon-edi_oca @ git+https://github.com/OCA/edi-framework.git@refs/pull/5/head#subdirectory=setup/edi_oca
