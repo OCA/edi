@@ -5,7 +5,7 @@
     "name": "Edi WebService",
     "summary": """
         Defines webservice integration from EDI Exchange records""",
-    "version": "15.0.1.1.0",
+    "version": "15.0.1.1.1",
     "license": "AGPL-3",
     "development_status": "Beta",
     "author": "Creu Blanca,Odoo Community Association (OCA)",
