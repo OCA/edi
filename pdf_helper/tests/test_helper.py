@@ -5,7 +5,7 @@ import os
 
 from lxml import etree
 
-from odoo.tests.common import TransactionCase, TreeCase
+from odoo.tests.common import BaseCase, TransactionCase
 
 from odoo.addons.pdf_helper.utils import PDFParser
 
@@ -18,7 +18,7 @@ def read_test_file(filename, mode="r"):
 
 # NOTE: this class could use a bare `unittest.TestCase` as base
 # but w/out TreeCase Odoo won't load these tests.
-class TestPDFHelperUtils(TreeCase):
+class TestPDFHelperUtils(BaseCase):
     def test_parse_xml(self):
         pdf_content = read_test_file("pdf_with_xml_test.pdf", mode="rb")
         res = PDFParser(pdf_content).get_xml_files()
