@@ -13,7 +13,7 @@ class TestEDIWebserviceBase(EDIBackendCommonComponentTestCase):
 
     @classmethod
     def _setup_records(cls):
-        super()._setup_records()
+        result = super()._setup_records()
         cls.filedata = base64.b64encode(b"This is a simple file")
         vals = {
             "model": cls.partner._name,
@@ -21,3 +21,4 @@ class TestEDIWebserviceBase(EDIBackendCommonComponentTestCase):
             "exchange_file": cls.filedata,
         }
         cls.record = cls.backend.create_record("test_csv_output", vals)
+        return result
