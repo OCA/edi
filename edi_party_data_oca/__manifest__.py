@@ -7,7 +7,7 @@
     "summary": """
     Allow to configure and retrieve party information for EDI exchanges.
     """,
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "development_status": "Alpha",
     "license": "AGPL-3",
     "website": "https://github.com/OCA/edi",
