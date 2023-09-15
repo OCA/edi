@@ -11,7 +11,7 @@ from .common import TestEDIWebserviceBase
 class TestSend(TestEDIWebserviceBase):
     @classmethod
     def _setup_records(cls):
-        super()._setup_records()
+        result = super()._setup_records()
         cls.ws_backend = cls.backend.webservice_backend_id
         cls.settings1 = """
         components:
@@ -40,6 +40,7 @@ class TestSend(TestEDIWebserviceBase):
                     endpoint: push/here
         """
         cls.record.type_id.set_settings(cls.settings1)
+        return result
 
     def test_find_component(self):
         component = self.backend._get_component(self.record, "send")
