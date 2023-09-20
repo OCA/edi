@@ -153,6 +153,8 @@ msgid "Boxes"
 msgstr "Cajas"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__cancelled
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__cancelled
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__cancelled
 msgid "Cancelled"
 msgstr "Cancelado"
@@ -209,14 +211,7 @@ msgid "Delay time"
 msgstr "Tiempo de retardo"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_queue_job__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_partner__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_uom_uom__display_name
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__display_name
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -233,14 +228,7 @@ msgid "Hours"
 msgstr "Horas"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_queue_job__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_partner__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_uom_uom__id
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__id
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__id
 msgid "ID"
 msgstr "ID (identificación)"
 
@@ -255,14 +243,7 @@ msgid "Kgs"
 msgstr "Kgs"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_queue_job____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_res_partner____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_uom_uom____last_update
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login____last_update
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
@@ -307,6 +288,8 @@ msgid "Name"
 msgstr "Nombre"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__not_sent
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__not_sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__not_sent
 msgid "Not sent"
 msgstr "No enviado"
@@ -338,6 +321,12 @@ msgstr "Contraseña"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__processing_error
+msgid "Processing Error"
+msgstr ""
+
+#. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__processing_error
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__processing_error
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__processing_error
 msgid "Processing error"
 msgstr "Error de procesamiento"
@@ -359,16 +348,22 @@ msgid "Send mode"
 msgstr "Modo de envío"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__sent_errors
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__sent_errors
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent_errors
 msgid "Sending error"
 msgstr "Error de envío"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__accepted
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__accepted
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__accepted
 msgid "Sent and accepted"
 msgstr "Enviado y aceptado"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__sent
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent
 msgid "Sent not verified"
 msgstr "Enviado sin verificar"
@@ -432,14 +427,14 @@ msgid "Voxel Code"
 msgstr "Código Voxel"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_filename
+msgid "Voxel Filename"
+msgstr ""
+
+#. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__voxel_tax_code
 msgid "Voxel Tax Code"
 msgstr "Código Voxel"
-
-#. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_filename
-msgid "Voxel filename"
-msgstr "Fichero Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_voxel_login
@@ -475,3 +470,6 @@ msgstr "Con retardo"
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_xml_report
 msgid "XML Report"
 msgstr "Reporte XML"
+
+#~ msgid "Voxel filename"
+#~ msgstr "Fichero Voxel"
