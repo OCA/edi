@@ -10,44 +10,53 @@ from odoo.exceptions import UserError
 logger = logging.getLogger(__name__)
 
 
-class SaleOrderImportEdifact(models.TransientModel):
-    _name = "sale.order.import"
-    _inherit = ["sale.order.import", "base.edifact"]
+class SaleOrderImport(models.TransientModel):
+    _inherit = "sale.order.import"
 
-    state = fields.Selection(
-        selection_add=[("tech", "Technical")], ondelete={"tech": "set default"}
+    import_type = fields.Selection(
+        selection_add=[("edifact", "EDIFACT")], ondelete={"edifact": "cascade"}
     )
-    parsed_json = fields.Text()
+    # Make doc_type field support for EDIFACT type
+    doc_type = fields.Selection(readonly=False)
+    # TODO: Move this feature to the base module or to an additional module.
+    json_data_preview = fields.Text(
+        help="Used by the btn `button_parse_order_preview` to preview data before importing"
+    )
+    edifact_ok = fields.Boolean(compute="_compute_edifact_ok")
+    # Techincal fields used to get the extension part of files
+    file_ext = fields.Char(default="txt,d96a")
+    # EDIFACT format release
+    release = fields.Char(default="d96a")
 
-    @property
-    def edifact_ok(self):
-        conf_ext = self.env.context.get("file_ext", "txt,d96a")
-        extensions = conf_ext.split(",")
-        ok = False
-        if self.order_filename:
+    @api.depends("order_file", "order_filename")
+    def _compute_edifact_ok(self):
+        for rec in self:
+            if not (rec.order_file and rec.order_filename):
+                rec.edifact_ok = False
+                continue
+            extensions = rec.file_ext.split(",")
             path, ext = os.path.splitext(self.order_filename)
             ok = ext and ext[1:] in extensions
-            if not ok and self.order_file:
+            if not ok:
                 ok = b64decode(self.order_file[:4]) == b"UNB"
-        return ok
+            rec.edifact_ok = ok
 
-    @api.onchange("order_file")
-    def order_file_change(self):
-        if self.edifact_ok:
-            self.csv_import = False
-            self.doc_type = self.env.context.get("doc_type", "rfq")
-            self.price_source = "order"
-        else:
-            res = super(SaleOrderImportEdifact, self).order_file_change()
-            if isinstance(res, dict):
-                return res
+    # TODO: Move this feature to the base module or to an additional module.
+    def button_parse_order_preview(self):
+        """
+        Generate a preview of the data before importing.
 
-    def parse_order_button(self):
+        This method is called by the button to take a quick look at the pydifact
+        structure ('edifact' type) and the parsed object ('order') from
+        the original document before importing the document.
+        """
+
         self.ensure_one()
+        edifact_model = self.env["base.edifact"]
         order_file_decoded = b64decode(self.order_file)
         parsed_obj = dict(edifact=None, order=None)
         if self.edifact_ok:
-            parsed_obj["edifact"] = self.pydifact_obj(order_file_decoded)
+            parsed_obj["edifact"] = edifact_model.pydifact_obj(order_file_decoded)
 
         parsed_order = self.parse_order(
             order_file_decoded, self.order_filename, self.partner_id
@@ -56,8 +65,7 @@ class SaleOrderImportEdifact(models.TransientModel):
         parsed_obj["order"] = parsed_order
         self.write(
             {
-                "parsed_json": json.dumps(parsed_obj, indent=4, default=str),
-                "state": "tech",
+                "json_data_preview": json.dumps(parsed_obj, indent=4, default=str),
             }
         )
         action = self.env["ir.actions.act_window"]._for_xml_id(
@@ -66,31 +74,30 @@ class SaleOrderImportEdifact(models.TransientModel):
         action["res_id"] = self.id
         return action
 
-    # Parser hook
-    def _parse_file(self, filename, filecontent, detect_doc_type=False):
-        "Called from parse_order()"
-        parsed_order = super(SaleOrderImportEdifact, self)._parse_file(
-            filename, filecontent, detect_doc_type
-        )
-        if not parsed_order and self.edifact_ok:
-            self.env.context.get("release", "d96a")
-            interchange = self._loads_edifact(filecontent)
-            parsed_order = self.parse_edifact_sale_order(interchange)
-        return parsed_order
+    def _get_supported_types(self):
+        # Add more types for EDIFACT
+        res = super()._get_supported_types()
+        res.update({"edifact": ("text/plain")})
+        return res
 
     @api.model
-    def parse_edifact_sale_order(self, interchange):
+    def parse_edifact_order(self, filecontent, detect_doc_type=False):
         # https://github.com/nerdocs/pydifact/blob/master/pydifact/segmentcollection.py
+        if detect_doc_type:
+            if not self.edifact_ok:
+                return None
+            return self.env.context.get("default_doc_type", "rfq")
+
+        edifact_model = self.env["base.edifact"]
+        interchange = edifact_model._loads_edifact(filecontent)
         header = interchange.get_header_segment()
         # > UNB segment: [['UNOA', '2'], ['5450534000000', '14'],
         # ['8435337000003', '14'], ['230306', '0435'], '5506']
 
-        msg_type, msg_type_release = self._get_msg_type(interchange)
+        msg_type, msg_type_release = edifact_model._get_msg_type(interchange)
         supported = ["ORDERS"]
         if msg_type not in supported:
             raise UserError(_("%s document is not a Sale Order document"))
-
-        doc_type = self.env.context.get("doc_type", "order")
 
         bgm = interchange.get_segment("BGM")
         # Customer PO number
@@ -98,7 +105,7 @@ class SaleOrderImportEdifact(models.TransientModel):
         order_ref = bgm[1]
 
         rd = {
-            "doc_type": doc_type,
+            "doc_type": self.doc_type,
             # Customer PO number
             "order_ref": order_ref,
             "edi_ctx": {"sender": header[1], "recipient": header[2]},  # header[1][0]
@@ -143,17 +150,22 @@ class SaleOrderImportEdifact(models.TransientModel):
     @api.model
     def _prepare_edifact_dates(self, interchange):
         dates = defaultdict(dict)
+        edifact_model = self.env["base.edifact"]
         for seg in interchange.get_segments("DTM"):
             date_meaning_code = seg[0][0]
             if date_meaning_code == "137":
-                dates["date"] = self.map2odoo_date(seg[0])
+                dates["date"] = edifact_model.map2odoo_date(seg[0])
             elif date_meaning_code == "63":
                 # latest delivery date
                 # dates.setdefault("delivery_detail",{})
-                dates["delivery_detail"]["validity_date"] = self.map2odoo_date(seg[0])
+                dates["delivery_detail"]["validity_date"] = edifact_model.map2odoo_date(
+                    seg[0]
+                )
             elif date_meaning_code == "64":
                 # earliest delivery date
-                dates["delivery_detail"]["commitment_date"] = self.map2odoo_date(seg[0])
+                dates["delivery_detail"][
+                    "commitment_date"
+                ] = edifact_model.map2odoo_date(seg[0])
 
         return dates
 
@@ -186,36 +198,39 @@ class SaleOrderImportEdifact(models.TransientModel):
     @api.model
     def _prepare_edifact_name_and_address(self, interchange):
         nads = {}
+        edifact_model = self.env["base.edifact"]
         for seg in interchange.get_segments("NAD"):
             reference_code = seg[0]
             if reference_code == "BY":
                 # NAD segment: ['BY', ['5450534001649', '', '9']]
                 # Customer (Buyer's GLN)
-                nads["partner"] = self.map2odoo_partner(seg)
+                nads["partner"] = edifact_model.map2odoo_partner(seg)
             elif reference_code == "SU":
                 # Our number of Supplier's GLN
                 # Can be used to check that we are not importing the order
                 # in the wrong company by mistake
-                nads["company"] = self.map2odoo_partner(seg)
+                nads["company"] = edifact_model.map2odoo_partner(seg)
             elif reference_code == "DP":
                 # Delivery Party
-                nads["ship_to"] = self.map2odoo_address(seg)
+                nads["ship_to"] = edifact_model.map2odoo_address(seg)
             elif reference_code == "IV":
                 # Invoice Party
-                nads["invoice_to"] = self.map2odoo_address(seg)
+                nads["invoice_to"] = edifact_model.map2odoo_address(seg)
         return nads
 
     @api.model
     def _prepare_edifact_currencies(self, interchange):
         currencies = {}
+        edifact_model = self.env["base.edifact"]
         for seg in interchange.get_segments("CUX"):
             usage_code = seg[0]
             if usage_code == "2":
-                currencies["currency"] = self.map2odoo_currency(seg)
+                currencies["currency"] = edifact_model.map2odoo_currency(seg)
         return currencies
 
     @api.model
     def _prepare_edifact_lines(self, interchange):
+        edifact_model = self.env["base.edifact"]
         lines = []
         zipsegments = zip(
             interchange.get_segments("LIN"),
@@ -227,10 +242,10 @@ class SaleOrderImportEdifact(models.TransientModel):
             lines.append(
                 {
                     "sequence": int(linseg[0]),
-                    "product": self.map2odoo_product(linseg),
-                    "qty": self.map2odoo_qty(qtyseg),
+                    "product": edifact_model.map2odoo_product(linseg),
+                    "qty": edifact_model.map2odoo_qty(qtyseg),
                     # price without taxes
-                    "price_unit": self.map2odoo_unit_price(priseg),
+                    "price_unit": edifact_model.map2odoo_unit_price(priseg),
                 }
             )
 

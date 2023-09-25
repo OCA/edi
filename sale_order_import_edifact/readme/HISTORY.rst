@@ -11,5 +11,5 @@
 14.0.1.0.0 (2023-06-07)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* [14.0][MIG] sale_order_import_edifact & base_edifact.
+* [14.0][ADD] sale_order_import_edifact & base_edifact.
   (`#779 <https://github.com/OCA/edi/pull/779>`_)

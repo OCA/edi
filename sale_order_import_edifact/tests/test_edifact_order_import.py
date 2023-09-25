@@ -10,6 +10,11 @@ from .common import get_test_data
 
 
 class TestEdifactOrderImport(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+
     @mute_logger("odoo.addons.sale_order_import.wizard.sale_order_import")
     def test_edifact_order_import(self):
         tests = get_test_data(self.env)
@@ -17,6 +22,7 @@ class TestEdifactOrderImport(TransactionCase):
             edifact_file = expected._get_content()
             wiz = self.env["sale.order.import"].create(
                 {
+                    "import_type": "edifact",
                     "order_file": base64.b64encode(edifact_file),
                     "order_filename": filename,
                 }
