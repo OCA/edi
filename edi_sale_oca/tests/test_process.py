@@ -4,14 +4,13 @@
 
 import base64
 import textwrap
+from unittest import mock
 
-import mock
-
-from odoo.addons.component.tests.common import SavepointComponentCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
 
 
-class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
+class TestProcessComponent(TransactionComponentCase, EDIBackendTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -24,6 +23,7 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
             exchange_file_ext="xml",
             exchange_filename_pattern="{record.identifier}-{type.code}-{dt}",
             backend_id=cls.backend.id,
+            # Bypass required fields with import_type = 'xml' in sale_order_import
             advanced_settings_edit=textwrap.dedent(
                 """
             components:
@@ -32,6 +32,7 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
             sale_order_import:
                 wiz_ctx:
                     random_key: custom
+                    default_import_type: 'xml'
             """
             ),
         )
@@ -155,7 +156,6 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
             "product_id",
             "product_uom_qty",
             "product_uom",
-            "name",
             "price_unit",
             "edi_id",
         ):

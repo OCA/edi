@@ -11,7 +11,7 @@
                 <page name="edi" string="EDI">
                     <group name="edi_main">
                         <field
-                            name="disable_edi_auto"
+                            name="edi_disable_auto"
                             string="Disable automated actions"
                         />
                         <field name="origin_exchange_record_id" />
@@ -42,7 +42,7 @@
                 <field name="edi_id" optional="hide" />
             </xpath>
             <xpath
-                expr="//field[@name='order_line']/form//field[@name='analytic_tag_ids']"
+                expr="//field[@name='order_line']/form//field[@name='analytic_distribution']"
                 position="after"
             >
                 <field name="edi_id" />

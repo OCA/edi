@@ -23,7 +23,7 @@ class SaleOrder(models.Model):
     # and ask the sender to issue a new order request.
     # This approach seems suitable only for orders that do not get processed immediately.
 
-    disable_edi_auto = fields.Boolean(
+    edi_disable_auto = fields.Boolean(
         states={"draft": [("readonly", False)]},
     )
 
@@ -49,7 +49,7 @@ class SaleOrderLine(models.Model):
         "edi.id.mixin",
     ]
 
-    disable_edi_auto = fields.Boolean(related="order_id.disable_edi_auto")
+    edi_disable_auto = fields.Boolean(related="order_id.edi_disable_auto")
 
     # TODO: add test
     edi_exchange_ready = fields.Boolean(compute="_compute_edi_exchange_ready")

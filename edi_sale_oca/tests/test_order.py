@@ -2,14 +2,14 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
 
 from .common import OrderMixin
 
 
-class TestOrder(SavepointCase, EDIBackendTestMixin, OrderMixin):
+class TestOrder(TransactionCase, EDIBackendTestMixin, OrderMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -44,7 +44,7 @@ class TestOrder(SavepointCase, EDIBackendTestMixin, OrderMixin):
                 },
             ]
         )
-        order.invalidate_cache()
+        order.env.invalidate_all()
         new_line1, new_line2 = order.order_line - lines
         self.assertEqual(new_line1.origin_exchange_record_id, self.exc_record_in)
         self.assertEqual(new_line2.origin_exchange_record_id, self.exc_record_in)
