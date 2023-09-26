@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ACSONE SA/NV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+  <record model="ir.ui.view" id="punchout_request_form_view">
+    <field name="model">punchout.request</field>
+    <field name="inherit_id" ref="punchout.punchout_request_form_view" />
+    <field name="arch" type="xml">
+      <xpath expr="//div[@name='button_box']" position="inside">
+          <field name="has_job_access" invisible="1" />
+          <button
+                    class="oe_stat_button"
+                    type="object"
+                    name="action_show_job_list"
+                    icon="fa-list"
+                    attrs="{'invisible': [('has_job_access', '=', False)]}"
+                >
+              <field name="job_count" widget="statinfo" string="Jobs" />
+          </button>
+      </xpath>
+    </field>
+  </record>
+</odoo>
