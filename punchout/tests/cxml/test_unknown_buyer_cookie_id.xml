@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE cXML SYSTEM 'http://xml.cxml.org/schemas/cXML/1.2.008/cXML.dtd'>
+<cXML xml:lang='en' payloadID='1695631859433' timestamp='2023-09-25T10:50:59.433+0200'>
+  <Header>
+    <From>
+      <Credential domain='Networkid'>
+        <Identity>From</Identity>
+      </Credential>
+    </From>
+    <To>
+      <Credential domain='Networkid'>
+        <Identity>To</Identity>
+      </Credential>
+    </To>
+    <Sender>
+      <Credential domain='identity'>
+        <Identity>admin@identity</Identity>
+      </Credential>
+      <UserAgent>Enfinity Suite 6</UserAgent>
+    </Sender>
+  </Header>
+  <Message>
+    <PunchOutOrderMessage>
+      <BuyerCookie>
+                gAAAAABlEZ7rysdjEwnI_1kDvjugV9aZ7FUV1Dm8gk4o6mtFd-2I0he19jpvi1uURwzXfDASK_TFpnBf4DJoCHKhGz2m_pUgoTnUlH2iPq9BbrYtRn7sVUNuoZvDKvwLb9mxFQgNaE8Y
+            </BuyerCookie>
+      <PunchOutOrderMessageHeader operationAllowed='edit'>
+        <Total>
+          <Money currency='EUR'>166.3900</Money>
+        </Total>
+        <ShipTo>
+          <Address addressID='fUsKD908Dj4AAAFa.bHmUfGY'>
+            <Name xml:lang='en'>contacter</Name>
+            <PostalAddress>
+              <DeliverTo />
+              <Street>Street 1</Street>
+              <City>City</City>
+              <State />
+              <PostalCode>1000</PostalCode>
+              <Country isoCountryCode='BE'>BE</Country>
+            </PostalAddress>
+          </Address>
+        </ShipTo>
+        <Shipping>
+          <Money currency='EUR'>0.0000</Money>
+          <Description xml:lang='en' />
+        </Shipping>
+        <Tax>
+          <Money currency='EUR'>34.9400</Money>
+          <Description xml:lang='en'>Value-added tax</Description>
+        </Tax>
+      </PunchOutOrderMessageHeader>
+      <ItemIn quantity='1' lineNumber='1'>
+        <ItemID>
+          <SupplierPartID>061396325 060 1</SupplierPartID>
+          <SupplierPartAuxiliaryID>UtQKD90k4GgAAAGKhjMtqsuG@10
+                    </SupplierPartAuxiliaryID>
+        </ItemID>
+        <ItemDetail>
+          <UnitPrice>
+            <Money currency='EUR'>37.5300</Money>
+          </UnitPrice>
+          <Description xml:lang='fr'><ShortName>Jeu de tournevis VDE,
+                        plats/cruciformes PH 5 pièces</ShortName>JEU DE
+                        TOURNEVIS-VDE-PH/PLAT-5PIECES
+                    </Description>
+          <UnitOfMeasure>EA</UnitOfMeasure>
+          <Classification domain='' />
+        </ItemDetail>
+        <Tax>
+          <Money currency='EUR'>7.8813</Money>
+          <Description xml:lang='en'>Value-added tax</Description>
+          <TaxDetail category='FullTax' percentageRate='0.210'>
+            <TaxAmount>
+              <Money currency="" />
+            </TaxAmount>
+          </TaxDetail>
+        </Tax>
+      </ItemIn>
+      <ItemIn quantity='1' lineNumber='2'>
+        <ItemID>
+          <SupplierPartID>0890108715078 1</SupplierPartID>
+          <SupplierPartAuxiliaryID>UtQKD90k4GgAAAGKhjMtqsuG@10
+                    </SupplierPartAuxiliaryID>
+        </ItemID>
+        <ItemDetail>
+          <UnitPrice>
+            <Money currency='EUR'>34.0800</Money>
+          </UnitPrice>
+          <Description xml:lang='fr'><ShortName>Nettoyant
+                        freins</ShortName>BIDON NETTOYANT FREINS 5 L
+                    </Description>
+          <UnitOfMeasure>EA</UnitOfMeasure>
+          <Classification domain='' />
+        </ItemDetail>
+        <Tax>
+          <Money currency='EUR'>7.1568</Money>
+          <Description xml:lang='en'>Value-added tax</Description>
+          <TaxDetail category='FullTax' percentageRate='0.210'>
+            <TaxAmount>
+              <Money currency="" />
+            </TaxAmount>
+          </TaxDetail>
+        </Tax>
+      </ItemIn>
+      <ItemIn quantity='1' lineNumber='3'>
+        <ItemID>
+          <SupplierPartID>0890108720793 1</SupplierPartID>
+          <SupplierPartAuxiliaryID>UtQKD90k4GgAAAGKhjMtqsuG@10
+                    </SupplierPartAuxiliaryID>
+        </ItemID>
+        <ItemDetail>
+          <UnitPrice>
+            <Money currency='EUR'>94.7800</Money>
+          </UnitPrice>
+          <Description xml:lang='fr'><ShortName>Nettoyant
+                        freins</ShortName>NETTOYANT FREINS REFILLO 20 LITRES
+                    </Description>
+          <UnitOfMeasure>EA</UnitOfMeasure>
+          <Classification domain='' />
+        </ItemDetail>
+        <Tax>
+          <Money currency='EUR'>19.9038</Money>
+          <Description xml:lang='en'>Value-added tax</Description>
+          <TaxDetail category='FullTax' percentageRate='0.210'>
+            <TaxAmount>
+              <Money currency="" />
+            </TaxAmount>
+          </TaxDetail>
+        </Tax>
+      </ItemIn>
+    </PunchOutOrderMessage>
+  </Message>
+</cXML>
