@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2021 Sunflower IT (<https://sunflowerweb.nl>)
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_account_config_settings" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field
+            name="inherit_id"
+            ref="account_einvoice_generate.view_account_config_settings"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='e-invoices']" position="inside">
+                <div class="o_setting_right_pane">
+                    <label for="ubl_domain_peppol" />
+                    <div class="text-muted">
+                        Specify a domain to determine which UBL invoices should be generated in PEPPOL dialect.
+                    </div>
+                    <div>
+                        <field
+                            name="ubl_domain_peppol"
+                            widget="domain"
+                            options="{'model': 'account.move', 'in_dialog': True}"
+                            placeholder="[]"
+                            help="For example: [('partner_id.country_id.code', 'in', ['NL', 'BE'])]"
+                        />
+                    </div>
+                    <label for="ubl_default_tax" />
+                    <div class="text-muted">
+                        Specify a default tax to use for invoice lines with no tax.
+                    </div>
+                    <div>
+                        <field name="ubl_default_tax" />
+                    </div>
+                    <label for="ubl_default_uom_id" />
+                    <div class="text-muted">
+                        Specify a default UOM to use for invoice lines with no UOM.
+                    </div>
+                    <div>
+                        <field name="ubl_default_uom_id" />
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
