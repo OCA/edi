@@ -8,7 +8,7 @@ import logging
 
 from lxml import etree
 
-from odoo import models
+from odoo import fields, models
 from odoo.tools import float_is_zero, float_round
 
 logger = logging.getLogger(__name__)
@@ -26,6 +26,9 @@ class AccountMove(models.Model):
         doc_id.text = self.name
         issue_date = etree.SubElement(parent_node, ns["cbc"] + "IssueDate")
         issue_date.text = self.invoice_date.strftime("%Y-%m-%d")
+        if self.invoice_date_due and version >= "2.1":
+            due_date = etree.SubElement(parent_node, ns["cbc"] + "DueDate")
+            due_date.text = fields.Date.to_string(self.invoice_date_due)
         type_code = etree.SubElement(parent_node, ns["cbc"] + "InvoiceTypeCode")
         type_code.text = self._ubl_get_invoice_type_code()
         if self.narration:
@@ -57,6 +60,18 @@ class AccountMove(models.Model):
             order_ref = etree.SubElement(parent_node, ns["cac"] + "OrderReference")
             order_ref_id = etree.SubElement(order_ref, ns["cbc"] + "ID")
             order_ref_id.text = sale_order_ref
+
+    def _ubl_get_buyer_reference(self):
+        return self.partner_id.name
+
+    def _ubl_add_buyer_reference(self, parent_node, ns, version="2.1"):
+        self.ensure_one()
+        buyer_ref = self._ubl_get_buyer_reference()
+        if buyer_ref:
+            buyer_order_ref = etree.SubElement(
+                parent_node, ns["cbc"] + "BuyerReference"
+            )
+            buyer_order_ref.text = buyer_ref
 
     def _ubl_get_contract_document_reference_dict(self):
         """Result: dict with key = Doc Type Code, value = ID"""
@@ -155,7 +170,13 @@ class AccountMove(models.Model):
         line_amount.text = "%0.*f" % (account_precision, iline.price_subtotal)
         self._ubl_add_invoice_line_tax_total(iline, line_root, ns, version=version)
         self._ubl_add_item(
-            iline.name, iline.product_id, line_root, ns, type_="sale", version=version
+            iline.name,
+            iline.product_id,
+            line_root,
+            ns,
+            type_="sale",
+            taxes=iline.tax_ids,
+            version=version,
         )
         price_node = etree.SubElement(line_root, ns["cac"] + "Price")
         price_amount = etree.SubElement(
@@ -175,7 +196,7 @@ class AccountMove(models.Model):
             )
         else:
             base_qty = etree.SubElement(price_node, ns["cbc"] + "BaseQuantity")
-        base_qty.text = "%0.*f" % (qty_precision, qty)
+        base_qty.text = "%0.*f" % (qty_precision, 1.0)
 
     def _ubl_add_invoice_line_tax_total(self, iline, parent_node, ns, version="2.1"):
         self.ensure_one()
@@ -253,6 +274,8 @@ class AccountMove(models.Model):
         nsmap, ns = self._ubl_get_nsmap_namespace("Invoice-2", version=version)
         xml_root = etree.Element("Invoice", nsmap=nsmap)
         self._ubl_add_header(xml_root, ns, version=version)
+        if version == "2.1":
+            self._ubl_add_buyer_reference(xml_root, ns, version=version)
         self._ubl_add_order_reference(xml_root, ns, version=version)
         self._ubl_add_contract_document_reference(xml_root, ns, version=version)
         self._ubl_add_attachments(xml_root, ns, version=version)
