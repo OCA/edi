@@ -86,7 +86,9 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
     def test_rule_no_create(self):
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
+        model = self.consumer_record
+        msg = rf"not allowed to modify '{model._description}' \({model._name}\)"
+        with self.assertRaisesRegex(AccessError, msg):
             self.create_record(self.user)
 
     @mute_logger("odoo.addons.base.models.ir_model")
@@ -97,7 +99,9 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
     @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_read(self):
         exchange_record = self.create_record()
-        with self.assertRaisesRegex(AccessError, "You are not allowed to access"):
+        model = self.consumer_record
+        msg = rf"not allowed to access '{model._description}' \({model._name}\)"
+        with self.assertRaisesRegex(AccessError, msg):
             exchange_record.with_user(self.user).read()
 
     @mute_logger("odoo.addons.base.models.ir_rule")
@@ -106,7 +110,9 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.assertTrue(exchange_record.with_user(self.user).read())
         self.consumer_record.name = "no_rule"
-        with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
+        model = self.consumer_record
+        msg = rf"not allowed to access '{model._description}' \({model._name}\)"
+        with self.assertRaisesRegex(AccessError, msg):
             exchange_record.with_user(self.user).read()
 
     @mute_logger("odoo.addons.base.models.ir_model")
@@ -126,7 +132,9 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
+        model = self.consumer_record
+        msg = rf"not allowed to modify '{model._description}' \({model._name}\)"
+        with self.assertRaisesRegex(AccessError, msg):
             exchange_record.with_user(self.user).unlink()
 
     def test_no_group_no_search(self):
@@ -211,5 +219,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         exchange_record = self.create_record()
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        with self.assertRaisesRegex(AccessError, "Exchange Record rule demo"):
+        model = self.consumer_record
+        msg = rf"not allowed to modify '{model._description}' \({model._name}\)"
+        with self.assertRaisesRegex(AccessError, msg):
             exchange_record.with_user(self.user).write({"external_identifier": "1234"})
