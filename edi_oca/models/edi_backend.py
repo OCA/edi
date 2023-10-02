@@ -127,7 +127,7 @@ class EDIBackend(models.Model):
                     components, key=lambda x: self._component_sort_key(x), reverse=True
                 )
                 component = components[0](c_work_ctx)
-                _logger.debug("using component", component._name)
+                _logger.debug("using component %s", component._name)
                 break
         if not component and not safe:
             raise NoComponentError(
