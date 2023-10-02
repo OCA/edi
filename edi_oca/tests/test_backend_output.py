@@ -12,7 +12,7 @@ from .common import EDIBackendCommonComponentRegistryTestCase
 from .fake_components import FakeOutputChecker, FakeOutputGenerator, FakeOutputSender
 
 
-class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
+class EDIBackendTestOutputCase(EDIBackendCommonComponentRegistryTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
