@@ -73,7 +73,7 @@
                                 context="{'default_type_id': active_id}"
                             >
                                 <tree decoration-muted="(not active)">
-                                    <field name="active" invisible="1" />
+                                    <field name="active" widget="boolean_toggle" />
                                     <field name="name" />
                                     <field name="model_id" />
                                     <field name="kind" />
@@ -168,7 +168,14 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_type_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_all': 1}</field>
+        <!--
+          `active_test` here is fundamental to see archived `rule_ids`.
+          Reason: when related fields are loaded with a `read`
+          the ctx that you could set at field level on the view is lost.
+        -->
+        <field
+            name="context"
+        >{'search_default_filter_all': 1, 'active_test': False}</field>
     </record>
     <record
         model="ir.actions.act_window.view"
