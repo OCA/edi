@@ -15,18 +15,22 @@ from .common import TestCommon
 class TestParsingValidation(TestCommon):
     """Mostly unit tests on wizard parsing methods."""
 
-    def test_onchange_validation_not_supported(self):
-        # Just test is not broken
-        self.assertTrue(self.wiz_model._unsupported_file_msg("fname.omg"))
-        # Test it gets called (cannot do it w/ Form)
-        mock_file_msg = mock.patch.object(type(self.wiz_model), "_unsupported_file_msg")
-        with mock_file_msg as mocked:
+    def test_wrong_import_type(self):
+        order_file_data = base64.b64encode(
+            b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        )
+        order_filename = "test_order.xml"
+        expected_error_message = (
+            "This file 'test_order.xml' is not recognized as"
+            " a PDF file. Please check the file and its extension."
+        )
+
+        with self.assertRaisesRegex(exceptions.UserError, expected_error_message):
             with Form(
-                self.wiz_model.with_context(default_order_filename="test.omg")
+                self.wiz_model.with_context(default_order_filename=order_filename)
             ) as form:
-                form.order_file = "00100000"
-                self.assertFalse(form.doc_type)
-                mocked.assert_called()
+                form.import_type = "pdf"
+                form.order_file = order_file_data
 
     def test_onchange_validation_xml(self):
         xml_data = base64.b64encode(
@@ -44,6 +48,7 @@ class TestParsingValidation(TestCommon):
                 with self.assertRaisesRegex(
                     exceptions.UserError, "I don't like this file"
                 ):
+                    form.import_type = "xml"
                     form.order_file = xml_data
                 mocked.assert_called()
 
@@ -54,6 +59,7 @@ class TestParsingValidation(TestCommon):
         ) as form:
             with mock_parse_order as mocked:
                 mocked.return_value = "rfq"
+                form.import_type = "xml"
                 form.order_file = xml_data
                 mocked.assert_called()
                 self.assertEqual(form.doc_type, "rfq")
@@ -67,6 +73,7 @@ class TestParsingValidation(TestCommon):
         ) as form:
             with mock_parse_order as mocked:
                 mocked.return_value = "rfq"
+                form.import_type = "pdf"
                 form.order_file = pdf_data
                 mocked.assert_called()
                 self.assertEqual(form.doc_type, "rfq")
@@ -84,12 +91,10 @@ class TestParsingValidation(TestCommon):
         xml_root, error_msg = self.wiz_model._parse_xml(xml_data)
         self.assertTrue(isinstance(xml_root, etree._Element))
         # Due to parse_xml_order NotImplementedError
-        self.assertEqual(error_msg, "Unsupported XML document")
         mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
         with mock_parse_order as mocked:
             mocked.side_effect = exceptions.UserError("I don't like this file")
             self.assertTrue(isinstance(xml_root, etree._Element))
-            self.assertEqual(error_msg, "Unsupported XML document")
 
     def test_parse_xml_good(self):
         xml_data = b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"

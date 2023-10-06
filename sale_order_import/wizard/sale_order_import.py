@@ -26,6 +26,12 @@ class SaleOrderImport(models.TransientModel):
         [("import", "Import"), ("update", "Update")], default="import"
     )
     partner_id = fields.Many2one("res.partner", string="Customer")
+    import_type = fields.Selection(
+        [("xml", "XML"), ("pdf", "PDF")],
+        required=True,
+        default=None,
+        help="Select a type which you want to import",
+    )
     order_file = fields.Binary(
         string="Request for Quotation or Order",
         required=True,
@@ -62,8 +68,15 @@ class SaleOrderImport(models.TransientModel):
         )
         if doc_type is None:
             return {"warning": self._unsupported_file_msg(self.order_filename)}
-        # I would expect to set doc_type = csv here
         self.doc_type = doc_type
+
+    def _get_supported_types(self):
+        # Define the supported types dictionary
+        supported_types = {
+            "xml": ("application/xml", "text/xml"),
+            "pdf": ("application/pdf"),
+        }
+        return supported_types
 
     def _parse_file(self, filename, filecontent, detect_doc_type=False):
         assert filename, "Missing filename"
@@ -71,19 +84,32 @@ class SaleOrderImport(models.TransientModel):
         filetype = mimetypes.guess_type(filename)
         logger.debug("Order file mimetype: %s", filetype)
         mimetype = filetype[0]
-        supported_types = {
-            "XML": ("application/xml", "text/xml"),
-            "PDF": ("application/pdf"),
-        }
-        res = None
-        if filetype and mimetype in supported_types["XML"]:
-            xml_root, error_msg = self._parse_xml(filecontent)
-            if (xml_root is None or not len(xml_root)) and error_msg:
-                raise UserError(error_msg)
-            res = self.parse_xml_order(xml_root, detect_doc_type=detect_doc_type)
-        elif filetype and mimetype == supported_types["PDF"]:
-            res = self.parse_pdf_order(filecontent, detect_doc_type=detect_doc_type)
-        return res
+        supported_types = self._get_supported_types()
+        # Check if the selected import type is supported
+        if self.import_type not in supported_types:
+            raise UserError(_("Please select a valid import type before importing!"))
+
+        # Check if the detected MIME type is supported for the selected import type
+        if mimetype not in supported_types[self.import_type]:
+            raise UserError(
+                _(
+                    "This file '%(filename)s' is not recognized as a %(type)s file. "
+                    "Please check the file and its extension.",
+                    filename=filename,
+                    type=self.import_type.upper(),
+                )
+            )
+        if hasattr(self, "parse_%s_order" % self.import_type):
+            return getattr(self, "parse_%s_order" % self.import_type)(
+                filecontent, detect_doc_type=detect_doc_type
+            )
+        else:
+            raise UserError(
+                _(
+                    "This Import Type is not supported. Did you install "
+                    "the module to support this type?"
+                )
+            )
 
     def _unsupported_file_msg(self, filename):
         return {
@@ -107,19 +133,17 @@ class SaleOrderImport(models.TransientModel):
         except etree.XMLSyntaxError:
             error_msg = _("This XML file is not XML-compliant")
             return xml_root, error_msg
-        try:
-            self.parse_xml_order(xml_root, detect_doc_type=True)
-        except (UserError, NotImplementedError):
-            error_msg = _("Unsupported XML document")
         return xml_root, error_msg
 
-    # FIXME: not used at all
     @api.model
-    def get_xml_doc_type(self, xml_root):  # pragma: no cover
-        raise UserError
-
-    @api.model
-    def parse_xml_order(self, xml_root, detect_doc_type=False):
+    def parse_xml_order(self, data, detect_doc_type=False):
+        if not self.env.context.get("xml_root", False):
+            xml_root, error_msg = self._parse_xml(data)
+        else:
+            xml_root = data
+            error_msg = None
+        if (xml_root is None or not len(xml_root)) and error_msg:
+            raise UserError(error_msg)
         raise NotImplementedError(
             _(
                 "This type of XML RFQ/order is not supported. Did you install "
@@ -127,7 +151,6 @@ class SaleOrderImport(models.TransientModel):
             )
         )
 
-    # TODO: move it out to a PDF support module
     @api.model
     def parse_pdf_order(self, order_file, detect_doc_type=False):
         """
@@ -139,7 +162,7 @@ class SaleOrderImport(models.TransientModel):
         for xml_filename, xml_root in xml_files_dict.items():
             logger.info("Trying to parse XML file %s", xml_filename)
             try:
-                parsed_order = self.parse_xml_order(
+                parsed_order = self.with_context(xml_root=True).parse_xml_order(
                     xml_root, detect_doc_type=detect_doc_type
                 )
                 return parsed_order
