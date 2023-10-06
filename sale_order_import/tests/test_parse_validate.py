@@ -15,14 +15,6 @@ from .common import TestCommon
 class TestParsingValidation(TestCommon):
     """Mostly unit tests on wizard parsing methods."""
 
-    def test_onchange_validation_none(self):
-        csv_data = base64.b64encode(b"id,name\n,1,Foo")
-        with Form(self.wiz_model) as form:
-            form.order_file = csv_data
-            # no filename, no party
-            self.assertFalse(form.csv_import)
-            self.assertFalse(form.doc_type)
-
     def test_onchange_validation_not_supported(self):
         # Just test is not broken
         self.assertTrue(self.wiz_model._unsupported_file_msg("fname.omg"))
@@ -33,7 +25,6 @@ class TestParsingValidation(TestCommon):
                 self.wiz_model.with_context(default_order_filename="test.omg")
             ) as form:
                 form.order_file = "00100000"
-                self.assertFalse(form.csv_import)
                 self.assertFalse(form.doc_type)
                 mocked.assert_called()
 
@@ -65,7 +56,6 @@ class TestParsingValidation(TestCommon):
                 mocked.return_value = "rfq"
                 form.order_file = xml_data
                 mocked.assert_called()
-                self.assertFalse(form.csv_import)
                 self.assertEqual(form.doc_type, "rfq")
 
     def test_onchange_validation_pdf(self):
@@ -79,7 +69,6 @@ class TestParsingValidation(TestCommon):
                 mocked.return_value = "rfq"
                 form.order_file = pdf_data
                 mocked.assert_called()
-                self.assertFalse(form.csv_import)
                 self.assertEqual(form.doc_type, "rfq")
 
     def test_parse_xml_bad(self):

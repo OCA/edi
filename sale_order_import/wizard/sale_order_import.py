@@ -26,12 +26,11 @@ class SaleOrderImport(models.TransientModel):
         [("import", "Import"), ("update", "Update")], default="import"
     )
     partner_id = fields.Many2one("res.partner", string="Customer")
-    csv_import = fields.Boolean(default=False, readonly=True)
     order_file = fields.Binary(
         string="Request for Quotation or Order",
         required=True,
         help="Upload a Request for Quotation or an Order file. Supported "
-        "formats: CSV, XML and PDF (PDF with an embeded XML file).",
+        "formats: XML and PDF (PDF with an embeded XML file).",
     )
     order_filename = fields.Char(string="Filename")
     doc_type = fields.Selection(
@@ -55,7 +54,6 @@ class SaleOrderImport(models.TransientModel):
     @api.onchange("order_file")
     def order_file_change(self):
         if not self.order_filename or not self.order_file:
-            self.csv_import = False
             self.doc_type = False
             return
 
@@ -65,7 +63,6 @@ class SaleOrderImport(models.TransientModel):
         if doc_type is None:
             return {"warning": self._unsupported_file_msg(self.order_filename)}
         # I would expect to set doc_type = csv here
-        self.csv_import = not doc_type
         self.doc_type = doc_type
 
     def _parse_file(self, filename, filecontent, detect_doc_type=False):
@@ -75,14 +72,11 @@ class SaleOrderImport(models.TransientModel):
         logger.debug("Order file mimetype: %s", filetype)
         mimetype = filetype[0]
         supported_types = {
-            "CSV": ("text/csv", "text/plain"),
             "XML": ("application/xml", "text/xml"),
             "PDF": ("application/pdf"),
         }
         res = None
-        if filetype and mimetype in supported_types["CSV"]:
-            res = False
-        elif filetype and mimetype in supported_types["XML"]:
+        if filetype and mimetype in supported_types["XML"]:
             xml_root, error_msg = self._parse_xml(filecontent)
             if (xml_root is None or not len(xml_root)) and error_msg:
                 raise UserError(error_msg)
@@ -95,7 +89,7 @@ class SaleOrderImport(models.TransientModel):
         return {
             "title": _("Unsupported file format"),
             "message": _(
-                "This file '%s' is not recognised as a CSV, XML nor "
+                "This file '%s' is not recognised as a XML nor "
                 "PDF file. Please check the file and it's "
                 "extension."
             )
@@ -130,17 +124,6 @@ class SaleOrderImport(models.TransientModel):
             _(
                 "This type of XML RFQ/order is not supported. Did you install "
                 "the module to support this XML format?"
-            )
-        )
-
-    # FIXME: not used at all
-    @api.model
-    def parse_csv_order(self, order_file, partner):  # pragma: no cover
-        assert partner, "missing partner"
-        raise UserError(
-            _(
-                "This type of CSV order is not supported. Did you install "
-                "the module to support CSV orders?"
             )
         )
 
