@@ -12,8 +12,8 @@
                 <group name="technical" invisible="1">
                     <field name="state" />
                 </group>
-                <group name="help-import" states="import">
-                    <div>
+                <group colspan="4" name="help-import" states="import">
+                    <div colspan="2">
                         <p
                         >Upload below the customer order or request for quotation as CSV, XML or PDF file. When you click on the Import button:</p>
                         <ol>
@@ -30,8 +30,8 @@
                         </ol>
                     </div>
                 </group>
-                <group name="help-update" states="update">
-                    <div>
+                <group colspan="4" name="help-update" states="update">
+                    <div colspan="2">
                         <p
                         >Some quotations have been found for this customer ; one of them may correspond to the order or RFQ that you are importing. You can either select an existing quotation to update or create a new one.</p>
                     </div>
