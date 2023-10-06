@@ -17,9 +17,10 @@ class SaleOrder(models.Model):
                 # I didn't find a python method to easily display
                 # a float + currency symbol (before or after)
                 # depending on lang of context and currency
-                name += _(" Amount w/o tax: %s %s)") % (
-                    sale.amount_untaxed,
-                    sale.currency_id.name,
+                name += _(
+                    " Amount w/o tax: %(amount)s %(currency)s",
+                    amount=sale.amount_untaxed,
+                    currency=sale.currency_id.name,
                 )
                 new_res.append((sale_id, name))
             return new_res
