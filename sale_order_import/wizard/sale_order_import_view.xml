@@ -15,10 +15,8 @@
                 <group colspan="4" name="help-import" states="import">
                     <div colspan="2">
                         <p
-                        >Upload below the customer order or request for quotation as CSV, XML or PDF file. When you click on the Import button:</p>
+                        >Upload below the customer order or request for quotation as XML or PDF file. When you click on the Import button:</p>
                         <ol>
-                            <li
-                            >If it is a CSV file, you will have to manually select the customer. The CSV file should have 2 columns: the product reference or EAN13 (1st col) and then the product quantity (2nd col). It shouldn't have any header line and use semi-colon as field separator. The quantity shouldn't use any thousand separator ; if it is a decimal value, it should use dot as the decimal separator.</li>
                             <li
                             >If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed. For the <a
                                     href="http://ubl.xml.org/"
@@ -39,11 +37,6 @@
                 <group name="import" states="import">
                     <field name="order_file" filename="order_filename" />
                     <field name="order_filename" invisible="1" />
-                    <field name="csv_import" invisible="1" />
-                    <field
-                        name="partner_id"
-                        attrs="{'invisible': [('csv_import', '=', False)], 'required': [('csv_import', '=', True)]}"
-                    />
                 </group>
                 <group name="update" states="update">
                     <field name="commercial_partner_id" />
