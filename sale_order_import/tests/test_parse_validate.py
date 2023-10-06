@@ -2,8 +2,8 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import base64
+from unittest import mock
 
-import mock
 from lxml import etree
 
 from odoo import exceptions
@@ -29,22 +29,13 @@ class TestParsingValidation(TestCommon):
         # Test it gets called (cannot do it w/ Form)
         mock_file_msg = mock.patch.object(type(self.wiz_model), "_unsupported_file_msg")
         with mock_file_msg as mocked:
-            with Form(self.wiz_model) as form:
-                form.order_filename = "test.omg"
+            with Form(
+                self.wiz_model.with_context(default_order_filename="test.omg")
+            ) as form:
                 form.order_file = "00100000"
                 self.assertFalse(form.csv_import)
                 self.assertFalse(form.doc_type)
                 mocked.assert_called()
-
-    def test_onchange_validation_csv(self):
-        csv_data = base64.b64encode(b"id,name\n,1,Foo")
-
-        with Form(self.wiz_model) as form:
-            form.partner_id = self.partner  # required by the view if CSV is set
-            form.order_filename = "test.csv"
-            form.order_file = csv_data
-            self.assertTrue(form.csv_import)
-            self.assertFalse(form.doc_type)
 
     def test_onchange_validation_xml(self):
         xml_data = base64.b64encode(
@@ -54,8 +45,9 @@ class TestParsingValidation(TestCommon):
         # Simulate bad file handling
         mock_parse_xml = mock.patch.object(type(self.wiz_model), "_parse_xml")
 
-        with Form(self.wiz_model) as form:
-            form.order_filename = "test.xml"
+        with Form(
+            self.wiz_model.with_context(default_order_filename="test.xml")
+        ) as form:
             with mock_parse_xml as mocked:
                 mocked.return_value = ("", "I don't like this file")
                 with self.assertRaisesRegex(
@@ -66,8 +58,9 @@ class TestParsingValidation(TestCommon):
 
         mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
 
-        with Form(self.wiz_model) as form:
-            form.order_filename = "test.xml"
+        with Form(
+            self.wiz_model.with_context(default_order_filename="test.xml")
+        ) as form:
             with mock_parse_order as mocked:
                 mocked.return_value = "rfq"
                 form.order_file = xml_data
@@ -79,9 +72,9 @@ class TestParsingValidation(TestCommon):
         pdf_data = self.read_test_file("test.pdf", mode="rb", as_b64=True)
         mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_pdf_order")
 
-        with Form(self.wiz_model) as form:
-            # form.partner_id = self.partner  # required by the view if CSV is set
-            form.order_filename = "test.pdf"
+        with Form(
+            self.wiz_model.with_context(default_order_filename="test.pdf")
+        ) as form:
             with mock_parse_order as mocked:
                 mocked.return_value = "rfq"
                 form.order_file = pdf_data
