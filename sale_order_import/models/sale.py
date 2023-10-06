@@ -14,9 +14,8 @@ class SaleOrder(models.Model):
             new_res = []
             for (sale_id, name) in res:
                 sale = self.browse(sale_id)
-                # I didn't find a python method to easily display
-                # a float + currency symbol (before or after)
-                # depending on lang of context and currency
+                # TODO: find a python method to easily display a float + currency
+                # symbol (before or after) depending on lang of context and currency
                 name += _(
                     " Amount w/o tax: %(amount)s %(currency)s",
                     amount=sale.amount_untaxed,
