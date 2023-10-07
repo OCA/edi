@@ -120,12 +120,9 @@ class AccountInvoiceImport(models.TransientModel):
         fileobj.close()
         return self.invoice2data_to_parsed_inv(invoice2data_res)
 
-    @api.model
-    def invoice2data_to_parsed_inv(self, invoice2data_res):
-        lines = invoice2data_res.get("lines", [])
-
+    def invoice2data_prepare_lines(self, lines):
+        """Manipulate line data to match with account_invoice_import"""
         for line in lines:
-            # Manipulate line data to match with account_invoice_import
             line["price_unit"] = float(line.get("price_unit", 0))
             taxes = self.parse_invoice2data_taxes(line)
             line["taxes"] = taxes  # or global_taxes,
@@ -154,6 +151,12 @@ class AccountInvoiceImport(models.TransientModel):
                 if line.get("line_note"):
                     line["line_note"] = line.get("line_note")
                 line["sectionheader"] = line.get("sectionheader")
+        return lines
+
+    @api.model
+    def invoice2data_to_parsed_inv(self, invoice2data_res):
+        lines = invoice2data_res.get("lines", [])
+        prepared_lines = self.invoice2data_prepare_lines(lines)
 
         parsed_inv = {
             "partner": {
@@ -199,7 +202,7 @@ class AccountInvoiceImport(models.TransientModel):
             "payment_reference": invoice2data_res.get("payment_reference"),
             "payment_unece_code": invoice2data_res.get("payment_unece_code"),
             "incoterm": invoice2data_res.get("incoterm"),
-            "lines": lines,
+            "lines": prepared_lines,
         }
         for field in ["invoice_number", "description"]:
             if isinstance(invoice2data_res.get(field), list):
