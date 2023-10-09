@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_invoice_download
+# 	* account_invoice_download
 #
 msgid ""
 msgstr ""
@@ -18,7 +18,9 @@ msgstr ""
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
-msgid "<span string=\"Download Every\" class=\"oe_inline\" attrs=\"{'invisible': [('method', '!=', 'auto')]}\"/>"
+msgid ""
+"<span string=\"Download Every\" class=\"oe_inline\" attrs=\"{'invisible': "
+"[('method', '!=', 'auto')]}\"/>"
 msgstr ""
 
 #. module: account_invoice_download
@@ -37,12 +39,13 @@ msgid "Active"
 msgstr "Actief"
 
 #. module: account_invoice_download
+#: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_search
 msgid "Archived"
 msgstr "Gearchiveerd"
 
 #. module: account_invoice_download
-#: selection:account.invoice.download.config,method:0
+#: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__method__auto
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -59,7 +62,12 @@ msgstr ""
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__backward_days
-msgid "By default, Odoo will download all invoices that are after the last download date. But it may happen that invoices are available online for download several days after their generation. So, if you set this parameter to 5, Odoo will download all invoices that are after the last download date minus 5 days."
+msgid ""
+"By default, Odoo will download all invoices that are after the last download "
+"date. But it may happen that invoices are available online for download "
+"several days after their generation. So, if you set this parameter to 5, "
+"Odoo will download all invoices that are after the last download date minus "
+"5 days."
 msgstr ""
 
 #. module: account_invoice_download
@@ -110,7 +118,7 @@ msgid "Date of the last successfull download"
 msgstr "Datum van de laatste succesvolle download"
 
 #. module: account_invoice_download
-#: selection:account.invoice.download.config,interval_type:0
+#: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__days
 msgid "Day(s)"
 msgstr "Dagen"
 
@@ -118,6 +126,7 @@ msgstr "Dagen"
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__display_name
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__display_name
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__display_name
+#: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_import_config__display_name
 msgid "Display Name"
 msgstr "Weergavenaam"
 
@@ -145,8 +154,17 @@ msgid "Download Config"
 msgstr "Download Configuratie"
 
 #. module: account_invoice_download
-#: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_import_config__download_config_ids
+#: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_import_config__download_config_count
+msgid "Download Config Count"
+msgstr ""
+
+#. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_import_config_form
+msgid "Download Configs"
+msgstr ""
+
+#. module: account_invoice_download
+#: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_import_config__download_config_ids
 msgid "Download Configurations"
 msgstr "Download Configuraties"
 
@@ -172,20 +190,20 @@ msgid "Download Start Date"
 msgstr "Download vanaf datum"
 
 #. module: account_invoice_download
-#: code:addons/account_invoice_download/models/account_invoice_download_config.py:231
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "Failed to create invoice. Error: %s. (parsed_inv=%s import_config=%s)"
 msgstr ""
 "Kon de factuur niet aanmaken. Fout: %s. (parsed_inv=%s import_config=%s)"
 
 #. module: account_invoice_download
-#: code:addons/account_invoice_download/models/account_invoice_download_config.py:184
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "Failed to download invoice. Error: %s."
 msgstr "Kon de factuur niet downloaden. Fout: %s."
 
 #. module: account_invoice_download
-#: selection:account.invoice.download.log,result:0
+#: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_log__result__failure
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Failure"
 msgstr "Fout"
@@ -205,12 +223,15 @@ msgstr "Groeperen op"
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__id
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__id
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__id
+#: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_import_config__id
 msgid "ID"
 msgstr "ID"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__password
-msgid "If you don't want to store the password in Odoo's database, leave this field empty and you will get a wizard to ask you the password on every download."
+msgid ""
+"If you don't want to store the password in Odoo's database, leave this field "
+"empty and you will get a wizard to ask you the password on every download."
 msgstr ""
 
 #. module: account_invoice_download
@@ -239,6 +260,8 @@ msgid "Invoice Download Log"
 msgstr "Factuur Download logboek"
 
 #. module: account_invoice_download
+#: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_graph
+#: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_pivot
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_tree
 msgid "Invoice Download Logs"
 msgstr "Factuur download logboek"
@@ -255,7 +278,7 @@ msgid "Invoice Import Config"
 msgstr "Factuur Import Config"
 
 #. module: account_invoice_download
-#: code:addons/account_invoice_download/models/account_invoice_download_config.py:237
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "Invoice number %s dated %s created (ID %d)."
 msgstr "Factuur nummer %s met factuurdatum %s aangemaakt (ID %d)."
@@ -269,6 +292,7 @@ msgstr "Laatste Download Datum"
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config____last_update
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials____last_update
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log____last_update
+#: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_import_config____last_update
 msgid "Last Modified on"
 msgstr "Laatst bijgewerkt op"
 
@@ -309,7 +333,7 @@ msgid "Logs for the download of Supplier Invoices"
 msgstr "Logboek over de download van inkoopfacturen"
 
 #. module: account_invoice_download
-#: selection:account.invoice.download.config,method:0
+#: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__method__manual
 msgid "Manual"
 msgstr "Handmatig"
 
@@ -320,13 +344,13 @@ msgid "Message"
 msgstr "Bericht"
 
 #. module: account_invoice_download
-#: code:addons/account_invoice_download/wizard/account_invoice_download_credentials.py:59
+#: code:addons/account_invoice_download/wizard/account_invoice_download_credentials.py:0
 #, python-format
 msgid "Missing Invoice Download Config"
 msgstr "Ontbrekende factuur download configuratie"
 
 #. module: account_invoice_download
-#: selection:account.invoice.download.config,interval_type:0
+#: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__months
 msgid "Month(s)"
 msgstr "Maand(en)"
 
@@ -341,19 +365,19 @@ msgid "Next Download Date"
 msgstr "Datum volgende download"
 
 #. module: account_invoice_download
-#: code:addons/account_invoice_download/models/account_invoice_download_config.py:121
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "No backend configured for download configuration '%s'."
 msgstr "Geen backend geconfigureerd voor de download configuratie '%s'."
 
 #. module: account_invoice_download
-#: code:addons/account_invoice_download/models/account_invoice_download_config.py:244
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "No invoice downloaded."
 msgstr "Geen factuur gedownload."
 
 #. module: account_invoice_download
-#: code:addons/account_invoice_download/models/account_invoice_download_config.py:125
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "No invoice import configuration for download configuration '%s'."
 msgstr ""
@@ -363,11 +387,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__invoice_count
 msgid "Number of Invoices Downloaded"
 msgstr "Aantal facturen gedownload"
-
-#. module: account_invoice_download
-#: selection:account.invoice.download.config,backend:0
-msgid "OVH"
-msgstr "OVH"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__partner_id
@@ -411,31 +430,33 @@ msgid "Search Invoice Download Logs"
 msgstr "Doorzoek factuur download logboeken"
 
 #. module: account_invoice_download
-#: code:addons/account_invoice_download/models/account_invoice_download_config.py:220
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "Skipping invoice %s dated %s because it already exists in Odoo (ID %d)."
 msgstr ""
 "Factuur %s met datum %s niet geimporteerd, omdat deze reeds bestaat (ID %d)."
 
 #. module: account_invoice_download
-#: selection:account.invoice.download.log,result:0
+#: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_log__result__success
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Success"
 msgstr "Success"
 
 #. module: account_invoice_download
-#: sql_constraint:account.invoice.download.config:0
+#: model:ir.model.constraint,message:account_invoice_download.constraint_account_invoice_download_config_backward_days_positive
 msgid "The backward days must be positive"
 msgstr "Het aantal dagen terug moet een positief aantal zijn"
 
 #. module: account_invoice_download
-#: sql_constraint:account.invoice.download.config:0
+#: model:ir.model.constraint,message:account_invoice_download.constraint_account_invoice_download_config_interval_number_positive
 msgid "The frequency must be strictly positive"
 msgstr "De frequentie moet een positief getal zijn"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_credentials__invoice_ids_str
-msgid "This field is a technical hack to be able to return the action with the created invoices"
+msgid ""
+"This field is a technical hack to be able to return the action with the "
+"created invoices"
 msgstr ""
 "Dit veld is een technische hack voor het mogelijk maken van acties op de "
 "aangemaakte facturen"
@@ -448,7 +469,7 @@ msgid "Vendor Bills Auto-Download"
 msgstr ""
 
 #. module: account_invoice_download
-#: selection:account.invoice.download.config,interval_type:0
+#: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__weeks
 msgid "Week(s)"
 msgstr "Week/Weken"
 
@@ -458,6 +479,12 @@ msgid "Wizard to ask credentials to download invoice"
 msgstr "Gids voor het vragen van inloggegevens om facturen te downloaden"
 
 #. module: account_invoice_download
-#: selection:account.invoice.download.config,interval_type:0
-msgid "Year"
-msgstr "Jaar"
+#: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__years
+msgid "Year(s)"
+msgstr ""
+
+#~ msgid "OVH"
+#~ msgstr "OVH"
+
+#~ msgid "Year"
+#~ msgstr "Jaar"
