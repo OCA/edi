@@ -354,7 +354,6 @@ class SaleOrderImport(models.TransientModel):
             )
         return parsed_order
 
-    # TODO: add tests
     def import_order_button(self):
         self.ensure_one()
         bdio = self.env["business.document.import"]
@@ -406,7 +405,6 @@ class SaleOrderImport(models.TransientModel):
         )
         return self.create_order_return_action(parsed_order, self.order_filename)
 
-    # TODO: add tests
     def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
         order = self.create_order(parsed_order, self.price_source, order_filename)
@@ -443,7 +441,6 @@ class SaleOrderImport(models.TransientModel):
             vals["client_order_ref"] = parsed_order["order_ref"]
         return vals
 
-    # TODO: add tests
     @api.model
     def _prepare_create_order_line(
         self, product, uom, order, import_line, price_source
@@ -612,7 +609,6 @@ class SaleOrderImport(models.TransientModel):
         # Allows other module to update some fields on the line
         return {}
 
-    # TODO: add tests
     def update_order_button(self):
         self.ensure_one()
         bdio = self.env["business.document.import"]
