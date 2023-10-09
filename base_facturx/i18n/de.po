@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* base_facturx
+# 	* base_facturx
 #
 msgid ""
 msgstr ""
