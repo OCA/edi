@@ -84,8 +84,8 @@ msgstr "No se pudo encontrar ningún Incotérmino en Odoo que corresponda a '%s'
 msgid ""
 "For product '%(product)s', the unit of measure is %(uom_product)s on the "
 "existing line, but it is %(uom_imported)s on the imported line.We don't "
-"support this scenario for the moment, so <b>the lines haven't been "
-"updated</b>."
+"support this scenario for the moment, so <b>the lines haven't been updated</"
+"b>."
 msgstr ""
 "Para el producto '%(product)s', la unidad de medida es %(uom_product)s en la "
 "línea existente, pero es %(uom_imported)s en la línea importada. No "
@@ -127,7 +127,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any %(label)s corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any %(label)s corresponding to the following information "
+"extracted from the business document:\n"
 "Name: %(name)s \n"
 "VAT number: %(vat)s \n"
 "Reference: %(ref)s \n"
@@ -151,7 +152,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any account corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any account corresponding to the following information "
+"extracted from the business document:\n"
 "Account code: %s"
 msgstr ""
 "Odoo no pudo encontrar ninguna cuenta correspondiente a la siguiente "
@@ -163,7 +165,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any analytic account corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any analytic account corresponding to the following "
+"information extracted from the business document:\n"
 "Analytic account code: %s"
 msgstr ""
 "Odoo no pudo encontrar ninguna cuenta analítica correspondiente a la "
@@ -175,7 +178,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any journal corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any journal corresponding to the following information "
+"extracted from the business document:\n"
 "Journal code: %s"
 msgstr ""
 "Odoo no pudo encontrar ningún diario correspondiente a la siguiente "
@@ -187,7 +191,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any product corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any product corresponding to the following information "
+"extracted from the business document:\n"
 "Barcode: %(barcode)s\n"
 "Product code: %(product_code)s\n"
 "Supplier: %(supplier)s\n"
@@ -203,7 +208,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any shipping partner corresponding to the following information extracted from the business document:\n"
+"Odoo couldn't find any shipping partner corresponding to the following "
+"information extracted from the business document:\n"
 "Name: %(name)s\n"
 "VAT number: %(vat)s\n"
 "Reference: %(ref)s\n"
@@ -235,7 +241,9 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"Odoo couldn't find any tax with 'Tax Application' = '%(tax)s' and 'Tax Included in Price' = '%(price)s' which correspond to the following information extracted from the business document:\n"
+"Odoo couldn't find any tax with 'Tax Application' = '%(tax)s' and 'Tax "
+"Included in Price' = '%(price)s' which correspond to the following "
+"information extracted from the business document:\n"
 "UNECE Tax Type code: %(tax_type)s\n"
 "UNECE Tax Category code: %(tax_cat)s\n"
 "UNECE Due Date code: %s(tax_due_date)\n"
@@ -277,12 +285,12 @@ msgstr ""
 #, python-format
 msgid ""
 "The VAT number of the customer written in the business document "
-"(%(parsed_vat)s) doesn't match the VAT number of the company '%(company)s' "
-"(%(vat)s) in which you are trying to import this document."
+"(%(parsed_vat)s) doesn't match the VAT number of the company "
+"'%(company)s' (%(vat)s) in which you are trying to import this document."
 msgstr ""
 "El número de IVA del cliente escrito en el documento comercial "
-"(%(parsed_vat)s) no coincide con el número de IVA de la empresa '%(company)"
-"s' (%(vat)s) en la que intenta importar esto documento."
+"(%(parsed_vat)s) no coincide con el número de IVA de la empresa "
+"'%(company)s' (%(vat)s) en la que intenta importar esto documento."
 
 #. module: base_business_document_import
 #. odoo-python
@@ -310,8 +318,8 @@ msgstr ""
 #, python-format
 msgid ""
 "The analysis of the business document returned '%(code)s' as the currency "
-"symbol or ISO code. But there are none or several currencies with the "
-"symbol/ISO code in Odoo."
+"symbol or ISO code. But there are none or several currencies with the symbol/"
+"ISO code in Odoo."
 msgstr ""
 "El análisis del documento comercial arrojó '%(code)s' como símbolo de moneda "
 "o código ISO. Pero no hay ninguna o varias monedas con el símbolo/código ISO "
@@ -384,8 +392,7 @@ msgid ""
 "The analysis of the business document returned <b>IBAN %(iban)s</b> as bank "
 "account, but there is no such bank account in Odoo linked to partner <a "
 "href=# data-oe-model=res.partner data-oe-id=%(partner_id)d>%(partner)s</a> "
-"and the option to automatically create bank accounts upon import is "
-"disabled."
+"and the option to automatically create bank accounts upon import is disabled."
 msgstr ""
 "El análisis del documento comercial deolvió <b>IBAN %(iban)s</b> como cuenta "
 "bancaria, pero no existe tal cuenta bancaria en Odoo vinculada al socio <a "
@@ -399,12 +406,12 @@ msgstr ""
 #, python-format
 msgid ""
 "The bank account <b>IBAN %(iban)s</b> has been automatically added on the "
-"supplier <a href=# data-oe-model=res.partner data-oe-"
-"id=%(partner_id)d>%(partner)s</a>"
+"supplier <a href=# data-oe-model=res.partner data-oe-id=%(partner_id)d>"
+"%(partner)s</a>"
 msgstr ""
 "La cuenta bancaria <b>IBAN %(iban)s</b> se ha añadido automáticamente al "
-"proveedor <a href=# data-oe-model=res.partner data-oe-"
-"id=%(partner_id)d>%(partner)s</a>"
+"proveedor <a href=# data-oe-model=res.partner data-oe-id=%(partner_id)d>"
+"%(partner)s</a>"
 
 #. module: base_business_document_import
 #. odoo-python
@@ -441,7 +448,6 @@ msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
