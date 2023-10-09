@@ -38,12 +38,7 @@ msgid "Config Settings"
 msgstr "Opciones de Configuración"
 
 #. module: edi_voxel_account_invoice_oca
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_report_edi_voxel_account_invoice_template_voxel_invoice__display_name
-msgid "Display Name"
-msgstr "Nombre mostrado"
-
-#. module: edi_voxel_account_invoice_oca
-#: model:ir.model,name:edi_voxel_account_invoice_oca.model_report_edi_voxel_account_invoice_template_voxel_invoice
+#: model:ir.model,name:edi_voxel_account_invoice_oca.model_report_edi_voxel_account_invoice_oca_template_voxel_invoice
 msgid "Edi Voxel Account Invoice Report"
 msgstr "Reporte de Factura para Voxel"
 
@@ -55,9 +50,9 @@ msgid "Edi Voxel: Update invoice export status"
 msgstr "Edi Voxel: Actualizar estado de la exportación de facturas"
 
 #. module: edi_voxel_account_invoice_oca
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_report_edi_voxel_account_invoice_template_voxel_invoice__id
-msgid "ID"
-msgstr "ID (identificación)"
+#: model:ir.model.fields,help:edi_voxel_account_invoice_oca.field_account_move__voxel_state
+msgid "Indicates the status of sending report to Voxel"
+msgstr ""
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_res_company__voxel_invoice_login_id
@@ -66,19 +61,21 @@ msgid "Invoice login"
 msgstr "Login para Facturas"
 
 #. module: edi_voxel_account_invoice_oca
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_bank_statement_line__voxel_job_ids
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_job_ids
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_payment__voxel_job_ids
 msgid "Jobs"
 msgstr "Trabajos"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model,name:edi_voxel_account_invoice_oca.model_account_move
-msgid "Journal Entries"
-msgstr "Asientos contables"
+msgid "Journal Entry"
+msgstr ""
 
 #. module: edi_voxel_account_invoice_oca
-#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_report_edi_voxel_account_invoice_template_voxel_invoice____last_update
-msgid "Last Modified on"
-msgstr "Última modificación en"
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__processing_error
+msgid "Processing Error"
+msgstr ""
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
@@ -111,9 +108,16 @@ msgid "Voxel"
 msgstr ""
 
 #. module: edi_voxel_account_invoice_oca
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_bank_statement_line__voxel_enabled
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_enabled
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_payment__voxel_enabled
 msgid "Voxel Enabled"
 msgstr "Voxel habilitado"
+
+#. module: edi_voxel_account_invoice_oca
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_filename
+msgid "Voxel Filename"
+msgstr ""
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
@@ -166,6 +170,28 @@ msgid "Voxel report processing error"
 msgstr "Reporte Voxel con error de procesamiento"
 
 #. module: edi_voxel_account_invoice_oca
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_state
+msgid "Voxel send state"
+msgstr ""
+
+#. module: edi_voxel_account_invoice_oca
+#: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_xml_report
+msgid "XML Report"
+msgstr ""
+
+#. module: edi_voxel_account_invoice_oca
 #: model:ir.actions.report,print_report_name:edi_voxel_account_invoice_oca.report_voxel_invoice
 msgid "object._get_voxel_filename()"
 msgstr ""
+
+#~ msgid "Display Name"
+#~ msgstr "Nombre mostrado"
+
+#~ msgid "ID"
+#~ msgstr "ID (identificación)"
+
+#~ msgid "Journal Entries"
+#~ msgstr "Asientos contables"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Última modificación en"
