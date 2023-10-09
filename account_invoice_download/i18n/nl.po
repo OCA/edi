@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* account_invoice_download
+# 	* account_invoice_download
 #
 msgid ""
 msgstr ""
@@ -18,7 +18,9 @@ msgstr ""
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
-msgid "<span string=\"Download Every\" class=\"oe_inline\" attrs=\"{'invisible': [('method', '!=', 'auto')]}\"/>"
+msgid ""
+"<span string=\"Download Every\" class=\"oe_inline\" attrs=\"{'invisible': "
+"[('method', '!=', 'auto')]}\"/>"
 msgstr ""
 
 #. module: account_invoice_download
@@ -59,7 +61,12 @@ msgstr ""
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__backward_days
-msgid "By default, Odoo will download all invoices that are after the last download date. But it may happen that invoices are available online for download several days after their generation. So, if you set this parameter to 5, Odoo will download all invoices that are after the last download date minus 5 days."
+msgid ""
+"By default, Odoo will download all invoices that are after the last download "
+"date. But it may happen that invoices are available online for download "
+"several days after their generation. So, if you set this parameter to 5, "
+"Odoo will download all invoices that are after the last download date minus "
+"5 days."
 msgstr ""
 
 #. module: account_invoice_download
@@ -210,7 +217,9 @@ msgstr "ID"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__password
-msgid "If you don't want to store the password in Odoo's database, leave this field empty and you will get a wizard to ask you the password on every download."
+msgid ""
+"If you don't want to store the password in Odoo's database, leave this field "
+"empty and you will get a wizard to ask you the password on every download."
 msgstr ""
 
 #. module: account_invoice_download
@@ -435,7 +444,9 @@ msgstr "De frequentie moet een positief getal zijn"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_credentials__invoice_ids_str
-msgid "This field is a technical hack to be able to return the action with the created invoices"
+msgid ""
+"This field is a technical hack to be able to return the action with the "
+"created invoices"
 msgstr ""
 "Dit veld is een technische hack voor het mogelijk maken van acties op de "
 "aangemaakte facturen"
