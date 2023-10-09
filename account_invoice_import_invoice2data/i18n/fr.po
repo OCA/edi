@@ -44,7 +44,6 @@ msgstr "Dernière modification le"
 
 #. module: account_invoice_import_invoice2data
 #: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
 #, python-format
 msgid "PDF Invoice parsing failed. Error message: %s"
 msgstr "L'analyse de la facture PDF a échoué. Message d'erreur : %s"
