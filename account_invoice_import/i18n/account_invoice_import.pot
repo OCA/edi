@@ -172,6 +172,7 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__display_name
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_journal__display_name
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_move__display_name
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_company__display_name
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__display_name
@@ -238,6 +239,7 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__id
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_journal__id
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_move__id
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_company__id
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__id
@@ -253,7 +255,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_error
-#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
@@ -356,6 +357,11 @@ msgid "Is Follower"
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_account_journal
+msgid "Journal"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_move
 msgid "Journal Entry"
 msgstr ""
@@ -363,6 +369,7 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import____last_update
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_config____last_update
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_journal____last_update
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_move____last_update
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_company____last_update
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings____last_update
@@ -506,11 +513,6 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__invoice_type__in_refund
 msgid "Refund"
-msgstr ""
-
-#. module: account_invoice_import
-#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_sms_error
-msgid "SMS Delivery error"
 msgstr ""
 
 #. module: account_invoice_import
