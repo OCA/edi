@@ -28,6 +28,14 @@ msgid "Config Settings"
 msgstr "Postavke"
 
 #. module: account_invoice_ubl
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_ir_actions_report__display_name
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__display_name
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__embed_pdf_in_ubl_xml_invoice
 msgid "Embed PDF in UBL XML Invoice"
@@ -37,6 +45,14 @@ msgstr "Pridruži PDF u UBL XML datuteku"
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_move_form
 msgid "Generate UBL XML File"
 msgstr "Generiraj UBL XML datoteku"
+
+#. module: account_invoice_ubl
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_account_move__id
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_ir_actions_report__id
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__id
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__id
+msgid "ID"
+msgstr ""
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,help:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
@@ -55,7 +71,15 @@ msgstr "Uključi PDF računa u samostalnu UBL XML datoteku."
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_account_move
-msgid "Journal Entries"
+msgid "Journal Entry"
+msgstr ""
+
+#. module: account_invoice_ubl
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_account_move____last_update
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_ir_actions_report____last_update
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company____last_update
+#: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings____last_update
+msgid "Last Modified on"
 msgstr ""
 
 #. module: account_invoice_ubl
