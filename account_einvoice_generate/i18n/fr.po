@@ -20,12 +20,14 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_einvoice_generate.view_account_config_settings
 msgid ""
 "<span class=\"o_form_label\">Select Format</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
+"                            <span class=\"fa fa-lg fa-building-o\" title="
+"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
+"\"/>"
 msgstr ""
 "<span class=\"o_form_label\">Sélectionner le format</span>\n"
 "                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company\""
-"/>"
+"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
+"\"/>"
 
 #. module: account_einvoice_generate
 #: model:ir.model,name:account_einvoice_generate.model_res_company
