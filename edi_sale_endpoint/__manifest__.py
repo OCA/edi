@@ -10,6 +10,7 @@
     "development_status": "Alpha",
     "license": "AGPL-3",
     "author": "Camptocamp,Odoo Community Association (OCA)",
+    "maintainers": ["simahawk"],
     "website": "https://github.com/OCA/edi",
     "depends": [
         "edi_sale_oca",
