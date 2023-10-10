@@ -414,9 +414,7 @@ msgstr "Gestionnaire des paramètres avancés EDI"
 #. module: edi_oca
 #: model:ir.actions.act_window,name:edi_oca.act_open_edi_backend_view
 #: model:ir.model,name:edi_oca.model_edi_backend
-#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_form
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_search
-#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_tree
 msgid "EDI Backend"
 msgstr ""
 
