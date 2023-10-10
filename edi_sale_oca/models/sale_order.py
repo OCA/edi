@@ -9,7 +9,7 @@ class SaleOrder(models.Model):
     _name = "sale.order"
     _inherit = [
         "sale.order",
-        "edi.auto.exchange.consumer.mixin",
+        "edi.exchange.consumer.mixin",
     ]
     # Receiver may send or not the response on create
     # then for each update IF required.
@@ -45,7 +45,7 @@ class SaleOrderLine(models.Model):
     _name = "sale.order.line"
     _inherit = [
         "sale.order.line",
-        "edi.auto.exchange.consumer.mixin",
+        "edi.exchange.consumer.mixin",
         "edi.id.mixin",
     ]
 
