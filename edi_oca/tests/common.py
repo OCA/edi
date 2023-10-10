@@ -15,14 +15,15 @@ from odoo.addons.component.tests.common import (
 
 class EDIBackendTestMixin(object):
     @classmethod
-    def _setup_context(cls):
+    def _setup_context(cls, **kw):
         return dict(
-            cls.env.context, tracking_disable=True, test_queue_job_no_delay=True
+            cls.env.context, tracking_disable=True, test_queue_job_no_delay=True, **kw
         )
 
     @classmethod
-    def _setup_env(cls):
-        cls.env = cls.env(context=cls._setup_context())
+    def _setup_env(cls, ctx=None):
+        ctx = ctx or {}
+        cls.env = cls.env(context=cls._setup_context(**ctx))
 
     @classmethod
     def _setup_records(cls):
