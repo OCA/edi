@@ -42,6 +42,7 @@ class AccountInvoiceImport(models.TransientModel):
     def parse_invoice2data_taxes(self, line):
         taxes = []
         type_code = "VAT"
+        price_include = False
         # CategoryCode assume standard rate s for standard or low rate AA
         categ_code = ""  # AA
         percentage = line.get("line_tax_percent")
@@ -52,13 +53,15 @@ class AccountInvoiceImport(models.TransientModel):
         elif fixed_amount:
             amount_type = "fixed"
             amount = fixed_amount
+        elif line.get("price_total") and not line.get("price_subtotal"):
+            price_include = True
         else:
             return taxes
         taxes.append(
             {
                 "amount_type": amount_type,
                 "amount": float(amount),
-                # "price_include": True, # todo
+                "price_include": price_include,
                 "unece_type_code": type_code,
                 "unece_categ_code": categ_code,
                 # "unece_due_date_code": due_date_code,
