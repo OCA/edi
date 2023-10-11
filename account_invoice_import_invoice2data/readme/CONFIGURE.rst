@@ -95,6 +95,7 @@ Invoice line Fields
 | uom | char | The name of the unit of measure, internally if will be mapped to the unece code. Example L will be mapped to unece_code LTR |
 | price_unit | float | The unit price of the item. (excluding taxes) |
 | discount | float | The amount of discount for this line. Eg 20 for 20% discount or 0.0 for no discount |
+| price_total | float | The total amount of the invoice line including taxes. It can be used to select the correct tax tag. |
 | price_subtotal | float | The total amount of the invoice line excluding taxes. It can be used to create adjustment lines when the decimal precision is insufficient. |
 | line_tax_percent | float | The percentage of tax |
 | line_tax_amount | float | The fixed amount of tax applied to the line |
