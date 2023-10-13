@@ -66,6 +66,12 @@ class AccountInvoiceImport(models.TransientModel):
         )
         return taxes
 
+    def _clean_string(self, string):
+        return re.sub(r"\W+", "", string)
+
+    def _clean_digits(self, string):
+        return re.sub(r"\D+", "", string)
+
     @api.model
     def invoice2data_parse_invoice(self, file_data):
         logger.info("Trying to analyze PDF invoice with invoice2data lib")
@@ -160,7 +166,7 @@ class AccountInvoiceImport(models.TransientModel):
 
         parsed_inv = {
             "partner": {
-                "vat": re.sub(r"\W+", "", invoice2data_res.get("vat", "")).upper(),
+                "vat": self._clean_string(invoice2data_res.get("vat", "")),
                 "name": invoice2data_res.get("partner_name"),
                 "street": invoice2data_res.get("partner_street"),
                 "street2": invoice2data_res.get("partner_street2"),
@@ -175,12 +181,12 @@ class AccountInvoiceImport(models.TransientModel):
                 "mobile": invoice2data_res.get("mobile"),
                 "ref": invoice2data_res.get("partner_ref"),
                 "siren": invoice2data_res.get("siren"),
-                "coc_registration_number": re.sub(
-                    r"\D+", "", invoice2data_res.get("partner_coc", "")
+                "coc_registration_number": self._clean_digits(
+                    invoice2data_res.get("partner_coc", "")
                 ),
             },
-            "bic": re.sub(r"\W+", "", invoice2data_res.get("bic", "")).upper(),
-            "iban": re.sub(r"\W+", "", invoice2data_res.get("iban", "")).upper(),
+            "bic": self._clean_string(invoice2data_res.get("bic", "")),
+            "iban": self._clean_string(invoice2data_res.get("iban", "")),
             "currency": {
                 "iso": invoice2data_res.get("currency"),
                 "currency_symbol": invoice2data_res.get("currency_symbol"),
