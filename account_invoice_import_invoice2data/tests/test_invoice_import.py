@@ -3,6 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import base64
+import logging
+from unittest import mock
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
@@ -26,6 +28,18 @@ class TestInvoiceImport(TransactionCase):
             "account_invoice_import_invoice2data.internet_access"
         )
         internet_product.supplier_taxes_id = [(6, 0, [frtax.id])]
+
+    def test_have_invoice2data_unavailable(self):
+        with mock.patch.dict("sys.modules", {"invoice2data": None}):
+            with self.assertLogs("", level="DEBUG") as cm:
+                logging.getLogger("").debug("Cannot import invoice2data")
+            self.assertEqual(cm.output, ["DEBUG:root:Cannot import invoice2data"])
+
+    def test_have_tesseract_unavailable(self):
+        with mock.patch.dict("sys.modules", {"tesseract": None}):
+            with self.assertLogs("", level="DEBUG") as cm:
+                logging.getLogger("").debug("Cannot import tesseract")
+            self.assertEqual(cm.output, ["DEBUG:root:Cannot import tesseract"])
 
     def test_import_free_invoice(self):
         filename = "invoice_free_fiber_201507.pdf"
