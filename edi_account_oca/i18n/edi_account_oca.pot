@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -24,21 +24,31 @@ msgid "Account Moves Exchange Record"
 msgstr ""
 
 #. module: edi_account_oca
-#: model_terms:ir.ui.view,arch_db:edi_account_oca.account_move_form_view
-msgid "Disable"
-msgstr ""
-
-#. module: edi_account_oca
-#: model:ir.model.fields,field_description:edi_account_oca.field_account_bank_statement_line__disable_edi_auto
-#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__disable_edi_auto
-#: model:ir.model.fields,field_description:edi_account_oca.field_account_payment__disable_edi_auto
-msgid "Disable Edi Auto"
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_bank_statement_line__edi_disable_auto
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__edi_disable_auto
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_payment__edi_disable_auto
+msgid "Disable auto"
 msgstr ""
 
 #. module: edi_account_oca
 #: model_terms:ir.ui.view,arch_db:edi_account_oca.view_account_journal_form
 #: model_terms:ir.ui.view,arch_db:edi_account_oca.view_partner_form
 msgid "EDI Configuration"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_exchange_type_id
+msgid "EDI origin exchange type"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_exchange_record_id
+msgid "EDI origin record"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,help:edi_account_oca.field_account_move__origin_exchange_record_id
+msgid "EDI record that originated this document."
 msgstr ""
 
 #. module: edi_account_oca
@@ -82,8 +92,8 @@ msgid "Moves"
 msgstr ""
 
 #. module: edi_account_oca
-#: model:ir.model.fields,help:edi_account_oca.field_account_bank_statement_line__disable_edi_auto
-#: model:ir.model.fields,help:edi_account_oca.field_account_move__disable_edi_auto
-#: model:ir.model.fields,help:edi_account_oca.field_account_payment__disable_edi_auto
-msgid "When marked, EDI could be avoided"
+#: model:ir.model.fields,help:edi_account_oca.field_account_bank_statement_line__edi_disable_auto
+#: model:ir.model.fields,help:edi_account_oca.field_account_move__edi_disable_auto
+#: model:ir.model.fields,help:edi_account_oca.field_account_payment__edi_disable_auto
+msgid "When marked, EDI automatic processing will be avoided"
 msgstr ""
