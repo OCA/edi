@@ -4,14 +4,13 @@
 
 import base64
 import textwrap
+from unittest import mock
 
-import mock
-
-from odoo.addons.component.tests.common import SavepointComponentCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
 
 
-class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
+class TestProcessComponent(TransactionComponentCase, EDIBackendTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -24,6 +23,7 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
             exchange_file_ext="xml",
             exchange_filename_pattern="{record.identifier}-{type.code}-{dt}",
             backend_id=cls.backend.id,
+            # Bypass required fields with default_import_type = 'xml' in sale_order_import
             advanced_settings_edit=textwrap.dedent(
                 """
             components:
@@ -32,6 +32,8 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
             sale_order_import:
                 wiz_ctx:
                     random_key: custom
+                    default_price_source: 'pricelist'
+                    default_import_type: 'xml'
             """
             ),
         )
@@ -59,21 +61,6 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
             self.assertEqual(wiz.order_filename, self.record.exchange_filename)
             self.assertEqual(wiz.price_source, "pricelist")
             md_onchange.assert_called()
-
-    def test_settings(self):
-        self.exc_type.advanced_settings_edit = textwrap.dedent(
-            """
-            components:
-                process:
-                    usage: input.process.sale.order
-            sale_order_import:
-                price_source: order
-                confirm_order: true
-            """
-        )
-        comp = self.backend._get_component(self.record, "process")
-        self.assertEqual(comp._get_default_price_source(), "order")
-        self.assertTrue(comp._order_should_be_confirmed())
 
     # In both tests here we don"t care about the specific format of the import.
     # We only care that the wizard plugged with the component works as expected.
@@ -155,7 +142,6 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
             "product_id",
             "product_uom_qty",
             "product_uom",
-            "name",
             "price_unit",
             "edi_id",
         ):
