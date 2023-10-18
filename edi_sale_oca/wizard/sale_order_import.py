@@ -18,5 +18,7 @@ class SaleOrderImport(models.TransientModel):
         )
         # TODO: we should probably add an ext reference field to s.o.l. in sale_order_import
         # and get rid of this override.
-        vals["edi_id"] = import_line.get("order_line_ref")
+        vals["edi_id"] = import_line.get("order_line_ref") or import_line.get(
+            "sequence"
+        )
         return vals
