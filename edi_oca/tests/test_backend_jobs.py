@@ -3,7 +3,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import mock
+from requests.exceptions import ConnectionError as ReqConnectionError
 
+from odoo.addons.queue_job.exception import RetryableJobError
 from odoo.addons.queue_job.tests.common import JobMixin
 
 from .common import EDIBackendCommonTestCase
@@ -46,6 +48,22 @@ class EDIBackendTestJobsCase(EDIBackendCommonTestCase, JobMixin):
             self.assertEqual(res, "Exchange sent")
             self.assertEqual(record.edi_exchange_state, "output_sent")
         self.assertEqual(created[0].name, "Send exchange file.")
+
+    def test_output_fail_retry(self):
+        job_counter = self.job_counter()
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+            "edi_exchange_state": "output_pending",
+        }
+        record = self.backend.create_record("test_csv_output", vals)
+        record._set_file_content("ABC")
+        job = self.backend.with_delay().exchange_send(record)
+        job_counter.search_created()
+        with mock.patch.object(type(self.backend), "_exchange_send") as mocked:
+            mocked.side_effect = ReqConnectionError("Connection broken")
+            with self.assertRaises(RetryableJobError):
+                job.perform()
 
     def test_input(self):
         job_counter = self.job_counter()

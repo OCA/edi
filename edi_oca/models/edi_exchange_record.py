@@ -571,3 +571,11 @@ class EDIExchangeRecord(models.Model):
         params = self._job_delay_params()
         params.update(kw)
         return super().with_delay(**params)
+
+    def delayable(self, **kw):
+        params = self._job_delay_params()
+        params.update(kw)
+        return super().delayable(**params)
+
+    def _job_retry_params(self):
+        return {}

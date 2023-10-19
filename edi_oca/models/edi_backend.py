@@ -13,6 +13,7 @@ from io import StringIO
 from odoo import _, exceptions, fields, models, tools
 
 from odoo.addons.component.exception import NoComponentError
+from odoo.addons.queue_job.exception import RetryableJobError
 
 from ..exceptions import EDIValidationError
 
@@ -303,6 +304,11 @@ class EDIBackend(models.Model):
             state = "output_error_on_send"
             message = exchange_record._exchange_status_message("send_ko")
             res = f"Error: {error}"
+        except self._send_retryable_exceptions() as err:
+            error = _get_exception_msg()
+            raise RetryableJobError(
+                error, **exchange_record._job_retry_params()
+            ) from err
         else:
             # TODO: maybe the send handler should return desired message and state
             message = exchange_record._exchange_status_message("send_ok")
@@ -334,6 +340,10 @@ class EDIBackend(models.Model):
             exceptions.UserError,
             exceptions.ValidationError,
         )
+
+    def _send_retryable_exceptions(self):
+        # IOError is a base class for all connection errors
+        return (IOError,)
 
     def _output_check_send(self, exchange_record):
         if exchange_record.direction != "output":
@@ -464,7 +474,7 @@ class EDIBackend(models.Model):
         message = None
         try:
             res = self._exchange_process(exchange_record)
-        except self._swallable_exceptions() as err:
+        except self._swallable_exceptions():
             if self.env.context.get("_edi_process_break_on_error"):
                 raise
             error = _get_exception_msg()
@@ -521,7 +531,7 @@ class EDIBackend(models.Model):
             state = "validate_error"
             message = exchange_record._exchange_status_message("validate_ko")
             res = f"Validation error: {error}"
-        except self._swallable_exceptions() as err:
+        except self._swallable_exceptions():
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
             error = _get_exception_msg()
