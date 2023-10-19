@@ -277,9 +277,9 @@ class EDIExchangeRecord(models.Model):
             "send_ko": _(
                 "An error happened while sending. Please check exchange record info."
             ),
-            "process_ok": _("Exchange processed successfully "),
+            "process_ok": _("Exchange processed successfully"),
             "process_ko": _("Exchange processed with errors"),
-            "receive_ok": _("Exchange received successfully "),
+            "receive_ok": _("Exchange received successfully"),
             "receive_ko": _("Exchange not received"),
             "ack_received": _("ACK file received."),
             "ack_missing": _("ACK file is required for this exchange but not found."),
