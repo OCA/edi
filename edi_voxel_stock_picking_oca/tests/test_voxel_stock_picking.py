@@ -11,6 +11,16 @@ class TestVoxelStockPickingCommon(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
         # Sale order company
         country = cls.env["res.country"].create({"name": "Country", "code": "CT"})
         state = cls.env["res.country.state"].create(
