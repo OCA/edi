@@ -70,7 +70,10 @@ class BasePydifact(models.AbstractModel):
 
     @api.model
     def _loads_edifact(self, order_file):
-        interchange = Interchange.from_str(order_file.decode())
+        try:
+            interchange = Interchange.from_str(order_file.decode())
+        except UnicodeDecodeError:
+            interchange = Interchange.from_str(order_file.decode('latin-1'))
         return interchange
 
     @api.model
