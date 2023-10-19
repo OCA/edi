@@ -10,6 +10,16 @@ class TestVoxelAccountInvoice(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super(TestVoxelAccountInvoice, cls).setUpClass()
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
         # Invoice line account
         # Invoice company
         cls.main_company = cls.env.ref("base.main_company")
