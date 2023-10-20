@@ -187,16 +187,22 @@ class BasePydifact(models.AbstractModel):
         }
 
     @api.model
-    def map2odoo_product(self, seg):
+    def map2odoo_product(self, seg, pia = None):
         """
         :seg: LIN segment
             ['1', '', ['8885583503464', 'EN']]
         EN. International Article Numbering Association (EAN)
         UP. UPC (Universal product code)
         SRV. GTIN
+        :product_info: PIA segment
+            ['5', ['1276', 'SA', '', '9']]
+        SA. Supplier's Article Number
         """
         product = seg[2]
         pct = product[1]
+        # Fallback on SA if no EAN given
+        if not product[0] and pia[1][0]:
+            return dict(code=pia[1][0])
         return dict(code=product[0]) if pct == "SRV" else dict(barcode=product[0])
 
     @api.model
