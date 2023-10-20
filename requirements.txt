@@ -7,4 +7,5 @@ pytz
 xmltodict
 dateparser
 pdfplumber
+pypdf>=3.1.0
 regex

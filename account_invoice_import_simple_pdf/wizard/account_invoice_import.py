@@ -28,6 +28,10 @@ try:
     import pdftotext
 except ImportError:
     logger.debug("Cannot import pdftotext")
+try:
+    import pypdf
+except ImportError:
+    logger.debug("Cannot import pypdf")
 
 
 class AccountInvoiceImport(models.TransientModel):
@@ -50,13 +54,13 @@ class AccountInvoiceImport(models.TransientModel):
             pages = []
             doc = fitz.open(fileobj.name)
             for page in doc:
-                pages.append(page.getText("text"))
+                pages.append(page.get_text())
             res = {
                 "all": "\n\n".join(pages),
                 "first": pages and pages[0] or "",
             }
-            logger.info("Text extraction made with PyMuPDF")
-            test_info["text_extraction"] = "pymupdf"
+            logger.info("Text extraction made with PyMuPDF %s", fitz.__version__)
+            test_info["text_extraction"] = "pymupdf %s" % fitz.__version__
         except Exception as e:
             logger.warning("Text extraction with PyMuPDF failed. Error: %s", e)
         return res
@@ -76,8 +80,23 @@ class AccountInvoiceImport(models.TransientModel):
                 "all": "\n\n".join(pages),
                 "first": pages and pages[0] or "",
             }
-        test_info["text_extraction"] = "pdfplumber"
-        logger.info("Text extraction made with pdfplumber")
+        test_info["text_extraction"] = "pdfplumber %s" % pdfplumber.__version__
+        logger.info("Text extraction made with pdfplumber %s", pdfplumber.__version__)
+        return res
+
+    @api.model
+    def _simple_pdf_text_extraction_pypdf(self, fileobj, test_info):
+        res = False
+        reader = pypdf.PdfReader(fileobj.name)
+        pages = []
+        for pdf_page in reader.pages:
+            pages.append(pdf_page.extract_text())
+            res = {
+                "all": "\n\n".join(pages),
+                "first": pages and pages[0] or "",
+            }
+        test_info["text_extraction"] = "pypdf %s" % pypdf.__version__
+        logger.info("Text extraction made with pypdf %s", pypdf.__version__)
         return res
 
     @api.model
@@ -147,6 +166,8 @@ class AccountInvoiceImport(models.TransientModel):
             res = self._simple_pdf_text_extraction_pdftotext_cmd(fileobj, test_info)
         elif specific_tool == "pdfplumber":
             res = self._simple_pdf_text_extraction_pdfplumber(fileobj, test_info)
+        elif specific_tool == "pypdf":
+            res = self._simple_pdf_text_extraction_pypdf(fileobj, test_info)
         else:
             raise UserError(
                 _(
@@ -195,6 +216,8 @@ class AccountInvoiceImport(models.TransientModel):
                 res = self._simple_pdf_text_extraction_pdftotext_cmd(fileobj, test_info)
             if not res:
                 res = self._simple_pdf_text_extraction_pdfplumber(fileobj, test_info)
+            if not res:
+                res = self._simple_pdf_text_extraction_pypdf(fileobj, test_info)
             if not res:
                 raise UserError(
                     _(

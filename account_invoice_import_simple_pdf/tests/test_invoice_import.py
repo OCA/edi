@@ -553,16 +553,21 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         self.assertEqual(float_compare(iline.price_unit, 1509, precision_digits=2), 0)
         inv.unlink()
 
-    def test_complete_import_pdfplumber(self):
+    def _complete_import_specific_method(self, method):
         icpo = self.env["ir.config_parameter"]
         key = "invoice_import_simple_pdf.pdf2txt"
-        method = "pdfplumber"
         configp = icpo.search([("key", "=", key)])
         if configp:
             configp.write({"value": method})
         else:
             icpo.create({"key": key, "value": method})
         self.test_complete_import()
+
+    def test_specific_python_methods(self):
+        # test only pure-pdf methods
+        # because we are sure they work on the Github test environment
+        self._complete_import_specific_method("pdfplumber")
+        self._complete_import_specific_method("pypdf")
 
     def test_test_mode(self):
         self.partner_ak.write(
