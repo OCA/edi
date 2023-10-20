@@ -145,22 +145,30 @@ class BasePydifact(models.AbstractModel):
         nameref = self.MAP_AGENCY_CODE_2_RES_PARTNER_NAMEREF.get(agency_code, "gln")
         address["partner"][nameref] = party_id
         d = address["address"]
+        # Fallback if address information is missing
+        try:
+            if isinstance(seg, Segment):
+                lenght_seg = len(seg.elements)
+            else:
+                lenght_seg = len(seg)
+        except ValueError:
+            lenght_seg = 0
         # PARTY NAME
-        if bool(seg[2]):
+        if lenght_seg > 2 and bool(seg[2]):
             d["name"] = seg[2]
-        if bool(seg[3]):
+        if lenght_seg > 3 and bool(seg[3]):
             d["name"] = "{}{}".format(f"{d['name']}. " if d.get("name") else "", seg[3])
-        if bool(seg[4]):
+        if lenght_seg > 4 and bool(seg[4]):
             # Street address and/or PO Box number in a structured address: one to three lines.
             d["street"] = seg[4]
-        if bool(seg[5]):
+        if lenght_seg > 5 and bool(seg[5]):
             d["city"] = seg[5]
-        if bool(seg[6]):
+        if lenght_seg > 6 and bool(seg[6]):
             # Country sub-entity identification
             d["state_code"] = seg[6]
-        if bool(seg[7]):
+        if lenght_seg > 7 and bool(seg[7]):
             d["zip"] = seg[7]
-        if bool(seg[8]):
+        if lenght_seg > 8 and bool(seg[8]):
             # Country, coded ISO 3166
             d["country_code"] = seg[8]
 
