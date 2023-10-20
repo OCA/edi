@@ -85,7 +85,11 @@ class BasePydifact(models.AbstractModel):
     @api.model
     def map2odoo_date(self, dt):
         # '102'
-        dtt = datetime.datetime.strptime(dt[1], "%Y%m%d")
+        date_format = "%Y%m%d%H%M%S"
+        length_dt = len(dt[1])
+        if (length_dt % 2 == 0 and length_dt in range(8, 13, 2)):
+            date_format = date_format[0 : length_dt - 2]
+        dtt = datetime.datetime.strptime(dt[1], date_format)
         return dtt.date()
 
     @api.model
