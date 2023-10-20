@@ -66,6 +66,10 @@ class TestBaseEdifact(TransactionCase):
         self.assertEqual(qty, 2.0)
 
     def test_map2odoo_unit_price(self):
+        # Test with Price qualifier is AAA
         seg = (["AAA", "19.75"],)
         unit_price = self.base_edifact_model.map2odoo_unit_price(seg)
         self.assertEqual(unit_price, 19.75)
+        # Test with no unit price
+        unit_price = self.base_edifact_model.map2odoo_unit_price()
+        self.assertEqual(unit_price, 0.0)
