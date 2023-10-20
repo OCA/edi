@@ -214,14 +214,18 @@ class BasePydifact(models.AbstractModel):
         return float(seg[0][1])
 
     @api.model
-    def map2odoo_unit_price(self, seg):
+    def map2odoo_unit_price(self, seg = None):
         """
         'PRI' EDI segment: [['AAA', '19.75']]
         Price qualifier:
         * 'AAA'. Calculation net
         * 'AAB'. Calculation gross
         """
-        pri = seg[0]
-        if pri[0] == "AAA":
-            return float(pri[1])
+        if seg:
+            pri = seg[0]
+            if pri[0] == "AAA":
+                return float(pri[1])
+            # TODO: Add price calculation formula
+            if pri[0] == "AAB":
+                return float(pri[1])
         return 0.0
