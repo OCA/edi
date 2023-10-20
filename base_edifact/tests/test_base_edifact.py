@@ -73,3 +73,9 @@ class TestBaseEdifact(TransactionCase):
         # Test with no unit price
         unit_price = self.base_edifact_model.map2odoo_unit_price()
         self.assertEqual(unit_price, 0.0)
+
+    def test_map2odoo_date(self):
+        # Test with date format YYYY-MM-DD HH:MM
+        date_str = (['137', '202303201433', '203'])
+        date = self.base_edifact_model.map2odoo_date(date_str)
+        self.assertEqual(str(date), "2023-03-20")
