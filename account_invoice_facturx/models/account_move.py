@@ -641,18 +641,16 @@ class AccountMove(models.Model):
                     product_charact, ns["ram"] + "Value"
                 )
                 product_charact_value.text = attrib_value
-            if (
-                hasattr(product, "hs_code_id")
-                and product.type in ("product", "consu")
-                and product.get_hs_code_recursively()
-            ):
-                product_classification = etree.SubElement(
-                    trade_product, ns["ram"] + "DesignatedProductClassification"
-                )
-                product_classification_code = etree.SubElement(
-                    product_classification, ns["ram"] + "ClassCode", listID="HS"
-                )
-                product_classification_code.text = product.hs_code_id.local_code
+            if hasattr(product, "hs_code_id") and product.type in ("product", "consu"):
+                hs_code = product.get_hs_code_recursively()
+                if hs_code:
+                    product_classification = etree.SubElement(
+                        trade_product, ns["ram"] + "DesignatedProductClassification"
+                    )
+                    product_classification_code = etree.SubElement(
+                        product_classification, ns["ram"] + "ClassCode", listID="HS"
+                    )
+                    product_classification_code.text = hs_code.local_code
             # origin_country_id and hs_code_id are provided
             # by the OCA module product_harmonized_system
             if (
