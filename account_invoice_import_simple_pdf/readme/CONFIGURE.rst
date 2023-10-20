@@ -9,6 +9,7 @@ If you want to force Odoo to use a specific text extraction method, go to the me
   #. pdftotext.lib
   #. pdftotext.cmd
   #. pdfplumber
+  #. pypdf
 
 In this configuration, Odoo will only use the selected text extraction method and, if it fails, it will display an error message.
 
