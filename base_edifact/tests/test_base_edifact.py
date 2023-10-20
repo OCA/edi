@@ -54,6 +54,12 @@ class TestBaseEdifact(TransactionCase):
         product = self.base_edifact_model.map2odoo_product(seg)
         self.assertEqual(product["barcode"], "8885583503464")
 
+    def test_map2odoo_product_pia(self):
+        seg = ("1", "", ["", "EN"])
+        pia = (['5', ['1276', 'SA', '', '9']])
+        product = self.base_edifact_model.map2odoo_product(seg, pia)
+        self.assertEqual(product["code"], "1276")
+
     def test_map2odoo_qty(self):
         seg = (["21", "2"],)
         qty = self.base_edifact_model.map2odoo_qty(seg)
