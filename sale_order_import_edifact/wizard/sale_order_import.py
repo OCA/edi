@@ -233,21 +233,28 @@ class SaleOrderImport(models.TransientModel):
     def _prepare_edifact_lines(self, interchange):
         edifact_model = self.env["base.edifact"]
         lines = []
+        qty_list = []
+
+        for i in interchange.get_segments("QTY"):
+            if i[0][0] == '21':
+                qty_list.append(i)
+
         zipsegments = zip(
             interchange.get_segments("LIN"),
-            interchange.get_segments("QTY"),
             interchange.get_segments("PRI"),
         )
+        for linseg, priseg in zipsegments:
 
-        for linseg, qtyseg, priseg in zipsegments:
-            lines.append(
-                {
-                    "sequence": int(linseg[0]),
-                    "product": edifact_model.map2odoo_product(linseg),
-                    "qty": edifact_model.map2odoo_qty(qtyseg),
-                    # price without taxes
-                    "price_unit": edifact_model.map2odoo_unit_price(priseg),
+            qtyseg = qty_list.pop(0) if qty_list else None
+
+            line = {
+                "sequence": int(linseg[0]),
+                "product": edifact_model.map2odoo_product(linseg),
+                "qty": edifact_model.map2odoo_qty(qtyseg),
+                # price without taxes
+                "price_unit": edifact_model.map2odoo_unit_price(priseg),
                 }
-            )
+
+            lines.append(line)
 
         return lines
