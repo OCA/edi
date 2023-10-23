@@ -70,10 +70,11 @@ class BasePydifact(models.AbstractModel):
 
     @api.model
     def _loads_edifact(self, order_file):
+        # TODO: use chardet library for get encoding
         try:
             interchange = Interchange.from_str(order_file.decode())
         except UnicodeDecodeError:
-            interchange = Interchange.from_str(order_file.decode('latin-1'))
+            interchange = Interchange.from_str(order_file.decode("latin-1"))
         return interchange
 
     @api.model
@@ -87,7 +88,7 @@ class BasePydifact(models.AbstractModel):
         # '102'
         date_format = "%Y%m%d%H%M%S"
         length_dt = len(dt[1])
-        if (length_dt % 2 == 0 and length_dt in range(8, 13, 2)):
+        if length_dt % 2 == 0 and length_dt in range(8, 13, 2):
             date_format = date_format[0 : length_dt - 2]
         dtt = datetime.datetime.strptime(dt[1], date_format)
         return dtt.date()
@@ -187,7 +188,7 @@ class BasePydifact(models.AbstractModel):
         }
 
     @api.model
-    def map2odoo_product(self, seg, pia = None):
+    def map2odoo_product(self, seg, pia=None):
         """
         :seg: LIN segment
             ['1', '', ['8885583503464', 'EN']]
@@ -214,7 +215,7 @@ class BasePydifact(models.AbstractModel):
         return float(seg[0][1])
 
     @api.model
-    def map2odoo_unit_price(self, seg = None):
+    def map2odoo_unit_price(self, seg=None):
         """
         'PRI' EDI segment: [['AAA', '19.75']]
         Price qualifier:
@@ -229,7 +230,7 @@ class BasePydifact(models.AbstractModel):
             if pri[0] == "AAB":
                 return float(pri[1])
         return 0.0
-    
+
     @api.model
     def map2odoo_description(self, seg):
         """
