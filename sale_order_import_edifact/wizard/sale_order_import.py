@@ -236,6 +236,7 @@ class SaleOrderImport(models.TransientModel):
         pia_list = []
         qty_list = []
         pri_list = []
+        imd_list = []
 
         for i in interchange.get_segments("PIA"):
             if i[1][1] == 'SA':
@@ -245,12 +246,17 @@ class SaleOrderImport(models.TransientModel):
                 qty_list.append(i)
         for i in interchange.get_segments("PRI"):
             pri_list.append(i)
+        for i in interchange.get_segments("IMD"):
+            if i[1] == '79':
+                imd_list.append(i)
+
 
         for linseg in interchange.get_segments("LIN"):
 
             piaseg = pia_list.pop(0) if pia_list else None
             qtyseg = qty_list.pop(0) if qty_list else None
             priseg = pri_list.pop(0) if pri_list else None
+            imdseg = imd_list.pop(0) if imd_list else None
 
             line = {
                 "sequence": int(linseg[0]),
@@ -262,6 +268,9 @@ class SaleOrderImport(models.TransientModel):
             # If the product price is not provided, the price will be taken from the system
             if price_unit != 0.0:
                 line["price_unit"] = price_unit
+            description = edifact_model.map2odoo_description(imdseg)
+            if description:
+                line["name"] = description
 
             lines.append(line)
 
