@@ -76,7 +76,7 @@ addon | version | maintainers | summary
 [sale_order_import_ubl_customer_free_ref](sale_order_import_ubl_customer_free_ref/) | 14.0.1.1.0 |  | Extract CustomerReference from sale UBL
 [sale_order_import_ubl_line_customer_ref](sale_order_import_ubl_line_customer_ref/) | 14.0.1.0.2 |  | Extract specific customer reference for each order line
 [sale_order_packaging_import](sale_order_packaging_import/) | 14.0.1.1.0 |  | Import the packaging on the sale order line
-[sale_order_ubl](sale_order_ubl/) | 14.0.1.0.1 |  | Embed UBL XML file inside the PDF quotation
+[sale_order_ubl](sale_order_ubl/) | 14.0.1.1.0 |  | Embed UBL XML file inside the PDF quotation
 
 [//]: # (end addons)
 
