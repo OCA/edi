@@ -141,8 +141,9 @@ class SaleOrderImport(models.TransientModel):
             partner_dict = pval.get("partner", pval)
             partner_dict["edi_ctx"] = {
                 "order_filename": self.order_filename,
-                "rff_va": references["vat"],
             }
+            if references.get("vat"):
+                partner_dict["edi_ctx"]["rff_va"] = references["vat"]
         if parties.get("company"):
             parties["company"]["edi_ctx"]["vendor_code"] = references.get("vendor_code")
         return parties
