@@ -229,3 +229,15 @@ class BasePydifact(models.AbstractModel):
             if pri[0] == "AAB":
                 return float(pri[1])
         return 0.0
+    
+    @api.model
+    def map2odoo_description(self, seg):
+        """
+        'IMD' EDI segment: ['F', '79', ['', '', '', 'Description']]
+        F: Label
+        79: Other description
+        """
+        if seg:
+            description = seg[2][3]
+            return description
+        return None
