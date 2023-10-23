@@ -23,7 +23,7 @@ class TestBaseEdifact(TransactionCase):
         obj = self.base_edifact_model.pydifact_obj(edifact_docu)
         # [1]: to get the list messages, [0]: to get the first list value of the segments
         self.assertEqual(obj[1]["segments"][0]["BGM"][1], "1AA1TEST")
-        
+
     def test_pydifact_obj_latin1(self):
         edifact_docu = _get_file_content("test_orders_-_no_ean_in_LIN_segments.txt")
         obj = self.base_edifact_model.pydifact_obj(edifact_docu)
@@ -56,7 +56,7 @@ class TestBaseEdifact(TransactionCase):
 
     def test_map2odoo_product_pia(self):
         seg = ("1", "", ["", "EN"])
-        pia = (['5', ['1276', 'SA', '', '9']])
+        pia = ["5", ["1276", "SA", "", "9"]]
         product = self.base_edifact_model.map2odoo_product(seg, pia)
         self.assertEqual(product["code"], "1276")
 
@@ -76,6 +76,11 @@ class TestBaseEdifact(TransactionCase):
 
     def test_map2odoo_date(self):
         # Test with date format YYYY-MM-DD HH:MM
-        date_str = (['137', '202303201433', '203'])
+        date_str = ["137", "202303201433", "203"]
         date = self.base_edifact_model.map2odoo_date(date_str)
         self.assertEqual(str(date), "2023-03-20")
+
+    def test_map2odoo_description(self):
+        seg = ["F", "79", ["", "", "", "Description"]]
+        description = self.base_edifact_model.map2odoo_description(seg)
+        self.assertEqual(description, "Description")
