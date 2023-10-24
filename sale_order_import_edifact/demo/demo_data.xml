@@ -78,4 +78,39 @@
         <field name="categ_id" ref="product.product_category_all" />
         <field name="barcode">9783898307645</field>
     </record>
+    <record id="product_product_edifact4_dm" model="product.product">
+        <field name="name">Product1</field>
+        <field name="sale_ok" eval="True" />
+        <field name="type">consu</field>
+        <field name="default_code">1276</field>
+        <field name="categ_id" ref="product.product_category_all" />
+    </record>
+    <record id="product_product_edifact5_dm" model="product.product">
+        <field name="name">Product2</field>
+        <field name="sale_ok" eval="True" />
+        <field name="type">consu</field>
+        <field name="default_code">46630</field>
+        <field name="categ_id" ref="product.product_category_all" />
+    </record>
+    <record id="product_product_edifact6_dm" model="product.product">
+        <field name="name">Product3</field>
+        <field name="sale_ok" eval="True" />
+        <field name="type">consu</field>
+        <field name="default_code">98891 75</field>
+        <field name="categ_id" ref="product.product_category_all" />
+    </record>
+    <record id="product_product_edifact7_dm" model="product.product">
+        <field name="name">Product4</field>
+        <field name="sale_ok" eval="True" />
+        <field name="type">consu</field>
+        <field name="default_code">37230</field>
+        <field name="categ_id" ref="product.product_category_all" />
+    </record>
+    <record id="product_product_edifact8_dm" model="product.product">
+        <field name="name">Product5</field>
+        <field name="sale_ok" eval="True" />
+        <field name="type">consu</field>
+        <field name="default_code">1076</field>
+        <field name="categ_id" ref="product.product_category_all" />
+    </record>
 </odoo>
