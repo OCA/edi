@@ -40,3 +40,28 @@ def get_test_data(env):
             }
         )
     }
+
+
+def get_test_data_no_ean_in_lin(env):
+    ref = env.ref
+    return {
+        "test_orders_-_no_ean_in_LIN_segments.txt": DotDict(
+            {
+                "_get_content": partial(
+                    _get_file_content, "test_orders_-_no_ean_in_LIN_segments.txt"
+                ),
+                "client_order_ref": "467819",
+                "date_order": "2023-03-20",
+                "partner": ref("sale_order_import_edifact.partner_edi_shipto_dm"),
+                "shipping_partner": ref(
+                    "sale_order_import_edifact.partner_edi_shipto_dm"
+                ),
+                "products": ref("sale_order_import_edifact.product_product_edifact4_dm")
+                + ref("sale_order_import_edifact.product_product_edifact5_dm")
+                + ref("sale_order_import_edifact.product_product_edifact6_dm")
+                + ref("sale_order_import_edifact.product_product_edifact7_dm")
+                + ref("sale_order_import_edifact.product_product_edifact8_dm"),
+                "qty": [12.0, 24.0, 12.0, 24.0, 90.0],
+            }
+        )
+    }
