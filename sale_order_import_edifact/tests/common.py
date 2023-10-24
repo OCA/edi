@@ -65,3 +65,26 @@ def get_test_data_no_ean_in_lin(env):
             }
         )
     }
+
+
+def get_test_data_no_price(env):
+    ref = env.ref
+    return {
+        "test_orders_-_no_PRI_segments.txt": DotDict(
+            {
+                "_get_content": partial(
+                    _get_file_content, "test_orders_-_no_PRI_segments.txt"
+                ),
+                "client_order_ref": "COM-004017",
+                "date_order": "2023-03-20",
+                "partner": ref("sale_order_import_edifact.partner_edi_invoiceto_dm"),
+                "shipping_partner": ref(
+                    "sale_order_import_edifact.partner_edi_shipto_dm"
+                ),
+                "products": ref("sale_order_import_edifact.product_product_edifact1_dm")
+                + ref("sale_order_import_edifact.product_product_edifact2_dm")
+                + ref("sale_order_import_edifact.product_product_edifact3_dm"),
+                "price": [1.0, 1.0, 1.0],
+            }
+        )
+    }

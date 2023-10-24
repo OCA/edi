@@ -6,7 +6,7 @@ import base64
 from odoo.tests.common import TransactionCase
 from odoo.tools import mute_logger
 
-from .common import get_test_data, get_test_data_no_ean_in_lin
+from .common import get_test_data, get_test_data_no_ean_in_lin, get_test_data_no_price
 
 
 class TestEdifactOrderImport(TransactionCase):
@@ -78,3 +78,32 @@ class TestEdifactOrderImport(TransactionCase):
                 self.assertEqual(
                     so.order_line.mapped("name")[0], "Product1 description"
                 )
+
+    @mute_logger("odoo.addons.sale_order_import.wizard.sale_order_import")
+    def test_edifact_order_import_no_price(self):
+        tests = get_test_data_no_price(self.env)
+        for filename, expected in tests.items():
+            edifact_file = expected._get_content()
+            wiz = self.env["sale.order.import"].create(
+                {
+                    "import_type": "edifact",
+                    "order_file": base64.b64encode(edifact_file),
+                    "order_filename": filename,
+                }
+            )
+            action = wiz.import_order_button()
+            so = self.env["sale.order"].browse(action["res_id"])
+            self.assertEqual(so.partner_id, expected["partner"])
+
+            if expected.get("client_order_ref"):
+                self.assertEqual(so.client_order_ref, expected["client_order_ref"])
+
+            if expected.get("shipping_partner"):
+                self.assertEqual(so.partner_shipping_id, expected["shipping_partner"])
+
+            if expected.get("products"):
+                expected_ids = sorted(expected["products"].ids)
+                self.assertEqual(
+                    sorted(so.order_line.mapped("product_id").ids), expected_ids
+                )
+                self.assertEqual(so.order_line.mapped("price_unit"), expected["price"])
