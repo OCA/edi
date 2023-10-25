@@ -60,6 +60,11 @@ msgid "Commercial Entity"
 msgstr ""
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__confirm_order
+msgid "Confirm Order"
+msgstr ""
+
+#. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid "Create New"
 msgstr ""
