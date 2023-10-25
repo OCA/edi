@@ -145,3 +145,30 @@ class TestOrderImport(TestCommon):
 
         self.assertEqual(len(so.order_line), 2)
         self.assertEqual(so.order_line[0].product_uom_qty, 3)
+
+    def test_confirm_order(self):
+        # Prepare test data
+        order_file_data = base64.b64encode(
+            b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        )
+        order_filename = "test_order.xml"
+        mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
+        # Create a new form
+        with Form(
+            self.wiz_model.with_context(
+                default_order_filename=order_filename,
+                default_confirm_order=True,
+            )
+        ) as form:
+            with mock_parse_order as mocked:
+                # Return 'rfq' for doc_type
+                mocked.return_value = "rfq"
+                # Set values for the required fields
+                form.import_type = "xml"
+                form.order_file = order_file_data
+                # Test the button with the simulated values
+                mocked.return_value = self.parsed_order
+                action = form.save().import_order_button()
+                so = self.env["sale.order"].browse(action["res_id"])
+                # Check the state of the order
+                self.assertEqual(so.state, "sale")
