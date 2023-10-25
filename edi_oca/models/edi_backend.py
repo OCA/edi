@@ -453,7 +453,7 @@ class EDIBackend(models.Model):
         check = self._exchange_process_check(exchange_record)
         if not check:
             return False
-        state = exchange_record.edi_exchange_state
+        old_state = state = exchange_record.edi_exchange_state
         error = False
         message = None
         try:
@@ -478,7 +478,10 @@ class EDIBackend(models.Model):
                     "exchanged_on": fields.Datetime.now(),
                 }
             )
-            if state == "input_processed_error":
+            if (
+                state == "input_processed_error"
+                and old_state != "input_processed_error"
+            ):
                 exchange_record._notify_error("process_ko")
             elif state == "input_processed":
                 exchange_record._notify_done()
