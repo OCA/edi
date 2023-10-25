@@ -8,6 +8,11 @@
                 <field name="type_id" />
                 <field name="identifier" />
                 <field name="external_identifier" optional="hide" />
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="hide"
+                />
                 <field name="related_name" optional="hide" />
                 <field name="res_id" groups="base.group_no_one" optional="hide" />
                 <field name="model" groups="base.group_no_one" optional="hide" />
@@ -97,6 +102,10 @@
                         <group name="config">
                             <field name="type_id" />
                             <field name="backend_id" options="{'no_create': True}" />
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                            />
                         </group>
                         <group name="status" string="Status">
                             <field name="exchanged_on" />
