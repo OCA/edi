@@ -56,6 +56,8 @@ class SaleOrderImport(models.TransientModel):
         "res.partner", string="Shipping Address", readonly=True
     )
     sale_id = fields.Many2one("sale.order", string="Quotation to Update")
+    # Confirm order after creating Sale Order
+    confirm_order = fields.Boolean(default=False)
 
     @api.onchange("order_file")
     def order_file_change(self):
@@ -320,6 +322,9 @@ class SaleOrderImport(models.TransientModel):
         order = soo.create(so_vals)
         bdio.post_create_or_update(parsed_order, order, doc_filename=order_filename)
         logger.info("Sale Order ID %d created", order.id)
+        if self.confirm_order:
+            order.action_confirm()
+            logger.info("Sale Order ID %d confirmed", order.id)
         return order
 
     @api.model
