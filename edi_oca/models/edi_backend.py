@@ -453,7 +453,7 @@ class EDIBackend(models.Model):
         check = self._exchange_process_check(exchange_record)
         if not check:
             return False
-        state = exchange_record.edi_exchange_state
+        old_state = state = exchange_record.edi_exchange_state
         error = False
         message = None
         try:
