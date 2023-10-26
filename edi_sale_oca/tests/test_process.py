@@ -29,11 +29,10 @@ class TestProcessComponent(TransactionComponentCase, EDIBackendTestMixin):
             components:
                 process:
                     usage: input.process.sale.order
-            sale_order_import:
-                wiz_ctx:
-                    random_key: custom
-                    default_price_source: 'pricelist'
-                    default_import_type: 'xml'
+                    env_ctx:
+                        default_price_source: 'pricelist'
+                        default_import_type: 'xml'
+                        random_key: custom
             """
             ),
         )
