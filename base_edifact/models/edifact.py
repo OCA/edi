@@ -70,7 +70,11 @@ class BasePydifact(models.AbstractModel):
 
     @api.model
     def _loads_edifact(self, order_file):
-        interchange = Interchange.from_str(order_file.decode())
+        # TODO: use chardet library for get encoding
+        try:
+            interchange = Interchange.from_str(order_file.decode())
+        except UnicodeDecodeError:
+            interchange = Interchange.from_str(order_file.decode("latin-1"))
         return interchange
 
     @api.model
@@ -82,7 +86,11 @@ class BasePydifact(models.AbstractModel):
     @api.model
     def map2odoo_date(self, dt):
         # '102'
-        dtt = datetime.datetime.strptime(dt[1], "%Y%m%d")
+        date_format = "%Y%m%d%H%M%S"
+        length_dt = len(dt[1])
+        if length_dt % 2 == 0 and length_dt in range(8, 13, 2):
+            date_format = date_format[0 : length_dt - 2]
+        dtt = datetime.datetime.strptime(dt[1], date_format)
         return dtt.date()
 
     @api.model
@@ -138,22 +146,30 @@ class BasePydifact(models.AbstractModel):
         nameref = self.MAP_AGENCY_CODE_2_RES_PARTNER_NAMEREF.get(agency_code, "gln")
         address["partner"][nameref] = party_id
         d = address["address"]
+        # Fallback if address information is missing
+        try:
+            if isinstance(seg, Segment):
+                lenght_seg = len(seg.elements)
+            else:
+                lenght_seg = len(seg)
+        except ValueError:
+            lenght_seg = 0
         # PARTY NAME
-        if bool(seg[2]):
+        if lenght_seg > 2 and bool(seg[2]):
             d["name"] = seg[2]
-        if bool(seg[3]):
+        if lenght_seg > 3 and bool(seg[3]):
             d["name"] = "{}{}".format(f"{d['name']}. " if d.get("name") else "", seg[3])
-        if bool(seg[4]):
+        if lenght_seg > 4 and bool(seg[4]):
             # Street address and/or PO Box number in a structured address: one to three lines.
             d["street"] = seg[4]
-        if bool(seg[5]):
+        if lenght_seg > 5 and bool(seg[5]):
             d["city"] = seg[5]
-        if bool(seg[6]):
+        if lenght_seg > 6 and bool(seg[6]):
             # Country sub-entity identification
             d["state_code"] = seg[6]
-        if bool(seg[7]):
+        if lenght_seg > 7 and bool(seg[7]):
             d["zip"] = seg[7]
-        if bool(seg[8]):
+        if lenght_seg > 8 and bool(seg[8]):
             # Country, coded ISO 3166
             d["country_code"] = seg[8]
 
@@ -172,16 +188,22 @@ class BasePydifact(models.AbstractModel):
         }
 
     @api.model
-    def map2odoo_product(self, seg):
+    def map2odoo_product(self, seg, pia=None):
         """
         :seg: LIN segment
             ['1', '', ['8885583503464', 'EN']]
         EN. International Article Numbering Association (EAN)
         UP. UPC (Universal product code)
         SRV. GTIN
+        :product_info: PIA segment
+            ['5', ['1276', 'SA', '', '9']]
+        SA. Supplier's Article Number
         """
         product = seg[2]
         pct = product[1]
+        # Fallback on SA if no EAN given
+        if not product[0] and pia[1][0]:
+            return dict(code=pia[1][0])
         return dict(code=product[0]) if pct == "SRV" else dict(barcode=product[0])
 
     @api.model
@@ -193,14 +215,30 @@ class BasePydifact(models.AbstractModel):
         return float(seg[0][1])
 
     @api.model
-    def map2odoo_unit_price(self, seg):
+    def map2odoo_unit_price(self, seg=None):
         """
         'PRI' EDI segment: [['AAA', '19.75']]
         Price qualifier:
         * 'AAA'. Calculation net
         * 'AAB'. Calculation gross
         """
-        pri = seg[0]
-        if pri[0] == "AAA":
-            return float(pri[1])
+        if seg:
+            pri = seg[0]
+            if pri[0] == "AAA":
+                return float(pri[1])
+            # TODO: Add price calculation formula
+            if pri[0] == "AAB":
+                return float(pri[1])
         return 0.0
+
+    @api.model
+    def map2odoo_description(self, seg):
+        """
+        'IMD' EDI segment: ['F', '79', ['', '', '', 'Description']]
+        F: Label
+        79: Other description
+        """
+        if seg:
+            description = seg[2][3]
+            return description
+        return None
