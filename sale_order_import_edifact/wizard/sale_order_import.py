@@ -38,7 +38,7 @@ class SaleOrderImport(models.TransientModel):
             path, ext = os.path.splitext(self.order_filename)
             ok = ext and ext[1:] in extensions
             if not ok:
-                ok = b64decode(self.order_file[:4]) == b"UNB"
+                ok = b64decode(self.order_file[:4]) in (b"UNA", b"UNB")
             rec.edifact_ok = ok
 
     # TODO: Move this feature to the base module or to an additional module.
@@ -77,7 +77,7 @@ class SaleOrderImport(models.TransientModel):
     def _get_supported_types(self):
         # Add more types for EDIFACT
         res = super()._get_supported_types()
-        res.update({"edifact": ("text/plain")})
+        res.update({"edifact": ("text/plain", None)})
         return res
 
     @api.model
