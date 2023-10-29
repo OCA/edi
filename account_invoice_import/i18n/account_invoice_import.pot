@@ -341,7 +341,6 @@ msgid "Invoice Import Configuration"
 msgstr ""
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_tree
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "Invoice Import Configurations"
 msgstr ""
