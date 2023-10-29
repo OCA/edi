@@ -264,7 +264,6 @@ msgstr "Si coché, de nouveaux messages demandent votre attention."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_error
-#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Si coché, certains messages ont une erreur d’envoi."
 
@@ -359,7 +358,6 @@ msgid "Invoice Import Configuration"
 msgstr "Configuration de l'import de factures"
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_tree
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "Invoice Import Configurations"
 msgstr "Configurations de l'import de factures"
@@ -532,11 +530,6 @@ msgstr "Contact non trouvé"
 #: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__invoice_type__in_refund
 msgid "Refund"
 msgstr "Remboursement"
-
-#. module: account_invoice_import
-#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_sms_error
-msgid "SMS Delivery error"
-msgstr "Erreur d’envoi de SMS"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
@@ -968,6 +961,9 @@ msgstr "e-mail envoyé par <b>%s</b> le %s avec l'objet <b>%s</b>"
 #, python-format
 msgid "unspecified"
 msgstr "non renseigné"
+
+#~ msgid "SMS Delivery error"
+#~ msgstr "Erreur d’envoi de SMS"
 
 #~ msgid ""
 #~ "This type of PDF invoice is not supported. Did you install the module to "
