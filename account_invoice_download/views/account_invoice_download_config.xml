@@ -86,7 +86,7 @@
         <field name="name">account.invoice.download.config.tree</field>
         <field name="model">account.invoice.download.config</field>
         <field name="arch" type="xml">
-            <tree string="Invoice Download Configurations">
+            <tree>
                 <field name="name" decoration-bf="1" />
                 <field
                     name="import_config_id"

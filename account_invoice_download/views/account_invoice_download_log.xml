@@ -34,7 +34,7 @@
     <field name="name">account.invoice.download.log.tree</field>
     <field name="model">account.invoice.download.log</field>
     <field name="arch" type="xml">
-        <tree string="Invoice Download Logs">
+        <tree>
             <field name="create_date" string="Date" />
             <field
                     name="partner_id"
