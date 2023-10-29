@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Download",
-    "version": "14.0.1.0.1",
+    "version": "14.0.1.0.2",
     "category": "Accounting",
     "license": "AGPL-3",
     "summary": "Auto-download supplier invoices and import them",
