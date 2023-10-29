@@ -245,11 +245,6 @@ msgid "Invoice Download Configuration"
 msgstr "Factuur Download Configuratie"
 
 #. module: account_invoice_download
-#: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_tree
-msgid "Invoice Download Configurations"
-msgstr "Factuur Download Configuraties"
-
-#. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_credentials_form
 msgid "Invoice Download Credentials"
 msgstr "Factuur Download Inloggegevens"
@@ -262,7 +257,6 @@ msgstr "Factuur Download logboek"
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_graph
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_pivot
-#: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_tree
 msgid "Invoice Download Logs"
 msgstr "Factuur download logboek"
 
@@ -482,6 +476,9 @@ msgstr "Gids voor het vragen van inloggegevens om facturen te downloaden"
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__years
 msgid "Year(s)"
 msgstr ""
+
+#~ msgid "Invoice Download Configurations"
+#~ msgstr "Factuur Download Configuraties"
 
 #~ msgid "OVH"
 #~ msgstr "OVH"
