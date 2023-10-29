@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<odoo>
-    <data noupdate="1">
+<odoo noupdate="1">
         <record id="mail_activity_transmit_warning" model="mail.activity.type">
             <field name="name">Transmission Error</field>
             <field name="icon">fa-warning</field>
@@ -8,5 +7,4 @@
             <field name="sequence">99</field>
             <field name="decoration_type">warning</field>
         </record>
-    </data>
 </odoo>
