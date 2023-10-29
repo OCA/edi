@@ -59,7 +59,7 @@
     <record id="account_invoice_import_config_tree" model="ir.ui.view">
         <field name="model">account.invoice.import.config</field>
         <field name="arch" type="xml">
-            <tree string="Invoice Import Configurations">
+            <tree>
                 <field name="sequence" widget="handle" />
                 <field name="partner_id" />
                 <field name="name" />

@@ -261,7 +261,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_error
-#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
@@ -346,7 +345,6 @@ msgid "Invoice Import Configuration"
 msgstr "Configuración de importación de facturas"
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_tree
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "Invoice Import Configurations"
 msgstr "Configuraciones de importación de facturas"
@@ -520,11 +518,6 @@ msgstr ""
 #: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__invoice_type__in_refund
 msgid "Refund"
 msgstr "Reembolso"
-
-#. module: account_invoice_import
-#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_sms_error
-msgid "SMS Delivery error"
-msgstr ""
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
