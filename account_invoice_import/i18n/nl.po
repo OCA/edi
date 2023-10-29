@@ -258,7 +258,6 @@ msgstr "Indien aangevinkt, nieuwe berichten vereisen uw aandacht."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_error
-#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Indien aangemerkt enkele berichten hebben afleveringsproblemen."
 
@@ -351,7 +350,6 @@ msgid "Invoice Import Configuration"
 msgstr "Factuur import instellingen"
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_tree
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "Invoice Import Configurations"
 msgstr "Factuur Importeer instellingen"
@@ -526,11 +524,6 @@ msgstr "Partner niet gevonden"
 #: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import__invoice_type__in_refund
 msgid "Refund"
 msgstr "Credit"
-
-#. module: account_invoice_import
-#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_sms_error
-msgid "SMS Delivery error"
-msgstr "SMS afleveringsfout"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_config_search
@@ -945,6 +938,9 @@ msgstr "email verzonden door <b>%s</b> op %s met als onderwerp <b>%s</b>"
 #, python-format
 msgid "unspecified"
 msgstr "ongespecificeerd"
+
+#~ msgid "SMS Delivery error"
+#~ msgstr "SMS afleveringsfout"
 
 #~ msgid ""
 #~ "This type of PDF invoice is not supported. Did you install the module to "
