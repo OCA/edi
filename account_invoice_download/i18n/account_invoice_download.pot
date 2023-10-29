@@ -241,11 +241,6 @@ msgid "Invoice Download Configuration"
 msgstr ""
 
 #. module: account_invoice_download
-#: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_tree
-msgid "Invoice Download Configurations"
-msgstr ""
-
-#. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_credentials_form
 msgid "Invoice Download Credentials"
 msgstr ""
@@ -258,7 +253,6 @@ msgstr ""
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_graph
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_pivot
-#: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_tree
 msgid "Invoice Download Logs"
 msgstr ""
 
