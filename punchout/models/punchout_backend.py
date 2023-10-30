@@ -67,3 +67,7 @@ class PunchoutBackend(models.Model):
             .with_context(punchout_backend_id=self.id,)
             ._redirect_to_punchout()
         )
+
+    def _get_redirect_url(self):
+        self.ensure_one()
+        return "/web"
