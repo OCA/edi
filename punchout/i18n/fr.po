@@ -90,7 +90,7 @@ msgstr ""
 #: code:addons/punchout/models/punchout_request.py:0
 #, python-format
 msgid "Done"
-msgstr "Tratiée"
+msgstr "Traitée"
 
 #. module: punchout
 #: code:addons/punchout/models/punchout_request.py:0
@@ -175,7 +175,7 @@ msgstr ""
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__buyer_cookie_encryption_key
 msgid "Key to encrypt the buyer cookie"
-msgstr ""
+msgstr "Clé pour l'encryption du buyer cookie"
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend____last_update
@@ -225,7 +225,7 @@ msgstr ""
 #: code:addons/punchout/models/punchout_request.py:0
 #, python-format
 msgid "No punchout backend found to initialize the connection."
-msgstr "Aucun backend punchout trouvé pour initialisé la connexion."
+msgstr "Aucun backend punchout trouvé pour initialiser la connexion."
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_request__message_needaction_counter
