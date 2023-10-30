@@ -340,3 +340,7 @@ class PunchoutRequest(models.Model):
         self._check_action_process_allowed()
         self.sudo().write({"state": "done", "error_message": False})
         return True
+
+    def _get_redirect_url(self):
+        self.ensure_one()
+        return "/web"
