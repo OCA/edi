@@ -34,6 +34,7 @@
           <div class="oe_button_box" name="button_box" />
           <group>
             <group>
+              <field name="backend_id" />
               <field name="user_id" />
               <field name="buyer_cookie_id" />
             </group>
@@ -67,6 +68,7 @@
     <field name="model">punchout.request</field>
     <field name="arch" type="xml">
       <search>
+        <field name="backend_id" />
         <field name="user_id" />
         <field name="buyer_cookie_id" />
       </search>
@@ -82,6 +84,7 @@
                 decoration-info="state == 'to_process'"
             >
         <field name="create_date" />
+        <field name="backend_id" />
         <field name="user_id" />
         <field name="buyer_cookie_id" />
         <field name="state" />
