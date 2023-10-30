@@ -14,6 +14,7 @@
                         icon="fa-sign-in"
                         string="Access"
                     />
+            <field name="state" widget="statusbar" clickable="1" />
         </header>
         <sheet>
           <div name="button_box" class="oe_button_box" />
@@ -74,6 +75,40 @@
                     />
         </group>
       </search>
+    </field>
+  </record>
+  <record model="ir.ui.view" id="punchout_backend_kanban_view">
+    <field name="model">punchout.backend</field>
+    <field name="arch" type="xml">
+      <kanban>
+        <field name="name" />
+        <templates>
+          <t t-name="kanban-box">
+            <div class="oe_kanban_vignette" style="padding: 5px 5px 5px 5px;">
+                <h2>
+                    <field name="name" />
+                </h2>
+              <div class="oe_kanban_details">
+
+              </div>
+                <div class="o_kanban_record_bottom">
+                  <div class="oe_kanban_bottom_left">
+
+                    </div>
+                  <div class="oe_kanban_bottom_right">
+                        <button
+                                        name="redirect_to_backend"
+                                        type="object"
+                                        class="btn btn-primary"
+                                    >
+                            <i class="fa fa-sign-in" /> Access
+                        </button>
+                    </div>
+                </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
     </field>
   </record>
   <!--ACTION-->

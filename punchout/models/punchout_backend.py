@@ -1,7 +1,7 @@
 # Copyright 2023 ACSONE SA/NV
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -14,11 +14,19 @@ class PunchoutBackend(models.Model):
 
     name = fields.Char(string="Name", required=True,)
     url = fields.Char(string="URL", required=True,)
-    from_domain = fields.Char(string="From domain", required=True,)
-    from_identity = fields.Char(string="From identity", required=True,)
+    from_domain = fields.Char(
+        string="From domain", required=True, groups="base.group_system",
+    )
+    from_identity = fields.Char(
+        string="From identity", required=True, groups="base.group_system",
+    )
     to_domain = fields.Char(string="To domain", required=True,)
-    to_identity = fields.Char(string="To identity", required=True,)
-    shared_secret = fields.Char(string="Shared secret", required=True,)
+    to_identity = fields.Char(
+        string="To identity", required=True, groups="base.group_system",
+    )
+    shared_secret = fields.Char(
+        string="Shared secret", required=True, groups="base.group_system",
+    )
     user_agent = fields.Char(string="User agent", required=True,)
     deployment_mode = fields.Char(
         string="Deployment mode", help="Test or production", required=True,
@@ -29,8 +37,19 @@ class PunchoutBackend(models.Model):
         required=True,
     )
     buyer_cookie_encryption_key = fields.Char(
-        string="Key to encrypt the buyer cookie", required=True,
+        string="Key to encrypt the buyer cookie",
+        groups="base.group_system",
+        required=True,
     )
+    state = fields.Selection(selection="_selection_state", default="draft")
+
+    @api.model
+    def _selection_state(self):
+        return [
+            ("draft", _("Draft")),
+            ("open", _("Open")),
+            ("closed", _("Closed")),
+        ]
 
     def _get_domain_and_identity(self, credential_type):
         self.ensure_one()
@@ -60,8 +79,16 @@ class PunchoutBackend(models.Model):
 
         return "/".join([base_url, url, str(self.id)])
 
+    def _check_access_backend(self):
+        """
+        Inherit this method to check if current user can access
+        the backend website
+        """
+        return True
+
     def redirect_to_backend(self):
         self.ensure_one()
+        self._check_access_backend()
         return (
             self.env["punchout.request"]
             .with_context(punchout_backend_id=self.id,)
