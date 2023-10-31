@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="wamas_document_template_view_tree" model="ir.ui.view">
+        <field name="name">wamas.document.template.view.tree</field>
+        <field name="model">wamas.document.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="code" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="wamas_document_template_view_form" model="ir.ui.view">
+        <field name="name">wamas.document.template.view.form</field>
+        <field name="model">wamas.document.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="code" />
+                    </group>
+                    <notebook>
+                        <page string="Lines of Elements" name="fields">
+                            <field name="line_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="element_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="wamas_document_template_view_search" model="ir.ui.view">
+        <field name="name">wamas.document.template.view.search</field>
+        <field name="model">wamas.document.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="code" />
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wamas_document_template" model="ir.actions.act_window">
+        <field name="name">WAMAS Document Template</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wamas.document.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="wamas_document_template_view_search" />
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+
+    <record id="ias_get_ubl_version" model="ir.actions.server">
+        <field name="name">get_ubl_version</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+action = record.ubl_version or "2.2"
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_PartyName_Name" model="ir.actions.server">
+        <field name="name">get_ubl_Party_PartyName_Name</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.name or ""
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_PostalAddress_StreetName" model="ir.actions.server">
+        <field name="name">get_ubl_Party_PostalAddress_StreetName</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.street or ""
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_PostalAddress_CityName" model="ir.actions.server">
+        <field name="name">get_ubl_Party_PostalAddress_CityName</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.city or ""
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_PostalAddress_PostalZone" model="ir.actions.server">
+        <field name="name">get_ubl_Party_PostalAddress_PostalZone</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.zip or ""
+        </field>
+    </record>
+
+    <record
+        id="ias_get_ubl_Party_PostalAddress_CountrySubentity"
+        model="ir.actions.server"
+    >
+        <field name="name">get_ubl_Party_PostalAddress_CountrySubentity</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.state_id and company.partner_id.state_id.name or ""
+        </field>
+    </record>
+
+    <record
+        id="ias_get_ubl_Party_PostalAddress_Country_IdentificationCode"
+        model="ir.actions.server"
+    >
+        <field
+            name="name"
+        >get_ubl_Party_PostalAddress_Country_IdentificationCode</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.country_id and company.partner_id.country_id.code or ""
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_PartyTaxScheme_CompanyID" model="ir.actions.server">
+        <field name="name">get_ubl_Party_PartyTaxScheme_CompanyID</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.vat or ""
+        </field>
+    </record>
+
+    <record
+        id="ias_get_ubl_Party_PartyTaxScheme_TaxScheme_ID"
+        model="ir.actions.server"
+    >
+        <field name="name">get_ubl_Party_PartyTaxScheme_TaxScheme_ID</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+action = ""
+        </field>
+    </record>
+
+    <record
+        id="ias_get_ubl_Party_PartyTaxScheme_TaxScheme_TaxTypeCode"
+        model="ir.actions.server"
+    >
+        <field name="name">get_ubl_Party_PartyTaxScheme_TaxScheme_TaxTypeCode</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+action = ""
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_Contact_Name" model="ir.actions.server">
+        <field name="name">get_ubl_Party_Contact_Name</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.child_ids and company.partner_id.child_ids[0].name or ""
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_Contact_Telephone" model="ir.actions.server">
+        <field name="name">get_ubl_Party_Contact_Telephone</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.child_ids and company.partner_id.child_ids[0].phone or ""
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_Contact_Telefax" model="ir.actions.server">
+        <field name="name">get_ubl_Party_Contact_Telefax</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+action = ""
+        </field>
+    </record>
+
+    <record id="ias_get_ubl_Party_Contact_ElectronicMail" model="ir.actions.server">
+        <field name="name">get_ubl_Party_Contact_ElectronicMail</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="state">code</field>
+        <field name="code">
+company = record._get_default_company()
+action = company.partner_id.child_ids and company.partner_id.child_ids[0].email or ""
+        </field>
+    </record>
+
+</odoo>

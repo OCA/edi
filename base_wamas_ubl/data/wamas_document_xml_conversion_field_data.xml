@@ -1,0 +1,1348 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+
+    <!-- WEAKQ/WEAPQ to XML -->
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_UBLVersionID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">10</field>
+        <field name="namespace">cbc</field>
+        <field name="name">UBLVersionID</field>
+        <field name="parent_id" eval="False" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="default_server_action_id" ref="ias_get_ubl_version" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_ID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">20</field>
+        <field name="namespace">cbc</field>
+        <field name="name">ID</field>
+        <field name="parent_id" eval="False" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weakq" />
+        <field name="field_id" eval="False" />
+        <field
+            name="df_field_line_id"
+            ref="base_wamas.wamas_document_default_field_template_weakq_f_telegram_sequence"
+        />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_IssueDate"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">30</field>
+        <field name="namespace">cbc</field>
+        <field name="name">IssueDate</field>
+        <field name="ttype">date</field>
+        <field name="parent_id" eval="False" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weakq" />
+        <field name="field_id" eval="False" />
+        <field
+            name="df_field_line_id"
+            ref="base_wamas.wamas_document_default_field_template_weakq_f_creation_time"
+        />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_OrderReference"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">40</field>
+        <field name="namespace">cac</field>
+        <field name="name">OrderReference</field>
+        <field name="parent_id" eval="False" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_OrderReference_ID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">50</field>
+        <field name="namespace">cbc</field>
+        <field name="name">ID</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_OrderReference" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weapq" />
+        <field
+            name="field_id"
+            ref="base_wamas.wamas_document_field_weapq_em_notice_number"
+        />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_OrderReference_IssueDate"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">60</field>
+        <field name="namespace">cbc</field>
+        <field name="name">IssueDate</field>
+        <field name="ttype">date</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_OrderReference" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weakq" />
+        <field
+            name="field_id"
+            ref="base_wamas.wamas_document_field_weakq_delivery_date"
+        />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">70</field>
+        <field name="namespace">cac</field>
+        <field name="name">DespatchSupplierParty</field>
+        <field name="parent_id" eval="False" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_CustomerAssignedAccountID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">80</field>
+        <field name="namespace">cbc</field>
+        <field name="name">CustomerAssignedAccountID</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weakq" />
+        <field
+            name="field_id"
+            ref="base_wamas.wamas_document_field_weakq_vendor_code"
+        />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">90</field>
+        <field name="namespace">cac</field>
+        <field name="name">Party</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PartyName"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">100</field>
+        <field name="namespace">cac</field>
+        <field name="name">PartyName</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PartyName_Name"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">110</field>
+        <field name="namespace">cbc</field>
+        <field name="name">Name</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PartyName"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">120</field>
+        <field name="namespace">cac</field>
+        <field name="name">PostalAddress</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress_StreetName"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">130</field>
+        <field name="namespace">cbc</field>
+        <field name="name">StreetName</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress_CityName"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">140</field>
+        <field name="namespace">cbc</field>
+        <field name="name">CityName</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress_PostalZone"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">150</field>
+        <field name="namespace">cbc</field>
+        <field name="name">PostalZone</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress_Country"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">160</field>
+        <field name="namespace">cac</field>
+        <field name="name">Country</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress_Country_IdentificationCode"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">170</field>
+        <field name="namespace">cbc</field>
+        <field name="name">IdentificationCode</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_PostalAddress_Country"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_Contact"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">180</field>
+        <field name="namespace">cac</field>
+        <field name="name">Contact</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_Contact_Telephone"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">190</field>
+        <field name="namespace">cbc</field>
+        <field name="name">Telephone</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_Contact"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_Contact_Telefax"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">200</field>
+        <field name="namespace">cbc</field>
+        <field name="name">Telefax</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_Contact"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_Contact_ElectronicMail"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">210</field>
+        <field name="namespace">cbc</field>
+        <field name="name">ElectronicMail</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchSupplierParty_Party_Contact"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">220</field>
+        <field name="namespace">cac</field>
+        <field name="name">DeliveryCustomerParty</field>
+        <field name="parent_id" eval="False" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">230</field>
+        <field name="namespace">cac</field>
+        <field name="name">Party</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyName"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">240</field>
+        <field name="namespace">cac</field>
+        <field name="name">PartyName</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyName_Name"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">250</field>
+        <field name="namespace">cbc</field>
+        <field name="name">Name</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyName"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="default_server_action_id" ref="ias_get_ubl_Party_PartyName_Name" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">260</field>
+        <field name="namespace">cac</field>
+        <field name="name">PostalAddress</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress_StreetName"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">270</field>
+        <field name="namespace">cbc</field>
+        <field name="name">StreetName</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_PostalAddress_StreetName"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress_CityName"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">280</field>
+        <field name="namespace">cbc</field>
+        <field name="name">CityName</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_PostalAddress_CityName"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress_PostalZone"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">290</field>
+        <field name="namespace">cbc</field>
+        <field name="name">PostalZone</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_PostalAddress_PostalZone"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress_CountrySubentity"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">300</field>
+        <field name="namespace">cbc</field>
+        <field name="name">CountrySubentity</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_PostalAddress_CountrySubentity"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress_Country"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">310</field>
+        <field name="namespace">cac</field>
+        <field name="name">Country</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress_Country_IdentificationCode"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">320</field>
+        <field name="namespace">cbc</field>
+        <field name="name">IdentificationCode</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PostalAddress_Country"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_PostalAddress_Country_IdentificationCode"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">330</field>
+        <field name="namespace">cac</field>
+        <field name="name">PartyTaxScheme</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme_CompanyID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">340</field>
+        <field name="namespace">cbc</field>
+        <field name="name">CompanyID</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_PartyTaxScheme_CompanyID"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme_TaxScheme"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">350</field>
+        <field name="namespace">cac</field>
+        <field name="name">TaxScheme</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme_TaxScheme_ID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">360</field>
+        <field name="namespace">cbc</field>
+        <field name="name">ID</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme_TaxScheme"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_PartyTaxScheme_TaxScheme_ID"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme_TaxScheme_TaxTypeCode"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">370</field>
+        <field name="namespace">cbc</field>
+        <field name="name">TaxTypeCode</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_PartyTaxScheme_TaxScheme"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_PartyTaxScheme_TaxScheme_TaxTypeCode"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">380</field>
+        <field name="namespace">cac</field>
+        <field name="name">Contact</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact_Name"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">390</field>
+        <field name="namespace">cbc</field>
+        <field name="name">Name</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="default_server_action_id" ref="ias_get_ubl_Party_Contact_Name" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact_Telephone"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">400</field>
+        <field name="namespace">cbc</field>
+        <field name="name">Telephone</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_Contact_Telephone"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact_Telefax"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">410</field>
+        <field name="namespace">cbc</field>
+        <field name="name">Telefax</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_Contact_Telefax"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact_ElectronicMail"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">420</field>
+        <field name="namespace">cbc</field>
+        <field name="name">ElectronicMail</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DeliveryCustomerParty_Party_Contact"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field
+            name="default_server_action_id"
+            ref="ias_get_ubl_Party_Contact_ElectronicMail"
+        />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_Shipment"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">430</field>
+        <field name="namespace">cac</field>
+        <field name="name">Shipment</field>
+        <field name="parent_id" eval="False" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_Shipment_ID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">440</field>
+        <field name="namespace">cbc</field>
+        <field name="name">ID</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_Shipment" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_Shipment_Delivery"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">450</field>
+        <field name="namespace">cac</field>
+        <field name="name">Delivery</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_Shipment" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_Shipment_Delivery_EstimatedDeliveryPeriod"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">460</field>
+        <field name="namespace">cac</field>
+        <field name="name">EstimatedDeliveryPeriod</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_Shipment_Delivery" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_Shipment_Delivery_EstimatedDeliveryPeriod_EndDate"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">470</field>
+        <field name="namespace">cbc</field>
+        <field name="name">EndDate</field>
+        <field name="ttype">date</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_Shipment_Delivery_EstimatedDeliveryPeriod"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weakq" />
+        <field
+            name="field_id"
+            ref="base_wamas.wamas_document_field_weakq_finish_time"
+        />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_Shipment_Delivery_EstimatedDeliveryPeriod_EndTime"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">480</field>
+        <field name="namespace">cbc</field>
+        <field name="name">EndTime</field>
+        <field name="ttype">time</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_Shipment_Delivery_EstimatedDeliveryPeriod"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weakq" />
+        <field
+            name="field_id"
+            ref="base_wamas.wamas_document_field_weakq_finish_time"
+        />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">490</field>
+        <field name="namespace">cac</field>
+        <field name="name">DespatchLine</field>
+        <field name="parent_id" eval="False" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="True" />
+        <field name="freq_element_id" ref="base_wamas.wamas_document_element_weapq" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine_ID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">500</field>
+        <field name="namespace">cbc</field>
+        <field name="name">ID</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_DespatchLine" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weapq" />
+        <field
+            name="field_id"
+            ref="base_wamas.wamas_document_field_weapq_external_reference"
+        />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine_DeliveredQuantity"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">510</field>
+        <field name="namespace">cbc</field>
+        <field name="name">DeliveredQuantity</field>
+        <field name="ttype">int</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_DespatchLine" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weapq" />
+        <field name="field_id" ref="base_wamas.wamas_document_field_weapq_quantity" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+        <field name="has_attribute" eval="True" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine_DeliveredQuantity_unitCode"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">511</field>
+        <field name="namespace">cbc</field>
+        <field name="name">DeliveredQuantity[unitCode]</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchLine_DeliveredQuantity"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weapq" />
+        <field name="field_id" ref="base_wamas.wamas_document_field_weapq_stock_unit" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine_OrderLineReference"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">520</field>
+        <field name="namespace">cac</field>
+        <field name="name">OrderLineReference</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_DespatchLine" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine_OrderLineReference_LineID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">530</field>
+        <field name="namespace">cbc</field>
+        <field name="name">LineID</field>
+        <field name="ttype">int</field>
+        <field name="len_field">4</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchLine_OrderLineReference"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weapq" />
+        <field name="field_id" eval="False" />
+        <field
+            name="df_field_line_id"
+            ref="base_wamas.wamas_document_default_field_template_weapq_f_telegram_sequence"
+        />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine_Item"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">540</field>
+        <field name="namespace">cac</field>
+        <field name="name">Item</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_DespatchLine" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine_Item_BuyersItemIdentification"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">550</field>
+        <field name="namespace">cac</field>
+        <field name="name">BuyersItemIdentification</field>
+        <field name="parent_id" ref="wdxc_from_weakq_weapq_to_xml_DespatchLine_Item" />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" eval="False" />
+        <field name="field_id" eval="False" />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+    <record
+        id="wdxc_from_weakq_weapq_to_xml_DespatchLine_Item_BuyersItemIdentification_ID"
+        model="wamas.document.xml.conversion.field"
+    >
+        <field name="sequence">560</field>
+        <field name="namespace">cbc</field>
+        <field name="name">ID</field>
+        <field
+            name="parent_id"
+            ref="wdxc_from_weakq_weapq_to_xml_DespatchLine_Item_BuyersItemIdentification"
+        />
+        <field
+            name="template_id"
+            ref="base_wamas_ubl.wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        />
+        <field name="element_id" ref="base_wamas.wamas_document_element_weapq" />
+        <field
+            name="field_id"
+            ref="base_wamas.wamas_document_field_weapq_item_number"
+        />
+        <field name="df_field_line_id" eval="False" />
+        <field name="default_value" />
+        <field name="default_func" />
+        <field name="is_freq_element" eval="False" />
+    </record>
+
+</odoo>

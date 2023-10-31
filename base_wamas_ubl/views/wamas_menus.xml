@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_edi_wamas_document_xml_conversion_template"
+        name="XML Conversion Template"
+        action="action_wamas_document_xml_conversion_template"
+        parent="base_wamas.menu_edi_wamas_conversion"
+        sequence="10"
+        groups="base_edi.group_edi_manager"
+    />
+
+</odoo>

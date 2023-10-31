@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+
+    <record id="base_wamas.wamas_document_element_weap" model="wamas.document.element">
+        <field name="freq_xml_path">./cac:DespatchLine</field>
+    </record>
+
+</odoo>

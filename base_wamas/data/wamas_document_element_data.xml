@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="wamas_document_element_weak" model="wamas.document.element">
+        <field name="name">WEAK</field>
+        <field name="code">WEAK</field>
+        <field
+            name="df_field_template_id"
+            ref="wamas_document_default_field_template_weak"
+        />
+        <field
+            name="field_ids"
+            eval="[(6, 0, [
+            ref('wamas_document_field_weak_client'),
+            ref('wamas_document_field_weak_em_notice_number'),
+            ref('wamas_document_field_weak_em_host_review_code'),
+            ref('wamas_document_field_weak_external_reference'),
+            ref('wamas_document_field_weak_em_notice_type'),
+            ref('wamas_document_field_weak_mand_supplier'),
+            ref('wamas_document_field_weak_supplier_number'),
+            ref('wamas_document_field_weak_name'),
+            ref('wamas_document_field_weak_name_2'),
+            ref('wamas_document_field_weak_name_3'),
+            ref('wamas_document_field_weak_name_4'),
+            ref('wamas_document_field_weak_call_form'),
+            ref('wamas_document_field_weak_address'),
+            ref('wamas_document_field_weak_address_2'),
+            ref('wamas_document_field_weak_postal_code'),
+            ref('wamas_document_field_weak_location'),
+            ref('wamas_document_field_weak_district'),
+            ref('wamas_document_field_weak_country'),
+            ref('wamas_document_field_weak_phone_number'),
+            ref('wamas_document_field_weak_fax_number'),
+            ref('wamas_document_field_weak_email'),
+            ref('wamas_document_field_weak_home_page'),
+            ref('wamas_document_field_weak_iln_gln'),
+            ref('wamas_document_field_weak_order_date'),
+            ref('wamas_document_field_weak_information_for_wamas'),
+        ])]"
+        />
+    </record>
+
+    <record id="wamas_document_element_weap" model="wamas.document.element">
+        <field name="name">WEAP</field>
+        <field name="code">WEAP</field>
+        <field
+            name="df_field_template_id"
+            ref="wamas_document_default_field_template_weap"
+        />
+        <field
+            name="field_ids"
+            eval="[(6, 0, [
+            ref('wamas_document_field_weap_client'),
+            ref('wamas_document_field_weap_em_notice_number'),
+            ref('wamas_document_field_weap_em_host_review_code'),
+            ref('wamas_document_field_weap_external_reference'),
+            ref('wamas_document_field_weap_host_pos_nr'),
+            ref('wamas_document_field_weap_client_2'),
+            ref('wamas_document_field_weap_item_number'),
+            ref('wamas_document_field_weap_variant'),
+            ref('wamas_document_field_weap_batch'),
+            ref('wamas_document_field_weap_dlc'),
+            ref('wamas_document_field_weap_booking_number'),
+            ref('wamas_document_field_weap_kz_transport_assistance'),
+            ref('wamas_document_field_weap_material_qualifier_1'),
+            ref('wamas_document_field_weap_material_qualifier_2'),
+            ref('wamas_document_field_weap_material_qualifier_3'),
+            ref('wamas_document_field_weap_ordered_quantity'),
+            ref('wamas_document_field_weap_order_unit'),
+            ref('wamas_document_field_weap_type_pos_em'),
+            ref('wamas_document_field_weap_notified_delivery_date'),
+            ref('wamas_document_field_weap_notified_delivery_note_number'),
+            ref('wamas_document_field_weap_notified_delivery_note_date'),
+            ref('wamas_document_field_weap_supplier_item_number'),
+            ref('wamas_document_field_weap_sentence_id'),
+            ref('wamas_document_field_weap_position_finished'),
+            ref('wamas_document_field_weap_feedback'),
+            ref('wamas_document_field_weap_serial_number'),
+            ref('wamas_document_field_weap_information_for_wamas'),
+        ])]"
+        />
+    </record>
+
+    <record id="wamas_document_element_weakq" model="wamas.document.element">
+        <field name="name">WEAKQ</field>
+        <field name="code">WEAKQ</field>
+        <field
+            name="df_field_template_id"
+            ref="wamas_document_default_field_template_weakq"
+        />
+        <field
+            name="field_ids"
+            eval="[(6, 0, [
+            ref('wamas_document_field_weakq_client'),
+            ref('wamas_document_field_weakq_em_transaction_number'),
+            ref('wamas_document_field_weakq_em_notice_id_for_host'),
+            ref('wamas_document_field_weakq_delivery_date'),
+            ref('wamas_document_field_weakq_truck_driver'),
+            ref('wamas_document_field_weakq_truck_license_plate'),
+            ref('wamas_document_field_weakq_truck_entry_time'),
+            ref('wamas_document_field_weakq_start_time'),
+            ref('wamas_document_field_weakq_finish_time'),
+            ref('wamas_document_field_weakq_registration_time'),
+            ref('wamas_document_field_weakq_host_information'),
+            ref('wamas_document_field_weakq_mand_supplier'),
+            ref('wamas_document_field_weakq_vendor_code'),
+        ])]"
+        />
+    </record>
+
+    <record id="wamas_document_element_weapq" model="wamas.document.element">
+        <field name="name">WEAPQ</field>
+        <field name="code">WEAPQ</field>
+        <field
+            name="df_field_template_id"
+            ref="wamas_document_default_field_template_weapq"
+        />
+        <field
+            name="field_ids"
+            eval="[(6, 0, [
+            ref('wamas_document_field_weapq_client'),
+            ref('wamas_document_field_weapq_em_transaction_number'),
+            ref('wamas_document_field_weapq_client_2'),
+            ref('wamas_document_field_weapq_em_notice_number'),
+            ref('wamas_document_field_weapq_em_notice_id_for_host'),
+            ref('wamas_document_field_weapq_external_reference'),
+            ref('wamas_document_field_weapq_host_pos_nr'),
+            ref('wamas_document_field_weapq_delivery_note_number'),
+            ref('wamas_document_field_weapq_client_3'),
+            ref('wamas_document_field_weapq_item_number'),
+            ref('wamas_document_field_weapq_variant'),
+            ref('wamas_document_field_weapq_host_material_qualification_id'),
+            ref('wamas_document_field_weapq_quantity'),
+            ref('wamas_document_field_weapq_weight'),
+            ref('wamas_document_field_weapq_host_weight_unit'),
+            ref('wamas_document_field_weapq_stock_unit'),
+            ref('wamas_document_field_weapq_batch'),
+            ref('wamas_document_field_weapq_dlc'),
+            ref('wamas_document_field_weapq_booking_number'),
+            ref('wamas_document_field_weapq_em_number'),
+            ref('wamas_document_field_weapq_kz_transport_assistance'),
+        ])]"
+        />
+    </record>
+
+</odoo>

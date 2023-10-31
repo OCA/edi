@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record
+        id="wamas_document_default_field_template_weak"
+        model="wamas.document.default.field.template"
+    >
+        <field name="name">Default Field Template - WEAK</field>
+        <field name="code">Default Field Template - WEAK</field>
+    </record>
+
+    <record
+        id="wamas_document_default_field_template_weap"
+        model="wamas.document.default.field.template"
+    >
+        <field name="name">Default Field Template - WEAP</field>
+        <field name="code">Default Field Template - WEAP</field>
+    </record>
+
+    <record
+        id="wamas_document_default_field_template_weakq"
+        model="wamas.document.default.field.template"
+    >
+        <field name="name">Default Field Template - WEAKQ</field>
+        <field name="code">Default Field Template - WEAKQ</field>
+    </record>
+
+    <record
+        id="wamas_document_default_field_template_weapq"
+        model="wamas.document.default.field.template"
+    >
+        <field name="name">Default Field Template - WEAPQ</field>
+        <field name="code">Default Field Template - WEAPQ</field>
+    </record>
+
+</odoo>

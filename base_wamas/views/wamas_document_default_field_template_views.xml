@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="wamas_document_default_field_template_view_tree" model="ir.ui.view">
+        <field name="name">wamas.document.default.field.template.view.tree</field>
+        <field name="model">wamas.document.default.field.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="code" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="wamas_document_default_field_template_view_form" model="ir.ui.view">
+        <field name="name">wamas.document.default.field.template.view.form</field>
+        <field name="model">wamas.document.default.field.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="General Information">
+                        <field name="name" />
+                        <field name="code" />
+                    </group>
+                    <group string="Lists of Default Fields">
+                        <field name="line_ids" nolabel="1" col="4" colspan="2">
+                            <tree>
+                                <field name="sequence" widget="handle" />
+                                <field name="df_field_id" />
+                            </tree>
+                            <form>
+                                <group
+                                    string="General Information"
+                                    name="general_information"
+                                >
+                                    <field name="sequence" />
+                                    <field name="df_field_id" />
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="wamas_document_default_field_template_view_search" model="ir.ui.view">
+        <field name="name">wamas.document.default.field.template.view.search</field>
+        <field name="model">wamas.document.default.field.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="code" />
+            </search>
+        </field>
+    </record>
+
+    <record
+        id="action_wamas_document_default_field_template"
+        model="ir.actions.act_window"
+    >
+        <field name="name">WAMAS Document Default Field Template</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wamas.document.default.field.template</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="search_view_id"
+            ref="wamas_document_default_field_template_view_search"
+        />
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

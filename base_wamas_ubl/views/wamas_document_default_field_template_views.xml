@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record
+        id="wamas_document_default_field_template_view_form_inherit"
+        model="ir.ui.view"
+    >
+        <field name="name">wamas.document.default.field.template.view.form</field>
+        <field name="model">wamas.document.default.field.template</field>
+        <field
+            name="inherit_id"
+            ref="base_wamas.wamas_document_default_field_template_view_form"
+        />
+        <field name="arch" type="xml">
+
+            <xpath
+                expr="//field[@name='line_ids']/form/group[@name='general_information']"
+                position="after"
+            >
+                <group string="UBL → WAMAS Document">
+                    <field name="xml_path" />
+                    <field name="xml_default_value" />
+                    <field name="xml_default_func" />
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

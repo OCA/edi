@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record
+        model="ir.model.access"
+        id="access_wamas_document_xml_conversion_template_edi_manager"
+    >
+        <field
+            name="name"
+        >Access WAMAS Document XML Conversion Template - EDI Manager</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_template"
+        />
+        <field name="group_id" ref="base_edi.group_edi_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record
+        model="ir.model.access"
+        id="access_wamas_document_xml_conversion_field_edi_manager"
+    >
+        <field
+            name="name"
+        >Access WAMAS Document XML Conversion Field - EDI Manager</field>
+        <field
+            name="model_id"
+            ref="base_wamas_ubl.model_wamas_document_xml_conversion_field"
+        />
+        <field name="group_id" ref="base_edi.group_edi_manager" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+</odoo>

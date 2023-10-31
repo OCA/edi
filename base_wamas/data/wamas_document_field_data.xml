@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Fields of element `WEAK` -->
+
+    <record id="wamas_document_field_weak_client" model="wamas.document.field">
+        <field name="name">Client</field>
+        <field name="code">Client</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weak_em_notice_number"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Notice Number</field>
+        <field name="code">EM Notice Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weak_em_host_review_code"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Host Review Code</field>
+        <field name="code">EM Host Review Code</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weak_external_reference"
+        model="wamas.document.field"
+    >
+        <field name="name">External Reference</field>
+        <field name="code">External Reference</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="wamas_document_field_weak_em_notice_type" model="wamas.document.field">
+        <field name="name">EM Notice Type</field>
+        <field name="code">EM Notice Type</field>
+        <field name="ttype">str</field>
+        <field name="len_field">6</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="wamas_document_field_weak_mand_supplier" model="wamas.document.field">
+        <field name="name">Mand. Supplier</field>
+        <field name="code">Mand. Supplier</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">110</field>
+    </record>
+
+    <record id="wamas_document_field_weak_supplier_number" model="wamas.document.field">
+        <field name="name">Supplier Number</field>
+        <field name="code">Supplier Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">13</field>
+        <field name="sequence">120</field>
+    </record>
+
+    <record id="wamas_document_field_weak_name" model="wamas.document.field">
+        <field name="name">Name</field>
+        <field name="code">Name</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">130</field>
+    </record>
+
+    <record id="wamas_document_field_weak_name_2" model="wamas.document.field">
+        <field name="name">Name 2</field>
+        <field name="code">Name 2</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">140</field>
+    </record>
+
+    <record id="wamas_document_field_weak_name_3" model="wamas.document.field">
+        <field name="name">Name 3</field>
+        <field name="code">Name 3</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">150</field>
+    </record>
+
+    <record id="wamas_document_field_weak_name_4" model="wamas.document.field">
+        <field name="name">Name 4</field>
+        <field name="code">Name 4</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">160</field>
+    </record>
+
+    <record id="wamas_document_field_weak_call_form" model="wamas.document.field">
+        <field name="name">Call Form</field>
+        <field name="code">Call Form</field>
+        <field name="ttype">str</field>
+        <field name="len_field">15</field>
+        <field name="sequence">170</field>
+    </record>
+
+    <record id="wamas_document_field_weak_address" model="wamas.document.field">
+        <field name="name">Address</field>
+        <field name="code">Address</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">180</field>
+    </record>
+
+    <record id="wamas_document_field_weak_address_2" model="wamas.document.field">
+        <field name="name">Address 2</field>
+        <field name="code">Address 2</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">190</field>
+    </record>
+
+    <record id="wamas_document_field_weak_postal_code" model="wamas.document.field">
+        <field name="name">Postal Code</field>
+        <field name="code">Postal Code</field>
+        <field name="ttype">str</field>
+        <field name="len_field">10</field>
+        <field name="sequence">200</field>
+    </record>
+
+    <record id="wamas_document_field_weak_location" model="wamas.document.field">
+        <field name="name">Location</field>
+        <field name="code">Location</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">210</field>
+    </record>
+
+    <record id="wamas_document_field_weak_district" model="wamas.document.field">
+        <field name="name">District</field>
+        <field name="code">District</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">220</field>
+    </record>
+
+    <record id="wamas_document_field_weak_country" model="wamas.document.field">
+        <field name="name">Country</field>
+        <field name="code">Country</field>
+        <field name="ttype">str</field>
+        <field name="len_field">4</field>
+        <field name="sequence">230</field>
+    </record>
+
+    <record id="wamas_document_field_weak_phone_number" model="wamas.document.field">
+        <field name="name">Phone Number</field>
+        <field name="code">Phone Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">35</field>
+        <field name="sequence">240</field>
+    </record>
+
+    <record id="wamas_document_field_weak_fax_number" model="wamas.document.field">
+        <field name="name">Fax Number</field>
+        <field name="code">Fax Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">35</field>
+        <field name="sequence">250</field>
+    </record>
+
+    <record id="wamas_document_field_weak_email" model="wamas.document.field">
+        <field name="name">Email</field>
+        <field name="code">Email</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">260</field>
+    </record>
+
+    <record id="wamas_document_field_weak_home_page" model="wamas.document.field">
+        <field name="name">Home Page</field>
+        <field name="code">Home Page</field>
+        <field name="ttype">str</field>
+        <field name="len_field">35</field>
+        <field name="sequence">270</field>
+    </record>
+
+    <record id="wamas_document_field_weak_iln_gln" model="wamas.document.field">
+        <field name="name">ILN/GLN</field>
+        <field name="code">ILN/GLN</field>
+        <field name="ttype">str</field>
+        <field name="len_field">13</field>
+        <field name="sequence">280</field>
+    </record>
+
+    <record id="wamas_document_field_weak_order_date" model="wamas.document.field">
+        <field name="name">Order Date</field>
+        <field name="code">Order Date</field>
+        <field name="ttype">datetime</field>
+        <field name="len_field">14</field>
+        <field name="sequence">290</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weak_information_for_wamas"
+        model="wamas.document.field"
+    >
+        <field name="name">Information for WAMAS</field>
+        <field name="code">Information for WAMAS</field>
+        <field name="ttype">str</field>
+        <field name="len_field">77</field>
+        <field name="sequence">300</field>
+    </record>
+
+    <!-- Fields of element `WEAP` -->
+
+    <record id="wamas_document_field_weap_client" model="wamas.document.field">
+        <field name="name">Client</field>
+        <field name="code">Client</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_em_notice_number"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Notice Number</field>
+        <field name="code">EM Notice Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_em_host_review_code"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Host Review Code</field>
+        <field name="code">EM Host Review Code</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_external_reference"
+        model="wamas.document.field"
+    >
+        <field name="name">External Reference</field>
+        <field name="code">External Reference</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="wamas_document_field_weap_host_pos_nr" model="wamas.document.field">
+        <field name="name">HOST-PosNr</field>
+        <field name="code">HOST-PosNr</field>
+        <field name="ttype">str</field>
+        <field name="len_field">6</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="wamas_document_field_weap_client_2" model="wamas.document.field">
+        <field name="name">Client 2</field>
+        <field name="code">Client 2</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">110</field>
+    </record>
+
+    <record id="wamas_document_field_weap_item_number" model="wamas.document.field">
+        <field name="name">Item Number</field>
+        <field name="code">Item Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">120</field>
+    </record>
+
+    <record id="wamas_document_field_weap_variant" model="wamas.document.field">
+        <field name="name">Variant</field>
+        <field name="code">Variant</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">130</field>
+    </record>
+
+    <record id="wamas_document_field_weap_batch" model="wamas.document.field">
+        <field name="name">Batch</field>
+        <field name="code">Batch</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">140</field>
+    </record>
+
+    <record id="wamas_document_field_weap_dlc" model="wamas.document.field">
+        <field name="name">DLC</field>
+        <field name="code">DLC</field>
+        <field name="ttype">date</field>
+        <field name="len_field">8</field>
+        <field name="sequence">150</field>
+    </record>
+
+    <record id="wamas_document_field_weap_booking_number" model="wamas.document.field">
+        <field name="name">Booking Number</field>
+        <field name="code">Booking Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">160</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_kz_transport_assistance"
+        model="wamas.document.field"
+    >
+        <field name="name">KZ Transport Assistance</field>
+        <field name="code">KZ Transport Assistance</field>
+        <field name="ttype">bool</field>
+        <field name="len_field">1</field>
+        <field name="sequence">170</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_material_qualifier_1"
+        model="wamas.document.field"
+    >
+        <field name="name">Material Qualifier 1</field>
+        <field name="code">Material Qualifier 1</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">180</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_material_qualifier_2"
+        model="wamas.document.field"
+    >
+        <field name="name">Material Qualifier 2</field>
+        <field name="code">Material Qualifier 2</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">190</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_material_qualifier_3"
+        model="wamas.document.field"
+    >
+        <field name="name">Material Qualifier 3</field>
+        <field name="code">Material Qualifier 3</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">200</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_ordered_quantity"
+        model="wamas.document.field"
+    >
+        <field name="name">Ordered Quantity</field>
+        <field name="code">Ordered Quantity</field>
+        <field name="ttype">float</field>
+        <field name="len_field">12</field>
+        <field name="decimal_place">3</field>
+        <field name="sequence">210</field>
+    </record>
+
+    <record id="wamas_document_field_weap_order_unit" model="wamas.document.field">
+        <field name="name">Order Unit</field>
+        <field name="code">Order Unit</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">220</field>
+    </record>
+
+    <record id="wamas_document_field_weap_type_pos_em" model="wamas.document.field">
+        <field name="name">TypePos-EM</field>
+        <field name="code">TypePos-EM</field>
+        <field name="ttype">str</field>
+        <field name="len_field">7</field>
+        <field name="sequence">230</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_notified_delivery_date"
+        model="wamas.document.field"
+    >
+        <field name="name">Notified Delivery Date</field>
+        <field name="code">Notified Delivery Date</field>
+        <field name="ttype">datetime</field>
+        <field name="len_field">14</field>
+        <field name="sequence">240</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_notified_delivery_note_number"
+        model="wamas.document.field"
+    >
+        <field name="name">Notified Delivery Note Number</field>
+        <field name="code">Notified Delivery Note Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">250</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_notified_delivery_note_date"
+        model="wamas.document.field"
+    >
+        <field name="name">Notified Delivery Note Date</field>
+        <field name="code">Notified Delivery Note Date</field>
+        <field name="ttype">datetime</field>
+        <field name="len_field">14</field>
+        <field name="sequence">260</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_supplier_item_number"
+        model="wamas.document.field"
+    >
+        <field name="name">Supplier Item Number</field>
+        <field name="code">Supplier Item Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">270</field>
+    </record>
+
+    <record id="wamas_document_field_weap_sentence_id" model="wamas.document.field">
+        <field name="name">Sentence ID</field>
+        <field name="code">Sentence ID</field>
+        <field name="ttype">str</field>
+        <field name="len_field">1</field>
+        <field name="sequence">280</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_position_finished"
+        model="wamas.document.field"
+    >
+        <field name="name">Position Finished</field>
+        <field name="code">Position Finished</field>
+        <field name="ttype">bool</field>
+        <field name="len_field">1</field>
+        <field name="sequence">290</field>
+    </record>
+
+    <record id="wamas_document_field_weap_feedback" model="wamas.document.field">
+        <field name="name">Feedback</field>
+        <field name="code">Feedback</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">300</field>
+    </record>
+
+    <record id="wamas_document_field_weap_serial_number" model="wamas.document.field">
+        <field name="name">Serial Number</field>
+        <field name="code">Serial Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">310</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weap_information_for_wamas"
+        model="wamas.document.field"
+    >
+        <field name="name">Information for WAMAS</field>
+        <field name="code">Information for WAMAS</field>
+        <field name="ttype">str</field>
+        <field name="len_field">77</field>
+        <field name="sequence">320</field>
+    </record>
+
+    <!-- Fields of element `WEAKQ` -->
+
+    <record id="wamas_document_field_weakq_client" model="wamas.document.field">
+        <field name="name">Client</field>
+        <field name="code">Client</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weakq_em_transaction_number"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Transaction Number</field>
+        <field name="code">EM Transaction Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weakq_em_notice_id_for_host"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Notice ID for Host</field>
+        <field name="code">EM Notice ID for Host</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="wamas_document_field_weakq_delivery_date" model="wamas.document.field">
+        <field name="name">Delivery Date</field>
+        <field name="code">Delivery Date</field>
+        <field name="ttype">datetime</field>
+        <field name="len_field">14</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="wamas_document_field_weakq_truck_driver" model="wamas.document.field">
+        <field name="name">Truck Driver</field>
+        <field name="code">Truck Driver</field>
+        <field name="ttype">str</field>
+        <field name="len_field">40</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weakq_truck_license_plate"
+        model="wamas.document.field"
+    >
+        <field name="name">Truck License Plate</field>
+        <field name="code">Truck License Plate</field>
+        <field name="ttype">str</field>
+        <field name="len_field">10</field>
+        <field name="sequence">110</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weakq_truck_entry_time"
+        model="wamas.document.field"
+    >
+        <field name="name">Truck Entry Time</field>
+        <field name="code">Truck Entry Time</field>
+        <field name="ttype">datetime</field>
+        <field name="len_field">14</field>
+        <field name="sequence">120</field>
+    </record>
+
+    <record id="wamas_document_field_weakq_start_time" model="wamas.document.field">
+        <field name="name">Start Time</field>
+        <field name="code">Start Time</field>
+        <field name="ttype">datetime</field>
+        <field name="len_field">14</field>
+        <field name="sequence">130</field>
+    </record>
+
+    <record id="wamas_document_field_weakq_finish_time" model="wamas.document.field">
+        <field name="name">Finish Time</field>
+        <field name="code">Finish Time</field>
+        <field name="ttype">datetime</field>
+        <field name="len_field">14</field>
+        <field name="sequence">140</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weakq_registration_time"
+        model="wamas.document.field"
+    >
+        <field name="name">Registration Time</field>
+        <field name="code">Registration Time</field>
+        <field name="ttype">datetime</field>
+        <field name="len_field">14</field>
+        <field name="sequence">150</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weakq_host_information"
+        model="wamas.document.field"
+    >
+        <field name="name">Host Information</field>
+        <field name="code">Host Information</field>
+        <field name="ttype">str</field>
+        <field name="len_field">77</field>
+        <field name="sequence">160</field>
+    </record>
+
+    <record id="wamas_document_field_weakq_mand_supplier" model="wamas.document.field">
+        <field name="name">Mand. Supplier</field>
+        <field name="code">Mand. Supplier</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">170</field>
+    </record>
+
+    <record id="wamas_document_field_weakq_vendor_code" model="wamas.document.field">
+        <field name="name">Vendor Code</field>
+        <field name="code">Vendor Code</field>
+        <field name="ttype">str</field>
+        <field name="len_field">13</field>
+        <field name="sequence">180</field>
+    </record>
+
+    <!-- Fields of element `WEAPQ` -->
+
+    <record id="wamas_document_field_weapq_client" model="wamas.document.field">
+        <field name="name">Client</field>
+        <field name="code">Client</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weapq_em_transaction_number"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Transaction Number</field>
+        <field name="code">EM Transaction Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_client_2" model="wamas.document.field">
+        <field name="name">Client 2</field>
+        <field name="code">Client 2</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weapq_em_notice_number"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Notice Number</field>
+        <field name="code">EM Notice Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weapq_em_notice_id_for_host"
+        model="wamas.document.field"
+    >
+        <field name="name">EM Notice ID for Host</field>
+        <field name="code">EM Notice ID for Host</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weapq_external_reference"
+        model="wamas.document.field"
+    >
+        <field name="name">External Reference</field>
+        <field name="code">External Reference</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">110</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_host_pos_nr" model="wamas.document.field">
+        <field name="name">HOST-PosNr</field>
+        <field name="code">HOST-PosNr</field>
+        <field name="ttype">str</field>
+        <field name="len_field">6</field>
+        <field name="sequence">120</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weapq_delivery_note_number"
+        model="wamas.document.field"
+    >
+        <field name="name">Delivery Note Number</field>
+        <field name="code">Delivery Note Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">130</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_client_3" model="wamas.document.field">
+        <field name="name">Client 3</field>
+        <field name="code">Client 3</field>
+        <field name="ttype">str</field>
+        <field name="len_field">3</field>
+        <field name="sequence">140</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_item_number" model="wamas.document.field">
+        <field name="name">Item Number</field>
+        <field name="code">Item Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">150</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_variant" model="wamas.document.field">
+        <field name="name">Variant</field>
+        <field name="code">Variant</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">160</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weapq_host_material_qualification_id"
+        model="wamas.document.field"
+    >
+        <field name="name">Host Material Qualification ID</field>
+        <field name="code">Host Material Qualification ID</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">170</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_quantity" model="wamas.document.field">
+        <field name="name">Quantity</field>
+        <field name="code">Quantity</field>
+        <field name="ttype">float</field>
+        <field name="len_field">12</field>
+        <field name="decimal_place">3</field>
+        <field name="sequence">180</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_weight" model="wamas.document.field">
+        <field name="name">Weight</field>
+        <field name="code">Weight</field>
+        <field name="ttype">float</field>
+        <field name="len_field">12</field>
+        <field name="decimal_place">3</field>
+        <field name="sequence">190</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weapq_host_weight_unit"
+        model="wamas.document.field"
+    >
+        <field name="name">HOST Weight Unit</field>
+        <field name="code">HOST Weight Unit</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">200</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_stock_unit" model="wamas.document.field">
+        <field name="name">Stock Unit</field>
+        <field name="code">Stock Unit</field>
+        <field name="ttype">str</field>
+        <field name="len_field">5</field>
+        <field name="sequence">210</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_batch" model="wamas.document.field">
+        <field name="name">Batch</field>
+        <field name="code">Batch</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">220</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_dlc" model="wamas.document.field">
+        <field name="name">DLC</field>
+        <field name="code">DLC</field>
+        <field name="ttype">date</field>
+        <field name="len_field">8</field>
+        <field name="sequence">230</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_booking_number" model="wamas.document.field">
+        <field name="name">Booking Number</field>
+        <field name="code">Booking Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">240</field>
+    </record>
+
+    <record id="wamas_document_field_weapq_em_number" model="wamas.document.field">
+        <field name="name">EM Number</field>
+        <field name="code">EM Number</field>
+        <field name="ttype">str</field>
+        <field name="len_field">20</field>
+        <field name="sequence">250</field>
+    </record>
+
+    <record
+        id="wamas_document_field_weapq_kz_transport_assistance"
+        model="wamas.document.field"
+    >
+        <field name="name">KZ Transport Assistance</field>
+        <field name="code">KZ Transport Assistance</field>
+        <field name="ttype">bool</field>
+        <field name="len_field">1</field>
+        <field name="sequence">260</field>
+    </record>
+
+</odoo>

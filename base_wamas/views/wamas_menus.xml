@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_edi_wamas_root"
+        name="WAMAS"
+        parent="base_edi.menu_edi_root"
+        sequence="10"
+        groups="base_edi.group_edi_manager"
+    >
+
+        <menuitem
+            id="menu_edi_wamas_document"
+            name="Document"
+            sequence="10"
+            groups="base_edi.group_edi_manager"
+        >
+
+            <menuitem
+                id="menu_edi_wamas_document_template"
+                name="Template"
+                action="action_wamas_document_template"
+                groups="base_edi.group_edi_manager"
+                sequence="10"
+            />
+
+            <menuitem
+                id="menu_edi_wamas_document_element"
+                name="Element"
+                action="action_wamas_document_element"
+                groups="base_edi.group_edi_manager"
+                sequence="20"
+            />
+
+            <menuitem
+                id="menu_edi_wamas_document_field"
+                name="Field"
+                action="action_wamas_document_field"
+                groups="base_edi.group_edi_manager"
+                sequence="30"
+            />
+
+        </menuitem>
+
+        <menuitem
+            id="menu_edi_wamas_conversion"
+            name="Conversion"
+            groups="base_edi.group_edi_manager"
+            sequence="20"
+        />
+
+        <menuitem
+            id="menu_edi_wamas_configuration"
+            name="Configuration"
+            groups="base_edi.group_edi_manager"
+            sequence="30"
+        >
+
+            <menuitem
+                id="menu_edi_wamas_configuration_default_field_template"
+                name="Default Field Template"
+                action="action_wamas_document_default_field_template"
+                groups="base_edi.group_edi_manager"
+                sequence="10"
+            />
+
+            <menuitem
+                id="menu_edi_wamas_configuration_default_field"
+                name="Default Field"
+                action="action_wamas_document_default_field"
+                groups="base_edi.group_edi_manager"
+                sequence="20"
+            />
+
+        </menuitem>
+
+    </menuitem>
+
+</odoo>

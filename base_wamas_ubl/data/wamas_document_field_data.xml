@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+
+    <!-- Fields of element `WEAK` -->
+
+    <record
+        id="base_wamas.wamas_document_field_weak_client"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">000</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_em_notice_number"
+        model="wamas.document.field"
+    >
+        <field name="xml_path">/main:DespatchAdvice/cbc:ID/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_em_host_review_code"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">HOST</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_external_reference"
+        model="wamas.document.field"
+    >
+        <field name="xml_path" />
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_em_notice_type"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >substring(/main:DespatchAdvice/cac:OrderReference/cbc:ID/text(), 1, 6)</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_mand_supplier"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >substring(/main:DespatchAdvice/cac:OrderReference/cbc:ID/text(), 7, 3)</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_supplier_number"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >substring(/main:DespatchAdvice/cac:OrderReference/cbc:ID/text(), 10, 13)</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_order_date"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:OrderReference/cbc:IssueDate/text()</field>
+    </record>
+
+    <record id="base_wamas.wamas_document_field_weak_name" model="wamas.document.field">
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:PartyName/cbc:Name/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_address"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:PostalAddress/cbc:StreetName/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_address_2"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:PostalAddress/cbc:CountrySubentity/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_location"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:PostalAddress/cbc:CityName/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_postal_code"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:PostalAddress/cbc:PostalZone/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_country"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_phone_number"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:Contact/cbc:Telephone/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_fax_number"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:Contact/cbc:Telefax/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weak_email"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party/cac:Contact/cbc:ElectronicMail/text()</field>
+    </record>
+
+    <!-- Fields of element `WEAP` -->
+
+    <record
+        id="base_wamas.wamas_document_field_weap_client"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">000</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_em_notice_number"
+        model="wamas.document.field"
+    >
+        <field name="xml_path">/main:DespatchAdvice/cbc:ID/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_em_host_review_code"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">HOST</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_material_qualifier_1"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">DISPONIBLE</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_type_pos_em"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">NORMAL</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_sentence_id"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">N</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_position_finished"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">N</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_feedback"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">LG</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_variant"
+        model="wamas.document.field"
+    >
+        <field name="xml_default_value">00000</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_external_reference"
+        model="wamas.document.field"
+    >
+        <field name="xml_path" />
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_host_pos_nr"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >substring(/main:DespatchAdvice/cac:DespatchLine[%s]/cbc:ID/text(), 1, 6)</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_client_2"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >substring(/main:DespatchAdvice/cac:DespatchLine[%s]/cbc:ID/text(), 7, 3)</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_item_number"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >substring(/main:DespatchAdvice/cac:DespatchLine[%s]/cbc:ID/text(), 10, 20)</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_ordered_quantity"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchLine[%s]/cbc:DeliveredQuantity/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_order_unit"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchLine[%s]/cbc:DeliveredQuantity/@unitCode</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_supplier_item_number"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >/main:DespatchAdvice/cac:DespatchLine[%s]/cac:Item/cac:SellersItemIdentification/cbc:ID/text()</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_notified_delivery_date"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >normalize-space(/main:DespatchAdvice/cac:Shipment/cac:Delivery/cac:EstimatedDeliveryPeriod)</field>
+    </record>
+
+    <record
+        id="base_wamas.wamas_document_field_weap_notified_delivery_note_date"
+        model="wamas.document.field"
+    >
+        <field
+            name="xml_path"
+        >normalize-space(/main:DespatchAdvice/cac:Shipment/cac:Delivery/cac:EstimatedDeliveryPeriod)</field>
+    </record>
+
+</odoo>

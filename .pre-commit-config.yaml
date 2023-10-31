@@ -8,6 +8,8 @@ exclude: |
   .svg$|/tests/([^/]+/)?cassettes/|^.copier-answers.yml$|^.github/|
   # Maybe reactivate this when all README files include prettier ignore tags?
   ^README\.md$|
+  # Ignore the text files
+  /tests/.*\.(txt|xml)|
   # Library files can have extraneous formatting (even minimized)
   /static/(src/)?lib/|
   # Repos using Sphinx to generate docs don't need prettying

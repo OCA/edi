@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="wamas_document_field_view_form_inherit" model="ir.ui.view">
+        <field name="name">wamas.document.field.view.form</field>
+        <field name="model">wamas.document.field</field>
+        <field name="inherit_id" ref="base_wamas.wamas_document_field_view_form" />
+        <field name="arch" type="xml">
+
+            <page name="mapping_to_template" position="after">
+                <page string="Mapping to UBL" name="mapping_to_ubl">
+                    <group string="UBL → WAMAS Document">
+                        <field name="xml_path" />
+                    </group>
+                </page>
+            </page>
+
+        </field>
+    </record>
+
+</odoo>

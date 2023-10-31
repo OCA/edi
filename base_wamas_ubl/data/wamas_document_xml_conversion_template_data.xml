@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+
+    <record
+        id="wamas_document_xml_conversion_template_from_xml_to_weak_weap"
+        model="wamas.document.xml.conversion.template"
+    >
+        <field name="name">XML to WEAK - WEAP</field>
+        <field name="code">XML to WEAK - WEAP</field>
+        <field name="ttype">from_xml</field>
+        <field
+            name="to_wamas_document_template_id"
+            ref="base_wamas.wamas_document_template_weak_weap"
+        />
+        <field name="ubl_xml_root_name">DespatchAdvice</field>
+    </record>
+
+    <record
+        id="wamas_document_xml_conversion_template_from_weakq_weapq_to_xml"
+        model="wamas.document.xml.conversion.template"
+    >
+        <field name="name">WEAKQ - WEAPQ to XML</field>
+        <field name="code">WEAKQ - WEAPQ to XML</field>
+        <field name="ttype">to_xml</field>
+        <field
+            name="from_wamas_document_template_id"
+            ref="base_wamas.wamas_document_template_weakq_weapq"
+        />
+        <field name="ubl_document_name">DespatchAdvice-2</field>
+        <field name="ubl_xml_root_name">DespatchAdvice</field>
+        <field name="ubl_version">2.2</field>
+        <field name="ubl_lang">en_US</field>
+    </record>
+
+</odoo>

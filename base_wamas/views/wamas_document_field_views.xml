@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="wamas_document_field_view_tree" model="ir.ui.view">
+        <field name="name">wamas.document.field.view.tree</field>
+        <field name="model">wamas.document.field</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="code" />
+                <field name="ttype" />
+                <field name="len_field" />
+                <field name="decimal_place" />
+                <field name="element_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="wamas_document_field_view_form" model="ir.ui.view">
+        <field name="name">wamas.document.field.view.form</field>
+        <field name="model">wamas.document.field</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="General Information">
+                        <group>
+                            <field name="name" />
+                            <field name="code" />
+                        </group>
+                        <group>
+                            <field name="ttype" />
+                            <field name="len_field" />
+                            <field name="decimal_place" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Mapping to Template" name="mapping_to_template">
+                            <group col="4" colpan="2">
+                                <field name="element_id" />
+                                <field name="sequence" />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="wamas_document_field_view_search" model="ir.ui.view">
+        <field name="name">wamas.document.field.view.search</field>
+        <field name="model">wamas.document.field</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="code" />
+                <field name="ttype" />
+                <field name="len_field" />
+                <field name="decimal_place" />
+                <field name="element_id" />
+                <separator />
+                <group expand="1" string="Group By">
+                    <filter
+                        name="gb_ttype"
+                        string="Type"
+                        context="{'group_by':'ttype'}"
+                    />
+                    <filter
+                        name="gb_element_id"
+                        string="Element"
+                        context="{'group_by':'element_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wamas_document_field" model="ir.actions.act_window">
+        <field name="name">WAMAS Document Field</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wamas.document.field</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="wamas_document_field_view_search" />
+        <field name="context">{'search_default_gb_element_id': 1}</field>
+    </record>
+
+</odoo>

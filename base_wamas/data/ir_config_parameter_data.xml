@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="wamas_document_default_field_type" model="ir.config_parameter">
+        <field name="key">wamas_document_default_field_type</field>
+        <field name="value">Sentence Type</field>
+    </record>
+
+    <record id="wamas_document_list_false_value" model="ir.config_parameter">
+        <field name="key">wamas_document_list_false_value</field>
+        <field name="value">["n", "nein", "non", "no", "none", "f", "false"]</field>
+    </record>
+
+    <record id="wamas_document_list_true_value" model="ir.config_parameter">
+        <field name="key">wamas_document_list_true_value</field>
+        <field name="value">["j", "ja", "o", "oui", "t", "true", "y", "yes"]</field>
+    </record>
+
+    <record id="wamas_document_default_false_value" model="ir.config_parameter">
+        <field name="key">wamas_document_default_false_value</field>
+        <field name="value">"N"</field>
+    </record>
+
+    <record id="wamas_document_default_true_value" model="ir.config_parameter">
+        <field name="key">wamas_document_default_true_value</field>
+        <field name="value">"J"</field>
+    </record>
+
+</odoo>

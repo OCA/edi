@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="wamas_to_xml_default_company_id" model="ir.config_parameter">
+        <field name="key">wamas_to_xml_default_company_id</field>
+        <field name="value">1</field>
+    </record>
+
+</odoo>

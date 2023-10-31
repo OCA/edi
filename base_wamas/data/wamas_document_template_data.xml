@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="wamas_document_template_weak_weap" model="wamas.document.template">
+        <field name="name">WEAK - WEAP</field>
+        <field name="code">WEAK - WEAP</field>
+        <field
+            name="line_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 10, 'element_id': ref('wamas_document_element_weak')}),
+            (0, 0, {'sequence': 20, 'element_id': ref('wamas_document_element_weap')}),
+        ]"
+        />
+    </record>
+
+    <record id="wamas_document_template_weakq_weapq" model="wamas.document.template">
+        <field name="name">WEAKQ - WEAPQ</field>
+        <field name="code">WEAKQ - WEAPQ</field>
+        <field
+            name="line_ids"
+            eval="[(5, 0, 0),
+            (0, 0, {'sequence': 10, 'element_id': ref('wamas_document_element_weakq')}),
+            (0, 0, {'sequence': 20, 'element_id': ref('wamas_document_element_weapq')}),
+        ]"
+        />
+    </record>
+
+</odoo>
