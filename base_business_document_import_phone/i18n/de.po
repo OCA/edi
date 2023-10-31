@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* base_business_document_import_phone
+# 	* base_business_document_import_phone
 #
 msgid ""
 msgstr ""
