@@ -175,6 +175,15 @@ msgid "No data provided"
 msgstr ""
 
 #. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"No price is defined in the file. Please double check file or select "
+"Pricelist as the source for prices."
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__import_type__pdf
 msgid "PDF"
 msgstr ""
