@@ -9,7 +9,7 @@ from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
-_logger = logging.getLogger("odoo.tests.test_module_operations")
+logger = logging.getLogger(__name__)
 
 
 @tagged("post_install", "-at_install")
@@ -173,8 +173,8 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         try:
             bdio._match_product(product_dict, [], seller=False)
             raise_test = False
-        except Exception as e:
-            _logger.info(e)
+        except Exception:
+            logger.info("Exception catched.")
         self.assertTrue(raise_test)
 
     def test_match_uom(self):
@@ -297,3 +297,15 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         res = bdio._match_account({"code": "898999"}, chatter)
         self.assertEqual(acc, res)
         self.assertEqual(len(chatter), 1)
+
+    def test_incoterm_match(self):
+        bdoo = self.env["business.document.import"]
+        incoterm_dict = {"code": "EXW"}
+        res = bdoo._match_incoterm(incoterm_dict, [])
+        self.assertEquals(res, self.env.ref("account.incoterm_EXW"))
+        incoterm_dict = {"code": "EXW WORKS"}
+        res = bdoo._match_incoterm(incoterm_dict, [])
+        self.assertEquals(res, self.env.ref("account.incoterm_EXW"))
+        incoterm_dict = {}
+        res = bdoo._match_incoterm(incoterm_dict, [])
+        self.assertFalse(res)
