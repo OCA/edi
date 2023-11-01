@@ -36,8 +36,17 @@ class TestInvoiceImport(SavepointCase):
                 "company_id": cls.company.id,
             }
         )
+        cls.adjustment_account = cls.env["account.account"].create(
+            {
+                "code": "Adjustment",
+                "name": "adjustment from invoice import",
+                "user_type_id": cls.env.ref(
+                    "account.data_account_type_current_assets"
+                ).id,
+            }
+        )
         purchase_tax_vals = {
-            "name": "Test 1% VAT",
+            "name": "Test 1% VAT Purchase",
             "description": "ZZ-VAT-buy-1.0",
             "type_tax_use": "purchase",
             "amount": 1,
@@ -51,7 +60,13 @@ class TestInvoiceImport(SavepointCase):
         }
         cls.purchase_tax = cls.env["account.tax"].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
-        sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
+        sale_tax_vals.update(
+            {
+                "name": "Test 1% VAT Sale",
+                "description": "ZZ-VAT-sale-1.0",
+                "type_tax_use": "sale",
+            }
+        )
         cls.sale_tax = cls.env["account.tax"].create(sale_tax_vals)
         cls.product = cls.env["product.product"].create(
             {
@@ -130,6 +145,13 @@ class TestInvoiceImport(SavepointCase):
                 ],
             }
         )
+        company = cls.env.ref("base.main_company")
+        company.update(
+            {
+                "adjustment_debit_account_id": cls.adjustment_account.id,
+                "adjustment_credit_account_id": cls.adjustment_account.id,
+            }
+        )
 
     def test_import_in_invoice(self):
         parsed_inv = {
@@ -190,6 +212,68 @@ class TestInvoiceImport(SavepointCase):
             ],
         }
         for import_c in self.all_import_config:
+            # hack to have a unique vendor inv ref
+            parsed_inv["invoice_number"] = "INV-%s" % import_c["invoice_line_method"]
+            inv = (
+                self.env["account.invoice.import"]
+                .with_company(self.company.id)
+                .create_invoice(parsed_inv, import_c)
+            )
+            logger.debug("testing import with import config=%s", import_c)
+            self.assertEqual(inv.move_type, parsed_inv["type"])
+            self.assertEqual(inv.company_id.id, self.company.id)
+            self.assertFalse(
+                inv.currency_id.compare_amounts(
+                    inv.amount_untaxed, parsed_inv["amount_untaxed"]
+                )
+            )
+            self.assertFalse(
+                inv.currency_id.compare_amounts(
+                    inv.amount_total, parsed_inv["amount_total"]
+                )
+            )
+            self.assertEqual(
+                fields.Date.to_string(inv.invoice_date), parsed_inv["date"]
+            )
+            self.assertEqual(
+                fields.Date.to_string(inv.invoice_date_due), parsed_inv["date_due"]
+            )
+            self.assertEqual(inv.journal_id.id, self.pur_journal2.id)
+
+    def test_import_in_invoice_tax_include(self):
+        self.purchase_tax.price_include = True
+        parsed_inv = {
+            "type": "in_invoice",
+            "journal": {"code": "XXXP2"},
+            "amount_untaxed": 99.01,
+            "amount_total": 100.00,
+            "date": "2017-08-16",
+            "date_due": "2017-08-31",
+            "date_start": "2017-08-01",
+            "date_end": "2017-08-31",
+            "partner": {"name": "Wood Corner"},
+            "description": "New hi-tech gadget",
+            "lines": [
+                {
+                    "product": {"code": "AII-TEST-PRODUCT"},
+                    "name": "Super test product",
+                    "qty": 2,
+                    "price_unit": 50,
+                    "taxes": [
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "price_include": True,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                }
+            ],
+        }
+        for import_c in self.all_import_config:
+            if not import_c["invoice_line_method"].startswith("nline"):
+                continue
             # hack to have a unique vendor inv ref
             parsed_inv["invoice_number"] = "INV-%s" % import_c["invoice_line_method"]
             inv = (
