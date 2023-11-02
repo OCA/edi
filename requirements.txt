@@ -5,6 +5,7 @@ invoice2data
 ovh
 pdfplumber
 phonenumbers
+pydifact
 pypdf>=3.1.0
 pyyaml
 regex
