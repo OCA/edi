@@ -19,7 +19,7 @@
     <field name="city">Paris</field>
     <field name="country_id" ref="base.fr" />
     <field name="website">http://www.free.fr</field>
-    <field name="vat">FR 604 219 388 61</field>
+    <field name="vat">FR60421938861</field>
 </record>
 
 <record id="free_import_config" model="account.invoice.import.config">
@@ -30,5 +30,46 @@
     <field name="static_product_id" ref="internet_access" />
 </record>
 
+<record id="product_beeswax_xl" model="product.product">
+    <field name="name">Beeswax XL</field>
+    <field name="description_sale">Acme beeswax</field>
+    <field name="default_code">17589684</field>
+    <field name="list_price">42</field>
+    <field name="type">consu</field>
+    <field name="uom_id" ref="uom.product_uom_kgm" />
+    <field name="uom_po_id" ref="uom.product_uom_kgm" />
+</record>
+
+<record id="olive_oil" model="product.product">
+    <field name="name">Olive Oil</field>
+    <field name="categ_id" ref="product.product_category_1" />
+    <field name="sale_ok" eval="True" />
+    <field name="purchase_ok" eval="True" />
+    <field name="type">consu</field>
+    <field name="uom_id" ref="uom.product_uom_litre" />
+    <field name="uom_po_id" ref="uom.product_uom_litre" />
+    <field name="barcode">987123</field>
+</record>
+
+<record id="luxury_truffles" model="product.product">
+    <field name="name">Luxury Truffles</field>
+    <field name="categ_id" ref="product.product_category_1" />
+    <field name="sale_ok" eval="True" />
+    <field name="purchase_ok" eval="True" />
+    <field name="type">consu</field>
+    <field name="uom_id" ref="uom.product_uom_gram" />
+    <field name="uom_po_id" ref="uom.product_uom_gram" />
+    <field name="default_code">LUX_TRF</field>
+<!--     <field
+            name="supplier_taxes_id"
+            eval="[(3, 0, [ref('l10n_generic_coa.1_purchase_tax_template')])]"
+        /> -->
+</record>
+
+<record id="azure_import_config" model="account.invoice.import.config">
+    <field name="name">Azure Interior Multiline Auto Product</field>
+    <field name="partner_id" ref="base.res_partner_12" />
+    <field name="invoice_line_method">nline_auto_product</field>
+</record>
 
 </odoo>

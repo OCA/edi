@@ -9,10 +9,9 @@
     "license": "AGPL-3",
     "summary": "Import supplier invoices using the invoice2data lib",
     "author": "Akretion,Odoo Community Association (OCA)",
-    "maintainers": ["alexis-via"],
+    "maintainers": ["alexis-via", "bosd"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import"],
-    # "excludes": ["account_invoice_import_simple_pdf"],
     "external_dependencies": {
         "python": [
             "invoice2data",

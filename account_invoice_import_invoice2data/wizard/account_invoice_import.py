@@ -2,8 +2,10 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import datetime
 import logging
 import os
+import re
 import shutil
 from tempfile import NamedTemporaryFile
 
@@ -35,6 +37,40 @@ class AccountInvoiceImport(models.TransientModel):
         if not res:
             res = self.invoice2data_parse_invoice(file_data)
         return res
+
+    @api.model
+    def parse_invoice2data_taxes(self, line):
+        taxes = []
+        type_code = "VAT"
+        # CategoryCode assume standard rate s for standard or low rate AA
+        categ_code = ""  # AA
+        percentage = line.get("line_tax_percent")
+        fixed_amount = line.get("line_tax_amount")
+        if percentage:
+            amount_type = "percent"
+            amount = percentage
+        elif fixed_amount:
+            amount_type = "fixed"
+            amount = fixed_amount
+        else:
+            return taxes
+        taxes.append(
+            {
+                "amount_type": amount_type,
+                "amount": float(amount),
+                # "price_include": True, # todo
+                "unece_type_code": type_code,
+                "unece_categ_code": categ_code,
+                # "unece_due_date_code": due_date_code,
+            }
+        )
+        return taxes
+
+    def _clean_string(self, string):
+        return re.sub(r"\W+", "", string)
+
+    def _clean_digits(self, string):
+        return re.sub(r"\D+", "", string)
 
     @api.model
     def invoice2data_parse_invoice(self, file_data):
@@ -90,24 +126,89 @@ class AccountInvoiceImport(models.TransientModel):
         fileobj.close()
         return self.invoice2data_to_parsed_inv(invoice2data_res)
 
+    def invoice2data_prepare_lines(self, lines):
+        """Manipulate line data to match with account_invoice_import"""
+        for line in lines:
+            line["price_unit"] = float(line.get("price_unit", 0))
+            taxes = self.parse_invoice2data_taxes(line)
+            line["taxes"] = taxes  # or global_taxes,
+            product_dict = {
+                "barcode": line.get("barcode"),
+                "code": line.get("code", line.get("name")),
+            }
+            line["product"] = product_dict
+            if line.get("date_start"):
+                line["date_start"] = line.get("date_start")
+                line["date_end"] = line.get("date_end")
+            if line.get("line_note"):
+                line["line_note"] = line.get("line_note")
+            line["sectionheader"] = line.get("sectionheader")
+            # qty 0 should be allowed to import notes, but not supported by document_import
+            line["qty"] = float(line.get("qty", 1))
+            if line["qty"] > 0:
+                uom_dict = {
+                    "unece_code": line.get("unece_code"),
+                    "name": line.get("uom"),
+                }
+                line["uom"] = uom_dict
+                line["discount"] = float(line.get("discount", 0.0))
+                if line.get("price_subtotal"):
+                    line["price_subtotal"] = float(line.get("price_subtotal"))
+                if line.get("line_note"):
+                    line["line_note"] = line.get("line_note")
+                line["sectionheader"] = line.get("sectionheader")
+        return lines
+
     @api.model
     def invoice2data_to_parsed_inv(self, invoice2data_res):
+        lines = invoice2data_res.get("lines", [])
+        prepared_lines = self.invoice2data_prepare_lines(lines)
+
         parsed_inv = {
             "partner": {
-                "vat": invoice2data_res.get("vat"),
+                "vat": self._clean_string(invoice2data_res.get("vat", "")),
                 "name": invoice2data_res.get("partner_name"),
+                "street": invoice2data_res.get("partner_street"),
+                "street2": invoice2data_res.get("partner_street2"),
+                "street3": invoice2data_res.get("partner_street3"),
+                "city": invoice2data_res.get("partner_city"),
+                "zip": invoice2data_res.get("partner_zip"),
+                "country_code": invoice2data_res.get("country_code"),
+                "state_code": invoice2data_res.get("state_code"),
                 "email": invoice2data_res.get("partner_email"),
                 "website": invoice2data_res.get("partner_website"),
+                "phone": invoice2data_res.get("telephone"),
+                "mobile": invoice2data_res.get("mobile"),
+                "ref": invoice2data_res.get("partner_ref"),
                 "siren": invoice2data_res.get("siren"),
+                "coc_registration_number": self._clean_digits(
+                    invoice2data_res.get("partner_coc", "")
+                ),
             },
+            "bic": self._clean_string(invoice2data_res.get("bic", "")),
+            "iban": self._clean_string(invoice2data_res.get("iban", "")),
             "currency": {
                 "iso": invoice2data_res.get("currency"),
+                "currency_symbol": invoice2data_res.get("currency_symbol"),
+                "country_code": invoice2data_res.get("country_code"),
+                "iso_or_symbol": invoice2data_res.get("currency"),
             },
             "amount_total": invoice2data_res.get("amount"),
             "date": invoice2data_res.get("date"),
             "date_due": invoice2data_res.get("date_due"),
             "date_start": invoice2data_res.get("date_start"),
             "date_end": invoice2data_res.get("date_end"),
+            "note": invoice2data_res.get("note"),
+            "narration": invoice2data_res.get("narration"),
+            # sale_order_customer_free_ref
+            "customer_order_number": invoice2data_res.get("customer_order_number"),
+            "customer_order_free_ref": invoice2data_res.get("customer_order_free_ref"),
+            "purchase_order_id": invoice2data_res.get("purchase_order_id"),
+            "mandate_id": invoice2data_res.get("mandate_id"),
+            "payment_reference": invoice2data_res.get("payment_reference"),
+            "payment_unece_code": invoice2data_res.get("payment_unece_code"),
+            "incoterm": invoice2data_res.get("incoterm"),
+            "lines": prepared_lines,
         }
         for field in ["invoice_number", "description"]:
             if isinstance(invoice2data_res.get(field), list):
@@ -121,6 +222,8 @@ class AccountInvoiceImport(models.TransientModel):
         if "company_vat" in invoice2data_res:
             parsed_inv["company"] = {"vat": invoice2data_res["company_vat"]}
         for key, value in parsed_inv.items():
-            if key.startswith("date") and value:
+            if key.startswith("date") and isinstance(value, datetime.datetime):
                 parsed_inv[key] = fields.Date.to_string(value)
+            if key.startswith("amount") and isinstance(value, str):
+                parsed_inv[key] = float(value)
         return parsed_inv
