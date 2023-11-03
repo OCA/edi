@@ -23,7 +23,7 @@ class IrActionsReport(models.Model):
             collected_streams
             and res_ids
             and len(res_ids) == 1
-            and report_ref in invoice_reports
+            and self._get_report(report_ref).report_name in invoice_reports
             and not self.env.context.get("no_embedded_factur-x_xml")
         ):
             move = amo.browse(res_ids)
