@@ -242,3 +242,50 @@ class BasePydifact(models.AbstractModel):
             description = seg[2][3]
             return description
         return None
+
+    def _safe_segment_element(self, value):
+        if value is False:
+            return ""
+        return str(value)
+
+    @api.model
+    def create_segment(self, *elements):
+        cleaned_elements = []
+        for element in elements:
+            if isinstance(element, list):
+                cleaned_elements.append(
+                    [self._safe_segment_element(value) for value in element]
+                )
+            else:
+                cleaned_elements.append(self._safe_segment_element(element))
+        return Segment(*cleaned_elements)
+
+    def create_interchange(self, sender, recipient, control_ref, syntax_identifier):
+        """
+        Create an interchange (started by UNB segment, ended by UNZ segment)
+
+        :param list sender: Identification of the sender of the interchange.
+            example: ["40410", "14"]
+                - 40410: Identification of the sender of the interchange
+                - 14: EAN (European Article Numbering Association)
+        :param list recipient: Identification of the recipient of the interchange.
+            example: ["40411", "14"]
+        :param str control_ref: Unique reference assigned by the sender to an interchange.
+            example: "10"
+        :param list syntax_identifier: Identification of the agency controlling
+            the syntax and indication of syntax level, plus the syntax version number.
+            example: ["UNOC", "3"]
+
+        :return: Interchange object representing the created interchange.
+        :rtype: Interchange
+        """
+        if not sender or not recipient or not control_ref or not syntax_identifier:
+            raise ValueError("All parameters must have values and not be False")
+
+        interchange = Interchange(
+            sender=(sender),
+            recipient=(recipient),
+            control_reference=str(control_ref),
+            syntax_identifier=(syntax_identifier),
+        )
+        return interchange
