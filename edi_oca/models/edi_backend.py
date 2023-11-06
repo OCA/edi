@@ -168,7 +168,7 @@ class EDIBackend(models.Model):
         self.ensure_one()
         _values = self._create_record_prepare_values(type_code, values)
         return self.exchange_record_model.create(_values)
-
+   
     def _create_record_prepare_values(self, type_code, values):
         res = values.copy()  # do not pollute original dict
         exchange_type = self.env["edi.exchange.type"].search(

@@ -9,7 +9,7 @@ from collections import defaultdict
 
 from odoo import _, api, exceptions, fields, models
 from odoo import SUPERUSER_ID
-
+from odoo.exceptions import MissingError
 _logger = logging.getLogger(__name__)
 
 
@@ -42,6 +42,7 @@ class EDIExchangeRecord(models.Model):
         index=True,
         required=False,
         readonly=True,
+        inverse="_inverse_res_id"
     )
     related_record_exists = fields.Boolean(compute="_compute_related_record_exists")
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
@@ -566,3 +567,14 @@ class EDIExchangeRecord(models.Model):
         params = self._job_delay_params()
         params.update(kw)
         return super().with_delay(**params)
+
+    def _inverse_res_id(self):
+        for rec in self:
+            if not rec.model or not rec.res_id:
+                continue
+            try:
+                rec.env[rec.model].browse(rec.res_id).write({
+                    'exchange_record_ids': [(4, rec.id)]
+                })
+            except (KeyError, ValueError, MissingError):
+                continue
