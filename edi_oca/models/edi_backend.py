@@ -7,6 +7,8 @@
 
 import base64
 import logging
+import traceback
+from io import StringIO
 
 from odoo import _, exceptions, fields, models, tools
 
@@ -17,10 +19,12 @@ from ..exceptions import EDIValidationError
 _logger = logging.getLogger(__name__)
 
 
-def _get_exception_msg(exc):
-    if hasattr(exc, "args") and isinstance(exc.args[0], str):
-        return exc.args[0]
-    return repr(exc)
+def _get_exception_msg():
+    buff = StringIO()
+    traceback.print_exc(file=buff)
+    traceback_txt = buff.getvalue()
+    buff.close()
+    return traceback_txt
 
 
 class EDIBackend(models.Model):
@@ -227,8 +231,8 @@ class EDIBackend(models.Model):
         if output:
             try:
                 self._validate_data(exchange_record, output)
-            except EDIValidationError as err:
-                error = _get_exception_msg(err)
+            except EDIValidationError:
+                error = _get_exception_msg()
                 state = "validate_error"
                 message = exchange_record._exchange_status_message("validate_ko")
                 exchange_record.update(
@@ -290,10 +294,10 @@ class EDIBackend(models.Model):
         message = None
         try:
             self._exchange_send(exchange_record)
-        except self._swallable_exceptions() as err:
+        except self._swallable_exceptions():
             if self.env.context.get("_edi_send_break_on_error"):
                 raise
-            error = _get_exception_msg(err)
+            error = _get_exception_msg()
             state = "output_error_on_send"
             message = exchange_record._exchange_status_message("send_ko")
             res = False
@@ -458,10 +462,10 @@ class EDIBackend(models.Model):
         message = None
         try:
             self._exchange_process(exchange_record)
-        except self._swallable_exceptions() as err:
+        except self._swallable_exceptions():
             if self.env.context.get("_edi_process_break_on_error"):
                 raise
-            error = _get_exception_msg(err)
+            error = _get_exception_msg()
             state = "input_processed_error"
             res = False
         else:
@@ -505,15 +509,15 @@ class EDIBackend(models.Model):
             if content:
                 exchange_record._set_file_content(content)
                 self._validate_data(exchange_record)
-        except EDIValidationError as err:
-            error = _get_exception_msg(err)
+        except EDIValidationError:
+            error = _get_exception_msg()
             state = "validate_error"
             message = exchange_record._exchange_status_message("validate_ko")
             res = False
-        except self._swallable_exceptions() as err:
+        except self._swallable_exceptions():
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
-            error = _get_exception_msg(err)
+            error = _get_exception_msg()
             state = "input_receive_error"
             message = exchange_record._exchange_status_message("receive_ko")
             res = False

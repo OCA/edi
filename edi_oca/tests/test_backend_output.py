@@ -70,10 +70,10 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
             [
                 {
                     "edi_exchange_state": "output_error_on_send",
-                    "exchange_error": "OOPS! Something went wrong :(",
                 }
             ],
         )
+        self.assertIn("OOPS! Something went wrong :(", self.record.exchange_error)
 
     def test_send_invalid_direction(self):
         vals = {
