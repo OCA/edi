@@ -58,10 +58,10 @@ class EDIBackendTestProcessCase(EDIBackendCommonComponentRegistryTestCase):
             [
                 {
                     "edi_exchange_state": "input_processed_error",
-                    "exchange_error": "OOPS! Something went wrong :(",
                 }
             ],
         )
+        self.assertIn("OOPS! Something went wrong :(", self.record.exchange_error)
 
     @mute_logger("odoo.models.unlink")
     def test_process_no_file_record(self):
