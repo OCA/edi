@@ -84,3 +84,20 @@ class TestBaseEdifact(TransactionCase):
         seg = ["F", "79", ["", "", "", "Description"]]
         description = self.base_edifact_model.map2odoo_description(seg)
         self.assertEqual(description, "Description")
+
+    def test_create_segment(self):
+        segment = self.base_edifact_model.create_segment("DTM", ["171", False, "102"])
+        self.assertEqual(str(segment), "'DTM' EDI segment: [['171', '', '102']]")
+
+    def test_create_interchange(self):
+        sender_edifact = ["40410", "14"]
+        recipient_edifact = ["40411", "14"]
+        control_ref = 10
+        syntax_identifier = ["UNOC", "3"]
+        interchange = self.base_edifact_model.create_interchange(
+            sender_edifact, recipient_edifact, control_ref, syntax_identifier
+        )
+        self.assertEqual(interchange.sender, ["40410", "14"])
+        self.assertEqual(interchange.recipient, ["40411", "14"])
+        self.assertEqual(interchange.control_reference, "10")
+        self.assertEqual(interchange.syntax_identifier, ["UNOC", "3"])
