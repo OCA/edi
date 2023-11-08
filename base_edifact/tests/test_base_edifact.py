@@ -13,10 +13,9 @@ def _get_file_content(filename):
 
 
 class TestBaseEdifact(TransactionCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.base_edifact_model = cls.env["base.edifact"]
+    def setUp(self):
+        super().setUp()
+        self.base_edifact_model = self.env["base.edifact"]
 
     def test_pydifact_obj(self):
         edifact_docu = _get_file_content("Retail_EDIFACT_ORDERS_sample1.txt")
