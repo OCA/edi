@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="sale_order_import_form" model="ir.ui.view">
+        <field name="name">sale.order.import.form.dev</field>
+        <field name="model">sale.order.import</field>
+        <field name="inherit_id" ref="sale_order_import.sale_order_import_form" />
+        <field name="arch" type="xml">
+            <!-- Support doc_type for import_type = 'edifact' -->
+            <field name="doc_type" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'readonly': [('import_type','!=','edifact')]}</attribute>
+            </field>
+            <footer position="before">
+                <group
+                    name="tech"
+                    attrs="{'invisible':[('json_data_preview','=', False)]}"
+                >
+                    <field name="json_data_preview" readonly="1" />
+                </group>
+            </footer>
+            <footer position="inside">
+                <button
+                    name="button_parse_order_preview"
+                    type="object"
+                    string="Parse"
+                    attrs="{'invisible': ['|', ('import_type','!=','edifact'), ('state','!=','import')]}"
+                    groups="base.group_system,base.group_no_one"
+                />
+            </footer>
+
+        </field>
+    </record>
+</odoo>
