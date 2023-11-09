@@ -7,6 +7,7 @@
 import logging
 import mimetypes
 from base64 import b64decode, b64encode
+import inspect
 
 from lxml import etree
 
@@ -100,6 +101,18 @@ class SaleOrderImport(models.TransientModel):
                 )
             )
         if hasattr(self, "parse_%s_order" % self.import_type):
+            # TODO: remove when upgrade sale_order_import_ubl
+            if self.import_type == "xml":
+                fn = getattr(self, "parse_xml_order")
+                sig = inspect.signature(fn)
+                if "xml_root" in sig.parameters:
+                    xml_root, error_msg = self._parse_xml(filecontent)
+                    if (xml_root is None or not len(xml_root)) and error_msg:
+                        raise UserError(error_msg)
+                    return self.parse_xml_order(
+                        xml_root, detect_doc_type=detect_doc_type
+                    )
+            # end todo remove
             return getattr(self, "parse_%s_order" % self.import_type)(
                 filecontent, detect_doc_type=detect_doc_type
             )
@@ -545,7 +558,10 @@ class SaleOrderImport(models.TransientModel):
                 if price_source != "order":
                     new_price_unit = order.pricelist_id.with_context(
                         date=order.date_order, uom=oline.product_uom.id
-                    )._price_get(oline.product_id, write_vals["product_uom_qty"],)[
+                    )._price_get(
+                        oline.product_id,
+                        write_vals["product_uom_qty"],
+                    )[
                         order.pricelist_id.id
                     ]
                     if float_compare(
