@@ -19,6 +19,7 @@ setuptools.setup(
         'odoo-addon-base_ubl>=16.0dev,<16.1dev',
         'odoo-addon-pdf_helper>=16.0dev,<16.1dev',
         'odoo-addon-sale_order_import>=16.0dev,<16.1dev',
+        'odoo-addon-sale_order_import_edifact>=16.0dev,<16.1dev',
     ],
     classifiers=[
         'Programming Language :: Python',
