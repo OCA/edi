@@ -2,9 +2,9 @@
 <!-- Copyright 2023 ACSONE SA/NV
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
-  <record model="ir.model.access" id="punchout_request_access_manager">
-    <field name="name">punchout.request access manager</field>
-    <field name="model_id" ref="punchout.model_punchout_request" />
+  <record model="ir.model.access" id="punchout_session_access_manager">
+    <field name="name">punchout.session access manager</field>
+    <field name="model_id" ref="punchout.model_punchout_session" />
     <field name="group_id" ref="base.group_system" />
     <field name="perm_read" eval="1" />
     <field name="perm_create" eval="0" />

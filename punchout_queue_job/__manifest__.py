@@ -13,6 +13,6 @@
         # oca/edi
         "punchout",
     ],
-    "data": ["views/punchout_request.xml"],
+    "data": ["views/punchout_session.xml"],
     "demo": [],
 }

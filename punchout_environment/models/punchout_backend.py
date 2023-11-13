@@ -20,5 +20,4 @@ class PunchoutBackend(models.Model):
             "user_agent": {},
             "deployment_mode": {},
             "browser_form_post_url": {},
-            "buyer_cookie_encryption_key": {},
         }

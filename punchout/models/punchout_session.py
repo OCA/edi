@@ -5,14 +5,17 @@ import logging
 import os
 import random
 import time
+from base64 import b64decode
 from datetime import datetime
+from io import StringIO
 from urllib.parse import urlparse
 from uuid import uuid4
 
 import lxml.etree as ET
 import pytz
 import requests
-from cryptography.fernet import Fernet, InvalidToken
+from dateutil.relativedelta import relativedelta
+from lxml.etree import XMLSyntaxError
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -20,13 +23,13 @@ from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
-class PunchoutRequest(models.Model):
-    _name = "punchout.request"
+class PunchoutSession(models.Model):
+    _name = "punchout.session"
     _inherit = [
         "mail.thread",
     ]
     _order = "create_date desc"
-    _description = "Punchout Request"
+    _description = "Punchout Session"
 
     backend_id = fields.Many2one(comodel_name="punchout.backend", readonly=True,)
     user_id = fields.Many2one(
@@ -34,9 +37,18 @@ class PunchoutRequest(models.Model):
     )
     buyer_cookie_id = fields.Char(readonly=True, string="Cookie")
     punchout_url = fields.Char(readonly=True, string="Start URL")
-    cxml_request = fields.Text(readonly=True, string="Request",)
+    cxml_setup_request = fields.Text(readonly=True, string="Setup Request",)
+    cxml_setup_request_response = fields.Text(
+        readonly=True, string="Setup Request Response",
+    )
     cxml_response = fields.Text(readonly=True, string="Response",)
     cxml_response_date = fields.Datetime(readonly=True, string="Response Date",)
+    expiration_date = fields.Datetime(
+        compute="_compute_expiration_date",
+        store=True,
+        readonly=True,
+        compute_sudo=True,
+    )
     error_message = fields.Text(readonly=True,)
     state = fields.Selection(
         selection="_selection_state", default="draft", tracking=True,
@@ -47,6 +59,16 @@ class PunchoutRequest(models.Model):
     def _compute_action_process_allowed(self):
         for rec in self:
             rec.action_process_allowed = rec.state in ("to_process", "error")
+
+    @api.depends(
+        "backend_id", "create_date",
+    )
+    def _compute_expiration_date(self):
+        for rec in self:
+            ref_date = rec.create_date or fields.Datetime.now()
+            rec.expiration_date = ref_date + relativedelta(
+                seconds=rec.backend_id.session_duration
+            )
 
     @api.model
     def _selection_state(self):
@@ -78,55 +100,36 @@ class PunchoutRequest(models.Model):
         random_numbers = "".join(map(str, random_numbers_list))
         return f"{timestamp}{pid}{random_numbers}@{domain}"
 
-    @api.model
-    def _get_punchout_request_header_credential(self, backend, header, credential_type):
-        """
-        Adds the asked credential tag in the header.
-        :param backend: punchout.backend
-        :param header: xml.etree.ElementTree.Element (header)
-        :param credential_type: "From", "To" or "Sender"
-        :return: xml.etree.ElementTree.Element (header)
-        """
-        header_cred_type = ET.SubElement(header, credential_type)
-        cred_domain, cred_identity = backend._get_domain_and_identity(credential_type)
-        header_cred = ET.SubElement(
-            header_cred_type, "Credential", attrib={"domain": cred_domain}
-        )
-        ET.SubElement(header_cred, "Identity").text = cred_identity
-        if credential_type == "Sender":
-            ET.SubElement(header_cred, "SharedSecret").text = backend.shared_secret
-            ET.SubElement(header_cred_type, "UserAgent").text = backend.user_agent
-        return header
-
-    def _get_punchout_request_header(self, cxml, backend):
-        """
-        Adds the header tag in the cXML PunchOut request element.
-        :param cxml: xml.etree.ElementTree.Element (cxml)
-        :param backend: punchout.backend
-        :return: xml.etree.ElementTree.Element (cxml)
-        """
-        header = ET.SubElement(cxml, "Header")
-        self._get_punchout_request_header_credential(backend, header, "From")
-        self._get_punchout_request_header_credential(backend, header, "To")
-        self._get_punchout_request_header_credential(backend, header, "Sender")
-        return cxml
-
     def _get_punchout_buyer_cookie(self):
         return f"{self.env.user.id}-{uuid4()}"
-
-    def _get_encrypted_punchout_buyer_cookie(self, backend, buyer_cookie):
-        encyrption_key = backend.buyer_cookie_encryption_key.encode()
-        return Fernet(encyrption_key).encrypt(buyer_cookie.encode("utf-8"))
 
     def _get_punchout_request_user_email(self):
         return self.env.user.email
 
-    def _get_punchout_request_setup(self, backend, buyer_cookie_id):
-        payload_id = self._get_punchout_payload_identity()
-        request_timestamp = self._get_punchout_request_timestamp()
-        encrypted_buyer_cookie_id = self._get_encrypted_punchout_buyer_cookie(
-            backend, buyer_cookie_id
+    def _render_cxml_operation(self, template_xml_id, template_values=None):
+        self.ensure_one()
+        backend = self.backend_id
+        template_values = template_values or {}
+        template_values.update(
+            {"session": self, "backend": backend, "user": self.env.user}
         )
+        cxml = (
+            self.env["ir.ui.view"]
+            .sudo()
+            .render_template(template_xml_id, template_values)
+        )
+        cxml_request_element = ET.fromstring(cxml)
+        ET.indent(cxml_request_element)
+        cxml_request_str = ET.tostring(
+            cxml_request_element,
+            encoding="UTF-8",
+            xml_declaration=True,
+            pretty_print=True,
+            doctype=backend._get_cxml_dtd_declaration(),
+        ).decode("utf-8")
+        return cxml_request_str
+
+    def _get_punchout_request_setup(self, session):
         user_email = self._get_punchout_request_user_email()
         if not user_email:
             raise UserError(
@@ -135,33 +138,10 @@ class PunchoutRequest(models.Model):
                     "in order to access this feature."
                 )
             )
-        cxml = ET.Element(
-            "cXML",
-            attrib={
-                "version": "1.2.008",
-                "{http://www.w3.org/XML/1998/namespace}lang": "en",
-                "payloadID": payload_id,
-                "timestamp": request_timestamp,
-            },
+        cxml_request_str = session._render_cxml_operation(
+            "punchout.cxml_punchout_PunchOutSetupRequest"
         )
-        self._get_punchout_request_header(cxml, backend)
-
-        deployment_mode = backend.deployment_mode
-        request = ET.SubElement(
-            cxml, "Request", attrib={"deploymentMode": deployment_mode}
-        )
-        setup_request = ET.SubElement(
-            request, "PunchOutSetupRequest", attrib={"operation": "create"}
-        )
-        ET.SubElement(setup_request, "BuyerCookie").text = encrypted_buyer_cookie_id
-        ET.SubElement(
-            setup_request, "Extrinsic", attrib={"name": "UserEmail"}
-        ).text = user_email
-        browser_form_post = ET.SubElement(setup_request, "BrowserFormPost")
-        ET.SubElement(
-            browser_form_post, "URL"
-        ).text = backend._get_browser_form_post_url()
-        return cxml
+        return cxml_request_str
 
     @api.model
     def _check_punchout_request_ok(self, response):
@@ -179,16 +159,7 @@ class PunchoutRequest(models.Model):
                 f"URL: {response.url}"
             )
             _logger.error(log_msg)
-            raise UserError(
-                _(
-                    "The PunchOut request with URL {url} returned "
-                    "{status_code} ({reason})."
-                ).format(
-                    url=response.url,
-                    status_code=response.status_code,
-                    reason=response.reason,
-                )
-            )
+            raise UserError(log_msg)
         if not 200 <= cxml_status_code <= 400:
             log_msg = (
                 f"PunchOut {self._name}: cXML {cxml_status_code}: "
@@ -208,21 +179,10 @@ class PunchoutRequest(models.Model):
             )
         return res
 
-    def _get_post_punchout_setup_url(self, request, buyer_cookie_id):
-        punchout_backend = request.backend_id
+    def _get_post_punchout_setup_url(self, session):
+        punchout_backend = session.backend_id
         punchout_setup_url = punchout_backend.url
-        cxml_request_element = self._get_punchout_request_setup(
-            punchout_backend, buyer_cookie_id
-        )
-        cxml_request_str = ET.tostring(
-            cxml_request_element,
-            encoding="UTF-8",
-            xml_declaration=True,
-            pretty_print=True,
-            doctype='<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.008/'
-            'cXML.dtd">',
-        ).decode("utf-8")
-        request.write({"cxml_request": cxml_request_str})
+        cxml_request_str = self._get_punchout_request_setup(session)
         _logger.info("PunchOut %s: posting setup request", self._name)
         response = requests.post(
             punchout_setup_url,
@@ -230,9 +190,18 @@ class PunchoutRequest(models.Model):
             headers={"Content-Type": "text/xml"},
             timeout=30,
         )
+        response_tree = ET.fromstring(response.content)
+        session.write(
+            {
+                "cxml_setup_request": cxml_request_str,
+                "cxml_setup_request_response": ET.tostring(
+                    response_tree, pretty_print=True
+                ),
+            }
+        )
         if not self._check_punchout_request_ok(response):
             return {}
-        response_tree = ET.fromstring(response.content)
+
         start_page_url = ""
         for url in response_tree.findall(
             "./Response/PunchOutSetupResponse/StartPage/URL"
@@ -242,27 +211,30 @@ class PunchoutRequest(models.Model):
 
     @api.model
     def _redirect_to_punchout(self):
-        request = self.sudo()._create_punchout_request()
+        session = self.sudo()._create_punchout_session()
+        if not session.punchout_url:
+            return False
         return {
             "type": "ir.actions.act_url",
-            "url": request.punchout_url,
+            "url": session.punchout_url,
             "target": "new",
         }
 
     @api.model
-    def _create_punchout_request(self):
+    def _create_punchout_session(self):
         punchout_backend = self._get_punchout_backend_to_use()
         buyer_cookie_id = self._get_punchout_buyer_cookie()
-        request = self.env["punchout.request"].create(
+        session = self.env["punchout.session"].create(
             {
                 "user_id": self.env.user.id,
                 "buyer_cookie_id": buyer_cookie_id,
                 "backend_id": punchout_backend.id,
             }
         )
-        url = self._get_post_punchout_setup_url(request, buyer_cookie_id)
-        request.write({"punchout_url": url})
-        return request
+        url = self._get_post_punchout_setup_url(session)
+        if url:
+            session.write({"punchout_url": url})
+        return session
 
     @api.model
     def _get_punchout_backend_to_use(self):
@@ -279,47 +251,76 @@ class PunchoutRequest(models.Model):
         return backend
 
     @api.model
-    def _store_punchout_request(self, backend_id, cxml_string):
-        backend = self.env["punchout.backend"].sudo().browse(backend_id)
-        tree = ET.fromstring(cxml_string.encode())
-        buyer_cookie = tree.find(".//BuyerCookie")
-        encrypted_buyer_cookie_id = (
-            buyer_cookie.text.strip() if buyer_cookie is not None else False
+    def _store_punchout_session_response(self, backend_id, cxml_string):
+        cxml = cxml_string.encode()
+        tree = ET.fromstring(cxml)
+        buyer_cookie_elem = tree.find(".//BuyerCookie")
+        buyer_cookie_id = (
+            buyer_cookie_elem.text.strip() if buyer_cookie_elem is not None else ""
         )
-        if not encrypted_buyer_cookie_id:
+        if not buyer_cookie_id:
             _logger.error(
                 "Unable to find a buyer cookie from the cXml punchout response \n%s",
                 ET.tostring(tree, pretty_print=True),
             )
             return False
-        encryption_key = backend.buyer_cookie_encryption_key.encode()
-        fernet = Fernet(encryption_key)
-        encrypted_buyer_cookie_id_b = encrypted_buyer_cookie_id.encode()
 
-        try:
-            buyer_cookie_id = fernet.decrypt(encrypted_buyer_cookie_id_b).decode()
-        except InvalidToken:
-            _logger.error(
-                "Unable to decode given buyer cookie. %s", encrypted_buyer_cookie_id
-            )
-            return False
-
-        request = self.sudo().search(
-            [("buyer_cookie_id", "=", buyer_cookie_id)], limit=1,
+        session = self.sudo().search(
+            [
+                ("buyer_cookie_id", "=", buyer_cookie_id),
+                ("backend_id", "=", backend_id),
+            ],
+            limit=1,
         )
-        if not request:
+        if not session:
             _logger.error(
                 "Unable to find a request with given buyer cookie %s", buyer_cookie_id
             )
             return False
-        request.with_user(request.user_id).sudo().write(
+
+        session.write(
             {
                 "cxml_response": ET.tostring(tree, pretty_print=True),
                 "cxml_response_date": fields.Datetime.now(),
-                "state": "to_process",
             }
         )
-        return request
+        xml_validation = session._validate_cxml()
+        is_valid = xml_validation.get("valid")
+        if is_valid:
+            session.write({"state": "to_process"})
+        else:
+            session.write(
+                {"state": "error", "error_message": xml_validation.get("error")}
+            )
+        if session.expiration_date <= fields.Datetime.now():
+            session.write(
+                {"state": "error", "error_message": "punchout.session expired"}
+            )
+        return session
+
+    def _validate_cxml(self):
+        self.ensure_one()
+        cxml = self.cxml_response
+        tree = ET.fromstring(cxml)
+        backend = self.backend_id
+        dtd_data = backend.dtd_file
+        if not dtd_data:
+            return {"valid": True}
+        try:
+            dtd_file = b64decode(dtd_data).decode()
+            dtd_io = StringIO(dtd_file)
+            dtd = ET.DTD(dtd_io)
+            dtd.validate(tree)
+            dtd_io.close()
+        except XMLSyntaxError as e:
+            _logger.exception(e)
+            return {
+                "valid": False,
+                "error": e.msg,
+            }
+        return {
+            "valid": True,
+        }
 
     def _check_action_process_allowed(self):
         for rec in self:

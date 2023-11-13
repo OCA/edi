@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 13.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-30 15:26+0000\n"
-"PO-Revision-Date: 2023-10-30 15:26+0000\n"
+"POT-Creation-Date: 2023-11-27 17:24+0000\n"
+"PO-Revision-Date: 2023-11-27 17:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,27 +26,27 @@ msgid "Access"
 msgstr "Accéder"
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_needaction
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_needaction
 msgid "Action Needed"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__action_process_allowed
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__action_process_allowed
 msgid "Action Process Allowed"
 msgstr ""
 
 #. module: punchout
-#: model_terms:ir.ui.view,arch_db:punchout.punchout_request_form_view
-msgid "An error occured during the process of the request."
-msgstr "Une erreur est survenue lors du traitement de la requête."
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "An error occured during the process of the session."
+msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_attachment_count
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__backend_id
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__backend_id
 msgid "Backend"
 msgstr ""
 
@@ -68,20 +68,25 @@ msgid "Closed"
 msgstr "Fermé"
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__buyer_cookie_id
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__buyer_cookie_id
 msgid "Cookie"
 msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__create_uid
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__create_uid
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__create_date
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__create_date
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__dtd_file
+msgid "DTD File for validation"
 msgstr ""
 
 #. module: punchout
@@ -92,38 +97,53 @@ msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__display_name
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__display_name
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "Done"
 msgstr "Traitée"
 
 #. module: punchout
 #: code:addons/punchout/models/punchout_backend.py:0
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "Draft"
 msgstr "Brouillon"
 
 #. module: punchout
-#: model_terms:ir.ui.view,arch_db:punchout.punchout_request_form_view
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__dtd_filename
+msgid "Dtd Filename"
+msgstr ""
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__dtd_version
+msgid "Dtd Version"
+msgstr ""
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
 msgid "Erreur"
 msgstr ""
 
 #. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "Error"
 msgstr "Erreur"
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__error_message
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__error_message
 msgid "Error Message"
-msgstr "Message d'erreur"
+msgstr ""
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__expiration_date
+msgid "Expiration Date"
+msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,help:punchout.field_punchout_backend__browser_form_post_url
@@ -131,17 +151,17 @@ msgid "Exposed URL where the shopping cart must be sent back to."
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_follower_ids
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_follower_ids
 msgid "Followers"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_channel_ids
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_channel_ids
 msgid "Followers (Channels)"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_partner_ids
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_partner_ids
 msgid "Followers (Partners)"
 msgstr ""
 
@@ -162,61 +182,61 @@ msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__id
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__id
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__id
 msgid "ID"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,help:punchout.field_punchout_request__message_needaction
-#: model:ir.model.fields,help:punchout.field_punchout_request__message_unread
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_needaction
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_unread
 msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,help:punchout.field_punchout_request__message_has_error
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_has_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_is_follower
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_is_follower
 msgid "Is Follower"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_backend__buyer_cookie_encryption_key
-msgid "Key to encrypt the buyer cookie"
-msgstr "Clé pour l'encryption du buyer cookie"
-
-#. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend____last_update
-#: model:ir.model.fields,field_description:punchout.field_punchout_request____last_update
+#: model:ir.model.fields,field_description:punchout.field_punchout_session____last_update
 msgid "Last Modified on"
 msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__write_uid
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__write_uid
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__write_date
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__write_date
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__write_date
 msgid "Last Updated on"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_main_attachment_id
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_main_attachment_id
 msgid "Main Attachment"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_has_error
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__session_duration
+msgid "Maximum session duration"
+msgstr ""
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_has_error
 msgid "Message Delivery error"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_ids
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_ids
 msgid "Messages"
 msgstr ""
 
@@ -231,33 +251,33 @@ msgid "Networkid"
 msgstr ""
 
 #. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "No punchout backend found to initialize the connection."
 msgstr "Aucun backend punchout trouvé pour initialisé la connexion."
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_needaction_counter
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_has_error_counter
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_has_error_counter
 msgid "Number of errors"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,help:punchout.field_punchout_request__message_needaction_counter
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_needaction_counter
 msgid "Number of messages which requires an action"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,help:punchout.field_punchout_request__message_has_error_counter
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_has_error_counter
 msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,help:punchout.field_punchout_request__message_unread_counter
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_unread_counter
 msgid "Number of unread messages"
 msgstr ""
 
@@ -268,12 +288,12 @@ msgid "Open"
 msgstr "Ouvert"
 
 #. module: punchout
-#: model_terms:ir.ui.view,arch_db:punchout.punchout_request_form_view
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
 msgid "Process"
 msgstr "Traiter"
 
 #. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "Processing the request"
 msgstr "Traitement de la requête"
@@ -295,38 +315,63 @@ msgid "PunchOut Backends"
 msgstr "Backends PunchOut"
 
 #. module: punchout
-#: model:ir.actions.act_window,name:punchout.punchout_request_act_window
-#: model:ir.ui.menu,name:punchout.punchout_request_menu
-msgid "PunchOut Requests"
-msgstr "Requêtes PunchOut"
-
-#. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "PunchOut request error"
 msgstr ""
 
 #. module: punchout
+#: model:ir.actions.act_window,name:punchout.punchout_session_act_window
+#: model:ir.ui.menu,name:punchout.punchout_session_menu
+msgid "PunchOut sessions"
+msgstr "Sessions PunchOut"
+
+#. module: punchout
 #: model:ir.actions.act_window,name:punchout.punchout_backend_act_window
 msgid "Punchout Backends"
+msgstr "Backends PunchOut"
+
+#. module: punchout
+#: model:ir.model,name:punchout.model_punchout_session
+msgid "Punchout Session"
+msgstr "Session PunchOut"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Received"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model,name:punchout.model_punchout_request
-msgid "Punchout Request"
-msgstr "Requête Punchout "
-
-#. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__cxml_response
-#: model_terms:ir.ui.view,arch_db:punchout.punchout_request_form_view
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__cxml_response
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
 msgid "Response"
-msgstr "Réponse"
+msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__cxml_response_date
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__cxml_response_date
 msgid "Response Date"
-msgstr "Date de la réponse"
+msgstr ""
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Sent"
+msgstr ""
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Setup"
+msgstr ""
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__cxml_setup_request
+msgid "Setup Request"
+msgstr ""
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__cxml_setup_request_response
+msgid "Setup Request Response"
+msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__shared_secret
@@ -334,13 +379,13 @@ msgid "Shared secret"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__punchout_url
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__punchout_url
 msgid "Start URL"
-msgstr "URL de départ"
+msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__state
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__state
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__state
 msgid "State"
 msgstr "Statut"
 
@@ -350,10 +395,22 @@ msgid "Test or production"
 msgstr ""
 
 #. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_backend.py:0
+#, python-format
+msgid "The duration of the session must be greater than 0. {name}"
+msgstr ""
+
+#. module: punchout
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "The response has been received and will be processed."
 msgstr "La réponse a été reçue et va être traitée."
+
+#. module: punchout
+#: code:addons/punchout/models/punchout_session.py:0
+#, python-format
+msgid "The response received from the backend is not valid."
+msgstr ""
 
 #. module: punchout
 #: code:addons/punchout/models/punchout_backend.py:0
@@ -363,10 +420,10 @@ msgid "This PunchOut backend already exists."
 msgstr ""
 
 #. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "To Process"
-msgstr ""
+msgstr "A traiter"
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__to_domain
@@ -384,19 +441,25 @@ msgid "URL"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_unread
+#: code:addons/punchout/models/punchout_session.py:0
+#, python-format
+msgid "Unable to process the request"
+msgstr ""
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_unread
 msgid "Unread Messages"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__message_unread_counter
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_unread_counter
 msgid "Unread Messages Counter"
 msgstr ""
 
 #. module: punchout
-#: model:ir.model.fields,field_description:punchout.field_punchout_request__user_id
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__user_id
 msgid "User"
-msgstr "Utilisateur"
+msgstr ""
 
 #. module: punchout
 #: model:ir.model.fields,field_description:punchout.field_punchout_backend__user_agent
@@ -404,13 +467,13 @@ msgid "User agent"
 msgstr ""
 
 #. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid "You are not allowed to process this request. "
 msgstr ""
 
 #. module: punchout
-#: code:addons/punchout/models/punchout_request.py:0
+#: code:addons/punchout/models/punchout_session.py:0
 #, python-format
 msgid ""
 "You must set a personnal email in your preferences in order to access this "
