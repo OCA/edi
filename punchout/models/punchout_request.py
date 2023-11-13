@@ -62,7 +62,7 @@ class PunchoutRequest(models.Model):
         Get ISO 8601 timestamp
         """
         current_time = datetime.now()
-        timezone = pytz.timezone(self.env.user.tz)
+        timezone = pytz.timezone(self.env.user.tz or "UTC")
         localized_time = current_time.astimezone(timezone)
         return localized_time.strftime("%Y-%m-%dT%H:%M:%S%z")
 
@@ -313,17 +313,7 @@ class PunchoutRequest(models.Model):
                 "state": "to_process",
             }
         )
-        request._notify_punchout_response_received()
         return request
-
-    def _notify_punchout_response_received(self):
-        self.ensure_one()
-        user = self.user_id
-        user.with_user(user).notify_info(
-            title=_("Processing the request"),
-            message=_("The response has been received and will be processed."),
-            sticky=False,
-        )
 
     def _check_action_process_allowed(self):
         for rec in self:
