@@ -14,9 +14,11 @@
     ],
     "data": [
         "security/punchout_backend.xml",
-        "security/punchout_request.xml",
+        "security/punchout_session.xml",
+        "data/cxml/common.xml",
+        "data/cxml/punchout_setup_request.xml",
         "views/punchout_backend.xml",
-        "views/punchout_request.xml",
+        "views/punchout_session.xml",
     ],
-    "external_dependencies": {"python": ["cryptography", "lxml"]},
+    "external_dependencies": {"python": ["lxml"]},
 }

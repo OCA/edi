@@ -9,8 +9,8 @@ from odoo.exceptions import AccessError
 _logger = logging.getLogger(__name__)
 
 
-class PunchoutRequest(models.Model):
-    _inherit = "punchout.request"
+class PunchoutSession(models.Model):
+    _inherit = "punchout.session"
 
     has_job_access = fields.Boolean(compute="_compute_has_job_access",)
     job_count = fields.Integer(compute="_compute_job_count",)
@@ -48,9 +48,9 @@ class PunchoutRequest(models.Model):
         action.update({"domain": self._get_queue_job_list_domain(), "context": {}})
         return action
 
-    def _store_punchout_request(self, *args, **kwargs):
-        request = super()._store_punchout_request(*args, **kwargs)
-        if request:
+    def _store_punchout_session_response(self, *args, **kwargs):
+        request = super()._store_punchout_session_response(*args, **kwargs)
+        if request and request.state == "to_process":
             request.with_user(request.user_id).with_delay(
                 description=request._get_queue_job_description()
             ).action_process()

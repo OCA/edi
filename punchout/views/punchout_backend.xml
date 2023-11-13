@@ -36,7 +36,10 @@
             <field name="user_agent" />
             <field name="deployment_mode" />
             <field name="browser_form_post_url" />
-            <field name="buyer_cookie_encryption_key" />
+            <field name="dtd_file" filename="dtd_filename" />
+            <field name="dtd_filename" invisible="1" />
+            <field name="dtd_version" />
+            <field name="session_duration" invisible="1" />
           </group>
         </sheet>
         <div class="oe_chatter" />

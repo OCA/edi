@@ -2,9 +2,9 @@
 <!-- Copyright 2023 ACSONE SA/NV
      License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
 <odoo>
-  <record model="ir.ui.view" id="punchout_request_form_view">
-    <field name="name">punchout.request.form (in punchout)</field>
-    <field name="model">punchout.request</field>
+  <record model="ir.ui.view" id="punchout_session_form_view">
+    <field name="name">punchout.session.form (in punchout)</field>
+    <field name="model">punchout.session</field>
     <field name="arch" type="xml">
       <form>
         <header>
@@ -28,7 +28,7 @@
                     class="alert alert-danger"
                     role="alert"
                 >
-                    An error occured during the process of the request.
+                    An error occured during the process of the session.
                 </div>
         <sheet>
           <div class="oe_button_box" name="button_box" />
@@ -40,16 +40,20 @@
             </group>
             <group>
               <field name="create_date" />
+              <field name="expiration_date" />
               <field name="cxml_response_date" />
             </group>
           </group>
           <notebook>
-            <page string="Request" name="request">
-              <field name="cxml_request" widget="ace" />
+            <page string="Setup" name="punchout_setup">
+                <separator string="Sent" name="sent" />
+              <field name="cxml_setup_request" widget="ace" />
+                <separator string="Received" name="received" />
+              <field name="cxml_setup_request_response" widget="ace" />
             </page>
-            <page string="Response" name="response">
-              <field name="cxml_response" widget="ace" />
-            </page>
+              <page string="Response" name="response">
+                  <field name="cxml_response" widget="ace" />
+              </page>
             <page
                             string="Erreur"
                             name="error"
@@ -66,9 +70,9 @@
       </form>
     </field>
   </record>
-  <record model="ir.ui.view" id="punchout_request_search_view">
-    <field name="name">punchout.request.search (in punchout)</field>
-    <field name="model">punchout.request</field>
+  <record model="ir.ui.view" id="punchout_session_search_view">
+    <field name="name">punchout.session.search (in punchout)</field>
+    <field name="model">punchout.session</field>
     <field name="arch" type="xml">
       <search>
         <field name="backend_id" />
@@ -77,9 +81,9 @@
       </search>
     </field>
   </record>
-  <record model="ir.ui.view" id="punchout_request_tree_view">
-    <field name="name">punchout.request.tree (in punchout)</field>
-    <field name="model">punchout.request</field>
+  <record model="ir.ui.view" id="punchout_session_tree_view">
+    <field name="name">punchout.session.tree (in punchout)</field>
+    <field name="model">punchout.session</field>
     <field name="arch" type="xml">
       <tree
                 decoration-success="state == 'done'"
@@ -94,17 +98,17 @@
       </tree>
     </field>
   </record>
-  <record model="ir.actions.act_window" id="punchout_request_act_window">
-    <field name="name">PunchOut Requests</field>
-    <field name="res_model">punchout.request</field>
+  <record model="ir.actions.act_window" id="punchout_session_act_window">
+    <field name="name">PunchOut sessions</field>
+    <field name="res_model">punchout.session</field>
     <field name="view_mode">tree,form</field>
     <field name="domain">[]</field>
     <field name="context">{}</field>
   </record>
-  <record model="ir.ui.menu" id="punchout_request_menu">
-    <field name="name">PunchOut Requests</field>
+  <record model="ir.ui.menu" id="punchout_session_menu">
+    <field name="name">PunchOut sessions</field>
     <field name="parent_id" ref="punchout.punchout_menu" />
-    <field name="action" ref="punchout.punchout_request_act_window" />
+    <field name="action" ref="punchout.punchout_session_act_window" />
     <field name="sequence" eval="15" />
   </record>
 </odoo>

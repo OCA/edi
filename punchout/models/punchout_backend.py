@@ -1,9 +1,9 @@
 # Copyright 2023 ACSONE SA/NV
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
-from odoo.http import request as odoo_request
+from odoo.exceptions import UserError, ValidationError
 
 
 class PunchoutBackend(models.Model):
@@ -37,12 +37,23 @@ class PunchoutBackend(models.Model):
         help="Exposed URL where the shopping cart must be sent back to.",
         required=True,
     )
-    buyer_cookie_encryption_key = fields.Char(
-        string="Key to encrypt the buyer cookie",
-        groups="base.group_system",
-        required=True,
+    dtd_version = fields.Char(default="1.2.008",)
+    dtd_file = fields.Binary(
+        string="DTD File for validation", groups="base.group_system",
     )
+    dtd_filename = fields.Char(groups="base.group_system",)
     state = fields.Selection(selection="_selection_state", default="draft")
+    session_duration = fields.Integer(string="Maximum session duration", default=7200,)
+
+    @api.constrains("session_duration")
+    def _check_session_duration(self):
+        for rec in self:
+            if rec.session_duration <= 0:
+                raise ValidationError(
+                    _(
+                        "The duration of the session must be greater than 0. {name}"
+                    ).format(name=rec.display_name)
+                )
 
     @api.model
     def _selection_state(self):
@@ -78,9 +89,7 @@ class PunchoutBackend(models.Model):
                 )
             )
 
-        return "/".join(
-            [base_url, url, str(self.id), f"?session_id={odoo_request.session.sid}"]
-        )
+        return "/".join([base_url, url, str(self.id), f"?db={self.env.cr.dbname}"])
 
     def _check_access_backend(self):
         """
@@ -93,7 +102,7 @@ class PunchoutBackend(models.Model):
         self.ensure_one()
         self._check_access_backend()
         return (
-            self.env["punchout.request"]
+            self.env["punchout.session"]
             .with_context(punchout_backend_id=self.id,)
             ._redirect_to_punchout()
         )
@@ -101,3 +110,14 @@ class PunchoutBackend(models.Model):
     def _get_redirect_url(self):
         self.ensure_one()
         return "/web"
+
+    def _get_cxml_version(self):
+        self.ensure_one()
+        return self.dtd_version
+
+    def _get_cxml_dtd_declaration(self):
+        self.ensure_one()
+        version = self._get_cxml_version()
+        dtd_link = f"http://xml.cxml.org/schemas/cXML/{version}/cXML.dtd"
+        declaration = f'<!DOCTYPE cXML SYSTEM "{dtd_link}">'
+        return declaration

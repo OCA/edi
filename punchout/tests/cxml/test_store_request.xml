@@ -21,8 +21,7 @@
   </Header>
   <Message>
     <PunchOutOrderMessage>
-      <BuyerCookie
-            >gAAAAABlEZQA3rzR0dp8XxpC0cAf7zlPZmFavA9hfy67iNkl5KBPSvWjIVlxL1rSnYIdDg_qF5txVul5j5bTISSQjC0l66lxtPVy1VSKrnbAXL6-GwKYZBmHMVx85kNBrp7XmmRmeFZk</BuyerCookie>
+      <BuyerCookie>2-cc162436-fcab-4cfb-888d-abfd8708520d</BuyerCookie>
       <PunchOutOrderMessageHeader operationAllowed='edit'>
         <Total>
           <Money currency='EUR'>166.3900</Money>

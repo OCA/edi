@@ -11,8 +11,7 @@ class TestPunchoutCommon(SavepointCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.backend_model = cls.env["punchout.backend"]
-        cls.request_model = cls.env["punchout.request"]
-        cls.buyer_cookie_encryption_key = "9Ndn3znJUntZpwF51nXsMokf1Xt0X3jjolMX-AD5_W0="
+        cls.session_model = cls.env["punchout.session"]
         cls.backend = cls.backend_model.create(
             {
                 "name": uuid4(),
@@ -25,11 +24,10 @@ class TestPunchoutCommon(SavepointCase):
                 "user_agent": "/",
                 "deployment_mode": "test",
                 "browser_form_post_url": "/punchout/cxml/receive/",
-                "buyer_cookie_encryption_key": cls.buyer_cookie_encryption_key,
             }
         )
 
-        cls.request = cls.request_model.create(
+        cls.session = cls.session_model.create(
             {
                 "backend_id": cls.backend.id,
                 "buyer_cookie_id": "2-cc162436-fcab-4cfb-888d-abfd8708520d",
@@ -43,4 +41,6 @@ class TestPunchoutCommon(SavepointCase):
         return content.decode()
 
     def _store_response(self, cxml_string):
-        return self.request_model._store_punchout_request(self.backend.id, cxml_string,)
+        return self.session_model._store_punchout_session_response(
+            self.backend.id, cxml_string,
+        )
