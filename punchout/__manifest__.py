@@ -18,6 +18,7 @@
         "security/punchout_request.xml",
         "views/punchout_backend.xml",
         "views/punchout_request.xml",
+        "views/web_templates.xml",
     ],
     "external_dependencies": {"python": ["cryptography", "lxml"]},
 }
