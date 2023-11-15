@@ -3,6 +3,7 @@
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.http import request as odoo_request
 
 
 class PunchoutBackend(models.Model):
@@ -77,7 +78,9 @@ class PunchoutBackend(models.Model):
                 )
             )
 
-        return "/".join([base_url, url, str(self.id)])
+        return "/".join(
+            [base_url, url, str(self.id), f"?session_id={odoo_request.session.sid}"]
+        )
 
     def _check_access_backend(self):
         """

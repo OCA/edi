@@ -10,15 +10,13 @@
     "depends": [
         # odoo addons
         "base",
-        # OCA/web
-        "web_notify",
+        "mail",
     ],
     "data": [
         "security/punchout_backend.xml",
         "security/punchout_request.xml",
         "views/punchout_backend.xml",
         "views/punchout_request.xml",
-        "views/web_templates.xml",
     ],
     "external_dependencies": {"python": ["cryptography", "lxml"]},
 }

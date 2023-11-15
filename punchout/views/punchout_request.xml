@@ -44,6 +44,9 @@
             </group>
           </group>
           <notebook>
+            <page string="Request" name="request">
+              <field name="cxml_request" widget="ace" />
+            </page>
             <page string="Response" name="response">
               <field name="cxml_response" widget="ace" />
             </page>

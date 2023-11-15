@@ -3,7 +3,7 @@
 
 import logging
 
-from odoo.http import Controller, request, route
+from odoo.http import Controller, local_redirect, request, route
 
 _logger = logging.getLogger(__name__)
 
@@ -24,11 +24,14 @@ class PunchoutController(Controller):
             .sudo()
             ._store_punchout_request(backend_id, cxml_string)
         )
+        backend = env["punchout.backend"].sudo().browse(backend_id)
         if not punchout_request:
+            redirect_url = backend._get_redirect_url()
             _logger.error(
                 "Unable to link the punchout response to a punchout.request "
                 "with given XML: \n%s",
                 cxml_string,
             )
-            return request.render("punchout.punchout_web_request_not_found")
-        return request.render("punchout.punchout_web_request_received")
+        else:
+            redirect_url = punchout_request._get_redirect_url()
+        return local_redirect(redirect_url)

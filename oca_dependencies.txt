@@ -10,4 +10,3 @@ stock-logistics-workflow
 connector
 storage
 server-auth
-web

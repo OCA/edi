@@ -34,6 +34,7 @@ class PunchoutRequest(models.Model):
     )
     buyer_cookie_id = fields.Char(readonly=True, string="Cookie")
     punchout_url = fields.Char(readonly=True, string="Start URL")
+    cxml_request = fields.Text(readonly=True, string="Request",)
     cxml_response = fields.Text(readonly=True, string="Response",)
     cxml_response_date = fields.Datetime(readonly=True, string="Response Date",)
     error_message = fields.Text(readonly=True,)
@@ -178,15 +179,16 @@ class PunchoutRequest(models.Model):
                 f"URL: {response.url}"
             )
             _logger.error(log_msg)
-            self.env.user.notify_warning(
-                title=_("PunchOut request error"),
-                message=_(
-                    f"The PunchOut request with URL {response.url} returned "
-                    f"{response.status_code} ({response.reason})."
-                ),
-                sticky=True,
+            raise UserError(
+                _(
+                    "The PunchOut request with URL {url} returned "
+                    "{status_code} ({reason})."
+                ).format(
+                    url=response.url,
+                    status_code=response.status_code,
+                    reason=response.reason,
+                )
             )
-            res = False
         if not 200 <= cxml_status_code <= 400:
             log_msg = (
                 f"PunchOut {self._name}: cXML {cxml_status_code}: "
@@ -194,18 +196,20 @@ class PunchoutRequest(models.Model):
                 f"URL: {response.url}"
             )
             _logger.error(log_msg)
-            self.env.user.notify_warning(
-                title=_("PunchOut request error"),
-                message=_(
-                    f"The PunchOut request with URL {response.url} returned "
-                    f"cXML {cxml_status_code} ({cxml_status_text})."
-                ),
-                sticky=True,
+            raise UserError(
+                _(
+                    "The PunchOut request with URL {url} returned "
+                    "{status_code} ({reason})."
+                ).format(
+                    url=response.url,
+                    status_code=cxml_status_code,
+                    reason=cxml_status_text,
+                )
             )
-            res = False
         return res
 
-    def _get_post_punchout_setup_url(self, punchout_backend, buyer_cookie_id):
+    def _get_post_punchout_setup_url(self, request, buyer_cookie_id):
+        punchout_backend = request.backend_id
         punchout_setup_url = punchout_backend.url
         cxml_request_element = self._get_punchout_request_setup(
             punchout_backend, buyer_cookie_id
@@ -218,6 +222,7 @@ class PunchoutRequest(models.Model):
             doctype='<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.008/'
             'cXML.dtd">',
         ).decode("utf-8")
+        request.write({"cxml_request": cxml_request_str})
         _logger.info("PunchOut %s: posting setup request", self._name)
         response = requests.post(
             punchout_setup_url,
@@ -248,15 +253,16 @@ class PunchoutRequest(models.Model):
     def _create_punchout_request(self):
         punchout_backend = self._get_punchout_backend_to_use()
         buyer_cookie_id = self._get_punchout_buyer_cookie()
-        url = self._get_post_punchout_setup_url(punchout_backend, buyer_cookie_id)
-        return self.env["punchout.request"].create(
+        request = self.env["punchout.request"].create(
             {
                 "user_id": self.env.user.id,
-                "punchout_url": url,
                 "buyer_cookie_id": buyer_cookie_id,
                 "backend_id": punchout_backend.id,
             }
         )
+        url = self._get_post_punchout_setup_url(request, buyer_cookie_id)
+        request.write({"punchout_url": url})
+        return request
 
     @api.model
     def _get_punchout_backend_to_use(self):
