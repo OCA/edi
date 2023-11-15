@@ -4,3 +4,5 @@ responses
 # Python Dependencies
 PyYAML
 xmlunittest
+odoo14-addon-base_edifact @ git+https://github.com/OCA/edi.git@refs/pull/847/head#subdirectory=setup/base_edifact
+
