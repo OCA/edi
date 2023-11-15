@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-11-15 11:36+0000\n"
+"PO-Revision-Date: 2023-11-15 14:36+0000\n"
 "Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
@@ -201,39 +201,41 @@ msgstr "Activo"
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__advanced_settings
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Ajustes Avanzados"
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__advanced_settings_edit
 msgid "Advanced YAML settings"
-msgstr ""
+msgstr "Configuración avanzada de YAML"
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_form
 msgid "Advanced settings"
-msgstr ""
+msgstr "Ajustes Avanzados"
 
 #. module: edi_oca
 #: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_all
 msgid "All"
-msgstr ""
+msgstr "Todos/as"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "An error happened while sending. Please check exchange record info."
 msgstr ""
+"Se ha producido un error durante el envío. Compruebe la información del "
+"registro de intercambio."
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_form
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_search
 msgid "Archived"
-msgstr ""
+msgstr "Archivado"
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Conteo de Anexos"
 
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__exchange_file_auto_generate
@@ -241,11 +243,15 @@ msgid ""
 "Auto generate output for records missing their payload. If active, a cron "
 "will take care of generating the output when not set yet. "
 msgstr ""
+"Genera automáticamente la salida para los registros a los que les falta la "
+"carga útil. Si está activo, un cron se encargará de generar la salida cuando "
+"aún no se haya establecido. "
 
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__model_manual_btn
 msgid "Automatically display a button on related models' form."
 msgstr ""
+"Mostrar automáticamente un botón en el formulario de modelos relacionados."
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__backend_id
@@ -254,57 +260,57 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_search
 msgid "Backend"
-msgstr ""
+msgstr "Servidor"
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_search
 msgid "Backend Type"
-msgstr ""
+msgstr "Tipo de Servidor"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "Backend must match with exchange type's backend!"
-msgstr ""
+msgstr "¡El servidor debe coincidir con el servidor del tipo de cambio!"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_type.py:0
 #, python-format
 msgid "Backend should respect backend type!"
-msgstr ""
+msgstr "¡El servidor debe respetar el tipo de servidor!"
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__backend_type_id
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__backend_type_id
 msgid "Backend type"
-msgstr ""
+msgstr "Tipo de servidor"
 
 #. module: edi_oca
 #: model:ir.model.constraint,message:edi_oca.constraint_edi_backend_type_uniq_code
 msgid "Backend type code must be unique!"
-msgstr ""
+msgstr "¡El código de tipo de servidor debe ser único!"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "Backend type must match with exchange type's backend type!"
-msgstr ""
+msgstr "¡El código de tipo de servidor debe ser único!"
 
 #. module: edi_oca
 #: model:ir.ui.menu,name:edi_oca.menu_edi_backend
 msgid "Backends"
-msgstr ""
+msgstr "Servidores"
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_create_form_view
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend_type__code
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__code
 msgid "Code"
-msgstr ""
+msgstr "Código"
 
 #. module: edi_oca
 #: model:ir.ui.menu,name:edi_oca.menu_edi_config
@@ -967,7 +973,7 @@ msgstr "Registro relacionado"
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__related_exchange_ids
 msgid "Related records"
-msgstr ""
+msgstr "Registros relacionados"
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__res_id
@@ -1096,9 +1102,9 @@ msgstr "Mensajes de la Página web"
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Historial de la comunicación en la web"
 
 #. module: edi_oca
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_error_on_send
 msgid "error on send"
-msgstr ""
+msgstr "error en el envío"
