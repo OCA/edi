@@ -7,35 +7,35 @@ msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-03 16:24+0000\n"
-"PO-Revision-Date: 2021-04-03 12:35-0400\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2023-11-15 14:36+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__exento
 msgid "(EXENTO) Exento"
-msgstr ""
+msgstr "(EXENTO) Exento"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__iba
 msgid "(IBA) Impuesto sobre bebidas alcohólicas"
-msgstr ""
+msgstr "(IBA) Impuesto sobre bebidas alcohólicas"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__icio
 msgid "(ICIO) Impuesto sobre las construcciones, instalaciones y obras"
-msgstr ""
+msgstr "(ICIO) Impuesto sobre las construcciones, instalaciones y obras"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__ie
 msgid "(IE) Impuestos especiales"
-msgstr ""
+msgstr "(IE) Impuestos especiales"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__iecdpcac
@@ -43,11 +43,13 @@ msgid ""
 "(IECDPCAC) Impuesto especial sobre los combustibles derivados del petróleo "
 "en la comunidad Autónoma Canaria"
 msgstr ""
+"(IECDPCAC) Impuesto especial sobre los combustibles derivados del petróleo "
+"en la comunidad Autónoma Canaria"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__igic
 msgid "(IGIC) IGIC"
-msgstr ""
+msgstr "(IGIC) IGIC"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__igtecm
@@ -55,11 +57,13 @@ msgid ""
 "(IGTECM) Impuesto general sobre el tráfico de empresas que se aplica en "
 "Ceuta y Melilla"
 msgstr ""
+"(IGTECM) Impuesto general sobre el tráfico de empresas que se aplica en "
+"Ceuta y Melilla"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__ihc
 msgid "(IHC) Impuesto sobre harinas cárnicas"
-msgstr ""
+msgstr "(IHC) Impuesto sobre harinas cárnicas"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__iiimab
@@ -67,31 +71,33 @@ msgid ""
 "(IIIMAB) Impuesto sobre las instalaciones que inciden sobre le medio "
 "ambiente en las Baleares"
 msgstr ""
+"(IIIMAB) Impuesto sobre las instalaciones que inciden sobre le medio "
+"ambiente en las Baleares"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__imgsn
 msgid "(IMGSN) Impuesto municipal sobre gastos suntuarios en Navarra"
-msgstr ""
+msgstr "(IMGSN) Impuesto municipal sobre gastos suntuarios en Navarra"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__impn
 msgid "(IMPN) Impuesto municipal sobre publicidad en Navarra"
-msgstr ""
+msgstr "(IMPN) Impuesto municipal sobre publicidad en Navarra"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__imsn
 msgid "(IMSN) Impuesto municipal sobre solares en Navarra"
-msgstr ""
+msgstr "(IMSN) Impuesto municipal sobre solares en Navarra"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__imvdn
 msgid "(IMVDN) Impuesto municipal sobre las viviendas desocupadas en Navarra"
-msgstr ""
+msgstr "(IMVDN) Impuesto municipal sobre las viviendas desocupadas en Navarra"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__irpf
 msgid "(IRPF) IRPF"
-msgstr ""
+msgstr "(IRPF) IRPF"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__itpajd
@@ -99,26 +105,28 @@ msgid ""
 "(ITPAJD) Impuesto sobre transmisiones patrimoniales y actos jurídicos "
 "documentados"
 msgstr ""
+"(ITPAJD) Impuesto sobre transmisiones patrimoniales y actos jurídicos "
+"documentados"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__iva
 msgid "(IVA) IVA"
-msgstr ""
+msgstr "(IVA) IVA"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__otro
 msgid "(OTRO) Otro"
-msgstr ""
+msgstr "(OTRO) Otro"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__ra
 msgid "(RA) Renta aduanas"
-msgstr ""
+msgstr "(RA) Renta aduanas"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__re
 msgid "(RE) Recargo de equivalencia"
-msgstr ""
+msgstr "(RE) Recargo de equivalencia"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
@@ -128,8 +136,10 @@ msgid ""
 "\"Values set here are company-specific.\" groups=\"base.group_multi_company"
 "\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
-"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
+"<span class=\"o_form_label\">Enviar modo</span>\n"
+"                            <span class=\"fa fa-lg fa-building-o\" title="
+"\"Values set here are company-specific.\" groups=\"base.group_multi_company\""
+"/>"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
@@ -139,8 +149,10 @@ msgid ""
 "\"Values set here are company-specific.\" groups=\"base.group_multi_company"
 "\"/>"
 msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí "
-"son específicos para cada compañía.\" groups=\"base.group_multi_company\"/>"
+"<span class=\"o_form_label\">Credenciales del Servicio web</span>\n"
+"                            <span class=\"fa fa-lg fa-building-o\" title="
+"\"Values set here are company-specific.\" groups=\"base.group_multi_company\""
+"/>"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__res_company__voxel_send_mode__fixed
@@ -322,7 +334,7 @@ msgstr "Contraseña"
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__processing_error
 msgid "Processing Error"
-msgstr ""
+msgstr "Error de procesamiento"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__processing_error
@@ -397,13 +409,13 @@ msgid ""
 "This operation cannot be performed because there are jobs running therefore "
 "cannot be unlinked."
 msgstr ""
-"Esta operación no puede ser realizada porque hay trabajos ejecutándose y no "
-"pueden ser eliminados"
+"Esta operación no se puede realizar porque hay trabajos en ejecución, por lo "
+"que no se pueden desvincular."
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__url
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__unidades
@@ -419,7 +431,7 @@ msgstr "Usuario"
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.view_company_form
 msgid "Voxel"
-msgstr ""
+msgstr "Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_uom_uom__voxel_code
@@ -429,7 +441,7 @@ msgstr "Código Voxel"
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_filename
 msgid "Voxel Filename"
-msgstr ""
+msgstr "Nombre de archivo Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__voxel_tax_code
@@ -454,7 +466,7 @@ msgstr "Administrador Voxel"
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_voxel_mixin
 msgid "Voxel mixin"
-msgstr ""
+msgstr "Mezcla de voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_state
