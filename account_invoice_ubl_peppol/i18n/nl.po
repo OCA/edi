@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-01 15:01+0000\n"
-"PO-Revision-Date: 2019-05-01 17:03+0200\n"
-"Last-Translator: <>\n"
+"PO-Revision-Date: 2023-11-18 16:34+0000\n"
+"Last-Translator: Bosd <c5e2fd43-d292-4c90-9d1f-74ff3436329a@anonaddy.me>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_ubl_peppol
 #: model:ir.model.fields,help:account_invoice_ubl_peppol.field_res_company__ubl_default_tax
@@ -62,7 +62,7 @@ msgstr ""
 #. module: account_invoice_ubl_peppol
 #: model:ir.model,name:account_invoice_ubl_peppol.model_res_country
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #. module: account_invoice_ubl_peppol
 #: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__create_uid
@@ -144,7 +144,7 @@ msgstr ""
 #. module: account_invoice_ubl_peppol
 #: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__name
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #. module: account_invoice_ubl_peppol
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.peppol_eas_list_search
@@ -172,7 +172,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_company__ubl_domain_peppol
 #: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_config_settings__ubl_domain_peppol
 msgid "PEPPOL domain"
-msgstr ""
+msgstr "PEPPOL domein"
 
 #. module: account_invoice_ubl_peppol
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.view_account_config_settings
