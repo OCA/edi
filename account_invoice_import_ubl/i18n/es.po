@@ -6,56 +6,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-11-20 22:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_import_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "(Universal Business Language, also known as"
-msgstr ""
+msgstr "(Lenguaje Universal de los Negocios, también conocido como"
 
 #. module: account_invoice_import_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "), either as XML file or as PDF file with an UBL XML attachment."
-msgstr ""
+msgstr "), ya sea como archivo XML o como archivo PDF con un anexo UBL XML."
 
 #. module: account_invoice_import_ubl
 #: model:ir.model.fields,field_description:account_invoice_import_ubl.field_account_invoice_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: account_invoice_import_ubl
 #: model:ir.model.fields,field_description:account_invoice_import_ubl.field_account_invoice_import__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_invoice_import_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "ISO/IEC 19845"
-msgstr ""
+msgstr "ISO/IEC 19845"
 
 #. module: account_invoice_import_ubl
 #: model:ir.model.fields,field_description:account_invoice_import_ubl.field_account_invoice_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última Modificación el"
 
 #. module: account_invoice_import_ubl
 #: code:addons/account_invoice_import_ubl/wizard/account_invoice_import.py:0
 #, python-format
 msgid "This UBL XML file is not an invoice/refund file (InvoiceTypeCode is %s"
 msgstr ""
+"Este archivo XML UBL no es un archivo de factura/reembolso (InvoiceTypeCode "
+"es %s"
 
 #. module: account_invoice_import_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_ubl.account_invoice_import_form
 msgid "UBL"
-msgstr ""
+msgstr "UBL"
 
 #. module: account_invoice_import_ubl
 #: model:ir.model,name:account_invoice_import_ubl.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
-msgstr ""
+msgstr "Asistente para importar facturas/reembolsos de proveedores"
