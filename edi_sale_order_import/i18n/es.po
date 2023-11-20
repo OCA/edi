@@ -6,43 +6,45 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-11-20 22:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: edi_sale_order_import
 #: model_terms:ir.ui.view,arch_db:edi_sale_order_import.message_already_imported
 msgid "<strong>Message:</strong>"
-msgstr ""
+msgstr "<strong>Mensaje:</strong>"
 
 #. module: edi_sale_order_import
 #: model_terms:ir.ui.view,arch_db:edi_sale_order_import.message_already_imported
 msgid "<strong>Order:</strong>"
-msgstr ""
+msgstr "<strong>Orden:</strong>"
 
 #. module: edi_sale_order_import
 #: model_terms:ir.ui.view,arch_db:edi_sale_order_import.message_already_imported
 msgid "<strong>Previous record:</strong>"
-msgstr ""
+msgstr "<strong>Registro anterior:</strong>"
 
 #. module: edi_sale_order_import
 #: code:addons/edi_sale_order_import/components/process.py:0
 #, python-format
 msgid "Sales order %s created"
-msgstr ""
+msgstr "Pedido de venta %s creado"
 
 #. module: edi_sale_order_import
 #: code:addons/edi_sale_order_import/components/process.py:0
 #, python-format
 msgid "Sales order has already been imported before"
-msgstr ""
+msgstr "El pedido de cliente ya se ha importado anteriormente"
 
 #. module: edi_sale_order_import
 #: code:addons/edi_sale_order_import/components/process.py:0
 #, python-format
 msgid "Something went wrong with the importing wizard."
-msgstr ""
+msgstr "Algo ha fallado en el asistente de importación."
