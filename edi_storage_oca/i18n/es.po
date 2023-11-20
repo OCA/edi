@@ -6,41 +6,43 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-11-20 22:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__display_name
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_exchange_type__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: edi_storage_oca
 #: model:ir.model,name:edi_storage_oca.model_edi_backend
 msgid "EDI Backend"
-msgstr ""
+msgstr "Servidor EDI"
 
 #. module: edi_storage_oca
 #: model:ir.model,name:edi_storage_oca.model_edi_exchange_type
 msgid "EDI Exchange Type"
-msgstr ""
+msgstr "Tipo de Intercambio EDI"
 
 #. module: edi_storage_oca
 #: model:ir.actions.server,name:edi_storage_oca.cron_check_storage_pending_input_ir_actions_server
 #: model:ir.cron,cron_name:edi_storage_oca.cron_check_storage_pending_input
 #: model:ir.cron,name:edi_storage_oca.cron_check_storage_pending_input
 msgid "EDI backend storage check pending input"
-msgstr ""
+msgstr "Comprobación de entrada pendiente de almacenamiento del servidor EDI"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_exchange_type__exchange_filename_pattern
 msgid "Exchange Filename Pattern"
-msgstr ""
+msgstr "Patrón de Intercambio de Archivos"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_exchange_type__exchange_filename_pattern
@@ -48,83 +50,91 @@ msgid ""
 "For output exchange types this should be a formatting string with the following variables available (to be used between brackets, `{}`): `exchange_record`, `record_name`, `type` and `dt`. For instance, a valid string would be {record_name}-{type.code}-{dt}\n"
 "For input exchange types related to storage backends it should be a regex expression to filter the files to be fetched from the pending directory in the related storage. E.g: `.*my-type-[0-9]*.\\.csv`"
 msgstr ""
+"Para los tipos de intercambio de salida, esto debe ser una cadena de formato "
+"con las siguientes variables disponibles (que se usarán entre corchetes, "
+"`{}`): `exchange_record`, `record_name`, `type` y `dt`. Por ejemplo, una "
+"cadena válida sería {record_name}-{type.code}-{dt}\n"
+"Para los tipos de intercambio de entrada relacionados con backends de "
+"almacenamiento, debe ser una expresión regular para filtrar los archivos que "
+"se recuperarán del directorio pendiente en el almacenamiento relacionado. "
+"Por ejemplo: `.*mi-tipo-[0-9]*.\\.csv`"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__id
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_exchange_type__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__input_dir_done
 msgid "Input done directory"
-msgstr ""
+msgstr "Entrada directorio realizada"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__input_dir_error
 msgid "Input error directory"
-msgstr ""
+msgstr "Directorio de error de entrada"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__input_dir_pending
 msgid "Input pending directory"
-msgstr ""
+msgstr "Entrada directorio pendiente"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend____last_update
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_exchange_type____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última Modificación el"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__output_dir_done
 msgid "Output done directory"
-msgstr ""
+msgstr "Salida directorio realizada"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__output_dir_error
 msgid "Output error directory"
-msgstr ""
+msgstr "Directorio de error de salida"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__output_dir_pending
 msgid "Output pending directory"
-msgstr ""
+msgstr "Salida directorio pendiente"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_backend__input_dir_done
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_backend__output_dir_done
 msgid "Path to folder for doneful operations"
-msgstr ""
+msgstr "Ruta de acceso a la carpeta para las operaciones realizadas"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_backend__input_dir_error
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_backend__output_dir_error
 msgid "Path to folder for error operations"
-msgstr ""
+msgstr "Ruta a la carpeta para operaciones de error"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_backend__input_dir_pending
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_backend__output_dir_pending
 msgid "Path to folder for pending operations"
-msgstr ""
+msgstr "Ruta a la carpeta de operaciones pendientes"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__input_dir_remove
 msgid "Remove input after done"
-msgstr ""
+msgstr "Eliminar la entrada una vez realizada"
 
 #. module: edi_storage_oca
 #: model_terms:ir.ui.view,arch_db:edi_storage_oca.edi_backend_view_form
 msgid "Storage"
-msgstr ""
+msgstr "Almacenamiento"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__storage_id
 msgid "Storage backend"
-msgstr ""
+msgstr "Servidor de almacenamiento"
 
 #. module: edi_storage_oca
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_backend__storage_id
 msgid "Storage for in-out files"
-msgstr ""
+msgstr "Almacenamiento de archivos de entrada-salida"
