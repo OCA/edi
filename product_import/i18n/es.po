@@ -6,49 +6,51 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-11-20 22:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: product_import
 #: model_terms:ir.ui.view,arch_db:product_import.product_import_form
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #. module: product_import
 #: code:addons/product_import/wizard/product_import.py:0
 #, python-format
 msgid "Cannot import product without barcode: %s"
-msgstr ""
+msgstr "No se puede importar un producto sin código de barras: %s"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado el"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__product_filename
 msgid "Filename"
-msgstr ""
+msgstr "Nombre del fichero"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: product_import
 #: model_terms:ir.ui.view,arch_db:product_import.product_import_form
@@ -56,71 +58,74 @@ msgid ""
 "If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed.\n"
 "                                For the"
 msgstr ""
+"Si es un archivo XML, Odoo lo analizará si el módulo que añade soporte para "
+"este formato XML está instalado.\n"
+"                                Para los archivos"
 
 #. module: product_import
 #: model_terms:ir.ui.view,arch_db:product_import.product_import_form
 msgid "Import"
-msgstr ""
+msgstr "Importar"
 
 #. module: product_import
 #: model:ir.actions.act_window,name:product_import.product_import_action
 #: model:ir.ui.menu,name:product_import.stock_product_import_menu
 msgid "Import Product Catalogue"
-msgstr ""
+msgstr "Importar Catálogo de Productos"
 
 #. module: product_import
 #: model_terms:ir.ui.view,arch_db:product_import.product_import_form
 msgid "Import Products"
-msgstr ""
+msgstr "Importar Productos"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificación el"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última actualización por"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última Actualización el"
 
 #. module: product_import
 #: code:addons/product_import/wizard/product_import.py:0
 #, python-format
 msgid "No data provided"
-msgstr ""
+msgstr "No se han facilitado datos"
 
 #. module: product_import
 #: model:ir.model.fields,field_description:product_import.field_product_import__product_file
 msgid "Product Catalogue"
-msgstr ""
+msgstr "Importar Catálogo de Productos"
 
 #. module: product_import
 #: model:ir.model,name:product_import.model_product_import
 msgid "Product import from files"
-msgstr ""
+msgstr "Importación de productos desde archivos"
 
 #. module: product_import
 #: code:addons/product_import/wizard/product_import.py:0
 #, python-format
 msgid "This XML file is not XML-compliant"
-msgstr ""
+msgstr "Este archivo no es compatible con el formato XML"
 
 #. module: product_import
 #: code:addons/product_import/wizard/product_import.py:0
 #, python-format
 msgid "This catalogue doesn't have any product!"
-msgstr ""
+msgstr "¡Este catálogo no tiene ningún producto!"
 
 #. module: product_import
 #: code:addons/product_import/wizard/product_import.py:0
 #, python-format
 msgid "This file '%s' cannot be imported."
-msgstr ""
+msgstr "Este archivo '%s' no puede ser importado."
 
 #. module: product_import
 #: code:addons/product_import/wizard/product_import.py:0
@@ -129,34 +134,38 @@ msgid ""
 "This file is not supported. Did you install the module to support this XML "
 "format?"
 msgstr ""
+"Este archivo no es compatible. Ha instalado el módulo para admitir este "
+"formato XML?"
 
 #. module: product_import
 #: model_terms:ir.ui.view,arch_db:product_import.product_import_form
 msgid "Universal Business Language"
-msgstr ""
+msgstr "Lenguaje Comercial Universal"
 
 #. module: product_import
 #: code:addons/product_import/wizard/product_import.py:0
 #, python-format
 msgid "Unsupported XML document"
-msgstr ""
+msgstr "Documento XML no compatible"
 
 #. module: product_import
 #: code:addons/product_import/wizard/product_import.py:0
 #, python-format
 msgid "Unsupported file format"
-msgstr ""
+msgstr "Formato de archivo no soportado"
 
 #. module: product_import
 #: model:ir.model.fields,help:product_import.field_product_import__product_file
 msgid "Upload a Product Catalogue"
-msgstr ""
+msgstr "Cargar un catálogo de productos"
 
 #. module: product_import
 #: model_terms:ir.ui.view,arch_db:product_import.product_import_form
 msgid ""
 "Upload below the product Catalogue. When you click on the Import button:"
 msgstr ""
+"Cargar a continuación el Catálogo de productos. Al hacer clic en el botón "
+"Importar:"
 
 #. module: product_import
 #: model_terms:ir.ui.view,arch_db:product_import.product_import_form
@@ -164,3 +173,6 @@ msgid ""
 "format (UBL), you should\n"
 "                                install the module <em>product_import_ubl</em>."
 msgstr ""
+"formato (UBL), debe\n"
+"                                Instale el módulo "
+"<em>product_import_ubl</em>."
