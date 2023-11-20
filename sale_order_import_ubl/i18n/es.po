@@ -6,93 +6,95 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-11-20 19:35+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: sale_order_import_ubl
 #: model:product.product,description_sale:sale_order_import_ubl.product_beeswax
 #: model:product.template,description_sale:sale_order_import_ubl.product_beeswax_product_template
 msgid "Acme beeswax"
-msgstr ""
+msgstr "Cera de abejas Acme"
 
 #. module: sale_order_import_ubl
 #: model:product.product,name:sale_order_import_ubl.product_beeswax
 #: model:product.template,name:sale_order_import_ubl.product_beeswax_product_template
 msgid "Beeswax"
-msgstr ""
+msgstr "Cera de abejas"
 
 #. module: sale_order_import_ubl
 #: model:product.pricelist,name:sale_order_import_ubl.dkk_pricelist
 msgid "DKK pricelist"
-msgstr ""
+msgstr "Lista de precios DKK"
 
 #. module: sale_order_import_ubl
 #: model:ir.model.fields,field_description:sale_order_import_ubl.field_sale_order_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: sale_order_import_ubl
 #: model:product.product,name:sale_order_import_ubl.product_red_paint
 #: model:product.template,name:sale_order_import_ubl.product_red_paint_product_template
 msgid "Falu Rödfärg"
-msgstr ""
+msgstr "Color rojo Falú"
 
 #. module: sale_order_import_ubl
 #: model:ir.model.fields,field_description:sale_order_import_ubl.field_sale_order_import__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: sale_order_import_ubl
 #: model:product.pricelist,name:sale_order_import_ubl.gbp_pricelist
 msgid "IYT pricelist"
-msgstr ""
+msgstr "Lista de precios IYT"
 
 #. module: sale_order_import_ubl
 #: model:ir.model.fields,field_description:sale_order_import_ubl.field_sale_order_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última fecha de Modificación"
 
 #. module: sale_order_import_ubl
 #: model:product.product,name:sale_order_import_ubl.product_pencil
 #: model:product.template,name:sale_order_import_ubl.product_pencil_product_template
 msgid "Pensel 20 mm"
-msgstr ""
+msgstr "Pensel 20 mm"
 
 #. module: sale_order_import_ubl
 #: model:product.product,description_sale:sale_order_import_ubl.product_red_paint
 #: model:product.template,description_sale:sale_order_import_ubl.product_red_paint_product_template
 msgid "Red paint"
-msgstr ""
+msgstr "Pintura Roja"
 
 #. module: sale_order_import_ubl
 #: model:product.pricelist,name:sale_order_import_ubl.sek_pricelist
 msgid "SEK pricelist"
-msgstr ""
+msgstr "Lista de precios SEK"
 
 #. module: sale_order_import_ubl
 #: model:ir.model,name:sale_order_import_ubl.model_sale_order_import
 msgid "Sale Order Import from Files"
-msgstr ""
+msgstr "Importación de Orden de Venta desde Ficheros"
 
 #. module: sale_order_import_ubl
 #: model:product.product,uom_name:sale_order_import_ubl.product_pencil
 #: model:product.template,uom_name:sale_order_import_ubl.product_pencil_product_template
 msgid "Units"
-msgstr ""
+msgstr "Unidades"
 
 #. module: sale_order_import_ubl
 #: model:product.product,description_sale:sale_order_import_ubl.product_pencil
 #: model:product.template,description_sale:sale_order_import_ubl.product_pencil_product_template
 msgid "Very good pencils for red paint"
-msgstr ""
+msgstr "Lápices muy buenos para pintura roja"
 
 #. module: sale_order_import_ubl
 #: model:product.product,uom_name:sale_order_import_ubl.product_beeswax
 #: model:product.template,uom_name:sale_order_import_ubl.product_beeswax_product_template
 msgid "kg"
-msgstr ""
+msgstr "Kg"
