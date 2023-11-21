@@ -1,0 +1,176 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_sale_oca
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_sale_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_order_form
+msgid "<span class=\"o_stat_text\">EDI</span>"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.message_already_imported
+msgid "<strong>Message:</strong>"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.message_already_imported
+msgid "<strong>Order:</strong>"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.message_already_imported
+msgid "<strong>Previous record:</strong>"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__edi_disable_auto
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__edi_disable_auto
+msgid "Disable auto"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_order_form
+msgid "Disable automated actions"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.ui.menu,name:edi_sale_oca.menu_sale_edi_root
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_order_form
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_partner_form
+msgid "EDI"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_sales_order_filter
+msgid "EDI exchange"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_sales_order_filter
+msgid "EDI exchange type"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__origin_exchange_type_id
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__origin_exchange_type_id
+msgid "EDI origin exchange type"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__origin_exchange_record_id
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__origin_exchange_record_id
+msgid "EDI origin record"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,help:edi_sale_oca.field_sale_order__origin_exchange_record_id
+#: model:ir.model.fields,help:edi_sale_oca.field_sale_order_line__origin_exchange_record_id
+msgid "EDI record that originated this document."
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__edi_id
+msgid "Edi"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__edi_config
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__edi_config
+msgid "Edi Config"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__edi_exchange_ready
+msgid "Edi Exchange Ready"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__edi_has_form_config
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__edi_has_form_config
+msgid "Edi Has Form Config"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__exchange_record_ids
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__exchange_record_ids
+msgid "Exchange Record"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__exchange_record_count
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__exchange_record_count
+msgid "Exchange Record Count"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.ui.menu,name:edi_sale_oca.menu_sale_edi_records
+msgid "Exchanges"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,help:edi_sale_oca.field_sale_order_line__edi_id
+msgid "Internal or external identifier for records."
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.actions.act_window,name:edi_sale_oca.act_open_edi_exchange_record_sale_order_view
+msgid "Sale Order Exchange Records"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model,name:edi_sale_oca.model_sale_order_import
+msgid "Sale Order Import from Files"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model,name:edi_sale_oca.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model,name:edi_sale_oca.model_sale_order_line
+msgid "Sales Order Line"
+msgstr ""
+
+#. module: edi_sale_oca
+#. odoo-python
+#: code:addons/edi_sale_oca/components/process.py:0
+#, python-format
+msgid "Sales order %s created"
+msgstr ""
+
+#. module: edi_sale_oca
+#. odoo-python
+#: code:addons/edi_sale_oca/components/process.py:0
+#, python-format
+msgid "Sales order has already been imported before"
+msgstr ""
+
+#. module: edi_sale_oca
+#. odoo-python
+#: code:addons/edi_sale_oca/components/process.py:0
+#, python-format
+msgid "Something went wrong with the importing wizard."
+msgstr ""
+
+#. module: edi_sale_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_sales_order_filter
+msgid "Source: EDI"
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,help:edi_sale_oca.field_sale_order__edi_disable_auto
+#: model:ir.model.fields,help:edi_sale_oca.field_sale_order_line__edi_disable_auto
+msgid "When marked, EDI automatic processing will be avoided"
+msgstr ""
