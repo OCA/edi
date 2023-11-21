@@ -1,6 +1,5 @@
 # Copyright 2020 ACSONE SA/NV (<http://acsone.eu>)
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
-import base64
 
 from lxml import etree
 
@@ -139,11 +138,12 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
     def test_generate_file(self):
         output = self.backend.exchange_generate(self.record1)
         expected = "{0.ref} - {0.name}".format(self.partner)
-        self.assertEqual(output.strip(), expected)
-        file_content = base64.b64decode(self.record1.exchange_file).decode()
+        self.assertEqual(output, "Exchange data generated")
+        file_content = self.record1._get_file_content()
         self.assertEqual(file_content.strip(), expected)
         output = self.backend.exchange_generate(self.record2)
-        doc = etree.fromstring(output)
+        file_content = self.record2._get_file_content()
+        doc = etree.fromstring(file_content)
         self.assertEqual(doc.tag, "Record")
         self.assertEqual(doc.attrib, {"ref": self.partner.ref})
         self.assertEqual(doc.getchildren()[0].tag, "Name")
@@ -156,16 +156,17 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         self.tmpl_out2.template_id.arch = (
             '<t t-name="edi_exchange.test_output2"><root><a>1</a></root></t>'
         )
-        result = self.tmpl_out2.exchange_generate(self.record2)
-        self.assertEqual(result, b"<root><a>1</a></root>")
+        output = self.tmpl_out2.exchange_generate(self.record2)
+        self.assertEqual(output, b"<root><a>1</a></root>")
         self.tmpl_out2.prettify = True
-        result = self.tmpl_out2.exchange_generate(self.record2)
-        self.assertEqual(result, b"<root>\n  <a>1</a>\n</root>\n")
+        output = self.tmpl_out2.exchange_generate(self.record2)
+        self.assertEqual(output, b"<root>\n  <a>1</a>\n</root>\n")
 
     def test_generate_file_report(self):
         output = self.backend.exchange_generate(self.record3)
-        self.assertTrue(output)
+        self.assertEqual(output, "Exchange data generated")
+        file_content = self.record3._get_file_content()
         self.assertEqual(
             self.report._render([self.record3.res_id])[0].strip().decode("UTF-8"),
-            output.strip(),
+            file_content.strip(),
         )
