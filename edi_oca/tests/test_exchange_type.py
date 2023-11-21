@@ -5,6 +5,8 @@
 
 from freezegun import freeze_time
 
+from odoo.tools import mute_logger
+
 from .common import EDIBackendCommonTestCase
 
 
@@ -23,6 +25,7 @@ class EDIExchangeTypeTestCase(EDIBackendCommonTestCase):
             self.exchange_type_out_ack.ack_for_type_ids.ids,
         )
 
+    @mute_logger("odoo.sql_db")
     def test_same_code_same_backend(self):
         with self.assertRaises(Exception) as err:
             self.exchange_type_in.copy({"code": "test_csv_input"})
