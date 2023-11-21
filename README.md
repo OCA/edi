@@ -34,9 +34,9 @@ addon | version | maintainers | summary
 [account_invoice_import_invoice2data](account_invoice_import_invoice2data/) | 14.0.2.2.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) [![bosd](https://github.com/bosd.png?size=30px)](https://github.com/bosd) | Import supplier invoices using the invoice2data lib
 [account_invoice_import_simple_pdf](account_invoice_import_simple_pdf/) | 14.0.3.3.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Import simple PDF vendor bills
 [account_invoice_import_ubl](account_invoice_import_ubl/) | 14.0.1.0.1 |  | Import UBL XML supplier invoices/refunds
-[account_invoice_ubl](account_invoice_ubl/) | 14.0.1.0.1 |  | Generate UBL XML file for customer invoices/refunds
+[account_invoice_ubl](account_invoice_ubl/) | 14.0.1.0.2 |  | Generate UBL XML file for customer invoices/refunds
 [account_invoice_ubl_email_attachment](account_invoice_ubl_email_attachment/) | 14.0.1.0.0 |  | Automatically adds the UBL file to the email.
-[account_invoice_ubl_peppol](account_invoice_ubl_peppol/) | 14.0.1.0.0 |  | Generate invoices in PEPPOL 3.0 BIS dialect
+[account_invoice_ubl_peppol](account_invoice_ubl_peppol/) | 14.0.1.0.1 |  | Generate invoices in PEPPOL 3.0 BIS dialect
 [base_business_document_import](base_business_document_import/) | 14.0.3.2.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Provides technical tools to import sale orders or supplier invoices
 [base_business_document_import_phone](base_business_document_import_phone/) | 14.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Use phone numbers to match partners upon import of business documents
 [base_ebill_payment_contract](base_ebill_payment_contract/) | 14.0.1.1.0 | [![TDu](https://github.com/TDu.png?size=30px)](https://github.com/TDu) | Base for managing e-billing contracts
