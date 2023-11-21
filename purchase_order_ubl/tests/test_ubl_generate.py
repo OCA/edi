@@ -2,9 +2,13 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import HttpCase
+from odoo.tools import mute_logger
 
 
 class TestUblOrder(HttpCase):
+
+    # Reduce log noise on CI while rendering GET assets
+    @mute_logger("werkzeug")
     def test_ubl_generate(self):
         ro = self.env.ref("purchase.report_purchase_quotation")
         poo = self.env["purchase.order"]
