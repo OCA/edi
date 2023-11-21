@@ -6,10 +6,13 @@ import base64
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
-from odoo.tools import file_open, float_compare
+from odoo.tools import file_open, float_compare, mute_logger
 
 
 class TestFacturx(TransactionCase):
+    @mute_logger(
+        "odoo.addons.account_invoice_import_facturx.wizard.account_invoice_import"
+    )
     def test_import_facturx_invoice(self):
         sample_files = {
             # BASIC

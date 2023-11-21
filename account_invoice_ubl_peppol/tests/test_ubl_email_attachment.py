@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo.tests.common import HttpSavepointCase, tagged
+from odoo.tools import mute_logger
 
 from odoo.addons.account_invoice_ubl.tests.common import TestUblInvoiceMixin
 
@@ -10,6 +11,9 @@ from odoo.addons.account_invoice_ubl.tests.common import TestUblInvoiceMixin
 
 @tagged("-at_install", "post_install")
 class TestAccountInvoiceUblPeppol(HttpSavepointCase, TestUblInvoiceMixin):
+
+    # Reduce log noise on CI while rendering GET assets
+    @mute_logger("werkzeug")
     def test_ubl_generate_peppol(self):
         invoice = self._create_invoice()
         invoice.company_id.xml_format_in_pdf_invoice = "ubl"
