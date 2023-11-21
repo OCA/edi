@@ -24,6 +24,8 @@ class TestUblInvoice(HttpSavepointCase, TestUblInvoiceMixin):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
 
+    # Reduce log noise on CI while rendering GET assets
+    @mute_logger("werkzeug")
     def test_ubl_generate(self):
         invoice = self._create_invoice()
         if invoice.company_id.xml_format_in_pdf_invoice != "ubl":
@@ -38,6 +40,7 @@ class TestUblInvoice(HttpSavepointCase, TestUblInvoiceMixin):
             invoice_filename = invoice.get_ubl_filename(version=version)
             self.assertTrue(invoice_filename in res)
 
+    @mute_logger("werkzeug")
     def test_attach_ubl_xml_file_button(self):
         invoice = self._create_invoice()
         if invoice.company_id.xml_format_in_pdf_invoice != "ubl":
