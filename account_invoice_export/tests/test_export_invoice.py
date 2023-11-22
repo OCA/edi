@@ -26,13 +26,7 @@ class TestExportAcountInvoice(SingleTransactionCase):
         cls.country = cls.env.ref("base.ch")
         cls.customer = cls.env.ref("base.res_partner_1")
         cls.account = cls.env["account.account"].search(
-            [
-                (
-                    "user_type_id",
-                    "=",
-                    cls.env.ref("account.data_account_type_revenue").id,
-                )
-            ],
+            [("account_type", "=", "income")],
             limit=1,
         )
         cls.product = cls.env.ref("product.product_product_1")
