@@ -6,80 +6,82 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-11-22 20:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: edi_endpoint_oca
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_form_view
 msgid "<span class=\"o_stat_text\">Exchanges</span>"
-msgstr ""
+msgstr "<span class=\"o_stat_text\">Intercambios</span>"
 
 #. module: edi_endpoint_oca
 #: model:ir.model,name:edi_endpoint_oca.model_edi_exchange_consumer_mixin
 msgid "Abstract record where exchange records can be assigned"
-msgstr ""
+msgstr "Registro abstracto al que se pueden asignar registros de intercambio"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__active
 msgid "Active"
-msgstr ""
+msgstr "Activo"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__auth_type
 msgid "Auth Type"
-msgstr ""
+msgstr "Tipo de Aut"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__backend_id
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
 msgid "Backend"
-msgstr ""
+msgstr "Servidor"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__backend_type_id
 msgid "Backend Type"
-msgstr ""
+msgstr "Tipo de Servidor"
 
 #. module: edi_endpoint_oca
 #: code:addons/edi_endpoint_oca/models/edi_endpoint.py:0
 #, python-format
 msgid "Backend and exchange type are mandatory"
-msgstr ""
+msgstr "El servidor y el tipo de cambio son obligatorios"
 
 #. module: edi_endpoint_oca
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
 msgid "Backend type"
-msgstr ""
+msgstr "Tipo de servidor"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__code_snippet
 msgid "Code Snippet"
-msgstr ""
+msgstr "Fragmento de Código"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__code_snippet_docs
 msgid "Code Snippet Docs"
-msgstr ""
+msgstr "Docs de Fragmentos de Código"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado el"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__csrf
 msgid "Csrf"
-msgstr ""
+msgstr "Csrf"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_backend__display_name
@@ -88,93 +90,94 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_exchange_consumer_mixin__display_name
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_exchange_record__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: edi_endpoint_oca
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_form_view
 msgid "EDI"
-msgstr ""
+msgstr "EDI"
 
 #. module: edi_endpoint_oca
 #: model:ir.model,name:edi_endpoint_oca.model_edi_backend
 msgid "EDI Backend"
-msgstr ""
+msgstr "Servidor EDI"
 
 #. module: edi_endpoint_oca
 #: model:ir.model,name:edi_endpoint_oca.model_edi_backend_type
 msgid "EDI Backend Type"
-msgstr ""
+msgstr "Tipo de Servidor EDI"
 
 #. module: edi_endpoint_oca
 #: model:ir.model,name:edi_endpoint_oca.model_edi_endpoint
 msgid "EDI Endpoint"
-msgstr ""
+msgstr "Punto final EDI"
 
 #. module: edi_endpoint_oca
 #: model:ir.actions.act_window,name:edi_endpoint_oca.edi_endpoint_act_window
 #: model:ir.ui.menu,name:edi_endpoint_oca.edi_endpoint_menu
 msgid "EDI Endpoints"
-msgstr ""
+msgstr "Puntos finales EDI"
 
 #. module: edi_endpoint_oca
 #: model:ir.model,name:edi_endpoint_oca.model_edi_exchange_record
 msgid "EDI exchange Record"
-msgstr ""
+msgstr "Registro de Intercambio EDI"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_exchange_consumer_mixin__origin_edi_endpoint_id
 msgid "EDI origin endpoint"
-msgstr ""
+msgstr "Punto final de origen EDI"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_exchange_record__edi_endpoint_id
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_exchange_record_view_search
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_exchange_record_view_tree
 msgid "Endpoint"
-msgstr ""
+msgstr "Punto final"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__endpoint_hash
 msgid "Endpoint Hash"
-msgstr ""
+msgstr "Hash de punto final"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_backend__endpoint_ids
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_backend_type__endpoint_ids
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_backend_view_form
 msgid "Endpoints"
-msgstr ""
+msgstr "Puntos finales"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_backend__endpoints_count
 msgid "Endpoints Count"
-msgstr ""
+msgstr "Recuento de puntos finales"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__exchange_type_id
 msgid "Exchange Type"
-msgstr ""
+msgstr "Tipo de Intercambio"
 
 #. module: edi_endpoint_oca
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
 msgid "Exchange type"
-msgstr ""
+msgstr "Tipo de Intercambio"
 
 #. module: edi_endpoint_oca
 #: code:addons/edi_endpoint_oca/models/edi_endpoint.py:0
 #, python-format
 msgid "Exchange type not compatible with selected backend type."
 msgstr ""
+"El tipo de cambio no es compatible con el tipo de servidor seleccionado."
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__exec_as_user_id
 msgid "Exec As User"
-msgstr ""
+msgstr "Ejecutar como Usuario"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__exec_mode
 msgid "Exec Mode"
-msgstr ""
+msgstr "Modo Ejec"
 
 #. module: edi_endpoint_oca
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
