@@ -65,12 +65,13 @@ class AccountMove(models.Model):
         file_data = self._get_file_for_transmission_method()
         headers = self.transmit_method_id.get_transmission_http_header()
         url = self.transmit_method_id.get_transmission_url()
-        res = requests.post(url, headers=headers, files=file_data)
+        res = requests.post(url, headers=headers, files=file_data, timeout=5)
         if res.status_code != 200:
             raise UserError(
                 _(
-                    "HTTP error {} sending invoice to {}".format(
-                        res.status_code, self.transmit_method_id.name
+                    "HTTP error {status_code} sending invoice to {method_name}".format(
+                        status_code=res.status_code,
+                        method_name=self.transmit_method_id.name,
                     )
                 )
             )
@@ -83,10 +84,8 @@ class AccountMove(models.Model):
         Use the format expected by the request library
         By default returns the PDF report.
         """
-        r = self.env["ir.actions.report"]._get_report_from_name(
-            "account.report_invoice"
-        )
-        pdf, _ = r._render([self.id])
+        report = "account.report_invoice"
+        pdf, _ = self.env["ir.actions.report"]._render(report, [self.id])
         filename = self._get_report_base_filename().replace("/", "_") + ".pdf"
         return {"file": (filename, pdf, "application/pdf")}
 
@@ -101,9 +100,8 @@ class AccountMove(models.Model):
             [activity_type], date_deadline=fields.Date.today()
         )
         if not activity:
-            message = self.env.ref(
-                "account_invoice_export.exception_sending_invoice"
-            )._render(values=values)
+            template = "account_invoice_export.exception_sending_invoice"
+            message = self.env["ir.ui.view"]._render_template(template, values=values)
             activity = self.activity_schedule(
                 activity_type, summary="Job error sending invoice", note=message
             )
