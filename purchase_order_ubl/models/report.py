@@ -8,26 +8,20 @@ from odoo import models
 class IrActionsReport(models.Model):
     _inherit = "ir.actions.report"
 
-    def postprocess_pdf_report(self, record, buffer):
-        if self.is_ubl_xml_to_embed_in_purchase_order():
-            buffer = record.add_xml_in_pdf_buffer(buffer)
-        return super().postprocess_pdf_report(record, buffer)
-
-    def _post_pdf(self, save_in_attachment, pdf_content=None, res_ids=None):
-        """
-        We go through that method when the PDF is generated for the 1st
-        time and also when it is read from the attachment.
-        """
-        pdf_content = super()._post_pdf(
-            save_in_attachment, pdf_content=pdf_content, res_ids=res_ids
+    def _render_qweb_pdf_prepare_streams(self, report_ref, data, res_ids=None):
+        collected_streams = super()._render_qweb_pdf_prepare_streams(
+            report_ref, data, res_ids
         )
-        if res_ids and len(res_ids) == 1:
-            if self.is_ubl_xml_to_embed_in_purchase_order():
-                purchase_order = self.env["purchase.order"].browse(res_ids)
-                pdf_content = purchase_order.embed_ubl_xml_in_pdf(pdf_content)
-        return pdf_content
+        if res_ids:
+            report_sudo = self._get_report(report_ref)
+            records = self.env[report_sudo.model].browse(res_ids)
+            for record in records:
+                collected_streams[record.id]["stream"] = record.add_xml_in_pdf_buffer(
+                    collected_streams[record.id]["stream"]
+                )
+        return collected_streams
 
-    def _render_qweb_pdf(self, res_ids=None, data=None):
+    def _render_qweb_pdf(self, report_ref, res_ids=None, data=None):
         """
         This is only necessary when tests are enabled.
         It forces the creation of pdf instead of html."""
@@ -39,9 +33,9 @@ class IrActionsReport(models.Model):
             or len(res_ids or []) == 1
             and not self.env.context.get("no_embedded_ubl_xml")
         ):
-            if len(self) == 1 and self.is_ubl_xml_to_embed_in_purchase_order():
+            if self._get_report(report_ref).is_ubl_xml_to_embed_in_purchase_order():
                 self = self.with_context(force_report_rendering=True)
-        return super()._render_qweb_pdf(res_ids, data)
+        return super()._render_qweb_pdf(report_ref, res_ids, data)
 
     def is_ubl_xml_to_embed_in_purchase_order(self):
         return (
