@@ -17,13 +17,13 @@ Base Business Document Import
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/14.0/base_business_document_import
+    :target: https://github.com/OCA/edi/tree/15.0/base_business_document_import
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-14-0/edi-14-0-base_business_document_import
+    :target: https://translation.odoo-community.org/projects/edi-15-0/edi-15-0-base_business_document_import
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=14.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=15.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
