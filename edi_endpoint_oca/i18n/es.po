@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-11-22 20:34+0000\n"
+"PO-Revision-Date: 2023-11-22 23:47+0000\n"
 "Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
@@ -182,7 +182,7 @@ msgstr "Modo Ejec"
 #. module: edi_endpoint_oca
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_endpoint_search_view
 msgid "Group By"
-msgstr ""
+msgstr "Agrupar Por"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_backend__id
@@ -191,12 +191,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_exchange_consumer_mixin__id
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_exchange_record__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,help:edi_endpoint_oca.field_edi_endpoint__endpoint_hash
 msgid "Identify the route with its main params"
-msgstr ""
+msgstr "Identificar la ruta con sus parámetros principales"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_backend____last_update
@@ -205,27 +205,27 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_exchange_consumer_mixin____last_update
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_exchange_record____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última Modificación el"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última Actualización por"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última Actualización el"
 
 #. module: edi_endpoint_oca
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_backend_view_form
 msgid "Manage endpoints"
-msgstr ""
+msgstr "Gestionar puntos finales"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__name
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,help:edi_endpoint_oca.field_edi_endpoint__registry_sync
@@ -235,47 +235,52 @@ msgid ""
 "\n"
 "OFF: record in line with the registry, nothing to do."
 msgstr ""
+"ON: el registro ha sido modificado y el registro no ha sido notificado.\n"
+"Ningún cambio estará activo hasta que esta bandera se ponga a false mediante "
+"la acción adecuada.\n"
+"\n"
+"OFF: registro en línea con el registro, nada que hacer."
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,help:edi_endpoint_oca.field_edi_exchange_consumer_mixin__origin_edi_endpoint_id
 #: model:ir.model.fields,help:edi_endpoint_oca.field_edi_exchange_record__edi_endpoint_id
 msgid "Record generated via this endpoint"
-msgstr ""
+msgstr "Registro generado a través de este punto final"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__registry_sync
 msgid "Registry Sync"
-msgstr ""
+msgstr "Sincronización de Registro"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__request_content_type
 msgid "Request Content Type"
-msgstr ""
+msgstr "Tipo de Contenido de la Solicitud"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__request_method
 msgid "Request Method"
-msgstr ""
+msgstr "Método de Solicitud"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__route
 msgid "Route"
-msgstr ""
+msgstr "Ruta"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__route_group
 msgid "Route Group"
-msgstr ""
+msgstr "Grupo de Ruta"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__route_type
 msgid "Route Type"
-msgstr ""
+msgstr "Tipo de Ruta"
 
 #. module: edi_endpoint_oca
 #: model:ir.actions.server,name:edi_endpoint_oca.server_action_registry_sync
 msgid "Sync registry"
-msgstr ""
+msgstr "Sincronizar Registro"
 
 #. module: edi_endpoint_oca
 #: code:addons/edi_endpoint_oca/models/edi_backend.py:0
@@ -285,13 +290,17 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Los siguientes servidores tienen puntos finales adjuntos. Por favor, "
+"archívelos antes:\n"
+"\n"
+"%s"
 
 #. module: edi_endpoint_oca
 #: model:ir.model.fields,help:edi_endpoint_oca.field_edi_endpoint__route_group
 msgid "Use this to classify routes together"
-msgstr ""
+msgstr "Utilízalo para clasificar las rutas juntas"
 
 #. module: edi_endpoint_oca
 #: model_terms:ir.ui.view,arch_db:edi_endpoint_oca.edi_backend_view_form
 msgid "endpoints configured"
-msgstr ""
+msgstr "puntos finales configurados"
