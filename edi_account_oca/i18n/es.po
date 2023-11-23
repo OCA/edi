@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-11-15 14:36+0000\n"
+"PO-Revision-Date: 2023-11-23 20:33+0000\n"
 "Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
@@ -36,7 +36,7 @@ msgstr "Deshabilitar"
 #: model:ir.model.fields,field_description:edi_account_oca.field_account_move__disable_edi_auto
 #: model:ir.model.fields,field_description:edi_account_oca.field_account_payment__disable_edi_auto
 msgid "Disable auto"
-msgstr ""
+msgstr "Deshabilitar auto"
 
 #. module: edi_account_oca
 #: model_terms:ir.ui.view,arch_db:edi_account_oca.view_account_journal_form
@@ -47,17 +47,17 @@ msgstr "Configuración EDI"
 #. module: edi_account_oca
 #: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_exchange_type_id
 msgid "EDI origin exchange type"
-msgstr ""
+msgstr "Tipo de intercambio de origen EDI"
 
 #. module: edi_account_oca
 #: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_exchange_record_id
 msgid "EDI origin record"
-msgstr ""
+msgstr "Registro de origen EDI"
 
 #. module: edi_account_oca
 #: model:ir.model.fields,help:edi_account_oca.field_account_move__origin_exchange_record_id
 msgid "EDI record that originated this document."
-msgstr ""
+msgstr "Registro EDI que originó este documento."
 
 #. module: edi_account_oca
 #: model:ir.model.fields,field_description:edi_account_oca.field_account_move__edi_config
