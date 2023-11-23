@@ -9,41 +9,44 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-12 01:43+0000\n"
-"PO-Revision-Date: 2018-03-12 01:43+0000\n"
-"Last-Translator: enjolras <yo@miguelrevilla.com>, 2018\n"
+"PO-Revision-Date: 2023-11-23 14:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_import_invoice2data
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "<b>regular PDF</b> file without any embedded XML file via the"
 msgstr ""
+"<b>archivo PDF</b> normal sin ningún archivo XML incrustado a través de la "
+"función"
 
 #. module: account_invoice_import_invoice2data
 #: model:product.product,description_sale:account_invoice_import_invoice2data.product_beeswax_xl
 #: model:product.template,description_sale:account_invoice_import_invoice2data.product_beeswax_xl_product_template
 msgid "Acme beeswax"
-msgstr ""
+msgstr "Cera de abejas Acme"
 
 #. module: account_invoice_import_invoice2data
 #: model:product.product,name:account_invoice_import_invoice2data.product_beeswax_xl
 #: model:product.template,name:account_invoice_import_invoice2data.product_beeswax_xl_product_template
 msgid "Beeswax XL"
-msgstr ""
+msgstr "Cera de abejas XL"
 
 #. module: account_invoice_import_invoice2data
 #: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: account_invoice_import_invoice2data
 #: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_invoice_import_invoice2data
 #: model:product.product,name:account_invoice_import_invoice2data.internet_access
@@ -54,25 +57,25 @@ msgstr "Acceso a internet"
 #. module: account_invoice_import_invoice2data
 #: model:ir.model.fields,field_description:account_invoice_import_invoice2data.field_account_invoice_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última Modificación el"
 
 #. module: account_invoice_import_invoice2data
 #: model:product.product,name:account_invoice_import_invoice2data.luxury_truffles
 #: model:product.template,name:account_invoice_import_invoice2data.luxury_truffles_product_template
 msgid "Luxury Truffles"
-msgstr ""
+msgstr "Trufas de Lujo"
 
 #. module: account_invoice_import_invoice2data
 #: model:product.product,name:account_invoice_import_invoice2data.olive_oil
 #: model:product.template,name:account_invoice_import_invoice2data.olive_oil_product_template
 msgid "Olive Oil"
-msgstr ""
+msgstr "Aceite de Oliva"
 
 #. module: account_invoice_import_invoice2data
 #: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
 #, python-format
 msgid "PDF Invoice parsing failed. Error message: %s"
-msgstr ""
+msgstr "Error en el análisis de la factura PDF. Mensaje de error: %s"
 
 #. module: account_invoice_import_invoice2data
 #: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
@@ -80,28 +83,30 @@ msgstr ""
 msgid ""
 "This PDF invoice doesn't match a known template of the invoice2data lib."
 msgstr ""
+"Esta factura en PDF no coincide con una plantilla conocida de la biblioteca "
+"de invoice2data."
 
 #. module: account_invoice_import_invoice2data
 #: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Units"
-msgstr ""
+msgstr "Unidades"
 
 #. module: account_invoice_import_invoice2data
 #: model:ir.model,name:account_invoice_import_invoice2data.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
-msgstr ""
+msgstr "Asistente para importar facturas/reembolsos de proveedores"
 
 #. module: account_invoice_import_invoice2data
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
 msgid "invoice2data"
-msgstr ""
+msgstr "invoice2data"
 
 #. module: account_invoice_import_invoice2data
 #: model:product.product,uom_name:account_invoice_import_invoice2data.product_beeswax_xl
 #: model:product.template,uom_name:account_invoice_import_invoice2data.product_beeswax_xl_product_template
 msgid "kg"
-msgstr ""
+msgstr "kg"
 
 #. module: account_invoice_import_invoice2data
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_invoice2data.account_invoice_import_form
@@ -110,3 +115,6 @@ msgid ""
 "only if the invoice2data library has a template for the invoices of that "
 "supplier."
 msgstr ""
+"(lee el texto del PDF y obtiene la información). Sólo funcionará si la "
+"biblioteca invoice2data tiene una plantilla para las facturas de ese "
+"proveedor."
