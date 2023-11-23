@@ -9,19 +9,20 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-12 01:43+0000\n"
-"PO-Revision-Date: 2018-03-12 01:43+0000\n"
-"Last-Translator: enjolras <yo@miguelrevilla.com>, 2018\n"
+"PO-Revision-Date: 2023-11-23 14:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid "(also called"
-msgstr ""
+msgstr "(también llamado"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
@@ -29,6 +30,8 @@ msgid ""
 "2.x) and ZUGFeRD 1.0: PDF file with an XML attachment in "
 "CrossIndustryInvoice format."
 msgstr ""
+"2.x) y ZUGFeRD 1.0: Archivo PDF con un anexo XML en formato "
+"CrossIndustryInvoice."
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
@@ -38,6 +41,9 @@ msgid ""
 "(%s). Maybe it is because the Factur-X XML file is at BASIC level, and we "
 "don't have the details of taxes for the allowance lines."
 msgstr ""
+"AllowanceTotalAmount (%s) no coincide con el total de las líneas de dietas "
+"(%s). Tal vez se deba a que el archivo XML de Factur-X está a nivel BÁSICO, "
+"y no disponemos de los detalles de los impuestos de las líneas de dietas."
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
@@ -47,16 +53,19 @@ msgid ""
 "Maybe it is because the Factur-X XML file is at BASIC level, and we don't "
 "have the details of taxes for the charge lines."
 msgstr ""
+"ChargeTotalAmount (%s) no coincide con el total de las líneas de cargo (%s). "
+"Tal vez se deba a que el fichero XML de Factur-X está a nivel BÁSICO, y no "
+"disponemos del detalle de impuestos de las líneas de cargo."
 
 #. module: account_invoice_import_facturx
 #: model:ir.model.fields,field_description:account_invoice_import_facturx.field_account_invoice_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid "Factur-X"
-msgstr ""
+msgstr "Factura-X"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
@@ -65,6 +74,8 @@ msgid ""
 "For the moment, in the Factur-X import, we only support type code 380 and "
 "381. (TypeCode is %s)"
 msgstr ""
+"Por el momento, en la importación de Factur-X, sólo admitimos los códigos de "
+"tipo 380 y 381. (TypeCode es %s)"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
@@ -75,12 +86,12 @@ msgstr "Global"
 #. module: account_invoice_import_facturx
 #: model:ir.model.fields,field_description:account_invoice_import_facturx.field_account_invoice_import__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_invoice_import_facturx
 #: model:ir.model.fields,field_description:account_invoice_import_facturx.field_account_invoice_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última Modificación el"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
@@ -92,25 +103,25 @@ msgstr "Servicio de logística"
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Misc Allowance"
-msgstr ""
+msgstr "Asignación Miscelánea"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Misc Charge"
-msgstr ""
+msgstr "Carga Miscelánea"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Misc Global Allowance"
-msgstr ""
+msgstr "Asignación Global Miscelánea"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Misc Global Charge"
-msgstr ""
+msgstr "Cargo Global Varios"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
@@ -119,6 +130,8 @@ msgid ""
 "The GrandTotalAmount is %s but the sum of the lines plus the total charge "
 "plus the total trade allowance plus the total taxes is %s."
 msgstr ""
+"El GrandTotalAmount es %s pero la suma de las líneas más el cargo total más "
+"la bonificación comercial total más los impuestos totales es %s."
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
@@ -127,22 +140,24 @@ msgid ""
 "The XML file embedded in the Factur-X invoice is invalid according to the "
 "official XML Schema Definition. Error: %s."
 msgstr ""
+"El archivo XML incrustado en la factura Factur-X no es válido según la "
+"definición oficial del esquema XML. Error: %s."
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Unknown ChargeIndicator %s"
-msgstr ""
+msgstr "Indicador de Carga Desconocido %s"
 
 #. module: account_invoice_import_facturx
 #: model:ir.model,name:account_invoice_import_facturx.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
-msgstr ""
+msgstr "Asistente para importar facturas/reembolsos de proveedores"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid "ZUGFeRD"
-msgstr ""
+msgstr "ZUGFeRD"
 
 #~ msgid "DE-INSURANCE-buy-16.34"
 #~ msgstr "DE-INSURANCE-buy-16.34"
