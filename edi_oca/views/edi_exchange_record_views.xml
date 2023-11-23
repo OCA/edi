@@ -28,12 +28,13 @@
             <form string="EDI Exchange Record">
                 <field name="direction" invisible="1" />
                 <field name="retryable" invisible="1" />
+                <field name="related_record_exists" invisible="1" />
                 <header>
                     <button
                         name="action_open_related_record"
                         type="object"
                         string="Related record"
-                        attrs="{'invisible': [('res_id', '=', False)]}"
+                        attrs="{'invisible': [('related_record_exists', '=', False)]}"
                     />
                     <!-- FIXME: this `invisible` domain does not work -->
                     <button
@@ -121,6 +122,13 @@
                         >
                           <field name="res_id" />
                           <field name="model" />
+                          <span
+                                class="text-warning"
+                                attrs="{'invisible': [('related_record_exists', '=', True)]}"
+                            >
+                            The related record is not available anymore.
+                            Consider deleting this record too or fixing its relation.
+                          </span>
                         </group>
                     </group>
                     <notebook>
@@ -266,6 +274,20 @@
             </search>
         </field>
     </record>
+
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_record_recent_view">
+        <field name="name">Recent exchanges</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field
+            name="domain"
+            eval="[('create_date', '>=', (DateTime.today() - relativedelta(days=15)).strftime('%Y-%m-%d %H:%M:%S'))]"
+        />
+        <field name="context">{'search_default_filter_created_today': 1}</field>
+    </record>
+
     <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view">
         <field name="name">Exchanges</field>
         <field name="type">ir.actions.act_window</field>
@@ -286,7 +308,9 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_pending': 1}</field>
+        <field
+            name="context"
+        >{'search_default_filter_pending': 1, 'search_default_filter_created_today': 1}</field>
     </record>
 
     <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view_failed">
@@ -296,7 +320,9 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_failed': 1}</field>
+        <field
+            name="context"
+        >{'search_default_filter_failed': 1, 'search_default_filter_created_today': 1}</field>
     </record>
 
     <record
@@ -309,7 +335,9 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_inbound': 1}</field>
+        <field
+            name="context"
+        >{'search_default_filter_inbound': 1, 'search_default_filter_created_today': 1}</field>
     </record>
 
     <record
@@ -322,7 +350,9 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_exchange_record_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{'search_default_filter_outbound': 1}</field>
+        <field
+            name="context"
+        >{'search_default_filter_outbound': 1, 'search_default_filter_created_today': 1}</field>
     </record>
     <record
         model="ir.actions.act_window.view"

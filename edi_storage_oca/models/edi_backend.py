@@ -42,6 +42,7 @@ class EDIBackend(models.Model):
     input_dir_pending = fields.Char(
         "Input pending directory", help="Path to folder for pending operations"
     )
+    input_dir_remove = fields.Boolean("Remove input after done")
     input_dir_done = fields.Char(
         "Input done directory", help="Path to folder for doneful operations"
     )
@@ -167,3 +168,11 @@ class EDIBackend(models.Model):
 
     def _storage_new_exchange_record_vals(self, file_name):
         return {"exchange_filename": file_name, "edi_exchange_state": "input_pending"}
+
+    def _check_output_exchange_sync(self, **kw):
+        # Do not skip sent records when dealing w/ storage related exchanges,
+        # because we want to update the file state
+        # depending on where they are in the external folder.
+        if self.storage_id:
+            kw["skip_sent"] = False
+        return super()._check_output_exchange_sync(**kw)

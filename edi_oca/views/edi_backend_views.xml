@@ -3,8 +3,9 @@
     <record id="edi_backend_view_tree" model="ir.ui.view">
         <field name="model">edi.backend</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree decoration-muted="(not active)">
                 <field name="name" />
+                <field name="active" />
             </tree>
         </field>
     </record>
@@ -65,8 +66,18 @@
                     context="{'group_by': 'backend_type_id'}"
                 />
                 <filter
+                    name="filter_all"
+                    string="All"
+                    domain="['|', ('active', '=', True), ('active', '=', False)]"
+                />
+                <filter
+                    name="filter_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="filter_archived"
                     string="Archived"
-                    name="Inactive"
                     domain="[('active', '=', False)]"
                 />
             </search>
@@ -79,7 +90,7 @@
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="edi_backend_view_search" />
         <field name="domain">[]</field>
-        <field name="context">{}</field>
+        <field name="context">{'search_default_filter_all': 1}</field>
     </record>
     <record model="ir.actions.act_window.view" id="act_open_edi_backend_view_form">
         <field name="act_window_id" ref="act_open_edi_backend_view" />

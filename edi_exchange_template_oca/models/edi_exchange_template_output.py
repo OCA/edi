@@ -1,13 +1,11 @@
 # Copyright 2020 ACSONE SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-import logging
+import lxml.etree as etree
 
 from odoo import fields, models
 
 from ..utils import xml_purge_nswrapper
-
-_logger = logging.getLogger(__name__)
 
 
 class EDIExchangeOutputTemplate(models.Model):
@@ -49,6 +47,7 @@ class EDIExchangeOutputTemplate(models.Model):
         readonly=False,
     )
     template_key = fields.Char(related="template_id.xml_id", string="Template key")
+    prettify = fields.Boolean(help="Prettify output. Works for XML output only.")
 
     def _default_code_snippet_docs(self):
         return (
@@ -94,14 +93,13 @@ class EDIExchangeOutputTemplate(models.Model):
             "record": exchange_record.record,
             "backend": exchange_record.backend_id,
             "template": self,
-            "utc_now": self._utc_now,
-            "date_to_string": self._date_to_string,
             "render_edi_template": self._render_template,
             "get_info_provider": self._get_info_provider,
             "info": {},
         }
-        values.update(self._evaluate_code_snippet(**values))
         values.update(kw)
+        values.update(self._time_utils())
+        values.update(self._evaluate_code_snippet(**values))
         return values
 
     def _render_template(self, exchange_record, code, **kw):
@@ -117,8 +115,13 @@ class EDIExchangeOutputTemplate(models.Model):
         """Post process generated output."""
         if self.output_type == "xml":
             # TODO: lookup for components to handle this dynamically
-            return xml_purge_nswrapper(output)
+            output = xml_purge_nswrapper(output)
+            if self.prettify:
+                output = self._prettify_xml(output)
         return output
+
+    def _prettify_xml(self, xml_string):
+        return etree.tostring(etree.fromstring(xml_string), pretty_print=True)
 
     def _get_info_provider(self, exchange_record, work_ctx=None, usage=None, **kw):
         """Retrieve component providing info to render a template.

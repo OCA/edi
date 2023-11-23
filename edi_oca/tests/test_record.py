@@ -1,7 +1,9 @@
 # Copyright 2020 ACSONE
+# Copyright 2022 Camptocamp SA
 # @author: Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import mock
 from freezegun import freeze_time
 
 from odoo import exceptions, fields
@@ -33,16 +35,30 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.assertNotEqual(new_record.identifier, record.identifier)
 
     def test_record_validate_state(self):
-        with self.assertRaises(exceptions.ValidationError) as err:
+        expected_err = "Exchange state must respect direction!"
+        with self.assertRaises(exceptions.ValidationError, msg=expected_err):
             vals = {
                 "model": self.partner._name,
                 "res_id": self.partner.id,
                 "edi_exchange_state": "output_pending",
             }
             self.backend.create_record("test_csv_input", vals)
-            self.assertEqual(
-                err.exception.name, "Exchange state must respect direction!"
-            )
+
+    def test_record_same_type_code(self):
+        # Two record.exchange.type sharing same code "test_csv_input"
+        # Record should be created with the right backend
+        new_backend = self.backend.copy()
+        self.exchange_type_in.copy(
+            {"backend_id": new_backend.id, "code": "test_csv_input"}
+        )
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        rec1 = self.backend.create_record("test_csv_input", vals)
+        rec2 = new_backend.create_record("test_csv_input", vals)
+        self.assertEqual(rec1.backend_id, self.backend)
+        self.assertEqual(rec2.backend_id, new_backend)
 
     def test_record_exchange_date(self):
         vals = {
@@ -130,3 +146,73 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.assertTrue(isinstance(delayed, DelayableRecordset))
         self.assertEqual(delayed.recordset, record)
         self.assertEqual(delayed.delayable.channel, "root.parent_test_chan.test_chan")
+
+    def test_create_child(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record0 = self.backend.create_record("test_csv_output", vals)
+        record1 = record0.exchange_create_child_record()
+        record2 = record0.exchange_create_child_record()
+        record3 = record2.exchange_create_child_record(model="sale.order", res_id=1)
+        record0.invalidate_cache()
+        record2.invalidate_cache()
+        self.assertIn(record1, record0.related_exchange_ids)
+        self.assertIn(record2, record0.related_exchange_ids)
+        self.assertIn(record3, record2.related_exchange_ids)
+        self.assertRecordValues(
+            record1 + record2 + record3,
+            [
+                {
+                    "parent_id": record0.id,
+                    "model": "res.partner",
+                    "res_id": self.partner.id,
+                },
+                {
+                    "parent_id": record0.id,
+                    "model": "res.partner",
+                    "res_id": self.partner.id,
+                },
+                {"parent_id": record2.id, "model": "sale.order", "res_id": 1},
+            ],
+        )
+
+    def test_create_ack(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record0 = self.backend.create_record("test_csv_output", vals)
+        ack = record0.exchange_create_ack_record()
+        record0.invalidate_cache()
+        self.assertIn(ack, record0.related_exchange_ids)
+        self.assertRecordValues(
+            ack,
+            [
+                {
+                    "parent_id": record0.id,
+                    "model": "res.partner",
+                    "res_id": self.partner.id,
+                    "type_id": self.exchange_type_out_ack.id,
+                },
+            ],
+        )
+        ack2 = record0.exchange_create_ack_record()
+        self.assertEqual(record0.ack_exchange_id, ack2)
+
+    def test_retry(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+        }
+        record0 = self.backend.create_record("test_csv_output", vals)
+        self.assertFalse(record0.retryable)
+        record0.edi_exchange_state = "output_error_on_send"
+        self.assertTrue(record0.retryable)
+        with mock.patch.object(type(record0), "_execute_next_action") as mocked:
+            record0.action_retry()
+            # quick exec is off, we should not get any call
+            mocked.assert_not_called()
+        self.assertEqual(record0.edi_exchange_state, "output_pending")
+        self.assertFalse(record0.retryable)

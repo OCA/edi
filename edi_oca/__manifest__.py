@@ -9,7 +9,7 @@
     Define backends, exchange types, exchange records,
     basic automation and views for handling EDI exchanges.
     """,
-    "version": "15.0.1.5.3",
+    "version": "15.0.1.6.0",
     "website": "https://github.com/OCA/edi",
     "development_status": "Beta",
     "license": "LGPL-3",
@@ -35,6 +35,7 @@
         "views/edi_backend_type_views.xml",
         "views/edi_exchange_record_views.xml",
         "views/edi_exchange_type_views.xml",
+        "views/edi_exchange_type_rule_views.xml",
         "views/menuitems.xml",
         "templates/exchange_chatter_msg.xml",
         "templates/exchange_mixin_buttons.xml",

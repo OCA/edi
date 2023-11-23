@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_type_rule_view_tree" model="ir.ui.view">
+        <field name="model">edi.exchange.type.rule</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="(not active)">
+                <field name="active" invisible="1" />
+                <field name="type_id" />
+                <field name="model_id" />
+                <field name="name" />
+                <field name="kind" />
+            </tree>
+        </field>
+    </record>
+    <record id="edi_exchange_type_rule_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.type.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="active" invisible="1" />
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        attrs="{'invisible': [('active', '=', True)]}"
+                    />
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group name="wrapper">
+                        <group name="config">
+                            <field
+                                name="type_id"
+                                invisible="context.get('default_type_id')"
+                            />
+                            <field name="model_id" />
+                            <field name="model" invisible="1" />
+                            <field name="kind" />
+                        </group>
+                        <group
+                            name="form"
+                            string="Form"
+                            attrs="{'invisible': [('kind', '!=', 'form_btn')]}"
+                        >
+                            <field name="form_btn_label" />
+                            <field name="form_btn_tooltip" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page
+                            name="domain"
+                            string="Domain"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                        >
+                            <field
+                                name="enable_domain"
+                                widget="domain"
+                                options="{'model': 'model', 'in_dialog': true}"
+                            />
+                        </page>
+                        <page
+                            name="snippet"
+                            string="Snippet"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                        >
+                            <field name="enable_snippet" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="edi_exchange_type_rule_view_search" model="ir.ui.view">
+        <field name="model">edi.exchange.type.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="type_id" />
+                <field name="model_id" />
+                <field name="kind" />
+                <filter
+                    name="filter_all"
+                    string="All"
+                    domain="['|', ('active', '=', True), ('active', '=', False)]"
+                />
+                <filter
+                    name="filter_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="filter_archived"
+                    string="Archived"
+                    domain="[('active', '=', False)]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_type_id"
+                        string="Exchange type"
+                        context="{'group_by': 'type_id'}"
+                    />
+                    <filter
+                        name="group_by_model_id"
+                        string="Model"
+                        context="{'group_by': 'model_id'}"
+                    />
+                    <filter
+                        name="group_by_kind"
+                        string="Kind"
+                        context="{'group_by': 'kind'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_type_rule_view">
+        <field name="name">EDI Exchange Type Rule</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.type.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_type_rule_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_filter_all': 1}</field>
+    </record>
+</odoo>

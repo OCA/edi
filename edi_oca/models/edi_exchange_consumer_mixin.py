@@ -19,6 +19,20 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     _name = "edi.exchange.consumer.mixin"
     _description = "Abstract record where exchange records can be assigned"
 
+    origin_exchange_record_id = fields.Many2one(
+        string="EDI origin record",
+        comodel_name="edi.exchange.record",
+        ondelete="set null",
+        help="EDI record that originated this document.",
+    )
+    origin_exchange_type_id = fields.Many2one(
+        string="EDI origin exchange type",
+        comodel_name="edi.exchange.type",
+        ondelete="set null",
+        related="origin_exchange_record_id.type_id",
+        # Store it to ease searching by type
+        store=True,
+    )
     exchange_record_ids = fields.One2many(
         "edi.exchange.record",
         inverse_name="res_id",
@@ -30,6 +44,12 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         default={},
     )
     edi_has_form_config = fields.Boolean(compute="_compute_edi_config")
+    # TODO: rename to `edi_disable_auto`
+    disable_edi_auto = fields.Boolean(
+        string="Disable auto",
+        help="When marked, EDI automatic processing will be avoided",
+        # Each extending module should override `states` as/if needed.
+    )
 
     def _compute_edi_config(self):
         for record in self:
@@ -38,34 +58,45 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
             record.edi_has_form_config = any([x.get("form") for x in config.values()])
 
     def _edi_get_exchange_type_config(self):
-        exchange_types = (
-            self.env["edi.exchange.type"]
+        # TODO: move this machinery to the rule model
+        rules = (
+            self.env["edi.exchange.type.rule"]
             .sudo()
-            .search([("model_ids.model", "=", self._name)])
+            .search([("model_id.model", "=", self._name)])
         )
         result = {}
-        for exchange_type in exchange_types:
+        for rule in rules:
+            exchange_type = rule.type_id
             eval_ctx = dict(
                 self._get_eval_context(), record=self, exchange_type=exchange_type
             )
-            domain = safe_eval.safe_eval(exchange_type.enable_domain or "[]", eval_ctx)
+            domain = safe_eval.safe_eval(rule.enable_domain or "[]", eval_ctx)
             if not self.filtered_domain(domain):
                 continue
-            if exchange_type.enable_snippet:
+            if rule.enable_snippet:
                 safe_eval.safe_eval(
-                    exchange_type.enable_snippet, eval_ctx, mode="exec", nocopy=True
+                    rule.enable_snippet, eval_ctx, mode="exec", nocopy=True
                 )
                 if not eval_ctx.get("result", False):
                     continue
 
-            result[exchange_type.id] = self._edi_get_exchange_type_conf(exchange_type)
+            result[rule.id] = self._edi_get_exchange_type_rule_conf(rule)
         return result
 
     @api.model
-    def _edi_get_exchange_type_conf(self, exchange_type):
-        conf = {"form": {}}
-        if exchange_type.model_manual_btn:
-            conf.update({"form": {"btn": {"label": exchange_type.name}}})
+    def _edi_get_exchange_type_rule_conf(self, rule):
+        conf = {
+            "form": {},
+            "type": {
+                "id": rule.type_id.id,
+                "name": rule.type_id.name,
+            },
+        }
+        if rule.kind == "form_btn":
+            label = rule.form_btn_label or rule.type_id.name
+            conf.update(
+                {"form": {"btn": {"label": label, "tooltip": rule.form_btn_tooltip}}}
+            )
         return conf
 
     def _get_eval_context(self):
@@ -172,11 +203,15 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     def _has_exchange_record_domain(
         self, exchange_type, backend=False, extra_domain=False
     ):
+        if isinstance(exchange_type, str):
+            # Backward compat: allow passing the code when this method is called directly
+            type_leaf = [("type_id.code", "=", exchange_type)]
+        else:
+            type_leaf = [("type_id", "=", exchange_type.id)]
         domain = [
             ("model", "=", self._name),
             ("res_id", "=", self.id),
-            ("type_id", "=", exchange_type.id),
-        ]
+        ] + type_leaf
         if backend is None:
             backend = exchange_type.backend_id
         if backend:
@@ -195,14 +230,29 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     @api.depends("exchange_record_ids")
     def _compute_exchange_record_count(self):
-        for record in self:
-            record.exchange_record_count = len(record.exchange_record_ids)
+        data = self.env["edi.exchange.record"].read_group(
+            [("res_id", "in", self.ids), ("model", "=", self._name)],
+            ["res_id"],
+            ["res_id"],
+        )
+        mapped_data = {x["res_id"]: x["res_id_count"] for x in data}
+        for rec in self:
+            rec.exchange_record_count = mapped_data.get(rec.id, 0)
 
     def action_view_edi_records(self):
         self.ensure_one()
         xmlid = "edi_oca.act_open_edi_exchange_record_view"
         action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
+        # Purge default search filters from ctx to avoid hiding records
+        ctx = action.get("context", {})
+        if isinstance(ctx, str):
+            ctx = safe_eval.safe_eval(ctx, self.env.context)
+        action["context"] = {
+            k: v for k, v in ctx.items() if not k.startswith("search_default_")
+        }
+        # Drop ID otherwise the context will be loaded from the action's record :S
+        action.pop("id")
         return action
 
     @api.model
@@ -232,3 +282,10 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         else:
             check_operation = operation
         return check_operation
+
+    def _edi_set_origin(self, exc_record):
+        self.sudo().update({"origin_exchange_record_id": exc_record.id})
+
+    def _edi_get_origin(self):
+        self.ensure_one()
+        return self.origin_exchange_record_id

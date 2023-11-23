@@ -11,3 +11,5 @@ from . import test_backend_validate
 from . import test_consumer_mixin
 from . import test_edi_backend_cron
 from . import test_security
+from . import test_quick_exec
+from . import test_exchange_type_deprecated_fields

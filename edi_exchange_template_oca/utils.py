@@ -1,3 +1,8 @@
+# Copyright 2020 ACSONE SA/NV
+# Copyright 2022 Camptocamp SA
+# @author Simone Orsi <simahawk@gmail.com>
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+
 from lxml import etree
 
 from odoo.tools import pycompat
@@ -25,8 +30,9 @@ def xml_purge_nswrapper(xml_content):
     if not (xml_content and xml_content.strip()):
         return xml_content
     root = etree.XML(xml_content)
-    # deeper elements come after, keep the root element at the end (if any)
-    for nswrapper in reversed(root.xpath("//nswrapper")):
+    # Deeper elements come after, keep the root element at the end (if any).
+    # Use `name()` because the real element could be namespaced on render.
+    for nswrapper in reversed(root.xpath("//*[name() = 'nswrapper']")):
         parent = nswrapper.getparent()
         if parent is None:
             # fmt:off

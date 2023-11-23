@@ -9,6 +9,39 @@ from .common import EDIBackendCommonTestCase
 
 
 class EDIExchangeTypeTestCase(EDIBackendCommonTestCase):
+    def test_ack_for(self):
+        self.assertEqual(self.exchange_type_out.ack_type_id, self.exchange_type_out_ack)
+        new_type = self.exchange_type_out.copy({"code": "just_a_test"})
+        self.assertEqual(new_type.ack_type_id, self.exchange_type_out_ack)
+        self.exchange_type_out_ack.refresh()
+        self.assertIn(
+            self.exchange_type_out.id,
+            self.exchange_type_out_ack.ack_for_type_ids.ids,
+        )
+        self.assertIn(
+            new_type.id,
+            self.exchange_type_out_ack.ack_for_type_ids.ids,
+        )
+
+    def test_same_code_same_backend(self):
+        with self.assertRaises(Exception) as err:
+            self.exchange_type_in.copy({"code": "test_csv_input"})
+        err_msg = err.exception.args[0]
+        self.assertTrue(
+            err_msg.startswith("duplicate key value violates unique constraint")
+        )
+
+    def test_same_code_different_backend(self):
+        new_backend = self.backend.copy()
+        new_type = self.exchange_type_in.copy(
+            {"backend_id": new_backend.id, "code": "test_csv_input"}
+        )
+        self.assertEqual(new_type.code, self.exchange_type_in.code)
+        self.assertEqual(
+            new_type.backend_type_id, self.exchange_type_in.backend_type_id
+        )
+        self.assertNotEqual(new_type.backend_id, self.exchange_type_in.backend_id)
+
     def test_advanced_settings(self):
         settings = """
         components:
