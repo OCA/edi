@@ -581,6 +581,12 @@ msgid "Exchange Type"
 msgstr ""
 
 #. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Exchange data generated"
+msgstr ""
+
+#. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 msgid "Exchange date"
 msgstr ""
@@ -605,7 +611,7 @@ msgstr ""
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "Exchange processed successfully "
+msgid "Exchange processed successfully"
 msgstr ""
 
 #. module: edi_oca
@@ -617,7 +623,7 @@ msgstr ""
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "Exchange received successfully "
+msgid "Exchange received successfully"
 msgstr ""
 
 #. module: edi_oca
