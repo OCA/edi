@@ -27,3 +27,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:edi_webservice_oca.field_edi_backend__webservice_backend_id
 msgid "Webservice Backend"
 msgstr ""
+
+#. module: edi_webservice_oca
+#: code:addons/edi_webservice_oca/components/send.py:0
+#, python-format
+msgid "`method` is required in `webservice` type settings."
+msgstr ""
