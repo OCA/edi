@@ -6,6 +6,7 @@
 import base64
 from unittest import mock
 
+from odoo import exceptions
 from odoo.tests.common import Form
 
 from .common import TestCommon
@@ -63,6 +64,28 @@ class TestOrderImport(TestCommon):
         self.wiz_model.update_order_lines(parsed_order_up, order, "pricelist")
         self.assertEqual(len(order.order_line), 2)
         self.assertEqual(int(order.order_line[0].product_uom_qty), 3)
+        # test raise UserError if not price_unit
+        parsed_order_up_no_price_unit = dict(
+            self.parsed_order,
+            partner={"email": "agrolait@yourcompany.example.com"},
+            lines=[
+                {
+                    "product": {"code": "FURN_7777"},
+                    "qty": 4,
+                    "uom": {"unece_code": "C62"},
+                },
+            ],
+        )
+        parsed_order_up_no_price_unit["doc_type"] = "order"
+        parsed_order_up_no_price_unit["price_source"] = "order"
+        expected_msg = (
+            "No price is defined in the file. Please double check "
+            "file or select Pricelist as the source for prices."
+        )
+        with self.assertRaisesRegex(exceptions.UserError, expected_msg):
+            self.wiz_model.update_order_lines(
+                parsed_order_up_no_price_unit, order, "order"
+            )
 
     def test_order_import_default_so_vals(self):
         default = {"client_order_ref": "OVERRIDE"}
