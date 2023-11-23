@@ -27,6 +27,11 @@ msgid "Disable"
 msgstr "Deshabilitar"
 
 #. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__disable_edi_auto
+msgid "Disable auto"
+msgstr ""
+
+#. module: edi_stock_oca
 #: model_terms:ir.ui.view,arch_db:edi_stock_oca.stock_picking_form_view
 msgid "EDI"
 msgstr "EDI"
@@ -35,6 +40,21 @@ msgstr "EDI"
 #: model_terms:ir.ui.view,arch_db:edi_stock_oca.view_partner_form
 msgid "EDI Configuration"
 msgstr "Configuración EDI"
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__origin_exchange_type_id
+msgid "EDI origin exchange type"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__origin_exchange_record_id
+msgid "EDI origin record"
+msgstr ""
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,help:edi_stock_oca.field_stock_picking__origin_exchange_record_id
+msgid "EDI record that originated this document."
+msgstr ""
 
 #. module: edi_stock_oca
 #: model:ir.model.fields,field_description:edi_stock_oca.field_stock_picking__edi_auto_disabled
@@ -70,3 +90,8 @@ msgstr "Recuento de Registros de Intercambio"
 #: model:ir.model,name:edi_stock_oca.model_stock_picking
 msgid "Transfer"
 msgstr "Transferencia"
+
+#. module: edi_stock_oca
+#: model:ir.model.fields,help:edi_stock_oca.field_stock_picking__disable_edi_auto
+msgid "When marked, EDI automatic processing will be avoided"
+msgstr ""
