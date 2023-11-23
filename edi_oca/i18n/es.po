@@ -51,7 +51,8 @@ msgid ""
 "                date_pattern: %Y-%m-%d-%H-%M-%S\n"
 "\n"
 "            In any case, you can use these settings\n"
-"            to provide your own configuration for whatever need you might have.\n"
+"            to provide your own configuration for whatever need you might "
+"have.\n"
 "        "
 msgstr ""
 "\n"
@@ -131,9 +132,11 @@ msgstr "<span class=\"pr-4\"><i class=\"fa fa-retweet\"/> Acciones EDI</span>"
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
 msgid ""
-"<span class=\"text-warning\" attrs=\"{'invisible': [('related_record_exists', '=', True)]}\">\n"
+"<span class=\"text-warning\" attrs=\"{'invisible': "
+"[('related_record_exists', '=', True)]}\">\n"
 "                            The related record is not available anymore.\n"
-"                            Consider deleting this record too or fixing its relation.\n"
+"                            Consider deleting this record too or fixing its "
+"relation.\n"
 "                          </span>"
 msgstr ""
 "<span class=\"text-warning\" attrs=\"{'invisible': [(' "
@@ -645,6 +648,12 @@ msgid "Exchange Type"
 msgstr "Tipo de Intercambio"
 
 #. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#, python-format
+msgid "Exchange data generated"
+msgstr ""
+
+#. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 msgid "Exchange date"
 msgstr "Fecha de Intercambio"
@@ -669,8 +678,8 @@ msgstr "Intercambio no válido"
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "Exchange processed successfully "
-msgstr "Intercambio procesado con éxito "
+msgid "Exchange processed successfully"
+msgstr ""
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
@@ -681,8 +690,8 @@ msgstr "Intercambio procesado con errores"
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
-msgid "Exchange received successfully "
-msgstr "Intercambio recibido correctamente "
+msgid "Exchange received successfully"
+msgstr ""
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_backend.py:0
@@ -817,13 +826,18 @@ msgstr "Seguidores (Socios)"
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__exchange_filename_pattern
 msgid ""
-"For output exchange types this should be a formatting string with the following variables available (to be used between brackets, `{}`): `exchange_record`, `record_name`, `type` and `dt`. For instance, a valid string would be {record_name}-{type.code}-{dt}\n"
-"For input exchange types related to storage backends it should be a regex expression to filter the files to be fetched from the pending directory in the related storage. E.g: `.*my-type-[0-9]*.\\.csv`"
+"For output exchange types this should be a formatting string with the "
+"following variables available (to be used between brackets, `{}`): "
+"`exchange_record`, `record_name`, `type` and `dt`. For instance, a valid "
+"string would be {record_name}-{type.code}-{dt}\n"
+"For input exchange types related to storage backends it should be a regex "
+"expression to filter the files to be fetched from the pending directory in "
+"the related storage. E.g: `.*my-type-[0-9]*.\\.csv`"
 msgstr ""
 "Para los tipos de intercambio de salida, esto debe ser una cadena de formato "
-"con las siguientes variables disponibles (que se usarán entre corchetes, "
-"`{}`): `exchange_record`, `record_name`, `type` y `dt`. Por ejemplo, una "
-"cadena válida sería {record_name}-{type.code}-{dt}\n"
+"con las siguientes variables disponibles (que se usarán entre corchetes, `{}"
+"`): `exchange_record`, `record_name`, `type` y `dt`. Por ejemplo, una cadena "
+"válida sería {record_name}-{type.code}-{dt}\n"
 "Para los tipos de intercambio de entrada relacionados con backends de "
 "almacenamiento, debe ser una expresión regular para filtrar los archivos que "
 "se recuperarán del directorio pendiente en el almacenamiento relacionado. "
@@ -1136,7 +1150,6 @@ msgstr "¡El registro ID=%d no tiene ningún archivo que enviar!"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_backend.py:0
-#: code:addons/edi_oca/models/edi_backend.py:0
 #, python-format
 msgid "Record ID=%d is not meant to be processed"
 msgstr "El registro ID=%d no está destinado a ser procesado"
@@ -1318,13 +1331,17 @@ msgstr "A la espera de ser enviado"
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_form
 msgid ""
 "Warning: these fields are deprecated.\n"
-"                              If you rely on them for configuring rules via data files,\n"
-"                              it's strongly recommended to rework such files\n"
+"                              If you rely on them for configuring rules via "
+"data files,\n"
+"                              it's strongly recommended to rework such "
+"files\n"
 "                              to use `edi.exchange.type.rule` records.\n"
 "                              Please note that, due to backward compat,\n"
-"                              removing a model from here will cause deletion\n"
+"                              removing a model from here will cause "
+"deletion\n"
 "                              of any existing rule for the model.\n"
-"                              You can use the button \"Wipe\" to clean them properly."
+"                              You can use the button \"Wipe\" to clean them "
+"properly."
 msgstr ""
 "Atención: estos campos están obsoletos.\n"
 "                              Si confía en ellos para configurar reglas a "
@@ -1373,8 +1390,8 @@ msgstr "Toallita"
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__partner_ids
 msgid ""
-"You can use this field to limit generating/processing exchanges for specific"
-" partners. Use it directly or within models rules (domain or snippet)."
+"You can use this field to limit generating/processing exchanges for specific "
+"partners. Use it directly or within models rules (domain or snippet)."
 msgstr ""
 "Puede utilizar este campo para limitar la generación/tratamiento de "
 "intercambios para determinados interlocutores. Utilícelo directamente o "
@@ -1384,3 +1401,11 @@ msgstr ""
 #: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_error_on_send
 msgid "error on send"
 msgstr "error en el envío"
+
+#, python-format
+#~ msgid "Exchange processed successfully "
+#~ msgstr "Intercambio procesado con éxito "
+
+#, python-format
+#~ msgid "Exchange received successfully "
+#~ msgstr "Intercambio recibido correctamente "
