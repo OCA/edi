@@ -41,13 +41,18 @@ msgstr "Patrón de Intercambio de Archivos"
 #. module: edi_storage_oca
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_exchange_type__exchange_filename_pattern
 msgid ""
-"For output exchange types this should be a formatting string with the following variables available (to be used between brackets, `{}`): `exchange_record`, `record_name`, `type` and `dt`. For instance, a valid string would be {record_name}-{type.code}-{dt}\n"
-"For input exchange types related to storage backends it should be a regex expression to filter the files to be fetched from the pending directory in the related storage. E.g: `.*my-type-[0-9]*.\\.csv`"
+"For output exchange types this should be a formatting string with the "
+"following variables available (to be used between brackets, `{}`): "
+"`exchange_record`, `record_name`, `type` and `dt`. For instance, a valid "
+"string would be {record_name}-{type.code}-{dt}\n"
+"For input exchange types related to storage backends it should be a regex "
+"expression to filter the files to be fetched from the pending directory in "
+"the related storage. E.g: `.*my-type-[0-9]*.\\.csv`"
 msgstr ""
 "Para los tipos de intercambio de salida, esto debe ser una cadena de formato "
-"con las siguientes variables disponibles (que se usarán entre corchetes, "
-"`{}`): `exchange_record`, `record_name`, `type` y `dt`. Por ejemplo, una "
-"cadena válida sería {record_name}-{type.code}-{dt}\n"
+"con las siguientes variables disponibles (que se usarán entre corchetes, `{}"
+"`): `exchange_record`, `record_name`, `type` y `dt`. Por ejemplo, una cadena "
+"válida sería {record_name}-{type.code}-{dt}\n"
 "Para los tipos de intercambio de entrada relacionados con backends de "
 "almacenamiento, debe ser una expresión regular para filtrar los archivos que "
 "se recuperarán del directorio pendiente en el almacenamiento relacionado. "
@@ -100,6 +105,11 @@ msgstr "Ruta a la carpeta para operaciones de error"
 #: model:ir.model.fields,help:edi_storage_oca.field_edi_backend__output_dir_pending
 msgid "Path to folder for pending operations"
 msgstr "Ruta a la carpeta de operaciones pendientes"
+
+#. module: edi_storage_oca
+#: model:ir.model.fields,field_description:edi_storage_oca.field_edi_backend__input_dir_remove
+msgid "Remove input after done"
+msgstr ""
 
 #. module: edi_storage_oca
 #: model_terms:ir.ui.view,arch_db:edi_storage_oca.edi_backend_view_form
