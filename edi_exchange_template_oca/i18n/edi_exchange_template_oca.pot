@@ -155,6 +155,16 @@ msgid "Output Type"
 msgstr ""
 
 #. module: edi_exchange_template_oca
+#: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_exchange_template_output__prettify
+msgid "Prettify"
+msgstr ""
+
+#. module: edi_exchange_template_oca
+#: model:ir.model.fields,help:edi_exchange_template_oca.field_edi_exchange_template_output__prettify
+msgid "Prettify output. Works for XML output only."
+msgstr ""
+
+#. module: edi_exchange_template_oca
 #: model:ir.model.fields,field_description:edi_exchange_template_oca.field_edi_exchange_template_output__template_arch
 msgid "QWeb arch"
 msgstr ""
