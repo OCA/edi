@@ -13,6 +13,7 @@ from io import StringIO
 from odoo import _, exceptions, fields, models, tools
 
 from odoo.addons.component.exception import NoComponentError
+from odoo.addons.queue_job.exception import RetryableJobError
 
 from ..exceptions import EDIValidationError
 
@@ -229,6 +230,7 @@ class EDIBackend(models.Model):
         except UnicodeDecodeError:
             pass
         if output:
+            message = exchange_record._exchange_status_message("generate_ok")
             try:
                 self._validate_data(exchange_record, output)
             except EDIValidationError:
@@ -239,8 +241,9 @@ class EDIBackend(models.Model):
                     {"edi_exchange_state": state, "exchange_error": error}
                 )
         exchange_record.notify_action_complete("generate", message=message)
-        return output
+        return message
 
+    # TODO: unify to all other checkes that return something
     def _check_exchange_generate(self, exchange_record, force=False):
         exchange_record.ensure_one()
         if (
@@ -288,10 +291,11 @@ class EDIBackend(models.Model):
         # In case already sent: skip sending and check the state
         check = self._output_check_send(exchange_record)
         if not check:
-            return False
+            return "Nothing to do. Likely already sent."
         state = exchange_record.edi_exchange_state
         error = False
         message = None
+        res = ""
         try:
             self._exchange_send(exchange_record)
         except self._swallable_exceptions():
@@ -300,7 +304,12 @@ class EDIBackend(models.Model):
             error = _get_exception_msg()
             state = "output_error_on_send"
             message = exchange_record._exchange_status_message("send_ko")
-            res = False
+            res = f"Error: {error}"
+        except self._send_retryable_exceptions() as err:
+            error = _get_exception_msg()
+            raise RetryableJobError(
+                error, **exchange_record._job_retry_params()
+            ) from err
         else:
             # TODO: maybe the send handler should return desired message and state
             message = exchange_record._exchange_status_message("send_ok")
@@ -310,7 +319,7 @@ class EDIBackend(models.Model):
                 if self.output_sent_processed_auto
                 else "output_sent"
             )
-            res = True
+            res = message
         finally:
             exchange_record.write(
                 {
@@ -332,6 +341,10 @@ class EDIBackend(models.Model):
             exceptions.UserError,
             exceptions.ValidationError,
         )
+
+    def _send_retryable_exceptions(self):
+        # IOError is a base class for all connection errors
+        return (IOError,)
 
     def _output_check_send(self, exchange_record):
         if exchange_record.direction != "output":
@@ -456,22 +469,21 @@ class EDIBackend(models.Model):
         # In case already processed: skip processing and check the state
         check = self._exchange_process_check(exchange_record)
         if not check:
-            return False
+            return "Nothing to do. Likely already processed."
         old_state = state = exchange_record.edi_exchange_state
         error = False
         message = None
         try:
-            self._exchange_process(exchange_record)
+            res = self._exchange_process(exchange_record)
         except self._swallable_exceptions():
             if self.env.context.get("_edi_process_break_on_error"):
                 raise
             error = _get_exception_msg()
             state = "input_processed_error"
-            res = False
+            res = f"Error: {error}"
         else:
             error = None
             state = "input_processed"
-            res = True
         finally:
             exchange_record.write(
                 {
@@ -505,7 +517,7 @@ class EDIBackend(models.Model):
         # In case already processed: skip processing and check the state
         check = self._exchange_receive_check(exchange_record)
         if not check:
-            return False
+            return "Nothing to do. Likely already received."
         state = exchange_record.edi_exchange_state
         error = False
         message = None
@@ -519,19 +531,19 @@ class EDIBackend(models.Model):
             error = _get_exception_msg()
             state = "validate_error"
             message = exchange_record._exchange_status_message("validate_ko")
-            res = False
+            res = f"Validation error: {error}"
         except self._swallable_exceptions():
             if self.env.context.get("_edi_receive_break_on_error"):
                 raise
             error = _get_exception_msg()
             state = "input_receive_error"
             message = exchange_record._exchange_status_message("receive_ko")
-            res = False
+            res = f"Input error: {error}"
         else:
             message = exchange_record._exchange_status_message("receive_ok")
             error = None
             state = "input_received"
-            res = True
+            res = message
         finally:
             exchange_record.write(
                 {

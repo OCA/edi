@@ -273,13 +273,14 @@ class EDIExchangeRecord(models.Model):
     def _exchange_status_messages(self):
         return {
             # status: message
+            "generate_ok": _("Exchange data generated"),
             "send_ok": _("Exchange sent"),
             "send_ko": _(
                 "An error happened while sending. Please check exchange record info."
             ),
-            "process_ok": _("Exchange processed successfully "),
+            "process_ok": _("Exchange processed successfully"),
             "process_ko": _("Exchange processed with errors"),
-            "receive_ok": _("Exchange received successfully "),
+            "receive_ok": _("Exchange received successfully"),
             "receive_ko": _("Exchange not received"),
             "ack_received": _("ACK file received."),
             "ack_missing": _("ACK file is required for this exchange but not found."),
@@ -571,3 +572,11 @@ class EDIExchangeRecord(models.Model):
         params = self._job_delay_params()
         params.update(kw)
         return super().with_delay(**params)
+
+    def delayable(self, **kw):
+        params = self._job_delay_params()
+        params.update(kw)
+        return super().delayable(**params)
+
+    def _job_retry_params(self):
+        return {}
