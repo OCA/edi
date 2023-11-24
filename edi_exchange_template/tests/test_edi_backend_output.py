@@ -126,13 +126,15 @@ result = {"res_ids": record.ids}
 class TestEDIBackendOutput(TestEDIBackendOutputBase):
     def test_get_template(self):
         self.assertEqual(
-            self.backend._get_output_template(self.record1), self.tmpl_out1
+            self.backend._get_template(self.record1, "output", ""), self.tmpl_out1
         )
         self.assertEqual(
-            self.backend._get_output_template(self.record2), self.tmpl_out2
+            self.backend._get_template(self.record2, "output", ""), self.tmpl_out2
         )
         self.assertEqual(
-            self.backend._get_output_template(self.record2, code=self.tmpl_out1.code),
+            self.backend._get_template(
+                self.record2, "output", "", code=self.tmpl_out1.code
+            ),
             self.tmpl_out1,
         )
 

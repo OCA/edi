@@ -3,3 +3,4 @@ factur-x
 lxml
 pyyaml
 xmlschema
+xmlunittest

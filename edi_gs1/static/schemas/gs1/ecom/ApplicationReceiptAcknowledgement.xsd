@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:application_receipt_acknowledgement="urn:gs1:ecom:application_receipt_acknowledgement:xsd:3" xmlns:ecom_common="urn:gs1:ecom:ecom_common:xsd:3" xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader" xmlns:shared_common="urn:gs1:shared:shared_common:xsd:3" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="urn:gs1:ecom:application_receipt_acknowledgement:xsd:3" version="3.4">
+    <xsd:annotation>
+        <xsd:documentation><![CDATA[---------------------------
+© Copyright GS1, 2019
+
+GS1 is providing this XML Schema Definition file and resultant XML file as a service to interested industries.
+This XML Schema Definition file and resultant XML file were developed through a consensus process of interested parties.
+
+Although efforts have been made to ensure that the XML Schema Definition file and resultant XML file are correct, reliable, and technically
+accurate,  GS1 makes NO WARRANTY, EXPRESS OR IMPLIED, THAT THIS XML Schema Definition file and resultant XML file ARE
+CORRECT, WILL NOT REQUIRE MODIFICATION AS EXPERIENCE AND TECHNOLOGICAL ADVANCES DICTATE, OR WILL BE SUITABLE FOR
+ANY PURPOSE OR WORKABLE IN ANY APPLICATION, OR OTHERWISE.  Use of the XML Schema Definition file and resultant XML
+file are with the understanding that GS1 has no liability for any claim to the contrary, or for any damage or loss of any kind or nature.
+
+Version Information:
+Version Number: 3.4
+Date of creation: April 2019
+
+The schema and subsequent updates will be provided on the GS1 websites.
+---------------------------
+]]></xsd:documentation>
+    </xsd:annotation>
+    <xsd:import namespace="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader" schemaLocation="../../sbdh/StandardBusinessDocumentHeader.xsd"/>
+    <xsd:import namespace="urn:gs1:shared:shared_common:xsd:3" schemaLocation="../shared/SharedCommon.xsd"/>
+    <xsd:import namespace="urn:gs1:ecom:ecom_common:xsd:3" schemaLocation="eComCommon.xsd"/>
+    <xsd:element name="applicationReceiptAcknowledgementMessage" type="application_receipt_acknowledgement:ApplicationReceiptAcknowledgementMessageType"/>
+    <xsd:complexType name="ApplicationReceiptAcknowledgementMessageType">
+        <xsd:sequence>
+            <xsd:element ref="sh:StandardBusinessDocumentHeader"/>
+            <xsd:element maxOccurs="10000" name="applicationReceiptAcknowledgement" type="application_receipt_acknowledgement:ApplicationReceiptAcknowledgementType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ApplicationReceiptAcknowledgementType">
+        <xsd:complexContent>
+            <xsd:extension base="ecom_common:EcomDocumentType">
+                <xsd:sequence>
+                    <xsd:element name="applicationReceiptAcknowledgementIdentification" type="ecom_common:Ecom_EntityIdentificationType"/>
+                    <xsd:element minOccurs="0" name="applicationResponseMessageHeaderLevel" type="application_receipt_acknowledgement:ApplicationResponseMessageHeaderLevelType"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="applicationResponseDocumentLevel" type="application_receipt_acknowledgement:ApplicationResponseDocumentLevelType"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="ApplicationResponseDocumentLevelType">
+        <xsd:sequence>
+            <xsd:element name="applicationResponseStatusCode" type="application_receipt_acknowledgement:ApplicationResponseStatusEnumerationType"/>
+            <xsd:element name="originalDocumentCreationDateTime" type="xsd:dateTime"/>
+            <xsd:element name="originalDocumentType" type="shared_common:EntityTypeCodeType"/>
+            <xsd:element minOccurs="0" name="originalDocumentActionCode" type="shared_common:DocumentActionEnumerationType"/>
+            <xsd:element minOccurs="0" name="originalDocumentStatusCode" type="shared_common:DocumentStatusEnumerationType"/>
+            <xsd:element minOccurs="0" name="originalDocumentReceivedDateTime" type="xsd:dateTime"/>
+            <xsd:element minOccurs="0" name="errorCount" type="xsd:positiveInteger"/>
+            <xsd:element name="originalEntityIdentification" type="ecom_common:Ecom_EntityIdentificationType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="applicationResponseErrorOrWarning" type="application_receipt_acknowledgement:ApplicationResponseErrorOrWarningType"/>
+            <xsd:element minOccurs="0" name="avpList" type="ecom_common:Ecom_AttributeValuePairListType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ApplicationResponseErrorOrWarningType">
+        <xsd:sequence>
+            <xsd:element name="errorOrWarningCode" type="ecom_common:ErrorOrWarningCodeType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="errorOrWarningCodeDescription" type="shared_common:Description1000Type"/>
+            <xsd:element minOccurs="0" name="originOfErrorOrWarning" type="ecom_common:Ecom_PartyIdentificationType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="applicationResponseErrorReference" type="application_receipt_acknowledgement:ApplicationResponseErrorReferenceType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ApplicationResponseErrorReferenceType">
+        <xsd:sequence>
+            <xsd:element name="attributeName">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="100"/>
+                        <xsd:minLength value="1"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="attributeLocation">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="1000"/>
+                        <xsd:minLength value="1"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element minOccurs="0" name="attributeValue">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:maxLength value="1000"/>
+                        <xsd:minLength value="1"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ApplicationResponseMessageHeaderLevelType">
+        <xsd:sequence>
+            <xsd:element name="applicationResponseStatusCode" type="application_receipt_acknowledgement:ApplicationResponseStatusEnumerationType"/>
+            <xsd:element minOccurs="0" name="errorCount" type="xsd:positiveInteger"/>
+            <xsd:element name="originalEntityIdentification" type="ecom_common:Ecom_EntityIdentificationType"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="applicationResponseErrorOrWarning" type="application_receipt_acknowledgement:ApplicationResponseErrorOrWarningType"/>
+            <xsd:element minOccurs="0" name="avpList" type="ecom_common:Ecom_AttributeValuePairListType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:simpleType name="ApplicationResponseStatusEnumerationType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="ERROR"/>
+            <xsd:enumeration value="RECEIVED"/>
+            <xsd:enumeration value="WARNING"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>
