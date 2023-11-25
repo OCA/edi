@@ -119,12 +119,7 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
             if not invoice2data_res:
                 fileobj.close()
-                raise UserError(
-                    _(
-                        "This PDF invoice doesn't match a known template of "
-                        "the invoice2data lib."
-                    )
-                )
+                return False
         logger.info("Result of invoice2data PDF extraction: %s", invoice2data_res)
         fileobj.close()
         return self.invoice2data_to_parsed_inv(invoice2data_res)
