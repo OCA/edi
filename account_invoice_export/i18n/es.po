@@ -6,13 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2023-11-25 11:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,help:account_invoice_export.field_account_bank_statement_line__send_through_http
@@ -20,13 +22,13 @@ msgstr ""
 #: model:ir.model.fields,help:account_invoice_export.field_account_payment__send_through_http
 #: model:ir.model.fields,help:account_invoice_export.field_transmit_method__send_through_http
 msgid "Adds a Send eBill button on the invoice"
-msgstr ""
+msgstr "Añade un botón Enviar factura electrónica en la factura"
 
 #. module: account_invoice_export
 #: code:addons/account_invoice_export/models/account_move.py:0
 #, python-format
 msgid "An error of type {} occured."
-msgstr ""
+msgstr "Se ha producido un error de tipo {}."
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.transmit_method_form
@@ -34,17 +36,21 @@ msgid ""
 "By default the PDF of the invoice will be sent using the connection "
 "parameters below (basic authenticaiton)."
 msgstr ""
+"Por defecto, el PDF de la factura se enviará utilizando los parámetros de "
+"conexión indicados a continuación (autenticación básica)."
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__display_name
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.view_move_form
 msgid "Ebill has already been sent. Are you sure you want to send it again ?"
 msgstr ""
+"La factura electrónica ya ha sido enviada. ¿Está seguro de que desea "
+"enviarla de nuevo?"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__send_through_http
@@ -52,18 +58,18 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__send_through_http
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__send_through_http
 msgid "Enable send eBill"
-msgstr ""
+msgstr "Activar el envío de factura electrónica"
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.exception_sending_invoice
 msgid "Error sending invoice to"
-msgstr ""
+msgstr "Error al enviar la factura a"
 
 #. module: account_invoice_export
 #: code:addons/account_invoice_export/models/account_move.py:0
 #, python-format
 msgid "HTTP error {} sending invoice to {}"
-msgstr ""
+msgstr "Error HTTP {} enviando factura a {}"
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.transmit_method_form
@@ -71,93 +77,96 @@ msgid ""
 "Handling specific connection needs and/or exporting other files can be done "
 "through code."
 msgstr ""
+"La gestión de necesidades específicas de conexión y/o la exportación de "
+"otros archivos pueden realizarse mediante código."
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__id
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__invoice_export_confirmed
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__invoice_export_confirmed
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__invoice_export_confirmed
 msgid "Invoice Export Confirmed"
-msgstr ""
+msgstr "Exportación de Facturas Confirmada"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__invoice_exported
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__invoice_exported
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__invoice_exported
 msgid "Invoice Exported"
-msgstr ""
+msgstr "Factura Exportada"
 
 #. module: account_invoice_export
 #: code:addons/account_invoice_export/models/account_move.py:0
 #, python-format
 msgid "Invoice successfuly sent to {}"
-msgstr ""
+msgstr "Factura enviada correctamente a {}"
 
 #. module: account_invoice_export
 #: model:ir.model,name:account_invoice_export.model_account_move
 msgid "Journal Entry"
-msgstr ""
+msgstr "Entrada Diaria"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move____last_update
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última Modificación el"
 
 #. module: account_invoice_export
 #: code:addons/account_invoice_export/models/account_move.py:0
 #, python-format
 msgid "Nothing done, invoice has already been exported before."
-msgstr ""
+msgstr "No se ha hecho nada, la factura ya se ha exportado antes."
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__destination_pwd
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.view_move_form
 msgid "Resend eBill"
-msgstr ""
+msgstr "Reenviar factura electrónica"
 
 #. module: account_invoice_export
 #: model:ir.actions.server,name:account_invoice_export.action_send_ebill
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.view_move_form
 msgid "Send eBill"
-msgstr ""
+msgstr "Enviar factura electrónica"
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.exception_sending_invoice
 msgid "The failed job has the uuid"
-msgstr ""
+msgstr "El trabajo fallido tiene el uuid"
 
 #. module: account_invoice_export
 #: model:mail.activity.type,name:account_invoice_export.mail_activity_transmit_warning
 msgid "Transmission Error"
-msgstr ""
+msgstr "Error de Transmisión"
 
 #. module: account_invoice_export
 #: model:ir.model,name:account_invoice_export.model_transmit_method
 msgid "Transmit Method of a document"
-msgstr ""
+msgstr "Método de comunicación de un documento"
 
 #. module: account_invoice_export
 #: code:addons/account_invoice_export/models/account_move.py:0
 #, python-format
 msgid "Transmit method is not configured to send through HTTP"
 msgstr ""
+"El método de transmisión no está configurado para enviar a través de HTTP"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__destination_url
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__destination_user
 msgid "User"
-msgstr ""
+msgstr "Usuario"
