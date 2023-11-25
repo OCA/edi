@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-12 01:43+0000\n"
-"PO-Revision-Date: 2018-03-12 01:43+0000\n"
-"Last-Translator: enjolras <yo@miguelrevilla.com>, 2018\n"
+"PO-Revision-Date: 2023-11-25 11:34+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_res_company
@@ -25,9 +26,8 @@ msgstr "Compañías"
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_res_config_settings
-#, fuzzy
 msgid "Config Settings"
-msgstr "account.config.settings"
+msgstr "Ajustes de Configuración"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_account_move__display_name
@@ -35,18 +35,18 @@ msgstr "account.config.settings"
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__display_name
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__embed_pdf_in_ubl_xml_invoice
 msgid "Embed PDF in UBL XML Invoice"
-msgstr ""
+msgstr "Incrustar PDF en Factura XML UBL"
 
 #. module: account_invoice_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_move_form
 msgid "Generate UBL XML File"
-msgstr ""
+msgstr "Incrustar PDF en Factura XML UBL"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_account_move__id
@@ -54,7 +54,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__id
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,help:account_invoice_ubl.field_res_company__embed_pdf_in_ubl_xml_invoice
@@ -65,16 +65,21 @@ msgid ""
 "to be compliant with the e-fff standard used in Belgium, you should activate "
 "this option."
 msgstr ""
+"Si está activada, el archivo XML de factura UBL independiente incluirá el "
+"PDF de la factura en base64 en el nodo 'AdditionalDocumentReference'. Por "
+"ejemplo, para cumplir con la norma e-fff utilizada en Bélgica, debe activar "
+"esta opción."
 
 #. module: account_invoice_ubl
 #: model_terms:ir.ui.view,arch_db:account_invoice_ubl.view_account_config_settings
 msgid "Include the PDF of the invoice in the standalone UBL Invoice XML file."
 msgstr ""
+"Incluir el PDF de la factura en el archivo XML de factura UBL independiente."
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_account_move
 msgid "Journal Entry"
-msgstr ""
+msgstr "Entrada Diaria"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_account_move____last_update
@@ -82,23 +87,22 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company____last_update
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_config_settings____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última Modificación el"
 
 #. module: account_invoice_ubl
 #: model:ir.model,name:account_invoice_ubl.model_ir_actions_report
-#, fuzzy
 msgid "Report Action"
-msgstr "Informe"
+msgstr "Informar Acción"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields.selection,name:account_invoice_ubl.selection__res_company__xml_format_in_pdf_invoice__ubl
 msgid "Universal Business Language (UBL)"
-msgstr ""
+msgstr "Lenguaje Comercial Universal (LCU)"
 
 #. module: account_invoice_ubl
 #: model:ir.model.fields,field_description:account_invoice_ubl.field_res_company__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
-msgstr ""
+msgstr "Formato XML integrado en factura PDF"
 
 #~ msgid "Invoice"
 #~ msgstr "Factura"
