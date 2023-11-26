@@ -11,6 +11,7 @@ from tempfile import NamedTemporaryFile
 
 from odoo import _, api, fields, models, tools
 from odoo.exceptions import UserError
+from odoo.tools import float_compare
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +58,7 @@ class AccountInvoiceImport(models.TransientModel):
             price_include = True
         else:
             return taxes
-        taxes.append(
+        taxes = [
             {
                 "amount_type": amount_type,
                 "amount": float(amount),
@@ -66,7 +67,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "unece_categ_code": categ_code,
                 # "unece_due_date_code": due_date_code,
             }
-        )
+        ]
         return taxes
 
     def _clean_string(self, string):
@@ -222,6 +223,47 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv["amount_untaxed"] = invoice2data_res["amount_untaxed"]
         if "amount_tax" in invoice2data_res:
             parsed_inv["amount_tax"] = invoice2data_res["amount_tax"]
+
+            if float_compare(
+                parsed_inv["amount_untaxed"],
+                parsed_inv["amount_tax"],
+                precision_rounding=0.01,
+            ):
+                logger.warning(prepared_lines)
+
+                # if there are no taxes create tax adjustment lines
+                if not any(
+                    il["taxes"][0].get("amount", 0.0) > 0
+                    for il in prepared_lines
+                    if "amount" in ["taxes"]
+                ):
+                    logger.info(
+                        "The total amount is different from the untaxed amount, "
+                        "but no tax has been configured !"
+                    )
+
+                    tax_lines = invoice2data_res.get("tax_lines", [])
+                    logger.warning(tax_lines)
+
+                    tax_correction_lines = [
+                        il for il in tax_lines if il.get("line_tax_amount") > 0
+                    ]
+                    logger.warning(tax_correction_lines)
+
+                    for tcl in tax_correction_lines:
+                        tcl["name"] = _("%s VAT Correction") % tcl["line_tax_percent"]
+                        tcl["qty"] = 1
+                        tcl["price_unit"] = tcl["price_subtotal"]
+
+                    tax_correction_lines = self.invoice2data_prepare_lines(
+                        tax_correction_lines
+                    )
+                    logger.error(tax_correction_lines)
+
+                    parsed_inv["lines"] += tax_correction_lines
+                    logger.warning("total invoice lines")
+                    logger.warning(parsed_inv["lines"])
+
         if "company_vat" in invoice2data_res:
             parsed_inv["company"] = {"vat": invoice2data_res["company_vat"]}
         for key, value in parsed_inv.items():

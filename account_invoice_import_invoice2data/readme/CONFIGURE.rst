@@ -103,3 +103,10 @@ Invoice line Fields
 | sectionheader | char | There is a special view available for section headers. |
 | date_start | date | The start date of the period for the invoice when the services are delivered. |
 | date_end | date | The start date of the period for the invoice when the services are delivered. |
+
+Tax line Fields
+| fieldname | type | Description |
+| -------------- | :---------: | :-------------------------------------- |
+| price_subtotal | float | The total amount of the tax rule excluding taxes. |
+| line_tax_percent | float | The percentage of tax. |
+| line_tax_amount | float | The amount of tax for the tax line. |
