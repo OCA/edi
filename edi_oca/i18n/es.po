@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-11-22 20:34+0000\n"
+"PO-Revision-Date: 2023-11-26 18:34+0000\n"
 "Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
@@ -651,7 +651,7 @@ msgstr "Tipo de Intercambio"
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "Exchange data generated"
-msgstr ""
+msgstr "Datos de intercambio generados"
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
@@ -679,7 +679,7 @@ msgstr "Intercambio no válido"
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "Exchange processed successfully"
-msgstr ""
+msgstr "Intercambio procesado con éxito"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
@@ -691,7 +691,7 @@ msgstr "Intercambio procesado con errores"
 #: code:addons/edi_oca/models/edi_exchange_record.py:0
 #, python-format
 msgid "Exchange received successfully"
-msgstr ""
+msgstr "Intercambio recibido correctamente"
 
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_backend.py:0
