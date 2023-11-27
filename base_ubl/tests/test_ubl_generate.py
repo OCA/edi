@@ -5,9 +5,13 @@
 from lxml import etree
 
 from odoo.tests.common import HttpCase
+from odoo.tools import mute_logger
 
 
 class TestUblInvoice(HttpCase):
+
+    # Reduce log noise on CI while rendering GET assets
+    @mute_logger("werkzeug")
     def test_pdf_generate(self):
         invoice = self.create_test_invoice()
         content, doc_type = (

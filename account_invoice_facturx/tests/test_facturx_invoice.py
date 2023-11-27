@@ -7,30 +7,34 @@ import logging
 from facturx import get_facturx_level
 from lxml import etree
 
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
+
+from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
 
 logger = logging.getLogger(__name__)
 
 
-class TestFacturXInvoice(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.company = self.env.ref("base.main_company")
-        self.product1 = self.env.ref("product.product_product_4")
-        self.product2 = self.env.ref("product.product_product_1")
-        self.invoice = self.env["account.move"].create(
+class TestFacturXInvoice(SavepointCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.company = cls.env.ref("base.main_company")
+        cls.product1 = cls.env.ref("product.product_product_4")
+        cls.product2 = cls.env.ref("product.product_product_1")
+        cls.invoice = cls.env["account.move"].create(
             {
-                "company_id": self.company.id,
+                "company_id": cls.company.id,
                 "move_type": "out_invoice",
-                "partner_id": self.env.ref("base.res_partner_2").id,
-                "currency_id": self.company.currency_id.id,
+                "partner_id": cls.env.ref("base.res_partner_2").id,
+                "currency_id": cls.company.currency_id.id,
                 "invoice_line_ids": [
                     (
                         0,
                         0,
                         {
-                            "product_id": self.product1.id,
-                            "product_uom_id": self.product1.uom_id.id,
+                            "product_id": cls.product1.id,
+                            "product_uom_id": cls.product1.uom_id.id,
                             "quantity": 12,
                             "price_unit": 42.42,
                         },
@@ -39,8 +43,8 @@ class TestFacturXInvoice(TransactionCase):
                         0,
                         0,
                         {
-                            "product_id": self.product2.id,
-                            "product_uom_id": self.product2.uom_id.id,
+                            "product_id": cls.product2.id,
+                            "product_uom_id": cls.product2.uom_id.id,
                             "quantity": 2,
                             "price_unit": 12.34,
                         },
@@ -48,7 +52,7 @@ class TestFacturXInvoice(TransactionCase):
                 ],
             }
         )
-        self.invoice.action_post()
+        cls.invoice.action_post()
 
     def test_deep_customer_invoice(self):
         # Bug in Basic XSD: missing CountrySubDivisionName

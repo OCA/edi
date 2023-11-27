@@ -7,14 +7,18 @@ import logging
 from unittest import mock
 
 from odoo import fields
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 from odoo.tools import file_open, float_compare
 
+from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
 
-class TestInvoiceImport(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        frtax = self.env["account.tax"].create(
+
+class TestInvoiceImport(SavepointCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        frtax = cls.env["account.tax"].create(
             {
                 "name": "French VAT purchase 20.0%",
                 "description": "FR-VAT-buy-20.0",
@@ -24,7 +28,7 @@ class TestInvoiceImport(TransactionCase):
             }
         )
         # Set this tax on Internet access product
-        internet_product = self.env.ref(
+        internet_product = cls.env.ref(
             "account_invoice_import_invoice2data.internet_access"
         )
         internet_product.supplier_taxes_id = [(6, 0, [frtax.id])]
