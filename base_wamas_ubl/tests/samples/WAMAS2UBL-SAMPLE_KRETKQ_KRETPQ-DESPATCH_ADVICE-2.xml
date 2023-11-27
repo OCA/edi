@@ -1,0 +1,80 @@
+<DespatchAdvice xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
+    <cbc:UBLVersionID>2.2</cbc:UBLVersionID>
+    <cbc:ID/>
+    <cbc:IssueDate>2023-05-01</cbc:IssueDate>
+    <cac:OrderReference>
+        <cbc:ID>1711980</cbc:ID>
+        <cbc:IssueDate>2023-05-01</cbc:IssueDate>
+    </cac:OrderReference>
+    <cac:DespatchSupplierParty>
+        <cbc:CustomerAssignedAccountID>4007720</cbc:CustomerAssignedAccountID>
+        <cac:Party>
+            <cac:PartyName>
+                <cbc:Name>Wood Corner</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>1839 Arbor Way</cbc:StreetName>
+                <cbc:CityName>Turlock</cbc:CityName>
+                <cbc:PostalZone>95380</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>US</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:Contact>
+                <cbc:Telephone>Ron Gibson</cbc:Telephone>
+                <cbc:Telefax></cbc:Telefax>
+                <cbc:ElectronicMail>ron.gibson76@example.com</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:DespatchSupplierParty>
+    <cac:DeliveryCustomerParty>
+        <cac:Party>
+            <cac:PartyName>
+                <cbc:Name>Deco Addict</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>77 Santa Barbara Rd</cbc:StreetName>
+                <cbc:CityName>Pleasant Hill</cbc:CityName>
+                <cbc:PostalZone>94523</cbc:PostalZone>
+                <cbc:CountrySubentity>California</cbc:CountrySubentity>
+                <cac:Country>
+                    <cbc:IdentificationCode>US</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID/>
+                <cac:TaxScheme>
+                    <cbc:ID/>
+                    <cbc:TaxTypeCode/>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:Contact>
+                <cbc:Name>Addison Olson</cbc:Name>
+                <cbc:Telephone>(223)-399-7637</cbc:Telephone>
+                <cbc:Telefax/>
+                <cbc:ElectronicMail>addison.olson28@example.com</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:DeliveryCustomerParty>
+    <cac:Shipment>
+        <cbc:ID/>
+        <cac:Delivery>
+            <cac:EstimatedDeliveryPeriod>
+                <cbc:EndDate>2023-05-10</cbc:EndDate>
+                <cbc:EndTime>09:57:14</cbc:EndTime>
+            </cac:EstimatedDeliveryPeriod>
+        </cac:Delivery>
+    </cac:Shipment>
+    <cac:DespatchLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:DeliveredQuantity unitCode="C62">144.0</cbc:DeliveredQuantity>
+        <cac:OrderLineReference>
+            <cbc:LineID>1711980</cbc:LineID>
+        </cac:OrderLineReference>
+        <cac:Item>
+            <cac:BuyersItemIdentification>
+                <cbc:ID>8060</cbc:ID>
+            </cac:BuyersItemIdentification>
+        </cac:Item>
+    </cac:DespatchLine>
+</DespatchAdvice>

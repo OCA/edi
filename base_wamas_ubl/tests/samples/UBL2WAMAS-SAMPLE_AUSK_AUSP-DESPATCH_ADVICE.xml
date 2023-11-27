@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DespatchAdvice xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
+	<cbc:UBLVersionID>2.2</cbc:UBLVersionID>
+	<cbc:ID>1673980/1700802</cbc:ID>
+	<cbc:Note/>
+	<cbc:IssueDate>2023-04-30</cbc:IssueDate>
+	<cac:OrderReference>
+		<cbc:ID>1700802</cbc:ID>
+	</cac:OrderReference>
+	<cac:DespatchSupplierParty>
+		<cac:Party>
+			<cac:PartyName>
+				<cbc:Name></cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName></cbc:StreetName>
+				<cbc:CityName></cbc:CityName>
+				<cbc:PostalZone></cbc:PostalZone>
+				<cac:Country>
+					<cbc:IdentificationCode></cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID></cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID></cbc:ID>
+					<cbc:TaxTypeCode></cbc:TaxTypeCode>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:Contact>
+				<cbc:Name></cbc:Name>
+				<cbc:Telephone></cbc:Telephone>
+				<cbc:ElectronicMail></cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:DespatchSupplierParty>
+	<cac:DeliveryCustomerParty>
+		<cac:Party>
+			<cac:PartyName>
+				<cbc:Name>YourCompany</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>250 Executive Park Blvd, Suite 3400</cbc:StreetName>
+				<cbc:CityName>San Francisco</cbc:CityName>
+				<cbc:PostalZone>94134</cbc:PostalZone>
+				<cbc:CountrySubentity>California</cbc:CountrySubentity>
+				<cac:Country>
+					<cbc:IdentificationCode>US</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID></cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID></cbc:ID>
+					<cbc:TaxTypeCode></cbc:TaxTypeCode>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:Contact>
+				<cbc:Name>Chester Reed</cbc:Name>
+				<cbc:Telephone>(979)-904-8902</cbc:Telephone>
+				<cbc:Telefax></cbc:Telefax>
+				<cbc:ElectronicMail>chester.reed79@example.com</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:DeliveryCustomerParty>
+	<cac:Shipment>
+		<cbc:ID>GE 2/120185</cbc:ID>
+		<cac:Delivery>
+			<cac:EstimatedDeliveryPeriod>
+				<cbc:EndDate>2023-04-13</cbc:EndDate>
+				<cbc:EndTime>11:00:00</cbc:EndTime>
+			</cac:EstimatedDeliveryPeriod>
+			<cac:Despatch>
+				<cac:DespatchLocation>
+					<cbc:ID>Quai-22</cbc:ID>
+				</cac:DespatchLocation>
+			</cac:Despatch>
+		</cac:Delivery>
+	</cac:Shipment>
+	<cac:DespatchLine>
+		<cbc:ID>10001</cbc:ID>
+		<cbc:DeliveredQuantity unitCode="XBO">1500</cbc:DeliveredQuantity>
+		<cac:OrderLineReference>
+			<cbc:LineID>000011</cbc:LineID>
+		</cac:OrderLineReference>
+		<cac:Item>
+			<cac:SellersItemIdentification>
+				<cbc:ID>7076</cbc:ID>
+			</cac:SellersItemIdentification>
+		</cac:Item>
+	</cac:DespatchLine>
+</DespatchAdvice>

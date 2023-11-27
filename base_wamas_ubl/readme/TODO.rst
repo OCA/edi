@@ -1,0 +1,2 @@
+- Get rid of embedded qweb engine in favor of odoo's
+- Get rid of Dotty and obj in favor of Odoo's own DotDict?

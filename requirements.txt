@@ -1,3 +1,6 @@
 # generated from manifests external_dependencies
+dotty-dict
 factur-x
 pydifact
+pytz
+xmltodict
