@@ -52,8 +52,8 @@ class Picking(models.Model):
             ]
         return [("id", "in", self.search(domain).ids)]
 
-    def action_done(self):
-        res = super(Picking, self).action_done()
+    def _action_done(self):
+        res = super()._action_done()
         for picking in self.filtered(lambda p: p.picking_type_code == "outgoing"):
             picking.action_send_to_voxel()
         return res
