@@ -8,7 +8,7 @@
     'license': 'AGPL-3',
     'summary': 'Embed UBL XML file inside the PDF quotation',
     'author': 'Akretion,Odoo Community Association (OCA)',
-    'website': 'https://github.com/OCA/edi/',
+    'website': 'https://github.com/OCA/edi',
     'depends': ['sale', 'base_ubl'],
     'data': [],
     'installable': True,

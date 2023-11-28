@@ -8,7 +8,7 @@
     'license': 'AGPL-3',
     'summary': 'Import UBL XML supplier invoices/refunds',
     'author': 'Akretion,Odoo Community Association (OCA)',
-    'website': 'http://www.akretion.com',
+    'website': 'https://github.com/OCA/edi',
     'depends': ['account_invoice_import', 'base_ubl'],
     'data': ['wizard/account_invoice_import_view.xml'],
     'demo': ['demo/demo_data.xml'],

@@ -56,8 +56,7 @@ class EDIBackendTestOutputCase(EDIBackendCommonComponentRegistryTestCase):
         self.assertRecordValues(self.record, [{"edi_exchange_state": "output_sent"}])
         self.record.refresh()
         self.assertAlmostEqual(
-            (self.record.exchanged_on - now).total_seconds(),
-            0, places = 2)
+            (self.record.exchanged_on - now).total_seconds(), 0, places=2)
 
     def test_send_record_with_error(self):
         self.record.write({"edi_exchange_state": "output_pending"})

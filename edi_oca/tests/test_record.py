@@ -10,6 +10,8 @@ import mock
 from odoo import exceptions, fields
 from odoo.tools import mute_logger
 
+# pylint: disable=odoo-addons-relative-import
+# we are testing, we want to test as we were an external consumer of the API
 from odoo.addons.edi_oca.utils import get_checksum
 from odoo.addons.queue_job.delay import DelayableRecordset
 
@@ -74,8 +76,7 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         record.edi_exchange_state = "output_sent"
         record.refresh()
         self.assertAlmostEqual(
-            (record.exchanged_on- now).total_seconds(),
-            0, places=2
+            (record.exchanged_on - now).total_seconds(), 0, places=2
         )
 
     @mute_logger("odoo.models.unlink")

@@ -22,7 +22,7 @@
         "base_sparse_field",
         "queue_job",
     ],
-    "external_dependencies": {"python": ["yaml"]},
+    # "external_dependencies": {"python": ["yaml"]},  # (pyyaml in PyPi)
     "data": [
         "wizards/edi_exchange_record_create_wiz.xml",
         "data/cron.xml",

@@ -89,7 +89,6 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
     def test_rule_no_create(self):
         self.user.write({"groups_id": [(4, self.group.id)]})
         self.consumer_record.name = "no_rule"
-        model = self.consumer_record
         with self.assertRaises(ValidationError):
             self.create_record(self.user.id)
 
@@ -184,7 +183,8 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
             "WARNING:{}:"
             "Deleted record {},{} "
             "is referenced by edi.exchange.record [{}]".format(
-                logger_name, exchange_record.model, exchange_record.res_id, exchange_record.id
+                logger_name, exchange_record.model,
+                exchange_record.res_id, exchange_record.id
             )
         )
         with self.assertLogs(logger_name, "WARNING") as watcher:

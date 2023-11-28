@@ -363,7 +363,7 @@ class EDIExchangeType(models.Model):
         _fields = ["enable_domain", "enable_snippet", "model_manual_btn"]
         deprecated_vals = {}.fromkeys(_fields, None)
         deprecated_vals.update({
-            "model_ids": [(5,0)],
+            "model_ids": [(5, 0)],
         })
         self.with_context(deprecated_rule_fields_bypass_inverse=True).write(
             deprecated_vals

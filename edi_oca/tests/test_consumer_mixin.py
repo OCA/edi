@@ -90,7 +90,8 @@ result = not record._has_exchange_record(exchange_type, exchange_type.backend_id
         action = self.consumer_record.action_view_edi_records()
         self.consumer_record.refresh()
         self.assertEqual(
-            exchange_record, self.env["edi.exchange.record"].search(safe_eval(action["domain"]))
+            exchange_record, self.env["edi.exchange.record"].search(
+                safe_eval(action["domain"]))
         )
         self.assertTrue(
             self.consumer_record._has_exchange_record(
