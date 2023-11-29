@@ -511,6 +511,22 @@ class BaseUbl(models.AbstractModel):
         return True
 
     @api.model
+    def _ubl_add_xml_in_pdf_buffer(self, xml_string, xml_filename, buffer):
+        # Add attachment to PDF content.
+        reader = PdfFileReader(buffer)
+        writer = PdfFileWriter()
+        writer.appendPagesFromReader(reader)
+        writer.addAttachment(xml_filename, xml_string)
+        # show attachments when opening PDF
+        writer._root_object.update(
+            {NameObject("/PageMode"): NameObject("/UseAttachments")}
+        )
+        new_buffer = BytesIO()
+        writer.write(new_buffer)
+        buffer.close()
+        return new_buffer
+
+    @api.model
     def embed_xml_in_pdf(
             self, xml_string, xml_filename, pdf_content=None, pdf_file=None):
         """
