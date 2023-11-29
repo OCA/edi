@@ -185,6 +185,13 @@ class EDIExchangeType(models.Model):
         for rec in self:
             rec.ack_for_type_ids = [x.id for x in by_type_id.get(rec.id, [])]
 
+    @api.multi
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
+        rec = super(EDIExchangeType, self.with_context(
+            deprecated_rule_fields_bypass_inverse=True)).copy(default)
+        return rec
+
     def get_settings(self):
         return self.advanced_settings
 
@@ -237,7 +244,8 @@ class EDIExchangeType(models.Model):
         )
 
     def _get_record_name(self, exchange_record):
-        if not exchange_record.res_id or not exchange_record.model:
+        if (not exchange_record.res_id or not exchange_record.model or
+                not exchange_record.record):
             return slugify(exchange_record.display_name)
         if hasattr(exchange_record.record, "_get_edi_exchange_record_name"):
             return exchange_record.record._get_edi_exchange_record_name(exchange_record)

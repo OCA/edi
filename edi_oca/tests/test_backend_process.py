@@ -34,6 +34,7 @@ class EDIBackendTestProcessCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_process_record(self):
         self.record.write({"edi_exchange_state": "input_received"})
+        self.record._onchange_edi_exchange_state()
         now = fields.Datetime.now()
         self.record.action_exchange_process()
         self.assertTrue(FakeInputProcess.check_called_for(self.record))
@@ -47,6 +48,7 @@ class EDIBackendTestProcessCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_process_record_with_error(self):
         self.record.write({"edi_exchange_state": "input_received"})
+        self.record._onchange_edi_exchange_state()
         self.record._set_file_content("TEST %d" % self.record.id)
         self.record.with_context(
             test_break_process="OOPS! Something went wrong :("
@@ -65,6 +67,7 @@ class EDIBackendTestProcessCase(EDIBackendCommonComponentRegistryTestCase):
     @mute_logger("odoo.models.unlink")
     def test_process_no_file_record(self):
         self.record.write({"edi_exchange_state": "input_received"})
+        self.record._onchange_edi_exchange_state()
         self.record.exchange_file = False
         with self.assertRaises(UserError):
             self.record.action_exchange_process()

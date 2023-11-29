@@ -74,6 +74,7 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.assertFalse(record.exchanged_on)
         now = fields.Datetime.now()
         record.edi_exchange_state = "output_sent"
+        record._onchange_edi_exchange_state()
         record.refresh()
         self.assertAlmostEqual(
             (record.exchanged_on - now).total_seconds(), 0, places=2
@@ -214,6 +215,7 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         record0 = self.backend.create_record("test_csv_output", vals)
         self.assertFalse(record0.retryable)
         record0.edi_exchange_state = "output_error_on_send"
+        record0._onchange_edi_exchange_state()
         self.assertTrue(record0.retryable)
         with mock.patch.object(type(record0), "_execute_next_action") as mocked:
             record0.action_retry()

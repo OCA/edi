@@ -8,7 +8,6 @@ import logging
 from collections import defaultdict
 
 from odoo import _, api, exceptions, fields, models
-from odoo import SUPERUSER_ID
 from odoo.exceptions import MissingError
 
 from ..utils import exchange_record_job_identity_exact, get_checksum
@@ -51,7 +50,7 @@ class EDIExchangeRecord(models.Model):
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
     exchange_file = fields.Binary(attachment=True, copy=False)
     exchange_filename = fields.Char(
-        compute="_compute_exchange_filename", readonly=False, store=True
+        compute="_compute_exchange_filename", readonly=False, store=True,
     )
     exchange_filechecksum = fields.Char(
         compute="_compute_exchange_filechecksum", store=True
@@ -123,7 +122,7 @@ class EDIExchangeRecord(models.Model):
         ),
     ]
 
-    @api.depends("model", "res_id")
+    @api.depends("model", "res_id", "parent_id")
     def _compute_related_name(self):
         for rec in self:
             related_record = rec.record
@@ -145,8 +144,8 @@ class EDIExchangeRecord(models.Model):
                 content = content.encode()
             rec.exchange_filechecksum = get_checksum(content)
 
-    @api.constrains("edi_exchange_state")
-    def _compute_exchanged_on(self):
+    @api.onchange("edi_exchange_state")
+    def _onchange_edi_exchange_state(self):
         for rec in self:
             if rec.edi_exchange_state in ("input_received", "output_sent"):
                 rec.exchanged_on = fields.Datetime.now()
@@ -179,7 +178,7 @@ class EDIExchangeRecord(models.Model):
         for rec in self:
             rec.ack_expected = bool(self.type_id.ack_type_id)
 
-    @api.depends("res_id", "model")
+    @api.depends("res_id", "model", "parent_id")
     def _compute_related_record_exists(self):
         for rec in self:
             rec.related_record_exists = bool(rec.record)
@@ -206,9 +205,11 @@ class EDIExchangeRecord(models.Model):
         # data from parent
         if not self.model and not self.parent_id:
             return None
-        if not self.model and self.parent_id:
+        elif not self.model and self.parent_id:
             return self.parent_id.record
-        return self.env[self.model].browse(self.res_id).exists()
+        elif self.model in self.env.registry.models:
+            return self.env[self.model].browse(self.res_id).exists()
+        return None
 
     def _set_file_content(
         self, output_string, encoding="utf-8", field_name="exchange_file"
@@ -235,7 +236,7 @@ class EDIExchangeRecord(models.Model):
         result = []
         for rec in self:
             rec_name = rec.identifier
-            if rec.res_id and rec.model:
+            if rec.res_id and rec.model and rec.record:
                 rec_name = rec.record.display_name
             name = "[{}] {}".format(rec.type_id.name, rec_name)
             result.append((rec.id, name))
@@ -369,7 +370,8 @@ class EDIExchangeRecord(models.Model):
         self.ensure_one()
         if not self.related_exchange_ids:
             return {}
-        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view")
+        action = self.env.ref(
+            "edi_oca.act_open_edi_exchange_record_view").sudo().read()[0]
         action["domain"] = [("id", "in", self.related_exchange_ids.ids)]
         return action
 
@@ -466,8 +468,8 @@ class EDIExchangeRecord(models.Model):
             count=False,
             access_rights_uid=access_rights_uid,
         )
-        if self._uid == SUPERUSER_ID:
-            # rules do not apply for the superuser
+        if self.env.user._is_system():
+            # rules do not apply to group "Settings"
             return len(ids) if count else ids
 
         # TODO highlight orphaned EDI records in UI:
@@ -544,7 +546,7 @@ class EDIExchangeRecord(models.Model):
         """In order to check if we can access a record, we are checking if we can access
         the related document"""
         super(EDIExchangeRecord, self).check_access_rule(operation)
-        if self._uid == SUPERUSER_ID:
+        if self.env.user._is_superuser():
             return
         default_checker = self.env["edi.exchange.consumer.mixin"].get_edi_access
         by_model_rec_ids = defaultdict(set)
@@ -599,8 +601,9 @@ class EDIExchangeRecord(models.Model):
             if not rec.model or not rec.res_id:
                 continue
             try:
-                rec.env[rec.model].browse(rec.res_id).write({
-                    'exchange_record_ids': [(4, rec.id)]
-                })
+                if "exchange_record_ids" in rec.env[rec.model]._fields:
+                    rec.env[rec.model].browse(rec.res_id).write({
+                        'exchange_record_ids': [(4, rec.id)]
+                    })
             except (KeyError, ValueError, MissingError):
                 continue

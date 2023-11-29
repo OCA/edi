@@ -83,6 +83,7 @@ class EDIBackendTestCronCase(EDIBackendCommonComponentRegistryTestCase):
             self.assertEqual(rec.edi_exchange_state, "new")
         self.record1._set_file_content("READY")
         self.record1.edi_exchange_state = "output_sent"
+        self.record1._onchange_edi_exchange_state()
         self.backend.with_context(
             fake_update_values={"edi_exchange_state": "output_sent_and_processed"}
         )._cron_check_output_exchange_sync(skip_sent=False)

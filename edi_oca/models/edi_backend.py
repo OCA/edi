@@ -223,6 +223,7 @@ class EDIBackend(models.Model):
                     "edi_exchange_state": "output_pending",
                 }
             )
+            exchange_record._onchange_edi_exchange_state()
         try:
             # TODO: Remove this on 15.0, we will keep it in order to not break current
             # installations
@@ -240,6 +241,7 @@ class EDIBackend(models.Model):
                 exchange_record.update(
                     {"edi_exchange_state": state, "exchange_error": error}
                 )
+                exchange_record._onchange_edi_exchange_state()
         exchange_record.notify_action_complete("generate", message=message)
         return message
 
@@ -335,6 +337,7 @@ class EDIBackend(models.Model):
                     "exchanged_on": fields.Datetime.now(),
                 }
             )
+            exchange_record._onchange_edi_exchange_state()
         exchange_record.notify_action_complete("send", message=message)
         return res
 
@@ -502,6 +505,7 @@ class EDIBackend(models.Model):
                     "exchange_error": error,
                 }
             )
+            exchange_record._onchange_edi_exchange_state()
             if (
                 state == "input_processed_error"
                 and old_state != "input_processed_error"
@@ -562,6 +566,7 @@ class EDIBackend(models.Model):
                     "exchanged_on": fields.Datetime.now(),
                 }
             )
+            exchange_record._onchange_edi_exchange_state()
         exchange_record.notify_action_complete("receive", message=message)
         return res
 
@@ -648,7 +653,8 @@ class EDIBackend(models.Model):
         return self.env["edi.exchange.record"].search(domain, count=count_only)
 
     def action_view_exchanges(self):
-        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view")
+        action = self.env.ref(
+            "edi_oca.act_open_edi_exchange_record_view").sudo().read()[0]
         action["context"] = {
             "search_default_backend_id": self.id,
             "default_backend_id": self.id,
@@ -657,7 +663,8 @@ class EDIBackend(models.Model):
         return action
 
     def action_view_exchange_types(self):
-        action = self.env.ref("edi_oca.act_open_edi_exchange_type_view")
+        action = self.env.ref(
+            "edi_oca.act_open_edi_exchange_type_view").sudo().read()[0]
         action["context"] = {
             "search_default_backend_id": self.id,
             "default_backend_id": self.id,

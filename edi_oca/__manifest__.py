@@ -18,6 +18,7 @@
     "depends": [
         "base_edi",
         "component_event",
+        "http_routing",
         "mail",
         "base_sparse_field",
         "queue_job",

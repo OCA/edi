@@ -44,6 +44,7 @@ class EDIBackendTestValidateCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_receive_validate_record(self):
         self.record_in.write({"edi_exchange_state": "input_pending"})
+        self.record_in._onchange_edi_exchange_state()
         self.backend.exchange_receive(self.record_in)
         self.assertTrue(FakeInputValidate.check_called_for(self.record_in))
         self.assertRecordValues(
@@ -52,6 +53,7 @@ class EDIBackendTestValidateCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_receive_validate_record_error(self):
         self.record_in.write({"edi_exchange_state": "input_pending"})
+        self.record_in._onchange_edi_exchange_state()
         exc = EDIValidationError("Data seems wrong!")
         self.backend.with_context(test_break_validate=exc).exchange_receive(
             self.record_in
@@ -69,6 +71,7 @@ class EDIBackendTestValidateCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_generate_validate_record(self):
         self.record_out.write({"edi_exchange_state": "new"})
+        self.record_out._onchange_edi_exchange_state()
         self.backend.exchange_generate(self.record_out)
         self.assertTrue(FakeOutputValidate.check_called_for(self.record_out))
         self.assertRecordValues(
@@ -77,6 +80,7 @@ class EDIBackendTestValidateCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_generate_validate_record_error(self):
         self.record_out.write({"edi_exchange_state": "new"})
+        self.record_out._onchange_edi_exchange_state()
         exc = EDIValidationError("Data seems wrong!")
         self.backend.with_context(test_break_validate=exc).exchange_generate(
             self.record_out

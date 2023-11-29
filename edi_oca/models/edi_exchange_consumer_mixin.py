@@ -186,7 +186,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
         return self._edi_get_create_record_wiz_action(exchange_type_id)
 
     def _edi_get_create_record_wiz_action(self, exchange_type_id):
-        action = self.env.ref("edi_oca.edi_exchange_record_create_act_window")
+        action = self.env.ref(
+            "edi_oca.edi_exchange_record_create_act_window").sudo().read()[0]
         action["context"] = {
             "default_res_id": self.id,
             "default_model": self._name,
@@ -246,7 +247,8 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
 
     def action_view_edi_records(self):
         self.ensure_one()
-        action = self.env.ref("edi_oca.act_open_edi_exchange_record_view")
+        action = self.env.ref(
+            "edi_oca.act_open_edi_exchange_record_view").sudo().read()[0]
         action["domain"] = [("model", "=", self._name), ("res_id", "=", self.id)]
         # Purge default search filters from ctx to avoid hiding records
         ctx = action.get("context") or {}

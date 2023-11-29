@@ -40,6 +40,7 @@ class EDIBackendTestInputCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_receive_record(self):
         self.record.edi_exchange_state = "input_pending"
+        self.record._onchange_edi_exchange_state()
         self.backend.with_context(fake_output="yeah!").exchange_receive(self.record)
         self.assertEqual(self.record._get_file_content(), "yeah!")
         self.assertRecordValues(self.record, [{"edi_exchange_state": "input_received"}])

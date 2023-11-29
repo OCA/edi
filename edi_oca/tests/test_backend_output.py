@@ -48,6 +48,7 @@ class EDIBackendTestOutputCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_send_record(self):
         self.record.write({"edi_exchange_state": "output_pending"})
+        self.record._onchange_edi_exchange_state()
         self.record._set_file_content("TEST %d" % self.record.id)
         self.assertFalse(self.record.exchanged_on)
         now = fields.Datetime.now()
@@ -60,6 +61,7 @@ class EDIBackendTestOutputCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_send_record_with_error(self):
         self.record.write({"edi_exchange_state": "output_pending"})
+        self.record._onchange_edi_exchange_state()
         self.record._set_file_content("TEST %d" % self.record.id)
         self.assertFalse(self.record.exchanged_on)
         self.record.with_context(
