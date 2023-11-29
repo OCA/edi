@@ -139,7 +139,7 @@ class EDIBackendTestOutputJobsCase(EDIBackendCommonComponentRegistryTestCase):
                 self.record.action_exchange_generate,
             )
             trap.assert_enqueued_job(
-                self.record.action_exchange_send,
+                self.record.action_exchange_send, properties=dict(priority=0)
             )
             # No matter how many times we schedule jobs
             self.record.with_delay().action_exchange_generate()
