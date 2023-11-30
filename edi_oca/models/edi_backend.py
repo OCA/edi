@@ -298,6 +298,13 @@ class EDIBackend(models.Model):
         res = ""
         try:
             self._exchange_send(exchange_record)
+            _logger.debug("%s sent", exchange_record.identifier)
+        except self._send_retryable_exceptions() as err:
+            error = _get_exception_msg()
+            _logger.debug("%s send failed. To be retried.", exchange_record.identifier)
+            raise RetryableJobError(
+                error, **exchange_record._job_retry_params()
+            ) from err
         except self._swallable_exceptions():
             if self.env.context.get("_edi_send_break_on_error"):
                 raise
@@ -305,11 +312,9 @@ class EDIBackend(models.Model):
             state = "output_error_on_send"
             message = exchange_record._exchange_status_message("send_ko")
             res = f"Error: {error}"
-        except self._send_retryable_exceptions() as err:
-            error = _get_exception_msg()
-            raise RetryableJobError(
-                error, **exchange_record._job_retry_params()
-            ) from err
+            _logger.debug(
+                "%s send failed. Marked as errored.", exchange_record.identifier
+            )
         else:
             # TODO: maybe the send handler should return desired message and state
             message = exchange_record._exchange_status_message("send_ok")
@@ -344,7 +349,9 @@ class EDIBackend(models.Model):
 
     def _send_retryable_exceptions(self):
         # IOError is a base class for all connection errors
-        return (IOError,)
+        # OSError is a base class for all errors
+        # when dealing w/ internal or external systems or filesystems
+        return (IOError, OSError)
 
     def _output_check_send(self, exchange_record):
         if exchange_record.direction != "output":
@@ -370,7 +377,6 @@ class EDIBackend(models.Model):
         for backend in self:
             backend._check_output_exchange_sync(**kw)
 
-    # TODO: consider splitting cron in 2 (1 for receiving, 1 for processing)
     def _check_output_exchange_sync(
         self, skip_send=False, skip_sent=True, record_ids=None
     ):
@@ -391,7 +397,12 @@ class EDIBackend(models.Model):
             len(new_records),
         )
         for rec in new_records:
-            rec.with_delay().action_exchange_generate()
+            job1 = rec.delayable().action_exchange_generate()
+            if not skip_send:
+                # Chain send job.
+                # Raise prio to max to send the record out as fast as possible.
+                job1.on_done(rec.delayable(priority=0).action_exchange_send())
+            job1.delay()
 
         if skip_send:
             return

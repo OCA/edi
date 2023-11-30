@@ -105,6 +105,10 @@
                                 name="exchange_filename"
                                 attrs="{'invisible': [('exchange_file', '!=', False)]}"
                             />
+                            <field
+                                name="exchange_filechecksum"
+                                attrs="{'invisible': [('exchange_file', '!=', False)]}"
+                            />
                         </group>
                         <group
                             name="ack"
