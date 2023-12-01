@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -108,8 +107,8 @@ class TestDespatchAdviceImport(SavepointCase):
                     "backorder_qty": 12.0,
                     "line_id": str(self.line1.id),
                     "order_line_id": str(self.line1.id),
-                    'product_lot': '1234890',
-                    "product_ref":  str(self.product_1.default_code),
+                    "product_lot": "1234890",
+                    "product_ref": str(self.product_1.default_code),
                     "qty": self.line1.product_qty,
                     "ref": str(self.purchase_order.name),
                     "uom": {"unece_code": "BG"},
@@ -118,8 +117,8 @@ class TestDespatchAdviceImport(SavepointCase):
                     "backorder_qty": 0,
                     "line_id": str(self.line2.id),
                     "order_line_id": str(self.line2.id),
-                    'product_lot': '876540',
-                    "product_ref":  str(self.product_2.default_code),
+                    "product_lot": "876540",
+                    "product_ref": str(self.product_2.default_code),
                     "qty": self.line2.product_qty,
                     "ref": str(self.purchase_order.name),
                     "uom": {"unece_code": "C62"},
@@ -169,8 +168,8 @@ class TestDespatchAdviceImport(SavepointCase):
                     "backorder_qty": 12.0,
                     "line_id": str(self.line1.id),
                     "order_line_id": str(self.line1.id),
-                    'product_lot': '1234890',
-                    "product_ref":  str(self.product_1.default_code),
+                    "product_lot": "1234890",
+                    "product_ref": str(self.product_1.default_code),
                     "qty": self.line1.product_qty,
                     "ref": str(self.purchase_order.name),
                     "uom": {"unece_code": "BG"},
@@ -179,14 +178,14 @@ class TestDespatchAdviceImport(SavepointCase):
                     "backorder_qty": 0,
                     "line_id": str(self.line2.id),
                     "order_line_id": str(self.line2.id),
-                    'product_lot': '876540',
-                    "product_ref":  str(self.product_2.default_code),
+                    "product_lot": "876540",
+                    "product_ref": str(self.product_2.default_code),
                     "qty": self.line2.product_qty,
                     "ref": str(self.purchase_order.name),
                     "uom": {"unece_code": "C62"},
                 },
             ],
-            "ref": '',
+            "ref": "",
             "supplier": {"vat": "BE0477472701"},
         }
         self.maxDiff = None

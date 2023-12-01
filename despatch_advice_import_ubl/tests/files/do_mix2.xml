@@ -1,5 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DespatchAdvice:DespatchAdvice xmlns:DespatchAdvice="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8" ?>
+<DespatchAdvice:DespatchAdvice
+    xmlns:DespatchAdvice="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
   <cbc:ID>0811960665</cbc:ID>
   <cbc:IssueDate>2021-04-01</cbc:IssueDate>
   <cbc:DespatchAdviceTypeCode>scheduled</cbc:DespatchAdviceTypeCode>

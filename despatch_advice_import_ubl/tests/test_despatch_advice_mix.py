@@ -1,17 +1,17 @@
-# -*- coding: utf-8 -*-
 # Copyright 2021 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import SavepointCase
 from odoo import fields
-
+from odoo.tests.common import SavepointCase
 from odoo.tools import file_open
-class TestDespatchAdviceMix(SavepointCase):
 
+
+class TestDespatchAdviceMix(SavepointCase):
     @classmethod
     def setUpClass(cls):
         """
-        Semi integration test : grab several DO for one PO and check that everything is created properly:
+        Semi integration test : grab several DO for one PO
+        and check that everything is created properly:
         Backorders, cancelled moves, etc
         """
         super(TestDespatchAdviceMix, cls).setUpClass()
@@ -29,11 +29,13 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p1 = Product.create({
-            "name": "CYDECTIN 0,1% ORAL DRENCH 1L",
-            "default_code": "1354307",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "P1"})],
-        })
+        cls.p1 = Product.create(
+            {
+                "name": "CYDECTIN 0,1% ORAL DRENCH 1L",
+                "default_code": "1354307",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "P1"})],
+            }
+        )
         cls.line1 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -46,11 +48,13 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p2 = Product.create({
-            "name": "CYDECTIN TRICLAMOX OVIN 1 L",
-            "default_code": "10005578",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p2"})],
-        })
+        cls.p2 = Product.create(
+            {
+                "name": "CYDECTIN TRICLAMOX OVIN 1 L",
+                "default_code": "10005578",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p2"})],
+            }
+        )
         cls.line2 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -63,11 +67,13 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p3 = Product.create({
-            "name": "VANGUARD DA2PI-CPV 25X1D",
-            "default_code": "10001458",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p3"})],
-        })
+        cls.p3 = Product.create(
+            {
+                "name": "VANGUARD DA2PI-CPV 25X1D",
+                "default_code": "10001458",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p3"})],
+            }
+        )
         cls.line3 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -80,11 +86,13 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p4 = Product.create({
-            "name": "APOQUEL  5,4MG 100CP",
-            "default_code": "10022152",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p4"})],
-        })
+        cls.p4 = Product.create(
+            {
+                "name": "APOQUEL  5,4MG 100CP",
+                "default_code": "10022152",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p4"})],
+            }
+        )
         cls.line4 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -96,12 +104,14 @@ class TestDespatchAdviceMix(SavepointCase):
                 "price_unit": 73.86,
             }
         )
-    
-        cls.p5 = Product.create({
-            "name": "DOGMINTH PATE TUBE 24GR",
-            "default_code": "10002655",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p5"})],
-        })
+
+        cls.p5 = Product.create(
+            {
+                "name": "DOGMINTH PATE TUBE 24GR",
+                "default_code": "10002655",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p5"})],
+            }
+        )
         cls.line5 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -113,12 +123,14 @@ class TestDespatchAdviceMix(SavepointCase):
                 "price_unit": 7.2,
             }
         )
-  
-        cls.p6 = Product.create({
-            "name": "RISPOVAL IBR INACT 100ML",
-            "default_code": "10001112",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p6"})],
-        })
+
+        cls.p6 = Product.create(
+            {
+                "name": "RISPOVAL IBR INACT 100ML",
+                "default_code": "10001112",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p6"})],
+            }
+        )
         cls.line6 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -130,12 +142,14 @@ class TestDespatchAdviceMix(SavepointCase):
                 "price_unit": 114.36,
             }
         )
-    
-        cls.p7 = Product.create({
-            "name": "MODERIN 32MG   30CP",
-            "default_code": "10005211",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p7"})],
-        })
+
+        cls.p7 = Product.create(
+            {
+                "name": "MODERIN 32MG   30CP",
+                "default_code": "10005211",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p7"})],
+            }
+        )
         cls.line7 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -148,11 +162,13 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p8 = Product.create({
-            "name": "CIDR  1,38gr BOITE DE 10",
-            "default_code": "10002949",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p8"})],
-        })
+        cls.p8 = Product.create(
+            {
+                "name": "CIDR  1,38gr BOITE DE 10",
+                "default_code": "10002949",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p8"})],
+            }
+        )
         cls.line8 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -165,11 +181,13 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p9 = Product.create({
-            "name": "VERSICAN+ BB ORAL 10x1d",
-            "default_code": "10022422",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p9"})],
-        })
+        cls.p9 = Product.create(
+            {
+                "name": "VERSICAN+ BB ORAL 10x1d",
+                "default_code": "10022422",
+                "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p9"})],
+            }
+        )
         cls.line9 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -182,11 +200,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p10 = Product.create({
-            "name": "VERSICAN+ BBPi IN 10x1d",
-            "default_code": "10023409",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p10"})],
-        })
+        cls.p10 = Product.create(
+            {
+                "name": "VERSICAN+ BBPi IN 10x1d",
+                "default_code": "10023409",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p10"})
+                ],
+            }
+        )
         cls.line10 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -199,11 +221,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p11 = Product.create({
-            "name": "CONVENIA SOL INJ 10ml",
-            "default_code": "10007669",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p11"})],
-        })
+        cls.p11 = Product.create(
+            {
+                "name": "CONVENIA SOL INJ 10ml",
+                "default_code": "10007669",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p11"})
+                ],
+            }
+        )
         cls.line11 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -216,11 +242,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p12 = Product.create({
-            "name": "WITNESS LH 6x1 TEST",
-            "default_code": "10012140",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p12"})],
-        })
+        cls.p12 = Product.create(
+            {
+                "name": "WITNESS LH 6x1 TEST",
+                "default_code": "10012140",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p12"})
+                ],
+            }
+        )
         cls.line12 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -233,11 +263,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p13 = Product.create({
-            "name": "WITNESS RELAXIN 5x1 TEST GESTATION",
-            "default_code": "10010958",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p13"})],
-        })
+        cls.p13 = Product.create(
+            {
+                "name": "WITNESS RELAXIN 5x1 TEST GESTATION",
+                "default_code": "10010958",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p13"})
+                ],
+            }
+        )
         cls.line13 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -250,11 +284,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p14 = Product.create({
-            "name": "ACEGON 10x6ML",
-            "default_code": "10010146",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p14"})],
-        })
+        cls.p14 = Product.create(
+            {
+                "name": "ACEGON 10x6ML",
+                "default_code": "10010146",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p14"})
+                ],
+            }
+        )
         cls.line14 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -267,11 +305,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p15 = Product.create({
-            "name": "EQUEST GEL ORAL 700kg",
-            "default_code": "10009831",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p15"})],
-        })
+        cls.p15 = Product.create(
+            {
+                "name": "EQUEST GEL ORAL 700kg",
+                "default_code": "10009831",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p15"})
+                ],
+            }
+        )
         cls.line15 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -284,11 +326,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p16 = Product.create({
-            "name": "WITNESS GIARDIA 5 TESTS",
-            "default_code": "10009407",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p16"})],
-        })
+        cls.p16 = Product.create(
+            {
+                "name": "WITNESS GIARDIA 5 TESTS",
+                "default_code": "10009407",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p16"})
+                ],
+            }
+        )
         cls.line16 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -301,11 +347,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p17 = Product.create({
-            "name": "CATMINTH PATE SERINGUE 3GR",
-            "default_code": "10003022",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p17"})],
-        })
+        cls.p17 = Product.create(
+            {
+                "name": "CATMINTH PATE SERINGUE 3GR",
+                "default_code": "10003022",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p17"})
+                ],
+            }
+        )
         cls.line17 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -318,11 +368,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p18 = Product.create({
-            "name": "FENDOV 1250 12 BOLI",
-            "default_code": "10006920",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p18"})],
-        })
+        cls.p18 = Product.create(
+            {
+                "name": "FENDOV 1250 12 BOLI",
+                "default_code": "10006920",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p18"})
+                ],
+            }
+        )
         cls.line18 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -335,11 +389,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p19 = Product.create({
-            "name": "FEVAXYN PENTOFEL 10X1D",
-            "default_code": "10004344",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p19"})],
-        })
+        cls.p19 = Product.create(
+            {
+                "name": "FEVAXYN PENTOFEL 10X1D",
+                "default_code": "10004344",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p19"})
+                ],
+            }
+        )
         cls.line19 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -352,11 +410,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p20 = Product.create({
-            "name": "VANGUARD CPV-LEPTO 25x1D",
-            "default_code": "10001455",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p20"})],
-        })
+        cls.p20 = Product.create(
+            {
+                "name": "VANGUARD CPV-LEPTO 25x1D",
+                "default_code": "10001455",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p20"})
+                ],
+            }
+        )
         cls.line20 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -369,11 +431,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p21 = Product.create({
-            "name": "VANGUARD DA2PI-CPV-LEPTO 25x1D (7)",
-            "default_code": "10001457",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p21"})],
-        })
+        cls.p21 = Product.create(
+            {
+                "name": "VANGUARD DA2PI-CPV-LEPTO 25x1D (7)",
+                "default_code": "10001457",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p21"})
+                ],
+            }
+        )
         cls.line21 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -386,11 +452,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p22 = Product.create({
-            "name": "VANGUARD LEPTO 25x1D",
-            "default_code": "10001459",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p22"})],
-        })
+        cls.p22 = Product.create(
+            {
+                "name": "VANGUARD LEPTO 25x1D",
+                "default_code": "10001459",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p22"})
+                ],
+            }
+        )
         cls.line22 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -403,11 +473,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p23 = Product.create({
-            "name": "VERSICAN+ DHPPI 25x1d",
-            "default_code": "10011717",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p23"})],
-        })
+        cls.p23 = Product.create(
+            {
+                "name": "VERSICAN+ DHPPI 25x1d",
+                "default_code": "10011717",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p23"})
+                ],
+            }
+        )
         cls.line23 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -420,11 +494,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p24 = Product.create({
-            "name": "VERSICAN+ DHPPI/L4 25x1d",
-            "default_code": "10011718",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p24"})],
-        })
+        cls.p24 = Product.create(
+            {
+                "name": "VERSICAN+ DHPPI/L4 25x1d",
+                "default_code": "10011718",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p24"})
+                ],
+            }
+        )
         cls.line24 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -437,11 +515,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p25 = Product.create({
-            "name": "VERSICAN+ L4 25x1d",
-            "default_code": "10011728",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p25"})],
-        })
+        cls.p25 = Product.create(
+            {
+                "name": "VERSICAN+ L4 25x1d",
+                "default_code": "10011728",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p25"})
+                ],
+            }
+        )
         cls.line25 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -454,11 +536,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p26 = Product.create({
-            "name": "VERSICAN+ PI 25x1d",
-            "default_code": "10011736",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p26"})],
-        })
+        cls.p26 = Product.create(
+            {
+                "name": "VERSICAN+ PI 25x1d",
+                "default_code": "10011736",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p26"})
+                ],
+            }
+        )
         cls.line26 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -471,11 +557,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p27 = Product.create({
-            "name": "VERSIFEL FELV 25x1d",
-            "default_code": "10009541",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p27"})],
-        })
+        cls.p27 = Product.create(
+            {
+                "name": "VERSIFEL FELV 25x1d",
+                "default_code": "10009541",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p27"})
+                ],
+            }
+        )
         cls.line27 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -488,11 +578,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p28 = Product.create({
-            "name": "VERSIGUARD RABIES 10x1d",
-            "default_code": "10016049",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p28"})],
-        })
+        cls.p28 = Product.create(
+            {
+                "name": "VERSIGUARD RABIES 10x1d",
+                "default_code": "10016049",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p28"})
+                ],
+            }
+        )
         cls.line28 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -505,11 +599,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p29 = Product.create({
-            "name": "WITNESS FELV-FIV 10x1 TEST",
-            "default_code": "10009061",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p29"})],
-        })
+        cls.p29 = Product.create(
+            {
+                "name": "WITNESS FELV-FIV 10x1 TEST",
+                "default_code": "10009061",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p29"})
+                ],
+            }
+        )
         cls.line29 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -522,11 +620,15 @@ class TestDespatchAdviceMix(SavepointCase):
             }
         )
 
-        cls.p30 = Product.create({
-            "name": "WITNESS FELV-FIV 5x1 TEST",
-            "default_code": "10006252",
-            "seller_ids": [(0, 0, {"name": cls.supplier.id, "product_code": "p30"})],
-        })
+        cls.p30 = Product.create(
+            {
+                "name": "WITNESS FELV-FIV 5x1 TEST",
+                "default_code": "10006252",
+                "seller_ids": [
+                    (0, 0, {"name": cls.supplier.id, "product_code": "p30"})
+                ],
+            }
+        )
         cls.line30 = cls.purchase_order.order_line.create(
             {
                 "order_id": cls.purchase_order.id,
@@ -543,20 +645,15 @@ class TestDespatchAdviceMix(SavepointCase):
 
         cls.DespatchAdviceImport = cls.env["despatch.advice.import"]
 
-
-        with file_open(
-            "despatch_advice_import_ubl/tests/files/do_mix1.xml", "rb"
-        ) as f:
+        with file_open("despatch_advice_import_ubl/tests/files/do_mix1.xml", "rb") as f:
             cls.despatch_advice_xml1 = f.read()
 
-        with file_open(
-            "despatch_advice_import_ubl/tests/files/do_mix2.xml", "rb"
-        ) as f:
+        with file_open("despatch_advice_import_ubl/tests/files/do_mix2.xml", "rb") as f:
             cls.despatch_advice_xml2 = f.read()
 
     def test_00(self):
-        picking_initial_state = self.picking.state
-        
+        self.picking.state
+
         xml_content1 = self.despatch_advice_xml1.format(
             order_id=self.purchase_order.name,
             line_1_id=self.line1.id,
@@ -576,18 +673,21 @@ class TestDespatchAdviceMix(SavepointCase):
         )
 
         xml_encoded_doc1 = xml_content1.encode("base64")
-        despatch_import = self.DespatchAdviceImport.create({'document': xml_encoded_doc1, 'filename':'do_mix1.xml'})
+        despatch_import = self.DespatchAdviceImport.create(
+            {"document": xml_encoded_doc1, "filename": "do_mix1.xml"}
+        )
         despatch_import.process_document()
 
-        pickings = self.purchase_order.picking_ids
+        self.purchase_order.picking_ids
 
-        po_moves = self.line21.move_ids.filtered(lambda m: m.state not in ('cancel', 'done'))
+        po_moves = self.line21.move_ids.filtered(
+            lambda m: m.state not in ("cancel", "done")
+        )
         po_move_initial = po_moves.filtered(lambda p: not p.backorder_id)
         po_move_backorder = po_moves.filtered(lambda p: p.backorder_id)
 
         self.assertEqual(po_move_initial.product_uom_qty, 30)
         self.assertFalse(po_move_backorder)
-
 
         xml_content2 = self.despatch_advice_xml2.format(
             order_id=self.purchase_order.name,
@@ -609,30 +709,43 @@ class TestDespatchAdviceMix(SavepointCase):
         )
 
         xml_encoded_doc2 = xml_content2.encode("base64")
-        despatch_import = self.DespatchAdviceImport.create({'document': xml_encoded_doc2, 'filename':'do_mix2.xml'})
+        despatch_import = self.DespatchAdviceImport.create(
+            {"document": xml_encoded_doc2, "filename": "do_mix2.xml"}
+        )
         despatch_import.process_document()
 
-        pickings = self.purchase_order.picking_ids
+        self.purchase_order.picking_ids
 
-        backorder = self.purchase_order.mapped("picking_ids").filtered(lambda p: p.backorder_id)
-        initial_pick = self.purchase_order.mapped("picking_ids").filtered(lambda p: not p.backorder_id)
+        backorder = self.purchase_order.mapped("picking_ids").filtered(
+            lambda p: p.backorder_id
+        )
+        initial_pick = self.purchase_order.mapped("picking_ids").filtered(
+            lambda p: not p.backorder_id
+        )
 
-        move_for_initial_pick = initial_pick.mapped("move_lines").filtered(lambda m: m.product_id.id == self.p21.id)
-        move_for_backorder_pick = backorder.mapped("move_lines").filtered(lambda m: m.product_id.id == self.p21.id)
+        move_for_initial_pick = initial_pick.mapped("move_lines").filtered(
+            lambda m: m.product_id.id == self.p21.id
+        )
+        move_for_backorder_pick = backorder.mapped("move_lines").filtered(
+            lambda m: m.product_id.id == self.p21.id
+        )
         self.assertEqual(move_for_initial_pick.product_qty, 25)
         self.assertEqual(move_for_backorder_pick.product_qty, 5)
 
-
-        po_moves = self.line21.move_ids.filtered(lambda m: m.state not in ('cancel', 'done'))
+        po_moves = self.line21.move_ids.filtered(
+            lambda m: m.state not in ("cancel", "done")
+        )
         po_move_initial = po_moves.filtered(lambda p: not p.backorder_id)
         po_move_backorder = po_moves.filtered(lambda p: p.backorder_id)
 
         self.assertEqual(po_move_initial.product_uom_qty, 25)
         self.assertEqual(po_move_backorder.product_uom_qty, 5)
 
-        move_for_initial_pick2 = initial_pick.mapped("move_lines").filtered(lambda m: m.product_id.id == self.p24.id)
-        move_for_backorder_pick2 = backorder.mapped("move_lines").filtered(lambda m: m.product_id.id == self.p24.id)
+        move_for_initial_pick2 = initial_pick.mapped("move_lines").filtered(
+            lambda m: m.product_id.id == self.p24.id
+        )
+        move_for_backorder_pick2 = backorder.mapped("move_lines").filtered(
+            lambda m: m.product_id.id == self.p24.id
+        )
         self.assertEqual(move_for_initial_pick2.product_qty, 132)
         self.assertEqual(move_for_backorder_pick2.product_qty, 68)
-
-        pickings_draft = self.env["stock.picking"].search([('origin', "=", self.purchase_order.name), ("state", "=", "draft")])

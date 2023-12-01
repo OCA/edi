@@ -1,5 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<DespatchAdvice:DespatchAdvice xmlns:DespatchAdvice="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8" ?>
+<DespatchAdvice:DespatchAdvice
+    xmlns:DespatchAdvice="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
   <cbc:ID>0810805774</cbc:ID>
   <cbc:IssueDate>2020-11-16</cbc:IssueDate>
   <cbc:DespatchAdviceTypeCode>scheduled</cbc:DespatchAdviceTypeCode>
@@ -45,7 +50,9 @@
   <cac:DespatchLine>
     <cbc:ID>{line_1_id}</cbc:ID>
     <cbc:DeliveredQuantity unitCode="BG">{line_1_qty}</cbc:DeliveredQuantity>
-    <cbc:OutstandingQuantity unitCode="BG">{line_1_backorder_qty}</cbc:OutstandingQuantity>
+    <cbc:OutstandingQuantity
+            unitCode="BG"
+        >{line_1_backorder_qty}</cbc:OutstandingQuantity>
     <cac:OrderLineReference>
       <cbc:LineID>{line_1_id}</cbc:LineID>
       <cac:OrderReference>
