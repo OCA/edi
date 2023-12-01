@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Factur-X",
-    "version": "14.0.1.1.1",
+    "version": "14.0.1.1.2",
     "category": "Invoicing Management",
     "license": "AGPL-3",
     "summary": "Generate Factur-X/ZUGFeRD customer invoices",
