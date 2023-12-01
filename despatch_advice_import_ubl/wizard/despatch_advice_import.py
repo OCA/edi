@@ -25,7 +25,11 @@ class DespatchAdviceImport(models.TransientModel):
     @api.model
     def parse_ubl_despatch_advice(self, xml_root):
         ns = xml_root.nsmap
-        main_xmlns = ns.pop("DespatchAdvice")
+        # Get main xmlns
+        if None in ns:
+            main_xmlns = ns.pop(None)
+        else:
+            main_xmlns = ns.pop("DespatchAdvice")
         ns["main"] = main_xmlns
         date_xpath = xml_root.xpath("/main:DespatchAdvice/cbc:IssueDate", namespaces=ns)
         estimated_delivery_date_xpath = xml_root.xpath(
@@ -40,12 +44,15 @@ class DespatchAdviceImport(models.TransientModel):
         despatch_advice_type_code_xpath = xml_root.xpath(
             "/main:DespatchAdvice/cbc:DespatchAdviceTypeCode", namespaces=ns
         )
+
         supplier_xpath = xml_root.xpath(
             "/main:DespatchAdvice/cac:DespatchSupplierParty/cac:Party", namespaces=ns
         )
-        supplier_dict = self.ubl_parse_party(supplier_xpath[0], ns)
         # We only take the "official references" for supplier_dict
-        supplier_dict = {"vat": supplier_dict.get("vat")}
+        supplier_dict = self.ubl_parse_party(supplier_xpath[0], ns)
+        supplier_dict = {
+            "vat": supplier_dict.get("vat"),
+        }
         customer_xpath = xml_root.xpath(
             "/main:DespatchAdvice/cac:DeliveryCustomerParty/cac:Party", namespaces=ns
         )
@@ -62,7 +69,9 @@ class DespatchAdviceImport(models.TransientModel):
             "ref": order_reference_xpath[0].text if order_reference_xpath else "",
             "supplier": supplier_dict,
             "company": customer_dict,
-            "despatch_advice_type_code": despatch_advice_type_code_xpath[0].text,
+            "despatch_advice_type_code": despatch_advice_type_code_xpath[0].text
+            if len(despatch_advice_type_code_xpath) > 0
+            else "",
             "date": len(date_xpath) and date_xpath[0].text,
             "estimated_delivery_date": len(estimated_delivery_date_xpath)
             and estimated_delivery_date_xpath[0].text,
@@ -81,9 +90,15 @@ class DespatchAdviceImport(models.TransientModel):
             backorder_qty = float(backorder_qty_xpath[0].text)
         else:
             backorder_qty = 0
+
         product_ref_xpath = line.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns
         )
+
+        if len(product_ref_xpath) == 0:
+            product_ref_xpath = line.xpath(
+                "cac:Item/cac:BuyersItemIdentification/cbc:ID", namespaces=ns
+            )
 
         product_lot_xpath = line.xpath(
             "cac:Item/cac:ItemInstance/cac:LotIdentification/cbc:LotNumberID",
@@ -114,12 +129,13 @@ class DespatchAdviceImport(models.TransientModel):
 
     @api.model
     def ubl_parse_party(self, party_node, ns):
-        partner_name_xpath = party_node.xpath(
-            "cac:PartyLegalEntity/cbc:RegistrationName", namespaces=ns
-        )
+        partner_name_xpath = party_node.xpath("cac:PartyName/cbc:Name", namespaces=ns)
+        if not partner_name_xpath:
+            partner_name_xpath = party_node.xpath(
+                "cac:PartyLegalEntity/cbc:RegistrationName", namespaces=ns
+            )
 
         vat_xpath = party_node.xpath("cac:PartyIdentification/cbc:ID", namespaces=ns)
-
         partner_dict = {
             "vat": vat_xpath[0].text
             if vat_xpath and vat_xpath[0].attrib.get("schemeName").upper()
