@@ -148,14 +148,21 @@ class ProductImport(models.TransientModel):
             result.append((0, 0, seller_info))
         return result
 
-    def _existing_product(self, barcode, company_id):
-        product_domain = [("barcode", "=", barcode)]
+    def _search_product(self, domain, company_id):
         if company_id:
-            product_domain += [("company_id", "=", company_id)]
+            domain = domain + [("company_id", "=", company_id)]
         return (
             self.env["product.product"]
             .with_context(active_test=False)
-            .search(product_domain, limit=1)
+            .search(domain, order="active DESC", limit=1)
+        )
+
+    def _existing_product(self, barcode, code, company_id):
+        product = None
+        if barcode:
+            product = self._search_product([("barcode", "=", barcode)], company_id)
+        return product or self._search_product(
+            [("default_code", "=", code)], company_id
         )
 
     @api.model
@@ -165,11 +172,6 @@ class ProductImport(models.TransientModel):
         # Setting "product_import_set_company" change the behavior.
         # Beware that barcode is unique key of product.template model
         # Can be changed by OCA add-on "product_barcode_constraint_per_company"
-        if not parsed_product["barcode"]:
-            chatter_msg.append(
-                _("Cannot import product without barcode: %s") % (parsed_product,)
-            )
-            return False
         import_company = self.env["res.company"].browse(
             self.env.context.get("product_company_id")
         )
@@ -178,6 +180,7 @@ class ProductImport(models.TransientModel):
         )
         product = self._existing_product(
             parsed_product["barcode"],
+            parsed_product["code"],
             company_id=product_company_id,
         )
         uom = self._bdimport._match_uom(parsed_product["uom"], chatter_msg)
