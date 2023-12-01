@@ -125,6 +125,10 @@ class DespatchAdviceImport(models.TransientModel):
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
             "backorder_qty": backorder_qty,
         }
+        defaults = self.env.context.get("despatch_advice_import__default_vals", {}).get(
+            "lines", {}
+        )
+        res_line.update(defaults)
         return res_line
 
     @api.model
