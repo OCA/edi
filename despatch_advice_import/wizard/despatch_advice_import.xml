@@ -8,8 +8,8 @@
         <field name="model">despatch.advice.import</field>
         <field name="arch" type="xml">
             <form string="Despatch Advice Import">
-                <group name="help-import">
-                  <div>
+                <group colspan="4" name="help-import">
+                  <div colspan="2">
                     <p
                         >Upload below the DespatchAdvice you received from your supplier. When you click on the import button:</p>
                     <ol>
@@ -18,12 +18,13 @@
                                     href="http://ubl.xml.org/"
                                     target="_blank"
                                 >Universal Business Language</a> format (UBL), you should install the module <em
-                                >order_response_import_ubl</em>.</li>
+                                >despatch_advice_import_ubl</em>.</li>
                       <li
                             >If it is a PDF file, Odoo will try to find an XML file in the attachments of the PDF file and then use this XML file.</li>
                     </ol>
                   </div>
                 </group>
+
                 <group name="main">
                     <field name="document" filename="filename" />
                     <field name="filename" invisible="1" />
