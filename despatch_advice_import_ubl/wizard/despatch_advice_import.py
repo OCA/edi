@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 # Copyright 2020 ACSONE SA/NV
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
 
-from odoo import api, models, _
-
+from odoo import _, api, models
 from odoo.exceptions import UserError
+
 logger = logging.getLogger(__name__)
 
 
@@ -60,7 +59,7 @@ class DespatchAdviceImport(models.TransientModel):
         for line in lines_xpath:
             res_lines.append(self.parse_ubl_despatch_advice_line(line, ns))
         res = {
-            "ref": order_reference_xpath[0].text if order_reference_xpath else '',
+            "ref": order_reference_xpath[0].text if order_reference_xpath else "",
             "supplier": supplier_dict,
             "company": customer_dict,
             "despatch_advice_type_code": despatch_advice_type_code_xpath[0].text,
@@ -87,13 +86,16 @@ class DespatchAdviceImport(models.TransientModel):
         )
 
         product_lot_xpath = line.xpath(
-            "cac:Item/cac:ItemInstance/cac:LotIdentification/cbc:LotNumberID", namespaces=ns
+            "cac:Item/cac:ItemInstance/cac:LotIdentification/cbc:LotNumberID",
+            namespaces=ns,
         )
         order_reference_xpath = line.xpath(
             "cac:OrderLineReference/cac:OrderReference/cbc:ID", namespaces=ns
         )
 
-        order_line_id_xpath = line.xpath("cac:OrderLineReference/cbc:LineID", namespaces=ns)
+        order_line_id_xpath = line.xpath(
+            "cac:OrderLineReference/cbc:LineID", namespaces=ns
+        )
 
         if not order_line_id_xpath:
             raise UserError(_("Missing line ID in the Despatch Advice."))
@@ -101,10 +103,10 @@ class DespatchAdviceImport(models.TransientModel):
         res_line = {
             "line_id": line_id_xpath[0].text,
             "order_line_id": order_line_id_xpath[0].text,
-            "ref": order_reference_xpath[0].text if order_reference_xpath else '',
+            "ref": order_reference_xpath[0].text if order_reference_xpath else "",
             "qty": qty,
             "product_ref": product_ref_xpath[0].text,
-            "product_lot": product_lot_xpath[0].text if product_lot_xpath else '',
+            "product_lot": product_lot_xpath[0].text if product_lot_xpath else "",
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
             "backorder_qty": backorder_qty,
         }
