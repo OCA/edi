@@ -98,16 +98,17 @@ class TestDespatchAdviceImport(TransactionCase):
             line_2_backorder_qty=0,
         )
         xml_content = b64encode(xml_content.encode("utf-8"))
-        result = self.DespatchAdviceImport.parse_despatch_advice(
-            b64decode(xml_content), "test.xml"
-        )
+        default = {"despatch_advice_type_code": "delivery"}
+        result = self.DespatchAdviceImport.with_context(
+            despatch_advice_import__default_vals=dict(despatch_advice=default)
+        ).parse_despatch_advice(b64decode(xml_content), "test.xml")
         attachments = result.pop("attachments")
         self.assertTrue(attachments.get("test.xml"))
         expected = {
             "chatter_msg": [],
             "company": {"vat": "BE0421801233"},
             "date": "2020-11-16",
-            "despatch_advice_type_code": "scheduled",
+            "despatch_advice_type_code": "delivery",
             "estimated_delivery_date": "2020-11-17",
             "lines": [
                 {
