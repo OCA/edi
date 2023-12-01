@@ -10,7 +10,15 @@ from odoo import fields
 from odoo.tests.common import SavepointCase
 from odoo.tools import file_open, float_compare
 
-from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+# TODO v16: use
+# from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
+DISABLED_MAIL_CONTEXT = {
+    "tracking_disable": True,
+    "mail_create_nolog": True,
+    "mail_create_nosubscribe": True,
+    "mail_notrack": True,
+    "no_reset_password": True,
+}
 
 
 class TestInvoiceImport(SavepointCase):
