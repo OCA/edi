@@ -204,7 +204,13 @@ class ProductImport(models.TransientModel):
             product.write(product_vals)
             logger.info("Product %d updated", product.id)
         else:
+            product_active = product_vals.pop("active")
             product = self.env["product.product"].create(product_vals)
+            if not product_active:
+                # Product created first, then archived in order to replicate
+                # all characteristics into product.template
+                product.flush()
+                product.action_archive()
             logger.info("Product %d created", product.id)
         return product
 
