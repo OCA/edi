@@ -88,6 +88,10 @@ class DespatchAdviceImport(models.TransientModel):
             self.env["business.document.import"]._check_company(
                 parsed_despatch_advice["company"], parsed_despatch_advice["chatter_msg"]
             )
+        defaults = self.env.context.get("despatch_advice_import__default_vals", {}).get(
+            "despatch_advice", {}
+        )
+        parsed_despatch_advice.update(defaults)
         return parsed_despatch_advice
 
     @api.model
