@@ -237,7 +237,9 @@ class DespatchAdviceImport(models.TransientModel):
         moves_qty = sum(moves.mapped("product_qty"))
 
         if float_compare(qty, moves_qty, precision_digits=precision) >= 0:
-            return
+            raise UserError(
+                _("The product quantity is greater than the original product quantity")
+            )
 
         # confirmed qty < ordered qty
         move_ids_to_backorder = []
