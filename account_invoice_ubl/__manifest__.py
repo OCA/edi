@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice UBL",
-    "version": "14.0.1.0.3",
+    "version": "16.0.1.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Generate UBL XML file for customer invoices/refunds",
@@ -15,6 +15,7 @@
         "account_payment_partner",
         "base_ubl_payment",
         "account_tax_unece",
+        "pdf_helper",
     ],
     "data": ["views/account_move.xml", "views/res_config_settings.xml"],
     "post_init_hook": "set_xml_format_in_pdf_invoice_to_ubl",
