@@ -110,7 +110,7 @@ class AccountMove(models.Model):
             ctx["no_embedded_ubl_xml"] = True
             ctx["force_report_rendering"] = True
             pdf_inv = (
-                self.with_context(ctx)
+                self.with_context(**ctx)
                 .env.ref("account.account_invoices")
                 ._render_qweb_pdf(self.ids)[0]
             )
@@ -391,7 +391,7 @@ class AccountMove(models.Model):
         filename = self.get_ubl_filename(version=version)
         attach = (
             self.env["ir.attachment"]
-            .with_context({})
+            .with_context(**{})
             .create(
                 {
                     "name": filename,
