@@ -4,6 +4,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import base64
+import io
 import logging
 
 from lxml import etree
@@ -110,9 +111,9 @@ class AccountMove(models.Model):
             ctx["no_embedded_ubl_xml"] = True
             ctx["force_report_rendering"] = True
             pdf_inv = (
-                self.with_context(**ctx)
-                .env.ref("account.account_invoices")
-                ._render_qweb_pdf(self.ids)[0]
+                self.env["ir.actions.report"]
+                .with_context(**ctx)
+                ._render_qweb_pdf("account.account_invoices", [self.id])[0]
             )
             binary_node.text = base64.b64encode(pdf_inv)
 
@@ -362,25 +363,21 @@ class AccountMove(models.Model):
         self.ensure_one()
         return self.partner_id.lang or "en_US"
 
-    def add_xml_in_pdf_buffer(self, buffer):
+    def _embed_ubl_xml_in_pdf(self, pdf_stream):
         self.ensure_one()
         if self.is_ubl_sale_invoice_posted():
             version = self.get_ubl_version()
             xml_filename = self.get_ubl_filename(version=version)
             xml_string = self.generate_ubl_xml_string(version=version)
-            buffer = self._ubl_add_xml_in_pdf_buffer(xml_string, xml_filename, buffer)
-        return buffer
-
-    def embed_ubl_xml_in_pdf(self, pdf_content):
-        self.ensure_one()
-        if self.is_ubl_sale_invoice_posted():
-            version = self.get_ubl_version()
-            xml_filename = self.get_ubl_filename(version=version)
-            xml_string = self.generate_ubl_xml_string(version=version)
-            pdf_content = self.embed_xml_in_pdf(
-                xml_string, xml_filename, pdf_content=pdf_content
+            pdf_content = pdf_stream["stream"].getvalue()
+            new_content = self.env["pdf.helper"].pdf_embed_xml(
+                pdf_content,
+                xml_filename,
+                xml_string,
             )
-        return pdf_content
+            # Replace the current content.
+            pdf_stream["stream"].close()
+            pdf_stream["stream"] = io.BytesIO(new_content)
 
     def attach_ubl_xml_file_button(self):
         self.ensure_one()

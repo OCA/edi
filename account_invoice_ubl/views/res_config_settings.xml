@@ -12,14 +12,16 @@
         />
         <field name="arch" type="xml">
             <xpath expr="//div[@id='e-invoices']" position="inside">
-                <div class="o_setting_left_pane">
-                    <field name="embed_pdf_in_ubl_xml_invoice" />
-                </div>
-                <div class="o_setting_right_pane">
-                    <label for="embed_pdf_in_ubl_xml_invoice" />
-                    <div class="text-muted">
-                    Include the PDF of the invoice in the standalone UBL Invoice XML file.
-                </div>
+                <div class="col-12 col-lg-6 o_setting_box">
+                    <div class="o_setting_left_pane">
+                        <field name="embed_pdf_in_ubl_xml_invoice" />
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="embed_pdf_in_ubl_xml_invoice" />
+                        <div class="text-muted">
+                        Include the PDF of the invoice in the standalone UBL Invoice XML file.
+                        </div>
+                    </div>
                 </div>
             </xpath>
         </field>

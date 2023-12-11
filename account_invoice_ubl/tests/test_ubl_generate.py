@@ -3,7 +3,7 @@
 # Copyright 2019 Onestein (<https://www.onestein.eu>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import HttpSavepointCase, tagged
+from odoo.tests.common import HttpCase, tagged
 from odoo.tools import mute_logger
 
 from ..hooks import (
@@ -18,7 +18,7 @@ MUTE_LOGGER = "odoo.addons.account_invoice_ubl.models.account_move"
 
 
 @tagged("-at_install", "post_install")
-class TestUblInvoice(HttpSavepointCase, TestUblInvoiceMixin):
+class TestUblInvoice(HttpCase, TestUblInvoiceMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -32,11 +32,13 @@ class TestUblInvoice(HttpSavepointCase, TestUblInvoiceMixin):
             invoice.company_id.xml_format_in_pdf_invoice = "ubl"
         for version in ["2.0", "2.1"]:
             pdf_file = (
-                self.env.ref("account.account_invoices")
+                self.env["ir.actions.report"]
                 .with_context(ubl_version=version, force_report_rendering=True)
-                ._render_qweb_pdf(invoice.ids)[0]
+                ._render_qweb_pdf("account.report_invoice_with_payments", invoice.ids)[
+                    0
+                ]
             )
-            res = self.env["base.ubl"].get_xml_files_from_pdf(pdf_file)
+            res = self.env["pdf.helper"].pdf_get_xml_files(pdf_file)
             invoice_filename = invoice.get_ubl_filename(version=version)
             self.assertTrue(invoice_filename in res)
 

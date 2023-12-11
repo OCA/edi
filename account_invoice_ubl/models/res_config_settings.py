@@ -9,5 +9,6 @@ class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
     embed_pdf_in_ubl_xml_invoice = fields.Boolean(
-        related="company_id.embed_pdf_in_ubl_xml_invoice", readonly=False
+        related="company_id.embed_pdf_in_ubl_xml_invoice",
+        readonly=False,
     )

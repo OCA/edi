@@ -9,36 +9,26 @@ from odoo import models
 class IrActionsReport(models.Model):
     _inherit = "ir.actions.report"
 
-    def postprocess_pdf_report(self, record, buffer):
-        if self.is_ubl_xml_to_embed_in_invoice():
-            buffer = record.add_xml_in_pdf_buffer(buffer)
-        return super().postprocess_pdf_report(record, buffer)
-
-    def _post_pdf(self, save_in_attachment, pdf_content=None, res_ids=None):
-        """We go through that method when the PDF is generated for the 1st
-        time and also when it is read from the attachment.
-        """
-        pdf_content = super()._post_pdf(
-            save_in_attachment, pdf_content=pdf_content, res_ids=res_ids
+    def _render_qweb_pdf_prepare_streams(self, report_ref, data, res_ids=None):
+        # It works, but:
+        # - when you click on the "Print" button or use the "Print" menu,
+        # the XML file is regenerated even when the invoice is read from the attachment.
+        # - when you open the invoice from the attachment, you get the "original" XML
+        # file
+        collected_streams = super()._render_qweb_pdf_prepare_streams(
+            report_ref, data, res_ids=res_ids
         )
-        if res_ids and len(res_ids) == 1:
-            if self.is_ubl_xml_to_embed_in_invoice():
-                invoice = self.env["account.move"].browse(res_ids)
-                if invoice.is_ubl_sale_invoice_posted():
-                    pdf_content = invoice.embed_ubl_xml_in_pdf(pdf_content)
-        return pdf_content
-
-    def is_ubl_xml_to_embed_in_invoice(self):
-        return (
-            self.model == "account.move"
+        amo = self.env["account.move"]
+        invoice_reports = amo._get_invoice_report_names()
+        if (
+            collected_streams
+            and res_ids
+            and len(res_ids) == 1
+            and report_ref in invoice_reports
             and not self.env.context.get("no_embedded_ubl_xml")
-            and self.report_name in self._get_invoice_reports_ubl()
-        )
-
-    @classmethod
-    def _get_invoice_reports_ubl(cls):
-        return [
-            "account.report_invoice",
-            "account.report_invoice_with_payments",
-            "account.account_invoice_report_duplicate_main",
-        ]
+        ):
+            move = amo.browse(res_ids)
+            if move._xml_format_in_pdf_invoice() == "ubl":
+                pdf_stream = collected_streams[move.id]
+                move._embed_ubl_xml_in_pdf(pdf_stream)
+        return collected_streams
