@@ -1,6 +1,7 @@
 # Copyright 2016-2017 Akretion (http://www.akretion.com)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # Copyright 2019 Onestein (<https://www.onestein.eu>)
+# Copyright 2023 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import base64
@@ -117,6 +118,41 @@ class AccountMove(models.Model):
             )
             binary_node.text = base64.b64encode(pdf_inv)
 
+    def _ubl_get_invoice_vat_exclusive_amount(self):
+        amount = self.amount_untaxed
+        # Add also non-VAT taxes that are not subjected to VAT
+        for tline in self.line_ids:
+            if not tline.tax_line_id:
+                continue
+            if tline.tax_line_id.unece_type_id.code != "VAT":
+                sign = 1 if tline.is_refund else -1
+                amount += sign * tline.balance
+        return amount
+
+    def _ubl_get_invoice_vat_amount(self):
+        amount = self.amount_tax
+        # Remove non-VAT taxes that are not subjected to VAT
+        for tline in self.line_ids:
+            if not tline.tax_line_id:
+                continue
+            if tline.tax_line_id.unece_type_id.code != "VAT":
+                sign = 1 if tline.is_refund else -1
+                amount -= sign * tline.balance
+        return amount
+
+    def _ubl_get_charge_total_amount(self):
+        amount = 0.0
+        for tline in self.line_ids:
+            if not tline.tax_line_id:
+                continue
+            if tline.tax_line_id.unece_type_id.code != "VAT":
+                if not tline.tax_line_id.include_base_amount:
+                    # For non-VAT taxes, not subject to VAT, they are declared
+                    # as AllowanceCharge
+                    sign = 1 if tline.is_refund else -1
+                    amount += sign * tline.balance
+        return amount
+
     def _ubl_add_legal_monetary_total(self, parent_node, ns, version="2.1"):
         self.ensure_one()
         monetary_total = etree.SubElement(parent_node, ns["cac"] + "LegalMonetaryTotal")
@@ -129,11 +165,20 @@ class AccountMove(models.Model):
         tax_excl_total = etree.SubElement(
             monetary_total, ns["cbc"] + "TaxExclusiveAmount", currencyID=cur_name
         )
-        tax_excl_total.text = "%0.*f" % (prec, self.amount_untaxed)
+        tax_excl_total.text = "%0.*f" % (
+            prec,
+            self._ubl_get_invoice_vat_exclusive_amount(),
+        )
         tax_incl_total = etree.SubElement(
             monetary_total, ns["cbc"] + "TaxInclusiveAmount", currencyID=cur_name
         )
         tax_incl_total.text = "%0.*f" % (prec, self.amount_total)
+        charge_total_amount = self._ubl_get_charge_total_amount()
+        if charge_total_amount:
+            el_charge_total_amount = etree.SubElement(
+                monetary_total, ns["cbc"] + "ChargeTotalAmount", currencyID=cur_name
+            )
+            el_charge_total_amount.text = "%0.*f" % (prec, charge_total_amount)
         prepaid_amount = etree.SubElement(
             monetary_total, ns["cbc"] + "PrepaidAmount", currencyID=cur_name
         )
@@ -144,13 +189,71 @@ class AccountMove(models.Model):
         )
         payable_amount.text = "%0.*f" % (prec, self.amount_residual)
 
+    def _ubl_get_invoice_line_price_unit(self, iline):
+        """Compute the base unit price without taxes"""
+        price = iline.price_unit
+        qty = 1.0
+        if iline.tax_ids:
+            tax_incl = any(t.price_include for t in iline.tax_ids)
+            if tax_incl:
+                # To prevent rounding issue, we must declare tax excluded price
+                # for the total quantity
+                qty = iline.quantity
+            taxes = iline.tax_ids.compute_all(
+                price,
+                self.currency_id,
+                qty,
+                product=iline.product_id,
+                partner=self.partner_id,
+            )
+            if taxes:
+                price = taxes["total_excluded"]
+        dpo = self.env["decimal.precision"]
+        price_precision = dpo.precision_get("Product Price")
+        return price, price_precision, qty
+
+    def _ubl_get_invoice_line_discount(self, iline, base_price, base_qty):
+        # Formula: Net amount = Invoiced quantity * (Item net price/item price
+        #   base quantity) + Sum of invoice line charge amount - sum of invoice
+        #   line allowance amount
+        discount = iline.quantity / base_qty * base_price - iline.price_subtotal
+        dpo = self.env["decimal.precision"]
+        price_precision = dpo.precision_get("Product Price")
+        discount = float_round(discount, precision_digits=price_precision)
+        return discount, price_precision
+
+    def _ubl_add_invoice_line_discount(
+        self, xml_root, iline, base_price, base_qty, ns, version="2.1"
+    ):
+        discount, prec = self._ubl_get_invoice_line_discount(
+            iline, base_price, base_qty
+        )
+        if float_is_zero(discount, precision_digits=prec):
+            return
+        charge_node = etree.SubElement(xml_root, ns["cac"] + "AllowanceCharge")
+        charge_indicator_node = etree.SubElement(
+            charge_node, ns["cbc"] + "ChargeIndicator"
+        )
+        charge_indicator_node.text = "false"
+        charge_reason_code_node = etree.SubElement(
+            charge_node, ns["cbc"] + "AllowanceChargeReasonCode"
+        )
+        charge_reason_code_node.text = "95"
+        charge_reason_node = etree.SubElement(
+            charge_node, ns["cbc"] + "AllowanceChargeReason"
+        )
+        charge_reason_node.text = "Discount"
+        charge_amount_node = etree.SubElement(
+            charge_node, ns["cbc"] + "Amount", currencyID=self.currency_id.name
+        )
+        charge_amount_node.text = "%0.*f" % (prec, discount)
+
     def _ubl_add_invoice_line(self, parent_node, iline, line_number, ns, version="2.1"):
         self.ensure_one()
         cur_name = self.currency_id.name
         line_root = etree.SubElement(parent_node, ns["cac"] + "InvoiceLine")
         dpo = self.env["decimal.precision"]
         qty_precision = dpo.precision_get("Product Unit of Measure")
-        price_precision = dpo.precision_get("Product Price")
         account_precision = self.currency_id.decimal_places
         line_id = etree.SubElement(line_root, ns["cbc"] + "ID")
         line_id.text = str(line_number)
@@ -165,10 +268,16 @@ class AccountMove(models.Model):
             quantity = etree.SubElement(line_root, ns["cbc"] + "InvoicedQuantity")
         qty = iline.quantity
         quantity.text = "%0.*f" % (qty_precision, qty)
+        base_price, price_precision, base_qty = self._ubl_get_invoice_line_price_unit(
+            iline
+        )
         line_amount = etree.SubElement(
             line_root, ns["cbc"] + "LineExtensionAmount", currencyID=cur_name
         )
         line_amount.text = "%0.*f" % (account_precision, iline.price_subtotal)
+        self._ubl_add_invoice_line_discount(
+            line_root, iline, base_price, base_qty, ns, version=version
+        )
         self._ubl_add_invoice_line_tax_total(iline, line_root, ns, version=version)
         self._ubl_add_item(
             iline.name,
@@ -176,56 +285,77 @@ class AccountMove(models.Model):
             line_root,
             ns,
             type_="sale",
-            taxes=iline.tax_ids,
             version=version,
         )
         price_node = etree.SubElement(line_root, ns["cac"] + "Price")
         price_amount = etree.SubElement(
             price_node, ns["cbc"] + "PriceAmount", currencyID=cur_name
         )
-        price_unit = 0.0
-        # Use price_subtotal/qty to compute price_unit to be sure
-        # to get a *tax_excluded* price unit
-        if not float_is_zero(qty, precision_digits=qty_precision):
-            price_unit = float_round(
-                iline.price_subtotal / float(qty), precision_digits=price_precision
-            )
-        price_amount.text = "%0.*f" % (price_precision, price_unit)
+        price_amount.text = "%0.*f" % (price_precision, base_price)
         if uom_unece_code:
-            base_qty = etree.SubElement(
+            base_qty_node = etree.SubElement(
                 price_node, ns["cbc"] + "BaseQuantity", unitCode=uom_unece_code
             )
         else:
-            base_qty = etree.SubElement(price_node, ns["cbc"] + "BaseQuantity")
-        base_qty.text = "%0.*f" % (qty_precision, 1.0)
+            base_qty_node = etree.SubElement(price_node, ns["cbc"] + "BaseQuantity")
+        base_qty_node.text = "%0.*f" % (qty_precision, base_qty)
 
-    def _ubl_add_invoice_line_tax_total(self, iline, parent_node, ns, version="2.1"):
+    def _ubl_add_tax_total(self, xml_root, ns, version="2.1"):
         self.ensure_one()
         cur_name = self.currency_id.name
         prec = self.currency_id.decimal_places
-        tax_total_node = etree.SubElement(parent_node, ns["cac"] + "TaxTotal")
-        price = iline.price_unit * (1 - (iline.discount or 0.0) / 100.0)
-        res_taxes = iline.tax_ids.compute_all(
-            price,
-            quantity=iline.quantity,
-            product=iline.product_id,
-            partner=self.partner_id,
-        )
-        tax_total = float_round(
-            res_taxes["total_included"] - res_taxes["total_excluded"],
-            precision_digits=prec,
-        )
+
+        # There are as many tax line as there are repartition lines
+        tax_lines = {}
+        for tline in self.line_ids:
+            if not tline.tax_line_id:
+                continue
+            tax_lines.setdefault(
+                tline.tax_line_id,
+                {"base": 0.0, "amount": 0.0},
+            )
+            tax_lines[tline.tax_line_id]["base"] += tline.tax_base_amount
+            sign = 1 if tline.is_refund else -1
+            tax_lines[tline.tax_line_id]["amount"] += sign * tline.balance
+
+        exempt = 0.0
+        exempt_taxes = self.line_ids.tax_line_id.browse()
+        for tax, amounts in tax_lines.items():
+            if tax.unece_type_id.code != "VAT":
+                if tax.include_base_amount:
+                    continue
+                exempt += amounts["amount"]
+                exempt_taxes |= tax
+                # For non-VAT taxes, not subject to VAT, declare as AllowanceCharge
+                charge_node = etree.SubElement(xml_root, ns["cac"] + "AllowanceCharge")
+                charge_indicator_node = etree.SubElement(
+                    charge_node, ns["cbc"] + "ChargeIndicator"
+                )
+                charge_indicator_node.text = "true"
+                charge_reason_code_node = etree.SubElement(
+                    charge_node, ns["cbc"] + "AllowanceChargeReasonCode"
+                )
+                charge_reason_code_node.text = "ABK"
+                charge_reason_node = etree.SubElement(
+                    charge_node, ns["cbc"] + "AllowanceChargeReason"
+                )
+                charge_reason_node.text = "Miscellaneous"
+                charge_amount_node = etree.SubElement(
+                    charge_node, ns["cbc"] + "Amount", currencyID=cur_name
+                )
+                charge_amount_node.text = "%0.*f" % (prec, amounts["amount"])
+                self._ubl_add_tax_category(tax, charge_node, ns, version=version)
+
+        tax_total_node = etree.SubElement(xml_root, ns["cac"] + "TaxTotal")
         tax_amount_node = etree.SubElement(
             tax_total_node, ns["cbc"] + "TaxAmount", currencyID=cur_name
         )
-        tax_amount_node.text = "%0.*f" % (prec, tax_total)
-        if not float_is_zero(tax_total, precision_digits=prec):
-            for res_tax in res_taxes["taxes"]:
-                tax = self.env["account.tax"].browse(res_tax["id"])
-                # we don't have the base amount in res_tax :-(
+        tax_amount_node.text = "%0.*f" % (prec, self._ubl_get_invoice_vat_amount())
+        for tax, amounts in tax_lines.items():
+            if tax.unece_type_id.code == "VAT":
                 self._ubl_add_tax_subtotal(
-                    False,
-                    res_tax["amount"],
+                    amounts["base"],
+                    amounts["amount"],
                     tax,
                     cur_name,
                     tax_total_node,
@@ -233,42 +363,26 @@ class AccountMove(models.Model):
                     version=version,
                 )
 
-    def _ubl_add_tax_total(self, xml_root, ns, version="2.1"):
-        self.ensure_one()
-        cur_name = self.currency_id.name
-        tax_total_node = etree.SubElement(xml_root, ns["cac"] + "TaxTotal")
-        tax_amount_node = etree.SubElement(
-            tax_total_node, ns["cbc"] + "TaxAmount", currencyID=cur_name
-        )
-        prec = self.currency_id.decimal_places
-        tax_amount_node.text = "%0.*f" % (prec, self.amount_tax)
-        if not float_is_zero(self.amount_tax, precision_digits=prec):
-            tax_lines = self.line_ids.filtered(lambda line: line.tax_line_id)
-            res = {}
-            # There are as many tax line as there are repartition lines
-            done_taxes = set()
-            for line in tax_lines:
-                res.setdefault(
-                    line.tax_line_id.tax_group_id,
-                    {"base": 0.0, "amount": 0.0, "tax": False},
-                )
-                res[line.tax_line_id.tax_group_id]["amount"] += line.price_subtotal
-                tax_key_add_base = tuple(self._get_tax_key_for_group_add_base(line))
-                if tax_key_add_base not in done_taxes:
-                    res[line.tax_line_id.tax_group_id]["base"] += line.tax_base_amount
-                    res[line.tax_line_id.tax_group_id]["tax"] = line.tax_line_id
-                    done_taxes.add(tax_key_add_base)
-            res = sorted(res.items(), key=lambda l: l[0].sequence)
-            for _group, amounts in res:
-                self._ubl_add_tax_subtotal(
-                    amounts["base"],
-                    amounts["amount"],
-                    amounts["tax"],
-                    cur_name,
-                    tax_total_node,
-                    ns,
-                    version=version,
-                )
+        if not float_is_zero(exempt, precision_digits=prec):
+            self._ubl_add_tax_subtotal(
+                exempt,
+                0,
+                exempt_taxes[0],
+                cur_name,
+                tax_total_node,
+                ns,
+                version=version,
+            )
+            if len(exempt_taxes) > 1:
+                # xpath cac:TaxCategory/cbc:Name
+                exempt_node = tax_total_node[-1]
+                exempt_node = [
+                    e for e in list(exempt_node) if e.tag == ns["cac"] + "TaxCategory"
+                ][0]
+                exempt_node = [
+                    e for e in list(exempt_node) if e.tag == ns["cbc"] + "Name"
+                ][0]
+                exempt_node.text = " + ".join([e.name for e in exempt_taxes])
 
     def generate_invoice_ubl_xml_etree(self, version="2.1"):
         self.ensure_one()
