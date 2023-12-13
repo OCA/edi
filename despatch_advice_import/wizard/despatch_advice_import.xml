@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="despatch_advice_import_form_view" model="ir.ui.view">
+        <field name="name">despatch.advice.import (in purchase_order_import)</field>
+        <field name="model">despatch.advice.import</field>
+        <field name="arch" type="xml">
+            <form string="Despatch Advice Import">
+                <group colspan="4" name="help-import">
+                  <div colspan="2">
+                    <p
+                        >Upload below the DespatchAdvice you received from your supplier. When you click on the import button:</p>
+                    <ol>
+                      <li
+                            >If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed. For the <a
+                                    href="http://ubl.xml.org/"
+                                    target="_blank"
+                                >Universal Business Language</a> format (UBL), you should install the module <em
+                                >despatch_advice_import_ubl</em>.</li>
+                      <li
+                            >If it is a PDF file, Odoo will try to find an XML file in the attachments of the PDF file and then use this XML file.</li>
+                    </ol>
+                  </div>
+                </group>
+
+                <group name="main">
+                    <field name="document" filename="filename" />
+                    <field name="filename" invisible="1" />
+                </group>
+                <footer>
+                    <button
+                        name="process_document"
+                        type="object"
+                        class="oe_highlight"
+                        string="Import document"
+                    />
+                    <button special="cancel" string="Cancel" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
+        <record id="despatch_advice_import_action" model="ir.actions.act_window">
+        <field name="name">Import</field>
+        <field name="res_model">despatch.advice.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record model="ir.ui.menu" id="despatch_advice_import_importer_menu">
+        <field name="name">UBL Despatch Advice Importer</field>
+        <field name="parent_id" ref="purchase.menu_procurement_management" />
+        <field name="action" ref="despatch_advice_import_action" />
+        <field name="sequence" eval="99" />
+    </record>
+
+</odoo>
