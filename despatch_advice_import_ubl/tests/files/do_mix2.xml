@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<DespatchAdvice:DespatchAdvice
+    xmlns:DespatchAdvice="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <cbc:ID>0811960665</cbc:ID>
+  <cbc:IssueDate>2021-04-01</cbc:IssueDate>
+  <cbc:DespatchAdviceTypeCode>scheduled</cbc:DespatchAdviceTypeCode>
+  <cac:OrderReference>
+    <cbc:ID>{order_id}</cbc:ID>
+  </cac:OrderReference>
+  <cac:DespatchSupplierParty>
+    <cac:Party>
+      <cac:PartyIdentification>
+        <cbc:ID schemeName="BE:VAT">BE0401953350</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PostalAddress>
+        <cbc:StreetName>RUE TEST, 1</cbc:StreetName>
+        <cbc:CityName>CITY</cbc:CityName>
+        <cbc:PostalZone>0000</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>BE</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>S.A. COMPANY</cbc:RegistrationName>
+      </cac:PartyLegalEntity>
+    </cac:Party>
+  </cac:DespatchSupplierParty>
+  <cac:DeliveryCustomerParty>
+    <cac:Party>
+      <cac:PartyIdentification>
+        <cbc:ID schemeName="BE:VAT">BE0421801233</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>COMPANY</cbc:RegistrationName>
+      </cac:PartyLegalEntity>
+    </cac:Party>
+  </cac:DeliveryCustomerParty>
+  <cac:Shipment>
+    <cbc:ID>0811960665</cbc:ID>
+    <cac:Delivery>
+      <cac:EstimatedDeliveryPeriod>
+        <cbc:EndDate>2021-04-02</cbc:EndDate>
+      </cac:EstimatedDeliveryPeriod>
+    </cac:Delivery>
+  </cac:Shipment>
+  <cac:DespatchLine>
+    <cbc:ID>000010</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">24</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_3_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VANGUARD DA2PI-CPV 25X1D</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10001458</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-11-25</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>471881</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000020</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">20</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_6_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>RISPOVAL IBR INACT 100ML</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10001112</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-12-25</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>455269</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000030</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="TY">0</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_9_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSICAN PLS BB ORAL VACX1DS VLX10_BE/NL</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10022422</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cac:LotIdentification>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000040</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">20</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_10_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSICAN+ BBPi IN 10x1d</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10023409</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-06-25</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>04582703</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000050</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">120</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_11_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>CONVENIA SOL INJ 10ml</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10007669</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2023-03-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>43224706</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000060</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="BB">160</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_19_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>FEVAXYN PENTOFEL 10X1D</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10004344</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-04-26</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>474662</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000070</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">5</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_20_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VANGUARD CPV-LEPTO 25x1D</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10001455</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2024-07-02</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>473338</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000080</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">25</cbc:DeliveredQuantity>
+    <cbc:OutstandingQuantity unitCode="C62">5</cbc:OutstandingQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_21_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VANGUARD DA2PI-CPV-LEPTO 25x1D (7)</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10001457</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-06-29</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>456322</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000090</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">10</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_22_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VANGUARD LEPTO 25x1D</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10001459</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-10-11</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>347340</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000100</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">30</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_23_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSICAN+ DHPPI 25x1d</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10011717</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-08-11</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>42602703</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000110</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">132</cbc:DeliveredQuantity>
+    <cbc:OutstandingQuantity unitCode="C62">68</cbc:OutstandingQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_24_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSICAN+ DHPPI/L4 25x1d</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10011718</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-06-08</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>95602701</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000120</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">60</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_25_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSICAN+ L4 25x1d</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10011728</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-04-20</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>445427A01</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000130</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">40</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_26_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSICAN+ PI 25x1d</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10011736</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-09-06</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>39602702</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000140</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="BB">15</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_27_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSIFEL FELV 25x1d</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10009541</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-12-06</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>491233</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000150</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">30</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_28_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSIGUARD RABIES 10x1d</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10016049</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-08-13</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>405827A04</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000030</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">18</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_9_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSICAN+ BB ORAL 10x1d </cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10022422</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2021-08-12</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>401463</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000030</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">2</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_9_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>VERSICAN+ BB ORAL 10x1d </cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10022422</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2021-08-12</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>401464</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+</DespatchAdvice:DespatchAdvice>

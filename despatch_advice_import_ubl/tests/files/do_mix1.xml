@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<DespatchAdvice:DespatchAdvice
+    xmlns:DespatchAdvice="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <cbc:ID>0811960660</cbc:ID>
+  <cbc:IssueDate>2021-04-01</cbc:IssueDate>
+  <cbc:DespatchAdviceTypeCode>scheduled</cbc:DespatchAdviceTypeCode>
+  <cac:OrderReference>
+    <cbc:ID>{order_id}</cbc:ID>
+  </cac:OrderReference>
+  <cac:DespatchSupplierParty>
+    <cac:Party>
+      <cac:PartyIdentification>
+        <cbc:ID schemeName="BE:VAT">BE0401953350</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PostalAddress>
+        <cbc:StreetName>RUE TEST, 1</cbc:StreetName>
+        <cbc:CityName>CITY</cbc:CityName>
+        <cbc:PostalZone>0000</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>BE</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>S.A. SOCIETY</cbc:RegistrationName>
+      </cac:PartyLegalEntity>
+    </cac:Party>
+  </cac:DespatchSupplierParty>
+  <cac:DeliveryCustomerParty>
+    <cac:Party>
+      <cac:PartyIdentification>
+        <cbc:ID schemeName="BE:VAT">BE0421801233</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>COMPANY</cbc:RegistrationName>
+      </cac:PartyLegalEntity>
+    </cac:Party>
+  </cac:DeliveryCustomerParty>
+  <cac:Shipment>
+    <cbc:ID>0811960660</cbc:ID>
+    <cac:Delivery>
+      <cac:EstimatedDeliveryPeriod>
+        <cbc:EndDate>2021-04-02</cbc:EndDate>
+      </cac:EstimatedDeliveryPeriod>
+    </cac:Delivery>
+  </cac:Shipment>
+  <cac:DespatchLine>
+    <cbc:ID>000010</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">60</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_1_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>CYDECTIN 0,1% ORAL DRENCH 1L</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10007444</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-09-30</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>475932</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000020</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">40</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_2_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>CYDECTIN TRICLAMOX OVIN 1 L</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10005578</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-05-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>446320</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+  <cbc:ID>000030</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">96</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_4_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>APOQUEL  5,4MG 100CP</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10022152</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-07-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>475409</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000040</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">10</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_7_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>MODERIN 32MG   30CP</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10005211</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2023-03-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>EC0920</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000050</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">40</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_8_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>CIDR  1,38gr BOITE DE 10</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10002949</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2021-07-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>Y073071</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000060</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">1</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_12_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>WITNESS LH 6x1 TEST</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10012140</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-01-22</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>461003</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000070</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">2</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_13_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>WITNESS RELAXIN 5x1 TEST GESTATION</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10010958</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-05-26</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>476920</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000080</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">4</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_14_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>ACEGON 10x6ML</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10010146</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2021-07-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>0029-72</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000090</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">480</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_15_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>EQUEST GEL ORAL 700kg</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10009831</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-11-30</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>483001</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000100</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">1</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_16_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>WITNESS GIARDIA 5 TESTS</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10009407</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-09-30</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>AT37.11</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000110</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">400</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_17_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>CATMINTH PATE SERINGUE 3GR</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10003022</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2023-10-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>477663</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000120</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="BB">30</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_18_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>FENDOV 1250 12 BOLI</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10006920</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2024-12-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>6089402</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000130</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">2</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_29_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>WITNESS FELV-FIV 10x1 TEST</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10009061</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-05-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>21ZLAE064</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+  <cac:DespatchLine>
+    <cbc:ID>000140</cbc:ID>
+    <cbc:DeliveredQuantity unitCode="C62">2</cbc:DeliveredQuantity>
+    <cac:OrderLineReference>
+      <cbc:LineID>{line_30_id}</cbc:LineID>
+      <cac:OrderReference>
+        <cbc:ID>{order_id}</cbc:ID>
+      </cac:OrderReference>
+    </cac:OrderLineReference>
+    <cac:Item>
+      <cbc:Name>WITNESS FELV-FIV 5x1 TEST</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>10006252</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ItemInstance>
+        <cbc:BestBeforeDate>2022-05-31</cbc:BestBeforeDate>
+        <cac:LotIdentification>
+          <cbc:LotNumberID>20ZLAD038</cbc:LotNumberID>
+        </cac:LotIdentification>
+      </cac:ItemInstance>
+    </cac:Item>
+  </cac:DespatchLine>
+</DespatchAdvice:DespatchAdvice>
