@@ -19,9 +19,9 @@ class TestExportAcountInvoiceJob(CommonCase):
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_requests.post.return_value = mock_response
-
+        invoice = self.invoice_1.with_context(resend_ebill=True)
         with mock_with_delay() as (delayable_cls, delayable):
-            self.invoice_1.export_invoice()
+            invoice.export_invoice()
             self.assertEqual(delayable_cls.call_count, 1)
             delay_args, delay_kwargs = delayable_cls.call_args
             self.assertEqual(delay_args, (self.invoice_1,))
