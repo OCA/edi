@@ -65,7 +65,8 @@ class AccountMove(models.Model):
         file_data = self._get_file_for_transmission_method()
         headers = self.transmit_method_id.get_transmission_http_header()
         url = self.transmit_method_id.get_transmission_url()
-        res = requests.post(url, headers=headers, files=file_data, timeout=5)
+        # TODO: Should be configurable as a parameter
+        res = requests.post(url, headers=headers, files=file_data, timeout=10)
         if res.status_code != 200:
             raise UserError(
                 _(
