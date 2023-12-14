@@ -10,11 +10,10 @@
     "summary": "",
     "author": "Camptocamp SA, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
-    "depends": ["account", "account_invoice_transmit_method", "queue_job"],
+    "depends": ["account", "account_invoice_transmit_method"],
     "maintainers": ["TDu"],
     "data": [
         "data/mail_activity_type.xml",
-        "data/queue_job_data.xml",
         "views/transmit_method.xml",
         "views/account_move.xml",
         "views/message_template.xml",
