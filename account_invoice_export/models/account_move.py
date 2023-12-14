@@ -7,8 +7,6 @@ import odoo
 from odoo import _, fields, models
 from odoo.exceptions import UserError, except_orm
 
-from odoo.addons.queue_job.job import identity_exact
-
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -21,10 +19,7 @@ class AccountMove(models.Model):
     def export_invoice(self):
         resend_invoice = self.env.context.get("resend_ebill", False)
         for invoice in self:
-            description = "{} - Export ebill".format(invoice.transmit_method_id.name)
-            invoice.with_delay(
-                description=description, identity_key=identity_exact
-            )._job_export_invoice(resend_invoice)
+            invoice._job_export_invoice(resend_invoice)
 
     def _job_export_invoice(self, resend_invoice=False):
         """Export ebill to external server and update the chatter."""
