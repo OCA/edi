@@ -95,7 +95,12 @@ class EDIExchangeTypeTestCase(EDIBackendCommonTestCase):
         # Test without any settings and minimal filename pattern
         self._test_exchange_filename("Test-File.csv")
 
+        # Test without extension for filename pattern
+        self.exchange_type_out.exchange_file_ext = False
+        self._test_exchange_filename("Test-File")
+
         # Test with datetime in filename pattern
+        self.exchange_type_out.exchange_file_ext = "csv"
         self.exchange_type_out.exchange_filename_pattern = "Test-File-{dt}"
         self._test_exchange_filename("Test-File-2022-04-28-08-37-24.csv")
 

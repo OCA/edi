@@ -220,7 +220,8 @@ class EDIExchangeType(models.Model):
         """Generate filename."""
         pattern = self.exchange_filename_pattern
         ext = self.exchange_file_ext
-        pattern = pattern + ".{ext}"
+        if ext:
+            pattern += ".{ext}"
         dt = self._make_exchange_filename_datetime()
         record_name = self._get_record_name(exchange_record)
         record = exchange_record
