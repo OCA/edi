@@ -1,4 +1,5 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2023 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
@@ -13,6 +14,13 @@ logger = logging.getLogger(__name__)
 
 class BaseUbl(models.AbstractModel):
     _inherit = "base.ubl"
+
+    @api.model
+    def _ubl_convert_payment_identifier(self, payment_identifier):
+        """Reformat localized payment identifier in an UBL compatible format"""
+        if not payment_identifier:
+            return payment_identifier
+        return payment_identifier.replace("+", "").replace("/", "")
 
     @api.model
     def _ubl_add_payment_means(
@@ -70,7 +78,9 @@ class BaseUbl(models.AbstractModel):
                 payment_channel_code.text = "IBAN"
                 if payment_identifier:
                     payment_id = etree.SubElement(pay_means, ns["cbc"] + "PaymentID")
-                    payment_id.text = payment_identifier
+                    payment_id.text = self._ubl_convert_payment_identifier(
+                        payment_identifier
+                    )
                 payee_fin_account = etree.SubElement(
                     pay_means, ns["cac"] + "PayeeFinancialAccount"
                 )
