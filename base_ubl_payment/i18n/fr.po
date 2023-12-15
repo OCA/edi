@@ -40,8 +40,8 @@ msgstr "Dernière modification le"
 #: code:addons/base_ubl_payment/models/ubl.py:0
 #, python-format
 msgid ""
-"Missing 'UNECE Payment Mean' on payment type '%s' used by the payment mode "
-"'%s'."
+"Missing 'UNECE Payment Mean' on payment type '{method}' "
+"used by the payment mode '{mode}'."
 msgstr ""
-"'Moyen de paiement UNECE’ manquant sur le type de paiement '%s' utilisé par "
-"le mode de paiement '%s'."
+"'Moyen de paiement UNECE’ manquant sur le type de paiement '{method}' utilisé par "
+"le mode de paiement '{mode}'."

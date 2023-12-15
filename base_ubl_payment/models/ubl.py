@@ -34,10 +34,12 @@ class BaseUbl(models.AbstractModel):
             if not payment_mode.payment_method_id.unece_id:
                 raise UserError(
                     _(
-                        "Missing 'UNECE Payment Mean' on payment type '%s' "
-                        "used by the payment mode '%s'."
+                        "Missing 'UNECE Payment Mean' on payment type '{method}' "
+                        "used by the payment mode '{mode}'."
+                    ).format(
+                        method=payment_mode.payment_method_id.name,
+                        mode=payment_mode.name,
                     )
-                    % (payment_mode.payment_method_id.name, payment_mode.name)
                 )
             pay_means_code.text = payment_mode.payment_method_id.unece_code
         else:
