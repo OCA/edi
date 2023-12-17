@@ -55,16 +55,25 @@ class AccountMove(models.Model):
             return "381"
 
     def _ubl_get_order_reference(self):
-        """This method is designed to be inherited"""
+        """An identifier of a referenced purchase order, issued by the Buyer"""
+        return self.ref or "/"
+
+    def _ubl_get_salesorder_reference(self):
+        """An identifier of a referenced sales order, issued by the Seller"""
         return self.invoice_origin
 
     def _ubl_add_order_reference(self, parent_node, ns, version="2.1"):
         self.ensure_one()
-        sale_order_ref = self._ubl_get_order_reference()
-        if sale_order_ref:
-            order_ref = etree.SubElement(parent_node, ns["cac"] + "OrderReference")
-            order_ref_id = etree.SubElement(order_ref, ns["cbc"] + "ID")
-            order_ref_id.text = sale_order_ref
+        buyer_ref = self._ubl_get_order_reference()
+        seller_ref = self._ubl_get_salesorder_reference()
+        if buyer_ref or seller_ref:
+            node = etree.SubElement(parent_node, ns["cac"] + "OrderReference")
+            if buyer_ref:
+                node_id = etree.SubElement(node, ns["cbc"] + "ID")
+                node_id.text = buyer_ref
+            if seller_ref:
+                node_salesorderid = etree.SubElement(node, ns["cbc"] + "SalesOrderID")
+                node_salesorderid.text = seller_ref
 
     def _ubl_get_buyer_reference(self):
         return self.partner_id.name
