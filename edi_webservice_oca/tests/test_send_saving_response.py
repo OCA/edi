@@ -6,9 +6,10 @@ from unittest import mock
 
 import responses
 from odoo_test_helper import FakeModelLoader
-from requests import HTTPError
 
 from odoo import models
+
+from odoo.addons.queue_job.exception import RetryableJobError
 
 from .common import TestEDIWebserviceBase
 
@@ -80,7 +81,7 @@ class TestSend(TestEDIWebserviceBase):
             "WebserviceBackend._consumer_record_env",
             side_effect=self._consumer_record_no_new_env,
         ) as mo:
-            with self.assertRaisesRegex(HTTPError, "Unauthorized"):
+            with self.assertRaisesRegex(RetryableJobError, "Unauthorized"):
                 self.backend._check_output_exchange_sync()
         mo.assert_called_once_with(self.record, new_cursor=True)
         self.assertEqual(self.record.edi_exchange_state, "output_pending")
@@ -194,7 +195,7 @@ class TestWebServiceSendHandledErrorChangingExchangeState(TestEDIWebserviceBase)
             "WebserviceBackend._consumer_record_env",
             side_effect=self._consumer_record_no_new_env,
         ) as mo:
-            with self.assertRaisesRegex(HTTPError, "Unauthorized"):
+            with self.assertRaisesRegex(RetryableJobError, "Unauthorized"):
                 self.backend._check_output_exchange_sync()
         mo.assert_called_once_with(self.record, new_cursor=True)
         self.assertTrue(self.edi_exchange_state_changed)
