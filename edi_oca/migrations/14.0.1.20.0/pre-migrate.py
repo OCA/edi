@@ -10,7 +10,9 @@ _logger = logging.getLogger(__name__)
 
 
 def migrate(cr, version):
-    if not version:
+    if not version or not tools.sql.column_exists(
+        cr, "edi_exchange_type", "model_manual_btn"
+    ):
         return
 
     # Backup old style rules to be used later on post migrate
