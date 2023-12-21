@@ -2,6 +2,7 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+
 from odoo import _, exceptions
 
 from odoo.addons.component.core import Component
@@ -27,7 +28,9 @@ class EDIWebserviceSend(Component):
 
     def send(self):
         method, pargs, kwargs = self._get_call_params()
-        return self.webservice_backend.call(method, *pargs, **kwargs)
+        return self.webservice_backend.call(
+            method, *pargs, consumer_record=self.exchange_record, **kwargs
+        )
 
     def _get_call_params(self):
         try:

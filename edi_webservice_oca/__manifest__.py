@@ -13,6 +13,10 @@
     "maintainers": ["etobella", "simahawk"],
     "website": "https://github.com/OCA/edi",
     "depends": ["edi_oca", "webservice"],
-    "data": ["views/edi_backend.xml", "security/ir.model.access.csv"],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/edi_backend.xml",
+        "views/edi_exchange_record.xml",
+    ],
     "demo": ["demo/edi_backend.xml"],
 }

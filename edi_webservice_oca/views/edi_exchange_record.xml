@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="edi_exchange_record_view_form" model="ir.ui.view">
+        <field name="name">edi_webservice_oca edi.exchange.record form view</field>
+        <field name="model">edi.exchange.record</field>
+        <field name="inherit_id" ref="edi_oca.edi_exchange_record_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='wrapper']" position="inside">
+                <group
+                    name="webservice_response"
+                    string="Webservice response"
+                    attrs="{'invisible': [('ws_response_status_code', '=', False)]}"
+                >
+                    <field name="ws_response_status_code" />
+                    <field name="ws_response_date" />
+                    <field name="ws_response_content_filename" invisible="1" />
+                    <field
+                        name="ws_response_content"
+                        filename="ws_response_content_filename"
+                    />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
