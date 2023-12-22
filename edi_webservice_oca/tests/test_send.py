@@ -40,6 +40,24 @@ class TestSend(TestEDIWebserviceBase):
                     endpoint: push/here
         """
         cls.record.type_id.set_settings(cls.settings1)
+        cls.a_user = (
+            cls.env["res.users"]
+            .with_context(no_reset_password=True)
+            .create(
+                {
+                    "name": "foo",
+                    "login": "a_user",
+                    "email": "foo@bar.com",
+                    "groups_id": [
+                        (
+                            6,
+                            0,
+                            (cls.env.ref("base.group_user")).ids,
+                        )
+                    ],
+                }
+            )
+        )
 
     def test_find_component(self):
         component = self.backend._get_component(self.record, "send")
@@ -79,9 +97,15 @@ class TestSend(TestEDIWebserviceBase):
     @responses.activate
     def test_component_send(self):
         self.record.type_id.set_settings(self.settings2)
+        # Internal user should be able to call the third party webservice
+        # without read access (no ir.access.model records)
+        # on `webservice.backend` model which store credentials
+        record = self.record.with_user(self.a_user)
+        backend = self.backend.with_user(self.a_user)
+
         url = "https://foo.test/push/here"
         responses.add(responses.POST, url, body="{}")
-        component = self.backend._get_component(self.record, "send")
+        component = backend._get_component(record, "send")
         result = component.send()
         self.assertEqual(result, b"{}")
         self.assertEqual(
