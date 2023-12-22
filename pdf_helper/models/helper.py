@@ -3,9 +3,11 @@
 # Copyright 2023 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
+import io
 import logging
 
 from odoo import api, models
+from odoo.tools.pdf import OdooPdfFileReader, OdooPdfFileWriter
 
 from ..utils import PDFParser
 
@@ -31,3 +33,14 @@ class PDFHelper(models.AbstractModel):
         except parser.get_xml_files_swallable_exceptions() as err:
             _logger.error("PDF file parsing failed: %s", str(err))
             return {}
+
+    @api.model
+    def pdf_embed_xml(self, pdf_content, xml_filename, xml_string):
+        """Add an XML attachment in a pdf"""
+        with io.BytesIO(pdf_content) as reader_buffer, io.BytesIO() as new_pdf_stream:
+            reader = OdooPdfFileReader(reader_buffer, strict=False)
+            writer = OdooPdfFileWriter()
+            writer.cloneReaderDocumentRoot(reader)
+            writer.addAttachment(xml_filename, xml_string, subtype="text/xml")
+            writer.write(new_pdf_stream)
+            return new_pdf_stream.getvalue()
