@@ -27,14 +27,14 @@ class TestPDFHelperUtils(TestCase):
 
 
 class TestPDFHelper(TransactionCase):
-    def test_parse_xml(self):
+    def test_get_xml(self):
         pdf_content = read_test_file("pdf_with_xml_test.pdf", mode="rb")
         res = self.env["pdf.helper"].pdf_get_xml_files(pdf_content)
         fname, xml_root = tuple(res.items())[0]
         self.assertEqual(fname, "factur-x.xml")
         self.assertTrue(isinstance(xml_root, etree._Element))
 
-    def test_parse_xml_fail(self):
+    def test_get_xml_fail(self):
         with self.assertLogs(
             "odoo.addons.pdf_helper.models.helper", level="ERROR"
         ) as log_catcher:
