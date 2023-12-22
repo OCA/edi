@@ -61,7 +61,7 @@ addon | version | maintainers | summary
 [edi_storage_oca](edi_storage_oca/) | 14.0.1.8.1 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
 [edi_ubl_oca](edi_ubl_oca/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Define EDI backend type for UBL.
 [edi_voxel_oca](edi_voxel_oca/) | 14.0.1.0.0 |  | Base module for connecting with Voxel
-[edi_webservice_oca](edi_webservice_oca/) | 14.0.1.4.0 | [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Defines webservice integration from EDI Exchange records
+[edi_webservice_oca](edi_webservice_oca/) | 14.0.1.4.1 | [![etobella](https://github.com/etobella.png?size=30px)](https://github.com/etobella) [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Defines webservice integration from EDI Exchange records
 [edi_xml_oca](edi_xml_oca/) | 14.0.1.1.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module for EDI exchange using XML files.
 [partner_identification_import](partner_identification_import/) | 14.0.1.0.1 |  | Provides partner matching on extra ID
 [pdf_helper](pdf_helper/) | 14.0.1.2.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Provides helpers to work w/ PDFs
