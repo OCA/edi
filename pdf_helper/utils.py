@@ -5,17 +5,19 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 import logging
-import mimetypes
 from io import BytesIO
+from struct import error as StructError
 
 from lxml import etree
 
-_logger = logging.getLogger(__name__)
-
 try:
-    import pypdf
+    from PyPDF2.errors import PdfReadError
 except ImportError:
-    _logger.debug("Cannot import pypdf")
+    from PyPDF2.utils import PdfReadError
+
+from odoo.tools.pdf import OdooPdfFileReader
+
+_logger = logging.getLogger(__name__)
 
 
 class PDFParser:
@@ -35,25 +37,19 @@ class PDFParser:
             _logger.debug("Valid XML files found in PDF: %s", list(res.keys()))
         return res
 
-    def _extract_xml_files(self, fd):
-        reader = pypdf.PdfReader(fd)
-        # attachment parsing via pypdf doesn't support /Kids
-        # cf my bug report https://github.com/py-pdf/pypdf/issues/2087
-        xmlfiles = {}
-        for filename, content_list in reader.attachments.items():
-            _logger.debug("Attachment %s found in PDF", filename)
-            mime_res = mimetypes.guess_type(filename)
-            if mime_res and mime_res[0] in ["application/xml", "text/xml"]:
+        with BytesIO(self.pdf_file) as buffer:
+            pdf_reader = OdooPdfFileReader(buffer, strict=False)
+
+            # Process embedded files.
+            for xml_name, content in pdf_reader.getAttachments():
                 try:
-                    _logger.debug("Trying to parse XML attachment %s", filename)
-                    xml_root = etree.fromstring(content_list[0])
-                    if len(xml_root) > 0:
-                        _logger.info("Valid XML file %s found in attachments", filename)
-                        xmlfiles[filename] = xml_root
-                    else:
-                        _logger.warning("XML file %s is empty", filename)
-                except Exception as err:
-                    _logger.warning(
-                        "Failed to parse XML file %s. Error: %s", filename, str(err)
-                    )
-        return xmlfiles
+                    res[xml_name] = etree.fromstring(content)
+                except Exception:
+                    _logger.debug("Non XML file found in PDF")
+            if res:
+                _logger.debug("Valid XML files found in PDF: %s", list(res.keys()))
+        return res
+
+    def get_xml_files_swallable_exceptions(self):
+        return (NotImplementedError, StructError, PdfReadError)
+
