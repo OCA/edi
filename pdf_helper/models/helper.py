@@ -7,7 +7,7 @@ import io
 import logging
 
 from odoo import api, models
-from odoo.tools.pdf import OdooPdfFileReader, OdooPdfFileWriter
+from odoo.tools.pdf import NameObject, OdooPdfFileReader, OdooPdfFileWriter
 
 from ..utils import PDFParser
 
@@ -42,5 +42,9 @@ class PDFHelper(models.AbstractModel):
             writer = OdooPdfFileWriter()
             writer.cloneReaderDocumentRoot(reader)
             writer.addAttachment(xml_filename, xml_string, subtype="text/xml")
+            # show attachments when opening PDF
+            writer._root_object.update(
+                {NameObject("/PageMode"): NameObject("/UseAttachments")}
+            )
             writer.write(new_pdf_stream)
             return new_pdf_stream.getvalue()
