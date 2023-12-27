@@ -310,6 +310,7 @@ class BaseUbl(models.AbstractModel):
         price_subtotal=False,
         qty_precision=3,
         price_precision=2,
+        taxes=None,
         version="2.1",
     ):
         line_item = etree.SubElement(parent_node, ns["cac"] + "LineItem")
@@ -343,7 +344,14 @@ class BaseUbl(models.AbstractModel):
             )
             base_qty.text = "1"  # What else could it be ?
         self._ubl_add_item(
-            name, product, line_item, ns, type_=type_, seller=seller, version=version
+            name,
+            product,
+            line_item,
+            ns,
+            type_=type_,
+            seller=seller,
+            version=version,
+            taxes=taxes,
         )
 
     def _ubl_get_seller_code_from_product(self, product):
@@ -366,6 +374,7 @@ class BaseUbl(models.AbstractModel):
         type_="purchase",
         seller=False,
         customer=False,
+        taxes=None,
         version="2.1",
     ):
         """Beware that product may be False (in particular on invoices)"""
@@ -428,9 +437,13 @@ class BaseUbl(models.AbstractModel):
             # contains the taxes of the product without taking into
             # account the fiscal position
             if type_ == "sale":
-                taxes = product.taxes_id
+                taxes = product.taxes_id.filtered(
+                    lambda t: t.unece_type_id.code == "VAT"
+                )
             else:
-                taxes = product.supplier_taxes_id
+                taxes = product.supplier_taxes_id.filtered(
+                    lambda t: t.unece_type_id.code == "VAT"
+                )
             skip_taxes = self.env.context.get("ubl_add_item__skip_taxes")
             if taxes and not skip_taxes:
                 for tax in taxes:
@@ -498,9 +511,16 @@ class BaseUbl(models.AbstractModel):
         tax_category_id.text = tax.unece_categ_code
         tax_name = etree.SubElement(tax_category, ns["cbc"] + "Name")
         tax_name.text = tax.name
+        tax_percent = etree.SubElement(tax_category, ns["cbc"] + "Percent")
         if tax.amount_type == "percent":
-            tax_percent = etree.SubElement(tax_category, ns["cbc"] + "Percent")
             tax_percent.text = str(tax.amount)
+        else:
+            tax_percent.text = "0"
+        if tax.unece_categ_code == "E":
+            tax_exmption_reason = etree.SubElement(
+                tax_category, ns["cbc"] + "TaxExemptionReason"
+            )
+            tax_exmption_reason.text = "Exempt"
         tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_tax(tax)
         self._ubl_add_tax_scheme(tax_scheme_dict, tax_category, ns, version=version)
 
@@ -513,7 +533,12 @@ class BaseUbl(models.AbstractModel):
                     tax_name=tax.name,
                 )
             )
-        tax_scheme_dict = {"id": tax.unece_type_code, "name": False, "type_code": False}
+        # Peppol BIS Billing 3.0 supports only VAT taxes
+        tax_scheme_dict = {
+            "id": "VAT",  # tax.unece_type_code,
+            "name": False,
+            "type_code": False,
+        }
         return tax_scheme_dict
 
     @api.model

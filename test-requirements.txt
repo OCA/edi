@@ -1,0 +1,2 @@
+odoo-addon-base-ubl-payment @ git+https://github.com/OCA/edi.git@refs/pull/893/head#subdirectory=setup/base_ubl_payment
+odoo-addon-pdf-helper @ git+https://github.com/OCA/edi.git@refs/pull/898/head#subdirectory=setup/pdf_helper
