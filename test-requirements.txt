@@ -1,0 +1,1 @@
+odoo-addon-base_wamas_ubl @ git+https://github.com/OCA/edi.git@refs/pull/875/head#subdirectory=setup/base_wamas_ubl
