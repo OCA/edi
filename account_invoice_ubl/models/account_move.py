@@ -439,21 +439,22 @@ class AccountMove(models.Model):
         # the field 'partner_shipping_id' is defined in the 'sale' module
         if hasattr(self, "partner_shipping_id") and self.partner_shipping_id:
             self._ubl_add_delivery(self.partner_shipping_id, xml_root, ns)
-        # Put paymentmeans block even when invoice is paid ?
-        payment_identifier = self.get_payment_identifier()
-        self._ubl_add_payment_means(
-            self.partner_bank_id,
-            self.payment_mode_id,
-            self.invoice_date_due,
-            xml_root,
-            ns,
-            payment_identifier=payment_identifier,
-            version=version,
-        )
-        if self.invoice_payment_term_id:
-            self._ubl_add_payment_terms(
-                self.invoice_payment_term_id, xml_root, ns, version=version
+        if self.move_type == "out_invoice":
+            # Put paymentmeans block even when invoice is paid ?
+            payment_identifier = self.get_payment_identifier()
+            self._ubl_add_payment_means(
+                self.partner_bank_id,
+                self.payment_mode_id,
+                self.invoice_date_due,
+                xml_root,
+                ns,
+                payment_identifier=payment_identifier,
+                version=version,
             )
+            if self.invoice_payment_term_id:
+                self._ubl_add_payment_terms(
+                    self.invoice_payment_term_id, xml_root, ns, version=version
+                )
         self._ubl_add_tax_total(xml_root, ns, version=version)
         self._ubl_add_legal_monetary_total(xml_root, ns, version=version)
 
