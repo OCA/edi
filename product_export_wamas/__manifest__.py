@@ -4,7 +4,9 @@
 
 {
     "name": "Product Export WAMAS",
-    "summary": """Module provides a method to export product as WAMAS format""",
+    "summary": """
+    Module provides a method to export products and product packagings as WAMAS format
+    """,
     "version": "16.0.1.0.0",
     "development_status": "Alpha",
     "category": "Hidden",

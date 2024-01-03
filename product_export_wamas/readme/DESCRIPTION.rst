@@ -1,1 +1,1 @@
-This module provide method to export product data as WAMAS format.
+This module provides a method to export products and product packagings as WAMAS format.
