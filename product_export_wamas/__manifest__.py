@@ -5,7 +5,8 @@
 {
     "name": "Product Export WAMAS",
     "summary": """
-    Module provides a method to export products and product packagings as WAMAS format
+    Module provides a method to export products, product packagings and product barcodes
+    as WAMAS format
     """,
     "version": "16.0.1.0.0",
     "development_status": "Alpha",
@@ -13,6 +14,6 @@
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "author": "Camptocamp,Odoo Community Association (OCA)",
-    "depends": ["product", "base_wamas_ubl"],
+    "depends": ["product", "base_wamas_ubl", "product_multi_barcode"],
     "data": [],
 }
