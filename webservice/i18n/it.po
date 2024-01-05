@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-11-28 14:37+0000\n"
+"PO-Revision-Date: 2024-01-05 10:38+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -35,7 +35,7 @@ msgstr "Intestazione chiave API"
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_header_env_default
 msgid "API Key header Env Default"
-msgstr "Intestazine chiave API ambiente predefinita"
+msgstr "Intestazione chiave API ambiente predefinita"
 
 #. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__api_key_env_is_editable
