@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<DespatchAdvice
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
+>
+	<cbc:UBLVersionID>2.2</cbc:UBLVersionID>
+	<cbc:ID><t t-raw="record.IvAusk_RahmenTourId_TourNr" /></cbc:ID>
+	<cbc:IssueDate><t t-raw="get_current_date()" /></cbc:IssueDate>
+	<cac:OrderReference>
+		<cbc:ID><t t-raw="record.IvAusk_ExtRef" /></cbc:ID>
+	</cac:OrderReference>
+	<cac:DespatchSupplierParty>
+		<cbc:CustomerAssignedAccountID><t
+                t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('CustomerAssignedAccountID', '') or ''"
+            /></cbc:CustomerAssignedAccountID>
+		<cac:Party>
+			<cac:PartyName>
+				<cbc:Name><t
+                        t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('PartyName', '') or ''"
+                    /></cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName><t
+                        t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('StreetName', '') or ''"
+                    /></cbc:StreetName>
+				<cbc:CityName><t
+                        t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('CityName', '') or ''"
+                    /></cbc:CityName>
+				<cbc:PostalZone><t
+                        t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('PostalZone', '') or ''"
+                    /></cbc:PostalZone>
+				<cac:Country>
+					<cbc:IdentificationCode><t
+                            t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('Country.IdentificationCode', '') or ''"
+                        /></cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID><t
+                        t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('CompanyID', '') or ''"
+                    /></cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID><t
+                            t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('TaxScheme.ID', '') or ''"
+                        /></cbc:ID>
+					<cbc:TaxTypeCode><t
+                            t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('TaxScheme.TaxTypeCode', '') or ''"
+                        /></cbc:TaxTypeCode>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:Contact>
+				<cbc:Name><t
+                        t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('Contact.Name', '') or ''"
+                    /></cbc:Name>
+				<cbc:Telephone><t
+                        t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('Contact.Telephone', '') or ''"
+                    /></cbc:Telephone>
+				<cbc:ElectronicMail><t
+                        t-raw="extra_data.get('DespatchSupplierParty', '') and extra_data['DespatchSupplierParty'].get('Contact.ElectronicMail', '') or ''"
+                    /></cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:DespatchSupplierParty>
+	<cac:DeliveryCustomerParty>
+		<cac:Party>
+            <cac:PartyIdentification>
+                <cbc:ID schemeName="ODOO:ID"><t
+                        t-raw="record.IvAusk_KST_KuNr"
+                    /></cbc:ID>
+            </cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('PartyName', '') or ''"
+                    /></cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('StreetName', '') or ''"
+                    /></cbc:StreetName>
+				<cbc:CityName><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('CityName', '') or ''"
+                    /></cbc:CityName>
+				<cbc:PostalZone><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('PostalZone', '') or ''"
+                    /></cbc:PostalZone>
+				<cbc:CountrySubentity><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('CountrySubentity', '') or ''"
+                    /></cbc:CountrySubentity>
+				<cac:Country>
+					<cbc:IdentificationCode><t
+                            t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('Country.IdentificationCode', '') or ''"
+                        /></cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('CompanyID', '') or ''"
+                    /></cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID><t
+                            t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('TaxScheme.ID', '') or ''"
+                        /></cbc:ID>
+					<cbc:TaxTypeCode><t
+                            t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('TaxScheme.TaxTypeCode', '') or ''"
+                        /></cbc:TaxTypeCode>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:Contact>
+				<cbc:Name><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('Contact.Name', '') or ''"
+                    /></cbc:Name>
+				<cbc:Telephone><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('Contact.Telephone', '') or ''"
+                    /></cbc:Telephone>
+				<cbc:Telefax><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('Contact.Telefax', '') or ''"
+                    /></cbc:Telefax>
+				<cbc:ElectronicMail><t
+                        t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('Contact.ElectronicMail', '') or ''"
+                    /></cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:DeliveryCustomerParty>
+	<cac:Shipment>
+		<cbc:ID><t t-raw="record.IvAusk_RahmenTourId_TourNr" /></cbc:ID>
+    </cac:Shipment>
+	<cac:DespatchLine t-foreach="record.lines" t-as="line">
+		<cac:Shipment>
+			<cac:TransportHandlingUnit>
+				<cac:ActualPackage>
+					<cbc:ID><t t-raw="line.package.IvTek_TeId" /></cbc:ID>
+				</cac:ActualPackage>
+				<cbc:TransportHandlingUnitTypeCode><t
+                        t-raw="line.package.IvTts_THM_ThmId"
+                    /></cbc:TransportHandlingUnitTypeCode>
+			</cac:TransportHandlingUnit>
+			<cac:GrossWeightMeasure>
+				<cbc:Measure><t t-raw="line.package.IvTek_GesGew" /></cbc:Measure>
+			</cac:GrossWeightMeasure>
+		</cac:Shipment>
+		<cbc:ID><t t-raw="line_index + 1" /></cbc:ID>
+        <cbc:DeliveredQuantity
+            t-att-unitCode="MAPPING['unitCode'][line.IvArt_HOSTUNITS_HostEinh] or MAPPING['unitCode'][line.IvArt_Bestand_Einheit]"
+        ><t t-raw="line.Mngs_Mng" /></cbc:DeliveredQuantity>
+		<cac:OrderLineReference>
+            <cbc:LineID><t t-raw="line.IvAusp_HostPosNr" /></cbc:LineID>
+		</cac:OrderLineReference>
+		<cac:Item>
+			<cac:BuyersItemIdentification>
+				<cbc:ID />
+			</cac:BuyersItemIdentification>
+			<cac:SellersItemIdentification>
+				<cbc:ID><t t-raw="line.IvArt_AId_ArtNr" /></cbc:ID>
+			</cac:SellersItemIdentification>
+		</cac:Item>
+	</cac:DespatchLine>
+</DespatchAdvice>

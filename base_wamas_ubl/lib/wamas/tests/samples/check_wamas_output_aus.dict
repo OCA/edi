@@ -1,0 +1,66 @@
+{
+    "lst_telegram_type": ["AUSKQ", "WATEKQ", "WATEPQ"],
+    "wamas_type": "Picking",
+    "data": {
+        "AUSKQ": [
+            {
+                "IvAusk_AusId_AusNr": "1673982/1701778",
+                "IvAusk_AusId_HostAusKz": "HOST",
+                "IvAusk_AusId_Mand": "000",
+                "IvAusk_ExtRef": "1701778",
+                "IvAusk_FertZeit": "20230413110128",
+                "IvAusk_Info2Host": "",
+                "IvAusk_KST_KuNr": "4009542",
+                "IvAusk_KST_Mand": "000",
+                "IvAusk_LiefTerm": "20230414000000",
+                "IvAusk_RahmenTourId_HostTourKz": "HOST",
+                "IvAusk_RahmenTourId_TourNr": "GE 2/120185",
+                "IvAusk_StartZeit": "20230413052523",
+            }
+        ],
+        "WATEKQ": [
+            {
+                "AnzSubTe": "0000",
+                "IvTek_GesGew": "000000314700",
+                "IvTek_Pos_FeldId": "QUAI-22",
+                "IvTek_Pos_Offs_L_X": "00000000",
+                "IvTek_Pos_Offs_L_Y": "00000000",
+                "IvTek_Pos_Offs_L_Z": "00000000",
+                "IvTek_Stamm_TeId": "",
+                "IvTek_TeId": "376401426411929180",
+                "IvTour_VAST_Versandart": "ST",
+                "IvTourp_LiefSNr": "",
+                "IvTourp_TOUR_TourId_HostTourKz": "HOST",
+                "IvTourp_TOUR_TourId_IntLfdNr": "9016",
+                "IvTourp_TOUR_TourId_TourNr": "GE 2/120185",
+                "IvTts_MaxLadeHoehe": "000740",
+                "IvTts_THM_ThmId": "PE",
+            }
+        ],
+        "WATEPQ": [
+            {
+                "IvArt_AId_ArtNr": "53126",
+                "IvArt_AId_Mand": "000",
+                "IvArt_AId_Var": "00000",
+                "IvArt_Bestand_Einheit": "PET",
+                "IvArt_HOSTUNITS_HostEinh": "",
+                "IvAusp_HostPosNr": "000151",
+                "IvAusp_UrAusId_AusNr": "1673982/1701778",
+                "IvAusp_UrAusId_HostAusKz": "HOST",
+                "IvAusp_UrAusId_Mand": "000",
+                "IvMatqk_HMATQ_HMatQ": "DISPONIBLE",
+                "IvTep_FifoDatum": "20231030",
+                "IvTep_MId_Charge": "",
+                "IvTep_MId_MHD": "20231030",
+                "IvTep_MId_ResNr": "",
+                "IvTep_MId_ThmKz": "N",
+                "IvTep_MId_WeNr": "12    eCAM  012630",
+                "IvTep_PosNr": "000015",
+                "IvTep_PrimThmKz": "N",
+                "IvTep_TeId": "376401426411929180",
+                "Mngs_Gew": "000000000000",
+                "Mngs_Mng": "000000096000",
+            }
+        ],
+    },
+}

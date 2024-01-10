@@ -1,4 +1,7 @@
 # generated from manifests external_dependencies
+dotty-dict
 factur-x
 phonenumbers
 pydifact
+pytz
+xmltodict
