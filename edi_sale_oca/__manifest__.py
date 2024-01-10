@@ -19,7 +19,6 @@
     ],
     "data": [
         "data/job_function.xml",
-        "views/res_partner.xml",
         "views/sale_order.xml",
         "views/edi_exchange_record.xml",
         "templates/exchange_chatter_msg.xml",
