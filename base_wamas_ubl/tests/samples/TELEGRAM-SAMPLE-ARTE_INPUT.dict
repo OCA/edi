@@ -1,0 +1,10 @@
+{
+    "product": "223 224 225",
+    "qty": 5.0,
+    "width": 55,
+    "height": 50,
+    "weight": 1,
+    "length": 10,
+    "package_type": "Box",
+    "game_identifier": "N",
+}
