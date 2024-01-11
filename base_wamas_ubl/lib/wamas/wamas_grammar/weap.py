@@ -207,7 +207,7 @@ grammar = OrderedDict(
             "df_func": False,
         },
         "RxWeap_AvLiefSDatum": {
-            "type": "str",
+            "type": "datetime",
             "length": 14,
             "dp": False,
             "ubl_path": "DespatchAdvice.cac:Shipment.cac:Delivery."
