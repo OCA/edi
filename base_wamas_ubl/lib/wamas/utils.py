@@ -301,6 +301,15 @@ def generate_wamas_line(dict_item, grammar, **kwargs):  # noqa: C901
     return res
 
 
+def generate_wamas_lines(dict_input, telegram_type, line_idx, wamas_lines):
+    line_idx += 1
+    grammar = DICT_WAMAS_GRAMMAR[telegram_type.lower()]
+    line = generate_wamas_line(dict_input, grammar, line_idx=line_idx)
+    if line:
+        wamas_lines.append(line)
+    return line_idx, wamas_lines
+
+
 def dict2wamas(dict_input, telegram_type):
     wamas_lines = []
     lst_telegram_type = telegram_type.split(",")
@@ -310,12 +319,22 @@ def dict2wamas(dict_input, telegram_type):
 
     line_idx = 0
     for telegram_type in lst_telegram_type:
-        line_idx += 1
-        grammar = DICT_WAMAS_GRAMMAR[telegram_type.lower()]
-        line = generate_wamas_line(dict_input, grammar, line_idx=line_idx)
-        if line:
-            wamas_lines.append(line)
-
+        # Special case for `KSTAUS`
+        if telegram_type == "KSTAUS":
+            # 1 line for `KstAus_LagIdKom = kMEZ`
+            dict_input["picking_zone"] = "kMEZ"
+            line_idx, wamas_lines = generate_wamas_lines(
+                dict_input, telegram_type, line_idx, wamas_lines
+            )
+            # 1 line for `KstAus_LagIdKom = kPAR`
+            dict_input["picking_zone"] = "kPAR"
+            line_idx, wamas_lines = generate_wamas_lines(
+                dict_input, telegram_type, line_idx, wamas_lines
+            )
+        else:
+            line_idx, wamas_lines = generate_wamas_lines(
+                dict_input, telegram_type, line_idx, wamas_lines
+            )
     return "\n".join(wamas_lines).encode("iso-8859-1")
 
 

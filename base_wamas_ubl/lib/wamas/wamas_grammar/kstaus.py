@@ -67,7 +67,7 @@ grammar = OrderedDict(
             "type": "str",
             "length": 6,
             "dp": False,
-            "dict_key": False,
+            "dict_key": "picking_zone",
             "df_val": False,
             "df_func": False,
         },
