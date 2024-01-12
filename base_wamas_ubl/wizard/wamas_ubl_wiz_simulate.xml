@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="wamas_ubl_wiz_simulate_form" model="ir.ui.view">
+        <field name="name">wamas.ubl.wiz.simulate.form</field>
+        <field name="model">wamas.ubl.wiz.simulate</field>
+        <field name="arch" type="xml">
+            <form string="Simulate WAMAS File">
+                <group>
+                    <div class="alert alert-info" role="alert" col="1" colspan="2">
+                        <div
+                        >This wizard will help you generate (simulating) a new WAMAS file from an existing WAMAS file.</div>
+                        <div
+                        >Only supports FROM telegram type TO telegram type(s) bellow:</div>
+                        <field name="supported_telegram" readonly="1" />
+                    </div>
+                </group>
+                <group>
+                    <field name="wamas_file" filename="wamas_filename" />
+                    <field name="wamas_filename" invisible="1" />
+                    <field
+                        name="output_wamas_file"
+                        filename="output_wamas_filename"
+                        attrs="{'invisible': [('output_wamas_file', '=', False)], 'readonly':[('output_wamas_file', '!=', False)]}"
+                    />
+                    <field name="output_wamas_filename" invisible="1" />
+                    <field
+                        name="output"
+                        attrs="{'invisible': [('output', '=', False)], 'readonly':[('output', '!=', False)]}"
+                    />
+                </group>
+                <footer>
+                    <button
+                        name="btn_simulate"
+                        type="object"
+                        class="oe_highlight"
+                        string="Simulate"
+                    />
+                    <button special="cancel" string="Cancel" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="wamas_ubl_wiz_simulate_action" model="ir.actions.act_window">
+        <field name="name">Simulate WAMAS File</field>
+        <field name="res_model">wamas.ubl.wiz.simulate</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

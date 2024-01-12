@@ -5,7 +5,12 @@
 from odoo import _, api, models
 
 from ..lib.wamas.ubl2wamas import ubl2wamas
-from ..lib.wamas.utils import detect_wamas_type, dict2wamas
+from ..lib.wamas.utils import (
+    detect_wamas_type,
+    dict2wamas,
+    get_supported_telegram,
+    get_supported_telegram_w2w,
+)
 from ..lib.wamas.wamas2ubl import dict2ubl, wamas2dict, wamas2ubl
 from ..lib.wamas.wamas2wamas import wamas2wamas
 
@@ -56,3 +61,11 @@ class BaseWamasUbl(models.AbstractModel):
         if not isinstance(data, dict):
             raise ValueError(_("The data is not valid."))
         return self.dict2wamas(data, telegram_type)
+
+    @api.model
+    def get_supported_telegram(self):
+        return get_supported_telegram()
+
+    @api.model
+    def get_supported_telegram_w2w(self):
+        return get_supported_telegram_w2w()

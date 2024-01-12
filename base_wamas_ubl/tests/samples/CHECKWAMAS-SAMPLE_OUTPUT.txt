@@ -1,0 +1,38 @@
+- WAMAS Type: Supplier
+- Telegram Type: LST
+- Data: {
+    "LST": [
+        {
+            "Lst_Mand": "000",
+            "Lst_LiefNr": "0001",
+            "Lst_Adrs_Name": "Adam Smith",
+            "Lst_Adrs_Name2": "",
+            "Lst_Adrs_Name3": "",
+            "Lst_Adrs_Name4": "",
+            "Lst_Adrs_Anrede": "",
+            "Lst_Adrs_Adr": "adam@dayrep.com",
+            "Lst_Adrs_Adr2": "",
+            "Lst_Adrs_PLZ": "79782",
+            "Lst_Adrs_Ort": "Sand Springs",
+            "Lst_Adrs_OrtTeil": "Texas",
+            "Lst_Adrs_Land": "US",
+            "Lst_Adrs_Fax": "",
+            "Lst_Adrs_Tel": "432-393-1264",
+            "Lst_Adrs_Email": "aaa",
+            "Lst_Adrs_WWW": "",
+            "Lst_Adrs_ILN": "",
+            "Lst_UIDNr": "",
+            "Lst_DVRNr": "",
+            "Lst_LSTTYP_LstTypId": "Standard",
+            "Lst_LokLstTyp_AnzWeBeleg": "0",
+            "Lst_LokLstTyp_LiefBewKz": "N",
+            "Lst_LokLstTyp_StdLgTor": "",
+            "Lst_LokLstTyp_StdRetTor": "",
+            "Lst_LokLstTyp_StdWeTor": "",
+            "Lst_LokLstTyp_UebLiefErl": "J",
+            "Lst_LokLstTyp_WeBelegLay": "Standard",
+            "Lst_SatzKz": "",
+            "Lst_PrueflosWeKz": "N"
+        }
+    ]
+}

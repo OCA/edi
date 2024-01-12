@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wamas_ubl_wiz_check,access_wamas_ubl_wiz_check,model_wamas_ubl_wiz_check,base_edi.group_edi_manager,1,1,1,1
+access_wamas_ubl_wiz_simulate,access_wamas_ubl_wiz_simulate,model_wamas_ubl_wiz_simulate,base_edi.group_edi_manager,1,1,1,1
