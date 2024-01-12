@@ -116,7 +116,7 @@ class TestSend(TestEDIWebserviceBase):
         self.assertEqual(self.record.ws_response_content_filename, "response_test.json")
 
 
-class TestWebServiceSendHandledErrorChangingExchangeState(TestEDIWebserviceBase):
+class TestSendCustomSaveResponse(TestEDIWebserviceBase):
     """This test demonstrate how to force state of exchange record
     even we get HTTP ERROR, because webservice module open a new transaction
     to change state of the consumer record in case of status code != 200 we
