@@ -1,0 +1,15 @@
+{
+    "default_code": "113",
+    "name": "The Yellow Chair",
+    "uom": "Units",
+    "weight": 2,
+    "sell_only_by_packaging": False,
+    "fifo_window": 999,
+    "wamas_expiration_date": False,
+    "wamas_assortment": "AA",
+    "wamas_class": "BB",
+    "wamas_code": "CC",
+    "package_type": "Box",
+    "standard_price": 0,
+    "game_identifier": "N",
+}
