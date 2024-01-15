@@ -17,3 +17,17 @@ msgstr ""
 #: model:ir.model,name:base_wamas_ubl.model_base_wamas_ubl
 msgid "Methods to convert WAMAS to UBL XML files and vice versa"
 msgstr ""
+
+#. module: base_wamas_ubl
+#. odoo-python
+#: code:addons/base_wamas_ubl/models/base_wamas_ubl.py:0
+#, python-format
+msgid "Please define telegram_type."
+msgstr ""
+
+#. module: base_wamas_ubl
+#. odoo-python
+#: code:addons/base_wamas_ubl/models/base_wamas_ubl.py:0
+#, python-format
+msgid "The data is not valid."
+msgstr ""
