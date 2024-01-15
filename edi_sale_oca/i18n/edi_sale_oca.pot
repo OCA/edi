@@ -47,7 +47,6 @@ msgstr ""
 #. module: edi_sale_oca
 #: model:ir.ui.menu,name:edi_sale_oca.menu_sale_edi_root
 #: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_order_form
-#: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_partner_form
 msgid "EDI"
 msgstr ""
 
