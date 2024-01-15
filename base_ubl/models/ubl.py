@@ -32,17 +32,31 @@ class BaseUbl(models.AbstractModel):
     @api.model
     def _ubl_add_address(self, partner, node_name, parent_node, ns, version="2.1"):
         address = etree.SubElement(parent_node, ns["cac"] + node_name)
-        if partner.street:
+        if partner.street or partner.street2:
             streetname = etree.SubElement(address, ns["cbc"] + "StreetName")
-            streetname.text = partner.street
-        if partner.street2:
+            streetname.text = partner.street or partner.street2
+        if partner.street and partner.street2:
             addstreetname = etree.SubElement(
                 address, ns["cbc"] + "AdditionalStreetName"
             )
             addstreetname.text = partner.street2
+        # if oca/partner-contact/partner_address_street3 is installed
         if hasattr(partner, "street3") and partner.street3:
-            blockname = etree.SubElement(address, ns["cbc"] + "BlockName")
-            blockname.text = partner.street3
+            # In an address, the real street is usually put in the last field
+            if partner.street and partner.street2:
+                # The first field is usually the Department
+                department = etree.SubElement(address, ns["cbc"] + "Department")
+                department.text = partner.street
+                streetname.text = partner.street2
+                addstreetname.text = partner.street3
+            elif partner.street or partner.street2:
+                addstreetname = etree.SubElement(
+                    address, ns["cbc"] + "AdditionalStreetName"
+                )
+                addstreetname.text = partner.street3
+            else:
+                streetname = etree.SubElement(address, ns["cbc"] + "StreetName")
+                streetname.text = partner.street3
         if partner.city:
             city = etree.SubElement(address, ns["cbc"] + "CityName")
             city.text = partner.city
