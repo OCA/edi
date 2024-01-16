@@ -225,11 +225,17 @@ class EDIExchangeRecord(models.Model):
     ):
         """Handy method to not have to convert b64 back and forth."""
         self.ensure_one()
+        encoding = self.type_id.encoding or "UTF-8"
+        decoding_error_handler = self.type_id.encoding_in_error_handler or "strict"
         if not self[field_name]:
             return ""
         if binary:
             res = base64.b64decode(self[field_name])
-            return res.decode() if not as_bytes else res
+            return (
+                res.decode(encoding, errors=decoding_error_handler)
+                if not as_bytes
+                else res
+            )
         return self[field_name]
 
     def name_get(self):

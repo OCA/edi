@@ -152,6 +152,38 @@ class EDIExchangeType(models.Model):
             "Use it directly or within models rules (domain or snippet)."
         ),
     )
+    # https://docs.python.org/3/library/codecs.html#standard-encodings
+    encoding = fields.Char(
+        help="Encoding to be applied to generate/process the exchanged file.\n"
+        "Example: UTF-8, Windows-1252, ASCII...(default is always 'UTF-8')",
+    )
+    # https://docs.python.org/3/library/codecs.html#codec-base-classes
+    encoding_out_error_handler = fields.Selection(
+        string="Encoding Error Handler",
+        selection=[
+            ("strict", "Raise Error"),
+            ("ignore", "Ignore"),
+            ("replace", "Replace with Replacement Marker"),
+            ("backslashreplace", "Replace with Backslashed Escape Sequences"),
+            ("surrogateescape", "Replace Byte with Individual Surrogate Code"),
+            ("xmlcharrefreplace", "Replace with XML/HTML Numeric Character Reference"),
+        ],
+        help="Handling of encoding errors on generate "
+             "(default is always 'Raise Error').",
+    )
+    # https://docs.python.org/3/library/codecs.html#codec-base-classes
+    encoding_in_error_handler = fields.Selection(
+        string="Decoding Error Handler",
+        selection=[
+            ("strict", "Raise Error"),
+            ("ignore", "Ignore"),
+            ("replace", "Replace with Replacement Marker"),
+            ("backslashreplace", "Replace with Backslashed Escape Sequences"),
+            ("surrogateescape", "Replace Byte with Individual Surrogate Code"),
+        ],
+        help="Handling of decoding errors on process "
+             "(default is always 'Raise Error').",
+    )
 
     _sql_constraints = [
         (

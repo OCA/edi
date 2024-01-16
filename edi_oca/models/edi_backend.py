@@ -214,9 +214,13 @@ class EDIBackend(models.Model):
         self._check_exchange_generate(exchange_record, force=force)
         output = self._exchange_generate(exchange_record, **kw)
         message = None
+        encoding = exchange_record.type_id.encoding or "UTF-8"
+        encoding_error_handler = (
+            exchange_record.type_id.encoding_out_error_handler or "strict"
+        )
         if output and store:
             if not isinstance(output, bytes):
-                output = output.encode()
+                output = output.encode(encoding, errors=encoding_error_handler)
             exchange_record.update(
                 {
                     "exchange_file": base64.b64encode(output),
