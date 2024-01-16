@@ -138,8 +138,8 @@ msgid ""
 msgstr ""
 "<span class=\"o_form_label\">Enviar modo</span>\n"
 "                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company\""
-"/>"
+"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
+"\"/>"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
@@ -151,8 +151,8 @@ msgid ""
 msgstr ""
 "<span class=\"o_form_label\">Credenciales del Servicio web</span>\n"
 "                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company\""
-"/>"
+"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
+"\"/>"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__res_company__voxel_send_mode__fixed
@@ -166,6 +166,7 @@ msgstr "Cajas"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__cancelled
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__cancelled
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__cancelled
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__cancelled
 msgid "Cancelled"
@@ -301,6 +302,7 @@ msgstr "Nombre"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__not_sent
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__not_sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__not_sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__not_sent
 msgid "Not sent"
@@ -338,6 +340,7 @@ msgstr "Error de procesamiento"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__processing_error
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__processing_error
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__processing_error
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__processing_error
 msgid "Processing error"
@@ -361,6 +364,7 @@ msgstr "Modo de envío"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__sent_errors
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__sent_errors
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__sent_errors
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent_errors
 msgid "Sending error"
@@ -368,6 +372,7 @@ msgstr "Error de envío"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__accepted
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__accepted
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__accepted
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__accepted
 msgid "Sent and accepted"
@@ -375,6 +380,7 @@ msgstr "Enviado y aceptado"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__sent
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent
 msgid "Sent not verified"
