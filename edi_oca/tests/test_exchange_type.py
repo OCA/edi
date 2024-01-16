@@ -131,6 +131,10 @@ class EDIExchangeTypeTestCase(EDIBackendCommonTestCase):
             date_pattern: '%Y-%m-%d-%H-%M'
         """
         self._test_exchange_filename("Test-File-2022-04-28-10-37.csv")
+        # Test with sequence in filename pattern
+        self.exchange_type_out.exchange_filename_pattern = "Test-File-{seq}"
+        self.exchange_type_out.exchange_filename_sequence_id = self.sequence
+        self._test_exchange_filename("Test-File-0000001.csv")
 
     def test_archive_rules(self):
         exc_type = self.exchange_type_out

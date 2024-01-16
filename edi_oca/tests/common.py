@@ -55,6 +55,14 @@ class EDIBackendTestMixin(object):
         cls.exchange_type_out.ack_type_id = cls.exchange_type_out_ack
         cls.partner = cls.env.ref("base.res_partner_1")
         cls.partner.ref = "EDI_EXC_TEST"
+        cls.sequence = cls.env["ir.sequence"].create(
+            {
+                "code": "test_sequence",
+                "name": "Test sequence",
+                "implementation": "no_gap",
+                "padding": 7,
+            }
+        )
 
     def read_test_file(self, filename):
         path = os.path.join(os.path.dirname(__file__), "examples", filename)
