@@ -49,6 +49,15 @@
                             <field name="partner_ids" widget="many2many_tags" />
                             <field name="job_channel_id" />
                             <field name="quick_exec" />
+                            <field name="encoding" />
+                            <field
+                                name="encoding_out_error_handler"
+                                attrs="{'invisible': [('direction', '=', 'input')]}"
+                            />
+                            <field
+                                name="encoding_in_error_handler"
+                                attrs="{'invisible': [('direction', '=', 'output')]}"
+                            />
                         </group>
                     </group>
                     <field name="deprecated_rule_fields_still_used" invisible="1" />
