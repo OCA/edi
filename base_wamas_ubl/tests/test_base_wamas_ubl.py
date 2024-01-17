@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from ast import literal_eval
+from base64 import b64decode, b64encode
 from difflib import SequenceMatcher
 
 from freezegun import freeze_time
@@ -18,6 +19,8 @@ class TestBaseWamas(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.base_wamas_ubl = cls.env["base.wamas.ubl"]
+        cls.wamas_ubl_wiz_check = cls.env["wamas.ubl.wiz.check"]
+        cls.wamas_ubl_wiz_simulate = cls.env["wamas.ubl.wiz.simulate"]
         cls.assertXmlTreeEqual = AccountTestInvoicingCommon.assertXmlTreeEqual
         cls.get_xml_tree_from_string = (
             AccountTestInvoicingCommon.get_xml_tree_from_string
@@ -97,6 +100,41 @@ class TestBaseWamas(TransactionCase):
             file_open(expected_output_file, "r").read().encode("iso-8859-1")
         )
         self.assertTrue(self._is_string_similar(output, expected_output))
+
+    def _wamas_ubl_wiz_check(self, input_file, expected_output_file):
+        str_input = file_open(input_file, "r").read()
+        str_expected_output = file_open(expected_output_file, "r").read()
+        wizard = self.wamas_ubl_wiz_check.create(
+            {
+                "wamas_file": b64encode(str_input.encode("iso-8859-1")),
+            }
+        )
+        wizard._onchange_wamas_filename()
+        self.assertFalse(wizard.output)
+        wizard.btn_check()
+        self.assertTrue(self._is_string_similar(wizard.output, str_expected_output))
+
+    def _wamas_ubl_wiz_simulate(
+        self, input_file, expected_output_file, state="success"
+    ):
+        str_input = file_open(input_file, "r").read()
+        wizard = self.wamas_ubl_wiz_simulate.create(
+            {
+                "wamas_file": b64encode(str_input.encode("iso-8859-1")),
+            }
+        )
+        wizard._onchange_wamas_filename()
+        self.assertFalse(wizard.output_wamas_file)
+        self.assertFalse(wizard.output_wamas_filename)
+        self.assertFalse(wizard.output)
+        wizard.btn_simulate()
+        if state == "success":
+            output = b64decode(wizard.output_wamas_file).decode("iso-8859-1")
+            expected_output = file_open(expected_output_file, "r").read()
+            self.assertTrue(self._is_string_similar(output, expected_output))
+        else:
+            expected_output = file_open(expected_output_file, "r").read()
+            self.assertTrue(self._is_string_similar(wizard.output, expected_output))
 
     def test_convert_wamas2ubl(self):
         dict_data = {
@@ -212,3 +250,32 @@ class TestBaseWamas(TransactionCase):
         self.assertEqual(lst_telegram_type, dict_expected_output["lst_telegram_type"])
         # Wamas Type
         self.assertEqual(wamas_type, dict_expected_output["wamas_type"])
+
+    def test_wamas_ubl_wiz_check(self):
+        # Success
+        self._wamas_ubl_wiz_check(
+            "base_wamas_ubl/tests/samples/CHECKWAMAS-SAMPLE_INPUT.wamas",
+            "base_wamas_ubl/tests/samples/CHECKWAMAS-SAMPLE_OUTPUT.txt",
+        )
+        # Raise Exception
+        self._wamas_ubl_wiz_check(
+            "base_wamas_ubl/tests/samples/CHECKWAMAS-SAMPLE_INPUT-EXCEPTION.wamas",
+            "base_wamas_ubl/tests/samples/CHECKWAMAS-SAMPLE_OUTPUT-EXCEPTION.txt",
+        )
+        self._wamas_ubl_wiz_check(
+            "base_wamas_ubl/tests/samples/CHECKWAMAS-SAMPLE_INPUT-EXCEPTION-2.wamas",
+            "base_wamas_ubl/tests/samples/CHECKWAMAS-SAMPLE_OUTPUT-EXCEPTION-2.txt",
+        )
+
+    def test_wamas_ubl_wiz_simulate(self):
+        # Success
+        self._wamas_ubl_wiz_simulate(
+            "base_wamas_ubl/tests/samples/SIMULATEWAMAS-SAMPLE_INPUT.wamas",
+            "base_wamas_ubl/tests/samples/SIMULATEWAMAS-SAMPLE_OUTPUT.wamas",
+        )
+        # Raise Exception
+        self._wamas_ubl_wiz_simulate(
+            "base_wamas_ubl/tests/samples/SIMULATEWAMAS-SAMPLE_INPUT-EXCEPTION.wamas",
+            "base_wamas_ubl/tests/samples/SIMULATEWAMAS-SAMPLE_OUTPUT-EXCEPTION.txt",
+            "fail",
+        )

@@ -20,6 +20,7 @@ try:
     from .const import (
         DEFAULT_TIMEZONE,
         DICT_CHILD_KEY,
+        DICT_CONVERT_WAMAS_TYPE,
         DICT_DETECT_WAMAS_TYPE,
         DICT_PARENT_KEY,
         DICT_WAMAS_GRAMMAR,
@@ -39,6 +40,7 @@ except ImportError:
     from const import (
         DEFAULT_TIMEZONE,
         DICT_CHILD_KEY,
+        DICT_CONVERT_WAMAS_TYPE,
         DICT_DETECT_WAMAS_TYPE,
         DICT_PARENT_KEY,
         DICT_WAMAS_GRAMMAR,
@@ -468,3 +470,11 @@ def convert_tz(dt_val, str_from_tz, str_to_tz):
     from_tz_dt = from_tz.localize(dt_val)
     to_tz_dt = from_tz_dt.astimezone(to_tz)
     return to_tz_dt
+
+
+def get_supported_telegram():
+    return LST_TELEGRAM_TYPE_SUPPORT_W2D
+
+
+def get_supported_telegram_w2w():
+    return DICT_CONVERT_WAMAS_TYPE

@@ -240,7 +240,6 @@ LST_VALID_TELEGRAM_IN = [
 DICT_CONVERT_WAMAS_TYPE = {
     "AUSK": ["AUSKQ", "WATEKQ"],
     "AUSP": ["WATEPQ"],
-    "AUSKQ": ["AUSK"],
     "KRETK": ["KRETKQ"],
     "KRETP": ["KRETPQ"],
     "WEAK": ["WEAKQ"],
