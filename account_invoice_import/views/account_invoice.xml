@@ -15,7 +15,7 @@
                     name="%(account_invoice_import_action)d"
                     string="Import Invoice File"
                     context="{'wizard_default_state': 'update-from-invoice', 'default_invoice_id': id, 'default_partner_id': commercial_partner_id}"
-                    attrs="{'invisible': ['|', ('move_type', 'not in', ('in_invoice', 'in_refund')), ('state', '!=', 'draft')]}"
+                    attrs="{'invisible': ['|', ('type', 'not in', ('in_invoice', 'in_refund')), ('state', '!=', 'draft')]}"
                 />
                 <!-- Button for quick access to the wizard
                      to encode multiple invoices -->
@@ -24,7 +24,7 @@
                     name="%(account_invoice_import_action)d"
                     string="Import Next Invoice"
                     context="{}"
-                    attrs="{'invisible': [('move_type', 'not in', ('in_invoice', 'in_refund'))]}"
+                    attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund'))]}"
                 />
             </button>
         </field>

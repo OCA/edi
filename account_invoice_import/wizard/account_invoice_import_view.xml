@@ -59,13 +59,12 @@
                     <field
                         name="import_config_id"
                         states="config,update-from-invoice,update"
-                        domain="[('partner_id', '=', partner_id)]"
                         attrs="{'required': [('state', 'in', ('config', 'update-from-invoice', 'update'))]}"
                     />
                     <field
                         name="invoice_id"
                         states="update,update-from-invoice"
-                        domain="[('state', '=', 'draft'), ('move_type', 'in', ('in_invoice', 'in_refund')), ('commercial_partner_id', '=', partner_id), ('move_type', '=', invoice_type)]"
+                        domain="[('state', '=', 'draft'), ('type', 'in', ('in_invoice', 'in_refund')), ('commercial_partner_id', '=', partner_id), ('type', '=', invoice_type)]"
                         context="{'invoice_show_amount': True}"
                         attrs="{'readonly': [('state', '=', 'update-from-invoice')]}"
                     />

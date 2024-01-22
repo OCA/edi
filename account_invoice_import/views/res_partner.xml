@@ -8,10 +8,7 @@
     <record id="view_partner_property_form" model="ir.ui.view">
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="account.view_partner_property_form" />
-        <field
-            name="groups_id"
-            eval="[(4, ref('account.group_account_invoice')), (4, ref('account.group_account_readonly'))]"
-        />
+        <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]" />
         <field name="arch" type="xml">
             <button
                 name="%(base.action_res_partner_bank_account_form)d"
