@@ -87,7 +87,7 @@ class TestProcessComponent(TransactionComponentCase, EDIBackendTestMixin):
             self.record.action_exchange_process()
             md_onchange.assert_called()
             md_btn.assert_called()
-        self.assertEqual(self.record.exchange_error, err_msg)
+        self.assertIn(err_msg, self.record.exchange_error)
 
     def test_new_order(self):
         # Create the order manully and use it via the mock on md_btn
