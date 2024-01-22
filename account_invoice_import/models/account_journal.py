@@ -13,10 +13,7 @@ class AccountJournal(models.Model):
             return super().create_invoice_from_attachment(attachment_ids=attachment_ids)
         attachment = self.env["ir.attachment"].browse(attachment_ids[0])
         wiz = self.env["account.invoice.import"].create(
-            {
-                "invoice_file": attachment.datas,
-                "invoice_filename": attachment.name,
-            }
+            {"invoice_file": attachment.datas, "invoice_filename": attachment.name}
         )
         action = wiz.import_invoice()
         # JS crash when there is not a 'views' key != False

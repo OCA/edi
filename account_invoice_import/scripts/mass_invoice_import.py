@@ -101,9 +101,7 @@ def handle_failure(directory, entry, file_path):
         fail_dir_path = fail_subdir_ok[directory]
         if fail_dir_path:
             logger.info(
-                "Moving file %s to sub-directory %s",
-                entry,
-                args.fail_subdir,
+                "Moving file %s to sub-directory %s", entry, args.fail_subdir,
             )
             os.rename(file_path, os.path.join(fail_dir_path, entry))
 
