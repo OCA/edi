@@ -369,7 +369,7 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:d2b2944492ea6b07b30e0f22c55bc8b95ab88c35292fbb556969fb2809289dca
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/licence-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/edi/tree/16.0/pdf_helper"><img alt="OCA/edi" src="https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/edi-16-0/edi-16-0-pdf_helper"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/edi&amp;target_branch=16.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/licence-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/edi/tree/17.0/pdf_helper"><img alt="OCA/edi" src="https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/edi-17-0/edi-17-0-pdf_helper"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/edi&amp;target_branch=17.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
 <p>Technical module to share PDF utils.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
@@ -389,6 +389,8 @@ ul.auto-toc {
 <p>Inside Odoo env:</p>
 <pre class="literal-block">
 res = env[&quot;pdf.helper&quot;].pdf_get_xml_files(pdf_filecontent)
+
+new_pdf_filecontent = env[&quot;pdf.helper&quot;].pdf_embed_xml(pdf_filecontent, filename, xml)
 </pre>
 <p>Outside Odoo env:</p>
 <pre class="literal-block">
@@ -402,7 +404,7 @@ res = PDFParser(pdf_filecontent).get_xml_files()
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-<a class="reference external" href="https://github.com/OCA/edi/issues/new?body=module:%20pdf_helper%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<a class="reference external" href="https://github.com/OCA/edi/issues/new?body=module:%20pdf_helper%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
@@ -418,6 +420,7 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <ul class="simple">
 <li>Simone Orsi &lt;<a class="reference external" href="mailto:simone.orsi&#64;camptocamp.com">simone.orsi&#64;camptocamp.com</a>&gt;</li>
 <li>Alexis de Lattre &lt;<a class="reference external" href="mailto:alexis.delattre&#64;akretion.com">alexis.delattre&#64;akretion.com</a>&gt;</li>
+<li>Jacques-Etienne Baudoux (BCIM) &lt;<a class="reference external" href="mailto:je&#64;bcim.be">je&#64;bcim.be</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
@@ -429,7 +432,7 @@ mission is to support the collaborative development of Odoo features and
 promote its widespread use.</p>
 <p>Current <a class="reference external" href="https://odoo-community.org/page/maintainer-role">maintainers</a>:</p>
 <p><a class="reference external image-reference" href="https://github.com/simahawk"><img alt="simahawk" src="https://github.com/simahawk.png?size=40px" /></a> <a class="reference external image-reference" href="https://github.com/alexis-via"><img alt="alexis-via" src="https://github.com/alexis-via.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/OCA/edi/tree/16.0/pdf_helper">OCA/edi</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/edi/tree/17.0/pdf_helper">OCA/edi</a> project on GitHub.</p>
 <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
 </div>
 </div>
