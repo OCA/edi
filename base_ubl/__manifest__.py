@@ -8,7 +8,7 @@
     'license': 'AGPL-3',
     'summary': 'Base module for Universal Business Language (UBL)',
     'author': 'Akretion,Odoo Community Association (OCA)',
-    'website': 'https://github.com/oca/edi/',
+    'website': 'https://github.com/OCA/edi',
     'depends': [
         'uom_unece',
         'account_tax_unece',

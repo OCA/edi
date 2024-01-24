@@ -1,0 +1,48 @@
+<odoo noupdate="1">
+    <record id="job_fun_exchange_record_generate" model="queue.job.function">
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="method">action_exchange_generate</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+    <record id="job_fun_exchange_record_send" model="queue.job.function">
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="method">action_exchange_send</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+    <record id="job_fun_exchange_record_receive" model="queue.job.function">
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="method">action_exchange_receive</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+    <record id="job_fun_exchange_record_process" model="queue.job.function">
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="method">action_exchange_process</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+    <record id="job_fun_exchange_record_create_ack" model="queue.job.function">
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="method">exchange_create_ack_record</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+    <!-- TO be removed on 16.0 -->
+    <record id="job_edi_backend_record_generate" model="queue.job.function">
+        <field name="model_id" ref="model_edi_backend" />
+        <field name="method">exchange_generate</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+    <record id="job_edi_backend_record_send" model="queue.job.function">
+        <field name="model_id" ref="model_edi_backend" />
+        <field name="method">exchange_send</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+    <record id="job_edi_backend_record_receive" model="queue.job.function">
+        <field name="model_id" ref="model_edi_backend" />
+        <field name="method">exchange_receive</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+    <record id="job_edi_backend_record_process" model="queue.job.function">
+        <field name="model_id" ref="model_edi_backend" />
+        <field name="method">exchange_process</field>
+        <field name="channel_id" ref="channel_edi_exchange" />
+    </record>
+</odoo>

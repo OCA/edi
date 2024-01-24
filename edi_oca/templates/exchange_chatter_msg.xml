@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="message_edi_exchange_link">
+        <t
+            t-set="message_color_klass"
+            t-value="{'error': 'text-danger', 'warning': 'text-warning'}"
+        />
+        <p t-attf-class="edi-exchange level-#{level}">
+            <span class="edi-exchange-ref">
+                <strong>EDI exchange:</strong>
+                <a
+                    t-attf-href="/web#id=#{exchange_record.id}&amp;model=#{exchange_record._name}&amp;view_type=form"
+                    t-att-data-oe-model="exchange_record._name"
+                    t-att-data-oe-id="exchange_record.id"
+                >
+                    <t t-esc="exchange_record.identifier" />
+                </a>
+            </span>
+            <br />
+            <t t-set="exc_type" t-value="exchange_record.type_id" />
+            <span class="edi-exchange-type">
+                <strong>Type:</strong>
+                <a
+                    t-attf-href="/web#id=#{exc_type.id}&amp;model=#{exc_type._name}&amp;view_type=form"
+                    t-att-data-oe-model="exc_type._name"
+                    t-att-data-oe-id="exc_type.id"
+                >
+                    <t t-esc="exc_type.name" />
+                </a>
+            </span>
+            <br />
+            <span class="exchange-state">
+                <strong>State:</strong>
+                <span t-field="exchange_record.edi_exchange_state" />
+            </span>
+            <br />
+            <span t-attf-class="exchange-message #{message_color_klass.get(level)}">
+                <strong>Message:</strong>
+                <span t-esc="message" />
+            </span>
+        </p>
+    </template>
+</odoo>

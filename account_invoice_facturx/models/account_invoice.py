@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import generate_facturx_from_binary, check_facturx_xsd
+    from facturx import generate_facturx_from_binary, xml_check_xsd
 except ImportError:
     logger.debug('Cannot import facturx')
 
@@ -741,7 +741,7 @@ class AccountInvoice(models.Model):
             'Factur-X XML file generated for invoice ID %d', self.id)
         logger.debug(xml_string)
         try:
-            check_facturx_xsd(xml_string, 'factur-x', facturx_level=ns['level'])
+            xml_check_xsd(xml_string, 'factur-x', level=ns['level'])
         except Exception as e:
             raise UserError(_(
                 "The factur-x.xml file is invalid against the official "

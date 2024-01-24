@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_record_view_tree" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="arch" type="xml">
+            <tree string="EDI Exchange Record"
+                  decoration-success="edi_exchange_state in ['output_sent_and_processed', 'input_processed']"
+                  decoration-danger="edi_exchange_state in ['validate_error', 'output_error_on_send', 'output_sent_and_error', 'input_receive_error', 'input_processed_error']"
+            >
+                <field name="backend_id" />
+                <field name="type_id" />
+                <field name="identifier" />
+                <field name="external_identifier"  />
+                <field name="related_name"  />
+                <field name="res_id" groups="base.group_no_one"  />
+                <field name="model" groups="base.group_no_one"  />
+                <field name="exchanged_on" />
+                <field name="ack_received_on" />
+                <field name="edi_exchange_state" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="edi_exchange_record_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="arch" type="xml">
+            <form string="EDI Exchange Record">
+                <field name="direction" invisible="1" />
+                <field name="retryable" invisible="1" />
+                <field name="related_record_exists" invisible="1" />
+                <header>
+                    <button
+                        name="action_open_related_record"
+                        type="object"
+                        string="Related record"
+                        attrs="{'invisible': [('related_record_exists', '=', False)]}"
+                    />
+                    <!-- FIXME: this `invisible` domain does not work -->
+                    <button
+                        name="action_open_related_exchanges"
+                        type="object"
+                        string="Related exchanges"
+                        attrs="{'invisible': [('related_exchange_ids', '=', False)]}"
+                    />
+                    <button
+                        name="action_retry"
+                        type="object"
+                        string="Retry"
+                        attrs="{'invisible': [('retryable', '=', False)]}"
+                    />
+                    <!-- FIXME: colors are ignored...
+                    and can't find how they are supposed to work.
+                    Probably not supported at all. -->
+                    <field
+                        attrs="{'invisible': [('direction', 'in', ('input', False))]}"
+                        name="edi_exchange_state"
+                        widget="statusbar"
+                        statusbar_visible="new,validate_error,output_pending,output_error_on_send,output_sent,output_sent_and_processed,output_sent_and_error"
+                        statusbar_colors='{
+                          "validate_error": "red",
+                          "output_pending": "yellow",
+                          "output_error_on_send": "red",
+                          "output_sent": "green",
+                          "output_sent_and_processed": "green",
+                          "output_sent_and_error": "red",
+                        }'
+                    />
+                    <field
+                        attrs="{'invisible': [('direction', 'in', ('output', False))]}"
+                        name="edi_exchange_state"
+                        widget="statusbar"
+                        statusbar_visible="new,validate_error,input_pending,input_received,input_receive_error,input_processed,input_processed_error"
+                        statusbar_colors='{
+                          "validate_error": "red",
+                          "input_pending": "yellow",
+                          "input_received": "green",
+                          "input_receive_error": "red",
+                          "input_processed": "green",
+                          "input_processed_error": "red"
+                        }'
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="identifier" class="oe_edit_only" />
+                        <h1>
+                            <field name="identifier" />
+                        </h1>
+                        <h2>
+                            <label for="external_identifier" class="oe_edit_only" />
+                            <field name="external_identifier" />
+                        </h2>
+                    </div>
+                    <group name="wrapper">
+                        <group name="config">
+                            <field name="type_id" />
+                            <field name="backend_id" options="{'no_create': True}" />
+                        </group>
+                        <group name="status" string="Status">
+                            <field name="exchanged_on" />
+                            <field name="exchange_file" filename="exchange_filename" />
+                            <field
+                                name="exchange_filename"
+                                attrs="{'invisible': [('exchange_file', '!=', False)]}"
+                            />
+                            <field
+                                name="exchange_filechecksum"
+                                attrs="{'invisible': [('exchange_file', '!=', False)]}"
+                            />
+                        </group>
+                        <group
+                            name="ack"
+                            string="ACK"
+                            attrs="{'invisible': [('ack_expected', '!=', True)]}"
+                        >
+                            <field name="ack_expected" />
+                            <field name="ack_exchange_id" />
+                            <field name="ack_received_on" />
+                        </group>
+                        <group
+                            name="related_odoo_record"
+                            string="Related record"
+                            groups="base.group_no_one"
+                            attrs="{'invisible': [('res_id', '=', 0)]}"
+                        >
+                          <field name="res_id" />
+                          <field name="model" />
+                          <span
+                                class="text-warning"
+                                attrs="{'invisible': [('related_record_exists', '=', True)]}"
+                            >
+                            The related record is not available anymore.
+                            Consider deleting this record too or fixing its relation.
+                          </span>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page
+                            name="error"
+                            string="Error"
+                            attrs="{'invisible': [('exchange_error', '=', False)]}"
+                        >
+                            <field name="exchange_error" />
+                        </page>
+                        <!-- FIXME: this `invisible` domain does not work -->
+                        <page
+                            name="related_exchanges"
+                            string="Related exchanges"
+                            attrs="{'invisible': [('related_exchange_ids', '=', False), ('parent_id', '=', False)]}"
+                        >
+                            <group name="rel_exchanges">
+                              <field name="parent_id" />
+                            </group>
+                            <field name="related_exchange_ids" nolabel="1" colspan="4">
+                              <tree>
+                                <field name="type_id" />
+                                <field name="identifier" />
+                                <field name="exchanged_on" />
+                                <field name="ack_received_on" />
+                                <field name="edi_exchange_state" />
+                              </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="edi_exchange_record_view_search" model="ir.ui.view">
+        <field name="model">edi.exchange.record</field>
+        <field name="arch" type="xml">
+            <search string="EDI Exchange Record">
+                <filter
+                    string="Successful"
+                    name="filter_success"
+                    domain="[('edi_exchange_state','in', ['output_sent_and_processed', 'input_processed'])]"
+                />
+                <filter
+                    string="Failed"
+                    name="filter_failed"
+                    domain="[('edi_exchange_state','in', ['validate_error', 'output_error_on_send', 'output_sent_and_error', 'input_receive_error', 'input_processed_error'])]"
+                />
+                <filter
+                    string="Pending"
+                    name="filter_pending"
+                    domain="[('edi_exchange_state','in', ['output_pending', 'input_pending', 'output_sent', 'input_received'])]"
+                />
+                <separator />
+                <filter
+                    string="Inbound"
+                    name="filter_inbound"
+                    domain="[('type_id.direction','=', 'input')]"
+                />
+                <filter
+                    string="Outbound"
+                    name="filter_outbound"
+                    domain="[('type_id.direction','=', 'output')]"
+                />
+                <separator />
+                <filter
+                    string="Created today"
+                    name="filter_created_today"
+                    domain="[('create_date','&gt;=',  context_today().strftime('%%Y-%%m-%%d 00:00:00'))]"
+                    help="Show all records created today"
+                />
+                <filter
+                    string="Created last 7 days"
+                    name="filter_created_last_week"
+                    domain="[('create_date','&gt;=',  (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"
+                    help="Show all records created in the last 7 days"
+                />
+                <filter
+                    string="Exchanged today"
+                    name="filter_exchanged_today"
+                    domain="[('exchanged_on','&gt;=', context_today().strftime('%%Y-%%m-%%d 00:00:00'))]"
+                    help="Show all records created today"
+                />
+                <filter
+                    string="Exchanged last 7 days"
+                    name="filter_exchanged_last_week"
+                    domain="[('exchanged_on','&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"
+                    help="Show all records created in the last 7 days"
+                />
+                <separator />
+                <field name="backend_id" />
+                <field name="type_id" />
+                <field name="res_id" />
+                <field name="exchanged_on" />
+                <field name="ack_received_on" />
+                <field name="edi_exchange_state" />
+                <field name="exchange_filename" />
+                <field name="identifier" />
+                <field name="external_identifier" />
+                <field name="ack_exchange_id" />
+                <field name="parent_id" />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_backend_id"
+                        string="Backend"
+                        context="{'group_by': 'backend_id'}"
+                    />
+                    <filter
+                        name="group_by_type_id"
+                        string="Type"
+                        context="{'group_by': 'type_id'}"
+                    />
+                    <filter
+                        name="group_by_edi_exchange_state"
+                        string="State"
+                        context="{'group_by': 'edi_exchange_state'}"
+                    />
+                    <filter
+                        name="group_by_parent_id"
+                        string="Parent exchange"
+                        context="{'group_by': 'parent_id'}"
+                    />
+                    <filter
+                        name="group_by_create_date"
+                        string="Create date"
+                        context="{'group_by': 'create_date'}"
+                    />
+                    <filter
+                        name="group_by_exchanged_on"
+                        string="Exchange date"
+                        context="{'group_by': 'exchanged_on'}"
+                    />
+                    <filter
+                        name="group_by_model"
+                        string="Model"
+                        context="{'group_by': 'model'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_record_recent_view">
+        <field name="name">Recent exchanges</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field
+            name="domain"
+            eval="[('create_date', '>=', (DateTime.today() - relativedelta(days=15)).strftime('%Y-%m-%d %H:%M:%S'))]"
+        />
+        <field name="context">{'search_default_filter_created_today': 1}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view">
+        <field name="name">Exchanges</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_filter_created_today': 1}</field>
+    </record>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_view_pending"
+    >
+        <field name="name">Exchanges - pending</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field
+            name="context"
+        >{'search_default_filter_pending': 1, 'search_default_filter_created_today': 1}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_record_view_failed">
+        <field name="name">Exchanges - failed</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field
+            name="context"
+        >{'search_default_filter_failed': 1, 'search_default_filter_created_today': 1}</field>
+    </record>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_view_inbound"
+    >
+        <field name="name">Exchanges - inbound</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field
+            name="context"
+        >{'search_default_filter_inbound': 1, 'search_default_filter_created_today': 1}</field>
+    </record>
+
+    <record
+        model="ir.actions.act_window"
+        id="act_open_edi_exchange_record_view_outbound"
+    >
+        <field name="name">Exchanges - outbound</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_record_view_search" />
+        <field name="domain">[]</field>
+        <field
+            name="context"
+        >{'search_default_filter_outbound': 1, 'search_default_filter_created_today': 1}</field>
+    </record>
+
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_record_view_form"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_record_view" />
+        <field name="sequence" eval="20" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="edi_exchange_record_view_form" />
+    </record>
+
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_record_view_tree"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_record_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="edi_exchange_record_view_tree" />
+    </record>
+</odoo>

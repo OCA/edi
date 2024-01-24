@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="edi_exchange_consumer_mixin_buttons">
+        <div
+            t-att-groups="group"
+            class="alert alert-warning"
+            role="alert"
+            style="margin-bottom:0px;"
+            attrs="{'invisible': [('edi_has_form_config', '=', False)]}"
+        >
+            <div>
+                <span class="pr-4"><i class="fa fa-retweet" /> EDI actions</span>
+                <field name="edi_config" widget="edi_configuration" />
+                <field name="edi_has_form_config" invisible="1" />
+            </div>
+        </div>
+    </template>
+</odoo>

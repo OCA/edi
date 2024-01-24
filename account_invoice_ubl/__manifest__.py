@@ -9,7 +9,7 @@
     'license': 'AGPL-3',
     'summary': 'Generate UBL XML file for customer invoices/refunds',
     'author': 'Akretion,Odoo Community Association (OCA)',
-    'website': 'https://github.com/OCA/edi/',
+    'website': 'https://github.com/OCA/edi',
     'depends': [
         'account_e-invoice_generate',
         'account_payment_partner',

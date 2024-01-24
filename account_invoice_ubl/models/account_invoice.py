@@ -289,12 +289,19 @@ class AccountInvoice(models.Model):
     def get_ubl_lang(self):
         return self.partner_id.lang or 'en_US'
 
+    def add_xml_in_pdf_buffer(self, buffer):
+        self.ensure_one()
+        if self.is_ubl_sale_invoice_posted():
+            version = self.get_ubl_version()
+            xml_filename = self.get_ubl_filename(version=version)
+            xml_string = self.generate_ubl_xml_string(version=version)
+            buffer = self._ubl_add_xml_in_pdf_buffer(xml_string, xml_filename, buffer)
+        return buffer
+
     @api.multi
     def embed_ubl_xml_in_pdf(self, pdf_content=None, pdf_file=None):
         self.ensure_one()
-        if (
-                self.type in ('out_invoice', 'out_refund') and
-                self.state in ('open', 'paid')):
+        if self.is_ubl_sale_invoice_posted():
             version = self.get_ubl_version()
             ubl_filename = self.get_ubl_filename(version=version)
             xml_string = self.generate_ubl_xml_string(version=version)
@@ -330,3 +337,11 @@ class AccountInvoice(models.Model):
             'view_mode': 'form,tree'
             })
         return action
+
+    def is_ubl_sale_invoice_posted(self):
+        self.ensure_one()
+        is_ubl = self.company_id.xml_format_in_pdf_invoice == "ubl"
+        if (is_ubl and self.type in ('out_invoice', 'out_refund')
+                and self.state in ('open', 'paid')):
+            return True
+        return False

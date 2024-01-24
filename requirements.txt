@@ -1,3 +1,6 @@
-phonenumbers
-invoice2data==0.3.5
+# generated from manifests external_dependencies
 factur-x
+invoice2data==0.3.5
+ovh
+phonenumbers
+PyYAML

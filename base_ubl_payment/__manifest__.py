@@ -8,7 +8,7 @@
     'license': 'AGPL-3',
     'summary': 'Payment-related code for Universal Business Language (UBL)',
     'author': 'Akretion,Odoo Community Association (OCA)',
-    'website': 'https://github.com/oca/edi/',
+    'website': 'https://github.com/OCA/edi',
     'depends': [
         'account_payment_unece',
         'base_ubl',
