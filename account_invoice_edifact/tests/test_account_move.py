@@ -79,3 +79,15 @@ class TestEdifactInvoice(TransactionCase):
         vals = {"tax": {0: 533.72}, "total_line_item": 2}
         segments = self.invoice._edifact_invoice_get_summary(vals)
         self.assertEqual(len(segments), 9)
+
+    def test_edifact_invoice_get_address(self):
+        partner = self.invoice.partner_id
+        if hasattr(partner, "street3"):
+            partner.street3 = "Address"
+            self.assertEqual(
+                self.invoice._edifact_invoice_get_address(partner), partner.street3
+            )
+        else:
+            self.assertEqual(
+                self.invoice._edifact_invoice_get_address(partner), partner.street
+            )

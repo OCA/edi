@@ -40,8 +40,20 @@ class AccountMove(models.Model):
             sender_edifact, recipient_edifact, self.id, syntax_identifier
         )
 
+    def _edifact_invoice_get_address(self, partner):
+        # We apply the same logic as:
+        # https://github.com/OCA/edi/blob/
+        # c41829a8d986c6751c07299807c808d15adbf4db/base_ubl/models/ubl.py#L39
+
+        # oca/partner-contact/partner_address_street3 is installed
+        if hasattr(partner, "street3"):
+            return partner.street3 or partner.street2 or partner.street
+        else:
+            return partner.street2 or partner.street
+
     def _edifact_invoice_get_buyer(self):
         buyer = self.partner_id
+        street = self._edifact_invoice_get_address(buyer)
         return [
             # Invoice information
             (
@@ -50,7 +62,7 @@ class AccountMove(models.Model):
                 [buyer.id, "", "92"],
                 "",
                 buyer.commercial_company_name,
-                [buyer.street, ""],
+                [street, ""],
                 buyer.city,
                 "",
                 buyer.zip,
@@ -78,6 +90,7 @@ class AccountMove(models.Model):
         id_number = self.env["res.partner.id_number"]
         seller = self.invoice_user_id.partner_id
         seller_id_number = id_number.search([("partner_id", "=", seller.id)], limit=1)
+        street = self._edifact_invoice_get_address(seller)
         return [
             # Seller information
             (
@@ -86,7 +99,7 @@ class AccountMove(models.Model):
                 [seller_id_number.name, "", "92"],
                 "",
                 seller.commercial_company_name,
-                [seller.street, ""],
+                [street, ""],
                 seller.city,
                 "",
                 seller.zip,
