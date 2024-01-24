@@ -87,7 +87,7 @@ def _prepare_pickings(data):
     packages = {}
 
     for order in data["AUSKQ"]:
-        order_id = order["IvAusk_AusId_AusNr"]
+        order_id = order["IvAusk_ExtRef"]
         _convert_float_field(order)
         if order_id not in pickings:
             order["lines"] = []
