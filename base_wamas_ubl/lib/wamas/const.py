@@ -145,12 +145,12 @@ LST_TELEGRAM_TYPE_IGNORE_W2D = ["AUSPQ", "TOURQ", "TAUSPQ"]
 
 DICT_TUPLE_KEY_RECEPTION = {
     ("WEAKQ", "WEAPQ"): (
-        "ubl_template/reception_wea.xml",
+        "ubl_template/reception.xml",
         ("WEAKQ", "IvWevk_WevId_WevNr"),
         ("WEAPQ", "IvWevp_WevId_WevNr"),
     ),
     ("KRETKQ", "KRETPQ"): (
-        "ubl_template/reception_kret.xml",
+        "ubl_template/return.xml",
         ("KRETKQ", "IvKretk_KretId_KretNr"),
         ("KRETPQ", "IvKretp_KretId_KretNr"),
     ),
@@ -174,7 +174,12 @@ DICT_FLOAT_FIELD = {
 # CONVERT UNIT CODE
 ##
 
-LST_FIELD_UNIT_CODE = ["HostEinheit"]
+LST_FIELD_UNIT_CODE = [
+    "HostEinheit",
+    "Art_Anzeige_Einheit",
+    "Arte_Einheit",
+    "ArtEan_EST_Einheit",
+]
 
 
 MAPPING_UNITCODE_WAMAS_TO_UBL = {
