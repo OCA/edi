@@ -267,7 +267,7 @@ grammar = OrderedDict(
             "type": "str",
             "length": 1,
             "dp": False,
-            "dict_key": False,
+            "dict_key": "game_identifier",
             "df_val": False,
             "df_func": False,
         },
