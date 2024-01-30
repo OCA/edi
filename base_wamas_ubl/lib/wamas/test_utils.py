@@ -5,6 +5,7 @@ import xmltodict
 from dotty_dict import Dotty
 from freezegun import freeze_time
 from utils import (
+    _set_string_bool,
     dict2wamas,
     file_open,
     file_path,
@@ -78,6 +79,15 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(get_Adrs_Name3(address_elements), "Nom3")
         self.assertEqual(get_Adrs_Name4(address_elements), "Nom4")
         self.assertEqual(get_Adrs_Adr(address_elements), "Adresse")
+
+    def test_set_string_bool(self):
+        # Input is boolean
+        self.assertEqual(_set_string_bool(False, 1, False), "N")
+        self.assertEqual(_set_string_bool(True, 1, False), "J")
+
+        # Input is string
+        self.assertEqual(_set_string_bool("N", 1, False), "N")
+        self.assertEqual(_set_string_bool("J", 1, False), "J")
 
 
 if __name__ == "__main__":
