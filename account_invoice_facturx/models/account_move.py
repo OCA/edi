@@ -614,7 +614,7 @@ class AccountMove(models.Model):
                 )
                 product_code.text = iline.product_id.default_code
         product_name = etree.SubElement(trade_product, ns["ram"] + "Name")
-        product_name.text = iline.name
+        product_name.text = iline.name or _("No invoice line label")
         if (
             ns["level"] in PROFILES_EN_UP
             and iline.product_id
