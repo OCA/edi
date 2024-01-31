@@ -4,7 +4,6 @@
 
 from ast import literal_eval
 from base64 import b64decode, b64encode
-from difflib import SequenceMatcher
 
 from freezegun import freeze_time
 
@@ -78,9 +77,6 @@ class TestBaseWamas(TransactionCase):
             },
         }
 
-    def _is_string_similar(self, s1, s2, threshold=0.9):
-        return SequenceMatcher(a=s1, b=s2).ratio() > threshold
-
     @freeze_time("2023-05-01")
     def _convert_wamas2ubl(self, input_file, expected_output_files):
         str_input = file_open(input_file, "r").read()
@@ -99,8 +95,9 @@ class TestBaseWamas(TransactionCase):
         expected_output = (
             file_open(expected_output_file, "r").read().encode("iso-8859-1")
         )
-        self.assertTrue(self._is_string_similar(output, expected_output))
+        self.assertEqual(output, expected_output)
 
+    @freeze_time("2023-05-01")
     def _wamas_ubl_wiz_check(self, input_file, expected_output_file):
         str_input = file_open(input_file, "r").read()
         str_expected_output = file_open(expected_output_file, "r").read()
@@ -112,8 +109,9 @@ class TestBaseWamas(TransactionCase):
         wizard._onchange_wamas_filename()
         self.assertFalse(wizard.output)
         wizard.btn_check()
-        self.assertTrue(self._is_string_similar(wizard.output, str_expected_output))
+        self.assertEqual(wizard.output, str_expected_output)
 
+    @freeze_time("2023-05-01")
     def _wamas_ubl_wiz_simulate(
         self, input_file, expected_output_file, state="success"
     ):
@@ -131,10 +129,10 @@ class TestBaseWamas(TransactionCase):
         if state == "success":
             output = b64decode(wizard.output_wamas_file).decode("iso-8859-1")
             expected_output = file_open(expected_output_file, "r").read()
-            self.assertTrue(self._is_string_similar(output, expected_output))
+            self.assertEqual(output, expected_output)
         else:
             expected_output = file_open(expected_output_file, "r").read()
-            self.assertTrue(self._is_string_similar(wizard.output, expected_output))
+            self.assertEqual(wizard.output, expected_output)
 
     def test_convert_wamas2ubl(self):
         dict_data = {
@@ -234,6 +232,7 @@ class TestBaseWamas(TransactionCase):
         output = self.base_wamas_ubl.dict2wamas(dict_input, "LST")
         self.assertEqual(output, expected_output)
 
+    @freeze_time("2023-12-21 04:12:51")
     def test_get_wamas_type(self):
         dict_data = {
             "input": "base_wamas_ubl/tests/samples/CHECKWAMAS-SAMPLE_INPUT.wamas",

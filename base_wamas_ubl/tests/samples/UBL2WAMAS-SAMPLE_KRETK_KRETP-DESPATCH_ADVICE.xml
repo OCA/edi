@@ -37,6 +37,8 @@
 			</cac:PartyName>
 			<cac:PostalAddress>
 				<cbc:StreetName>250 Executive Park Blvd, Suite 3400</cbc:StreetName>
+				<cbc:AdditionalStreetName>AdditionalStreetName_1</cbc:AdditionalStreetName>
+				<cbc:Department>Department_1</cbc:Department>
 				<cbc:CityName>San Francisco</cbc:CityName>
 				<cbc:PostalZone>94134</cbc:PostalZone>
 				<cbc:CountrySubentity>California</cbc:CountrySubentity>
