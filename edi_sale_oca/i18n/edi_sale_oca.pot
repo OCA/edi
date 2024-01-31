@@ -51,6 +51,11 @@ msgid "EDI"
 msgstr ""
 
 #. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__edi_id
+msgid "EDI ID"
+msgstr ""
+
+#. module: edi_sale_oca
 #: model_terms:ir.ui.view,arch_db:edi_sale_oca.view_sales_order_filter
 msgid "EDI exchange"
 msgstr ""
@@ -76,11 +81,6 @@ msgstr ""
 #: model:ir.model.fields,help:edi_sale_oca.field_sale_order__origin_exchange_record_id
 #: model:ir.model.fields,help:edi_sale_oca.field_sale_order_line__origin_exchange_record_id
 msgid "EDI record that originated this document."
-msgstr ""
-
-#. module: edi_sale_oca
-#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__edi_id
-msgid "Edi"
 msgstr ""
 
 #. module: edi_sale_oca
