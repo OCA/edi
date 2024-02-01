@@ -18,7 +18,7 @@ except ImportError:
     from utils import file_open, generate_wamas_line
 
 
-def ubl2list(infile, telegram_type):  # noqa: C901
+def ubl2list(infile, telegram_type, extra_data=False):  # noqa: C901
     res = []
 
     my_dict = Dotty(xmltodict.parse(infile))
@@ -54,6 +54,7 @@ def ubl2list(infile, telegram_type):  # noqa: C901
                 line_idx=line_idx,
                 len_loop=len_loop,
                 idx_loop=idx_loop,
+                extra_data=extra_data,
             )
             if line:
                 res.append(line)
@@ -61,8 +62,8 @@ def ubl2list(infile, telegram_type):  # noqa: C901
     return res
 
 
-def ubl2wamas(infile, telegram_type, verbose=False):
-    lst_of_str_wamas = ubl2list(infile, telegram_type)
+def ubl2wamas(infile, telegram_type, extra_data=False, verbose=False):
+    lst_of_str_wamas = ubl2list(infile, telegram_type, extra_data=extra_data)
     wamas = "\n".join(lst_of_str_wamas)
     if verbose:
         _logger.debug(wamas)

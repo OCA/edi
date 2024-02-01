@@ -211,9 +211,16 @@ def get_date_from_field(*args):
     return res
 
 
-def convert_unit_code(key, val):
+def convert_unit_code(key, val, unit_mapping=None):
     if key in LST_FIELD_UNIT_CODE:
-        return MAPPING_UNITCODE_UBL_TO_WAMAS["unitCode"].get(val, val)
+        _mapping = (
+            unit_mapping
+            and unit_mapping.get(
+                "MAPPING_UNITCODE_UBL_TO_WAMAS", MAPPING_UNITCODE_UBL_TO_WAMAS
+            )
+            or MAPPING_UNITCODE_UBL_TO_WAMAS
+        )
+        return _mapping["unitCode"].get(val, val)
     return val
 
 
@@ -327,7 +334,8 @@ def generate_wamas_line(dict_item, grammar, **kwargs):  # noqa: C901
 
             val = globals()[df_func](*args)
 
-        val = convert_unit_code(_key, val)
+        extra_data = kwargs.get("extra_data", None)
+        val = convert_unit_code(_key, val, unit_mapping=extra_data)
         if kwargs.get("check_to_set_value_to_string", False):
             # Ignore convert string of float/int/date/datetime type
             # to move entire value when convert wamas2wamas
@@ -352,16 +360,20 @@ def generate_wamas_line(dict_item, grammar, **kwargs):  # noqa: C901
     return res
 
 
-def generate_wamas_lines(dict_input, telegram_type, line_idx, wamas_lines):
+def generate_wamas_lines(
+    dict_input, telegram_type, line_idx, wamas_lines, extra_data=False
+):
     line_idx += 1
     grammar = DICT_WAMAS_GRAMMAR[telegram_type.lower()]
-    line = generate_wamas_line(dict_input, grammar, line_idx=line_idx)
+    line = generate_wamas_line(
+        dict_input, grammar, line_idx=line_idx, extra_data=extra_data
+    )
     if line:
         wamas_lines.append(line)
     return line_idx, wamas_lines
 
 
-def dict2wamas(dict_input, telegram_type):
+def dict2wamas(dict_input, telegram_type, extra_data=False):
     wamas_lines = []
     lst_telegram_type = telegram_type.split(",")
 
@@ -375,16 +387,16 @@ def dict2wamas(dict_input, telegram_type):
             # 1 line for `KstAus_LagIdKom = kMEZ`
             dict_input["picking_zone"] = "kMEZ"
             line_idx, wamas_lines = generate_wamas_lines(
-                dict_input, telegram_type, line_idx, wamas_lines
+                dict_input, telegram_type, line_idx, wamas_lines, extra_data=extra_data
             )
             # 1 line for `KstAus_LagIdKom = kPAR`
             dict_input["picking_zone"] = "kPAR"
             line_idx, wamas_lines = generate_wamas_lines(
-                dict_input, telegram_type, line_idx, wamas_lines
+                dict_input, telegram_type, line_idx, wamas_lines, extra_data=extra_data
             )
         else:
             line_idx, wamas_lines = generate_wamas_lines(
-                dict_input, telegram_type, line_idx, wamas_lines
+                dict_input, telegram_type, line_idx, wamas_lines, extra_data=extra_data
             )
     return "\n".join(wamas_lines).encode("iso-8859-1")
 
@@ -510,13 +522,20 @@ def wamas2dict(
 
 def dict2ubl(template, data, verbose=False, extra_data=False):
     t = miniqweb.QWebXml(template)
+    _mapping = (
+        extra_data
+        and extra_data.get(
+            "MAPPING_UNITCODE_WAMAS_TO_UBL", MAPPING_UNITCODE_WAMAS_TO_UBL
+        )
+        or MAPPING_UNITCODE_WAMAS_TO_UBL
+    )
     # Convert dict to object to use dotted notation in template
     globals_dict = {
         "record": obj(data),
         "get_date": get_date,
         "get_time": get_time,
         "get_current_date": get_current_date,
-        "MAPPING": MAPPING_UNITCODE_WAMAS_TO_UBL,
+        "MAPPING": _mapping,
         "extra_data": extra_data,
     }
     xml = t.render(globals_dict)

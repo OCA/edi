@@ -12,6 +12,8 @@ from odoo.tools import file_open
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
+from ..lib.wamas.structure import MappingDict
+
 
 class TestBaseWamas(TransactionCase):
     @classmethod
@@ -74,6 +76,31 @@ class TestBaseWamas(TransactionCase):
                 "Contact.ElectronicMail": cls.partner_2.child_ids
                 and cls.partner_2.child_ids[0].email
                 or "",
+            },
+            "MAPPING_UNITCODE_WAMAS_TO_UBL": {
+                "unitCode": MappingDict(
+                    {
+                        "BOT": "XBQ",  # plastic bottle
+                        "BOUT": "C62",  # Unit
+                        "BOITE": "XBX",  # box
+                        "LITRE": "LTR",  # litre
+                        "PET": "XBO",  # glass bottle
+                        "TETRA": "X4A",  # tetra pack, changed 'X4B' to 'X4A'for testing
+                        "": False,  # undefined,
+                    }
+                )
+            },
+            "MAPPING_UNITCODE_UBL_TO_WAMAS": {
+                "unitCode": MappingDict(
+                    {
+                        "XBQ": "BOT",  # plastic bottle
+                        "C62": "BOUT",  # Unit
+                        "XBX": "BOITE",  # box
+                        "LTR": "LITRE",  # litre
+                        "XBO": "PET",  # glass bottle
+                        "X4A": "TETRA",  # tetra pack, changed 'X4B' to 'X4A'for testing
+                    }
+                )
             },
         }
 

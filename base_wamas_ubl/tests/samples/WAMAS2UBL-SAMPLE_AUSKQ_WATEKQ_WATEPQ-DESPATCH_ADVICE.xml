@@ -81,7 +81,7 @@
 			</cac:GrossWeightMeasure>
 		</cac:Shipment>
 		<cbc:ID>1</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="X4B">7.0</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="X4A">7.0</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID>000101</cbc:LineID>
 		</cac:OrderLineReference>
@@ -106,7 +106,7 @@
 			</cac:GrossWeightMeasure>
 		</cac:Shipment>
 		<cbc:ID>2</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="X4B">8.0</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="X4A">8.0</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID>000101</cbc:LineID>
 		</cac:OrderLineReference>

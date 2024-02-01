@@ -11,7 +11,7 @@
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "author": "Camptocamp,Odoo Community Association (OCA)",
-    "depends": ["base_edi", "base_ubl"],
+    "depends": ["base_edi", "base_ubl", "uom_unece"],
     "external_dependencies": {
         "python": ["xmltodict", "dotty-dict", "pytz"],
     },
@@ -19,6 +19,8 @@
         "security/ir.model.access.csv",
         "wizard/wamas_ubl_wiz_check.xml",
         "wizard/wamas_ubl_wiz_simulate.xml",
+        "views/uom_uom.xml",
+        "views/uom_category.xml",
         "views/wamas_menu.xml",
     ],
 }
