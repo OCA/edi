@@ -105,7 +105,7 @@ grammar = OrderedDict(
             "dp": False,
             "ubl_path": False,
             "df_val": False,
-            "df_func": "get_Adrs_Name",
+            "df_func": "supplier_get_Adrs_Name",
         },
         "RxWeak_Adrs_Name2": {
             "type": "str",
@@ -113,7 +113,7 @@ grammar = OrderedDict(
             "dp": False,
             "ubl_path": False,
             "df_val": False,
-            "df_func": "get_Adrs_Name2",
+            "df_func": "supplier_get_Adrs_Name2",
         },
         "RxWeak_Adrs_Name3": {
             "type": "str",
@@ -121,7 +121,7 @@ grammar = OrderedDict(
             "dp": False,
             "ubl_path": False,
             "df_val": False,
-            "df_func": "get_Adrs_Name3",
+            "df_func": "supplier_get_Adrs_Name3",
         },
         "RxWeak_Adrs_Name4": {
             "type": "str",
@@ -129,7 +129,7 @@ grammar = OrderedDict(
             "dp": False,
             "ubl_path": False,
             "df_val": False,
-            "df_func": "get_Adrs_Name4",
+            "df_func": "supplier_get_Adrs_Name4",
         },
         "RxWeak_Adrs_Anrede": {
             "type": "str",
@@ -145,14 +145,13 @@ grammar = OrderedDict(
             "dp": False,
             "ubl_path": False,
             "df_val": False,
-            "df_func": "get_Adrs_Adr",
+            "df_func": "supplier_get_Adrs_Adr",
         },
         "RxWeak_Adrs_Adr2": {
             "type": "str",
             "length": 40,
             "dp": False,
-            "ubl_path": "DespatchAdvice.cac:DespatchSupplierParty."
-            "cac:Party.cac:PostalAddress.cbc:CountrySubentity",
+            "ubl_path": False,
             "df_val": False,
             "df_func": False,
         },
