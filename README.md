@@ -33,7 +33,7 @@ addon | version | maintainers | summary
 [base_ebill_payment_contract](base_ebill_payment_contract/) | 13.0.1.0.0 |  | Base for managing e-billing contracts
 [base_edi](base_edi/) | 13.0.1.0.3 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Base module for Factur-X/ZUGFeRD
-[base_ubl](base_ubl/) | 13.0.2.5.0 |  | Base module for Universal Business Language (UBL)
+[base_ubl](base_ubl/) | 13.0.2.5.1 |  | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 13.0.1.0.1 |  | Payment-related code for Universal Business Language (UBL)
 [edi](edi/) | 13.0.1.24.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_account](edi_account/) | 13.0.2.0.1 |  | Define EDI Configuration for Account Moves
