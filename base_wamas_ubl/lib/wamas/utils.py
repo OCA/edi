@@ -171,7 +171,12 @@ def _set_string_datetime(val, length, dp, **kwargs):
 
 
 def _set_string_bool(val, length, dp, **kwargs):
-    return (val or "N")[:length]
+    res = "N"
+    if isinstance(val, str) and val:
+        res = val[:length]
+    elif isinstance(val, bool) and val:
+        res = "J"
+    return res
 
 
 def set_value_to_string(val, ttype, length, dp, **kwargs):

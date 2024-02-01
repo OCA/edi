@@ -1,5 +1,6 @@
 {
     "barcode": "256256256",
     "product": "113 113 113",
+    "product_uom": "C62",
     "game_identifier": "N",
 }
