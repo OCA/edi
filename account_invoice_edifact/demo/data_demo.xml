@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="partner_edifact_dm" model="res.partner">
+        <field name="name">Partner Name 1</field>
+        <field name="is_company" eval="True" />
+        <field name="customer_rank" eval="1" />
+        <field name="street">Street 1</field>
+        <field name="zip">1234</field>
+        <field name="city">City 1</field>
+    <field name="country_id" ref="base.lu" />
+    </record>
+    <record id="partner_edifact_shipto_dm" model="res.partner">
+        <field name="name">Partner Name 2</field>
+        <field name="parent_id" ref="partner_edifact_dm" />
+        <field name="street">Street 2</field>
+        <field name="zip">4321</field>
+        <field name="city">City 2</field>
+        <field name="country_id" ref="base.pl" />
+        <field name="email" />
+        <field name="type">delivery</field>
+    </record>
+    <record id="partner_edifact_invoiceto_dm" model="res.partner">
+        <field name="name">Partner Name 3</field>
+        <field name="parent_id" ref="partner_edifact_dm" />
+        <field name="street">Street 3</field>
+        <field name="zip">3214</field>
+        <field name="city">City 3</field>
+        <field name="country_id" ref="base.pl" />
+        <field name="function">Accountant</field>
+        <field name="customer_rank" eval="1" />
+        <field name="type">invoice</field>
+    </record>
+
+    <record
+        id="user_edifact_sender_dm"
+        model="res.users"
+        context="{'no_reset_password': True}"
+    >
+        <field name="partner_id" ref="partner_edifact_dm" />
+        <field name="name">Edifact User</field>
+        <field name="login">edifact_username</field>
+        <field name="password">edifact_password</field>
+    </record>
+
+    <record id="res_partner_id_number_edifact" model="res.partner.id_number">
+        <field
+            name="category_id"
+            ref="partner_identification_gln.partner_identification_gln_number_category"
+        />
+        <field name="partner_id" ref="partner_edifact_dm" />
+        <field name="name">9780201379624</field>
+    </record>
+    <record id="res_partner_id_number_edifact_shipto" model="res.partner.id_number">
+        <field
+            name="category_id"
+            ref="partner_identification_gln.partner_identification_gln_number_category"
+        />
+        <field name="partner_id" ref="partner_edifact_shipto_dm" />
+        <field name="name">9780201379686</field>
+    </record>
+    <record id="res_partner_id_number_edifact_invoiceto" model="res.partner.id_number">
+        <field
+            name="category_id"
+            ref="partner_identification_gln.partner_identification_gln_number_category"
+        />
+        <field name="partner_id" ref="partner_edifact_invoiceto_dm" />
+        <field name="name">9780201379174</field>
+    </record>
+</odoo>
