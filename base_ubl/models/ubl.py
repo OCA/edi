@@ -450,14 +450,14 @@ class BaseUbl(models.AbstractModel):
                         node_name="ClassifiedTaxCategory",
                         version=version,
                     )
-            for attribute_value in product.attribute_line_ids.mapped("value_ids"):
+            for ptav in product.product_template_attribute_value_ids._only_active():
                 item_property = etree.SubElement(
                     item, ns["cac"] + "AdditionalItemProperty"
                 )
                 property_name = etree.SubElement(item_property, ns["cbc"] + "Name")
-                property_name.text = attribute_value.attribute_id.name
+                property_name.text = ptav.attribute_id.name
                 property_value = etree.SubElement(item_property, ns["cbc"] + "Value")
-                property_value.text = attribute_value.name
+                property_value.text = ptav.name
 
     @api.model
     def _ubl_add_tax_subtotal(
