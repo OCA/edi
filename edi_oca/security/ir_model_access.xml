@@ -120,4 +120,11 @@
             name="domain_force"
         >['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
      </record>
+     <record id="rule_edi_backend_multi_company" model="ir.rule">
+        <field name="name">edi_backend multi-company</field>
+        <field name="model_id" ref="model_edi_backend" />
+        <field
+            name="domain_force"
+        >['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+     </record>
 </odoo>

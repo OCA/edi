@@ -6,6 +6,11 @@
             <tree decoration-muted="(not active)">
                 <field name="name" />
                 <field name="active" />
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="hide"
+                />
             </tree>
         </field>
     </record>
@@ -47,6 +52,7 @@
                     <group>
                         <field name="output_sent_processed_auto" />
                         <field name="active" invisible="1" />
+                        <field name="company_id" groups="base.group_multi_company" />
                     </group>
                     <!-- Hook to add more config -->
                     <notebook />

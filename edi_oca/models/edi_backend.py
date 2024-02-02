@@ -57,6 +57,7 @@ class EDIBackend(models.Model):
     """
     )
     active = fields.Boolean(default=True)
+    company_id = fields.Many2one("res.company", string="Company")
 
     def _get_component(self, exchange_record, key):
         record_conf = self._get_component_conf_for_record(exchange_record, key)
