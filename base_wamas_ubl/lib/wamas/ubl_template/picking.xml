@@ -144,7 +144,7 @@
             t-att-unitCode="MAPPING['unitCode'][line.IvArt_HOSTUNITS_HostEinh] or MAPPING['unitCode'][line.IvArt_Bestand_Einheit]"
         ><t t-raw="line.Mngs_Mng" /></cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-            <cbc:LineID><t t-raw="line.IvAusp_HostPosNr" /></cbc:LineID>
+            <cbc:LineID><t t-raw="int(line.IvAusp_HostPosNr)" /></cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>

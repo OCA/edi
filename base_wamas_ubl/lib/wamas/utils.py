@@ -145,6 +145,8 @@ def _set_string_date(val, length, dp, **kwargs):
         res = res.date().strftime("%Y%m%d")
     elif isinstance(res, str):
         res = res.ljust(length)
+    elif not res:
+        res = ""
     else:
         raise Exception(
             "The value '%s' is not the date type. Please check it again!" % res
@@ -162,6 +164,8 @@ def _set_string_datetime(val, length, dp, **kwargs):
         res = res.strftime("%Y%m%d%H%M%S")
     elif isinstance(res, str):
         res = res.ljust(length)
+    elif not res:
+        res = ""
     else:
         raise Exception(
             "The value '%s' is not the date type. Please check it again!" % res

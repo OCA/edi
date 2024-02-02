@@ -63,8 +63,8 @@ grammar = OrderedDict(
             "length": 5,
             "dp": False,
             "ubl_path": False,
-            "df_val": "HOST",
-            "df_func": False,
+            "df_val": False,
+            "df_func": "get_source",
         },
         "RxKretk_ExtRef": {
             "type": "str",
@@ -135,7 +135,8 @@ grammar = OrderedDict(
             "type": "str",
             "length": 15,
             "dp": False,
-            "ubl_path": False,
+            "ubl_path": "DespatchAdvice.cac:DespatchSupplierParty."
+            "cac:Party.cac:Contact.cbc:Title",
             "df_val": False,
             "df_func": False,
         },
@@ -239,7 +240,7 @@ grammar = OrderedDict(
             "length": 14,
             "dp": False,
             "ubl_path": False,
-            "df_val": False,
+            "df_val": "SF-EM-RETCLI",
             "df_func": False,
         },
         "RxKretk_Info2Wamas": {
@@ -254,7 +255,8 @@ grammar = OrderedDict(
             "type": "datetime",
             "length": 14,
             "dp": False,
-            "ubl_path": "DespatchAdvice.cac:OrderReference.cbc:IssueDate",
+            "ubl_path": "DespatchAdvice.cac:Shipment.cac:Delivery."
+            "cac:EstimatedDeliveryPeriod.cbc:EndDate",
             "df_val": False,
             "df_func": False,
         },
