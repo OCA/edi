@@ -83,7 +83,7 @@
 		<cbc:ID>1</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="X4B">7.0</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>000101</cbc:LineID>
+			<cbc:LineID>101</cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>
@@ -108,7 +108,7 @@
 		<cbc:ID>2</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="X4B">8.0</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>000101</cbc:LineID>
+			<cbc:LineID>102</cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>

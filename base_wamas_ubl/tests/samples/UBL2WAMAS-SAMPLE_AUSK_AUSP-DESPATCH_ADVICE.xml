@@ -83,7 +83,7 @@
 		<cbc:ID>10001</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="XBO">1500</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>000011</cbc:LineID>
+			<cbc:LineID>11</cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:SellersItemIdentification>

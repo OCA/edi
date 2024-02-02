@@ -69,7 +69,7 @@
         <cbc:ID>1</cbc:ID>
         <cbc:DeliveredQuantity unitCode="C62">144.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
-            <cbc:LineID>1711980</cbc:LineID>
+            <cbc:LineID>10</cbc:LineID>
         </cac:OrderLineReference>
         <cac:Item>
             <cac:BuyersItemIdentification>
