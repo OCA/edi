@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="rule_webservice_backend_multi_company" model="ir.rule">
+        <field name="name">webservice_backend multi-company</field>
+        <field name="model_id" ref="model_webservice_backend" />
+        <field
+            name="domain_force"
+        >['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

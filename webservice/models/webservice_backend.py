@@ -37,6 +37,7 @@ class WebserviceBackend(models.Model):
         ],
         required=True,
     )
+    company_id = fields.Many2one("res.company", string="Company")
 
     @api.constrains("auth_type")
     def _check_auth_type(self):

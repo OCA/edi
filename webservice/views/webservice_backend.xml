@@ -21,6 +21,7 @@
                         </h2>
                     </div>
                     <group name="config">
+                        <field name="company_id" groups="base.group_multi_company" />
                         <field name="protocol" />
                         <field name="url" />
                         <field name="content_type" />
@@ -85,6 +86,11 @@
                 <field name="tech_name" />
                 <field name="url" />
                 <field name="protocol" />
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="hide"
+                />
             </tree>
         </field>
     </record>
