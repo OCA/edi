@@ -66,6 +66,12 @@ msgid "EDI exchange type"
 msgstr ""
 
 #. module: edi_sale_oca
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__origin_edi_endpoint_id
+#: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__origin_edi_endpoint_id
+msgid "EDI origin endpoint"
+msgstr ""
+
+#. module: edi_sale_oca
 #: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order__origin_exchange_type_id
 #: model:ir.model.fields,field_description:edi_sale_oca.field_sale_order_line__origin_exchange_type_id
 msgid "EDI origin exchange type"
@@ -120,6 +126,12 @@ msgstr ""
 #. module: edi_sale_oca
 #: model:ir.model.fields,help:edi_sale_oca.field_sale_order_line__edi_id
 msgid "Internal or external identifier for records."
+msgstr ""
+
+#. module: edi_sale_oca
+#: model:ir.model.fields,help:edi_sale_oca.field_sale_order__origin_edi_endpoint_id
+#: model:ir.model.fields,help:edi_sale_oca.field_sale_order_line__origin_edi_endpoint_id
+msgid "Record generated via this endpoint"
 msgstr ""
 
 #. module: edi_sale_oca
