@@ -40,6 +40,11 @@ msgid "EDI Configuration"
 msgstr ""
 
 #. module: edi_account_oca
+#: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_edi_endpoint_id
+msgid "EDI origin endpoint"
+msgstr ""
+
+#. module: edi_account_oca
 #: model:ir.model.fields,field_description:edi_account_oca.field_account_move__origin_exchange_type_id
 msgid "EDI origin exchange type"
 msgstr ""
@@ -92,6 +97,11 @@ msgstr ""
 #. module: edi_account_oca
 #: model:ir.ui.menu,name:edi_account_oca.menu_account_edi_exchange_record
 msgid "Moves"
+msgstr ""
+
+#. module: edi_account_oca
+#: model:ir.model.fields,help:edi_account_oca.field_account_move__origin_edi_endpoint_id
+msgid "Record generated via this endpoint"
 msgstr ""
 
 #. module: edi_account_oca
