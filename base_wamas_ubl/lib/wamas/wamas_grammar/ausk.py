@@ -70,7 +70,7 @@ grammar = OrderedDict(
             "type": "str",
             "length": 20,
             "dp": False,
-            "ubl_path": "DespatchAdvice.cac:OrderReference.cbc:ID",
+            "ubl_path": "DespatchAdvice.cbc:ID",
             "df_val": False,
             "df_func": False,
         },
@@ -79,7 +79,7 @@ grammar = OrderedDict(
             "length": 6,
             "dp": False,
             "ubl_path": "DespatchAdvice.cac:Shipment.cac:ShipmentStage."
-            "cbc:TransportModeCode",
+            "cbc:TransportMeansTypeCode",
             "df_val": False,
             "df_func": False,
         },
@@ -647,7 +647,7 @@ grammar = OrderedDict(
             "length": 10,
             "dp": False,
             "ubl_path": False,
-            "df_val": False,
+            "df_val": "CAM",
             "df_func": False,
         },
         "RxAusk_RahmenTourLkwFahrer": {
