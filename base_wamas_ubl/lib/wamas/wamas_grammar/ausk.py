@@ -653,7 +653,7 @@ grammar = OrderedDict(
             "length": 10,
             "dp": False,
             "ubl_path": False,
-            "df_val": False,
+            "df_val": "CAM",
             "df_func": False,
         },
         "RxAusk_RahmenTourLkwFahrer": {

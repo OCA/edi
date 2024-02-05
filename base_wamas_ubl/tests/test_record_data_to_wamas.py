@@ -59,7 +59,7 @@ class TestRecordToWAMAS(common.TransactionCase):
             "expected_output": "base_wamas_ubl/tests/samples/TELEGRAM-SAMPLE-ART_OUTPUT.wamas",
         }
         expected_output = (
-            file_open(dict_data["expected_output"], "r").read().encode("iso-8859-1")
+            file_open(dict_data["expected_output"], "r").read().strip("\n").encode("iso-8859-1")
         )
         dict_input = literal_eval(file_open(dict_data["input"], "r").read())
         output = self.base_wamas_ubl.record_data_to_wamas(dict_input, "ART")

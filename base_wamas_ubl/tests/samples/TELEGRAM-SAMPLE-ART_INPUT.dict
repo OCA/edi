@@ -10,6 +10,7 @@
     "wamas_class": "BB",
     "product_uom_wamas_code": "HAR",
     "packaging_code": "Box",
+    "packaging_level_palette_wamas_code": "CC",
     "standard_price": 0,
     "game_identifier": "N",
 }
