@@ -9,7 +9,7 @@
         <field name="arch" type="xml">
             <xpath expr="//div[@id='invoicing_settings']" position="after">
                 <h2>Electronic Invoices</h2>
-                <div class="row mt16 o_settings_container" id="invoicing_settings">
+                <div class="row mt16 o_settings_container" id="e-invoicing_settings">
                     <div class="col-12 col-lg-8 o_setting_box" id="e-invoices">
                         <div class="o_setting_left_pane" />
                         <div class="o_setting_right_pane">
