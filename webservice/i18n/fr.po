@@ -63,6 +63,11 @@ msgid "Auth Type Env Is Editable"
 msgstr ""
 
 #. module: webservice
+#: model:ir.model.fields,field_description:webservice.field_webservice_backend__company_id
+msgid "Company"
+msgstr ""
+
+#. module: webservice
 #: model:ir.model.fields,field_description:webservice.field_webservice_backend__content_type
 msgid "Content Type"
 msgstr "Type de contenu"
