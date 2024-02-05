@@ -30,11 +30,11 @@ addon | version | maintainers | summary
 [base_edi](base_edi/) | 16.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module to aggregate EDI features.
 [base_edifact](base_edifact/) | 16.0.1.2.0 | [![rmorant](https://github.com/rmorant.png?size=30px)](https://github.com/rmorant) | UN/EDIFACT/D96A utilities using pydifact parser
 [base_facturx](base_facturx/) | 16.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Base module for Factur-X/ZUGFeRD
-[base_ubl](base_ubl/) | 16.0.1.0.1 |  | Base module for Universal Business Language (UBL)
+[base_ubl](base_ubl/) | 16.0.1.1.0 |  | Base module for Universal Business Language (UBL)
 [base_wamas_ubl](base_wamas_ubl/) | 16.0.1.6.0 |  | Base module to aggregate WAMAS - UBL features.
 [despatch_advice_import](despatch_advice_import/) | 16.0.1.0.0 |  | Despatch Advice import
 [despatch_advice_import_ubl](despatch_advice_import_ubl/) | 16.0.1.0.0 |  | Import Despatch Advice files
-[pdf_helper](pdf_helper/) | 16.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Provides helpers to work w/ PDFs
+[pdf_helper](pdf_helper/) | 16.0.1.1.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Provides helpers to work w/ PDFs
 [sale_order_import](sale_order_import/) | 16.0.1.2.0 |  | Import RFQ or sale orders from files
 [sale_order_import_edifact](sale_order_import_edifact/) | 16.0.1.0.0 | [![rmorant](https://github.com/rmorant.png?size=30px)](https://github.com/rmorant) | EDIFACT/D96A Order
 
