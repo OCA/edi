@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2016-2021 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <button name="button_draft" position="before">
+                <button
+                    type="action"
+                    name="%(account_invoice_import_action)d"
+                    string="Import Invoice File"
+                    context="{'wizard_default_state': 'update-from-invoice', 'default_invoice_id': id, 'default_partner_id': commercial_partner_id}"
+                    attrs="{'invisible': ['|', ('type', 'not in', ('in_invoice', 'in_refund')), ('state', '!=', 'draft')]}"
+                />
+                <!-- Button for quick access to the wizard
+                     to encode multiple invoices -->
+                <button
+                    type="action"
+                    name="%(account_invoice_import_action)d"
+                    string="Import Next Invoice"
+                    context="{}"
+                    attrs="{'invisible': [('type', 'not in', ('in_invoice', 'in_refund'))]}"
+                />
+            </button>
+        </field>
+    </record>
+</odoo>
