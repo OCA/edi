@@ -15,7 +15,9 @@
 				<cbc:Name>MyCompany</cbc:Name>
 			</cac:PartyName>
 			<cac:PostalAddress>
-				<cbc:StreetName>1839 Arbor Way</cbc:StreetName>
+				<cbc:StreetName>StreetName</cbc:StreetName>
+				<cbc:Department>Department</cbc:Department>
+				<cbc:AdditionalStreetName>AdditionalStreetName</cbc:AdditionalStreetName>
 				<cbc:CityName>Turlock</cbc:CityName>
 				<cbc:PostalZone>95380</cbc:PostalZone>
 				<cbc:CountrySubentity>California</cbc:CountrySubentity>
