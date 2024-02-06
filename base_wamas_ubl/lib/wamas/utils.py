@@ -249,20 +249,66 @@ def get_Adrs_Name(a):
 
 def get_Adrs_Name2(a):
     return next(
-        filter(None, [a["Department"], a["StreetName"], a["AdditionalStreetName"]]), ""
+        iter(
+            list(
+                filter(
+                    None,
+                    [
+                        a["ContactName"],
+                        a["PartyName"],
+                        a["Department"],
+                        a["StreetName"],
+                        a["AdditionalStreetName"],
+                    ],
+                )
+            )[1:-1]
+        ),
+        "",
     )
 
 
 def get_Adrs_Name3(a):
-    return next(filter(None, [a["StreetName"], a["AdditionalStreetName"]]), "")
+    return next(
+        iter(
+            list(
+                filter(
+                    None,
+                    [
+                        a["ContactName"],
+                        a["PartyName"],
+                        a["Department"],
+                        a["StreetName"],
+                        a["AdditionalStreetName"],
+                    ],
+                )
+            )[2:-1]
+        ),
+        "",
+    )
 
 
 def get_Adrs_Name4(a):
-    return a["AdditionalStreetName"]
+    return next(
+        iter(
+            list(
+                filter(
+                    None,
+                    [
+                        a["ContactName"],
+                        a["PartyName"],
+                        a["Department"],
+                        a["StreetName"],
+                        a["AdditionalStreetName"],
+                    ],
+                )
+            )[3:-1]
+        ),
+        "",
+    )
 
 
 def get_Adrs_Adr(a):
-    return a["AdditionalStreetName"] or a["StreetName"]
+    return a["AdditionalStreetName"] or a["StreetName"] or a["Department"]
 
 
 def generate_wamas_line(dict_item, grammar, **kwargs):  # noqa: C901
