@@ -93,7 +93,7 @@ class TestBaseWamas(TransactionCase):
         str_input = file_open(input_file, "r").read()
         output = self.base_wamas_ubl.ubl2wamas(str_input, telegram_type)
         expected_output = (
-            file_open(expected_output_file, "r").read().encode("iso-8859-1")
+            file_open(expected_output_file, "r").read().strip("\n").encode("iso-8859-1")
         )
         self.assertEqual(output, expected_output)
 

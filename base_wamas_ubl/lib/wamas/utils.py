@@ -1,3 +1,5 @@
+# Copyright 2023 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
+
 import ast
 import codecs
 import logging
@@ -243,68 +245,34 @@ def get_address_elements(dict_item, party_type="DeliveryCustomerParty"):
     }
 
 
+def _get_Name(a, index):
+    candidates = (
+        "ContactName",
+        "PartyName",
+        "Department",
+        "StreetName",
+        "AdditionalStreetName",
+    )
+    values = [a[x] for x in candidates if a.get(x)]
+    # always drop last element, that's the address
+    values = values[index:-1]
+    return values[0] if values else None
+
+
 def get_Adrs_Name(a):
-    return a["ContactName"] or a["PartyName"]
+    return _get_Name(a, 0)
 
 
 def get_Adrs_Name2(a):
-    return next(
-        iter(
-            list(
-                filter(
-                    None,
-                    [
-                        a["ContactName"],
-                        a["PartyName"],
-                        a["Department"],
-                        a["StreetName"],
-                        a["AdditionalStreetName"],
-                    ],
-                )
-            )[1:-1]
-        ),
-        "",
-    )
+    return _get_Name(a, 1)
 
 
 def get_Adrs_Name3(a):
-    return next(
-        iter(
-            list(
-                filter(
-                    None,
-                    [
-                        a["ContactName"],
-                        a["PartyName"],
-                        a["Department"],
-                        a["StreetName"],
-                        a["AdditionalStreetName"],
-                    ],
-                )
-            )[2:-1]
-        ),
-        "",
-    )
+    return _get_Name(a, 2)
 
 
 def get_Adrs_Name4(a):
-    return next(
-        iter(
-            list(
-                filter(
-                    None,
-                    [
-                        a["ContactName"],
-                        a["PartyName"],
-                        a["Department"],
-                        a["StreetName"],
-                        a["AdditionalStreetName"],
-                    ],
-                )
-            )[3:-1]
-        ),
-        "",
-    )
+    return _get_Name(a, 3)
 
 
 def get_Adrs_Adr(a):
