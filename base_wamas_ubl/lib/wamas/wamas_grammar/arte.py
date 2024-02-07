@@ -99,7 +99,7 @@ grammar = OrderedDict(
             "type": "int",
             "length": 6,
             "dp": False,
-            "dict_key": False,
+            "dict_key": "quantity",
             "df_val": False,
             "df_func": False,
         },
