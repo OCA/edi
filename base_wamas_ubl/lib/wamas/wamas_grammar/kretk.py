@@ -79,7 +79,7 @@ grammar = OrderedDict(
             "length": 6,
             "dp": False,
             "ubl_path": False,
-            "df_val": "STDMAN",
+            "df_val": "RETCLI",
             "df_func": False,
         },
         "RxKretk_KST_Mand": {
@@ -200,21 +200,21 @@ grammar = OrderedDict(
             "df_val": False,
             "df_func": False,
         },
-        "RxKretk_Adrs_Fax": {
-            "type": "str",
-            "length": 35,
-            "dp": False,
-            "ubl_path": "DespatchAdvice.cac:DespatchSupplierParty."
-            "cac:Party.cac:Contact.cbc:Telefax",
-            "df_val": False,
-            "df_func": False,
-        },
         "RxKretk_Adrs_Email": {
             "type": "str",
             "length": 40,
             "dp": False,
             "ubl_path": "DespatchAdvice.cac:DespatchSupplierParty."
             "cac:Party.cac:Contact.cbc:ElectronicMail",
+            "df_val": False,
+            "df_func": False,
+        },
+        "RxKretk_Adrs_Fax": {
+            "type": "str",
+            "length": 35,
+            "dp": False,
+            "ubl_path": "DespatchAdvice.cac:DespatchSupplierParty."
+            "cac:Party.cac:Contact.cbc:Telefax",
             "df_val": False,
             "df_func": False,
         },
@@ -254,8 +254,12 @@ grammar = OrderedDict(
             "type": "datetime",
             "length": 14,
             "dp": False,
-            "ubl_path": "DespatchAdvice.cac:Shipment.cac:Delivery."
-            "cac:EstimatedDeliveryPeriod.cbc:EndDate",
+            "ubl_path": [
+                "DespatchAdvice.cac:Shipment.cac:Delivery."
+                "cac:EstimatedDeliveryPeriod.cbc:EndDate",
+                "DespatchAdvice.cac:Shipment.cac:Delivery."
+                "cac:EstimatedDeliveryPeriod.cbc:EndTime",
+            ],
             "df_val": False,
             "df_func": False,
         },

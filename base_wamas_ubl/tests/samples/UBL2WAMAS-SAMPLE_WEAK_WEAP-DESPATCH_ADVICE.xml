@@ -66,12 +66,12 @@
 		<cac:Delivery>
 			<cac:EstimatedDeliveryPeriod>
 				<cbc:EndDate>2023-05-01</cbc:EndDate>
-				<cbc:EndTime>00:00:00.0Z</cbc:EndTime>
+				<cbc:EndTime>14:00:00</cbc:EndTime>
 			</cac:EstimatedDeliveryPeriod>
 		</cac:Delivery>
 	</cac:Shipment>
 	<cac:DespatchLine>
-		<cbc:ID>0000200001151</cbc:ID>
+		<cbc:ID>0001</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="C62">1536</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID>0001</cbc:LineID>
@@ -86,7 +86,7 @@
 		</cac:Item>
 	</cac:DespatchLine>
 	<cac:DespatchLine>
-		<cbc:ID>0000300001156</cbc:ID>
+		<cbc:ID>0002</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="XBO">5184</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID>0002</cbc:LineID>
@@ -101,7 +101,7 @@
 		</cac:Item>
 	</cac:DespatchLine>
 	<cac:DespatchLine>
-		<cbc:ID>0000400001160</cbc:ID>
+		<cbc:ID>0003</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="C62">3840</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID>0003</cbc:LineID>
@@ -116,7 +116,7 @@
 		</cac:Item>
 	</cac:DespatchLine>
 	<cac:DespatchLine>
-		<cbc:ID>0000500001162</cbc:ID>
+		<cbc:ID>0004</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="XBO">3072</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID>0004</cbc:LineID>
@@ -131,7 +131,7 @@
 		</cac:Item>
 	</cac:DespatchLine>
 	<cac:DespatchLine>
-		<cbc:ID>0000600001176</cbc:ID>
+		<cbc:ID>0005</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="XBO">3024</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID>0005</cbc:LineID>

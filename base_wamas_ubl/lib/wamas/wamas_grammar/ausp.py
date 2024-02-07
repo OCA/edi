@@ -54,7 +54,7 @@ grammar = OrderedDict(
             "type": "str",
             "length": 20,
             "dp": False,
-            "ubl_path": "DespatchAdvice.cac:Shipment.cbc:HandlingCode",
+            "ubl_path": "DespatchAdvice.cbc:ID",
             "df_val": False,
             "df_func": False,
         },

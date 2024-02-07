@@ -5,7 +5,7 @@
 	<cbc:Note/>
 	<cbc:IssueDate>2023-05-01</cbc:IssueDate>
 	<cac:OrderReference>
-		<cbc:ID>STDMAN0001040</cbc:ID>
+		<cbc:ID>0001040</cbc:ID>
 		<cbc:IssueDate>2023-04-27</cbc:IssueDate>
 	</cac:OrderReference>
 	<cac:DespatchSupplierParty>
@@ -63,11 +63,20 @@
 			</cac:Contact>
 		</cac:Party>
 	</cac:DeliveryCustomerParty>
+	<cac:Shipment>
+		<cbc:ID>130377</cbc:ID>
+		<cac:Delivery>
+			<cac:EstimatedDeliveryPeriod>
+				<cbc:EndDate>2023-05-01</cbc:EndDate>
+				<cbc:EndTime>14:00:00</cbc:EndTime>
+			</cac:EstimatedDeliveryPeriod>
+		</cac:Delivery>
+	</cac:Shipment>
 	<cac:DespatchLine>
-		<cbc:ID>0000200001151</cbc:ID>
+		<cbc:ID>0001</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="C62">1536</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>1</cbc:LineID>
+			<cbc:LineID>0001</cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>
@@ -76,10 +85,10 @@
 		</cac:Item>
 	</cac:DespatchLine>
 	<cac:DespatchLine>
-		<cbc:ID>0000300001156</cbc:ID>
+		<cbc:ID>0002</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="XBO">5184</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>2</cbc:LineID>
+			<cbc:LineID>0002</cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>
@@ -88,10 +97,10 @@
 		</cac:Item>
 	</cac:DespatchLine>
 	<cac:DespatchLine>
-		<cbc:ID>0000400001160</cbc:ID>
+		<cbc:ID>0003</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="C62">3840</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>3</cbc:LineID>
+			<cbc:LineID>0003</cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>
@@ -100,10 +109,10 @@
 		</cac:Item>
 	</cac:DespatchLine>
 	<cac:DespatchLine>
-		<cbc:ID>0000500001162</cbc:ID>
+		<cbc:ID>0004</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="XBO">3072</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>4</cbc:LineID>
+			<cbc:LineID>0004</cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>
@@ -112,10 +121,10 @@
 		</cac:Item>
 	</cac:DespatchLine>
 	<cac:DespatchLine>
-		<cbc:ID>0000600001176</cbc:ID>
+		<cbc:ID>0005</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="XBO">3024</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>5</cbc:LineID>
+			<cbc:LineID>0005</cbc:LineID>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>
