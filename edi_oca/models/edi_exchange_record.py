@@ -108,6 +108,9 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_retryable",
         help="The record state can be rolled back manually in case of failure.",
     )
+    company_id = fields.Many2one(
+        "res.company", string="Company", compute="_compute_company_id", store=True
+    )
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -117,6 +120,14 @@ class EDIExchangeRecord(models.Model):
             "The external_identifier must be unique for a type and a backend.",
         ),
     ]
+
+    @api.depends("res_id", "model")
+    def _compute_company_id(self):
+        for rec in self:
+            if rec.record and rec.record._fields.get("company_id", False):
+                rec.company_id = rec.record.company_id
+            else:
+                rec.company_id = False
 
     @api.depends("model", "res_id")
     def _compute_related_name(self):
