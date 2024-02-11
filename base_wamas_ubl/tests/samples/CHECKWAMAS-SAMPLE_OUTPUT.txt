@@ -1,8 +1,12 @@
 - WAMAS Type: Supplier
-- Telegram Type: LST
 - Data: {
     "LST": [
         {
+            "Telheader_Quelle": "ODOO",
+            "Telheader_Ziel": "WAMAS",
+            "Telheader_TelSeq": 1,
+            "Telheader_AnlZeit": "20231221041251",
+            "Satzart": "LST000051",
             "Lst_Mand": "000",
             "Lst_LiefNr": "0001",
             "Lst_Adrs_Name": "Adam Smith",
@@ -24,7 +28,7 @@
             "Lst_UIDNr": "",
             "Lst_DVRNr": "",
             "Lst_LSTTYP_LstTypId": "Standard",
-            "Lst_LokLstTyp_AnzWeBeleg": "0",
+            "Lst_LokLstTyp_AnzWeBeleg": 0,
             "Lst_LokLstTyp_LiefBewKz": "N",
             "Lst_LokLstTyp_StdLgTor": "",
             "Lst_LokLstTyp_StdRetTor": "",
@@ -36,4 +40,3 @@
         }
     ]
 }
-            

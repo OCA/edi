@@ -10,35 +10,35 @@
         <cbc:CustomerAssignedAccountID>1040</cbc:CustomerAssignedAccountID>
         <cac:Party>
             <cac:PartyName>
-                <cbc:Name>Wood Corner</cbc:Name>
+                <cbc:Name/>
             </cac:PartyName>
             <cac:PostalAddress>
-                <cbc:StreetName>1839 Arbor Way</cbc:StreetName>
-                <cbc:CityName>Turlock</cbc:CityName>
-                <cbc:PostalZone>95380</cbc:PostalZone>
+                <cbc:StreetName/>
+                <cbc:CityName/>
+                <cbc:PostalZone/>
                 <cac:Country>
-                    <cbc:IdentificationCode>US</cbc:IdentificationCode>
+                    <cbc:IdentificationCode/>
                 </cac:Country>
             </cac:PostalAddress>
             <cac:Contact>
-                <cbc:Telephone>Ron Gibson</cbc:Telephone>
+                <cbc:Telephone/>
                 <cbc:Telefax/>
-                <cbc:ElectronicMail>ron.gibson76@example.com</cbc:ElectronicMail>
+                <cbc:ElectronicMail/>
             </cac:Contact>
         </cac:Party>
     </cac:DespatchSupplierParty>
     <cac:DeliveryCustomerParty>
         <cac:Party>
             <cac:PartyName>
-                <cbc:Name>Deco Addict</cbc:Name>
+                <cbc:Name/>
             </cac:PartyName>
             <cac:PostalAddress>
-                <cbc:StreetName>77 Santa Barbara Rd</cbc:StreetName>
-                <cbc:CityName>Pleasant Hill</cbc:CityName>
-                <cbc:PostalZone>94523</cbc:PostalZone>
-                <cbc:CountrySubentity>California</cbc:CountrySubentity>
+                <cbc:StreetName/>
+                <cbc:CityName/>
+                <cbc:PostalZone/>
+                <cbc:CountrySubentity/>
                 <cac:Country>
-                    <cbc:IdentificationCode>US</cbc:IdentificationCode>
+                    <cbc:IdentificationCode/>
                 </cac:Country>
             </cac:PostalAddress>
             <cac:PartyTaxScheme>
@@ -49,10 +49,10 @@
                 </cac:TaxScheme>
             </cac:PartyTaxScheme>
             <cac:Contact>
-                <cbc:Name>Addison Olson</cbc:Name>
-                <cbc:Telephone>(223)-399-7637</cbc:Telephone>
+                <cbc:Name/>
+                <cbc:Telephone/>
                 <cbc:Telefax/>
-                <cbc:ElectronicMail>addison.olson28@example.com</cbc:ElectronicMail>
+                <cbc:ElectronicMail/>
             </cac:Contact>
         </cac:Party>
     </cac:DeliveryCustomerParty>
@@ -66,7 +66,7 @@
         </cac:Delivery>
     </cac:Shipment>
     <cac:DespatchLine>
-        <cbc:ID>1</cbc:ID>
+        <cbc:ID>20</cbc:ID>
         <cbc:DeliveredQuantity unitCode="C62">1536.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
@@ -77,7 +77,7 @@
             </cac:BuyersItemIdentification>
         </cac:Item>
     </cac:DespatchLine><cac:DespatchLine>
-        <cbc:ID>2</cbc:ID>
+        <cbc:ID>30</cbc:ID>
         <cbc:DeliveredQuantity unitCode="XBO">5184.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
@@ -88,7 +88,7 @@
             </cac:BuyersItemIdentification>
         </cac:Item>
     </cac:DespatchLine><cac:DespatchLine>
-        <cbc:ID>3</cbc:ID>
+        <cbc:ID>40</cbc:ID>
         <cbc:DeliveredQuantity unitCode="C62">3840.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
@@ -99,7 +99,7 @@
             </cac:BuyersItemIdentification>
         </cac:Item>
     </cac:DespatchLine><cac:DespatchLine>
-        <cbc:ID>4</cbc:ID>
+        <cbc:ID>50</cbc:ID>
         <cbc:DeliveredQuantity unitCode="XBO">3072.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
@@ -110,7 +110,7 @@
             </cac:BuyersItemIdentification>
         </cac:Item>
     </cac:DespatchLine><cac:DespatchLine>
-        <cbc:ID>5</cbc:ID>
+        <cbc:ID>60</cbc:ID>
         <cbc:DeliveredQuantity unitCode="XBO">3024.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>

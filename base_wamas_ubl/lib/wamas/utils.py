@@ -1,70 +1,40 @@
 # Copyright 2023 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import ast
-import codecs
 import logging
 import os
 import re
-import struct
 from collections import OrderedDict
 from datetime import date, datetime, timedelta
-from pprint import pprint
+from pprint import pformat
 from random import randint, randrange
 
 import pytz
 from dateutil.parser import parse
 
-_logger = logging.getLogger("wamas_utils")
+from .const import (
+    DEFAULT_TIMEZONE,
+    DICT_CHILD_KEY,
+    DICT_CONVERT_WAMAS_TYPE,
+    DICT_DETECT_WAMAS_TYPE,
+    DICT_PARENT_KEY,
+    DICT_WAMAS_GRAMMAR,
+    LST_FIELD_UNIT_CODE,
+    MAPPING_UNITCODE_UNECE_TO_WAMAS,
+    SYSTEM_ERP,
+    SYSTEM_WAMAS,
+)
 
-# TODO: Find "clean" way to manage imports for both module & CLI contexts
-try:
-    from . import miniqweb
-    from .const import (
-        DEFAULT_TIMEZONE,
-        DICT_CHILD_KEY,
-        DICT_CONVERT_WAMAS_TYPE,
-        DICT_DETECT_WAMAS_TYPE,
-        DICT_PARENT_KEY,
-        DICT_WAMAS_GRAMMAR,
-        LST_FIELD_UNIT_CODE,
-        LST_TELEGRAM_TYPE_IGNORE_W2D,
-        LST_TELEGRAM_TYPE_SUPPORT_D2W,
-        LST_TELEGRAM_TYPE_SUPPORT_W2D,
-        MAPPING_UNITCODE_UBL_TO_WAMAS,
-        MAPPING_UNITCODE_WAMAS_TO_UBL,
-        SYSTEM_ERP,
-        SYSTEM_WAMAS,
-        TELEGRAM_HEADER_GRAMMAR,
-    )
-    from .structure import obj
-except ImportError:
-    import miniqweb
-    from const import (
-        DEFAULT_TIMEZONE,
-        DICT_CHILD_KEY,
-        DICT_CONVERT_WAMAS_TYPE,
-        DICT_DETECT_WAMAS_TYPE,
-        DICT_PARENT_KEY,
-        DICT_WAMAS_GRAMMAR,
-        LST_FIELD_UNIT_CODE,
-        LST_TELEGRAM_TYPE_IGNORE_W2D,
-        LST_TELEGRAM_TYPE_SUPPORT_D2W,
-        LST_TELEGRAM_TYPE_SUPPORT_W2D,
-        MAPPING_UNITCODE_UBL_TO_WAMAS,
-        MAPPING_UNITCODE_WAMAS_TO_UBL,
-        SYSTEM_ERP,
-        SYSTEM_WAMAS,
-        TELEGRAM_HEADER_GRAMMAR,
-    )
-    from structure import obj
+_logger = logging.getLogger("wamas_utils")
 
 
 def file_path(path):
     return os.path.join(os.path.abspath(os.path.dirname(__file__)), path)
 
 
-def file_open(path):
-    return codecs.open(path, "r", "iso-8859-1")
+def file_open(path, mode="r"):
+    return open(path, mode, encoding="iso-8859-1")
 
 
 def get_date(val):
@@ -224,7 +194,7 @@ def get_date_from_field(*args):
 
 def convert_unit_code(key, val):
     if key in LST_FIELD_UNIT_CODE:
-        return MAPPING_UNITCODE_UBL_TO_WAMAS["unitCode"].get(val, val)
+        return MAPPING_UNITCODE_UNECE_TO_WAMAS["unitCode"].get(val, val)
     return val
 
 
@@ -257,7 +227,11 @@ def _get_Name(a, index):
         "StreetName",
         "AdditionalStreetName",
     )
-    values = [a[x] for x in candidates if a.get(x)]
+    values = []
+    for c in candidates:
+        e = a.get(c)
+        if e and e not in values:
+            values.append(e)
     # always drop last element, that's the address
     values = values[index:-1]
     return values[0] if values else None
@@ -283,11 +257,26 @@ def get_Adrs_Adr(a):
     return a["AdditionalStreetName"] or a["StreetName"] or a["Department"]
 
 
-def generate_wamas_line(dict_item, grammar, **kwargs):  # noqa: C901
-    res = ""
+def get_index(idx):
+    return idx
+
+
+def wamas_dict2line(wamas_dict):
+    """Converts a wamas OrderedDict to a telegram."""
+    return "".join(wamas_dict.values())
+
+
+def generate_wamas_line(dict_item, grammar, **kwargs):
+    """Generate a wamas telegram."""
+    wamas_dict = generate_wamas_dict(dict_item, grammar, **kwargs)
+    return wamas_dict2line(wamas_dict)
+
+
+def generate_wamas_dict(dict_item, grammar, **kwargs):  # noqa: C901
+    """Generate an OrderedDict with wamas field and value."""
     dict_parent_id = kwargs.get("dict_parent_id", {})
     telegram_type_out = kwargs.get("telegram_type_out", False)
-    dict_wamas_out = {}
+    dict_wamas_out = OrderedDict()
     do_convert_tz = not kwargs.get("do_wamas2wamas", False)
     for _key in grammar:
         val = ""
@@ -335,6 +324,8 @@ def generate_wamas_line(dict_item, grammar, **kwargs):  # noqa: C901
                     _key,
                     telegram_type_out,
                 )
+            elif df_func == "get_index":
+                args = (kwargs.get("idx_loop", 0),)
             elif df_func == "get_random_str_num":
                 args = (length,)
             elif "get_date_from_field" in df_func:
@@ -356,208 +347,92 @@ def generate_wamas_line(dict_item, grammar, **kwargs):  # noqa: C901
             val = globals()[df_func](*args)
 
         val = convert_unit_code(_key, val)
-        if kwargs.get("check_to_set_value_to_string", False):
-            # Ignore convert string of float/int/date/datetime type
-            # to move entire value when convert wamas2wamas
-            if (
-                not val
-                or _key in ["Telheader_TelSeq", "Telheader_AnlZeit"]
-                or df_func
-                or ttype not in ["float", "int", "date", "datetime"]
-            ):
-                val = set_value_to_string(
-                    val, ttype, length, dp, do_convert_tz=do_convert_tz
-                )
-        else:
-            val = set_value_to_string(
-                val, ttype, length, dp, do_convert_tz=do_convert_tz
-            )
+        val = set_value_to_string(val, ttype, length, dp, do_convert_tz=do_convert_tz)
         dict_wamas_out[_key] = val
-        res += val
         lst_parent_key = DICT_PARENT_KEY.get(telegram_type_out, False)
         if lst_parent_key and _key in lst_parent_key:
             dict_parent_id[_key] = val
-    return res
+    return dict_wamas_out
 
 
 def generate_wamas_lines(dict_input, telegram_type, line_idx, wamas_lines):
     line_idx += 1
-    grammar = DICT_WAMAS_GRAMMAR[telegram_type.lower()]
+    grammar = DICT_WAMAS_GRAMMAR[telegram_type]
     line = generate_wamas_line(dict_input, grammar, line_idx=line_idx)
     if line:
         wamas_lines.append(line)
     return line_idx, wamas_lines
 
 
-def dict2wamas(dict_input, telegram_type):
-    wamas_lines = []
-    lst_telegram_type = telegram_type.split(",")
-
-    if not all(x in LST_TELEGRAM_TYPE_SUPPORT_D2W for x in lst_telegram_type):
-        raise Exception("Invalid telegram types: %s" % telegram_type)
-
-    line_idx = 0
-    for telegram_type in lst_telegram_type:
-        # Special case for `KSTAUS`
-        if telegram_type == "KSTAUS":
-            # 1 line for `KstAus_LagIdKom = kMEZ`
-            dict_input["picking_zone"] = "kMEZ"
-            line_idx, wamas_lines = generate_wamas_lines(
-                dict_input, telegram_type, line_idx, wamas_lines
-            )
-            # 1 line for `KstAus_LagIdKom = kPAR`
-            dict_input["picking_zone"] = "kPAR"
-            line_idx, wamas_lines = generate_wamas_lines(
-                dict_input, telegram_type, line_idx, wamas_lines
-            )
-        else:
-            line_idx, wamas_lines = generate_wamas_lines(
-                dict_input, telegram_type, line_idx, wamas_lines
-            )
-    return "\n".join(wamas_lines).encode("iso-8859-1")
+def get_grammar(telegram_type):
+    return DICT_WAMAS_GRAMMAR[telegram_type]
 
 
-def _get_grammar(telegram_type, use_simple_grammar=False):
-    if use_simple_grammar:
-        grammar = DICT_WAMAS_GRAMMAR[telegram_type.lower()]
-        if not isinstance(list(grammar.values())[0], dict):
-            return grammar
-        simple_grammar = OrderedDict()
-        for field in grammar:
-            if field in TELEGRAM_HEADER_GRAMMAR.keys():
-                continue
-            simple_grammar[field] = grammar[field]["length"]
-        return simple_grammar
-    return DICT_WAMAS_GRAMMAR[telegram_type.lower()]
-
-
-def fw2dict(line, grammar, telegram_type, verbose=False):
+def fw2dict(line, grammar, telegram_type):
     """
-    Convert a fixed width to a dict
+    Converts a fixed width string to a dict
 
-    definition: { "k1": 3, "k2": 5 }
-    line: abcdefgh
+    Parameters:
+        line (str): The string to convert
+        grammar (OrderedDict): The field width definition in the format:
+            { "k1": { "length": 3 }, "k2": { "length": 5 } }
+        telegram_type (str): Telegram type
+
+    Returns:
+        OrderedDict: Same keys as the grammar, values from the string
     """
-
-    # prepare format
-    fieldwidths = grammar.values()
-    fmtstring = " ".join("{}{}".format(abs(fw), "s") for fw in fieldwidths)
-    unpack = struct.Struct(fmtstring).unpack_from
-
     # sanity checks
-    expected_size = sum(fieldwidths)
-    line = line.encode("iso-8859-1")
-    if len(line) != expected_size:
-        _logger.debug(
-            "Line of length %d does not match expected length %d: %s",
-            len(line),
-            expected_size,
-            line.decode("iso-8859-1"),
-        )
-        _logger.debug(repr(unpack(line)))
-
-        if abs(len(line) - expected_size) == 1 and telegram_type in (
-            "WATEKQ",
-            "WATEPQ",
-        ):
-            _logger.debug("Length off by one only, fields not impacted, no fix needed.")
-
-        elif telegram_type == "WATEPQ":
-            # line_WATEPQ_-_weirdly_encoded_01.wamas
-            # - this case has a weird WATEPQ:IvTep_MId_Charge
-            #   of incorrect size due to weirdly encoded chars inside:
-            #   b'6423033A\xc3\xa9\xc2\xb0\xc2\xb0\xc3\xaf\xc2\xbf\xc2\xbd
-            #   \xc3\xaf\xc2\xbf\xc2\xbd370063 '
-            #   33 chars instead of expected 20 (when file is decoded as iso-8859-1)
-            # - we clean it from non ascii chars and fill it with space to fix length
-            #   and avoid impact on other fields
-            to_fix = line.split(b" ")[0]
-            to_keep_idx = len(to_fix) + 1
-            line = (
-                to_fix.decode("iso-8859-1").encode("ascii", "ignore").ljust(20, b" ")
-                + line[to_keep_idx:]
+    max_length = min_length = sum(f["length"] for f in grammar.values())
+    last_val = grammar[next(reversed(grammar))]
+    if last_val["type"] == "str":
+        min_length -= last_val["length"] + 1
+    if not min_length <= len(line) <= max_length:
+        raise Exception(
+            "Line of length {actual:d} does not match expected length of "
+            "{expected:d}:\n{line:s}".format(
+                actual=len(line),
+                expected=max_length,
+                line=line,
             )
-
-            if len(line) is expected_size:
-                _logger.debug("Line corrected successfully.")
-            else:
-                _logger.debug(
-                    "Line of length %d still does not match expected length %d: %s",
-                    len(line),
-                    expected_size,
-                    line.decode("iso-8859-1"),
-                )
+        )
+    else:
+        line = line.ljust(max_length)
 
     # actual parsing
-    try:
-        vals = tuple(s.decode("iso-8859-1") for s in unpack(line))
-    except struct.error as e:
-        _logger.debug(line)
-        raise e
-
-    # cleaning
-    vals = [v.strip() for v in vals]
-    vals_with_keys = list(zip(grammar.keys(), vals))
-    vals_with_lengths = list(zip(vals_with_keys, fieldwidths, list(map(len, vals))))
-    if verbose:
-        pprint(vals_with_lengths)
-    res = dict(vals_with_keys)
+    res = OrderedDict()
+    offset = 0
+    for fname, fdef in grammar.items():
+        b = line[offset : offset + fdef["length"]]
+        offset += fdef["length"]
+        if fdef["type"] == "int":
+            val = int(b)
+        elif fdef["type"] == "float":
+            dp = fdef["dp"]
+            val = float(b[:-dp] + "." + b[-dp:])
+        else:
+            val = b.rstrip()
+        res[fname] = val
+    _logger.debug(pformat(res))
     return res
 
 
-def wamas2dict(
-    infile, lst_valid_telgram=False, use_simple_grammar=False, verbose=False
-):
-    header_len = sum(TELEGRAM_HEADER_GRAMMAR.values())
-    result = {}
-    lst_telegram_type_in = []
-
-    if not lst_valid_telgram:
-        lst_valid_telgram = LST_TELEGRAM_TYPE_SUPPORT_W2D
-
-    for line in infile.splitlines():
-        if not line:
-            continue
-        head = fw2dict(line[:header_len], TELEGRAM_HEADER_GRAMMAR, "header")
-        telegram_type, telegram_seq, dummy = re.split(r"(\d+)", head["Satzart"], 1)
-        # ignore useless telegram types
-        if telegram_type in LST_TELEGRAM_TYPE_IGNORE_W2D:
-            continue
-        if telegram_type not in lst_valid_telgram:
-            raise Exception("Invalid telegram type: %s" % telegram_type)
-        lst_telegram_type_in.append(telegram_type)
-        grammar = _get_grammar(telegram_type, use_simple_grammar)
-        body = fw2dict(line[header_len:], grammar, telegram_type)
-        val = result.setdefault(telegram_type, [])
-        val.append(body)
-    lst_telegram_type_in = list(set(lst_telegram_type_in))
-    if verbose:
-        pprint(result)
-    return result, lst_telegram_type_in
-
-
-def dict2ubl(template, data, verbose=False, extra_data=False):
-    t = miniqweb.QWebXml(template)
-    # Convert dict to object to use dotted notation in template
-    globals_dict = {
-        "record": obj(data),
-        "get_date": get_date,
-        "get_time": get_time,
-        "get_current_date": get_current_date,
-        "MAPPING": MAPPING_UNITCODE_WAMAS_TO_UBL,
-        "extra_data": extra_data,
-    }
-    xml = t.render(globals_dict)
-    if verbose:
-        pprint(xml)
-    return xml
+def get_telegram_type(line):
+    # given by Satzart at pos 49, len 9
+    return re.split(r"(\d+)", line[40:49])[0]
 
 
 def detect_wamas_type(infile):
-    data, lst_telegram_type = wamas2dict(infile, use_simple_grammar=True)
-    lst_telegram_type.sort()
-    wamas_type = DICT_DETECT_WAMAS_TYPE.get(tuple(lst_telegram_type), "Undefined")
-    return data, lst_telegram_type, wamas_type
+    """
+    Detect the type of message
+
+    Parameters:
+        line (str): The wamas message
+
+    Returns:
+        str: Type of message
+    """
+    wamas_type = DICT_DETECT_WAMAS_TYPE.get(get_telegram_type(infile), "Undefined")
+    return wamas_type
 
 
 def convert_tz(dt_val, str_from_tz, str_to_tz):
@@ -569,7 +444,7 @@ def convert_tz(dt_val, str_from_tz, str_to_tz):
 
 
 def get_supported_telegram():
-    return LST_TELEGRAM_TYPE_SUPPORT_W2D
+    return DICT_WAMAS_GRAMMAR.keys()
 
 
 def get_supported_telegram_w2w():

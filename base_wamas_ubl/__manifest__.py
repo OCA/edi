@@ -17,8 +17,8 @@
     },
     "data": [
         "security/ir.model.access.csv",
-        "wizard/wamas_ubl_wiz_check.xml",
-        "wizard/wamas_ubl_wiz_simulate.xml",
+        "wizards/wamas_ubl_wiz_check.xml",
+        "wizards/wamas_ubl_wiz_simulate.xml",
         "views/wamas_menu.xml",
     ],
 }

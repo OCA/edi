@@ -1,237 +1,201 @@
-#!/usr/bin/python3
+# Copyright 2023 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import getopt
+import argparse
 import logging
-import sys
-from pprint import pprint
+from pprint import pformat
+
+from freezegun import freeze_time
+
+from . import const, miniqweb, utils
+
+# FIXME: replace by Dotty ?
+from .structure import obj
 
 _logger = logging.getLogger("wamas2ubl")
 
-# TODO: Find "clean" way to manage imports for both module & CLI contexts
-try:
-    from .const import (
-        DICT_FLOAT_FIELD,
-        DICT_TUPLE_KEY_PICKING,
-        DICT_TUPLE_KEY_RECEPTION,
-    )
-    from .utils import dict2ubl, file_open, file_path, wamas2dict
-except ImportError:
-    from const import DICT_FLOAT_FIELD, DICT_TUPLE_KEY_PICKING, DICT_TUPLE_KEY_RECEPTION
-    from utils import dict2ubl, file_open, file_path, wamas2dict
 
-##
-# Data transformations
-##
+class Extractor:
+    def __init__(self, data):
+        self.data = data
+        self.transfers = {}
+        self.packages = {}
 
+    def get_head(self, telegram_type, key_name, head=None):
+        """Converts a list of dict into a dict of dict
 
-def _get_float(val, length=12, decimal_place=3):
-    res = val.strip()
+        Parameters:
+            telegram_type: the key to get the list out of data
+            key_name: the key in the dict that serves as key in the new dict
+            head: the result dict that is build
+        """
+        if head is None:
+            head = self.transfers
+        for item in self.data[telegram_type]:
+            key = item[key_name]
+            if key not in head:
+                head[key] = item
+            else:
+                _logger.debug(
+                    "Redundant %s (transfer) record found, ignoring: %s",
+                    telegram_type,
+                    key,
+                )
 
-    try:
-        if len(res) >= length:
-            str_whole_number = res[: length - decimal_place]
-            str_decimal_portion = res[decimal_place * -1 :]
+    def get_line(self, telegram_type, transfer_key_name, package_key_name=False):
+        """Process a list of dict as lines of the transfers
 
-            res = str_whole_number + "." + str_decimal_portion
-
-            res = float(res.strip())
-    except TypeError:
-        _logger.debug("Cannot convert value '%s' to float type", val)
-
-    return res
-
-
-def _convert_float_field(data):
-    for _field in DICT_FLOAT_FIELD:  # noqa: F405
-        val_field = data.get(_field, False)
-        if val_field:
-            data[_field] = _get_float(
-                val_field,
-                DICT_FLOAT_FIELD[_field][0],
-                DICT_FLOAT_FIELD[_field][1],
-            )
-
-
-def _prepare_receptions(data, order_name, order_key, line_name, line_key):
-    orders = {}
-
-    for order in data[order_name]:
-        order_id = order[order_key]
-        _convert_float_field(order)
-        if order_id not in orders:
-            order["lines"] = []
-            orders[order_id] = order
-        else:
-            _logger.debug(
-                "Redundant %s (order) record found, ignoring: %s", order_name, order_id
-            )
-
-    for line in data[line_name]:
-        order_id = line[line_key]
-        _convert_float_field(line)
-        if order_id not in orders:
-            _logger.debug(
-                "Found %s (line) record for unknown %s (order), ignoring: %s",
-                line_name,
-                order_name,
-                order_id,
-            )
-            continue
-        orders[order_id]["lines"].append(line)
-
-    return orders
-
-
-def _prepare_pickings(data):
-    pickings = {}
-    packages = {}
-
-    for order in data["AUSKQ"]:
-        order_id = order["IvAusk_ExtRef"]
-        _convert_float_field(order)
-        if order_id not in pickings:
-            order["lines"] = []
-            order["packages"] = set()
-            pickings[order_id] = order
-        else:
-            _logger.debug(
-                "Redundant AUSKQ (order) record found, ignoring: %s", order_id
-            )
-
-    for package in data["WATEKQ"]:
-        package_id = package["IvTek_TeId"]
-        _convert_float_field(package)
-        if package_id not in packages:
-            packages[package_id] = package
-        else:
-            _logger.debug(
-                "Redundant WATEKQ (package) record found, ignoring: %s", package_id
-            )
-
-    for line in data["WATEPQ"]:
-        order_id = line["IvAusp_UrAusId_AusNr"]
-        _convert_float_field(line)
-        if order_id not in pickings:
-            _logger.debug(
-                "Found WATEPQ (line) record for unknown AUSKQ (order), ignoring: %s",
-                order_id,
-            )
-            continue
-        pickings[order_id]["lines"].append(line)
-        package_id = line["IvTep_TeId"]
-        if package_id in packages:
+        Parameters:
+            telegram_type: the key to get the list out of data
+            transfer_key_name: the key in the dict that serves to identify the
+                               parent in transfers
+            package_key_name: the key in the dict that serves to identify the
+                              related package
+        """
+        for line in self.data[telegram_type]:
+            key = line[transfer_key_name]
+            if key not in self.transfers:
+                _logger.debug(
+                    "Found %s (line) record for unknown transfer, ignoring: %s",
+                    telegram_type,
+                    key,
+                )
+                continue
+            self.transfers[key].setdefault("lines", []).append(line)
+            if not package_key_name:
+                continue
+            package = line[package_key_name]
+            if package not in self.packages:
+                _logger.debug(
+                    "Found %s (line) record with unknown package, ignoring: %s",
+                    telegram_type,
+                    package,
+                )
+                continue
             line["package"] = package
-            pickings[order_id]["packages"].add(package_id)
-        else:
-            _logger.debug(
-                "Found WATEPQ (line) record with unknown WATEKQ (package), ignoring: %s",
-                package_id,
-            )
-
-    return pickings
+            self.transfers[key].setdefault("packages", []).append(package)
 
 
-def wamas2ubl(
-    infile,
-    verbose=False,
-    dict_mapping_reception=False,
-    dict_mapping_picking=False,
-    extra_data=False,
-):
+def wamas2dict(msg):
+    """
+    Converts a wamas message to a dict
+
+    Parameters:
+        msg (str): The msg to convert
+
+    Returns:
+        dict: key=telegram type, value=list of OrderedDict
+    """
+    result = {}
+    supported_telegrams = utils.get_supported_telegram()
+    for line in msg.splitlines():
+        if not line:
+            continue
+        telegram_type = utils.get_telegram_type(line)
+        # ignore useless telegram types
+        if telegram_type in const.LST_TELEGRAM_TYPE_IGNORE_W2D:
+            continue
+        if telegram_type not in supported_telegrams:
+            raise Exception("Invalid telegram type: %s" % telegram_type)
+        grammar = utils.get_grammar(telegram_type)
+        d = utils.fw2dict(line, grammar, telegram_type)
+        val = result.setdefault(telegram_type, [])
+        val.append(d)
+    _logger.debug(pformat(result))
+    return result
+
+
+def dict2ubl(msg_type, data, extra_data=False):
     if extra_data is False:
         extra_data = {"DeliveryCustomerParty": {}, "DespatchSupplierParty": {}}
 
-    if not dict_mapping_reception:
-        dict_mapping_reception = DICT_TUPLE_KEY_RECEPTION  # noqa: F405
+    # Analyze/transform wamas file content
+    extractor = Extractor(data)
 
-    if not dict_mapping_picking:
-        dict_mapping_picking = DICT_TUPLE_KEY_PICKING  # noqa: F405
-
-    # 1) parse wamas file
-    data, dummy = wamas2dict(infile, verbose=verbose)
-    if verbose:
-        pprint(data)
-
-    # 2) analyze/transform wamas file content
-    top_keys = list(data.keys())
-    top_keys.sort()
-    top_keys = tuple(top_keys)
-    tmpl_path = False
-    if top_keys in dict_mapping_reception.keys():
-        template_type = "reception"
-        tmpl_path = dict_mapping_reception[top_keys][0]
-        order_name = dict_mapping_reception[top_keys][1][0]
-        order_key = dict_mapping_reception[top_keys][1][1]
-        line_name = dict_mapping_reception[top_keys][2][0]
-        line_key = dict_mapping_reception[top_keys][2][1]
-        receptions = _prepare_receptions(
-            data, order_name, order_key, line_name, line_key
-        )
-    elif top_keys in dict_mapping_picking.keys():
-        template_type = "picking"
-        tmpl_path = dict_mapping_picking[top_keys]
-        pickings = _prepare_pickings(data)
-        if verbose:
-            _logger.debug("Number of pickings: %d", len(pickings))
-            for order_id, picking in pickings.items():
-                _logger.debug("Order ID: %s", order_id)
-                _logger.debug(
-                    "Number of packages: %s", len(pickings[order_id]["packages"])
-                )
-                pprint(picking)
+    if msg_type == "ReceptionResponse":
+        extractor.get_head("WEAKQ", "IvWevk_WevId_WevNr")
+        extractor.get_line("WEAPQ", "IvWevp_WevId_WevNr")
+    elif msg_type == "ReturnResponse":
+        extractor.get_head("KRETKQ", "IvKretk_KretId_KretNr")
+        extractor.get_line("KRETPQ", "IvKretp_KretId_KretNr")
+    elif msg_type == "PickingResponse":
+        extractor.get_head("AUSKQ", "IvAusk_AusId_AusNr")
+        extractor.get_head("WATEKQ", "IvTek_TeId", extractor.packages)
+        extractor.get_line("WATEPQ", "IvAusp_UrAusId_AusNr", "IvTep_TeId")
     else:
-        raise Exception(
-            "Could not match input wamas file with a corresponding template type: %s"
-            % str(top_keys)
-        )
+        raise Exception("Invalid message type: %s" % msg_type)
 
-    # 3) get template
-    tmpl_file = file_open(file_path(tmpl_path))
-    ubl_template = tmpl_file.read()
-    tmpl_file.close()
+    pickings = extractor.transfers
+    _logger.debug("Number of pickings: %d", len(pickings))
+    for order_id, picking in pickings.items():
+        _logger.debug("ID: %s", order_id)
+        packages = pickings[order_id].get("packages")
+        if packages:
+            _logger.debug("Number of packages: %s", len(packages))
+        _logger.debug(pformat(picking))
 
-    # 4) output
-    if template_type == "reception":
-        ubl = []
-        for reception in receptions.values():
-            ubl.append(
-                dict2ubl(ubl_template, reception, verbose, extra_data)  # noqa: F405
-            )
-    elif template_type == "picking":
-        ubl = []
-        for picking in pickings.values():
-            ubl.append(
-                dict2ubl(ubl_template, picking, verbose, extra_data)  # noqa: F405
-            )
-    if verbose:
-        _logger.debug("Number of UBL files generated: %d", len(ubl))
-        for f in ubl:
-            _logger.debug(f)
-    return ubl
+    # Get template
+    ubl_template_path = const.DICT_UBL_TEMPLATE[msg_type]
+    with utils.file_open(utils.file_path(ubl_template_path)) as tmpl_file:
+        ubl_template = tmpl_file.read()
+
+    # Convert
+    ubls = []
+    for picking in pickings.values():
+        ubl = render_ubl(ubl_template, picking, extra_data=extra_data)
+        ubls.append(ubl)
+    _logger.debug("Number of UBL files generated: %d", len(ubls))
+    return ubls
 
 
-def usage(argv):
-    _logger.debug("%s -i <inputfile>" % argv[0])
+def render_ubl(ubl_template, data, extra_data=False):
+    t = miniqweb.QWebXml(ubl_template)
+    # Convert dict to object to use dotted notation in template
+    globals_dict = {
+        "record": obj(data),
+        "get_date": utils.get_date,
+        "get_time": utils.get_time,
+        "get_current_date": utils.get_current_date,
+        "MAPPING": const.MAPPING_UNITCODE_WAMAS_TO_UNECE,
+        "extra_data": extra_data,
+    }
+    xml = t.render(globals_dict)
+    return xml
 
 
-def main(argv):
-    infile = ""
-    verbose = False
-    opts, args = getopt.getopt(argv[1:], "hi:v", ["ifile=", "verbose"])
-    for opt, arg in opts:
-        if opt == "-h":
-            usage(argv)
-            sys.exit()
-        elif opt in ("-i", "--ifile"):
-            infile = file_open(arg).read()
-        elif opt in ("-v", "--verbose"):
-            verbose = True
-            logging.basicConfig(level=logging.DEBUG)
-    if not infile:
-        usage(argv)
-        sys.exit()
-    wamas2ubl(infile, verbose)
+def wamas2ubl(wamas_msg, extra_data=False):
+    data = wamas2dict(wamas_msg)
+    msg_type = utils.detect_wamas_type(wamas_msg)
+    return dict2ubl(msg_type, data, extra_data=extra_data)
+
+
+@freeze_time("2023-05-01")
+def main():
+    parser = argparse.ArgumentParser(
+        description="Converts wamas message into UBLs documents.",
+    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="enable debug log")
+    parser.add_argument(
+        "-f", "--format", default="ubl", choices=["dict", "ubl"], help="result format"
+    )
+    parser.add_argument(
+        "-o", "--output", dest="outputfile", help="write result in this file"
+    )
+    parser.add_argument("inputfile", help="read message from this file")
+    args = parser.parse_args()
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+    infile = utils.file_open(args.inputfile).read()
+    if args.format == "dict":
+        res = pformat(wamas2dict(infile))
+    else:
+        res = "\n".join(wamas2ubl(infile))
+    if args.outputfile:
+        fd = utils.file_open(args.outputfile, "w")
+        fd.write(res)
+    else:
+        print(res)  # pylint: disable=print-used
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()

@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import json
-import struct
 from base64 import b64decode
 
 from odoo import _, api, fields, models
@@ -35,26 +34,18 @@ class WamasUblWizCheck(models.TransientModel):
 
         bwu_obj = self.env["base.wamas.ubl"]
         try:
-            data, lst_telegram_type, wamas_type = bwu_obj.get_wamas_type(
-                wamas_file_decoded
-            )
+            wamas_type = bwu_obj.get_wamas_type(wamas_file_decoded)
+            data = bwu_obj.wamas2dict(wamas_file_decoded)
 
             self.output = (
                 _(
                     """- WAMAS Type: %(wamas_type)s
-- Telegram Type: %(telegram_type)s
-- Data: %(data)s
-            """
+- Data: %(data)s"""
                 )
                 % dict(
                     wamas_type=wamas_type,
-                    telegram_type=",".join(lst_telegram_type),
                     data=json.dumps(data, indent=4, sort_keys=False),
                 )
-            )
-        except struct.error:
-            self.output = _(
-                """- Error: Length of line does not match expected length"""
             )
         except Exception as e:
             self.output = _("""- Error: %s""") % (e)

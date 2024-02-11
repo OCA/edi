@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DespatchAdvice xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
 	<cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-	<cbc:ID>1673980/1700802</cbc:ID>
+	<cbc:ID>WH/PICK/1700802</cbc:ID>
 	<cbc:Note/>
 	<cbc:IssueDate>2023-04-30</cbc:IssueDate>
 	<cac:OrderReference>
-		<cbc:ID>1700802</cbc:ID>
+		<cbc:ID>SO1700802</cbc:ID>
 	</cac:OrderReference>
 	<cac:DespatchSupplierParty>
 		<cac:Party>
 			<cac:PartyName>
-				<cbc:Name></cbc:Name>
+				<cbc:Name>YourCompany</cbc:Name>
 			</cac:PartyName>
 			<cac:PostalAddress>
-				<cbc:StreetName></cbc:StreetName>
-				<cbc:CityName></cbc:CityName>
-				<cbc:PostalZone></cbc:PostalZone>
+				<cbc:StreetName>250 Executive Park Blvd, Suite 3400</cbc:StreetName>
+				<cbc:CityName>San Francisco</cbc:CityName>
+				<cbc:PostalZone>94134</cbc:PostalZone>
+				<cbc:CountrySubentity>California</cbc:CountrySubentity>
 				<cac:Country>
-					<cbc:IdentificationCode></cbc:IdentificationCode>
+					<cbc:IdentificationCode>US</cbc:IdentificationCode>
 				</cac:Country>
 			</cac:PostalAddress>
 			<cac:PartyTaxScheme>
@@ -28,9 +29,10 @@
 				</cac:TaxScheme>
 			</cac:PartyTaxScheme>
 			<cac:Contact>
-				<cbc:Name></cbc:Name>
-				<cbc:Telephone></cbc:Telephone>
-				<cbc:ElectronicMail></cbc:ElectronicMail>
+				<cbc:Name>Chester Reed</cbc:Name>
+				<cbc:Telephone>(979)-904-8902</cbc:Telephone>
+				<cbc:Telefax></cbc:Telefax>
+				<cbc:ElectronicMail>chester.reed79@example.com</cbc:ElectronicMail>
 			</cac:Contact>
 		</cac:Party>
 	</cac:DespatchSupplierParty>
@@ -83,11 +85,23 @@
 		<cbc:ID>10001</cbc:ID>
 		<cbc:DeliveredQuantity unitCode="XBO">1500</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>11</cbc:LineID>
+			<cbc:LineID/>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:SellersItemIdentification>
 				<cbc:ID>7076</cbc:ID>
+			</cac:SellersItemIdentification>
+		</cac:Item>
+	</cac:DespatchLine>
+	<cac:DespatchLine>
+		<cbc:ID>10002</cbc:ID>
+		<cbc:DeliveredQuantity unitCode="XBO">50</cbc:DeliveredQuantity>
+		<cac:OrderLineReference>
+			<cbc:LineID/>
+		</cac:OrderLineReference>
+		<cac:Item>
+			<cac:SellersItemIdentification>
+				<cbc:ID>5225</cbc:ID>
 			</cac:SellersItemIdentification>
 		</cac:Item>
 	</cac:DespatchLine>

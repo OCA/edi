@@ -3,70 +3,66 @@
 
 import argparse
 import logging
+from ast import literal_eval
 from pprint import pformat
-
-import xmltodict
-from dotty_dict import Dotty
-from freezegun import freeze_time
 
 from . import const, utils
 
-_logger = logging.getLogger("ubl2wamas")
+_logger = logging.getLogger("json2wamas")
 
-SUPPORTED_TYPES = list(const.SUPPORTED_UBL_TO_WAMAS.keys())
+SUPPORTED_TYPES = list(const.SUPPORTED_DICT_TO_WAMAS.keys())
 
 
-def ubl2list(infile, msg_type):  # noqa: C901
+def dict2list(dict_input, msg_type):
     res = []
 
-    my_dict = Dotty(xmltodict.parse(infile))
     if msg_type not in SUPPORTED_TYPES:
         raise Exception("Invalid document type: %s" % msg_type)
 
-    dict_telegram_type_loop = {
-        "WEAP": "DespatchAdvice.cac:DespatchLine",
-        "AUSP": "DespatchAdvice.cac:DespatchLine",
-        "KRETP": "DespatchAdvice.cac:DespatchLine",
-    }
-
     line_idx = 0
-    for telegram_type in const.SUPPORTED_UBL_TO_WAMAS[msg_type]:
+    for telegram_type in const.SUPPORTED_DICT_TO_WAMAS[msg_type]:
         grammar = const.DICT_WAMAS_GRAMMAR[telegram_type]
-
-        loop_element = dict_telegram_type_loop.get(telegram_type, False)
-        len_loop = (
-            loop_element
-            and isinstance(my_dict[loop_element], list)
-            and len(my_dict[loop_element])
-            or 1
-        )
-
-        for idx_loop in range(len_loop):
+        # Special case for `KSTAUS`
+        if telegram_type == "KSTAUS":
+            # 1 line for `KstAus_LagIdKom = kMEZ`
             line_idx += 1
+            dict_input["picking_zone"] = "kMEZ"
             line = utils.generate_wamas_dict(
-                my_dict,
+                dict_input,
                 grammar,
                 line_idx=line_idx,
-                len_loop=len_loop,
-                idx_loop=idx_loop,
             )
-            if line:
-                res.append(line)
-
+            res.append(line)
+            # 1 line for `KstAus_LagIdKom = kPAR`
+            line_idx += 1
+            dict_input["picking_zone"] = "kPAR"
+            line = utils.generate_wamas_dict(
+                dict_input,
+                grammar,
+                line_idx=line_idx,
+            )
+            res.append(line)
+        else:
+            line_idx += 1
+            line = utils.generate_wamas_dict(
+                dict_input,
+                grammar,
+                line_idx=line_idx,
+            )
+            res.append(line)
     return res
 
 
-def ubl2wamas(infile, msg_type):
-    lst_of_wamas_dicts = ubl2list(infile, msg_type)
+def dict2wamas(dict_input, msg_type):
+    lst_of_wamas_dicts = dict2list(dict_input, msg_type)
     wamas = "\n".join(utils.wamas_dict2line(d) for d in lst_of_wamas_dicts)
     _logger.debug(lst_of_wamas_dicts)
     return wamas
 
 
-@freeze_time("2023-05-01")
 def main():
     parser = argparse.ArgumentParser(
-        description="Converts UBL document into message.",
+        description="Converts JSON document into message.",
     )
     parser.add_argument("-v", "--verbose", action="store_true", help="enable debug log")
     parser.add_argument(
@@ -87,10 +83,11 @@ def main():
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
     infile = utils.file_open(args.inputfile).read()
+    infile = literal_eval(infile)
     if args.format == "dict":
-        res = pformat(ubl2list(infile, args.type))
+        res = pformat(dict2list(infile, args.type))
     else:
-        res = ubl2wamas(infile, args.type)
+        res = dict2wamas(infile, args.type)
     if args.outputfile:
         fd = utils.file_open(args.outputfile, "w")
         fd.write(res)

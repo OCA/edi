@@ -119,12 +119,12 @@
         </cac:Delivery>
     </cac:Shipment>
     <cac:DespatchLine t-foreach="record.lines" t-as="line">
-        <cbc:ID><t t-raw="line_index + 1" /></cbc:ID>
+        <cbc:ID><t t-raw="line.IvKretp_HostPosNr" /></cbc:ID>
         <cbc:DeliveredQuantity
             t-att-unitCode="MAPPING['unitCode'][line.IvArt_HOSTUNITS_HostEinh] or MAPPING['unitCode'][line.IvArt_Bestand_Einheit]"
         ><t t-raw="line.IvKretp_AnmMngs_Mng" /></cbc:DeliveredQuantity>
         <cac:OrderLineReference>
-            <cbc:LineID><t t-raw="int(line.IvKretp_HostPosNr)" /></cbc:LineID>
+            <cbc:LineID />
         </cac:OrderLineReference>
         <cac:Item>
             <cac:BuyersItemIdentification>
