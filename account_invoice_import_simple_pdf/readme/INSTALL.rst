@@ -5,10 +5,9 @@ The module supports 5 different extraction methods:
 1. `PyMuPDF <https://github.com/pymupdf/PyMuPDF>`_ which is a Python binding for `MuPDF <https://mupdf.com/>`_, a lightweight PDF toolkit/viewer/renderer published under the AGPL licence by the company `Artifex Software <https://artifex.com/>`_.
 #. `pdftotext python library <https://pypi.org/project/pdftotext/>`_, which is a python binding for the pdftotext tool.
 #. `pdftotext command line tool <https://en.wikipedia.org/wiki/Pdftotext>`_, which is based on `poppler <https://poppler.freedesktop.org/>`_, a PDF rendering library used by `xpdf <https://www.xpdfreader.com/>`_ and `Evince <https://wiki.gnome.org/Apps/Evince/FrequentlyAskedQuestions>`_ (the PDF reader of `Gnome <https://www.gnome.org/>`_).
-#. `pdfplumber <https://pypi.org/project/pdfplumber/>`_, which is a python library built on top the of the python library `pdfminer.six <https://pypi.org/project/pdfminer.six/>`_. pdfplumber is a pure-python solution, so it's very easy to install on all OSes.
 #. `pypdf <https://github.com/py-pdf/pypdf/>`_, which is one of the most common PDF lib for Python. pypdf is a pure-python solution, so it's very easy to install on all OSes.
 
-PyMuPDF and pdftotext both give a very good text output. So far, I can't say which one is best. pdfplumber and pypdf often give lower-quality text output, but their advantage is that they are pure-Python librairies, so you will always be able to install it whatever your technical environnement is.
+PyMuPDF and pdftotext both give a very good text output. So far, I can't say which one is best. pypdf often gives lower-quality text output, but its advantage is that it is a pure-Python librairy, so you will always be able to install it whatever your technical environnement is.
 
 You can choose one extraction method and only install the tools/libs for that method.
 
@@ -48,15 +47,6 @@ To install **pdftotext command line**, run:
 .. code::
 
   sudo apt install poppler-utils
-
-Install pdfplumber
-~~~~~~~~~~~~~~~~~~
-
-To install the **pdfplumber** python lib, run:
-
-.. code::
-
-  sudo pip3 install --upgrade pdfplumber
 
 Install pypdf
 ~~~~~~~~~~~~~

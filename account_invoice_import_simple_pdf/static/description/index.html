@@ -410,17 +410,16 @@ ul.auto-toc {
 <li><a class="reference internal" href="#install-pymupdf" id="toc-entry-2">Install PyMuPDF</a></li>
 <li><a class="reference internal" href="#install-pdftotext-python-lib" id="toc-entry-3">Install pdftotext python lib</a></li>
 <li><a class="reference internal" href="#install-pdftotext-command-line" id="toc-entry-4">Install pdftotext command line</a></li>
-<li><a class="reference internal" href="#install-pdfplumber" id="toc-entry-5">Install pdfplumber</a></li>
-<li><a class="reference internal" href="#install-pypdf" id="toc-entry-6">Install pypdf</a></li>
-<li><a class="reference internal" href="#other-requirements" id="toc-entry-7">Other requirements</a></li>
+<li><a class="reference internal" href="#install-pypdf" id="toc-entry-5">Install pypdf</a></li>
+<li><a class="reference internal" href="#other-requirements" id="toc-entry-6">Other requirements</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#configuration" id="toc-entry-8">Configuration</a></li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-9">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-10">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-11">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-12">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-13">Maintainers</a></li>
+<li><a class="reference internal" href="#configuration" id="toc-entry-7">Configuration</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-8">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-9">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-10">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-11">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-12">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -433,10 +432,9 @@ ul.auto-toc {
 <li><a class="reference external" href="https://github.com/pymupdf/PyMuPDF">PyMuPDF</a> which is a Python binding for <a class="reference external" href="https://mupdf.com/">MuPDF</a>, a lightweight PDF toolkit/viewer/renderer published under the AGPL licence by the company <a class="reference external" href="https://artifex.com/">Artifex Software</a>.</li>
 <li><a class="reference external" href="https://pypi.org/project/pdftotext/">pdftotext python library</a>, which is a python binding for the pdftotext tool.</li>
 <li><a class="reference external" href="https://en.wikipedia.org/wiki/Pdftotext">pdftotext command line tool</a>, which is based on <a class="reference external" href="https://poppler.freedesktop.org/">poppler</a>, a PDF rendering library used by <a class="reference external" href="https://www.xpdfreader.com/">xpdf</a> and <a class="reference external" href="https://wiki.gnome.org/Apps/Evince/FrequentlyAskedQuestions">Evince</a> (the PDF reader of <a class="reference external" href="https://www.gnome.org/">Gnome</a>).</li>
-<li><a class="reference external" href="https://pypi.org/project/pdfplumber/">pdfplumber</a>, which is a python library built on top the of the python library <a class="reference external" href="https://pypi.org/project/pdfminer.six/">pdfminer.six</a>. pdfplumber is a pure-python solution, so it’s very easy to install on all OSes.</li>
 <li><a class="reference external" href="https://github.com/py-pdf/pypdf/">pypdf</a>, which is one of the most common PDF lib for Python. pypdf is a pure-python solution, so it’s very easy to install on all OSes.</li>
 </ol>
-<p>PyMuPDF and pdftotext both give a very good text output. So far, I can’t say which one is best. pdfplumber and pypdf often give lower-quality text output, but their advantage is that they are pure-Python librairies, so you will always be able to install it whatever your technical environnement is.</p>
+<p>PyMuPDF and pdftotext both give a very good text output. So far, I can’t say which one is best. pypdf often gives lower-quality text output, but its advantage is that it is a pure-Python librairy, so you will always be able to install it whatever your technical environnement is.</p>
 <p>You can choose one extraction method and only install the tools/libs for that method.</p>
 <div class="section" id="install-pymupdf">
 <h2><a class="toc-backref" href="#toc-entry-2">Install PyMuPDF</a></h2>
@@ -465,22 +463,15 @@ sudo pip3 install --upgrade pdftotext
 sudo apt install poppler-utils
 </pre>
 </div>
-<div class="section" id="install-pdfplumber">
-<h2><a class="toc-backref" href="#toc-entry-5">Install pdfplumber</a></h2>
-<p>To install the <strong>pdfplumber</strong> python lib, run:</p>
-<pre class="code literal-block">
-sudo pip3 install --upgrade pdfplumber
-</pre>
-</div>
 <div class="section" id="install-pypdf">
-<h2><a class="toc-backref" href="#toc-entry-6">Install pypdf</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-5">Install pypdf</a></h2>
 <p>To install the <strong>pypdf</strong> python lib, run:</p>
 <pre class="code literal-block">
 sudo pip3 install --upgrade pypdf
 </pre>
 </div>
 <div class="section" id="other-requirements">
-<h2><a class="toc-backref" href="#toc-entry-7">Other requirements</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">Other requirements</a></h2>
 <p>This module also requires the following Python libraries:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://pypi.org/project/regex/">regex</a> which is backward-compatible with the <em>re</em> module of the Python standard library, but has additional functionalities.</li>
@@ -501,8 +492,8 @@ sudo pip3 install regex==2022.3.2
 </div>
 </div>
 <div class="section" id="configuration">
-<h1><a class="toc-backref" href="#toc-entry-8">Configuration</a></h1>
-<p>By default, for the PDF to text conversion, the module tries the different methods in the order mentionned in the INSTALL section: it will first try to use <strong>PyMuPDF</strong>; if it fails (for example because the lib is not properly installed), then it will try to use the <strong>pdftotext python lib</strong>, if that one also fails, it will try to use <strong>pdftotext command line</strong> and, if it also fails, it will eventually try <strong>pdfplumber</strong>. If none of the 4 methods work, Odoo will display an error message.</p>
+<h1><a class="toc-backref" href="#toc-entry-7">Configuration</a></h1>
+<p>By default, for the PDF to text conversion, the module tries the different methods in the order mentionned in the INSTALL section: it will first try to use <strong>PyMuPDF</strong>; if it fails (for example because the lib is not properly installed), then it will try to use the <strong>pdftotext python lib</strong>, if that one also fails, it will try to use <strong>pdftotext command line</strong> and, if it also fails, it will eventually try <strong>pypdf</strong>. If none of the 4 methods work, Odoo will display an error message.</p>
 <p>If you want to force Odoo to use a specific text extraction method, go to the menu <em>Configuration &gt; Technical &gt; Parameters &gt; System Parameters</em> and create a new System Parameter:</p>
 <ul class="simple">
 <li><em>Key</em>: <strong>invoice_import_simple_pdf.pdf2txt</strong></li>
@@ -510,7 +501,6 @@ sudo pip3 install regex==2022.3.2
 <li>pymupdf</li>
 <li>pdftotext.lib</li>
 <li>pdftotext.cmd</li>
-<li>pdfplumber</li>
 <li>pypdf</li>
 </ol>
 </li>
@@ -519,7 +509,7 @@ sudo pip3 install regex==2022.3.2
 <p>You will find a full demonstration about how to configure each Vendor and import the PDF invoices in this <a class="reference external" href="https://www.youtube.com/watch?v=edsEuXVyEYE">screencast</a>.</p>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-9">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-8">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -527,21 +517,21 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-10">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-9">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-11">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-10">Authors</a></h2>
 <ul class="simple">
 <li>Akretion</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-12">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-11">Contributors</a></h2>
 <ul class="simple">
 <li>Alexis de Lattre &lt;<a class="reference external" href="mailto:alexis.delattre&#64;akretion.com">alexis.delattre&#64;akretion.com</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-13">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-12">Maintainers</a></h2>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org"><img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" /></a>
 <p>OCA, or the Odoo Community Association, is a nonprofit organization whose

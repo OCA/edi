@@ -14,7 +14,6 @@
     "depends": ["account_invoice_import"],
     "external_dependencies": {
         "python": [
-            "pdfplumber",
             "regex",
             "dateparser",
             "pypdf>=3.1.0",
