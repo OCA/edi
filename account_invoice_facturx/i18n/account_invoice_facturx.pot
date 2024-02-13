@@ -144,6 +144,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
+msgid "No invoice line label"
+msgstr ""
+
+#. module: account_invoice_facturx
+#. odoo-python
+#: code:addons/account_invoice_facturx/models/account_move.py:0
+#, python-format
 msgid "No specific payment term selected"
 msgstr ""
 
