@@ -21,10 +21,6 @@ try:
 except ImportError:
     logger.debug("Cannot import regex")
 try:
-    import pdfplumber
-except ImportError:
-    logger.debug("Cannot import pdfplumber")
-try:
     import pdftotext
 except ImportError:
     logger.debug("Cannot import pdftotext")
@@ -63,25 +59,6 @@ class AccountInvoiceImport(models.TransientModel):
             test_info["text_extraction"] = "pymupdf %s" % fitz.__version__
         except Exception as e:
             logger.warning("Text extraction with PyMuPDF failed. Error: %s", e)
-        return res
-
-    @api.model
-    def _simple_pdf_text_extraction_pdfplumber(self, fileobj, test_info):
-        res = False
-        with pdfplumber.open(fileobj.name, laparams={"detect_vertical": True}) as pdf:
-            pages = []
-            for pdf_page in pdf.pages:
-                pages.append(
-                    pdf_page.extract_text(
-                        layout=True, use_text_flow=True, keep_blank_chars=True
-                    )
-                )
-            res = {
-                "all": "\n\n".join(pages),
-                "first": pages and pages[0] or "",
-            }
-        test_info["text_extraction"] = "pdfplumber %s" % pdfplumber.__version__
-        logger.info("Text extraction made with pdfplumber %s", pdfplumber.__version__)
         return res
 
     @api.model
@@ -164,8 +141,6 @@ class AccountInvoiceImport(models.TransientModel):
             res = self._simple_pdf_text_extraction_pdftotext_lib(fileobj, test_info)
         elif specific_tool == "pdftotext.cmd":
             res = self._simple_pdf_text_extraction_pdftotext_cmd(fileobj, test_info)
-        elif specific_tool == "pdfplumber":
-            res = self._simple_pdf_text_extraction_pdfplumber(fileobj, test_info)
         elif specific_tool == "pypdf":
             res = self._simple_pdf_text_extraction_pypdf(fileobj, test_info)
         else:
@@ -214,8 +189,6 @@ class AccountInvoiceImport(models.TransientModel):
                 res = self._simple_pdf_text_extraction_pdftotext_lib(fileobj, test_info)
             if not res:
                 res = self._simple_pdf_text_extraction_pdftotext_cmd(fileobj, test_info)
-            if not res:
-                res = self._simple_pdf_text_extraction_pdfplumber(fileobj, test_info)
             if not res:
                 res = self._simple_pdf_text_extraction_pypdf(fileobj, test_info)
             if not res:

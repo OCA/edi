@@ -568,7 +568,6 @@ class TestInvoiceImport(TransactionCase):
     def test_specific_python_methods(self):
         # test only pure-pdf methods
         # because we are sure they work on the Github test environment
-        self._complete_import_specific_method("pdfplumber")
         self._complete_import_specific_method("pypdf")
 
     def test_test_mode(self):
