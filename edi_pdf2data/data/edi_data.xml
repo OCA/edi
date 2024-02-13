@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="backend_type" model="edi.backend.type">
+        <field name="name">Import File Backend type</field>
+        <field name="code">pdf2data</field>
+    </record>
+
+    <record id="pdf2data_exchange_type" model="edi.exchange.type">
+        <field name="name">Pdf2Data Generic Exchange type</field>
+        <field name="code">pdf2data_generic</field>
+        <field name="backend_type_id" ref="backend_type" />
+        <field name="direction">input</field>
+        <field name="exchange_filename_pattern">{record_name}{dt}</field>
+        <field name="exchange_file_ext">pdf</field>
+    </record>
+
+    <record id="pdf2data_backend" model="edi.backend">
+        <field name="name">Pdf2Data Manual Backend</field>
+        <field name="backend_type_id" ref="backend_type" />
+    </record>
+</odoo>
