@@ -18,7 +18,7 @@ Install it via pip:
 
 .. code::
 
-  sudo pip3 install --upgrade pymupdf
+  pip3 install --upgrade pymupdf
 
 Beware that *PyMuPDF* is not a pure-python library: it uses MuPDF, which is written in C language. If a python wheel for your OS, CPU architecture and Python version is available on pypi (check the `list of PyMuPDF wheels <https://pypi.org/project/PyMuPDF/#files>`_ on pypi), it will install smoothly. Otherwize, the installation via pip will require MuPDF and all its development libs to compile the binding.
 
@@ -35,7 +35,7 @@ and then install the lib via pip:
 
 .. code::
 
-  sudo pip3 install --upgrade pdftotext
+  pip3 install --upgrade pdftotext
 
 On OSes other than Debian/Ubuntu, follow the instructions on the `project page <https://github.com/jalan/pdftotext>`_.
 
@@ -55,7 +55,7 @@ To install the **pypdf** python lib, run:
 
 .. code::
 
-  sudo pip3 install --upgrade pypdf
+  pip3 install --upgrade pypdf
 
 
 Other requirements
@@ -70,17 +70,11 @@ The dateparser lib depends itself on regex. So you can install these Python libr
 
 .. code::
 
-  sudo pip3 install --upgrade dateparser
+  pip3 install --upgrade dateparser
 
-The dateparser lib is not compatible with all regex lib versions. As of September 2022, the `version requirement <https://github.com/scrapinghub/dateparser/blob/master/setup.py#L30>`_ declared by dateparser for regex is **!=2019.02.19, !=2021.8.27, <2022.3.15**. So the latest version of regex which is compatible with dateparser is **2022.3.2**. To know the version of regex installed in your environment, run:
+The dateparser lib is not compatible with all regex lib versions. As of February 2024, the `version requirement <https://github.com/scrapinghub/dateparser/blob/master/setup.py#L36>`_ declared by dateparser for regex is **!=2019.02.19, !=2021.8.27**. So the latest version of dateparser is currenly compatible with the latest version of regex. To know the version of regex installed in your environment, run:
 
-
-.. code::
-
-  sudo pip3 show regex
-
-To force regex to version 2022.3.2, run:
 
 .. code::
 
-  sudo pip3 install regex==2022.3.2
+  pip3 show regex
