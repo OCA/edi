@@ -54,7 +54,12 @@ class AccountInvoiceImport(models.TransientModel):
             pages = []
             doc = fitz.open(fileobj.name)
             for page in doc:
-                pages.append(page.get_text())
+                # Check if Tessdata is available for OCR
+                tessdata = fitz.get_tessdata()
+                # Perform OCR if Tessdata is available, otherwise use regular text extraction
+                textpage = page.get_textpage_ocr(full=False, tessdata=tessdata) if tessdata else page.get_textpage()
+                # Append the extracted text to the pages list
+                pages.append(page.get_text(textpage=textpage))
             res = {
                 "all": "\n\n".join(pages),
                 "first": pages and pages[0] or "",
