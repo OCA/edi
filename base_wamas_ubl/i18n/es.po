@@ -6,13 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2024-02-14 15:36+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: base_wamas_ubl
 #. odoo-python
@@ -20,14 +22,14 @@ msgstr ""
 #: code:addons/base_wamas_ubl/wizard/wamas_ubl_wiz_simulate.py:0
 #, python-format
 msgid "- Error: %s"
-msgstr ""
+msgstr "- Error: %s"
 
 #. module: base_wamas_ubl
 #. odoo-python
 #: code:addons/base_wamas_ubl/wizard/wamas_ubl_wiz_check.py:0
 #, python-format
 msgid "- Error: Length of line does not match expected length"
-msgstr ""
+msgstr "- Error: La longitud de la línea no coincide con la longitud esperada"
 
 #. module: base_wamas_ubl
 #. odoo-python
@@ -39,154 +41,160 @@ msgid ""
 "- Data: %(data)s\n"
 "            "
 msgstr ""
+"- Tipo WAMAS: %(wamas_type)s\n"
+"- Tipo de telegrama: %(telegram_type)s\n"
+"- Datos: %(data)s\n"
+"            "
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_simulate_form
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 msgid "Check"
-msgstr ""
+msgstr "Comprobar"
 
 #. module: base_wamas_ubl
 #: model:ir.actions.act_window,name:base_wamas_ubl.wamas_ubl_wiz_check_action
 #: model:ir.ui.menu,name:base_wamas_ubl.wamas_ubl_wiz_check_menu
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 msgid "Check WAMAS File"
-msgstr ""
+msgstr "Comprobar el archivo WAMAS"
 
 #. module: base_wamas_ubl
 #: model:ir.model,name:base_wamas_ubl.model_wamas_ubl_wiz_check
 msgid "Check WAMAS File Wizard"
-msgstr ""
+msgstr "Comprobar el Asistente de Archivos WAMAS"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__create_uid
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__create_date
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado el"
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 msgid "Data"
-msgstr ""
+msgstr "Datos"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__display_name
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Mostrar Nombre"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__id
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check____last_update
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última Modificación el"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__write_uid
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última Actualización por"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__write_date
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última Actualización el"
 
 #. module: base_wamas_ubl
 #: model:ir.model,name:base_wamas_ubl.model_base_wamas_ubl
 msgid "Methods to convert WAMAS to UBL XML files and vice versa"
-msgstr ""
+msgstr "Métodos para convertir archivos WAMAS a UBL XML y viceversa"
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_simulate_form
 msgid "Only supports FROM telegram type TO telegram type(s) bellow:"
 msgstr ""
+"Sólo admite el tipo de telegrama DESDE el tipo de telegrama HASTA el tipo o "
+"tipos de telegrama(s) siguiente(s):"
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 msgid "Only supports telegram type(s) bellow:"
-msgstr ""
+msgstr "Sólo admite los siguientes tipos de telegramas:"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__output
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__output
 msgid "Output"
-msgstr ""
+msgstr "Salida"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__output_wamas_file
 msgid "Output WAMAS File"
-msgstr ""
+msgstr "Archivo WAMAS de Salida"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__output_wamas_filename
 msgid "Output WAMAS Filename"
-msgstr ""
+msgstr "Nombre del Archivo WAMAS de Salida"
 
 #. module: base_wamas_ubl
 #. odoo-python
 #: code:addons/base_wamas_ubl/models/base_wamas_ubl.py:0
 #, python-format
 msgid "Please define telegram_type."
-msgstr ""
+msgstr "Por favor, defina telegram_type."
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_simulate_form
 msgid "Simulate"
-msgstr ""
+msgstr "Simular"
 
 #. module: base_wamas_ubl
 #: model:ir.actions.act_window,name:base_wamas_ubl.wamas_ubl_wiz_simulate_action
 #: model:ir.ui.menu,name:base_wamas_ubl.wamas_ubl_wiz_simulate_menu
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_simulate_form
 msgid "Simulate WAMAS File"
-msgstr ""
+msgstr "Simular Fichero WAMAS"
 
 #. module: base_wamas_ubl
 #: model:ir.model,name:base_wamas_ubl.model_wamas_ubl_wiz_simulate
 msgid "Simulate WAMAS File Wizard"
-msgstr ""
+msgstr "Asistente de Simulación de Ficheros WAMAS"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__supported_telegram
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__supported_telegram
 msgid "Supported Telegram"
-msgstr ""
+msgstr "Telegram Compatible"
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 msgid "Telegram Type"
-msgstr ""
+msgstr "Tipo de Telegram"
 
 #. module: base_wamas_ubl
 #. odoo-python
 #: code:addons/base_wamas_ubl/models/base_wamas_ubl.py:0
 #, python-format
 msgid "The data is not valid."
-msgstr ""
+msgstr "Los datos no son válidos."
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 msgid "This wizard will help you extract data of a WAMAS file into:"
-msgstr ""
+msgstr "Este asistente le ayudará a extraer los datos de un archivo WAMAS en:"
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_simulate_form
@@ -194,25 +202,27 @@ msgid ""
 "This wizard will help you generate (simulating) a new WAMAS file from an "
 "existing WAMAS file."
 msgstr ""
+"Este asistente le ayudará a generar (simular) un nuevo archivo WAMAS a "
+"partir de un archivo WAMAS existente."
 
 #. module: base_wamas_ubl
 #: model:ir.ui.menu,name:base_wamas_ubl.menu_wamas_parent
 msgid "WAMAS"
-msgstr ""
+msgstr "WAMAS"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__wamas_file
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__wamas_file
 msgid "WAMAS File"
-msgstr ""
+msgstr "Archivo WAMAS"
 
 #. module: base_wamas_ubl
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_check__wamas_filename
 #: model:ir.model.fields,field_description:base_wamas_ubl.field_wamas_ubl_wiz_simulate__wamas_filename
 msgid "WAMAS Filename"
-msgstr ""
+msgstr "Nombre de archivo WAMAS"
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 msgid "WAMAS Type"
-msgstr ""
+msgstr "Tipo WAMAS"
