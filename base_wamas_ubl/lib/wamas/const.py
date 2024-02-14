@@ -49,6 +49,7 @@ DICT_DETECT_WAMAS_TYPE = {
     "KRETKQ": "ReturnResponse",
     "KST": "Customer",
     "LST": "Supplier",
+    "WATEKQ": "PickingResponse",
     "WEAK": "Reception",
     "WEAKQ": "ReceptionResponse",
 }
