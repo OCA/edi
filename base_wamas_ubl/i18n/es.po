@@ -18,33 +18,20 @@ msgstr ""
 
 #. module: base_wamas_ubl
 #. odoo-python
-#: code:addons/base_wamas_ubl/wizard/wamas_ubl_wiz_check.py:0
-#: code:addons/base_wamas_ubl/wizard/wamas_ubl_wiz_simulate.py:0
+#: code:addons/base_wamas_ubl/wizards/wamas_ubl_wiz_check.py:0
+#: code:addons/base_wamas_ubl/wizards/wamas_ubl_wiz_simulate.py:0
 #, python-format
 msgid "- Error: %s"
 msgstr "- Error: %s"
 
 #. module: base_wamas_ubl
 #. odoo-python
-#: code:addons/base_wamas_ubl/wizard/wamas_ubl_wiz_check.py:0
-#, python-format
-msgid "- Error: Length of line does not match expected length"
-msgstr "- Error: La longitud de la línea no coincide con la longitud esperada"
-
-#. module: base_wamas_ubl
-#. odoo-python
-#: code:addons/base_wamas_ubl/wizard/wamas_ubl_wiz_check.py:0
+#: code:addons/base_wamas_ubl/wizards/wamas_ubl_wiz_check.py:0
 #, python-format
 msgid ""
 "- WAMAS Type: %(wamas_type)s\n"
-"- Telegram Type: %(telegram_type)s\n"
-"- Data: %(data)s\n"
-"            "
+"- Data: %(data)s"
 msgstr ""
-"- Tipo WAMAS: %(wamas_type)s\n"
-"- Tipo de telegrama: %(telegram_type)s\n"
-"- Datos: %(data)s\n"
-"            "
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
@@ -153,8 +140,8 @@ msgstr "Nombre del Archivo WAMAS de Salida"
 #. odoo-python
 #: code:addons/base_wamas_ubl/models/base_wamas_ubl.py:0
 #, python-format
-msgid "Please define telegram_type."
-msgstr "Por favor, defina telegram_type."
+msgid "Please define wamas message type (msg_type)."
+msgstr ""
 
 #. module: base_wamas_ubl
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_simulate_form
@@ -226,3 +213,24 @@ msgstr "Nombre de archivo WAMAS"
 #: model_terms:ir.ui.view,arch_db:base_wamas_ubl.wamas_ubl_wiz_check_form
 msgid "WAMAS Type"
 msgstr "Tipo WAMAS"
+
+#, python-format
+#~ msgid "- Error: Length of line does not match expected length"
+#~ msgstr ""
+#~ "- Error: La longitud de la línea no coincide con la longitud esperada"
+
+#, python-format
+#~ msgid ""
+#~ "- WAMAS Type: %(wamas_type)s\n"
+#~ "- Telegram Type: %(telegram_type)s\n"
+#~ "- Data: %(data)s\n"
+#~ "            "
+#~ msgstr ""
+#~ "- Tipo WAMAS: %(wamas_type)s\n"
+#~ "- Tipo de telegrama: %(telegram_type)s\n"
+#~ "- Datos: %(data)s\n"
+#~ "            "
+
+#, python-format
+#~ msgid "Please define telegram_type."
+#~ msgstr "Por favor, defina telegram_type."
