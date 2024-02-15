@@ -64,12 +64,13 @@ class Extractor:
             self.transfers[key].setdefault("lines", []).append(line)
             if not package_key_name:
                 continue
-            package = line[package_key_name]
-            if package not in self.packages:
+            package_id = line[package_key_name]
+            package = self.packages.get(package_id)
+            if not package:
                 _logger.debug(
                     "Found %s (line) record with unknown package, ignoring: %s",
                     telegram_type,
-                    package,
+                    package_id,
                 )
                 continue
             line["package"] = package
