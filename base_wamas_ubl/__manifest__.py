@@ -5,7 +5,7 @@
 {
     "name": "Base WAMAS UBL",
     "summary": """Base module to aggregate WAMAS - UBL features.""",
-    "version": "16.0.1.7.0",
+    "version": "16.0.1.8.0",
     "development_status": "Alpha",
     "category": "Hidden",
     "website": "https://github.com/OCA/edi",
