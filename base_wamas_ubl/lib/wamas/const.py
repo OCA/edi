@@ -1,51 +1,24 @@
-# TODO: Find "clean" way to manage imports for both module & CLI contexts
-try:
-    from .structure import MappingDict
-    from .wamas_grammar import (
-        art,
-        arte,
-        artean,
-        ausk,
-        auskq,
-        ausp,
-        kretk,
-        kretkq,
-        kretp,
-        kretpq,
-        kst,
-        kstaus,
-        lst,
-        watekq,
-        watepq,
-        weak,
-        weakq,
-        weap,
-        weapq,
-    )
-except ImportError:
-    from structure import MappingDict
-    from wamas_grammar import (
-        art,
-        arte,
-        artean,
-        ausk,
-        auskq,
-        ausp,
-        kretk,
-        kretkq,
-        kretp,
-        kretpq,
-        kst,
-        kstaus,
-        lst,
-        watekq,
-        watepq,
-        weak,
-        weakq,
-        weap,
-        weapq,
-    )
-
+from .wamas_grammar import (
+    art,
+    arte,
+    artean,
+    ausk,
+    auskq,
+    ausp,
+    kretk,
+    kretkq,
+    kretp,
+    kretpq,
+    kst,
+    kstaus,
+    lst,
+    watekq,
+    watepq,
+    weak,
+    weakq,
+    weap,
+    weapq,
+)
 
 ##
 # WAMAS CONST
@@ -54,7 +27,6 @@ except ImportError:
 DEFAULT_TIMEZONE = "Europe/Zurich"
 SYSTEM_WAMAS = "WAMAS"
 SYSTEM_ERP = "ODOO"
-
 
 ##
 # WAMAS FORMAT SPECS
@@ -68,10 +40,79 @@ TELEGRAM_HEADER_GRAMMAR = {
     "Satzart": 9,
 }
 
+DICT_DETECT_WAMAS_TYPE = {
+    "ART": "Product",
+    "AUSK": "Picking",
+    "AUSKQ": "PickingResponse",
+    "KRETK": "Return",
+    "KRETKQ": "ReturnResponse",
+    "KST": "Customer",
+    "LST": "Supplier",
+    "WATEKQ": "PickingResponse",
+    "WEAK": "Reception",
+    "WEAKQ": "ReceptionResponse",
+}
+
 ##
 # WAMAS GRAMMAR
 ##
 
+DICT_WAMAS_GRAMMAR = {
+    "ART": art.grammar,
+    "ARTE": arte.grammar,
+    "ARTEAN": artean.grammar,
+    "AUSK": ausk.grammar,
+    "AUSP": ausp.grammar,
+    "KRETK": kretk.grammar,
+    "KRETP": kretp.grammar,
+    "WEAK": weak.grammar,
+    "WEAP": weap.grammar,
+    "AUSKQ": auskq.grammar,
+    "KRETKQ": kretkq.grammar,
+    "KRETPQ": kretpq.grammar,
+    "KST": kst.grammar,
+    "KSTAUS": kstaus.grammar,
+    "LST": lst.grammar,
+    "WATEKQ": watekq.grammar,
+    "WATEPQ": watepq.grammar,
+    "WEAKQ": weakq.grammar,
+    "WEAPQ": weapq.grammar,
+}
+
+##
+# WAMAS TO UBL
+##
+
+LST_TELEGRAM_TYPE_IGNORE_W2D = ["AUSPQ", "TOURQ", "TAUSPQ"]
+
+DICT_UBL_TEMPLATE = {
+    "ReceptionResponse": "ubl_template/reception.xml",
+    "ReturnResponse": "ubl_template/return.xml",
+    "PickingResponse": "ubl_template/picking.xml",
+}
+
+##
+# DICT TO WAMAS
+##
+
+SUPPORTED_DICT_TO_WAMAS = {
+    "Product": ["ART"],  # "ARTE", "ARTEAN"],
+    "Packaging": ["ARTE"],
+    "Barcode": ["ARTEAN"],
+    "Customer": ["KST"],  # "KSTAUS"],
+    "CustomerDeliveryPreferences": ["KSTAUS"],
+    "Supplier": ["LST"],
+}
+
+##
+# UBL TO WAMAS
+##
+
+SUPPORTED_UBL_TO_WAMAS = {
+    "Reception": ["WEAK", "WEAP"],
+    "Picking": ["AUSK", "AUSP"],
+    "Return": ["KRETK", "KRETP"],
+}
 
 LST_TELEGRAM_TYPE_SUPPORT_D2W = [
     "ART",
@@ -89,146 +130,9 @@ LST_TELEGRAM_TYPE_SUPPORT_D2W = [
 ]
 
 
-DICT_WAMAS_GRAMMAR = {
-    "art": art.grammar,
-    "arte": arte.grammar,
-    "artean": artean.grammar,
-    "ausk": ausk.grammar,
-    "ausp": ausp.grammar,
-    "kretk": kretk.grammar,
-    "kretp": kretp.grammar,
-    "weak": weak.grammar,
-    "weap": weap.grammar,
-    "auskq": auskq.grammar,
-    "kretkq": kretkq.grammar,
-    "kretpq": kretpq.grammar,
-    "kst": kst.grammar,
-    "kstaus": kstaus.grammar,
-    "lst": lst.grammar,
-    "watekq": watekq.grammar,
-    "watepq": watepq.grammar,
-    "weakq": weakq.grammar,
-    "weapq": weapq.grammar,
-}
-
-
 ##
-# WAMAS TO UBL
-##
-
-
-LST_TELEGRAM_TYPE_SUPPORT_W2D = [
-    "ART",
-    "ARTE",
-    "ARTEAN",
-    "AUSK",
-    "AUSKQ",
-    "AUSP",
-    "KRETK",
-    "KRETKQ",
-    "KRETP",
-    "KRETPQ",
-    "KST",
-    "KSTAUS",
-    "LST",
-    "WATEKQ",
-    "WATEPQ",
-    "WEAK",
-    "WEAKQ",
-    "WEAP",
-    "WEAPQ",
-]
-
-
-LST_TELEGRAM_TYPE_IGNORE_W2D = ["AUSPQ", "TOURQ", "TAUSPQ"]
-
-
-DICT_TUPLE_KEY_RECEPTION = {
-    ("WEAKQ", "WEAPQ"): (
-        "ubl_template/reception.xml",
-        ("WEAKQ", "IvWevk_WevId_WevNr"),
-        ("WEAPQ", "IvWevp_WevId_WevNr"),
-    ),
-    ("KRETKQ", "KRETPQ"): (
-        "ubl_template/return.xml",
-        ("KRETKQ", "IvKretk_KretId_KretNr"),
-        ("KRETPQ", "IvKretp_KretId_KretNr"),
-    ),
-}
-
-
-DICT_TUPLE_KEY_PICKING = {
-    ("AUSKQ", "WATEKQ", "WATEPQ"): "ubl_template/picking.xml",
-}
-
-
-DICT_FLOAT_FIELD = {
-    "IvWevp_LiefMngs_Mng": (12, 3),
-    "IvKretp_AnmMngs_Mng": (12, 3),
-    "Mngs_Mng": (12, 3),
-    "IvTek_GesGew": (12, 3),
-}
-
-
-##
-# CONVERT UNIT CODE
-##
-
-LST_FIELD_UNIT_CODE = [
-    "HostEinheit",
-    "Art_Anzeige_Einheit",
-    "Arte_Einheit",
-    "ArtEan_EST_Einheit",
-]
-
-
-MAPPING_UNITCODE_WAMAS_TO_UBL = {
-    # DespatchLine/DeliveredQuantity[unitCode]
-    # https://docs.peppol.eu/poacc/upgrade-3/codelist/UNECERec20/
-    "unitCode": MappingDict(
-        {
-            "BOT": "XBQ",  # plastic bottle
-            "BOUT": "C62",  # Unit
-            "BOITE": "XBX",  # box
-            "LITRE": "LTR",  # litre
-            "PET": "XBO",  # glass bottle
-            "TETRA": "X4B",  # tetra pack
-            "": False,  # undefined,
-        }
-    )
-}
-
-
-MAPPING_UNITCODE_UBL_TO_WAMAS = {"unitCode": MappingDict()}
-for key, value in MAPPING_UNITCODE_WAMAS_TO_UBL["unitCode"].items():
-    MAPPING_UNITCODE_UBL_TO_WAMAS["unitCode"][value] = key
-
-
-##
-# CHECK WAMAS
-##
-
-DICT_DETECT_WAMAS_TYPE = {
-    ("WEAK", "WEAP"): "Reception",
-    ("WEAKQ", "WEAPQ"): "Reception",
-    ("AUSK", "AUSP"): "Picking",
-    ("AUSKQ", "WATEKQ", "WATEPQ"): "Picking",
-    ("KRETK", "KRETP"): "Return",
-    ("KRETKQ", "KRETPQ"): "Return",
-    ("KSTAUS",): "Customer Delivery Preference",
-    ("LST",): "Supplier",
-    ("ART",): "Product",
-    ("ARTE",): "Product Packaging",
-    ("ARTEAN",): "Product EAN",
-    ("ART", "ARTE"): "Product and Product Packaging",
-    ("ART", "ARTEAN"): "Product and Product EAN",
-    ("ARTE", "ARTEAN"): "Product Packaging and Product EAN",
-    ("ART", "ARTE", "ARTEAN"): "Product, Product Packaging and Product EAN",
-    ("KST",): "Customer",
-}
 # WAMAS TO WAMAS
 ##
-
 
 LST_VALID_TELEGRAM_IN = [
     "AUSK",
@@ -249,17 +153,6 @@ DICT_CONVERT_WAMAS_TYPE = {
     "KRETP": ["KRETPQ"],
     "WEAK": ["WEAKQ"],
     "WEAP": ["WEAPQ"],
-}
-
-
-DICT_WAMAS_GRAMMAR_OUT = {
-    "auskq": auskq.grammar_convert,
-    "kretkq": kretkq.grammar_convert,
-    "kretpq": kretpq.grammar_convert,
-    "watekq": watekq.grammar_convert,
-    "watepq": watepq.grammar_convert,
-    "weakq": weakq.grammar_convert,
-    "weapq": weapq.grammar_convert,
 }
 
 

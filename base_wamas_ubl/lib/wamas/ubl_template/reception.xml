@@ -119,12 +119,13 @@
         </cac:Delivery>
     </cac:Shipment>
     <cac:DespatchLine t-foreach="record.lines" t-as="line">
-        <cbc:ID><t t-raw="line_index + 1" /></cbc:ID>
+        <cbc:ID><t t-raw="line.IvWeap_HostPosNr" /></cbc:ID>
         <cbc:DeliveredQuantity
-            t-att-unitCode="MAPPING['unitCode'][line.IvArt_HOSTUNITS_HostEinh] or MAPPING['unitCode'][line.IvArt_Bestand_Einheit]"
+            t-att-unitCode="line.IvArt_Bestand_Einheit"
+            unitCodeListAgencyName="WAMAS"
         ><t t-raw="line.IvWevp_LiefMngs_Mng" /></cbc:DeliveredQuantity>
         <cac:OrderLineReference>
-            <cbc:LineID><t t-raw="line.IvWeap_ExtRef" /></cbc:LineID>
+            <cbc:LineID />
         </cac:OrderLineReference>
         <cac:Item>
             <cac:BuyersItemIdentification>

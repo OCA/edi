@@ -1,6 +1,6 @@
 <DespatchAdvice xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
 	<cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-	<cbc:ID>GE 2/120185</cbc:ID>
+	<cbc:ID>1673982/1701778</cbc:ID>
 	<cbc:IssueDate>2023-05-01</cbc:IssueDate>
 	<cac:OrderReference>
 		<cbc:ID>1673982/1701778</cbc:ID>
@@ -9,14 +9,14 @@
 		<cbc:CustomerAssignedAccountID/>
 		<cac:Party>
 			<cac:PartyName>
-				<cbc:Name>Wood Corner</cbc:Name>
+				<cbc:Name/>
 			</cac:PartyName>
 			<cac:PostalAddress>
-				<cbc:StreetName>1839 Arbor Way</cbc:StreetName>
-				<cbc:CityName>Turlock</cbc:CityName>
-				<cbc:PostalZone>95380</cbc:PostalZone>
+				<cbc:StreetName/>
+				<cbc:CityName/>
+				<cbc:PostalZone/>
 				<cac:Country>
-					<cbc:IdentificationCode>US</cbc:IdentificationCode>
+					<cbc:IdentificationCode/>
 				</cac:Country>
 			</cac:PostalAddress>
 			<cac:PartyTaxScheme>
@@ -27,9 +27,9 @@
 				</cac:TaxScheme>
 			</cac:PartyTaxScheme>
 			<cac:Contact>
-				<cbc:Name>Ron Gibson</cbc:Name>
-				<cbc:Telephone>(976)-397-4091</cbc:Telephone>
-				<cbc:ElectronicMail>ron.gibson76@example.com</cbc:ElectronicMail>
+				<cbc:Name/>
+				<cbc:Telephone/>
+				<cbc:ElectronicMail/>
 			</cac:Contact>
 		</cac:Party>
 	</cac:DespatchSupplierParty>
@@ -39,15 +39,15 @@
 				<cbc:ID schemeName="ODOO:ID">4009542</cbc:ID>
 			</cac:PartyIdentification>
 			<cac:PartyName>
-				<cbc:Name>Deco Addict</cbc:Name>
+				<cbc:Name/>
 			</cac:PartyName>
 			<cac:PostalAddress>
-				<cbc:StreetName>77 Santa Barbara Rd</cbc:StreetName>
-				<cbc:CityName>Pleasant Hill</cbc:CityName>
-				<cbc:PostalZone>94523</cbc:PostalZone>
-				<cbc:CountrySubentity>California</cbc:CountrySubentity>
+				<cbc:StreetName/>
+				<cbc:CityName/>
+				<cbc:PostalZone/>
+				<cbc:CountrySubentity/>
 				<cac:Country>
-					<cbc:IdentificationCode>US</cbc:IdentificationCode>
+					<cbc:IdentificationCode/>
 				</cac:Country>
 			</cac:PostalAddress>
 			<cac:PartyTaxScheme>
@@ -58,10 +58,10 @@
 				</cac:TaxScheme>
 			</cac:PartyTaxScheme>
 			<cac:Contact>
-				<cbc:Name>Addison Olson</cbc:Name>
-				<cbc:Telephone>(223)-399-7637</cbc:Telephone>
+				<cbc:Name/>
+				<cbc:Telephone/>
 				<cbc:Telefax/>
-				<cbc:ElectronicMail>addison.olson28@example.com</cbc:ElectronicMail>
+				<cbc:ElectronicMail/>
 			</cac:Contact>
 		</cac:Party>
 	</cac:DeliveryCustomerParty>
@@ -80,10 +80,10 @@
 				<cbc:Measure>314.7</cbc:Measure>
 			</cac:GrossWeightMeasure>
 		</cac:Shipment>
-		<cbc:ID>1</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="X4B">7.0</cbc:DeliveredQuantity>
+		<cbc:ID>101</cbc:ID>
+		<cbc:DeliveredQuantity unitCode="TETRA" unitCodeListAgencyName="WAMAS">7.0</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>000101</cbc:LineID>
+			<cbc:LineID/>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>
@@ -105,10 +105,10 @@
 				<cbc:Measure>314.7</cbc:Measure>
 			</cac:GrossWeightMeasure>
 		</cac:Shipment>
-		<cbc:ID>2</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="X4B">8.0</cbc:DeliveredQuantity>
+		<cbc:ID>102</cbc:ID>
+		<cbc:DeliveredQuantity unitCode="TETRA" unitCodeListAgencyName="WAMAS">8.0</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-			<cbc:LineID>000101</cbc:LineID>
+			<cbc:LineID/>
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>

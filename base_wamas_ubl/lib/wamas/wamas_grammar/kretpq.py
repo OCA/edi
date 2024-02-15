@@ -1,25 +1,6 @@
 from collections import OrderedDict
 
-grammar = {
-    "IvKretk_KretId_Mand": 3,
-    "IvKretp_KretId_KretNr": 20,
-    "IvKretp_KretId_HostKretKz": 5,
-    "IvKretp_ExtRef": 20,
-    "IvKretp_HostPosNr": 6,
-    "IvKretp_MId_AId_Mand": 3,
-    "IvKretp_MId_AId_ArtNr": 20,
-    "IvKretp_MId_AId_Var": 5,
-    "IvMatqk_HMATQ_HMatQ": 20,
-    "IvKretp_AnmMngs_Mng": 12,
-    "IvKretp_AnmMngs_Gew": 12,
-    "IvArt_HOSTUNITS_HostEinh": 5,
-    "IvArt_Bestand_Einheit": 5,
-    "IvKretp_MId_Charge": 20,
-    "IvKretp_Mid_MHD": 8,
-    "IvKretp_MId_WeNr": 20,
-}
-
-grammar_convert = OrderedDict(
+grammar = OrderedDict(
     {
         "Telheader_Quelle": {
             "type": "str",

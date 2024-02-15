@@ -28,10 +28,10 @@ class WamasUblWizSimulate(models.TransientModel):
         bwu_obj = self.env["base.wamas.ubl"]
         dict_telegram = bwu_obj.get_supported_telegram_w2w()
         res = ""
-        for from_telegram in dict_telegram:
+        for from_telegram, to_telegrams in dict_telegram.items():
             res += "- %(from_telegram)s => %(to_telegram)s\n" % {
                 "from_telegram": from_telegram,
-                "to_telegram": ", ".join(dict_telegram[from_telegram]),
+                "to_telegram": ", ".join(to_telegrams),
             }
         return res
 

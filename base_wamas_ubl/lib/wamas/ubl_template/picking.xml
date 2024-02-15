@@ -5,7 +5,7 @@
     xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
 >
 	<cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-	<cbc:ID><t t-raw="record.IvAusk_RahmenTourId_TourNr" /></cbc:ID>
+	<cbc:ID><t t-raw="record.IvAusk_AusId_AusNr" /></cbc:ID>
 	<cbc:IssueDate><t t-raw="get_current_date()" /></cbc:IssueDate>
 	<cac:OrderReference>
 		<cbc:ID><t t-raw="record.IvAusk_ExtRef" /></cbc:ID>
@@ -64,11 +64,9 @@
 	</cac:DespatchSupplierParty>
 	<cac:DeliveryCustomerParty>
 		<cac:Party>
-            <cac:PartyIdentification>
-                <cbc:ID schemeName="ODOO:ID"><t
-                        t-raw="record.IvAusk_KST_KuNr"
-                    /></cbc:ID>
-            </cac:PartyIdentification>
+			<cac:PartyIdentification>
+				<cbc:ID schemeName="ODOO:ID"><t t-raw="record.IvAusk_KST_KuNr" /></cbc:ID>
+			</cac:PartyIdentification>
 			<cac:PartyName>
 				<cbc:Name><t
                         t-raw="extra_data.get('DeliveryCustomerParty', '') and extra_data['DeliveryCustomerParty'].get('PartyName', '') or ''"
@@ -124,7 +122,7 @@
 	</cac:DeliveryCustomerParty>
 	<cac:Shipment>
 		<cbc:ID><t t-raw="record.IvAusk_RahmenTourId_TourNr" /></cbc:ID>
-    </cac:Shipment>
+	</cac:Shipment>
 	<cac:DespatchLine t-foreach="record.lines" t-as="line">
 		<cac:Shipment>
 			<cac:TransportHandlingUnit>
@@ -139,12 +137,13 @@
 				<cbc:Measure><t t-raw="line.package.IvTek_GesGew" /></cbc:Measure>
 			</cac:GrossWeightMeasure>
 		</cac:Shipment>
-		<cbc:ID><t t-raw="line_index + 1" /></cbc:ID>
-        <cbc:DeliveredQuantity
-            t-att-unitCode="MAPPING['unitCode'][line.IvArt_HOSTUNITS_HostEinh] or MAPPING['unitCode'][line.IvArt_Bestand_Einheit]"
+		<cbc:ID><t t-raw="line.IvAusp_HostPosNr" /></cbc:ID>
+		<cbc:DeliveredQuantity
+            t-att-unitCode="line.IvArt_Bestand_Einheit"
+            unitCodeListAgencyName="WAMAS"
         ><t t-raw="line.Mngs_Mng" /></cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
-            <cbc:LineID><t t-raw="line.IvAusp_HostPosNr" /></cbc:LineID>
+			<cbc:LineID />
 		</cac:OrderLineReference>
 		<cac:Item>
 			<cac:BuyersItemIdentification>

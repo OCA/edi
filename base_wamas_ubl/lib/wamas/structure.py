@@ -1,3 +1,6 @@
+# Copyright 2023 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
 import logging
 
 _logger = logging.getLogger("wamas")

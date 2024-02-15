@@ -57,6 +57,7 @@ Authors
 ~~~~~~~
 
 * Camptocamp
+* BCIM
 
 Contributors
 ~~~~~~~~~~~~

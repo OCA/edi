@@ -1,30 +1,6 @@
 from collections import OrderedDict
 
-grammar = {
-    "IvWevp_WevId_Mand": 3,
-    "IvWevp_WevId_WevNr": 20,
-    "IvWevp_WEAP_WeaId_Mand": 3,
-    "IvWevp_WEAP_WeaId_WeaNr": 20,
-    "IvWevp_WEAP_WeaId_HostWeaKz": 5,
-    "IvWeap_ExtRef": 20,
-    "IvWeap_HostPosNr": 6,
-    "IvWevp_LiefSNr": 20,
-    "IvWevp_MId_AId_Mand": 3,
-    "IvWevp_MId_AId_ArtNr": 20,
-    "IvWevp_MId_AId_Var": 5,
-    "IvMatQk_HMATQ_HMatQ": 20,
-    "IvWevp_LiefMngs_Mng": 12,
-    "IvWevp_LiefMngs_Gew": 12,
-    "IvArt_HOSTUNITS_HostEinh": 5,
-    "IvArt_Bestand_Einheit": 5,
-    "IvWevp_MId_Charge": 20,
-    "IvWevp_MId_MHD": 8,
-    "IvWevp_MId_ResNr": 20,
-    "IvWevp_MId_WeNr": 20,
-    "IvWevp_MId_ThmKz": 1,
-}
-
-grammar_convert = OrderedDict(
+grammar = OrderedDict(
     {
         "Telheader_Quelle": {
             "type": "str",
