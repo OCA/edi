@@ -20,8 +20,6 @@ from .const import (
     DICT_DETECT_WAMAS_TYPE,
     DICT_PARENT_KEY,
     DICT_WAMAS_GRAMMAR,
-    LST_FIELD_UNIT_CODE,
-    MAPPING_UNITCODE_UNECE_TO_WAMAS,
     SYSTEM_ERP,
     SYSTEM_WAMAS,
 )
@@ -192,12 +190,6 @@ def get_date_from_field(*args):
     return res
 
 
-def convert_unit_code(key, val):
-    if key in LST_FIELD_UNIT_CODE:
-        return MAPPING_UNITCODE_UNECE_TO_WAMAS["unitCode"].get(val, val)
-    return val
-
-
 def get_address_elements(dict_item, party_type="DeliveryCustomerParty"):
     return {
         "ContactName": dict_item.get(
@@ -346,7 +338,6 @@ def generate_wamas_dict(dict_item, grammar, **kwargs):  # noqa: C901
 
             val = globals()[df_func](*args)
 
-        val = convert_unit_code(_key, val)
         val = set_value_to_string(val, ttype, length, dp, do_convert_tz=do_convert_tz)
         dict_wamas_out[_key] = val
         lst_parent_key = DICT_PARENT_KEY.get(telegram_type_out, False)

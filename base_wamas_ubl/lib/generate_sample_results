@@ -1,0 +1,8 @@
+#!/usr/bin/sh
+./ubl2wamas ../tests/samples/UBL2WAMAS-SAMPLE_AUSK_AUSP-DESPATCH_ADVICE.xml -o ../tests/samples/UBL2WAMAS-SAMPLE_AUSK_AUSP.wamas -t Picking
+./ubl2wamas ../tests/samples/UBL2WAMAS-SAMPLE_WEAK_WEAP-DESPATCH_ADVICE.xml -o ../tests/samples/UBL2WAMAS-SAMPLE_WEAK_WEAP.wamas -t Reception
+./ubl2wamas ../tests/samples/UBL2WAMAS-SAMPLE_KRETK_KRETP-DESPATCH_ADVICE.xml -o ../tests/samples/UBL2WAMAS-SAMPLE_KRETK_KRETP.wamas -t Return
+
+./wamas2ubl ../tests/samples/WAMAS2UBL-SAMPLE_AUSKQ_WATEKQ_WATEPQ.wamas -o ../tests/samples/WAMAS2UBL-SAMPLE_AUSKQ_WATEKQ_WATEPQ-DESPATCH_ADVICE.xml
+./wamas2ubl ../tests/samples/WAMAS2UBL-SAMPLE_WEAKQ_WEAPQ.wamas -o ../tests/samples/WAMAS2UBL-SAMPLE_WEAKQ_WEAPQ-DESPATCH_ADVICE.xml
+./wamas2ubl ../tests/samples/WAMAS2UBL-SAMPLE_KRETKQ_KRETPQ.wamas -o ../tests/samples/WAMAS2UBL-SAMPLE_KRETKQ_KRETPQ-DESPATCH_ADVICE.xml

@@ -5,7 +5,7 @@
     xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
 >
 	<cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-	<cbc:ID><t t-raw="record.IvAusk_RahmenTourId_TourNr" /></cbc:ID>
+	<cbc:ID><t t-raw="record.IvAusk_AusId_AusNr" /></cbc:ID>
 	<cbc:IssueDate><t t-raw="get_current_date()" /></cbc:IssueDate>
 	<cac:OrderReference>
 		<cbc:ID><t t-raw="record.IvAusk_ExtRef" /></cbc:ID>
@@ -139,7 +139,8 @@
 		</cac:Shipment>
 		<cbc:ID><t t-raw="line.IvAusp_HostPosNr" /></cbc:ID>
 		<cbc:DeliveredQuantity
-            t-att-unitCode="MAPPING['unitCode'][line.IvArt_HOSTUNITS_HostEinh] or MAPPING['unitCode'][line.IvArt_Bestand_Einheit]"
+            t-att-unitCode="line.IvArt_Bestand_Einheit"
+            unitCodeListAgencyName="WAMAS"
         ><t t-raw="line.Mngs_Mng" /></cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID />

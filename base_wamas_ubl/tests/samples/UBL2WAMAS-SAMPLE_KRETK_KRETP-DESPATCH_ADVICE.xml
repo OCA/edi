@@ -74,7 +74,7 @@
 	</cac:Shipment>
 	<cac:DespatchLine>
 		<cbc:ID>0001</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="C62">1536</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="BOUT">1536</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID/>
 		</cac:OrderLineReference>
@@ -86,7 +86,7 @@
 	</cac:DespatchLine>
 	<cac:DespatchLine>
 		<cbc:ID>0002</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="XBO">5184</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="PET">5184</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID/>
 		</cac:OrderLineReference>
@@ -98,7 +98,7 @@
 	</cac:DespatchLine>
 	<cac:DespatchLine>
 		<cbc:ID>0003</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="C62">3840</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="BOUT">3840</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID>0003</cbc:LineID>
 		</cac:OrderLineReference>
@@ -110,7 +110,7 @@
 	</cac:DespatchLine>
 	<cac:DespatchLine>
 		<cbc:ID>0004</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="XBO">3072</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="PET">3072</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID/>
 		</cac:OrderLineReference>
@@ -122,7 +122,7 @@
 	</cac:DespatchLine>
 	<cac:DespatchLine>
 		<cbc:ID>0005</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="XBO">3024</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="PET">3024</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID/>
 		</cac:OrderLineReference>

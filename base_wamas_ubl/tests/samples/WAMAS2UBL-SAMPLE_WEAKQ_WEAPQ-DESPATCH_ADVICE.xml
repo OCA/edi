@@ -67,7 +67,7 @@
     </cac:Shipment>
     <cac:DespatchLine>
         <cbc:ID>20</cbc:ID>
-        <cbc:DeliveredQuantity unitCode="C62">1536.0</cbc:DeliveredQuantity>
+        <cbc:DeliveredQuantity unitCode="BOUT" unitCodeListAgencyName="WAMAS">1536.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
         </cac:OrderLineReference>
@@ -78,7 +78,7 @@
         </cac:Item>
     </cac:DespatchLine><cac:DespatchLine>
         <cbc:ID>30</cbc:ID>
-        <cbc:DeliveredQuantity unitCode="XBO">5184.0</cbc:DeliveredQuantity>
+        <cbc:DeliveredQuantity unitCode="PET" unitCodeListAgencyName="WAMAS">5184.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
         </cac:OrderLineReference>
@@ -89,7 +89,7 @@
         </cac:Item>
     </cac:DespatchLine><cac:DespatchLine>
         <cbc:ID>40</cbc:ID>
-        <cbc:DeliveredQuantity unitCode="C62">3840.0</cbc:DeliveredQuantity>
+        <cbc:DeliveredQuantity unitCode="BOUT" unitCodeListAgencyName="WAMAS">3840.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
         </cac:OrderLineReference>
@@ -100,7 +100,7 @@
         </cac:Item>
     </cac:DespatchLine><cac:DespatchLine>
         <cbc:ID>50</cbc:ID>
-        <cbc:DeliveredQuantity unitCode="XBO">3072.0</cbc:DeliveredQuantity>
+        <cbc:DeliveredQuantity unitCode="PET" unitCodeListAgencyName="WAMAS">3072.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
         </cac:OrderLineReference>
@@ -111,7 +111,7 @@
         </cac:Item>
     </cac:DespatchLine><cac:DespatchLine>
         <cbc:ID>60</cbc:ID>
-        <cbc:DeliveredQuantity unitCode="XBO">3024.0</cbc:DeliveredQuantity>
+        <cbc:DeliveredQuantity unitCode="PET" unitCodeListAgencyName="WAMAS">3024.0</cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID/>
         </cac:OrderLineReference>

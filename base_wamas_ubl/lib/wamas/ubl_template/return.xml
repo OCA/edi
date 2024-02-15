@@ -121,7 +121,8 @@
     <cac:DespatchLine t-foreach="record.lines" t-as="line">
         <cbc:ID><t t-raw="line.IvKretp_HostPosNr" /></cbc:ID>
         <cbc:DeliveredQuantity
-            t-att-unitCode="MAPPING['unitCode'][line.IvArt_HOSTUNITS_HostEinh] or MAPPING['unitCode'][line.IvArt_Bestand_Einheit]"
+            t-att-unitCode="line.IvArt_Bestand_Einheit"
+            unitCodeListAgencyName="WAMAS"
         ><t t-raw="line.IvKretp_AnmMngs_Mng" /></cbc:DeliveredQuantity>
         <cac:OrderLineReference>
             <cbc:LineID />

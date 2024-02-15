@@ -1,4 +1,3 @@
-from .structure import MappingDict
 from .wamas_grammar import (
     art,
     arte,
@@ -91,40 +90,6 @@ DICT_UBL_TEMPLATE = {
     "ReturnResponse": "ubl_template/return.xml",
     "PickingResponse": "ubl_template/picking.xml",
 }
-
-##
-# CONVERT UNIT CODE
-##
-
-# FIXME: move to grammar
-LST_FIELD_UNIT_CODE = [
-    "HostEinheit",
-    "Art_Anzeige_Einheit",
-    "Arte_Einheit",
-    "ArtEan_EST_Einheit",
-]
-
-
-MAPPING_UNITCODE_WAMAS_TO_UNECE = {
-    # DespatchLine/DeliveredQuantity[unitCode]
-    # https://docs.peppol.eu/poacc/upgrade-3/codelist/UNECERec20/
-    "unitCode": MappingDict(
-        {
-            "BOT": "XBQ",  # plastic bottle
-            "BOUT": "C62",  # Unit
-            "BOITE": "XBX",  # box
-            "LITRE": "LTR",  # litre
-            "PET": "XBO",  # glass bottle
-            "TETRA": "X4B",  # tetra pack
-            "": False,  # undefined,
-        }
-    )
-}
-
-
-MAPPING_UNITCODE_UNECE_TO_WAMAS = {"unitCode": MappingDict()}
-for key, value in MAPPING_UNITCODE_WAMAS_TO_UNECE["unitCode"].items():
-    MAPPING_UNITCODE_UNECE_TO_WAMAS["unitCode"][value] = key
 
 ##
 # DICT TO WAMAS

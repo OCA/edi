@@ -1,6 +1,6 @@
 <DespatchAdvice xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
 	<cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-	<cbc:ID>GE 2/120185</cbc:ID>
+	<cbc:ID>1673982/1701778</cbc:ID>
 	<cbc:IssueDate>2023-05-01</cbc:IssueDate>
 	<cac:OrderReference>
 		<cbc:ID>1673982/1701778</cbc:ID>
@@ -72,16 +72,16 @@
 		<cac:Shipment>
 			<cac:TransportHandlingUnit>
 				<cac:ActualPackage>
-					<cbc:ID>None</cbc:ID>
+					<cbc:ID>376401426411929180</cbc:ID>
 				</cac:ActualPackage>
-				<cbc:TransportHandlingUnitTypeCode>None</cbc:TransportHandlingUnitTypeCode>
+				<cbc:TransportHandlingUnitTypeCode>PE</cbc:TransportHandlingUnitTypeCode>
 			</cac:TransportHandlingUnit>
 			<cac:GrossWeightMeasure>
-				<cbc:Measure>None</cbc:Measure>
+				<cbc:Measure>314.7</cbc:Measure>
 			</cac:GrossWeightMeasure>
 		</cac:Shipment>
 		<cbc:ID>101</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="X4B">7.0</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="TETRA" unitCodeListAgencyName="WAMAS">7.0</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID/>
 		</cac:OrderLineReference>
@@ -97,16 +97,16 @@
 		<cac:Shipment>
 			<cac:TransportHandlingUnit>
 				<cac:ActualPackage>
-					<cbc:ID>None</cbc:ID>
+					<cbc:ID>376401426411929180</cbc:ID>
 				</cac:ActualPackage>
-				<cbc:TransportHandlingUnitTypeCode>None</cbc:TransportHandlingUnitTypeCode>
+				<cbc:TransportHandlingUnitTypeCode>PE</cbc:TransportHandlingUnitTypeCode>
 			</cac:TransportHandlingUnit>
 			<cac:GrossWeightMeasure>
-				<cbc:Measure>None</cbc:Measure>
+				<cbc:Measure>314.7</cbc:Measure>
 			</cac:GrossWeightMeasure>
 		</cac:Shipment>
 		<cbc:ID>102</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="X4B">8.0</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="TETRA" unitCodeListAgencyName="WAMAS">8.0</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID/>
 		</cac:OrderLineReference>

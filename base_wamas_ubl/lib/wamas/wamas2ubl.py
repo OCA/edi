@@ -156,7 +156,6 @@ def render_ubl(ubl_template, data, extra_data=False):
         "get_date": utils.get_date,
         "get_time": utils.get_time,
         "get_current_date": utils.get_current_date,
-        "MAPPING": const.MAPPING_UNITCODE_WAMAS_TO_UNECE,
         "extra_data": extra_data,
     }
     xml = t.render(globals_dict)

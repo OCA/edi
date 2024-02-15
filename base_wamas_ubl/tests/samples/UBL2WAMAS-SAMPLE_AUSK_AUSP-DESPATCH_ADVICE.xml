@@ -83,7 +83,7 @@
 	</cac:Shipment>
 	<cac:DespatchLine>
 		<cbc:ID>10001</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="XBO">1500</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="PET">1500</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID/>
 		</cac:OrderLineReference>
@@ -95,7 +95,7 @@
 	</cac:DespatchLine>
 	<cac:DespatchLine>
 		<cbc:ID>10002</cbc:ID>
-		<cbc:DeliveredQuantity unitCode="XBO">50</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity unitCode="BOUT">50</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID/>
 		</cac:OrderLineReference>
