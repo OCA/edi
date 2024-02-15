@@ -37,6 +37,9 @@ class DespatchAdviceImport(models.TransientModel):
             "cac:EstimatedDeliveryPeriod/cbc:EndDate",
             namespaces=ns,
         )
+        order_id_xpath = xml_root.xpath(
+            "/main:DespatchAdvice/cbc:ID", namespaces=ns
+        )
         order_reference_xpath = xml_root.xpath(
             "/main:DespatchAdvice/cac:OrderReference/cbc:ID", namespaces=ns
         )
@@ -66,6 +69,7 @@ class DespatchAdviceImport(models.TransientModel):
         for line in lines_xpath:
             res_lines.append(self.parse_ubl_despatch_advice_line(line, ns))
         res = {
+            "id": order_id_xpath[0].text if order_id_xpath else "",
             "ref": order_reference_xpath[0].text if order_reference_xpath else "",
             "supplier": supplier_dict,
             "company": customer_dict,
@@ -111,7 +115,6 @@ class DespatchAdviceImport(models.TransientModel):
         order_line_id_xpath = line.xpath(
             "cac:OrderLineReference/cbc:LineID", namespaces=ns
         )
-
         if not order_line_id_xpath:
             raise UserError(_("Missing line ID in the Despatch Advice."))
 
