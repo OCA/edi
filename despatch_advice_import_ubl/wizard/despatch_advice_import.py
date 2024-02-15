@@ -128,6 +128,23 @@ class DespatchAdviceImport(models.TransientModel):
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
             "backorder_qty": backorder_qty,
         }
+
+        package_id_xpath = line.xpath(
+            "cac:Shipment/cac:TransportHandlingUnit/cac:ActualPackage/cbc:ID", namespaces=ns
+        )
+        package_type_xpath = line.xpath(
+            "cac:Shipment/cac:TransportHandlingUnit/cbc:TransportHandlingUnitTypeCode", namespaces=ns
+        )
+        package_weight_xpath = line.xpath(
+            "cac:Shipment/cac:GrossWeightMeasure/cbc:Measure", namespaces=ns
+        )
+        if package_id_xpath or package_type_xpath:
+            res_line["package"] = {
+                "name": package_id_xpath[0].text if package_id_xpath else "",
+                "type": package_type_xpath[0].text if package_type_xpath else "",
+                "weight": package_weight_xpath[0].text if package_weight_xpath else "",
+            }
+
         defaults = self.env.context.get("despatch_advice_import__default_vals", {}).get(
             "lines", {}
         )
