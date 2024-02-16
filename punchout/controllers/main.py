@@ -4,7 +4,7 @@
 import logging
 from base64 import b64decode
 
-from odoo.http import Controller, local_redirect, request, route
+from odoo.http import Controller, request, route
 
 _logger = logging.getLogger(__name__)
 
@@ -40,4 +40,4 @@ class PunchoutController(Controller):
             )
         else:
             redirect_url = punchout_session._get_redirect_url()
-        return local_redirect(redirect_url)
+        return request.redirect_query(redirect_url)

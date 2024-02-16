@@ -13,37 +13,69 @@ class PunchoutBackend(models.Model):
         ("name_unique", "unique(name)", _("This PunchOut backend already exists."))
     ]
 
-    name = fields.Char(string="Name", required=True,)
-    url = fields.Char(string="URL", required=True,)
+    name = fields.Char(
+        required=True,
+    )
+    description = fields.Char(
+        required=True,
+    )
+    url = fields.Char(
+        string="URL",
+        required=True,
+    )
     from_domain = fields.Char(
-        string="From domain", required=True, groups="base.group_system",
+        string="From domain",
+        required=True,
+        groups="base.group_system",
     )
     from_identity = fields.Char(
-        string="From identity", required=True, groups="base.group_system",
+        string="From identity",
+        required=True,
+        groups="base.group_system",
     )
-    to_domain = fields.Char(string="To domain", required=True,)
+    to_domain = fields.Char(
+        string="To domain",
+        required=True,
+    )
     to_identity = fields.Char(
-        string="To identity", required=True, groups="base.group_system",
+        string="To identity",
+        required=True,
+        groups="base.group_system",
     )
     shared_secret = fields.Char(
-        string="Shared secret", required=True, groups="base.group_system",
+        string="Shared secret",
+        required=True,
+        groups="base.group_system",
     )
-    user_agent = fields.Char(string="User agent", required=True,)
+    user_agent = fields.Char(
+        string="User agent",
+        required=True,
+    )
     deployment_mode = fields.Char(
-        string="Deployment mode", help="Test or production", required=True,
+        string="Deployment mode",
+        help="Test or production",
+        required=True,
     )
     browser_form_post_url = fields.Char(
         string="Browser form post URL",
         help="Exposed URL where the shopping cart must be sent back to.",
         required=True,
     )
-    dtd_version = fields.Char(default="1.2.008",)
-    dtd_file = fields.Binary(
-        string="DTD File for validation", groups="base.group_system",
+    dtd_version = fields.Char(
+        default="1.2.008",
     )
-    dtd_filename = fields.Char(groups="base.group_system",)
+    dtd_file = fields.Binary(
+        string="DTD File for validation",
+        groups="base.group_system",
+    )
+    dtd_filename = fields.Char(
+        groups="base.group_system",
+    )
     state = fields.Selection(selection="_selection_state", default="draft")
-    session_duration = fields.Integer(string="Maximum session duration", default=7200,)
+    session_duration = fields.Integer(
+        string="Maximum session duration",
+        default=7200,
+    )
 
     @api.constrains("session_duration")
     def _check_session_duration(self):
@@ -103,7 +135,9 @@ class PunchoutBackend(models.Model):
         self._check_access_backend()
         return (
             self.env["punchout.session"]
-            .with_context(punchout_backend_id=self.id,)
+            .with_context(
+                punchout_backend_id=self.id,
+            )
             ._redirect_to_punchout()
         )
 
