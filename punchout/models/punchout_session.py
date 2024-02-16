@@ -31,37 +31,59 @@ class PunchoutSession(models.Model):
     _order = "create_date desc"
     _description = "Punchout Session"
 
-    backend_id = fields.Many2one(comodel_name="punchout.backend", readonly=True,)
+    backend_id = fields.Many2one(
+        comodel_name="punchout.backend",
+        readonly=True,
+    )
     user_id = fields.Many2one(
-        comodel_name="res.users", readonly=True, default=lambda self: self.env.uid,
+        comodel_name="res.users",
+        readonly=True,
+        default=lambda self: self.env.uid,
     )
     buyer_cookie_id = fields.Char(readonly=True, string="Cookie")
     punchout_url = fields.Char(readonly=True, string="Start URL")
-    cxml_setup_request = fields.Text(readonly=True, string="Setup Request",)
-    cxml_setup_request_response = fields.Text(
-        readonly=True, string="Setup Request Response",
+    cxml_setup_request = fields.Text(
+        readonly=True,
+        string="Setup Request",
     )
-    cxml_response = fields.Text(readonly=True, string="Response",)
-    cxml_response_date = fields.Datetime(readonly=True, string="Response Date",)
+    cxml_setup_request_response = fields.Text(
+        readonly=True,
+        string="Setup Request Response",
+    )
+    cxml_response = fields.Text(
+        readonly=True,
+        string="Response",
+    )
+    cxml_response_date = fields.Datetime(
+        readonly=True,
+        string="Response Date",
+    )
     expiration_date = fields.Datetime(
         compute="_compute_expiration_date",
         store=True,
         readonly=True,
         compute_sudo=True,
     )
-    error_message = fields.Text(readonly=True,)
+    error_message = fields.Text(
+        readonly=True,
+    )
     state = fields.Selection(
-        selection="_selection_state", default="draft", tracking=True,
+        selection="_selection_state",
+        default="draft",
+        tracking=True,
     )
     action_process_allowed = fields.Boolean(compute="_compute_action_process_allowed")
 
-    @api.depends("state",)
+    @api.depends(
+        "state",
+    )
     def _compute_action_process_allowed(self):
         for rec in self:
             rec.action_process_allowed = rec.state in ("to_process", "error")
 
     @api.depends(
-        "backend_id", "create_date",
+        "backend_id",
+        "create_date",
     )
     def _compute_expiration_date(self):
         for rec in self:
@@ -116,7 +138,7 @@ class PunchoutSession(models.Model):
         cxml = (
             self.env["ir.ui.view"]
             .sudo()
-            .render_template(template_xml_id, template_values)
+            ._render_template(template_xml_id, values=template_values)
         )
         cxml_request_element = ET.fromstring(cxml)
         ET.indent(cxml_request_element)
