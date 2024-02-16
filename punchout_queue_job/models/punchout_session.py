@@ -12,8 +12,12 @@ _logger = logging.getLogger(__name__)
 class PunchoutSession(models.Model):
     _inherit = "punchout.session"
 
-    has_job_access = fields.Boolean(compute="_compute_has_job_access",)
-    job_count = fields.Integer(compute="_compute_job_count",)
+    has_job_access = fields.Boolean(
+        compute="_compute_has_job_access",
+    )
+    job_count = fields.Integer(
+        compute="_compute_job_count",
+    )
 
     @api.depends_context("uid")
     def _compute_has_job_access(self):

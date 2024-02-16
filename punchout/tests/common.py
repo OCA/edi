@@ -3,10 +3,10 @@
 
 from uuid import uuid4
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class TestPunchoutCommon(SavepointCase):
+class TestPunchoutCommon(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -15,6 +15,7 @@ class TestPunchoutCommon(SavepointCase):
         cls.backend = cls.backend_model.create(
             {
                 "name": uuid4(),
+                "description": uuid4(),
                 "from_domain": "from",
                 "from_identity": "from",
                 "to_domain": "to",
@@ -42,5 +43,6 @@ class TestPunchoutCommon(SavepointCase):
 
     def _store_response(self, cxml_string):
         return self.session_model._store_punchout_session_response(
-            self.backend.id, cxml_string,
+            self.backend.id,
+            cxml_string,
         )
