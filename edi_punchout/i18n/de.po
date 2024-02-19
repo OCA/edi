@@ -1,0 +1,205 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_punchout
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-25 10:35+0000\n"
+"PO-Revision-Date: 2023-04-25 10:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_punchout
+#: code:addons/edi_punchout/models/edi_punchout_account.py:0
+#, python-format
+msgid ""
+"%s does not seem to be a query string. Note values need to be urlencoded, "
+"like name=value%20with%20space"
+msgstr ""
+"%s sieht nicht wie ein query string aus. Werte sollten urlencoded sein, "
+"z.B. name=value%20with%20space"
+
+#. module: edi_punchout
+#: model:ir.model,name:edi_punchout.model_edi_punchout_transaction
+msgid "A transaction for a punchout session"
+msgstr "Eine transaktion für eine Punchout Sesion"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_transaction__account_id
+msgid "Account"
+msgstr "Account"
+
+#. module: edi_punchout
+#: model:ir.model,name:edi_punchout.model_edi_punchout_account
+msgid "Account for a webshop supporting punchout"
+msgstr "Account für eine Webshop der Punchout unterstützt"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__catalog_url
+msgid "Catalog Url"
+msgstr "Katalog-URL"
+
+#. module: edi_punchout
+#: model:ir.model.fields,help:edi_punchout.field_uom_uom__ids_name
+msgid "Code of this UOM according to the IDS protocol"
+msgstr "Code dieser Masseinheit im IDS-Protokoll"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__company_id
+msgid "Company"
+msgstr "Unternehmen"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__group_ids
+msgid "Group"
+msgstr "Benutzergruppe"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__hook_url
+msgid "Hook Url"
+msgstr "Hook-URL"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_uom_uom__ids_name
+msgid "IDS name"
+msgstr "IDS-Name"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__ids_version
+msgid "IDS Version"
+msgstr "IDS-Version"
+
+#. module: edi_punchout
+#: model:ir.model.fields,help:edi_punchout.field_edi_punchout_account__group_ids
+msgid "If set, only members of the selected groups can access this account"
+msgstr "Wenn hier Benutzergruppen eingegeben werden, ist der Account nur für Mitglieder dieser Gruppe zugänglich"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__ids_name_kunde
+msgid "Name"
+msgstr "Name"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__ids_kndnr
+msgid "Number"
+msgstr "Kundennummer"
+
+#. module: edi_punchout
+#: model:ir.model.fields.selection,name:edi_punchout.selection__edi_punchout_account__protocol__oci
+msgid "OCI"
+msgstr "OCI"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__oci_version
+msgid "OCI Version"
+msgstr "OCI-Version"
+
+#. module: edi_punchout
+#: model:ir.actions.act_window,name:edi_punchout.action_edi_punchout_account
+#: model:ir.ui.menu,name:edi_punchout.menu_edi_punchout_account
+msgid "Order from suppliers"
+msgstr "Lieferantenbestellung"
+
+#. module: edi_punchout
+#: model:ir.model.fields,help:edi_punchout.field_edi_punchout_account__ids_kndnr
+msgid "Parameter 'kndnr'"
+msgstr "Parameter 'kndnr'"
+
+#. module: edi_punchout
+#: model:ir.model.fields,help:edi_punchout.field_edi_punchout_account__ids_name_kunde
+msgid "Parameter 'name_kunde'"
+msgstr "Parameter 'name_kunde'"
+
+#. module: edi_punchout
+#: model:ir.model.fields,help:edi_punchout.field_edi_punchout_account__ids_pw_kunde
+msgid "Parameter 'pw_kunde'"
+msgstr "Parameter 'pw_kunde'"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__partner_name
+msgid "Partner name"
+msgstr "Name des Partners"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__ids_pw_kunde
+msgid "Password"
+msgstr "Passwort"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__product_category_id
+msgid "Product Category"
+msgstr "Produktkategorie"
+
+#. module: edi_punchout
+#: model:ir.model,name:edi_punchout.model_uom_uom
+msgid "Product Unit of Measure"
+msgstr "Produkteinheit"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__protocol
+msgid "Protocol"
+msgstr "Protokoll"
+
+#. module: edi_punchout
+#: model:ir.actions.act_window,name:edi_punchout.action_edi_punchout_account_config
+#: model:ir.ui.menu,name:edi_punchout.menu_edi_punchout_account_config
+msgid "Punchout accounts"
+msgstr "Puchout accounts"
+
+#. module: edi_punchout
+#: model:ir.model,name:edi_punchout.model_purchase_order
+msgid "Purchase Order"
+msgstr "Beschaffungsauftrag"
+
+#. module: edi_punchout
+#: model_terms:ir.ui.view,arch_db:edi_punchout.ids_send_cart_form
+msgid "Send to supplier webshop"
+msgstr "An Lieferantenwebshop senden"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_transaction__session_id
+msgid "Session"
+msgstr "Session"
+
+#. module: edi_punchout
+#: model_terms:ir.ui.view,arch_db:edi_punchout.view_edi_punchout_account_kanban
+msgid "Start a purchase"
+msgstr "Einkauf starten"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__partner_id
+msgid "Supplier"
+msgstr "Lieferant"
+
+#. module: edi_punchout
+#: model:ir.model.fields,help:edi_punchout.field_edi_punchout_account__oci_custom_url_parameters
+msgid ""
+"The vendor should have given you authentication parameters in the "
+"form username=user&password=pass"
+msgstr ""
+"Der Lieferant sollte Zugangsdaten in der Form "
+"username=user&password=pass mitgeteilt haben"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_transaction__transaction_id
+msgid "Transaction"
+msgstr "Transaktion"
+
+#. module: edi_punchout
+#: model:ir.model.fields,field_description:edi_punchout.field_edi_punchout_account__oci_custom_url_parameters
+msgid "Vendor-specific parameters"
+msgstr "Lieferantenspzifische Parameter"
+
+#. module: edi_punchout
+#: model:ir.model.fields,help:edi_punchout.field_edi_punchout_account__product_category_id
+msgid ""
+"When creating new products, create them in the following category instead of"
+" the default"
+msgstr ""
+"Bei der Erstellung neuer Produkte folgende Kategorie statt des Standards verwenden"

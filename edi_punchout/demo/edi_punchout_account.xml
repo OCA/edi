@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Hunki Enterprises BV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="edi_punchout_account_ids" model="edi.punchout.account">
+        <field name="partner_id" ref="base.res_partner_12" />
+        <field name="protocol">ids</field>
+        <field
+            name="catalog_url"
+        >https://supplier.url/catalog_ids?possibly_a_parameter=value</field>
+        <field name="ids_name_kunde">user</field>
+        <field name="ids_pw_kunde">pass</field>
+    </record>
+
+    <record id="edi_punchout_account_oci" model="edi.punchout.account">
+        <field name="partner_id" ref="base.res_partner_12" />
+        <field name="protocol">oci</field>
+        <field
+            name="catalog_url"
+        >https://supplier.url/catalog_oci?possibly_a_parameter=value</field>
+        <field name="oci_custom_url_parameters">username=user&amp;password=pass</field>
+    </record>
+
+</odoo>

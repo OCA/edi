@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Hunki Enterprises BV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+<record id="view_edi_punchout_account_form" model="ir.ui.view">
+    <field name="model">edi.punchout.account</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <group>
+                        <field name="partner_id" />
+                        <field name="company_id" groups="base.group_multi_company" />
+                        <field name="group_ids" widget="many2many_tags" />
+                    </group>
+                    <group>
+                        <field name="protocol" />
+                        <field
+                                name="oci_version"
+                                attrs="{'invisible': [('protocol', '!=', 'oci')], 'required': [('protocol', '=', 'oci')]}"
+                            />
+                        <field
+                                name="ids_version"
+                                attrs="{'invisible': [('protocol', '!=', 'ids')], 'required': [('protocol', '=', 'ids')]}"
+                            />
+                        <field name="catalog_url" />
+                        <field
+                                name="oci_custom_url_parameters"
+                                attrs="{'invisible': [('protocol', '!=', 'oci')], 'required': [('protocol', '=', 'oci')]}"
+                            />
+                        <field
+                                name="ids_kndnr"
+                                attrs="{'invisible': [('protocol', '!=', 'ids')]}"
+                            />
+                        <field
+                                name="ids_name_kunde"
+                                attrs="{'invisible': [('protocol', '!=', 'ids')]}"
+                            />
+                        <field
+                                name="ids_pw_kunde"
+                                attrs="{'invisible': [('protocol', '!=', 'ids')]}"
+                            />
+                    </group>
+                    <group>
+                        <field name="product_category_id" />
+                    </group>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="view_edi_punchout_account_tree" model="ir.ui.view">
+    <field name="model">edi.punchout.account</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="partner_id" />
+            <field name="catalog_url" />
+            <field name="company_id" />
+        </tree>
+    </field>
+</record>
+
+<act_window
+        id="action_edi_punchout_account_config"
+        name="Punchout accounts"
+        res_model="edi.punchout.account"
+        view_mode="tree,form"
+    />
+
+<menuitem
+        id="menu_edi_punchout_account_config"
+        action="action_edi_punchout_account_config"
+        parent="purchase.menu_purchase_config"
+    />
+
+<record id="view_edi_punchout_account_kanban" model="ir.ui.view">
+    <field name="model">edi.punchout.account</field>
+    <field name="arch" type="xml">
+        <kanban create="false">
+            <field name="id" />
+            <field name="protocol" />
+            <field name="oci_version" />
+            <field name="ids_version" />
+            <field name="partner_id" />
+            <field name="partner_img" />
+            <field name="partner_name" />
+            <field name="catalog_url" />
+            <field name="hook_url" />
+            <field name="oci_custom_url_parameters_html" />
+            <field name="ids_kndnr" />
+            <field name="ids_name_kunde" />
+            <field name="ids_pw_kunde" />
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="o_kanban_record o_kanban_record_has_image_fill">
+                        <div
+                                class="o_kanban_image_fill_left o_kanban_image_full"
+                                t-attf-style="background-image: url('/web/image?model=res.partner&amp;field=image_128&amp;id={{record.partner_id.raw_value}}')"
+                                t-if="record.partner_img.value"
+                                role="img"
+                            />
+                        <div
+                                class="o_kanban_image_fill_left o_kanban_image_full"
+                                style="background-image: url('/base/static/img/avatar_grey.png')"
+                                t-else=""
+                                role="img"
+                            />
+                        <div class="oe_kanban_details">
+                            <strong><t t-esc="record.partner_name.value" /></strong>
+                            <form
+                                    t-att-action="record.catalog_url.raw_value"
+                                    method="post"
+                                    enctype="multipart/form-data"
+                                >
+                                <t t-if="record.protocol.raw_value=='oci'">
+                                    <input
+                                            type="hidden"
+                                            name="~OkCode"
+                                            value="ADDI"
+                                            t-if="record.oci_version.raw_value == '3.0'"
+                                        />
+                                    <input
+                                            type="hidden"
+                                            name="~CALLER"
+                                            value="CTLG"
+                                            t-if="record.oci_version.raw_value == '3.0'"
+                                        />
+                                    <input
+                                            type="hidden"
+                                            name="OCI_VERSION"
+                                            t-att-value="record.oci_version.raw_value"
+                                        />
+                                    <input
+                                            type="hidden"
+                                            name="HOOK_URL"
+                                            t-att-value="record.hook_url.raw_value"
+                                        />
+                                    <t
+                                            t-raw="record.oci_custom_url_parameters_html.raw_value"
+                                        />
+                                </t>
+                                <t t-if="record.protocol.raw_value=='ids'">
+                                    <input type="hidden" name="action" value="WKE" />
+                                    <input
+                                            type="hidden"
+                                            name="version"
+                                            t-att-value="record.ids_version.raw_value"
+                                        />
+                                    <input
+                                            type="hidden"
+                                            name="hookurl"
+                                            t-att-value="record.hook_url.raw_value"
+                                        />
+                                    <input
+                                            type="hidden"
+                                            name="kndnr"
+                                            t-att-value="record.ids_kndnr.raw_value"
+                                        />
+                                    <input
+                                            type="hidden"
+                                            name="name_kunde"
+                                            t-att-value="record.ids_name_kunde.raw_value"
+                                        />
+                                    <input
+                                            type="hidden"
+                                            name="pw_kunde"
+                                            t-att-value="record.ids_pw_kunde.raw_value"
+                                        />
+                                </t>
+                                <button
+                                        class="btn btn-primary"
+                                        onclick="var $form = jQuery(this.form); $hookurl = $form.find('[name=hookurl], [name=HOOK_URL]'); jQuery.ajax({url: '/edi_punchout/get_transaction', data: {account_id: jQuery(this).data('accountId')}}).done(function(data) { $hookurl.val(String(new window.URL('/edi_punchout/return/'+data, $hookurl.val()))); $form.submit() }); return false"
+                                        t-att-data-account-id="record.id.raw_value"
+                                    >Start a purchase</button>
+                            </form>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+<act_window
+        id="action_edi_punchout_account"
+        name="Order from suppliers"
+        res_model="edi.punchout.account"
+        view_mode="kanban"
+    />
+
+<menuitem
+        id="menu_edi_punchout_account"
+        action="action_edi_punchout_account"
+        parent="purchase.menu_purchase_root"
+    />
+
+</odoo>

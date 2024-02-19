@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Hunki Enterprises BV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <template id="ids_send_cart">
+        <Warenkorb xmlns="http://www.itek.de/Shop-Anbindung/Warenkorb/">
+            <WarenkorbInfo>
+                <Date><t t-esc="object.date_order.strftime('%Y-%m-%d')" /></Date>
+                <Time><t t-esc="object.date_order.strftime('%H:%M:%S')" /></Time>
+                <Version><t t-esc="account.ids_version" /></Version>
+            </WarenkorbInfo>
+            <Order>
+                <OrderInfo>
+                    <InquiryNo><t t-esc="object.name" /></InquiryNo>
+                    <PartNo><t t-esc="object.name" /></PartNo>
+                    <OfferNo t-if="object.partner_ref"><t
+                            t-esc="object.partner_ref"
+                        /></OfferNo>
+                    <ModeOfShipment t-translation="off">Lieferung</ModeOfShipment>
+                    <Cur><t t-esc="object.currency_id.name" /></Cur>
+                    <ZusatzText />
+                </OrderInfo>
+                <OrderItem t-foreach="object.order_line" t-as="order_line">
+                    <ItemChara t-translation="off">normal</ItemChara>
+                    <ArtNo><t
+                            t-esc="order_line.product_id.seller_ids.filtered(lambda x: x.name == object.partner_id)[:1].product_code"
+                        /></ArtNo>
+                    <Qty><t
+                            t-esc="order_line.product_qty * order_line.product_uom.factor_inv"
+                        /></Qty>
+                    <QU><t t-esc="order_line.product_uom.ids_name" /></QU>
+                </OrderItem>
+            </Order>
+        </Warenkorb>
+    </template>
+
+    <template id="ids_send_cart_form">
+        <form
+            t-att-action="account.catalog_url"
+            method="post"
+            enctype="multipart/form-data"
+        >
+            <input type="hidden" name="hookurl" t-att-value="account.hook_url" />
+            <input type="hidden" name="version" t-att-value="account.ids_version" />
+            <input type="hidden" name="action" value="WKS" />
+            <input type="hidden" name="kndnr" t-att-value="account.ids_kndnr" />
+            <input
+                type="hidden"
+                name="name_kunde"
+                t-att-value="account.ids_name_kunde"
+            />
+            <input type="hidden" name="pw_kunde" t-att-value="account.ids_pw_kunde" />
+            <input type="hidden" name="warenkorb" t-att-value="cart_xml" />
+            <button
+                class="btn btn-primary"
+                style="min-height: 25px; margin: 4px 3px 4px 0; padding-top: 2px; padding-bottom: 2px"
+                onclick="event.preventDefault(); var $form = jQuery(this.form); $hookurl = $form.find('[name=hookurl]'); jQuery.ajax({url: '/edi_punchout/get_transaction', data: {account_id: jQuery(this).data('accountId'), order_id: jQuery(this).data('orderId')}}).done(function(data) { $hookurl.val(String(new window.URL('/edi_punchout/return/'+data, $hookurl.val()))); $form.submit() }); return false"
+                t-att-data-account-id="account.id"
+                t-att-data-order-id="order.id"
+            >Send to supplier webshop</button>
+        </form>
+    </template>
+
+</odoo>
