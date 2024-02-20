@@ -294,16 +294,16 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         res = bdio._match_currency(currency_dict, [])
         self.assertEqual(res, first_cur)
         currency_dict = {"iso": "EUR"}
-        res = bdio._match_currency(currency_dict, [])
+        res = bdio.with_context(active_test=False)._match_currency(currency_dict, [])
         self.assertEqual(res, self.env.ref("base.EUR"))
         currency_dict = {"symbol": "€"}
-        res = bdio._match_currency(currency_dict, [])
+        res = bdio.with_context(active_test=False)._match_currency(currency_dict, [])
         self.assertEqual(res, self.env.ref("base.EUR"))
         currency_dict = {"country_code": "fr "}
         res = bdio._match_currency(currency_dict, [])
         self.assertEqual(res, self.env.ref("base.EUR"))
         currency_dict = {"iso_or_symbol": "€"}
-        res = bdio._match_currency(currency_dict, [])
+        res = bdio.with_context(active_test=False)._match_currency(currency_dict, [])
         self.assertEqual(res, self.env.ref("base.EUR"))
         currency_id = self.env.ref("base.KRW").id
         self.cr.execute(
@@ -397,7 +397,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         )
         de_tax_21_onpayment = self.env["account.tax"].create(
             {
-                "name": "German VAT purchase 18.0%",
+                "name": "German VAT purchase 18.0% (On Payment)",
                 "description": "DE-VAT-buy-18.0",
                 "type_tax_use": "purchase",
                 "price_include": False,
