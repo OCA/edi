@@ -415,7 +415,7 @@ class BaseUbl(models.AbstractModel):
                     std_identification,
                     ns["cbc"] + "ID",
                     schemeAgencyID="6",
-                    schemeID="GTIN",
+                    schemeID="0160",  # GTIN = 0160
                 )
                 std_identification_id.text = product.barcode
             # I'm not 100% sure, but it seems that ClassifiedTaxCategory
@@ -771,10 +771,16 @@ class BaseUbl(models.AbstractModel):
         return {}
 
     def ubl_parse_product(self, line_node, ns):
+        # GTIN schemeID is 0160
         barcode_xpath = line_node.xpath(
-            "cac:Item/cac:StandardItemIdentification/cbc:ID[@schemeID='GTIN']",
+            "cac:Item/cac:StandardItemIdentification/cbc:ID[@schemeID='0160']",
             namespaces=ns,
         )
+        if not barcode_xpath:
+            barcode_xpath = line_node.xpath(
+                "cac:Item/cac:StandardItemIdentification/cbc:ID[@schemeID='GTIN']",
+                namespaces=ns,
+            )
         code_xpath = line_node.xpath(
             "cac:Item/cac:SellersItemIdentification/cbc:ID", namespaces=ns
         )
