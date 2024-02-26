@@ -162,8 +162,8 @@ class SaleOrderImport(models.TransientModel):
                 dates["delivery_detail"]["validity_date"] = edifact_model.map2odoo_date(
                     seg[0]
                 )
-            elif date_meaning_code == "64":
-                # earliest delivery date
+            elif date_meaning_code == "2":
+                # Delivery date
                 dates["delivery_detail"][
                     "commitment_date"
                 ] = edifact_model.map2odoo_date(seg[0])

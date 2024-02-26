@@ -52,6 +52,7 @@ def get_test_data_no_ean_in_lin(env):
                 ),
                 "client_order_ref": "467819",
                 "date_order": "2023-03-20",
+                "commitment_date": "2023-03-22 00:00:00",
                 "partner": ref("sale_order_import_edifact.partner_edi_shipto_dm"),
                 "shipping_partner": ref(
                     "sale_order_import_edifact.partner_edi_shipto_dm"
@@ -77,6 +78,7 @@ def get_test_data_no_price(env):
                 ),
                 "client_order_ref": "COM-004017",
                 "date_order": "2023-03-20",
+                "commitment_date": "2023-03-21 00:00:00",
                 "partner": ref("sale_order_import_edifact.partner_edi_invoiceto_dm"),
                 "shipping_partner": ref(
                     "sale_order_import_edifact.partner_edi_shipto_dm"
