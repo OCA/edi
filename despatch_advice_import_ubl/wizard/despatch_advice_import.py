@@ -37,6 +37,7 @@ class DespatchAdviceImport(models.TransientModel):
             "cac:EstimatedDeliveryPeriod/cbc:EndDate",
             namespaces=ns,
         )
+        order_id_xpath = xml_root.xpath("/main:DespatchAdvice/cbc:ID", namespaces=ns)
         order_reference_xpath = xml_root.xpath(
             "/main:DespatchAdvice/cac:OrderReference/cbc:ID", namespaces=ns
         )
@@ -66,12 +67,15 @@ class DespatchAdviceImport(models.TransientModel):
         for line in lines_xpath:
             res_lines.append(self.parse_ubl_despatch_advice_line(line, ns))
         res = {
+            "id": order_id_xpath[0].text if order_id_xpath else "",
             "ref": order_reference_xpath[0].text if order_reference_xpath else "",
             "supplier": supplier_dict,
             "company": customer_dict,
-            "despatch_advice_type_code": despatch_advice_type_code_xpath[0].text
-            if len(despatch_advice_type_code_xpath) > 0
-            else "",
+            "despatch_advice_type_code": (
+                despatch_advice_type_code_xpath[0].text
+                if len(despatch_advice_type_code_xpath) > 0
+                else ""
+            ),
             "date": len(date_xpath) and date_xpath[0].text,
             "estimated_delivery_date": len(estimated_delivery_date_xpath)
             and estimated_delivery_date_xpath[0].text,
@@ -125,6 +129,25 @@ class DespatchAdviceImport(models.TransientModel):
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
             "backorder_qty": backorder_qty,
         }
+
+        package_id_xpath = line.xpath(
+            "cac:Shipment/cac:TransportHandlingUnit/cac:ActualPackage/cbc:ID",
+            namespaces=ns,
+        )
+        package_type_xpath = line.xpath(
+            "cac:Shipment/cac:TransportHandlingUnit/cbc:TransportHandlingUnitTypeCode",
+            namespaces=ns,
+        )
+        package_weight_xpath = line.xpath(
+            "cac:Shipment/cac:GrossWeightMeasure/cbc:Measure", namespaces=ns
+        )
+        if package_id_xpath or package_type_xpath:
+            res_line["package"] = {
+                "name": package_id_xpath[0].text if package_id_xpath else "",
+                "type": package_type_xpath[0].text if package_type_xpath else "",
+                "weight": package_weight_xpath[0].text if package_weight_xpath else "",
+            }
+
         defaults = self.env.context.get("despatch_advice_import__default_vals", {}).get(
             "lines", {}
         )
@@ -141,9 +164,11 @@ class DespatchAdviceImport(models.TransientModel):
 
         vat_xpath = party_node.xpath("cac:PartyIdentification/cbc:ID", namespaces=ns)
         partner_dict = {
-            "vat": vat_xpath[0].text
-            if vat_xpath and vat_xpath[0].attrib.get("schemeName").upper()
-            else False,
+            "vat": (
+                vat_xpath[0].text
+                if vat_xpath and vat_xpath[0].attrib.get("schemeName").upper()
+                else False
+            ),
             "name": partner_name_xpath[0].text,
         }
         address_xpath = party_node.xpath("cac:PostalAddress", namespaces=ns)

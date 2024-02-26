@@ -87,6 +87,7 @@ class TestDespatchAdviceImport(TransactionCase):
             All the fields are filled into the internal data structure.
         """
         xml_content = self.despatch_advice_xml1.decode("utf-8").format(
+            picking_name="0810805774",
             order_id=self.purchase_order.name,
             line_1_id=self.line1.id,
             line_1_qty=self.line1.product_qty,
@@ -110,6 +111,7 @@ class TestDespatchAdviceImport(TransactionCase):
             "date": "2020-11-16",
             "despatch_advice_type_code": "delivery",
             "estimated_delivery_date": "2020-11-17",
+            "id": "0810805774",
             "lines": [
                 {
                     "backorder_qty": 12.0,
@@ -149,6 +151,7 @@ class TestDespatchAdviceImport(TransactionCase):
             All the fields are filled into the internal data structure.
         """
         xml_content = self.despatch_advice_xml2.decode("utf-8").format(
+            picking_name="0810805774",
             line_1_id=self.line1.id,
             line_1_order_id=self.purchase_order.name,
             line_1_qty=self.line1.product_qty,
@@ -172,6 +175,7 @@ class TestDespatchAdviceImport(TransactionCase):
             "date": "2020-11-16",
             "despatch_advice_type_code": "scheduled",
             "estimated_delivery_date": "2020-11-17",
+            "id": "0810805774",
             "lines": [
                 {
                     "backorder_qty": 12.0,
