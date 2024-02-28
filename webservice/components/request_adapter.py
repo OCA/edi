@@ -65,8 +65,14 @@ class BaseRestRequestsAdapter(Component):
 
     def _get_url(self, url=None, url_params=None, **kwargs):
         if not url:
-            # TODO: if url is given, we should validate the domain
-            # to avoid abusing a webservice backend for different calls.
             url = self.collection.url
+        elif not url.startswith(self.collection.url):
+            if not url.startswith("http"):
+                url = f"{self.collection.url.rstrip('/')}/{url.lstrip('/')}"
+            else:
+                # TODO: if url is given, we should validate the domain
+                # to avoid abusing a webservice backend for different calls.
+                pass
+
         url_params = url_params or kwargs
         return url.format(**url_params)
