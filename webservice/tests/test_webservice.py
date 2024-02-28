@@ -89,6 +89,28 @@ class TestWebService(CommonWebService):
         )
 
     @responses.activate
+    def test_web_service_get_url_combine(self):
+        endpoint = "api/test"
+        responses.add(responses.GET, self.url + endpoint, body="{}")
+        result = self.webservice.call("get", url="api/test")
+        self.assertEqual(result, b"{}")
+        self.assertEqual(len(responses.calls), 1)
+        self.assertEqual(
+            responses.calls[0].request.headers["Content-Type"], "application/xml"
+        )
+
+    @responses.activate
+    def test_web_service_get_url_combine_full_url(self):
+        endpoint = "api/test"
+        responses.add(responses.GET, self.url + endpoint, body="{}")
+        result = self.webservice.call("get", url="http://localhost.demo.odoo/api/test")
+        self.assertEqual(result, b"{}")
+        self.assertEqual(len(responses.calls), 1)
+        self.assertEqual(
+            responses.calls[0].request.headers["Content-Type"], "application/xml"
+        )
+
+    @responses.activate
     def test_web_service_post(self):
         responses.add(responses.POST, self.url, body="{}")
         result = self.webservice.call("post", data="demo_response")
