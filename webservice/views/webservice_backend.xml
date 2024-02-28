@@ -58,6 +58,22 @@
                                 'required': [('auth_type', '=', 'api_key')],
                             }"
                         />
+                        <field
+                            name="oauth2_clientid"
+                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                        />
+                        <field
+                            name="oauth2_client_secret"
+                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                        />
+                        <field
+                            name="oauth2_token_url"
+                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                        />
+                        <field
+                            name="oauth2_audience"
+                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')]}"
+                        />
                     </group>
                 </sheet>
             </form>

@@ -1,7 +1,9 @@
 # Copyright 2020 Creu Blanca
 # Copyright 2022 Camptocamp SA
 # @author Simone Orsi <simahawk@gmail.com>
+# @author Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 
 from odoo import _, api, exceptions, fields, models
 
@@ -21,14 +23,22 @@ class WebserviceBackend(models.Model):
             ("none", "Public"),
             ("user_pwd", "Username & password"),
             ("api_key", "API Key"),
+            ("oauth2", "OAuth2 Backend Application Flow (Client Credentials Grant)"),
         ],
-        default="user_pwd",
         required=True,
     )
     username = fields.Char(auth_type="user_pwd")
     password = fields.Char(auth_type="user_pwd")
     api_key = fields.Char(string="API Key", auth_type="api_key")
     api_key_header = fields.Char(string="API Key header", auth_type="api_key")
+    oauth2_clientid = fields.Char(string="Client ID", auth_type="oauth2")
+    oauth2_client_secret = fields.Char(string="Client Secret", auth_type="oauth2")
+    oauth2_token_url = fields.Char(string="Token URL", auth_type="oauth2")
+    oauth2_audience = fields.Char(
+        string="Audience"
+        # no auth_type because not required
+    )
+    oauth2_token = fields.Char(help="the OAuth2 token (serialized JSON)")
     content_type = fields.Selection(
         [
             ("application/json", "JSON"),
@@ -78,8 +88,15 @@ class WebserviceBackend(models.Model):
     def _get_adapter(self):
         with self.work_on(self._name) as work:
             return work.component(
-                usage="webservice.request", webservice_protocol=self.protocol
+                usage="webservice.request",
+                webservice_protocol=self._get_adapter_protocol(),
             )
+
+    def _get_adapter_protocol(self):
+        protocol = self.protocol
+        if self.auth_type.startswith("oauth2"):
+            protocol += f"+{self.auth_type}"
+        return protocol
 
     @property
     def _server_env_fields(self):
@@ -93,6 +110,10 @@ class WebserviceBackend(models.Model):
             "api_key": {},
             "api_key_header": {},
             "content_type": {},
+            "oauth2_clientid": {},
+            "oauth2_client_secret": {},
+            "oauth2_token_url": {},
+            "oauth2_audience": {},
         }
         webservice_fields.update(base_fields)
         return webservice_fields
