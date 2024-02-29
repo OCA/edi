@@ -69,6 +69,9 @@ class AccountInvoiceImportConfig(models.Model):
         check_company=True,
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
     )
+    allow_draft_invoices_same_partner = fields.Boolean(
+        "Allow creating multiple draft invoices for the same partner"
+    )
 
     @api.depends("static_product_id", "account_id", "partner_id")
     def _compute_analytic_distribution(self):

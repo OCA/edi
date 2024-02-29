@@ -810,21 +810,28 @@ class AccountInvoiceImport(models.TransientModel):
                 action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
                 action["res_id"] = self.id
             else:
-                draft_same_supplier_invs = amo.search(
-                    [
-                        ("commercial_partner_id", "=", partner.id),
-                        ("move_type", "=", parsed_inv["type"]),
-                        ("state", "=", "draft"),
-                    ]
-                )
-                logger.debug("draft_same_supplier_invs=%s", draft_same_supplier_invs)
-                if draft_same_supplier_invs:
-                    wiz_vals["state"] = "update"
-                    if len(draft_same_supplier_invs) == 1:
-                        wiz_vals["invoice_id"] = draft_same_supplier_invs[0].id
-                    xmlid = "account_invoice_import.account_invoice_import_action"
-                    action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
-                    action["res_id"] = self.id
+                if not self.import_config_id.allow_draft_invoices_same_partner:
+                    draft_same_supplier_invs = amo.search(
+                        [
+                            ("commercial_partner_id", "=", partner.id),
+                            ("move_type", "=", parsed_inv["type"]),
+                            ("state", "=", "draft"),
+                        ]
+                    )
+                    logger.debug(
+                        "draft_same_supplier_invs=%s", draft_same_supplier_invs
+                    )
+                    if draft_same_supplier_invs:
+                        wiz_vals["state"] = "update"
+                        if len(draft_same_supplier_invs) == 1:
+                            wiz_vals["invoice_id"] = draft_same_supplier_invs[0].id
+                        xmlid = "account_invoice_import.account_invoice_import_action"
+                        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+                        action["res_id"] = self.id
+                    else:
+                        action = self.create_invoice_action(
+                            parsed_inv, import_config, _("Import Vendor Bill wizard")
+                        )
                 else:
                     action = self.create_invoice_action(
                         parsed_inv, import_config, _("Import Vendor Bill wizard")
