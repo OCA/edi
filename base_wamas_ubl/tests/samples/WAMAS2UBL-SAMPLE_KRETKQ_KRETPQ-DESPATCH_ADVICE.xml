@@ -1,6 +1,6 @@
 <DespatchAdvice xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
     <cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-    <cbc:ID/>
+    <cbc:ID>1683399</cbc:ID>
     <cbc:IssueDate>2023-05-01</cbc:IssueDate>
     <cac:OrderReference>
         <cbc:ID>1712149</cbc:ID>
@@ -124,7 +124,7 @@
 </DespatchAdvice>
 <DespatchAdvice xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2">
     <cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-    <cbc:ID/>
+    <cbc:ID>1683288</cbc:ID>
     <cbc:IssueDate>2023-05-01</cbc:IssueDate>
     <cac:OrderReference>
         <cbc:ID>1711980</cbc:ID>
