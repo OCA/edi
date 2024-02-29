@@ -61,6 +61,9 @@ class TestEdifactOrderImport(TransactionCase):
             so = self.env["sale.order"].browse(action["res_id"])
             self.assertEqual(so.partner_id, expected["partner"])
 
+            if expected.get("commitment_date"):
+                self.assertEqual(str(so.commitment_date), expected["commitment_date"])
+
             if expected.get("client_order_ref"):
                 self.assertEqual(so.client_order_ref, expected["client_order_ref"])
 
@@ -94,6 +97,9 @@ class TestEdifactOrderImport(TransactionCase):
             action = wiz.import_order_button()
             so = self.env["sale.order"].browse(action["res_id"])
             self.assertEqual(so.partner_id, expected["partner"])
+
+            if expected.get("commitment_date"):
+                self.assertEqual(str(so.commitment_date), expected["commitment_date"])
 
             if expected.get("client_order_ref"):
                 self.assertEqual(so.client_order_ref, expected["client_order_ref"])
