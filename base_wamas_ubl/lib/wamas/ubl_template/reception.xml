@@ -5,7 +5,7 @@
     xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
 >
     <cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-    <cbc:ID />
+    <cbc:ID><t t-raw="record.IvWevk_WevId_WevNr" /></cbc:ID>
     <cbc:IssueDate><t t-raw="get_current_date()" /></cbc:IssueDate>
     <cac:OrderReference>
         <cbc:ID><t t-raw="record.lines[0].IvWevp_WEAP_WeaId_WeaNr" /></cbc:ID>
