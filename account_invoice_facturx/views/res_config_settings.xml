@@ -13,39 +13,24 @@
             ref="account_einvoice_generate.view_account_config_settings"
         />
         <field name="arch" type="xml">
-            <div id="e-invoices" position="after">
-                <div class="col-xs-12 col-md-6 o_setting_box" id="facturx">
-                    <div class="o_setting_left_pane" />
-                    <div class="o_setting_right_pane">
-                            <div
-                            class="content-group"
-                            name="facturx_level"
-                            attrs="{'invisible': [('xml_format_in_pdf_invoice', '!=', 'factur-x')]}"
-                        >
-                            <div class="row mt16">
-                                <label for="facturx_level" class="col-md-5" />
-                                <field
-                                    name="facturx_level"
-                                    attrs="{'required': [('xml_format_in_pdf_invoice', '=', 'factur-x')]}"
-                                />
-                            </div>
-                        </div>
-                        <div
-                            class="content-group"
-                            name="facturx_refund_type"
-                            attrs="{'invisible': [('xml_format_in_pdf_invoice', '!=', 'factur-x')]}"
-                        >
-                            <div class="row mt16">
-                                <label for="facturx_refund_type" class="col-md-5" />
-                                <field
-                                    name="facturx_refund_type"
-                                    attrs="{'required': [('xml_format_in_pdf_invoice', '=', 'factur-x')]}"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <setting id="e-invoices" position="after">
+                <setting
+                    id="e-invoices-facturx_level"
+                    string="Factur-X Level"
+                    help="Select the profile used for Factur-X invoice generation"
+                    invisible="xml_format_in_pdf_invoice != 'factur-x'"
+                >
+                    <field name="facturx_level" />
+                </setting>
+                <setting
+                    id="e-invoices-facturx_refund_type"
+                    string="Factur-X Refund Type"
+                    help="Select the type used for Factur-X customer refunds"
+                    invisible="xml_format_in_pdf_invoice != 'factur-x'"
+                >
+                    <field name="facturx_refund_type" />
+                </setting>
+            </setting>
         </field>
     </record>
 </odoo>

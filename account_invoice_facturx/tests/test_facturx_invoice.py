@@ -2,25 +2,23 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import logging
-
 from facturx import get_facturx_level
 from lxml import etree
 
 from odoo.tests.common import TransactionCase
 
-logger = logging.getLogger(__name__)
-
 
 class TestFacturXInvoice(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.company = self.env.ref("base.main_company")
-        self.product1 = self.env.ref("product.product_product_4")
-        self.product2 = self.env.ref("product.product_product_1")
-        sale_taxes = self.env["account.tax"].search(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.company = cls.env.ref("base.main_company")
+        cls.product1 = cls.env.ref("product.product_product_4")
+        cls.product2 = cls.env.ref("product.product_product_1")
+        sale_taxes = cls.env["account.tax"].search(
             [
-                ("company_id", "=", self.company.id),
+                ("company_id", "=", cls.company.id),
                 ("type_tax_use", "=", "sale"),
                 "|",
                 ("unece_type_id", "=", False),
@@ -29,23 +27,22 @@ class TestFacturXInvoice(TransactionCase):
         )
         sale_taxes.write(
             {
-                "unece_type_id": self.env.ref("account_tax_unece.tax_type_vat").id,
-                "unece_categ_id": self.env.ref("account_tax_unece.tax_categ_s").id,
+                "unece_type_id": cls.env.ref("account_tax_unece.tax_type_vat").id,
+                "unece_categ_id": cls.env.ref("account_tax_unece.tax_categ_s").id,
             }
         )
-        self.invoice = self.env["account.move"].create(
+        cls.invoice = cls.env["account.move"].create(
             {
-                "company_id": self.company.id,
+                "company_id": cls.company.id,
                 "move_type": "out_invoice",
-                "partner_id": self.env.ref("base.res_partner_2").id,
-                "currency_id": self.company.currency_id.id,
+                "partner_id": cls.env.ref("base.res_partner_2").id,
+                "currency_id": cls.company.currency_id.id,
                 "invoice_line_ids": [
                     (
                         0,
                         0,
                         {
-                            "product_id": self.product1.id,
-                            "product_uom_id": self.product1.uom_id.id,
+                            "product_id": cls.product1.id,
                             "quantity": 12,
                             "price_unit": 42.42,
                         },
@@ -54,8 +51,7 @@ class TestFacturXInvoice(TransactionCase):
                         0,
                         0,
                         {
-                            "product_id": self.product2.id,
-                            "product_uom_id": self.product2.uom_id.id,
+                            "product_id": cls.product2.id,
                             "quantity": 2,
                             "price_unit": 12.34,
                         },
@@ -63,7 +59,7 @@ class TestFacturXInvoice(TransactionCase):
                 ],
             }
         )
-        self.invoice.action_post()
+        cls.invoice.action_post()
 
     def test_deep_customer_invoice(self):
         # Bug in Basic XSD: missing CountrySubDivisionName
