@@ -7,7 +7,7 @@ from itertools import chain
 
 import werkzeug
 
-from odoo import http, models
+from odoo import http, models, registry as registry_get
 
 from ..registry import EndpointRegistry
 
@@ -18,8 +18,8 @@ class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
 
     @classmethod
-    def _endpoint_route_registry(cls, env):
-        return EndpointRegistry.registry_for(env.cr)
+    def _endpoint_route_registry(cls, cr):
+        return EndpointRegistry.registry_for(cr)
 
     @classmethod
     def _generate_routing_rules(cls, modules, converters):
@@ -32,7 +32,7 @@ class IrHttp(models.AbstractModel):
     @classmethod
     def _endpoint_routing_rules(cls):
         """Yield custom endpoint rules"""
-        e_registry = cls._endpoint_route_registry(http.request.env)
+        e_registry = cls._endpoint_route_registry(http.request.env.cr)
         for endpoint_rule in e_registry.get_rules():
             _logger.debug("LOADING %s", endpoint_rule)
             endpoint = endpoint_rule.endpoint
@@ -41,20 +41,41 @@ class IrHttp(models.AbstractModel):
 
     @classmethod
     def routing_map(cls, key=None):
-        last_version = cls._get_routing_map_last_version(http.request.env)
-        if not hasattr(cls, "_routing_map"):
-            # routing map just initialized, store last update for this env
-            cls._endpoint_route_last_version = last_version
-        elif cls._endpoint_route_last_version < last_version:
-            _logger.info("Endpoint registry updated, reset routing map")
-            cls._routing_map = {}
-            cls._rewrite_len = {}
-            cls._endpoint_route_last_version = last_version
+        # When the request cursor is used to instantiate the EndpointRegistry
+        # in the call to routing_map, the READ REPEATABLE isolation level
+        # will ensure that any value read from the DB afterwards, will be the
+        # same than when the first SELECT is executed.
+        #
+        # This is breaking the oauth flow as the oauth token that is written
+        # at the beggining of the oauth process cannot be read by the cursor
+        # computing the session token, which will read an old value. Therefore
+        # when the session security check is performed, the session token
+        # is outdated as the new session token is computed using an up to date
+        # cursor.
+        #
+        # By using a dedicated cursor to instantiate the EndpointRegistry, we
+        # ensure no read is performed on the database using the request cursor
+        # which will in turn use the updated value of the oauth token to compute
+        # the session token, and the security check will not fail.
+        registry = registry_get(http.request.env.cr.dbname)
+        with registry.cursor() as cr:
+            last_version = cls._get_routing_map_last_version(cr)
+            if not hasattr(cls, "_routing_map"):
+                _logger.debug(
+                    "routing map just initialized, store last update for this env"
+                )
+                # routing map just initialized, store last update for this env
+                cls._endpoint_route_last_version = last_version
+            elif cls._endpoint_route_last_version < last_version:
+                _logger.info("Endpoint registry updated, reset routing map")
+                cls._routing_map = {}
+                cls._rewrite_len = {}
+                cls._endpoint_route_last_version = last_version
         return super().routing_map(key=key)
 
     @classmethod
-    def _get_routing_map_last_version(cls, env):
-        return cls._endpoint_route_registry(env).last_version()
+    def _get_routing_map_last_version(cls, cr):
+        return cls._endpoint_route_registry(cr).last_version()
 
     @classmethod
     def _clear_routing_map(cls):
