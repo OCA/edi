@@ -16,13 +16,13 @@ block other modules or data) -->
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
             <xpath
-                expr="//div[hasclass('o_address_format')]/field[@name='country_id']"
+                expr="//div[@name='partner_address_country']/field[@name='country_id']"
                 position="attributes"
             >
                 <attribute name="required">1</attribute>
             </xpath>
             <xpath
-                expr="//field[@name='child_ids']/form//field[@name='country_id']"
+                expr="//field[@name='child_ids']/form//div[@name='div_address']/field[@name='country_id']"
                 position="attributes"
             >
                 <attribute name="required">1</attribute>

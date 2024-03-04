@@ -5,6 +5,7 @@
 import logging
 
 from lxml import etree
+from stdnum import ean
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -276,12 +277,8 @@ class AccountMove(models.Model):
         trade_agreement = etree.SubElement(
             trade_transaction, ns["ram"] + "ApplicableHeaderTradeDelivery"
         )
-        # partner_shipping_id is provided by the sale module
-        if (
-            ns["level"] in PROFILES_EN_UP
-            and hasattr(self, "partner_shipping_id")
-            and self.partner_shipping_id
-        ):
+        # partner_shipping_id is provided by the account module since v16
+        if ns["level"] in PROFILES_EN_UP and self.partner_shipping_id:
             shipto_trade_party = etree.SubElement(
                 trade_agreement, ns["ram"] + "ShipToTradeParty"
             )
@@ -602,7 +599,7 @@ class AccountMove(models.Model):
 
     def _set_iline_product_information(self, iline, trade_product, ns):
         if iline.product_id:
-            if iline.product_id.barcode:
+            if iline.product_id.barcode and ean.is_valid(iline.product_id.barcode):
                 barcode = etree.SubElement(
                     trade_product, ns["ram"] + "GlobalID", schemeID="0160"
                 )
