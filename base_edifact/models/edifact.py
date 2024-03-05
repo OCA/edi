@@ -195,16 +195,25 @@ class BasePydifact(models.AbstractModel):
         EN. International Article Numbering Association (EAN)
         UP. UPC (Universal product code)
         SRV. GTIN
-        :product_info: PIA segment
+        :pia: PIA segment
             ['5', ['1276', 'SA', '', '9']]
         SA. Supplier's Article Number
         """
-        product = seg[2]
-        pct = product[1]
+        code = seg[2][0]
+        product_tmp = self.env["product.template"]
+        if code:
+            field = "default_code" if seg[2][1] == "SRV" else "barcode"
+            record = product_tmp.search([(field, "=", code)], limit=1)
+            if record:
+                if field == "default_code":
+                    field = "code"
+                return {field: code}
         # Fallback on SA if no EAN given
-        if not product[0] and pia[1][0]:
-            return dict(code=pia[1][0])
-        return dict(code=product[0]) if pct == "SRV" else dict(barcode=product[0])
+        if pia is not None and pia[1][0]:
+            record = product_tmp.search([("default_code", "=", pia[1][0])], limit=1)
+            if record:
+                return {"code": pia[1][0]}
+        return {}
 
     @api.model
     def map2odoo_qty(self, seg):
