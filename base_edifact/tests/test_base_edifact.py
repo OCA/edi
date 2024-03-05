@@ -17,6 +17,9 @@ class TestBaseEdifact(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.base_edifact_model = cls.env["base.edifact"]
+        cls.product = cls.env.ref("product.product_product_1")
+        cls.product.barcode = "9783898"
+        cls.product.default_code = "12767"
 
     def test_pydifact_obj(self):
         edifact_docu = _get_file_content("Retail_EDIFACT_ORDERS_sample1.txt")
@@ -50,15 +53,31 @@ class TestBaseEdifact(TransactionCase):
         self.assertEqual(currency["symbol"], "€")
 
     def test_map2odoo_product(self):
-        seg = ("1", "", ["8885583503464", "EN"])
+        seg = ("1", "", ["9783898", "EN"])
         product = self.base_edifact_model.map2odoo_product(seg)
-        self.assertEqual(product["barcode"], "8885583503464")
+        self.assertEqual(product["barcode"], "9783898")
 
-    def test_map2odoo_product_pia(self):
+    def test_map2odoo_product_incorrect_barcode(self):
+        seg = ("1", "", ["97838983075", "EN"])
+        product = self.base_edifact_model.map2odoo_product(seg)
+        self.assertEqual(product, {})
+
+    def test_map2odoo_product_srv(self):
+        seg = ("1", "", ["12767", "SRV"])
+        product = self.base_edifact_model.map2odoo_product(seg)
+        self.assertEqual(product["code"], "12767")
+
+    def test_map2odoo_product_no_lin_has_pia(self):
         seg = ("1", "", ["", "EN"])
-        pia = ["5", ["1276", "SA", "", "9"]]
+        pia = ["5", ["12767", "SA", "", "9"]]
         product = self.base_edifact_model.map2odoo_product(seg, pia)
-        self.assertEqual(product["code"], "1276")
+        self.assertEqual(product["code"], "12767")
+
+    def test_map2odoo_product_uncorrect_lin_and_pia(self):
+        seg = ("1", "", ["97838983075", "EN"])
+        pia = ["5", ["127678", "SA", "", "9"]]
+        product = self.base_edifact_model.map2odoo_product(seg, pia)
+        self.assertEqual(product, {})
 
     def test_map2odoo_qty(self):
         seg = (["21", "2"],)
