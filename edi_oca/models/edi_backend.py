@@ -50,6 +50,7 @@ class EDIBackend(models.Model):
         required=True,
         ondelete="restrict",
     )
+    backend_type_code = fields.Char(related="backend_type_id.code")
     output_sent_processed_auto = fields.Boolean(
         help="""
     Automatically set the record as processed after sending.
