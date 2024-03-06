@@ -50,6 +50,8 @@
                         </h2>
                     </div>
                     <group>
+                        <!-- can be used to hide elements based on the backend type, e.g. notebook pages -->
+                        <field name="backend_type_code" invisible="1" />
                         <field name="output_sent_processed_auto" />
                         <field name="active" invisible="1" />
                         <field name="company_id" groups="base.group_multi_company" />
