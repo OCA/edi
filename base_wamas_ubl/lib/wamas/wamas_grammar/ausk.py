@@ -709,10 +709,8 @@ grammar = OrderedDict(
             "length": 30,
             "dp": False,
             "ubl_path": {
-                "DespatchAdvice.cac:Shipment.cbc:HandlingInstructions": [
-                    "DespatchAdvice.cac:Shipment.cbc:ID",
-                    False,
-                ]
+                "DespatchAdvice.cac:Shipment."
+                "cbc:HandlingInstructions": "DespatchAdvice.cac:Shipment.cbc:ID"
             },
             "df_val": False,
             "df_func": False,
