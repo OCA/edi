@@ -4,7 +4,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
-import mimetypes
 from io import BytesIO
 
 from lxml import etree
@@ -585,6 +584,7 @@ class BaseUbl(models.AbstractModel):
             ) from e
         return True
 
+    # TODO: move to pdf_helper
     @api.model
     def _ubl_add_xml_in_pdf_buffer(self, xml_string, xml_filename, buffer):
         # Add attachment to PDF content.
@@ -600,6 +600,7 @@ class BaseUbl(models.AbstractModel):
         writer.write(new_buffer)
         return new_buffer
 
+    # TODO: move to pdf_helper
     @api.model
     def _embed_ubl_xml_in_pdf_content(self, xml_string, xml_filename, pdf_content):
         """Add the attachments to the PDF content.
@@ -620,6 +621,7 @@ class BaseUbl(models.AbstractModel):
         logger.info("%s file added to PDF content", xml_filename)
         return pdf_content
 
+    # TODO: move to pdf_helper
     @api.model
     def embed_xml_in_pdf(
         self, xml_string, xml_filename, pdf_content=None, pdf_file=None
@@ -786,43 +788,9 @@ class BaseUbl(models.AbstractModel):
         }
         return product_dict
 
-    # ======================= METHODS only needed for testing
-
-    # Method copy-pasted from edi/base_business_document_import/
-    # models/business_document_import.py
-    # Because we don't depend on this module
     def get_xml_files_from_pdf(self, pdf_file):
         """Returns a dict with key = filename, value = XML file obj"""
-        logger.info("Trying to find an embedded XML file inside PDF")
-        res = {}
-        try:
-            fd = BytesIO(pdf_file)
-            pdf = PdfFileReader(fd)
-            logger.debug("pdf.trailer=%s", pdf.trailer)
-            pdf_root = pdf.trailer["/Root"]
-            logger.debug("pdf_root=%s", pdf_root)
-            embeddedfiles = pdf_root["/Names"]["/EmbeddedFiles"]["/Names"]
-            i = 0
-            xmlfiles = {}  # key = filename, value = PDF obj
-            for embeddedfile in embeddedfiles[:-1]:
-                mime_res = mimetypes.guess_type(embeddedfile)
-                if mime_res and mime_res[0] in ["application/xml", "text/xml"]:
-                    xmlfiles[embeddedfile] = embeddedfiles[i + 1]
-                i += 1
-            logger.debug("xmlfiles=%s", xmlfiles)
-            for filename, xml_file_dict_obj in xmlfiles.items():
-                try:
-                    xml_file_dict = xml_file_dict_obj.getObject()
-                    logger.debug("xml_file_dict=%s", xml_file_dict)
-                    xml_string = xml_file_dict["/EF"]["/F"].getData()
-                    xml_root = etree.fromstring(xml_string)
-                    logger.debug(
-                        "A valid XML file %s has been found in the PDF file", filename
-                    )
-                    res[filename] = xml_root
-                except Exception:
-                    continue
-        except Exception as exc:
-            logger.debug("Passing any uncaught exception. \n %s" % exc)
-        logger.info("Valid XML files found in PDF: %s", list(res.keys()))
-        return res
+        logger.warning(
+            "`get_xml_files_from_pdf` deprecated: use `pdf.helper.pdf_get_xml_files`"
+        )
+        return self.env["pdf.helper"].pdf_get_xml_files(pdf_file)
