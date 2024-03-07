@@ -666,6 +666,12 @@ class AccountMove(models.Model):
                 )
                 origin_trade_country_code.text = product.origin_country_id.code
 
+    def _cii_allow_negative_unit_prices(self):
+        """Although not valid per the Factur-X standard, override this and return true
+        to allow invoice lines with negative unit prices in specific cases.
+        """
+        return False
+
     def _cii_add_invoice_line_block(self, trade_transaction, iline, line_number, ns):
         self.ensure_one()
         line_item = etree.SubElement(
@@ -682,7 +688,11 @@ class AccountMove(models.Model):
         line_trade_agreement = etree.SubElement(
             line_item, ns["ram"] + "SpecifiedLineTradeAgreement"
         )
-        if float_compare(iline.price_unit, 0, precision_digits=ns["price_prec"]) < 0:
+        if (
+            not self._cii_allow_negative_unit_prices()
+            and float_compare(iline.price_unit, 0, precision_digits=ns["price_prec"])
+            < 0
+        ):
             raise UserError(
                 _(
                     "The Factur-X standard specify that unit prices can't be "
