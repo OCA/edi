@@ -1,0 +1,19 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* base_facturx
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: base_facturx
+#: model:ir.model,name:base_facturx.model_base_facturx
+msgid "Common methods to generate and parse Factur-X and Order-X"
+msgstr ""
