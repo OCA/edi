@@ -17,19 +17,6 @@ msgstr ""
 "X-Generator: Weblate 4.17\n"
 
 #. module: account_einvoice_generate
-#: model_terms:ir.ui.view,arch_db:account_einvoice_generate.view_account_config_settings
-msgid ""
-"<span class=\"o_form_label\">Select Format</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
-msgstr ""
-"<span class=\"o_form_label\">Sélectionner le format</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
-
-#. module: account_einvoice_generate
 #: model:ir.model,name:account_einvoice_generate.model_res_company
 msgid "Companies"
 msgstr "Sociétés"
@@ -64,3 +51,14 @@ msgstr "Format XML embarqué dans la facture PDF"
 #: model_terms:ir.ui.view,arch_db:account_einvoice_generate.view_account_config_settings
 msgid "XML format attached to your PDF customer invoices"
 msgstr "Format XML embarqué à l'intérieur de vos factures clients PDF"
+
+#~ msgid ""
+#~ "<span class=\"o_form_label\">Select Format</span>\n"
+#~ "                            <span class=\"fa fa-lg fa-building-o\" title="
+#~ "\"Values set here are company-specific.\" groups=\"base."
+#~ "group_multi_company\"/>"
+#~ msgstr ""
+#~ "<span class=\"o_form_label\">Sélectionner le format</span>\n"
+#~ "                            <span class=\"fa fa-lg fa-building-o\" title="
+#~ "\"Values set here are company-specific.\" groups=\"base."
+#~ "group_multi_company\"/>"
