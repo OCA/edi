@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Tecnativa - Víctor Martínez
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_wizard_base_import_pdf_upload_form" model="ir.ui.view">
+        <field name="model">wizard.base.import.pdf.upload</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="model" invisible="1" />
+                    <field
+                        name="attachment_ids"
+                        widget="many2many_binary"
+                        colspan="2"
+                        string="Upload Files"
+                        nolabel="1"
+                        options="{'accepted_file_extensions': '.pdf'}"
+                    />
+                </group>
+                <footer>
+                    <button
+                        name="action_process"
+                        string="Import"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_wizard_base_import_pdf_upload" model="ir.actions.act_window">
+        <field name="name">Import PDFs</field>
+        <field name="res_model">wizard.base.import.pdf.upload</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
