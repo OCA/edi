@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2017-2022 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_account_config_settings" model="ir.ui.view">
+        <field name="name">account_invoice_facturx.res.config.settings</field>
+        <field name="model">res.config.settings</field>
+        <field
+            name="inherit_id"
+            ref="account_einvoice_generate.view_account_config_settings"
+        />
+        <field name="arch" type="xml">
+            <setting id="e-invoices" position="after">
+                <setting
+                    id="e-invoices-facturx_level"
+                    string="Factur-X Level"
+                    help="Select the profile used for Factur-X invoice generation"
+                    invisible="xml_format_in_pdf_invoice != 'factur-x'"
+                >
+                    <field name="facturx_level" />
+                </setting>
+                <setting
+                    id="e-invoices-facturx_refund_type"
+                    string="Factur-X Refund Type"
+                    help="Select the type used for Factur-X customer refunds"
+                    invisible="xml_format_in_pdf_invoice != 'factur-x'"
+                >
+                    <field name="facturx_refund_type" />
+                </setting>
+            </setting>
+        </field>
+    </record>
+</odoo>
