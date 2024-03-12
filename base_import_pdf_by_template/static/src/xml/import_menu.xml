@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="BaseImportPdfSimple.ImportRecords" owl="1">
+        <DropdownItem
+            class="o_base_import_pdf_by_template_menu dropdown-item"
+            t-on-click="openWizardBaseImportPdfUpload"
+        >
+            Import PDF
+        </DropdownItem>
+    </t>
+</templates>

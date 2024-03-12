@@ -1,0 +1,609 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* base_import_pdf_by_template
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
+#, python-format
+msgid ""
+"<p>%(item_name)s has been set with %(new_value)s instead of\n"
+"                    %(old_value)s</p>"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_view_form
+msgid "<span class=\"oe_edit_only\">Name</span>"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template_line__log_distinct_value
+msgid ""
+"A note will be added with the previous value and the indicated value if\n"
+"        they are different."
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__active
+msgid "Active"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__allowed_template_ids
+msgid "Allowed Template"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_view_form
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_view_search
+msgid "Archived"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_mixin__attachment_id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__attachment_id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__attachment_id
+msgid "Attachment"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__auto_detect_pattern
+msgid "Auto detect pattern"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.ui.menu,name:base_import_pdf_by_template.menu_base_import_pdf_by_template_root
+msgid "Base Import Pdf By Template"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_base_import_pdf_template
+msgid "Base Import Pdf Template"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_base_import_pdf_template_line
+msgid "Base Import Pdf Template Line"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_base_import_pdf_template_line_mapped
+msgid "Base Import Pdf Template Line Mapped"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.view_wizard_base_import_pdf_upload_form
+msgid "Cancel"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__child_field_id
+msgid "Child Field"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__child_model
+msgid "Child Model"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__column
+msgid "Column"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__decimal_separator__comma
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__comma
+#, python-format
+msgid "Comma (,)"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__company_id
+msgid "Company"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__create_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__create_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__create_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__create_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__create_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__create_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__create_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__create_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__create_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__create_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__data
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__data
+msgid "Data"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__date_format
+msgid "Date Format"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__decimal_separator
+msgid "Decimal Separator"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__default_value
+msgid "Default value"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__display_name
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__display_name
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__display_name
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__display_name
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__display_name
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__decimal_separator__dot
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__dot
+#, python-format
+msgid "Dot (.)"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
+#, python-format
+msgid "Error to set %(field_name)s with value %(value)s"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_mixin__extraction_mode
+msgid "Extraction Mode"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__extraction_mode
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__extraction_mode
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__extraction_mode
+msgid "Extraction mode"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__field_id
+msgid "Field"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__child_field_name
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__field_name
+msgid "Field Name"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__field_ttype
+msgid "Field Type"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__data_file
+msgid "File"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__attachment_ids
+msgid "Files"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__value_type__fixed
+#, python-format
+msgid "Fixed"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value
+msgid "Fixed value"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template_line__field_relation
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template_line__search_field_relation
+msgid "For relationship fields, the technical name of the target model"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
+#, python-format
+msgid "Generated Documents"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__time_format__-h:-m:-s
+#, python-format
+msgid "H:M:S"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__related_model__header
+#, python-format
+msgid "Header"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__header_items
+msgid "Header Items"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__header_items
+msgid "Header columns separated by commas"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__header_values
+msgid "Header values"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__id
+msgid "ID"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.view_wizard_base_import_pdf_upload_form
+msgid "Import"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. openerp-web
+#: code:addons/base_import_pdf_by_template/static/src/xml/import_menu.xml:0
+#, python-format
+msgid "Import PDF"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.actions.act_window,name:base_import_pdf_by_template.action_wizard_base_import_pdf_upload
+msgid "Import PDFs"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__auto_detect_pattern
+msgid ""
+"It will be necessary to set a patter that only finds something\n"
+"        in the documents for this template."
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template____last_update
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line____last_update
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped____last_update
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview____last_update
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload____last_update
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__write_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__write_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__write_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__write_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__write_uid
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__write_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__write_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__write_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__write_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__write_date
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__line_ids
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__line_ids
+msgid "Line"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__related_model__lines
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_view_form
+#, python-format
+msgid "Lines"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__lines_values
+msgid "Lines values"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__log_text
+msgid "Log Text"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__log_distinct_value
+msgid "Log distint value?"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-m--d--y
+#, python-format
+msgid "MM-dd-YY"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-m/-d/-y
+#, python-format
+msgid "MM/dd/YY"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__model_id
+msgid "Main Model"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__mapped_ids
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "Mapped"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__model
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__model
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__model
+msgid "Model"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__name
+msgid "Name"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
+#, python-format
+msgid ""
+"No template has been auto-detected from %s, it may be necessary to create a "
+"new one."
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__none
+#, python-format
+msgid "None"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_mixin.py:0
+#, python-format
+msgid "Odoo could not extract the text from the PDF."
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__origin
+msgid "Origin"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__parent_id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__parent_id
+msgid "Parent"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__pattern
+msgid "Pattern"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_view_form
+msgid "Preview"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.actions.act_window,name:base_import_pdf_by_template.action_wizard_base_import_pdf_preview
+msgid "Preview PDF"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template__extraction_mode__pypdf
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__wizard_base_import_pdf_preview__extraction_mode__pypdf
+msgid "Pypdf"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__data
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.view_wizard_base_import_pdf_preview_form
+msgid "RAW data"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__field_relation
+msgid "Related Model"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__related_model
+msgid "Related model"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__search_field_id
+msgid "Search field"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__search_field_name
+msgid "Search field name"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__search_field_relation
+msgid "Search field relation"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__search_field_ttype
+msgid "Search field type"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__search_subfield_id
+msgid "Search subfield"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__space
+#, python-format
+msgid "Space ( )"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__table_info
+msgid "Table info"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.view_wizard_base_import_pdf_preview_form
+msgid "Technical information"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__template_id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__template_id
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__template_id
+msgid "Template"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.actions.act_window,name:base_import_pdf_by_template.base_import_pdf_template_action
+#: model:ir.ui.menu,name:base_import_pdf_by_template.menu_base_import_pdf_template
+msgid "Templates"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
+#, python-format
+msgid "There is no template that can be applied"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__thousand_separator
+msgid "Thousand Separator"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__time_format
+msgid "Time Format"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__total_pages
+msgid "Total pages"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.view_wizard_base_import_pdf_upload_form
+msgid "Upload Files"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__value
+msgid "Value"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__value_type
+msgid "Value type"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__value_type__variable
+#, python-format
+msgid "Variable"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_wizard_base_import_pdf_mixin
+msgid "Wizard Base Import Pdf Mixin"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_wizard_base_import_pdf_preview
+msgid "Wizard Base Import Pdf Preview"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_wizard_base_import_pdf_upload
+msgid "Wizard Base Import Pdf Upload"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_wizard_base_import_pdf_upload_line
+msgid "Wizard Base Import Pdf upload Line"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-y--d--m
+#, python-format
+msgid "YY-dd-MM"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-y/-d/-m
+#, python-format
+msgid "YY/dd/MM"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d_-m_-y
+#, python-format
+msgid "dd.MM.YY"
+msgstr ""
