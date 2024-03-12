@@ -18,18 +18,6 @@ msgstr ""
 "X-Generator: Weblate 3.8\n"
 
 #. module: account_einvoice_generate
-#: model_terms:ir.ui.view,arch_db:account_einvoice_generate.view_account_config_settings
-#, fuzzy
-msgid ""
-"<span class=\"o_form_label\">Select Format</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
-msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Vrijednosti postavljene ovdje "
-"su specifične za svaku tvrtku\" groups=\"base.group_multi_company\"/>"
-
-#. module: account_einvoice_generate
 #: model:ir.model,name:account_einvoice_generate.model_res_company
 msgid "Companies"
 msgstr "Tvrtke"
@@ -64,6 +52,17 @@ msgstr "XML format ugnježđen u PDF račun"
 #: model_terms:ir.ui.view,arch_db:account_einvoice_generate.view_account_config_settings
 msgid "XML format attached to your PDF customer invoices"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "<span class=\"o_form_label\">Select Format</span>\n"
+#~ "                            <span class=\"fa fa-lg fa-building-o\" title="
+#~ "\"Values set here are company-specific.\" groups=\"base."
+#~ "group_multi_company\"/>"
+#~ msgstr ""
+#~ "<span class=\"fa fa-lg fa-building-o\" title=\"Vrijednosti postavljene "
+#~ "ovdje su specifične za svaku tvrtku\" groups=\"base.group_multi_company\"/"
+#~ ">"
 
 #~ msgid "Select the format of your e-invoices."
 #~ msgstr "Odaberite format za vaše elektroničke račune."
