@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0\n"
+"Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -74,6 +74,7 @@ msgstr ""
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_level
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings__facturx_level
+#: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
 msgid "Factur-X Level"
 msgstr ""
 
@@ -85,6 +86,7 @@ msgstr ""
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_refund_type
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings__facturx_refund_type
+#: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
 msgid "Factur-X Refund Type"
 msgstr ""
 
@@ -164,6 +166,16 @@ msgstr ""
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_ir_actions_report
 msgid "Report Action"
+msgstr ""
+
+#. module: account_invoice_facturx
+#: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
+msgid "Select the profile used for Factur-X invoice generation"
+msgstr ""
+
+#. module: account_invoice_facturx
+#: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
+msgid "Select the type used for Factur-X customer refunds"
 msgstr ""
 
 #. module: account_invoice_facturx
