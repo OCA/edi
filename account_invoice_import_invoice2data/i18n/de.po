@@ -73,14 +73,6 @@ msgid "PDF Invoice parsing failed. Error message: %s"
 msgstr "PDF Rechnungsverarbeitung ist gescheitert. Fehler Meldung: %s"
 
 #. module: account_invoice_import_invoice2data
-#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
-#, python-format
-msgid ""
-"This PDF invoice doesn't match a known template of the invoice2data lib."
-msgstr ""
-"Diese PDF Rechnung entspricht keinem Template der invoice2data Bibliothek."
-
-#. module: account_invoice_import_invoice2data
 #: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Units"
@@ -112,6 +104,12 @@ msgstr ""
 "Bibliothek (liest den Text der PDF und erhält die Informationen). Dies "
 "funktioniert nur, wenn die Bibliothek invoice2data eine Vorlage für die "
 "Rechnungen dieses Lieferanten enthält."
+
+#, python-format
+#~ msgid ""
+#~ "This PDF invoice doesn't match a known template of the invoice2data lib."
+#~ msgstr ""
+#~ "Diese PDF Rechnung entspricht keinem Template der invoice2data Bibliothek."
 
 #~ msgid "Unit(s)"
 #~ msgstr "Einheit(en)"
