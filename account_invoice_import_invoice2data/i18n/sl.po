@@ -76,14 +76,6 @@ msgid "PDF Invoice parsing failed. Error message: %s"
 msgstr "Neuspešna obdelava PDF računa. Napaka: %s"
 
 #. module: account_invoice_import_invoice2data
-#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
-#, python-format
-msgid ""
-"This PDF invoice doesn't match a known template of the invoice2data lib."
-msgstr ""
-"Ta PDF račun se ne ujema z nobeno znano predlogo iz knjižnice invoice2data."
-
-#. module: account_invoice_import_invoice2data
 #: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Units"
@@ -112,3 +104,10 @@ msgid ""
 "only if the invoice2data library has a template for the invoices of that "
 "supplier."
 msgstr ""
+
+#, python-format
+#~ msgid ""
+#~ "This PDF invoice doesn't match a known template of the invoice2data lib."
+#~ msgstr ""
+#~ "Ta PDF račun se ne ujema z nobeno znano predlogo iz knjižnice "
+#~ "invoice2data."

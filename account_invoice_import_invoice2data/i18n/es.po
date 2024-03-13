@@ -78,15 +78,6 @@ msgid "PDF Invoice parsing failed. Error message: %s"
 msgstr "Error en el análisis de la factura PDF. Mensaje de error: %s"
 
 #. module: account_invoice_import_invoice2data
-#: code:addons/account_invoice_import_invoice2data/wizard/account_invoice_import.py:0
-#, python-format
-msgid ""
-"This PDF invoice doesn't match a known template of the invoice2data lib."
-msgstr ""
-"Esta factura en PDF no coincide con una plantilla conocida de la biblioteca "
-"de invoice2data."
-
-#. module: account_invoice_import_invoice2data
 #: model:product.product,uom_name:account_invoice_import_invoice2data.internet_access
 #: model:product.template,uom_name:account_invoice_import_invoice2data.internet_access_product_template
 msgid "Units"
@@ -118,3 +109,10 @@ msgstr ""
 "(lee el texto del PDF y obtiene la información). Sólo funcionará si la "
 "biblioteca invoice2data tiene una plantilla para las facturas de ese "
 "proveedor."
+
+#, python-format
+#~ msgid ""
+#~ "This PDF invoice doesn't match a known template of the invoice2data lib."
+#~ msgstr ""
+#~ "Esta factura en PDF no coincide con una plantilla conocida de la "
+#~ "biblioteca de invoice2data."
