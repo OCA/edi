@@ -164,12 +164,10 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         )
         self.assertEqual(res, product1)
         raise_test = True
-        try:
-            bdio._match_product(product_dict, [], seller=False)
-            raise_test = False
-        except Exception:
-            pass
         self.assertTrue(raise_test)
+        chatter = []
+        bdio._match_product(product_dict, chatter_msg=chatter, seller=False)
+        self.assertGreaterEqual(len(chatter), 1)
 
     def test_match_uom(self):
         bdio = self.env["business.document.import"]
