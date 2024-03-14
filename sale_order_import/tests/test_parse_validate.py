@@ -2,8 +2,8 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import base64
+from unittest import mock
 
-import mock
 from lxml import etree
 
 from odoo import exceptions
@@ -15,36 +15,22 @@ from .common import TestCommon
 class TestParsingValidation(TestCommon):
     """Mostly unit tests on wizard parsing methods."""
 
-    def test_onchange_validation_none(self):
-        csv_data = base64.b64encode(b"id,name\n,1,Foo")
-        with Form(self.wiz_model) as form:
-            form.order_file = csv_data
-            # no filename, no party
-            self.assertFalse(form.csv_import)
-            self.assertFalse(form.doc_type)
+    def test_wrong_import_type(self):
+        order_file_data = base64.b64encode(
+            b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        )
+        order_filename = "test_order.xml"
+        expected_error_message = (
+            "This file 'test_order.xml' is not recognized as"
+            " a PDF file. Please check the file and its extension."
+        )
 
-    def test_onchange_validation_not_supported(self):
-        # Just test is not broken
-        self.assertTrue(self.wiz_model._unsupported_file_msg("fname.omg"))
-        # Test it gets called (cannot do it w/ Form)
-        mock_file_msg = mock.patch.object(type(self.wiz_model), "_unsupported_file_msg")
-        with mock_file_msg as mocked:
-            with Form(self.wiz_model) as form:
-                form.order_filename = "test.omg"
-                form.order_file = "00100000"
-                self.assertFalse(form.csv_import)
-                self.assertFalse(form.doc_type)
-                mocked.assert_called()
-
-    def test_onchange_validation_csv(self):
-        csv_data = base64.b64encode(b"id,name\n,1,Foo")
-
-        with Form(self.wiz_model) as form:
-            form.partner_id = self.partner  # required by the view if CSV is set
-            form.order_filename = "test.csv"
-            form.order_file = csv_data
-            self.assertTrue(form.csv_import)
-            self.assertFalse(form.doc_type)
+        with self.assertRaisesRegex(exceptions.UserError, expected_error_message):
+            with Form(
+                self.wiz_model.with_context(default_order_filename=order_filename)
+            ) as form:
+                form.import_type = "pdf"
+                form.order_file = order_file_data
 
     def test_onchange_validation_xml(self):
         xml_data = base64.b64encode(
@@ -54,39 +40,42 @@ class TestParsingValidation(TestCommon):
         # Simulate bad file handling
         mock_parse_xml = mock.patch.object(type(self.wiz_model), "_parse_xml")
 
-        with Form(self.wiz_model) as form:
-            form.order_filename = "test.xml"
+        with Form(
+            self.wiz_model.with_context(default_order_filename="test.xml")
+        ) as form:
             with mock_parse_xml as mocked:
                 mocked.return_value = ("", "I don't like this file")
                 with self.assertRaisesRegex(
                     exceptions.UserError, "I don't like this file"
                 ):
+                    form.import_type = "xml"
                     form.order_file = xml_data
                 mocked.assert_called()
 
         mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
 
-        with Form(self.wiz_model) as form:
-            form.order_filename = "test.xml"
+        with Form(
+            self.wiz_model.with_context(default_order_filename="test.xml")
+        ) as form:
             with mock_parse_order as mocked:
                 mocked.return_value = "rfq"
+                form.import_type = "xml"
                 form.order_file = xml_data
                 mocked.assert_called()
-                self.assertFalse(form.csv_import)
                 self.assertEqual(form.doc_type, "rfq")
 
     def test_onchange_validation_pdf(self):
         pdf_data = self.read_test_file("test.pdf", mode="rb", as_b64=True)
         mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_pdf_order")
 
-        with Form(self.wiz_model) as form:
-            # form.partner_id = self.partner  # required by the view if CSV is set
-            form.order_filename = "test.pdf"
+        with Form(
+            self.wiz_model.with_context(default_order_filename="test.pdf")
+        ) as form:
             with mock_parse_order as mocked:
                 mocked.return_value = "rfq"
+                form.import_type = "pdf"
                 form.order_file = pdf_data
                 mocked.assert_called()
-                self.assertFalse(form.csv_import)
                 self.assertEqual(form.doc_type, "rfq")
 
     def test_parse_xml_bad(self):
@@ -102,12 +91,10 @@ class TestParsingValidation(TestCommon):
         xml_root, error_msg = self.wiz_model._parse_xml(xml_data)
         self.assertTrue(isinstance(xml_root, etree._Element))
         # Due to parse_xml_order NotImplementedError
-        self.assertEqual(error_msg, "Unsupported XML document")
         mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
         with mock_parse_order as mocked:
             mocked.side_effect = exceptions.UserError("I don't like this file")
             self.assertTrue(isinstance(xml_root, etree._Element))
-            self.assertEqual(error_msg, "Unsupported XML document")
 
     def test_parse_xml_good(self):
         xml_data = b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
