@@ -28,14 +28,14 @@ class TestPDFHelperUtils(TreeCase):
 
 
 class TestPDFHelper(TransactionCase):
-    def test_parse_xml(self):
+    def test_get_xml(self):
         pdf_content = read_test_file("pdf_with_xml_test.pdf", mode="rb")
         res = self.env["pdf.helper"].pdf_get_xml_files(pdf_content)
         fname, xml_root = tuple(res.items())[0]
         self.assertEqual(fname, "factur-x.xml")
         self.assertTrue(isinstance(xml_root, etree._Element))
 
-    def test_parse_xml_fail(self):
+    def test_get_xml_fail(self):
         with self.assertLogs(
             "odoo.addons.pdf_helper.models.helper", level="ERROR"
         ) as log_catcher:
@@ -44,3 +44,15 @@ class TestPDFHelper(TransactionCase):
                 "PDF file parsing failed: Cannot read an empty file",
                 log_catcher.output[0],
             )
+
+    def test_embed_xml(self):
+        pdf_content = read_test_file("pdf_with_xml_test.pdf", mode="rb")
+        filename = "test"
+        xml = b"<root>test</root>"
+        newpdf_content = self.env["pdf.helper"].pdf_embed_xml(
+            pdf_content, filename, xml
+        )
+        attachments = self.env["pdf.helper"].pdf_get_xml_files(newpdf_content)
+        self.assertTrue(filename in attachments)
+        etree_content = attachments[filename]
+        self.assertEqual(xml, etree.tostring(etree_content))
