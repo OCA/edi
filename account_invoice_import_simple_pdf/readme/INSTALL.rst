@@ -5,10 +5,9 @@ The module supports 5 different extraction methods:
 1. `PyMuPDF <https://github.com/pymupdf/PyMuPDF>`_ which is a Python binding for `MuPDF <https://mupdf.com/>`_, a lightweight PDF toolkit/viewer/renderer published under the AGPL licence by the company `Artifex Software <https://artifex.com/>`_.
 #. `pdftotext python library <https://pypi.org/project/pdftotext/>`_, which is a python binding for the pdftotext tool.
 #. `pdftotext command line tool <https://en.wikipedia.org/wiki/Pdftotext>`_, which is based on `poppler <https://poppler.freedesktop.org/>`_, a PDF rendering library used by `xpdf <https://www.xpdfreader.com/>`_ and `Evince <https://wiki.gnome.org/Apps/Evince/FrequentlyAskedQuestions>`_ (the PDF reader of `Gnome <https://www.gnome.org/>`_).
-#. `pdfplumber <https://pypi.org/project/pdfplumber/>`_, which is a python library built on top the of the python library `pdfminer.six <https://pypi.org/project/pdfminer.six/>`_. pdfplumber is a pure-python solution, so it's very easy to install on all OSes.
 #. `pypdf <https://github.com/py-pdf/pypdf/>`_, which is one of the most common PDF lib for Python. pypdf is a pure-python solution, so it's very easy to install on all OSes.
 
-PyMuPDF and pdftotext both give a very good text output. So far, I can't say which one is best. pdfplumber and pypdf often give lower-quality text output, but their advantage is that they are pure-Python librairies, so you will always be able to install it whatever your technical environnement is.
+PyMuPDF and pdftotext both give a very good text output. So far, I can't say which one is best. pypdf often gives lower-quality text output, but its advantage is that it is a pure-Python librairy, so you will always be able to install it whatever your technical environnement is.
 
 You can choose one extraction method and only install the tools/libs for that method.
 
@@ -19,7 +18,7 @@ Install it via pip:
 
 .. code::
 
-  sudo pip3 install --upgrade pymupdf
+  pip3 install --upgrade pymupdf
 
 Beware that *PyMuPDF* is not a pure-python library: it uses MuPDF, which is written in C language. If a python wheel for your OS, CPU architecture and Python version is available on pypi (check the `list of PyMuPDF wheels <https://pypi.org/project/PyMuPDF/#files>`_ on pypi), it will install smoothly. Otherwize, the installation via pip will require MuPDF and all its development libs to compile the binding.
 
@@ -36,7 +35,7 @@ and then install the lib via pip:
 
 .. code::
 
-  sudo pip3 install --upgrade pdftotext
+  pip3 install --upgrade pdftotext
 
 On OSes other than Debian/Ubuntu, follow the instructions on the `project page <https://github.com/jalan/pdftotext>`_.
 
@@ -49,15 +48,6 @@ To install **pdftotext command line**, run:
 
   sudo apt install poppler-utils
 
-Install pdfplumber
-~~~~~~~~~~~~~~~~~~
-
-To install the **pdfplumber** python lib, run:
-
-.. code::
-
-  sudo pip3 install --upgrade pdfplumber
-
 Install pypdf
 ~~~~~~~~~~~~~
 
@@ -65,7 +55,7 @@ To install the **pypdf** python lib, run:
 
 .. code::
 
-  sudo pip3 install --upgrade pypdf
+  pip3 install --upgrade pypdf
 
 
 Other requirements
@@ -80,17 +70,11 @@ The dateparser lib depends itself on regex. So you can install these Python libr
 
 .. code::
 
-  sudo pip3 install --upgrade dateparser
+  pip3 install --upgrade dateparser
 
-The dateparser lib is not compatible with all regex lib versions. As of September 2022, the `version requirement <https://github.com/scrapinghub/dateparser/blob/master/setup.py#L30>`_ declared by dateparser for regex is **!=2019.02.19, !=2021.8.27, <2022.3.15**. So the latest version of regex which is compatible with dateparser is **2022.3.2**. To know the version of regex installed in your environment, run:
+The dateparser lib is not compatible with all regex lib versions. As of February 2024, the `version requirement <https://github.com/scrapinghub/dateparser/blob/master/setup.py#L36>`_ declared by dateparser for regex is **!=2019.02.19, !=2021.8.27**. So the latest version of dateparser is currenly compatible with the latest version of regex. To know the version of regex installed in your environment, run:
 
-
-.. code::
-
-  sudo pip3 show regex
-
-To force regex to version 2022.3.2, run:
 
 .. code::
 
-  sudo pip3 install regex==2022.3.2
+  pip3 show regex
