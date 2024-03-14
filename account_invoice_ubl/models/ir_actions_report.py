@@ -20,11 +20,12 @@ class IrActionsReport(models.Model):
         )
         amo = self.env["account.move"]
         invoice_reports = amo._get_invoice_report_names()
+        report_name = self._get_report(report_ref).report_name
         if (
             collected_streams
             and res_ids
             and len(res_ids) == 1
-            and report_ref in invoice_reports
+            and report_name in invoice_reports
             and not self.env.context.get("no_embedded_ubl_xml")
         ):
             move = amo.browse(res_ids)
