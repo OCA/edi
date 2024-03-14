@@ -10,7 +10,7 @@ import unittest
 from lxml import etree
 from odoo_test_helper import FakeModelLoader
 
-from odoo.tests.common import Form
+from odoo.tests.common import Form, tagged
 
 from .common import EDIBackendCommonTestCase
 
@@ -18,6 +18,7 @@ from .common import EDIBackendCommonTestCase
 # This clashes w/ some setup (eg: run tests w/ pytest when edi_storage is installed)
 # If you still want to run `edi` tests w/ pytest when this happens, set this env var.
 @unittest.skipIf(os.getenv("SKIP_EDI_CONSUMER_CASE"), "Consumer test case disabled.")
+@tagged("at_install", "-post_install")
 class TestConsumerMixinCase(EDIBackendCommonTestCase):
     @classmethod
     def _setup_records(cls):

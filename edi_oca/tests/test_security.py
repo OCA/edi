@@ -5,11 +5,13 @@
 from odoo_test_helper import FakeModelLoader
 
 from odoo.exceptions import AccessError
+from odoo.tests.common import tagged
 from odoo.tools import mute_logger
 
 from .common import EDIBackendCommonTestCase
 
 
+@tagged("at_install", "-post_install")
 class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
     @classmethod
     def _setup_records(cls):
