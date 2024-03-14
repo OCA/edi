@@ -341,7 +341,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             pattern = self.regexp
         else:
             if decimal_places:
-                pattern = r"(?:\d{1,3}%s)*\d{1,3}%s\d{%d}" % (
+                pattern = r"(?:\d{1,3}%s)*\d{1,3}%s\d{1,%d}" % (
                     thousand_sep_pattern,
                     decimal_sep_pattern,
                     decimal_places,
@@ -375,9 +375,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             if thousand_sep_pattern:
                 amount_raw = regex.sub(thousand_sep_pattern, "", amount_raw)
             if decimal_places:
-                amount_raw_list = list(amount_raw)
-                amount_raw_list[-decimal_places - 1] = "."
-                amount_raw = "".join(amount_raw_list)
+                amount_raw = regex.sub(decimal_sep_pattern, ".", amount_raw)
             try:
                 valid_amounts.append(float(amount_raw))
             except ValueError:
