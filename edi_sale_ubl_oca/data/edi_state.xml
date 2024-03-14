@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+  <!--
+    UBL norm has no specific state, hence we decided to use PEPPOL's definitions.
+    https://docs.peppol.eu/poacc/upgrade-3/codelist/UNCL4343-T76/
+  -->
+  <!-- sale.order -->
+  <record id="edi_sale_order_state_workflow" model="edi.state.workflow">
+    <field name="name">EDI sale order</field>
+    <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
+    <field name="model_id" ref="sale.model_sale_order" />
+  </record>
+  <record id="edi_sale_order_state_ap" model="edi.state">
+    <field name="code">AP</field>
+    <field name="name">Accepted</field>
+    <field name="workflow_id" ref="edi_sale_order_state_workflow" />
+    <field name="is_default" eval="True" />
+  </record>
+  <record id="edi_sale_order_state_ab" model="edi.state">
+    <field name="code">AB</field>
+    <field name="name">Message acknowledgement</field>
+    <field name="workflow_id" ref="edi_sale_order_state_workflow" />
+  </record>
+  <record id="edi_sale_order_state_re" model="edi.state">
+    <field name="code">RE</field>
+    <field name="name">Rejected</field>
+    <field name="workflow_id" ref="edi_sale_order_state_workflow" />
+  </record>
+  <record id="edi_sale_order_state_ca" model="edi.state">
+    <field name="code">CA</field>
+    <field name="name">Conditionally accepted</field>
+    <field name="workflow_id" ref="edi_sale_order_state_workflow" />
+  </record>
+  <!-- sale.order.line
+  https://docs.peppol.eu/poacc/upgrade-3/codelist/UNCL1229/
+  -->
+  <record id="edi_sale_order_line_state_workflow" model="edi.state.workflow">
+    <field name="name">EDI sale order line</field>
+    <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
+    <field name="model_id" ref="sale.model_sale_order_line" />
+  </record>
+  <record id="edi_sale_order_line_state_1" model="edi.state">
+    <field name="code">1</field>
+    <field name="name">Order line is added</field>
+    <field name="description">The information is to be or has been added</field>
+    <field name="workflow_id" ref="edi_sale_order_line_state_workflow" />
+  </record>
+  <record id="edi_sale_order_line_state_3" model="edi.state">
+    <field name="code">3</field>
+    <field name="name">Changed</field>
+    <field name="description">Order line is accepted with change</field>
+    <field name="workflow_id" ref="edi_sale_order_line_state_workflow" />
+  </record>
+  <record id="edi_sale_order_line_state_5" model="edi.state">
+    <field name="code">5</field>
+    <field name="name">Accepted without amendment</field>
+    <field name="workflow_id" ref="edi_sale_order_line_state_workflow" />
+    <field name="is_default" eval="True" />
+  </record>
+  <record id="edi_sale_order_line_state_7" model="edi.state">
+    <field name="code">7</field>
+    <field name="name"> Not accepted</field>
+    <field name="workflow_id" ref="edi_sale_order_line_state_workflow" />
+  </record>
+  <record id="edi_sale_order_line_state_42" model="edi.state">
+    <field name="code">42</field>
+    <field name="name">Already delivered</field>
+    <field name="workflow_id" ref="edi_sale_order_line_state_workflow" />
+  </record>
+</odoo>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!-- TODO: noupdate OR better create via post init hook   -->
+    <record id="demo_edi_exc_type_order_response_out" model="edi.exchange.type">
+        <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
+        <field name="name">Demo UBL Sale Order Response</field>
+        <field name="code">demo_UBL_SaleOrderResponse_out</field>
+        <field name="direction">output</field>
+        <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <field
+            name="state_workflow_ids"
+            eval="[(6, 0, [
+              ref('edi_sale_ubl_oca.edi_sale_order_state_workflow'),
+              ref('edi_sale_ubl_oca.edi_sale_order_line_state_workflow')
+            ])]"
+        />
+        <field name="advanced_settings_edit">
+components:
+  generate:
+    usage: ubl.generate.OrderResponse
+  validate:
+    usage: edi.xml
+    work_ctx:
+      schema_path: base_ubl:data/xsd-2.2/maindoc/UBL-OrderResponse-2.2.xsd
+        </field>
+    </record>
+
+    <record
+        id="demo_edi_exc_type_order_response_out_rule_1"
+        model="edi.exchange.type.rule"
+    >
+        <field name="type_id" ref="demo_edi_exc_type_order_response_out" />
+        <field name="model_id" ref="sale.model_sale_order" />
+        <field name="name">SO automatic demo</field>
+        <field name="kind">auto</field>
+        <field name="enable_domain">[('disable_edi_auto', '=', False)]</field>
+        <field name="auto_conf_edit">
+actions:
+  generate:
+    when:
+      - write
+    trigger_fields:
+      - state
+      - commitment_date
+    tracked_fields:
+      - state
+      - commitment_date
+    if:
+      snippet: result = todo.vals.get('state') in ('sale', 'sent', 'cancel') or "commitment_date" in todo.vals
+        </field>
+    </record>
+
+    <record id="demo_edi_exc_type_order_in" model="edi.exchange.type">
+        <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
+        <field name="ack_type_id" ref="demo_edi_exc_type_order_response_out" />
+        <field name="name">Demo UBL Sale Order</field>
+        <field name="code">demo_UBL_SaleOrder_in</field>
+        <field name="direction">input</field>
+        <field name="exchange_file_ext">xml</field>
+        <field
+            name="state_workflow_ids"
+            eval="[(6, 0, [
+              ref('edi_sale_ubl_oca.edi_sale_order_state_workflow'),
+              ref('edi_sale_ubl_oca.edi_sale_order_line_state_workflow')
+            ])]"
+        />
+        <field name="advanced_settings_edit">
+components:
+    process:
+        usage: input.process.sale.order
+        </field>
+    </record>
+
+</odoo>

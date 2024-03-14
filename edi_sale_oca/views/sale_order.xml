@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 Camptocamp SA
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="view_order_form">
+        <field name="name">sale.order.form (in edi_sale)</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page name="edi" string="EDI">
+                    <group name="edi_main">
+                        <field
+                            name="disable_edi_auto"
+                            string="Disable automated actions"
+                        />
+                        <field name="origin_exchange_record_id" />
+                        <field name="origin_exchange_type_id" />
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-retweet"
+                    attrs="{'invisible': [('exchange_record_count', '=', 0)]}"
+                    name="action_view_edi_records"
+                >
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="exchange_record_count" />
+                        </span>
+                        <span class="o_stat_text">EDI</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/tree/field[@name='name']"
+                position="before"
+            >
+                <field name="edi_id" optional="hide" />
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/form//field[@name='analytic_tag_ids']"
+                position="after"
+            >
+                <field name="edi_id" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_tree" model="ir.ui.view">
+        <field name="name">sale.order.tree (in edi_sale)</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree" />
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="origin_exchange_record_id" optional="hide" />
+                <field name="origin_exchange_type_id" optional="hide" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter" model="ir.ui.view">
+        <field name="name">sale.order.search (in edi_sale)</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter" />
+        <field name="arch" type="xml">
+            <field name="analytic_account_id" position="after">
+                <field name="origin_exchange_record_id" />
+                <field name="origin_exchange_type_id" />
+            </field>
+            <filter name="activities_upcoming_all" position="after">
+                <filter
+                    string="Source: EDI"
+                    name="filter_from_edi"
+                    domain="[('origin_exchange_record_id', '!=', False)]"
+                />
+            </filter>
+            <filter name="order_month" position="after">
+                <filter
+                    string="EDI exchange"
+                    name="group_by_edi_exchange"
+                    context="{'group_by': 'origin_exchange_record_id'}"
+                />
+                <filter
+                    string="EDI exchange type"
+                    name="group_by_edi_type"
+                    context="{'group_by': 'origin_exchange_type_id'}"
+                />
+            </filter>
+        </field>
+    </record>
+</odoo>

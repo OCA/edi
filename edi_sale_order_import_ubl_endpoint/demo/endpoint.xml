@@ -8,7 +8,7 @@
         <field name="backend_type_id" ref="edi_ubl_oca.edi_backend_type_ubl" />
         <field
             name="exchange_type_id"
-            ref="edi_sale_order_import_ubl.edi_exchange_type"
+            ref="edi_sale_order_import_ubl.demo_edi_exchange_type"
         />
         <!-- Enable it when ready to be used -->
         <field name="active" eval="0" />
