@@ -26,6 +26,7 @@ setuptools.setup(
         'odoo12-addon-base_facturx',
         'odoo12-addon-base_ubl',
         'odoo12-addon-base_ubl_payment',
+        'odoo12-addon-edi_oca',
         'odoo12-addon-purchase_order_ubl',
         'odoo12-addon-purchase_stock_ubl',
         'odoo12-addon-sale_order_import',
