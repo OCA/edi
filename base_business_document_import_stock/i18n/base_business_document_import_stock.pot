@@ -19,7 +19,7 @@ msgid "Common methods to import business documents"
 msgstr ""
 
 #. module: base_business_document_import_stock
-#: code:addons/base_business_document_import_stock/models/business_document_import.py:32
+#: code:addons/base_business_document_import_stock/models/business_document_import.py:31
 #, python-format
 msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
 msgstr ""
