@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_exchange_type_view_tree" model="ir.ui.view">
+        <field name="model">edi.exchange.type</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="(not active)">
+                <field name="backend_id" />
+                <field name="name" />
+                <field name="code" />
+                <field name="direction" />
+                <field name="ack_type_id" />
+                <field name="ack_for_type_ids"  />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+    <record id="edi_exchange_type_view_form" model="ir.ui.view">
+        <field name="model">edi.exchange.type</field>
+        <field name="arch" type="xml">
+            <form string="EDI Exchange Type">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group name="wrapper">
+                        <group name="main">
+                            <field name="backend_id" />
+                            <field name="backend_type_id" />
+                            <field name="code" />
+                            <field name="direction" />
+                        </group>
+                        <group name="config">
+                            <field name="exchange_filename_pattern" />
+                            <field name="exchange_file_ext" />
+                            <field name="exchange_file_auto_generate" />
+                            <field name="ack_type_id" />
+                            <field name="ack_for_type_ids" widget="many2many_tags" />
+                            <field name="partner_ids" widget="many2many_tags" />
+                            <field name="job_channel_id" />
+                            <field name="quick_exec" />
+                            <field name="encoding" />
+                            <field
+                                name="encoding_out_error_handler"
+                                attrs="{'invisible': [('direction', '=', 'input')]}"
+                            />
+                            <field
+                                name="encoding_in_error_handler"
+                                attrs="{'invisible': [('direction', '=', 'output')]}"
+                            />
+                        </group>
+                    </group>
+                    <field name="deprecated_rule_fields_still_used" invisible="1" />
+                    <notebook>
+                        <page
+                            name="adv_settings"
+                            string="Advanced settings"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                        >
+                            <field
+                                name="advanced_settings_edit"
+                                widget="ace"
+                                colspan="4"
+                            />
+                        </page>
+                        <page
+                            name="model_rules"
+                            string="Model rules"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                        >
+                            <field
+                                name="rule_ids"
+                                context="{'default_type_id': active_id}"
+                            >
+                                <tree decoration-muted="(not active)">
+                                    <field name="active" widget="boolean_toggle" />
+                                    <field name="name" />
+                                    <field name="model_id" />
+                                    <field name="kind" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page
+                            name="deprecated_model_rules"
+                            string="DEPRECATED Model rules"
+                            groups="edi_oca.group_edi_advanced_settings_manager"
+                            attrs="{'invisible': [('deprecated_rule_fields_still_used', '=', False)]}"
+                        >
+                            <div class="alert alert-warning" role="alert">
+                              Warning: these fields are deprecated.
+                              If you rely on them for configuring rules via data files,
+                              it's strongly recommended to rework such files
+                              to use `edi.exchange.type.rule` records.
+                              Please note that, due to backward compat,
+                              removing a model from here will cause deletion
+                              of any existing rule for the model.
+                              You can use the button "Wipe" to clean them properly.
+                            </div>
+                            <group>
+                              <field name="model_ids" widget="many2many_tags" />
+                              <field name="enable_domain" />
+                              <field
+                                    name="enable_snippet"
+                                    widget="ace"
+                                    options="{'mode': 'python'}"
+                                />
+                              <field name="model_manual_btn" />
+                            </group>
+                            <button
+                                type="object"
+                                name="button_wipe_deprecated_rule_fields"
+                                string="Wipe"
+                            />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="edi_exchange_type_view_search" model="ir.ui.view">
+        <field name="model">edi.exchange.type</field>
+        <field name="arch" type="xml">
+            <search string="EDI Exchange Type">
+                <field name="name" />
+                <field name="backend_id" />
+                <field name="code" />
+                <field name="direction" />
+                <field name="ack_type_id" />
+                <filter
+                    name="filter_inbound"
+                    string="Inbound"
+                    domain="[('direction', '=', 'input')]"
+                />
+                <filter
+                    name="filter_outbound"
+                    string="Outbound"
+                    domain="[('direction', '=', 'output')]"
+                />
+                <filter
+                    name="filter_all"
+                    string="All"
+                    domain="['|', ('active', '=', True), ('active', '=', False)]"
+                />
+                <filter
+                    name="filter_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="filter_archived"
+                    string="Archived"
+                    domain="[('active', '=', False)]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_by_backend_id"
+                        string="Backend"
+                        context="{'group_by': 'backend_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="act_open_edi_exchange_type_view">
+        <field name="name">EDI Exchange Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.exchange.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_exchange_type_view_search" />
+        <field name="domain">[]</field>
+        <!--
+          `active_test` here is fundamental to see archived `rule_ids`.
+          Reason: when related fields are loaded with a `read`
+          the ctx that you could set at field level on the view is lost.
+        -->
+        <field
+            name="context"
+        >{'search_default_filter_all': 1, 'active_test': False}</field>
+    </record>
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_type_view_form"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_type_view" />
+        <field name="sequence" eval="20" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="edi_exchange_type_view_form" />
+    </record>
+    <record
+        model="ir.actions.act_window.view"
+        id="act_open_edi_exchange_type_view_tree"
+    >
+        <field name="act_window_id" ref="act_open_edi_exchange_type_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="edi_exchange_type_view_tree" />
+    </record>
+</odoo>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="edi_backend_view_tree" model="ir.ui.view">
+        <field name="model">edi.backend</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="(not active)">
+                <field name="name" />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+    <record id="edi_backend_view_form" model="ir.ui.view">
+        <field name="model">edi.backend</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-archive"
+                        >
+                            <field
+                                name="active"
+                                widget="boolean_button"
+                                options='{"terminology": "archive"}'
+                            />
+                        </button>
+                        <button
+                            type="object"
+                            name="action_view_exchanges"
+                            string="Exchanges"
+                            icon="fa-list"
+                        />
+                        <button
+                            type="object"
+                            name="action_view_exchange_types"
+                            string="Exchange types"
+                            icon="fa-list"
+                        />
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <h2>
+                            <label for="backend_type_id" class="oe_edit_only" />
+                            <field name="backend_type_id" />
+                        </h2>
+                    </div>
+                    <group>
+                        <field name="output_sent_processed_auto" />
+                        <field name="active" invisible="1" />
+                    </group>
+                    <!-- Hook to add more config -->
+                    <notebook />
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="edi_backend_view_search" model="ir.ui.view">
+        <field name="model">edi.backend</field>
+        <field name="arch" type="xml">
+            <search string="EDI Backend">
+                <field name="name" />
+                <field name="backend_type_id" />
+                <filter
+                    name="group_by_backend_type_id"
+                    string="Backend Type"
+                    context="{'group_by': 'backend_type_id'}"
+                />
+                <filter
+                    name="filter_all"
+                    string="All"
+                    domain="['|', ('active', '=', True), ('active', '=', False)]"
+                />
+                <filter
+                    name="filter_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="filter_archived"
+                    string="Archived"
+                    domain="[('active', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="act_open_edi_backend_view">
+        <field name="name">EDI Backend</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">edi.backend</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="edi_backend_view_search" />
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_filter_all': 1}</field>
+    </record>
+    <record model="ir.actions.act_window.view" id="act_open_edi_backend_view_form">
+        <field name="act_window_id" ref="act_open_edi_backend_view" />
+        <field name="sequence" eval="20" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="edi_backend_view_form" />
+    </record>
+    <record model="ir.actions.act_window.view" id="act_open_edi_backend_view_tree">
+        <field name="act_window_id" ref="act_open_edi_backend_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="edi_backend_view_tree" />
+    </record>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2020 Creu Blanca
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record model="ir.ui.view" id="edi_exchange_record_create_form_view">
+        <field name="name">edi.exchange.record.create.wiz.form (in edi)</field>
+        <field name="model">edi.exchange.record.create.wiz</field>
+        <field name="arch" type="xml">
+            <form string="Generate Exchange Record">
+                <group>
+                    <field
+                        name="backend_id"
+                        domain="[('backend_type_id', '=', backend_type_id)]"
+                        options="{'no_create': True, 'no_open': True}"
+                    />
+                    <field name="backend_type_id" invisible="1" />
+                    <field name="exchange_type_id" invisible="1" />
+                    <field name="res_id" invisible="1" />
+                    <field name="model" invisible="1" />
+                </group>
+                <footer>
+                    <button
+                        name="create_edi"
+                        string="Generate"
+                        class="btn-primary"
+                        type="object"
+                    />
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="edi_exchange_record_create_act_window">
+        <field name="name">Generate Exchange Record</field>
+        <field name="res_model">edi.exchange.record.create.wiz</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

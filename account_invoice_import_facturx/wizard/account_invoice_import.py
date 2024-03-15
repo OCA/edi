@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import check_facturx_xsd
+    from facturx import xml_check_xsd
 except ImportError:
     logger.debug('Cannot import facturx')
 
@@ -288,7 +288,7 @@ class AccountInvoiceImport(models.TransientModel):
         namespaces = xml_root.nsmap
         # Check XML schema to avoid headaches trying to import invalid files
         try:
-            check_facturx_xsd(xml_root)
+            xml_check_xsd(xml_root)
         except Exception:
             raise UserError(_(
                 "The XML file embedded in the Factur-X invoice is invalid "
