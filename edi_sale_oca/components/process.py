@@ -18,28 +18,47 @@ class EDIExchangeSOInput(Component):
 
     def __init__(self, work_context):
         super().__init__(work_context)
-        self.settings = self.type_settings.get("sale_order_import", {})
+        self.settings = {}
+        # Suppor legacy key `self.type_settings`
+        for key in ("sale_order", "sale_order_import"):
+            if key in self.type_settings:
+                self.settings = self.type_settings.get(key, {})
+                break
 
     def process(self):
         wiz = self._setup_wizard()
         res = wiz.import_order_button()
+        # TODO: log debug
         if wiz.state == "update" and wiz.sale_id:
             order = wiz.sale_id
-            msg = _("Sales order has already been imported before")
+            msg = self.msg_order_existing_error
             self._handle_existing_order(order, msg)
             raise UserError(msg)
         else:
-            order_id = res["res_id"]
-            order = self.env["sale.order"].browse(order_id)
-            if self._order_should_be_confirmed():
-                order.action_confirm()
-            self.exchange_record.sudo()._set_related_record(order)
-            return _("Sales order %s created") % order.name
-        raise UserError(_("Something went wrong with the importing wizard."))
+            order = self._handle_create_order(res["res_id"])
+            return self.msg_order_created % order.name
+        raise UserError(self.msg_generic_error)
+
+    @property
+    def msg_order_existing_error(self):
+        return _("Sales order has already been imported before")
+
+    @property
+    def msg_order_created(self):
+        return _("Sales order %s created")
+
+    @property
+    def msg_generic_error(self):
+        return _("Something went wrong with the importing wizard.")
 
     def _setup_wizard(self):
         """Init a `sale.order.import` instance for current record."""
         ctx = self.settings.get("wiz_ctx", {})
+        # Set the right EDI origin on both order and lines
+        edi_defaults = {"origin_exchange_record_id": self.exchange_record.id}
+        ctx["sale_order_import__default_vals"] = dict(
+            order=edi_defaults, lines=edi_defaults
+        )
         wiz = self.env["sale.order.import"].with_context(**ctx).sudo().create({})
         wiz.order_file = self.exchange_record._get_file_content(binary=False)
         wiz.order_filename = self.exchange_record.exchange_filename
@@ -53,6 +72,13 @@ class EDIExchangeSOInput(Component):
 
     def _order_should_be_confirmed(self):
         return self.settings.get("confirm_order", False)
+
+    def _handle_create_order(self, order_id):
+        order = self.env["sale.order"].browse(order_id)
+        self.exchange_record._set_related_record(order)
+        if self._order_should_be_confirmed():
+            order.action_confirm()
+        return order
 
     def _handle_existing_order(self, order, message):
         prev_record = self._get_previous_record(order)
