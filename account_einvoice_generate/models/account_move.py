@@ -11,7 +11,7 @@ class AccountMove(models.Model):
     def get_payment_identifier(self):
         """This method is designed to be inherited in localization modules"""
         self.ensure_one()
-        return None
+        return self.payment_reference
 
     @api.model
     def _get_invoice_report_names(self):
