@@ -26,6 +26,9 @@ class DespatchAdviceImport(models.TransientModel):
         "(PDF with an embeded XML file).",
     )
     filename = fields.Char(string="File Name")
+    allow_validate_over_qty = fields.Boolean(
+        "Allow Validate Over Quantity", default=True
+    )
 
     # Format of parsed despatch advice
     # {
@@ -188,6 +191,10 @@ class DespatchAdviceImport(models.TransientModel):
             moves_qty = sum(stock_moves.mapped("product_qty"))
             if line_info["qty"] == moves_qty:
                 self._process_accepted(stock_moves, parsed_order_document)
+            elif line_info["qty"] > moves_qty and self.allow_validate_over_qty:
+                self._process_accepted(
+                    stock_moves, parsed_order_document, forced_qty=line_info["qty"]
+                )
             elif not line_info["qty"] and not line_info["backorder_qty"]:
                 self._process_rejected(stock_moves, parsed_order_document)
             else:
@@ -211,7 +218,7 @@ class DespatchAdviceImport(models.TransientModel):
 
         stock_moves._action_cancel()
 
-    def _process_accepted(self, stock_moves, parsed_order_document):
+    def _process_accepted(self, stock_moves, parsed_order_document, forced_qty=False):
         parsed_order_document["chatter_msg"] = (
             parsed_order_document["chatter_msg"] or []
         )
@@ -221,7 +228,7 @@ class DespatchAdviceImport(models.TransientModel):
         stock_moves._action_confirm()
         stock_moves._action_assign()
         for move in stock_moves:
-            move.quantity_done = move.product_qty
+            move.quantity_done = forced_qty or move.product_qty
 
     def _process_conditional(self, moves, parsed_order_document, line):
         precision = self.env["decimal.precision"].precision_get(

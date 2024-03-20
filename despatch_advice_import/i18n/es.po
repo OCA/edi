@@ -17,6 +17,11 @@ msgstr ""
 "X-Generator: Weblate 4.17\n"
 
 #. module: despatch_advice_import
+#: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__allow_validate_over_qty
+msgid "Allow Validate Over Quantity"
+msgstr ""
+
+#. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid "Cancel"
 msgstr "Cancelar"
@@ -80,8 +85,8 @@ msgstr "ID"
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid ""
-"If it is a PDF file, Odoo will try to find an XML file in the attachments of"
-" the PDF file and then use this XML file."
+"If it is a PDF file, Odoo will try to find an XML file in the attachments of "
+"the PDF file and then use this XML file."
 msgstr ""
 "Si es un archivo PDF, Odoo tratará de encontrar un archivo XML en los "
 "adjuntos del archivo PDF y luego usará este archivo XML."
@@ -89,8 +94,8 @@ msgstr ""
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid ""
-"If it is an XML file, Odoo will parse it if the module that adds support for"
-" this XML format is installed. For the"
+"If it is an XML file, Odoo will parse it if the module that adds support for "
+"this XML format is installed. For the"
 msgstr ""
 "Si es un archivo XML, Odoo lo analizará si está instalado el módulo que "
 "agrega soporte para este formato XML. Para el"
@@ -136,7 +141,6 @@ msgstr "Falta el nombre de archivo del documento"
 
 #. module: despatch_advice_import
 #. odoo-python
-#: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "No purchase order found for name %s."
@@ -186,8 +190,8 @@ msgstr ""
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid ""
-"This type of XML Order Document is not supported. Did you install the module"
-" to support this XML format?"
+"This type of XML Order Document is not supported. Did you install the module "
+"to support this XML format?"
 msgstr ""
 "Este tipo de documento de pedido XML no es compatible. ¿Ha instalado el "
 "módulo para admitir este formato XML?"
@@ -197,8 +201,8 @@ msgstr ""
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid ""
-"This type of XML Order Response is not supported. Did you install the module"
-" to support this XML format?"
+"This type of XML Order Response is not supported. Did you install the module "
+"to support this XML format?"
 msgstr ""
 "Este tipo de respuesta de pedido XML no es compatible. ¿Ha instalado el "
 "módulo para admitir este formato XML?"
@@ -239,7 +243,7 @@ msgstr "Aviso de Envío XML o PDF"
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid ""
-"format (UBL), you should install the module "
-"<em>despatch_advice_import_ubl</em>."
+"format (UBL), you should install the module <em>despatch_advice_import_ubl</"
+"em>."
 msgstr ""
 "formato (UBL), debes instalar el módulo <em>despatch_advice_import_ubl</em>."
