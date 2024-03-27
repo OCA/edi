@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-15 07:39+0000\n"
-"PO-Revision-Date: 2024-02-14 15:36+0000\n"
+"PO-Revision-Date: 2024-03-27 15:37+0000\n"
 "Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
 "Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
 "Language: es\n"
@@ -60,7 +60,7 @@ msgstr ""
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__en16931
 msgid "EN 16931 (Comfort)"
-msgstr "EN 16931 (Comfort)"
+msgstr "EN 16931 (Confort)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__extended
@@ -72,12 +72,12 @@ msgstr "Extendido"
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Factur-X"
-msgstr "Factur-X"
+msgstr "Factura-X"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__xml_format_in_pdf_invoice__factur-x
 msgid "Factur-X (CII)"
-msgstr "Factur-X (CII)"
+msgstr "Factura-X (CII)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_level
@@ -181,12 +181,13 @@ msgstr "Informar Acción"
 #. module: account_invoice_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
 msgid "Select the profile used for Factur-X invoice generation"
-msgstr ""
+msgstr "Seleccione el perfil utilizado para la generación de facturas Factur-X"
 
 #. module: account_invoice_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
 msgid "Select the type used for Factur-X customer refunds"
 msgstr ""
+"Seleccione el tipo utilizado para las devoluciones de clientes de Factur-X"
 
 #. module: account_invoice_facturx
 #. odoo-python
