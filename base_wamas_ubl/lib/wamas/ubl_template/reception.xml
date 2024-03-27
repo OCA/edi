@@ -5,11 +5,10 @@
     xmlns="urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2"
 >
     <cbc:UBLVersionID>2.2</cbc:UBLVersionID>
-    <cbc:ID><t t-raw="record.IvWevk_WevId_WevNr" /></cbc:ID>
+    <cbc:ID><t t-raw="record.lines[0].IvWevp_WEAP_WeaId_WeaNr" /></cbc:ID>
     <cbc:IssueDate><t t-raw="get_current_date()" /></cbc:IssueDate>
     <cac:OrderReference>
-        <cbc:ID><t t-raw="record.lines[0].IvWevp_WEAP_WeaId_WeaNr" /></cbc:ID>
-        <cbc:IssueDate><t t-raw="get_current_date()" /></cbc:IssueDate>
+        <cbc:ID><t t-raw="record.lines[0].IvWeap_ExtRef" /></cbc:ID>
     </cac:OrderReference>
     <cac:DespatchSupplierParty>
         <cbc:CustomerAssignedAccountID><t

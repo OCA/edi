@@ -4,7 +4,6 @@
     <cbc:IssueDate>2023-05-01</cbc:IssueDate>
     <cac:OrderReference>
         <cbc:ID>1712149</cbc:ID>
-        <cbc:IssueDate>2023-05-01</cbc:IssueDate>
     </cac:OrderReference>
     <cac:DespatchSupplierParty>
         <cbc:CustomerAssignedAccountID>4026234</cbc:CustomerAssignedAccountID>
@@ -128,7 +127,6 @@
     <cbc:IssueDate>2023-05-01</cbc:IssueDate>
     <cac:OrderReference>
         <cbc:ID>1711980</cbc:ID>
-        <cbc:IssueDate>2023-05-01</cbc:IssueDate>
     </cac:OrderReference>
     <cac:DespatchSupplierParty>
         <cbc:CustomerAssignedAccountID>4007720</cbc:CustomerAssignedAccountID>
