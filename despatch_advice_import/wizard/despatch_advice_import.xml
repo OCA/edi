@@ -28,6 +28,7 @@
                 <group name="main">
                     <field name="document" filename="filename" />
                     <field name="filename" invisible="1" />
+                    <field name="allow_validate_over_qty" />
                 </group>
                 <footer>
                     <button
