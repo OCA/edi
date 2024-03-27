@@ -705,6 +705,7 @@ class TestDespatchAdviceMix(TransactionCase):
         self.assertTrue(po_moves)
 
         xml_content2 = self.despatch_advice_xml2.decode("utf-8").format(
+            picking_name="0810805774",
             order_id=self.purchase_order.name,
             line_3_id=self.line3.id,
             line_6_id=self.line6.id,

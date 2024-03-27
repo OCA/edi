@@ -135,10 +135,10 @@ class DespatchAdviceImport(models.TransientModel):
         )
         self.process_data(parsed_order_document)
 
-    def _collect_lines_by_id(self, lines_doc):
+    def _collect_lines_by_id(self, lines_doc, key="order_line_id"):
         lines_by_id = {}
         for line in lines_doc:
-            line_id = int(line["order_line_id"])
+            line_id = int(line[key])
             if line_id in lines_by_id:
                 lines_by_id[line_id]["qty"] += line["qty"]
                 lines_by_id[line_id]["backorder_qty"] += line["backorder_qty"]
