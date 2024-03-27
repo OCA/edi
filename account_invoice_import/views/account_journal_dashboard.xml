@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2020 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="account_journal_dashboard_kanban_view" model="ir.ui.view">
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view" />
+        <field name="arch" type="xml">
+                <xpath
+                expr="//t[@id='account.JournalBodySalePurchase']//widget[@name='account_file_uploader']"
+                position="attributes"
+            >
+                        <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath
+                expr="//t[@id='account.JournalBodySalePurchase']//widget[@name='account_file_uploader']"
+                position="after"
+            >
+                    <button
+                    string="Upload"
+                    type="action"
+                    name="%(account_invoice_import_action)d"
+                    groups="account.group_account_invoice"
+                    journal_type="purchase"
+                    class="btn btn-primary d-block"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
