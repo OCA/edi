@@ -14,6 +14,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: despatch_advice_import
+#: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__allow_validate_over_qty
+msgid "Allow Validate Over Quantity"
+msgstr ""
+
+#. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid "Cancel"
 msgstr ""
