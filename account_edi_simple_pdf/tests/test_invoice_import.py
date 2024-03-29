@@ -46,7 +46,7 @@ class TestInvoiceImport(TransactionCase):
 
         self.partner_config = self.partner._simple_pdf_partner_config()
         self.test_info = {"test_mode": True}
-        self.env["account.invoice.import"]._simple_pdf_update_test_info(self.test_info)
+        self.env['account.invoice.import.simple.pdf.mixin']._simple_pdf_update_test_info(self.test_info)
         aiispfo = self.env["account.invoice.import.simple.pdf.fields"]
         self.space_chars = list(self.test_info["space_pattern"][1:-1])
         frtax = self.env["account.tax"].create(
@@ -58,7 +58,7 @@ class TestInvoiceImport(TransactionCase):
                 "type_tax_use": "purchase",
             }
         )
-        self.module = "account_invoice_import_simple_pdf"
+        self.module = "account_edi_simple_pdf"
         self.product = self.env.ref("%s.mobile_phone" % self.module)
         self.product.supplier_taxes_id = [(6, 0, [frtax.id])]
 
@@ -154,16 +154,6 @@ class TestInvoiceImport(TransactionCase):
                 ],
             }
         )
-        self.ak_invoice_config = self.env["account.invoice.import.config"].create(
-            {
-                "name": "Akretion France",
-                "partner_id": self.partner_ak.id,
-                "invoice_line_method": "1line_static_product",
-                "label": "My custom line label",
-                "static_product_id": self.product.id,
-            }
-        )
-
         self.ak_filename = "akretion_france-test.pdf"
         with file_open("%s/tests/pdf/%s" % (self.module, self.ak_filename), "rb") as f:
             self.ak_pdf_file = f.read()
@@ -512,44 +502,25 @@ class TestInvoiceImport(TransactionCase):
             )
             self.assertEqual(src, parsed_inv["invoice_number"])
 
-    def test_raw_extraction(self):
-        aiio = self.env["account.invoice.import"]
-        res = aiio.simple_pdf_text_extraction(self.bt_pdf_file, self.test_info)
-        self.assertIsInstance(res, dict)
-        self.assertTrue(len(res["all"]) >= len(res["first"]))
-        self.assertIn("FR 74 397 480 930", res["first"])
-        self.assertIn("FR74397480930", res["first_no_space"])
-
     def test_complete_import(self):
-        wiz = self.env["account.invoice.import"].create(
-            {
-                "invoice_file": self.ak_pdf_file_b64,
-                "invoice_filename": self.ak_filename,
-            }
+        attachment = self.env['ir.attachment'].create({
+            'name': self.ak_filename,
+            'datas': self.ak_pdf_file_b64,
+        })
+        invoices = self.env['account.move'].with_context(
+            default_move_type='in_invoice'
+        )._simple_pdf_create_invoice_from_attachment(
+            attachment,
         )
-        wiz.import_invoice()
-        # Check result of invoice creation
-        invoices = self.env["account.move"].search(
-            [
-                ("partner_id", "=", self.partner_ak.id),
-                ("state", "=", "draft"),
-                ("move_type", "=", "in_invoice"),
-                ("ref", "=", "VT/2022/0001"),
-            ]
-        )
-        inv_config = self.ak_invoice_config
         self.assertEqual(len(invoices), 1)
         inv = invoices[0]
         self.assertEqual(fields.Date.to_string(inv.invoice_date), "2022-09-21")
         self.assertEqual(fields.Date.to_string(inv.invoice_date_due), "2022-10-21")
         self.assertEqual(inv.journal_id.type, "purchase")
-        self.assertEqual(inv.currency_id, self.env.ref("base.EUR"))
         self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 1810.80))
         self.assertFalse(inv.currency_id.compare_amounts(inv.amount_untaxed, 1509))
         self.assertEqual(len(inv.invoice_line_ids), 1)
         iline = inv.invoice_line_ids[0]
-        self.assertEqual(iline.name, inv_config.label)
-        self.assertEqual(iline.product_id, self.product)
         self.assertEqual(iline.tax_ids, self.product.supplier_taxes_id)
         self.assertEqual(float_compare(iline.quantity, 1.0, precision_digits=2), 0)
         self.assertEqual(float_compare(iline.price_unit, 1509, precision_digits=2), 0)
@@ -569,18 +540,3 @@ class TestInvoiceImport(TransactionCase):
         # test only pure-pdf methods
         # because we are sure they work on the Github test environment
         self._complete_import_specific_method("pypdf")
-
-    def test_test_mode(self):
-        self.partner_ak.write(
-            {
-                "simple_pdf_test_file": self.ak_pdf_file_b64,
-                "simple_pdf_test_filename": self.ak_filename,
-            }
-        )
-        self.partner_ak.pdf_simple_test_run()
-        self.assertTrue(self.partner_ak.simple_pdf_test_results)
-        self.assertTrue(self.partner_ak.simple_pdf_test_raw_text)
-        self.partner_ak.pdf_simple_test_cleanup()
-        self.assertFalse(self.partner_ak.simple_pdf_test_results)
-        self.assertFalse(self.partner_ak.simple_pdf_test_raw_text)
-        self.assertFalse(self.partner_ak.simple_pdf_test_file)

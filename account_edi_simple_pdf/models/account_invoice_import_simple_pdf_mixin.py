@@ -6,6 +6,7 @@ import logging
 import shutil
 import subprocess
 from tempfile import NamedTemporaryFile
+from base64 import b64decode
 
 from odoo import _, api, models
 from odoo.exceptions import UserError
@@ -30,18 +31,8 @@ except ImportError:
     logger.debug("Cannot import pypdf")
 
 
-class AccountInvoiceImport(models.TransientModel):
-    _inherit = "account.invoice.import"
-
-    @api.model
-    def fallback_parse_pdf_invoice(self, file_data):
-        """This method must be inherited by additional modules with
-        the same kind of logic as the account_bank_statement_import_*
-        modules"""
-        res = super().fallback_parse_pdf_invoice(file_data)
-        if not res:
-            res = self.simple_pdf_parse_invoice(file_data)
-        return res
+class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
+    _name = "account.invoice.import.simple.pdf.mixin"
 
     @api.model
     def _simple_pdf_text_extraction_pymupdf(self, fileobj, test_info):
