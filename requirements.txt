@@ -1,4 +1,7 @@
 # generated from manifests external_dependencies
+dateparser
 factur-x
 PyPDF2
+pypdf>=3.1.0
 PyYAML
+regex
