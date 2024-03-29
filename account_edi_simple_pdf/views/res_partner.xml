@@ -9,35 +9,15 @@
 
     <record id="view_partner_property_form" model="ir.ui.view">
         <field name="model">res.partner</field>
-        <field
-            name="inherit_id"
-            ref="account_invoice_import.view_partner_property_form"
-        />
-        <field name="priority">99</field>
-        <!-- account_invoice_import.view_partner_property_form is
-             limited to groups account.group_account_invoice
-             and account.group_account_readonly -->
+        <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
-            <div name="invoice_import_configs" position="replace" />
-            <page name="accounting" position="after">
+            <notebook position="inside">
                     <page
                     name="invoice_import_simple_pdf"
                     string="Vendor Bill Import"
                     attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
+                    groups="account.group_account_readonly,account.group_account_invoice"
                 >
-                    <div name="invoice_import_configs" colspan="2">
-                    <button
-                            type="object"
-                            class="btn-link"
-                            name="show_account_invoice_import_config"
-                        >
-                        <field
-                                name="invoice_import_count"
-                                string="Invoice Import Configurations"
-                                widget="statinfo"
-                            />
-                    </button>
-                </div>
                     <group name="simple_pdf_main">
                         <group name="simple_pdf_main-left">
                         <field name="simple_pdf_keyword" string="Keywords" />
@@ -47,6 +27,7 @@
                                 string="Invoice Currency"
                                 options="{'no_create': True, 'no_create_edit': True}"
                             />
+                        <field name="simple_pdf_product_id" />
                 </group>
                         <group name="simple_pdf_main-right">
                         <field name="simple_pdf_date_format" string="Date Format" />
@@ -118,7 +99,7 @@
 
                     </group>
                 </page>
-            </page>
+            </notebook>
         </field>
     </record>
 

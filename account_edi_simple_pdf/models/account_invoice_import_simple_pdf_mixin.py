@@ -30,18 +30,9 @@ except ImportError:
     logger.debug("Cannot import pypdf")
 
 
-class AccountInvoiceImport(models.TransientModel):
-    _inherit = "account.invoice.import"
-
-    @api.model
-    def fallback_parse_pdf_invoice(self, file_data):
-        """This method must be inherited by additional modules with
-        the same kind of logic as the account_bank_statement_import_*
-        modules"""
-        res = super().fallback_parse_pdf_invoice(file_data)
-        if not res:
-            res = self.simple_pdf_parse_invoice(file_data)
-        return res
+class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
+    _name = "account.invoice.import.simple.pdf.mixin"
+    _description = "Mixin providing parsing functions from text"
 
     @api.model
     def _simple_pdf_text_extraction_pymupdf(self, fileobj, test_info):
@@ -251,10 +242,12 @@ class AccountInvoiceImport(models.TransientModel):
                 found_res = [keyword in raw_text_no_space for keyword in keywords]
                 if all(found_res):
                     partner_id = partner["id"]
-                    result_label = _("Successful match on %d keywords (%s)") % (
-                        len(keywords),
-                        ", ".join(keywords),
-                    )
+                    result_label = _(
+                        "Successful match on %(count)d keywords (%(keywords)s)"
+                    ) % {
+                        "count": len(keywords),
+                        "keywords": ", ".join(keywords),
+                    }
                     test_results.append("<li>%s</li>" % result_label)
                     break
             for kfield, kfield_label in keyword_fields_dict.items():
@@ -367,7 +360,7 @@ class AccountInvoiceImport(models.TransientModel):
                 raise UserError(
                     _("Missing parse method for field '%s'. This should never happen.")
                     % field.name
-                )
+                ) from None
 
         failed_fields = parsed_inv.pop("failed_fields")
         if failed_fields:

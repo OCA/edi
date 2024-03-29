@@ -7,7 +7,7 @@ The module supports 5 different extraction methods:
 #. `pdftotext command line tool <https://en.wikipedia.org/wiki/Pdftotext>`_, which is based on `poppler <https://poppler.freedesktop.org/>`_, a PDF rendering library used by `xpdf <https://www.xpdfreader.com/>`_ and `Evince <https://wiki.gnome.org/Apps/Evince/FrequentlyAskedQuestions>`_ (the PDF reader of `Gnome <https://www.gnome.org/>`_).
 #. `pypdf <https://github.com/py-pdf/pypdf/>`_, which is one of the most common PDF lib for Python. pypdf is a pure-python solution, so it's very easy to install on all OSes.
 
-PyMuPDF and pdftotext both give a very good text output. So far, I can't say which one is best. pypdf often gives lower-quality text output, but its advantage is that it is a pure-Python librairy, so you will always be able to install it whatever your technical environnement is.
+PyMuPDF and pdftotext both give a very good text output. So far, I can't say which one is best. pypdf often gives lower-quality text output, but its advantage is that it is a pure-Python library, so you will always be able to install it whatever your technical environement is.
 
 You can choose one extraction method and only install the tools/libs for that method.
 

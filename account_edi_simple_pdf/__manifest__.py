@@ -3,15 +3,14 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Account Invoice Import Simple PDF",
-    "version": "14.0.4.0.0",
+    "name": "Import Simple PDF",
+    "version": "15.0.4.0.0",
     "category": "Accounting/Accounting",
     "license": "AGPL-3",
     "summary": "Import simple PDF vendor bills",
-    "author": "Akretion,Odoo Community Association (OCA)",
-    "maintainers": ["alexis-via"],
+    "author": "Akretion,Hunki Enterprises BV,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
-    "depends": ["account_invoice_import"],
+    "depends": ["account_edi"],
     "external_dependencies": {
         "python": [
             "regex",
@@ -22,7 +21,6 @@
     },
     "data": [
         "security/ir.model.access.csv",
-        "wizard/account_invoice_import_view.xml",
         "views/res_partner.xml",
         "views/account_invoice_import_simple_pdf_fields.xml",
         "views/account_invoice_import_simple_pdf_invoice_number.xml",
