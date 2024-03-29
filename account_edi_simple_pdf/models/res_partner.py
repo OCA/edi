@@ -112,6 +112,12 @@ class ResPartner(models.Model):
         "partner_id",
         string="Invoice Import Number Format",
     )
+    simple_pdf_product_id = fields.Many2one(
+        "product.product",
+        string="Product",
+        help="Use this product when creating a parsed invoice. This allows you to "
+        "preconfigure taxes, accounts, etc",
+    )
     simple_pdf_test_file = fields.Binary(
         string="Test PDF Invoice File", attachment=True
     )
@@ -191,7 +197,7 @@ class ResPartner(models.Model):
 
     def pdf_simple_test_run(self):
         self.ensure_one()
-        aiio = self.env["account.invoice.import"]
+        aiio = self.env["account.move"]
         rpo = self.env["res.partner"]
         vals = {}
         test_results = []
@@ -366,16 +372,16 @@ class ResPartner(models.Model):
         if thousand_sep == decimal_sep:
             raise UserError(
                 _(
-                    "For partner '%s', the decimal separator (%s) is the same as "
-                    "the thousand separator (%s). Keep in mind that, if not set "
+                    "For partner '%(name)s', the decimal separator (%(decimal)s) is the same "
+                    "as the thousand separator (%(thousand)s). Keep in mind that, if not set "
                     "explicitly, decimal and thousand separator are read from the "
                     "language of the partner."
                 )
-                % (
-                    self.display_name,
-                    char2separator.get(decimal_sep),
-                    char2separator.get(thousand_sep),
-                )
+                % {
+                    "name": self.display_name,
+                    "decimal": char2separator.get(decimal_sep),
+                    "thousand": char2separator.get(thousand_sep),
+                }
             )
         logger.debug("decimal_sep=|%s| thousand_sep=|%s|", decimal_sep, thousand_sep)
         partner_config = {
@@ -398,14 +404,6 @@ class ResPartner(models.Model):
         amount_untaxed_count = field_list.count("amount_untaxed")
         amount_tax = field_list.count("amount_tax")
         amount_fields_count = amount_total_count + amount_untaxed_count + amount_tax
-        if "date" not in field_list:
-            raise UserError(
-                _(
-                    "You must configure a field extraction rule for "
-                    "field 'Date' for partner '%s'."
-                )
-                % self.display_name
-            )
         if amount_fields_count == 0:
             raise UserError(
                 _("There is no amount field configured for partner '%s'.")

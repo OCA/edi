@@ -73,10 +73,10 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
                 if rec.occurrence_max < rec.occurrence_min:
                     raise ValidationError(
                         _(
-                            "The maximum occurence (%d) must be equal to or above "
-                            "the minimum occurence (%d)."
+                            "The maximum occurence (%(occurrence_max)d) must be equal to or "
+                            "above the minimum occurence (%(occurrence_min)d)."
                         )
-                        % (rec.occurrence_max, rec.occurrence_min)
+                        % rec
                     )
 
     @api.onchange("occurrence_min")
