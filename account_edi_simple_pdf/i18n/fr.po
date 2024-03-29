@@ -1,0 +1,947 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_invoice_import_simple_pdf
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-05-29 11:08+0000\n"
+"Last-Translator: Claude R Perrin <claude@perrin.it>\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.17\n"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid ", Position: %d"
+msgstr ", Position : %d"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "<b>Failed</b> to extract the following field(s): %s."
+msgstr "<b>Impossible</b> d’extraire le(s) champ(s) suivant(s) : %s."
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.account_invoice_import_form
+msgid ""
+"<b>regular PDF</b> file without any embedded XML file via a pre-"
+"configuration in Odoo."
+msgstr ""
+"fichier <b>PDF standard</b> sans aucun fichier XML intégré via une pré-"
+"configuration dans Odoo."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_pages__all
+msgid "All Pages"
+msgstr "Toutes les pages"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Amount Setup"
+msgstr "Configuration du montant"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid "Bad configuration"
+msgstr "Erreur de configuration"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Cleanup Test Data"
+msgstr "Effacer les données de test"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model,name:account_invoice_import_simple_pdf.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid ""
+"Could not get the decimal separator for partner '%s': the fields 'Language' "
+"and 'Decimal Separator' are both empty for this partner."
+msgstr ""
+"Impossible d’obtenir le séparateur décimal du contact '%s' : les champs "
+"'Langue' et 'Séparateur décimal' sont tous deux vides pour ce contact."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__create_uid
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__create_date
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Current partner found"
+msgstr "Nom du contact détecté"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "DD MM YY"
+msgstr "JJ MM AA"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "DD MM YYYY"
+msgstr "JJ MM AAAA"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "DD Month YY"
+msgstr "JJ Mois AA"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "DD Month YYYY"
+msgstr "JJ Mois AAAA"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_date_format
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_date_format
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+#, python-format
+msgid "Date Format"
+msgstr "Format de date"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_date_separator
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_date_separator
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Date Separator"
+msgstr "Séparateur de date"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_decimal_separator
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_decimal_separator
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Decimal Separator"
+msgstr "Séparateur décimal"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Decimal Separator:"
+msgstr "Séparateur de décimales :"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__description
+msgid "Description"
+msgstr "Description"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import__display_name
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__display_name
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__display_name
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Afficher Nom"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__date_due
+msgid "Due Date"
+msgstr "Date d'échéance"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__date_end
+msgid "End Date"
+msgstr "Date de fin"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__end
+#, python-format
+msgid "End String"
+msgstr "Chaîne de fin"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Error message"
+msgstr "Message d'erreur"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Errors are in red."
+msgstr "Les erreurs sont en rouge."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__extract_rule
+msgid "Extract Rule"
+msgstr "Règle d’extraction"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Extract Rule:"
+msgstr "Règle d’extraction :"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__name
+msgid "Field"
+msgstr "Champ"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Field Extraction Rules"
+msgstr "Règles d’extraction des champs"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_field_ids
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_field_ids
+msgid "Fields for PDF Invoice Import"
+msgstr "Champs pour l’import de facture PDF"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model,name:account_invoice_import_simple_pdf.model_account_invoice_import_simple_pdf_fields
+msgid "Fields for Simple PDF invoice import"
+msgstr "Champs pour Simple PDF invoice import"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__extract_rule__first
+msgid "First"
+msgstr "Premier"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_pages__first
+msgid "First Page Only"
+msgstr "Uniquement la première page"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__fixed_char
+msgid "Fixed Char"
+msgstr "Caractère ou chaîne fixe"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid ""
+"For partner '%s', only one amount field is configured but it is not 'Amount "
+"Total'."
+msgstr ""
+"Pour le contact '%s', un seul champ montant est configuré, mais il ne s’agit "
+"pas de 'Montant total'."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid ""
+"For partner '%s', the decimal separator (%s) is the same as the thousand "
+"separator (%s). Keep in mind that, if not set explicitly, decimal and "
+"thousand separator are read from the language of the partner."
+msgstr ""
+"Pour le contact '%s', le séparateur décimal (%s) est le même que le "
+"séparateur de milliers (%s). Notez bien que, s'ils ne sont pas définis "
+"explicitement, les séparateurs décimaux et mille sont tirés de la langue du "
+"contact."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid ""
+"For partner '%s', the decimal separator cannot be the same as the thousand "
+"separator."
+msgstr ""
+"Pour le contact '%s', le séparateur décimal ne peut pas être le même que le "
+"séparateur de milliers."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Found another partner:"
+msgstr "Autre contact trouvé :"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Generate Default Extract Rules"
+msgstr "Créer des règles d’extraction par défaut"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import__id
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__id
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__id
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_keyword
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_users__simple_pdf_keyword
+msgid ""
+"If empty, Odoo will use the VAT number to identify the partner. To match on "
+"several keywords, separate them with '|' (pipe)."
+msgstr ""
+"S’il est vide, Odoo utilisera le numéro de TVA pour identifier le contact. "
+"Pour faire correspondre plusieurs mots-clés, séparez-les par le ’|’ (pipe)."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_currency_id
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_users__simple_pdf_currency_id
+msgid "If empty, Odoo will use the company currency."
+msgstr "S’il est vide, Odoo utilisera la devise de l’entreprise."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_decimal_separator
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_users__simple_pdf_decimal_separator
+msgid ""
+"If empty, Odoo will use the decimal separator configured on the language of "
+"the partner."
+msgstr ""
+"S’il est vide, Odoo utilisera le séparateur décimal configuré pour la langue "
+"du contact."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_thousand_separator
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_users__simple_pdf_thousand_separator
+msgid ""
+"If empty, Odoo will use the thousand separator configured on the language of "
+"the partner."
+msgstr ""
+"S’il est vide, Odoo utilisera le séparateur de milliers configuré pour la "
+"langue du contact."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_date_format
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_users__simple_pdf_date_format
+msgid ""
+"If the date format uses 'Month', check that the language is properly "
+"configured on the partner. 'Month' works both in full and short version "
+"('January' and 'Jan.')."
+msgstr ""
+"Si le format de date utilise 'Mois', vérifiez que la langue est correctement "
+"configurée sur le contact. ‘Mois’ fonctionne à la fois en version entière et "
+"abrégée ('Janvier' et 'Jan.')."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_date_separator
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_users__simple_pdf_date_separator
+msgid ""
+"If the date looks like 'Sep. 4, 2021', use 'space' as date separator (Odoo "
+"will ignore the dot and comma)."
+msgstr ""
+"Si la date ressemble à « 4, Sept. 2021 », utilisez « espace » comme "
+"séparateur de date (Odoo ignorera le point et la virgule)."
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Invoice Currency"
+msgstr "Devise de la facture"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__date
+msgid "Invoice Date"
+msgstr "Date de facture"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Invoice Import Configurations"
+msgstr "Configuration(s) d’import de facture"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_currency_id
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_currency_id
+msgid "Invoice Import Currency"
+msgstr "Devise de la facture importée"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_invoice_number_ids
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_invoice_number_ids
+msgid "Invoice Import Number Format"
+msgstr "Format du numéro de la facture à importer"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__invoice_number
+msgid "Invoice Number"
+msgstr "Numéro de facture"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Invoice Number Format"
+msgstr "Format du numéro de la facture"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model,name:account_invoice_import_simple_pdf.model_account_invoice_import_simple_pdf_invoice_number
+msgid "Invoice number format for Simple PDF invoice import"
+msgstr "Format de numéro de facture pour Simple PDF invoice import"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Keywords"
+msgstr "Mots clés"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__extract_rule__last
+msgid "Last"
+msgstr "Dernier"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import____last_update
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields____last_update
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number____last_update
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__write_uid
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__write_uid
+msgid "Last Updated by"
+msgstr "Mis à jour par"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__write_date
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__write_date
+msgid "Last Updated on"
+msgstr "Mis à jour le"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__date_format
+#: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__date_separator
+msgid ""
+"Leave empty if the format used is the same as the format defined in the "
+"global section."
+msgstr ""
+"Laissez vide si le format utilisé est le même que celui défini dans la "
+"section globale."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "MM DD YY"
+msgstr "MM YY AA"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "MM DD YYYY"
+msgstr "MM JJ AAAA"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__extract_rule__max
+msgid "Max"
+msgstr "Montant le plus élevé"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__occurrence_max
+msgid "Maximum Occurence"
+msgstr "Nb max de répétitions"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__extract_rule__min
+msgid "Min"
+msgstr "Montant le plus faible"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__occurrence_min
+msgid "Minimum Occurence"
+msgstr "Nb minimal de répétitions"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid "Missing fixed char."
+msgstr "Caractère ou chaine absent."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Missing invoice number format configuration on partner '%s'."
+msgstr "Le format de n° de facture n’est pas été configuré pour le contact %s."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Missing parse method for field '%s'. This should never happen."
+msgstr ""
+"Méthode d’analyse absente pour le champ '%s'. Cela ne devrait jamais arriver."
+
+#. module: account_invoice_import_simple_pdf
+#: model:product.product,name:account_invoice_import_simple_pdf.mobile_phone
+#: model:product.template,name:account_invoice_import_simple_pdf.mobile_phone_product_template
+msgid "Mobile phone"
+msgstr "Téléphone mobile"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Month DD YY"
+msgstr "Mois JJ AA"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Month DD YYYY"
+msgstr "Mois JJ AAAA"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid "No date format configured on partner '%s' nor on the field '%s'."
+msgstr ""
+"Aucun format de date n’est configuré pour le contact ‘%s’. ni sur le champ "
+"‘%s’."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid "No date separator configured on partner '%s' nor on the field '%s'."
+msgstr ""
+"Aucun séparateur de date configuré pour le contact '%s' ni sur le champ '%s'."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "No partner found."
+msgstr "Aucun contact détecté."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid ""
+"No text to cut, maybe because start string was the very end of the document"
+msgstr ""
+"Pas de texte à couper, peut-être parce que le début de chaîne était à la "
+"toute fin du document"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid "No valid data extracted for field '%s'."
+msgstr "Aucune donnée valide extraite pour le champ '%s'."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "None"
+msgstr "Aucun"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Odoo could not extract the text from the PDF invoice with the method %s. "
+"Refer to the Odoo server logs for more technical information about the cause "
+"of the failure."
+msgstr ""
+"Odoo n’a pas pu extraire le texte de la facture PDF avec la méthode %s. "
+"Reportez-vous aux journaux du serveur Odoo pour plus d’informations "
+"techniques sur la cause de la panne."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Odoo could not extract the text from the PDF invoice. Refer to the Odoo "
+"server logs for more technical information about the cause of the failure."
+msgstr ""
+"Odoo n’a pas pu extraire le texte de la facture PDF. Reportez-vous aux "
+"journaux du serveur Odoo pour plus d’informations techniques sur la cause de "
+"la panne."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Ordered List"
+msgstr "Liste ordonnée"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_pages
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_pages
+msgid "Page Analysis"
+msgstr "Analyse des pages"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid ""
+"Partner '%s' is configured with an extract rule '%s' with position %d for "
+"field '%s' but the list of extracted valid data only has %d entries."
+msgstr ""
+"Le contact '%s' est configuré avec une règle d’extraction '%s' avec les "
+"indicateurs de position %d pour le champ '%s', mais la liste des données "
+"valides extraites ne contient que des éléments %d."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__position
+msgid "Position"
+msgstr "Position"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Raw List"
+msgstr "Liste brute"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Regular Expression"
+msgstr "Expression régulière"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Result:"
+msgstr "Résultat :"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Run Test"
+msgstr "Lancer le test"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Searching Partner"
+msgstr "Recherche d’un contact"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__sequence
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__sequence
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_keyword
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_keyword
+msgid "Simple Pdf Keyword"
+msgstr "Mot-clé Simple PDF"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__date_format
+msgid "Specific Date Format"
+msgstr "Format de date spécial"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__date_separator
+msgid "Specific Date Separator"
+msgstr "Séparateur de date spécial"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__extract_rule__position_end
+msgid "Specific Position from End"
+msgstr "Position spéciale à partir de la fin"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__extract_rule__position_max
+msgid "Specific Position from Max"
+msgstr "Position spéciale à partir du maximum"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__extract_rule__position_min
+msgid "Specific Position from Min"
+msgstr "Position spéciale à partir du minimum"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__extract_rule__position_start
+msgid "Specific Position from Start"
+msgstr "Position spéciale à partir du début"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__regexp
+msgid "Specific Regular Expression"
+msgstr "Expression régulière spéciale"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__date_start
+msgid "Start Date"
+msgstr "Date de début"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__start
+#, python-format
+msgid "Start String"
+msgstr "Chaîne de début"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid "String '%s' not found"
+msgstr "Chaîne '%s' introuvable"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid "Successful cut on '%s'"
+msgstr "Découpe réussie de '%s'"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Successful match on %d keywords (%s)"
+msgstr "Correspondance réussie avec %d mots-clés (%s)"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Successful match on {label} '{value}'"
+msgstr "Correspondance réussie pour {label} '{value}'"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"System Parameter 'invoice_import_simple_pdf.pdf2txt' has an invalid value "
+"'%s'."
+msgstr ""
+"Le paramètre système 'invoice_import_simple_pdf.pdf2txt' a une valeur "
+"invalide '%s'."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__amount_tax
+msgid "Tax Amount"
+msgstr "Taxes"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Test"
+msgstr "Test"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Test Date:"
+msgstr "Date du test :"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_test_file
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_test_file
+msgid "Test PDF Invoice File"
+msgstr "Fichier de test de facture PDF"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_test_filename
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_test_filename
+msgid "Test PDF Invoice Filename"
+msgstr "Nom du fichier de test de facture"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_test_results
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_test_results
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Test Results"
+msgstr "Résultats du test"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_test_raw_text
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_test_raw_text
+msgid "Test Text Extraction"
+msgstr "Texte extrait lors du Test"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Text Extraction from PDF"
+msgstr "Texte extrait du PDF"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Text extraction system parameter:"
+msgstr "Paramètre système d’extraction de texte :"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Text extraction tool used:"
+msgstr "Outil d’extraction utilisé :"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_invoice_number.py:0
+#, python-format
+msgid ""
+"The maximum occurence (%d) must be equal to or above the minimum occurence "
+"(%d)."
+msgstr ""
+"Le nombre de répétitions maximal (%d) doit être égale ou supérieure au "
+"nombre de répétitions minimal (%d)."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.constraint,message:account_invoice_import_simple_pdf.constraint_account_invoice_import_simple_pdf_invoice_number_occurrence_max_positive
+msgid "The maximum occurence must be strictly positive."
+msgstr "Le nombre maximum de répétitions doit être positif."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.constraint,message:account_invoice_import_simple_pdf.constraint_account_invoice_import_simple_pdf_invoice_number_occurrence_min_positive
+msgid "The minimum occurence must be strictly positive."
+msgstr "Le nombre minimal de répétitions doit être positif."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.constraint,message:account_invoice_import_simple_pdf.constraint_account_invoice_import_simple_pdf_fields_position_specific_positive
+msgid "The position must be strictly positive."
+msgstr "La position doit être un nombre positif."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.constraint,message:account_invoice_import_simple_pdf.constraint_account_invoice_import_simple_pdf_fields_partner_field_unique
+msgid "There is already an entry for that field."
+msgstr "Il y a déjà une entrée pour ce champ."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "There is no amount field configured for partner '%s'."
+msgstr "Aucun champ montant n’est configuré pour le contact '%s'."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_thousand_separator
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_thousand_separator
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Thousand Separator"
+msgstr "Séparateur de milliers"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Thousand Separator:"
+msgstr "Séparateur de milliers :"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__amount_total
+msgid "Total"
+msgstr "Total TTC"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__string_type
+msgid "Type"
+msgstr "Type"
+
+#. module: account_invoice_import_simple_pdf
+#: model:product.product,uom_name:account_invoice_import_simple_pdf.mobile_phone
+#: model:product.template,uom_name:account_invoice_import_simple_pdf.mobile_phone_product_template
+msgid "Units"
+msgstr "Unités"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__account_invoice_import_simple_pdf_fields__name__amount_untaxed
+msgid "Untaxed Amount"
+msgstr "Montant HT"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "VAT number"
+msgstr "Numéro de TVA"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "Valid-data Filtered List"
+msgstr "Liste des données valides correspondant au filtre"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_fields__partner_id
+#: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_account_invoice_import_simple_pdf_invoice_number__partner_id
+msgid "Vendor"
+msgstr "Fournisseur"
+
+#. module: account_invoice_import_simple_pdf
+#: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
+msgid "Vendor Bill Import"
+msgstr "Import factures fournisseurs"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model,name:account_invoice_import_simple_pdf.model_account_invoice_import
+msgid "Wizard to import supplier invoices/refunds"
+msgstr "Assistant pour importer les factures/remboursements des fournisseurs"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "YYYY MM DD"
+msgstr "AAAA MM JJ"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid ""
+"You must configure a field extraction rule for field 'Date' for partner '%s'."
+msgstr ""
+"Vous devez configurer une règle d’extraction de champ pour le champ 'Date' "
+"pour le contact '%s'."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
+#, python-format
+msgid "You must set a Specific Regular Expression on the 'Description' field."
+msgstr ""
+"Vous devez définir une expression régulière spécifique dans le champ "
+"'Description'."
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "You must upload a test PDF invoice."
+msgstr "Vous devez charger une facture PDF de test."
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_thousand_separator__apostrophe
+msgid "apostrophe"
+msgstr "apostrophe"
+
+#. module: account_invoice_import_simple_pdf
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_decimal_separator__comma
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_thousand_separator__comma
+msgid "comma"
+msgstr "virgule"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "dash"
+msgstr "tiret"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_decimal_separator__dot
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_thousand_separator__dot
+#, python-format
+msgid "dot"
+msgstr "point"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_thousand_separator__none
+#, python-format
+msgid "none"
+msgstr "aucun"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_thousand_separator__space
+#, python-format
+msgid "space"
+msgstr "espace"
+
+#. module: account_invoice_import_simple_pdf
+#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
+#, python-format
+msgid "unknown"
+msgstr "inconnu"
+
+#~ msgid "Successful match on VAT number '%s'"
+#~ msgstr "Correspondance réussie avec le numéro de TVA '%s'"
+
+#~ msgid "Simple PDF import: could not find vendor."
+#~ msgstr "Simple PDF Import : Impossible de trouver le Vendeur."
