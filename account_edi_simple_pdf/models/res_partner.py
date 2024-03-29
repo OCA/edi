@@ -366,16 +366,16 @@ class ResPartner(models.Model):
         if thousand_sep == decimal_sep:
             raise UserError(
                 _(
-                    "For partner '%s', the decimal separator (%s) is the same as "
-                    "the thousand separator (%s). Keep in mind that, if not set "
+                    "For partner '%(name)s', the decimal separator (%(decimal)s) is the same "
+                    "as the thousand separator (%(thousand)s). Keep in mind that, if not set "
                     "explicitly, decimal and thousand separator are read from the "
                     "language of the partner."
                 )
-                % (
-                    self.display_name,
-                    char2separator.get(decimal_sep),
-                    char2separator.get(thousand_sep),
-                )
+                % {
+                    "name": self.display_name,
+                    "decimal": char2separator.get(decimal_sep),
+                    "thousand": char2separator.get(thousand_sep),
+                }
             )
         logger.debug("decimal_sep=|%s| thousand_sep=|%s|", decimal_sep, thousand_sep)
         partner_config = {
