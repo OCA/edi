@@ -46,7 +46,9 @@ class TestInvoiceImport(TransactionCase):
 
         self.partner_config = self.partner._simple_pdf_partner_config()
         self.test_info = {"test_mode": True}
-        self.env['account.invoice.import.simple.pdf.mixin']._simple_pdf_update_test_info(self.test_info)
+        self.env[
+            "account.invoice.import.simple.pdf.mixin"
+        ]._simple_pdf_update_test_info(self.test_info)
         aiispfo = self.env["account.invoice.import.simple.pdf.fields"]
         self.space_chars = list(self.test_info["space_pattern"][1:-1])
         frtax = self.env["account.tax"].create(
@@ -503,14 +505,18 @@ class TestInvoiceImport(TransactionCase):
             self.assertEqual(src, parsed_inv["invoice_number"])
 
     def test_complete_import(self):
-        attachment = self.env['ir.attachment'].create({
-            'name': self.ak_filename,
-            'datas': self.ak_pdf_file_b64,
-        })
-        invoices = self.env['account.move'].with_context(
-            default_move_type='in_invoice'
-        )._simple_pdf_create_invoice_from_attachment(
-            attachment,
+        attachment = self.env["ir.attachment"].create(
+            {
+                "name": self.ak_filename,
+                "datas": self.ak_pdf_file_b64,
+            }
+        )
+        invoices = (
+            self.env["account.move"]
+            .with_context(default_move_type="in_invoice")
+            ._simple_pdf_create_invoice_from_attachment(
+                attachment,
+            )
         )
         self.assertEqual(len(invoices), 1)
         inv = invoices[0]

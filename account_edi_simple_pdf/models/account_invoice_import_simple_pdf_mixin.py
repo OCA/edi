@@ -6,7 +6,6 @@ import logging
 import shutil
 import subprocess
 from tempfile import NamedTemporaryFile
-from base64 import b64decode
 
 from odoo import _, api, models
 from odoo.exceptions import UserError
@@ -242,10 +241,12 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
                 found_res = [keyword in raw_text_no_space for keyword in keywords]
                 if all(found_res):
                     partner_id = partner["id"]
-                    result_label = _("Successful match on %d keywords (%s)") % (
-                        len(keywords),
-                        ", ".join(keywords),
-                    )
+                    result_label = _(
+                        "Successful match on %(count)d keywords (%(keywords)s)"
+                    ) % {
+                        "count": len(keywords),
+                        "keywords": ", ".join(keywords),
+                    }
                     test_results.append("<li>%s</li>" % result_label)
                     break
             for kfield, kfield_label in keyword_fields_dict.items():
@@ -358,7 +359,7 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
                 raise UserError(
                     _("Missing parse method for field '%s'. This should never happen.")
                     % field.name
-                )
+                ) from None
 
         failed_fields = parsed_inv.pop("failed_fields")
         if failed_fields:
