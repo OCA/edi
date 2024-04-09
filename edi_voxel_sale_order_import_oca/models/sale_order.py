@@ -81,7 +81,12 @@ class SaleOrder(models.Model):
         else:
             raise UserError(_("'%s' is not recognised as an XML file") % order_filename)
         _logger.debug("Starting to import:%s" % (order_filename))
-        return self._parse_xml_order(xml_root, error_msgs, company)
+        try:
+            return self._parse_xml_order(xml_root, error_msgs, company)
+        except Exception as exc:
+            raise UserError(
+                _("Error creating the order") + f"\n\nFile contents:\n{order_file}"
+            ) from exc
 
     def _parse_xml_order(self, xml_root, error_msgs, company):
         vals = {"company_id": company.id}
