@@ -110,6 +110,12 @@ msgid "Enable Voxel"
 msgstr ""
 
 #. module: edi_voxel_sale_order_import_oca
+#: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
+#, python-format
+msgid "Error creating the order"
+msgstr ""
+
+#. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,help:edi_voxel_sale_order_import_oca.field_sale_order__voxel_state
 msgid "Indicates the status of sending report to Voxel"
 msgstr ""
