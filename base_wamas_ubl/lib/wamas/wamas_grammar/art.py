@@ -724,7 +724,7 @@ grammar = OrderedDict(
             "length": 4,
             "dp": False,
             "dict_key": False,
-            "df_val": "-",
+            "df_val": False,
             "df_func": False,
         },
         "Art_SatzKz": {
