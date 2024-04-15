@@ -9,7 +9,6 @@
     <cbc:IssueDate><t t-raw="get_current_date()" /></cbc:IssueDate>
     <cac:OrderReference>
         <cbc:ID><t t-raw="record.IvKretk_ExtRef" /></cbc:ID>
-        <cbc:IssueDate><t t-raw="get_current_date()" /></cbc:IssueDate>
     </cac:OrderReference>
     <cac:DespatchSupplierParty>
         <cbc:CustomerAssignedAccountID><t
