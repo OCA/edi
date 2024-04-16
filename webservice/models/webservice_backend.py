@@ -31,14 +31,33 @@ class WebserviceBackend(models.Model):
     password = fields.Char(auth_type="user_pwd")
     api_key = fields.Char(string="API Key", auth_type="api_key")
     api_key_header = fields.Char(string="API Key header", auth_type="api_key")
+    oauth2_flow = fields.Selection(
+        [
+            ("backend_application", "Backend Application (Client Credentials Grant)"),
+            ("authorization_code", "Web Application (Authorization Code Grant)"),
+        ],
+        readonly=False,
+        store=True,
+        compute="_compute_oauth2_flow",
+    )
     oauth2_clientid = fields.Char(string="Client ID", auth_type="oauth2")
     oauth2_client_secret = fields.Char(string="Client Secret", auth_type="oauth2")
     oauth2_token_url = fields.Char(string="Token URL", auth_type="oauth2")
+    oauth2_authorization_url = fields.Char(string="Authorization URL")
     oauth2_audience = fields.Char(
         string="Audience"
         # no auth_type because not required
     )
+    oauth2_scope = fields.Char(help="scope of the the authorization")
     oauth2_token = fields.Char(help="the OAuth2 token (serialized JSON)")
+    redirect_url = fields.Char(
+        compute="_compute_redirect_url",
+        help="The redirect URL to be used as part of the OAuth2 authorisation flow",
+    )
+    oauth2_state = fields.Char(
+        help="random key generated when authorization flow starts "
+        "to ensure that no CSRF attack happen"
+    )
     content_type = fields.Selection(
         [
             ("application/json", "JSON"),
@@ -95,8 +114,32 @@ class WebserviceBackend(models.Model):
     def _get_adapter_protocol(self):
         protocol = self.protocol
         if self.auth_type.startswith("oauth2"):
-            protocol += f"+{self.auth_type}"
+            protocol += f"+{self.auth_type}-{self.oauth2_flow}"
         return protocol
+
+    @api.depends("auth_type")
+    def _compute_oauth2_flow(self):
+        for rec in self:
+            if rec.auth_type != "oauth2":
+                rec.oauth2_flow = False
+
+    @api.depends("auth_type", "oauth2_flow")
+    def _compute_redirect_url(self):
+        get_param = self.env["ir.config_parameter"].sudo().get_param
+        base_url = get_param("web.base.url")
+        for rec in self:
+            if rec.auth_type == "oauth2" and rec.oauth2_flow == "authorization_flow":
+                rec.redirect_url = base_url + f"/webservice/{rec.id}/oauth2/redirect"
+            else:
+                rec.redirect_url = False
+
+    def button_authorize(self):
+        self._get_adapter().redirect_to_authorize()
+        return {
+            "type": "ir.actions.act_url",
+            "url": "authorize_url",
+            "target": "self",
+        }
 
     @property
     def _server_env_fields(self):
@@ -110,8 +153,11 @@ class WebserviceBackend(models.Model):
             "api_key": {},
             "api_key_header": {},
             "content_type": {},
+            "oauth2_flow": {},
+            "oauth2_scope": {},
             "oauth2_clientid": {},
             "oauth2_client_secret": {},
+            "oauth2_authorization_url": {},
             "oauth2_token_url": {},
             "oauth2_audience": {},
         }

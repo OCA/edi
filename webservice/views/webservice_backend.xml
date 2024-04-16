@@ -8,7 +8,14 @@
         <field name="model">webservice.backend</field>
         <field name="arch" type="xml">
             <form>
-                <header />
+                <header>
+                    <button
+                        type="object"
+                        name="button_authorize"
+                        string="OAuth Authorize"
+                        attrs="{'invisible': ['|', ('auth_type', '!=', 'oauth2'), ('oauth2_flow', '!=', 'authorization_code')]}"
+                    />
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" />
@@ -59,12 +66,24 @@
                             }"
                         />
                         <field
+                            name="oauth2_flow"
+                            attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                        />
+                        <field
                             name="oauth2_clientid"
                             attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
                         />
                         <field
                             name="oauth2_client_secret"
                             attrs="{'invisible': [('auth_type', '!=', 'oauth2')], 'required': [('auth_type', '=', 'oauth2')]}"
+                        />
+                        <field
+                            name="oauth2_scope"
+                            attrs="{'invisible': [('auth_type', '!=', 'oauth2'), ('oauth2_flow', '!=', 'authorization_code')], 'required': [('auth_type', '=', 'oauth2'), ('oauth2_flow', '=', 'authorization_code')]}"
+                        />
+                        <field
+                            name="oauth2_authorization_url"
+                            attrs="{'invisible': [('auth_type', '!=', 'oauth2'), ('oauth2_flow', '!=', 'authorization_code')], 'required': [('auth_type', '=', 'oauth2'), ('oauth2_flow', '=', 'authorization_code')]}"
                         />
                         <field
                             name="oauth2_token_url"
