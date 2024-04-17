@@ -30,7 +30,7 @@ class EDIStorageComponentTestCase(TestEDIStorageBase):
             self.checker_input._get_remote_file_path("WHATEVER", "foo.csv")
 
     def test_get_remote_file(self):
-        with mock.patch(STORAGE_BACKEND_MOCK_PATH + ".get") as mocked:
+        with mock.patch(STORAGE_BACKEND_MOCK_PATH + "._get_b64_data") as mocked:
             self.checker._get_remote_file("pending")
             mocked.assert_called_with(
                 "demo_out/pending/{}".format(self._filename(self.record)), binary=False

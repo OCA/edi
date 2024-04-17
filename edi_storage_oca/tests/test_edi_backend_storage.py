@@ -161,6 +161,10 @@ class TestEDIBackendOutput(TestEDIStorageBase):
                 "exchange_file": rec1.exchange_file,
             }
         )
+        # Avoid the exchange_file name generated from the compute function
+        # of rec2 and rec3 is the same, leading to an incorrect test
+        rec2.exchange_filename = "rec2.csv"
+
         mocked_paths = {
             self._file_fullpath("done", record=rec1): self.fakepath,
             self._file_fullpath("error", record=rec2): self.fakepath,

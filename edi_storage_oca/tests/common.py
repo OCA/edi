@@ -106,20 +106,22 @@ class TestEDIStorageBase(EDIBackendCommonComponentTestCase):
 
     def _mock_storage_backend_get(self, mocked_paths):
         mocked = functools.partial(self._mocked_backend_get, mocked_paths)
-        return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".get", mocked)
+        return mock.patch(STORAGE_BACKEND_MOCK_PATH + "._get_b64_data", mocked)
 
     def _mock_storage_backend_add(self):
-        return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".add", self._mocked_backend_add)
+        return mock.patch(
+            STORAGE_BACKEND_MOCK_PATH + "._add_b64_data", self._mocked_backend_add
+        )
 
     def _mock_storage_backend_list_files(self, mocked_paths):
         mocked = functools.partial(self._mocked_backend_list_files, mocked_paths)
-        return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".list_files", mocked)
+        return mock.patch(STORAGE_BACKEND_MOCK_PATH + "._list", mocked)
 
     def _mock_storage_backend_find_files(self, result):
         def _result(self, pattern, relative_path=None, **kw):
             return result
 
-        return mock.patch(STORAGE_BACKEND_MOCK_PATH + ".find_files", _result)
+        return mock.patch(STORAGE_BACKEND_MOCK_PATH + "._find_files", _result)
 
     def _test_result(
         self,

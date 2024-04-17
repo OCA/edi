@@ -79,7 +79,7 @@ class EDIStorageComponentMixin(AbstractComponent):
             # TODO: support match via pattern (eg: filename-prefix-*)
             # otherwise is impossible to retrieve input files and acks
             # (the date will never match)
-            return self.storage.get(path.as_posix(), binary=binary)
+            return self.storage._get_b64_data(path.as_posix(), binary=binary)
         except FileNotFoundError:
             _logger.info(
                 "Ignored FileNotFoundError when trying "

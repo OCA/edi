@@ -7,7 +7,7 @@
     "summary": """
     Base module to allow exchanging files via storage backend (eg: SFTP).
     """,
-    "version": "14.0.1.8.1",
+    "version": "12.0.1.0.1",
     "development_status": "Beta",
     "license": "LGPL-3",
     "website": "https://github.com/OCA/edi",

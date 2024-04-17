@@ -75,7 +75,6 @@ class EDIBackendTestCase(EDIBackendCommonComponentRegistryTestCase):
 
     def test_03_process_record_success_delete(self):
         self.backend.write({"input_dir_remove": True, "input_dir_done": False})
-        self.backend.flush()
 
         with self._mock_listener_remove_file():
             self.record.write({"edi_exchange_state": "input_received"})

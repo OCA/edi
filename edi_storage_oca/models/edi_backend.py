@@ -140,8 +140,12 @@ class EDIBackend(models.Model):
         if existing:
             return
         record = self.create_record(
-            exchange_type.code, self._storage_new_exchange_record_vals(file_name)
+            exchange_type.code,
+            {
+                "edi_exchange_state": "input_pending"
+            }
         )
+        record.exchange_filename = file_name
         _logger.debug("%s: new exchange record generated.", self.name)
         return record.identifier
 
@@ -153,7 +157,7 @@ class EDIBackend(models.Model):
             # If there is not pattern, return everything
             filenames = [
                 x
-                for x in self.storage_id.list_files(full_input_dir_pending)
+                for x in self.storage_id._list(full_input_dir_pending)
                 if x.strip("/")
             ]
             return filenames
@@ -162,12 +166,9 @@ class EDIBackend(models.Model):
         if exchange_type.exchange_file_ext:
             bits.append(r"\." + exchange_type.exchange_file_ext)
         pattern = "".join(bits)
-        full_paths = self.storage_id.find_files(pattern, full_input_dir_pending)
+        full_paths = self.storage_id._find_files(pattern, full_input_dir_pending)
         pending_path_len = len(full_input_dir_pending)
         return [p[pending_path_len:].strip("/") for p in full_paths]
-
-    def _storage_new_exchange_record_vals(self, file_name):
-        return {"exchange_filename": file_name, "edi_exchange_state": "input_pending"}
 
     def _check_output_exchange_sync(self, **kw):
         # Do not skip sent records when dealing w/ storage related exchanges,
