@@ -1,3 +1,5 @@
 invoice2data==0.3.5
 freezegun
 odoo_test_helper
+
+odoo12-addon-storage_backend @ git+https://github.com/OCA/storage.git@refs/pull/367/head#subdirectory=setup/storage_backend
