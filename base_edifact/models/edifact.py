@@ -109,7 +109,9 @@ class BasePydifact(models.AbstractModel):
         codes = ["BY", "SU"]
         reference_code = seg[0]
         if reference_code not in codes:
-            raise NotImplementedError(f"Code '{reference_code}' not implemented")
+            raise NotImplementedError(
+                "Code '{}' not implemented".format(reference_code)
+            )
         #
         party_identification = seg[1]
         party_id = party_identification[0]
@@ -124,7 +126,8 @@ class BasePydifact(models.AbstractModel):
         DP. Party to which goods should be delivered, if not identical with
             consignee.
             NAD+DP+5550534000086::9+++++++DE'
-            NAD segment: ['DP', ['5550534022101', '', '9'], '', '', '', '', '', '', 'ES']
+            NAD segment:
+                ['DP', ['5550534022101', '', '9'], '', '', '', '', '', '', 'ES']
         IV. Party to whom an invoice is issued.
             NAD+IV+5450534005838::9++AMAZON EU SARL:NIEDERLASSUNG
             DEUTSCHLAND+MARCEL-BREUER-STR. 12+MUENCHEN++80807+DE
@@ -158,9 +161,12 @@ class BasePydifact(models.AbstractModel):
         if lenght_seg > 2 and bool(seg[2]):
             d["name"] = seg[2]
         if lenght_seg > 3 and bool(seg[3]):
-            d["name"] = "{}{}".format(f"{d['name']}. " if d.get("name") else "", seg[3])
+            d["name"] = "{}{}".format(
+                "{}. ".format(d["name"]) if d.get("name") else "", seg[3]
+            )
         if lenght_seg > 4 and bool(seg[4]):
-            # Street address and/or PO Box number in a structured address: one to three lines.
+            # Street address and/or PO Box number in a structured address:
+            # one to three lines.
             d["street"] = seg[4]
         if lenght_seg > 5 and bool(seg[5]):
             d["city"] = seg[5]
@@ -180,7 +186,8 @@ class BasePydifact(models.AbstractModel):
         """
         ['2', 'EUR', '9']
         """
-        # Identification of the name or symbol of the monetary unit involved in the transaction.
+        # Identification of the name or symbol of the monetary unit involved
+        # in the transaction.
         currency_coded = seg[1]
         return {
             "iso": currency_coded,
@@ -273,7 +280,8 @@ class BasePydifact(models.AbstractModel):
                 - 14: EAN (European Article Numbering Association)
         :param list recipient: Identification of the recipient of the interchange.
             example: ["40411", "14"]
-        :param str control_ref: Unique reference assigned by the sender to an interchange.
+        :param str control_ref:
+            Unique reference assigned by the sender to an interchange.
             example: "10"
         :param list syntax_identifier: Identification of the agency controlling
             the syntax and indication of syntax level, plus the syntax version number.
