@@ -3,9 +3,11 @@
 # @author Simone Orsi <simahawk@gmail.com>
 # @author Alexandre Fayolle <alexandre.fayolle@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
+import logging
 
 from odoo import _, api, exceptions, fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class WebserviceBackend(models.Model):
@@ -23,7 +25,7 @@ class WebserviceBackend(models.Model):
             ("none", "Public"),
             ("user_pwd", "Username & password"),
             ("api_key", "API Key"),
-            ("oauth2", "OAuth2 Backend Application Flow (Client Credentials Grant)"),
+            ("oauth2", "OAuth2"),
         ],
         required=True,
     )
@@ -34,7 +36,7 @@ class WebserviceBackend(models.Model):
     oauth2_flow = fields.Selection(
         [
             ("backend_application", "Backend Application (Client Credentials Grant)"),
-            ("authorization_code", "Web Application (Authorization Code Grant)"),
+            ("web_application", "Web Application (Authorization Code Grant)"),
         ],
         readonly=False,
         store=True,
@@ -102,7 +104,10 @@ class WebserviceBackend(models.Model):
         return name in extra_params or super()._valid_field_parameter(field, name)
 
     def call(self, method, *args, **kwargs):
-        return getattr(self._get_adapter(), method)(*args, **kwargs)
+        _logger.debug("backend %s: call %s %s %s", self.name, method, args, kwargs)
+        response = getattr(self._get_adapter(), method)(*args, **kwargs)
+        _logger.debug("backend %s: response: \n%s", self.name, response)
+        return response
 
     def _get_adapter(self):
         with self.work_on(self._name) as work:
@@ -127,17 +132,26 @@ class WebserviceBackend(models.Model):
     def _compute_redirect_url(self):
         get_param = self.env["ir.config_parameter"].sudo().get_param
         base_url = get_param("web.base.url")
+        if base_url.startswith("http://"):
+            _logger.warning(
+                "web.base.url is configured in http. Oauth2 requires using https"
+            )
+            base_url = base_url[len("http://") :]
+        if not base_url.startswith("https://"):
+            base_url = f"https://{base_url}"
         for rec in self:
-            if rec.auth_type == "oauth2" and rec.oauth2_flow == "authorization_flow":
-                rec.redirect_url = base_url + f"/webservice/{rec.id}/oauth2/redirect"
+            if rec.auth_type == "oauth2" and rec.oauth2_flow == "web_application":
+                rec.redirect_url = f"{base_url}/webservice/{rec.id}/oauth2/redirect"
             else:
                 rec.redirect_url = False
 
     def button_authorize(self):
-        self._get_adapter().redirect_to_authorize()
+        _logger.info("Button OAuth2 Authorize")
+        authorize_url = self._get_adapter().redirect_to_authorize()
+        _logger.info("Redirecting to %s", authorize_url)
         return {
             "type": "ir.actions.act_url",
-            "url": "authorize_url",
+            "url": authorize_url,
             "target": "self",
         }
 
