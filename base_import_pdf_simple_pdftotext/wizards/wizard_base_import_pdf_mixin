@@ -1,0 +1,27 @@
+# Copyright 2024 Tecnativa - Víctor Martínez
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+import logging
+
+import pdftotext
+
+from odoo import models
+
+logger = logging.getLogger(__name__)
+
+
+class WizardBaseImportPdfMixin(models.AbstractModel):
+    _inherit = "wizard.base.import.pdf.mixin"
+
+    def _pdf_text_extraction_pdftotext_lib(self, fileobj):
+        # pdftotext lib doc: https://github.com/jalan/pdftotext
+        res = False
+        try:
+            res = []
+            with open(fileobj.name, "rb") as pdf_file:
+                pdf = pdftotext.PDF(pdf_file)
+                for page in pdf:
+                    res.append(page)
+            logger.info("Text extraction made with pdftotext lib")
+        except Exception as e:
+            logger.warning("Text extraction with pdftotext lib failed. Error: %s", e)
+        return res
