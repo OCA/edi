@@ -1,7 +1,7 @@
 # Copyright 2022 Camptocamp SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 from odoo.tools import pycompat
 
 from ..utils import xml_purge_nswrapper
@@ -42,7 +42,7 @@ XML2 = """
 """
 
 
-class TestNSWrapper(SavepointCase):
+class TestNSWrapper(TransactionCase):
     maxDiff = None
 
     def test_purge1(self):
