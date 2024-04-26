@@ -35,6 +35,15 @@
                             <field name="exchange_file_auto_generate" />
                             <field name="ack_type_id" />
                             <field name="job_channel_id" />
+                            <field name="encoding" />
+                            <field
+                                name="encoding_out_error_handler"
+                                attrs="{'invisible': [('direction', '=', 'input')]}"
+                            />
+                            <field
+                                name="encoding_in_error_handler"
+                                attrs="{'invisible': [('direction', '=', 'output')]}"
+                            />
                         </group>
                     </group>
                     <notebook>
