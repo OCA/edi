@@ -6,22 +6,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2024-05-01 15:34+0000\n"
+"Last-Translator: c2cdidier <didier.donze@camptocamp.com>\n"
 "Language-Team: none\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: despatch_advice_import_ubl
 #: model:ir.model,name:despatch_advice_import_ubl.model_despatch_advice_import
 msgid "Despatch Advice Import from Files"
-msgstr ""
+msgstr "Importer l'avis d'expédition à partir des fichiers"
 
 #. module: despatch_advice_import_ubl
 #. odoo-python
 #: code:addons/despatch_advice_import_ubl/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "Missing line ID in the Despatch Advice."
-msgstr ""
+msgstr "ID de ligne manquant dans l'avis d'expédition."
