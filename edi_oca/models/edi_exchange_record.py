@@ -46,7 +46,9 @@ class EDIExchangeRecord(models.Model):
         model_field="model",
         copy=False,
     )
-    related_record_exists = fields.Boolean(compute="_compute_related_record_exists")
+    related_record_exists = fields.Boolean(
+        compute="_compute_related_record_exists", compute_sudo=True
+    )
     related_name = fields.Char(compute="_compute_related_name", compute_sudo=True)
     exchange_file = fields.Binary(attachment=True, copy=False)
     exchange_filename = fields.Char(
@@ -209,7 +211,7 @@ class EDIExchangeRecord(models.Model):
             return None
         if not self.model and self.parent_id:
             return self.parent_id.record
-        return self.env[self.model].browse(self.res_id).exists()
+        return self.env[self.model].sudo(False).search([("id", "=", int(self.res_id))])
 
     def _set_file_content(
         self, output_string, encoding="utf-8", field_name="exchange_file"
@@ -237,7 +239,7 @@ class EDIExchangeRecord(models.Model):
         for rec in self:
             rec_name = rec.identifier
             if rec.res_id and rec.model:
-                rec_name = rec.record.display_name
+                rec_name = rec.record.sudo().display_name
             name = "[{}] {}".format(rec.type_id.name, rec_name)
             result.append((rec.id, name))
         return result
