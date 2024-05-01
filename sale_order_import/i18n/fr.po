@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-12 13:36+0000\n"
-"PO-Revision-Date: 2016-11-12 13:36+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"PO-Revision-Date: 2024-05-01 15:34+0000\n"
+"Last-Translator: c2cdidier <didier.donze@camptocamp.com>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: sale_order_import
 #. odoo-python
@@ -24,21 +25,21 @@ msgstr ""
 #: code:addons/sale_order_import/tests/test_sale_order.py:0
 #, python-format
 msgid " Amount w/o tax: %(amount)s %(currency)s"
-msgstr ""
+msgstr " Montant hors taxe: %(amount)s %(currency)s"
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "%(orders)s new order line(s) created: %(label)s"
-msgstr ""
+msgstr "%(orders)s nouvelle(s) ligne(s) de commande créée(s): %(label)s"
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "%(orders)s order line(s) deleted: %(label)s"
-msgstr ""
+msgstr "%(orders)s ligne(s) de commande supprimée(s): %(label)s"
 
 #. module: sale_order_import
 #. odoo-python
@@ -48,11 +49,13 @@ msgid ""
 "An order of customer '%(partner)s' with reference '%(ref)s' already exists: "
 "%(name)s (state: %(state)s)"
 msgstr ""
+"Une commande avec la référence '%(ref)s' existe déjà pour le client "
+"'%(partner)s': %(name)s (état: %(state)s)"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__price_source
 msgid "Apply Prices From"
-msgstr ""
+msgstr "Appliquer les prix à partir de"
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
@@ -62,12 +65,12 @@ msgstr "Annuler"
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__commercial_partner_id
 msgid "Commercial Entity"
-msgstr ""
+msgstr "Entité commerciale"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__confirm_order
 msgid "Confirm Order"
-msgstr ""
+msgstr "Confirmer la commande"
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
@@ -79,7 +82,7 @@ msgstr "Créer une nouvelle"
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "Created automatically via file import (%s)."
-msgstr ""
+msgstr "Créé automatiquement par importation de fichier (%s)."
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_uid
@@ -94,22 +97,22 @@ msgstr "Créé le"
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__partner_id
 msgid "Customer"
-msgstr ""
+msgstr "Client"
 
 #. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__price_source__order
 msgid "Customer Order"
-msgstr ""
+msgstr "Commande client"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nom affiché"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__doc_type
 msgid "Document Type"
-msgstr ""
+msgstr "Type de document"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__order_filename
@@ -127,6 +130,8 @@ msgid ""
 "If it is a PDF file, Odoo will try to find an XML file in the attachments of "
 "the PDF file and then use this XML file to create the quotation."
 msgstr ""
+"S'il s'agit d'un document PDF, Odoo tentera de trouver un fichier XML en "
+"pièce-jointe et utilisera ensuite ce document XML pour créer le devis."
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
@@ -134,6 +139,8 @@ msgid ""
 "If it is an XML file, Odoo will parse it if the module that adds support for "
 "this XML format is installed. For the"
 msgstr ""
+"S'il s'agit d'un document XML, Odoo l'analysera si le module adéquat est "
+"installé. Pour le"
 
 #. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__state__import
@@ -145,22 +152,22 @@ msgstr "Importer"
 #: model:ir.actions.act_window,name:sale_order_import.sale_order_import_action
 #: model:ir.ui.menu,name:sale_order_import.sale_order_import_menu
 msgid "Import RFQ or Order"
-msgstr ""
+msgstr "Importer la demande ou la commande d'achat"
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid "Import Sale Orders"
-msgstr ""
+msgstr "Importer le bon de commande"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__import_type
 msgid "Import Type"
-msgstr ""
+msgstr "Type d'import"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Dernière modification le"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__write_uid
@@ -177,7 +184,7 @@ msgstr "Dernière mise-à-jour le"
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "No data provided"
-msgstr ""
+msgstr "Aucune donnée fournie"
 
 #. module: sale_order_import
 #. odoo-python
@@ -187,23 +194,25 @@ msgid ""
 "No price is defined in the file. Please double check file or select "
 "Pricelist as the source for prices."
 msgstr ""
+"Aucun prix définit dans le fichier. Veuillez vérifier le fichier ou "
+"sélectionner une liste de prix source."
 
 #. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__import_type__pdf
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "Please select a valid import type before importing!"
-msgstr ""
+msgstr "Veuillez sélectionner un type d'importation valide avant d'importer !"
 
 #. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__price_source__pricelist
 msgid "Pricelist"
-msgstr ""
+msgstr "Liste de prix"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__sale_id
