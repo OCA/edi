@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="0">
+    <record id="edi_exchange_type_purchase_order_out" model="edi.exchange.type">
+        <field name="backend_id" ref="edi_backend_edifact" />
+        <field name="backend_type_id" ref="edi_backend_type_edifact" />
+        <field name="name">EDIFACT-OUT-ORDER</field>
+        <field name="code">edifact_out_order</field>
+        <field name="direction">output</field>
+        <field name="exchange_filename_pattern">D{dt}</field>
+        <field name="exchange_file_ext">txt</field>
+        <field name="exchange_file_auto_generate">True</field>
+        <field name="encoding">iso-8859-1</field>
+        <field name="encoding_out_error_handler">strict</field>
+        <field name="encoding_in_error_handler">strict</field>
+        <field name="quick_exec" eval="True" />
+        <field name="advanced_settings_edit">
+            components:
+                generate:
+                    usage: output.generate.edifact
+                    env_ctx:
+                        msg_type: Picking
+            filename_pattern:
+                force_tz: Europe/Zurich
+                date_pattern: "%Y%m%d%H%M%S%f"
+        </field>
+    </record>
+
+    <record id="edi_exchange_type_purchase_order_input" model="edi.exchange.type">
+        <field name="backend_id" ref="edi_backend_edifact" />
+        <field name="backend_type_id" ref="edi_backend_type_edifact" />
+        <field name="name">EDIFACT-IN-DESPATCH-ADVICE</field>
+        <field name="code">edifact_in_despatch_advice</field>
+        <field name="exchange_filename_pattern">D{dt}</field>
+        <field name="exchange_file_ext">txt</field>
+        <field name="direction">input</field>
+        <field name="exchange_file_auto_generate">True</field>
+        <field name="encoding">iso-8859-1</field>
+        <field name="encoding_out_error_handler">strict</field>
+        <field name="encoding_in_error_handler">strict</field>
+        <field name="advanced_settings_edit">
+            components:
+                process:
+                    usage: input.process.edifact.input
+                    env_ctx:
+                        msg_type: "EDIFACT Input"
+        </field>
+    </record>
+</odoo>
