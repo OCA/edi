@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template
+        id="edi_exchange_inbound_instruction"
+        name="Render GS1 Inbound Instruction"
+    >
+        <warehousing_inbound_instruction:warehousingInboundInstructionMessage
+            xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+            xmlns:warehousing_inbound_instruction="urn:gs1:ecom:warehousing_inbound_instruction:xsd:3"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
+            <t
+                t-raw="render_edi_template(exchange_record, 'gs1.BusinessHeader', sender=sender, receiver=receiver)"
+            />
+            <t t-set="instruction_info" t-value="info.warehousingInboundInstruction" />
+            <t
+                t-set="shipment_info"
+                t-value="instruction_info.warehousingInboundInstructionShipment"
+            />
+            <t t-set="purchase_order" t-value="record.purchase_id" />
+            <warehousingInboundInstruction>
+                <creationDateTime t-esc="utc_now()" />
+                <documentStatusCode>ORIGINAL</documentStatusCode>
+                <documentActionCode>ADD</documentActionCode>
+                <warehousingInboundInstructionIdentification>
+                    <entityIdentification
+                        t-esc="record.name"
+                    >WH/IN/123456789</entityIdentification>
+                </warehousingInboundInstructionIdentification>
+                <logisticServicesBuyer>
+                    <gln t-esc="ls_buyer.gln_code" />
+                </logisticServicesBuyer>
+                <logisticServicesSeller>
+                    <gln t-esc="ls_seller.gln_code" />
+                </logisticServicesSeller>
+                <warehousingInboundInstructionShipment>
+                    <shipmentIdentification>
+                        <additionalShipmentIdentification
+                            t-esc="shipment_info.shipmentIdentification.additionalShipmentIdentification.value"
+                            t-att="shipment_info.shipmentIdentification.additionalShipmentIdentification.attrs"
+                            additionalShipmentIdentificationTypeCode="GOODS_RECEIVER_ASSIGNED"
+                        >WH/IN/00014</additionalShipmentIdentification>
+                    </shipmentIdentification>
+                    <t t-set="shipper" t-value="shipment_info.shipper" />
+                    <shipper>
+                        <gln t-esc="shipper.gln_code">0000000000044</gln>
+                        <additionalPartyIdentification
+                            t-if="shipper.additionalPartyIdentification"
+                            t-att="shipper.additionalPartyIdentification.attrs"
+                            t-esc="shipper.additionalPartyIdentification.value"
+                        >CARRIER#1</additionalPartyIdentification>
+                    </shipper>
+                    <receiver>
+                        <gln t-esc="receiver.gln_code">0000000000001</gln>
+                    </receiver>
+                    <t t-foreach="shipment_info.packageTotal" t-as="package_total">
+                        <packageTotal>
+                            <packageTypeCode
+                                t-esc="package_total.packageTypeCode"
+                            >AF</packageTypeCode>
+                            <totalPackageQuantity
+                                t-esc="package_total.totalPackageQuantity"
+                            >2</totalPackageQuantity>
+                            <totalGrossWeight
+                                t-att="package_total.totalGrossWeight.attrs"
+                                t-esc="package_total.totalGrossWeight.value"
+                            >6.0</totalGrossWeight>
+                        </packageTotal>
+                    </t>
+                    <warehousingReceiptTypeCode
+                    >REGULAR_RECEIPT</warehousingReceiptTypeCode>
+                    <plannedReceipt>
+                        <logisticEventDateTime>
+                            <date>2020-07-12</date>
+                        </logisticEventDateTime>
+                    </plannedReceipt>
+                    <t t-foreach="shipment_info._shipment_items" t-as="ship_item">
+                        <t
+                            t-set="trade_item"
+                            t-value="ship_item.transactionalTradeItem"
+                        />
+                        <t t-set="avp_list" t-value="ship_item.avpList" />
+                        <warehousingInboundInstructionShipmentItem>
+                            <lineItemNumber
+                                t-esc="ship_item.lineItemNumber"
+                            >1</lineItemNumber>
+                            <note
+                                t-if="ship_item.note and ship_item.note.value"
+                                t-att="ship_item.note.attrs"
+                                t-esc="ship_item.note.value"
+                            />
+                            <transactionalTradeItem>
+                                <gtin t-esc="trade_item.gtin">11111111111111</gtin>
+                                <additionalTradeItemIdentification
+                                    t-if="trade_item.additionalTradeItemIdentification"
+                                    t-att="trade_item.additionalTradeItemIdentification.attrs"
+                                    t-esc="trade_item.additionalTradeItemIdentification.value"
+                                    additionalTradeItemIdentificationTypeCode="BUYER_ASSIGNED"
+                                >102150001001000010003200010311101101</additionalTradeItemIdentification>
+                            </transactionalTradeItem>
+                            <avpList t-if="avp_list">
+                                <t t-foreach="avp_list" t-as="avp_list_item">
+                                    <eComStringAttributeValuePairList
+                                        t-att="avp_list_item.attrs"
+                                        t-esc="avp_list_item.value"
+                                    >TRUE</eComStringAttributeValuePairList>
+                                </t>
+                            </avpList>
+                            <plannedReceiptQuantity
+                                t-att="ship_item._plannedQty.attrs"
+                                t-esc="ship_item._plannedQty.value"
+                                measurementUnitCode="KGM"
+                            >300.0</plannedReceiptQuantity>
+                        </warehousingInboundInstructionShipmentItem>
+                    </t>
+                </warehousingInboundInstructionShipment>
+            </warehousingInboundInstruction>
+        </warehousing_inbound_instruction:warehousingInboundInstructionMessage>
+    </template>
+</odoo>

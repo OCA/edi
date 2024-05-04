@@ -10,21 +10,23 @@ class EDIBackend(models.Model):
 
     def _exchange_generate(self, exchange_record, **kw):
         # Template take precedence over component lookup
-        tmpl = self._get_output_template(exchange_record)
+        tmpl = self._get_template(exchange_record, "output", "generate")
         if tmpl:
             return tmpl.exchange_generate(exchange_record, **kw)
         return super()._exchange_generate(exchange_record, **kw)
 
-    @property
-    def output_template_model(self):
-        return self.env["edi.exchange.template.output"]
+    def _exchange_process(self, exchange_record, **kw):
+        tmpl = self._get_template(exchange_record, "input", "process")
+        if tmpl:
+            return tmpl.process_input(exchange_record, **kw)
+        return super()._exchange_process(exchange_record, **kw)
 
-    def _get_output_template(self, exchange_record, code=None):
+    def _get_template(self, exchange_record, direction, action, code=None):
         """Retrieve output templates by convention.
 
         Template's code must match the same component usage as per normal components.
         """
-        search = self.output_template_model.search
+        search = self.env["edi.exchange.template." + direction].search
         # TODO: maybe we can add a m2o to output templates
         # but then we would need another for input templates if they are introduced.
         tmpl = None

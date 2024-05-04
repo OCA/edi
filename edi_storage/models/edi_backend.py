@@ -7,6 +7,7 @@ import logging
 import os
 
 from odoo import fields, models
+from odoo.tools import mute_logger
 
 _logger = logging.getLogger(__name__)
 
@@ -155,7 +156,9 @@ class EDIBackend(models.Model):
         if exchange_type.exchange_file_ext:
             bits.append(r"\." + exchange_type.exchange_file_ext)
         pattern = "".join(bits)
-        full_paths = self.storage_id.find_files(pattern, self.input_dir_pending)
+        # Because used in a cron
+        with mute_logger("odoo.addons.queue_job.jobrunner.runner"):
+            full_paths = self.storage_id.find_files(pattern, self.input_dir_pending)
         pending_path_len = len(self.input_dir_pending)
         return [p[pending_path_len:].strip("/") for p in full_paths]
 
