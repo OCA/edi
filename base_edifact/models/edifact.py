@@ -199,7 +199,7 @@ class BasePydifact(models.AbstractModel):
             ['5', ['1276', 'SA', '', '9']]
         SA. Supplier's Article Number
         """
-        code = seg[2][0]
+        code = seg[2][0] if len(list(seg)) > 2 else False
         product_tmp = self.env["product.template"]
         if code:
             field = "default_code" if seg[2][1] == "SRV" else "barcode"
