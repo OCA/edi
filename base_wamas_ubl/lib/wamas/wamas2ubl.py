@@ -29,6 +29,9 @@ class Extractor:
             key_name: the key in the dict that serves as key in the new dict
             head: the result dict that is build
         """
+        if telegram_type not in self.data:
+            raise ValueError("Missing telegram: %s" % telegram_type)
+
         if head is None:
             head = self.transfers
         for item in self.data[telegram_type]:
@@ -52,6 +55,9 @@ class Extractor:
             package_key_name: the key in the dict that serves to identify the
                               related package
         """
+        if telegram_type not in self.data:
+            raise ValueError("Missing telegram: %s" % telegram_type)
+
         for line in self.data[telegram_type]:
             key = line[transfer_key_name]
             if key not in self.transfers:

@@ -66,11 +66,11 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(_set_string_bool("J", 1, False), "J")
 
     def test_set_string_float(self):
-        # Input is the positive value
+        # Positive
         self.assertEqual(_set_string_float(3.6, 9, 3), "000003600")
         self.assertEqual(_set_string_float(3.0, 9, 3), "000003000")
 
-        # Input is the negative value
+        # Negative
         self.assertEqual(_set_string_float(-3.6, 9, 3), "-00003600")
         self.assertEqual(_set_string_float(-3.0, 9, 3), "-00003000")
 

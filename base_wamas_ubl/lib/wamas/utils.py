@@ -89,8 +89,6 @@ def _set_string_int(val, length, dp, **kwargs):
 
 
 def _set_string_float(val, length, dp, **kwargs):
-    res = str(float(val or 0))
-
     try:
         res = str(float(val or 0))
     except ValueError as err:
@@ -100,7 +98,7 @@ def _set_string_float(val, length, dp, **kwargs):
 
     # Support for the negative float
     signed = ""
-    if "-" in res:
+    if res.startswith("-"):
         signed = "-"
         length = length - 1
         res = res.lstrip("-")
