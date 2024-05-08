@@ -194,7 +194,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         exchange_record = self.create_record()
         exchange_record.res_id = -1
         admin_group = self.env.ref("base.group_system")
-        self.user.write({"groups_id": [(4, admin_group.id)]})
+        self.user.write({"groups_id": [(4, self.group.id), (4, admin_group.id)]})
         self.assertEqual(
             1,
             self.env["edi.exchange.record"]

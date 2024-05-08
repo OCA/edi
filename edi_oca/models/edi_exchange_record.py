@@ -468,8 +468,8 @@ class EDIExchangeRecord(models.Model):
             count=False,
             access_rights_uid=access_rights_uid,
         )
-        if self.env.is_system():
-            # restrictions do not apply to group "Settings"
+        if self.env.is_superuser():
+            # restrictions do not apply for the superuser
             return len(ids) if count else ids
 
         # TODO highlight orphaned EDI records in UI:
@@ -514,11 +514,14 @@ class EDIExchangeRecord(models.Model):
                         list(targets[res_id]),
                     )
                 recs = recs - missing
-            allowed = (
+            allowed = list(
                 self.env[model]
                 .with_context(active_test=False)
                 ._search([("id", "in", recs.ids)])
             )
+            if self.env.is_system():
+                # Group "Settings" can list exchanges where record is deleted
+                allowed.extend(missing.ids)
             for target_id in allowed:
                 result += list(targets[target_id])
         if len(orig_ids) == limit and len(result) < len(orig_ids):
@@ -545,7 +548,7 @@ class EDIExchangeRecord(models.Model):
     def check_access_rule(self, operation):
         """In order to check if we can access a record, we are checking if we can access
         the related document"""
-        super(EDIExchangeRecord, self).check_access_rule(operation)
+        super().check_access_rule(operation)
         if self.env.is_superuser():
             return
         default_checker = self.env["edi.exchange.consumer.mixin"].get_edi_access
