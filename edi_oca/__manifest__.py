@@ -26,6 +26,7 @@
     "data": [
         "wizards/edi_exchange_record_create_wiz.xml",
         "data/cron.xml",
+        "data/ir_actions_server.xml",
         "data/sequence.xml",
         "data/job_channel.xml",
         "data/job_function.xml",

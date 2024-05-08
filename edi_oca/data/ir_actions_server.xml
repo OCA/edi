@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.actions.server" id="action_retry_edi_exchange_record">
+        <field name="name">Retry</field>
+        <field name="groups_id" eval="[(4, ref('base_edi.group_edi_manager'))]" />
+        <field name="model_id" ref="model_edi_exchange_record" />
+        <field name="binding_model_id" ref="model_edi_exchange_record" />
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_retry()
+        </field>
+    </record>
+</odoo>
