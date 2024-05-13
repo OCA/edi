@@ -6,39 +6,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2024-05-13 10:34+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: base_ubl
 #: model:ir.model,name:base_ubl.model_base_ubl
 msgid "Common methods to generate and parse UBL XML files"
-msgstr ""
+msgstr "Metodi comuni per generare ed elaborare file UBL e XML"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%(tax_name)s'"
-msgstr ""
+msgstr "Categoria imposta UNECE non presente nell'imposta %(tax_name)s'"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%(tax_name)s'"
-msgstr ""
+msgstr "Categoria imposta UNECE non presente nell'imposta '%(tax_name)s'"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
-msgstr ""
+msgstr "Codice UNECE mancante nell'unità di misura '%s'"
 
 #. module: base_ubl
 #. odoo-python
@@ -48,6 +50,8 @@ msgid ""
 "The UBL XML file does not contain the version for validating the content "
 "according to the schema."
 msgstr ""
+"Il file UBL XML non contiene la versione per validare il contenuto in "
+"accordo allo schema."
 
 #. module: base_ubl
 #. odoo-python
@@ -59,3 +63,7 @@ msgid ""
 "is the error, which may give you an idea on the cause of the problem : "
 "%(error)s."
 msgstr ""
+"Il file XML generato non è valido per la definizione dello schema XML "
+"ufficiale. Il file XML generato e l'errore completo sono stati scritti nel "
+"log del server. Qui c'è l'errore, che potrebbe aiutare a capire la causa del "
+"problema: %(error)s."
