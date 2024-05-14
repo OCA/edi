@@ -16,7 +16,9 @@ class TestEdiWebService(EDIBackendCommonTestCase):
                 "url": "http://localhost.demo.odoo/",
                 "content_type": "application/xml",
                 "tech_name": "demo_ws",
-                "auth_type": "none",
+                "auth_type": "user_pwd",
+                "username": "user",
+                "password": "pwd",
             }
         )
         vals = {
