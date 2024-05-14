@@ -1,1 +1,2 @@
 odoo-test-helper>=2.0.1
+responses
