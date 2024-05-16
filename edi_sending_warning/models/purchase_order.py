@@ -15,9 +15,13 @@ class PurchaseOrder(models.Model):
     def _compute_transmission_error(self):
         super()._compute_transmission_error()
         for rec in self:
-            if not rec.transmission_error and rec.exchange_record_ids and any(
-                x.edi_exchange_state == "output_error_on_send"
-                for x in rec.exchange_record_ids
+            if (
+                not rec.transmission_error
+                and rec.exchange_record_ids
+                and any(
+                    x.edi_exchange_state == "output_error_on_send"
+                    for x in rec.exchange_record_ids
+                )
             ):
                 rec.transmission_error = (
                     rec.sending_error_type == "edi_message_not_sent"
