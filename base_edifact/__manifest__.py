@@ -3,7 +3,7 @@
 {
     "name": "Base EDIFACT",
     "summary": "UN/EDIFACT/D96A utilities using pydifact parser",
-    "version": "16.0.1.3.0",
+    "version": "16.0.1.4.0",
     "development_status": "Alpha",
     "category": "Tools",
     "website": "https://github.com/OCA/edi",
