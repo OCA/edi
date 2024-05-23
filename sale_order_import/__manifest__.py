@@ -20,6 +20,15 @@
         # and support for PDF import should be moved to a glue module
         "pdf_helper",
     ],
-    "data": ["security/ir.model.access.csv", "wizard/sale_order_import_view.xml"],
+    "data": [
+        "security/ir.model.access.csv",
+        "wizard/sale_order_import_view.xml",
+        "templates/error_lines_chatter_msg.xml",
+    ],
     "installable": True,
+    "assets": {
+        "web.assets_backend": [
+            "sale_order_import/static/src/scss/error_lines_chatter_msg.scss",
+        ]
+    },
 }

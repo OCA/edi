@@ -58,6 +58,9 @@ class SaleOrderImport(models.TransientModel):
     sale_id = fields.Many2one("sale.order", string="Quotation to Update")
     # Confirm order after creating Sale Order
     confirm_order = fields.Boolean(default=False)
+    skip_error_lines = fields.Boolean(
+        help="Ignore and push all error lines to the chatter when importing if enabled."
+    )
 
     @api.onchange("order_file")
     def order_file_change(self):
@@ -263,16 +266,29 @@ class SaleOrderImport(models.TransientModel):
             so_vals["partner_invoice_id"] = invoicing_partner.id
         if parsed_order.get("date"):
             so_vals["date_order"] = parsed_order["date"]
+        error_lines = []
         for line in parsed_order["lines"]:
-            # partner=False because we don't want to use product.supplierinfo
-            product = bdio._match_product(
-                line["product"], parsed_order["chatter_msg"], seller=False
-            )
-            uom = bdio._match_uom(line.get("uom"), parsed_order["chatter_msg"], product)
-            line_vals = self._prepare_create_order_line(
-                product, uom, so_vals, line, price_source
-            )
-            so_vals["order_line"].append((0, 0, line_vals))
+            try:
+                # partner=False because we don't want to use product.supplierinfo
+                product = bdio._match_product(
+                    line["product"], parsed_order["chatter_msg"], seller=False
+                )
+                uom = bdio._match_uom(
+                    line.get("uom"), parsed_order["chatter_msg"], product
+                )
+                line_vals = self._prepare_create_order_line(
+                    product, uom, so_vals, line, price_source
+                )
+                so_vals["order_line"].append((0, 0, line_vals))
+            except UserError as exc:
+                if not self.skip_error_lines:
+                    raise exc
+                error_line = dict(values=line, error_msg=exc.args[0])
+                error_lines.append(error_line)
+
+        # Push to the chatter all errored lines if any
+        if error_lines:
+            parsed_order["error_lines"] = error_lines
 
         defaults = self.env.context.get("sale_order_import__default_vals", {}).get(
             "order", {}
@@ -413,6 +429,7 @@ class SaleOrderImport(models.TransientModel):
     def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
         order = self.create_order(parsed_order, self.price_source, order_filename)
+        self._post_error_lines_message(parsed_order, order)
         order.message_post(
             body=_("Created automatically via file import (%s).") % self.order_filename
         )
@@ -672,3 +689,16 @@ class SaleOrderImport(models.TransientModel):
             }
         )
         return action
+
+    def _post_error_lines_message(self, parsed_order, order):
+        order.ensure_one()
+        if not self.skip_error_lines or not parsed_order.get("error_lines", False):
+            return
+
+        error_lines = parsed_order.get("error_lines")
+        order.message_post_with_view(
+            "sale_order_import.template_skip_error_lines_message",
+            values={
+                "lines": error_lines,
+            },
+        )
