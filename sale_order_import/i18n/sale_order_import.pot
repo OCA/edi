@@ -102,6 +102,16 @@ msgid "Document Type"
 msgstr ""
 
 #. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Error Message"
+msgstr ""
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Errors lines on Import:"
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__order_filename
 msgid "Filename"
 msgstr ""
@@ -123,6 +133,12 @@ msgstr ""
 msgid ""
 "If it is an XML file, Odoo will parse it if the module that adds support for"
 " this XML format is installed. For the"
+msgstr ""
+
+#. module: sale_order_import
+#: model:ir.model.fields,help:sale_order_import.field_sale_order_import__skip_error_lines
+msgid ""
+"Ignore and push all error lines to the chatter when importing if enabled."
 msgstr ""
 
 #. module: sale_order_import
@@ -225,6 +241,11 @@ msgstr ""
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__partner_shipping_id
 msgid "Shipping Address"
+msgstr ""
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__skip_error_lines
+msgid "Skip Error Lines"
 msgstr ""
 
 #. module: sale_order_import
@@ -365,6 +386,11 @@ msgid ""
 msgstr ""
 
 #. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Values"
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__import_type__xml
 msgid "XML"
 msgstr ""
@@ -379,4 +405,9 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
 "format (UBL), you should install the module <em>sale_order_import_ubl</em>."
+msgstr ""
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "line(s)"
 msgstr ""

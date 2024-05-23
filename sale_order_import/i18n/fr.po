@@ -23,34 +23,30 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_order_import/models/sale.py:0
 #: code:addons/sale_order_import/tests/test_sale_order.py:0
-#, python-format
 msgid " Amount w/o tax: %(amount)s %(currency)s"
 msgstr " Montant hors taxe: %(amount)s %(currency)s"
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "%(orders)s new order line(s) created: %(label)s"
 msgstr "%(orders)s nouvelle(s) ligne(s) de commande créée(s): %(label)s"
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "%(orders)s order line(s) deleted: %(label)s"
 msgstr "%(orders)s ligne(s) de commande supprimée(s): %(label)s"
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
-"An order of customer '%(partner)s' with reference '%(ref)s' already exists: "
-"%(name)s (state: %(state)s)"
+"An order of customer '%(partner)s' with reference '%(ref)s' already exists: %"
+"(name)s (state: %(state)s)"
 msgstr ""
-"Une commande avec la référence '%(ref)s' existe déjà pour le client "
-"'%(partner)s': %(name)s (état: %(state)s)"
+"Une commande avec la référence '%(ref)s' existe déjà pour le client '%"
+"(partner)s': %(name)s (état: %(state)s)"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__price_source
@@ -80,7 +76,6 @@ msgstr "Créer une nouvelle"
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "Created automatically via file import (%s)."
 msgstr "Créé automatiquement par importation de fichier (%s)."
 
@@ -115,6 +110,16 @@ msgid "Document Type"
 msgstr "Type de document"
 
 #. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Error Message"
+msgstr ""
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Errors lines on Import:"
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__order_filename
 msgid "Filename"
 msgstr "Nom du fichier"
@@ -143,6 +148,12 @@ msgstr ""
 "installé. Pour le"
 
 #. module: sale_order_import
+#: model:ir.model.fields,help:sale_order_import.field_sale_order_import__skip_error_lines
+msgid ""
+"Ignore and push all error lines to the chatter when importing if enabled."
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__state__import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid "Import"
@@ -165,11 +176,6 @@ msgid "Import Type"
 msgstr "Type d'import"
 
 #. module: sale_order_import
-#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import____last_update
-msgid "Last Modified on"
-msgstr "Dernière modification le"
-
-#. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__write_uid
 msgid "Last Updated by"
 msgstr "Dernière mise-à-jour par"
@@ -182,14 +188,12 @@ msgstr "Dernière mise-à-jour le"
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "No data provided"
 msgstr "Aucune donnée fournie"
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "No price is defined in the file. Please double check file or select "
 "Pricelist as the source for prices."
@@ -205,7 +209,6 @@ msgstr "PDF"
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "Please select a valid import type before importing!"
 msgstr "Veuillez sélectionner un type d'importation valide avant d'importer !"
 
@@ -255,6 +258,11 @@ msgid "Shipping Address"
 msgstr ""
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__skip_error_lines
+msgid "Skip Error Lines"
+msgstr ""
+
+#. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
 "Some quotations have been found for this customer ; one of them may "
@@ -270,7 +278,6 @@ msgstr "Etat"
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "The currency of the imported order (%(old)s) is different from the currency "
 "of the existing order (%(new)s)"
@@ -279,7 +286,6 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "The customer '%(name)s' has a pricelist '%(pricelist)s' but the currency of "
 "this order is '%(currency)s'."
@@ -288,7 +294,6 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "The quantity has been updated on the order line with product '%(product)s' "
 "from %(qty0)s to %(qty1)s %(uom)s"
@@ -297,7 +302,6 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "The unit price has been updated on the order line with product '%(product)s' "
 "from %(old)s to %(new)s %(currency)s"
@@ -306,14 +310,12 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "There are no embedded XML file in this PDF file."
 msgstr ""
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "This Import Type is not supported. Did you install the module to support "
 "this type?"
@@ -322,14 +324,12 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "This XML file is not XML-compliant"
 msgstr ""
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "This file '%(filename)s' is not recognized as a %(type)s file. Please check "
 "the file and its extension."
@@ -338,7 +338,6 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "This file '%s' is not recognised as a XML nor PDF file. Please check the "
 "file and it's extension."
@@ -347,21 +346,18 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "This order doesn't have any line !"
 msgstr ""
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "This quotation has been updated automatically via the import of file %s"
 msgstr ""
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid ""
 "This type of XML RFQ/order is not supported. Did you install the module to "
 "support this XML format?"
@@ -375,7 +371,6 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "Unsupported file format"
 msgstr ""
 
@@ -404,6 +399,11 @@ msgid ""
 msgstr ""
 
 #. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Values"
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__import_type__xml
 msgid "XML"
 msgstr ""
@@ -411,7 +411,6 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-#, python-format
 msgid "You must select a quotation to update."
 msgstr ""
 
@@ -420,6 +419,14 @@ msgstr ""
 msgid ""
 "format (UBL), you should install the module <em>sale_order_import_ubl</em>."
 msgstr ""
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "line(s)"
+msgstr ""
+
+#~ msgid "Last Modified on"
+#~ msgstr "Dernière modification le"
 
 #, fuzzy
 #~ msgid "Csv Import"
