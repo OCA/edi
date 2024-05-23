@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import models
+from odoo import api, models
 
 _logger = logging.getLogger(__file__)
 
@@ -72,13 +72,14 @@ class SaleOrder(models.Model):
                 return False
         return True
 
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         # Inject a key to check if we are in a SO create session
         # to not mess up w/ lines when not needed.
         # The key is removed right aftewards.
         return (
             super(SaleOrder, self.with_context(evt_from_create=self._name))
-            .create(vals)
+            .create(vals_list)
             .with_context(evt_from_create=None)
         )
 
