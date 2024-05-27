@@ -287,6 +287,12 @@ class EDIBackend(models.Model):
 
     # TODO: add tests
     def _validate_data(self, exchange_record, value=None, **kw):
+        if exchange_record.direction == "input" and not exchange_record.exchange_file:
+            if not exchange_record.type_id.allow_empty_files_on_receive:
+                raise ValueError(
+                    _("Empty files are not allowed for this exchange type")
+                )
+
         component = self._get_component(exchange_record, "validate")
         if component:
             return component.validate(value)
@@ -472,7 +478,10 @@ class EDIBackend(models.Model):
             raise exceptions.UserError(
                 _("Record ID=%d is not meant to be processed") % exchange_record.id
             )
-        if not exchange_record.exchange_file:
+        if (
+            not exchange_record.exchange_file
+            and not exchange_record.type_id.allow_empty_files_on_receive
+        ):
             raise exceptions.UserError(
                 _("Record ID=%d has no file to process!") % exchange_record.id
             )
@@ -541,7 +550,8 @@ class EDIBackend(models.Model):
         content = None
         try:
             content = self._exchange_receive(exchange_record)
-            if content:
+            # Ignore result of FileNotFoundError/OSError
+            if content is not None:
                 exchange_record._set_file_content(content)
                 self._validate_data(exchange_record)
         except EDIValidationError:
