@@ -71,6 +71,7 @@ class PunchoutSession(models.Model):
         selection="_selection_state",
         default="draft",
         tracking=True,
+        readonly=True,
     )
     action_process_allowed = fields.Boolean(compute="_compute_action_process_allowed")
 
