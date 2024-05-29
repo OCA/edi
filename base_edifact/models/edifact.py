@@ -200,19 +200,12 @@ class BasePydifact(models.AbstractModel):
         SA. Supplier's Article Number
         """
         code = seg[2][0] if len(list(seg)) > 2 else False
-        product_tmp = self.env["product.template"]
         if code:
-            field = "default_code" if seg[2][1] == "SRV" else "barcode"
-            record = product_tmp.search([(field, "=", code)], limit=1)
-            if record:
-                if field == "default_code":
-                    field = "code"
-                return {field: code}
+            field = "code" if seg[2][1] == "SRV" else "barcode"
+            return {field: code}
         # Fallback on SA if no EAN given
         if pia is not None and pia[1][0]:
-            record = product_tmp.search([("default_code", "=", pia[1][0])], limit=1)
-            if record:
-                return {"code": pia[1][0]}
+            return {"code": pia[1][0]}
         return {}
 
     @api.model
