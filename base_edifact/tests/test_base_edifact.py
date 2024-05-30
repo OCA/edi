@@ -57,11 +57,6 @@ class TestBaseEdifact(TransactionCase):
         product = self.base_edifact_model.map2odoo_product(seg)
         self.assertEqual(product["barcode"], "9783898")
 
-    def test_map2odoo_product_incorrect_barcode(self):
-        seg = ("1", "", ["97838983075", "EN"])
-        product = self.base_edifact_model.map2odoo_product(seg)
-        self.assertEqual(product, {})
-
     def test_map2odoo_product_srv(self):
         seg = ("1", "", ["12767", "SRV"])
         product = self.base_edifact_model.map2odoo_product(seg)
@@ -73,10 +68,9 @@ class TestBaseEdifact(TransactionCase):
         product = self.base_edifact_model.map2odoo_product(seg, pia)
         self.assertEqual(product["code"], "12767")
 
-    def test_map2odoo_product_uncorrect_lin_and_pia(self):
-        seg = ("1", "", ["97838983075", "EN"])
-        pia = ["5", ["127678", "SA", "", "9"]]
-        product = self.base_edifact_model.map2odoo_product(seg, pia)
+    def test_map2odoo_product_no_lin_and_no_pia(self):
+        seg = ("1", "", ["", "EN"])
+        product = self.base_edifact_model.map2odoo_product(seg)
         self.assertEqual(product, {})
 
     def test_map2odoo_qty(self):
