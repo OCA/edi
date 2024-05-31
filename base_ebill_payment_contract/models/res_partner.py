@@ -21,13 +21,13 @@ class ResPartner(models.Model):
             ("partner_id", "=", self.id),
             ("transmit_method_id", "=", transmit_method.id),
         ]
-        contracts = self.env["ebill.payment.contract"].search(
+        contract = self.env["ebill.payment.contract"].search(
             AND([domain or [], base_domain]), limit=1
         )
-        if not contracts:
+        if not contract:
             _logger.error(
                 "eBill contract for {} on {} not found".format(
                     self.name, transmit_method.name
                 )
             )
-        return contracts[0] if contracts else contracts
+        return contract
