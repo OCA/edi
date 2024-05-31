@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from odoo.tests.common import Form, SingleTransactionCase
 
 
-class TestCrmOpportunityCurrency(SingleTransactionCase):
+class TestBaseEbillPaymentContract(SingleTransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
