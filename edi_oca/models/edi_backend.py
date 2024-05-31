@@ -364,12 +364,9 @@ class EDIBackend(models.Model):
         # when dealing w/ internal or external systems or filesystems
         return (IOError, OSError)
 
-    def _send_should_retry(self, exchange_record):
-        return (
-            # Safety check not to retry indefinitely
-            exchange_record.create_date >= (fields.Datetime.now() - timedelta(days=1))
-            or self.env.context.get("_edi_send_break_on_error")
-        )
+    def _send_should_retry(self, exc_record):
+        # Safety check not to retry indefinitely
+        return exc_record.create_date >= (fields.Datetime.now() - timedelta(days=1))
 
     def _output_check_send(self, exchange_record):
         if exchange_record.direction != "output":
