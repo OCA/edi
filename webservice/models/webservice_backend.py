@@ -39,8 +39,6 @@ class WebserviceBackend(models.Model):
             ("web_application", "Web Application (Authorization Code Grant)"),
         ],
         readonly=False,
-        store=True,
-        compute="_compute_oauth2_flow",
     )
     oauth2_clientid = fields.Char(string="Client ID", auth_type="oauth2")
     oauth2_client_secret = fields.Char(string="Client Secret", auth_type="oauth2")
@@ -122,12 +120,6 @@ class WebserviceBackend(models.Model):
             protocol += f"+{self.auth_type}-{self.oauth2_flow}"
         return protocol
 
-    @api.depends("auth_type")
-    def _compute_oauth2_flow(self):
-        for rec in self:
-            if rec.auth_type != "oauth2":
-                rec.oauth2_flow = False
-
     @api.depends("auth_type", "oauth2_flow")
     def _compute_redirect_url(self):
         get_param = self.env["ir.config_parameter"].sudo().get_param
@@ -177,3 +169,10 @@ class WebserviceBackend(models.Model):
         }
         webservice_fields.update(base_fields)
         return webservice_fields
+
+    def _compute_server_env(self):
+        # OVERRIDE: reset ``oauth2_flow`` when ``auth_type`` is not "oauth2", even if
+        # defined otherwise in server env vars
+        res = super()._compute_server_env()
+        self.filtered(lambda r: r.auth_type != "oauth2").oauth2_flow = None
+        return res
