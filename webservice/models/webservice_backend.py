@@ -96,3 +96,10 @@ class WebserviceBackend(models.Model):
         }
         webservice_fields.update(base_fields)
         return webservice_fields
+
+    def _compute_server_env(self):
+        # OVERRIDE: reset ``oauth2_flow`` when ``auth_type`` is not "oauth2", even if
+        # defined otherwise in server env vars
+        res = super()._compute_server_env()
+        self.filtered(lambda r: r.auth_type != "oauth2").oauth2_flow = None
+        return res
