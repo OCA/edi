@@ -79,6 +79,7 @@ class TestUblInvoice(HttpCase):
         # validate invoice
         if not product:
             product = self.env.ref("product.product_product_4")
+        self.env.ref("base.EUR").active = True
         invoice = aio.create(
             {
                 "partner_id": self.env.ref("base.res_partner_2").id,
