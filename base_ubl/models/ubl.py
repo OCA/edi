@@ -381,9 +381,7 @@ class BaseUbl(models.AbstractModel):
                 seller_code = self._ubl_get_seller_code_from_product(product)
             if not product_name:
                 variant = ", ".join(product.attribute_line_ids.mapped("value_ids.name"))
-                product_name = (
-                    variant and "{} ({})".format(product.name, variant) or product.name
-                )
+                product_name = variant and f"{product.name} ({variant})" or product.name
         description = etree.SubElement(item, ns["cbc"] + "Description")
         description.text = name
         name_node = etree.SubElement(item, ns["cbc"] + "Name")
@@ -561,9 +559,7 @@ class BaseUbl(models.AbstractModel):
     @api.model
     def _ubl_check_xml_schema(self, xml_string, document, version="2.1"):
         """Validate the XML file against the XSD"""
-        xsd_file = "base_ubl/data/xsd-{}/maindoc/UBL-{}-{}.xsd".format(
-            version, document, version
-        )
+        xsd_file = f"base_ubl/data/xsd-{version}/maindoc/UBL-{document}-{version}.xsd"
         xsd_etree_obj = etree.parse(file_open(xsd_file))
         official_schema = etree.XMLSchema(xsd_etree_obj)
         try:
