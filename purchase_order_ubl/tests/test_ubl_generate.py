@@ -6,7 +6,6 @@ from odoo.tools import mute_logger
 
 
 class TestUblOrder(HttpCase):
-
     # Reduce log noise on CI while rendering GET assets
     @mute_logger("werkzeug")
     def test_ubl_generate(self):

@@ -17,29 +17,35 @@ Purchase Order UBL
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/14.0/purchase_order_ubl
+    :target: https://github.com/OCA/edi/tree/17.0/purchase_order_ubl
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-14-0/edi-14-0-purchase_order_ubl
+    :target: https://translation.odoo-community.org/projects/edi-17-0/edi-17-0-purchase_order_ubl
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=14.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=17.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module adds support for UBL, the `Universal Business Language (UBL) <http://ubl.xml.org/>`_ standard,
-on purchase orders. The UBL 2.1 standard became the
-`ISO/IEC 19845 <http://www.iso.org/iso/catalogue_detail.htm?csnumber=66370>`_ standard
-in December 2015 (cf the `official announce <http://www.prweb.com/releases/2016/01/prweb13186919.htm>`_).
+This module adds support for UBL, the `Universal Business Language
+(UBL) <http://ubl.xml.org/>`__ standard, on purchase orders. The UBL 2.1
+standard became the `ISO/IEC
+19845 <http://www.iso.org/iso/catalogue_detail.htm?csnumber=66370>`__
+standard in December 2015 (cf the `official
+announce <http://www.prweb.com/releases/2016/01/prweb13186919.htm>`__).
 
 With this module, when you generate the purchase order or RFQ report:
 
-* on a draft/RFQ/Bid Received purchase order, the PDF file will have an embedded XML *Request For Quotation* file compliant with the UBL 2.1 or 2.0 standard.
+-  on a draft/RFQ/Bid Received purchase order, the PDF file will have an
+   embedded XML *Request For Quotation* file compliant with the UBL 2.1
+   or 2.0 standard.
+-  on an approved purchase order, the PDF file will have an embedded XML
+   *Order* file compliant with the UBL 2.1 or 2.0 standard.
 
-* on an approved purchase order, the PDF file will have an embedded XML *Order* file compliant with the UBL 2.1 or 2.0 standard.
-
-If your supplier has Odoo and has installed the module *sale_order_import_ubl*, he will be able to import the PDF file and it will automatically create the quotation/sale order.
+If your supplier has Odoo and has installed the module
+*sale_order_import_ubl*, he will be able to import the PDF file and it
+will automatically create the quotation/sale order.
 
 **Table of contents**
 
@@ -52,7 +58,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20purchase_order_ubl%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20purchase_order_ubl%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -60,19 +66,19 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Akretion
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Alexis de Lattre <alexis.delattre@akretion.com>
-* Andrea Stirpe <a.stirpe@onestein.nl>
-* Robin Conjour <rconjour@demolium.com>
+-  Alexis de Lattre <alexis.delattre@akretion.com>
+-  Andrea Stirpe <a.stirpe@onestein.nl>
+-  Robin Conjour <rconjour@demolium.com>
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -84,6 +90,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/purchase_order_ubl>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/17.0/purchase_order_ubl>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
