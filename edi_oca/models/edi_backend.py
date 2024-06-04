@@ -208,10 +208,13 @@ class EDIBackend(models.Model):
 
         :param exchange_record: edi.exchange.record recordset
         :param store: store output on the record itself
-        :param force: allow to re-genetate the content
+        :param force: allow to re-generate the content
         :param kw: keyword args to be propagated to output generate handler
         """
         self.ensure_one()
+        if force and exchange_record.exchange_file:
+            # Remove file to regenerate
+            exchange_record.exchange_file = False
         self._check_exchange_generate(exchange_record, force=force)
         output = self._exchange_generate(exchange_record, **kw)
         message = None
