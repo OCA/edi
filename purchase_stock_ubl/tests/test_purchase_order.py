@@ -6,7 +6,6 @@ from odoo.addons.purchase_order_ubl.tests.test_ubl_generate import TestUblOrder
 
 class TestPurchaseOrder(TestUblOrder):
     def test_get_delivery_partner(self):
-
         order = self.env.ref("purchase.purchase_order_4")
         warehouse = order.picking_type_id.warehouse_id
         delivery_partner = order.get_delivery_partner()
