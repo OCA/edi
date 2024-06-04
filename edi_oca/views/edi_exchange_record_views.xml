@@ -55,6 +55,12 @@
                         string="Retry"
                         attrs="{'invisible': [('retryable', '=', False)]}"
                     />
+                    <button
+                        name="action_regenerate"
+                        type="object"
+                        string="Regenerate"
+                        attrs="{'invisible': ['|', ('direction', 'in', ('input', False)), ('edi_exchange_state', '!=', 'validate_error')]}"
+                    />
                     <!-- FIXME: colors are ignored...
                     and can't find how they are supposed to work.
                     Probably not supported at all. -->
