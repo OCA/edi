@@ -29,6 +29,7 @@ class EndpointMixin(models.AbstractModel):
         default=lambda self: self._default_code_snippet_docs(),
     )
     exec_as_user_id = fields.Many2one(comodel_name="res.users")
+    company_id = fields.Many2one("res.company", string="Company")
 
     def _selection_exec_mode(self):
         return [("code", "Execute code")]

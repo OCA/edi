@@ -44,6 +44,10 @@
                         <page name="main" string="Main">
                             <group name="config1">
                                 <group name="main">
+                                    <field
+                                        name="company_id"
+                                        groups="base.group_multi_company"
+                                    />
                                     <field name="route_group" />
                                     <field name="exec_mode" />
                                     <field

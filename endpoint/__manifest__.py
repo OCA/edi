@@ -13,6 +13,7 @@
     "depends": ["endpoint_route_handler", "rpc_helper"],
     "data": [
         "security/ir.model.access.csv",
+        "security/ir_rule.xml",
         "views/endpoint_view.xml",
     ],
     "demo": [
