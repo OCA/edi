@@ -1,4 +1,5 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
+# Copyright 2024 Tecnativa - Pedro M. Baeza
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models
@@ -47,8 +48,9 @@ class AccountMove(models.Model):
             ]
         return [("id", "in", self.search(domain).ids)]
 
-    def post(self):
-        res = super().post()
+    def _post(self, soft=True):
+        """Send to Voxel when posting."""
+        res = super()._post(soft=soft)
         self.action_send_to_voxel()
         return res
 
