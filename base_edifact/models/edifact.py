@@ -199,14 +199,15 @@ class BasePydifact(models.AbstractModel):
             ['5', ['1276', 'SA', '', '9']]
         SA. Supplier's Article Number
         """
+        res = {}
+        # Set default code based on SA if given
+        if pia is not None and pia[1][0]:
+            res["code"] = pia[1][0]
         code = seg[2][0] if len(list(seg)) > 2 else False
         if code:
             field = "code" if seg[2][1] == "SRV" else "barcode"
-            return {field: code}
-        # Fallback on SA if no EAN given
-        if pia is not None and pia[1][0]:
-            return {"code": pia[1][0]}
-        return {}
+            res[field] = code
+        return res
 
     @api.model
     def map2odoo_qty(self, seg):
