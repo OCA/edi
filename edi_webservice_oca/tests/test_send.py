@@ -5,6 +5,7 @@ import responses
 
 from odoo import exceptions
 
+from ..components.send import EDIWebserviceSendHTTPException
 from .common import TestEDIWebserviceBase
 
 
@@ -112,3 +113,15 @@ class TestSend(TestEDIWebserviceBase):
             responses.calls[0].request.headers["Content-Type"], "application/xml"
         )
         self.assertEqual(responses.calls[0].request.body, "This is a simple file")
+
+    @responses.activate
+    def test_component_send_raise_http_error(self):
+        self.record.type_id.set_settings(self.settings2)
+        record = self.record.with_user(self.a_user)
+        backend = self.backend.with_user(self.a_user)
+
+        url = "https://foo.test/push/here"
+        responses.add(responses.POST, url, status=404)
+        component = backend._get_component(record, "send")
+        with self.assertRaises(EDIWebserviceSendHTTPException):
+            component.send()
