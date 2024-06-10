@@ -4,7 +4,7 @@
 
 {
     "name": "Purchase Stock UBL",
-    "version": "14.0.1.0.0",
+    "version": "17.0.1.0.0",
     "category": "Purchase Management",
     "license": "AGPL-3",
     "summary": "Glue module for Purchase Order UBL and Stock/Inventory",
