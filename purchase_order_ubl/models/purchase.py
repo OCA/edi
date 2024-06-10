@@ -256,7 +256,7 @@ class PurchaseOrder(models.Model):
                 xml_string, self.get_document_name(doc_type), version=version
             )
             pdf_content = self.embed_xml_in_pdf(
-                xml_string, xml_filename, pdf_content=pdf_content, pdf_file=pdf_file
+                xml_string, xml_filename, pdf_content=pdf_content[0], pdf_file=pdf_file
             )
         return pdf_content
 
