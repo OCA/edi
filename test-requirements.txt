@@ -1,0 +1,2 @@
+odoo-addon-base_ubl @ git+https://github.com/OCA/edi.git@refs/pull/983/head#subdirectory=base_ubl
+odoo-addon-purchase_order_ubl @ git+https://github.com/OCA/edi.git@refs/pull/984/head#subdirectory=purchase_order_ubl
