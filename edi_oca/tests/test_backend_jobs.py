@@ -94,3 +94,24 @@ class EDIBackendTestJobsCase(EDIBackendCommonTestCase, JobMixin):
         job = self.backend.with_delay().exchange_process(record)
         created = job_counter.search_created()
         self.assertEqual(created[0].name, "Process an incoming document.")
+
+    def test_input_processed_error(self):
+        vals = {
+            "model": self.partner._name,
+            "res_id": self.partner.id,
+            "edi_exchange_state": "input_received",
+        }
+        record = self.backend.create_record("test_csv_input", vals)
+        record._set_file_content("ABC")
+        # Process `input_received` records
+        job_counter = self.job_counter()
+        self.backend._check_input_exchange_sync()
+        created = job_counter.search_created()
+        # Create job
+        self.assertEqual(len(created), 1)
+        record.edi_exchange_state = "input_processed_error"
+        # Don't re-process `input_processed_error` records
+        self.backend._check_input_exchange_sync()
+        new_created = job_counter.search_created() - created
+        # Should not create new job
+        self.assertEqual(len(new_created), 0)

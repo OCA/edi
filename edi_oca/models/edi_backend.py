@@ -648,7 +648,7 @@ class EDIBackend(models.Model):
         return domain
 
     def _input_pending_process_records_domain(self, record_ids=None):
-        states = ("input_received", "input_processed_error")
+        states = ("input_received",)
         domain = [
             ("backend_id", "=", self.id),
             ("type_id.direction", "=", "input"),
