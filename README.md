@@ -25,7 +25,7 @@ addon | version | maintainers | summary
 [account_invoice_download](account_invoice_download/) | 14.0.1.0.2 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Auto-download supplier invoices and import them
 [account_invoice_download_ovh](account_invoice_download_ovh/) | 14.0.1.1.1 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Get OVH Invoice via the API
 [account_invoice_download_scaleway](account_invoice_download_scaleway/) | 14.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Get Scaleway Invoices via the API
-[account_invoice_export](account_invoice_export/) | 14.0.1.2.4 |  | Account Invoice Export
+[account_invoice_export](account_invoice_export/) | 14.0.1.2.5 |  | Account Invoice Export
 [account_invoice_export_server_env](account_invoice_export_server_env/) | 14.0.1.0.0 |  | Server environment for Account Invoice Export
 [account_invoice_facturx](account_invoice_facturx/) | 14.0.1.1.2 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X/ZUGFeRD customer invoices
 [account_invoice_facturx_py3o](account_invoice_facturx_py3o/) | 14.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X invoices with Py3o reporting engine
@@ -39,7 +39,7 @@ addon | version | maintainers | summary
 [account_invoice_ubl_peppol](account_invoice_ubl_peppol/) | 14.0.1.0.2 |  | Generate invoices in PEPPOL 3.0 BIS dialect
 [base_business_document_import](base_business_document_import/) | 14.0.3.2.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Provides technical tools to import sale orders or supplier invoices
 [base_business_document_import_phone](base_business_document_import_phone/) | 14.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Use phone numbers to match partners upon import of business documents
-[base_ebill_payment_contract](base_ebill_payment_contract/) | 14.0.1.1.1 | [![TDu](https://github.com/TDu.png?size=30px)](https://github.com/TDu) | Base for managing e-billing contracts
+[base_ebill_payment_contract](base_ebill_payment_contract/) | 14.0.1.1.2 | [![TDu](https://github.com/TDu.png?size=30px)](https://github.com/TDu) | Base for managing e-billing contracts
 [base_edi](base_edi/) | 14.0.1.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 14.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Base module for Factur-X/ZUGFeRD
 [base_ubl](base_ubl/) | 14.0.1.8.2 |  | Base module for Universal Business Language (UBL)
@@ -70,12 +70,12 @@ addon | version | maintainers | summary
 [purchase_order_ubl](purchase_order_ubl/) | 14.0.1.1.1 |  | Embed UBL XML file inside the PDF purchase order
 [purchase_order_ubl_py3o](purchase_order_ubl_py3o/) | 14.0.1.1.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate UBL purchase orders with Py3o reporting engine
 [purchase_stock_ubl](purchase_stock_ubl/) | 14.0.1.0.0 |  | Glue module for Purchase Order UBL and Stock/Inventory
-[sale_order_customer_free_ref](sale_order_customer_free_ref/) | 14.0.1.0.0 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
+[sale_order_customer_free_ref](sale_order_customer_free_ref/) | 14.0.1.0.1 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
 [sale_order_import](sale_order_import/) | 14.0.1.5.0 |  | Import RFQ or sale orders from files
 [sale_order_import_ubl](sale_order_import_ubl/) | 14.0.1.4.1 |  | Import UBL XML sale order files
 [sale_order_import_ubl_customer_free_ref](sale_order_import_ubl_customer_free_ref/) | 14.0.1.1.0 |  | Extract CustomerReference from sale UBL
 [sale_order_import_ubl_line_customer_ref](sale_order_import_ubl_line_customer_ref/) | 14.0.1.0.2 |  | Extract specific customer reference for each order line
-[sale_order_packaging_import](sale_order_packaging_import/) | 14.0.1.1.0 |  | Import the packaging on the sale order line
+[sale_order_packaging_import](sale_order_packaging_import/) | 14.0.1.1.1 |  | Import the packaging on the sale order line
 [sale_order_ubl](sale_order_ubl/) | 14.0.1.1.1 |  | Embed UBL XML file inside the PDF quotation
 
 [//]: # (end addons)

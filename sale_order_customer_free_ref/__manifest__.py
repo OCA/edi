@@ -3,7 +3,7 @@
 
 {
     "name": "Sale Order Customer Free Reference",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "category": "Sale",
     "license": "AGPL-3",
     "summary": "Splits the Customer Reference on sale orders into two fields. "
