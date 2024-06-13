@@ -7,7 +7,7 @@
         Base for managing e-billing contracts""",
     "version": "14.0.1.1.1",
     "license": "AGPL-3",
-    "author": "Camptocamp SA,Odoo Community Association (OCA)",
+    "author": "Camptocamp,Odoo Community Association (OCA)",
     "maintainers": ["TDu"],
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_transmit_method"],
