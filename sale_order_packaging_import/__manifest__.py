@@ -7,7 +7,7 @@
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Import the packaging on the sale order line",
-    "author": "Camptocamp SA,Odoo Community Association (OCA)",
+    "author": "Camptocamp,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "depends": [
         "sale_stock",
