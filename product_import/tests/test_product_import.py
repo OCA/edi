@@ -30,6 +30,7 @@ PARSED_CATALOG = {
             "price": 12.55,
             "product_code": "MNTR011",
             "uom": {"unece_code": False},
+            "sale_delay": 3,
         },
         {
             # Archived product
@@ -45,6 +46,7 @@ PARSED_CATALOG = {
             "product_code": "MNTR012",
             "uom": {"unece_code": "C62"},
             "active": False,
+            "sale_delay": 1,
         },
     ],
     "ref": "1387",
@@ -136,6 +138,9 @@ class TestProductImport(TestCommon):
             self.assertEqual(p_values, expected)
             self.assertEqual(pt_values, expected)
             self.assertEqual(product.seller_ids, product_tmpl.seller_ids)
+            self.assertEqual(
+                product.seller_ids.mapped("delay")[0], parsed.get("sale_delay", 0)
+            ),
 
     def test_import_button(self):
         form = self.wiz_form

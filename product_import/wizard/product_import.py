@@ -139,6 +139,7 @@ class ProductImport(models.TransientModel):
                     and s_info.price == seller_info["price"]
                     and s_info.currency_id.id == seller_info["currency_id"]
                     and s_info.company_id.id == seller_info["company_id"]
+                    and s_info.delay == seller_info["delay"]
                 ):
                     seller_id = s_info.id
                 else:
@@ -187,6 +188,7 @@ class ProductImport(models.TransientModel):
             "currency_id": currency.id,
             "min_qty": parsed_product["min_qty"],
             "company_id": product_company_id,
+            "delay": parsed_product.get("sale_delay", 0),
         }
         product_vals["seller_ids"] = self._prepare_supplierinfo(seller_info, product)
         if product:
