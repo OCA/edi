@@ -251,7 +251,7 @@ class ProductImport(models.TransientModel):
         if not catalogue.get("products"):
             raise UserError(_("This catalogue doesn't have any product!"))
         company_id = self._get_company_id(catalogue)
-        seller = self._get_seller(catalogue)
+        seller = self.with_company(company_id)._get_seller(catalogue)
         # 2nd step: Prepare values and create the "product.product" records in Odoo
         self.create_update_products(
             catalogue["products"],
