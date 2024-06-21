@@ -18,8 +18,9 @@ class AccountMove(models.Model):
         result = self.browse([])
 
         if parsed_values.get("partner"):
-            self._get_default_journal()
+            journal = self._get_default_journal()
             currency = self._get_default_currency()
+            tax = self.env["account.tax"]
             amount_untaxed = currency.round(
                 parsed_values.get(
                     "amount_untaxed",
@@ -27,6 +28,17 @@ class AccountMove(models.Model):
                     - parsed_values.get("amount_tax", 0),
                 )
             )
+            amount_tax = currency.round(
+                parsed_values.get(
+                    "amount_tax",
+                    parsed_values.get("amount_total", 0)
+                    - parsed_values.get("amount_untaxed", 0),
+                )
+            )
+            if amount_untaxed and amount_tax:
+                tax = self.env["account.edi.format"]._retrieve_tax(
+                    currency.round(amount_tax / amount_untaxed) * 100, journal.type
+                )
             result = self.create(
                 {
                     "partner_id": parsed_values["partner"]
@@ -42,6 +54,7 @@ class AccountMove(models.Model):
                             {
                                 "name": parsed_values.get("description", "/"),
                                 "price_unit": amount_untaxed,
+                                "tax_ids": [(6, 0, tax.ids)],
                             },
                         ),
                     ],
