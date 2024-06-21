@@ -16,6 +16,7 @@ class BaseRestRequestsAdapter(Component):
     # TODO: url and url_params could come from work_ctx
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
+        content_only = kwargs.pop("content_only", True)
         new_kwargs = kwargs.copy()
         new_kwargs.update(
             {
@@ -27,7 +28,9 @@ class BaseRestRequestsAdapter(Component):
         # pylint: disable=E8106
         request = requests.request(method, url, **new_kwargs)
         request.raise_for_status()
-        return request.content
+        if content_only:
+            return request.content
+        return request
 
     def get(self, **kwargs):
         return self._request("get", **kwargs)
