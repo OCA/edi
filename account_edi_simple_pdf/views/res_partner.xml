@@ -26,6 +26,7 @@
                                 string="Invoice Currency"
                                 options="{'no_create': True, 'no_create_edit': True}"
                             />
+                        <field name="simple_pdf_product_id" />
                 </group>
                         <group name="simple_pdf_main-right">
                         <field name="simple_pdf_date_format" string="Date Format" />

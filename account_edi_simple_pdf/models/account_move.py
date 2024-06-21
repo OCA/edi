@@ -1,6 +1,7 @@
 from base64 import b64decode
 
 from odoo import models
+from odoo.tests.common import Form
 
 
 class AccountMove(models.Model):
@@ -17,9 +18,8 @@ class AccountMove(models.Model):
         result = self.browse([])
 
         if parsed_values.get("partner"):
-            journal = self._get_default_journal()
+            self._get_default_journal()
             currency = self._get_default_currency()
-            tax = self.env["account.tax"]
             amount_untaxed = currency.round(
                 parsed_values.get(
                     "amount_untaxed",
@@ -27,17 +27,6 @@ class AccountMove(models.Model):
                     - parsed_values.get("amount_tax", 0),
                 )
             )
-            amount_tax = currency.round(
-                parsed_values.get(
-                    "amount_tax",
-                    parsed_values.get("amount_total", 0)
-                    - parsed_values.get("amount_untaxed", 0),
-                )
-            )
-            if amount_untaxed and amount_tax:
-                tax = self.env["account.edi.format"]._retrieve_tax(
-                    currency.round(amount_tax / amount_untaxed) * 100, journal.type
-                )
             result = self.create(
                 {
                     "partner_id": parsed_values["partner"]
@@ -52,17 +41,20 @@ class AccountMove(models.Model):
                             0,
                             {
                                 "name": parsed_values.get("description", "/"),
-                                "price_unit": parsed_values.get(
-                                    "amount_untaxed",
-                                    parsed_values.get("amount_total", 0)
-                                    - parsed_values.get("amount_tax", 0),
-                                ),
-                                "tax_ids": [(6, 0, tax.ids)],
+                                "price_unit": amount_untaxed,
                             },
                         ),
                     ],
                 }
             )
+            if result.partner_id.simple_pdf_product_id:
+                with Form(result) as invoice_form:
+                    with invoice_form.invoice_line_ids.edit(0) as line_form:
+                        line_form.product_id = result.partner_id.simple_pdf_product_id
+                        line_form.name = parsed_values.get(
+                            "description", line_form.name
+                        )
+                        line_form.price_unit = amount_untaxed or line_form.price_unit
         for message in parsed_values.get("chatter_msg", []):
             result.message_post(body=message)
         return result

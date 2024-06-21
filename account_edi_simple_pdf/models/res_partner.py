@@ -112,6 +112,12 @@ class ResPartner(models.Model):
         "partner_id",
         string="Invoice Import Number Format",
     )
+    simple_pdf_product_id = fields.Many2one(
+        "product.product",
+        string="Product",
+        help="Use this product when creating a parsed invoice. This allows you to "
+        "preconfigure taxes, accounts, etc",
+    )
     simple_pdf_test_file = fields.Binary(
         string="Test PDF Invoice File", attachment=True
     )
@@ -191,7 +197,7 @@ class ResPartner(models.Model):
 
     def pdf_simple_test_run(self):
         self.ensure_one()
-        aiio = self.env["account.invoice.import"]
+        aiio = self.env["account.move"]
         rpo = self.env["res.partner"]
         vals = {}
         test_results = []

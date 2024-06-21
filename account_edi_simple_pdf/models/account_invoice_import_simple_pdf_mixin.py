@@ -32,6 +32,7 @@ except ImportError:
 
 class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
     _name = "account.invoice.import.simple.pdf.mixin"
+    _description = "Mixin providing parsing functions from text"
 
     @api.model
     def _simple_pdf_text_extraction_pymupdf(self, fileobj, test_info):
