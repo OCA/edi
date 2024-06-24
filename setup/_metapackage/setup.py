@@ -12,6 +12,7 @@ setuptools.setup(
         'odoo-addon-account_invoice_facturx>=15.0dev,<15.1dev',
         'odoo-addon-base_edi>=15.0dev,<15.1dev',
         'odoo-addon-base_facturx>=15.0dev,<15.1dev',
+        'odoo-addon-base_import_pdf_by_template>=15.0dev,<15.1dev',
         'odoo-addon-base_ubl>=15.0dev,<15.1dev',
         'odoo-addon-edi_account_oca>=15.0dev,<15.1dev',
         'odoo-addon-edi_backend_partner_oca>=15.0dev,<15.1dev',
@@ -28,6 +29,7 @@ setuptools.setup(
         'odoo-addon-edi_voxel_stock_picking_secondary_unit_oca>=15.0dev,<15.1dev',
         'odoo-addon-edi_webservice_oca>=15.0dev,<15.1dev',
         'odoo-addon-pdf_helper>=15.0dev,<15.1dev',
+        'odoo-addon-test_base_import_pdf_by_template>=15.0dev,<15.1dev',
     ],
     classifiers=[
         'Programming Language :: Python',
