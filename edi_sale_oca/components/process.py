@@ -28,7 +28,6 @@ class EDIExchangeSOInput(Component):
         else:
             order = self._handle_create_order(res["res_id"])
             return self.msg_order_created % order.name
-        raise UserError(self.msg_generic_error)
 
     @property
     def msg_order_existing_error(self):
@@ -37,10 +36,6 @@ class EDIExchangeSOInput(Component):
     @property
     def msg_order_created(self):
         return _("Sales order %s created")
-
-    @property
-    def msg_generic_error(self):
-        return _("Something went wrong with the importing wizard.")
 
     def _setup_wizard(self):
         """Init a `sale.order.import` instance for current record."""

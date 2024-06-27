@@ -6,11 +6,11 @@ import base64
 import textwrap
 from unittest import mock
 
-from odoo.addons.component.tests.common import TransactionComponentCase
+from odoo.addons.component.tests.common import SavepointComponentCase
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
 
 
-class TestProcessComponent(TransactionComponentCase, EDIBackendTestMixin):
+class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
