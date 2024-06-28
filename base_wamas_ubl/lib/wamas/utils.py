@@ -12,6 +12,7 @@ from random import randint, randrange
 
 import pytz
 from dateutil.parser import parse
+from markupsafe import escape
 
 from .const import (
     DEFAULT_TIMEZONE,
@@ -401,7 +402,7 @@ def fw2dict(line, grammar, telegram_type):
             dp = fdef["dp"]
             val = float(b[:-dp] + "." + b[-dp:])
         else:
-            val = b.rstrip()
+            val = escape(b.rstrip())
         res[fname] = val
     _logger.debug(pformat(res))
     return res
