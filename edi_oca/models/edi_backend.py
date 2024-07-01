@@ -306,7 +306,7 @@ class EDIBackend(models.Model):
         # In case already sent: skip sending and check the state
         check = self._output_check_send(exchange_record)
         if not check:
-            return "Nothing to do. Likely already sent."
+            return self._failed_output_check_send_msg()
         state = exchange_record.edi_exchange_state
         error = False
         message = None
@@ -697,3 +697,6 @@ class EDIBackend(models.Model):
             if raise_if_not:
                 raise
             return False
+
+    def _failed_output_check_send_msg(self):
+        return "Nothing to do. Likely already sent."
