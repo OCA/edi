@@ -4,12 +4,12 @@
 
 from freezegun import freeze_time
 
-from odoo.addons.edi_sale_oca.tests.common import OrderMixin
+from odoo.addons.component.tests.common import ComponentMixin
 
-from .common import XMLBaseTestCase, get_xml_handler
+from .common import OrderMixin, XMLBaseTestCase, get_xml_handler
 
 
-class TestOrderResponseOutbound(XMLBaseTestCase, OrderMixin):
+class TestOrderResponseOutbound(XMLBaseTestCase, OrderMixin, ComponentMixin):
 
     maxDiff = None
 
@@ -18,6 +18,7 @@ class TestOrderResponseOutbound(XMLBaseTestCase, OrderMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.setUpComponent()
         cls._setup_order()
         cls.exc_type_in = cls.env.ref("edi_sale_ubl_oca.demo_edi_exc_type_order_in")
         cls.exc_type_out = cls.env.ref(
@@ -75,5 +76,6 @@ class TestOrderResponseOutbound(XMLBaseTestCase, OrderMixin):
         err = handler.validate(file_content)
         self.assertEqual(err, None, err)
         data = handler.parse_xml(file_content)
-        # TODO: test all main data
-        self.assertEqual(data["cbc:OrderResponseCode"], "AP")
+        # Order has not been created from exchange record input (just linked to record out),
+        # so all lines are not in Accepted state (AP)
+        self.assertEqual(data["cbc:OrderResponseCode"], "CA")

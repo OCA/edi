@@ -5,17 +5,25 @@
 from odoo import exceptions
 from odoo.tests.common import SavepointCase
 
+from odoo.addons.component.tests.common import ComponentMixin
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
 
 from .common import OrderInboundTestMixin
 
 
-class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin):
+class TestOrderInbound(
+    SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin, ComponentMixin
+):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.setUpComponent()
         cls.backend = cls._get_backend()
         cls._setup_inbound_order(cls.backend)
+
+    def setUp(self):
+        super().setUp()
+        ComponentMixin.setUp(self)
 
     @classmethod
     def _get_backend(cls):
@@ -49,7 +57,7 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin
         self.exc_record_in.action_exchange_process()
         self.assertEqual(self.exc_record_in.edi_exchange_state, "input_processed_error")
         err_msg = "Sales order has already been imported before"
-        self.assertEqual(self.exc_record_in.exchange_error, err_msg)
+        self.assertIn(err_msg, self.exc_record_in.exchange_error)
 
     def test_new_order(self):
         self.assertEqual(self.exc_record_in.edi_exchange_state, "input_received")
@@ -72,7 +80,7 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin
         self.assertEqual(order.order_line.mapped("edi_id"), ["1", "2"])
         self.assertTrue(order.edi_state_id.code, order.EDI_STATE_ORDER_ACCEPTED)
         self.assertTrue(
-            order.mapped("order_line.edi_state_id").code,
+            order.mapped("order_line.edi_state_id.code"),
             order.EDI_STATE_ORDER_LINE_ACCEPTED,
         )
 

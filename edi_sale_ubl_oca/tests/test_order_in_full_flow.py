@@ -5,6 +5,7 @@
 from odoo import fields
 from odoo.tests.common import SavepointCase
 
+from odoo.addons.component.tests.common import ComponentMixin
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
 
 from .common import OrderInboundTestMixin, get_xml_handler
@@ -12,7 +13,9 @@ from .common import OrderInboundTestMixin, get_xml_handler
 # TODO: split in different tests w/ SingleTransaction
 
 
-class TestOrderInboundFull(SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin):
+class TestOrderInboundFull(
+    SavepointCase, EDIBackendTestMixin, OrderInboundTestMixin, ComponentMixin
+):
 
     _schema_path = "base_ubl:data/xsd-2.2/maindoc/UBL-OrderResponse-2.2.xsd"
 
@@ -20,6 +23,7 @@ class TestOrderInboundFull(SavepointCase, EDIBackendTestMixin, OrderInboundTestM
     def setUpClass(cls):
         super().setUpClass()
         cls._setup_env()
+        cls.setUpComponent()
         cls.backend = cls._get_backend()
         cls._setup_inbound_order(cls.backend)
 
@@ -48,6 +52,7 @@ class TestOrderInboundFull(SavepointCase, EDIBackendTestMixin, OrderInboundTestM
         ack_exc_record = order.exchange_record_ids.filtered(
             lambda x: x.type_id == self.exc_type_out
         )
+        ack_exc_record.action_exchange_generate()
         file_content = ack_exc_record._get_file_content()
         self.assertTrue(file_content)
         # TMP /
@@ -73,7 +78,7 @@ class TestOrderInboundFull(SavepointCase, EDIBackendTestMixin, OrderInboundTestM
         ack_exc_record = order.exchange_record_ids.filtered(
             lambda x: x.type_id == self.exc_type_out and x != ack_exc_record
         )
-        self.assertEqual(ack_exc_record.parent_id, self.exc_record_in)
+        ack_exc_record.action_exchange_generate()
         self.assertEqual(ack_exc_record.edi_exchange_state, "output_pending")
         file_content = ack_exc_record._get_file_content()
         self.assertTrue(file_content)

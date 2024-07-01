@@ -4,14 +4,17 @@
 
 from odoo.tests.common import SavepointCase
 
+from odoo.addons.component.tests.common import ComponentMixin
 from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
-from odoo.addons.edi_sale_oca.tests.common import OrderMixin
+
+from .common import OrderMixin
 
 
-class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
+class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin, ComponentMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.setUpComponent()
         # force metadata storage w/ proper key
         cls.env = cls.env(context=dict(cls.env.context, edi_framework_action=True))
         cls.backend = cls._get_backend()
@@ -23,6 +26,11 @@ class TestOrderInbound(SavepointCase, EDIBackendTestMixin, OrderMixin):
             origin_exchange_record_id=cls.exc_record_in.id,
             line_defaults=dict(origin_exchange_record_id=cls.exc_record_in.id),
         )
+
+    def setUp(self):
+        super().setUp()
+        ComponentMixin.setUp(self)
+        self.sale.action_confirm()
 
     @classmethod
     def _get_backend(cls):
