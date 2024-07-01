@@ -5,6 +5,7 @@ from dotty_dict import Dotty
 
 from ..utils import (
     _set_string_bool,
+    _set_string_float,
     file_open,
     file_path,
     get_address_elements,
@@ -63,6 +64,15 @@ class TestUtils(unittest.TestCase):
         # Input is string
         self.assertEqual(_set_string_bool("N", 1, False), "N")
         self.assertEqual(_set_string_bool("J", 1, False), "J")
+
+    def test_set_string_float(self):
+        # Positive
+        self.assertEqual(_set_string_float(3.6, 9, 3), "000003600")
+        self.assertEqual(_set_string_float(3.0, 9, 3), "000003000")
+
+        # Negative
+        self.assertEqual(_set_string_float(-3.6, 9, 3), "-00003600")
+        self.assertEqual(_set_string_float(-3.0, 9, 3), "-00003000")
 
 
 if __name__ == "__main__":

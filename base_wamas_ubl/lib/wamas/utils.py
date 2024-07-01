@@ -89,19 +89,25 @@ def _set_string_int(val, length, dp, **kwargs):
 
 
 def _set_string_float(val, length, dp, **kwargs):
-    res = str(float(val or 0))
-
-    # Check if it is int / float or not
-    if not res.replace(".", "", 1).isdigit():
+    try:
+        res = str(float(val or 0))
+    except ValueError as err:
         raise Exception(
             "The value '%s' is not the float type. Please check it again!" % res
-        )
+        ) from err
+
+    # Support for the negative float
+    signed = ""
+    if res.startswith("-"):
+        signed = "-"
+        length = length - 1
+        res = res.lstrip("-")
 
     str_whole_number, str_decimal_portion = res.split(".")
     str_whole_number = str_whole_number.rjust(length - dp, "0")
     str_decimal_portion = str_decimal_portion.ljust(dp, "0")
 
-    return (str_whole_number + str_decimal_portion)[:length]
+    return signed + (str_whole_number + str_decimal_portion)[:length]
 
 
 def _set_string_date(val, length, dp, **kwargs):
