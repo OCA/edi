@@ -93,6 +93,24 @@ class TestEndpoint(CommonEndpoint):
         payload = result["payload"]
         self.assertEqual(json.loads(payload), {"a": 1, "b": 2})
 
+    def test_endpoint_log(self):
+        self.endpoint.write(
+            {
+                "code_snippet": textwrap.dedent(
+                    """
+            log("ciao")
+            result = {"ok": True}
+            """
+                )
+            }
+        )
+        with self._get_mocked_request() as req:
+            # just test that logging does not break
+            # as it creates a record directly via sql
+            # and we cannot easily check the result
+            self.endpoint._handle_request(req)
+        self.env.cr.execute("DELETE FROM ir_logging")
+
     @mute_logger("endpoint.endpoint", "odoo.modules.registry")
     def test_endpoint_validate_request(self):
         endpoint = self.endpoint.copy(

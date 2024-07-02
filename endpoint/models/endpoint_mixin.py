@@ -83,6 +83,8 @@ class EndpointMixin(models.AbstractModel):
         * status_code
 
         which are all optional.
+
+        Use ``log`` function to log messages into ir.logging table.
         """
 
     def _get_code_snippet_eval_context(self, request):
@@ -106,7 +108,30 @@ class EndpointMixin(models.AbstractModel):
             "exceptions": safe_eval.wrap_module(
                 exceptions, ["UserError", "ValidationError"]
             ),
+            "log": self._code_snippet_log_func,
         }
+
+    def _code_snippet_log_func(self, message, level="info"):
+        # Almost barely copied from ir.actions.server
+        with self.pool.cursor() as cr:
+            cr.execute(
+                """
+                INSERT INTO ir_logging
+                (create_date, create_uid, type, dbname, name, level, message, path, line, func)
+                VALUES (NOW() at time zone 'UTC', %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+                (
+                    self.env.uid,
+                    "server",
+                    self._cr.dbname,
+                    __name__,
+                    level,
+                    message,
+                    "endpoint",
+                    self.id,
+                    self.name,
+                ),
+            )
 
     def _handle_exec__code(self, request):
         if not self._code_snippet_valued():
