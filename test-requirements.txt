@@ -4,3 +4,5 @@ responses
 # Python Dependencies
 PyYAML
 xmlunittest
+
+odoo14-addon-edi_sale_oca @ git+https://github.com/thienvh332/edi@refs/pull/23/head#subdirectory=setup/edi_sale_oca
