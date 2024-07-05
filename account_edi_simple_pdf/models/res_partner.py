@@ -404,14 +404,6 @@ class ResPartner(models.Model):
         amount_untaxed_count = field_list.count("amount_untaxed")
         amount_tax = field_list.count("amount_tax")
         amount_fields_count = amount_total_count + amount_untaxed_count + amount_tax
-        if "date" not in field_list:
-            raise UserError(
-                _(
-                    "You must configure a field extraction rule for "
-                    "field 'Date' for partner '%s'."
-                )
-                % self.display_name
-            )
         if amount_fields_count == 0:
             raise UserError(
                 _("There is no amount field configured for partner '%s'.")
