@@ -26,9 +26,4 @@
         "templates/error_lines_chatter_msg.xml",
     ],
     "installable": True,
-    "assets": {
-        "web.assets_backend": [
-            "sale_order_import/static/src/scss/error_lines_chatter_msg.scss",
-        ]
-    },
 }

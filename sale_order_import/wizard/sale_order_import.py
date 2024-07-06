@@ -697,8 +697,9 @@ class SaleOrderImport(models.TransientModel):
 
         error_lines = parsed_order.get("error_lines")
         order.message_post_with_view(
-            "sale_order_import.template_skip_error_lines_message",
+            "sale_order_import.skip_error_lines_message",
             values={
                 "lines": error_lines,
             },
+            subtype_id=self.env.ref("mail.mt_note").id,
         )
