@@ -558,9 +558,10 @@ class SaleOrderImport(models.TransientModel):
                 if price_source != "order":
                     new_price_unit = order.pricelist_id.with_context(
                         date=order.date_order, uom=oline.product_uom.id
-                    )._price_get(oline.product_id, write_vals["product_uom_qty"],)[
-                        order.pricelist_id.id
-                    ]
+                    )._price_get(
+                        oline.product_id,
+                        write_vals["product_uom_qty"],
+                    )[order.pricelist_id.id]
                     if float_compare(
                         new_price_unit, oline.price_unit, precision_digits=price_prec
                     ):
