@@ -1,27 +1,25 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, models
+from odoo import _, api, models
 
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    def name_get(self):
+    @api.depends("amount_untaxed", "currency_id")
+    def _compute_display_name(self):
         """Add amount_untaxed in name_get of sale orders"""
-        res = super().name_get()
+        res = super()._compute_display_name()
         if self._context.get("sale_order_show_amount"):
-            new_res = []
-            for sale_id, name in res:
-                sale = self.browse(sale_id)
+            for order in self:
                 # TODO: find a python method to easily display a float + currency
                 # symbol (before or after) depending on lang of context and currency
-                name += _(
-                    " Amount w/o tax: %(amount)s %(currency)s",
-                    amount=sale.amount_untaxed,
-                    currency=sale.currency_id.name,
+                name = _(
+                    "%(so_name)s Amount w/o tax: %(amount)s %(currency)s",
+                    so_name=order.name,
+                    amount=order.amount_untaxed,
+                    currency=order.currency_id.name,
                 )
-                new_res.append((sale_id, name))
-            return new_res
-        else:
-            return res
+                order.display_name = name
+        return res

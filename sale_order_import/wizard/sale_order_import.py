@@ -101,8 +101,8 @@ class SaleOrderImport(models.TransientModel):
                     type=self.import_type.upper(),
                 )
             )
-        if hasattr(self, "parse_%s_order" % self.import_type):
-            return getattr(self, "parse_%s_order" % self.import_type)(
+        if hasattr(self, f"parse_{self.import_type}_order"):
+            return getattr(self, f"parse_{self.import_type}_order")(
                 filecontent, detect_doc_type=detect_doc_type
             )
         else:
@@ -486,8 +486,9 @@ class SaleOrderImport(models.TransientModel):
             vals.pop("order_id")
 
         # Handle additional fields dynamically if available.
-        # This way, if you add a field to a record and it's value is injected by a parser
-        # you won't have to override `_prepare_create_order_line` to let it propagate.
+        # This way, if you add a field to a record
+        # and it's value is injected by a parser, you won't have to
+        # override `_prepare_create_order_line` to let it propagate.
         for k, v in import_line.items():
             if k not in vals and k in solo._fields:
                 vals[k] = v
@@ -582,8 +583,7 @@ class SaleOrderImport(models.TransientModel):
                 oline.write(write_vals)
         if compare_res["to_remove"]:
             to_remove_label = [
-                "%s %s x %s"
-                % (line.product_uom_qty, line.product_uom.name, line.product_id.name)
+                f"{line.product_uom_qty} {line.product_uom.name} x {line.product_id.name}"  # noqa
                 for line in compare_res["to_remove"]
             ]
             chatter.append(
@@ -603,12 +603,7 @@ class SaleOrderImport(models.TransientModel):
                 line_vals["order_id"] = order.id
                 new_line = solo.create(line_vals)
                 to_create_label.append(
-                    "%s %s x %s"
-                    % (
-                        new_line.product_uom_qty,
-                        new_line.product_uom.name,
-                        new_line.name,
-                    )
+                    f"{new_line.product_uom_qty} {new_line.product_uom.name} x {new_line.name}"  # noqa
                 )
             chatter.append(
                 _(

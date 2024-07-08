@@ -19,7 +19,7 @@ class TestOrderImport(TestCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.parsed_order = {
-            "partner": {"email": "deco.addict82@example.com"},
+            "partner": {"email": "deco_addict@yourcompany.example.com"},
             "date": "2018-08-14",
             "order_ref": "TEST1242",
             "lines": [
@@ -33,6 +33,19 @@ class TestOrderImport(TestCommon):
             "chatter_msg": [],
             "doc_type": "rfq",
         }
+        usd_pricelist = cls.env["product.pricelist"].create(
+            {
+                "name": "USD test pricelist",
+                "currency_id": cls.env.ref("base.USD").id,
+            }
+        )
+        cls.env["res.partner"].search(
+            [("email", "=", "deco_addict@yourcompany.example.com")]
+        ).write(
+            {
+                "property_product_pricelist": usd_pricelist.id,
+            }
+        )
 
     def test_order_import(self):
         order = self.wiz_model.create_order(self.parsed_order, "pricelist")
@@ -122,7 +135,9 @@ class TestOrderImport(TestCommon):
                 self.assertEqual(action["view_id"], False)
                 mocked.assert_called()
                 so = self.env["sale.order"].browse(action["res_id"])
-                self.assertEqual(so.partner_id.email, "deco.addict82@example.com")
+                self.assertEqual(
+                    so.partner_id.email, "deco_addict@yourcompany.example.com"
+                )
                 self.assertEqual(so.client_order_ref, "TEST1242")
                 self.assertEqual(so.order_line.product_id.code, "FURN_8888")
                 self.assertEqual(so.state, "draft")
