@@ -4,7 +4,6 @@ factur-x
 invoice2data
 ovh
 phonenumbers
-pypdf
 pypdf>=3.1.0
 pyyaml
 regex
