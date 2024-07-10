@@ -69,6 +69,11 @@ msgid "Code Snippet Docs"
 msgstr "Docs de Fragmentos de Código"
 
 #. module: edi_endpoint_oca
+#: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__company_id
+msgid "Company"
+msgstr ""
+
+#. module: edi_endpoint_oca
 #: model:ir.model.fields,field_description:edi_endpoint_oca.field_edi_endpoint__create_uid
 msgid "Created by"
 msgstr "Creado por"
@@ -286,7 +291,8 @@ msgstr "Sincronizar Registro"
 #: code:addons/edi_endpoint_oca/models/edi_backend.py:0
 #, python-format
 msgid ""
-"The following backend(s) have endpoints attached. Please archive them before:\n"
+"The following backend(s) have endpoints attached. Please archive them "
+"before:\n"
 "\n"
 "%s"
 msgstr ""
