@@ -10,6 +10,15 @@ In order to define a new Exchange Record, we need to configure:
 * Backend
 * Components
 
+Jobs
+~~~~~~~~~~~~~~~~~~~~
+
+1. Internal User: might be an EDI user without even knowing about it, triggering EDI flows by some of his actions on business records; does not need access to related queue jobs.
+
+2. EDI User: more conscious EDI user that might sometimes need to debug things a bit further and thus needs access to related queue jobs.
+
+3. EDI Manager: full configuration access.
+
 Component definition
 ~~~~~~~~~~~~~~~~~~~~
 
