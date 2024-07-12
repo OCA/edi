@@ -1,2 +1,3 @@
 odoo-test-helper>=2.0.1
 responses
+odoo-addon-base_ubl @ git+https://github.com/OCA/edi.git@refs/pull/927/head#subdirectory=setup/base_ubl
