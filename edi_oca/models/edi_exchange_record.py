@@ -263,7 +263,7 @@ class EDIExchangeRecord(models.Model):
     def _quick_exec_enabled(self):
         if self.env.context.get("edi__skip_quick_exec"):
             return False
-        return self.type_id.quick_exec
+        return self.type_id.quick_exec and self.backend_id.active
 
     def _execute_next_action(self):
         # The backend already knows how to handle records
