@@ -6,14 +6,14 @@
         <field name="trigger">on_button_confirm_purchase_order</field>
         <field name="model" ref="purchase.model_purchase_order" />
         <field name="snippet_before_do">
-            result={
-                "snippet_var_do": {}
-            }
+result={
+    "snippet_var_do": {}
+}
         </field>
         <field name="snippet_do" />
     </record>
     <record id="edi_conf_send_via_email" model="edi.configuration">
-        <field name="name">Send EDI Quoctation Config</field>
+        <field name="name">Send EDI Quotation Config</field>
         <field name="code">send_via_email_rfq</field>
         <field name="trigger">send_via_email_rfq</field>
         <field

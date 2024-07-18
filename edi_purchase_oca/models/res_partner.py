@@ -14,6 +14,5 @@ class ResPartner(models.Model):
         relation="res_partner_edi_configuration_rel",
         column1="partner_id",
         column2="conf_id",
-        # TODO: Domain for Purchase model
-        domain="[('model_name', '=', 'purchase.order')]"
+        domain="[('model_name', '=', 'purchase.order')]",
     )
