@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="edi_conf_button_confirm_purchase_order" model="edi.configuration">
+        <field name="code">on_button_confirm_purchase_order</field>
+        <field name="trigger">on_button_confirm_purchase_order</field>
+        <field name="model" ref="purchase.model_purchase_order" />
+        <field name="snippet_before_do">
+            result={
+                "snippet_var_do": {}
+            }
+        </field>
+        <field name="snippet_do" />
+    </record>
+    <record id="edi_conf_send_via_email" model="edi.configuration">
+        <field name="code">send_via_email_rfq</field>
+        <field name="trigger">send_via_email_rfq</field>
+        <field
+            name="snippet_do"
+        >record._edi_send_via_email(ir_action=record.action_rfq_send())</field>
+    </record>
+</odoo>

@@ -6,13 +6,12 @@ from odoo import models
 
 class PurchaseOrder(models.Model):
     _name = "purchase.order"
-    _inherit = ["purchase.order", "edi.exchange.consumer.mixin"]
+    _inherit = ["purchase.order", "edi.exchange.consumer.mixin", "edi.configuration.mixin"]
 
     def button_confirm(self):
-        result = super().button_confirm()
-        if self:
-            self._event("on_button_confirm_purchase_order").notify(self)
-        return result
+        res = super().button_confirm()
+        self._event("on_button_confirm_purchase_order").notify(self)
+        return res
 
     def button_cancel(self):
         result = super().button_cancel()
