@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="edi_conf_send_via_email" model="edi.configuration">
+        <field name="name">Send Via Email</field>
+        <field name="active">False</field>
+        <field name="code">send_via_email</field>
+        <field name="trigger">on_email_send</field>
+        <field name="snippet_do">record._edi_send_via_email()</field>
+    </record>
+
+    <!-- Add type_id to use Send Via EDI -->
+    <record id="edi_conf_send_via_edi" model="edi.configuration">
+        <field name="name">Send Via EDI</field>
+        <field name="active">False</field>
+        <field name="code">send_via_edi</field>
+        <field name="snippet_do">record._edi_send_via_edi(conf.type_id)</field>
+    </record>
+</odoo>
