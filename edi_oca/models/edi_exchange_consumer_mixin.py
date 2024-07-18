@@ -7,7 +7,7 @@
 
 from lxml import etree
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.tools import safe_eval
 
 from odoo.addons.base_sparse_field.models.fields import Serialized
@@ -291,3 +291,38 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     def _edi_get_origin(self):
         self.ensure_one()
         return self.origin_exchange_record_id
+
+    def _edi_send_via_edi(self, exchange_type):
+        exchange_record = self._edi_create_exchange_record(exchange_type)
+        exchange_record.action_exchange_generate_send()
+        msg = _("EDI auto: output generated.")
+        exchange_record._notify_related_record(msg)
+        exchange_record._trigger_edi_event("generated")
+
+    def _edi_send_via_email(self, ir_action=None, partners=None):
+        if ir_action is None:
+            if self._name == "purchase.order":
+                ir_action = self.action_rfq_send()
+            elif self._name == "sale.order":
+                ir_action = self.action_quotation_send()
+            else:
+                return False
+
+        ctx = ir_action.get("context", {})
+        composer_model = self.env[ir_action["res_model"]].with_context(ctx)
+
+        if self._name == "purchase.order":
+            subtype = self.env.ref("purchase.mt_rfq_approved")
+            composer = composer_model.create({"subtype_id": subtype.id})
+            composer.onchange_template_id_wrapper()
+            composer.partner_ids = self._vendor_email_partners().ids
+        elif self._name == "sale.order":
+            subtype = self.env.ref("sale.mt_order_confirmed")
+            composer = composer_model.create({"subtype_id": subtype.id})
+            composer.onchange_template_id_wrapper()
+            composer.partner_ids = self.partner_id.ids
+        else:
+            return False
+
+        composer.send_mail()
+        return True
