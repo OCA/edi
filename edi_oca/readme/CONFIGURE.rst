@@ -11,7 +11,7 @@ In order to define a new Exchange Record, we need to configure:
 * Components
 
 Jobs
-~~~~~~~~~~~~~~~~~~~~
+~~~~
 
 1. Internal User: might be an EDI user without even knowing about it, triggering EDI flows by some of his actions on business records; does not need access to related queue jobs.
 
