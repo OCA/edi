@@ -3,9 +3,10 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
 <odoo>
 
-    <record model="ir.ui.view" id="endpoint_endpoint_form_view">
-        <field name="name">endpoint.endpoint.form</field>
-        <field name="model">endpoint.endpoint</field>
+    <!-- Basic view inheritable by real models -->
+    <record model="ir.ui.view" id="endpoint_mixin_form_view">
+        <field name="name">endpoint.mixin.form</field>
+        <field name="model">endpoint.mixin</field>
         <field name="arch" type="xml">
             <form>
                 <header />
@@ -87,6 +88,19 @@
                     </notebook>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="endpoint_endpoint_form_view">
+        <field name="name">endpoint.endpoint.form</field>
+        <field name="model">endpoint.endpoint</field>
+        <field name="inherit_id" ref="endpoint.endpoint_mixin_form_view" />
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+          <form position="attributes">
+            <!-- Needed just to make further inheritance happy -->
+            <attribute name="name">real</attribute>
+          </form>
         </field>
     </record>
 
