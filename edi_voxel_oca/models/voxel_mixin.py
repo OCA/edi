@@ -219,9 +219,7 @@ class VoxelMixin(models.AbstractModel):
         try:
             response = self._request_to_voxel(requests.get, folder, company)
         except Exception as exc:
-            raise Exception(
-                "Error reading '{}' folder from Voxel".format(folder)
-            ) from exc
+            raise Exception(f"Error reading '{folder}' folder from Voxel") from exc
         # if no error, return list of documents file names
         content = response.content
         return content and content.decode("utf-8").split("\n") or []
@@ -231,7 +229,7 @@ class VoxelMixin(models.AbstractModel):
             response = self._request_to_voxel(requests.get, folder, company, filename)
         except Exception as exc:
             raise Exception(
-                "Error reading document {} from folder {}".format(filename, folder)
+                f"Error reading document {filename} from folder {folder}"
             ) from exc
         # Getting xml content with utf8 there are characters that can not
         # be decoded, so 'ISO-8859-1' is used
@@ -242,9 +240,7 @@ class VoxelMixin(models.AbstractModel):
             self._request_to_voxel(requests.delete, folder, company, voxel_filename)
         except Exception as exc:
             raise Exception(
-                "Error deleting document {} from folder {}".format(
-                    voxel_filename, folder
-                )
+                f"Error deleting document {voxel_filename} from folder {folder}"
             ) from exc
 
     # auxiliary methods
@@ -253,7 +249,7 @@ class VoxelMixin(models.AbstractModel):
         self.ensure_one()
         document_type = self.get_document_type()
         date_time_seq = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
-        return "{}_{}.xml".format(document_type, date_time_seq)
+        return f"{document_type}_{date_time_seq}.xml"
 
     def _cancel_voxel_jobs(self):
         # Remove not started jobs
