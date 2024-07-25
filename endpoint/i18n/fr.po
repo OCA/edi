@@ -32,13 +32,13 @@ msgid "All"
 msgstr ""
 
 #. module: endpoint
-#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
 #: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_search_view
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid "Archived"
 msgstr ""
 
 #. module: endpoint
-#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid "Auth"
 msgstr ""
 
@@ -49,12 +49,12 @@ msgid "Auth Type"
 msgstr ""
 
 #. module: endpoint
-#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid "Code"
 msgstr ""
 
 #. module: endpoint
-#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid "Code Help"
 msgstr ""
 
@@ -167,7 +167,7 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: endpoint
-#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid "Main"
 msgstr ""
 
@@ -200,14 +200,14 @@ msgid "Registry Sync"
 msgstr ""
 
 #. module: endpoint
-#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid ""
 "Registry out of sync. Likely the record has been modified but not sync'ed "
 "with the routing registry."
 msgstr ""
 
 #. module: endpoint
-#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid "Request"
 msgstr ""
 
@@ -252,7 +252,7 @@ msgid "To sync"
 msgstr ""
 
 #. module: endpoint
-#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_endpoint_form_view
+#: model_terms:ir.ui.view,arch_db:endpoint.endpoint_mixin_form_view
 msgid ""
 "Use the action \"Sync registry\" to make changes effective once you are done "
 "with edits and creates."
