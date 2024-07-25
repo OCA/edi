@@ -137,7 +137,7 @@ class PurchaseOrder(models.Model):
                 self.incoterm_id, xml_root, ns, version=version
             )
 
-        for oline in self.order_line:
+        for oline in self.order_line.filtered(lambda x: not x.display_type):
             # line_number as third arg comes from purchase.order.line id field
             # see https://github.com/OCA/edi/issues/300
             self._ubl_add_rfq_line(xml_root, oline, oline.id, ns, version=version)
@@ -167,7 +167,7 @@ class PurchaseOrder(models.Model):
             )
         self._ubl_add_monetary_total(xml_root, ns, version=version)
 
-        for oline in self.order_line:
+        for oline in self.order_line.filtered(lambda x: not x.display_type):
             # line_number as third arg comes from purchase.order.line id field
             # see https://github.com/OCA/edi/issues/300
             self._ubl_add_order_line(xml_root, oline, oline.id, ns, version=version)
