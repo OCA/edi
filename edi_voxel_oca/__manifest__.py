@@ -3,7 +3,7 @@
 {
     "name": "Voxel",
     "summary": "Base module for connecting with Voxel",
-    "version": "15.0.1.0.0",
+    "version": "17.0.1.0.0",
     "development_status": "Production/Stable",
     "category": "Hidden",
     "author": "Tecnativa, Odoo Community Association (OCA)",

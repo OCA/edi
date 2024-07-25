@@ -6,12 +6,12 @@
         <field name="name">res.partner.voxel.enabled</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
-        <field name="groups_id" eval="[(4, ref('group_voxel_manager'))]" />
         <field name="arch" type="xml">
             <group name="sale" position="inside">
                 <field
                     name="voxel_enabled"
-                    attrs="{'invisible': [('parent_id', '!=', False), ('is_company', '=', False)]}"
+                    invisible="parent_id and not is_company"
+                    groups="edi_voxel_oca.group_voxel_manager"
                 />
             </group>
         </field>

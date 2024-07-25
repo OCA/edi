@@ -6,10 +6,12 @@
         <field name="name">account.tax.form.inherit.voxel</field>
         <field name="model">account.tax</field>
         <field name="inherit_id" ref="account.view_tax_form" />
-        <field name="groups_id" eval="[(4, ref('group_voxel_manager'))]" />
         <field name="arch" type="xml">
             <field name="company_id" position="after">
-                <field name="voxel_tax_code" />
+                <field
+                    name="voxel_tax_code"
+                    groups="edi_voxel_oca.group_voxel_manager"
+                />
             </field>
         </field>
     </record>

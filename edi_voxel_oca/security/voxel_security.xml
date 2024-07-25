@@ -23,8 +23,6 @@
     <record id="voxel_login_multi_company_rule" model="ir.rule">
         <field name="name">Voxel login multi-company</field>
         <field name="model_id" ref="edi_voxel_oca.model_voxel_login" />
-        <field
-            name="domain_force"
-        >['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
     </record>
 </odoo>

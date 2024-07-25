@@ -101,10 +101,14 @@ class VoxelMixin(models.AbstractModel):
         queue_obj = self.env["queue.job"].sudo()
         # Determine processed documents
         filenames = self._list_voxel_document_filenames("Outbox", company)
-        processed = sent_docs.filtered(lambda r: r.voxel_filename not in filenames)
+        processed = sent_docs.filtered(
+            lambda r, filenames=filenames: r.voxel_filename not in filenames
+        )
         # Determine documents with errors
         filenames = self._list_voxel_document_filenames("Error", company)
-        with_errors = processed.filtered(lambda r: r.voxel_filename in filenames)
+        with_errors = processed.filtered(
+            lambda r, filenames=filenames: r.voxel_filename in filenames
+        )
         doc_dict = {}
         for doc in with_errors:
             if doc.voxel_filename:
@@ -118,7 +122,10 @@ class VoxelMixin(models.AbstractModel):
                     # If not, create it
                     file_job = queue_obj.search(
                         [("channel", "=", "root.voxel_status")]
-                    ).filtered(lambda r: r.args == [filename, company])[:1]
+                    ).filtered(
+                        lambda r, filename=filename, company=company: r.args
+                        == [filename, company]
+                    )[:1]
                     if not file_job:
                         error_msg = (
                             document.with_context(company_id=company.id)
@@ -160,7 +167,10 @@ class VoxelMixin(models.AbstractModel):
             # If not, create it
             file_job = queue_job_obj.search(
                 [("channel", "=", "root.voxel_import")]
-            ).filtered(lambda r: r.args == [voxel_filename, company])[:1]
+            ).filtered(
+                lambda r, voxel_filename=voxel_filename, company=company: r.args
+                == [voxel_filename, company]
+            )[:1]
             if not file_job:
                 self.with_context(
                     company_id=company.id
