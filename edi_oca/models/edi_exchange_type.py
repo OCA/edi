@@ -184,6 +184,7 @@ class EDIExchangeType(models.Model):
         help="Handling of decoding errors on process "
              "(default is always 'Raise Error').",
     )
+    allow_empty_files_on_receive = fields.Boolean(string="Allow Empty Files")
 
     _sql_constraints = [
         (

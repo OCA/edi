@@ -50,6 +50,10 @@
                                 name="encoding_in_error_handler"
                                 attrs="{'invisible': [('direction', '=', 'output')]}"
                             />
+                            <field
+                                name="allow_empty_files_on_receive"
+                                attrs="{'invisible': [('direction', '=', 'output')]}"
+                            />
                         </group>
                     </group>
                     <field name="deprecated_rule_fields_still_used" invisible="1" />
