@@ -67,7 +67,7 @@ addon | version | maintainers | summary
 [pdf_helper](pdf_helper/) | 14.0.2.0.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Provides helpers to work w/ PDFs
 [product_import](product_import/) | 14.0.1.2.0 |  | Import product catalogues
 [product_import_ubl](product_import_ubl/) | 14.0.1.1.1 |  | Import UBL XML catalogue files
-[purchase_order_ubl](purchase_order_ubl/) | 14.0.1.1.1 |  | Embed UBL XML file inside the PDF purchase order
+[purchase_order_ubl](purchase_order_ubl/) | 14.0.1.2.0 |  | Embed UBL XML file inside the PDF purchase order
 [purchase_order_ubl_py3o](purchase_order_ubl_py3o/) | 14.0.1.1.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate UBL purchase orders with Py3o reporting engine
 [purchase_stock_ubl](purchase_stock_ubl/) | 14.0.1.0.0 |  | Glue module for Purchase Order UBL and Stock/Inventory
 [sale_order_customer_free_ref](sale_order_customer_free_ref/) | 14.0.1.0.1 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
