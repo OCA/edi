@@ -122,20 +122,20 @@ msgid "ACK exchange"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:305
 #, python-format
 msgid "ACK file is required for this exchange but not found."
 msgstr ""
 "Le fichier ACK est nécessaire pour cet échange mais n'a pas été trouvé."
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:306
 #, python-format
 msgid "ACK file received but contains errors."
 msgstr "Fichier ACK reçu mais contenant des erreurs."
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:304
 #, python-format
 msgid "ACK file received."
 msgstr "Fichier ACK reçu."
@@ -178,7 +178,7 @@ msgid "Action Needed"
 msgstr "Action nécessaire"
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:360
 #, python-format
 msgid "Action retry: state moved back to '%s'"
 msgstr ""
@@ -217,7 +217,12 @@ msgid "All"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__allow_empty_files_on_receive
+msgid "Allow Empty Files"
+msgstr ""
+
+#. module: edi_oca
+#: code:addons/edi_oca/models/edi_exchange_record.py:297
 #, python-format
 msgid "An error happened while sending. Please check exchange record info."
 msgstr ""
@@ -230,11 +235,8 @@ msgid "Apply to this model"
 msgstr ""
 
 #. module: edi_oca
-#: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_form
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_backend_view_search
-#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_rule_view_form
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_rule_view_search
-#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_form
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_search
 msgid "Archived"
 msgstr ""
@@ -269,13 +271,13 @@ msgid "Backend Type"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:283
 #, python-format
 msgid "Backend must match with exchange type's backend!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_type.py:0
+#: code:addons/edi_oca/models/edi_exchange_type.py:240
 #, python-format
 msgid "Backend should respect backend type!"
 msgstr ""
@@ -287,12 +289,12 @@ msgid "Backend type"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.constraint,message:edi_oca.constraint_edi_backend_type_uniq_code
+#: sql_constraint:edi.backend.type:0
 msgid "Backend type code must be unique!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:288
 #, python-format
 msgid "Backend type must match with exchange type's backend type!"
 msgstr ""
@@ -313,6 +315,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_backend__backend_type_code
 #: model:ir.model.fields,field_description:edi_oca.field_edi_backend_type__code
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__code
 msgid "Code"
@@ -364,13 +367,18 @@ msgid "Created today"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_type_rule__kind__custom
+#: selection:edi.exchange.type.rule,kind:0
 msgid "Custom"
 msgstr ""
 
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_form
 msgid "DEPRECATED Model rules"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__encoding_in_error_handler
+msgid "Decoding Error Handler"
 msgstr ""
 
 #. module: edi_oca
@@ -434,6 +442,7 @@ msgstr ""
 #. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_tree
 msgid "EDI Exchange Record"
 msgstr ""
 
@@ -510,6 +519,12 @@ msgid "Edi Has Form Config"
 msgstr ""
 
 #. module: edi_oca
+#: code:addons/edi_oca/models/edi_backend.py:296
+#, python-format
+msgid "Empty files are not allowed for this exchange type"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__enable_domain
 msgid "Enable Domain"
 msgstr ""
@@ -535,22 +550,39 @@ msgid "Enabled for partners"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__encoding
+msgid "Encoding"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__encoding_out_error_handler
+msgid "Encoding Error Handler"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__encoding
+msgid ""
+"Encoding to be applied to generate/process the exchanged file.\n"
+"Example: UTF-8, Windows-1252, ASCII...(default is always 'UTF-8')"
+msgstr ""
+
+#. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
 msgid "Error"
 msgstr "Erreur"
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__input_processed_error
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Error on process"
 msgstr "Erreur de traitement"
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__input_receive_error
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Error on reception"
 msgstr "Erreur de réception"
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__validate_error
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Error on validation"
 msgstr "Erreur lors de la validation"
 
@@ -600,7 +632,7 @@ msgid "Exchange Type"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:295
 #, python-format
 msgid "Exchange data generated"
 msgstr ""
@@ -616,56 +648,56 @@ msgid "Exchange error"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:303
 #, python-format
 msgid "Exchange not received"
 msgstr "Échange non reçu"
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:307
 #, python-format
 msgid "Exchange not valid"
 msgstr "Échange non valide"
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:300
 #, python-format
 msgid "Exchange processed successfully"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:301
 #, python-format
 msgid "Exchange processed with errors"
 msgstr "Échange traité avec des erreurs"
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:302
 #, python-format
 msgid "Exchange received successfully"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
+#: code:addons/edi_oca/models/edi_backend.py:281
 #, python-format
 msgid "Exchange record ID=%d already has a file to process!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
+#: code:addons/edi_oca/models/edi_backend.py:273
 #, python-format
 msgid "Exchange record ID=%d is not an outgoing record, cannot be generated"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
+#: code:addons/edi_oca/models/edi_backend.py:265
 #, python-format
 msgid ""
 "Exchange record ID=%d is not in draft state and has already an output value."
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:296
 #, python-format
 msgid "Exchange sent"
 msgstr "Échange envoyé"
@@ -676,7 +708,7 @@ msgid "Exchange state"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_record.py:0
+#: code:addons/edi_oca/models/edi_exchange_record.py:160
 #, python-format
 msgid "Exchange state must respect direction!"
 msgstr ""
@@ -772,24 +804,12 @@ msgid "Followers (Partners)"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__exchange_filename_pattern
-msgid ""
-"For output exchange types this should be a formatting string with the "
-"following variables available (to be used between brackets, `{}`): "
-"`exchange_record`, `record_name`, `type` and `dt`. For instance, a valid "
-"string would be {record_name}-{type.code}-{dt}\n"
-"For input exchange types related to storage backends it should be a regex "
-"expression to filter the files to be fetched from the pending directory in "
-"the related storage. E.g: `.*my-type-[0-9]*.\\.csv`"
-msgstr ""
-
-#. module: edi_oca
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_rule_view_form
 msgid "Form"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_type_rule__kind__form_btn
+#: selection:edi.exchange.type.rule,kind:0
 msgid "Form button"
 msgstr ""
 
@@ -822,6 +842,18 @@ msgid "Group By"
 msgstr "Grouper par"
 
 #. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__encoding_in_error_handler
+msgid ""
+"Handling of decoding errors on process (default is always 'Raise Error')."
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_type__encoding_out_error_handler
+msgid ""
+"Handling of encoding errors on generate (default is always 'Raise Error')."
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_type_rule__form_btn_tooltip
 msgid "Help message visible as tooltip on button h-over"
 msgstr ""
@@ -851,8 +883,12 @@ msgid ""
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__message_needaction
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__message_unread
+msgid "If checked new messages require your attention."
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__message_needaction
 msgid "If checked, new messages require your attention."
 msgstr ""
 "Si cette case est cochée, de nouveaux messages requièrent votre attention."
@@ -863,6 +899,12 @@ msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: edi_oca
+#: selection:edi.exchange.type,encoding_in_error_handler:0
+#: selection:edi.exchange.type,encoding_out_error_handler:0
+msgid "Ignore"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.ui.menu,name:edi_oca.menu_edi_exchange_record_inbound
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_search
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_type_view_search
@@ -870,7 +912,7 @@ msgid "Inbound"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_type__direction__input
+#: selection:edi.exchange.type,direction:0
 msgid "Input"
 msgstr "Entrée"
 
@@ -976,7 +1018,7 @@ msgid "Name"
 msgstr "Nom"
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__new
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "New"
 msgstr "Nouveau"
 
@@ -987,8 +1029,8 @@ msgstr "Nombre d'actions"
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__message_has_error_counter
-msgid "Number of errors"
-msgstr "Nombre d'erreurs"
+msgid "Number of error"
+msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,help:edi_oca.field_edi_exchange_record__message_needaction_counter
@@ -1018,7 +1060,7 @@ msgid "Outbound"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_type__direction__output
+#: selection:edi.exchange.type,direction:0
 msgid "Output"
 msgstr "Sortie"
 
@@ -1044,7 +1086,7 @@ msgid "Pending"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__input_processed
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Processed"
 msgstr "Traité"
 
@@ -1054,7 +1096,13 @@ msgid "Quick execution"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__input_received
+#: selection:edi.exchange.type,encoding_in_error_handler:0
+#: selection:edi.exchange.type,encoding_out_error_handler:0
+msgid "Raise Error"
+msgstr ""
+
+#. module: edi_oca
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Received"
 msgstr "Reçu"
 
@@ -1070,31 +1118,37 @@ msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__res_id
-msgid "Record"
+msgid "Record ID"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
+#: code:addons/edi_oca/models/edi_backend.py:489
 #, python-format
 msgid "Record ID=%d has no file to process!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
+#: code:addons/edi_oca/models/edi_backend.py:380
 #, python-format
 msgid "Record ID=%d has no file to send!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
+#: code:addons/edi_oca/models/edi_backend.py:482
+#: code:addons/edi_oca/models/edi_backend.py:597
 #, python-format
 msgid "Record ID=%d is not meant to be processed"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:0
+#: code:addons/edi_oca/models/edi_backend.py:376
 #, python-format
 msgid "Record ID=%d is not meant to be sent!"
+msgstr ""
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
+msgid "Regenerate"
 msgstr ""
 
 #. module: edi_oca
@@ -1123,11 +1177,35 @@ msgid "Related records"
 msgstr ""
 
 #. module: edi_oca
+#: selection:edi.exchange.type,encoding_in_error_handler:0
+#: selection:edi.exchange.type,encoding_out_error_handler:0
+msgid "Replace Byte with Individual Surrogate Code"
+msgstr ""
+
+#. module: edi_oca
+#: selection:edi.exchange.type,encoding_in_error_handler:0
+#: selection:edi.exchange.type,encoding_out_error_handler:0
+msgid "Replace with Backslashed Escape Sequences"
+msgstr ""
+
+#. module: edi_oca
+#: selection:edi.exchange.type,encoding_in_error_handler:0
+#: selection:edi.exchange.type,encoding_out_error_handler:0
+msgid "Replace with Replacement Marker"
+msgstr ""
+
+#. module: edi_oca
+#: selection:edi.exchange.type,encoding_out_error_handler:0
+msgid "Replace with XML/HTML Numeric Character Reference"
+msgstr ""
+
+#. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record_create_wiz__res_id
 msgid "Res"
 msgstr ""
 
 #. module: edi_oca
+#: model:ir.actions.server,name:edi_oca.action_retry_edi_exchange_record
 #: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
 msgid "Retry"
 msgstr ""
@@ -1148,17 +1226,17 @@ msgid "Rules to handle exchanges and UI automatically"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_sent
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Sent"
 msgstr "Envoyé"
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_sent_and_error
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Sent and error"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_sent_and_processed
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Sent and processed"
 msgstr "Envoyé et traité"
 
@@ -1208,17 +1286,17 @@ msgid "Successful"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.constraint,message:edi_oca.constraint_edi_exchange_type_code_uniq
+#: sql_constraint:edi.exchange.type:0
 msgid "The code must be unique per backend"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.constraint,message:edi_oca.constraint_edi_exchange_record_external_identifier_uniq
+#: sql_constraint:edi.exchange.record:0
 msgid "The external_identifier must be unique for a type and a backend."
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.constraint,message:edi_oca.constraint_edi_exchange_record_identifier_uniq
+#: sql_constraint:edi.exchange.record:0
 msgid "The identifier must be unique."
 msgstr ""
 
@@ -1249,12 +1327,12 @@ msgid "Unread Messages Counter"
 msgstr "Compteur de messages non lus"
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__input_pending
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Waiting to be received"
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_pending
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "Waiting to be sent"
 msgstr ""
 
@@ -1310,9 +1388,12 @@ msgid ""
 msgstr ""
 
 #. module: edi_oca
-#: model:ir.model.fields.selection,name:edi_oca.selection__edi_exchange_record__edi_exchange_state__output_error_on_send
+#: selection:edi.exchange.record,edi_exchange_state:0
 msgid "error on send"
 msgstr ""
+
+#~ msgid "Number of errors"
+#~ msgstr "Nombre d'erreurs"
 
 #, python-format
 #~ msgid "Exchange received successfully "
