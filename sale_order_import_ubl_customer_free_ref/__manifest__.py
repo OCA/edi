@@ -1,6 +1,6 @@
 {
     "name": "Sale Order UBL Import Customer Free Ref",
-    "version": "13.0.1.0.1",
+    "version": "13.0.1.0.2",
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Extract CustomerReference from sale UBL",

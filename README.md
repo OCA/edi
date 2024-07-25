@@ -22,7 +22,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [account_e-invoice_generate](account_e-invoice_generate/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Technical module to generate PDF invoices with embedded XML file
-[account_invoice_export](account_invoice_export/) | 13.0.1.2.2 |  | Account Invoice Export
+[account_invoice_export](account_invoice_export/) | 13.0.1.2.3 |  | Account Invoice Export
 [account_invoice_export_server_env](account_invoice_export_server_env/) | 13.0.1.0.2 |  | Server environment for Account Invoice Export
 [account_invoice_facturx](account_invoice_facturx/) | 13.0.1.1.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X/ZUGFeRD customer invoices
 [account_invoice_facturx_py3o](account_invoice_facturx_py3o/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Generate Factur-X invoices with Py3o reporting engine
@@ -30,7 +30,7 @@ addon | version | maintainers | summary
 [account_invoice_ubl_email_attachment](account_invoice_ubl_email_attachment/) | 13.0.1.1.1 |  | Automatically adds the UBL file to the email.
 [account_invoice_ubl_peppol](account_invoice_ubl_peppol/) | 13.0.1.1.0 |  | Generate invoices in PEPPOL 3.0 BIS dialect
 [base_business_document_import](base_business_document_import/) | 13.0.2.1.1 |  | Provides technical tools to import sale orders or supplier invoices
-[base_ebill_payment_contract](base_ebill_payment_contract/) | 13.0.1.0.0 |  | Base for managing e-billing contracts
+[base_ebill_payment_contract](base_ebill_payment_contract/) | 13.0.1.0.1 |  | Base for managing e-billing contracts
 [base_edi](base_edi/) | 13.0.1.0.3 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 13.0.1.0.0 | [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Base module for Factur-X/ZUGFeRD
 [base_ubl](base_ubl/) | 13.0.2.5.1 |  | Base module for Universal Business Language (UBL)
@@ -55,10 +55,10 @@ addon | version | maintainers | summary
 [partner_identification_import](partner_identification_import/) | 13.0.2.0.1 |  | Provides partner matching on extra ID
 [purchase_order_ubl](purchase_order_ubl/) | 13.0.1.2.1 |  | Embed UBL XML file inside the PDF purchase order
 [purchase_stock_ubl](purchase_stock_ubl/) | 13.0.1.1.1 |  | Glue module for Purchase Order UBL and Stock/Inventory
-[sale_order_customer_free_ref](sale_order_customer_free_ref/) | 13.0.1.0.1 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
+[sale_order_customer_free_ref](sale_order_customer_free_ref/) | 13.0.1.0.2 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
 [sale_order_import](sale_order_import/) | 13.0.2.1.2 |  | Import RFQ or sale orders from files
 [sale_order_import_ubl](sale_order_import_ubl/) | 13.0.2.2.0 |  | Import UBL XML sale order files
-[sale_order_import_ubl_customer_free_ref](sale_order_import_ubl_customer_free_ref/) | 13.0.1.0.1 |  | Extract CustomerReference from sale UBL
+[sale_order_import_ubl_customer_free_ref](sale_order_import_ubl_customer_free_ref/) | 13.0.1.0.2 |  | Extract CustomerReference from sale UBL
 [sale_order_import_ubl_http](sale_order_import_ubl_http/) | 13.0.1.1.3 |  | Add an HTTP endpoint to import UBL formatted ordersautomatically as sales order
 [sale_order_ubl](sale_order_ubl/) | 13.0.1.1.0 |  | Embed UBL XML file inside the PDF quotation
 [webservice](webservice/) | 13.0.1.0.2 |  | Defines webservice abstract definition to be used generally
