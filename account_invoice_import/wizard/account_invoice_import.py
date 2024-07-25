@@ -164,8 +164,9 @@ class AccountInvoiceImport(models.TransientModel):
         #           },
         #       'name': 'Gelierzucker Extra 250g',
         #       'price_unit': 1.45, # price_unit without taxes
+        #       'discount': 10.0,  # for 10% discount
         #       'qty': 2.0,
-        #       'price_subtotal': 2.90,  # not required, but needed
+        #       'price_subtotal': 2.61,  # not required, but needed
         #               to be able to generate adjustment lines when decimal
         #               precision is not high enough in Odoo
         #       'uom': {'unece_code': 'C62'},
@@ -424,6 +425,7 @@ class AccountInvoiceImport(models.TransientModel):
                     {
                         "quantity": line["qty"],
                         "price_unit": line["price_unit"],  # TODO fix for tax incl
+                        "discount": line.get("discount", 0),
                     }
                 )
             if start_end_dates_installed:
@@ -540,6 +542,7 @@ class AccountInvoiceImport(models.TransientModel):
         if not parsed_inv.get("currency_rounding"):
             self.get_precision_rounding_from_currency_helper(parsed_inv)
         prec_pp = self.env["decimal.precision"].precision_get("Product Price")
+        prec_disc = self.env["decimal.precision"].precision_get("Discount")
         prec_uom = self.env["decimal.precision"].precision_get(
             "Product Unit of Measure"
         )
@@ -582,6 +585,9 @@ class AccountInvoiceImport(models.TransientModel):
             line["qty"] = float_round(line["qty"], precision_digits=prec_uom)
             line["price_unit"] = float_round(
                 line["price_unit"], precision_digits=prec_pp
+            )
+            line["discount"] = float_round(
+                line.get("discount", 0), precision_digits=prec_disc
             )
         parsed_inv_for_log = dict(parsed_inv)
         if "attachments" in parsed_inv_for_log:
