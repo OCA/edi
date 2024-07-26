@@ -5,7 +5,7 @@
 
     <record model="ir.ui.view" id="edi_endpoint_form_view">
         <field name="model">edi.endpoint</field>
-        <field name="inherit_id" ref="endpoint.endpoint_endpoint_form_view" />
+        <field name="inherit_id" ref="endpoint.endpoint_mixin_form_view" />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('alert')]" position="before">
