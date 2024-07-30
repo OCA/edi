@@ -20,10 +20,11 @@
         <field name="arch" type="xml">
             <div name="invoice_import_configs" position="replace" />
             <page name="accounting" position="after">
-                    <page
+                <page
                     name="invoice_import_simple_pdf"
                     string="Vendor Bill Import"
                     attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
+                    groups="account.group_account_invoice,account.group_account_readonly"
                 >
                     <div name="invoice_import_configs" colspan="2">
                     <button

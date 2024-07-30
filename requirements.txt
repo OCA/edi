@@ -1,12 +1,10 @@
 # generated from manifests external_dependencies
+dateparser
 dotty-dict
 factur-x
 phonenumbers
 pydifact
-pytz
-xmltodict
-dateparser
-pdfplumber
-dateparser
 pypdf>=3.1.0
+pytz
 regex
+xmltodict
