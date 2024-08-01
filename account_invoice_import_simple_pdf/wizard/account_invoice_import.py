@@ -71,16 +71,19 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _simple_pdf_text_extraction_pypdf(self, fileobj, test_info):
         res = False
-        reader = pypdf.PdfReader(fileobj.name)
-        pages = []
-        for pdf_page in reader.pages:
-            pages.append(pdf_page.extract_text())
-            res = {
-                "all": "\n\n".join(pages),
-                "first": pages and pages[0] or "",
-            }
-        test_info["text_extraction"] = "pypdf %s" % pypdf.__version__
-        logger.info("Text extraction made with pypdf %s", pypdf.__version__)
+        try:
+            reader = pypdf.PdfReader(fileobj.name)
+            pages = []
+            for pdf_page in reader.pages:
+                pages.append(pdf_page.extract_text())
+                res = {
+                    "all": "\n\n".join(pages),
+                    "first": pages and pages[0] or "",
+                }
+            test_info["text_extraction"] = "pypdf %s" % pypdf.__version__
+            logger.info("Text extraction made with pypdf %s", pypdf.__version__)
+        except Exception as e:
+            logger.warning("Text extraction with pypdf failed. Error: %s", e)
         return res
 
     @api.model
@@ -184,6 +187,7 @@ class AccountInvoiceImport(models.TransientModel):
             "wb", prefix="odoo-simple-pdf-", suffix=".pdf"
         ) as fileobj:
             fileobj.write(file_data)
+            fileobj.seek(0)
             # Extract text from PDF
             # Very interesting reading:
             # https://dida.do/blog/how-to-extract-text-from-pdf
