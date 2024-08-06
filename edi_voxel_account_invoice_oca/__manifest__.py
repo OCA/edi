@@ -4,7 +4,7 @@
 {
     "name": "Voxel account invoice oca",
     "summary": "Sends account invoices to Voxel.",
-    "version": "15.0.1.0.2",
+    "version": "17.0.1.0.0",
     "development_status": "Production/Stable",
     "category": "Accounting & Finance",
     "author": "Tecnativa, Odoo Community Association (OCA)",
