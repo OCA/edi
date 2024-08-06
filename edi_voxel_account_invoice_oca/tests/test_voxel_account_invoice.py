@@ -9,7 +9,7 @@ from odoo.tests import TransactionCase
 class TestVoxelAccountInvoice(TransactionCase):
     @classmethod
     def setUpClass(cls):
-        super(TestVoxelAccountInvoice, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(
             context=dict(
                 cls.env.context,
@@ -62,7 +62,7 @@ class TestVoxelAccountInvoice(TransactionCase):
         )
         cls.env["product.customerinfo"].create(
             {
-                "name": partner.id,
+                "partner_id": partner.id,
                 "product_tmpl_id": product_1.product_tmpl_id.id,
                 "product_id": product_1.id,
                 "product_code": "1234567891234",
@@ -74,14 +74,15 @@ class TestVoxelAccountInvoice(TransactionCase):
         product_3 = product_obj.create(
             {"default_code": "DC_003", "name": "Product 3 (test)"}
         )
-
+        tax_group_15 = cls.env["account.tax.group"].create({"name": "Tax 15%"})
+        tax_group_30 = cls.env["account.tax.group"].create({"name": "Tax 30%"})
         tax_15 = cls.env["account.tax"].create(
             {
                 "name": "Tax 15%",
                 "type_tax_use": "sale",
                 "amount_type": "percent",
                 "amount": 15,
-                "tax_group_id": cls.env.ref("account.tax_group_taxes").id,
+                "tax_group_id": tax_group_15.id,
             }
         )
         tax_30 = cls.env["account.tax"].create(
@@ -90,13 +91,14 @@ class TestVoxelAccountInvoice(TransactionCase):
                 "type_tax_use": "sale",
                 "amount_type": "percent",
                 "amount": 30,
-                "tax_group_id": cls.env.ref("account.tax_group_taxes").id,
+                "tax_group_id": tax_group_30.id,
             }
         )
         # Invoice
         cls.invoice = cls.env["account.move"].create(
             {
                 "partner_id": partner.id,
+                "partner_shipping_id": False,
                 "move_type": "out_invoice",
                 "currency_id": cls.main_company.currency_id.id,
                 "invoice_date": date(2019, 4, 13),
@@ -109,6 +111,7 @@ class TestVoxelAccountInvoice(TransactionCase):
                             "product_id": product_1.id,
                             "quantity": 2,
                             "price_unit": 750,
+                            "tax_ids": False,
                             "name": "Product 1",
                             "product_uom_id": cls.env.ref("uom.product_uom_unit").id,
                         },
@@ -133,6 +136,7 @@ class TestVoxelAccountInvoice(TransactionCase):
                             "product_id": product_3.id,
                             "quantity": 0,
                             "price_unit": 0,
+                            "tax_ids": False,
                             "name": "Product 3",
                             "product_uom_id": product_3.uom_id.id,
                         },
@@ -166,6 +170,7 @@ class TestVoxelAccountInvoice(TransactionCase):
         # Get expected data
         expected_report_data = self._get_invoice_data()
         # Check data
+        self.maxDiff = None
         self.assertDictEqual(report_data, expected_report_data)
 
     def _get_invoice_data(self):
