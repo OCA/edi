@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="voxel_login_form_view" model="ir.ui.view">
+        <field name="name">voxel.login.view.form</field>
+        <field name="model">voxel.login</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet groups="edi_voxel_oca.group_voxel_manager">
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="url" />
+                        </group>
+                        <group>
+                            <field name="user" />
+                            <field name="password" password="True" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="product_uom_form_view" model="ir.ui.view">
+        <field name="name">uom.uom.form.inherit</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="voxel_code" groups="edi_voxel_oca.group_voxel_manager" />
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 Tecnativa - Ernesto Tejeda
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.voxel</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='companies']" position="after">
+                <div id="voxel">
+                <block name="voxel" title="Voxel">
+                    <setting title="Voxel">
+                        <span class="o_form_label">Send mode</span>
+                        <span
+                                class="fa fa-lg fa-building-o"
+                                title="Values set here are company-specific."
+                                groups="base.group_multi_company"
+                            />
+                        <div class="text-muted">
+                                Choose the send mode for documents to Voxel
+                        </div>
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label
+                                        for="voxel_send_mode"
+                                        string="Mode"
+                                        class="col-xs-3 col-md-3 o_light_label"
+                                    />
+                                <field name="voxel_send_mode" class="oe_inline" />
+                            </div>
+                            <div
+                                    class="row mt16"
+                                    invisible="voxel_send_mode != 'fixed'"
+                                >
+                                <label
+                                        for="voxel_sent_time"
+                                        class="col-xs-3 col-md-3 o_light_label"
+                                    />
+                                <field
+                                        name='voxel_sent_time'
+                                        widget='float_time'
+                                        class="oe_inline"
+                                    />
+                            </div>
+                            <div
+                                    class="row mt16"
+                                    invisible="voxel_send_mode != 'delayed'"
+                                >
+                                <label
+                                        for="voxel_delay_time"
+                                        class="col-xs-3 col-md-3 o_light_label"
+                                    />
+                                <field
+                                        name='voxel_delay_time'
+                                        widget='float_time'
+                                        class="oe_inline"
+                                    />
+                            </div>
+                        </div>
+
+                    </setting>
+                    <setting>
+                        <span class="o_form_label">Web Sevice credentials</span>
+                        <span
+                                class="fa fa-lg fa-building-o"
+                                title="Values set here are company-specific."
+                                groups="base.group_multi_company"
+                            />
+                        <div class="text-muted">
+                                Set credentials for connection to Voxel using Web Service
+                        </div>
+                        <div class="content-group" name="voxel_login_config" />
+                    </setting>
+                </block>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2019 Tecnativa - Ernesto tejeda
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <record id="uom.product_uom_unit" model="uom.uom">
+        <field name="voxel_code">Unidades</field>
+    </record>
+    <record id="uom.product_uom_kgm" model="uom.uom">
+        <field name="voxel_code">Kgs</field>
+    </record>
+    <record id="uom.product_uom_hour" model="uom.uom">
+        <field name="voxel_code">Horas</field>
+    </record>
+    <record id="uom.product_uom_meter" model="uom.uom">
+        <field name="voxel_code">Metros</field>
+    </record>
+    <record id="uom.product_uom_litre" model="uom.uom">
+        <field name="voxel_code">Lts</field>
+    </record>
+    <record id="uom.product_uom_lb" model="uom.uom">
+        <field name="voxel_code">Lbs</field>
+    </record>
+</odoo>
