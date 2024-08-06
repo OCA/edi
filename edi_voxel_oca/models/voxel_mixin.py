@@ -295,12 +295,12 @@ class VoxelMixin(models.AbstractModel):
             ("product_id", "=", False),
         ]
         customerinfo = self.env["product.customerinfo"].search(
-            [("name", "=", partner.id)] + domain,
+            [("partner_id", "=", partner.id)] + domain,
             order="product_id, sequence",
         )
         if not customerinfo:
             customerinfo = self.env["product.customerinfo"].search(
-                [("name", "=", partner.commercial_partner_id.id)] + domain,
+                [("partner_id", "=", partner.commercial_partner_id.id)] + domain,
                 order="product_id, sequence",
             )
         return customerinfo[:1].product_code
