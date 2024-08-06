@@ -132,27 +132,19 @@ msgstr "(RE) Recargo de equivalencia"
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
 msgid ""
 "<span class=\"o_form_label\">Send mode</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
+"                        <span class=\"fa fa-lg fa-building-o\" "
+"title=\"Values set here are company-specific.\" groups=\"base."
+"group_multi_company\"/>"
 msgstr ""
-"<span class=\"o_form_label\">Enviar modo</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
 msgid ""
 "<span class=\"o_form_label\">Web Sevice credentials</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
+"                        <span class=\"fa fa-lg fa-building-o\" "
+"title=\"Values set here are company-specific.\" groups=\"base."
+"group_multi_company\"/>"
 msgstr ""
-"<span class=\"o_form_label\">Credenciales del Servicio web</span>\n"
-"                            <span class=\"fa fa-lg fa-building-o\" title="
-"\"Values set here are company-specific.\" groups=\"base.group_multi_company"
-"\"/>"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__res_company__voxel_send_mode__fixed
@@ -165,9 +157,6 @@ msgid "Boxes"
 msgstr "Cajas"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__cancelled
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__cancelled
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__cancelled
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__cancelled
 msgid "Cancelled"
 msgstr "Cancelado"
@@ -256,11 +245,6 @@ msgid "Kgs"
 msgstr "Kgs"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login____last_update
-msgid "Last Modified on"
-msgstr "Última modificación en"
-
-#. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización de"
@@ -301,9 +285,6 @@ msgid "Name"
 msgstr "Nombre"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__not_sent
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__not_sent
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__not_sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__not_sent
 msgid "Not sent"
 msgstr "No enviado"
@@ -339,9 +320,6 @@ msgid "Processing Error"
 msgstr "Error de procesamiento"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__processing_error
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__processing_error
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__processing_error
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__processing_error
 msgid "Processing error"
 msgstr "Error de procesamiento"
@@ -363,25 +341,16 @@ msgid "Send mode"
 msgstr "Modo de envío"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__sent_errors
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__sent_errors
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__sent_errors
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent_errors
 msgid "Sending error"
 msgstr "Error de envío"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__accepted
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__accepted
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__accepted
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__accepted
 msgid "Sent and accepted"
 msgstr "Enviado y aceptado"
 
 #. module: edi_voxel_oca
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__sent
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__sale_order__voxel_state__sent
-#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__stock_picking__voxel_state__sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent
 msgid "Sent not verified"
 msgstr "Enviado sin verificar"
@@ -409,6 +378,7 @@ msgid "Tax"
 msgstr "Impuesto"
 
 #. module: edi_voxel_oca
+#. odoo-python
 #: code:addons/edi_voxel_oca/models/voxel_mixin.py:0
 #, python-format
 msgid ""
@@ -488,6 +458,31 @@ msgstr "Con retardo"
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_xml_report
 msgid "XML Report"
 msgstr "Reporte XML"
+
+#~ msgid ""
+#~ "<span class=\"o_form_label\">Send mode</span>\n"
+#~ "                            <span class=\"fa fa-lg fa-building-o\" "
+#~ "title=\"Values set here are company-specific.\" groups=\"base."
+#~ "group_multi_company\"/>"
+#~ msgstr ""
+#~ "<span class=\"o_form_label\">Enviar modo</span>\n"
+#~ "                            <span class=\"fa fa-lg fa-building-o\" "
+#~ "title=\"Values set here are company-specific.\" groups=\"base."
+#~ "group_multi_company\"/>"
+
+#~ msgid ""
+#~ "<span class=\"o_form_label\">Web Sevice credentials</span>\n"
+#~ "                            <span class=\"fa fa-lg fa-building-o\" "
+#~ "title=\"Values set here are company-specific.\" groups=\"base."
+#~ "group_multi_company\"/>"
+#~ msgstr ""
+#~ "<span class=\"o_form_label\">Credenciales del Servicio web</span>\n"
+#~ "                            <span class=\"fa fa-lg fa-building-o\" "
+#~ "title=\"Values set here are company-specific.\" groups=\"base."
+#~ "group_multi_company\"/>"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Última modificación en"
 
 #~ msgid "Voxel filename"
 #~ msgstr "Fichero Voxel"
