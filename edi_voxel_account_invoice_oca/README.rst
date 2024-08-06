@@ -17,19 +17,19 @@ Voxel account invoice oca
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/15.0/edi_voxel_account_invoice_oca
+    :target: https://github.com/OCA/edi/tree/17.0/edi_voxel_account_invoice_oca
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-15-0/edi-15-0-edi_voxel_account_invoice_oca
+    :target: https://translation.odoo-community.org/projects/edi-17-0/edi-17-0-edi_voxel_account_invoice_oca
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=15.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=17.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module allows you to send invoices to Voxel. Sending are queued in jobs
-running in the background.
+This module allows you to send invoices to Voxel. Sending are queued in
+jobs running in the background.
 
 **Table of contents**
 
@@ -39,52 +39,53 @@ running in the background.
 Configuration
 =============
 
-To configure this module you have to belong to the access group
-'Voxel manager' under 'Technical Settings', then:
+To configure this module you have to belong to the access group 'Voxel
+manager' under 'Technical Settings', then:
 
-#. Open a customer form view. In 'Sales & Purchases' page,
-   check 'Enable Voxel' if you want to send invoices to this
-   customer through Voxel.
-#. Go to *Settings > Users & Companies > Companies*, open the companies you
-   want to enable Voxel communication and set 'Enable Voxel' field to True.
-#. In the login list, add the corresponding login for connecting with
-   Voxel to send the invoices. The final URL where the invoices are going
-   to be sent is '<Login URL>/Outbox'.
-#. Save the form and edit it again, find 'invoice login' field and select
-   the login to be used in the invoice sending.
-#. Select also the 'Send mode' to set when the Invoice will be sent:
+1. Open a customer form view. In 'Sales & Purchases' page, check 'Enable
+   Voxel' if you want to send invoices to this customer through Voxel.
+2. Go to *Settings > Users & Companies > Companies*, open the companies
+   you want to enable Voxel communication and set 'Enable Voxel' field
+   to True.
+3. In the login list, add the corresponding login for connecting with
+   Voxel to send the invoices. The final URL where the invoices are
+   going to be sent is '<Login URL>/Outbox'.
+4. Save the form and edit it again, find 'invoice login' field and
+   select the login to be used in the invoice sending.
+5. Select also the 'Send mode' to set when the Invoice will be sent:
 
-  * On validate: The invoice will be sent to Voxel automatically when
-    the invoice is validated.
-  * At fixed time: The invoice will be sent to Voxel automatically at
-    a fixed time.
-  * With delay: The invoice will be sent to Voxel automatically a certain
-    time after the invoice is validated.
+..
+
+   -  On validate: The invoice will be sent to Voxel automatically when
+      the invoice is validated.
+   -  At fixed time: The invoice will be sent to Voxel automatically at
+      a fixed time.
+   -  With delay: The invoice will be sent to Voxel automatically a
+      certain time after the invoice is validated.
 
 Note:
 
-This module enqueue the sending invoices to Voxel in jobs in the background.
-To do that it uses queue_job module, so a configuration is required
-according to that.
-The jobs for sending invoices to Voxel are queued in the channel
-``root.voxel_export channel``.
-The sending status check jobs are queued in the channel
-``root.voxel_status``.
+This module enqueue the sending invoices to Voxel in jobs in the
+background. To do that it uses queue_job module, so a configuration is
+required according to that. The jobs for sending invoices to Voxel are
+queued in the channel ``root.voxel_export channel``. The sending status
+check jobs are queued in the channel ``root.voxel_status``.
 
 Usage
 =====
 
 To use this module, you need to:
 
-#. Go to *Invoicing > Customers > Invoices* and create a
-   new Invoice or open an existing draft invoice. Make sure that the customer
-   has 'Enable Voxel' field checkbox (See configuration section).
-#. Validate the invoice and it will be send to Voxel immediately or later,
-   depending on the Voxel 'Send mode' chosen in the company configuration.
-#. A new tab will be visible on the invoice form with the label 'Voxel'
+1. Go to *Invoicing > Customers > Invoices* and create a new Invoice or
+   open an existing draft invoice. Make sure that the customer has
+   'Enable Voxel' field checkbox (See configuration section).
+2. Validate the invoice and it will be send to Voxel immediately or
+   later, depending on the Voxel 'Send mode' chosen in the company
+   configuration.
+3. A new tab will be visible on the invoice form with the label 'Voxel'
    to show the information regarding sending the invoice to Voxel.
-#. When the report is sent, you will be able to see the XML report in another
-   tab next to the jobs tab.
+4. When the report is sent, you will be able to see the XML report in
+   another tab next to the jobs tab.
 
 Bug Tracker
 ===========
@@ -92,7 +93,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20edi_voxel_account_invoice_oca%0Aversion:%2015.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20edi_voxel_account_invoice_oca%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -100,21 +101,21 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Tecnativa
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* `Tecnativa <https://www.tecnativa.com>`_:
+-  `Tecnativa <https://www.tecnativa.com>`__:
 
-  * Ernesto Tejeda
-  * Pedro M. Baeza
-  * Sergio Teruel
+   -  Ernesto Tejeda
+   -  Pedro M. Baeza
+   -  Sergio Teruel
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -126,6 +127,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/15.0/edi_voxel_account_invoice_oca>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/17.0/edi_voxel_account_invoice_oca>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
