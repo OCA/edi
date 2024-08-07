@@ -6,33 +6,35 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2024-08-07 11:58+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__exento
 msgid "(EXENTO) Exento"
-msgstr ""
+msgstr "(EXENTO) Exento"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__iba
 msgid "(IBA) Impuesto sobre bebidas alcohólicas"
-msgstr ""
+msgstr "(IBA) Imposta sulle bevande alcoliche"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__icio
 msgid "(ICIO) Impuesto sobre las construcciones, instalaciones y obras"
-msgstr ""
+msgstr "(ICIL) Imposta sulle costruzioni, impianti e lavori"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__ie
 msgid "(IE) Impuestos especiales"
-msgstr ""
+msgstr "(IS) Imposte speciali"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__iecdpcac
@@ -40,11 +42,13 @@ msgid ""
 "(IECDPCAC) Impuesto especial sobre los combustibles derivados del petróleo "
 "en la comunidad Autónoma Canaria"
 msgstr ""
+"(IECDPCAC) Tassa speciale sui carburanti derivati dal petrolio nella "
+"Comunità Autonoma delle Isole Canarie"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__igic
 msgid "(IGIC) IGIC"
-msgstr ""
+msgstr "(IGIC) IGIC"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__igtecm
@@ -52,11 +56,13 @@ msgid ""
 "(IGTECM) Impuesto general sobre el tráfico de empresas que se aplica en "
 "Ceuta y Melilla"
 msgstr ""
+"(IGTECM) Tassa generale sul traffico d'affari che si applica a Ceuta e "
+"Melilla"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__ihc
 msgid "(IHC) Impuesto sobre harinas cárnicas"
-msgstr ""
+msgstr "(IHC) Tassa sulla farina di carne"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__iiimab
@@ -64,58 +70,59 @@ msgid ""
 "(IIIMAB) Impuesto sobre las instalaciones que inciden sobre le medio "
 "ambiente en las Baleares"
 msgstr ""
+"(IIIMAB) Tassa sugli impianti che incidono sull'ambiente nelle Isole Baleari"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__imgsn
 msgid "(IMGSN) Impuesto municipal sobre gastos suntuarios en Navarra"
-msgstr ""
+msgstr "(IMGSN) Imposta comunale sulle spese di lusso in Navarra"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__impn
 msgid "(IMPN) Impuesto municipal sobre publicidad en Navarra"
-msgstr ""
+msgstr "(IMPN) Imposta comunale sulla pubblicità in Navarra"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__imsn
 msgid "(IMSN) Impuesto municipal sobre solares en Navarra"
-msgstr ""
+msgstr "(IMSN) Imposta comunale sui terreni in Navarra"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__imvdn
 msgid "(IMVDN) Impuesto municipal sobre las viviendas desocupadas en Navarra"
-msgstr ""
+msgstr "(IMVDN) Imposta comunale sulle case non occupate in Navarra"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__irpf
 msgid "(IRPF) IRPF"
-msgstr ""
+msgstr "(IRPF) IRPF"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__itpajd
 msgid ""
 "(ITPAJD) Impuesto sobre transmisiones patrimoniales y actos jurídicos "
 "documentados"
-msgstr ""
+msgstr "(ITPAJD) Imposta sui trasferimenti e imposta di bollo"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__iva
 msgid "(IVA) IVA"
-msgstr ""
+msgstr "(IVA) IVA"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__otro
 msgid "(OTRO) Otro"
-msgstr ""
+msgstr "(OTRO) Altro"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__ra
 msgid "(RA) Renta aduanas"
-msgstr ""
+msgstr "(RA) Entrate doganali"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_tax__voxel_tax_code__re
 msgid "(RE) Recargo de equivalencia"
-msgstr ""
+msgstr "(RE) Supplemento di equivalenza"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
@@ -123,6 +130,10 @@ msgid ""
 "<span class=\"o_form_label\">Send mode</span>\n"
 "                        <span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
 msgstr ""
+"<span class=\"o_form_label\">Modalità invio</span>\n"
+"                        <span class=\"fa fa-lg fa-building-o\" title=\"I "
+"valori impostati qui sono specifici per azienda.\" groups=\"base."
+"group_multi_company\"/>"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
@@ -130,236 +141,241 @@ msgid ""
 "<span class=\"o_form_label\">Web Sevice credentials</span>\n"
 "                        <span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-specific.\" groups=\"base.group_multi_company\"/>"
 msgstr ""
+"<span class=\"o_form_label\">Credenziali servizio web</span>\n"
+"                        <span class=\"fa fa-lg fa-building-o\" title=\"I "
+"valori impostati qui sono specifici per azienda.\" groups=\"base."
+"group_multi_company\"/>"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__res_company__voxel_send_mode__fixed
 msgid "At fixed time"
-msgstr ""
+msgstr "Ad orario prefissato"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__cajas
 msgid "Boxes"
-msgstr ""
+msgstr "Contenitori"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__cancelled
 msgid "Cancelled"
-msgstr ""
+msgstr "Annullata"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
 msgid "Choose the send mode for documents to Voxel"
-msgstr ""
+msgstr "Scegliere la modalità di invio per i documenti a Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Aziende"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__company_id
 msgid "Company"
-msgstr ""
+msgstr "Azienda"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Impostazioni configurazione"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.view_company_form
 msgid "Configuration"
-msgstr ""
+msgstr "Configurazione"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Contatto"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__contenedores
 msgid "Containers"
-msgstr ""
+msgstr "Contenitori"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creato da"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creato il"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__voxel_delay_time
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings__voxel_delay_time
 msgid "Delay time"
-msgstr ""
+msgstr "Tempo ritardo"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nome visualizzato"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__voxel_enabled
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_partner__voxel_enabled
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_users__voxel_enabled
 msgid "Enable Voxel"
-msgstr ""
+msgstr "Abilita Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__horas
 msgid "Hours"
-msgstr ""
+msgstr "Ore"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,help:edi_voxel_oca.field_voxel_mixin__voxel_state
 msgid "Indicates the status of sending report to Voxel"
-msgstr ""
+msgstr "India lo stato dell'invio resoconto a Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__kgs
 msgid "Kgs"
-msgstr ""
+msgstr "Kg"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultimo aggiornamento di"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultimo aggiornamento il"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__lbs
 msgid "Lbs"
-msgstr ""
+msgstr "Lb"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__lts
 msgid "Liters"
-msgstr ""
+msgstr "Litri"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.view_company_form
 msgid "Logins"
-msgstr ""
+msgstr "Accessi"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__metros
 msgid "Meters"
-msgstr ""
+msgstr "Metri"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
 msgid "Mode"
-msgstr ""
+msgstr "Modalità"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__name
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__not_sent
 msgid "Not sent"
-msgstr ""
+msgstr "Non inviato"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__res_company__voxel_send_mode__auto
 msgid "On validate"
-msgstr ""
+msgstr "Alla validazione"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__otros
 msgid "Others"
-msgstr ""
+msgstr "Altri"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__bultos
 msgid "Packages"
-msgstr ""
+msgstr "Colli"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__palets
 msgid "Pallets"
-msgstr ""
+msgstr "Pallet"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__password
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__processing_error
 msgid "Processing Error"
-msgstr ""
+msgstr "Errore elaborazione"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__processing_error
 msgid "Processing error"
-msgstr ""
+msgstr "Errore elaborazione"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_uom_uom
 msgid "Product Unit of Measure"
-msgstr ""
+msgstr "Unità di misura del prodotto"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_queue_job
 msgid "Queue Job"
-msgstr ""
+msgstr "Lavoro in coda"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__voxel_send_mode
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings__voxel_send_mode
 msgid "Send mode"
-msgstr ""
+msgstr "Modalità invio"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent_errors
 msgid "Sending error"
-msgstr ""
+msgstr "Errore invio"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__accepted
 msgid "Sent and accepted"
-msgstr ""
+msgstr "Inviato e accettato"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent
 msgid "Sent not verified"
-msgstr ""
+msgstr "Inviato non verificato"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__voxel_sent_time
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_config_settings__voxel_sent_time
 msgid "Sent time"
-msgstr ""
+msgstr "Ora invio"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
 msgid "Set credentials for connection to Voxel using Web Service"
 msgstr ""
+"Imposta le credenziali per la connessione a Voxel utilizzando il servizio web"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__metroscuadrados
 msgid "Square meters"
-msgstr ""
+msgstr "Metri quadri"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_account_tax
 msgid "Tax"
-msgstr ""
+msgstr "Imposta"
 
 #. module: edi_voxel_oca
 #. odoo-python
@@ -369,74 +385,76 @@ msgid ""
 "This operation cannot be performed because there are jobs running therefore "
 "cannot be unlinked."
 msgstr ""
+"Questa operazione non può essere eseguita perché ci sono dei lavori in corso "
+"che non possono essere scollegati."
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__url
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__uom_uom__voxel_code__unidades
 msgid "Units"
-msgstr ""
+msgstr "Unità"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_login__user
 msgid "User"
-msgstr ""
+msgstr "Utente"
 
 #. module: edi_voxel_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.res_config_settings_view_form
 #: model_terms:ir.ui.view,arch_db:edi_voxel_oca.view_company_form
 msgid "Voxel"
-msgstr ""
+msgstr "Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_uom_uom__voxel_code
 msgid "Voxel Code"
-msgstr ""
+msgstr "Codice Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_filename
 msgid "Voxel Filename"
-msgstr ""
+msgstr "Nome file Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_account_tax__voxel_tax_code
 msgid "Voxel Tax Code"
-msgstr ""
+msgstr "Codice imposta Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_voxel_login
 msgid "Voxel login"
-msgstr ""
+msgstr "Login Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_res_company__voxel_login_ids
 msgid "Voxel logins"
-msgstr ""
+msgstr "Accessi Voxel"
 
 #. module: edi_voxel_oca
 #: model:res.groups,name:edi_voxel_oca.group_voxel_manager
 msgid "Voxel manager"
-msgstr ""
+msgstr "Responsabile Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model,name:edi_voxel_oca.model_voxel_mixin
 msgid "Voxel mixin"
-msgstr ""
+msgstr "Mixin Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_state
 msgid "Voxel send state"
-msgstr ""
+msgstr "Stato invio Voxel"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__res_company__voxel_send_mode__delayed
 msgid "With delay"
-msgstr ""
+msgstr "Con ritardo"
 
 #. module: edi_voxel_oca
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_xml_report
 msgid "XML Report"
-msgstr ""
+msgstr "Resoconto XML"
