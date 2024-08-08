@@ -44,8 +44,6 @@ msgstr "Reporte de Factura para Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.actions.server,name:edi_voxel_account_invoice_oca.ir_cron_check_invoice_export_status_ir_actions_server
-#: model:ir.cron,cron_name:edi_voxel_account_invoice_oca.ir_cron_check_invoice_export_status
-#: model:ir.cron,name:edi_voxel_account_invoice_oca.ir_cron_check_invoice_export_status
 msgid "Edi Voxel: Update invoice export status"
 msgstr "Edi Voxel: Actualizar estado de la exportación de facturas"
 
