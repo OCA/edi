@@ -238,7 +238,11 @@ class EDIExchangeRecord(models.Model):
             rec_name = rec.identifier
             if rec.res_id and rec.model:
                 rec_name = rec.record.display_name
-            name = "[{}] {}".format(rec.type_id.name, rec_name)
+            name = (
+                "[{}] {}".format(rec.type_id.name, rec_name)
+                if rec._context.get("include_exchange_type_name", True)
+                else rec_name
+            )
             result.append((rec.id, name))
         return result
 

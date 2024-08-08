@@ -222,6 +222,15 @@ class EDIExchangeType(models.Model):
         ext = self.exchange_file_ext
         pattern = pattern + ".{ext}"
         dt = self._make_exchange_filename_datetime()
+        # Avoid duplicating type code in filename if not having related record
+        if (
+            "{type.code}" in pattern
+            and slugify(self.code) == slugify(self.name)
+            and (not exchange_record.res_id or not exchange_record.model)
+        ):
+            exchange_record = exchange_record.with_context(
+                include_exchange_type_name=False
+            )
         record_name = self._get_record_name(exchange_record)
         record = exchange_record
         if exchange_record.model and exchange_record.res_id:
