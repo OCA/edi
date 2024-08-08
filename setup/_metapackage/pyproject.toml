@@ -1,12 +1,13 @@
 [project]
 name = "odoo-addons-oca-edi"
-version = "17.0.20240806.0"
+version = "17.0.20240808.0"
 dependencies = [
     "odoo-addon-account_einvoice_generate>=17.0dev,<17.1dev",
     "odoo-addon-account_invoice_facturx>=17.0dev,<17.1dev",
     "odoo-addon-base_business_document_import>=17.0dev,<17.1dev",
     "odoo-addon-base_edi>=17.0dev,<17.1dev",
     "odoo-addon-base_facturx>=17.0dev,<17.1dev",
+    "odoo-addon-edi_voxel_account_invoice_oca>=17.0dev,<17.1dev",
     "odoo-addon-edi_voxel_oca>=17.0dev,<17.1dev",
     "odoo-addon-pdf_helper>=17.0dev,<17.1dev",
 ]
