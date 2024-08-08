@@ -157,6 +157,7 @@ msgid "Boxes"
 msgstr "Cajas"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__cancelled
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__cancelled
 msgid "Cancelled"
 msgstr "Cancelado"
@@ -285,6 +286,7 @@ msgid "Name"
 msgstr "Nombre"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__not_sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__not_sent
 msgid "Not sent"
 msgstr "No enviado"
@@ -320,6 +322,7 @@ msgid "Processing Error"
 msgstr "Error de procesamiento"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__processing_error
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__processing_error
 msgid "Processing error"
 msgstr "Error de procesamiento"
@@ -341,16 +344,19 @@ msgid "Send mode"
 msgstr "Modo de envío"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__sent_errors
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent_errors
 msgid "Sending error"
 msgstr "Error de envío"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__accepted
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__accepted
 msgid "Sent and accepted"
 msgstr "Enviado y aceptado"
 
 #. module: edi_voxel_oca
+#: model:ir.model.fields.selection,name:edi_voxel_oca.selection__account_move__voxel_state__sent
 #: model:ir.model.fields.selection,name:edi_voxel_oca.selection__voxel_mixin__voxel_state__sent
 msgid "Sent not verified"
 msgstr "Enviado sin verificar"
