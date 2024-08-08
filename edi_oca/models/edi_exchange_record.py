@@ -130,13 +130,12 @@ class EDIExchangeRecord(models.Model):
             related_record = rec.record
             rec.related_name = related_record.display_name if related_record else ""
 
-    @api.depends("model", "type_id")
+    @api.depends("model", "res_id", "type_id")
     def _compute_exchange_filename(self):
         for rec in self:
             if not rec.type_id:
                 continue
-            if not rec.exchange_filename:
-                rec.exchange_filename = rec.type_id._make_exchange_filename(rec)
+            rec.exchange_filename = rec.type_id._make_exchange_filename(rec)
 
     @api.depends("exchange_file")
     def _compute_exchange_filechecksum(self):

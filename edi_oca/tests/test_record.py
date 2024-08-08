@@ -12,6 +12,7 @@ from odoo import exceptions, fields
 from odoo.tools import mute_logger
 
 from odoo.addons.edi_oca.utils import get_checksum
+from odoo.addons.http_routing.models.ir_http import slugify
 from odoo.addons.queue_job.delay import DelayableRecordset
 
 from .common import EDIBackendCommonTestCase
@@ -75,6 +76,30 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
             record.edi_exchange_state = "output_sent"
             self.assertEqual(
                 fields.Datetime.to_string(record.exchanged_on), "2020-10-21 10:00:00"
+            )
+
+    def test_record_exchange_filename(self):
+        # Using pattern with `record_name`
+        self.exchange_type_out.exchange_filename_pattern = (
+            "{record_name}-{type.code}-{dt}"
+        )
+        vals = {
+            "edi_exchange_state": "new",
+        }
+        record = self.backend.create_record("test_csv_output", vals)
+        self.assertFalse(record.exchanged_on)
+        with freeze_time("2020-10-21 10:00:00"):
+            # Having a duplicate in filename
+            identifier = slugify(record.identifier)
+            self.assertEqual(
+                record.exchange_filename,
+                f"test-csv-output-{identifier}-test_csv_output-2020-10-21-12-00-00.csv",
+            )
+            record._set_related_record(self.partner)
+            # Should recompute filename after getting the related record
+            self.assertEqual(
+                record.exchange_filename,
+                "wood-corner-test_csv_output-2020-10-21-12-00-00.csv",
             )
 
     @mute_logger("odoo.models.unlink")
