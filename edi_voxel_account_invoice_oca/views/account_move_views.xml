@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button
+                    name="action_send_to_voxel"
+                    type="object"
+                    string="Send to Voxel"
+                    invisible="move_type not in ['out_invoice', 'out_refund'] or state != 'posted'"
+                />
+            </header>
+            <notebook position="inside">
+                <field name="voxel_enabled" invisible="1" />
+                <page
+                    string="Voxel"
+                    invisible="not voxel_enabled"
+                    groups="edi_voxel_oca.group_voxel_manager"
+                >
+                    <group>
+                        <field name="voxel_state" />
+                    </group>
+                    <group
+                        name="group_voxel_processing_error"
+                        colspan="8"
+                        invisible="not processing_error"
+                    >
+                        <field name="processing_error" />
+                    </group>
+                    <notebook>
+                        <page string="Voxel Jobs" name="page_voxel_jobs">
+                            <group name="group_voxel_jobs">
+                                <field
+                                    name="voxel_job_ids"
+                                    options="{'reload_on_button': true}"
+                                    nolabel="1"
+                                    readonly="1"
+                                >
+                                    <tree>
+                                        <field name="date_created" />
+                                        <field name="eta" />
+                                        <field name="date_done" />
+                                        <field name="state" />
+                                        <button
+                                            type="object"
+                                            name="voxel_requeue_sudo"
+                                            string="Requeue"
+                                            class="oe_highlight"
+                                            invisible="state != 'failed'"
+                                        />
+                                        <button
+                                            type="object"
+                                            name="voxel_cancel_now"
+                                            string="Cancel sending"
+                                            class="oe_highlight_cancel"
+                                            icon="fa-times-circle"
+                                            invisible="state not in ['pending','enqueued']"
+                                        />
+                                        <button
+                                            type="object"
+                                            name="voxel_do_now"
+                                            string="Send now"
+                                            class="oe_highlight"
+                                            icon="fa-fighter-jet"
+                                            invisible="state != 'pending' or (not eta)"
+                                        />
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page
+                            string="Voxel XML report"
+                            name="page_voxel_report"
+                            invisible="not voxel_xml_report"
+                        >
+                            <group name="group_voxel_report">
+                                <group colspan="8" invisible="not voxel_filename">
+                                    <field name="voxel_filename" />
+                                </group>
+                                <group colspan="8">
+                                    <field
+                                        name="voxel_xml_report"
+                                        widget="ace"
+                                        options="{'mode': 'xml'}"
+                                        nolabel="1"
+                                    />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </page>
+            </notebook>
+        </field>
+    </record>
+    <record id="view_account_invoice_filter" model="ir.ui.view">
+        <field name="name">account.invoice.select.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter" />
+        <field name="arch" type="xml">
+            <filter name="late" position="before">
+                <group
+                    string="Voxel filters"
+                    groups="edi_voxel_oca.group_voxel_manager"
+                >
+                    <separator />
+                    <filter
+                        name="voxel_not_sent"
+                        string="Voxel report not sent"
+                        domain="[('voxel_state', '=', 'not_sent'), ('voxel_enabled', '=', True)]"
+                    />
+                    <filter
+                        name="voxel_in_process"
+                        string="Voxel report in process"
+                        domain="[('voxel_state', '=', 'in_process')]"
+                        help="Voxel report in process"
+                    />
+                    <filter
+                        name="voxel_accepted"
+                        string="Voxel report accepted"
+                        domain="[('voxel_state', '=', 'accepted')]"
+                        help="Voxel report accepted"
+                    />
+                    <filter
+                        name="voxel_sending_error"
+                        string="Voxel report failed"
+                        domain="[('voxel_state', '=', 'sending_error')]"
+                        help="The last attemp to sent to Voxel has failed"
+                    />
+                    <filter
+                        name="voxel_processing_error"
+                        string="Voxel report processing error"
+                        domain="[('voxel_state', '=', 'processing_error')]"
+                        help="The last Voxel report processing with errors"
+                    />
+                    <filter
+                        name="voxel_cancelled"
+                        string="Voxel cancelled"
+                        domain="[('voxel_state', '=', 'cancelled')]"
+                        help="Cancelled Voxel reports"
+                    />
+                    <separator />
+                </group>
+            </filter>
+        </field>
+    </record>
+</odoo>
