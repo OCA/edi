@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="demo_edi_backend_storage" model="edi.backend">
+        <field name="name">Storage Demo EDI backend</field>
+        <field name="backend_type_id" ref="edi_oca.demo_edi_backend_type" />
+        <field name="storage_id" ref="storage_backend.default_storage_backend" />
+        <field name="input_dir_pending">demo_in/pending</field>
+        <field name="input_dir_done">demo_in/done</field>
+        <field name="input_dir_error">demo_in/error</field>
+        <field name="output_dir_pending">demo_out/pending</field>
+        <field name="output_dir_done">demo_out/done</field>
+        <field name="output_dir_error">demo_out/error</field>
+    </record>
+</odoo>

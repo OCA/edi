@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="cron_check_storage_pending_input" model="ir.cron" forcecreate="True">
+        <field name="name">EDI backend storage check pending input</field>
+        <field name="active" eval="True" />
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False" />
+        <field name="model_id" ref="edi_oca.model_edi_backend" />
+        <field name="state">code</field>
+        <field
+            name="code"
+        >model.search([('storage_id', '!=', False)])._storage_cron_check_pending_input()</field>
+    </record>
+</odoo>
