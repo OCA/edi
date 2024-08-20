@@ -139,8 +139,8 @@ msgid ""
 "relation.\n"
 "                          </span>"
 msgstr ""
-"<span class=\"text-warning\" attrs=\"{'invisible': [("
-"'related_record_exists', '=', True)]}\">\n"
+"<span class=\"text-warning\" attrs=\"{'invisible': "
+"[('related_record_exists', '=', True)]}\">\n"
 "                            El registro relacionado ya no está disponible.\n"
 "                            Considere eliminar este registro también o "
 "arreglar su relación.\n"
@@ -1148,6 +1148,11 @@ msgstr "El registro ID=%d no está destinado a ser procesado"
 #, python-format
 msgid "Record ID=%d is not meant to be sent!"
 msgstr "¡El registro ID=%d no está destinado a ser enviado!"
+
+#. module: edi_oca
+#: model_terms:ir.ui.view,arch_db:edi_oca.edi_exchange_record_view_form
+msgid "Regenerate"
+msgstr ""
 
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_record__related_name
