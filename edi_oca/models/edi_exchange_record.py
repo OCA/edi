@@ -341,6 +341,10 @@ class EDIExchangeRecord(models.Model):
             self._execute_next_action()
         return True
 
+    def action_regenerate(self):
+        for rec in self:
+            rec.action_exchange_generate(force=True)
+
     def action_open_related_record(self):
         self.ensure_one()
         if not self.related_record_exists:
