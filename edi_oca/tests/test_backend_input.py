@@ -50,7 +50,7 @@ class EDIBackendTestInputCase(EDIBackendCommonComponentRegistryTestCase):
             fake_output="", _edi_receive_break_on_error=False
         ).exchange_receive(self.record)
         # Check the record
-        msg = "Empty files are not allowed for this exchange type"
+        msg = "Empty files are not allowed for exchange type"
         self.assertIn(msg, self.record.exchange_error)
         self.assertEqual(self.record._get_file_content(), "")
         self.assertRecordValues(

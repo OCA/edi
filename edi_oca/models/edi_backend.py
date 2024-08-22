@@ -292,7 +292,13 @@ class EDIBackend(models.Model):
         if exchange_record.direction == "input" and not exchange_record.exchange_file:
             if not exchange_record.type_id.allow_empty_files_on_receive:
                 raise ValueError(
-                    _("Empty files are not allowed for this exchange type")
+                    _(
+                        "Empty files are not allowed for exchange type %(name)s (%(code)s)"
+                    )
+                    % {
+                        "name": exchange_record.type_id.name,
+                        "code": exchange_record.type_id.code,
+                    }
                 )
 
         component = self._get_component(exchange_record, "validate")
