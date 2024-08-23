@@ -502,7 +502,7 @@ msgstr ""
 #. module: edi_oca
 #: code:addons/edi_oca/models/edi_backend.py:296
 #, python-format
-msgid "Empty files are not allowed for this exchange type"
+msgid "Empty files are not allowed for exchange type %s (%s)"
 msgstr ""
 
 #. module: edi_oca
@@ -1096,26 +1096,26 @@ msgid "Record ID"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:489
+#: code:addons/edi_oca/models/edi_backend.py:490
 #, python-format
 msgid "Record ID=%d has no file to process!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:380
+#: code:addons/edi_oca/models/edi_backend.py:381
 #, python-format
 msgid "Record ID=%d has no file to send!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:482
-#: code:addons/edi_oca/models/edi_backend.py:597
+#: code:addons/edi_oca/models/edi_backend.py:483
+#: code:addons/edi_oca/models/edi_backend.py:598
 #, python-format
 msgid "Record ID=%d is not meant to be processed"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:376
+#: code:addons/edi_oca/models/edi_backend.py:377
 #, python-format
 msgid "Record ID=%d is not meant to be sent!"
 msgstr ""
