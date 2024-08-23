@@ -6,75 +6,77 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2024-08-23 12:06+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. module: sale_order_import_edifact
 #. odoo-python
 #: code:addons/sale_order_import_edifact/wizard/sale_order_import.py:0
 #, python-format
 msgid "%s document is not a Sale Order document"
-msgstr ""
+msgstr "Il documento %s non è un documento ordine di vendita"
 
 #. module: sale_order_import_edifact
 #: model:ir.model,name:sale_order_import_edifact.model_business_document_import
 msgid "Common methods to import business documents"
-msgstr ""
+msgstr "Metodi comuni per l'importazione di documenti di lavoro"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields,field_description:sale_order_import_edifact.field_sale_order_import__doc_type
 msgid "Document Type"
-msgstr ""
+msgstr "Tipo documento"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields.selection,name:sale_order_import_edifact.selection__sale_order_import__import_type__edifact
 msgid "EDIFACT"
-msgstr ""
+msgstr "EDIFACT"
 
 #. module: sale_order_import_edifact
 #: model:product.template,name:sale_order_import_edifact.product_product_edifact1_dm_product_template
 msgid "EDIFACT Demo 1"
-msgstr ""
+msgstr "Demo 1 EDIFACT"
 
 #. module: sale_order_import_edifact
 #: model:product.template,name:sale_order_import_edifact.product_product_edifact2_dm_product_template
 msgid "EDIFACT Demo 2"
-msgstr ""
+msgstr "Demo 2 EDIFACT"
 
 #. module: sale_order_import_edifact
 #: model:product.template,name:sale_order_import_edifact.product_product_edifact3_dm_product_template
 msgid "EDIFACT Demo 3"
-msgstr ""
+msgstr "Demo 3 EDIFACT"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields,field_description:sale_order_import_edifact.field_sale_order_import__edifact_ok
 msgid "Edifact Ok"
-msgstr ""
+msgstr "EDIFACT OK"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields,field_description:sale_order_import_edifact.field_sale_order_import__file_ext
 msgid "File Ext"
-msgstr ""
+msgstr "Ext file"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields,field_description:sale_order_import_edifact.field_sale_order_import__import_type
 msgid "Import Type"
-msgstr ""
+msgstr "Tipo importazione"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields,field_description:sale_order_import_edifact.field_sale_order_import__json_data_preview
 msgid "Json Data Preview"
-msgstr ""
+msgstr "Anteprima dati JSON"
 
 #. module: sale_order_import_edifact
 #: model_terms:ir.ui.view,arch_db:sale_order_import_edifact.sale_order_import_form
 msgid "Parse"
-msgstr ""
+msgstr "Analizza"
 
 #. module: sale_order_import_edifact
 #. odoo-python
@@ -84,46 +86,48 @@ msgid ""
 "Partner GLN Code: %(party)s not found in order file: '%(file)s' from VAT "
 "registration number '%(vat)s'."
 msgstr ""
+"Codice partner GLN: %(party)s non trovato nel file ordine: '%(file)s' per "
+"registrazione IVA numero '%(vat)s'."
 
 #. module: sale_order_import_edifact
 #: model:product.template,name:sale_order_import_edifact.product_product_edifact4_dm_product_template
 msgid "Product1"
-msgstr ""
+msgstr "Prodotto1"
 
 #. module: sale_order_import_edifact
 #: model:product.template,name:sale_order_import_edifact.product_product_edifact5_dm_product_template
 msgid "Product2"
-msgstr ""
+msgstr "Prodotto2"
 
 #. module: sale_order_import_edifact
 #: model:product.template,name:sale_order_import_edifact.product_product_edifact6_dm_product_template
 msgid "Product3"
-msgstr ""
+msgstr "Prodotto3"
 
 #. module: sale_order_import_edifact
 #: model:product.template,name:sale_order_import_edifact.product_product_edifact7_dm_product_template
 msgid "Product4"
-msgstr ""
+msgstr "Prodotto4"
 
 #. module: sale_order_import_edifact
 #: model:product.template,name:sale_order_import_edifact.product_product_edifact8_dm_product_template
 msgid "Product5"
-msgstr ""
+msgstr "Prodotto5"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields,field_description:sale_order_import_edifact.field_sale_order_import__release
 msgid "Release"
-msgstr ""
+msgstr "Rilascio"
 
 #. module: sale_order_import_edifact
 #: model:ir.model,name:sale_order_import_edifact.model_sale_order_import
 msgid "Sale Order Import from Files"
-msgstr ""
+msgstr "Importazione ordine di vendita da file"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields,help:sale_order_import_edifact.field_sale_order_import__import_type
 msgid "Select a type which you want to import"
-msgstr ""
+msgstr "Selezionare un tipo che si vuole importare"
 
 #. module: sale_order_import_edifact
 #. odoo-python
@@ -131,7 +135,7 @@ msgstr ""
 #: code:addons/sale_order_import_edifact/models/business_document_import.py:0
 #, python-format
 msgid "Unknown"
-msgstr ""
+msgstr "Sconosciuto"
 
 #. module: sale_order_import_edifact
 #: model:ir.model.fields,help:sale_order_import_edifact.field_sale_order_import__json_data_preview
@@ -139,6 +143,8 @@ msgid ""
 "Used by the btn `button_parse_order_preview` to preview data before "
 "importing"
 msgstr ""
+"Utilizzato dal pulsante `button_parse_order_preview` per anteprima data "
+"prima dell'importazione"
 
 #. module: sale_order_import_edifact
 #. odoo-python
@@ -148,3 +154,5 @@ msgid ""
 "partner_identification_gln module should be installed with a xmlid: "
 "partner_identification_gln_number_category"
 msgstr ""
+"Il modulo partner_identification_gln deve essere installato con un xmlid: "
+"partner_identification_gln_number_category"
