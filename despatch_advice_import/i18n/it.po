@@ -6,79 +6,81 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2024-08-23 15:06+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__allow_validate_over_qty
 msgid "Allow Validate Over Quantity"
-msgstr ""
+msgstr "Consenti validazione sovra quantità"
 
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creato da"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creato il"
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "Delivery cancelled by the supplier."
-msgstr ""
+msgstr "Consegna annullata dal fornitore."
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "Delivery confirmed by the supplier."
-msgstr ""
+msgstr "Consegna confermata dal fornitore."
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "Delivery confirmed with amendment by the supplier."
-msgstr ""
+msgstr "Consegna confermata con correzione dal fornitore."
 
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid "Despatch Advice Import"
-msgstr ""
+msgstr "Importa avviso spedizione"
 
 #. module: despatch_advice_import
 #: model:ir.model,name:despatch_advice_import.model_despatch_advice_import
 msgid "Despatch Advice Import from Files"
-msgstr ""
+msgstr "Importazione di avvisi di spedizione da file"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nome visualizzato"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__filename
 msgid "File Name"
-msgstr ""
+msgstr "Nome file"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
@@ -86,6 +88,8 @@ msgid ""
 "If it is a PDF file, Odoo will try to find an XML file in the attachments of"
 " the PDF file and then use this XML file."
 msgstr ""
+"Se è un file PDF, Odoo cercherà di trovare un file XML negli allegati del "
+"file PDF e usarlo."
 
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
@@ -93,45 +97,47 @@ msgid ""
 "If it is an XML file, Odoo will parse it if the module that adds support for"
 " this XML format is installed. For the"
 msgstr ""
+"Se è un file XML, Odoo lo analizzerà se è installato il modulo che aggiunge "
+"il supporto per questo formato XML. Per il"
 
 #. module: despatch_advice_import
 #: model:ir.actions.act_window,name:despatch_advice_import.despatch_advice_import_action
 msgid "Import"
-msgstr ""
+msgstr "Importa"
 
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid "Import document"
-msgstr ""
+msgstr "Importa documento"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Ultima modifica il"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultimo aggiornamento di"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultimo aggiornamento il"
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "Missing document file"
-msgstr ""
+msgstr "File documento mancante"
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "Missing document filename"
-msgstr ""
+msgstr "Nome file documento mancante"
 
 #. module: despatch_advice_import
 #. odoo-python
@@ -139,35 +145,35 @@ msgstr ""
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "No purchase order found for name %s."
-msgstr ""
+msgstr "Nessun ordine di acquisto trovato per il nome %s."
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/tests/test_despatch_advice_import.py:0
 #, python-format
 msgid "No purchase order found for name 123456."
-msgstr ""
+msgstr "Nessun ordine di acquisto trovato per il nome 123456."
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "The product quantity is greater than the original product quantity"
-msgstr ""
+msgstr "La quantità del prodotto è superiore alla quantità originale"
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "There are no embedded XML file in this PDF file."
-msgstr ""
+msgstr "In questo PDF non c'è un file XML integrato."
 
 #. module: despatch_advice_import
 #. odoo-python
 #: code:addons/despatch_advice_import/wizard/despatch_advice_import.py:0
 #, python-format
 msgid "This XML file is not XML-compliant"
-msgstr ""
+msgstr "Il file XML non è compatibile al formato XML"
 
 #. module: despatch_advice_import
 #. odoo-python
@@ -177,6 +183,8 @@ msgid ""
 "This file '%s' is not recognised as XML nor PDF file. Please check the file "
 "and it's extension."
 msgstr ""
+"Il file '%s' non è riconosciuto come file XML o PDF. Controllare il file e "
+"la sua estensione."
 
 #. module: despatch_advice_import
 #. odoo-python
@@ -186,6 +194,8 @@ msgid ""
 "This type of XML Order Document is not supported. Did you install the module"
 " to support this XML format?"
 msgstr ""
+"Questo tipo di documento ordine XML non è supportato. Il modulo per "
+"supportare questo formato XML è installato?"
 
 #. module: despatch_advice_import
 #. odoo-python
@@ -195,16 +205,18 @@ msgid ""
 "This type of XML Order Response is not supported. Did you install the module"
 " to support this XML format?"
 msgstr ""
+"Questo tipo di risposta ordine XML non è supportato. Il modulo per "
+"supportare questo formato XML è installato?"
 
 #. module: despatch_advice_import
 #: model:ir.ui.menu,name:despatch_advice_import.despatch_advice_import_importer_menu
 msgid "UBL Despatch Advice Importer"
-msgstr ""
+msgstr "Importatore avviso spedizione UBL"
 
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
 msgid "Universal Business Language"
-msgstr ""
+msgstr "Linguaggio commerciale universale"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,help:despatch_advice_import.field_despatch_advice_import__document
@@ -212,6 +224,8 @@ msgid ""
 "Upload an Despatch Advice file that you received from your supplier. "
 "Supported formats: XML and PDF (PDF with an embeded XML file)."
 msgstr ""
+"Caricare un avviso di spedizione ricevuto dal fornitore. Formati supportati: "
+"XML e PDF (PDF con XML incorporato)."
 
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
@@ -219,11 +233,13 @@ msgid ""
 "Upload below the DespatchAdvice you received from your supplier. When you "
 "click on the import button:"
 msgstr ""
+"Caricare in calce l'avviso di spedizione ricevuto dal fornitore. Quando si "
+"fa clic sul pulsante di importazione:"
 
 #. module: despatch_advice_import
 #: model:ir.model.fields,field_description:despatch_advice_import.field_despatch_advice_import__document
 msgid "XML or PDF Despatch Advice"
-msgstr ""
+msgstr "Avviso di spedizione XML o PDF"
 
 #. module: despatch_advice_import
 #: model_terms:ir.ui.view,arch_db:despatch_advice_import.despatch_advice_import_form_view
@@ -231,3 +247,5 @@ msgid ""
 "format (UBL), you should install the module "
 "<em>despatch_advice_import_ubl</em>."
 msgstr ""
+"formato (UBL), bisogna installare il modulo "
+"<em>despatch_advice_import_ubl</em>."
