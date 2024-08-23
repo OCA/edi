@@ -6,40 +6,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2024-08-23 12:06+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "(no date)"
-msgstr ""
+msgstr "(nessuna data)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__basic
 msgid "Basic"
-msgstr ""
+msgstr "Base"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__basicwl
 msgid "Basic without lines"
-msgstr ""
+msgstr "Base senza righe"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Aziende"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Impostazioni configurazione"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -49,45 +51,47 @@ msgid ""
 "Country is not set on partner '%s'. In the Factur-X standard, the country is"
 " required for buyer and seller."
 msgstr ""
+"La nazione non è impostata nel partner '%s'. Nello standard Fatture-X, la "
+"nazione è richiesta per gli acquisitori e i venditori."
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__en16931
 msgid "EN 16931 (Comfort)"
-msgstr ""
+msgstr "EN 16931 (Comfort)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__extended
 msgid "Extended"
-msgstr ""
+msgstr "Esteso"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Factur-X"
-msgstr ""
+msgstr "Factur-X"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__xml_format_in_pdf_invoice__factur-x
 msgid "Factur-X (CII)"
-msgstr ""
+msgstr "Factur-X (CII)"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_level
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings__facturx_level
 msgid "Factur-X Level"
-msgstr ""
+msgstr "Livello Factur-X"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_logo
 msgid "Factur-X Logo"
-msgstr ""
+msgstr "Logo Factur-X"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__facturx_refund_type
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_config_settings__facturx_refund_type
 msgid "Factur-X Refund Type"
-msgstr ""
+msgstr "Tipo rimborso Factur-X"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -97,75 +101,77 @@ msgid ""
 "Factur-X {invoice_type} {invoice_number} dated {invoice_date} issued by "
 "{company_name}"
 msgstr ""
+"Factur-X {invoice_type} {invoice_number} datato {invoice_date} emesso da "
+"{company_name}"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Invoice"
-msgstr ""
+msgstr "Fattura"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_account_move
 msgid "Journal Entry"
-msgstr ""
+msgstr "Registrazione contabile"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,help:account_invoice_facturx.field_res_company__facturx_logo
 msgid "Logo to include in the visible part of Factur-X invoices"
-msgstr ""
+msgstr "Logo da includere nella parte visibile delle fatture Factur-X"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__minimum
 msgid "Minimum"
-msgstr ""
+msgstr "Minimo"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr ""
+msgstr "Categoria imposta UNECE non presente nell'imposta '%s'"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr ""
+msgstr "Tipo imposta UNECE non presente nell'imposta '%s'"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE code on payment method '%s'"
-msgstr ""
+msgstr "Codice UNECE non presente nel metodo di pagamento '%s'"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "No invoice line label"
-msgstr ""
+msgstr "Nessuna etichetta riga fattura"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "No specific payment term selected"
-msgstr ""
+msgstr "Nessun termine di pagamento specifico selezionato"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Refund"
-msgstr ""
+msgstr "Rimborso"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_ir_actions_report
 msgid "Report Action"
-msgstr ""
+msgstr "Azione resoconto"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -176,16 +182,19 @@ msgid ""
 "price of line '%s' is negative. You should generate a customer refund for "
 "that line."
 msgstr ""
+"Lo standard Factur-X indica che il prezzo unitario non può essere negativo. "
+"Il prezzo unitario della riga '%s' è negativo. Bisogna generare un rimborso "
+"cliente per la riga."
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_refund_type__380
 msgid "Type 380 with negative amounts"
-msgstr ""
+msgstr "Tipo 380 con valori negativi"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_refund_type__381
 msgid "Type 381 with positive amounts"
-msgstr ""
+msgstr "Tipo 381 con valori positivi"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,help:account_invoice_facturx.field_res_company__facturx_level
@@ -194,22 +203,24 @@ msgid ""
 "Unless if you have a good reason, you should always select 'EN 16931 "
 "(Comfort)', which is the default value."
 msgstr ""
+"Se non si ha un buon motivo, si dovrebbe sempre selezionare 'EN 16931 "
+"(Comfort)', che è il valore predefinito."
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Wire transfer"
-msgstr ""
+msgstr "Bonifico bancario"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields,field_description:account_invoice_facturx.field_res_company__xml_format_in_pdf_invoice
 msgid "XML Format embedded in PDF invoice"
-msgstr ""
+msgstr "Formato XML incorporato nella fattura PDF"
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "{company_name}: {invoice_type} {invoice_number} dated {invoice_date}"
-msgstr ""
+msgstr "{company_name}: {invoice_type} {invoice_number} datata {invoice_date}"
