@@ -171,7 +171,6 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
 
     def _process_form(self):
         """Create record with Form() according to text."""
-        # text = "".join(data)
         text = self.data
         template = self.template_id
         model = self.env[template.model]
@@ -202,7 +201,15 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                         model_name=template.child_model, related_model="lines"
                     )._process_set_value_form(line_form, field_name, line[field_name])
         try:
-            record = model_form.save()
+            # Prepare vals (similar to .save()) + apply defaults (in case it has changed
+            # in some onchange for example: warehouse_id from sale orders)
+            vals = model_form._values_to_save()
+            for key in ctx:
+                if key.startswith("default_"):
+                    field = key.replace("default_", "")
+                    if field in vals:
+                        vals.update({field: ctx[key]})
+            record = model.with_context(**ctx).create(vals)
         except (AssertionError) as err:
             raise UserError(err) from err
         if self.log_text:
