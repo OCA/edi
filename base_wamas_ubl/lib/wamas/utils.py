@@ -299,7 +299,7 @@ def generate_wamas_dict(dict_item, grammar, **kwargs):  # noqa: C901
             if isinstance(ubl_path, list):
                 lst_val = []
                 for _item in ubl_path:
-                    lst_val.append(dict_item.get(_item, ""))
+                    lst_val.append(dict_item.get(_item) or "")
                 if lst_val:
                     val = " ".join(lst_val)
             elif isinstance(ubl_path, dict):
