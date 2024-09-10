@@ -65,8 +65,8 @@
 		<cbc:ID>130377</cbc:ID>
 		<cac:Delivery>
 			<cac:PromiseDeliveryPeriod>
-				<cbc:EndDate>2023-05-01</cbc:EndDate>
-				<cbc:EndTime>14:00:00</cbc:EndTime>
+				<cbc:EndDate>2023-05-02</cbc:EndDate>
+				<cbc:EndTime>15:00:00</cbc:EndTime>
 			</cac:PromiseDeliveryPeriod>
 			<cac:EstimatedDeliveryPeriod>
 				<cbc:EndDate>2023-05-01</cbc:EndDate>
