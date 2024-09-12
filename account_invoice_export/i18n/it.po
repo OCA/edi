@@ -143,7 +143,8 @@ msgstr "Metodo trasmissione di un documento"
 #: code:addons/account_invoice_export/models/account_move.py:0
 #, python-format
 msgid "Transmit method is not configured to send through HTTP"
-msgstr "Il metodo di trasmissione non è configurato per inviare attraverso HTTP"
+msgstr ""
+"Il metodo di trasmissione non è configurato per inviare attraverso HTTP"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__destination_url
