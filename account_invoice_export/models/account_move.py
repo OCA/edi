@@ -5,7 +5,7 @@ import requests
 
 import odoo
 from odoo import _, fields, models
-from odoo.exceptions import UserError, except_orm
+from odoo.exceptions import UserError
 
 
 class AccountMove(models.Model):
@@ -39,16 +39,11 @@ class AccountMove(models.Model):
                 "error_type": type(e).__name__,
                 "transmit_method_name": self.transmit_method_id.name,
             }
-            if isinstance(e, except_orm):
-                values["error_detail"] = e.name
-            with odoo.api.Environment.manage():
-                with odoo.registry(self.env.cr.dbname).cursor() as new_cr:
-                    # Create a new environment with new cursor database
-                    new_env = odoo.api.Environment(
-                        new_cr, self.env.uid, self.env.context
-                    )
-                    # The chatter of the invoice need to be updated, when the job fails
-                    self.with_env(new_env).log_error_sending_invoice(values)
+            with odoo.registry(self.env.cr.dbname).cursor() as new_cr:
+                # Create a new environment with new cursor database
+                new_env = odoo.api.Environment(new_cr, self.env.uid, self.env.context)
+                # The chatter of the invoice need to be updated, when the job fails
+                self.with_env(new_env).log_error_sending_invoice(values)
             raise
         self.log_success_sending_invoice()
         return res
