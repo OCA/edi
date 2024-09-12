@@ -30,3 +30,11 @@ class TestExportAcountInvoice(CommonCase):
     def test_get_file_description(self):
         res = self.invoice_1._get_file_for_transmission_method()
         self.assertTrue(res["file"])
+
+    def test_get_url(self):
+        url = self.transmit_method.get_transmission_url()
+        self.assertEqual(url, "https://example.com/post")
+
+    def test_get_header(self):
+        header = self.transmit_method.get_transmission_http_header()
+        self.assertTrue("Authorization" in header.keys())
