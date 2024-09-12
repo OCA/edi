@@ -11,7 +11,7 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     def _job_export_invoice_job_options(self, resend_invoice=False):
-        description = "Export eBill to {}".format(self.transmit_method_id.name)
+        description = f"Export eBill to {self.transmit_method_id.name}"
         return {
             "description": description,
             "identity_key": identity_exact,
