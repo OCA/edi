@@ -106,7 +106,7 @@ class AccountMove(models.Model):
             error_log = _("An error of type {} occured.").format(
                 values.get("error_type")
             )
-        activity.note += "<div class='mt16'><p>{}</p></div>".format(error_log)
+        activity.note += f"<div class='mt16'><p>{error_log}</p></div>"
 
     def log_success_sending_invoice(self):
         """Log success sending invoice and clear existing exception, if any."""
