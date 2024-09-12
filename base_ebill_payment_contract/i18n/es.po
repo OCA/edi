@@ -43,7 +43,6 @@ msgstr "Cliente"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__display_name
-#: model:ir.model.fields,field_description:base_ebill_payment_contract.field_res_partner__display_name
 msgid "Display Name"
 msgstr "Mostrar Nombre"
 
@@ -59,7 +58,6 @@ msgstr "Fecha Final"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__id
-#: model:ir.model.fields,field_description:base_ebill_payment_contract.field_res_partner__id
 msgid "ID"
 msgstr "ID"
 
@@ -67,12 +65,6 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__is_valid
 msgid "Is Valid"
 msgstr "Es Válido"
-
-#. module: base_ebill_payment_contract
-#: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract____last_update
-#: model:ir.model.fields,field_description:base_ebill_payment_contract.field_res_partner____last_update
-msgid "Last Modified on"
-msgstr "Última modificación el"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__write_uid
@@ -120,3 +112,6 @@ msgstr "Válido"
 #: model:ir.ui.menu,name:base_ebill_payment_contract.ebill_payment_contract_menu
 msgid "eBill Payment Contract"
 msgstr "Contrato de pago de facturas electrónicas"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Última modificación el"
