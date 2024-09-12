@@ -17,21 +17,22 @@ Base eBill Payment Contract
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/16.0/base_ebill_payment_contract
+    :target: https://github.com/OCA/edi/tree/17.0/base_ebill_payment_contract
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-16-0/edi-16-0-base_ebill_payment_contract
+    :target: https://translation.odoo-community.org/projects/edi-17-0/edi-17-0-base_ebill_payment_contract
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=16.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=17.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-The goal of this module is to be a common ground for ebilling addons.
-It adds an ebill.payment.contract attached to a partner.
-Alone this module has no purpose. It needs to be installed with a module that implements a specific ebilling system.
-This depending module has to implement his own 'transmit.method'.
+The goal of this module is to be a common ground for ebilling addons. It
+adds an ebill.payment.contract attached to a partner. Alone this module
+has no purpose. It needs to be installed with a module that implements a
+specific ebilling system. This depending module has to implement his own
+'transmit.method'.
 
 **Table of contents**
 
@@ -43,8 +44,7 @@ Usage
 
 To use this module, you need to:
 
-#. Install a specific e-billing module
-   (None are ready, yet)
+1. Install a specific e-billing module (None are ready, yet)
 
 Bug Tracker
 ===========
@@ -52,7 +52,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20base_ebill_payment_contract%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20base_ebill_payment_contract%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -60,25 +60,25 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Camptocamp
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Thierry Ducrest <thierry.ducrest@camptocamp.com>
-* Phuc Tran Thanh <phuc@trobz.com>
+-  Thierry Ducrest <thierry.ducrest@camptocamp.com>
+-  Phuc Tran Thanh <phuc@trobz.com>
 
 Other credits
-~~~~~~~~~~~~~
+-------------
 
 The development of this module has been financially supported by:
 
-* Camptocamp
+-  Camptocamp
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -98,6 +98,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-TDu| 
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/16.0/base_ebill_payment_contract>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/17.0/base_ebill_payment_contract>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

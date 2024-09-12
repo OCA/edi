@@ -10,7 +10,6 @@ _logger = logging.getLogger(__name__)
 
 
 class ResPartner(models.Model):
-
     _inherit = "res.partner"
 
     def get_active_contract(self, transmit_method, domain=None):
@@ -26,8 +25,6 @@ class ResPartner(models.Model):
         )
         if not contract:
             _logger.error(
-                "eBill contract for {} on {} not found".format(
-                    self.name, transmit_method.name
-                )
+                f"eBill contract for {self.name} on {transmit_method.name} not found"
             )
         return contract
