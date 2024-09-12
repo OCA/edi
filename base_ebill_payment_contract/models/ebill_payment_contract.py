@@ -5,7 +5,6 @@ from odoo import api, fields, models
 
 
 class EbillPaymentContract(models.Model):
-
     _name = "ebill.payment.contract"
     _description = "eBill Payment Contract"
 
