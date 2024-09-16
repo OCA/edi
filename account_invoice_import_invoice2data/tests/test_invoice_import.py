@@ -174,7 +174,7 @@ class TestInvoiceImport(SavepointCase):
         # self.assertEqual(inv.journal_id.payment_reference, "202309097001")
         # self.assertEqual(inv.journal_id.incoterm_id, self.env.ref("account.incoterm_DPU")
 
-        self.assertEqual(len(inv.invoice_line_ids), 8)
+        self.assertEqual(len(inv.invoice_line_ids), 7)
         iline = inv.invoice_line_ids[0]
         self.assertEqual(iline.name, "--- Non Food ---")
         self.assertEqual(iline.display_type, "line_section")
@@ -205,9 +205,9 @@ class TestInvoiceImport(SavepointCase):
             iline.product_id,
             self.env.ref("account_invoice_import_invoice2data.olive_oil"),
         )
-        # todo test discount, not yet implemented in account_invoice_import
         self.assertEqual(float_compare(iline.quantity, 1.0, precision_digits=0), 0)
         self.assertEqual(float_compare(iline.price_unit, 1.00, precision_digits=2), 0)
+        self.assertEqual(float_compare(iline.discount, 10, precision_digits=2), 0)
         iline = inv.invoice_line_ids[5]
         self.assertEqual(
             iline.name, "Our Olive Oil is delivered in a re-usable glass container"
