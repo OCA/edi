@@ -8,7 +8,7 @@
     "name": "WebService",
     "summary": """
         Defines webservice abstract definition to be used generally""",
-    "version": "16.0.1.3.0",
+    "version": "16.0.1.4.0",
     "license": "AGPL-3",
     "development_status": "Production/Stable",
     "maintainers": ["etobella"],
