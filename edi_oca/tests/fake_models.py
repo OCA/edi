@@ -7,7 +7,7 @@ from odoo import fields, models
 
 class EdiExchangeConsumerTest(models.Model):
     _name = "edi.exchange.consumer.test"
-    _inherit = ["edi.exchange.consumer.mixin"]
+    _inherit = ["edi.exchange.consumer.mixin", "edi.configuration.mixin"]
     _description = "Model used only for test"
 
     name = fields.Char()
