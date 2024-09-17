@@ -5,15 +5,13 @@ import os
 import unittest
 
 from odoo_test_helper import FakeModelLoader
-from odoo.addons.queue_job.tests.common import trap_jobs
-
 
 from .common import EDIBackendCommonComponentRegistryTestCase
 from .fake_components import (
+    FakeConfigurationListener,
     FakeOutputChecker,
     FakeOutputGenerator,
     FakeOutputSender,
-    FakeConfigurationListener,
 )
 
 
@@ -21,7 +19,6 @@ from .fake_components import (
 # If you still want to run `edi` tests w/ pytest when this happens, set this env var.
 @unittest.skipIf(os.getenv("SKIP_EDI_CONSUMER_CASE"), "Consumer test case disabled.")
 class TestEDIConfigurations(EDIBackendCommonComponentRegistryTestCase):
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -85,30 +82,83 @@ class TestEDIConfigurations(EDIBackendCommonComponentRegistryTestCase):
         cls.loader.restore_registry()
         super().tearDownClass()
 
-    def test_edi_configuration(self):
+    def test_edi_send_via_edi_config(self):
         # Create new consumer record
-
         consumer_record = self.env["edi.exchange.consumer.test"].create(
             {"name": "Test Consumer"}
         )
-
         # Check configuration on create
         consumer_record.refresh()
         exchange_record = consumer_record.exchange_record_ids
         self.assertEqual(len(exchange_record), 1)
         self.assertEqual(exchange_record.type_id, self.exchange_type_out)
         self.assertEqual(exchange_record.edi_exchange_state, "output_sent")
-
-
-        # Check _edi_send_via_edi
-
-        # Check generate and send output record
-
         # Write the existed consumer record
-        consumer_record.name = "Fix Consumer"
+        consumer_record.name = "Fixed Consumer"
         # check Configuration on write
         consumer_record.refresh()
         exchange_record = consumer_record.exchange_record_ids - exchange_record
         self.assertEqual(len(exchange_record), 1)
         self.assertEqual(exchange_record.type_id, self.exchange_type_out)
         self.assertEqual(exchange_record.edi_exchange_state, "output_sent")
+
+    def test_edi_code_snippet(self):
+        # Create new consumer record
+        consumer_record = self.env["edi.exchange.consumer.test"].create(
+            {"name": "Test Consumer"}
+        )
+        expected_value = {
+            "todo": True,
+            "snippet_do_vars": {
+                "a": 1,
+                "b": 2,
+            },
+            "event_only": True,
+            "tracked_fields": ["state"],
+            "edi_action": "new_action",
+        }
+        # Simulate the snippet_before_do
+        self.write_config.snippet_before_do = "result = " + str(expected_value)
+        # Execute with the raw data
+        vals = self.write_config.edi_exec_snippet_before_do(
+            consumer_record,
+            todo=False,
+            tracked_fields=[],
+            edi_action="generate",
+        )
+        # Check the new vals after execution
+        self.assertEqual(vals, expected_value)
+
+        # Check the snippet_do
+        expected_value = {
+            "change_state": True,
+            "snippet_do_vars": {
+                "a": 1,
+                "b": 2,
+            },
+            "record": consumer_record,
+            "tracked_fields": ["state"],
+        }
+        snippet_do = """\n
+old_state = old_value.get("state", False)\n
+new_state = vals.get("state", False)\n
+result = {\n
+    "change_state": True if old_state and new_state and old_state != new_state else False,\n
+    "snippet_do_vars": snippet_do_vars,\n
+    "record": record,\n
+    "tracked_fields": tracked_fields,\n
+}
+        """
+        self.write_config.snippet_do = snippet_do
+        # Execute with the raw data
+        record_id = consumer_record.id
+        vals = self.write_config.edi_exec_snippet_do(
+            consumer_record,
+            todo=False,
+            tracked_fields=[],
+            edi_action="generate",
+            old_vals={record_id: dict(state="draft")},
+            vals={record_id: dict(state="confirmed")},
+        )
+        # Check the new vals after execution
+        self.assertEqual(vals, expected_value)

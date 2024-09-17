@@ -134,18 +134,18 @@ class FakeInputValidate(FakeComponentMixin):
     def validate(self, value=None):
         self._fake_it()
         return
-    
+
+
 class FakeConfigurationListener(FakeComponentMixin):
     _name = "fake.configuration.listener"
     _inherit = "base.event.listener"
     _apply_on = ["edi.exchange.consumer.test"]
 
-
     # TODO: Add tests for partner_ids
 
     def on_record_write(self, record, fields=None, **kwargs):
         trigger = "on_record_write"
-        edi_configuration = self.env['edi.configuration']
+        edi_configuration = self.env["edi.configuration"]
         if kwargs.get("vals", False):
             for rec in record:
                 confs = edi_configuration.edi_get_conf(trigger, model_name=rec._name)
@@ -155,13 +155,15 @@ class FakeConfigurationListener(FakeComponentMixin):
 
     def on_record_create(self, record, fields=None, **kwargs):
         trigger = "on_record_create"
-        edi_configuration = self.env['edi.configuration']
+        edi_configuration = self.env["edi.configuration"]
         backend_id = self.env.ref("edi_oca.demo_edi_backend")
         val_list = kwargs.get("vals", False)
         if val_list:
             for rec, vals in zip(record, val_list):
                 kwargs["vals"] = {rec.id: vals}
-                confs = edi_configuration.edi_get_conf(trigger, model_name=rec._name, backend=backend_id)
+                confs = edi_configuration.edi_get_conf(
+                    trigger, model_name=rec._name, backend=backend_id
+                )
                 print("Configuring: ", confs)
                 for conf in confs:
                     conf.edi_exec_snippet_do(rec, **kwargs)

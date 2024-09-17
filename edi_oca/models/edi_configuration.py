@@ -184,7 +184,8 @@ class EdiConfiguration(models.Model):
             before_do_vals = self.edi_exec_snippet_before_do(record, **kwargs)
             vals.update(before_do_vals)
         if vals["todo"]:
-            self._evaluate_code_snippet(self.snippet_do, **vals)
+            return self._evaluate_code_snippet(self.snippet_do, **vals)
+        return True
 
     @api.model
     def edi_get_conf(self, trigger, model_name=None, partners=None, backend=None):
