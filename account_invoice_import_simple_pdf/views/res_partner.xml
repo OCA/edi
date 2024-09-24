@@ -14,9 +14,6 @@
             ref="account_invoice_import.view_partner_property_form"
         />
         <field name="priority">99</field>
-        <!-- account_invoice_import.view_partner_property_form is
-             limited to groups account.group_account_invoice
-             and account.group_account_readonly -->
         <field name="arch" type="xml">
             <div name="invoice_import_configs" position="replace" />
             <page name="accounting" position="after">
