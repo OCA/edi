@@ -570,10 +570,15 @@ class EDIExchangeRecord(models.Model):
         for exc_rec in self.sudo():
             if not exc_rec.related_record_exists:
                 continue
-            by_model_rec_ids[exc_rec.model].add(exc_rec.res_id)
-            if exc_rec.model not in by_model_checker:
-                by_model_checker[exc_rec.model] = getattr(
-                    self.env[exc_rec.model], "get_edi_access", default_checker
+            model = exc_rec.model
+            res_id = exc_rec.res_id
+            if not model and exc_rec.parent_id:
+                model = exc_rec.parent_id.model
+                res_id = exc_rec.parent_id.res_id
+            by_model_rec_ids[model].add(res_id)
+            if model not in by_model_checker:
+                by_model_checker[model] = getattr(
+                    self.env[model], "get_edi_access", default_checker
                 )
 
         for model, rec_ids in by_model_rec_ids.items():
