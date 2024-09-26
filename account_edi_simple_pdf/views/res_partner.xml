@@ -16,6 +16,7 @@
                     name="invoice_import_simple_pdf"
                     string="Vendor Bill Import"
                     attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
+                    groups="account.group_account_readonly,account.group_account_invoice"
                 >
                     <group name="simple_pdf_main">
                         <group name="simple_pdf_main-left">
