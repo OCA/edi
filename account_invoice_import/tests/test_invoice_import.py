@@ -264,7 +264,8 @@ class TestInvoiceImport(TransactionCase):
                     "product": {"code": "AII-TEST-PRODUCT"},
                     "name": "Super product",
                     "qty": 3,
-                    "price_unit": 10.22,
+                    "price_unit": 100,
+                    "discount": 10,
                     "date_start": "2017-08-01",
                     "date_end": "2017-08-31",
                     "taxes": [
@@ -286,8 +287,10 @@ class TestInvoiceImport(TransactionCase):
                 .with_company(self.company.id)
                 .create_invoice(parsed_inv, import_config)
             )
-            self.assertFalse(inv.currency_id.compare_amounts(inv.amount_untaxed, 30.66))
-            self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 30.97))
+            self.assertFalse(
+                inv.currency_id.compare_amounts(inv.amount_untaxed, 270.00)
+            )
+            self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 272.70))
             self.assertEqual(
                 fields.Date.to_string(inv.invoice_date), parsed_inv["date"]
             )
