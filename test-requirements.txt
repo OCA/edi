@@ -4,3 +4,5 @@ responses
 # Python Dependencies
 PyYAML
 xmlunittest
+# tests use python 3.6 and pypdf dropped support for python 3.6-3.7 in 5.0
+pypdf==4.3.1
