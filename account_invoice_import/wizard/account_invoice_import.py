@@ -160,8 +160,9 @@ class AccountInvoiceImport(models.TransientModel):
         #           },
         #       'name': 'Gelierzucker Extra 250g',
         #       'price_unit': 1.45, # price_unit without taxes
+        #       'discount': 10.0,  # for 10% discount
         #       'qty': 2.0,
-        #       'price_subtotal': 2.90,  # not required, but needed
+        #       'price_subtotal': 2.61,  # not required, but needed
         #               to be able to generate adjustment lines when decimal
         #               precision is not high enough in Odoo
         #       'uom': {'unece_code': 'C62'},
@@ -385,6 +386,7 @@ class AccountInvoiceImport(models.TransientModel):
                 {
                     "quantity": line["qty"],
                     "price_unit": line["price_unit"],  # TODO fix for tax incl
+                    "discount": line.get("discount", 0),
                 }
             )
             vals["invoice_line_ids"].append((0, 0, il_vals))
@@ -497,6 +499,7 @@ class AccountInvoiceImport(models.TransientModel):
         if not parsed_inv.get("currency_rec"):
             self.get_currency_helper(parsed_inv)
         prec_pp = self.env["decimal.precision"].precision_get("Product Price")
+        prec_disc = self.env["decimal.precision"].precision_get("Discount")
         prec_uom = self.env["decimal.precision"].precision_get(
             "Product Unit of Measure"
         )
@@ -537,6 +540,9 @@ class AccountInvoiceImport(models.TransientModel):
             line["qty"] = float_round(line["qty"], precision_digits=prec_uom)
             line["price_unit"] = float_round(
                 line["price_unit"], precision_digits=prec_pp
+            )
+            line["discount"] = float_round(
+                line.get("discount", 0), precision_digits=prec_disc
             )
         parsed_inv_for_log = dict(parsed_inv)
         if "attachments" in parsed_inv_for_log:
@@ -1115,21 +1121,10 @@ class AccountInvoiceImport(models.TransientModel):
                             ),
                         )
                     )
-                    new_balance = invoice.currency_id._convert(
-                        new_amount_currency,
-                        invoice.company_id.currency_id,
-                        invoice.company_id,
-                        invoice.date,
-                    )
                     vals = {"amount_currency": new_amount_currency}
-                    if company_cur.compare_amounts(new_balance, 0) > 0:
-                        vals["debit"] = new_balance
-                        vals["credit"] = 0
-                    else:
-                        vals["debit"] = 0
-                        vals["credit"] = new_balance * -1
                     logger.info("Force VAT amount with diff=%s", diff_tax_amount)
                     mline.write(vals)
+                    invoice._compute_amount()
                     break
             if not has_tax_line:
                 raise UserError(
