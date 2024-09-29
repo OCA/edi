@@ -29,3 +29,5 @@ class TestUblOrder(HttpCase):
                 elif order.state in rfq_states:
                     filename = order.get_ubl_filename("rfq", version=version)
                     self.assertTrue(filename in res)
+
+    # TODO: add tests to validate UBL data generation!
