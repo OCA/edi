@@ -1,7 +1,8 @@
-DEPRECATED: use `edi_sale_oca`.
+TODO
 
-Plug sale_order_import into EDI machinery.
-
+Inbound
+~~~~~~~
+Receive sale orders from EDI channels.
 
 Control sale order confirmation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
