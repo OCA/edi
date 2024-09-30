@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.sales_purchases</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="edi_configuration" string="Edi Configurations">
+                    <group string="Configurations">
+                        <field
+                            name="edi_purchase_conf_ids"
+                            context="{'default_model_name': 'purchase.order', 'default_partner_ids': active_ids}"
+                        />
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

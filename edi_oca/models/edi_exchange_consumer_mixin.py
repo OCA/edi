@@ -7,7 +7,7 @@
 
 from lxml import etree
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.tools import safe_eval
 
 from odoo.addons.base_sparse_field.models.fields import Serialized
@@ -291,3 +291,45 @@ class EDIExchangeConsumerMixin(models.AbstractModel):
     def _edi_get_origin(self):
         self.ensure_one()
         return self.origin_exchange_record_id
+
+    def _edi_send_via_edi(self, exchange_type):
+        exchange_record = self._edi_create_exchange_record(exchange_type)
+        exchange_record.action_exchange_generate_send()
+        msg = _("EDI auto: output generated.")
+        exchange_record._notify_related_record(msg)
+        exchange_record._trigger_edi_event("generated")
+
+    def _edi_send_via_email(
+        self, ir_action=None, subtype_ref=None, partner_method=None, partners=None
+    ):
+        # Default action if not provided
+        if ir_action is None:
+            # `action_send_email` is just an action name I created
+            # to be able to generalize across models.
+            if hasattr(self, "action_send_email"):
+                ir_action = self.action_send_email()
+            else:
+                return False
+        # Retrieve context and composer model
+        ctx = ir_action.get("context", {})
+        composer_model = self.env[ir_action["res_model"]].with_context(ctx)
+
+        # Determine subtype and partner_ids dynamically based on model-specific logic
+        subtype = subtype_ref and self.env.ref(subtype_ref) or None
+        if not subtype:
+            return False
+
+        composer = composer_model.create({"subtype_id": subtype.id})
+        composer.onchange_template_id_wrapper()
+
+        # Dynamically retrieve partners based on the provided method or fallback to parameter
+        if partner_method and hasattr(self, partner_method):
+            composer.partner_ids = getattr(self, partner_method)().ids
+        elif partners:
+            composer.partner_ids = partners.ids
+        else:
+            return False
+
+        # Send the email
+        composer.send_mail()
+        return True
