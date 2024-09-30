@@ -1,6 +1,8 @@
 # Copyright 2022 Camptocamp SA
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from odoo.exceptions import UserError
+
 from .common import TestCommon
 
 PARSED_CATALOG = {
@@ -48,6 +50,7 @@ PARSED_CATALOG = {
         },
     ],
     "ref": "1387",
+    "company": {"name": "Customer ABC"},
     "seller": {
         "contact": False,
         "email": False,
@@ -70,19 +73,24 @@ class TestProductImport(TestCommon):
         cls.parsed_catalog["chatter_msg"] = []
 
     def test_get_seller(self):
-        seller = self.wiz_model._get_seller(self.parsed_catalog)
+        # Not found
+        with self.assertRaises(UserError):
+            seller = self.wiz_model._get_seller(self.parsed_catalog)
+        # Found
+        seller = self.wiz_model.with_company(self.company.id)._get_seller(
+            self.parsed_catalog
+        )
         self.assertEqual(seller, self.supplier)
 
     def test_get_company_id(self):
-        # Test not found company_id
-        company_id = self.wiz_model._get_company_id(self.parsed_catalog)
-        self.assertIs(company_id, False)
         # Test found company_id
-        new_catalog = dict(
-            self.parsed_catalog, company={"name": "My Company (San Francisco)"}
-        )
+        company_id = self.wiz_model._get_company_id(self.parsed_catalog)
+        self.assertEqual(company_id, self.company.id)
+        # Test not found company_id
+        new_catalog = dict(self.parsed_catalog)
+        del new_catalog["company"]
         company_id = self.wiz_model._get_company_id(new_catalog)
-        self.assertEqual(company_id, self.env.ref("base.main_company").id)
+        self.assertIs(company_id, False)
 
     def test_product_import(self):
         # product.product

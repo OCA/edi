@@ -12,7 +12,10 @@ class TestCommon(SavepointCase):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.wiz_model = cls.env["product.import"]
-        cls.supplier = cls.env["res.partner"].create({"name": "Catalogue Vendor"})
+        cls.company = cls.env["res.company"].create({"name": "Customer ABC"})
+        cls.supplier = cls.env["res.partner"].create(
+            {"name": "Catalogue Vendor", "company_id": cls.company.id}
+        )
 
     def _mock(self, method_name):
         return mock.patch.object(type(self.wiz_model), method_name)
