@@ -49,7 +49,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
                     "name": "Poor Partner (not integrating one)",
                     "email": "poor.partner@ododo.com",
                     "login": "poorpartner",
-                    "groups_id": [(6, 0, [cls.env.ref("base.group_user").id])],
+                    "groups_id": [(6, 0, [cls.env.ref("base_edi.group_edi_user").id])],
                 }
             )
         )

@@ -5,6 +5,7 @@
 
 import base64
 import logging
+from ast import literal_eval
 from collections import defaultdict
 
 from odoo import _, api, exceptions, fields, models
@@ -114,6 +115,10 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_retryable",
         help="The record state can be rolled back manually in case of failure.",
     )
+    related_queue_jobs_count = fields.Integer(
+        compute="_compute_related_queue_jobs_count"
+    )
+    company_id = fields.Many2one("res.company", string="Company")
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -598,3 +603,32 @@ class EDIExchangeRecord(models.Model):
 
     def _job_retry_params(self):
         return {}
+
+    def _compute_related_queue_jobs_count(self):
+        for rec in self:
+            # TODO: We should refactor the object field on queue_job to use jsonb field
+            # so that we can search directly into it.
+            rec.related_queue_jobs_count = rec.env["queue.job"].search_count(
+                [("func_string", "like", str(rec))]
+            )
+
+    def action_view_related_queue_jobs(self):
+        self.ensure_one()
+        xmlid = "queue_job.action_queue_job"
+        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        # Searching based on task name. Ex: `edi.exchange.record(1,).action_exchange_send()`
+        # TODO: We should refactor the object field on queue_job to use jsonb field
+        # so that we can search directly into it.
+        action["domain"] = [("func_string", "like", str(self))]
+        # Purge default search filters from ctx to avoid hiding records
+        ctx = action.get("context", {})
+        if isinstance(ctx, str):
+            ctx = literal_eval(ctx)
+        # Update the current contexts
+        ctx.update(self.env.context)
+        action["context"] = {
+            k: v for k, v in ctx.items() if not k.startswith("search_default_")
+        }
+        # Drop ID otherwise the context will be loaded from the action's record
+        action.pop("id")
+        return action
