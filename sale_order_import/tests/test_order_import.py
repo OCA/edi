@@ -3,6 +3,11 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import base64
+from unittest import mock
+
+from odoo.tests.common import Form
+
 from .common import TestCommon
 
 
@@ -65,3 +70,78 @@ class TestOrderImport(TestCommon):
             sale_order_import__default_vals=dict(order=default)
         ).create_order(self.parsed_order, "pricelist")
         self.assertEqual(order.client_order_ref, "OVERRIDE")
+
+    def test_with_order_buttons(self):
+        # Prepare test data
+        order_file_data = base64.b64encode(
+            b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        )
+        order_filename = "test_order.xml"
+        mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
+        # Create a new form
+        with Form(
+            self.wiz_model.with_context(
+                default_order_filename=order_filename,
+            )
+        ) as form:
+            with mock_parse_order as mocked:
+                # Return 'rfq' for doc_type
+                mocked.return_value = "rfq"
+                # Set values for the required fields
+                form.import_type = "xml"
+                form.order_file = order_file_data
+                mocked.assert_called()
+                # Test the button with the simulated values
+                mocked.return_value = self.parsed_order
+                action = form.save().import_order_button()
+                self.assertEqual(action["xml_id"], "sale.action_quotations")
+                self.assertEqual(action["view_mode"], "form,tree,calendar,graph")
+                self.assertEqual(action["view_id"], False)
+                mocked.assert_called()
+                so = self.env["sale.order"].browse(action["res_id"])
+                self.assertEqual(so.partner_id.email, "deco.addict82@example.com")
+                self.assertEqual(so.client_order_ref, "TEST1242")
+                self.assertEqual(so.order_line.product_id.code, "FURN_8888")
+                self.assertEqual(so.state, "draft")
+
+        # Create another form to update the above sale order
+        with Form(
+            self.wiz_model.with_context(
+                default_order_filename=order_filename,
+            )
+        ) as form:
+            with mock_parse_order as mocked:
+                # Return 'rfq' for doc_type
+                mocked.return_value = "rfq"
+                # Set the required fields
+                form.import_type = "xml"
+                form.order_file = order_file_data
+                parsed_order_up = dict(
+                    self.parsed_order,
+                    lines=[
+                        {
+                            "product": {"code": "FURN_8888"},
+                            "qty": 3,
+                            "uom": {"unece_code": "C62"},
+                            "price_unit": 12.42,
+                        },
+                        {
+                            "product": {"code": "FURN_9999"},
+                            "qty": 1,
+                            "uom": {"unece_code": "C62"},
+                            "price_unit": 1.42,
+                        },
+                    ],
+                )
+                mocked.return_value = parsed_order_up
+                action = form.save().import_order_button()
+                form = form.save()
+                self.assertEqual(
+                    action["xml_id"], "sale_order_import.sale_order_import_action"
+                )
+                self.assertEqual(form.state, "update")
+                self.assertEqual(form.sale_id, so)
+                form.update_order_button()
+
+        self.assertEqual(len(so.order_line), 2)
+        self.assertEqual(so.order_line[0].product_uom_qty, 3)
