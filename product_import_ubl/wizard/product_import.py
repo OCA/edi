@@ -90,6 +90,9 @@ class ProductImport(models.TransientModel):
                 "price": float(ele_price.text or 0),
                 "currency": {"iso": currency} if currency else False,
                 "min_qty": min_qty,
+                "sale_delay": xline.text(
+                    "cac:RequiredItemLocationQuantity/cbc:LeadTimeMeasure"
+                ),
             }
         )
         return product_vals
