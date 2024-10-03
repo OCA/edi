@@ -17,21 +17,21 @@ Base Import Pdf by Template
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/15.0/base_import_pdf_by_template
+    :target: https://github.com/OCA/edi/tree/17.0/base_import_pdf_by_template
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-15-0/edi-15-0-base_import_pdf_by_template
+    :target: https://translation.odoo-community.org/projects/edi-17-0/edi-17-0-base_import_pdf_by_template
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=15.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=17.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module allows you to import PDF files and generate records based on the data
-contained in those PDF files.
-It also allows you to define a pattern that indicates how to recognize and extract
-the data from the PDF to generate a record.
+This module allows you to import PDF files and generate records based on
+the data contained in those PDF files. It also allows you to define a
+pattern that indicates how to recognize and extract the data from the
+PDF to generate a record.
 
 **Table of contents**
 
@@ -41,102 +41,129 @@ the data from the PDF to generate a record.
 Configuration
 =============
 
-To configure a PDF document template for import, the first thing to do is to have the
-document defined with a specific structure.
+To configure a PDF document template for import, the first thing to do
+is to have the document defined with a specific structure.
 
-#. Go to Settings > Technical > Base Import PDF Simple > Templates
-#. Create a new template by entering a characteristic name and the model on which
-   the record will be generated.
+1. Go to Settings > Technical > Base Import PDF Simple > Templates
+2. Create a new template by entering a characteristic name and the model
+   on which the record will be generated.
 
-  Fields to consider completing on template:
+..
 
-    - Main Model: model on which the record will be generated. Example: purchase.order
-    - Child field: One2many field that will create records from selected template.
-      Example: Order Lines (purchase.order)
-    - Auto detect pattern: Define a characteristic pattern of the document so that
-      it recognizes that it corresponds to the template we are creating. Need to use
-      regular expression. Example: (?<=ESA79935607)[\S\s]*
-    - Header Items: Complete this field if the template has a header table to extract
-      information lines. Example: Reference,Quantity,Price
-    - Company: Set the company that will use the template. If it is empty, template
-      will apply for all companies set on the environment.
+   Fields to consider completing on template:
 
-#. Add new lines.
+      -  Main Model: model on which the record will be generated.
+         Example: purchase.order
+      -  Child field: One2many field that will create records from
+         selected template. Example: Order Lines (purchase.order)
+      -  Auto detect pattern: Define a characteristic pattern of the
+         document so that it recognizes that it corresponds to the
+         template we are creating. Need to use regular expression.
+         Example: (?<=ESA79935607)[Ss]\*
+      -  Header Items: Complete this field if the template has a header
+         table to extract information lines. Example:
+         Reference,Quantity,Price
+      -  Company: Set the company that will use the template. If it is
+         empty, template will apply for all companies set on the
+         environment.
 
-  - Related model: When adding new line, the section where to locate the data; "header"
-    which, as its name indicates, refers to the header of the document and "lines" refers
-    to the structure of lines or table of the document.
-  - Field: Map the field to be completed. Example: product
-  - Pattern: Optional field to complete. Define pattern of the document so that it
-    recognizes the place to get the field selected on PDF template. Need to use regular
-    expression. Example: ([0-9]{7}) [0-7]{1}
-  - Value type:
-      - Fixed: Select this value, if the field mapped will always have an specific
-        value and not extract the information from template. In this case Pattern field
-        must be empty.
-      - Variable: Select variable to get the information from template. In this case,
-        Pattern field must be completed.
-  - For Value type "Variable" will appear extra fields to complete:
-  - Search value: Indicates the field by which the value obtained in the PDF will
-    be searched on the system.
-  - Default value: If the search result is empty for the search value option, you
-    can set default value to create a record and not getting error message.
-  - Log distint value?: This option is useful when getting prices in order to
-    compare prices inside system and prices obtained from PDF. This will create lines
-    with prices obtained from the system but create log on chatter to see the
-    differences obtained from PDF.
+1. Add new lines.
+
+..
+
+   -  Related model: When adding new line, the section where to locate
+      the data; "header" which, as its name indicates, refers to the
+      header of the document and "lines" refers to the structure of
+      lines or table of the document.
+
+   -  Field: Map the field to be completed. Example: product
+
+   -  Pattern: Optional field to complete. Define pattern of the
+      document so that it recognizes the place to get the field selected
+      on PDF template. Need to use regular expression. Example:
+      ([0-9]{7}) [0-7]{1}
+
+   -  Value type:
+
+      -  Fixed: Select this value, if the field mapped will always have
+         an specific value and not extract the information from
+         template. In this case Pattern field must be empty.
+      -  Variable: Select variable to get the information from template.
+         In this case, Pattern field must be completed.
+
+   -  For Value type "Variable" will appear extra fields to complete:
+
+   -  Search value: Indicates the field by which the value obtained in
+      the PDF will be searched on the system.
+
+   -  Default value: If the search result is empty for the search value
+      option, you can set default value to create a record and not
+      getting error message.
+
+   -  Log distint value?: This option is useful when getting prices in
+      order to compare prices inside system and prices obtained from
+      PDF. This will create lines with prices obtained from the system
+      but create log on chatter to see the differences obtained from
+      PDF.
 
 Check demo data to further information.
 
 Usage
 =====
 
-This module allows to upload PDF files in any Odoo model. It processes each of the files
-and converts it into a new record.
-Technically, the pdf is transformed into text and that text is processed to create the
-record.
-The module incorporates an option in Favorites Import PDF and Template configuration in
-order to recognized any document structure.
+This module allows to upload PDF files in any Odoo model. It processes
+each of the files and converts it into a new record. Technically, the
+pdf is transformed into text and that text is processed to create the
+record. The module incorporates an option in Favorites Import PDF and
+Template configuration in order to recognized any document structure.
 
 Known issues / Roadmap
 ======================
 
-- Add operator in template lines (= or ilike)
-- Add support for selection fields as default value.
-- Simplify auto-detection (defining a text only to search the system should search the
-  corresponding regular expression).
-- Allow compatibility with registration process created from email alias (for purchase
-  order for example).
-- Remove error if some file is not auto-detected template, options: boolean (default
-  option according to system parameter) to omit error for not found files or change
-  process to 2 steps, auto-detect and show lines (each one with respect to a file) with
-  template applied (similar to dms_auto_classification).
-- Create test_base_import_pdf_simple module with sale, purchase and account dependencies
-  to leave templates created in runboat and tests more useful for testers.
-- Display a more readable error if there is an error in Preview process, example: wrong
-  pattern. Message: "Please check template defined, some items are not correctly set".
-- Add a progress bar (widget=“gauge”) in the import wizard process, useful if we import
-  for example sales orders with 20 lines and thus know the progress.
+-  Add operator in template lines (= or ilike)
+-  Add support for selection fields as default value.
+-  Simplify auto-detection (defining a text only to search the system
+   should search the corresponding regular expression).
+-  Allow compatibility with registration process created from email
+   alias (for purchase order for example).
+-  Remove error if some file is not auto-detected template, options:
+   boolean (default option according to system parameter) to omit error
+   for not found files or change process to 2 steps, auto-detect and
+   show lines (each one with respect to a file) with template applied
+   (similar to dms_auto_classification).
+-  Create test_base_import_pdf_simple module with sale, purchase and
+   account dependencies to leave templates created in runboat and tests
+   more useful for testers.
+-  Display a more readable error if there is an error in Preview
+   process, example: wrong pattern. Message: "Please check template
+   defined, some items are not correctly set".
+-  Add a progress bar (widget=“gauge”) in the import wizard process,
+   useful if we import for example sales orders with 20 lines and thus
+   know the progress.
 
 Compatibility with csv, xls, etc:
 
-- Separate much of the logic to new module base_import_simple that would contain the logic
-  of templates, type of files (csv, excel, etc) in the templates and wizard and this module
-  would depend on the other adding only what relates to PDF.
-- The base module should take into account for each template whether each line is a new
-  record or not, and start line (in case you want to omit any), only page 1 would be imported.
-- The preview smart-btton would serve exactly the same purpose.
-- In the case of csv and Excel  that each record is a line, the document will NOT be attached
-  to the record.
-- If you indicate  that each record is a line the column will be the key, otherwise you must
-  specify to which  line each line of the template refers.
-- In the case of csv it will try to auto-detect the lines and columns (no need to complicate
-  delimiters configuration).
-- The menu "Import PDF" of the favorite menu would become "Import file", and the allowed file
-  extensions would be those obtained from a method (it would be extended by other modules that
-  add other formats such as PDF).
-- Add queue_job_base_import_simple module to process everything by queues (example: Excel
-  with hundreds of lines, each one a record).
+-  Separate much of the logic to new module base_import_simple that
+   would contain the logic of templates, type of files (csv, excel, etc)
+   in the templates and wizard and this module would depend on the other
+   adding only what relates to PDF.
+-  The base module should take into account for each template whether
+   each line is a new record or not, and start line (in case you want to
+   omit any), only page 1 would be imported.
+-  The preview smart-btton would serve exactly the same purpose.
+-  In the case of csv and Excel that each record is a line, the document
+   will NOT be attached to the record.
+-  If you indicate that each record is a line the column will be the
+   key, otherwise you must specify to which line each line of the
+   template refers.
+-  In the case of csv it will try to auto-detect the lines and columns
+   (no need to complicate delimiters configuration).
+-  The menu "Import PDF" of the favorite menu would become "Import
+   file", and the allowed file extensions would be those obtained from a
+   method (it would be extended by other modules that add other formats
+   such as PDF).
+-  Add queue_job_base_import_simple module to process everything by
+   queues (example: Excel with hundreds of lines, each one a record).
 
 Bug Tracker
 ===========
@@ -144,7 +171,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20base_import_pdf_by_template%0Aversion:%2015.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20base_import_pdf_by_template%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -152,20 +179,20 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Tecnativa
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* `Tecnativa <https://www.tecnativa.com>`_:
+-  `Tecnativa <https://www.tecnativa.com>`__:
 
-  * Víctor Martínez
-  * Pedro M. Baeza
+   -  Víctor Martínez
+   -  Pedro M. Baeza
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -185,6 +212,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-victoralmau| 
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/15.0/base_import_pdf_by_template>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/17.0/base_import_pdf_by_template>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
