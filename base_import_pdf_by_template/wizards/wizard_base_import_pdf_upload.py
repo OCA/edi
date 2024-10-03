@@ -145,17 +145,14 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                 )
                 if not self.log_text:
                     self.log_text = ""
-                self.log_text += (
-                    _(
-                        """<p>%(item_name)s has been set with %(new_value)s instead of
+                self.log_text += _(
+                    """<p>%(item_name)s has been set with %(new_value)s instead of
                     %(old_value)s</p>"""
-                    )
-                    % {
-                        "item_name": getattr(_form, "name"),  # noqa: B009
-                        "old_value": old_value_data,
-                        "new_value": new_value_data,
-                    }
-                )
+                ) % {
+                    "item_name": getattr(_form, "name"),  # noqa: B009
+                    "old_value": old_value_data,
+                    "new_value": new_value_data,
+                }
         else:
             try:
                 setattr(_form, field_name, value)
@@ -210,7 +207,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                     if field in vals:
                         vals.update({field: ctx[key]})
             record = model.with_context(**ctx).create(vals)
-        except (AssertionError) as err:
+        except AssertionError as err:
             raise UserError(err) from err
         if self.log_text:
             record._message_log(body=self.log_text)
