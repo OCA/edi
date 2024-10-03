@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0\n"
+"Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -14,93 +14,56 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_aislante
 #: model:product.template,name:test_base_import_pdf_by_template.product_aislante_product_template
 msgid "Test Aislante"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_boligrafo
 #: model:product.template,name:test_base_import_pdf_by_template.product_boligrafo_product_template
 msgid "Test Boligrafo"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_botiquin
 #: model:product.template,name:test_base_import_pdf_by_template.product_botiquin_product_template
 msgid "Test Botiquin"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.generic_product
 #: model:product.template,name:test_base_import_pdf_by_template.generic_product_product_template
 msgid "Test Generic Product"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_hamaca
 #: model:product.template,name:test_base_import_pdf_by_template.product_hamaca_product_template
 msgid "Test Hamaca"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_leds
 #: model:product.template,name:test_base_import_pdf_by_template.product_leds_product_template
 msgid "Test Leds"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_laminas
 #: model:product.template,name:test_base_import_pdf_by_template.product_laminas_product_template
 msgid "Test Lmaninas"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_mochila
 #: model:product.template,name:test_base_import_pdf_by_template.product_mochila_product_template
 msgid "Test Mochila"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_plastificadora
 #: model:product.template,name:test_base_import_pdf_by_template.product_plastificadora_product_template
 msgid "Test Plastificadora"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_rotulador
 #: model:product.template,name:test_base_import_pdf_by_template.product_rotulador_product_template
 msgid "Test Rotulador"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.product,name:test_base_import_pdf_by_template.product_trituradora
 #: model:product.template,name:test_base_import_pdf_by_template.product_trituradora_product_template
 msgid "Test Trituradora"
-msgstr ""
-
-#. module: test_base_import_pdf_by_template
-#: model:product.product,uom_name:test_base_import_pdf_by_template.generic_product
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_aislante
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_boligrafo
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_botiquin
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_hamaca
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_laminas
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_leds
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_mochila
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_plastificadora
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_rotulador
-#: model:product.product,uom_name:test_base_import_pdf_by_template.product_trituradora
-#: model:product.template,uom_name:test_base_import_pdf_by_template.generic_product_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_aislante_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_boligrafo_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_botiquin_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_hamaca_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_laminas_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_leds_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_mochila_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_plastificadora_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_rotulador_product_template
-#: model:product.template,uom_name:test_base_import_pdf_by_template.product_trituradora_product_template
-msgid "Units"
 msgstr ""

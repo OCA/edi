@@ -9,7 +9,7 @@
     </record>
     <!-- Product Data !-->
     <record id="supplierinfo_decathlon_4449130" model="product.supplierinfo">
-        <field name="name" ref="partner_decathlon" />
+        <field name="partner_id" ref="partner_decathlon" />
         <field name="product_code">4449130</field>
     </record>
     <record id="product_mochila" model="product.product">
@@ -22,7 +22,7 @@
         />
     </record>
     <record id="supplierinfo_decathlon_5284409" model="product.supplierinfo">
-        <field name="name" ref="partner_decathlon" />
+        <field name="partner_id" ref="partner_decathlon" />
         <field name="product_code">5284409</field>
     </record>
     <record id="product_aislante" model="product.product">
@@ -35,7 +35,7 @@
         />
     </record>
     <record id="supplierinfo_decathlon_4225123" model="product.supplierinfo">
-        <field name="name" ref="partner_decathlon" />
+        <field name="partner_id" ref="partner_decathlon" />
         <field name="product_code">4225123</field>
     </record>
     <record id="product_hamaca" model="product.product">
@@ -48,7 +48,7 @@
         />
     </record>
     <record id="supplierinfo_decathlon_4006580" model="product.supplierinfo">
-        <field name="name" ref="partner_decathlon" />
+        <field name="partner_id" ref="partner_decathlon" />
         <field name="product_code">4006580</field>
     </record>
     <record id="product_botiquin" model="product.product">
@@ -118,7 +118,7 @@
         <field name="name">Tecnativa</field>
     </record>
     <record id="supplierinfo_tecnativa_CONS_0001" model="product.supplierinfo">
-        <field name="name" ref="partner_tecnativa" />
+        <field name="partner_id" ref="partner_tecnativa" />
         <field name="product_code">CONS_0001</field>
     </record>
     <record id="product_rotulador" model="product.product">
@@ -131,7 +131,7 @@
         />
     </record>
     <record id="supplierinfo_tecnativa_CONS_0002" model="product.supplierinfo">
-        <field name="name" ref="partner_tecnativa" />
+        <field name="partner_id" ref="partner_tecnativa" />
         <field name="product_code">CONS_0002</field>
     </record>
     <record id="product_boligrafo" model="product.product">
@@ -144,7 +144,7 @@
         />
     </record>
     <record id="supplierinfo_tecnativa_FURN_0003" model="product.supplierinfo">
-        <field name="name" ref="partner_tecnativa" />
+        <field name="partner_id" ref="partner_tecnativa" />
         <field name="product_code">FURN_0003</field>
     </record>
     <record id="product_leds" model="product.product">
@@ -157,7 +157,7 @@
         />
     </record>
     <record id="supplierinfo_tecnativa_E_COM10" model="product.supplierinfo">
-        <field name="name" ref="partner_tecnativa" />
+        <field name="partner_id" ref="partner_tecnativa" />
         <field name="product_code">E-COM10</field>
     </record>
     <record id="product_plastificadora" model="product.product">
@@ -170,7 +170,7 @@
         />
     </record>
     <record id="supplierinfo_tecnativa_FURN_8621" model="product.supplierinfo">
-        <field name="name" ref="partner_tecnativa" />
+        <field name="partner_id" ref="partner_tecnativa" />
         <field name="product_code">FURN_8621</field>
     </record>
     <record id="product_laminas" model="product.product">
@@ -183,7 +183,7 @@
         />
     </record>
     <record id="supplierinfo_tecnativa_FURN_7023" model="product.supplierinfo">
-        <field name="name" ref="partner_tecnativa" />
+        <field name="partner_id" ref="partner_tecnativa" />
         <field name="product_code">FURN_7023</field>
     </record>
     <record id="product_trituradora" model="product.product">

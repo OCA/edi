@@ -4,23 +4,13 @@
 from base64 import b64encode
 from os import path
 
-from odoo.tests import common
+from odoo.addons.base.tests.common import BaseCommon
 
 
-class TestBaseImportPdfByTemplate(common.TransactionCase):
+class TestBaseImportPdfByTemplate(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(
-            context=dict(
-                cls.env.context,
-                mail_create_nolog=True,
-                mail_create_nosubscribe=True,
-                mail_notrack=True,
-                no_reset_password=True,
-                tracking_disable=True,
-            )
-        )
         cls.partner_decathlon = cls.env.ref(
             "test_base_import_pdf_by_template.partner_decathlon"
         )
