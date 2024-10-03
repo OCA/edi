@@ -297,7 +297,7 @@ class BaseImportPdfTemplateLine(models.Model):
     def _onchange_value_type(self):
         if self.value_type == "fixed" and self.field_relation:
             record = self.env[self.field_relation].search([], limit=1)
-            self.fixed_value = "%s,%s" % (self.field_relation, record.id)
+            self.fixed_value = f"{self.field_relation},{record.id}"
 
     @api.onchange("search_field_id")
     def _onchange_search_field_id(self):

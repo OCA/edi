@@ -24,63 +24,61 @@
                             <field name="related_model" widget="radio" />
                             <field
                                 name="field_id"
-                                attrs="{'invisible': [('related_model', '=', False)]}"
+                                invisible="not related_model"
                                 options="{'no_create': True}"
                             />
                             <field name="field_relation" invisible="1" />
-                            <field
-                                name="column"
-                                attrs="{'invisible': [('related_model', '!=', 'lines')]}"
-                            />
+                            <field name="column" invisible="related_model != 'lines'" />
                             <field
                                 name="pattern"
-                                attrs="{'invisible': [('value_type', '=', 'fixed')], 'required': [('value_type', '!=', 'fixed')]}"
+                                invisible="value_type == 'fixed'"
+                                required="value_type != 'fixed'"
                             />
                             <field
                                 name="value_type"
                                 widget="radio"
-                                attrs="{'invisible': [('field_id', '=', False)]}"
+                                invisible="not field_id"
                             />
                             <field
                                 name="search_field_id"
-                                attrs="{'invisible': ['|', ('field_id', '=', False),('value_type', '=', 'fixed')]}"
+                                invisible="not field_id or value_type == 'fixed'"
                             />
                             <field name="search_field_ttype" invisible="1" />
                             <field name="search_field_relation" invisible="1" />
                             <field
                                 name="search_subfield_id"
-                                attrs="{'invisible': [('search_field_ttype', '!=', 'one2many')]}"
+                                invisible="search_field_ttype != 'one2many'"
                             />
                             <field
                                 name="default_value"
-                                attrs="{'invisible': ['|', ('value_type', '=', 'fixed'),('field_relation', '=', False)]}"
+                                invisible="value_type == 'fixed' or not field_relation"
                             />
                             <field
                                 name="log_distinct_value"
-                                attrs="{'invisible': ['|', ('field_id', '=', False),('value_type', '=', 'fixed')]}"
+                                invisible="not field_id or value_type == 'fixed'"
                             />
                             <field
                                 name="fixed_value"
-                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_relation', '=', False)]}"
+                                invisible="value_type != 'fixed' or not field_relation"
                             />
                         </group>
                         <group name="right">
                             <field name="field_ttype" invisible="1" />
                             <field
                                 name="date_format"
-                                attrs="{'invisible': [('field_ttype', 'not in', ('date', 'datetime'))]}"
+                                invisible="field_ttype not in ('date', 'datetime')"
                             />
                             <field
                                 name="time_format"
-                                attrs="{'invisible': [('field_ttype', '!=', 'datetime')]}"
+                                invisible="field_ttype != 'datetime'"
                             />
                             <field
                                 name="decimal_separator"
-                                attrs="{'invisible': [('field_ttype', 'not in', ('float', 'monetary'))]}"
+                                invisible="field_ttype not in ('float', 'monetary')"
                             />
                             <field
                                 name="thousand_separator"
-                                attrs="{'invisible': [('field_ttype', 'not in', ('float', 'monetary'))]}"
+                                invisible="field_ttype not in ('float', 'monetary')"
                             />
                         </group>
                     </group>
@@ -88,7 +86,7 @@
                         <page
                             string="Mapped"
                             name="page_mapped_ids"
-                            attrs="{'invisible': ['|', ('value_type', '=', 'fixed'),('field_relation', '=', False)]}"
+                            invisible="value_type == 'fixed' or not field_relation"
                         >
                             <field name="mapped_ids" nolabel="1">
                                 <tree editable="bottom">

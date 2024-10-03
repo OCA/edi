@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 {
     "name": "Base Import Pdf by Template",
-    "version": "15.0.1.0.1",
+    "version": "17.0.1.0.0",
     "website": "https://github.com/OCA/edi",
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "license": "AGPL-3",
@@ -25,8 +25,6 @@
     "assets": {
         "web.assets_backend": [
             "base_import_pdf_by_template/static/src/**/*.js",
-        ],
-        "web.assets_qweb": [
             "base_import_pdf_by_template/static/src/**/*.xml",
         ],
     },
