@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0\n"
+"Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -14,6 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 #, python-format
 msgid ""
@@ -102,6 +103,7 @@ msgid "Column"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__decimal_separator__comma
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__comma
@@ -166,6 +168,7 @@ msgid "Display Name"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__decimal_separator__dot
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__dot
@@ -174,6 +177,8 @@ msgid "Dot (.)"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 #, python-format
 msgid "Error to set %(field_name)s with value %(value)s"
@@ -218,6 +223,7 @@ msgid "Files"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__value_type__fixed
 #, python-format
@@ -236,12 +242,14 @@ msgid "For relationship fields, the technical name of the target model"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 #, python-format
 msgid "Generated Documents"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__time_format__-h:-m:-s
 #, python-format
@@ -249,6 +257,7 @@ msgid "H:M:S"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__related_model__header
 #, python-format
@@ -286,15 +295,15 @@ msgid "Import"
 msgstr ""
 
 #. module: base_import_pdf_by_template
-#. openerp-web
-#: code:addons/base_import_pdf_by_template/static/src/xml/import_menu.xml:0
-#, python-format
-msgid "Import PDF"
+#: model:ir.actions.act_window,name:base_import_pdf_by_template.action_wizard_base_import_pdf_upload
+msgid "Import PDFs"
 msgstr ""
 
 #. module: base_import_pdf_by_template
-#: model:ir.actions.act_window,name:base_import_pdf_by_template.action_wizard_base_import_pdf_upload
-msgid "Import PDFs"
+#. odoo-javascript
+#: code:addons/base_import_pdf_by_template/static/src/xml/import_records.xml:0
+#, python-format
+msgid "Import records (with template)"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -302,16 +311,6 @@ msgstr ""
 msgid ""
 "It will be necessary to set a patter that only finds something\n"
 "        in the documents for this template."
-msgstr ""
-
-#. module: base_import_pdf_by_template
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template____last_update
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line____last_update
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped____last_update
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview____last_update
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload____last_update
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line____last_update
-msgid "Last Modified on"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -341,6 +340,7 @@ msgid "Line"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__related_model__lines
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_view_form
@@ -364,6 +364,7 @@ msgid "Log distint value?"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-m--d--y
 #, python-format
@@ -371,6 +372,7 @@ msgid "MM-dd-YY"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-m/-d/-y
 #, python-format
@@ -401,6 +403,7 @@ msgid "Name"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 #, python-format
 msgid ""
@@ -409,6 +412,7 @@ msgid ""
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__none
 #, python-format
@@ -416,6 +420,7 @@ msgid "None"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_mixin.py:0
 #, python-format
 msgid "Odoo could not extract the text from the PDF."
@@ -495,6 +500,7 @@ msgid "Search subfield"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__space
 #, python-format
@@ -525,6 +531,7 @@ msgid "Templates"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 #, python-format
 msgid "There is no template that can be applied"
@@ -561,6 +568,7 @@ msgid "Value type"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__value_type__variable
 #, python-format
@@ -588,6 +596,7 @@ msgid "Wizard Base Import Pdf upload Line"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-y--d--m
 #, python-format
@@ -595,6 +604,7 @@ msgid "YY-dd-MM"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-y/-d/-m
 #, python-format
@@ -602,6 +612,7 @@ msgid "YY/dd/MM"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d_-m_-y
 #, python-format
