@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="base_import_pdf_by_template.ImportRecords">
+        <DropdownItem
+            class="'o_base_import_pdf_by_template_menu dropdown-item'"
+            onSelected.bind="openWizardBaseImportPdfUpload"
+        >
+            <i class="fa fa-fw fa-upload me-1" />Import records (with template)
+        </DropdownItem>
+    </t>
+</templates>
