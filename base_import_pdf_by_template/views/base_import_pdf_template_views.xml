@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="base_import_pdf_template_view_search" model="ir.ui.view">
+        <field name="name">base.import.pdf.template.search</field>
+        <field name="model">base.import.pdf.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <filter
+                    string="Archived"
+                    name="inactive"
+                    domain="[('active', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+    <record id="base_import_pdf_template_view_tree" model="ir.ui.view">
+        <field name="name">base.import.pdf.template.tree</field>
+        <field name="model">base.import.pdf.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="extraction_mode" />
+                <field name="model_id" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+    <record id="base_import_pdf_template_view_form" model="ir.ui.view">
+        <field name="name">base.import.pdf.template.form</field>
+        <field name="model">base.import.pdf.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            class="oe_stat_button"
+                            name="button_preview"
+                            icon="fa-search-plus"
+                            string="Preview"
+                            type="object"
+                            target="new"
+                        />
+                    </div>
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        invisible="active"
+                    />
+                    <div class="oe_title">
+                        <span class="oe_edit_only">Name</span>
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group name="main_group">
+                        <group name="left">
+                            <field name="active" invisible="1" />
+                            <field name="extraction_mode" widget="radio" />
+                            <field name="model" invisible="1" />
+                            <field name="child_model" invisible="1" />
+                            <field name="model_id" options="{'no_create': True}" />
+                            <field name="child_field_id" invisible="not model_id" />
+                        </group>
+                        <group name="right">
+                            <field name="auto_detect_pattern" />
+                            <field name="header_items" invisible="not child_model" />
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                                options="{'no_create': True}"
+                            />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines" name="page_line_ids">
+                            <field
+                                name="line_ids"
+                                context="{'tree_view_ref': 'base_import_pdf_by_template.base_import_pdf_template_line_view_tree', 'form_view_ref':'base_import_pdf_by_template.base_import_pdf_template_line_view_form', 'default_model_id': model_id}"
+                            />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="base_import_pdf_template_action" model="ir.actions.act_window">
+        <field name="name">Templates</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">base.import.pdf.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem
+        id="menu_base_import_pdf_by_template_root"
+        name="Base Import Pdf By Template"
+        parent="base.menu_custom"
+    />
+    <menuitem
+        id="menu_base_import_pdf_template"
+        parent="menu_base_import_pdf_by_template_root"
+        action="base_import_pdf_template_action"
+    />
+</odoo>

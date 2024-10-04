@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="base_import_pdf_template_line_view_tree" model="ir.ui.view">
+        <field name="name">base.import.pdf.template.line.tree</field>
+        <field name="model">base.import.pdf.template.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="related_model" />
+                <field name="field_id" />
+                <field name="search_field_id" />
+                <field name="value_type" />
+            </tree>
+        </field>
+    </record>
+    <record id="base_import_pdf_template_line_view_form" model="ir.ui.view">
+        <field name="name">base.import.pdf.template.line.form</field>
+        <field name="model">base.import.pdf.template.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group name="main_group">
+                        <group name="left">
+                            <field name="model" invisible="1" />
+                            <field name="related_model" widget="radio" />
+                            <field
+                                name="field_id"
+                                invisible="not related_model"
+                                options="{'no_create': True}"
+                            />
+                            <field name="field_relation" invisible="1" />
+                            <field name="column" invisible="related_model != 'lines'" />
+                            <field
+                                name="pattern"
+                                invisible="value_type == 'fixed'"
+                                required="value_type != 'fixed'"
+                            />
+                            <field
+                                name="value_type"
+                                widget="radio"
+                                invisible="not field_id"
+                            />
+                            <field
+                                name="search_field_id"
+                                invisible="not field_id or value_type == 'fixed'"
+                            />
+                            <field name="search_field_ttype" invisible="1" />
+                            <field name="search_field_relation" invisible="1" />
+                            <field
+                                name="search_subfield_id"
+                                invisible="search_field_ttype != 'one2many'"
+                            />
+                            <field
+                                name="default_value"
+                                invisible="value_type == 'fixed' or not field_relation"
+                            />
+                            <field
+                                name="log_distinct_value"
+                                invisible="not field_id or value_type == 'fixed'"
+                            />
+                            <field
+                                name="fixed_value"
+                                invisible="value_type != 'fixed' or not field_relation"
+                            />
+                        </group>
+                        <group name="right">
+                            <field name="field_ttype" invisible="1" />
+                            <field
+                                name="date_format"
+                                invisible="field_ttype not in ('date', 'datetime')"
+                            />
+                            <field
+                                name="time_format"
+                                invisible="field_ttype != 'datetime'"
+                            />
+                            <field
+                                name="decimal_separator"
+                                invisible="field_ttype not in ('float', 'monetary')"
+                            />
+                            <field
+                                name="thousand_separator"
+                                invisible="field_ttype not in ('float', 'monetary')"
+                            />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page
+                            string="Mapped"
+                            name="page_mapped_ids"
+                            invisible="value_type == 'fixed' or not field_relation"
+                        >
+                            <field name="mapped_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="origin" />
+                                    <field name="value" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
