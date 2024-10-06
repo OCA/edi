@@ -282,6 +282,8 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEqual(res, partner2)
 
     def test_match_currency(self):
+        currency_inv = self.env.ref("base.EUR")
+        currency_inv.active = True
         bdio = self.env["business.document.import"]
         currency_dict = {"xmlid": "base.USD"}
         res = bdio._match_currency(currency_dict, [])
@@ -357,7 +359,6 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             raise_test = False
         except Exception:
             logger.info("Exception catched.")
-
         self.assertTrue(raise_test)
 
     def test_match_uom(self):
@@ -480,3 +481,15 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         res = bdio._match_account({"code": "898999"}, chatter)
         self.assertEqual(acc, res)
         self.assertEqual(len(chatter), 1)
+
+    def test_incoterm_match(self):
+        bdoo = self.env["business.document.import"]
+        incoterm_dict = {"code": "EXW"}
+        res = bdoo._match_incoterm(incoterm_dict, [])
+        self.assertEqual(res, self.env.ref("account.incoterm_EXW"))
+        incoterm_dict = {"code": "EXW WORKS"}
+        res = bdoo._match_incoterm(incoterm_dict, [])
+        self.assertEqual(res, self.env.ref("account.incoterm_EXW"))
+        incoterm_dict = {}
+        res = bdoo._match_incoterm(incoterm_dict, [])
+        self.assertFalse(res)
