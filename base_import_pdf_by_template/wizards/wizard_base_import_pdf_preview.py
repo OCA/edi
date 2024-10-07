@@ -10,6 +10,7 @@ class WizardBaseImportPdfPreview(models.TransientModel):
     _inherit = "wizard.base.import.pdf.mixin"
 
     data_file = fields.Binary(string="File", attachment=True)
+    file_name = fields.Char(store=True)
     data = fields.Text(string="RAW data", readonly=True)
     total_pages = fields.Integer(string="Total pages", readonly=True)
     template_id = fields.Many2one(
