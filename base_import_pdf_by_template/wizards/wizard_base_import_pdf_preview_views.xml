@@ -8,9 +8,11 @@
             <form>
                 <group>
                     <field name="extraction_mode" widget="radio" />
+                    <field name="file_name" invisible="1" />
                     <field
                         name="data_file"
                         options="{'accepted_file_extensions': '.pdf'}"
+                        filename="file_name"
                     />
                     <field name="total_pages" invisible="total_pages == 0" />
                 </group>

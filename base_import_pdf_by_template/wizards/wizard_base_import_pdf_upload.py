@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import logging
 
+from markupsafe import Markup
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tests import Form
@@ -99,7 +101,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         store=True,
     )
     extraction_mode = fields.Selection(related="template_id.extraction_mode")
-    log_text = fields.Text()
+    log_text = fields.Html()
 
     @api.depends("attachment_id")
     def _compute_template_id(self):
@@ -122,6 +124,20 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         self.attachment_id.write({"res_model": record._name, "res_id": record.id})
         return record
 
+    def _add_log_error_text(self, field_name, value):
+        text = _("Error to set %(field_name)s with value %(value)s") % {
+            "field_name": field_name,
+            "value": value,
+        }
+        self._add_log_text(text)
+
+    def _add_log_text(self, text):
+        markup_text = Markup("<p>{text}</p>").format(text=text)
+        if not self.log_text:
+            self.log_text = markup_text
+        else:
+            self.log_text += markup_text
+
     def _process_set_value_form(self, _form, field_name, value):
         old_value = getattr(_form, field_name)
         model_name = self.env.context.get("model_name")
@@ -143,28 +159,20 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                 new_value_data = (
                     value.display_name if isinstance(value, models.Model) else value
                 )
-                if not self.log_text:
-                    self.log_text = ""
-                self.log_text += _(
-                    """<p>%(item_name)s has been set with %(new_value)s instead of
-                    %(old_value)s</p>"""
+                text = _(
+                    """%(item_name)s has been set with %(new_value)s instead of
+                    %(old_value)s"""
                 ) % {
                     "item_name": getattr(_form, "name"),  # noqa: B009
                     "old_value": old_value_data,
                     "new_value": new_value_data,
                 }
+                self._add_log_text(text)
         else:
             try:
                 setattr(_form, field_name, value)
             except Exception:
-                if not self.log_text:
-                    self.log_text = ""
-                self.log_text += _(
-                    "Error to set %(field_name)s with value %(value)s"
-                ) % {
-                    "field_name": field_name,
-                    "value": value,
-                }
+                self._add_log_error_text(field_name, value)
 
     def _process_form(self):
         """Create record with Form() according to text."""
@@ -191,17 +199,11 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                     template.child_model
                 )
                 for field_name in list(child_fixed_values.keys()):
+                    child_field_value = child_fixed_values[field_name]
                     try:
-                        setattr(line_form, field_name, child_fixed_values[field_name])
+                        setattr(line_form, field_name, child_field_value)
                     except Exception:
-                        if not self.log_text:
-                            self.log_text = ""
-                        self.log_text += _(
-                            "Error to set %(field_name)s with value %(value)s"
-                        ) % {
-                            "field_name": field_name,
-                            "value": child_fixed_values[field_name],
-                        }
+                        self._add_log_error_text(field_name, child_field_value)
                 # et the values of any line
                 for field_name in list(line.keys()):
                     self.with_context(
