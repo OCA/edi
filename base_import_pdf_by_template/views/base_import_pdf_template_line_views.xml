@@ -19,68 +19,69 @@
             <form>
                 <sheet>
                     <group name="main_group">
-                        <group name="left">
-                            <field name="model" invisible="1" />
-                            <field name="related_model" widget="radio" />
-                            <field
-                                name="field_id"
-                                invisible="not related_model"
-                                options="{'no_create': True}"
-                            />
-                            <field name="field_relation" invisible="1" />
-                            <field name="column" invisible="related_model != 'lines'" />
-                            <field
-                                name="pattern"
-                                invisible="value_type == 'fixed'"
-                                required="value_type != 'fixed'"
-                            />
-                            <field
-                                name="value_type"
-                                widget="radio"
-                                invisible="not field_id"
-                            />
-                            <field
-                                name="search_field_id"
-                                invisible="not field_id or value_type == 'fixed'"
-                            />
-                            <field name="search_field_ttype" invisible="1" />
-                            <field name="search_field_relation" invisible="1" />
-                            <field
-                                name="search_subfield_id"
-                                invisible="search_field_ttype != 'one2many'"
-                            />
-                            <field
-                                name="default_value"
-                                invisible="value_type == 'fixed' or not field_relation"
-                            />
-                            <field
-                                name="log_distinct_value"
-                                invisible="not field_id or value_type == 'fixed'"
-                            />
-                            <field
-                                name="fixed_value"
-                                invisible="value_type != 'fixed' or not field_relation"
-                            />
-                        </group>
-                        <group name="right">
-                            <field name="field_ttype" invisible="1" />
-                            <field
-                                name="date_format"
-                                invisible="field_ttype not in ('date', 'datetime')"
-                            />
-                            <field
-                                name="time_format"
-                                invisible="field_ttype != 'datetime'"
-                            />
-                            <field
-                                name="decimal_separator"
-                                invisible="field_ttype not in ('float', 'monetary')"
-                            />
-                            <field
-                                name="thousand_separator"
-                                invisible="field_ttype not in ('float', 'monetary')"
-                            />
-                        </group>
+                        <field name="model" invisible="1" />
+                        <field
+                            name="related_model"
+                            widget="radio"
+                            options="{'horizontal': True}"
+                        />
+                        <field
+                            name="field_id"
+                            invisible="not related_model"
+                            options="{'no_create': True}"
+                        />
+                        <field name="field_relation" invisible="1" />
+                        <field name="column" invisible="related_model != 'lines'" />
+                        <field
+                            name="pattern"
+                            invisible="value_type == 'fixed'"
+                            required="value_type != 'fixed'"
+                        />
+                        <field
+                            name="value_type"
+                            widget="radio"
+                            options="{'horizontal': True}"
+                            invisible="not field_id"
+                        />
+                        <field
+                            name="search_field_id"
+                            invisible="not field_id or value_type == 'fixed'"
+                        />
+                        <field name="search_field_ttype" invisible="1" />
+                        <field name="search_field_relation" invisible="1" />
+                        <field
+                            name="search_subfield_id"
+                            invisible="search_field_ttype != 'one2many'"
+                        />
+                        <field
+                            name="default_value"
+                            invisible="value_type == 'fixed' or not field_relation"
+                        />
+                        <field
+                            name="log_distinct_value"
+                            invisible="not field_id or value_type == 'fixed'"
+                        />
+                        <field
+                            name="fixed_value"
+                            invisible="value_type != 'fixed' or not field_relation"
+                        />
+                        <field name="field_ttype" invisible="1" />
+                        <field
+                            name="date_format"
+                            invisible="field_ttype not in ('date', 'datetime')"
+                        />
+                        <field
+                            name="time_format"
+                            invisible="field_ttype != 'datetime'"
+                        />
+                        <field
+                            name="decimal_separator"
+                            invisible="field_ttype not in ('float', 'monetary')"
+                        />
+                        <field
+                            name="thousand_separator"
+                            invisible="field_ttype not in ('float', 'monetary')"
+                        />
                     </group>
                     <notebook>
                         <page
