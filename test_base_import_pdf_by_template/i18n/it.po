@@ -1,0 +1,72 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* test_base_import_pdf_by_template
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-10-07 09:06+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_aislante_product_template
+msgid "Test Aislante"
+msgstr "Test isolante"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_boligrafo_product_template
+msgid "Test Boligrafo"
+msgstr "Test penna"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_botiquin_product_template
+msgid "Test Botiquin"
+msgstr "Test armadietto"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.generic_product_product_template
+msgid "Test Generic Product"
+msgstr "Test prodotto generico"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_hamaca_product_template
+msgid "Test Hamaca"
+msgstr "Test amaca"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_leds_product_template
+msgid "Test Leds"
+msgstr "Test led"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_laminas_product_template
+msgid "Test Lmaninas"
+msgstr "Test fogli"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_mochila_product_template
+msgid "Test Mochila"
+msgstr "Test cartella"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_plastificadora_product_template
+msgid "Test Plastificadora"
+msgstr "Test laminatore"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_rotulador_product_template
+msgid "Test Rotulador"
+msgstr "Test marcatore"
+
+#. module: test_base_import_pdf_by_template
+#: model:product.template,name:test_base_import_pdf_by_template.product_trituradora_product_template
+msgid "Test Trituradora"
+msgstr "Test trituratore"
