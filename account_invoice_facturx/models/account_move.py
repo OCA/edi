@@ -393,6 +393,7 @@ class AccountMove(models.Model):
                     "unece_type_code": "VAT",
                     "unece_categ_code": "E",
                     "amount": 0,
+                    "amount_type": "percent",
                     "display_name": "Empty virtual tax",
                 }
             )
