@@ -1,0 +1,1 @@
+odoo-addon-account_invoice_export @ git+https://github.com/OCA/edi.git@refs/pull/1037/head#subdirectory=account_invoice_export
