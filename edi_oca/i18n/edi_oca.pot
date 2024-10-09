@@ -1096,7 +1096,7 @@ msgid "Record ID"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:490
+#: code:addons/edi_oca/models/edi_backend.py:493
 #, python-format
 msgid "Record ID=%d has no file to process!"
 msgstr ""
@@ -1108,8 +1108,8 @@ msgid "Record ID=%d has no file to send!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_backend.py:483
-#: code:addons/edi_oca/models/edi_backend.py:598
+#: code:addons/edi_oca/models/edi_backend.py:486
+#: code:addons/edi_oca/models/edi_backend.py:601
 #, python-format
 msgid "Record ID=%d is not meant to be processed"
 msgstr ""
