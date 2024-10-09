@@ -407,9 +407,7 @@ class EDIBackend(models.Model):
         :param skip_sent: ignore records that were already sent.
         """
         # Generate output files
-        new_records = self.exchange_record_model.search(
-            self._output_new_records_domain(record_ids=record_ids)
-        )
+        new_records = self._get_new_output_exchange_records(record_ids=record_ids)
         _logger.info(
             "EDI Exchange output sync: found %d new records to process.",
             len(new_records),
@@ -439,6 +437,11 @@ class EDIBackend(models.Model):
             else:
                 # TODO: run in job as well?
                 self._exchange_output_check_state(rec)
+
+    def _get_new_output_exchange_records(self, record_ids=None):
+        return self.exchange_record_model.search(
+            self._output_new_records_domain(record_ids=record_ids)
+        )
 
     def _output_new_records_domain(self, record_ids=None):
         """Domain for output records needing output content generation."""
