@@ -240,9 +240,9 @@ grammar = OrderedDict(
             "dp": False,
             "ubl_path": [
                 "DespatchAdvice.cac:Shipment.cac:Delivery."
-                "cac:EstimatedDeliveryPeriod.cbc:EndDate",
+                "cac:PromiseDeliveryPeriod.cbc:EndDate",
                 "DespatchAdvice.cac:Shipment.cac:Delivery."
-                "cac:EstimatedDeliveryPeriod.cbc:EndTime",
+                "cac:PromiseDeliveryPeriod.cbc:EndTime",
             ],
             "df_val": False,
             "df_func": False,
