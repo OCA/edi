@@ -43,3 +43,26 @@ class EDIBackendTestInputCase(EDIBackendCommonComponentRegistryTestCase):
         self.backend.with_context(fake_output="yeah!").exchange_receive(self.record)
         self.assertEqual(self.record._get_file_content(), "yeah!")
         self.assertRecordValues(self.record, [{"edi_exchange_state": "input_received"}])
+
+    def test_receive_no_allow_empty_file_record(self):
+        self.record.edi_exchange_state = "input_pending"
+        self.backend.with_context(
+            fake_output="", _edi_receive_break_on_error=False
+        ).exchange_receive(self.record)
+        # Check the record
+        msg = "Empty files are not allowed for exchange type"
+        self.assertIn(msg, self.record.exchange_error)
+        self.assertEqual(self.record._get_file_content(), "")
+        self.assertRecordValues(
+            self.record, [{"edi_exchange_state": "input_receive_error"}]
+        )
+
+    def test_receive_allow_empty_file_record(self):
+        self.record.edi_exchange_state = "input_pending"
+        self.record.type_id.allow_empty_files_on_receive = True
+        self.backend.with_context(
+            fake_output="", _edi_receive_break_on_error=False
+        ).exchange_receive(self.record)
+        # Check the record
+        self.assertEqual(self.record._get_file_content(), "")
+        self.assertRecordValues(self.record, [{"edi_exchange_state": "input_received"}])

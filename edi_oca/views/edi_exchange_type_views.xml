@@ -41,6 +41,7 @@
                         </group>
                         <group name="config">
                             <field name="exchange_filename_pattern" />
+                            <field name="exchange_filename_sequence_id" />
                             <field name="exchange_file_ext" />
                             <field name="exchange_file_auto_generate" />
                             <field name="ack_type_id" />
@@ -48,6 +49,19 @@
                             <field name="partner_ids" widget="many2many_tags" />
                             <field name="job_channel_id" />
                             <field name="quick_exec" />
+                            <field name="encoding" />
+                            <field
+                                name="encoding_out_error_handler"
+                                attrs="{'invisible': [('direction', '=', 'input')]}"
+                            />
+                            <field
+                                name="encoding_in_error_handler"
+                                attrs="{'invisible': [('direction', '=', 'output')]}"
+                            />
+                            <field
+                                name="allow_empty_files_on_receive"
+                                attrs="{'invisible': [('direction', '=', 'output')]}"
+                            />
                         </group>
                     </group>
                     <field name="deprecated_rule_fields_still_used" invisible="1" />

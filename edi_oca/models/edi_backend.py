@@ -50,6 +50,7 @@ class EDIBackend(models.Model):
         required=True,
         ondelete="restrict",
     )
+    backend_type_code = fields.Char(related="backend_type_id.code")
     output_sent_processed_auto = fields.Boolean(
         help="""
     Automatically set the record as processed after sending.
@@ -57,6 +58,7 @@ class EDIBackend(models.Model):
     """
     )
     active = fields.Boolean(default=True)
+    company_id = fields.Many2one("res.company", string="Company")
 
     def _get_component(self, exchange_record, key):
         record_conf = self._get_component_conf_for_record(exchange_record, key)
@@ -207,16 +209,23 @@ class EDIBackend(models.Model):
 
         :param exchange_record: edi.exchange.record recordset
         :param store: store output on the record itself
-        :param force: allow to re-genetate the content
+        :param force: allow to re-generate the content
         :param kw: keyword args to be propagated to output generate handler
         """
         self.ensure_one()
+        if force and exchange_record.exchange_file:
+            # Remove file to regenerate
+            exchange_record.exchange_file = False
         self._check_exchange_generate(exchange_record, force=force)
         output = self._exchange_generate(exchange_record, **kw)
         message = None
+        encoding = exchange_record.type_id.encoding or "UTF-8"
+        encoding_error_handler = (
+            exchange_record.type_id.encoding_out_error_handler or "strict"
+        )
         if output and store:
             if not isinstance(output, bytes):
-                output = output.encode()
+                output = output.encode(encoding, errors=encoding_error_handler)
             exchange_record.update(
                 {
                     "exchange_file": base64.b64encode(output),
@@ -280,6 +289,18 @@ class EDIBackend(models.Model):
 
     # TODO: add tests
     def _validate_data(self, exchange_record, value=None, **kw):
+        if exchange_record.direction == "input" and not exchange_record.exchange_file:
+            if not exchange_record.type_id.allow_empty_files_on_receive:
+                raise ValueError(
+                    _(
+                        "Empty files are not allowed for exchange type %(name)s (%(code)s)"
+                    )
+                    % {
+                        "name": exchange_record.type_id.name,
+                        "code": exchange_record.type_id.code,
+                    }
+                )
+
         component = self._get_component(exchange_record, "validate")
         if component:
             return component.validate(value)
@@ -291,7 +312,7 @@ class EDIBackend(models.Model):
         # In case already sent: skip sending and check the state
         check = self._output_check_send(exchange_record)
         if not check:
-            return "Nothing to do. Likely already sent."
+            return self._failed_output_check_send_msg()
         state = exchange_record.edi_exchange_state
         error = False
         message = None
@@ -389,9 +410,7 @@ class EDIBackend(models.Model):
         :param skip_sent: ignore records that were already sent.
         """
         # Generate output files
-        new_records = self.exchange_record_model.search(
-            self._output_new_records_domain(record_ids=record_ids)
-        )
+        new_records = self._get_new_output_exchange_records(record_ids=record_ids)
         _logger.info(
             "EDI Exchange output sync: found %d new records to process.",
             len(new_records),
@@ -421,6 +440,11 @@ class EDIBackend(models.Model):
             else:
                 # TODO: run in job as well?
                 self._exchange_output_check_state(rec)
+
+    def _get_new_output_exchange_records(self, record_ids=None):
+        return self.exchange_record_model.search(
+            self._output_new_records_domain(record_ids=record_ids)
+        )
 
     def _output_new_records_domain(self, record_ids=None):
         """Domain for output records needing output content generation."""
@@ -464,7 +488,10 @@ class EDIBackend(models.Model):
             raise exceptions.UserError(
                 _("Record ID=%d is not meant to be processed") % exchange_record.id
             )
-        if not exchange_record.exchange_file:
+        if (
+            not exchange_record.exchange_file
+            and not exchange_record.type_id.allow_empty_files_on_receive
+        ):
             raise exceptions.UserError(
                 _("Record ID=%d has no file to process!") % exchange_record.id
             )
@@ -535,7 +562,8 @@ class EDIBackend(models.Model):
         content = None
         try:
             content = self._exchange_receive(exchange_record)
-            if content:
+            # Ignore result of FileNotFoundError/OSError
+            if content is not None:
                 exchange_record._set_file_content(content)
                 self._validate_data(exchange_record)
         except EDIValidationError:
@@ -678,3 +706,6 @@ class EDIBackend(models.Model):
             if raise_if_not:
                 raise
             return False
+
+    def _failed_output_check_send_msg(self):
+        return "Nothing to do. Likely already sent."

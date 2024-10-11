@@ -1,0 +1,8 @@
+{
+  "pull_requests": {
+    "5": "No need",
+    "29": "only for > 16.0",
+    "63": "FWD port PR from the same version",
+    "65": "Only valid for v16"
+  }
+}

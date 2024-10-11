@@ -95,7 +95,12 @@ class EDIExchangeTypeTestCase(EDIBackendCommonTestCase):
         # Test without any settings and minimal filename pattern
         self._test_exchange_filename("Test-File.csv")
 
+        # Test without extension for filename pattern
+        self.exchange_type_out.exchange_file_ext = False
+        self._test_exchange_filename("Test-File")
+
         # Test with datetime in filename pattern
+        self.exchange_type_out.exchange_file_ext = "csv"
         self.exchange_type_out.exchange_filename_pattern = "Test-File-{dt}"
         self._test_exchange_filename("Test-File-2022-04-28-08-37-24.csv")
 
@@ -126,6 +131,10 @@ class EDIExchangeTypeTestCase(EDIBackendCommonTestCase):
             date_pattern: '%Y-%m-%d-%H-%M'
         """
         self._test_exchange_filename("Test-File-2022-04-28-10-37.csv")
+        # Test with sequence in filename pattern
+        self.exchange_type_out.exchange_filename_pattern = "Test-File-{seq}"
+        self.exchange_type_out.exchange_filename_sequence_id = self.sequence
+        self._test_exchange_filename("Test-File-0000001.csv")
 
     def test_archive_rules(self):
         exc_type = self.exchange_type_out

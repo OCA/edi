@@ -17,7 +17,7 @@ class EDIBackendTestMixin(object):
     @classmethod
     def _setup_context(cls, **kw):
         return dict(
-            cls.env.context, tracking_disable=True, test_queue_job_no_delay=True, **kw
+            cls.env.context, tracking_disable=True, queue_job__no_delay=True, **kw
         )
 
     @classmethod
@@ -55,6 +55,14 @@ class EDIBackendTestMixin(object):
         cls.exchange_type_out.ack_type_id = cls.exchange_type_out_ack
         cls.partner = cls.env.ref("base.res_partner_1")
         cls.partner.ref = "EDI_EXC_TEST"
+        cls.sequence = cls.env["ir.sequence"].create(
+            {
+                "code": "test_sequence",
+                "name": "Test sequence",
+                "implementation": "no_gap",
+                "padding": 7,
+            }
+        )
 
     def read_test_file(self, filename):
         path = os.path.join(os.path.dirname(__file__), "examples", filename)

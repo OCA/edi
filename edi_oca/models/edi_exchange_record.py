@@ -114,6 +114,7 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_retryable",
         help="The record state can be rolled back manually in case of failure.",
     )
+    company_id = fields.Many2one("res.company", string="Company")
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),
@@ -225,11 +226,17 @@ class EDIExchangeRecord(models.Model):
     ):
         """Handy method to not have to convert b64 back and forth."""
         self.ensure_one()
+        encoding = self.type_id.encoding or "UTF-8"
+        decoding_error_handler = self.type_id.encoding_in_error_handler or "strict"
         if not self[field_name]:
             return ""
         if binary:
             res = base64.b64decode(self[field_name])
-            return res.decode() if not as_bytes else res
+            return (
+                res.decode(encoding, errors=decoding_error_handler)
+                if not as_bytes
+                else res
+            )
         return self[field_name]
 
     def name_get(self):
@@ -356,6 +363,10 @@ class EDIExchangeRecord(models.Model):
         if self._quick_exec_enabled():
             self._execute_next_action()
         return True
+
+    def action_regenerate(self):
+        for rec in self:
+            rec.action_exchange_generate(force=True)
 
     def action_open_related_record(self):
         self.ensure_one()
