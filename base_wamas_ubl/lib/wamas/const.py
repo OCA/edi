@@ -5,6 +5,7 @@ from .wamas_grammar import (
     ausk,
     auskq,
     ausp,
+    auspq,
     bkorr,
     kretk,
     kretkq,
@@ -49,6 +50,7 @@ DICT_DETECT_WAMAS_TYPE = {
     "ART": "Product",
     "AUSK": "Picking",
     "AUSKQ": "PickingResponse",
+    "AUSPQ": "PickingResponse",
     "KRETK": "Return",
     "KRETKQ": "ReturnResponse",
     "KST": "Customer",
@@ -77,6 +79,7 @@ DICT_WAMAS_GRAMMAR = {
     "WEAK": weak.grammar,
     "WEAP": weap.grammar,
     "AUSKQ": auskq.grammar,
+    "AUSPQ": auspq.grammar,
     "KRETKQ": kretkq.grammar,
     "KRETPQ": kretpq.grammar,
     "KST": kst.grammar,
@@ -96,7 +99,7 @@ DICT_WAMAS_GRAMMAR = {
 # WAMAS TO UBL
 ##
 
-LST_TELEGRAM_TYPE_IGNORE_W2D = ["AUSPQ", "TOURQ", "TAUSPQ"]
+LST_TELEGRAM_TYPE_IGNORE_W2D = ["TOURQ", "TAUSPQ"]
 
 DICT_UBL_TEMPLATE = {
     "ReceptionResponse": "ubl_template/reception.xml",
@@ -166,7 +169,7 @@ LST_VALID_TELEGRAM_IN = [
 
 DICT_CONVERT_WAMAS_TYPE = {
     "AUSK": ["AUSKQ", "WATEKQ"],
-    "AUSP": ["WATEPQ"],
+    "AUSP": ["AUSPQ", "WATEPQ"],
     "KRETK": ["KRETKQ"],
     "KRETP": ["KRETPQ"],
     "WEAK": ["WEAKQ"],

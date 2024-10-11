@@ -127,8 +127,11 @@ def dict2ubl(msg_type, data, extra_data=False):
         extractor.get_line("KRETPQ", "IvKretp_KretId_KretNr")
     elif msg_type == "PickingResponse":
         extractor.get_head("AUSKQ", "IvAusk_AusId_AusNr")
-        extractor.get_head("WATEKQ", "IvTek_TeId", extractor.packages)
-        extractor.get_line("WATEPQ", "IvAusp_UrAusId_AusNr", "IvTep_TeId")
+        if "WATEKQ" not in extractor.data and "WATEPQ" not in extractor.data:
+            extractor.get_line("AUSPQ", "IvAusp_UrAusId_AusNr")
+        else:
+            extractor.get_head("WATEKQ", "IvTek_TeId", extractor.packages)
+            extractor.get_line("WATEPQ", "IvAusp_UrAusId_AusNr", "IvTep_TeId")
     else:
         raise Exception("Invalid message type: %s" % msg_type)
 

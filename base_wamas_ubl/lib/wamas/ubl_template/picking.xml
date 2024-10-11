@@ -124,7 +124,7 @@
 		<cbc:ID><t t-raw="record.IvAusk_RahmenTourId_TourNr" /></cbc:ID>
 	</cac:Shipment>
 	<cac:DespatchLine t-foreach="record.lines" t-as="line">
-		<cac:Shipment>
+		<cac:Shipment t-if="line.package">
 			<cac:TransportHandlingUnit>
 				<cac:ActualPackage>
 					<cbc:ID><t t-raw="line.package.IvTek_TeId" /></cbc:ID>
@@ -139,9 +139,19 @@
 		</cac:Shipment>
 		<cbc:ID><t t-raw="line.IvAusp_HostPosNr" /></cbc:ID>
 		<cbc:DeliveredQuantity
+            t-if="line.Mngs_Mng"
             t-att-unitCode="line.IvArt_Bestand_Einheit"
             unitCodeListAgencyName="WAMAS"
-        ><t t-raw="line.Mngs_Mng" /></cbc:DeliveredQuantity>
+        >
+		<t t-raw="line.Mngs_Mng" />
+		</cbc:DeliveredQuantity>
+		<cbc:DeliveredQuantity
+            t-if="line.IvAusp_LiefMngsWamas_Mng"
+            t-att-unitCode="line.IvArt_Bestand_Einheit"
+            unitCodeListAgencyName="WAMAS"
+        >
+		<t t-raw="line.IvAusp_LiefMngsWamas_Mng" />
+		</cbc:DeliveredQuantity>
 		<cac:OrderLineReference>
 			<cbc:LineID />
 		</cac:OrderLineReference>
@@ -150,7 +160,12 @@
 				<cbc:ID />
 			</cac:BuyersItemIdentification>
 			<cac:SellersItemIdentification>
-				<cbc:ID><t t-raw="line.IvArt_AId_ArtNr" /></cbc:ID>
+				<cbc:ID t-if="line.IvArt_AId_ArtNr">
+					<t t-raw="line.IvArt_AId_ArtNr" />
+				</cbc:ID>
+				<cbc:ID t-if="line.IvAusp_MId_AId_ArtNr">
+					<t t-raw="line.IvAusp_MId_AId_ArtNr" />
+				</cbc:ID>
 			</cac:SellersItemIdentification>
 		</cac:Item>
 	</cac:DespatchLine>
