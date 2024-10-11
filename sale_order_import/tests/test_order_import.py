@@ -195,3 +195,66 @@ class TestOrderImport(TestCommon):
                 so = self.env["sale.order"].browse(action["res_id"])
                 # Check the state of the order
                 self.assertEqual(so.state, "sale")
+
+    def test_order_import_log_errored_line(self):
+        # Prepare test data
+        parsed_order = dict(
+            self.parsed_order,
+            partner={"email": "agrolait@yourcompany.example.com"},
+            lines=[
+                {
+                    "product": {"code": "errored"},  # No product exists with this code
+                    "qty": 3,
+                    "uom": {"unece_code": "C62"},
+                    "price_unit": 12.42,
+                },
+                {
+                    "product": {"code": "FURN_9999"},
+                    "qty": 1,
+                    "uom": {"unece_code": "C62"},
+                    "price_unit": 1.42,
+                },
+            ],
+        )
+        order_file_data = base64.b64encode(
+            b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        )
+        order_filename = "test_order.xml"
+        mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
+        # Create a new form
+        with Form(
+            self.wiz_model.with_context(
+                default_order_filename=order_filename,
+                default_confirm_order=True,
+                default_skip_error_lines=True,
+            )
+        ) as form:
+            with mock_parse_order as mocked:
+                # Return 'rfq' for doc_type
+                mocked.return_value = "rfq"
+                # Set values for the required fields
+                form.import_type = "xml"
+                form.order_file = order_file_data
+                # Test the button with the simulated values
+                mocked.return_value = parsed_order
+                action = form.save().import_order_button()
+                so = self.env["sale.order"].browse(action["res_id"])
+                # Check the order
+                self.assertEqual(so.state, "sale")
+                self.assertEqual(so.client_order_ref, parsed_order["order_ref"])
+                self.assertEqual(len(so.order_line), 1)
+                self.assertEqual(
+                    so.order_line.product_id.default_code,
+                    parsed_order["lines"][1]["product"]["code"],
+                )
+                # Check the error lines message
+                messages = [
+                    "Errors lines on Import: 1 line(s)",
+                    "Odoo couldn't find any product corresponding to the following"
+                    " information extracted from the business document",
+                ]
+                self.assertTrue(
+                    so.message_ids.filtered(
+                        lambda m: messages[0] in m.body and messages[1] in m.body
+                    )
+                )

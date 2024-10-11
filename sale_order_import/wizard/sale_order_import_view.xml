@@ -61,6 +61,7 @@
                         name="price_source"
                         attrs="{'invisible': [('doc_type', '!=', 'order')], 'required': [('doc_type', '=', 'order')]}"
                     />
+                    <field name="skip_error_lines" />
                 </group>
                 <footer>
                     <button
