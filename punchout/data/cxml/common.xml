@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ACSONE SA/NV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <template id="cxml_punchout_request">
+<!--        <t t-raw="backend._get_cxml_xml_declaration()" />-->
+<!--        <t t-raw="backend._get_cxml_dtd_declaration()" />-->
+        <cXML
+            t-att-version="backend._get_cxml_version()"
+            t-att-payloadID="session._get_punchout_payload_identity()"
+            t-att-timestamp="session._get_punchout_request_timestamp()"
+        >
+            <t t-call="punchout.cxml_punchout_header" />
+            <Request t-att-deploymentMode="backend.deployment_mode">
+                <t t-raw="0" />
+            </Request>
+        </cXML>
+    </template>
+
+    <template id="cxml_punchout_header">
+      <Header>
+        <From>
+          <Credential t-att-domain="backend.from_domain">
+            <Identity><t t-esc="backend.from_identity" /></Identity>
+          </Credential>
+        </From>
+        <To>
+          <Credential t-att-domain="backend.to_domain">
+            <Identity><t t-esc="backend.to_identity" /></Identity>
+          </Credential>
+        </To>
+        <Sender>
+          <Credential domain="Networkid">
+            <Identity><t t-esc="backend.from_identity" /></Identity>
+            <SharedSecret><t t-esc="backend.shared_secret" /></SharedSecret>
+          </Credential>
+          <UserAgent><t t-esc="backend.user_agent" /></UserAgent>
+        </Sender>
+      </Header>
+    </template>
+
+</odoo>
