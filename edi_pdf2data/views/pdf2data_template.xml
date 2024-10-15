@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2021 Creu Blanca
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="pdf2data_template_form_view">
+        <field name="name">pdf2data.template.form (in edi_pdf2data)</field>
+        <field name="model">pdf2data.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button
+                            name="check_pdf"
+                            type="object"
+                            string="Check PDF"
+                            icon="fa-file-pdf-o"
+                        />
+                        <button
+                            name="%(pdf2data_template_import_yml_act_window)s"
+                            type="action"
+                            string="Import YAML"
+                            icon="fa-upload"
+                            context="{'default_template_id': id}"
+                        />
+                    </div>
+                    <group>
+                        <field name="name" />
+                        <field
+                            name="type_id"
+                            options="{'no_open': 1, 'no_create': 1}"
+                        />
+                        <field
+                            name="exchange_type_id"
+                            options="{'no_open': 1, 'no_create': 1}"
+                            domain="[('backend_type_id', '=', %(edi_pdf2data.backend_type)s)]"
+                        />
+                        <field name="sequence" />
+                        <field name="pdf_file" filename="pdf_filename" />
+                        <field name="pdf_filename" invisible="1" />
+                    </group>
+                    <notebook>
+                        <page name="field" string="Fields">
+                            <field name="field_ids">
+                                <tree>
+                                    <field name="name" />
+                                    <control>
+                                        <create
+                                            name="add_regex"
+                                            string="Add regex field"
+                                        />
+                                        <create
+                                            name="add_static"
+                                            string="Add a static field"
+                                            context="{'default_parse_mode': 'static'}"
+                                        />
+                                        <create
+                                            name="add_line"
+                                            string="Add a line field"
+                                            context="{'default_parse_mode': 'line'}"
+                                        />
+                                    </control>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="keyword" string="Keywords">
+                            <group>
+                                <group string="Include" name="include">
+                                    <field name="keyword_ids" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="keyword" />
+                                            <field name="exclude" invisible="1" />
+                                        </tree>
+                                        <form editable="bottom">
+                                            <sheet>
+                                                <group>
+                                                    <field name="keyword" />
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                    </field>
+                                </group>
+                                <group string="Exclude" name="exclude">
+                                    <field
+                                        name="exclude_keyword_ids"
+                                        nolabel="1"
+                                        context="{'default_exclude': 1}"
+                                    >
+                                        <tree editable="bottom">
+                                            <field name="keyword" />
+                                            <field name="exclude" invisible="1" />
+                                        </tree>
+                                        <form editable="bottom">
+                                            <sheet>
+                                                <group>
+                                                    <field name="keyword" />
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                    </field>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="config" string="Configuration">
+                            <group>
+                                <group>
+                                    <field name="lang" />
+                                    <field name="decimal_separator" />
+                                </group>
+                                <group>
+                                    <field name="remove_whitespace" />
+                                    <field name="remove_accents" />
+                                    <field name="lowercase" />
+                                </group>
+                            </group>
+                            <group name="replace" string="Replace">
+                                <field name="replace_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="from_char" />
+                                        <field name="to_char" />
+                                    </tree>
+                                    <form editable="bottom">
+                                    <sheet><group>
+                                        <field name="from_char" />
+                                        <field name="to_char" />
+                                        </group></sheet></form>
+                                </field>
+                            </group>
+                        </page>
+                        <page name="result" string="Result">
+                            <field name="file_result" widget="ace" />
+                        </page>
+                        <page name="extracted_text" string="Extracted Text">
+                            <field name="extracted_text" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter" />
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="pdf2data_template_field_form_view">
+        <field name="name">pdf2data.template.field.form (in edi_pdf2data)</field>
+        <field name="model">pdf2data.template.field</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="parse_mode" invisible="1" />
+                    </group>
+                    <group
+                        name="parse_standard"
+                        attrs="{'invisible': [('parse_mode', 'not in', ['regex', 'static'])]}"
+                    >
+                        <field name="value" />
+                        <field name="kind" />
+                        <field
+                            name="decimal_separator"
+                            attrs="{'invisible': [('kind', 'not in', ['float', 'int'])]}"
+                        />
+                        <field
+                            name="split_separator"
+                            attrs="{'invisible': [('kind', '!=', 'str')]}"
+                        />
+                        <field
+                            name="date_format"
+                            attrs="{'invisible': [('kind', '!=', 'date')]}"
+                        />
+                    </group>
+                    <group
+                        name="parse_line"
+                        attrs="{'invisible': [('parse_mode', '!=', 'line')]}"
+                    >
+                        <field name="line_separator" />
+                        <field name="start_block" />
+                        <field name="end_block" />
+                        <field name="start" />
+                        <field name="end" />
+                    </group>
+                    <group
+                        name="field"
+                        string="Fields"
+                        attrs="{'invisible': [('parse_mode', '!=', 'line')]}"
+                    >
+                        <field name="field_ids" nolabel="1">
+                            <tree>
+                                <field name="name" />
+                                <control>
+                                    <create name="add_regex" string="Add regex field" />
+                                    <create
+                                        name="add_static"
+                                        string="Add a static field"
+                                        context="{'default_parse_mode': 'static'}"
+                                    />
+                                </control>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="pdf2data_template_search_view">
+        <field name="name">pdf2data.template.search (in edi_pdf2data)</field>
+        <field name="model">pdf2data.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="type_id" />
+            </search>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="pdf2data_template_tree_view">
+        <field name="name">pdf2data.template.tree (in edi_pdf2data)</field>
+        <field name="model">pdf2data.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="type_id" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="pdf2data_template_act_window">
+        <field name="name">Pdf2data Template</field>
+        <field name="res_model">pdf2data.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record model="ir.ui.menu" id="pdf2data_template_menu">
+        <field name="name">Pdf2data Templates</field>
+        <field name="parent_id" ref="base_edi.menu_edi_root" />
+        <field name="action" ref="pdf2data_template_act_window" />
+        <field name="sequence" eval="110" />
+    </record>
+</odoo>

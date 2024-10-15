@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 CreuBlanca
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="pdf2data_template_type_account_move" model="pdf2data.template.type">
+        <field name="name">Account Move</field>
+        <field name="code">account.move</field>
+    </record>
+    <record id="pdf2data_exchange_type" model="edi.exchange.type">
+        <field name="name">Pdf2Data Account Move</field>
+        <field name="code">pdf2data_account_move</field>
+        <field name="backend_type_id" ref="edi_pdf2data.backend_type" />
+        <field name="direction">input</field>
+        <field name="exchange_filename_pattern">{record_name}--{dt}</field>
+        <field name="exchange_file_ext">pdf</field>
+    </record>
+
+</odoo>
