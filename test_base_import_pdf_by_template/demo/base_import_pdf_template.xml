@@ -82,6 +82,13 @@
         <field name="pattern">ES[0-9]{10}</field>
         <field name="value_type">variable</field>
     </record>
+    <record id="po_decathlon_line_origin" model="base.import.pdf.template.line">
+        <field name="template_id" ref="po_decathlon" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="purchase.field_purchase_order__origin" />
+        <field name="value_type">fixed</field>
+        <field name="fixed_value_char">fixed-origin</field>
+    </record>
     <record id="po_decathlon_line_product_id" model="base.import.pdf.template.line">
         <field name="template_id" ref="po_decathlon" />
         <field name="related_model">lines</field>
@@ -214,6 +221,16 @@
         <field name="field_id" ref="account.field_account_move__partner_id" />
         <field name="value_type">fixed</field>
         <field name="fixed_value" ref="partner_tecnativa" />
+    </record>
+    <record id="invoice_tecnativa_line_move_type" model="base.import.pdf.template.line">
+        <field name="template_id" ref="invoice_tecnativa" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="account.field_account_move__move_type" />
+        <field name="value_type">fixed</field>
+        <field
+            name="fixed_value_selection"
+            ref="account.selection__account_invoice_report__move_type__in_invoice"
+        />
     </record>
     <record
         id="invoice_tecnativa_line_product_id"
