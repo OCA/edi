@@ -18,8 +18,8 @@ msgstr ""
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 #, python-format
 msgid ""
-"<p>%(item_name)s has been set with %(new_value)s instead of\n"
-"                    %(old_value)s</p>"
+"%(item_name)s has been set with %(new_value)s instead of\n"
+"                    %(old_value)s"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -60,6 +60,14 @@ msgstr ""
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__auto_detect_pattern
 msgid "Auto detect pattern"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-b_-d,_-y
+#, python-format
+msgid "B d, YY"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -179,7 +187,6 @@ msgstr ""
 #. module: base_import_pdf_by_template
 #. odoo-python
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
-#: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 #, python-format
 msgid "Error to set %(field_name)s with value %(value)s"
 msgstr ""
@@ -215,6 +222,11 @@ msgstr ""
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__data_file
 msgid "File"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__file_name
+msgid "File Name"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -617,4 +629,20 @@ msgstr ""
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d_-m_-y
 #, python-format
 msgid "dd.MM.YY"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d/-m/-y
+#, python-format
+msgid "dd/MM/YY"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d/-m/-y-short
+#, python-format
+msgid "dd/MM/yy"
 msgstr ""
