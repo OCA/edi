@@ -127,7 +127,9 @@ class BaseImportPdfTemplate(models.Model):
         for fixed_key in list(fixed_fields.keys()):
             ctx_key = "default_%s" % fixed_key
             fixed_value = fixed_fields[fixed_key]
-            ctx.update({ctx_key: fixed_value.id})
+            if isinstance(fixed_value, models.Model):
+                fixed_value = fixed_value.id
+            ctx.update({ctx_key: fixed_value})
         return ctx
 
     def _get_fixed_fields_from_model(self, model):
@@ -136,7 +138,7 @@ class BaseImportPdfTemplate(models.Model):
             lambda x: x.model == model and x.value_type == "fixed"
         )
         for fixed_field in fixed_fields:
-            res[fixed_field.field_name] = fixed_field.fixed_value
+            res[fixed_field.field_name] = fixed_field._get_fixed_value()
         return res
 
     def _get_field_header_values(self, text):
@@ -278,6 +280,16 @@ class BaseImportPdfTemplateLine(models.Model):
         default="variable",
         string="Value type",
     )
+    fixed_value_char = fields.Char()
+    fixed_value_date = fields.Date()
+    fixed_value_datetime = fields.Datetime()
+    fixed_value_float = fields.Float()
+    fixed_value_html = fields.Html()
+    fixed_value_integer = fields.Integer()
+    fixed_value_selection = fields.Many2one(
+        comodel_name="ir.model.fields.selection", domain="[('field_id', '=', field_id)]"
+    )
+    fixed_value_text = fields.Text()
     fixed_value = fields.Reference(
         selection="_selection_reference_value",
         string="Fixed value",
@@ -315,6 +327,27 @@ class BaseImportPdfTemplateLine(models.Model):
                 if item.related_model == "header"
                 else item.template_id.child_model
             )
+
+    def _get_fixed_field_name_ttype_mapped(self):
+        return {
+            "char": "fixed_value_char",
+            "date": "fixed_value_date",
+            "datetime": "fixed_value_datetime",
+            "float": "fixed_value_float",
+            "html": "fixed_value_html",
+            "integer": "fixed_value_integer",
+            "selection": "fixed_value_selection",
+            "text": "fixed_value_text",
+            "many2one": "fixed_value",
+        }
+
+    def _get_fixed_value(self):
+        self.ensure_one()
+        f_name = self._get_fixed_field_name_ttype_mapped()[self.field_ttype]
+        f_value = self[f_name]
+        if self.field_ttype == "selection":
+            f_value = f_value.value
+        return f_value
 
     def _replace_text(self, text, letters, prefix):
         for letter in letters:
