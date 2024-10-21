@@ -122,6 +122,19 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         self.attachment_id.write({"res_model": record._name, "res_id": record.id})
         return record
 
+    def _add_log_error_text(self, field_name, value):
+        text = _("Error to set %(field_name)s with value %(value)s") % {
+            "field_name": field_name,
+            "value": value,
+        }
+        self._add_log_text(text)
+
+    def _add_log_text(self, text):
+        if not self.log_text:
+            self.log_text = text
+        else:
+            self.log_text += text
+
     def _process_set_value_form(self, _form, field_name, value):
         old_value = getattr(_form, field_name)
         model_name = self.env.context.get("model_name")
@@ -143,9 +156,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                 new_value_data = (
                     value.display_name if isinstance(value, models.Model) else value
                 )
-                if not self.log_text:
-                    self.log_text = ""
-                self.log_text += (
+                text = (
                     _(
                         """<p>%(item_name)s has been set with %(new_value)s instead of
                     %(old_value)s</p>"""
@@ -156,18 +167,12 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                         "new_value": new_value_data,
                     }
                 )
+                self._add_log_text(text)
         else:
             try:
                 setattr(_form, field_name, value)
             except Exception:
-                if not self.log_text:
-                    self.log_text = ""
-                self.log_text += _(
-                    "Error to set %(field_name)s with value %(value)s"
-                ) % {
-                    "field_name": field_name,
-                    "value": value,
-                }
+                self._add_log_error_text(field_name, value)
 
     def _process_form(self):
         """Create record with Form() according to text."""
@@ -198,14 +203,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                     try:
                         setattr(line_form, field_name, child_field_value)
                     except Exception:
-                        if not self.log_text:
-                            self.log_text = ""
-                        self.log_text += _(
-                            "Error to set %(field_name)s with value %(value)s"
-                        ) % {
-                            "field_name": field_name,
-                            "value": child_field_value,
-                        }
+                        self._add_log_error_text(field_name, child_field_value)
 
                 # et the values of any line
                 for field_name in list(line.keys()):
