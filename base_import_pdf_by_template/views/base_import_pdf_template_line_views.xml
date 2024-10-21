@@ -51,10 +51,53 @@
                                 name="search_subfield_id"
                                 attrs="{'invisible': [('search_field_ttype', '!=', 'one2many')]}"
                             />
+                            <!-- Fixed value !-->
+                            <field
+                                name="fixed_value_char"
+                                string="Fixed value"
+                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_ttype', '!=', 'char')]}"
+                            />
+                            <field
+                                name="fixed_value_date"
+                                string="Fixed value"
+                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_ttype', '!=', 'date')]}"
+                            />
+                            <field
+                                name="fixed_value_datetime"
+                                string="Fixed value"
+                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_ttype', '!=', 'datetime')]}"
+                            />
+                            <field
+                                name="fixed_value_float"
+                                string="Fixed value"
+                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_ttype', '!=', 'float')]}"
+                            />
+                            <field
+                                name="fixed_value_html"
+                                string="Fixed value"
+                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_ttype', '!=', 'html')]}"
+                            />
+                            <field
+                                name="fixed_value_integer"
+                                string="Fixed value"
+                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_ttype', '!=', 'integer')]}"
+                            />
+                            <field
+                                name="fixed_value_selection"
+                                string="Fixed value"
+                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_ttype', '!=', 'selection')]}"
+                            />
+                            <field
+                                name="fixed_value_text"
+                                string="Fixed value"
+                                attrs="{'invisible': ['|', ('value_type', '!=', 'fixed'),('field_ttype', '!=', 'text')]}"
+                            />
                             <field
                                 name="default_value"
+                                string="Fixed value"
                                 attrs="{'invisible': ['|', ('value_type', '=', 'fixed'),('field_relation', '=', False)]}"
                             />
+                            <!-- Fixed value !-->
                             <field
                                 name="log_distinct_value"
                                 attrs="{'invisible': ['|', ('field_id', '=', False),('value_type', '=', 'fixed')]}"

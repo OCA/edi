@@ -194,7 +194,19 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                     template.child_model
                 )
                 for field_name in list(child_fixed_values.keys()):
-                    setattr(line_form, field_name, child_fixed_values[field_name])
+                    child_field_value = child_fixed_values[field_name]
+                    try:
+                        setattr(line_form, field_name, child_field_value)
+                    except Exception:
+                        if not self.log_text:
+                            self.log_text = ""
+                        self.log_text += _(
+                            "Error to set %(field_name)s with value %(value)s"
+                        ) % {
+                            "field_name": field_name,
+                            "value": child_field_value,
+                        }
+
                 # et the values of any line
                 for field_name in list(line.keys()):
                     self.with_context(
