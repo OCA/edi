@@ -55,16 +55,59 @@
                         />
                         <field
                             name="default_value"
+                            string="Fixed value"
                             invisible="value_type == 'fixed' or not field_relation"
                         />
                         <field
                             name="log_distinct_value"
                             invisible="not field_id or value_type == 'fixed'"
                         />
+                        <!-- Fixed value !-->
+                        <field
+                            name="fixed_value_char"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'char'"
+                        />
+                        <field
+                            name="fixed_value_date"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'date'"
+                        />
+                        <field
+                            name="fixed_value_datetime"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'datetime'"
+                        />
+                        <field
+                            name="fixed_value_float"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'float'"
+                        />
+                        <field
+                            name="fixed_value_html"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'html'"
+                        />
+                        <field
+                            name="fixed_value_integer"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'integer'"
+                        />
+                        <field
+                            name="fixed_value_selection"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'selection'"
+                        />
+                        <field
+                            name="fixed_value_text"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'text'"
+                        />
                         <field
                             name="fixed_value"
                             invisible="value_type != 'fixed' or not field_relation"
                         />
+                        <!-- Fixed value !-->
                         <field name="field_ttype" invisible="1" />
                         <field
                             name="date_format"

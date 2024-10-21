@@ -64,6 +64,7 @@ class TestBaseImportPdfByTemplate(BaseCommon):
         attachments = self._get_attachments(record)
         self.assertEqual(record.partner_id, self.partner_decathlon)
         self.assertEqual(record.partner_ref, "ES9812110233")
+        self.assertEqual(record.origin, "fixed-origin")
         self.assertIn(attachment, attachments)
         self.assertEqual(len(record.order_line), 5)
         self.assertEqual(sum(record.order_line.mapped("product_uom_qty")), 5)
@@ -78,12 +79,13 @@ class TestBaseImportPdfByTemplate(BaseCommon):
     def test_account_invoice_tecnativa(self):
         attachment = self._create_ir_attachment("account_invoice_tecnativa.pdf")
         wizard = self._create_wizard_base_import_pdf_upload("account.move", attachment)
-        # Similar context from Vendor invoices menu
-        wizard = wizard.with_context(**{"default_move_type": "in_invoice"})
+        # Similar context from Customer invoices menu
+        wizard = wizard.with_context(**{"default_move_type": "out_invoice"})
         res = wizard.action_process()
         self.assertEqual(res["res_model"], "account.move")
         record = self.env[res["res_model"]].browse(res["res_id"])
         attachments = self._get_attachments(record)
+        self.assertEqual(record.move_type, "in_invoice")
         self.assertEqual(record.partner_id, self.partner_tecnativa)
         self.assertIn(attachment, attachments)
         self.assertEqual(len(record.invoice_line_ids), 6)
