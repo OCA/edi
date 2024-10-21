@@ -87,6 +87,7 @@ class TestBaseImportPdfByTemplate(common.TransactionCase):
         self.assertEqual(record.country_id.code, "ES")
         self.assertEqual(record.industry_id.name, "Food")
         self.assertEqual(record.user_id, self.user)
+        self.assertEqual(record.ref, "fixed-ref")
         self.assertEqual(len(record.child_ids), 3)
         child_1 = record.child_ids.filtered(lambda x: x.name == "Child 1")
         self.assertEqual(child_1.street, "Address 1")
@@ -123,6 +124,7 @@ class TestBaseImportPdfByTemplate(common.TransactionCase):
         self.assertEqual(record.country_id.code, "ES")
         self.assertEqual(record.industry_id.name, "Food")
         self.assertEqual(record.user_id, self.user)
+        self.assertEqual(record.ref, "fixed-ref")
         self.assertEqual(len(record.child_ids), 3)
         child_1 = record.child_ids.filtered(lambda x: x.name == "Child 1")
         self.assertEqual(child_1.street, "Address 1")
@@ -133,7 +135,7 @@ class TestBaseImportPdfByTemplate(common.TransactionCase):
         child_3 = record.child_ids.filtered(lambda x: x.name == "Child 3")
         self.assertEqual(child_3.street, "Address 3")
         self.assertEqual(child_3.country_id.code, "ES")
-        self.assertFalse(record.message_ids)
+        self.assertTrue(record.message_ids)  # Error message to set ref to childs
 
     def test_wizard_base_import_pdf_by_template_error(self):
         self.env.ref(

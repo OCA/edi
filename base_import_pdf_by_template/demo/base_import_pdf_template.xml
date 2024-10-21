@@ -50,6 +50,16 @@
         <field name="fixed_value" ref="base.user_admin" />
     </record>
     <record
+        id="demo_base_import_pdf_template_res_partner_header_05"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="base.field_res_partner__ref" />
+        <field name="value_type">fixed</field>
+        <field name="fixed_value_char">fixed-ref</field>
+    </record>
+    <record
         id="demo_base_import_pdf_template_res_partner_line_01"
         model="base.import.pdf.template.line"
     >
