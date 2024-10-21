@@ -250,7 +250,48 @@ msgid "Fixed"
 msgstr "Fisso"
 
 #. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_char
+msgid "Fixed Value Char"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_date
+msgid "Fixed Value Date"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_datetime
+msgid "Fixed Value Datetime"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_float
+msgid "Fixed Value Float"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_html
+msgid "Fixed Value Html"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_integer
+msgid "Fixed Value Integer"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_selection
+msgid "Fixed Value Selection"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_text
+msgid "Fixed Value Text"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
 msgid "Fixed value"
 msgstr "Valore fisso"
 
