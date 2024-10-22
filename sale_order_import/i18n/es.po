@@ -1,0 +1,460 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * sale_order_import
+#
+# Translators:
+# enjolras <yo@miguelrevilla.com>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-12 01:43+0000\n"
+"PO-Revision-Date: 2023-11-26 20:35+0000\n"
+"Last-Translator: Ivorra78 <informatica@totmaterial.es>\n"
+"Language-Team: Spanish (https://www.transifex.com/oca/teams/23907/es/)\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/models/sale.py:0
+#: code:addons/sale_order_import/tests/test_sale_order.py:0
+#, python-format
+msgid " Amount w/o tax: %(amount)s %(currency)s"
+msgstr " Importe sin impuestos: %(amount)s %(currency)s"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "%(orders)s new order line(s) created: %(label)s"
+msgstr "%(orders)s nueva(s) línea(s) de pedido creada(s): %(label)s"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "%(orders)s order line(s) deleted: %(label)s"
+msgstr "%(orders)s línea(s) de pedido suprimida(s): %(label)s"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"An order of customer '%(partner)s' with reference '%(ref)s' already exists: "
+"%(name)s (state: %(state)s)"
+msgstr ""
+"Ya existe un pedido del cliente '%(partner)s' con referencia '%(ref)s': "
+"%(name)s (state: %(state)s)"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__price_source
+msgid "Apply Prices From"
+msgstr "Aplicar Precios Desde"
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__commercial_partner_id
+msgid "Commercial Entity"
+msgstr "Entidad Comercial"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__confirm_order
+msgid "Confirm Order"
+msgstr "Confirmar Pedido"
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid "Create New"
+msgstr "Crear nuevo"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "Created automatically via file import (%s)."
+msgstr "Creado automáticamente a través de la importación de archivos (%s)."
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__partner_id
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: sale_order_import
+#: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__price_source__order
+msgid "Customer Order"
+msgstr "Pedido del cliente"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__doc_type
+msgid "Document Type"
+msgstr "Tipo de documento"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__order_filename
+msgid "Filename"
+msgstr "Archivo"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid ""
+"If it is a PDF file, Odoo will try to find an XML file in the attachments of "
+"the PDF file and then use this XML file to create the quotation."
+msgstr ""
+"Si es un archivo PDF, Odoo tratará de encontrar un archivo XML en los "
+"adjuntos del archivo PDF y luego usará este archivo XML para crear la "
+"cotización."
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid ""
+"If it is an XML file, Odoo will parse it if the module that adds support for "
+"this XML format is installed. For the"
+msgstr ""
+"Si es un archivo XML, Odoo lo analizará si el módulo que añade soporte para "
+"este formato XML está instalado. Para los archivos"
+
+#. module: sale_order_import
+#: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__state__import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid "Import"
+msgstr "Importar"
+
+#. module: sale_order_import
+#: model:ir.actions.act_window,name:sale_order_import.sale_order_import_action
+#: model:ir.ui.menu,name:sale_order_import.sale_order_import_menu
+msgid "Import RFQ or Order"
+msgstr "Importar solicitud de presupuesto o pedido"
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid "Import Sale Orders"
+msgstr "Importar pedidos de venta"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__import_type
+msgid "Import Type"
+msgstr "Tipo de Importación"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "No data provided"
+msgstr "No se han facilitado datos"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"No price is defined in the file. Please double check file or select "
+"Pricelist as the source for prices."
+msgstr ""
+"No se ha definido ningún precio en el archivo. Compruebe el archivo o "
+"seleccione Lista de precios como fuente de precios."
+
+#. module: sale_order_import
+#: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__import_type__pdf
+msgid "PDF"
+msgstr "PDF"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "Please select a valid import type before importing!"
+msgstr ""
+"¡Por favor, seleccione un tipo de importación válido antes de importar!"
+
+#. module: sale_order_import
+#: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__price_source__pricelist
+msgid "Pricelist"
+msgstr "Tarifa"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__sale_id
+msgid "Quotation to Update"
+msgstr "Presupuesto para actualizar"
+
+#. module: sale_order_import
+#: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__doc_type__rfq
+msgid "Request For Quotation"
+msgstr "Solicitud de presupuesto"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__order_file
+msgid "Request for Quotation or Order"
+msgstr "Solicitud de presupuesto o pedido"
+
+#. module: sale_order_import
+#: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__doc_type__order
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: sale_order_import
+#: model:ir.model,name:sale_order_import.model_sale_order_import
+msgid "Sale Order Import from Files"
+msgstr "Importación de Orden de Venta desde Ficheros"
+
+#. module: sale_order_import
+#: model:ir.model,name:sale_order_import.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: sale_order_import
+#: model:ir.model.fields,help:sale_order_import.field_sale_order_import__import_type
+msgid "Select a type which you want to import"
+msgstr "Seleccione el tipo que desea importar"
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__partner_shipping_id
+msgid "Shipping Address"
+msgstr "Dirección de envío"
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid ""
+"Some quotations have been found for this customer ; one of them may "
+"correspond to the order or RFQ that you are importing. You can either select "
+"an existing quotation to update or create a new one."
+msgstr ""
+"Se han encontrado algunos presupuestos para este cliente; uno de ellos puede "
+"corresponder al pedido o petición de oferta que está importando. Puede "
+"seleccionar una oferta existente para actualizarla o crear una nueva."
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__state
+msgid "State"
+msgstr "Estado"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"The currency of the imported order (%(old)s) is different from the currency "
+"of the existing order (%(new)s)"
+msgstr ""
+"La divisa del pedido importado ( %(old)s) es diferente de la divisa del "
+"pedido existente (%(new)s)"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"The customer '%(name)s' has a pricelist '%(pricelist)s' but the currency of "
+"this order is '%(currency)s'."
+msgstr ""
+"El cliente '%(name)s' tiene una lista de precios '%(pricelist)s' pero la "
+"divisa de este pedido es '%(currency)s'."
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"The quantity has been updated on the order line with product '%(product)s' "
+"from %(qty0)s to %(qty1)s %(uom)s"
+msgstr ""
+"Se ha actualizado la cantidad en la línea de pedido con el producto "
+"'%(product)s' de %(qty0)s a %(qty1)s %(uom)s"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"The unit price has been updated on the order line with product '%(product)s' "
+"from %(old)s to %(new)s %(currency)s"
+msgstr ""
+"Se ha actualizado el precio unitario en la línea de pedido con el producto "
+"'%(product)s' de %(old)s a %(new)s %(currency)s"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "There are no embedded XML file in this PDF file."
+msgstr "No hay ningún archivo XML incorporado en este archivo PDF."
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"This Import Type is not supported. Did you install the module to support "
+"this type?"
+msgstr ""
+"Este Tipo de Importación no está admitido. ¿Has instalado el módulo para "
+"admitir este tipo?"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "This XML file is not XML-compliant"
+msgstr "Este archivo no es compatible con el formato XML"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"This file '%(filename)s' is not recognized as a %(type)s file. Please check "
+"the file and its extension."
+msgstr ""
+"Este archivo '%(filename)s' no se reconoce como un archivo %(type)s. "
+"Compruebe el archivo y su extensión."
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"This file '%s' is not recognised as a XML nor PDF file. Please check the "
+"file and it's extension."
+msgstr ""
+"Este archivo '%s' no se reconoce como archivo XML ni PDF. Compruebe el "
+"archivo y su extensión."
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "This order doesn't have any line !"
+msgstr "¡Este pedido no tiene ninguna línea!"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "This quotation has been updated automatically via the import of file %s"
+msgstr ""
+"Este presupuesto se ha actualizado automáticamente mediante la importación "
+"del fichero %s"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid ""
+"This type of XML RFQ/order is not supported. Did you install the module to "
+"support this XML format?"
+msgstr ""
+"Este tipo de petición de oferta/pedido XML no es compatible. ¿Ha instalado "
+"el módulo para admitir este formato XML?"
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid "Universal Business Language"
+msgstr "Lenguaje Comercial Universal"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "Unsupported file format"
+msgstr "Formato de archivo no soportado"
+
+#. module: sale_order_import
+#: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__state__update
+msgid "Update"
+msgstr "Actualizar"
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid "Update Existing"
+msgstr "Actualizar existente"
+
+#. module: sale_order_import
+#: model:ir.model.fields,help:sale_order_import.field_sale_order_import__order_file
+msgid ""
+"Upload a Request for Quotation or an Order file. Supported formats: XML and "
+"PDF (PDF with an embeded XML file)."
+msgstr ""
+"Cargue una solicitud de presupuesto o un archivo de pedido. Formatos "
+"admitidos: XML y PDF (PDF con un archivo XML incorporado)."
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid ""
+"Upload below the customer order or request for quotation as XML or PDF file. "
+"When you click on the Import button:"
+msgstr ""
+"Cargue a continuación el pedido del cliente o la solicitud de presupuesto "
+"como archivo XML o PDF. Al hacer clic en el botón Importar:"
+
+#. module: sale_order_import
+#: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__import_type__xml
+msgid "XML"
+msgstr "XML"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+#, python-format
+msgid "You must select a quotation to update."
+msgstr "Debe seleccionar un presupuesto para actualizarlo."
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
+msgid ""
+"format (UBL), you should install the module <em>sale_order_import_ubl</em>."
+msgstr "(UBL), debe instalar el módulo <em>sale_order_import_ubl</em>."
+
+#, fuzzy
+#~ msgid "Csv Import"
+#~ msgstr "Importar CSV"
+
+#~ msgid "Missing customer"
+#~ msgstr "Falta cliente"
+
+#, fuzzy
+#~ msgid "Quotation"
+#~ msgstr "Presupuesto para actualizar"
