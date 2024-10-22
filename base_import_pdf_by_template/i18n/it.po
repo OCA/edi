@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-07 09:06+0000\n"
+"PO-Revision-Date: 2024-10-22 10:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -24,6 +24,8 @@ msgid ""
 "%(item_name)s has been set with %(new_value)s instead of\n"
 "                    %(old_value)s"
 msgstr ""
+"%(item_name)s è stato impostato con %(new_value)s invece di\n"
+"                    %(old_value)s"
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_view_form
@@ -73,7 +75,7 @@ msgstr "Rilevamento automatico schema"
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-b_-d,_-y
 #, python-format
 msgid "B d, YY"
-msgstr ""
+msgstr "B d, YY"
 
 #. module: base_import_pdf_by_template
 #: model:ir.ui.menu,name:base_import_pdf_by_template.menu_base_import_pdf_by_template_root
@@ -232,7 +234,7 @@ msgstr "File"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__file_name
 msgid "File Name"
-msgstr ""
+msgstr "Nome file"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__attachment_ids
@@ -646,7 +648,7 @@ msgstr "dd.MM.YY"
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d/-m/-y
 #, python-format
 msgid "dd/MM/YY"
-msgstr ""
+msgstr "dd/MM/YY"
 
 #. module: base_import_pdf_by_template
 #. odoo-python
@@ -654,7 +656,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d/-m/-y-short
 #, python-format
 msgid "dd/MM/yy"
-msgstr ""
+msgstr "dd/MM/yy"
 
 #, python-format
 #~ msgid ""
