@@ -48,3 +48,5 @@ class BusinessHeaderTestCase(SavepointComponentCase, XMLTestCaseMixin):
                 "@xmlns:xs": "http://www.w3.org/2001/XMLSchema",
             },
         )
+
+    # TODO: add test for validation error

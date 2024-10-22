@@ -53,6 +53,7 @@ class EDIExchangeRecord(models.Model):
             # Common states
             ("new", "New"),
             ("validate_error", "Error on validation"),
+            ("stop", "Stopped"),  # Flow stopped
             # output exchange states
             ("output_pending", "Waiting to be sent"),
             ("output_error_on_send", "error on send"),
@@ -132,7 +133,7 @@ class EDIExchangeRecord(models.Model):
     @api.constrains("edi_exchange_state")
     def _constrain_edi_exchange_state(self):
         for rec in self:
-            if rec.edi_exchange_state in ("new", "validate_error"):
+            if rec.edi_exchange_state in ("new", "validate_error", "stop"):
                 continue
             if not rec.edi_exchange_state.startswith(rec.direction):
                 raise exceptions.ValidationError(
@@ -147,8 +148,10 @@ class EDIExchangeRecord(models.Model):
     def _get_ack_record(self):
         if not self.type_id.ack_type_id:
             return None
-        return self.related_exchange_ids.filtered(
-            lambda x: x.type_id == self.type_id.ack_type_id
+        return fields.first(
+            self.related_exchange_ids.filtered(
+                lambda x: x.type_id == self.type_id.ack_type_id
+            )
         )
 
     def _compute_ack_expected(self):
@@ -208,10 +211,11 @@ class EDIExchangeRecord(models.Model):
             result.append((rec.id, name))
         return result
 
-    @api.model
-    def create(self, vals):
-        vals["identifier"] = self._get_identifier()
-        return super().create(vals)
+    @api.model_create_multi
+    def create(self, list_vals):
+        for vals in list_vals:
+            vals["identifier"] = self._get_identifier()
+        return super().create(list_vals)
 
     def _get_identifier(self):
         return self.env["ir.sequence"].next_by_code("edi.exchange")
@@ -238,6 +242,7 @@ class EDIExchangeRecord(models.Model):
             "send_ko": _(
                 "An error happened while sending. Please check exchange record info."
             ),
+            "stop": _("The workflow has been stopped"),
             "process_ok": _("File %s processed successfully ") % self.exchange_filename,
             "process_ko": _("File %s processed with errors") % self.exchange_filename,
             "receive_ok": _("File %s received successfully ") % self.exchange_filename,
@@ -254,6 +259,13 @@ class EDIExchangeRecord(models.Model):
     def action_exchange_send(self):
         self.ensure_one()
         return self.backend_id.exchange_send(self)
+
+    def action_exchange_stop(self):
+        self.write({"edi_exchange_state": "stop", "exchange_error": False})
+        children = self.related_exchange_ids
+        if children:
+            children.action_exchange_stop()
+        return True
 
     def action_exchange_process(self):
         self.ensure_one()
@@ -305,16 +317,23 @@ class EDIExchangeRecord(models.Model):
         """Post notification on the original record."""
         if not hasattr(self.record, "message_post_with_view"):
             return
-        self.record.message_post_with_view(
-            "edi.message_edi_exchange_link",
-            values={
-                "backend": self.backend_id,
-                "exchange_record": self,
-                "message": message,
-                "level": level,
-            },
-            subtype_id=self.env.ref("mail.mt_note").id,
+        last_message = (
+            fields.first(
+                self.record.message_ids.filtered(lambda m: "EDI exchange" in m.body)
+            ).body
+            or ""
         )
+        if message not in last_message:
+            self.record.message_post_with_view(
+                "edi.message_edi_exchange_link",
+                values={
+                    "backend": self.backend_id,
+                    "exchange_record": self,
+                    "message": message,
+                    "level": level,
+                },
+                subtype_id=self.env.ref("mail.mt_note").id,
+            )
 
     def _trigger_edi_event_make_name(self, name, suffix=None):
         return "on_edi_exchange_{name}{suffix}".format(
@@ -330,7 +349,11 @@ class EDIExchangeRecord(models.Model):
         self._notify_related_record(self._exchange_status_message("process_ok"))
         self._trigger_edi_event("done")
 
-    def _notify_error(self, message_key):
+    def _notify_stop(self):
+        self._notify_related_record(self._exchange_status_message("stop"))
+        self._trigger_edi_event("stop")
+
+    def _notify_error(self, message_key="process_ko"):
         self._notify_related_record(
             self._exchange_status_message(message_key), level="error",
         )

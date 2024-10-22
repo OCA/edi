@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="edi_exchange_type_receipt_ack_out" model="edi.exchange.type">
+        <field name="backend_type_id" ref="edi_gs1.backend_type_gs1" />
+        <field name="name">GS1 ApplicationReceiptAcknowledgement</field>
+        <field name="code">applicationReceiptAcknowledgement_out</field>
+        <field name="direction">output</field>
+        <field name="exchange_filename_pattern">{record_name}-{type.code}-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <!-- TODO -->
+        <!-- <field name="template_id" ref="edi_exchange_ack_out" /> -->
+        <field name="advanced_settings_edit">
+          components:
+            validate:
+              usage: edi.xml
+              work_ctx:
+                schema_path: edi_gs1:static/schemas/gs1/ecom/ApplicationReceiptAcknowledgement.xsd
+        </field>
+    </record>
+</odoo>
