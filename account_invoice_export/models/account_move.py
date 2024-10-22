@@ -1,0 +1,116 @@
+# Copyright 2020 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
+
+import requests
+
+import odoo
+from odoo import _, fields, models
+from odoo.exceptions import UserError
+
+
+class AccountMove(models.Model):
+    _inherit = "account.move"
+
+    invoice_exported = fields.Boolean(copy=False)
+    # Usefull when the distant system does not validate the export synchronously
+    invoice_export_confirmed = fields.Boolean(copy=False)
+    send_through_http = fields.Boolean(related="transmit_method_id.send_through_http")
+
+    def export_invoice(self):
+        resend_invoice = self.env.context.get("resend_ebill", False)
+        for invoice in self:
+            invoice._job_export_invoice(resend_invoice)
+
+    def _job_export_invoice(self, resend_invoice=False):
+        """Export ebill to external server and update the chatter."""
+        self.ensure_one()
+        if (
+            not resend_invoice
+            and self.invoice_exported
+            and self.invoice_export_confirmed
+        ):
+            return _("Nothing done, invoice has already been exported before.")
+        try:
+            res = self._export_invoice()
+        except Exception as e:
+            values = {
+                "job_id": self.env.context.get("job_uuid"),
+                "error_detail": "",
+                "error_type": type(e).__name__,
+                "transmit_method_name": self.transmit_method_id.name,
+            }
+            with odoo.registry(self.env.cr.dbname).cursor() as new_cr:
+                # Create a new environment with new cursor database
+                new_env = odoo.api.Environment(new_cr, self.env.uid, self.env.context)
+                # The chatter of the invoice need to be updated, when the job fails
+                self.with_env(new_env).log_error_sending_invoice(values)
+            raise
+        self.log_success_sending_invoice()
+        return res
+
+    def _export_invoice(self):
+        """Export electronic invoice to external service."""
+        if not self.transmit_method_id.send_through_http:
+            raise UserError(_("Transmit method is not configured to send through HTTP"))
+        file_data = self._get_file_for_transmission_method()
+        headers = self.transmit_method_id.get_transmission_http_header()
+        url = self.transmit_method_id.get_transmission_url()
+        # TODO: Should be configurable as a parameter
+        res = requests.post(url, headers=headers, files=file_data, timeout=10)
+        if res.status_code != 200:
+            raise UserError(
+                _(
+                    "HTTP error {status_code} sending invoice to {method_name}".format(
+                        status_code=res.status_code,
+                        method_name=self.transmit_method_id.name,
+                    )
+                )
+            )
+        self.invoice_exported = self.invoice_export_confirmed = True
+        return res.text
+
+    def _get_file_for_transmission_method(self):
+        """Return the file description to send.
+
+        Use the format expected by the request library
+        By default returns the PDF report.
+        """
+        report = "account.report_invoice"
+        pdf, _ = self.env["ir.actions.report"]._render(report, [self.id])
+        filename = self._get_report_base_filename().replace("/", "_") + ".pdf"
+        return {"file": (filename, pdf, "application/pdf")}
+
+    def log_error_sending_invoice(self, values):
+        """Log an exception in invoice's chatter when sending fails.
+
+        If an exception already exists it is update otherwise a new one
+        is created.
+        """
+        activity_type = "account_invoice_export.mail_activity_transmit_warning"
+        activity = self.activity_reschedule(
+            [activity_type], date_deadline=fields.Date.today()
+        )
+        if not activity:
+            template = "account_invoice_export.exception_sending_invoice"
+            message = self.env["ir.ui.view"]._render_template(template, values=values)
+            activity = self.activity_schedule(
+                activity_type, summary="Job error sending invoice", note=message
+            )
+        error_log = values.get("error_detail")
+        if not error_log:
+            error_log = _("An error of type {} occured.").format(
+                values.get("error_type")
+            )
+        activity.note += f"<div class='mt16'><p>{error_log}</p></div>"
+
+    def log_success_sending_invoice(self):
+        """Log success sending invoice and clear existing exception, if any."""
+        self.activity_feedback(
+            ["account_invoice_export.mail_activity_transmit_warning"],
+            feedback="It worked on a later try",
+        )
+        self.message_post(
+            body=_("Invoice successfuly sent to {}").format(
+                self.transmit_method_id.name
+            )
+        )
