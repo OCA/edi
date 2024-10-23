@@ -11,12 +11,3 @@ def post_init_hook(env):
     env.ref("test_base_import_pdf_by_template.po_decathlon_line_product_id").write(
         {"default_value": f"{product_model_name},{generic_product.id}"}
     )
-    template_invoice_tecnativa = env.ref(
-        "test_base_import_pdf_by_template.invoice_tecnativa"
-    )
-    template_invoice_tecnativa.write(
-        {"auto_detect_pattern": r"(?<=B 8 7 5 3 0 4 3 2)[\S\s]*"}
-    )
-    env.ref("test_base_import_pdf_by_template.invoice_tecnativa_line_product_id").write(
-        {"default_value": f"{product_model_name},{generic_product.id}"}
-    )

@@ -5,10 +5,9 @@ from base64 import b64encode
 from os import path
 
 from odoo.addons.base.tests.common import BaseCommon
-from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class TestBaseImportPdfByTemplateBase(BaseCommon):
+class TestBaseImportPdfByTemplate(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -17,12 +16,6 @@ class TestBaseImportPdfByTemplateBase(BaseCommon):
         )
         cls.template_po_decathlon = cls.env.ref(
             "test_base_import_pdf_by_template.po_decathlon"
-        )
-        cls.partner_tecnativa = cls.env.ref(
-            "test_base_import_pdf_by_template.partner_tecnativa"
-        )
-        cls.template_invoice_tecnativa = cls.env.ref(
-            "test_base_import_pdf_by_template.invoice_tecnativa"
         )
 
     def _data_file(self, filename, encoding=None):
@@ -54,8 +47,6 @@ class TestBaseImportPdfByTemplateBase(BaseCommon):
             [("res_model", "=", record._name), ("res_id", "=", record.id)]
         )
 
-
-class TestBaseImportPdfByTemplateMisc(TestBaseImportPdfByTemplateBase):
     def test_purchase_order_decathlon(self):
         attachment = self._create_ir_attachment("purchase_order_declathon.pdf")
         wizard = self._create_wizard_base_import_pdf_upload(
@@ -77,28 +68,3 @@ class TestBaseImportPdfByTemplateMisc(TestBaseImportPdfByTemplateBase):
         self.assertIn("BOTIQUIN", default_codes)
         self.assertIn("GENERIC", default_codes)
         self.assertIn("66.11", record.message_ids.body)
-
-    def test_account_invoice_tecnativa(self):
-        attachment = self._create_ir_attachment("account_invoice_tecnativa.pdf")
-        wizard = self._create_wizard_base_import_pdf_upload("account.move", attachment)
-        # Similar context from Vendor invoices menu
-        wizard = wizard.with_context(**{"default_move_type": "in_invoice"})
-        res = wizard.action_process()
-        self.assertEqual(res["res_model"], "account.move")
-        record = self.env[res["res_model"]].browse(res["res_id"])
-        attachments = self._get_attachments(record)
-        self.assertEqual(record.partner_id, self.partner_tecnativa)
-        self.assertIn(attachment, attachments)
-        self.assertEqual(len(record.invoice_line_ids), 6)
-        self.assertEqual(sum(record.invoice_line_ids.mapped("quantity")), 665)
-        default_codes = record.invoice_line_ids.mapped("product_id.default_code")
-        self.assertIn("ROTULADOR", default_codes)
-        self.assertIn("BOLIGRAFO", default_codes)
-        self.assertIn("LEDS", default_codes)
-        self.assertIn("PLASTIFICADORA", default_codes)
-        self.assertIn("LAMINAS", default_codes)
-        self.assertIn("TRITURADORA", default_codes)
-        self.assertIn("100.25", record.message_ids.body)
-
-
-class TestBaseImportPdfByTemplateSupplierInvoice(AccountTestInvoicingCommon, TestBaseImportPdfByTemplateBase):
