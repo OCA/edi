@@ -5,9 +5,10 @@ from base64 import b64encode
 from os import path
 
 from odoo.addons.base.tests.common import BaseCommon
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-class TestBaseImportPdfByTemplate(BaseCommon):
+class TestBaseImportPdfByTemplateBase(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -53,6 +54,8 @@ class TestBaseImportPdfByTemplate(BaseCommon):
             [("res_model", "=", record._name), ("res_id", "=", record.id)]
         )
 
+
+class TestBaseImportPdfByTemplateMisc(TestBaseImportPdfByTemplateBase):
     def test_purchase_order_decathlon(self):
         attachment = self._create_ir_attachment("purchase_order_declathon.pdf")
         wizard = self._create_wizard_base_import_pdf_upload(
@@ -96,3 +99,6 @@ class TestBaseImportPdfByTemplate(BaseCommon):
         self.assertIn("LAMINAS", default_codes)
         self.assertIn("TRITURADORA", default_codes)
         self.assertIn("100.25", record.message_ids.body)
+
+
+class TestBaseImportPdfByTemplateSupplierInvoice(AccountTestInvoicingCommon, TestBaseImportPdfByTemplateBase):
