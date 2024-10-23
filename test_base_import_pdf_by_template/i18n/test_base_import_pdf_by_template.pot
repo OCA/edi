@@ -19,11 +19,6 @@ msgid "Test Aislante"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.template,name:test_base_import_pdf_by_template.product_boligrafo_product_template
-msgid "Test Boligrafo"
-msgstr ""
-
-#. module: test_base_import_pdf_by_template
 #: model:product.template,name:test_base_import_pdf_by_template.product_botiquin_product_template
 msgid "Test Botiquin"
 msgstr ""
@@ -39,31 +34,6 @@ msgid "Test Hamaca"
 msgstr ""
 
 #. module: test_base_import_pdf_by_template
-#: model:product.template,name:test_base_import_pdf_by_template.product_leds_product_template
-msgid "Test Leds"
-msgstr ""
-
-#. module: test_base_import_pdf_by_template
-#: model:product.template,name:test_base_import_pdf_by_template.product_laminas_product_template
-msgid "Test Lmaninas"
-msgstr ""
-
-#. module: test_base_import_pdf_by_template
 #: model:product.template,name:test_base_import_pdf_by_template.product_mochila_product_template
 msgid "Test Mochila"
-msgstr ""
-
-#. module: test_base_import_pdf_by_template
-#: model:product.template,name:test_base_import_pdf_by_template.product_plastificadora_product_template
-msgid "Test Plastificadora"
-msgstr ""
-
-#. module: test_base_import_pdf_by_template
-#: model:product.template,name:test_base_import_pdf_by_template.product_rotulador_product_template
-msgid "Test Rotulador"
-msgstr ""
-
-#. module: test_base_import_pdf_by_template
-#: model:product.template,name:test_base_import_pdf_by_template.product_trituradora_product_template
-msgid "Test Trituradora"
 msgstr ""
