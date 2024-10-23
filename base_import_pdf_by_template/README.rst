@@ -122,7 +122,6 @@ Known issues / Roadmap
 ======================
 
 -  Add operator in template lines (= or ilike)
--  Add support for selection fields as default value.
 -  Simplify auto-detection (defining a text only to search the system
    should search the corresponding regular expression).
 -  Allow compatibility with registration process created from email
