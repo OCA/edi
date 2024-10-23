@@ -74,8 +74,8 @@ msgstr "Rilevamento automatico schema"
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-b_-d,_-y
 #, python-format
-msgid "B d, YY"
-msgstr "B d, YY"
+msgid "B dd, YY"
+msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model:ir.ui.menu,name:base_import_pdf_by_template.menu_base_import_pdf_by_template_root
@@ -529,6 +529,11 @@ msgid "RAW data"
 msgstr "Dati grezzi"
 
 #. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__record_ref
+msgid "Record Ref"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__field_relation
 msgid "Related Model"
 msgstr "Modello correlato"
@@ -678,10 +683,58 @@ msgstr "YY/dd/MM"
 #. module: base_import_pdf_by_template
 #. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-b-short_-d,_-y
+#, python-format
+msgid "b dd, YY"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d_-b_-y
+#, python-format
+msgid "dd B YY"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d_-b-short_-y
+#, python-format
+msgid "dd b YY"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d--m--y
+#, python-format
+msgid "dd-MM-YY"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d--b--y
+#, python-format
+msgid "dd-b-yy"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d_-m_-y
 #, python-format
 msgid "dd.MM.YY"
 msgstr "dd.MM.YY"
+
+#. module: base_import_pdf_by_template
+#. odoo-python
+#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
+#: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__date_format__-d_-m_-y-short
+#, python-format
+msgid "dd.MM.yy"
+msgstr ""
 
 #. module: base_import_pdf_by_template
 #. odoo-python
@@ -698,6 +751,10 @@ msgstr "dd/MM/YY"
 #, python-format
 msgid "dd/MM/yy"
 msgstr "dd/MM/yy"
+
+#, python-format
+#~ msgid "B d, YY"
+#~ msgstr "B d, YY"
 
 #, python-format
 #~ msgid ""
