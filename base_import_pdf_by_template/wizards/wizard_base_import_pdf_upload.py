@@ -16,6 +16,7 @@ class WizardBaseImportPdfUpload(models.TransientModel):
     _description = "Wizard Base Import Pdf Upload"
 
     model = fields.Char()
+    record_ref = fields.Reference(selection="_selection_reference_value")
     attachment_ids = fields.Many2many(comodel_name="ir.attachment", string="Files")
     allowed_template_ids = fields.Many2many(
         comodel_name="base.import.pdf.template", compute="_compute_allowed_template_ids"
@@ -25,6 +26,15 @@ class WizardBaseImportPdfUpload(models.TransientModel):
         comodel_name="wizard.base.import.pdf.upload.line",
         inverse_name="parent_id",
     )
+
+    @api.model
+    def _selection_reference_value(self):
+        models = (
+            self.env["ir.model"]
+            .sudo()
+            .search([("transient", "=", False)], order="name asc")
+        )
+        return [(model.model, model.name) for model in models]
 
     @api.depends("model")
     def _compute_allowed_template_ids(self):
@@ -179,6 +189,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         text = self.data
         template = self.template_id
         model = self.env[template.model]
+        model = self.parent_id.record_ref or self.env[template.model]
         ctx = template._prepare_ctx_from_model(template.model)
         model_form = Form(model.with_context(**ctx))
         # Set the values of the header in Form
@@ -216,9 +227,16 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
             for key in ctx:
                 if key.startswith("default_"):
                     field = key.replace("default_", "")
-                    if field in vals:
+                    if field in vals and not self.parent_id.record_ref:
                         vals.update({field: ctx[key]})
-            record = model.with_context(**ctx).create(vals)
+                    elif self.parent_id.record_ref:
+                        vals.update({field: ctx[key]})
+            # Create or update
+            if self.parent_id.record_ref:
+                model.with_context(**ctx).write(vals)
+                record = self.parent_id.record_ref
+            else:
+                record = model.with_context(**ctx).create(vals)
         except AssertionError as err:
             raise UserError(err) from err
         if self.log_text:
