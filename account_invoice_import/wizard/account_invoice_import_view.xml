@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2015-2021 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="account_invoice_import_form" model="ir.ui.view">
+        <field name="model">account.invoice.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Supplier Invoice or Refund">
+                <div name="help-import" states="import">
+                    <p
+                    >Upload below the supplier invoice/refund as PDF or XML file: Odoo will create a draft supplier invoice/refund. Supported formats:</p>
+                    <ul name="supported_formats_list" />
+                    <p
+                    >If the format you need is not listed above, you should install an additionnal Odoo module that adds support for that format (e.g. <i
+                        >account_invoice_import_facturx</i>, <i
+                        >account_invoice_import_ubl</i>, <i
+                        >account_invoice_import_invoice2data</i>, etc).</p>
+                    <p
+                    >If there are several invoice import configurations for the supplier of the invoice, Odoo will ask you to choose one of them. If there is an existing draft invoice for that supplier, Odoo will propose you to update that draft invoice or create a new draft invoice.</p>
+                </div>
+                <div name="help-config" states="config">
+                    <p
+                    >The supplier has several invoice import configurations: please select the one you want to use for this import.</p>
+                </div>
+                <div name="help-update" states="update">
+                    <p
+                    >Some draft supplier invoices/refunds have been found for the supplier of the invoice you are importing; one of them may correspond to the invoice you are importing. You can either select an existing draft supplier invoice to update or create a new draft invoice.</p>
+                </div>
+                <group name="main" states="import,config,update,update-from-invoice">
+                    <field name="state" invisible="1" />
+                    <field name="currency_id" invisible="1" />
+                    <field
+                        name="invoice_file"
+                        filename="invoice_filename"
+                        required="1"
+                        states="import,update-from-invoice"
+                    />
+                    <field name="invoice_filename" invisible="1" />
+                    <field
+                        name="partner_id"
+                        states="config,update,update-from-invoice"
+                    />
+                    <field name="invoice_type" states="config,update" />
+                    <field
+                        name="amount_untaxed"
+                        states="config,update"
+                        widget="monetary"
+                        options="{'currency_field': 'currency_id'}"
+                    />
+                    <field
+                        name="amount_total"
+                        states="config,update"
+                        widget="monetary"
+                        options="{'currency_field': 'currency_id'}"
+                    />
+                    <field
+                        name="import_config_id"
+                        states="config,update-from-invoice,update"
+                        domain="[('partner_id', '=', partner_id)]"
+                        attrs="{'required': [('state', 'in', ('config', 'update-from-invoice', 'update'))]}"
+                    />
+                    <field
+                        name="invoice_id"
+                        states="update,update-from-invoice"
+                        domain="[('state', '=', 'draft'), ('move_type', 'in', ('in_invoice', 'in_refund')), ('commercial_partner_id', '=', partner_id), ('move_type', '=', invoice_type)]"
+                        context="{'invoice_show_amount': True}"
+                        attrs="{'readonly': [('state', '=', 'update-from-invoice')]}"
+                    />
+                </group>
+                <group
+                    name="partner-not-found"
+                    states="partner-not-found"
+                    string="Vendor not found"
+                >
+                    <field name="message" nolabel="1" colspan="2" />
+                    <field name="partner_vat" invisible="1" />
+                    <field name="partner_country_id" invisible="1" />
+                </group>
+                <group
+                    name="partner-not-found-create"
+                    states="partner-not-found"
+                    string="Create New Vendor"
+                >
+                    <button
+                        name="new_partner"
+                        type="object"
+                        string="Create"
+                        states="partner-not-found"
+                        class="btn-primary"
+                    />
+                </group>
+                <group
+                    name="partner-not-found-update"
+                    attrs="{'invisible': ['|', ('state', '!=', 'partner-not-found'), ('partner_vat', '=', False)]}"
+                    string="Update Existing Vendor"
+                    col="1"
+                >
+                    <group>
+                            <field
+                            name="partner_id"
+                            domain="[('parent_id', '=', False)]"
+                            readonly="0"
+                            string="Vendor to Update"
+                        />
+                    </group>
+                    <group>
+                    <button
+                            name="update_partner_vat_show"
+                            type="object"
+                            string="Update and Show Vendor"
+                            class="btn-primary"
+                        />
+                    <button
+                            name="update_partner_vat_continue"
+                            type="object"
+                            string="Update and Continue"
+                            class="btn-primary"
+                        />
+                    </group>
+            </group>
+                <footer>
+                    <button
+                        name="import_invoice"
+                        type="object"
+                        class="btn-primary"
+                        string="Import"
+                        states="import,config"
+                    />
+                    <button
+                        name="update_invoice"
+                        type="object"
+                        class="btn-primary"
+                        string="Update Existing"
+                        states="update"
+                    />
+                    <button
+                        name="create_invoice_action_button"
+                        type="object"
+                        class="btn-primary"
+                        string="Create New"
+                        states="update"
+                    />
+                    <button
+                        name="update_invoice"
+                        type="object"
+                        class="btn-primary"
+                        string="Update Invoice"
+                        states="update-from-invoice"
+                    />
+                    <button special="cancel" string="Cancel" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="account_invoice_import_action" model="ir.actions.act_window">
+        <field name="name">Import Vendor Bill</field>
+        <field name="res_model">account.invoice.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'invoice_show_amount': True}</field>
+    </record>
+    <menuitem
+        id="account_invoice_import_menu"
+        parent="account.menu_finance_payables"
+        action="account_invoice_import_action"
+        sequence="15"
+    />
+</odoo>
