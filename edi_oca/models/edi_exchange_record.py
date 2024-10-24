@@ -112,6 +112,8 @@ class EDIExchangeRecord(models.Model):
         compute="_compute_retryable",
         help="The record state can be rolled back manually in case of failure.",
     )
+    is_queued = fields.Boolean(
+        help="Technical field to know if a related job has been created already.")
 
     _sql_constraints = [
         ("identifier_uniq", "unique(identifier)", "The identifier must be unique."),

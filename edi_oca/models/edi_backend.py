@@ -413,6 +413,7 @@ class EDIBackend(models.Model):
             len(new_records),
         )
         for rec in new_records:
+            rec.is_queued = True
             job1 = rec.delayable().action_exchange_generate()
             if not skip_send:
                 # Chain send job.
@@ -451,6 +452,7 @@ class EDIBackend(models.Model):
             ("type_id.direction", "=", "output"),
             ("edi_exchange_state", "=", "new"),
             ("exchange_file", "=", False),
+            ("is_queued", "=", False),
         ]
         if record_ids:
             domain.append(("id", "in", record_ids))
@@ -631,6 +633,7 @@ class EDIBackend(models.Model):
             len(pending_records),
         )
         for rec in pending_records:
+            rec.is_queued = True
             rec.with_delay().action_exchange_receive()
 
         pending_process_records = self.exchange_record_model.search(
@@ -649,6 +652,7 @@ class EDIBackend(models.Model):
             ("type_id.direction", "=", "input"),
             ("edi_exchange_state", "=", "input_pending"),
             ("exchange_file", "=", False),
+            ("is_queued", "=", False),
         ]
         if record_ids:
             domain.append(("id", "in", record_ids))
