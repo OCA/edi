@@ -134,3 +134,29 @@ class FakeInputValidate(FakeComponentMixin):
     def validate(self, value=None):
         self._fake_it()
         return
+
+
+class FakeConfigurationListener(FakeComponentMixin):
+    _name = "fake.configuration.listener"
+    _inherit = "base.event.listener"
+    _apply_on = ["edi.exchange.consumer.test"]
+
+    def on_record_write_configuration(self, record, fields=None, **kwargs):
+        trigger = "on_record_write"
+        if kwargs.get("vals", False):
+            for rec in record:
+                confs = record.edi_config_ids.edi_get_conf(trigger)
+                for conf in confs:
+                    conf.edi_exec_snippet_do(rec, **kwargs)
+        return True
+
+    def on_record_create_configuration(self, record, fields=None, **kwargs):
+        trigger = "on_record_create"
+        val_list = kwargs.get("vals", False)
+        if val_list:
+            for rec, vals in zip(record, val_list):
+                kwargs["vals"] = {rec.id: vals}
+                confs = rec.edi_config_ids.edi_get_conf(trigger)
+                for conf in confs:
+                    conf.edi_exec_snippet_do(rec, **kwargs)
+        return True

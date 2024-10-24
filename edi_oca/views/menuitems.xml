@@ -82,4 +82,11 @@
         sequence="40"
         action="act_open_edi_exchange_type_rule_view"
     />
+    <menuitem
+        id="menu_edi_configuration"
+        parent="edi_oca.menu_edi_config"
+        name="Configurations"
+        sequence="50"
+        action="act_open_edi_configuration_view"
+    />
 </odoo>
