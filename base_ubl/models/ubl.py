@@ -15,12 +15,6 @@ from odoo.tools import file_open, float_is_zero, float_round
 
 logger = logging.getLogger(__name__)
 
-try:
-    from PyPDF2 import PdfFileReader, PdfFileWriter
-    from PyPDF2.generic import NameObject
-except ImportError:
-    logger.debug("Cannot import PyPDF2")
-
 
 class BaseUbl(models.AbstractModel):
     _name = "base.ubl"
@@ -587,17 +581,14 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def _ubl_add_xml_in_pdf_buffer(self, xml_string, xml_filename, buffer):
-        # Add attachment to PDF content.
-        reader = PdfFileReader(buffer)
-        writer = PdfFileWriter()
-        writer.appendPagesFromReader(reader)
-        writer.addAttachment(xml_filename, xml_string)
-        # show attachments when opening PDF
-        writer._root_object.update(
-            {NameObject("/PageMode"): NameObject("/UseAttachments")}
+        logger.warning(
+            "`_ubl_add_xml_in_pdf_buffer` deprecated: use `pdf.helper.pdf_embed_xml`"
         )
-        new_buffer = BytesIO()
-        writer.write(new_buffer)
+        pdf_content = buffer.getvalue()
+        new_content = self.env["pdf.helper"].pdf_embed_xml(
+            pdf_content, xml_filename, xml_string
+        )
+        new_buffer = BytesIO(new_content)
         return new_buffer
 
     @api.model
@@ -607,16 +598,14 @@ class BaseUbl(models.AbstractModel):
         -> it will return the new PDF binary with the embedded XML
         (used for qweb-pdf reports)
         """
+        logger.warning(
+            "`_embed_ubl_xml_in_pdf_content` deprecated: use `pdf.helper.pdf_embed_xml`"
+        )
         self.ensure_one()
         logger.debug("Starting to embed %s in PDF", xml_filename)
-
-        with BytesIO(pdf_content) as reader_buffer:
-            buffer = self._ubl_add_xml_in_pdf_buffer(
-                xml_string, xml_filename, reader_buffer
-            )
-        pdf_content = buffer.getvalue()
-        buffer.close()
-
+        pdf_content = self.env["pdf.helper"].pdf_embed_xml(
+            pdf_content, xml_filename, xml_string
+        )
         logger.info("%s file added to PDF content", xml_filename)
         return pdf_content
 
@@ -638,8 +627,8 @@ class BaseUbl(models.AbstractModel):
         if pdf_file:
             with open(pdf_file, "rb") as f:
                 pdf_content = f.read()
-        updated_pdf_content = self._embed_ubl_xml_in_pdf_content(
-            xml_string, xml_filename, pdf_content
+        updated_pdf_content = self.env["pdf.helper"].pdf_embed_xml(
+            pdf_content, xml_filename, xml_string
         )
         if pdf_file:
             with open(pdf_file, "wb") as f:
