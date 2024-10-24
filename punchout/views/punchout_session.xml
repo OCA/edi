@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ACSONE SA/NV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+  <record model="ir.ui.view" id="punchout_session_form_view">
+    <field name="name">punchout.session.form (in punchout)</field>
+    <field name="model">punchout.session</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <field name="action_process_allowed" invisible="1" />
+          <button
+                        name="action_process"
+                        type="object"
+                        string="Process"
+                        class="btn-primary"
+                        icon="fa-rocket"
+                        attrs="{'invisible': [('action_process_allowed', '=', False)]}"
+                    />
+          <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,to_process,done"
+                    />
+        </header>
+        <div
+                    attrs="{'invisible': [('state', '!=', 'error')]}"
+                    class="alert alert-danger"
+                    role="alert"
+                >
+                    An error occured during the process of the session.
+                </div>
+        <sheet>
+          <div class="oe_button_box" name="button_box" />
+          <group>
+            <group>
+              <field name="backend_id" />
+              <field name="user_id" />
+              <field name="buyer_cookie_id" />
+            </group>
+            <group>
+              <field name="create_date" />
+              <field name="expiration_date" />
+              <field name="cxml_response_date" />
+            </group>
+          </group>
+          <notebook>
+            <page string="Setup" name="punchout_setup">
+                <separator string="Sent" name="sent" />
+              <field name="cxml_setup_request" widget="ace" />
+                <separator string="Received" name="received" />
+              <field name="cxml_setup_request_response" widget="ace" />
+            </page>
+              <page string="Response" name="response">
+                  <field name="cxml_response" widget="ace" />
+              </page>
+            <page
+                            string="Erreur"
+                            name="error"
+                            attrs="{'invisible': [('error_message', '=', False)]}"
+                        >
+              <field name="error_message" />
+            </page>
+          </notebook>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers" />
+          <field name="message_ids" widget="mail_thread" />
+        </div>
+      </form>
+    </field>
+  </record>
+  <record model="ir.ui.view" id="punchout_session_search_view">
+    <field name="name">punchout.session.search (in punchout)</field>
+    <field name="model">punchout.session</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="backend_id" />
+        <field name="user_id" />
+        <field name="buyer_cookie_id" />
+      </search>
+    </field>
+  </record>
+  <record model="ir.ui.view" id="punchout_session_tree_view">
+    <field name="name">punchout.session.tree (in punchout)</field>
+    <field name="model">punchout.session</field>
+    <field name="arch" type="xml">
+      <tree
+                decoration-success="state == 'done'"
+                decoration-danger="state == 'error'"
+                decoration-info="state == 'to_process'"
+            >
+        <field name="create_date" />
+        <field name="backend_id" />
+        <field name="user_id" />
+        <field name="buyer_cookie_id" />
+        <field name="state" />
+      </tree>
+    </field>
+  </record>
+  <record model="ir.actions.act_window" id="punchout_session_act_window">
+    <field name="name">PunchOut sessions</field>
+    <field name="res_model">punchout.session</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[]</field>
+    <field name="context">{}</field>
+  </record>
+  <record model="ir.ui.menu" id="punchout_session_menu">
+    <field name="name">PunchOut sessions</field>
+    <field name="parent_id" ref="punchout.punchout_menu" />
+    <field name="action" ref="punchout.punchout_session_act_window" />
+    <field name="sequence" eval="15" />
+  </record>
+</odoo>
