@@ -10,12 +10,7 @@ from struct import error as StructError
 
 from lxml import etree
 
-try:
-    from PyPDF2.errors import PdfReadError
-except ImportError:
-    from PyPDF2.utils import PdfReadError
-
-from odoo.tools.pdf import OdooPdfFileReader
+from odoo.tools.pdf import OdooPdfFileReader, PdfReadError
 
 _logger = logging.getLogger(__name__)
 
