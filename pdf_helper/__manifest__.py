@@ -5,7 +5,7 @@
 # TODO: move it to a simple python package under OCA umbrella?
 {
     "name": "PDF Helper",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.0.1",
     "category": "Tools",
     "license": "LGPL-3",
     "summary": "Provides helpers to work w/ PDFs",
