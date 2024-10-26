@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-22 10:06+0000\n"
+"PO-Revision-Date: 2024-10-26 16:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -252,42 +252,42 @@ msgstr "Fisso"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_char
 msgid "Fixed Value Char"
-msgstr ""
+msgstr "Carattere a valore fisso"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_date
 msgid "Fixed Value Date"
-msgstr ""
+msgstr "Data a valore fisso"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_datetime
 msgid "Fixed Value Datetime"
-msgstr ""
+msgstr "Dataora a valore fisso"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_float
 msgid "Fixed Value Float"
-msgstr ""
+msgstr "Decimale a valore fisso"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_html
 msgid "Fixed Value Html"
-msgstr ""
+msgstr "HTML a valore fisso"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_integer
 msgid "Fixed Value Integer"
-msgstr ""
+msgstr "Itero a valore fisso"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_selection
 msgid "Fixed Value Selection"
-msgstr ""
+msgstr "Selezione a valore fisso"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value_text
 msgid "Fixed Value Text"
-msgstr ""
+msgstr "Testo a valore fisso"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__fixed_value
