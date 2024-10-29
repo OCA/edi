@@ -68,6 +68,7 @@ class EndpointRegistry:
 
     __slots__ = "cr"
     _table = "endpoint_route"
+    # pylint: disable=W8105
     _columns = (
         # name, type, comment
         ("key", "VARCHAR", ""),
@@ -99,9 +100,11 @@ class EndpointRegistry:
     @classmethod
     def _setup_db_table(cls, cr):
         """Create routing table and indexes"""
-        tools.sql.create_model_table(cr, cls._table, columns=cls._columns)
+        tools.sql.create_model_table(cr, cls._table)
+        for name, sql_type, _comment in cls._columns:
+            tools.sql.create_column(cr, cls._table, name, sql_type, _comment)
         tools.sql.create_unique_index(
-            cr, "endpoint_route__key_uniq", cls._table, ["key",],
+            cr, "endpoint_route__key_uniq", cls._table, ["key"],
         )
         tools.sql.add_constraint(
             cr,
