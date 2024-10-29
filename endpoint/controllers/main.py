@@ -37,7 +37,10 @@ class EndpointControllerMixin:
         if headers is None:
             headers = {}
         headers["Content-Type"] = "application/json"
-        resp = request.make_response(data, headers=headers)
+        if request._request_type == "http":
+            resp = request.make_response(data, headers=headers)
+        else:
+            resp = request._json_response(data)
         resp.status = str(status)
         return resp
 

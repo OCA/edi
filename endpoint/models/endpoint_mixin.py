@@ -7,9 +7,12 @@ import textwrap
 import werkzeug
 
 from odoo import _, api, exceptions, fields, http, models
-from odoo.tools import safe_eval
+from odoo.tools import misc
+from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.rpc_helper.decorator import disable_rpc
+
+from ..tools import misc as custom_misc
 
 
 @disable_rpc()  # Block ALL RPC calls
@@ -88,22 +91,22 @@ class EndpointMixin(models.AbstractModel):
     def _get_code_snippet_eval_context(self, request):
         """Prepare the context used when evaluating python code
 
-        :returns: dict -- evaluation context given to safe_eval
+        :returns: dict -- evaluation context given to tools.misc
         """
         return {
             "env": self.env,
             "user": self.env.user,
             "endpoint": self,
             "request": request,
-            "datetime": safe_eval.datetime,
-            "dateutil": safe_eval.dateutil,
-            "time": safe_eval.time,
-            "json": safe_eval.json,
+            "datetime": misc.datetime,
+            "dateutil": misc.dateutil,
+            "time": misc.time,
+            "json": custom_misc.json,
             "Response": http.Response,
-            "werkzeug": safe_eval.wrap_module(
+            "werkzeug": misc.wrap_module(
                 werkzeug, {"exceptions": ["NotFound", "BadRequest", "Unauthorized"]}
             ),
-            "exceptions": safe_eval.wrap_module(
+            "exceptions": misc.wrap_module(
                 exceptions, ["UserError", "ValidationError"]
             ),
             "log": self._code_snippet_log_func,
@@ -136,7 +139,7 @@ class EndpointMixin(models.AbstractModel):
             return {}
         eval_ctx = self._get_code_snippet_eval_context(request)
         snippet = self.code_snippet
-        safe_eval.safe_eval(snippet, eval_ctx, mode="exec", nocopy=True)
+        safe_eval(snippet, eval_ctx, mode="exec", nocopy=True)
         result = eval_ctx.get("result")
         if not isinstance(result, dict):
             raise exceptions.UserError(

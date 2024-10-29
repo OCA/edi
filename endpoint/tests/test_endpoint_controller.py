@@ -6,17 +6,16 @@ import json
 import os
 from unittest import skipIf
 
-from odoo.tests.common import HttpSavepointCase
+from odoo.tests.common import HttpCase
 from odoo.tools.misc import mute_logger
 
 
 @skipIf(os.getenv("SKIP_HTTP_CASE"), "EndpointHttpCase skipped")
-class EndpointHttpCase(HttpSavepointCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+class EndpointHttpCase(HttpCase):
+    def setUp(self):
+        super(EndpointHttpCase, self).setUp()
         # force sync for demo records
-        cls.env["endpoint.endpoint"].search([])._handle_registry_sync()
+        self.env["endpoint.endpoint"].search([])._handle_registry_sync()
 
     def tearDown(self):
         self.env["ir.http"]._clear_routing_map()

@@ -4,7 +4,7 @@
 {
     "name": "Endpoint",
     "summary": """Provide custom endpoint machinery.""",
-    "version": "14.0.2.3.0",
+    "version": "13.0.1.0.0",
     "license": "LGPL-3",
     "development_status": "Beta",
     "author": "Camptocamp,Odoo Community Association (OCA)",
@@ -16,6 +16,6 @@
         "security/ir_rule.xml",
         "views/endpoint_view.xml",
     ],
-    "demo": ["demo/endpoint_demo.xml",],
+    "demo": ["demo/endpoint_demo.xml"],
     "post_init_hook": "post_init_hook",
 }
