@@ -17,10 +17,10 @@ EDI endpoint
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/14.0/edi_endpoint_oca
+    :target: https://github.com/OCA/edi/tree/14.0/edi_endpoint
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-14-0/edi-14-0-edi_endpoint_oca
+    :target: https://translation.odoo-community.org/projects/edi-14-0/edi-14-0-edi_endpoint
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
     :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=14.0
@@ -76,6 +76,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/edi_endpoint_oca>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/14.0/edi_endpoint>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

@@ -3,8 +3,8 @@
         <record id="server_action_registry_sync" model="ir.actions.server">
             <field name="name">Sync registry</field>
             <field name="type">ir.actions.server</field>
-            <field name="model_id" ref="edi_endpoint_oca.model_edi_endpoint" />
-            <field name="binding_model_id" ref="edi_endpoint_oca.model_edi_endpoint" />
+            <field name="model_id" ref="edi_endpoint.model_edi_endpoint" />
+            <field name="binding_model_id" ref="edi_endpoint.model_edi_endpoint" />
             <field name="state">code</field>
             <field name="code">
 records.filtered(lambda x: not x.registry_sync).write({"registry_sync": True})
