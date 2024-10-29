@@ -25,10 +25,7 @@ class CommonEndpoint(SavepointCase):
 
     @classmethod
     def _setup_context(cls):
-        return dict(
-            cls.env.context,
-            tracking_disable=True,
-        )
+        return dict(cls.env.context, tracking_disable=True,)
 
     @classmethod
     def _setup_records(cls):
