@@ -25,11 +25,7 @@ class TestEndpoint(CommonEndpoint):
     def test_endpoint_unique(self):
         with self.assertRaises(psycopg2.IntegrityError):
             self.env["endpoint.endpoint"].create(
-                {
-                    "name": "Endpoint",
-                    "route": "/demo/one",
-                    "exec_mode": "code",
-                }
+                {"name": "Endpoint", "route": "/demo/one", "exec_mode": "code",}
             )
 
     def test_endpoint_validation(self):

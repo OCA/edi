@@ -19,10 +19,7 @@ class EndpointMixin(models.AbstractModel):
     _inherit = "endpoint.route.handler"
     _description = "Endpoint mixin"
 
-    exec_mode = fields.Selection(
-        selection="_selection_exec_mode",
-        required=True,
-    )
+    exec_mode = fields.Selection(selection="_selection_exec_mode", required=True,)
     code_snippet = fields.Text()
     code_snippet_docs = fields.Text(
         compute="_compute_code_snippet_docs",
