@@ -25,7 +25,7 @@ class TestEndpoint(CommonEndpoint):
     def test_endpoint_unique(self):
         with self.assertRaises(psycopg2.IntegrityError):
             self.env["endpoint.endpoint"].create(
-                {"name": "Endpoint", "route": "/demo/one", "exec_mode": "code",}
+                {"name": "Endpoint", "route": "/demo/one", "exec_mode": "code"}
             )
 
     def test_endpoint_validation(self):
@@ -229,9 +229,9 @@ class TestEndpoint(CommonEndpoint):
         key = endpoint._endpoint_registry_unique_key()
         reg = endpoint._endpoint_registry
         self.assertEqual(reg._get_rule(key), None)
-        with mock.patch.object(type(self.env.cr.postcommit), "add") as mocked:
+        with mock.patch.object(type(self.env.cr), "after") as mocked:
             endpoint.registry_sync = True
-            partial_func = mocked.call_args[0][0]
+            partial_func = mocked.call_args[0][1]
             self.assertEqual(partial_func.args, ([endpoint.id],))
             self.assertEqual(
                 partial_func.func.__name__, "_handle_registry_sync_post_commit"
