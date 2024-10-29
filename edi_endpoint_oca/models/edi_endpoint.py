@@ -4,7 +4,7 @@
 import werkzeug
 
 from odoo import _, api, exceptions, fields, models
-from odoo.tools import safe_eval
+from odoo.tools.safe_eval import safe_eval
 
 
 class EDIEndpoint(models.Model):
@@ -70,13 +70,14 @@ class EDIEndpoint(models.Model):
 
     def action_view_edi_records(self):
         self.ensure_one()
-        xmlid = "edi_oca.act_open_edi_exchange_record_view"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
+        module_name = "edi"
+        action_xmlid = "act_open_edi_exchange_record_view"
+        action = self.env["ir.actions.act_window"].for_xml_id(module_name, action_xmlid)
         action["domain"] = [("edi_endpoint_id", "=", self.id)]
         # Purge default search filters from ctx to avoid hiding records
         ctx = action.get("context", {})
         if isinstance(ctx, str):
-            ctx = safe_eval.safe_eval(ctx, self.env.context)
+            ctx = safe_eval(ctx, self.env.context)
         action["context"] = {
             k: v for k, v in ctx.items() if not k.startswith("search_default_")
         }
