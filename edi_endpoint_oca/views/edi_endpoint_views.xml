@@ -93,7 +93,7 @@
 
     <record model="ir.ui.menu" id="edi_endpoint_menu">
         <field name="name">EDI Endpoints</field>
-        <field name="parent_id" ref="edi_oca.menu_edi_config" />
+        <field name="parent_id" ref="edi.menu_edi_config" />
         <field name="action" ref="edi_endpoint_act_window" />
         <field name="sequence" eval="100" />
     </record>
