@@ -10,9 +10,7 @@ class EDIBackend(models.Model):
     _inherit = "edi.backend"
 
     endpoint_ids = fields.One2many(
-        string="Endpoints",
-        comodel_name="edi.endpoint",
-        inverse_name="backend_id",
+        string="Endpoints", comodel_name="edi.endpoint", inverse_name="backend_id",
     )
     endpoints_count = fields.Integer(compute="_compute_endpoints_count")
 

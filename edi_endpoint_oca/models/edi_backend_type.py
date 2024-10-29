@@ -11,7 +11,5 @@ class EDIBackendType(models.Model):
     _inherit = "edi.backend.type"
 
     endpoint_ids = fields.One2many(
-        string="Endpoints",
-        comodel_name="edi.endpoint",
-        inverse_name="backend_type_id",
+        string="Endpoints", comodel_name="edi.endpoint", inverse_name="backend_type_id",
     )
