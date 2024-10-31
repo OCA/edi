@@ -36,10 +36,7 @@ class OAuth2Controller(http.Controller):
         )  # we expect an adapter that supports web_application
         token = adapter._fetch_token_from_authorization(code)
         backend.write(
-            {
-                "oauth2_token": json.dumps(token),
-                "oauth2_state": False,
-            }
+            {"oauth2_token": json.dumps(token), "oauth2_state": False,}
         )
         # after saving the token, redirect to the backend form view
         uid = request.session.uid

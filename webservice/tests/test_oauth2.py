@@ -128,10 +128,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
         responses.add(
             responses.POST,
             f"{self.url}oauth2/token",
-            json={
-                "error": "invalid_grant",
-                "error_description": "invalid grant",
-            },
+            json={"error": "invalid_grant", "error_description": "invalid grant",},
             status=404,
         )
         responses.add(responses.GET, f"{self.url}endpoint", body="NOK", status=403)

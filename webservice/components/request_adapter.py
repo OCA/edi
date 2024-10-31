@@ -167,10 +167,7 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
         url = self._get_url(url=url, url_params=url_params)
         new_kwargs = kwargs.copy()
         new_kwargs.update(
-            {
-                "headers": self._get_headers(**kwargs),
-                "timeout": None,
-            }
+            {"headers": self._get_headers(**kwargs), "timeout": None,}
         )
         client = BackendApplicationClient(client_id=self.collection.oauth2_clientid)
         with OAuth2Session(client=client, token=self.token) as session:
@@ -233,13 +230,10 @@ class WebApplicationOAuth2RestRequestsAdapter(Component):
                 "redirect_url",
             ]
         )[0]
-        client = WebApplicationClient(
-            client_id=oauth_params["oauth2_clientid"],
-        )
+        client = WebApplicationClient(client_id=oauth_params["oauth2_clientid"],)
 
         with OAuth2Session(
-            client=client,
-            redirect_uri=oauth_params.get("redirect_url"),
+            client=client, redirect_uri=oauth_params.get("redirect_url"),
         ) as session:
             authorization_url, state = session.authorization_url(
                 backend.oauth2_authorization_url, **authorization_url_extra_params
