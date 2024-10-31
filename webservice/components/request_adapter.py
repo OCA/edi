@@ -166,9 +166,7 @@ class BackendApplicationOAuth2RestRequestsAdapter(Component):
     def _request(self, method, url=None, url_params=None, **kwargs):
         url = self._get_url(url=url, url_params=url_params)
         new_kwargs = kwargs.copy()
-        new_kwargs.update(
-            {"headers": self._get_headers(**kwargs), "timeout": None,}
-        )
+        new_kwargs.update({"headers": self._get_headers(**kwargs), "timeout": None})
         client = BackendApplicationClient(client_id=self.collection.oauth2_clientid)
         with OAuth2Session(client=client, token=self.token) as session:
             # pylint: disable=E8106

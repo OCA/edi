@@ -12,15 +12,14 @@ from .common import CommonWebService
 
 
 class TestWebService(CommonWebService):
-    @classmethod
-    def _setup_records(cls):
-        res = super()._setup_records()
-        cls.url = "http://localhost.demo.odoo/"
-        cls.webservice = cls.env["webservice.backend"].create(
+    def _setup_records(self):
+        res = super(TestWebService, self)._setup_records()
+        self.url = "https://localhost.demo.odoo/"
+        self.webservice = self.env["webservice.backend"].create(
             {
                 "name": "WebService",
                 "protocol": "http",
-                "url": cls.url,
+                "url": self.url,
                 "content_type": "application/xml",
                 "tech_name": "demo_ws",
                 "auth_type": "none",
@@ -39,9 +38,7 @@ class TestWebService(CommonWebService):
             r"However, the following field\(s\) are not valued: Username, Password"
         )
         with self.assertRaisesRegex(exceptions.UserError, msg):
-            self.webservice.write(
-                {"auth_type": "user_pwd",}
-            )
+            self.webservice.write({"auth_type": "user_pwd"})
 
         msg = (
             r"Webservice 'WebService' "
@@ -57,9 +54,7 @@ class TestWebService(CommonWebService):
             r"However, the following field\(s\) are not valued: API Key, API Key header"
         )
         with self.assertRaisesRegex(exceptions.UserError, msg):
-            self.webservice.write(
-                {"auth_type": "api_key",}
-            )
+            self.webservice.write({"auth_type": "api_key"})
 
         msg = (
             r"Webservice 'WebService' "
@@ -67,9 +62,7 @@ class TestWebService(CommonWebService):
             r"However, the following field\(s\) are not valued: API Key header"
         )
         with self.assertRaisesRegex(exceptions.UserError, msg):
-            self.webservice.write(
-                {"auth_type": "api_key", "api_key": "foo",}
-            )
+            self.webservice.write({"auth_type": "api_key", "api_key": "foo"})
 
     @responses.activate
     def test_web_service_get(self):
@@ -96,7 +89,7 @@ class TestWebService(CommonWebService):
     def test_web_service_get_url_combine_full_url(self):
         endpoint = "api/test"
         responses.add(responses.GET, self.url + endpoint, body="{}")
-        result = self.webservice.call("get", url="http://localhost.demo.odoo/api/test")
+        result = self.webservice.call("get", url="https://localhost.demo.odoo/api/test")
         self.assertEqual(result, b"{}")
         self.assertEqual(len(responses.calls), 1)
         self.assertEqual(

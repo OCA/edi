@@ -10,25 +10,21 @@ from odoo.addons.component.tests.common import TransactionComponentCase
 
 @tagged("-at_install", "post_install")
 class CommonWebService(TransactionComponentCase):
-    @classmethod
-    def _setup_context(cls):
+    def _setup_context(self):
         return dict(
-            cls.env.context, tracking_disable=True, test_queue_job_no_delay=True,
+            self.env.context, tracking_disable=True, test_queue_job_no_delay=True,
         )
 
-    @classmethod
-    def _setup_env(cls):
-        cls.env = cls.env(context=cls._setup_context())
+    def _setup_env(self):
+        self.env = self.env(context=self._setup_context())
 
-    @classmethod
-    def _setup_records(cls):
+    def _setup_records(self):
         pass
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls._setup_env()
-        cls._setup_records()
+    def setUp(self):
+        super(CommonWebService, self).setUp()
+        self._setup_env()
+        self._setup_records()
 
 
 @contextmanager

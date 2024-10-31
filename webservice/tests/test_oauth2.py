@@ -19,11 +19,10 @@ from .common import CommonWebService, mock_cursor
 
 
 class TestWebServiceOauth2BackendApplication(CommonWebService):
-    @classmethod
-    def _setup_records(cls):
+    def _setup_records(self):
 
-        res = super()._setup_records()
-        cls.url = "https://localhost.demo.odoo/"
+        res = super(TestWebServiceOauth2BackendApplication, self)._setup_records()
+        self.url = "https://localhost.demo.odoo/"
         os.environ["SERVER_ENV_CONFIG"] = "\n".join(
             [
                 "[webservice_backend.test_oauth2_back]",
@@ -31,23 +30,23 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
                 "oauth2_flow = backend_application",
                 "oauth2_clientid = some_client_id",
                 "oauth2_client_secret = shh_secret",
-                f"oauth2_token_url = {cls.url}oauth2/token",
-                f"oauth2_audience = {cls.url}",
+                f"oauth2_token_url = {self.url}oauth2/token",
+                f"oauth2_audience = {self.url}",
             ]
         )
-        cls.webservice = cls.env["webservice.backend"].create(
+        self.webservice = self.env["webservice.backend"].create(
             {
                 "name": "WebService OAuth2",
                 "tech_name": "test_oauth2_back",
                 "auth_type": "oauth2",
                 "protocol": "http",
-                "url": cls.url,
+                "url": self.url,
                 "oauth2_flow": "backend_application",
                 "content_type": "application/xml",
                 "oauth2_clientid": "some_client_id",
                 "oauth2_client_secret": "shh_secret",
-                "oauth2_token_url": f"{cls.url}oauth2/token",
-                "oauth2_audience": cls.url,
+                "oauth2_token_url": f"{self.url}oauth2/token",
+                "oauth2_audience": self.url,
             }
         )
         return res
@@ -74,7 +73,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
 
         with mock_cursor(self.env.cr):
             result = self.webservice.call("get", url=f"{self.url}endpoint")
-        self.webservice.invalidate_recordset()
+        self.webservice.invalidate_cache()
         self.assertTrue("cool_token" in self.webservice.oauth2_token)
         self.assertEqual(result, b"OK")
 
@@ -89,7 +88,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
                 "token_type": "Bearer",
             }
         )
-        self.webservice.flush_model()
+        self.webservice.flush()
 
         expires_timestamp = time.time() + duration
         responses.add(
@@ -108,7 +107,7 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
             result = self.webservice.call("get", url=f"{self.url}endpoint")
             self.env.cr.commit.assert_called_once_with()  # one call with no args
 
-        self.webservice.invalidate_recordset()
+        self.webservice.invalidate_cache()
         self.assertTrue("cool_token" in self.webservice.oauth2_token)
         self.assertEqual(result, b"OK")
 
@@ -123,12 +122,12 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
                 "token_type": "Bearer",
             }
         )
-        self.webservice.flush_model()
+        self.webservice.flush()
 
         responses.add(
             responses.POST,
             f"{self.url}oauth2/token",
-            json={"error": "invalid_grant", "error_description": "invalid grant",},
+            json={"error": "invalid_grant", "error_description": "invalid grant"},
             status=404,
         )
         responses.add(responses.GET, f"{self.url}endpoint", body="NOK", status=403)
@@ -139,15 +138,14 @@ class TestWebServiceOauth2BackendApplication(CommonWebService):
             self.env.cr.commit.assert_not_called()
             self.env.cr.close.assert_called_once_with()  # one call with no args
 
-        self.webservice.invalidate_recordset()
+        self.webservice.invalidate_cache()
         self.assertTrue("old_token" in self.webservice.oauth2_token)
 
 
 class TestWebServiceOauth2WebApplication(CommonWebService):
-    @classmethod
-    def _setup_records(cls):
-        res = super()._setup_records()
-        cls.url = "https://localhost.demo.odoo/"
+    def _setup_records(self):
+        res = super(TestWebServiceOauth2WebApplication, self)._setup_records()
+        self.url = "https://localhost.demo.odoo/"
         os.environ["SERVER_ENV_CONFIG"] = "\n".join(
             [
                 "[webservice_backend.test_oauth2_web]",
@@ -155,25 +153,25 @@ class TestWebServiceOauth2WebApplication(CommonWebService):
                 "oauth2_flow = web_application",
                 "oauth2_clientid = some_client_id",
                 "oauth2_client_secret = shh_secret",
-                f"oauth2_token_url = {cls.url}oauth2/token",
-                f"oauth2_audience = {cls.url}",
-                f"oauth2_authorization_url = {cls.url}/authorize",
+                f"oauth2_token_url = {self.url}oauth2/token",
+                f"oauth2_audience = {self.url}",
+                f"oauth2_authorization_url = {self.url}/authorize",
             ]
         )
-        cls.webservice = cls.env["webservice.backend"].create(
+        self.webservice = self.env["webservice.backend"].create(
             {
                 "name": "WebService OAuth2",
                 "tech_name": "test_oauth2_web",
                 "auth_type": "oauth2",
                 "protocol": "http",
-                "url": cls.url,
+                "url": self.url,
                 "oauth2_flow": "web_application",
                 "content_type": "application/xml",
                 "oauth2_clientid": "some_client_id",
                 "oauth2_client_secret": "shh_secret",
-                "oauth2_token_url": f"{cls.url}oauth2/token",
-                "oauth2_audience": cls.url,
-                "oauth2_authorization_url": f"{cls.url}/authorize",
+                "oauth2_token_url": f"{self.url}oauth2/token",
+                "oauth2_audience": self.url,
+                "oauth2_authorization_url": f"{self.url}/authorize",
             }
         )
         return res
@@ -243,7 +241,7 @@ oauth2_authorization_url = {url}/authorize
                 },
             ):
                 server_env_mixin.serv_config = server_env._load_config()  # Reload vars
-                ws.invalidate_recordset()  # Avoid reading from cache
+                ws.invalidate_cache()  # Avoid reading from cache
                 if auth_type == "oauth2":
                     self.assertEqual(ws.oauth2_flow, oauth2_flow)
                 else:
