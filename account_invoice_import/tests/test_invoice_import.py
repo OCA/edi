@@ -8,42 +8,50 @@ import logging
 from unittest import mock
 
 from odoo import fields
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_is_zero
 
 logger = logging.getLogger(__name__)
 
 
-class TestInvoiceImport(SavepointCase):
+class TestInvoiceImport(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.company = cls.env.ref("base.main_company")
         cls.company.invoice_import_email = "alexis.delattre@testme.com"
         cls.expense_account = cls.env["account.account"].create(
-            {
-                "code": "612AII",
-                "name": "expense account invoice import",
-                "user_type_id": cls.env.ref("account.data_account_type_expenses").id,
-                "company_id": cls.company.id,
-            }
+            [
+                {
+                    "code": "612AII",
+                    "name": "expense account invoice import",
+                    "user_type_id": cls.env.ref(
+                        "account.data_account_type_expenses"
+                    ).id,
+                    "company_id": cls.company.id,
+                }
+            ]
         )
         cls.income_account = cls.env["account.account"].create(
-            {
-                "code": "707AII",
-                "name": "revenue account invoice import",
-                "user_type_id": cls.env.ref("account.data_account_type_revenue").id,
-                "company_id": cls.company.id,
-            }
+            [
+                {
+                    "code": "707AII",
+                    "name": "revenue account invoice import",
+                    "user_type_id": cls.env.ref("account.data_account_type_revenue").id,
+                    "company_id": cls.company.id,
+                }
+            ]
         )
         cls.adjustment_account = cls.env["account.account"].create(
-            {
-                "code": "Adjustment",
-                "name": "adjustment from invoice import",
-                "user_type_id": cls.env.ref(
-                    "account.data_account_type_current_assets"
-                ).id,
-            }
+            [
+                {
+                    "code": "Adjustment",
+                    "name": "adjustment from invoice import",
+                    "user_type_id": cls.env.ref(
+                        "account.data_account_type_current_assets"
+                    ).id,
+                }
+            ]
         )
         purchase_tax_vals = {
             "name": "Test 1% VAT Purchase",
@@ -58,7 +66,7 @@ class TestInvoiceImport(SavepointCase):
             # "account_id": cls.expense_account.id,
             # "refund_account_id": cls.expense_account.id,
         }
-        cls.purchase_tax = cls.env["account.tax"].create(purchase_tax_vals)
+        cls.purchase_tax = cls.env["account.tax"].create([purchase_tax_vals])
         sale_tax_vals = purchase_tax_vals.copy()
         sale_tax_vals.update(
             {
@@ -67,16 +75,18 @@ class TestInvoiceImport(SavepointCase):
                 "type_tax_use": "sale",
             }
         )
-        cls.sale_tax = cls.env["account.tax"].create(sale_tax_vals)
+        cls.sale_tax = cls.env["account.tax"].create([sale_tax_vals])
         cls.product = cls.env["product.product"].create(
-            {
-                "name": "Expense product",
-                "default_code": "AII-TEST-PRODUCT",
-                "taxes_id": [(6, 0, [cls.sale_tax.id])],
-                "supplier_taxes_id": [(6, 0, [cls.purchase_tax.id])],
-                "property_account_income_id": cls.income_account.id,
-                "property_account_expense_id": cls.expense_account.id,
-            }
+            [
+                {
+                    "name": "Expense product",
+                    "default_code": "AII-TEST-PRODUCT",
+                    "taxes_id": [(6, 0, [cls.sale_tax.id])],
+                    "supplier_taxes_id": [(6, 0, [cls.purchase_tax.id])],
+                    "property_account_income_id": cls.income_account.id,
+                    "property_account_expense_id": cls.expense_account.id,
+                }
+            ]
         )
         cls.all_import_config = [
             {
@@ -117,33 +127,37 @@ class TestInvoiceImport(SavepointCase):
             }
         )
         cls.partner_with_email = cls.env["res.partner"].create(
-            {
-                "is_company": True,
-                "name": "AgroMilk",
-                "email": "invoicing@agromilk.com",
-                "country_id": cls.env.ref("base.fr").id,
-            }
+            [
+                {
+                    "is_company": True,
+                    "name": "AgroMilk",
+                    "email": "invoicing@agromilk.com",
+                    "country_id": cls.env.ref("base.fr").id,
+                }
+            ]
         )
         cls.partner_with_email_with_inv_config = cls.env["res.partner"].create(
-            {
-                "is_company": True,
-                "name": "Anevia",
-                "email": "invoicing@anevia.com",
-                "country_id": cls.env.ref("base.fr").id,
-                "invoice_import_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "Import config for Anevia",
-                            "company_id": cls.company.id,
-                            "invoice_line_method": "1line_static_product",
-                            "static_product_id": cls.product.id,
-                            "label": "Flamingo 220S",
-                        },
-                    )
-                ],
-            }
+            [
+                {
+                    "is_company": True,
+                    "name": "Anevia",
+                    "email": "invoicing@anevia.com",
+                    "country_id": cls.env.ref("base.fr").id,
+                    "invoice_import_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                "name": "Import config for Anevia",
+                                "company_id": cls.company.id,
+                                "invoice_line_method": "1line_static_product",
+                                "static_product_id": cls.product.id,
+                                "label": "Flamingo 220S",
+                            },
+                        )
+                    ],
+                }
+            ]
         )
         company = cls.env.ref("base.main_company")
         company.update(
@@ -366,10 +380,12 @@ Nina
 
     def test_email_gateway_multi_comp_1_matching(self):
         comp = self.env["res.company"].create(
-            {
-                "name": "Let it fail INC",
-                "invoice_import_email": "project-discussion@example.com",
-            }
+            [
+                {
+                    "name": "Let it fail INC",
+                    "invoice_import_email": "project-discussion@example.com",
+                }
+            ]
         )
         logger_name = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
 
@@ -408,7 +424,7 @@ Nina
                 self.assertIn(msg, "\n".join(watcher.output))
 
     def test_email_gateway_multi_comp_none_matching(self):
-        self.env["res.company"].create({"name": "Let it fail INC"})
+        self.env["res.company"].create([{"name": "Let it fail INC"}])
         logger_name = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
         with self.assertLogs(logger_name, "ERROR") as watcher:
             self.env["mail.thread"].with_context(
