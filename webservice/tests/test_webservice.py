@@ -40,9 +40,7 @@ class TestWebService(CommonWebService):
         )
         with self.assertRaisesRegex(exceptions.UserError, msg):
             self.webservice.write(
-                {
-                    "auth_type": "user_pwd",
-                }
+                {"auth_type": "user_pwd",}
             )
 
         msg = (
@@ -60,9 +58,7 @@ class TestWebService(CommonWebService):
         )
         with self.assertRaisesRegex(exceptions.UserError, msg):
             self.webservice.write(
-                {
-                    "auth_type": "api_key",
-                }
+                {"auth_type": "api_key",}
             )
 
         msg = (
@@ -72,10 +68,7 @@ class TestWebService(CommonWebService):
         )
         with self.assertRaisesRegex(exceptions.UserError, msg):
             self.webservice.write(
-                {
-                    "auth_type": "api_key",
-                    "api_key": "foo",
-                }
+                {"auth_type": "api_key", "api_key": "foo",}
             )
 
     @responses.activate
