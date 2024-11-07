@@ -54,13 +54,7 @@ records.filtered(lambda x: not x.registry_sync).write({"registry_sync": True})
     }
     if tools.sql.column_exists(env.cr, "ir_act_server", "activity_user_type"):
         values["activity_user_type"] = "specific"
-    ids = query_insert(
-        env.cr,
-        "ir_act_server",
-        [
-            values,
-        ],
-    )
+    ids = query_insert(env.cr, "ir_act_server", [values,],)
 
     # Finally add an xmlid
     module, id_ = xid.split(".", 1)

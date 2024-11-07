@@ -14,10 +14,7 @@ def migrate(cr, version):
 
     env = api.Environment(cr, SUPERUSER_ID, {})
     module = env["ir.module.module"].search(
-        [
-            ("name", "=", "rpc_helper"),
-            ("state", "=", "uninstalled"),
-        ]
+        [("name", "=", "rpc_helper"), ("state", "=", "uninstalled"),]
     )
     if module:
         _logger.info("Install module rpc_helper")

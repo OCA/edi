@@ -16,8 +16,6 @@
         "security/ir_rule.xml",
         "views/endpoint_view.xml",
     ],
-    "demo": [
-        "demo/endpoint_demo.xml",
-    ],
+    "demo": ["demo/endpoint_demo.xml",],
     "post_init_hook": "post_init_hook",
 }
