@@ -53,10 +53,7 @@ def query_multi_update(cr, table_name, rows, cols):
         values=sql.Placeholder(),
     )
     execute_values(
-        cr,
-        query.as_string(cr._cnx),
-        rows,
-        template=template.as_string(cr._cnx),
+        cr, query.as_string(cr._cnx), rows, template=template.as_string(cr._cnx),
     )
 
 
@@ -104,12 +101,7 @@ class EndpointRegistry:
         """Create routing table and indexes"""
         tools.sql.create_model_table(cr, cls._table, columns=cls._columns)
         tools.sql.create_unique_index(
-            cr,
-            "endpoint_route__key_uniq",
-            cls._table,
-            [
-                "key",
-            ],
+            cr, "endpoint_route__key_uniq", cls._table, ["key",],
         )
         tools.sql.add_constraint(
             cr,

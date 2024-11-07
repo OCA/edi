@@ -47,10 +47,7 @@ class TestRegistry(SavepointCase):
         last_update0 = self.reg.last_update()
         self.assertTrue(last_update0 > 0)
         rule1.options = {
-            "handler": {
-                "klass_dotted_path": CTRLFake._path,
-                "method_name": "handler2",
-            }
+            "handler": {"klass_dotted_path": CTRLFake._path, "method_name": "handler2",}
         }
         # FIXME: to test timestamp we have to mock psql datetime.
         # self.reg.update_rules([rule1])
@@ -87,12 +84,7 @@ class TestRegistry(SavepointCase):
             endpoint_hash = i
             route_group = "test_route_handler"
             rule = self.reg.make_rule(
-                key,
-                route,
-                options,
-                routing,
-                endpoint_hash,
-                route_group=route_group,
+                key, route, options, routing, endpoint_hash, route_group=route_group,
             )
             for k, v in kw.items():
                 setattr(rule, k, v)
@@ -141,16 +133,10 @@ class TestRegistry(SavepointCase):
             self.reg._get_rule("route2").handler_options.method_name, "handler1"
         )
         rule1.options = {
-            "handler": {
-                "klass_dotted_path": CTRLFake._path,
-                "method_name": "handler2",
-            }
+            "handler": {"klass_dotted_path": CTRLFake._path, "method_name": "handler2",}
         }
         rule2.options = {
-            "handler": {
-                "klass_dotted_path": CTRLFake._path,
-                "method_name": "handler3",
-            }
+            "handler": {"klass_dotted_path": CTRLFake._path, "method_name": "handler3",}
         }
         self.reg.update_rules([rule1, rule2])
         self.assertEqual(

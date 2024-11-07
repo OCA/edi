@@ -5,7 +5,7 @@ import logging
 
 # fmt: off
 from odoo.addons.endpoint_route_handler.registry import (
-    EndpointRegistry,  # pylint: disable=odoo-addons-relative-import
+    EndpointRegistry  # pylint: disable=odoo-addons-relative-import,
 )
 
 # fmt: on
