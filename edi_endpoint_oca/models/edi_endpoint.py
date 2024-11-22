@@ -70,7 +70,7 @@ class EDIEndpoint(models.Model):
 
     def action_view_edi_records(self):
         self.ensure_one()
-        module_name = "edi"
+        module_name = "edi_oca"
         action_xmlid = "act_open_edi_exchange_record_view"
         action = self.env["ir.actions.act_window"].for_xml_id(module_name, action_xmlid)
         action["domain"] = [("edi_endpoint_id", "=", self.id)]

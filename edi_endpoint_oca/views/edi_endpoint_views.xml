@@ -8,20 +8,18 @@
         <field name="inherit_id" ref="endpoint.endpoint_mixin_form_view" />
         <field name="mode">primary</field>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('alert')]" position="before">
-                <div class="oe_button_box" name="button_box">
-                    <button
-                        type="object"
-                        class="oe_stat_button"
-                        icon="fa-retweet"
-                        name="action_view_edi_records"
-                    >
-                        <div class="o_form_field o_stat_info">
-                            <span class="o_stat_text">Exchanges</span>
-                        </div>
-                    </button>
-                </div>
-            </xpath>
+            <div name="button_box" position="inside">
+                <button
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-retweet"
+                    name="action_view_edi_records"
+                >
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_text">Exchanges</span>
+                    </div>
+                </button>
+            </div>
             <notebook position="before">
                 <separator string="EDI" />
                 <div name="backend">
@@ -93,7 +91,7 @@
 
     <record model="ir.ui.menu" id="edi_endpoint_menu">
         <field name="name">EDI Endpoints</field>
-        <field name="parent_id" ref="edi.menu_edi_config" />
+        <field name="parent_id" ref="edi_oca.menu_edi_config" />
         <field name="action" ref="edi_endpoint_act_window" />
         <field name="sequence" eval="100" />
     </record>

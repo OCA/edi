@@ -7,12 +7,12 @@
     "summary": """
     Base module allowing configuration of custom endpoints for EDI framework.
     """,
-    "version": "13.0.1.0.0",
+    "version": "12.0.1.0.0",
     "development_status": "Beta",
     "license": "LGPL-3",
     "website": "https://github.com/OCA/edi",
     "author": "Camptocamp,Odoo Community Association (OCA)",
-    "depends": ["edi", "endpoint"],
+    "depends": ["edi_oca", "endpoint"],
     "data": [
         "data/server_action.xml",
         "security/ir.model.access.csv",
