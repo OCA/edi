@@ -13,7 +13,7 @@
     "development_status": "Production/Stable",
     "maintainers": ["etobella"],
     "author": "Creu Blanca, Camptocamp, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/web-api",
+    "website": "https://github.com/OCA/edi",
     "depends": ["component", "server_environment"],
     "data": [
         "security/ir.model.access.csv",
