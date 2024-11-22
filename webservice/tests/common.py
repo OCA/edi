@@ -1,6 +1,7 @@
 # Copyright 2020 Creu Blanca
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
+import mock
+from contextlib import contextmanager
 from odoo.tests.common import tagged
 
 from odoo.addons.component.tests.common import TransactionComponentCase
