@@ -40,7 +40,7 @@ class IrHttp(models.AbstractModel):
                 yield (url, endpoint, endpoint_rule.routing)
 
     @classmethod
-    def routing_map(cls, key=None):
+    def routing_map(cls):
         # When the request cursor is used to instantiate the EndpointRegistry
         # in the call to routing_map, the READ REPEATABLE isolation level
         # will ensure that any value read from the DB afterwards, will be the
@@ -71,7 +71,7 @@ class IrHttp(models.AbstractModel):
                 cls._routing_map = {}
                 cls._rewrite_len = {}
                 cls._endpoint_route_last_version = last_version
-        return super().routing_map(key=key)
+        return super().routing_map()
 
     @classmethod
     def _get_routing_map_last_version(cls, cr):
