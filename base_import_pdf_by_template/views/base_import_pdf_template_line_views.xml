@@ -101,7 +101,7 @@
                         <field
                             name="fixed_value_text"
                             string="Fixed value"
-                            invisible="value_type != 'fixed' or field_ttype != 'text'"
+                            invisible="value_type != 'fixed' or field_ttype not in ('text', 'json')"
                         />
                         <field
                             name="fixed_value"

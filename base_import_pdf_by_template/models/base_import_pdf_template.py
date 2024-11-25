@@ -1,5 +1,6 @@
 # Copyright 2024 Tecnativa - Víctor Martínez
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+import json
 import re
 from datetime import datetime
 
@@ -344,6 +345,7 @@ class BaseImportPdfTemplateLine(models.Model):
             "integer": "fixed_value_integer",
             "selection": "fixed_value_selection",
             "text": "fixed_value_text",
+            "json": "fixed_value_text",
             "many2one": "fixed_value",
         }
 
@@ -353,6 +355,8 @@ class BaseImportPdfTemplateLine(models.Model):
         f_value = self[f_name]
         if self.field_ttype == "selection":
             f_value = f_value.value
+        elif self.field_ttype == "json":
+            f_value = json.loads(f_value)
         return f_value
 
     def _replace_text(self, text, letters, prefix):
