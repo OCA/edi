@@ -4,8 +4,8 @@
 {
     "name": "Edi Account",
     "summary": """
-        Define EDI Configuration for Account Moves""",
-    "version": "16.0.1.1.0",
+        Define EDI Configuration for Account Invoices""",
+    "version": "12.0.1.0.0",
     "license": "LGPL-3",
     "author": "Creu Blanca,Odoo Community Association (OCA)",
     "maintainers": ["etobella"],
@@ -15,7 +15,7 @@
     "data": [
         "views/account_journal.xml",
         "views/res_partner.xml",
-        "views/account_move.xml",
+        "views/account_invoice.xml",
         "views/edi_exchange_record.xml",
     ],
     "demo": [],

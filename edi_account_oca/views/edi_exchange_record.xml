@@ -5,13 +5,13 @@
 
     <record
         model="ir.actions.act_window"
-        id="act_open_edi_exchange_record_account_move_view"
+        id="act_open_edi_exchange_record_account_invoice_view"
     >
-        <field name="name">Account Moves Exchange Record</field>
+        <field name="name">Account Invoice Exchange Records</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">edi.exchange.record</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('model', '=', 'account.move')]</field>
+        <field name="domain">[('model', '=', 'account.invoice')]</field>
         <field name="context">{}</field>
     </record>
     <menuitem
@@ -22,8 +22,8 @@
     />
     <menuitem
         id="menu_account_edi_exchange_record"
-        name="Moves"
-        action="act_open_edi_exchange_record_account_move_view"
+        name="Invoices"
+        action="act_open_edi_exchange_record_account_invoice_view"
         parent="menu_account_edi_root"
         sequence="20"
     />
