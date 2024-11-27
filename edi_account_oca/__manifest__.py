@@ -10,7 +10,7 @@
     "author": "Creu Blanca,Odoo Community Association (OCA)",
     "maintainers": ["etobella"],
     "development_status": "Beta",
-    "website": "https://github.com/OCA/edi-framework",
+    "website": "https://github.com/OCA/edi",
     "depends": ["account", "edi_oca", "component_event"],
     "data": [
         "views/account_journal.xml",
