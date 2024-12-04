@@ -13,7 +13,7 @@
         <field name="arch" type="xml">
             <notebook position="inside">
                     <page
-                    name="invoice_import_simple_pdf"
+                    name="account_edi_simple_pdf"
                     string="Vendor Bill Import"
                     attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
                     groups="account.group_account_readonly,account.group_account_invoice"
@@ -28,7 +28,7 @@
                                 options="{'no_create': True, 'no_create_edit': True}"
                             />
                         <field name="simple_pdf_product_id" />
-                </group>
+                        </group>
                         <group name="simple_pdf_main-right">
                         <field name="simple_pdf_date_format" string="Date Format" />
                         <field
@@ -44,39 +44,48 @@
                                 string="Thousand Separator"
                             />
                         <field name="simple_pdf_test_filename" invisible="1" />
+                        </group>
                     </group>
+                    <group name="invoice_import_simple_pdf_number">
+                        <label for="simple_pdf_invoice_number_ids" colspan="2" />
+                        <field
+                            name="simple_pdf_invoice_number_ids"
+                            nolabel="1"
+                            colspan="2"
+                        />
                     </group>
-                    <group
-                        name="invoice_import_simple_pdf_number"
-                        string="Invoice Number Format"
-                    >
-                            <field name="simple_pdf_invoice_number_ids" nolabel="1" />
-                    </group>
-                    <group
-                        name="invoice_import_simple_pdf_fields"
-                        string="Field Extraction Rules"
-                        col="1"
-                    >
+                    <group name="invoice_import_simple_pdf_fields">
                         <button
                             name="pdf_simple_generate_default_fields"
                             type="object"
                             string="Generate Default Extract Rules"
                             attrs="{'invisible': [('simple_pdf_field_ids', '!=', [])]}"
+                            colspan="2"
                         />
-                        <field name="simple_pdf_field_ids" nolabel="1" />
+                        <label for="simple_pdf_field_ids" colspan="2" />
+                        <field name="simple_pdf_field_ids" nolabel="1" colspan="2" />
                     </group>
-                    <group name="pdf_simple_test" string="Test" col="1">
-                            <group name="pdf_simple_test_file" col="3">
+                    <group
+                        name="pdf_simple_test"
+                        string="Test"
+                        groups="base.group_no_one"
+                    >
+                            <group name="pdf_simple_test_file" colspan="2">
                                 <field
                                 name="simple_pdf_test_file"
                                 filename="simple_pdf_test_filename"
                             />
-                                <div name="pdf_simple_test_buttons">
+                                <group
+                                name="pdf_simple_test_buttons"
+                                colspan="2"
+                                col="1"
+                            >
                                 <button
                                     type="object"
                                     name="pdf_simple_test_run"
                                     string="Run Test"
                                     class="btn-primary"
+                                    attrs="{'invisible': [('simple_pdf_test_file', '=', False)]}"
                                 />
                                 <button
                                     name="pdf_simple_test_cleanup"
@@ -84,17 +93,23 @@
                                     string="Cleanup Test Data"
                                     attrs="{'invisible': [('simple_pdf_test_file', '=', False), ('simple_pdf_test_results', '=', False), ('simple_pdf_test_raw_text', '=', False)]}"
                                 />
-
-                        </div>
+                                </group>
                             </group>
-                        <group name="pdf_simple_test_results" string="Test Results">
-                                <field nolabel="1" name="simple_pdf_test_results" />
+                        <group name="pdf_simple_test_results" colspan="2">
+                            <label for="simple_pdf_test_results" colspan="2" />
+                                <field
+                                nolabel="1"
+                                name="simple_pdf_test_results"
+                                colspan="2"
+                            />
                         </group>
-                        <group
-                            name="pdf_simple_test_raw_text"
-                            string="Text Extraction from PDF"
-                        >
-                                <field nolabel="1" name="simple_pdf_test_raw_text" />
+                        <group name="pdf_simple_test_raw_text" colspan="2">
+                        <label for="simple_pdf_test_raw_text" colspan="2" />
+                                <field
+                                nolabel="1"
+                                name="simple_pdf_test_raw_text"
+                                colspan="2"
+                            />
                         </group>
 
                     </group>

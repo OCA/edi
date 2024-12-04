@@ -8,8 +8,8 @@ class AccountMove(models.Model):
     _inherit = ["account.move", "account.invoice.import.simple.pdf.mixin"]
     _name = "account.move"
 
-    def _get_create_invoice_from_attachment_decoders(self):
-        return super()._get_create_invoice_from_attachment_decoders() + [
+    def _get_create_document_from_attachment_decoders(self):
+        return super()._get_create_document_from_attachment_decoders() + [
             (99, self._simple_pdf_create_invoice_from_attachment),
         ]
 
@@ -18,8 +18,14 @@ class AccountMove(models.Model):
         result = self.browse([])
 
         if parsed_values.get("partner"):
-            journal = self._get_default_journal()
-            currency = self._get_default_currency()
+            new = self.new({})
+            journal = new.journal_id
+            currency = (
+                parsed_values.get("currency", {}).get(
+                    "recordset", self.env["res.currency"]
+                )
+                or new.currency_id
+            )
             tax = self.env["account.tax"]
             amount_untaxed = currency.round(
                 parsed_values.get(
@@ -41,6 +47,7 @@ class AccountMove(models.Model):
                 )
             result = self.create(
                 {
+                    "currency_id": currency.id,
                     "partner_id": parsed_values["partner"]
                     .get("recordset", self.env["res.partner"])
                     .id,
