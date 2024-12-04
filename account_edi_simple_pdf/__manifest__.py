@@ -10,6 +10,7 @@
     "summary": "Import simple PDF vendor bills",
     "author": "Akretion,Hunki Enterprises BV,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
+    "maintainers": ["hbrunn"],
     "depends": ["account_edi"],
     "external_dependencies": {
         "python": [
