@@ -459,7 +459,10 @@ class AccountMove(models.Model):
         self._ubl_add_legal_monetary_total(xml_root, ns, version=version)
 
         line_number = 0
-        for iline in self.invoice_line_ids:
+        invoice_lines = self.invoice_line_ids.filtered(
+            lambda line: line.display_type not in ("line_note", "line_section")
+        )
+        for iline in invoice_lines:
             line_number += 1
             self._ubl_add_invoice_line(
                 xml_root, iline, line_number, ns, version=version

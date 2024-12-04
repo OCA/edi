@@ -8,7 +8,8 @@
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Generate UBL XML file for customer invoices/refunds",
-    "author": "Akretion,Onestein,Odoo Community Association (OCA)",
+    "author": "Akretion,Onestein,BCIM,Odoo Community Association (OCA)",
+    "maintainers": ["jbaudoux"],
     "website": "https://github.com/OCA/edi",
     "depends": [
         "account_einvoice_generate",
