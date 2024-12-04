@@ -4,8 +4,8 @@
 
 import base64
 
-from odoo import fields
-from odoo.tests.common import TransactionCase, tagged
+from odoo import exceptions, fields
+from odoo.tests.common import Form, TransactionCase, tagged
 from odoo.tools import file_open, float_compare
 
 
@@ -505,6 +505,43 @@ class TestInvoiceImport(TransactionCase):
             )
             self.assertEqual(src, parsed_inv["invoice_number"])
 
+    def test_description_parsing(self):
+        field = self.env["account.invoice.import.simple.pdf.fields"].create(
+            {
+                "name": "description",
+                "regexp": ".*",
+                "extract_rule": "position_start",
+            }
+        )
+        with self.assertRaisesRegex(
+            exceptions.ValidationError, "Specific Regular Expression"
+        ):
+            field.regexp = False
+        with Form(field) as field_form:
+            field_form.extract_rule = False
+            field_form.name = "description"
+            field_form.regexp = "desc: .*"
+        self.assertEqual(field.extract_rule, "first")
+        parsed_inv = {"failed_fields": []}
+        field._get_description(parsed_inv, "", {}, {})
+        self.assertIn("description", parsed_inv["failed_fields"])
+        parsed_inv = {}
+        field._get_description(parsed_inv, "desc: hello world", {}, {})
+        self.assertEqual(parsed_inv["description"], "desc: hello world")
+        parsed_inv = {}
+        field.extract_rule = "position_min"
+        field.position = 1
+        field._get_description(parsed_inv, "desc: 1\ndesc: 2", {}, {})
+        self.assertEqual(parsed_inv["description"], "desc: 1")
+        parsed_inv = {}
+        field.extract_rule = "min"
+        field._get_description(parsed_inv, "desc: 1\ndesc: 2", {}, {})
+        self.assertEqual(parsed_inv["description"], "desc: 1")
+        parsed_inv = {}
+        field.extract_rule = "max"
+        field._get_description(parsed_inv, "desc: 1\ndesc: 2", {}, {})
+        self.assertEqual(parsed_inv["description"], "desc: 2")
+
     def test_complete_import(self):
         attachment = self.env["ir.attachment"].create(
             {
@@ -544,14 +581,27 @@ class TestInvoiceImport(TransactionCase):
         self.test_complete_import()
 
     def test_specific_python_methods(self):
-        # test only pure-pdf methods
-        # because we are sure they work on the Github test environment
         self._complete_import_specific_method("pypdf")
+        self._complete_import_specific_method("pdftotext.cmd")
+        with self.assertRaisesRegex(exceptions.UserError, "with the method pymupdf"):
+            self._complete_import_specific_method("pymupdf")
+        with self.assertRaisesRegex(
+            exceptions.UserError, "with the method pdftotext.lib"
+        ):
+            self._complete_import_specific_method("pdftotext.lib")
+        with self.assertRaisesRegex(exceptions.UserError, "invalid value"):
+            self._complete_import_specific_method("invalid")
 
     def test_test_run(self):
         """
         Test the test run code on the partner form
         """
         self.partner_ak.simple_pdf_test_file = self.ak_pdf_file_b64
+        self.partner_ak.simple_pdf_product_id = self.env["product.product"].search(
+            [
+                ("purchase_ok", "=", True),
+            ],
+            limit=1,
+        )
         self.partner_ak.pdf_simple_test_run()
         self.assertIn("Current partner found", self.partner_ak.simple_pdf_test_results)
