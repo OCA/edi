@@ -327,18 +327,29 @@ class AccountMove(models.Model):
         cur_name = self.currency_id.name
         prec = self.currency_id.decimal_places
 
-        # There are as many tax line as there are repartition lines
         tax_lines = {}
         for tline in self.line_ids:
-            if not tline.tax_line_id:
-                continue
-            tax_lines.setdefault(
-                tline.tax_line_id,
-                {"base": 0.0, "amount": 0.0},
-            )
-            tax_lines[tline.tax_line_id]["base"] += tline.tax_base_amount
             sign = 1 if tline.is_refund else -1
-            tax_lines[tline.tax_line_id]["amount"] += sign * tline.balance
+            if tline.tax_line_id:
+                # There are as many tax line as there are repartition lines
+                tax_lines.setdefault(
+                    tline.tax_line_id,
+                    {"base": 0.0, "amount": 0.0},
+                )
+                tax_lines[tline.tax_line_id]["base"] += tline.tax_base_amount
+                tax_lines[tline.tax_line_id]["amount"] += sign * tline.balance
+            elif tline.tax_ids:
+                # In case there are no repartition lines
+                for tax in tline.tax_ids:
+                    if not tline.is_refund and tax.invoice_repartition_line_ids:
+                        continue
+                    if tline.is_refund and tax.refund_repartition_line_ids:
+                        continue
+                    tax_lines.setdefault(
+                        tax,
+                        {"base": 0.0, "amount": 0.0},
+                    )
+                    tax_lines[tax]["base"] += sign * tline.balance
 
         exempt = 0.0
         exempt_taxes = self.line_ids.tax_line_id.browse()
