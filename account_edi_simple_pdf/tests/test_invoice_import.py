@@ -5,10 +5,11 @@
 import base64
 
 from odoo import fields
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import file_open, float_compare
 
 
+@tagged("-at_install", "post_install")
 class TestInvoiceImport(TransactionCase):
     def setUp(self):
         super().setUp()

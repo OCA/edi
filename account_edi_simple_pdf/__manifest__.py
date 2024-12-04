@@ -4,7 +4,7 @@
 
 {
     "name": "Import Simple PDF",
-    "version": "15.0.4.0.0",
+    "version": "16.0.1.0.0",
     "category": "Accounting/Accounting",
     "license": "AGPL-3",
     "summary": "Import simple PDF vendor bills",
