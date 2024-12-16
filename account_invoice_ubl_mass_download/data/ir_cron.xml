@@ -6,7 +6,7 @@
 <odoo>
     <record id="ir_cron_remove_zipped_file" model="ir.cron">
         <field name="name">Autovacuum UBL zipped files</field>
-        <field name="model_id" ref="model_account_invoice" />
+        <field name="model_id" ref="model_account_move" />
         <field name="state">code</field>
         <field name="code">model._cron_remove_ubl_zip()</field>
         <field name='interval_number'>1</field>

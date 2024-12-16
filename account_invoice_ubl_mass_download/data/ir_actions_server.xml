@@ -7,8 +7,8 @@
 
     <record model="ir.actions.server" id="account_invoice_mass_download_ubl">
         <field name="name">Invoices UBL XML and PDF (zip)</field>
-        <field name="model_id" ref="model_account_invoice" />
-        <field name="binding_model_id" ref="model_account_invoice" />
+        <field name="model_id" ref="model_account_move" />
+        <field name="binding_model_id" ref="model_account_move" />
         <field name="state">code</field>
         <field name="code">
             action = records.zip_ubl_xml_and_pdf()

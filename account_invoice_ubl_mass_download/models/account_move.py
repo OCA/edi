@@ -6,20 +6,18 @@ import io
 import logging
 import zipfile
 
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-ATTACHMENT_TMP_NAME = "temporary-invoice-ubl-zip-file"
+ATTACHMENT_TMP_DESC = "temporary-invoice-ubl-zip-file"
 ZIP_FILE_NAME = "XML-UBL-PDF"
 
 
-class AccountInvoice(models.Model):
+class AccountMove(models.Model):
+    _inherit = "account.move"
 
-    _inherit = "account.invoice"
-
-    @api.multi
     def zip_ubl_xml_and_pdf(self):
         """
         Create a zip file with XML UBL and PDF for each invoice.
@@ -35,7 +33,7 @@ class AccountInvoice(models.Model):
                             "out_invoice",
                             "out_refund",
                         )
-                        or invoice.state not in ("open", "paid")
+                        or invoice.state != "posted"
                     ):
                         raise UserError(
                             _(
@@ -73,9 +71,9 @@ class AccountInvoice(models.Model):
                 .with_context(ctx)
                 .create(
                     {
-                        "name": ATTACHMENT_TMP_NAME,
+                        "name": zipname,
+                        "description": ATTACHMENT_TMP_DESC,
                         "datas": base64.b64encode(buffer.getvalue()),
-                        "datas_fname": zipname,
                         "type": "binary",
                     }
                 )
@@ -93,5 +91,7 @@ class AccountInvoice(models.Model):
         Find temporary zipped file created and delete it.
         """
         _logger.info("Running autovacuum UBL zipped file.")
-        attachs = self.env["ir.attachment"].search([("name", "=", ATTACHMENT_TMP_NAME)])
+        attachs = self.env["ir.attachment"].search(
+            [("description", "=", ATTACHMENT_TMP_DESC)]
+        )
         attachs.unlink()
