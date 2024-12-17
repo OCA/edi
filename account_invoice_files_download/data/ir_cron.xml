@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-    Copyright 2021 Coop IT Easy (https://coopiteasy.be)
-  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+SPDX-FileCopyrightText: 2021 Coop IT Easy SC
+
+SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <odoo>
     <record id="ir_cron_remove_tmp_edi_zip_files" model="ir.cron">

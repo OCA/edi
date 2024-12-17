@@ -1,0 +1,57 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_invoice_files_download
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_invoice_files_download
+#: code:addons/account_invoice_files_download/models/account_move.py:0
+#, python-format
+msgid ""
+"Cannot generate file because invoice {invoice_name} is not an invoice or a "
+"refund or that invoice is not posted."
+msgstr ""
+"Impossible de générer le fichier car la facture {invoice_name} n'est pas une "
+"facture ou un avoir ou la facture n'est pas comptabilisée."
+
+#. module: account_invoice_files_download
+#: model:ir.model.fields,field_description:account_invoice_files_download.field_account_move__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_invoice_files_download
+#: model:ir.actions.server,name:account_invoice_files_download.account_invoice_download_edi_files_zip
+msgid "Download invoice files (zip)"
+msgstr "Télécharcher les fichiers de facture (zip)"
+
+#. module: account_invoice_files_download
+#: model:ir.model.fields,field_description:account_invoice_files_download.field_account_move__id
+msgid "ID"
+msgstr ""
+
+#. module: account_invoice_files_download
+#: model:ir.model,name:account_invoice_files_download.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: account_invoice_files_download
+#: model:ir.model.fields,field_description:account_invoice_files_download.field_account_move____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: account_invoice_files_download
+#: model:ir.actions.server,name:account_invoice_files_download.ir_cron_remove_tmp_edi_zip_files_ir_actions_server
+#: model:ir.cron,cron_name:account_invoice_files_download.ir_cron_remove_tmp_edi_zip_files
+#: model:ir.cron,name:account_invoice_files_download.ir_cron_remove_tmp_edi_zip_files
+msgid "Remove temporary EDI zip files"
+msgstr "Supprimer les fichiers zip EDI temporaires"
