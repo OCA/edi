@@ -15,6 +15,7 @@ _logger = logging.getLogger(__name__)
 ATTACHMENT_TMP_DESC = "temporary-invoice-edi-zip-file"
 ZIP_FILE_NAME = "invoice_files-{timestamp}.zip"
 REPORT_REF = "account.account_invoices"
+PDF_EMBEDDED_EDI_FORMATS = ["facturx_1_0_05"]
 
 
 class AccountMove(models.Model):
@@ -26,7 +27,7 @@ class AccountMove(models.Model):
             report.print_report_name, {"object": self, "time": time}
         )
         filename = "{}.pdf".format(report_name.replace("/", "_"))
-        report_contents = report._render_qweb_pdf([self.id])[0]
+        report_contents = report._render_qweb_pdf(REPORT_REF, [self.id])[0]
         return filename, report_contents
 
     def _add_invoice_edi_files(self, ziparc):
@@ -36,7 +37,7 @@ class AccountMove(models.Model):
         ziparc.writestr(pdf_filename, pdf_contents)
         # now, add all edi documents that are not embedded in the pdf.
         for edi_document in self.edi_document_ids:
-            if edi_document.edi_format_id._is_embedding_to_invoice_pdf_needed():
+            if edi_document.edi_format_id.code in PDF_EMBEDDED_EDI_FORMATS:
                 # already present in the pdf
                 continue
             attachment = edi_document.attachment_id
