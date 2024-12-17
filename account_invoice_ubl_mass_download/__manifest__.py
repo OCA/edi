@@ -3,11 +3,11 @@
 
 {
     "name": "Account Invoice UBL Mass Download",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "license": "AGPL-3",
     "author": "Coop IT Easy SC",
     "website": "https://coopiteasy.be",
-    "depends": ["account_invoice_ubl"],
+    "depends": ["account_edi"],
     "data": ["data/ir_actions_server.xml", "data/ir_cron.xml"],
     "demo": [],
 }

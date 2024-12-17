@@ -5,14 +5,12 @@
 -->
 <odoo>
 
-    <record model="ir.actions.server" id="account_invoice_mass_download_ubl">
-        <field name="name">Invoices UBL XML and PDF (zip)</field>
+    <record id="account_invoice_download_edi_files_zip" model="ir.actions.server">
+        <field name="name">Download invoice files (zip)</field>
         <field name="model_id" ref="model_account_move" />
         <field name="binding_model_id" ref="model_account_move" />
         <field name="state">code</field>
-        <field name="code">
-            action = records.zip_ubl_xml_and_pdf()
-        </field>
+        <field name="code">action = records.download_edi_files_zip()</field>
     </record>
 
 </odoo>
