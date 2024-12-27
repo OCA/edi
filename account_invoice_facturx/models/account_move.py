@@ -296,12 +296,12 @@ class AccountMove(models.Model):
             payment_means_info = etree.SubElement(
                 payment_means, ns["ram"] + "Information"
             )
-        if self.payment_mode_id:
-            payment_means_code.text = self.payment_mode_id.payment_method_id.unece_code
+        if self.preferred_payment_method_line_id:
+            payment_means_code.text = (
+                self.preferred_payment_method_line_id.payment_method_id.unece_code
+            )
             if ns["level"] in PROFILES_EN_UP:
-                payment_means_info.text = (
-                    self.payment_mode_id.note or self.payment_mode_id.name
-                )
+                payment_means_info.text = self.preferred_payment_method_line_id.name
         else:
             payment_means_code.text = "30"  # use 30 and not 31,
             # for wire transfer, according to Factur-X CIUS
@@ -317,11 +317,13 @@ class AccountMove(models.Model):
             partner_bank = self.partner_bank_id
             if (
                 not partner_bank
-                and self.payment_mode_id
-                and self.payment_mode_id.bank_account_link == "fixed"
-                and self.payment_mode_id.fixed_journal_id
+                and self.preferred_payment_method_line_id
+                and self.preferred_payment_method_line_id.journal_id
+                and self.preferred_payment_method_line_id.journal_id.bank_account_id
             ):
-                partner_bank = self.payment_mode_id.fixed_journal_id.bank_account_id
+                partner_bank = (
+                    self.preferred_payment_method_line_id.journal_id.bank_account_id
+                )
             if partner_bank and partner_bank.acc_type == "iban":
                 payment_means_bank_account = etree.SubElement(
                     payment_means, ns["ram"] + "PayeePartyCreditorFinancialAccount"
@@ -375,7 +377,8 @@ class AccountMove(models.Model):
 
         # Direct debit Mandate
         if (
-            self.payment_mode_id.payment_method_id.unece_code in DIRECT_DEBIT_CODES
+            self.preferred_payment_method_line_id.payment_method_id.unece_code
+            in DIRECT_DEBIT_CODES
             and hasattr(self, "mandate_id")
             and self.mandate_id.unique_mandate_reference
         ):
@@ -473,7 +476,8 @@ class AccountMove(models.Model):
         # ICS, provided by the OCA module account_banking_sepa_direct_debit
         if (
             ns["level"] != "minimum"
-            and self.payment_mode_id.payment_method_id.unece_code in DIRECT_DEBIT_CODES
+            and self.preferred_payment_method_line_id.payment_method_id.unece_code
+            in DIRECT_DEBIT_CODES
             and hasattr(self.company_id, "sepa_creditor_identifier")
             and self.company_id.sepa_creditor_identifier
         ):
@@ -490,17 +494,18 @@ class AccountMove(models.Model):
         )
         invoice_currency.text = ns["currency"]
         if (
-            self.payment_mode_id
-            and not self.payment_mode_id.payment_method_id.unece_code
+            self.preferred_payment_method_line_id
+            and not self.preferred_payment_method_line_id.payment_method_id.unece_code
         ):
             raise UserError(
-                _("Missing UNECE code on payment method '%s'")
-                % self.payment_mode_id.payment_method_id.display_name
+                _("Missing UNECE code on payment method '%s'.")
+                % self.preferred_payment_method_line_id.payment_method_id.display_name
             )
         if ns["level"] != "minimum" and not (
             self.move_type == "out_refund"
-            and self.payment_mode_id
-            and self.payment_mode_id.payment_method_id.unece_code in CREDIT_TRF_CODES
+            and self.preferred_payment_method_line_id
+            and self.preferred_payment_method_line_id.payment_method_id.unece_code
+            in CREDIT_TRF_CODES
         ):
             self._cii_add_trade_settlement_payment_means_block(trade_settlement, ns)
 
@@ -639,7 +644,7 @@ class AccountMove(models.Model):
                     product_charact, ns["ram"] + "Value"
                 )
                 product_charact_value.text = attrib_value
-            if hasattr(product, "hs_code_id") and product.type in ("product", "consu"):
+            if hasattr(product, "hs_code_id") and product.type in ("consu", "combo"):
                 hs_code = product.get_hs_code_recursively()
                 if hs_code:
                     product_classification = etree.SubElement(
@@ -653,7 +658,7 @@ class AccountMove(models.Model):
             # by the OCA module product_harmonized_system
             if (
                 hasattr(product, "origin_country_id")
-                and product.type in ("product", "consu")
+                and product.type in ("consu", "combo")
                 and product.origin_country_id
             ):
                 origin_trade_country = etree.SubElement(

@@ -2,8 +2,6 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import base64
-
 from odoo import fields, models, tools
 
 
@@ -63,9 +61,6 @@ class ResCompany(models.Model):
             ):
                 fname = level2logo[company.facturx_level]
                 fname_path = f"account_invoice_facturx/static/logos/{fname}"
-                f = tools.file_open(fname_path, "rb")
-                f_binary = f.read()
-                if f_binary:
-                    facturx_logo = base64.b64encode(f_binary)
-
+                with tools.file_open(fname_path, "rb") as flogo:
+                    facturx_logo = flogo.read()
             company.facturx_logo = facturx_logo

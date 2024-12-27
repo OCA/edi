@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Factur-X",
-    "version": "17.0.1.1.0",
+    "version": "18.0.1.0.0",
     "category": "Invoicing Management",
     "license": "AGPL-3",
     "summary": "Generate Factur-X/ZUGFeRD customer invoices",
@@ -13,7 +13,6 @@
     "website": "https://github.com/OCA/edi",
     "depends": [
         "account_einvoice_generate",
-        "account_payment_partner",
         "base_facturx",
         "base_vat",
     ],
