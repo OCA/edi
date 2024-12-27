@@ -127,7 +127,7 @@ class AccountMove(models.Model):
         elif ns["level"] == "extended":
             urn = "urn:cen.eu:en16931:2017#conformant#" "urn:factur-x.eu:1p0:extended"
         else:
-            urn = "urn:factur-x.eu:1p0:%s" % ns["level"]
+            urn = f"urn:factur-x.eu:1p0:{ns['level']}"
         ctx_param_id.text = urn
 
     def _cii_add_header_block(self, root, ns):

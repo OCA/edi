@@ -17,13 +17,13 @@ Account Invoice Factur-X
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/17.0/account_invoice_facturx
+    :target: https://github.com/OCA/edi/tree/18.0/account_invoice_facturx
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-17-0/edi-17-0-account_invoice_facturx
+    :target: https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-account_invoice_facturx
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=17.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -41,14 +41,14 @@ ZUGFeRD/Factur-X standard is to embed an XML file inside the PDF invoice
 to carry structured information about the invoice. So, with a
 ZUGFeRD/Factur-X PDF invoice:
 
-- no need to change your habbits and those of your customers: you can
-  still send your PDF invoices by email as usual.
-- customers equiped with a modern accouting software will be able to
-  import the invoice automatically as supplier invoice by taking
-  advantage of the embedded XML file,
-- customers with an ancient accounting software will just open the PDF
-  file with their PDF reader and manually encode the document as
-  supplier invoice in their accounting software.
+-  no need to change your habbits and those of your customers: you can
+   still send your PDF invoices by email as usual.
+-  customers equiped with a modern accouting software will be able to
+   import the invoice automatically as supplier invoice by taking
+   advantage of the embedded XML file,
+-  customers with an ancient accounting software will just open the PDF
+   file with their PDF reader and manually encode the document as
+   supplier invoice in their accounting software.
 
 **Table of contents**
 
@@ -78,13 +78,13 @@ Configuration
 
 In the menu *Invoicing > Configuration > Settings*, check these options:
 
-- *XML Format embedded in PDF invoice*: if you want to generate Factur-X
-  invoices, this option must be set to *Factur-X (CII)*
-- the *Factur-X Level*: unless you have a good reason, you should keep
-  the default value *EN 16931 (Comfort)*
-- *Factur-X Refund Type*: choose the type of the XML invoice for
-  customer refunds (keep the default value if you are not familiar with
-  this setting).
+-  *XML Format embedded in PDF invoice*: if you want to generate
+   Factur-X invoices, this option must be set to *Factur-X (CII)*
+-  the *Factur-X Level*: unless you have a good reason, you should keep
+   the default value *EN 16931 (Comfort)*
+-  *Factur-X Refund Type*: choose the type of the XML invoice for
+   customer refunds (keep the default value if you are not familiar with
+   this setting).
 
 Bug Tracker
 ===========
@@ -92,7 +92,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_facturx%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_facturx%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -107,7 +107,7 @@ Authors
 Contributors
 ------------
 
-- Alexis de Lattre <alexis.delattre@akretion.com>
+-  Alexis de Lattre <alexis.delattre@akretion.com>
 
 Maintainers
 -----------
@@ -130,6 +130,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-alexis-via| 
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/17.0/account_invoice_facturx>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/18.0/account_invoice_facturx>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
