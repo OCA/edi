@@ -13,5 +13,6 @@
     "website": "https://github.com/OCA/edi",
     "depends": ["account"],
     "data": ["views/res_config_settings.xml"],
+    "post_init_hook": "update_invoice_report_config",
     "installable": True,
 }

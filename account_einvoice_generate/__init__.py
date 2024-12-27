@@ -2,3 +2,4 @@
 
 from . import models
 from . import wizards
+from .post_install import update_invoice_report_config
