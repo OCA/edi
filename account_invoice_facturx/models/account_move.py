@@ -458,11 +458,14 @@ class AccountMove(models.Model):
         base.text = "%0.*f" % (ns["cur_prec"], base_amount * ns["sign"])
         tax_categ_code = etree.SubElement(trade_tax, ns["ram"] + "CategoryCode")
         tax_categ_code.text = tax["unece_categ_code"]
-        if tax.get("unece_due_date_code"):
+        due_date_type_code = self._get_unece_due_date_type_code() or tax.get(
+            "unece_due_date_code"
+        )
+        if due_date_type_code:
             trade_tax_due_date = etree.SubElement(
                 trade_tax, ns["ram"] + "DueDateTypeCode"
             )
-            trade_tax_due_date.text = tax["unece_due_date_code"]
+            trade_tax_due_date.text = due_date_type_code
             # Field tax_exigibility is not required, so no error if missing
         if tax.get("amount_type") == "percent":
             percent = etree.SubElement(trade_tax, ns["ram"] + "RateApplicablePercent")
