@@ -23,3 +23,8 @@ msgstr ""
 #: model:res.groups,name:base_edi.group_edi_manager
 msgid "EDI Manager"
 msgstr ""
+
+#. module: base_edi
+#: model:res.groups,name:base_edi.group_edi_user
+msgid "EDI User"
+msgstr ""
