@@ -5,10 +5,11 @@
     "name": "Despatch Advice Import",
     "summary": """
         Despatch Advice import""",
-    "version": "16.0.1.2.0",
+    "version": "16.0.1.2.1",
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
-    "author": "ACSONE SA/NV,Odoo Community Association (OCA)",
+    "author": "ACSONE SA/NV,BCIM,Odoo Community Association (OCA)",
+    "maintainers": ["jbaudoux"],
     "depends": ["purchase", "purchase_stock", "base_business_document_import"],
     "data": ["security/ir.model.access.csv", "wizard/despatch_advice_import.xml"],
     "demo": [],
