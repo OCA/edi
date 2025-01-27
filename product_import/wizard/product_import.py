@@ -150,7 +150,7 @@ class ProductImport(models.TransientModel):
         return result
 
     @api.model
-    def _prepare_product(self, parsed_product, chatter_msg, seller=None):
+    def _prepare_product(self, parsed_product, seller, chatter_msg):
         # Important: barcode is unique key of product.template model
         # So records product.product are created with company_id=False.
         # Only the pricelist (product.supplierinfo) is company-specific.
@@ -197,14 +197,12 @@ class ProductImport(models.TransientModel):
         return product_vals
 
     @api.model
-    def create_product(self, parsed_product, chatter_msg, seller=None):
-        product_vals = self._prepare_product(parsed_product, chatter_msg, seller=seller)
-        if not product_vals:
-            return False
+    def _save_product(self, product_vals, chatter_msg):
+        """Create / Update a product."""
         product = product_vals.pop("recordset", None)
         if product:
             product.write(product_vals)
-            logger.info("Product %d updated", product.id)
+            logger.debug("Product %s updated", product.default_code)
         else:
             product_active = product_vals.pop("active")
             product = self.env["product.product"].create(product_vals)
@@ -213,33 +211,60 @@ class ProductImport(models.TransientModel):
                 # all characteristics into product.template
                 product.flush()
                 product.action_archive()
-            logger.info("Product %d created", product.id)
+            logger.debug("Product %s created", product.default_code)
+
         return product
 
     @api.model
-    def _create_products(self, catalogue, seller, filename=None):
-        products = self.env["product.product"].browse()
-        for product in catalogue.get("products"):
-            record = self.create_product(
-                product,
-                catalogue["chatter_msg"],
+    def _create_update_products(self, products, seller_id, chatter_msg):
+        """Create / Update all products."""
+        seller = self.env["res.partner"].browse(seller_id)
+
+        for parsed_product in products:
+            product_vals = self._prepare_product(
+                parsed_product,
                 seller=seller,
+                chatter_msg=chatter_msg,
             )
-            if record:
-                products |= record
-        self._bdimport.post_create_or_update(catalogue, seller, doc_filename=filename)
-        logger.info("Products updated for vendor %d", seller.id)
-        return products
+            if product_vals:
+                product = self._save_product(product_vals, chatter_msg=chatter_msg)
+                chatter_msg.append(
+                    f"Product created/updated {product.default_code} ({product.id})"
+                )
+        return True
+
+    @api.model
+    def create_update_products(self, products, seller_id, chatter_msg):
+        """Create / Update a product.
+
+        This method can be overriden, for example to import asynchronously with queue_job.
+        """
+        return self._create_update_products(
+            products, seller_id, chatter_msg=chatter_msg
+        )
 
     def import_button(self):
         self.ensure_one()
         file_content = b64decode(self.product_file)
+        # 1st step: Parse the (UBL) document --> get a "catalogue" dictionary
         catalogue = self.parse_product_catalogue(file_content, self.product_filename)
         if not catalogue.get("products"):
             raise UserError(_("This catalogue doesn't have any product!"))
         company_id = self._get_company_id(catalogue)
         seller = self._get_seller(catalogue)
-        self.with_context(product_company_id=company_id)._create_products(
-            catalogue, seller, filename=self.product_filename
+        wiz = self.with_context(product_company_id=company_id)
+        # 2nd step: Prepare values and create the "product.product" records in Odoo
+        wiz.create_update_products(
+            catalogue["products"],
+            seller.id,
+            chatter_msg=catalogue["chatter_msg"],
         )
+        # Save imported file as attachment
+        self._bdimport.post_create_or_update(
+            catalogue, seller, doc_filename=self.product_filename
+        )
+        logger.info(
+            "Update for vendor %s: %d products", seller.name, len(catalogue["products"])
+        )
+
         return {"type": "ir.actions.act_window_close"}
