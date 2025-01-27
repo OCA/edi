@@ -150,11 +150,10 @@ class ProductImport(models.TransientModel):
         return result
 
     @api.model
-    def _prepare_product(self, parsed_product, seller, chatter_msg):
+    def _prepare_product(self, parsed_product, seller, company_id, chatter_msg):
         # Important: barcode is unique key of product.template model
         # So records product.product are created with company_id=False.
         # Only the pricelist (product.supplierinfo) is company-specific.
-        product_company_id = self.env.context.get("product_company_id", False)
         if not parsed_product["barcode"]:
             chatter_msg.append(
                 _("Cannot import product without barcode: %s") % (parsed_product,)
@@ -187,7 +186,7 @@ class ProductImport(models.TransientModel):
             "price": parsed_product["price"],
             "currency_id": currency.id,
             "min_qty": parsed_product["min_qty"],
-            "company_id": product_company_id,
+            "company_id": company_id,
             "delay": parsed_product.get("sale_delay", 0),
         }
         product_vals["seller_ids"] = self._prepare_supplierinfo(seller_info, product)
@@ -216,7 +215,7 @@ class ProductImport(models.TransientModel):
         return product
 
     @api.model
-    def _create_update_products(self, products, seller_id, chatter_msg):
+    def _create_update_products(self, products, seller_id, company_id, chatter_msg):
         """Create / Update all products."""
         seller = self.env["res.partner"].browse(seller_id)
 
@@ -224,6 +223,7 @@ class ProductImport(models.TransientModel):
             product_vals = self._prepare_product(
                 parsed_product,
                 seller=seller,
+                company_id=company_id,
                 chatter_msg=chatter_msg,
             )
             if product_vals:
@@ -234,13 +234,13 @@ class ProductImport(models.TransientModel):
         return True
 
     @api.model
-    def create_update_products(self, products, seller_id, chatter_msg):
+    def create_update_products(self, products, seller_id, company_id, chatter_msg):
         """Create / Update a product.
 
         This method can be overriden, for example to import asynchronously with queue_job.
         """
         return self._create_update_products(
-            products, seller_id, chatter_msg=chatter_msg
+            products, seller_id, company_id, chatter_msg=chatter_msg
         )
 
     def import_button(self):
@@ -252,11 +252,11 @@ class ProductImport(models.TransientModel):
             raise UserError(_("This catalogue doesn't have any product!"))
         company_id = self._get_company_id(catalogue)
         seller = self._get_seller(catalogue)
-        wiz = self.with_context(product_company_id=company_id)
         # 2nd step: Prepare values and create the "product.product" records in Odoo
-        wiz.create_update_products(
+        self.create_update_products(
             catalogue["products"],
             seller.id,
+            company_id,
             chatter_msg=catalogue["chatter_msg"],
         )
         # Save imported file as attachment
