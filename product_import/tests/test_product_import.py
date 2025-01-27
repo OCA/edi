@@ -50,6 +50,7 @@ PARSED_CATALOG = {
         },
     ],
     "ref": "1387",
+    "company": {"name": "Customer ABC"},
     "seller": {
         "contact": False,
         "email": False,
@@ -88,9 +89,15 @@ class TestProductImport(TestCommon):
 
     def test_product_import(self):
         # product.product
-        products = self.wiz_model._create_products(
-            self.parsed_catalog, seller=self.supplier
+        product_obj = self.env["product.product"].with_context(active_test=False)
+        existing = product_obj.search([], order="id")
+
+        wiz = self.wiz_model.create(
+            {"product_file": b"====", "product_filename": "test_import.xml"}
         )
+        with self._mock("parse_product_catalogue", return_value=self.parsed_catalog):
+            wiz.import_button()
+        products = product_obj.search([], order="id") - existing
         self.assertEqual(len(products), 3)
         for product, parsed in zip(products, PARSED_CATALOG["products"]):
 
@@ -140,7 +147,7 @@ class TestProductImport(TestCommon):
             self.assertEqual(product.seller_ids, product_tmpl.seller_ids)
             self.assertEqual(
                 product.seller_ids.mapped("delay")[0], parsed.get("sale_delay", 0)
-            ),
+            )
 
     def test_import_button(self):
         form = self.wiz_form

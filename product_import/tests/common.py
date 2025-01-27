@@ -14,8 +14,8 @@ class TestCommon(SavepointCase):
         cls.wiz_model = cls.env["product.import"]
         cls.supplier = cls.env["res.partner"].create({"name": "Catalogue Vendor"})
 
-    def _mock(self, method_name):
-        return mock.patch.object(type(self.wiz_model), method_name)
+    def _mock(self, method_name, **kw):
+        return mock.patch.object(type(self.wiz_model), method_name, **kw)
 
     @property
     def wiz_form(self):
