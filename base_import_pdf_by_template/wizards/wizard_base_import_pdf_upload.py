@@ -60,7 +60,9 @@ class WizardBaseImportPdfUpload(models.TransientModel):
         self.line_ids = lines
         # Error si corresponde
         lines_without_template = self.line_ids.filtered(lambda x: not x.template_id)
-        if lines_without_template:
+        if lines_without_template and not self.env.context.get(
+            "skip_template_not_found_error"
+        ):
             raise UserError(
                 _(
                     "No template has been auto-detected from %s, it may be "
@@ -70,7 +72,7 @@ class WizardBaseImportPdfUpload(models.TransientModel):
             )
         # Process + return records
         records = self.env[self.model]
-        for line in self.line_ids:
+        for line in self.line_ids.filtered("template_id"):
             records += line.action_process()
         action = {
             "type": "ir.actions.act_window",
