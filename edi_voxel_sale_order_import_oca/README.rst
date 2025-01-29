@@ -89,6 +89,7 @@ Authors
 ~~~~~~~
 
 * Tecnativa
+* Guavana
 
 Contributors
 ~~~~~~~~~~~~
@@ -98,6 +99,10 @@ Contributors
   * Ernesto Tejeda
   * Pedro M. Baeza
   * Sergio Teruel
+
+* `Guavana <https://guavana.com>`_:
+
+  * Leonardo J. Caballero G.
 
 Maintainers
 ~~~~~~~~~~~

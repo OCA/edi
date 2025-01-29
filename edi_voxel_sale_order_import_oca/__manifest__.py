@@ -1,4 +1,5 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
+# Copyright 2024, 2025 Guavana - Leonardo J. Caballero G.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
@@ -6,7 +7,7 @@
     "summary": "Import sale order from Voxel.",
     "version": "16.0.1.0.1",
     "category": "Sale",
-    "author": "Tecnativa, Odoo Community Association (OCA)",
+    "author": "Tecnativa, Guavana, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "depends": [
