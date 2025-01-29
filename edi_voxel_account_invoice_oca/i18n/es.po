@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-24 23:58+0000\n"
 "PO-Revision-Date: 2023-11-15 14:36+0000\n"
@@ -183,15 +183,3 @@ msgstr "Informe XML"
 #: model:ir.actions.report,print_report_name:edi_voxel_account_invoice_oca.report_voxel_invoice
 msgid "object._get_voxel_filename()"
 msgstr "object._get_voxel_filename()"
-
-#~ msgid "Display Name"
-#~ msgstr "Nombre mostrado"
-
-#~ msgid "ID"
-#~ msgstr "ID (identificación)"
-
-#~ msgid "Journal Entries"
-#~ msgstr "Asientos contables"
-
-#~ msgid "Last Modified on"
-#~ msgstr "Última modificación en"
