@@ -3,7 +3,7 @@
 {
     "name": "Edi Voxel Secondary Unit Oca",
     "summary": "Add Voxel UoM code to Secondary UoM model",
-    "version": "15.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Hidden",
     "website": "https://github.com/OCA/edi",
     "author": "Tecnativa, Odoo Community Association (OCA)",
