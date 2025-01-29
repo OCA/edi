@@ -22,7 +22,7 @@
                         name="voxel_logins"
                         attrs="{'invisible': [('voxel_enabled', '=', False)]}"
                     >
-                        <field name="voxel_login_ids" nolabel="1">
+                        <field name="voxel_login_ids" nolabel="1" colspan="2">
                             <tree editable="bottom">
                                 <field name="name" />
                                 <field name="url" />
