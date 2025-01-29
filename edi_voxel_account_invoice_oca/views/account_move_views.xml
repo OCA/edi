@@ -138,7 +138,7 @@
                         name="voxel_sending_error"
                         string="Voxel report failed"
                         domain="[('voxel_state', '=', 'sending_error')]"
-                        help="The last attemp to sent to Voxel has failed"
+                        help="The last attempt to sent to Voxel has failed"
                     />
                     <filter
                         name="voxel_processing_error"

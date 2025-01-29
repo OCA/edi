@@ -99,7 +99,7 @@ msgstr "Último procesamiento de reporte con errores"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
-msgid "The last attemp to sent to Voxel has failed"
+msgid "The last attempt to sent to Voxel has failed"
 msgstr "El úlimo intento de envío a Voxel ha fallado"
 
 #. module: edi_voxel_account_invoice_oca
