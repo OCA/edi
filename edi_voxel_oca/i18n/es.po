@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-03 16:24+0000\n"
 "PO-Revision-Date: 2023-11-15 14:36+0000\n"
@@ -488,6 +488,3 @@ msgstr "Con retardo"
 #: model:ir.model.fields,field_description:edi_voxel_oca.field_voxel_mixin__voxel_xml_report
 msgid "XML Report"
 msgstr "Reporte XML"
-
-#~ msgid "Voxel filename"
-#~ msgstr "Fichero Voxel"
