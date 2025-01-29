@@ -7,7 +7,7 @@
     "version": "16.0.1.0.0",
     "development_status": "Production/Stable",
     "category": "Hidden",
-    "author": "Tecnativa, Odoo Community Association (OCA)",
+    "author": "Tecnativa, Guavana, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "depends": [
