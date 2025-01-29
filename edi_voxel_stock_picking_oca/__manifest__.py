@@ -5,7 +5,7 @@
     "summary": "Sends stock picking report to Voxel.",
     "version": "16.0.1.0.2",
     "category": "Warehouse Management",
-    "author": "Tecnativa, Odoo Community Association (OCA)",
+    "author": "Tecnativa, Guavana, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "depends": ["edi_voxel_oca", "product_expiry", "sale_stock"],
