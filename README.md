@@ -38,6 +38,7 @@ addon | version | maintainers | summary
 [base_wamas_ubl](base_wamas_ubl/) | 16.0.1.17.0 |  | Base module to aggregate WAMAS - UBL features.
 [despatch_advice_import](despatch_advice_import/) | 16.0.1.2.0 |  | Despatch Advice import
 [despatch_advice_import_ubl](despatch_advice_import_ubl/) | 16.0.1.1.0 |  | Import Despatch Advice files
+[edi_voxel_oca](edi_voxel_oca/) | 16.0.1.0.0 | [![macagua](https://github.com/macagua.png?size=30px)](https://github.com/macagua) | Base module for connecting with Voxel
 [pdf_helper](pdf_helper/) | 16.0.1.1.0 | [![simahawk](https://github.com/simahawk.png?size=30px)](https://github.com/simahawk) [![alexis-via](https://github.com/alexis-via.png?size=30px)](https://github.com/alexis-via) | Provides helpers to work w/ PDFs
 [sale_order_import](sale_order_import/) | 16.0.1.2.0 |  | Import RFQ or sale orders from files
 [sale_order_import_edifact](sale_order_import_edifact/) | 16.0.1.1.0 | [![rmorant](https://github.com/rmorant.png?size=30px)](https://github.com/rmorant) | EDIFACT/D96A Order
