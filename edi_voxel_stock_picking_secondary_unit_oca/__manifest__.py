@@ -3,7 +3,7 @@
 {
     "name": "Voxel stock picking secondary unit",
     "summary": "Export Secondary UoMs Voxel Code in picking Voxel documents",
-    "version": "15.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Warehouse Management",
     "website": "https://github.com/OCA/edi",
     "author": "Tecnativa, Odoo Community Association (OCA)",
