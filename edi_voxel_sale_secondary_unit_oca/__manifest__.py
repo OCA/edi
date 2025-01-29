@@ -1,4 +1,5 @@
 # Copyright 2021 Tecnativa - Ernesto Tejeda
+# Copyright 2024, 2025 Guavana - Leonardo J. Caballero G.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 {
     "name": "Edi Voxel Sale Secondary Unit Oca",
@@ -6,7 +7,7 @@
     "version": "16.0.1.0.0",
     "category": "Sale",
     "website": "https://github.com/OCA/edi",
-    "author": "Tecnativa, Odoo Community Association (OCA)",
+    "author": "Tecnativa, Guavana, Odoo Community Association (OCA)",
     "maintainers": ["ernestotejeda"],
     "license": "AGPL-3",
     "depends": [
