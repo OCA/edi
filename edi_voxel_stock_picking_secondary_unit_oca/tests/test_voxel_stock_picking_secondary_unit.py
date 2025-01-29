@@ -1,4 +1,5 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
+# Copyright 2024, 2025 Guavana - Leonardo J. Caballero G.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo.tests import Form
