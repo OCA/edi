@@ -103,6 +103,7 @@ Authors
 ~~~~~~~
 
 * Tecnativa
+* Guavana
 
 Contributors
 ~~~~~~~~~~~~
