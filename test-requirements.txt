@@ -1,2 +1,2 @@
 freezegun==1.2.2
-odoo-addon-edi_voxel_oca @ git+https://github.com/OCA/edi.git@refs/pull/1116/head#subdirectory=setup/edi_voxel_oca
+odoo-addon-edi-voxel-oca @ git+https://github.com/OCA/edi.git@refs/pull/1116/head#subdirectory=setup/edi_voxel_oca
