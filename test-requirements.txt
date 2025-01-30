@@ -1,3 +1,4 @@
 freezegun==1.2.2
 odoo-addon-edi-voxel-sale-order-import-oca @ git+https://github.com/OCA/edi.git@refs/pull/1118/head#subdirectory=setup/edi_voxel_sale_order_import_oca
 odoo-addon-edi-voxel-secondary-unit-oca @ git+https://github.com/OCA/edi.git@refs/pull/1119/head#subdirectory=setup/edi_voxel_secondary_unit_oca
+odoo-addon-sale-order-secondary-unit @ git+https://github.com/OCA/sale-workflow.git@refs/pull/3022/head#subdirectory=setup/sale_order_secondary_unit
