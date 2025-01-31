@@ -11,7 +11,7 @@ class TestResPartner(TransactionCase):
         self.partner = self.env["res.partner"].create(
             {
                 "name": "Test Partner",
-                "vat": "ES12345678",
+                "vat": "ESX12345678",  # Provide a valid VAT number
                 "voxel_enabled": True,
             }
         )
@@ -26,7 +26,7 @@ class TestResPartner(TransactionCase):
 
     def test_get_voxel_vat_with_prefix(self):
         vat = self.partner._get_voxel_vat()
-        self.assertEqual(vat, "12345678", "VAT should be stripped of the 'ES' prefix")
+        self.assertEqual(vat, "X12345678", "VAT should be stripped of the 'ES' prefix")
 
     def test_get_voxel_vat_without_prefix(self):
         self.partner.vat = "12345678"
