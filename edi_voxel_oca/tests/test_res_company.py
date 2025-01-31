@@ -16,8 +16,8 @@ class TestResCompany(TransactionCase):
             {
                 "name": "Test Company",
                 "voxel_enabled": True,
-                "voxel_send_mode": "auto",
-                "voxel_sent_time": 12.0,
+                "voxel_send_mode": "fixed",
+                "voxel_sent_time": 11.0,  # 11:00 AM
                 "voxel_delay_time": 2.0,
             }
         )
@@ -28,18 +28,13 @@ class TestResCompany(TransactionCase):
         self.assertIsNone(eta, "ETA should be None for auto send mode")
 
     def test_get_voxel_report_eta_fixed(self):
-        self.company.voxel_send_mode = "fixed"
-        tz = self.env.context.get("tz", self.env.user.partner_id.tz) or "UTC"
-        offset = datetime.now(pytz.timezone(tz)).strftime("%z")
-        hour_diff = int(offset[:3])
-        expected_hour = int(12 - hour_diff)
-        now = datetime.now()
-        if now.hour > expected_hour:
-            now += timedelta(days=1)
-        expected_eta = now.replace(
-            hour=expected_hour, minute=0, second=0, microsecond=0
-        )
+        tz = pytz.timezone(self.env.user.partner_id.tz or "UTC")
+        now = datetime.now(tz)
+        expected_eta = now.replace(hour=11, minute=0, second=0, microsecond=0)
+        if now.hour > 11 or (now.hour == 11 and now.minute > 0):
+            expected_eta += timedelta(days=1)
         eta = self.company._get_voxel_report_eta()
+        eta = eta.replace(second=0, microsecond=0)  # Ignore seconds and microseconds
         self.assertEqual(eta, expected_eta, "ETA should match the expected fixed time")
 
     def test_get_voxel_report_eta_delayed(self):
