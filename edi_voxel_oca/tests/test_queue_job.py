@@ -4,14 +4,16 @@
 
 from odoo.tests.common import TransactionCase
 
-class TestQueueJob(TransactionCase):
 
+class TestQueueJob(TransactionCase):
     def setUp(self):
         super(TestQueueJob, self).setUp()
-        self.queue_job = self.env['queue.job'].create({
-            'name': 'Test Job',
-            'state': 'pending',
-        })
+        self.queue_job = self.env["queue.job"].create(
+            {
+                "name": "Test Job",
+                "state": "pending",
+            }
+        )
 
     def test_voxel_do_now(self):
         self.queue_job.voxel_do_now()
@@ -19,8 +21,11 @@ class TestQueueJob(TransactionCase):
 
     def test_voxel_cancel_now(self):
         self.queue_job.voxel_cancel_now()
-        self.assertFalse(self.queue_job.exists(), "Job should be unlinked if in pending, enqueued, or failed state")
+        self.assertFalse(
+            self.queue_job.exists(),
+            "Job should be unlinked if in pending, enqueued, or failed state",
+        )
 
     def test_voxel_requeue_sudo(self):
         self.queue_job.voxel_requeue_sudo()
-        self.assertEqual(self.queue_job.state, 'enqueued', "Job should be requeued")
+        self.assertEqual(self.queue_job.state, "enqueued", "Job should be requeued")
