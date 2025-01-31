@@ -8,11 +8,15 @@ from odoo.tests.common import TransactionCase
 class TestQueueJob(TransactionCase):
     def setUp(self):
         super(TestQueueJob, self).setUp()
-        self.queue_job = self.env["queue.job"].create(
-            {
-                "name": "Test Job",
-                "state": "pending",
-            }
+        self.queue_job = (
+            self.env["queue.job"]
+            .with_delay()
+            .create(
+                {
+                    "name": "Test Job",
+                    "state": "failed",
+                }
+            )
         )
 
     def test_voxel_do_now(self):
