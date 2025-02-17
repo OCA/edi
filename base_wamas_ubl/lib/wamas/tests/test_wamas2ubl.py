@@ -44,6 +44,11 @@ class TestWamas2ubl(unittest.TestCase):
         lst_expected_output = "WAMAS2UBL-SAMPLE_COMB_WEAKQ_WEAPQ-DESPATCH_ADVICE.xml"
         self._convert_wamas2ubl(input_file, lst_expected_output)
 
+    def test_convert_wamas2ubl_reception_groupby(self):
+        input_file = "WAMAS2UBL-SAMPLE_GROUPBY_WEAKQ_WEAPQ.wamas"
+        lst_expected_output = "WAMAS2UBL-SAMPLE_GROUPBY_WEAKQ_WEAPQ-DESPATCH_ADVICE.xml"
+        self._convert_wamas2ubl(input_file, lst_expected_output)
+
     def test_convert_wamas2ubl_return(self):
         input_file = "WAMAS2UBL-SAMPLE_KRETKQ_KRETPQ.wamas"
         lst_expected_output = "WAMAS2UBL-SAMPLE_KRETKQ_KRETPQ-DESPATCH_ADVICE.xml"

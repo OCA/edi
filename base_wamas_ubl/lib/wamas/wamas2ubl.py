@@ -52,6 +52,8 @@ class Extractor:
         transfer_key1_name,
         transfer_key2_name=False,
         package_key_name=False,
+        group_by_key=False,
+        group_by_key_values=(),
     ):
         """Process a list of dict as lines of the transfers
 
@@ -60,9 +62,31 @@ class Extractor:
             transfer_key1_name: the key in the dict that serves to identify the
                                parent in transfers
             transfer_key2_name: the key in the dict that serves to identify a sub-transfer
+            group_by_key: the key in the dict that serves to group the lines
+            group_by_key_values: the values to sum when grouping by group_by_key
             package_key_name: the key in the dict that serves to identify the
                               related package
         """
+
+        def _add_line_to_transfer(
+            line, transfer, group_by_key=False, group_by_key_values=()
+        ):
+            if not group_by_key:
+                transfer.setdefault("lines", []).append(line)
+                return
+
+            for transfer_line in transfer.get("lines", []):
+                if group_by_key and line.get(group_by_key) == transfer_line.get(
+                    group_by_key
+                ):
+                    # Sum values grouped by group_by_key
+                    for group_by_key_value in group_by_key_values:
+                        transfer_line[group_by_key_value] += line.get(
+                            group_by_key_value
+                        )
+                    return
+            transfer.setdefault("lines", []).append(line)
+
         transfers = {}
         if telegram_type not in self.data:
             raise ValueError("Missing telegram: %s" % telegram_type)
@@ -83,7 +107,14 @@ class Extractor:
             if key not in transfers:
                 # Copy parent transfer data
                 transfers[key] = OrderedDict(self.transfers[line[transfer_key1_name]])
-            transfers[key].setdefault("lines", []).append(line)
+            # Sum values grouped by group_by_key
+            _add_line_to_transfer(
+                line,
+                transfers[key],
+                group_by_key,
+                group_by_key_values,
+            )
+
             if not package_key_name:
                 continue
             package_id = line[package_key_name]
@@ -138,7 +169,15 @@ def dict2ubl(msg_type, data, extra_data=False):
 
     if msg_type == "ReceptionResponse":
         extractor.get_head("WEAKQ", "IvWevk_WevId_WevNr")
-        extractor.get_line("WEAPQ", "IvWevp_WevId_WevNr", "IvWevp_WEAP_WeaId_WeaNr")
+        extractor.get_line(
+            "WEAPQ",
+            "IvWevp_WevId_WevNr",
+            transfer_key2_name="IvWevp_WEAP_WeaId_WeaNr",
+            # Group by key article
+            group_by_key="IvWevp_MId_AId_ArtNr",
+            # Sum quanties and weights grouped
+            group_by_key_values=("IvWevp_LiefMngs_Mng", "IvWevp_LiefMngs_Gew"),
+        )
     elif msg_type == "ReturnResponse":
         extractor.get_head("KRETKQ", "IvKretk_KretId_KretNr")
         extractor.get_line("KRETPQ", "IvKretp_KretId_KretNr")
