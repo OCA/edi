@@ -5,6 +5,8 @@
 import base64
 from collections import defaultdict
 
+from psycopg2.extensions import AsIs
+
 from odoo import _, api, exceptions, fields, models
 
 
@@ -389,23 +391,22 @@ class EDIExchangeRecord(models.Model):
         model_data = defaultdict(
             lambda: defaultdict(set)
         )  # {res_model: {res_id: set(ids)}}
-        for sub_ids in self._cr.split_for_in_conditions(ids):
-            self._cr.execute(
+        for sub_ids in self.env.cr.split_for_in_conditions(ids):
+            self.env.cr.execute(
                 """
                             SELECT id, res_id, model
-                            FROM "%s"
-                            WHERE id = ANY (%%(ids)s)"""
-                % self._table,
-                dict(ids=list(sub_ids)),
+                            FROM %(this_table)s
+                            WHERE id = ANY %(ids);""",
+                {"this_table": AsIs(self._table), "ids": list(sub_ids)},
             )
-            for eid, res_id, model in self._cr.fetchall():
+            for eid, res_id, model in self.env.cr.fetchall():
                 if not model:
                     result.append(eid)
                     continue
                 model_data[model][res_id].add(eid)
 
         for model, targets in model_data.items():
-            if not self.env[model].check_access_rights("read", False):
+            if not self.env[model].has_access("read"):
                 continue
             target_ids = list(targets)
             allowed = (
@@ -431,13 +432,13 @@ class EDIExchangeRecord(models.Model):
     def read(self, fields=None, load="_classic_read"):
         """Override to explicitely call check_access_rule, that is not called
         by the ORM. It instead directly fetches ir.rules and apply them."""
-        self.check_access_rule("read")
+        self.check_access("read")
         return super().read(fields=fields, load=load)
 
-    def check_access_rule(self, operation):
+    def check_access(self, operation):
         """In order to check if we can access a record, we are checking if we can access
         the related document"""
-        super().check_access_rule(operation)
+        super().check_access(operation)
         if self.env.is_superuser():
             return
         default_checker = self.env["edi.exchange.consumer.mixin"].get_edi_access
@@ -449,19 +450,18 @@ class EDIExchangeRecord(models.Model):
             by_model_rec_ids[exc_rec.model].add(exc_rec.res_id)
             if exc_rec.model not in by_model_checker:
                 by_model_checker[exc_rec.model] = getattr(
-                    self.env[exc_rec.model], "get_edi_access", default_checker
+                    self.env[exc_rec.model : str], "get_edi_access", default_checker
                 )
 
         for model, rec_ids in by_model_rec_ids.items():
-            records = self.env[model].browse(rec_ids).with_user(self._uid)
+            records = self.env[model].browse(rec_ids)
             checker = by_model_checker[model]
             for record in records:
                 check_operation = checker(
                     [record.id], operation, model_name=record._name
                 )
-                record.check_access_rights(check_operation)
-                record.check_access_rule(check_operation)
+                record.check_access(check_operation)
 
     def write(self, vals):
-        self.check_access_rule("write")
+        self.check_access("write")
         return super().write(vals)

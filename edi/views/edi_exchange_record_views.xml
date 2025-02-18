@@ -3,7 +3,7 @@
     <record id="edi_exchange_record_view_tree" model="ir.ui.view">
         <field name="model">edi.exchange.record</field>
         <field name="arch" type="xml">
-            <tree string="EDI Exchange Record">
+            <list string="EDI Exchange Record">
                 <field name="name" />
                 <field name="identifier" />
                 <field name="external_identifier" />
@@ -14,7 +14,7 @@
                 <field name="exchanged_on" />
                 <field name="ack_received_on" />
                 <field name="edi_exchange_state" />
-            </tree>
+            </list>
         </field>
     </record>
     <record id="edi_exchange_record_view_form" model="ir.ui.view">
@@ -32,7 +32,7 @@
                             type="object"
                             class="oe_stat_button"
                             icon="fa-cubes"
-                            attrs="{'invisible': ['|', ('edi_exchange_state', '!=', 'new'), ('exchange_file_auto_generate', '=', True)]}"
+                            invisible="edi_exchange_state != 'new' or exchange_file_auto_generate"
                             string="Generate"
                         />
                         <button
@@ -40,14 +40,14 @@
                             type="object"
                             icon="fa-refresh"
                             string="Retry"
-                            attrs="{'invisible': [('retryable', '=', False)]}"
+                            invisible="not retryable"
                         />
                         <button
                             name="action_open_related_record"
                             type="object"
                             icon="fa-share-square-o"
                             string="Related record"
-                            attrs="{'invisible': [('res_id', '=', False)]}"
+                            invisible="not res_id"
                         />
                         <!-- FIXME: this `invisible` domain does not work -->
                         <button
@@ -55,7 +55,7 @@
                             type="object"
                             icon="fa-sitemap"
                             string="Related exchanges"
-                            attrs="{'invisible': [('related_exchange_ids', '=', False)]}"
+                            invisible="not related_exchange_ids"
                         />
                     </div>
                     <div class="oe_title">
@@ -83,14 +83,10 @@
                             <field name="exchange_file" filename="exchange_filename" />
                             <field
                                 name="exchange_filename"
-                                attrs="{'invisible': [('exchange_file', '!=', False)]}"
+                                invisible="exchange_file != False"
                             />
                         </group>
-                        <group
-                            name="ack"
-                            string="ACK"
-                            attrs="{'invisible': [('ack_expected', '!=', True)]}"
-                        >
+                        <group name="ack" string="ACK" invisible="ack_expected != True">
                             <field name="ack_expected" />
                             <field name="ack_exchange_id" />
                             <field name="ack_received_on" />
@@ -99,7 +95,7 @@
                             name="related_odoo_record"
                             string="Related record"
                             groups="base.group_no_one"
-                            attrs="{'invisible': [('res_id', '=', 0)]}"
+                            invisible="not res_id"
                         >
                             <field name="res_id" />
                             <field name="model" />
@@ -109,7 +105,7 @@
                         <page
                             name="error"
                             string="Error"
-                            attrs="{'invisible': [('exchange_error', '=', False)]}"
+                            invisible="not exchange_error"
                         >
                             <field name="exchange_error" />
                         </page>
@@ -117,20 +113,20 @@
                         <page
                             name="related_exchanges"
                             string="Related exchanges"
-                            attrs="{'invisible': [('related_exchange_ids', '=', False), ('parent_id', '=', False)]}"
+                            invisible="not related_exchange_ids and not parent_id"
                         >
                             <group name="rel_exchanges">
                                 <field name="parent_id" />
                             </group>
                             <field name="related_exchange_ids" nolabel="1" colspan="4">
-                                <tree>
+                                <list>
                                     <field name="name" />
                                     <field name="identifier" />
                                     <field name="type_id" />
                                     <field name="exchanged_on" />
                                     <field name="ack_received_on" />
                                     <field name="edi_exchange_state" />
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
