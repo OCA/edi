@@ -8,15 +8,13 @@
   for not found files or change process to 2 steps, auto-detect and show
   lines (each one with respect to a file) with template applied (similar
   to dms_auto_classification).
-- Create test_base_import_pdf_simple module with sale, purchase and
-  account dependencies to leave templates created in runboat and tests
-  more useful for testers.
 - Display a more readable error if there is an error in Preview process,
   example: wrong pattern. Message: "Please check template defined, some
   items are not correctly set".
 - Add a progress bar (widget=“gauge”) in the import wizard process,
   useful if we import for example sales orders with 20 lines and thus
   know the progress.
+- Add date_format model to define the specific formats.
 
 Compatibility with csv, xls, etc:
 
