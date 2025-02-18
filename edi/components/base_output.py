@@ -6,8 +6,7 @@ from odoo.addons.component.core import AbstractComponent
 
 
 class EDIBackendOutputComponentMixin(AbstractComponent):
-    """Generate output content.
-    """
+    """Generate output content."""
 
     _name = "edi.component.output.mixin"
     _inherit = "edi.component.mixin"
@@ -18,8 +17,7 @@ class EDIBackendOutputComponentMixin(AbstractComponent):
 
 
 class EDIBackendSendComponentMixin(AbstractComponent):
-    """Send output records.
-    """
+    """Send output records."""
 
     _name = "edi.component.send.mixin"
     _inherit = "edi.component.mixin"
@@ -30,7 +28,6 @@ class EDIBackendSendComponentMixin(AbstractComponent):
 
 
 class EDIBackendCheckComponentMixin(AbstractComponent):
-
     _name = "edi.component.check.mixin"
     _inherit = "edi.component.mixin"
     _usage = "edi.output.check.*"

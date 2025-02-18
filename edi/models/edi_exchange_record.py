@@ -32,7 +32,11 @@ class EDIExchangeRecord(models.Model):
     backend_id = fields.Many2one(comodel_name="edi.backend", required=True)
     model = fields.Char(index=True, required=False, readonly=True)
     res_id = fields.Many2oneReference(
-        string="Record", index=True, required=False, readonly=True, model_field="model",
+        string="Record",
+        index=True,
+        required=False,
+        readonly=True,
+        model_field="model",
     )
     exchange_file = fields.Binary(attachment=True)
     exchange_filename = fields.Char(
@@ -204,7 +208,7 @@ class EDIExchangeRecord(models.Model):
             rec_name = rec.identifier
             if rec.res_id and rec.model:
                 rec_name = rec.record.display_name
-            name = "[{}] {}".format(rec.type_id.name, rec_name)
+            name = f"[{rec.type_id.name}] {rec_name}"
             result.append((rec.id, name))
         return result
 
@@ -318,7 +322,8 @@ class EDIExchangeRecord(models.Model):
 
     def _trigger_edi_event_make_name(self, name, suffix=None):
         return "on_edi_exchange_{name}{suffix}".format(
-            name=name, suffix=("_" + suffix) if suffix else "",
+            name=name,
+            suffix=("_" + suffix) if suffix else "",
         )
 
     def _trigger_edi_event(self, name, suffix=None):
@@ -332,7 +337,8 @@ class EDIExchangeRecord(models.Model):
 
     def _notify_error(self, message_key):
         self._notify_related_record(
-            self._exchange_status_message(message_key), level="error",
+            self._exchange_status_message(message_key),
+            level="error",
         )
         self._trigger_edi_event("error")
 
@@ -342,7 +348,8 @@ class EDIExchangeRecord(models.Model):
 
     def _notify_ack_missing(self):
         self._notify_related_record(
-            self._exchange_status_message("ack_missing"), level="warning",
+            self._exchange_status_message("ack_missing"),
+            level="warning",
         )
         self._trigger_edi_event("done", suffix="ack_missing")
 
@@ -422,15 +429,15 @@ class EDIExchangeRecord(models.Model):
         return len(result) if count else list(result)
 
     def read(self, fields=None, load="_classic_read"):
-        """ Override to explicitely call check_access_rule, that is not called
-            by the ORM. It instead directly fetches ir.rules and apply them. """
+        """Override to explicitely call check_access_rule, that is not called
+        by the ORM. It instead directly fetches ir.rules and apply them."""
         self.check_access_rule("read")
         return super().read(fields=fields, load=load)
 
     def check_access_rule(self, operation):
         """In order to check if we can access a record, we are checking if we can access
         the related document"""
-        super(EDIExchangeRecord, self).check_access_rule(operation)
+        super().check_access_rule(operation)
         if self.env.is_superuser():
             return
         default_checker = self.env["edi.exchange.consumer.mixin"].get_edi_access

@@ -17,13 +17,13 @@ EDI
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/13.0/edi
+    :target: https://github.com/OCA/edi/tree/18.0/edi
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-13-0/edi-13-0-edi
+    :target: https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-edi
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=13.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -33,7 +33,8 @@ Base EDI backend.
 Provides following models:
 
 1. EDI Backend, to centralize configuration
-2. EDI Backend Type, to classify EDI backends (eg: UBL, GS1, e-invoice, pick-yours)
+2. EDI Backend Type, to classify EDI backends (eg: UBL, GS1, e-invoice,
+   pick-yours)
 3. EDI Exchange Type, to define file types of exchange
 4. EDI Exchange Record, to define a record exchanged between systems
 
@@ -47,70 +48,74 @@ Also define a mixin to be inherited by records that will generate EDIs
 Configuration
 =============
 
-This module aims to provide an infrastructure to simplify interchangability of documents
-between systems providing a configuration platform.
-It will be inherited by other modules in order to define the proper implementations of
-components.
+This module aims to provide an infrastructure to simplify
+interchangability of documents between systems providing a configuration
+platform. It will be inherited by other modules in order to define the
+proper implementations of components.
 
 In order to define a new Exchange Record, we need to configure:
 
-* Backend Type
-* Exchange Type
-* Backend
-* Components
+- Backend Type
+- Exchange Type
+- Backend
+- Components
 
 Component definition
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
-The component usage must be defined like `edi.{direction}.{kind}.{code}` where:
+The component usage must be defined like edi.{direction}.{kind}.{code}
+where:
 
-* direction is `output` or `input`
-* kind can be: `generate`, `send`, `check`, `process`, `receive`
-* code is the `{backend type code}` or `{backend type code}.{exchange type code}`
+- direction is output or input
+- kind can be: generate, send, check, process, receive
+- code is the {backend type code} or {backend type code}.{exchange type
+  code}
 
 User EDI generation
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
-On the exchange type, it might be possible to define a set of models, a domain and a
-snippet of code.
-After defining this fields, we will automatically see buttons on the view to generate
-the exchange records.
-This configuration is useful to define a way of generation managed by user.
+On the exchange type, it might be possible to define a set of models, a
+domain and a snippet of code. After defining this fields, we will
+automatically see buttons on the view to generate the exchange records.
+This configuration is useful to define a way of generation managed by
+user.
 
 Usage
 =====
 
-After certain operations or manual execution, Exchange records will be generated.
-This Exchange records might be input records or outputs records.
+After certain operations or manual execution, Exchange records will be
+generated. This Exchange records might be input records or outputs
+records.
 
-The change of state can be manually executed by the system or be managed through by
-`ir.cron`.
+The change of state can be manually executed by the system or be managed
+through by ir.cron.
 
 Output Exchange records
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
-An output record is intended to be used for exchange information from Odoo to another
-system.
+An output record is intended to be used for exchange information from
+Odoo to another system.
 
 The flow of an output record should be:
 
-* Creation
-* Generation of data
-* Validation of data
-* Sending data
-* Validation of data processed properly by the other party
+- Creation
+- Generation of data
+- Validation of data
+- Sending data
+- Validation of data processed properly by the other party
 
 Input Exchange records
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
-An input record is intended to be used for exchange information another system to odoo.
+An input record is intended to be used for exchange information another
+system to odoo.
 
 The flow of an input record should be:
 
-* Creation
-* Reception of data
-* Checking data
-* Processing data
+- Creation
+- Reception of data
+- Checking data
+- Processing data
 
 Bug Tracker
 ===========
@@ -118,7 +123,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20edi%0Aversion:%2013.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20edi%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -126,18 +131,18 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * ACSONE
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Simone Orsi <simahawk@gmail.com>
-* Enric Tobella <etobella@creublanca.es>
+- Simone Orsi <simahawk@gmail.com>
+- Enric Tobella <etobella@creublanca.es>
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -157,6 +162,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-simahawk| 
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/13.0/edi>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/18.0/edi>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

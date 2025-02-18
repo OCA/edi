@@ -6,7 +6,6 @@ from odoo.addons.component.core import Component
 
 
 class FakeComponentMixin(Component):
-
     FAKED_COLLECTOR = []
 
     # only for testing
@@ -28,7 +27,7 @@ class FakeComponentMixin(Component):
 
     @classmethod
     def _call_key(cls, rec):
-        return "{}: {}".format(cls._name, rec.id)
+        return f"{cls._name}: {rec.id}"
 
     @classmethod
     def reset_faked(cls):

@@ -101,8 +101,8 @@
                             groups="base.group_no_one"
                             attrs="{'invisible': [('res_id', '=', 0)]}"
                         >
-                          <field name="res_id" />
-                          <field name="model" />
+                            <field name="res_id" />
+                            <field name="model" />
                         </group>
                     </group>
                     <notebook>
@@ -120,17 +120,17 @@
                             attrs="{'invisible': [('related_exchange_ids', '=', False), ('parent_id', '=', False)]}"
                         >
                             <group name="rel_exchanges">
-                              <field name="parent_id" />
+                                <field name="parent_id" />
                             </group>
                             <field name="related_exchange_ids" nolabel="1" colspan="4">
-                              <tree>
-                                <field name="name" />
-                                <field name="identifier" />
-                                <field name="type_id" />
-                                <field name="exchanged_on" />
-                                <field name="ack_received_on" />
-                                <field name="edi_exchange_state" />
-                              </tree>
+                                <tree>
+                                    <field name="name" />
+                                    <field name="identifier" />
+                                    <field name="type_id" />
+                                    <field name="exchanged_on" />
+                                    <field name="ack_received_on" />
+                                    <field name="edi_exchange_state" />
+                                </tree>
                             </field>
                         </page>
                     </notebook>

@@ -6,7 +6,6 @@ from odoo.addons.component.core import AbstractComponent
 
 
 class EDIBackendComponentMixin(AbstractComponent):
-
     _name = "edi.component.mixin"
     _collection = "edi.backend"
     _usage = None
