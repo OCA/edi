@@ -125,9 +125,7 @@ class EDIExchangeType(models.Model):
     @api.constrains("backend_id", "backend_type_id")
     def _check_backend(self):
         for rec in self:
-            if not rec.backend_id:
-                continue
-            if rec.backend_id.backend_type_id != rec.backend_type_id:
+            if rec.backend_id and rec.backend_id.backend_type_id != rec.backend_type_id:
                 raise exceptions.UserError(_("Backend should respect backend type!"))
 
     def _make_exchange_filename(self, exchange_record):

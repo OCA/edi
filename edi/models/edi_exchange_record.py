@@ -114,11 +114,25 @@ class EDIExchangeRecord(models.Model):
         ),
     ]
 
-    @api.depends("type_id.code", "model", "res_id")
+    @api.model
+    def get_external_states(self):
+        return [
+            "input_received",
+            "output_sent",
+        ]
+
+    @api.model
+    def get_not_check_constraint_states(self):
+        return [
+            "new",
+            "validate_error",
+        ]
+
+    @api.depends("type_id.name", "model", "res_id")
     def _compute_name(self):
         for rec in self:
             rec.name = "{} - {}".format(
-                rec.type_id.name, rec.record.name if rec.model else "Unrelated"
+                rec.type_id.name, rec.record.name if rec.model else _("Unrelated")
             )
 
     @api.depends("model", "type_id")
@@ -131,14 +145,16 @@ class EDIExchangeRecord(models.Model):
 
     @api.depends("edi_exchange_state")
     def _compute_exchanged_on(self):
-        for rec in self:
-            if rec.edi_exchange_state in ("input_received", "output_sent"):
-                rec.exchanged_on = fields.Datetime.now()
+        states = self.get_external_states()
+        self.filtered(lambda r, st=states: r.edi_exchange_state in st).update(
+            {"exchanged_on": fields.Datetime.now()}
+        )
 
     @api.constrains("edi_exchange_state")
     def _constrain_edi_exchange_state(self):
+        states = self.get_not_check_constraint_states()
         for rec in self:
-            if rec.edi_exchange_state in ("new", "validate_error"):
+            if rec.edi_exchange_state in states:
                 continue
             if not rec.edi_exchange_state.startswith(rec.direction):
                 raise exceptions.ValidationError(
@@ -184,7 +200,7 @@ class EDIExchangeRecord(models.Model):
             return None
         if not self.model and self.parent_id:
             return self.parent_id.record
-        return self.env[self.model].browse(self.res_id)
+        return self.env[self.model : str].browse(self.res_id)
 
     def _set_file_content(
         self, output_string, encoding="utf-8", field_name="exchange_file"
@@ -214,10 +230,11 @@ class EDIExchangeRecord(models.Model):
             result.append((rec.id, name))
         return result
 
-    @api.model
-    def create(self, vals):
-        vals["identifier"] = self._get_identifier()
-        return super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            vals["identifier"] = self._get_identifier()
+        return super().create(vals_list)
 
     def _get_identifier(self):
         return self.env["ir.sequence"].next_by_code("edi.exchange")
@@ -391,12 +408,12 @@ class EDIExchangeRecord(models.Model):
         model_data = defaultdict(
             lambda: defaultdict(set)
         )  # {res_model: {res_id: set(ids)}}
+        query = """SELECT id, res_id, model
+        FROM %(this_table)s
+        WHERE id = ANY %(ids);"""
         for sub_ids in self.env.cr.split_for_in_conditions(ids):
             self.env.cr.execute(
-                """
-                            SELECT id, res_id, model
-                            FROM %(this_table)s
-                            WHERE id = ANY %(ids);""",
+                query,
                 {"this_table": AsIs(self._table), "ids": list(sub_ids)},
             )
             for eid, res_id, model in self.env.cr.fetchall():
@@ -430,7 +447,7 @@ class EDIExchangeRecord(models.Model):
         return len(result) if count else list(result)
 
     def read(self, fields=None, load="_classic_read"):
-        """Override to explicitely call check_access_rule, that is not called
+        """Override to explicitely call check_access, that is not called
         by the ORM. It instead directly fetches ir.rules and apply them."""
         self.check_access("read")
         return super().read(fields=fields, load=load)
@@ -456,11 +473,8 @@ class EDIExchangeRecord(models.Model):
         for model, rec_ids in by_model_rec_ids.items():
             records = self.env[model].browse(rec_ids)
             checker = by_model_checker[model]
-            for record in records:
-                check_operation = checker(
-                    [record.id], operation, model_name=record._name
-                )
-                record.check_access(check_operation)
+            check_operation = checker(records.ids, operation, model_name=records._name)
+            records.check_access(check_operation)
 
     def write(self, vals):
         self.check_access("write")
