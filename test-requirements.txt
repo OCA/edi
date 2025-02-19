@@ -1,1 +1,2 @@
 freezegun==1.2.2
+odoo_test_helper

@@ -15,9 +15,8 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.file = tools.file_open(
-            "AmazonWebServices.pdf",
+            "addons/edi_pdf2data_oca/tests/AmazonWebServices.pdf",
             mode="rb",
-            subdir="addons/edi_pdf2data_oca/tests",
         ).read()
         cls._load_module_components(cls, "edi_oca")
         cls._load_module_components(cls, "edi_pdf2data_oca")
@@ -38,7 +37,8 @@ class Pdf2DataTestCase(common.EDIBackendCommonComponentRegistryTestCase):
 
     def import_template(self, file="com.amazon.aws.yml"):
         template_yml = tools.file_open(
-            file, mode="r", subdir="addons/edi_pdf2data_oca/tests"
+            "addons/edi_pdf2data_oca/tests/" + file,
+            mode="r",
         ).read()
         template = self.env["pdf2data.template"].create(
             {"name": "Amazon WS", "exchange_type_id": self.exchange_type.id}

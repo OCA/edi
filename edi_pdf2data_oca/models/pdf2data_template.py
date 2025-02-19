@@ -23,6 +23,7 @@ class Pdf2dataTemplate(models.Model):
     _name = "pdf2data.template"
     _description = "Pdf2data Template"
     _order = "sequence"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char()
     exchange_type_id = fields.Many2one("edi.exchange.type", required=True)

@@ -63,7 +63,7 @@
                         <page name="keyword" string="Keywords">
                             <group>
                                 <group string="Include" name="include">
-                                    <field name="keyword_ids" nolabel="1">
+                                    <field name="keyword_ids" nolabel="1" colspan="2">
                                         <tree editable="bottom">
                                             <field name="keyword" />
                                             <field name="exclude" invisible="1" />
@@ -82,6 +82,7 @@
                                         name="exclude_keyword_ids"
                                         nolabel="1"
                                         context="{'default_exclude': 1}"
+                                        colspan="2"
                                     >
                                         <tree editable="bottom">
                                             <field name="keyword" />
@@ -111,7 +112,7 @@
                                 </group>
                             </group>
                             <group name="replace" string="Replace">
-                                <field name="replace_ids" nolabel="1">
+                                <field name="replace_ids" nolabel="1" colspan="2">
                                     <tree editable="bottom">
                                         <field name="from_char" />
                                         <field name="to_char" />
