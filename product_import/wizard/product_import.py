@@ -200,7 +200,7 @@ class ProductImport(models.TransientModel):
         """Create / Update a product."""
         product = product_vals.pop("recordset", None)
         if product:
-            product.write(product_vals)
+            product.update(product_vals)
             logger.debug("Product %s updated", product.default_code)
         else:
             product_active = product_vals.pop("active")
