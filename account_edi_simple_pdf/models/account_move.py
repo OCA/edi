@@ -69,6 +69,6 @@ class AccountMove(models.Model):
                             "description", line_form.name
                         )
                         line_form.price_unit = amount_untaxed or line_form.price_unit
-        for message in parsed_values.get("chatter_msg", []):
-            result.message_post(body=message)
+            for message in parsed_values.get("chatter_msg", []):
+                result.message_post(body=message)
         return result
