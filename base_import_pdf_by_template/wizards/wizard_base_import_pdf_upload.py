@@ -73,7 +73,11 @@ class WizardBaseImportPdfUpload(models.TransientModel):
         # Process + return records
         records = self.env[self.model]
         for line in self.line_ids.filtered("template_id"):
-            records += line.action_process()
+            try:
+                records += line.action_process()
+            except Exception:
+                if not self.env.context.get("skip_template_not_found_error"):
+                    raise
         action = {
             "type": "ir.actions.act_window",
             "res_model": records._name,
@@ -119,13 +123,16 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
     def _compute_template_id(self):
         self.template_id = False
         for item in self.filtered("attachment_id"):
-            data = item._parse_pdf_grouped()
-            text = ""
-            for key in list(data.keys()):
-                text += "".join(data[key])
-            item.template_id = (
-                item.parent_id.allowed_template_ids._auto_detect_from_text(text)
-            )
+            try:
+                data = item._parse_pdf_grouped()
+                text = ""
+                for key in list(data.keys()):
+                    text += "".join(data[key])
+                item.template_id = (
+                    item.parent_id.allowed_template_ids._auto_detect_from_text(text)
+                )
+            except Exception:  # pylint: disable=W8138 - never fail
+                pass
 
     def action_process(self):
         """Parse the file again, this time with the corresponding extraction mode."""
