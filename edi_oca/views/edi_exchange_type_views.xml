@@ -40,6 +40,7 @@
                             <field name="ack_for_type_ids" widget="many2many_tags" />
                             <field name="partner_ids" widget="many2many_tags" />
                             <field name="job_channel_id" />
+                            <field name="job_priority" />
                             <field name="quick_exec" />
                             <field name="encoding" />
                             <field

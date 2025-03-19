@@ -592,9 +592,13 @@ class EDIExchangeRecord(models.Model):
 
     def _job_delay_params(self):
         params = {}
-        channel = self.type_id.sudo().job_channel_id
+        exchange_type = self.type_id.sudo()
+        channel = exchange_type.job_channel_id
         if channel:
             params["channel"] = channel.complete_name
+        priority = exchange_type.job_priority
+        if priority:
+            params["priority"] = priority
         # Avoid generating the same job for the same record if existing
         params["identity_key"] = exchange_record_job_identity_exact
         return params
