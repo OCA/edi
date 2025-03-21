@@ -34,6 +34,11 @@ msgid "Config Settings"
 msgstr ""
 
 #. module: edi_voxel_stock_picking_oca
+#: model:ir.model,name:edi_voxel_stock_picking_oca.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: edi_voxel_stock_picking_oca
 #: model:ir.model,name:edi_voxel_stock_picking_oca.model_report_edi_voxel_stock_picking_oca_template_voxel_picking
 msgid "Edi Voxel Stock picking Report"
 msgstr ""
@@ -124,6 +129,12 @@ msgstr ""
 #. module: edi_voxel_stock_picking_oca
 #: model:ir.actions.report,name:edi_voxel_stock_picking_oca.report_voxel_picking
 msgid "Voxel Picking Operations"
+msgstr ""
+
+#. module: edi_voxel_stock_picking_oca
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_res_partner__voxel_picking_report_id
+#: model:ir.model.fields,field_description:edi_voxel_stock_picking_oca.field_res_users__voxel_picking_report_id
+msgid "Voxel Picking Report"
 msgstr ""
 
 #. module: edi_voxel_stock_picking_oca

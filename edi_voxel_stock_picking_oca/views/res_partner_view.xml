@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_partner_form_voxel" model="ir.ui.view">
+        <field name="name">res.partner.form.voxel</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='voxel_enabled']" position="after">
+                <field
+                    name="voxel_picking_report_id"
+                    attrs="{'invisible': ['|', ('is_company', '=', False), ('voxel_enabled', '=', False)]}"
+                    options="{'no_create': True, 'no_open': True}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
