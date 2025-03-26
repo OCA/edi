@@ -3,7 +3,7 @@
     <record id="view_partner_form_voxel" model="ir.ui.view">
         <field name="name">res.partner.form.voxel</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="inherit_id" ref="edi_voxel_oca.view_partner_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='voxel_enabled']" position="after">
                 <field
