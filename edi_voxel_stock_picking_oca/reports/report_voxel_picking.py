@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, models
+from odoo.tools import html2plaintext
 
 
 class ReportVoxelPicking(models.AbstractModel):
@@ -77,7 +78,9 @@ class ReportVoxelPicking(models.AbstractModel):
         ]
 
     def _get_comments_data(self, picking):
-        return picking.note and [{"Msg": picking.note}] or []
+        """Ensure the note is in str and strips HTML tags"""
+        note = picking.note and html2plaintext(picking.note)
+        return [{"Msg": note}] if note else []
 
     def _get_references_data(self, picking):
         so = picking.sale_id

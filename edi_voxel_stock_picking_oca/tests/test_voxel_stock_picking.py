@@ -239,7 +239,7 @@ class TestVoxelStockPicking(TestVoxelStockPickingCommon):
         ]
 
     def _get_comments_data(self):
-        return [{"Msg": "<p>Picking note (test)</p>"}]
+        return [{"Msg": "Picking note (test)"}]
 
     def _get_references_data(self):
         return [{"PORef": "Sale order name (test)"}]
