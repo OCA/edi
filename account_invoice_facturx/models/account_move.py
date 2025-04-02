@@ -409,12 +409,18 @@ class AccountMove(models.Model):
                 _("Missing UNECE Tax Category on tax '%s'") % tax_dict["display_name"]
             )
 
-    def _cii_line_applicable_trade_tax_block(self, tax_recordset, parent_node, ns):
+    def _cii_line_applicable_trade_tax_block(
+        self, tax_recordset, parent_node, ns, allowance=False
+    ):
         tax = {}
         if tax_recordset:
             tax = ns["tax_speeddict"][tax_recordset.id]
         self._cii_check_tax_required_info(tax)
-        trade_tax = etree.SubElement(parent_node, ns["ram"] + "ApplicableTradeTax")
+        if allowance:
+            node_name = "CategoryTradeTax"
+        else:
+            node_name = "ApplicableTradeTax"
+        trade_tax = etree.SubElement(parent_node, ns["ram"] + node_name)
         trade_tax_typecode = etree.SubElement(trade_tax, ns["ram"] + "TypeCode")
         trade_tax_typecode.text = tax["unece_type_code"]
         trade_tax_categcode = etree.SubElement(trade_tax, ns["ram"] + "CategoryCode")
@@ -471,7 +477,7 @@ class AccountMove(models.Model):
             percent = etree.SubElement(trade_tax, ns["ram"] + "RateApplicablePercent")
             percent.text = "%0.*f" % (2, tax["amount"])
 
-    def _cii_add_trade_settlement_block(self, trade_transaction, ns):
+    def _cii_add_trade_settlement_block(self, trade_transaction, allowance_ilines, ns):
         self.ensure_one()
         trade_settlement = etree.SubElement(
             trade_transaction, ns["ram"] + "ApplicableHeaderTradeSettlement"
@@ -513,7 +519,6 @@ class AccountMove(models.Model):
             self._cii_add_trade_settlement_payment_means_block(trade_settlement, ns)
 
         at_least_one_tax = False
-        tax_basis_total = 0.0
         # move_type == 'out_invoice': tline.amount_currency < 0
         # move_type == 'out_refund': tline.amount_currency > 0
         tax_amount_sign = self.move_type == "out_invoice" and -1 or 1
@@ -527,7 +532,6 @@ class AccountMove(models.Model):
                 trade_settlement,
                 ns,
             )
-            tax_basis_total += tax_base_amount
             at_least_one_tax = True
         tax_zero_amount = {}  # key = tax recordset, value = base
         for line in self.line_ids:
@@ -540,16 +544,19 @@ class AccountMove(models.Model):
             self._cii_total_applicable_trade_tax_block(
                 tax, 0, tax_base_amount, trade_settlement, ns
             )
-            tax_basis_total += tax_base_amount
             at_least_one_tax = True
 
         if not at_least_one_tax:
             self._cii_total_applicable_trade_tax_block(None, 0, 0, trade_settlement, ns)
 
+        # Global Allowance lines = invoice lines with negative price
+        for allowance_iline in allowance_ilines:
+            self._cii_allowance_line(allowance_iline, trade_settlement, ns)
+
         if ns["level"] != "minimum":
             self._cii_trade_payment_terms_block(trade_settlement, ns)
 
-        self._cii_monetary_summation_block(trade_settlement, tax_basis_total, ns)
+        self._cii_monetary_summation_block(trade_settlement, ns)
         # When you create a full refund from an invoice, Odoo will
         # set the field reversed_entry_id
         if self.reversed_entry_id and self.reversed_entry_id.state == "posted":
@@ -568,7 +575,40 @@ class AccountMove(models.Model):
                 date_ns_type="qdt",
             )
 
-    def _cii_monetary_summation_block(self, trade_settlement, tax_basis_total, ns):
+    def _cii_allowance_line(self, iline, trade_settlement, ns):
+        allowance_line = etree.SubElement(
+            trade_settlement, ns["ram"] + "SpecifiedTradeAllowanceCharge"
+        )
+        charge_indic = etree.SubElement(allowance_line, ns["ram"] + "ChargeIndicator")
+        indicator = etree.SubElement(charge_indic, ns["udt"] + "Indicator")
+        indicator.text = "false"
+        if not float_is_zero(iline.discount, ns["disc_prec"]):
+            calculation_percent = etree.SubElement(
+                allowance_line, ns["ram"] + "CalculationPercent"
+            )
+            calculation_percent.text = "%0.*f" % (ns["disc_prec"], iline.discount)
+            basis_amount = etree.SubElement(allowance_line, ns["ram"] + "BasisAmount")
+            basis_amount.text = "%0.*f" % (
+                ns["price_prec"],
+                iline.price_unit * iline.quantity * -1,
+            )
+
+        actual_amount = iline.price_subtotal * -1
+        ns["allowance_total_amount"] += actual_amount
+        actual_amount_node = etree.SubElement(
+            allowance_line, ns["ram"] + "ActualAmount"
+        )
+        actual_amount_node.text = "%0.*f" % (ns["cur_prec"], actual_amount)
+
+        reason = etree.SubElement(allowance_line, ns["ram"] + "Reason")
+        reason.text = (
+            iline.name
+            or (iline.product_id and iline.product_id.display_name)
+            or _("Discount")
+        )
+        self._cii_invoice_line_taxes(iline, allowance_line, ns, allowance=True)
+
+    def _cii_monetary_summation_block(self, trade_settlement, ns):
         sums = etree.SubElement(
             trade_settlement,
             ns["ram"] + "SpecifiedTradeSettlementHeaderMonetarySummation",
@@ -577,19 +617,24 @@ class AccountMove(models.Model):
             line_total = etree.SubElement(sums, ns["ram"] + "LineTotalAmount")
             line_total.text = "%0.*f" % (
                 ns["cur_prec"],
-                self.amount_untaxed * ns["sign"],
+                (self.amount_untaxed - ns["allowance_total_amount"]) * ns["sign"],
             )
-        # In Factur-X, charge total amount and allowance total are not required
-        # charge_total = etree.SubElement(
-        #    sums, ns['ram'] + 'ChargeTotalAmount')
-        # charge_total.text = '0.00'
-        # allowance_total = etree.SubElement(
-        #    sums, ns['ram'] + 'AllowanceTotalAmount')
-        # allowance_total.text = '0.00'
+            # We don't want to generate charge total, because we don't have the
+            # notion of charge in Odoo. We only support allowance:
+            # an allowance is an invoice line with a negative price
+            # Warning: the allowance amount is positive (but has negative meaning)
+            if not self.currency_id.is_zero(ns["allowance_total_amount"]):
+                allowance_total = etree.SubElement(
+                    sums, ns["ram"] + "AllowanceTotalAmount"
+                )
+                allowance_total.text = "%0.*f" % (
+                    ns["cur_prec"],
+                    ns["allowance_total_amount"],
+                )
         tax_basis_total_amt = etree.SubElement(sums, ns["ram"] + "TaxBasisTotalAmount")
         tax_basis_total_amt.text = "%0.*f" % (
             ns["cur_prec"],
-            tax_basis_total * ns["sign"],
+            self.amount_untaxed * ns["sign"],
         )
         tax_total = etree.SubElement(
             sums, ns["ram"] + "TaxTotalAmount", currencyID=ns["currency"]
@@ -688,15 +733,6 @@ class AccountMove(models.Model):
         line_trade_agreement = etree.SubElement(
             line_item, ns["ram"] + "SpecifiedLineTradeAgreement"
         )
-        if float_compare(iline.price_unit, 0, precision_digits=ns["price_prec"]) < 0:
-            raise UserError(
-                _(
-                    "The Factur-X standard specify that unit prices can't be "
-                    "negative. The unit price of line '%s' is negative. You "
-                    "should generate a customer refund for that line."
-                )
-                % iline.name
-            )
         # convert gross price_unit to tax_excluded value
         taxres = iline.tax_ids.compute_all(iline.price_unit)
         gross_price_val = float_round(
@@ -732,13 +768,31 @@ class AccountMove(models.Model):
                 indicator = etree.SubElement(charge_indic, ns["udt"] + "Indicator")
                 if fc_discount == 1:
                     indicator.text = "false"
+                    ac_sign = 1
                 else:
                     indicator.text = "true"
+                    ac_sign = -1
+                calculation_percent = etree.SubElement(
+                    trade_allowance, ns["ram"] + "CalculationPercent"
+                )
+                calculation_percent.text = "%0.*f" % (
+                    ns["disc_prec"],
+                    iline.discount * ac_sign,
+                )
+                basis_amount = etree.SubElement(
+                    trade_allowance, ns["ram"] + "BasisAmount"
+                )
+                basis_amount.text = "%0.*f" % (
+                    ns["price_prec"],
+                    iline.price_unit * iline.quantity,
+                )
                 actual_amount = etree.SubElement(
                     trade_allowance, ns["ram"] + "ActualAmount"
                 )
                 actual_amount_val = float_round(
-                    gross_price_val - net_price_val, precision_digits=ns["price_prec"]
+                    ac_sign
+                    * ((iline.price_unit * iline.quantity) - iline.price_subtotal),
+                    precision_digits=ns["price_prec"],
                 )
                 actual_amount.text = "%0.*f" % (
                     ns["price_prec"],
@@ -776,14 +830,7 @@ class AccountMove(models.Model):
         line_trade_settlement = etree.SubElement(
             line_item, ns["ram"] + "SpecifiedLineTradeSettlement"
         )
-
-        if iline.tax_ids:
-            for tax in iline.tax_ids:
-                self._cii_line_applicable_trade_tax_block(
-                    tax, line_trade_settlement, ns
-                )
-        else:
-            self._cii_line_applicable_trade_tax_block(None, line_trade_settlement, ns)
+        self._cii_invoice_line_taxes(iline, line_trade_settlement, ns)
         # Fields start_date and end_date are provided by the OCA
         # module account_invoice_start_end_dates
         if (
@@ -808,6 +855,17 @@ class AccountMove(models.Model):
             ns["cur_prec"],
             iline.price_subtotal * ns["sign"],
         )
+
+    def _cii_invoice_line_taxes(self, iline, parent_node, ns, allowance=False):
+        if iline.tax_ids:
+            for tax in iline.tax_ids:
+                self._cii_line_applicable_trade_tax_block(
+                    tax, parent_node, ns, allowance=allowance
+                )
+        else:
+            self._cii_line_applicable_trade_tax_block(
+                None, parent_node, ns, allowance=allowance
+            )
 
     def generate_facturx_xml(self):
         self.ensure_one()
@@ -850,6 +908,7 @@ class AccountMove(models.Model):
             "lang": lang,
             "tax_speeddict": tax_speeddict,
             "fp_speeddict": fp_speeddict,
+            "allowance_total_amount": 0.0,
         }
 
         root = etree.Element(ns["rsm"] + "CrossIndustryInvoice", nsmap=nsmap)
@@ -860,19 +919,27 @@ class AccountMove(models.Model):
             root, ns["rsm"] + "SupplyChainTradeTransaction"
         )
 
+        allowance_ilines = self.env["account.move.line"]
         if ns["level"] in ("extended", "en16931", "basic"):
             line_number = 0
             for iline in self.invoice_line_ids.filtered(
                 lambda x: x.display_type == "product"
             ):
-                line_number += 1
-                self._cii_add_invoice_line_block(
-                    trade_transaction, iline, line_number, ns
+                price_compare = float_compare(
+                    iline.price_unit, 0, precision_digits=ns["price_prec"]
                 )
+                if price_compare >= 0:
+                    line_number += 1
+                    self._cii_add_invoice_line_block(
+                        trade_transaction, iline, line_number, ns
+                    )
+                else:
+                    # global allowance
+                    allowance_ilines |= iline
 
         self._cii_add_trade_agreement_block(trade_transaction, ns)
         self._cii_add_trade_delivery_block(trade_transaction, ns)
-        self._cii_add_trade_settlement_block(trade_transaction, ns)
+        self._cii_add_trade_settlement_block(trade_transaction, allowance_ilines, ns)
 
         xml_byte = etree.tostring(
             root, pretty_print=True, encoding="UTF-8", xml_declaration=True
