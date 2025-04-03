@@ -18,11 +18,9 @@
     ],
     "data": [
         "security/ir.model.access.csv",
-        "security/rule.xml",
-        "views/account_invoice_import_config.xml",
         "views/res_config_settings.xml",
         "wizard/account_invoice_import_view.xml",
-        "views/account_invoice.xml",
+        "views/account_move.xml",
         "views/account_journal_dashboard.xml",
         "views/res_partner.xml",
     ],
