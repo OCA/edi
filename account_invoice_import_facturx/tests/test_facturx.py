@@ -2,9 +2,8 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import base64
 
-from odoo import fields
+from odoo import Command, fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open
 
@@ -15,6 +14,36 @@ class TestFacturx(TransactionCase):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.company = cls.env.ref("base.main_company")
+        adjustment_credit_account_id = (
+            cls.env["account.account"]
+            .create(
+                {
+                    "company_id": cls.company.id,
+                    "code": "758FXADJUST",
+                    "name": "Adjustment income account",
+                    "account_type": "income",
+                }
+            )
+            .id
+        )
+        adjustment_debit_account_id = (
+            cls.env["account.account"]
+            .create(
+                {
+                    "company_id": cls.company.id,
+                    "code": "658FXADJUST",
+                    "name": "Adjustment expense account",
+                    "account_type": "expense",
+                }
+            )
+            .id
+        )
+        cls.company.write(
+            {
+                "adjustment_credit_account_id": adjustment_credit_account_id,
+                "adjustment_debit_account_id": adjustment_debit_account_id,
+            }
+        )
         cls.expense_account = cls.env["account.account"].search(
             [
                 ("company_id", "=", cls.company.id),
@@ -35,22 +64,27 @@ class TestFacturx(TransactionCase):
         # AFTER account_invoice_import_facturx, so the search= on field account_id
         # in the demo XML file of this module doesn't give any result.
         # That's why we set the account_id field of account.invoice.import.config here
-        demo_import_configs = cls.env["account.invoice.import.config"].search(
+        demo_partner_model_datas = cls.env["ir.model.data"].search(
             [
-                ("company_id", "=", cls.company.id),
-                ("invoice_line_method", "in", ("1line_no_product", "nline_no_product")),
-                ("account_id", "=", False),
+                ("module", "=", "account_invoice_import_facturx"),
+                ("model", "=", "res.partner"),
+                ("res_id", "!=", False),
+                ("name", "!=", False),
             ]
         )
-        demo_import_configs.write({"account_id": cls.expense_account.id})
-        demo_import_configs = cls.env["account.invoice.import.config"].search(
-            [
-                ("company_id", "=", cls.company.id),
-                ("invoice_line_method", "=", "1line_no_product"),
-                ("tax_ids", "=", False),
-            ]
-        )
-        demo_import_configs.write({"tax_ids": [(6, 0, [cls.purchase_tax.id])]})
+        for model_data in demo_partner_model_datas:
+            partner = (
+                cls.env["res.partner"]
+                .browse(int(model_data["res_id"]))
+                .with_company(cls.company.id)
+            )
+            vals = {}
+            if not partner.invoice_import_account_id:
+                vals["invoice_import_account_id"] = cls.expense_account.id
+            if not partner.invoice_import_tax_ids:
+                vals["invoice_import_tax_ids"] = [Command.set([cls.purchase_tax.id])]
+            if vals:
+                partner.write(vals)
 
     def test_import_facturx_invoice(self):
         sample_files = {
@@ -217,16 +251,19 @@ class TestFacturx(TransactionCase):
             f.close()
             wiz = self.env["account.invoice.import"].create(
                 {
-                    "invoice_file": base64.b64encode(pdf_file),
-                    "invoice_filename": inv_file,
+                    "invoice_attachment_ids": [
+                        Command.create({"raw": pdf_file, "name": inv_file})
+                    ],
+                    "company_id": self.company.id,
                 }
             )
-            wiz.import_invoice()
+            wiz.import_invoices()
             invoices = amo.search(
                 [
                     ("state", "=", "draft"),
                     ("move_type", "in", ("in_invoice", "in_refund")),
                     ("ref", "=", res_dict["invoice_number"]),
+                    ("company_id", "=", self.company.id),
                 ]
             )
             self.assertEqual(len(invoices), 1)

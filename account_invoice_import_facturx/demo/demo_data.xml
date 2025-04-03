@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
 
-<record id="jolie_boutique" model="res.partner">
-    <field name="name">Ma jolie boutique</field>
-    <field name="is_company" eval="True" />
-    <field name="supplier_rank">1</field>
-    <field name="customer_rank">0</field>
-    <field name="street">35 rue de la république</field>
-    <field name="zip">69001</field>
-    <field name="city">Lyon</field>
-    <field name="country_id" ref="base.fr" />
-    <field name="vat">FR11999999998</field>
-</record>
-
 <record id="fr_vat_purchase_20" model="account.tax">
     <field name="name">FR VAT purchase 20.0%</field>
     <field name="description">FR-VAT-buy-20.0</field>
@@ -24,18 +12,24 @@
     <field name="company_id" ref="base.main_company" />
 </record>
 
-<record id="jolie_boutique_import_config" model="account.invoice.import.config">
-    <field name="name">Jolie Boutique</field>
-    <field name="partner_id" ref="jolie_boutique" />
-    <field name="company_id" ref="base.main_company" />
-    <field name="invoice_line_method">1line_no_product</field>
+<record id="jolie_boutique" model="res.partner">
+    <field name="name">Ma jolie boutique</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="street">35 rue de la république</field>
+    <field name="zip">69001</field>
+    <field name="city">Lyon</field>
+    <field name="country_id" ref="base.fr" />
+    <field name="vat">FR11999999998</field>
+    <field name="invoice_import_single_line">1</field>
     <field
-            name="account_id"
+            name="invoice_import_account_id"
             model="account.account"
             search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
         />
     <field
-            name="tax_ids"
+            name="invoice_import_tax_ids"
             eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"
         />
 </record>
@@ -49,20 +43,12 @@
     <field name="zip">80333</field>
     <field name="city">München</field>
     <field name="country_id" ref="base.de" />
-</record>
-
-<record id="lieferant_import_config" model="account.invoice.import.config">
-    <field name="name">Lieferant</field>
-    <field name="partner_id" ref="lieferant" />
-    <field name="company_id" ref="base.main_company" />
-    <field name="invoice_line_method">nline_no_product</field>
     <field
-            name="account_id"
+            name="invoice_import_account_id"
             model="account.account"
             search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
         />
 </record>
-
 
 <record id="mvm_musterhafter" model="res.partner">
     <field name="name">MVM Musterhafter
@@ -74,20 +60,12 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="zip">12345</field>
     <field name="city">Musterstadt</field>
     <field name="country_id" ref="base.de" />
-</record>
-
-<record id="mvm_musterhafter_import_config" model="account.invoice.import.config">
-    <field name="name">MVM Musterhafter</field>
-    <field name="partner_id" ref="mvm_musterhafter" />
-    <field name="invoice_line_method">nline_no_product</field>
-    <field name="company_id" ref="base.main_company" />
     <field
-            name="account_id"
+            name="invoice_import_account_id"
             model="account.account"
             search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
         />
 </record>
-
 
 <record id="musterlieferant" model="res.partner">
     <field name="name">MUSTERLIEFERANT GMBH</field>
@@ -99,20 +77,12 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="zip">99199</field>
     <field name="city">MUSTERHAUSEN</field>
     <field name="country_id" ref="base.de" />
-</record>
-
-<record id="musterlieferant_import_config" model="account.invoice.import.config">
-    <field name="name">MUSTERLIEFERANT</field>
-    <field name="partner_id" ref="musterlieferant" />
-    <field name="company_id" ref="base.main_company" />
-    <field name="invoice_line_method">nline_no_product</field>
     <field
-            name="account_id"
+            name="invoice_import_account_id"
             model="account.account"
             search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
         />
 </record>
-
 
 <record id="de_vat_purchase_19" model="account.tax">
     <field name="name">German VAT purchase 19.0%</field>
@@ -172,20 +142,14 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="customer_rank">0</field>
     <field name="country_id" ref="base.fr" />
     <field name="vat">FR11123456782</field>
-</record>
-
-<record id="test_noline_import_config" model="account.invoice.import.config">
-    <field name="name">Test noline</field>
-    <field name="partner_id" ref="test_noline" />
-    <field name="company_id" ref="base.main_company" />
-    <field name="invoice_line_method">1line_no_product</field>
+    <field name="invoice_import_single_line">1</field>
     <field
-            name="account_id"
+            name="invoice_import_account_id"
             model="account.account"
             search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
         />
     <field
-            name="tax_ids"
+            name="invoice_import_tax_ids"
             eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"
         />
 </record>
@@ -197,20 +161,13 @@ Versicherungsverein Musterstadt a.G.</field>
     <field name="customer_rank">0</field>
     <field name="country_id" ref="base.fr" />
     <field name="vat">FR14987654324</field>
-</record>
-
-<record id="test_line_import_config" model="account.invoice.import.config">
-    <field name="name">Test line</field>
-    <field name="partner_id" ref="test_line" />
-    <field name="company_id" ref="base.main_company" />
-    <field name="invoice_line_method">nline_no_product</field>
     <field
-            name="account_id"
+            name="invoice_import_account_id"
             model="account.account"
             search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
         />
     <field
-            name="tax_ids"
+            name="invoice_import_tax_ids"
             eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"
         />
 </record>

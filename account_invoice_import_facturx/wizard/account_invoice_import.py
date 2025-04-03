@@ -21,15 +21,15 @@ class AccountInvoiceImport(models.TransientModel):
     _inherit = ["account.invoice.import", "base.facturx"]
 
     @api.model
-    def parse_xml_invoice(self, xml_root):
+    def parse_xml_invoice(self, xml_root, company):
         if (
             xml_root.tag
             and "crossindustry" in xml_root.tag.lower()
             and "invoice" in xml_root.tag.lower()
         ):
-            return self.parse_facturx_invoice(xml_root)
+            return self.parse_facturx_invoice(xml_root, company)
         else:
-            return super().parse_xml_invoice(xml_root)
+            return super().parse_xml_invoice(xml_root, company)
 
     def prepare_facturx_xpath_dict(self):
         xpath_dict = {
@@ -350,7 +350,7 @@ class AccountInvoiceImport(models.TransientModel):
         return res
 
     @api.model
-    def parse_facturx_invoice(self, xml_root):  # noqa: C901
+    def parse_facturx_invoice(self, xml_root, company):  # noqa: C901
         """Parse Cross Industry Invoice XML file"""
         logger.debug("Starting to parse XML file as Factur-X/ZUGFeRD file")
         namespaces = xml_root.nsmap
@@ -402,8 +402,9 @@ class AccountInvoiceImport(models.TransientModel):
         # We're not supposed to use matching methods in this module,
         # but I want to get the decimal precision of the currency of the invoice
         # So I put it in a try/except...
-        self.get_currency_helper(res)
-        currency = res["currency_rec"]
+        currency = self.env["business.document.import"]._match_currency(
+            res, [], company=company, raise_exception=False
+        )
         amount_total = res["amount_total"]
         ac_qty_dict = {"charges": 1, "allowances": -1}
         if currency.compare_amounts(amount_total, 0) < 0 and inv_type == "in_invoice":
