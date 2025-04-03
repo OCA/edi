@@ -1,19 +1,25 @@
-# Copyright 2015-2021 Akretion France (http://www.akretion.com/)
+# Copyright 2015-2021 Akretion France (https://www.akretion.com/)
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, models
-from odoo.tools.misc import format_amount
+from odoo import api, fields, models
+from odoo.tools import is_html_empty
 
 
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    def _get_move_display_name(self, show_ref=False):
-        """Add amount_untaxed in name_get of invoices"""
-        name = super()._get_move_display_name(show_ref=show_ref)
-        if self.env.context.get("invoice_show_amount"):
-            name += _(" Amount w/o tax: %s") % format_amount(
-                self.env, self.amount_untaxed, self.currency_id
-            )
-        return name
+    invoice_import_warnings = fields.Html(readonly=True)
+    show_invoice_import_warnings = fields.Boolean(
+        compute="_compute_show_invoice_import_warnings"
+    )
+
+    @api.depends("state", "invoice_import_warnings")
+    def _compute_show_invoice_import_warnings(self):
+        for move in self:
+            show = False
+            if move.state == "draft" and not is_html_empty(
+                move.invoice_import_warnings
+            ):
+                show = True
+            move.show_invoice_import_warnings = show
