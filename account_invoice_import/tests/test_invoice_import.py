@@ -4,9 +4,10 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-import mock
+import unittest.mock
+from random import randint
 
-from odoo import fields
+from odoo import Command, fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_is_zero
 
@@ -76,7 +77,7 @@ class TestInvoiceImport(TransactionCase):
                     "name": "Expense product",
                     "default_code": "AII-TEST-PRODUCT",
                     "taxes_id": [(6, 0, [cls.sale_tax.id])],
-                    "supplier_taxes_id": [(6, 0, [cls.purchase_tax.id])],
+                    "supplier_taxes_id": [Command.set([cls.purchase_tax.id])],
                     "property_account_income_id": cls.income_account.id,
                     "property_account_expense_id": cls.expense_account.id,
                 }
@@ -84,17 +85,18 @@ class TestInvoiceImport(TransactionCase):
         )
         cls.all_import_config = [
             {
-                "invoice_line_method": "1line_no_product",
+                "single_line": True,
                 "account": cls.expense_account,
                 "taxes": cls.purchase_tax,
+                "company": cls.company,
             },
-            {"invoice_line_method": "1line_static_product", "product": cls.product},
+            {"single_line": False, "product": cls.product, "company": cls.company},
             {
-                "invoice_line_method": "nline_no_product",
                 "account": cls.expense_account,
+                "company": cls.company,
             },
-            {"invoice_line_method": "nline_static_product", "product": cls.product},
-            {"invoice_line_method": "nline_auto_product"},
+            {"product": cls.product, "company": cls.company},
+            {"company": cls.company},
         ]
 
         # Define partners as supplier and customer
@@ -134,19 +136,8 @@ class TestInvoiceImport(TransactionCase):
                 "name": "Anevia",
                 "email": "invoicing@anevia.com",
                 "country_id": cls.env.ref("base.fr").id,
-                "invoice_import_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "Import config for Anevia",
-                            "company_id": cls.company.id,
-                            "invoice_line_method": "1line_static_product",
-                            "static_product_id": cls.product.id,
-                            "label": "Flamingo 220S",
-                        },
-                    )
-                ],
+                "invoice_import_product_id": cls.product.id,
+                "invoice_import_label": "Flamingo 220S",
             }
         )
 
@@ -181,11 +172,9 @@ class TestInvoiceImport(TransactionCase):
         }
         for import_c in self.all_import_config:
             # hack to have a unique vendor inv ref
-            parsed_inv["invoice_number"] = "INV-%s" % import_c["invoice_line_method"]
-            inv = (
-                self.env["account.invoice.import"]
-                .with_company(self.company.id)
-                .create_invoice(parsed_inv, import_c)
+            parsed_inv["invoice_number"] = "INV-%s" % randint(100000, 999999)
+            inv = self.env["account.invoice.import"].create_invoice(
+                parsed_inv, import_c
             )
             self.assertEqual(inv.move_type, parsed_inv["type"])
             self.assertEqual(inv.company_id.id, self.company.id)
@@ -234,11 +223,9 @@ class TestInvoiceImport(TransactionCase):
                 }
             ],
         }
-        import_config = {"invoice_line_method": "nline_auto_product"}
-        inv = (
-            self.env["account.invoice.import"]
-            .with_company(self.company.id)
-            .create_invoice(parsed_inv, import_config)
+        import_config = {"company": self.company}
+        inv = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
         )
         self.assertEqual(inv.move_type, parsed_inv["type"])
         self.assertFalse(
@@ -280,12 +267,10 @@ class TestInvoiceImport(TransactionCase):
             ],
         }
         for import_config in self.all_import_config:
-            if not import_config["invoice_line_method"].startswith("nline"):
+            if import_config.get("single_line"):
                 continue
-            inv = (
-                self.env["account.invoice.import"]
-                .with_company(self.company.id)
-                .create_invoice(parsed_inv, import_config)
+            inv = self.env["account.invoice.import"].create_invoice(
+                parsed_inv, import_config
             )
             self.assertFalse(
                 inv.currency_id.compare_amounts(inv.amount_untaxed, 270.00)
@@ -325,7 +310,9 @@ Nina
         )
         logger_name = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
 
-        mock_parse = mock.patch.object(type(self.env["mail.thread"]), "message_parse")
+        mock_parse = unittest.mock.patch.object(
+            type(self.env["mail.thread"]), "message_parse"
+        )
         with self.assertLogs(logger_name) as watcher:
             # NOTE: for some reason in tests the msg is not parsed properly
             # and message_dict is kind of empty.
@@ -421,7 +408,6 @@ Nina
         self.assertEqual(len(move), 1)
         self.assertTrue(self.company.currency_id.is_zero(move.amount_total))
         self.assertFalse(move.invoice_date)
-        self.assertFalse(move.invoice_line_ids)
 
     def test_email_partner_invoice_config(self):
         partner = self.partner_with_email_with_inv_config
@@ -443,7 +429,7 @@ Nina
         iline = move.invoice_line_ids
         self.assertEqual(iline.product_id.id, self.product.id)
         self.assertEqual(iline.quantity, 1)
-        self.assertEqual(iline.name, partner.invoice_import_ids[0].label)
+        self.assertEqual(iline.name, partner.invoice_import_label)
         price_prec = self.env["decimal.precision"].precision_get("Product Price")
         self.assertTrue(float_is_zero(iline.price_unit, precision_digits=price_prec))
         self.assertTrue(self.company.currency_id.is_zero(iline.price_subtotal))
