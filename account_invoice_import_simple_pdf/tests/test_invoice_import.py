@@ -4,7 +4,7 @@
 
 import base64
 
-from odoo import fields
+from odoo import Command, fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_compare
 
@@ -68,106 +68,102 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         )
 
         # for the full test with a PDF invoice
-        cls.partner_ak = cls.env["res.partner"].create(
-            {
-                "name": "Akretion France",
-                "is_company": True,
-                "country_id": cls.env.ref("base.fr").id,
-                "simple_pdf_date_format": "dd-mm-y4",
-                "simple_pdf_date_separator": "slash",
-                "vat": "FR86792377731",
-                "simple_pdf_currency_id": cls.env.ref("base.EUR").id,
-                "simple_pdf_decimal_separator": "dot",
-                "simple_pdf_thousand_separator": "comma",
-                "simple_pdf_invoice_number_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "string_type": "fixed",
-                            "fixed_char": "VT/",
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "string_type": "year4",
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "string_type": "fixed",
-                            "fixed_char": "/",
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "string_type": "digit",
-                            "occurrence_min": 4,
-                            "occurrence_max": 4,
-                        },
-                    ),
-                ],
-                "simple_pdf_field_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "amount_total",
-                            "extract_rule": "last",
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "amount_untaxed",
-                            "extract_rule": "first",
-                            "start": "Subtotal",
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "date",
-                            "extract_rule": "first",
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "date_due",
-                            "extract_rule": "position_start",
-                            "position": 2,
-                        },
-                    ),
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "invoice_number",
-                            "extract_rule": "first",
-                        },
-                    ),
-                ],
-            }
-        )
-        cls.ak_invoice_config = cls.env["account.invoice.import.config"].create(
-            {
-                "name": "Akretion France",
-                "partner_id": cls.partner_ak.id,
-                "invoice_line_method": "1line_static_product",
-                "label": "My custom line label",
-                "static_product_id": cls.product.id,
-                "company_id": cls.company.id,
-            }
+        cls.partner_ak = (
+            cls.env["res.partner"]
+            .with_company(cls.company.id)
+            .create(
+                {
+                    "name": "Akretion France",
+                    "is_company": True,
+                    "country_id": cls.env.ref("base.fr").id,
+                    "simple_pdf_date_format": "dd-mm-y4",
+                    "simple_pdf_date_separator": "slash",
+                    "vat": "FR86792377731",
+                    "invoice_import_label": "My custom line label",
+                    "invoice_import_product_id": cls.product.id,
+                    "simple_pdf_currency_id": cls.env.ref("base.EUR").id,
+                    "simple_pdf_decimal_separator": "dot",
+                    "simple_pdf_thousand_separator": "comma",
+                    "simple_pdf_invoice_number_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                "string_type": "fixed",
+                                "fixed_char": "VT/",
+                            },
+                        ),
+                        (
+                            0,
+                            0,
+                            {
+                                "string_type": "year4",
+                            },
+                        ),
+                        (
+                            0,
+                            0,
+                            {
+                                "string_type": "fixed",
+                                "fixed_char": "/",
+                            },
+                        ),
+                        (
+                            0,
+                            0,
+                            {
+                                "string_type": "digit",
+                                "occurrence_min": 4,
+                                "occurrence_max": 4,
+                            },
+                        ),
+                    ],
+                    "simple_pdf_field_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                "name": "amount_total",
+                                "extract_rule": "last",
+                            },
+                        ),
+                        (
+                            0,
+                            0,
+                            {
+                                "name": "amount_untaxed",
+                                "extract_rule": "first",
+                                "start": "Subtotal",
+                            },
+                        ),
+                        (
+                            0,
+                            0,
+                            {
+                                "name": "date",
+                                "extract_rule": "first",
+                            },
+                        ),
+                        (
+                            0,
+                            0,
+                            {
+                                "name": "date_due",
+                                "extract_rule": "position_start",
+                                "position": 2,
+                            },
+                        ),
+                        (
+                            0,
+                            0,
+                            {
+                                "name": "invoice_number",
+                                "extract_rule": "first",
+                            },
+                        ),
+                    ],
+                }
+            )
         )
 
         cls.ak_filename = "akretion_france-test.pdf"
@@ -520,11 +516,15 @@ class TestInvoiceImportSimplePdf(TransactionCase):
     def test_complete_import(self):
         wiz = self.env["account.invoice.import"].create(
             {
-                "invoice_file": self.ak_pdf_file_b64,
-                "invoice_filename": self.ak_filename,
+                "invoice_attachment_ids": [
+                    Command.create(
+                        {"datas": self.ak_pdf_file_b64, "name": self.ak_filename}
+                    )
+                ],
+                "company_id": self.company.id,
             }
         )
-        wiz.import_invoice()
+        wiz.import_invoices()
         # Check result of invoice creation
         invoices = self.env["account.move"].search(
             [
@@ -535,7 +535,6 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 ("company_id", "=", self.company.id),
             ]
         )
-        inv_config = self.ak_invoice_config
         self.assertEqual(len(invoices), 1)
         inv = invoices[0]
         self.assertEqual(fields.Date.to_string(inv.invoice_date), "2022-09-21")
@@ -546,7 +545,10 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         self.assertFalse(inv.currency_id.compare_amounts(inv.amount_untaxed, 1509))
         self.assertEqual(len(inv.invoice_line_ids), 1)
         iline = inv.invoice_line_ids[0]
-        self.assertEqual(iline.name, inv_config.label)
+        self.assertEqual(
+            iline.name,
+            self.partner_ak.with_company(self.company.id).invoice_import_label,
+        )
         self.assertEqual(iline.product_id, self.product)
         self.assertEqual(iline.tax_ids, self.product.supplier_taxes_id)
         self.assertEqual(float_compare(iline.quantity, 1.0, precision_digits=2), 0)

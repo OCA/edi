@@ -25,6 +25,10 @@
     <field name="simple_pdf_pages">first</field>
     <field name="simple_pdf_decimal_separator">comma</field>
     <field name="simple_pdf_thousand_separator">space</field>
+    <field
+            name="invoice_import_label"
+        >Mobile phone: subscription and communication</field>
+    <field name="invoice_import_product_id" ref="mobile_phone" />
 </record>
 
 <record id="inv_number1" model="account.invoice.import.simple.pdf.invoice.number">
@@ -59,13 +63,5 @@
     <field name="extract_rule">first</field>
 </record>
 
-<record id="bouygues_telecom_import_config" model="account.invoice.import.config">
-    <field name="name">Bouygues Telecom mobile</field>
-    <field name="partner_id" ref="bouygues_telecom" />
-    <field name="company_id" ref="base.main_company" />
-    <field name="invoice_line_method">1line_static_product</field>
-    <field name="label">Mobile phone: subscription and communication</field>
-    <field name="static_product_id" ref="mobile_phone" />
-</record>
 
 </odoo>
