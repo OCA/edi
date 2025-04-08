@@ -2,7 +2,8 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import _, fields, models
+from odoo.exceptions import UserError
 
 
 class ResPartner(models.Model):
@@ -43,6 +44,13 @@ class ResPartner(models.Model):
     )
     # For analytic, users should use the ability to auto-set an analytic distribution
     # depending on product/partner
+    # Technical field for the create partner scenario
+    invoice_import_move_id = fields.Many2one(
+        "account.move", string="Related Imported Vendor Bill", readonly=True
+    )
+    invoice_import_move_partner_id = fields.Many2one(
+        related="invoice_import_move_id.partner_id"
+    )
 
     def _convert_to_import_config(self, company):
         self.ensure_one()
@@ -73,3 +81,45 @@ class ResPartner(models.Model):
             ):
                 vals["account"] = self.invoice_import_account_id
         return vals
+
+    def update_imported_invoice(self):
+        self.ensure_one()
+        invoice_import_move = self.invoice_import_move_id
+        assert invoice_import_move
+        self.write({"invoice_import_move_id": False})
+        self.message_post(
+            body=_(
+                "Partner created from imported vendor bill <a href=# data-oe-model=pos.order "
+                "data-oe-id=%(move_id)d>%(move_name)s</a>",
+                move_id=invoice_import_move.id,
+                move_name=invoice_import_move.display_name,
+            )
+        )
+        if invoice_import_move.partner_id:
+            raise UserError(
+                _(
+                    "The vendor bill %(move)s already has a partner %(partner)s.",
+                    move=invoice_import_move.display_name,
+                    partner=invoice_import_move.partner_id.display_name,
+                )
+            )
+        invoice_import_move._invoice_import_set_partner_and_update_lines(self)
+        # TODO update tax on lines
+        invoice_import_move.message_post(
+            body=_(
+                "The partner has been created via the <em>create or update partner</em> wizard."
+            )
+        )
+        # TODO check refund
+        action = self.env["ir.actions.actions"]._for_xml_id(
+            "account.action_move_in_invoice_type"
+        )
+        action.update(
+            {
+                "view_id": False,
+                "views": False,
+                "view_mode": "form,tree",
+                "res_id": invoice_import_move.id,
+            }
+        )
+        return action

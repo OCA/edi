@@ -28,8 +28,25 @@
                     <field name="invoice_import_label" />
                     <field name="invoice_import_single_line" />
                     <field name="invoice_import_journal_id" />
+                    <field name="invoice_import_move_id" invisible="1" />
+                    <field name="invoice_import_move_partner_id" invisible="1" />
                 </group>
             </group>
+            <div role="alert" position="after">
+                <div
+                    class="alert alert-info"
+                    groups="account.group_account_invoice"
+                    role="alert"
+                    attrs="{'invisible': ['|', ('invoice_import_move_id', '=', False), ('invoice_import_move_partner_id', '!=', False)]}"
+                >
+                  <button
+                        string="Set partner"
+                        type="object"
+                        name="update_imported_invoice"
+                        class="oe_link"
+                    /> on imported vendor bill <field name="invoice_import_move_id" />
+                </div>
+            </div>
         </field>
     </record>
 </odoo>
