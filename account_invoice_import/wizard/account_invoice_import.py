@@ -149,14 +149,67 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def _prepare_create_invoice_no_partner(self, parsed_inv, import_config, vals):
-        if parsed_inv.get("partner") and parsed_inv["partner"].get("email"):
-            source_email = parsed_inv["partner"]["email"]
-            if parsed_inv["partner"].get("name"):
-                source_email = "%s <%s>" % (
-                    parsed_inv["partner"]["name"],
-                    source_email,
+        if parsed_inv.get("partner"):
+            if parsed_inv["partner"].get("email"):
+                source_email = parsed_inv["partner"]["email"]
+                if parsed_inv["partner"].get("name"):
+                    source_email = "%s <%s>" % (
+                        parsed_inv["partner"]["name"],
+                        source_email,
+                    )
+                vals["invoice_source_email"] = source_email
+            partner_data = {
+                "is_company": True,
+                "country_id": False,
+                "state_id": False,
+                "supplier_rank": 1,
+            }
+            if (
+                parsed_inv["partner"].get("country_code")
+                and isinstance(parsed_inv["partner"]["country_code"], str)
+                and len(parsed_inv["partner"]["country_code"].strip()) == 2
+            ):
+                country = self.env["res.country"].search(
+                    [
+                        (
+                            "code",
+                            "=",
+                            parsed_inv["partner"]["country_code"].upper().strip(),
+                        )
+                    ],
+                    limit=1,
                 )
-            vals["invoice_source_email"] = source_email
+                if country:
+                    partner_data["country_id"] = country.id
+                # There are already warnings when country code doesn't exist
+            if (
+                partner_data.get("country_id")
+                and parsed_inv["partner"].get("state_code")
+                and isinstance(parsed_inv["partner"]["state_code"], str)
+            ):
+                state = self.env["res.country.state"].search(
+                    [
+                        (
+                            "code",
+                            "=",
+                            parsed_inv["partner"]["state_code"].upper().strip(),
+                        ),
+                        ("country_id", "=", partner_data["country_id"]),
+                    ],
+                    limit=1,
+                )
+                if state:
+                    partner_data["state_id"] = state.id
+            rpo = self.env["res.partner"]
+            for key, value in parsed_inv["partner"].items():
+                if (
+                    value
+                    and isinstance(value, str)
+                    and hasattr(rpo, key)
+                    and key not in ("country_code", "state_code")
+                ):
+                    partner_data[key] = value
+            vals["import_partner_data"] = partner_data
 
     @api.model
     def _prepare_create_invoice_journal(self, parsed_inv, import_config, vals):
@@ -676,198 +729,6 @@ class AccountInvoiceImport(models.TransientModel):
         )
         return existing_inv
 
-    def goto_partner_not_found(self, parsed_inv, error_message):
-        """Hook designed to add an action when no partner is found
-        For instance to propose to create the partner based on the partner_dict.
-        """
-        partner_dict = parsed_inv["partner"]
-        vals = {
-            "message": error_message,
-            "state": "partner-not-found",
-            "partner_vat": partner_dict.get("vat"),
-        }
-        if parsed_inv["partner"].get("country_code"):
-            country = self.env["res.country"].search(
-                [("code", "=", partner_dict["country_code"].upper().strip())], limit=1
-            )
-            if country:
-                vals["partner_country_id"] = country.id
-        self.write(vals)
-        xmlid = "account_invoice_import.account_invoice_import_action"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
-        action["res_id"] = self.id
-        return action
-
-    def _prepare_partner_update(self):
-        assert self.partner_vat
-        assert not self.partner_id.parent_id
-        vals = {}
-        if self.partner_id.vat:
-            if self.partner_id.vat != self.partner_vat:
-                raise UserError(
-                    _(
-                        "The vendor to update '%(partner_name)s' already "
-                        "has a VAT number (%(partner_vat)s) "
-                        "which is different from the vendor VAT number "
-                        "of the invoice (%(invoice_vat)s).",
-                        partner_name=self.partner_id.display_name,
-                        partner_vat=self.partner_id.vat,
-                        invoice_vat=self.partner_vat,
-                    )
-                )
-
-        else:
-            vals["vat"] = self.partner_vat
-        if self.partner_country_id:
-            if self.partner_id.country_id:
-                if self.partner_id.country_id != self.partner_country_id:
-                    raise UserError(
-                        _(
-                            "The vendor to update '%(partner_name)s' already "
-                            "has a country (%(partner_country)s) "
-                            "which is different from the country of the vendor "
-                            "of the invoice (%(invoice_country)s).",
-                            partner_name=self.partner_id.display_name,
-                            partner_country=self.partner_id.country_id.display_name,
-                            invoice_country=self.partner_country_id.display_name,
-                        )
-                    )
-            else:
-                vals["country_id"] = self.partner_country_id.id
-        return vals
-
-    def update_partner_vat(self):
-        """In the update process, we only take care of VAT and country code"""
-        if not self.partner_id:
-            raise UserError(_("You must select a vendor to update."))
-        self.partner_id.write(self._prepare_partner_update())
-
-    def update_partner_vat_show(self):
-        self.update_partner_vat()
-        action = {
-            "name": self.partner_id.display_name,
-            "type": "ir.actions.act_window",
-            "res_model": "res.partner",
-            "res_id": self.partner_id.id,
-            "view_mode": "form",
-        }
-        return action
-
-    def update_partner_vat_continue(self):
-        self.update_partner_vat()
-        return self.import_invoice()
-
-    def _prepare_new_partner_context(self, parsed_inv):
-        partner_dict = parsed_inv["partner"]
-        context = {
-            "default_is_company": True,
-            "default_supplier_rank": 1,
-            "default_name": partner_dict.get("name"),
-            "default_street": partner_dict.get("street"),
-            "default_street2": partner_dict.get("street2"),
-            "default_street3": partner_dict.get("street3"),
-            "default_zip": partner_dict.get("zip"),
-            "default_city": partner_dict.get("city"),
-            "default_website": partner_dict.get("website"),
-            "default_vat": self.partner_vat,
-            "default_country_id": self.partner_country_id.id or False,
-        }
-        if (
-            self.partner_country_id
-            and partner_dict.get("state_code")
-            and isinstance(partner_dict["state_code"], str)
-        ):
-            country_state = self.env["res.country.state"].search(
-                [
-                    ("code", "=", partner_dict["state_code"].upper().strip()),
-                    ("country_id", "=", self.partner_country_id.id),
-                ],
-                limit=1,
-            )
-            if country_state:
-                context["default_state_id"] = country_state.id
-        return context
-
-    def new_partner(self):
-        parsed_inv = self.get_parsed_invoice()
-        # we don't create a new partner, we just show a pre-filled partner form
-        context = self._prepare_new_partner_context(parsed_inv)
-        action = {
-            "name": self.partner_id.display_name,
-            "type": "ir.actions.act_window",
-            "res_model": "res.partner",
-            "target": "current",
-            "view_mode": "form",
-            "context": context,
-        }
-        # After this, when you save the partner, the active_id field in the
-        # URL is still the ID of the wizard. It will trigger an error if
-        # you click on "0 invoice import configuration" right after:
-        # Record does not exist or has been deleted.
-        # (Record: res.partner(<ID wizard>,), User: 2)
-        # If you have an idea on how to fix this problem, please tell me!
-        return action
-
-    def _get_import_config_from_scratch(self, partner=None):
-        """Used when we don't have any import config on the partner, or when no
-        partner was detected"""
-        import_config = {
-            "company": self.company_id,
-        }
-        company_id = self.company_id.id
-        if partner:
-            last_invoice = self.env["account.move"].search(
-                [
-                    ("commercial_partner_id", "=", partner.commercial_partner_id.id),
-                    ("move_type", "=", "in_invoice"),
-                    ("company_id", "=", company_id),
-                    ("state", "=", "posted"),
-                ],
-                limit=1,
-                order="invoice_date desc",
-            )
-            if last_invoice:
-                invoice_lines = last_invoice.invoice_line_ids[0].filtered(
-                    lambda x: not x.display_type == "product"
-                )
-                if invoice_lines:
-                    inv_line = invoice_lines[0]
-                    if inv_line:
-                        if inv_line.product_id:
-                            import_config["product"] = inv_line.product_id
-                            return import_config
-                        else:
-                            import_config.update(
-                                {
-                                    "account": inv_line.account_id,
-                                    "taxes": inv_line.tax_ids,
-                                }
-                            )
-                            return import_config
-        first_purchase_journal = self.env["account.journal"].search(
-            [
-                ("type", "=", "purchase"),
-                ("company_id", "=", company_id),
-                ("default_account_id", "!=", False),
-            ],
-            limit=1,
-        )
-        if first_purchase_journal:
-            account = first_purchase_journal.default_account_id
-        else:
-            account = (
-                self.env["ir.property"]
-                .with_company(company_id)
-                ._get("property_account_expense_categ_id", "product.category")
-            )
-        import_config.update(
-            {
-                "account": account,
-                "taxes": account.tax_ids or self.company_id.account_purchase_tax_id,
-            }
-        )
-        return import_config
-
     def import_invoices(self):
         """Method called by the button of the wizard"""
         self.ensure_one()
@@ -951,6 +812,7 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def create_invoice(self, parsed_inv, import_config, origin=None):
         amo = self.env["account.move"]
+        # TODO: logs for partner are present twice in warning banner
         # ADD no partner handling in pre process ?
         parsed_inv = self._pre_process_parsed_inv(parsed_inv, import_config["company"])
         vals = self._prepare_create_invoice_vals(parsed_inv, import_config)
@@ -1292,8 +1154,7 @@ class AccountInvoiceImport(models.TransientModel):
                     subject=msg_dict.get("subject")
                     and html.escape(msg_dict["subject"]),
                 )
-                #                try:
-                if True:
+                try:
                     invoice_id = self.create_invoice_webservice(
                         base64.b64encode(attach_bytes),
                         filename,
@@ -1306,12 +1167,12 @@ class AccountInvoiceImport(models.TransientModel):
                         invoice_id,
                         filename,
                     )
-        #                except Exception as e:
-        #                    logger.error(
-        #                        "Failed to import invoice from mail attachment %s. Error: %s",
-        #                        filename,
-        #                        e,
-        #                    )
+                except Exception as e:
+                    logger.error(
+                        "Failed to import invoice from mail attachment %s. Error: %s",
+                        filename,
+                        e,
+                    )
         else:
             logger.info("The email has no attachments, skipped.")
         return self.create({})

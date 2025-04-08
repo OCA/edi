@@ -15,13 +15,24 @@
             <div
                     class="alert alert-warning"
                     role="alert"
-                    attrs="{'invisible': [('show_invoice_import_warnings', '=', False)]}"
+                    attrs="{'invisible': [('show_import_warnings', '=', False)]}"
                 >
-                <field name="invoice_import_warnings" />
+                <field name="import_warnings" />
             </div>
         </div>
         <field name="show_name_warning" position="after">
-                <field name="show_invoice_import_warnings" invisible="1" />
+            <field name="show_import_warnings" invisible="1" />
+            <field name="import_partner_data" invisible="1" />
+        </field>
+        <field name="partner_id" position="after">
+                <button
+                    name="%(account_invoice_import_partner_create_action)d"
+                    type="action"
+                    attrs="{'invisible': ['|', '|', '|', ('state', '!=', 'draft'), ('move_type', 'not in', ('in_invoice', 'in_refund')), ('import_partner_data', '=', False), ('partner_id', '!=', False)]}"
+                    groups="account.group_account_invoice"
+                    colspan="2"
+                    string="Create or Update Partner"
+                />
         </field>
     </field>
 </record>

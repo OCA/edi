@@ -20,6 +20,7 @@
         "security/ir.model.access.csv",
         "views/res_config_settings.xml",
         "wizard/account_invoice_import_view.xml",
+        "wizard/account_invoice_import_partner_create_view.xml",
         "views/account_move.xml",
         "views/account_journal_dashboard.xml",
         "views/res_partner.xml",
