@@ -1489,6 +1489,13 @@ class BusinessDocumentImport(models.AbstractModel):
                 )
         for msg in parsed_dict["chatter_msg"]:
             record.message_post(body=msg)
+        if hasattr(record, "import_warnings") and parsed_dict.get("chatter_msg"):
+            import_warn = _("Import warnings:")
+            list_msg = "\n".join(
+                [f"<li>{msg}</li>" for msg in parsed_dict["chatter_msg"]]
+            )
+            import_warnings = f"<strong>{import_warn}</strong><ul>{list_msg}</ul>"
+            record.write({"import_warnings": import_warnings})
         if parsed_dict.get("note"):
             if doc_filename:
                 msg = _("<b>Notes in file %s:</b>") % doc_filename
