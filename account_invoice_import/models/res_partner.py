@@ -29,10 +29,13 @@ class ResPartner(models.Model):
         help="Taxes configured here will go through the mapping of the fiscal position.",
     )
     # FORCE VALUE fields
-    # company_dependent=True ??
-    invoice_import_single_line = fields.Boolean(string="Force Single Invoice Line")
+    invoice_import_single_line = fields.Boolean(
+        string="Force Single Invoice Line", company_dependent=True
+    )
     invoice_import_label = fields.Char(
-        string="Force Invoice Line Description", help="Force Invoice Line Description"
+        string="Force Invoice Line Description",
+        help="Force Invoice Line Description",
+        company_dependent=True,
     )
 
     invoice_import_journal_id = fields.Many2one(
