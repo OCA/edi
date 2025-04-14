@@ -3,7 +3,7 @@
 {
     "name": "EDI PURCHASE EDIFACT OCA",
     "summary": "Create and send EDIFACT order files",
-    "version": "12.0.1.0.0",
+    "version": "14.0.1.0.0",
     "development_status": "Alpha",
     "website": "https://github.com/OCA/edi",
     "author": "Trobz, Odoo Community Association (OCA)",
