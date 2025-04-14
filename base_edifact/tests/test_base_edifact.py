@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0)
 
 
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import SavepointCase
 from odoo.tools import file_open
 
 
@@ -12,10 +12,10 @@ def _get_file_content(filename):
         return fd.read()
 
 
-class TestBaseEdifact(TransactionCase):
+class TestBaseEdifact(SavepointCase):
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def setUp(cls):
+        super().setUp()
         cls.base_edifact_model = cls.env["base.edifact"]
         cls.product = cls.env.ref("product.product_product_1")
         cls.product.barcode = "9783898"
