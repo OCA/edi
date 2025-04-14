@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
-
 <odoo>
     <record id="purchase_order_import_form" model="ir.ui.view">
         <field name="name">purchase.order.import.form.dev</field>
@@ -8,8 +7,7 @@
             <form string="Import Purchase Orders">
                 <group colspan="4" name="help-import">
                     <div colspan="2">
-                        <p
-                        >Upload below the customer order as EDIFACT file.</p>
+                        <p>Upload below the customer order as EDIFACT file.</p>
                     </div>
                 </group>
                 <group name="import">
@@ -38,7 +36,7 @@
         <field name="res_model">purchase.order.import</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <field name="context"></field>
+        <field name="context" />
     </record>
     <menuitem
         id="purchase_order_import_menu"

@@ -8,8 +8,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     edifact_purchase_order_out = fields.Boolean(
-        string="Export Purchase Order with EDIFACT",
-        default=False
+        string="Export Purchase Order with EDIFACT", default=False
     )
 
     edifact_despatch_advice_ignore_lines_with_unknown_products = fields.Boolean(

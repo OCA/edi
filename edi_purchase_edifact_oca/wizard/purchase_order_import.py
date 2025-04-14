@@ -1,9 +1,9 @@
 # Copyright 2024 Trobz
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import json
 import logging
 import mimetypes
-import json
 from base64 import b64decode, b64encode
 from collections import defaultdict
 
@@ -336,8 +336,7 @@ class PurchaseOrderImport(models.TransientModel):
             except UserError as error:
                 if (
                     order
-                    and
-                    partner.edifact_despatch_advice_ignore_lines_with_unknown_products
+                    and partner.edifact_despatch_advice_ignore_lines_with_unknown_products
                 ):
                     order.message_post(body=_(error.name))
                     order_dict["unknown_products"].append(line)

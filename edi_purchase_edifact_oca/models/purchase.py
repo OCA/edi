@@ -1,8 +1,9 @@
 # Copyright 2024 Trobz
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0)
 
-from odoo import _, models, fields
 from datetime import datetime
+
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 

@@ -2,12 +2,13 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import base64
-from odoo.addons.component.tests.common import TransactionComponentCase
-from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
+import re
+from base64 import b64encode
 
 from odoo import fields
-from base64 import b64encode
-import re
+
+from odoo.addons.component.tests.common import TransactionComponentCase
+from odoo.addons.edi_oca.tests.common import EDIBackendTestMixin
 
 
 class TestEdifactPurchaseOrder(TransactionComponentCase, EDIBackendTestMixin):
@@ -163,7 +164,7 @@ class TestEdifactPurchaseOrder(TransactionComponentCase, EDIBackendTestMixin):
                 "'LIN+3++:EN'PIA+1+FURN_667777:SA::91'PIA+1+FURN_667777:BP::92'"
                 "QTY+21:4.0:'QTY+52::'DTM+2:20250110:102'MOA+203:0.0'PRI+AAA:0.0'"
                 "PRI+AAB:0.0'RFF+PL:338'TAX+7+VAT+++:::0'UNS+S'"
-            )
+            ),
         )
         wiz = self.env["purchase.order.import"].create(
             {
