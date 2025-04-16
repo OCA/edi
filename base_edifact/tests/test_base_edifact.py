@@ -13,7 +13,6 @@ def _get_file_content(filename):
 
 
 class TestBaseEdifact(TransactionCase):
-
     def setUp(self):
         super().setUp()
         self.base_edifact_model = self.env["base.edifact"]
