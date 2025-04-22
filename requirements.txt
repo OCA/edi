@@ -8,4 +8,5 @@ phonenumbers
 pypdf>=3.1.0,<5.0
 pyyaml
 regex
+unicodecsv
 xmlschema
