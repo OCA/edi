@@ -369,9 +369,9 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:620d480d83f4b77c1e9e9b0565e72f1cb3b0d85aaa2a51a0359b763a28d5702b
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/edi/tree/15.0/edi_voxel_stock_picking_oca"><img alt="OCA/edi" src="https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/edi-15-0/edi-15-0-edi_voxel_stock_picking_oca"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/edi&amp;target_branch=15.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
-<p>This module allows you to send delivery orders to Voxel. Sending
-are queued in jobs running in the background.</p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/edi/tree/18.0/edi_voxel_stock_picking_oca"><img alt="OCA/edi" src="https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-edi_voxel_stock_picking_oca"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/edi&amp;target_branch=18.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p>This module allows you to send delivery orders to Voxel. Sending are
+queued in jobs running in the background.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -388,55 +388,56 @@ are queued in jobs running in the background.</p>
 </div>
 <div class="section" id="configuration">
 <h1><a class="toc-backref" href="#toc-entry-1">Configuration</a></h1>
-<p>To configure this module you have to belong to the access group
-‘Voxel manager’ under ‘Technical Settings’, then:</p>
+<p>To configure this module you have to belong to the access group ‘Voxel
+manager’ under ‘Technical Settings’, then:</p>
 <ol class="arabic simple">
-<li>Open a customer form view. In ‘Sales &amp; Purchases’ page,
-check ‘Enable Voxel’ if you want to send delivery orders to this
-customer through Voxel.</li>
-<li>Go to <em>Settings &gt; Users &amp; Companies &gt; Companies</em>, open the companies you
-want to enable Voxel communication and set ‘Enable Voxel’ field to True.</li>
+<li>Open a customer form view. In ‘Sales &amp; Purchases’ page, check ‘Enable
+Voxel’ if you want to send delivery orders to this customer through
+Voxel.</li>
+<li>Go to <em>Settings &gt; Users &amp; Companies &gt; Companies</em>, open the companies
+you want to enable Voxel communication and set ‘Enable Voxel’ field
+to True.</li>
 <li>In the login list, add the corresponding login for connecting with
-Voxel to send delivery orders. The final URL where delivery orders are going
-to be sent is ‘&lt;Login URL&gt;/Outbox’.</li>
-<li>Save the form and edit it again, find ‘Stock picking login’ field and select
-the login to be used in delivery orders sending.</li>
+Voxel to send delivery orders. The final URL where delivery orders
+are going to be sent is ‘&lt;Login URL&gt;/Outbox’.</li>
+<li>Save the form and edit it again, find ‘Stock picking login’ field and
+select the login to be used in delivery orders sending.</li>
 <li>Select also the ‘Send mode’ to set when delivery orders will be sent:</li>
 </ol>
+<!--  -->
 <blockquote>
 <ul class="simple">
-<li>On validate: Delivery orders will be sent to Voxel automatically when
-they are validated.</li>
-<li>At fixed time: Delivery orders will be sent to Voxel automatically at
-a fixed time.</li>
-<li>With delay: Delivery orders will be sent to Voxel automatically a certain
-time after they are validated.</li>
+<li>On validate: Delivery orders will be sent to Voxel automatically
+when they are validated.</li>
+<li>At fixed time: Delivery orders will be sent to Voxel automatically
+at a fixed time.</li>
+<li>With delay: Delivery orders will be sent to Voxel automatically a
+certain time after they are validated.</li>
 </ul>
 </blockquote>
 <p>Note:</p>
 <p>This module enqueue the sending delivery orders to Voxel in jobs in the
-background. To do that it uses queue_job module, so a configuration is required
-according to that.
-The jobs for sending invoices to Voxel are queued in the channel
-<tt class="docutils literal">root.voxel_export channel</tt>.
-The sending status check jobs are queued in the channel
-<tt class="docutils literal">root.voxel_status</tt>.</p>
+background. To do that it uses queue_job module, so a configuration is
+required according to that. The jobs for sending invoices to Voxel are
+queued in the channel <tt class="docutils literal">root.voxel_export channel</tt>. The sending status
+check jobs are queued in the channel <tt class="docutils literal">root.voxel_status</tt>.</p>
 </div>
 <div class="section" id="usage">
 <h1><a class="toc-backref" href="#toc-entry-2">Usage</a></h1>
 <p>To use this module, you need to:</p>
 <ol class="arabic simple">
-<li>Go to <em>Inventory &gt; Overview</em> and access to ‘Delivery Orders’ of a desired
-company. create a new ‘delivery order’ or open an existing ready to done
-‘delivery order’. Make sure that the customer has ‘Enable Voxel’
-field checkbox (See configuration section).</li>
-<li>Validate the delivery order and it will be send to Voxel
-immediately or later, depending on the Voxel ‘Send mode’
-chosen in the company configuration.</li>
-<li>A new tab will be visible on the delivery order form with the label ‘Voxel’
-to show the information regarding sending the delivery order to Voxel.</li>
-<li>When the report is sent, you will be able to see the XML report in another
-tab next to the jobs tab.</li>
+<li>Go to <em>Inventory &gt; Overview</em> and access to ‘Delivery Orders’ of a
+desired company. create a new ‘delivery order’ or open an existing
+ready to done ‘delivery order’. Make sure that the customer has
+‘Enable Voxel’ field checkbox (See configuration section).</li>
+<li>Validate the delivery order and it will be send to Voxel immediately
+or later, depending on the Voxel ‘Send mode’ chosen in the company
+configuration.</li>
+<li>A new tab will be visible on the delivery order form with the label
+‘Voxel’ to show the information regarding sending the delivery order
+to Voxel.</li>
+<li>When the report is sent, you will be able to see the XML report in
+another tab next to the jobs tab.</li>
 </ol>
 </div>
 <div class="section" id="bug-tracker">
@@ -444,7 +445,7 @@ tab next to the jobs tab.</li>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-<a class="reference external" href="https://github.com/OCA/edi/issues/new?body=module:%20edi_voxel_stock_picking_oca%0Aversion:%2015.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<a class="reference external" href="https://github.com/OCA/edi/issues/new?body=module:%20edi_voxel_stock_picking_oca%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
@@ -476,7 +477,7 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.</p>
-<p>This module is part of the <a class="reference external" href="https://github.com/OCA/edi/tree/15.0/edi_voxel_stock_picking_oca">OCA/edi</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/edi/tree/18.0/edi_voxel_stock_picking_oca">OCA/edi</a> project on GitHub.</p>
 <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
 </div>
 </div>
