@@ -8,7 +8,7 @@
             <xpath expr="//field[@name='voxel_enabled']" position="after">
                 <field
                     name="voxel_picking_report_id"
-                    attrs="{'invisible': ['|', ('is_company', '=', False), ('voxel_enabled', '=', False)]}"
+                    invisible="not is_company or not voxel_enabled"
                     options="{'no_create': True, 'no_open': True}"
                 />
             </xpath>

@@ -87,7 +87,7 @@ class ReportVoxelPicking(models.AbstractModel):
         return [{"PORef": (so.client_order_ref or so.name) if so else picking.origin}]
 
     def _get_products_data(self, picking):
-        lines = picking.move_lines.filtered(lambda x: x.state == "done")
+        lines = picking.move_ids.filtered(lambda x: x.state == "done")
         return [{"product": self._get_product_data(line)} for line in lines]
 
     def _get_product_data(self, line):
@@ -121,7 +121,7 @@ class ReportVoxelPicking(models.AbstractModel):
                     and ml.lot_id.expiration_date.strftime("%Y-%m-%d")
                     or ""
                 ),
-                "Quantity": ml.qty_done,
+                "Quantity": ml.quantity,
             }
             for ml in line.move_line_ids
         ]

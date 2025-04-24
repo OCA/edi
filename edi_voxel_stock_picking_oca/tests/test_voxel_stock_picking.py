@@ -4,23 +4,14 @@
 from datetime import datetime
 
 from odoo.tests import Form
-from odoo.tests.common import TransactionCase
+
+from odoo.addons.base.tests.common import BaseCommon
 
 
-class TestVoxelStockPickingCommon(TransactionCase):
+class TestVoxelStockPickingCommon(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(
-            context=dict(
-                cls.env.context,
-                mail_create_nolog=True,
-                mail_create_nosubscribe=True,
-                mail_notrack=True,
-                no_reset_password=True,
-                tracking_disable=True,
-            )
-        )
         # Sale order company
         country = cls.env["res.country"].create({"name": "Country", "code": "CT"})
         state = cls.env["res.country.state"].create(
@@ -56,11 +47,11 @@ class TestVoxelStockPickingCommon(TransactionCase):
             }
         )
         cls.product = cls.env["product.product"].create(
-            {"default_code": "DC_001", "name": "Product 1 (test)", "type": "product"}
+            {"default_code": "DC_001", "name": "Product 1 (test)", "type": "consu"}
         )
         cls.env["product.customerinfo"].create(
             {
-                "name": cls.partner.id,
+                "partner_id": cls.partner.id,
                 "product_tmpl_id": cls.product.product_tmpl_id.id,
                 "product_id": cls.product.id,
                 "product_code": "1234567891234",
@@ -70,11 +61,11 @@ class TestVoxelStockPickingCommon(TransactionCase):
             {
                 "default_code": "DC_002",
                 "name": "Product 2 (test)",
-                "type": "product",
+                "type": "consu",
                 "tracking": "lot",
             }
         )
-        cls.lot = cls.env["stock.production.lot"].create(
+        cls.lot = cls.env["stock.lot"].create(
             {
                 "name": "LOT01",
                 "product_id": cls.product2.id,
@@ -96,10 +87,10 @@ class TestVoxelStockPickingCommon(TransactionCase):
                 "note": "Picking note (test)",
             }
         )
-        sm = cls.picking.move_lines[0]
-        sm.write({"quantity_done": sm.product_uom_qty})
-        sm = cls.picking.move_lines[1]
-        sm.write({"quantity_done": sm.product_uom_qty})
+        sm = cls.picking.move_ids[0]
+        sm.write({"quantity": sm.product_uom_qty})
+        sm = cls.picking.move_ids[1]
+        sm.write({"quantity": sm.product_uom_qty})
         sm.move_line_ids.lot_id = cls.lot.id
         backorder_wizard_dict = cls.picking.button_validate()
         # pylint: disable=W8121

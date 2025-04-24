@@ -69,7 +69,7 @@ class Picking(models.Model):
             type_code = record.picking_type_code
             is_outgoing = type_code == "outgoing"
             is_incoming_returned = type_code == "incoming" and bool(
-                record.move_lines.mapped("origin_returned_move_id")
+                record.move_ids.mapped("origin_returned_move_id")
             )
             return enabled and (is_outgoing or is_incoming_returned)
 
