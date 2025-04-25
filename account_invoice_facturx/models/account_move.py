@@ -72,7 +72,7 @@ class AccountMove(models.Model):
             address_state.text = partner.state_id.name
 
     def _cii_trade_contact_department_name(self, partner):
-        return None
+        return False
 
     @api.model
     def _cii_add_trade_contact_block(self, partner, parent_node, ns):
@@ -179,7 +179,7 @@ class AccountMove(models.Model):
         return
 
     def _cii_trade_agreement_buyer_ref(self, partner):
-        return None
+        return False
 
     def _cii_add_trade_agreement_block(self, trade_transaction, ns):
         self.ensure_one()
