@@ -50,7 +50,6 @@ class TestCsvOrderImport(TransactionCase):
         partner = self.env["res.partner"].create(
             {
                 "name": "Akretion",
-                "customer": True,
                 "is_company": True,
             }
         )

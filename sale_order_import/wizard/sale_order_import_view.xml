@@ -42,7 +42,7 @@
                     <field name="csv_import" invisible="1" />
                     <field
                         name="partner_id"
-                        attrs="{'invisible': [('csv_import', '=', False)], 'required': [('csv_import', '=', True)]}"
+                        attrs="{'required': [('csv_import', '=', True)]}"
                     />
                 </group>
                 <group name="update" states="update">

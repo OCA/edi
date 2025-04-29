@@ -44,7 +44,7 @@ class TestParsingValidation(TestCommon):
             form.order_filename = "test.csv"
             form.order_file = csv_data
             self.assertTrue(form.csv_import)
-            self.assertFalse(form.doc_type)
+            self.assertTrue(form.doc_type)
 
     def test_onchange_validation_xml(self):
         xml_data = base64.b64encode(

@@ -26,7 +26,8 @@ class SaleOrderImport(models.TransientModel):
         [("import", "Import"), ("update", "Update")], string="State", default="import"
     )
     partner_id = fields.Many2one(
-        "res.partner", string="Customer", domain=[("customer", "=", True)]
+        "res.partner",
+        string="Customer",
     )
     csv_import = fields.Boolean(default=False, readonly=True)
     order_file = fields.Binary(
@@ -67,8 +68,6 @@ class SaleOrderImport(models.TransientModel):
         if doc_type is None:
             return {"warning": self._unsupported_file_msg(self.order_filename)}
         # I would expect to set doc_type = csv here
-        self.csv_import = not doc_type
-        self.doc_type = doc_type
 
     def _parse_file(self, filename, filecontent, detect_doc_type=False):
         assert filename, "Missing filename"
@@ -82,8 +81,11 @@ class SaleOrderImport(models.TransientModel):
             "PDF": ("application/pdf"),
         }
         res = None
+        self.csv_import = False
         if filetype and mimetype in supported_types["CSV"]:
-            res = False
+            res = self.parse_csv_order(filecontent, self.partner_id)
+            self.csv_import = True
+            self.doc_type = "rfq"
         elif filetype and mimetype in supported_types["XML"]:
             xml_root, error_msg = self._parse_xml(filecontent)
             if (xml_root is None or not len(xml_root)) and error_msg:
@@ -209,6 +211,8 @@ class SaleOrderImport(models.TransientModel):
     def _search_existing_order_domain(
         self, parsed_order, commercial_partner, state_domain
     ):
+        if not parsed_order.get("order_ref"):
+            parsed_order["order_ref"] = False
         return AND(
             [
                 state_domain,
