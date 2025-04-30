@@ -605,3 +605,30 @@ class TestInvoiceImport(TransactionCase):
         )
         self.partner_ak.pdf_simple_test_run()
         self.assertIn("Current partner found", self.partner_ak.simple_pdf_test_results)
+
+    def test_mail_thread(self):
+        """
+        Test creating invoices via mail being parsed by our code
+        """
+        invoice = self.env["account.move"].message_new(
+            {
+                "from": "unknown@test.com",
+                "subject": "your invoice",
+                "date": "2024-01-01",
+                "body": "this is your invoice",
+                "attachments": [
+                    self.env["mail.thread"]._Attachment("something else", b"test", {}),
+                    self.env["mail.thread"]._Attachment(
+                        "invoice.pdf", self.ak_pdf_file, {}
+                    ),
+                ],
+            },
+            custom_values={
+                "move_type": "in_invoice",
+                "journal_id": self.env["account.journal"]
+                .search([("type", "=", "purchase")], limit=1)
+                .id,
+            },
+        )
+        self.assertTrue(invoice)
+        self.assertEqual(invoice.partner_id, self.partner_ak)
