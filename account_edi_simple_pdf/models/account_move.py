@@ -1,6 +1,6 @@
 from base64 import b64decode
 
-from odoo import models
+from odoo import api, models
 from odoo.tests.common import Form
 
 
@@ -14,7 +14,10 @@ class AccountMove(models.Model):
         ]
 
     def _simple_pdf_create_invoice_from_attachment(self, attachment):
-        parsed_values = self.simple_pdf_parse_invoice(b64decode(attachment.datas))
+        return self._simple_pdf_create_invoice_from_bytes(b64decode(attachment.datas))
+
+    def _simple_pdf_create_invoice_from_bytes(self, attachment_bytes):
+        parsed_values = self.simple_pdf_parse_invoice(attachment_bytes)
         result = self.browse([])
 
         if parsed_values.get("partner"):
@@ -79,3 +82,20 @@ class AccountMove(models.Model):
             for message in parsed_values.get("chatter_msg", []):
                 result.message_post(body=message)
         return result
+
+    @api.model
+    def message_new(self, msg_dict, custom_values=None):
+        for attachment_tuple in msg_dict.get("attachments", []):
+            try:
+                invoice = self.with_context(
+                    **{
+                        "default_%s" % key: value
+                        for key, value in (custom_values or {}).items()
+                    }
+                )._simple_pdf_create_invoice_from_bytes(attachment_tuple[1])
+            except Exception:  # pylint: disable=except-pass
+                pass
+            else:
+                if invoice:
+                    return invoice
+        return super().message_new(msg_dict, custom_values=custom_values)
