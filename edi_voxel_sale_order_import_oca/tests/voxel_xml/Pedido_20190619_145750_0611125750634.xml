@@ -20,8 +20,7 @@
         Province="Tarragona"
         Country="ESP"
         Email=""
-    >
-  </Supplier>
+    />
     <Client
         ClientID="1"
         CIF=""
@@ -43,8 +42,7 @@
             PC="43222"
             Province="Tarragona"
             Country="ESP"
-        >
-    </Customer>
+        />
     </Customers>
     <ProductList>
         <Product

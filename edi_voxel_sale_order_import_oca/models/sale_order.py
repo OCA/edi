@@ -385,5 +385,5 @@ class SaleOrder(models.Model):
         for key, value in partner_data.items():
             if partner_data.get(key):
                 field_str = model._fields[key].get_description(self.env)["string"]
-                msg_fields += "<li>{}: {}</li>".format(field_str, value)
+                msg_fields += f"<li>{field_str}: {value}</li>"
         return msg_fields

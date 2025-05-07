@@ -17,19 +17,19 @@ Voxel sale order oca
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/15.0/edi_voxel_sale_order_import_oca
+    :target: https://github.com/OCA/edi/tree/18.0/edi_voxel_sale_order_import_oca
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-15-0/edi-15-0-edi_voxel_sale_order_import_oca
+    :target: https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-edi_voxel_sale_order_import_oca
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=15.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module allows you to import sales orders from Voxel. Imports
-are queued in jobs running in the background.
+This module allows you to import sales orders from Voxel. Imports are
+queued in jobs running in the background.
 
 **Table of contents**
 
@@ -39,38 +39,38 @@ are queued in jobs running in the background.
 Configuration
 =============
 
-To configure this module you have to belong to the access group
-'Voxel manager' under 'Technical Settings', then:
+To configure this module you have to belong to the access group 'Voxel
+manager' under 'Technical Settings', then:
 
-#. Go to *Settings > Users & Companies > Companies*, open the companies you
-   want to enable Voxel communication and set 'Enable Voxel' field to True.
-#. In the login list, add the corresponding login for connecting with
-   Voxel to import sales orders. The final URL from where sales order will be
-   imported is '<Login URL>/Outbox'.
-#. Save the form and edit it again, find 'Sale Order login' field and select
-   the login to be used in the imports.
-#. If you have the right access, go to
-   *Settings > Technical > Automation > Scheduled Actions*, find the record
-   named 'Edi Voxel: Get voxel sale order' and Adjust the data corresponding
-   to that scheduled action, such as the frequency with which that action will
+1. Go to *Settings > Users & Companies > Companies*, open the companies
+   you want to enable Voxel communication and set 'Enable Voxel' field
+   to True.
+2. In the login list, add the corresponding login for connecting with
+   Voxel to import sales orders. The final URL from where sales order
+   will be imported is '<Login URL>/Outbox'.
+3. Save the form and edit it again, find 'Sale Order login' field and
+   select the login to be used in the imports.
+4. If you have the right access, go to *Settings > Technical >
+   Automation > Scheduled Actions*, find the record named 'Edi Voxel:
+   Get voxel sale order' and Adjust the data corresponding to that
+   scheduled action, such as the frequency with which that action will
    be executed.
 
 Note:
 
-This module enqueue the imports in jobs in the background.
-To do that it uses queue_job module, so a configuration is required
-according to that.
+This module enqueue the imports in jobs in the background. To do that it
+uses queue_job module, so a configuration is required according to that.
 The jobs for impots are queued in the channel ``root.voxel_import``.
 
 Usage
 =====
 
-To use this module, you don't need to do anything. Automatically every so
-often a 'scheduled action' will be executed that will try to import from
-Voxel the sales orders that have not been imported previously.
+To use this module, you don't need to do anything. Automatically every
+so often a 'scheduled action' will be executed that will try to import
+from Voxel the sales orders that have not been imported previously.
 
-Imports will be performed for the companies that have the 'Voxel'
-field checked (See configuration section).
+Imports will be performed for the companies that have the 'Voxel' field
+checked (See configuration section).
 
 Bug Tracker
 ===========
@@ -78,7 +78,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20edi_voxel_sale_order_import_oca%0Aversion:%2015.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20edi_voxel_sale_order_import_oca%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -86,21 +86,21 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Tecnativa
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* `Tecnativa <https://www.tecnativa.com>`_:
+- `Tecnativa <https://www.tecnativa.com>`__:
 
-  * Ernesto Tejeda
-  * Pedro M. Baeza
-  * Sergio Teruel
+  - Ernesto Tejeda
+  - Pedro M. Baeza
+  - Sergio Teruel
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -112,6 +112,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/15.0/edi_voxel_sale_order_import_oca>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/18.0/edi_voxel_sale_order_import_oca>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
