@@ -7,7 +7,7 @@ from datetime import datetime
 
 from lxml import etree
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.osv import expression
 
@@ -53,18 +53,18 @@ class SaleOrder(models.Model):
             xml_content, voxel_filename, error_msgs, company
         )
         # Add internal note to the created sale order
-        create_msg = _("Created automatically via voxel import (%s).") % voxel_filename
+        create_msg = self.env._(
+            "Created automatically via voxel import (%s).", voxel_filename
+        )
         if error_msgs:
             str_error_msgs = ""
             for error_msg in error_msgs:
-                str_error_msgs += "<li>%s</li>" % error_msg
-            create_msg += (
-                _(
-                    "<br/><span style='font-weight: bold;'>"
-                    "The following errors were found:</span><br/>"
-                    "<ul>%s</ul>"
-                )
-                % str_error_msgs
+                str_error_msgs += f"<li>{error_msg}</li>"
+            create_msg += self.env._(
+                "<br/><span style='font-weight: bold;'>"
+                "The following errors were found:</span><br/>"
+                "<ul>%s</ul>",
+                str_error_msgs,
             )
         order.message_post(body=create_msg)
         return order
@@ -72,20 +72,25 @@ class SaleOrder(models.Model):
     @api.model
     def _parse_voxel_order(self, order_file, order_filename, error_msgs, company):
         filetype = mimetypes.guess_type(order_filename)[0]
-        _logger.debug("Order file mimetype: %s", filetype)
+        _logger.debug(f"Order file mimetype: {filetype}")
         if filetype in ["application/xml", "text/xml"]:
             try:
                 xml_root = etree.fromstring(order_file)
             except Exception as exc:
-                raise UserError(_("This XML file is not XML-compliant")) from exc
+                raise UserError(
+                    self.env._("This XML file is not XML-compliant")
+                ) from exc
         else:
-            raise UserError(_("'%s' is not recognised as an XML file") % order_filename)
-        _logger.debug("Starting to import:%s" % (order_filename))
+            raise UserError(
+                self.env._("'%s' is not recognised as an XML file", order_filename)
+            )
+        _logger.debug(f"Starting to import: {order_filename}")
         try:
             return self._parse_xml_order(xml_root, error_msgs, company)
         except Exception as exc:
             raise UserError(
-                _("Error creating the order") + f"\n\nFile contents:\n{order_file}"
+                self.env._("Error creating the order")
+                + f"\n\nFile contents:\n{order_file}"
             ) from exc
 
     def _parse_xml_order(self, xml_root, error_msgs, company):
@@ -150,13 +155,13 @@ class SaleOrder(models.Model):
                 # Add error message to error_msgs list
                 msg_fields = self._get_voxel_msg_fields("res.partner", partner_data)
                 error_msgs.append(
-                    _(
+                    self.env._(
                         "Couldn't find any <b>Company</b> corresponding to "
                         "the following information extracted from the Voxel "
                         "document:<br/>"
-                        "<ul>%s</ul>"
+                        "<ul>%s</ul>",
+                        msg_fields,
                     )
-                    % (msg_fields)
                 )
 
     def _parse_client_data_voxel(self, vals, xml_root, error_msgs):
@@ -199,13 +204,13 @@ class SaleOrder(models.Model):
                 # Add error message to error_msgs list
                 msg_fields = self._get_voxel_msg_fields("res.partner", partner_data)
                 error_msgs.append(
-                    _(
+                    self.env._(
                         "Couldn't find any <b>Delivery Address</b> "
                         "corresponding to the following information extracted "
                         "from the Voxel document:<br/>"
-                        "<ul>%s</ul>"
+                        "<ul>%s</ul>",
+                        msg_fields,
                     )
-                    % (msg_fields)
                 )
 
     def _parse_partner_data_voxel(self, data, raise_error=True):
@@ -236,7 +241,7 @@ class SaleOrder(models.Model):
             return partner  # return the unique partner matching
         if raise_error:
             raise UserError(
-                _(
+                self.env._(
                     "Can't find a suitable partner for this data:\n\n%(data)s"
                     "\nResults: %(partner_count)s",
                     data=data,
@@ -283,13 +288,16 @@ class SaleOrder(models.Model):
                     self.env["sale.order"].browse(line_vals["order_id"]).partner_id
                 )
                 customerinfo = self.env["product.customerinfo"].search(
-                    [("name", "=", partner.id), ("product_code", "=", supplier_sku)],
+                    [
+                        ("partner_id", "=", partner.id),
+                        ("product_code", "=", supplier_sku),
+                    ],
                     limit=1,
                 )
                 if not customerinfo:
                     customerinfo = self.env["product.customerinfo"].search(
                         [
-                            ("name", "=", partner.commercial_partner_id.id),
+                            ("partner_id", "=", partner.commercial_partner_id.id),
                             ("product_code", "=", supplier_sku),
                         ],
                         limit=1,
@@ -306,7 +314,7 @@ class SaleOrder(models.Model):
                 product = self.env["product.product"].search(domain)
         if len(product) != 1:
             raise UserError(
-                _(
+                self.env._(
                     "Can't find a suitable product for this data:\n\n%(product_data)s"
                     "\nResults: %(product_count)s",
                     product_data=product_data,
@@ -322,8 +330,9 @@ class SaleOrder(models.Model):
         product_uom = self.env["uom.uom"].search([("voxel_code", "=", mu)])
         if len(product_uom) != 1:
             raise UserError(
-                _(
-                    "Can't find a suitable Unit of Measure for this data:\n\n%(product_data)s"
+                self.env._(
+                    "Can't find a suitable Unit of Measure "
+                    "for this data:\n\n%(product_data)s"
                     "\nResults: %(product_uom_count)s",
                     product_data=product_data,
                     product_uom_count=len(product_uom),
@@ -360,13 +369,12 @@ class SaleOrder(models.Model):
                 tax_data = {"voxel_tax_code": voxel_tax_code, "amount": amount}
                 msg_fields = self._get_voxel_msg_fields("account.tax", tax_data)
                 error_msgs.append(
-                    _(
+                    self.env._(
                         "Couldn't find any <b>Tax</b> corresponding to "
                         "the following information extracted from the Voxel "
                         "document:<br/>"
-                        "<ul>%s</ul>"
+                        f"<ul>{msg_fields}</ul>"
                     )
-                    % (msg_fields)
                 )
 
     def _get_partner_data_voxel(self, data):

@@ -6,16 +6,13 @@
         <field name="name">sale.order.view.form</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
-        <field
-            name="groups_id"
-            eval="[(4, ref('edi_voxel_oca.group_voxel_manager'))]"
-        />
         <field name="arch" type="xml">
             <notebook>
                 <page
                     string="Voxel"
                     name="page_voxel"
-                    attrs="{'invisible': [('voxel_xml_report', '=', False)]}"
+                    invisible="not voxel_xml_report"
+                    groups="edi_voxel_oca.group_voxel_manager"
                 >
                     <group name="group_voxel">
                         <group>

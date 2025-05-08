@@ -19,4 +19,4 @@ Note:
 
 This module enqueue the imports in jobs in the background. To do that it
 uses queue_job module, so a configuration is required according to that.
-The jobs for impots are queued in the channel `root.voxel_import`.
+The jobs for imports are queued in the channel `root.voxel_import`.
