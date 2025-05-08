@@ -5,10 +5,11 @@ import os
 from datetime import date, datetime
 
 from odoo.modules.module import get_module_path
-from odoo.tests.common import TransactionCase
+
+from odoo.addons.base.tests.common import BaseCommon
 
 
-class TestVoxelSaleOrderImportCommon(TransactionCase):
+class TestVoxelSaleOrderImportCommon(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -33,7 +34,7 @@ class TestVoxelSaleOrderImportCommon(TransactionCase):
         )
         cls.supplierinfo_product_test_1 = cls.env["product.customerinfo"].create(
             {
-                "name": cls.customer_test.id,
+                "partner_id": cls.customer_test.id,
                 "product_tmpl_id": cls.product_test_1.product_tmpl_id.id,
                 "product_id": cls.product_test_1.id,
                 "product_code": "SP11111",
