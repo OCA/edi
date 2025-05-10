@@ -92,27 +92,27 @@ class ReportVoxelInvoice(models.AbstractModel):
         if invoice.picking_ids:
             for picking in invoice.picking_ids:
                 picking_date = fields.Datetime.from_string(picking.date)
-                references.append(
-                    {
-                        "DNRef": picking.name,
-                        "PORef": (
-                            picking.sale_id.client_order_ref or picking.sale_id.name
-                        ),
-                        "DNRefDate": picking_date
-                        and datetime.strftime(picking_date, "%Y-%m-%d"),
-                    }
-                )
+                reference_dic = {
+                    "DNRef": picking.name,
+                    "PORef": (picking.sale_id.client_order_ref or picking.sale_id.name),
+                    "DNRefDate": picking_date
+                    and datetime.strftime(picking_date, "%Y-%m-%d"),
+                }
+                if invoice.reversed_entry_id:
+                    reference_dic["InvoiceRef"] = invoice.reversed_entry_id.name
+                references.append(reference_dic)
         else:
             orders = invoice.invoice_line_ids.mapped("sale_line_ids.order_id")
             for order in orders:
-                references.append(
-                    {
-                        "DNRef": invoice.name,
-                        "PORef": order.client_order_ref or order.name,
-                        "DNRefDate": invoice.invoice_date
-                        and date.strftime(invoice.invoice_date, "%Y-%m-%d"),
-                    }
-                )
+                reference_dic = {
+                    "DNRef": invoice.name,
+                    "PORef": order.client_order_ref or order.name,
+                    "DNRefDate": invoice.invoice_date
+                    and date.strftime(invoice.invoice_date, "%Y-%m-%d"),
+                }
+                if invoice.reversed_entry_id:
+                    reference_dic["InvoiceRef"] = invoice.reversed_entry_id.name
+                references.append(reference_dic)
         return references
 
     def _get_products_data(self, invoice):
