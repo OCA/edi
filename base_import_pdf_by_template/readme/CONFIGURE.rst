@@ -43,4 +43,11 @@ document defined with a specific structure.
     with prices obtained from the system but create log on chatter to see the
     differences obtained from PDF.
 
+#.  Process PDF templates from mail alias.
+
+  - Create a mail alias
+  - Set the key "process_pdf_template": True in "Default values"
+
+The record will be created with PDF values
+
 Check demo data to further information.
