@@ -8,6 +8,7 @@
 import base64
 import logging
 import traceback
+from datetime import timedelta
 from io import StringIO
 
 from odoo import _, exceptions, fields, models, tools
@@ -322,10 +323,20 @@ class EDIBackend(models.Model):
             _logger.debug("%s sent", exchange_record.identifier)
         except self._send_retryable_exceptions() as err:
             error = _get_exception_msg()
-            _logger.debug("%s send failed. To be retried.", exchange_record.identifier)
-            raise RetryableJobError(
-                error, **exchange_record._job_retry_params()
-            ) from err
+            if self._send_should_retry(exchange_record):
+                _logger.debug(
+                    "%s send failed. To be retried.", exchange_record.identifier
+                )
+                raise RetryableJobError(
+                    error, **exchange_record._job_retry_params()
+                ) from err
+            else:
+                state = "output_error_on_send"
+                message = exchange_record._exchange_status_message("send_ko")
+                res = f"Error: {error}"
+                _logger.debug(
+                    "%s send failed. Marked as errored.", exchange_record.identifier
+                )
         except self._swallable_exceptions():
             if self.env.context.get("_edi_send_break_on_error"):
                 raise
@@ -373,6 +384,10 @@ class EDIBackend(models.Model):
         # OSError is a base class for all errors
         # when dealing w/ internal or external systems or filesystems
         return (IOError, OSError)
+
+    def _send_should_retry(self, exc_record):
+        # Safety check not to retry indefinitely
+        return exc_record.create_date >= (fields.Datetime.now() - timedelta(days=1))
 
     def _output_check_send(self, exchange_record):
         if exchange_record.direction != "output":
