@@ -5,9 +5,7 @@ import os
 
 from lxml import etree
 
-from odoo.tests import TransactionCase
-from odoo.tests.case import TestCase
-
+from odoo.addons.base.tests.common import BaseCommon
 from odoo.addons.pdf_helper.utils import PDFParser
 
 
@@ -17,7 +15,7 @@ def read_test_file(filename, mode="r"):
         return thefile.read()
 
 
-class TestPDFHelperUtils(TestCase):
+class TestPDFHelperUtils(BaseCommon):
     def test_parse_xml(self):
         pdf_content = read_test_file("pdf_with_xml_test.pdf", mode="rb")
         res = PDFParser(pdf_content).get_xml_files()
@@ -26,7 +24,7 @@ class TestPDFHelperUtils(TestCase):
         self.assertTrue(isinstance(xml_root, etree._Element))
 
 
-class TestPDFHelper(TransactionCase):
+class TestPDFHelper(BaseCommon):
     def test_get_xml(self):
         pdf_content = read_test_file("pdf_with_xml_test.pdf", mode="rb")
         res = self.env["pdf.helper"].pdf_get_xml_files(pdf_content)
