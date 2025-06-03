@@ -348,6 +348,7 @@ class BaseImportPdfTemplateLine(models.Model):
             "text": "fixed_value_text",
             "json": "fixed_value_text",
             "many2one": "fixed_value",
+            "many2many": "fixed_value",
         }
 
     def _get_fixed_value(self):
