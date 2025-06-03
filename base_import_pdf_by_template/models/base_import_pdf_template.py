@@ -238,6 +238,7 @@ class BaseImportPdfTemplateLine(models.Model):
     date_format = fields.Selection(
         selection=[
             ("*Y-*d-*m", _("YY-dd-MM")),
+            ("*Y-*m-*d", _("YY-MM-dd")),
             ("*m-*d-*Y", _("MM-dd-YY")),
             ("*d-*m-*Y", _("dd-MM-YY")),
             ("*Y/*d/*m", _("YY/dd/MM")),
