@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,7 +16,6 @@ msgstr ""
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "(no date)"
 msgstr ""
 
@@ -43,10 +42,15 @@ msgstr ""
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid ""
 "Country is not set on partner '%s'. In the Factur-X standard, the country is"
 " required for buyer and seller."
+msgstr ""
+
+#. module: account_invoice_facturx
+#. odoo-python
+#: code:addons/account_invoice_facturx/models/account_move.py:0
+msgid "Discount"
 msgstr ""
 
 #. module: account_invoice_facturx
@@ -62,7 +66,6 @@ msgstr ""
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "Factur-X"
 msgstr ""
 
@@ -93,7 +96,6 @@ msgstr ""
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid ""
 "Factur-X {invoice_type} {invoice_number} dated {invoice_date} issued by "
 "{company_name}"
@@ -102,7 +104,6 @@ msgstr ""
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "Invoice"
 msgstr ""
 
@@ -124,42 +125,36 @@ msgstr ""
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
 msgstr ""
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
 msgstr ""
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
-msgid "Missing UNECE code on payment method '%s'"
+msgid "Missing UNECE code on payment method '%s'."
 msgstr ""
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "No invoice line label"
 msgstr ""
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "No specific payment term selected"
 msgstr ""
 
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "Refund"
 msgstr ""
 
@@ -176,16 +171,6 @@ msgstr ""
 #. module: account_invoice_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
 msgid "Select the type used for Factur-X customer refunds"
-msgstr ""
-
-#. module: account_invoice_facturx
-#. odoo-python
-#: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
-msgid ""
-"The Factur-X standard specify that unit prices can't be negative. The unit "
-"price of line '%s' is negative. You should generate a customer refund for "
-"that line."
 msgstr ""
 
 #. module: account_invoice_facturx
@@ -209,7 +194,6 @@ msgstr ""
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "Wire transfer"
 msgstr ""
 
@@ -221,6 +205,5 @@ msgstr ""
 #. module: account_invoice_facturx
 #. odoo-python
 #: code:addons/account_invoice_facturx/models/account_move.py:0
-#, python-format
 msgid "{company_name}: {invoice_type} {invoice_number} dated {invoice_date}"
 msgstr ""
