@@ -305,7 +305,7 @@ class AccountMove(models.Model):
             # for wire transfer, according to Factur-X CIUS
             if ns["level"] in PROFILES_EN_UP:
                 payment_means_info.text = _("Wire transfer")
-            logger.warning(
+            logger.info(
                 "Missing payment mode on invoice ID %d. "
                 "Using 30 (wire transfer) as UNECE code as fallback "
                 "for payment mean",
