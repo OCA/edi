@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Manuel Regidor <manuel.regidor@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="edi_ediversa_send_invoice_view_partner_form" model="ir.ui.view">
+        <field name="name">edi.ediversa.send.invoice.view.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="edi_oca.view_partner_form" />
+        <field name="arch" type="xml">
+            <group name="edi_ediversa" position="inside">
+                <field name="ediversa_send_invoice" />
+            </group>
+        </field>
+    </record>
+</odoo>

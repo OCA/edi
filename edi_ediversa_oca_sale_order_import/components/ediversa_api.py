@@ -9,8 +9,9 @@ class EdiversaApi(Component):
 
     def get_sale_orders(self, company):
         docs = self.get_documents(company)
+        env = "comedicloudws" if not company.edi_ediversa_test else "comedicloudwstest"
         namespaces = {
-            "a": "comedicloudwstest",
+            "a": env,
         }
         doc_names = []
         for doc in docs:

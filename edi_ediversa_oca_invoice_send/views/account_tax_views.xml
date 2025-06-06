@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Manuel Regidor <manuel.regidor@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="edi_ediversa_send_invoice_view_tax_form" model="ir.ui.view">
+        <field name="name">edi.ediversa.send.invoice.view.tax.form</field>
+        <field name="model">account.tax</field>
+        <field name="inherit_id" ref="account.view_tax_form" />
+        <field name="arch" type="xml">
+            <field name="country_id" position="after">
+                <field name="ediversa_tax_type" />
+            </field>
+        </field>
+    </record>
+</odoo>

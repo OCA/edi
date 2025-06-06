@@ -28,12 +28,13 @@ class EdiversaApi(Component):
         return response
 
     def get_documents(self, company):
+        env = "comedicloudws" if not company.edi_ediversa_test else "comedicloudwstest"
         msg = Markup(
             f"""<soapenv:Envelope
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-xmlns:com="comedicloudwstest">
+xmlns:com="{env}">
     <soapenv:Header/>
     <soapenv:Body>
         <com:downloadDocumentListExtended soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
@@ -46,7 +47,7 @@ xmlns:com="comedicloudwstest">
         response = self.send_request(msg, company.edi_ediversa_test)
         namespaces = {
             "soap": "http://schemas.xmlsoap.org/soap/envelope/",
-            "a": "comedicloudwstest",
+            "a": env,
         }
         tree = ElementTree.fromstring(response)
         docs = tree.findall(
@@ -60,12 +61,13 @@ xmlns:com="comedicloudwstest">
         return docs
 
     def download_document(self, identifier, company):
+        env = "comedicloudws" if not company.edi_ediversa_test else "comedicloudwstest"
         msg = Markup(
             f"""<soapenv:Envelope
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-xmlns:com="comedicloudwstest">
+xmlns:com="{env}">
     <soapenv:Header/>
     <soapenv:Body>
         <com:downloadDocument soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
@@ -79,19 +81,20 @@ xmlns:com="comedicloudwstest">
         response = self.send_request(msg, company.edi_ediversa_test)
         namespaces = {
             "soap": "http://schemas.xmlsoap.org/soap/envelope/",
-            "a": "comedicloudwstest",
+            "a": env,
         }
         tree = ElementTree.fromstring(response)
         doc = tree.find("./soap:Body" "//a:content", namespaces)
         return doc
 
     def confirm_document_download(self, identifier, company):
+        env = "comedicloudws" if not company.edi_ediversa_test else "comedicloudwstest"
         msg = Markup(
             f"""<soapenv:Envelope
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-xmlns:com="comedicloudwstest">
+xmlns:com="{env}">
     <soapenv:Header/><soapenv:Body>
         <com:confirmDocumentDownload soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
             <user xsi:type="xsd:string">{company.edi_ediversa_user}</user>
@@ -105,12 +108,13 @@ xmlns:com="comedicloudwstest">
         return True
 
     def send_document(self, filename, file, company):
+        env = "comedicloudws" if not company.edi_ediversa_test else "comedicloudwstest"
         msg = Markup(
             f"""<soapenv:Envelope
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-xmlns:com="comedicloudwstest">
+xmlns:com="{env}">
     <soapenv:Header/><soapenv:Body>
         <com:uploadDocument soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
             <user xsi:type="xsd:string">{company.edi_ediversa_user}</user>
@@ -124,7 +128,7 @@ xmlns:com="comedicloudwstest">
         response = self.send_request(msg, company.edi_ediversa_test)
         namespaces = {
             "soap": "http://schemas.xmlsoap.org/soap/envelope/",
-            "a": "comedicloudwstest",
+            "a": env,
         }
         tree = ElementTree.fromstring(response)
         docs = tree.find(

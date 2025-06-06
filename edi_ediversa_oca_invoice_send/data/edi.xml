@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ediversa_invoice_output_exchange_type" model="edi.exchange.type">
+        <field name="name">Ediversa - Invoice Output</field>
+        <field name="code">ediversa_invoice_ouput</field>
+        <field name="backend_type_id" ref="edi_ediversa_oca.ediversa_backend_type" />
+        <field name="backend_id" ref="edi_ediversa_oca.ediversa_backend" />
+        <field name="direction">output</field>
+        <field name="exchange_filename_pattern">{record_name}--{dt}</field>
+        <field name="exchange_file_ext">txt</field>
+    </record>
+</odoo>
