@@ -1,0 +1,14 @@
+ORDERS_D_93A_UN_EAN007
+ORD|0000000001|220
+DTM|20250101|20250201
+FTX|AAI||Sale Order Notes
+NADSU|000000001||Test Company|||||
+NADBY|000000002||||Customer|Customer Address|Customer City|46001
+NADDP|000000003||Shipping Contact|Shipping Contact Address|Shipping Contact City|46001|
+NADIV|000000004||Invoice Contact|Invoice Contact Address|Invoice Contact City|46001|
+CUX|EUR|9
+LIN|11111111|EN|1
+IMDLIN|F|||Product
+QTYLIN|21|10
+PRILIN|AAB|50
+MOARES|500||||500
