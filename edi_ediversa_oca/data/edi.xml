@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2025 Manuel Regidor <manuel.regidor@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="ediversa_backend_type" model="edi.backend.type">
+        <field name="name">Ediversa Backend type</field>
+        <field name="code">ediversa</field>
+    </record>
+    <record id="ediversa_backend" model="edi.backend">
+        <field name="name">Ediversa</field>
+        <field name="backend_type_id" ref="ediversa_backend_type" />
+        <field name="output_sent_processed_auto" eval="True" />
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2025 Manuel Regidor <manuel.regidor@sygel.es>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <record id="edi_ediversa_api_url" model="ir.config_parameter">
+        <field name="key">edi_ediversa_oca.api_url</field>
+        <field name="value">https://comedicloudws.ediversa.net:9024/Server</field>
+    </record>
+    <record id="edi_ediversa_api_url_test" model="ir.config_parameter">
+        <field name="key">edi_ediversa_oca.api_url_test</field>
+        <field name="value">https://comedicloudwstest.ediversa.net:9025/Server</field>
+    </record>
+</odoo>
