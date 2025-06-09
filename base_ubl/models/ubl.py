@@ -544,9 +544,7 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def _ubl_get_version(self, xml_root, root_name, ns):
-        version_xpath = xml_root.xpath(
-            "/%s/cbc:UBLVersionID" % root_name, namespaces=ns
-        )
+        version_xpath = xml_root.xpath(f"/{root_name}/cbc:UBLVersionID", namespaces=ns)
         if not version_xpath:
             raise UserError(
                 _(
