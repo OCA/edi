@@ -19,10 +19,10 @@
                         <ol>
                             <li
                             >If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed. For the <a
-                                    href="http://ubl.xml.org/"
-                                    target="_blank"
-                                >Universal Business Language</a> format (UBL), you should install the module <em
-                                >sale_order_import_ubl</em>.</li>
+                                href="http://ubl.xml.org/"
+                                target="_blank"
+                            >Universal Business Language</a> format (UBL), you should install the module <em
+                            >sale_order_import_ubl</em>.</li>
                             <li
                             >If it is a PDF file, Odoo will try to find an XML file in the attachments of the PDF file and then use this XML file to create the quotation.</li>
                         </ol>

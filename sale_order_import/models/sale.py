@@ -12,7 +12,7 @@ class SaleOrder(models.Model):
         res = super().name_get()
         if self._context.get("sale_order_show_amount"):
             new_res = []
-            for (sale_id, name) in res:
+            for sale_id, name in res:
                 sale = self.browse(sale_id)
                 # TODO: find a python method to easily display a float + currency
                 # symbol (before or after) depending on lang of context and currency
