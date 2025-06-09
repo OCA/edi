@@ -10,7 +10,7 @@ from base64 import b64decode, b64encode
 
 from lxml import etree
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.osv.expression import AND
 from odoo.tools import config, float_compare, float_is_zero
@@ -89,12 +89,14 @@ class SaleOrderImport(models.TransientModel):
         supported_types = self._get_supported_types()
         # Check if the selected import type is supported
         if self.import_type not in supported_types:
-            raise UserError(_("Please select a valid import type before importing!"))
+            raise UserError(
+                self.env._("Please select a valid import type before importing!")
+            )
 
         # Check if the detected MIME type is supported for the selected import type
         if mimetype not in supported_types[self.import_type]:
             raise UserError(
-                _(
+                self.env._(
                     "This file '%(filename)s' is not recognized as a %(type)s file. "
                     "Please check the file and its extension.",
                     filename=filename,
@@ -111,7 +113,7 @@ class SaleOrderImport(models.TransientModel):
                 itype=self.import_type,
             )
             raise UserError(
-                _(
+                self.env._(
                     "This Import Type is not supported. Did you install "
                     "the module to support this type?"
                 )
@@ -119,8 +121,8 @@ class SaleOrderImport(models.TransientModel):
 
     def _unsupported_file_msg(self, filename):
         return {
-            "title": _("Unsupported file format"),
-            "message": _(
+            "title": self.env._("Unsupported file format"),
+            "message": self.env._(
                 "This file '%s' is not recognised as a XML nor "
                 "PDF file. Please check the file and it's "
                 "extension."
@@ -131,13 +133,13 @@ class SaleOrderImport(models.TransientModel):
     @api.model
     def _parse_xml(self, data):
         if not data:
-            return None, _("No data provided")
+            return None, self.env._("No data provided")
         xml_root = None
         try:
             xml_root = etree.fromstring(data)
             error_msg = None
         except etree.XMLSyntaxError:
-            error_msg = _("This XML file is not XML-compliant")
+            error_msg = self.env._("This XML file is not XML-compliant")
             return xml_root, error_msg
         return xml_root, error_msg
 
@@ -151,7 +153,7 @@ class SaleOrderImport(models.TransientModel):
         if (xml_root is None or not len(xml_root)) and error_msg:
             raise UserError(error_msg)
         raise NotImplementedError(
-            _(
+            self.env._(
                 "This type of XML RFQ/order is not supported. Did you install "
                 "the module to support this XML format?"
             )
@@ -164,7 +166,9 @@ class SaleOrderImport(models.TransientModel):
         """
         xml_files_dict = self.env["pdf.helper"].pdf_get_xml_files(order_file)
         if not xml_files_dict:
-            raise UserError(_("There are no embedded XML file in this PDF file."))
+            raise UserError(
+                self.env._("There are no embedded XML file in this PDF file.")
+            )
         for xml_filename, xml_root in xml_files_dict.items():
             logger.info("Trying to parse XML file %s", xml_filename)
             try:
@@ -175,7 +179,7 @@ class SaleOrderImport(models.TransientModel):
             except (etree.LxmlError, UserError):
                 continue
         raise UserError(
-            _(
+            self.env._(
                 "This type of XML RFQ/order is not supported. Did you install "
                 "the module to support this XML format?"
             )
@@ -287,7 +291,7 @@ class SaleOrderImport(models.TransientModel):
     def _validate_currency(self, partner, currency):
         if partner.property_product_pricelist.currency_id != currency:
             raise UserError(
-                _(
+                self.env._(
                     "The customer '%(name)s' has a pricelist '%(pricelist)s' but the "
                     "currency of this order is '%(currency)s'.",
                     name=partner.display_name,
@@ -308,7 +312,7 @@ class SaleOrderImport(models.TransientModel):
         )
         if existing_orders:
             raise UserError(
-                _(
+                self.env._(
                     "An order of customer '%(partner)s' with reference '%(ref)s' "
                     "already exists: %(name)s (state: %(state)s)",
                     partner=partner.display_name,
@@ -371,7 +375,7 @@ class SaleOrderImport(models.TransientModel):
             order_file_decoded, self.order_filename, self.partner_id
         )
         if not parsed_order.get("lines"):
-            raise UserError(_("This order doesn't have any line !"))
+            raise UserError(self.env._("This order doesn't have any line !"))
         partner = bdio._match_partner(
             parsed_order["partner"], [], partner_type="customer"
         )
@@ -418,12 +422,13 @@ class SaleOrderImport(models.TransientModel):
         self.ensure_one()
         order = self.create_order(parsed_order, self.price_source, order_filename)
         order.message_post(
-            body=_("Created automatically via file import (%s).") % self.order_filename
+            body=self.env._("Created automatically via file import (%s).")
+            % self.order_filename
         )
         action = self.env["ir.actions.actions"]._for_xml_id("sale.action_quotations")
         action.update(
             {
-                "view_mode": "form,tree,calendar,graph",
+                "view_mode": "form,list,calendar,graph",
                 "views": False,
                 "view_id": False,
                 "res_id": order.id,
@@ -475,7 +480,7 @@ class SaleOrderImport(models.TransientModel):
         if price_source == "order":
             if "price_unit" not in import_line:
                 raise UserError(
-                    _(
+                    self.env._(
                         "No price is defined in the file. Please double check "
                         "file or select Pricelist as the source for prices."
                     )
@@ -550,7 +555,7 @@ class SaleOrderImport(models.TransientModel):
             # TODO: add support for price_source == order
             if cdict.get("qty"):
                 chatter.append(
-                    _(
+                    self.env._(
                         "The quantity has been updated on the order line "
                         "with product '%(product)s' from %(qty0)s to %(qty1)s %(uom)s",
                         product=oline.product_id.display_name,
@@ -571,7 +576,7 @@ class SaleOrderImport(models.TransientModel):
                         new_price_unit, oline.price_unit, precision_digits=price_prec
                     ):
                         chatter.append(
-                            _(
+                            self.env._(
                                 "The unit price has been updated on the order "
                                 "line with product '%(product)s' from %(old)s to "
                                 "%(new)s %(currency)s",
@@ -592,7 +597,7 @@ class SaleOrderImport(models.TransientModel):
                 for line in compare_res["to_remove"]
             ]
             chatter.append(
-                _(
+                self.env._(
                     "%(orders)s order line(s) deleted: %(label)s",
                     orders=len(compare_res["to_remove"]),
                     label=", ".join(to_remove_label),
@@ -612,7 +617,7 @@ class SaleOrderImport(models.TransientModel):
                     f"x {new_line.name}"
                 )
             chatter.append(
-                _(
+                self.env._(
                     "%(orders)s new order line(s) created: %(label)s",
                     orders=len(compare_res["to_add"]),
                     label=", ".join(to_create_label),
@@ -629,7 +634,7 @@ class SaleOrderImport(models.TransientModel):
         bdio = self.env["business.document.import"]
         order = self.sale_id
         if not order:
-            raise UserError(_("You must select a quotation to update."))
+            raise UserError(self.env._("You must select a quotation to update."))
         parsed_order = self.parse_order(
             b64decode(self.order_file), self.order_filename, self.partner_id
         )
@@ -638,7 +643,7 @@ class SaleOrderImport(models.TransientModel):
         )
         if currency != order.currency_id:
             raise UserError(
-                _(
+                self.env._(
                     "The currency of the imported order (%(old)s) is different from "
                     "the currency of the existing order (%(new)s)",
                     old=currency.name,
@@ -658,7 +663,7 @@ class SaleOrderImport(models.TransientModel):
             self.order_filename,
         )
         order.message_post(
-            body=_(
+            body=self.env._(
                 "This quotation has been updated automatically via the import of "
                 "file %s"
             )
@@ -667,7 +672,7 @@ class SaleOrderImport(models.TransientModel):
         action = self.env["ir.actions.act_window"]._for_xml_id("sale.action_quotations")
         action.update(
             {
-                "view_mode": "form,tree,calendar,graph",
+                "view_mode": "form,list,calendar,graph",
                 "views": False,
                 "view_id": False,
                 "res_id": order.id,

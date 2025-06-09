@@ -7,7 +7,7 @@ from unittest import mock
 from lxml import etree
 
 from odoo import exceptions
-from odoo.tests.common import Form
+from odoo.tests import Form
 
 from .common import TestCommon
 

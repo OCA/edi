@@ -7,7 +7,7 @@ import base64
 from unittest import mock
 
 from odoo import exceptions
-from odoo.tests.common import Form
+from odoo.tests import Form
 
 from .common import TestCommon
 
@@ -19,7 +19,7 @@ class TestOrderImport(TestCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.parsed_order = {
-            "partner": {"email": "deco.addict82@example.com"},
+            "partner": {"email": "so.import.test@example.com"},
             "date": "2018-08-14",
             "order_ref": "TEST1242",
             "lines": [
@@ -118,11 +118,11 @@ class TestOrderImport(TestCommon):
                 mocked.return_value = self.parsed_order
                 action = form.save().import_order_button()
                 self.assertEqual(action["xml_id"], "sale.action_quotations")
-                self.assertEqual(action["view_mode"], "form,tree,calendar,graph")
+                self.assertEqual(action["view_mode"], "form,list,calendar,graph")
                 self.assertEqual(action["view_id"], False)
                 mocked.assert_called()
                 so = self.env["sale.order"].browse(action["res_id"])
-                self.assertEqual(so.partner_id.email, "deco.addict82@example.com")
+                self.assertEqual(so.partner_id.email, "so.import.test@example.com")
                 self.assertEqual(so.client_order_ref, "TEST1242")
                 self.assertEqual(so.order_line.product_id.code, "FURN_8888")
                 self.assertEqual(so.state, "draft")
