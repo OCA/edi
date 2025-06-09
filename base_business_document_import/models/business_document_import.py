@@ -1366,13 +1366,6 @@ class BusinessDocumentImport(models.AbstractModel):
                 self.env._("Missing VAT number on company '%s'") % company.display_name
             )
 
-    def get_xml_files_from_pdf(self, pdf_file):
-        """Returns a dict with key = filename, value = XML file obj"""
-        logger.warning(
-            "`get_xml_files_from_pdf` deprecated: use `pdf.helper.pdf_get_xml_files`"
-        )
-        return self.env["pdf.helper"].pdf_get_xml_files(pdf_file)
-
     @api.model
     def post_create_or_update(self, parsed_dict, record, doc_filename=None):
         if parsed_dict.get("attachments"):

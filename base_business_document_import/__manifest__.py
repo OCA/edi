@@ -15,6 +15,5 @@
         # OCA/community-data-files
         "account_tax_unece",
         "uom_unece",
-        "pdf_helper",
     ],
 }
