@@ -4,6 +4,7 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import inspect
 import logging
 import mimetypes
 from base64 import b64decode, b64encode
@@ -23,17 +24,20 @@ class SaleOrderImport(models.TransientModel):
     _description = "Sale Order Import from Files"
 
     state = fields.Selection(
-        [("import", "Import"), ("update", "Update")], string="State", default="import"
+        [("import", "Import"), ("update", "Update")], default="import"
     )
-    partner_id = fields.Many2one(
-        "res.partner", string="Customer", domain=[("customer", "=", True)]
+    partner_id = fields.Many2one("res.partner", string="Customer")
+    import_type = fields.Selection(
+        [("xml", "XML"), ("pdf", "PDF")],
+        required=True,
+        default=None,
+        help="Select a type which you want to import",
     )
-    csv_import = fields.Boolean(default=False, readonly=True)
     order_file = fields.Binary(
         string="Request for Quotation or Order",
         required=True,
         help="Upload a Request for Quotation or an Order file. Supported "
-        "formats: CSV, XML and PDF (PDF with an embeded XML file).",
+        "formats: XML and PDF (PDF with an embeded XML file).",
     )
     order_filename = fields.Char(string="Filename")
     doc_type = fields.Selection(
@@ -57,7 +61,6 @@ class SaleOrderImport(models.TransientModel):
     @api.onchange("order_file")
     def order_file_change(self):
         if not self.order_filename or not self.order_file:
-            self.csv_import = False
             self.doc_type = False
             return
 
@@ -66,9 +69,15 @@ class SaleOrderImport(models.TransientModel):
         )
         if doc_type is None:
             return {"warning": self._unsupported_file_msg(self.order_filename)}
-        # I would expect to set doc_type = csv here
-        self.csv_import = not doc_type
         self.doc_type = doc_type
+
+    def _get_supported_types(self):
+        # Define the supported types dictionary
+        supported_types = {
+            "xml": ("application/xml", "text/xml"),
+            "pdf": ("application/pdf"),
+        }
+        return supported_types
 
     def _parse_file(self, filename, filecontent, detect_doc_type=False):
         assert filename, "Missing filename"
@@ -76,28 +85,49 @@ class SaleOrderImport(models.TransientModel):
         filetype = mimetypes.guess_type(filename)
         logger.debug("Order file mimetype: %s", filetype)
         mimetype = filetype[0]
-        supported_types = {
-            "CSV": ("text/csv", "text/plain"),
-            "XML": ("application/xml", "text/xml"),
-            "PDF": ("application/pdf"),
-        }
-        res = None
-        if filetype and mimetype in supported_types["CSV"]:
-            res = False
-        elif filetype and mimetype in supported_types["XML"]:
-            xml_root, error_msg = self._parse_xml(filecontent)
-            if (xml_root is None or not len(xml_root)) and error_msg:
-                raise UserError(error_msg)
-            res = self.parse_xml_order(xml_root, detect_doc_type=detect_doc_type)
-        elif filetype and mimetype == supported_types["PDF"]:
-            res = self.parse_pdf_order(filecontent, detect_doc_type=detect_doc_type)
-        return res
+        supported_types = self._get_supported_types()
+        # Check if the selected import type is supported
+        if self.import_type not in supported_types:
+            raise UserError(_("Please select a valid import type before importing!"))
+
+        # Check if the detected MIME type is supported for the selected import type
+        if mimetype not in supported_types[self.import_type]:
+            raise UserError(
+                _(
+                    "This file '%(filename)s' is not recognized as a %(type)s file. "
+                    "Please check the file and its extension.",
+                    filename=filename,
+                    type=self.import_type.upper(),
+                )
+            )
+        if hasattr(self, "parse_%s_order" % self.import_type):
+            # TODO: remove when upgrade sale_order_import_ubl
+            if self.import_type == "xml":
+                sig = inspect.signature(self.parse_xml_order)
+                if "xml_root" in sig.parameters:
+                    xml_root, error_msg = self._parse_xml(filecontent)
+                    if (xml_root is None or not len(xml_root)) and error_msg:
+                        raise UserError(error_msg)
+                    return self.parse_xml_order(
+                        xml_root, detect_doc_type=detect_doc_type
+                    )
+            # end todo remove
+            return getattr(self, "parse_%s_order" % self.import_type)(
+                filecontent, detect_doc_type=detect_doc_type
+            )
+        else:
+            raise UserError(
+                _(
+                    "This Import Type is not supported. Did you install "
+                    "the module to support this type?"
+                )
+            )
 
     def _unsupported_file_msg(self, filename):
         return {
             "title": _("Unsupported file format"),
             "message": _(
-                "This file '%s' is not recognised as a CSV, XML nor "
+                "This file '%s' is not recognised as a XML nor "
                 "PDF file. Please check the file and it's "
                 "extension."
             )
@@ -115,19 +145,17 @@ class SaleOrderImport(models.TransientModel):
         except etree.XMLSyntaxError:
             error_msg = _("This XML file is not XML-compliant")
             return xml_root, error_msg
-        try:
-            self.parse_xml_order(xml_root, detect_doc_type=True)
-        except (UserError, NotImplementedError):
-            error_msg = _("Unsupported XML document")
         return xml_root, error_msg
 
-    # FIXME: not used at all
     @api.model
-    def get_xml_doc_type(self, xml_root):  # pragma: no cover
-        raise UserError
-
-    @api.model
-    def parse_xml_order(self, xml_root, detect_doc_type=False):
+    def parse_xml_order(self, data, detect_doc_type=False):
+        if not self.env.context.get("xml_root", False):
+            xml_root, error_msg = self._parse_xml(data)
+        else:
+            xml_root = data
+            error_msg = None
+        if (xml_root is None or not len(xml_root)) and error_msg:
+            raise UserError(error_msg)
         raise NotImplementedError(
             _(
                 "This type of XML RFQ/order is not supported. Did you install "
@@ -135,18 +163,6 @@ class SaleOrderImport(models.TransientModel):
             )
         )
 
-    # FIXME: not used at all
-    @api.model
-    def parse_csv_order(self, order_file, partner):  # pragma: no cover
-        assert partner, "missing partner"
-        raise UserError(
-            _(
-                "This type of CSV order is not supported. Did you install "
-                "the module to support CSV orders?"
-            )
-        )
-
-    # TODO: move it out to a PDF support module
     @api.model
     def parse_pdf_order(self, order_file, detect_doc_type=False):
         """
@@ -158,7 +174,7 @@ class SaleOrderImport(models.TransientModel):
         for xml_filename, xml_root in xml_files_dict.items():
             logger.info("Trying to parse XML file %s", xml_filename)
             try:
-                parsed_order = self.parse_xml_order(
+                parsed_order = self.with_context(xml_root=True).parse_xml_order(
                     xml_root, detect_doc_type=detect_doc_type
                 )
                 return parsed_order
@@ -278,13 +294,11 @@ class SaleOrderImport(models.TransientModel):
         if partner.property_product_pricelist.currency_id != currency:
             raise UserError(
                 _(
-                    "The customer '%s' has a pricelist '%s' but the "
-                    "currency of this order is '%s'."
-                )
-                % (
-                    partner.display_name,
-                    partner.property_product_pricelist.display_name,
-                    currency.name,
+                    "The customer '%(name)s' has a pricelist '%(pricelist)s' but the "
+                    "currency of this order is '%(currency)s'.",
+                    name=partner.display_name,
+                    pricelist=partner.property_product_pricelist.display_name,
+                    currency=currency.name,
                 )
             )
 
@@ -301,14 +315,12 @@ class SaleOrderImport(models.TransientModel):
         if existing_orders:
             raise UserError(
                 _(
-                    "An order of customer '%s' with reference '%s' "
-                    "already exists: %s (state: %s)"
-                )
-                % (
-                    partner.display_name,
-                    parsed_order["order_ref"],
-                    existing_orders[0].name,
-                    existing_orders[0].state,
+                    "An order of customer '%(partner)s' with reference '%(ref)s' "
+                    "already exists: %(name)s (state: %(state)s)",
+                    partner=partner.display_name,
+                    ref=parsed_order["order_ref"],
+                    name=existing_orders[0].name,
+                    state=existing_orders[0].state,
                 )
             )
 
@@ -354,7 +366,6 @@ class SaleOrderImport(models.TransientModel):
             )
         return parsed_order
 
-    # TODO: add tests
     def import_order_button(self):
         self.ensure_one()
         bdio = self.env["business.document.import"]
@@ -406,7 +417,6 @@ class SaleOrderImport(models.TransientModel):
         )
         return self.create_order_return_action(parsed_order, self.order_filename)
 
-    # TODO: add tests
     def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
         order = self.create_order(parsed_order, self.price_source, order_filename)
@@ -443,7 +453,6 @@ class SaleOrderImport(models.TransientModel):
             vals["client_order_ref"] = parsed_order["order_ref"]
         return vals
 
-    # TODO: add tests
     @api.model
     def _prepare_create_order_line(
         self, product, uom, order, import_line, price_source
@@ -473,7 +482,6 @@ class SaleOrderImport(models.TransientModel):
             # but it is not enough: we also need to play _onchange_discount()
             # to have the right discount for pricelist
             vals["order_id"] = order
-            vals = solo.play_onchanges(vals, ["product_id"])
             vals.pop("order_id")
 
         # Handle additional fields dynamically if available.
@@ -538,24 +546,18 @@ class SaleOrderImport(models.TransientModel):
                 chatter.append(
                     _(
                         "The quantity has been updated on the order line "
-                        "with product '%s' from %s to %s %s"
-                    )
-                    % (
-                        oline.product_id.display_name,
-                        cdict["qty"][0],
-                        cdict["qty"][1],
-                        oline.product_uom.name,
+                        "with product '%(product)s' from %(qty0)s to %(qty1)s %(uom)s",
+                        product=oline.product_id.display_name,
+                        qty0=cdict["qty"][0],
+                        qty1=cdict["qty"][1],
+                        uom=oline.product_uom.name,
                     )
                 )
                 write_vals["product_uom_qty"] = cdict["qty"][1]
                 if price_source != "order":
                     new_price_unit = order.pricelist_id.with_context(
                         date=order.date_order, uom=oline.product_uom.id
-                    ).price_get(
-                        oline.product_id.id,
-                        write_vals["product_uom_qty"],
-                        order.partner_id.id,
-                    )[
+                    )._price_get(oline.product_id, write_vals["product_uom_qty"],)[
                         order.pricelist_id.id
                     ]
                     if float_compare(
@@ -564,13 +566,12 @@ class SaleOrderImport(models.TransientModel):
                         chatter.append(
                             _(
                                 "The unit price has been updated on the order "
-                                "line with product '%s' from %s to %s %s"
-                            )
-                            % (
-                                oline.product_id.display_name,
-                                oline.price_unit,
-                                new_price_unit,
-                                order.currency_id.name,
+                                "line with product '%(product)s' from %(old)s to "
+                                "%(new)s %(currency)s",
+                                product=oline.product_id.display_name,
+                                old=oline.price_unit,
+                                new=new_price_unit,
+                                currency=order.currency_id.name,
                             )
                         )
                         write_vals["price_unit"] = new_price_unit
@@ -584,8 +585,11 @@ class SaleOrderImport(models.TransientModel):
                 for line in compare_res["to_remove"]
             ]
             chatter.append(
-                _("%d order line(s) deleted: %s")
-                % (len(compare_res["to_remove"]), ", ".join(to_remove_label))
+                _(
+                    "%(orders)s order line(s) deleted: %(label)s",
+                    orders=len(compare_res["to_remove"]),
+                    label=", ".join(to_remove_label),
+                )
             )
             compare_res["to_remove"].unlink()
         if compare_res["to_add"]:
@@ -605,8 +609,11 @@ class SaleOrderImport(models.TransientModel):
                     )
                 )
             chatter.append(
-                _("%d new order line(s) created: %s")
-                % (len(compare_res["to_add"]), ", ".join(to_create_label))
+                _(
+                    "%(orders)s new order line(s) created: %(label)s",
+                    orders=len(compare_res["to_add"]),
+                    label=", ".join(to_create_label),
+                )
             )
         return True
 
@@ -614,7 +621,6 @@ class SaleOrderImport(models.TransientModel):
         # Allows other module to update some fields on the line
         return {}
 
-    # TODO: add tests
     def update_order_button(self):
         self.ensure_one()
         bdio = self.env["business.document.import"]
@@ -630,10 +636,11 @@ class SaleOrderImport(models.TransientModel):
         if currency != order.currency_id:
             raise UserError(
                 _(
-                    "The currency of the imported order (%s) is different from "
-                    "the currency of the existing order (%s)"
+                    "The currency of the imported order (%(old)s) is different from "
+                    "the currency of the existing order (%(new)s)",
+                    old=currency.name,
+                    new=order.currency_id.name,
                 )
-                % (currency.name, order.currency_id.name)
             )
         vals = self._prepare_update_order_vals(
             parsed_order, order, self.commercial_partner_id
