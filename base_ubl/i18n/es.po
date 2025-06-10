@@ -25,39 +25,6 @@ msgstr "Métodos habituales para generar y analizar archivos XML UBL"
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
-msgid "Missing UNECE Tax Category on tax '%(tax_name)s'"
-msgstr ""
-"Falta la categoría fiscal de la UNECE (CEPE) en el impuesto '%(tax_name)s'"
-
-#. module: base_ubl
-#. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
-#, python-format
-msgid "Missing UNECE Tax Type on tax '%(tax_name)s'"
-msgstr "Falta el tipo de impuesto UNECE en el impuesto '%(tax_name)s'"
-
-#. module: base_ubl
-#. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
-#, python-format
-msgid "Missing UNECE code on unit of measure '%s'"
-msgstr "Falta el código UNECE en la unidad de medida '%s'"
-
-#. module: base_ubl
-#. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
-#, python-format
-msgid ""
-"The UBL XML file does not contain the version for validating the content "
-"according to the schema."
-msgstr ""
-"El archivo UBL XML no contiene la versión para validar el contenido según el "
-"esquema."
-
-#. module: base_ubl
-#. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
-#, python-format
 msgid ""
 "The UBL XML file is not valid against the official XML Schema Definition. "
 "The XML file and the full error have been written in the server logs. Here "
