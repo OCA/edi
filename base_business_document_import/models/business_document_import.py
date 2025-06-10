@@ -314,7 +314,6 @@ class BusinessDocumentImport(models.AbstractModel):
         partner = self._direct_match(partner_dict, rpo, raise_exception=raise_exception)
         if partner:
             return partner
-        company_id = self._context.get("force_company") or self.env.company.id
         domain = domain or []
         domain = expression.AND(
             [
@@ -322,7 +321,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 [
                     "|",
                     ("company_id", "=", False),
-                    ("company_id", "=", company_id),
+                    ("company_id", "=", self.env.company.id),
                 ],
             ]
         )
@@ -575,12 +574,11 @@ class BusinessDocumentImport(models.AbstractModel):
                 % iban
             )
             return False
-        company_id = self._context.get("force_company") or self.env.company.id
         bankaccount = rpbo.search(
             [
                 "|",
                 ("company_id", "=", False),
-                ("company_id", "=", company_id),
+                ("company_id", "=", self.env.company.id),
                 ("sanitized_acc_number", "=", iban),
                 ("partner_id", "=", partner.id),
             ],
@@ -719,7 +717,7 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _match_company_domain(self):
-        company_id = self._context.get("force_company") or self.env.user.company_id.id
+        company_id = self.env.company.id or self.env.user.company_id.id
         return ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
 
     @api.model
@@ -821,10 +819,7 @@ class BusinessDocumentImport(models.AbstractModel):
                     )
                     % country_code,
                 )
-        if self._context.get("force_company"):
-            company = self.env["res.company"].browse(self._context["force_company"])
-        else:
-            company = self.env.company
+        company = self.env.company
         company_cur = company.currency_id
         chatter_msg.append(
             self.env._("No currency specified, so Odoo used the company currency (%s)")
@@ -905,8 +900,7 @@ class BusinessDocumentImport(models.AbstractModel):
         self, tax_dict, type_tax_use="purchase", price_include=False
     ):
         ato = self.env["account.tax"]
-        company_id = self._context.get("force_company") or self.env.company.id
-        domain = [("company_id", "=", company_id)]
+        domain = [("company_id", "=", self.env.company.id)]
         if type_tax_use == "purchase":
             domain.append(("type_tax_use", "=", "purchase"))
         elif type_tax_use == "sale":
@@ -1150,9 +1144,9 @@ class BusinessDocumentImport(models.AbstractModel):
         return values
 
     def _prepare_account_speed_dict(self):
-        company_id = self._context.get("force_company") or self.env.company.id
         res = self.env["account.account"].search_read(
-            [("company_ids", "=", company_id), ("deprecated", "=", False)], ["code"]
+            [("company_ids", "=", self.env.company.id), ("deprecated", "=", False)],
+            ["code"],
         )
         speed_dict = {}
         for line in res:
@@ -1214,9 +1208,8 @@ class BusinessDocumentImport(models.AbstractModel):
         )
 
     def _prepare_analytic_account_speed_dict(self):
-        company_id = self._context.get("force_company") or self.env.company.id
         res = self.env["account.analytic.account"].search_read(
-            [("company_id", "=", company_id)], ["code"]
+            [("company_id", "=", self.env.company.id)], ["code"]
         )
         speed_dict = {}
         for line in res:
@@ -1258,9 +1251,8 @@ class BusinessDocumentImport(models.AbstractModel):
         )
 
     def _prepare_journal_speed_dict(self):
-        company_id = self._context.get("force_company") or self.env.company.id
         res = self.env["account.journal"].search_read(
-            [("company_id", "=", company_id)], ["code"]
+            [("company_id", "=", self.env.company.id)], ["code"]
         )
         speed_dict = {}
         for line in res:
@@ -1339,11 +1331,7 @@ class BusinessDocumentImport(models.AbstractModel):
     def _check_company(self, company_dict, chatter_msg):
         if not company_dict:
             company_dict = {}
-        rco = self.env["res.company"]
-        if self._context.get("force_company"):
-            company = rco.browse(self._context["force_company"])
-        else:
-            company = self.env.company
+        company = self.env.company
         if not company_dict.get("vat"):
             return
         parsed_company_vat = company_dict["vat"].replace(" ", "").upper()
