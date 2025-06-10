@@ -5,7 +5,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
-from io import BytesIO
 
 from lxml import etree
 
@@ -538,60 +537,3 @@ class BaseUblGenerate(models.AbstractModel):
                 tax_scheme, ns["cbc"] + "TaxTypeCode"
             )
             tax_scheme_type_code.text = tax_scheme_dict["type_code"]
-
-    @api.model
-    def _ubl_add_xml_in_pdf_buffer(self, xml_string, xml_filename, buffer):
-        logger.warning(
-            "`_ubl_add_xml_in_pdf_buffer` deprecated: use `pdf.helper.pdf_embed_xml`"
-        )
-        pdf_content = buffer.getvalue()
-        new_content = self.env["pdf.helper"].pdf_embed_xml(
-            pdf_content, xml_filename, xml_string
-        )
-        new_buffer = BytesIO(new_content)
-        return new_buffer
-
-    @api.model
-    def _embed_ubl_xml_in_pdf_content(self, xml_string, xml_filename, pdf_content):
-        """Add the attachments to the PDF content.
-        Use the pdf_content argument, which has the binary of the PDF
-        -> it will return the new PDF binary with the embedded XML
-        (used for qweb-pdf reports)
-        """
-        logger.warning(
-            "`_embed_ubl_xml_in_pdf_content` deprecated: use `pdf.helper.pdf_embed_xml`"
-        )
-        self.ensure_one()
-        logger.debug("Starting to embed %s in PDF", xml_filename)
-        pdf_content = self.env["pdf.helper"].pdf_embed_xml(
-            pdf_content, xml_filename, xml_string
-        )
-        logger.info("%s file added to PDF content", xml_filename)
-        return pdf_content
-
-    # TODO: move to pdf_helper
-    @api.model
-    def embed_xml_in_pdf(
-        self, xml_string, xml_filename, pdf_content=None, pdf_file=None
-    ):
-        """
-        2 possible uses:
-        a) use the pdf_content argument, which has the binary of the PDF
-        -> it will return the new PDF binary with the embedded XML
-        (used for qweb-pdf reports)
-        b) OR use the pdf_file argument, which has the full path to the
-        original PDF file
-        -> it will re-write this file with the new PDF
-        (used for py3o reports, *_ubl_py3o modules in this repo)
-        """
-        assert pdf_content or pdf_file, "Missing pdf_file or pdf_content"
-        if pdf_file:
-            with open(pdf_file, "rb") as f:
-                pdf_content = f.read()
-        updated_pdf_content = self.env["pdf.helper"].pdf_embed_xml(
-            pdf_content, xml_filename, xml_string
-        )
-        if pdf_file:
-            with open(pdf_file, "wb") as f:
-                f.write(updated_pdf_content)
-        return updated_pdf_content
