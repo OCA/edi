@@ -661,7 +661,7 @@ class BusinessDocumentImport(models.AbstractModel):
                     [
                         self._match_company_domain(),
                         [
-                            ("product_tmpl_id", "=", seller.product_tmpl_id.id),
+                            ("partner_id", "=", seller.id),
                             ("product_code", "=", product_dict["code"]),
                         ],
                     ]
