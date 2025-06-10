@@ -314,15 +314,10 @@ class BusinessDocumentImport(models.AbstractModel):
         partner = self._direct_match(partner_dict, rpo, raise_exception=raise_exception)
         if partner:
             return partner
-        domain = domain or []
         domain = expression.AND(
             [
-                domain,
-                [
-                    "|",
-                    ("company_id", "=", False),
-                    ("company_id", "=", self.env.company.id),
-                ],
+                domain or [],
+                self._match_company_domain(),
             ]
         )
         order = self._get_match_partner_order(partner_type)
@@ -575,13 +570,15 @@ class BusinessDocumentImport(models.AbstractModel):
             )
             return False
         bankaccount = rpbo.search(
-            [
-                "|",
-                ("company_id", "=", False),
-                ("company_id", "=", self.env.company.id),
-                ("sanitized_acc_number", "=", iban),
-                ("partner_id", "=", partner.id),
-            ],
+            expression.AND(
+                [
+                    self._match_company_domain(),
+                    [
+                        ("acc_number", "=", iban),
+                        ("partner_id", "=", partner.id),
+                    ],
+                ]
+            ),
             limit=1,
         )
         if bankaccount:
@@ -660,11 +657,15 @@ class BusinessDocumentImport(models.AbstractModel):
             # WARNING: Won't work for multi-variant products
             # because product.supplierinfo is attached to product template
             sinfo = self.env["product.supplierinfo"].search(
-                self._match_company_domain()
-                + [
-                    ("partner_id", "=", seller.id),
-                    ("product_code", "=", product_dict["code"]),
-                ],
+                expression.AND(
+                    [
+                        self._match_company_domain(),
+                        [
+                            ("product_tmpl_id", "=", seller.product_tmpl_id.id),
+                            ("product_code", "=", product_dict["code"]),
+                        ],
+                    ]
+                ),
                 limit=1,
             )
             if sinfo and len(sinfo.product_tmpl_id.product_variant_ids) == 1:
