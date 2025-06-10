@@ -35,7 +35,7 @@ class BaseUbl(models.AbstractModel):
             logger.warning(xml_string)
             logger.warning(e)
             raise UserError(
-                _(
+                self.env._(
                     "The UBL XML file is not valid against the official "
                     "XML Schema Definition. The XML file and the "
                     "full error have been written in the server logs. "
