@@ -20,38 +20,32 @@ msgstr ""
 "X-Generator: Weblate 4.17\n"
 
 #. module: base_ubl_generate
-#: model:ir.model,name:base_ubl_generate.model_base_ubl_generate
+#: model:ir.model,name:base_ubl_generate.model_base_ubl
 msgid "Common methods to generate and parse UBL XML files"
 msgstr "Méthodes courantes pour générer et analyser les fichiers UBL XML"
 
 #. module: base_ubl_generate
 #. odoo-python
 #: code:addons/base_ubl_generate/models/ubl.py:0
-#, python-format
 msgid "Missing UNECE Tax Category on tax '%(tax_name)s'"
 msgstr "Catégorie de taxe UNECE manquante '%(tax_name)s'"
 
 #. module: base_ubl_generate
 #. odoo-python
 #: code:addons/base_ubl_generate/models/ubl.py:0
-#, python-format
 msgid "Missing UNECE Tax Type on tax '%(tax_name)s'"
 msgstr "Type de taxe UNECE manquante sur la taxe '%(tax_name)s'"
 
 #. module: base_ubl_generate
 #. odoo-python
 #: code:addons/base_ubl_generate/models/ubl.py:0
-#, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
 msgstr "Code UNECE manquant pour l'unité de mesure '%s'"
 
-#. module: base_ubl_generate
-#. odoo-python
-#: code:addons/base_ubl_generate/models/ubl.py:0
 #, python-format
-msgid ""
-"The UBL XML file does not contain the version for validating the content "
-"according to the schema."
-msgstr ""
-"Le fichier XML UBL ne contient pas la version permettant de valider le "
-"contenu selon le schéma."
+#~ msgid ""
+#~ "The UBL XML file does not contain the version for validating the content "
+#~ "according to the schema."
+#~ msgstr ""
+#~ "Le fichier XML UBL ne contient pas la version permettant de valider le "
+#~ "contenu selon le schéma."

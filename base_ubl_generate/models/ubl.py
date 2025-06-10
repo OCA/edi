@@ -393,7 +393,11 @@ class BaseUblGenerate(models.AbstractModel):
             if not seller_code:
                 seller_code = self._ubl_get_seller_code_from_product(product)
             if not product_name:
-                variant = ", ".join(product.attribute_line_ids.mapped("value_ids.name"))
+                variant = ""
+                if product.attribute_line_ids:
+                    variant = ", ".join(
+                        [x.name for x in product.attribute_line_ids.value_ids]
+                    )
                 product_name = variant and f"{product.name} ({variant})" or product.name
         description = etree.SubElement(item, ns["cbc"] + "Description")
         description.text = name
@@ -446,7 +450,7 @@ class BaseUblGenerate(models.AbstractModel):
                         node_name="ClassifiedTaxCategory",
                         version=version,
                     )
-            for attribute_value in product.attribute_line_ids.mapped("value_ids"):
+            for attribute_value in product.attribute_line_ids.value_ids:
                 item_property = etree.SubElement(
                     item, ns["cac"] + "AdditionalItemProperty"
                 )
