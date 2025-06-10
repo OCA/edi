@@ -3,7 +3,7 @@
 
 {
     "name": "Base UBL Parse",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Hidden",
     "license": "AGPL-3",
     "summary": "Base module to parse UBL files (Universal Business Language)",
