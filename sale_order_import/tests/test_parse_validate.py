@@ -108,7 +108,7 @@ class TestParsingValidation(TestCommon):
     def test_parse_pdf_bad(self):
         pdf_data = self.read_test_file("test.pdf", mode="rb", as_b64=True)
         mock_pdf_get_xml_files = mock.patch.object(
-            type(self.env["pdf.helper"]), "pdf_get_xml_files"
+            type(self.env["pdf.xml.tool"]), "pdf_get_xml_files"
         )
         with mock_pdf_get_xml_files as mocked:
             mocked.return_value = {}
@@ -121,7 +121,7 @@ class TestParsingValidation(TestCommon):
     def test_parse_pdf_good(self):
         pdf_data = self.read_test_file("test.pdf", mode="rb", as_b64=True)
         mock_pdf_get_xml_files = mock.patch.object(
-            type(self.env["pdf.helper"]), "pdf_get_xml_files"
+            type(self.env["pdf.xml.tool"]), "pdf_get_xml_files"
         )
         mock_parse_xml_order = mock.patch.object(
             type(self.wiz_model), "parse_xml_order"
@@ -142,7 +142,7 @@ class TestParsingValidation(TestCommon):
     def test_parse_pdf_good_but_no_file(self):
         pdf_data = self.read_test_file("test.pdf", mode="rb", as_b64=True)
         mock_pdf_get_xml_files = mock.patch.object(
-            type(self.env["pdf.helper"]), "pdf_get_xml_files"
+            type(self.env["pdf.xml.tool"]), "pdf_get_xml_files"
         )
         mock_parse_xml_order = mock.patch.object(
             type(self.wiz_model), "parse_xml_order"

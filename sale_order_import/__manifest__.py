@@ -18,7 +18,7 @@
         "onchange_helper",
         # TODO: this dependency should be removed
         # and support for PDF import should be moved to a glue module
-        "pdf_helper",
+        "pdf_xml_attachment",
     ],
     "data": ["security/ir.model.access.csv", "wizard/sale_order_import_view.xml"],
     "installable": True,
