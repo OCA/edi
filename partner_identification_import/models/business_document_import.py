@@ -23,7 +23,7 @@ class BusinessDocumentImport(models.AbstractModel):
             for ident in partner_dict.get("id_number", []):
                 if ident.get("schemeID") not in schemes.mapped("code"):
                     continue
-                categ = schemes.filtered(lambda s: s.code == ident["schemeID"])
+                categ = schemes.filtered(lambda s, _id=ident: s.code == _id["schemeID"])
                 id_number = self.env["res.partner.id_number"].search(
                     [
                         ("category_id", "in", categ.ids),
@@ -46,8 +46,9 @@ class BusinessDocumentImport(models.AbstractModel):
                         return contact
                     return id_number.partner_id
                 unmatched.append(
-                    _("ID Number: {}\nID Number Category: {}\n\n").format(
-                        ident["value"], ident["schemeID"]
+                    _(
+                        "ID Number: %(value)s\nID Number Category: %(schemeID)s\n\n",
+                        **ident,
                     )
                 )
             if unmatched:
