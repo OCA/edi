@@ -1,7 +1,7 @@
 # Copyright 2020 Jacques-Etienne Baudoux <je@bcim.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, models
+from odoo import api, models
 
 
 class BusinessDocumentImport(models.AbstractModel):
@@ -46,7 +46,7 @@ class BusinessDocumentImport(models.AbstractModel):
                         return contact
                     return id_number.partner_id
                 unmatched.append(
-                    _(
+                    self.env._(
                         "ID Number: %(value)s\nID Number Category: %(schemeID)s\n\n",
                         **ident,
                     )
@@ -55,7 +55,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 raise self.user_error_wrap(
                     "_hook_match_partner",
                     partner_dict,
-                    _(
+                    self.env._(
                         "Odoo couldn't find a partner corresponding to the "
                         "following information extracted from the business document:\n"
                         "{}"

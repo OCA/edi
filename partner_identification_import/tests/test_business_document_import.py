@@ -4,7 +4,7 @@
 from odoo.tests import common
 
 
-class TestBaseBusinessDocumentImport(common.SavepointCase):
+class TestBaseBusinessDocumentImport(common.TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
