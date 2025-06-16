@@ -201,6 +201,21 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         model = self.parent_id.record_ref or self.env[template.model]
         ctx = template._prepare_ctx_from_model(template.model)
         model_form = Form(model.with_context(**ctx))
+        # Try to set default values (very important if record_ref is already set)
+        # Example use case: Invoice created without a defined partner, the partner
+        # must be set at the beginning, before the lines, so that the values are
+        # appropriate (fiscal position).
+        extra_vals = {}
+        for key in list(ctx.keys()):
+            if key.startswith("default_"):
+                field_name = key.replace("default_", "")
+                field_value = ctx[key]
+                if model._fields[field_name].type == "many2one":
+                    field_value = model[field_name].browse(field_value)
+                try:
+                    setattr(model_form, field_name, field_value)
+                except Exception:
+                    extra_vals[field_name] = ctx[key]
         # Set the values of the header in Form
         header_values = template._get_field_header_values(text)
         for field_name in list(header_values.keys()):
@@ -224,7 +239,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                         setattr(line_form, field_name, child_field_value)
                     except Exception:
                         self._add_log_error_text(field_name, child_field_value)
-                # et the values of any line
+                # set the values of any line
                 for field_name in list(line.keys()):
                     self.with_context(
                         model_name=template.child_model, related_model="lines"
@@ -233,13 +248,11 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
             # Prepare vals (similar to .save()) + apply defaults (in case it has changed
             # in some onchange for example: warehouse_id from sale orders)
             vals = model_form._get_save_values()
-            for key in ctx:
-                if key.startswith("default_"):
-                    field = key.replace("default_", "")
-                    if field in vals and not self.parent_id.record_ref:
-                        vals.update({field: ctx[key]})
-                    elif self.parent_id.record_ref:
-                        vals.update({field: ctx[key]})
+            for f_name in extra_vals:
+                if f_name in vals and not self.parent_id.record_ref:
+                    vals.update({f_name: extra_vals[f_name]})
+                elif self.parent_id.record_ref:
+                    vals.update({f_name: extra_vals[f_name]})
             # Create or update
             if self.parent_id.record_ref:
                 model.with_context(**ctx).write(vals)
