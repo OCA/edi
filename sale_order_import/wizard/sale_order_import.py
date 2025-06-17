@@ -492,6 +492,7 @@ class SaleOrderImport(models.TransientModel):
             # but it is not enough: we also need to play _onchange_discount()
             # to have the right discount for pricelist
             vals["order_id"] = order
+            vals = solo.play_onchanges(vals, ["product_id"])
             vals.pop("order_id")
 
         # Handle additional fields dynamically if available.
