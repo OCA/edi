@@ -85,32 +85,24 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                     "simple_pdf_decimal_separator": "dot",
                     "simple_pdf_thousand_separator": "comma",
                     "simple_pdf_invoice_number_ids": [
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "string_type": "fixed",
                                 "fixed_char": "VT/",
                             },
                         ),
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "string_type": "year4",
                             },
                         ),
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "string_type": "fixed",
                                 "fixed_char": "/",
                             },
                         ),
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "string_type": "digit",
                                 "occurrence_min": 4,
@@ -119,43 +111,33 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                         ),
                     ],
                     "simple_pdf_field_ids": [
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "name": "amount_total",
                                 "extract_rule": "last",
                             },
                         ),
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "name": "amount_untaxed",
                                 "extract_rule": "first",
                                 "start": "Subtotal",
                             },
                         ),
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "name": "date",
                                 "extract_rule": "first",
                             },
                         ),
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "name": "date_due",
                                 "extract_rule": "position_start",
                                 "position": 2,
                             },
                         ),
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "name": "invoice_number",
                                 "extract_rule": "first",
