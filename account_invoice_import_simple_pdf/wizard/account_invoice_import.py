@@ -13,7 +13,7 @@ from odoo.osv import expression
 
 logger = logging.getLogger(__name__)
 try:
-    import fitz
+    import pymupdf
 except ImportError:
     logger.debug("Cannot import PyMuPDF")
 try:
@@ -49,19 +49,17 @@ class AccountInvoiceImport(models.TransientModel):
         version = None
         try:
             pages = []
-            doc = fitz.open(fileobj.name)
+            doc = pymupdf.open(fileobj.name)
             for page in doc:
                 pages.append(page.get_text())
             res = {
                 "all": "\n\n".join(pages),
                 "first": pages and pages[0] or "",
             }
-            # For PyMuPDF, we used to get the version via __version__
-            # but it is not possible with newer version of the lib
-            if hasattr(fitz, "__version__"):
-                version = fitz.__version__
-            elif hasattr(fitz, "version") and isinstance(fitz.version, tuple):
-                version = fitz.version[0]
+            if hasattr(pymupdf, "__version__"):
+                version = pymupdf.__version__
+            elif hasattr(pymupdf, "version") and isinstance(pymupdf.version, tuple):
+                version = pymupdf.version[0]
             logger.info("Text extraction made with PyMuPDF %s", version)
             test_info["text_extraction"] = "pymupdf %s" % version
         except Exception as e:
