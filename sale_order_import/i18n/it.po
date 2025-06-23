@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-08-23 15:06+0000\n"
+"PO-Revision-Date: 2025-06-23 09:25+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: sale_order_import
 #. odoo-python
@@ -298,7 +298,7 @@ msgid ""
 "from %(qty0)s to %(qty1)s %(uom)s"
 msgstr ""
 "La quantità è stata aggiornata nella riga ordine con prodotto '%(product)s' "
-"da %(qty0)s a %(uom)s"
+"da %(qty0)s a %(qty1)s %(uom)s"
 
 #. module: sale_order_import
 #. odoo-python
