@@ -110,6 +110,7 @@ class EDIExchangeRecord(models.Model):
         help="ACK generated for current exchange.",
         compute="_compute_ack_exchange_id",
         store=True,
+        index=True,
     )
     ack_received_on = fields.Datetime(
         string="ACK received on", related="ack_exchange_id.exchanged_on"
