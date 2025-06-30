@@ -569,6 +569,11 @@ msgid "Search subfield"
 msgstr "Sotto campo ricerca"
 
 #. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__search_subfield_name
+msgid "Search subfield name"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__space

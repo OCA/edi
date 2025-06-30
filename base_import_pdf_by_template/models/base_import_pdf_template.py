@@ -231,6 +231,9 @@ class BaseImportPdfTemplateLine(models.Model):
         domain="[('model_id.model', '=', search_field_relation)]",
         string="Search subfield",
     )
+    search_subfield_name = fields.Char(
+        related="search_subfield_id.name", string="Search subfield name"
+    )
     default_value = fields.Reference(
         selection="_selection_reference_value",
         string="Default value",
@@ -353,7 +356,10 @@ class BaseImportPdfTemplateLine(models.Model):
     def _get_fixed_value(self):
         self.ensure_one()
         f_name = self._get_fixed_field_name_ttype_mapped()[self.field_ttype]
-        f_value = self[f_name]
+        # Apply .sudo() because it is possible that the user executing code
+        # does not have read permissions on the model (for example:
+        # ir.module.fields.selection).
+        f_value = self.sudo()[f_name]
         if self.field_ttype == "selection":
             f_value = f_value.value
         elif self.field_ttype == "json":
@@ -395,7 +401,7 @@ class BaseImportPdfTemplateLine(models.Model):
             return False
         domain_field_name = self.search_field_name
         if self.search_subfield_id:
-            domain_field_name += ".%s" % (self.search_subfield_id.name)
+            domain_field_name += f".{self.search_subfield_name}"
         return self.env[self.field_relation].search(
             [(domain_field_name, "=", value)], limit=1
         )
