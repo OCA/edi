@@ -219,7 +219,10 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         """Set default values from context and return extra values."""
         extra_vals = {}
         for key in list(ctx.keys()):
-            if key.startswith("default_"):
+            # It is important to skip this field, when using fetchmail it
+            # is defined as default_ but it does not exist and there
+            # would be an error preventing the record from being created.
+            if key.startswith("default_") and key != "default_fetchmail_server_id":
                 field_name = key.replace("default_", "")
                 field_value = ctx[key]
                 # Skip if field doesn't exist in model
