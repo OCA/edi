@@ -1,14 +1,12 @@
-# Copyright 2024 Tecnativa - Víctor Martínez
+# Copyright 2024-2026 Tecnativa - Víctor Martínez
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-import logging
-
+import psycopg2
 from markupsafe import Markup
 
-from odoo import _, api, fields, models
+from odoo import SUPERUSER_ID, _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.modules.registry import Registry
 from odoo.tests.form import Form
-
-logger = logging.getLogger(__name__)
 
 
 class WizardBaseImportPdfUpload(models.TransientModel):
@@ -50,6 +48,31 @@ class WizardBaseImportPdfUpload(models.TransientModel):
                 data += line.data if line.data else ""
             item.data = data
 
+    @api.model
+    def _create_ir_logging(self, message, func):
+        self.env.flush_all()
+        db_name = self._cr.dbname
+        # Use a new cursor to avoid rollback that could be caused by an upper method
+        try:
+            db_registry = Registry(db_name)
+            with db_registry.cursor() as cr:
+                env = api.Environment(cr, SUPERUSER_ID, {})
+                IrLogging = env["ir.logging"]
+                IrLogging.sudo().create(
+                    {
+                        "name": "base_import_pdf_by_template",
+                        "type": "server",
+                        "dbname": db_name,
+                        "level": "DEBUG",
+                        "message": message,
+                        "path": self._name,
+                        "func": func,
+                        "line": 1,
+                    }
+                )
+        except psycopg2.Error:  # pylint: disable=W8138
+            pass
+
     def action_process(self):
         """Creamos las lineas, auto-detección + procesar cada línea."""
         if not self.allowed_template_ids:
@@ -75,7 +98,8 @@ class WizardBaseImportPdfUpload(models.TransientModel):
         for line in self.line_ids.filtered("template_id"):
             try:
                 records += line.action_process()
-            except Exception:
+            except Exception as e:
+                self._create_ir_logging(e, "line_action_process")
                 if not self.env.context.get("skip_template_not_found_error"):
                     raise
         action = {
@@ -190,7 +214,8 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         else:
             try:
                 setattr(_form, field_name, value)
-            except Exception:
+            except Exception as e:
+                self.parent_id._create_ir_logging(e, "_process_set_value_form")
                 self._add_log_error_text(field_name, value)
 
     def _process_form(self):
@@ -232,7 +257,8 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                     field_value = model[field_name].browse(field_value)
                 try:
                     setattr(model_form, field_name, field_value)
-                except Exception:
+                except Exception as e:
+                    self.parent_id._create_ir_logging(e, "_set_default_values")
                     extra_vals[field_name] = ctx[key]
         return extra_vals
 
@@ -261,8 +287,9 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         for field_name, child_field_value in child_fixed_values.items():
             try:
                 setattr(line_form, field_name, child_field_value)
-            except Exception:
+            except Exception as e:
                 self._add_log_error_text(field_name, child_field_value)
+                self.parent_id._create_ir_logging(e, "_set_child_fixed_values")
 
     def _set_child_line_values(self, line_form, template, line):
         """Set extracted values for child lines."""
