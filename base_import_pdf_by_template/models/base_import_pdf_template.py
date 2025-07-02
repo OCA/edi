@@ -435,9 +435,20 @@ class BaseImportPdfTemplateLine(models.Model):
     def _get_field_value(self, text):
         field_value = False
         if self.pattern:
-            res = re.findall(self.pattern, text)
-            if res:
-                field_value = self._process_value(res[0])
+            matches = re.compile(self.pattern).finditer(text)
+            if matches:
+                text_res = ""
+                # This option allows us to concatenate all the values found if we do a
+                # pattern like this one: ([A-Z]{7})|([0-9]{5})
+                # ABCDEFG 01234
+                for match in matches:
+                    if match.groups():
+                        for m_group in match.groups():
+                            if m_group:
+                                text_res += m_group
+                    else:
+                        text_res = text[match.start() : match.end()]
+                field_value = self._process_value(text_res)
         return field_value
 
 
