@@ -7,7 +7,7 @@
         <field
             name="report_name"
         >edi_voxel_account_invoice_oca.template_voxel_invoice</field>
-        <field name="binding_model_id" ref="model_account_move" />
+        <field name="binding_model_id" ref="account.model_account_move" />
         <field name="binding_type">report</field>
         <field name="print_report_name">object._get_voxel_filename()</field>
     </record>

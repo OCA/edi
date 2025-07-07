@@ -3,23 +3,15 @@
 
 from datetime import date, datetime
 
-from odoo.tests import TransactionCase
+from odoo import Command
+
+from odoo.addons.base.tests.common import BaseCommon
 
 
-class TestVoxelAccountInvoice(TransactionCase):
+class TestVoxelAccountInvoice(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(
-            context=dict(
-                cls.env.context,
-                mail_create_nolog=True,
-                mail_create_nosubscribe=True,
-                mail_notrack=True,
-                no_reset_password=True,
-                tracking_disable=True,
-            )
-        )
         # Invoice line account
         # Invoice company
         cls.main_company = cls.env.ref("base.main_company")
@@ -104,9 +96,7 @@ class TestVoxelAccountInvoice(TransactionCase):
                 "invoice_date": date(2019, 4, 13),
                 "company_id": cls.main_company.id,
                 "invoice_line_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": product_1.id,
                             "quantity": 2,
@@ -116,9 +106,7 @@ class TestVoxelAccountInvoice(TransactionCase):
                             "product_uom_id": cls.env.ref("uom.product_uom_unit").id,
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": product_2.id,
                             "quantity": 3,
@@ -129,9 +117,7 @@ class TestVoxelAccountInvoice(TransactionCase):
                             "product_uom_id": product_2.uom_id.id,
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": product_3.id,
                             "quantity": 0,
@@ -144,6 +130,7 @@ class TestVoxelAccountInvoice(TransactionCase):
                 ],
             }
         )
+        cls.invoice.action_post()
 
     def test_get_voxel_filename(self):
         bef = datetime.now()

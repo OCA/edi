@@ -1,10 +1,9 @@
 # Copyright 2019 Tecnativa - Ernesto Tejeda
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import date, datetime
 from operator import itemgetter
 
-from odoo import api, fields, models
+from odoo import api, models
 
 
 class ReportVoxelInvoice(models.AbstractModel):
@@ -34,8 +33,7 @@ class ReportVoxelInvoice(models.AbstractModel):
         return {
             "Type": type_mapping.get(invoice.move_type),
             "Ref": invoice.name,
-            "Date": invoice.invoice_date
-            and datetime.strftime(invoice.invoice_date, "%Y-%m-%d"),
+            "Date": invoice.invoice_date and invoice.invoice_date.strftime("%Y-%m-%d"),
             "Currency": invoice.currency_id.name,
         }
 
@@ -91,15 +89,13 @@ class ReportVoxelInvoice(models.AbstractModel):
         references = []
         if invoice.picking_ids:
             for picking in invoice.picking_ids:
-                picking_date = fields.Datetime.from_string(picking.date)
                 references.append(
                     {
                         "DNRef": picking.name,
                         "PORef": (
                             picking.sale_id.client_order_ref or picking.sale_id.name
                         ),
-                        "DNRefDate": picking_date
-                        and datetime.strftime(picking_date, "%Y-%m-%d"),
+                        "DNRefDate": picking.date and picking.date.strftime("%Y-%m-%d"),
                     }
                 )
         else:
@@ -110,7 +106,7 @@ class ReportVoxelInvoice(models.AbstractModel):
                         "DNRef": invoice.name,
                         "PORef": order.client_order_ref or order.name,
                         "DNRefDate": invoice.invoice_date
-                        and date.strftime(invoice.invoice_date, "%Y-%m-%d"),
+                        and invoice.invoice_date.strftime("%Y-%m-%d"),
                     }
                 )
         return references

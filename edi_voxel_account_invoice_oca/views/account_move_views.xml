@@ -14,7 +14,6 @@
                 />
             </header>
             <notebook position="inside">
-                <field name="voxel_enabled" invisible="1" />
                 <page
                     string="Voxel"
                     invisible="not voxel_enabled"
@@ -39,7 +38,7 @@
                                     nolabel="1"
                                     readonly="1"
                                 >
-                                    <tree>
+                                    <list>
                                         <field name="date_created" />
                                         <field name="eta" />
                                         <field name="date_done" />
@@ -67,7 +66,7 @@
                                             icon="fa-fighter-jet"
                                             invisible="state != 'pending' or (not eta)"
                                         />
-                                    </tree>
+                                    </list>
                                 </field>
                             </group>
                         </page>
