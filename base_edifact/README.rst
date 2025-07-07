@@ -17,17 +17,16 @@ Base EDIFACT
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/16.0/base_edifact
+    :target: https://github.com/OCA/edi/tree/18.0/base_edifact
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-16-0/edi-16-0-base_edifact
+    :target: https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-base_edifact
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=16.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=18.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
-
 
 This module contains methods to generate and parse EDIFACT/D96A files
 
@@ -44,7 +43,6 @@ This module contains methods to generate and parse EDIFACT/D96A files
 Installation
 ============
 
-
 This module requires 'pydifact' python library.
 
 Configuration
@@ -52,32 +50,36 @@ Configuration
 
 Requires partner_identification_gln module to store GLN identifiers.
 
-Partner identification code assigned by the European Article Numbering Association.
+Partner identification code assigned by the European Article Numbering
+Association.
 
 Use two identification categories:
 
-- "GLN Identificatin Number". Partner identification like invoice or delivery address.
+- "GLN Identificatin Number". Partner identification like invoice or
+  delivery address.
 - "GCP Identification Number". Global Company Prefix.
 
 If GCP codes are needed in UNB interchange header.
 
-If you need group partners, consider oca/partner-contact/partner_company_group module.
+If you need group partners, consider
+oca/partner-contact/partner_company_group module.
 
 Usage
 =====
 
+This module doesn't do anything useful by itself, but it is used by
+several other modules:
 
-This module doesn't do anything useful by itself, but it is used by several other modules:
-
-* *sale_order_import_edifact* that imports EDIFACT/D96A sale orders.
+- *sale_order_import_edifact* that imports EDIFACT/D96A sale orders.
 
 Changelog
 =========
 
-
 14.0.1.0.0 (2023-04-13)
-~~~~~~~~~~~~~~~~~~~~~~~
-Strong migration from 12.0.1.0.1 because it's not working for Amazon vendor orders.
+-----------------------
+
+Strong migration from 12.0.1.0.1 because it's not working for Amazon
+vendor orders.
 
 Bug Tracker
 ===========
@@ -85,7 +87,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20base_edifact%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20base_edifact%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -93,21 +95,22 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * ALBA Software
 * PlanetaTIC
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Rafa Morant <rmorant@albasoft.com> (www.albasoft.com)
-* Marc Poch <mpoch@planetatic.com>
-* Duong (Tran Quoc) <duongtq@trobz.com>
-* Tris Doan <tridm@trobz.com>
+- Rafa Morant <rmorant@albasoft.com>
+  (`www.albasoft.com <http://www.albasoft.com>`__)
+- Marc Poch <mpoch@planetatic.com>
+- Duong (Tran Quoc) <duongtq@trobz.com>
+- Tris Doan <tridm@trobz.com>
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 
@@ -127,6 +130,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-rmorant| 
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/16.0/base_edifact>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/18.0/base_edifact>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

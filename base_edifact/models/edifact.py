@@ -57,9 +57,7 @@ class BasePydifact(models.AbstractModel):
             }
             logger.info(message)
             for segment in message.segments:
-                logger.info(
-                    "Segment tag: {}, content: {}".format(segment.tag, segment.elements)
-                )
+                logger.info(f"Segment tag: {segment.tag}, content: {segment.elements}")
                 # segms.append((segment.tag, segment.elements))
                 seg = dict()
                 seg[segment.tag] = segment.elements
@@ -81,7 +79,7 @@ class BasePydifact(models.AbstractModel):
     def _get_msg_type(self, interchange):
         seg = interchange.get_segment("UNH")
         # MSG_TYPE, EDIFACT_MSG_TYPE_RELEASE
-        return (seg[1][0], "{}{}".format(seg[1][1], seg[1][2]))
+        return (seg[1][0], f"{seg[1][1]}{seg[1][2]}")
 
     @api.model
     def map2odoo_date(self, dt):
