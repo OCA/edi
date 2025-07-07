@@ -24,13 +24,15 @@ class TestBaseEdifact(TransactionCase):
     def test_pydifact_obj(self):
         edifact_docu = _get_file_content("Retail_EDIFACT_ORDERS_sample1.txt")
         obj = self.base_edifact_model.pydifact_obj(edifact_docu)
-        # [1]: to get the list messages, [0]: to get the first list value of the segments
+        # [1]: to get the list messages,
+        # [0]: to get the first list value of the segments
         self.assertEqual(obj[1]["segments"][0]["BGM"][1], "1AA1TEST")
 
     def test_pydifact_obj_latin1(self):
         edifact_docu = _get_file_content("test_orders_-_no_ean_in_LIN_segments.txt")
         obj = self.base_edifact_model.pydifact_obj(edifact_docu)
-        # [1]: to get the list messages, [3]: to get the third list value of the segments
+        # [1]: to get the list messages,
+        # [3]: to get the third list value of the segments
         self.assertEqual(obj[1]["segments"][3]["NAD"][3], "Suppliér1")
 
     def test_map2odoo_address(self):
@@ -38,7 +40,9 @@ class TestBaseEdifact(TransactionCase):
         DP. Party to which goods should be delivered, if not identical with
             consignee.
             NAD+DP+5550534000086::9+++++++DE'
-            NAD segment: ['DP', ['5550534022101', '', '9'], '', '', '', '', '', '', 'ES']
+            NAD segment: [
+                'DP', ['5550534022101', '', '9'],
+                '', '', '', '', '', '', 'ES']
         """
         seg = ["DP", ["5550534000086", "", "9"], "", "", "", "", "", "", "ES"]
         address = self.base_edifact_model.map2odoo_address(seg)
