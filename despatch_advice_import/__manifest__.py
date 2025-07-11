@@ -5,7 +5,7 @@
     "name": "Despatch Advice Import",
     "summary": """
         Despatch Advice import""",
-    "version": "16.0.1.2.0",
+    "version": "16.0.1.2.1",
     "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "author": "ACSONE SA/NV,BCIM,Odoo Community Association (OCA)",
