@@ -6,7 +6,7 @@
     "version": "18.0.1.0.0",
     "category": "Warehouse Management",
     "author": "Tecnativa, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/edi",
+    "website": "https://github.com/OCA/edi-voxel",
     "license": "AGPL-3",
     "depends": ["edi_voxel_oca", "product_expiry", "sale_stock"],
     "data": [
