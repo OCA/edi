@@ -60,10 +60,7 @@ class AccountMove(models.Model):
         if res.status_code != 200:
             raise UserError(
                 _(
-                    "HTTP error {status_code} sending invoice to {method_name}".format(
-                        status_code=res.status_code,
-                        method_name=self.transmit_method_id.name,
-                    )
+                    f"HTTP error {res.status_code} sending invoice to {self.transmit_method_id.name}"
                 )
             )
         self.invoice_exported = self.invoice_export_confirmed = True
