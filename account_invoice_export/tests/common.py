@@ -25,9 +25,13 @@ class CommonCase(TransactionCase):
         cls.country = cls.env.ref("base.ch")
         cls.customer = cls.env.ref("base.res_partner_1")
         cls.account = cls.env["account.account"].search(
-            [("account_type", "=", "income"), ("company_id", "=", cls.env.company.id)],
+            [
+                ("account_type", "=", "income"),
+                ("company_ids", "in", [cls.env.company.id]),
+            ],
             limit=1,
         )
+
         cls.product = cls.env.ref("product.product_product_1")
         cls.invoice_1 = cls.env["account.move"].create(
             {
