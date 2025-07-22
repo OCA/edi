@@ -63,7 +63,7 @@ class PurchaseOrder(models.Model):
         # the representative of the ordering company.
         # So we will check the code of the company's `id number` here
         sender = id_number.search(
-            [("partner_id", "=", self.user_id.company_id.partner_id.id)], limit=1
+            [("partner_id", "=", self.company_id.partner_id.id)], limit=1
         )
         recipient = id_number.search([("partner_id", "=", self.partner_id.id)], limit=1)
         # if current supplier does not have `Id number`
