@@ -27,6 +27,8 @@ class EDIExchangeProductInput(Component):
         """Init a `product.import` instance for current record."""
         ctx = self.settings.get("wiz_ctx", {})
         wiz = self.env["product.import"].with_context(**ctx).sudo().create({})
+        # Set the active company before import
+        wiz = wiz.with_company(self.backend.company_id)
         wiz.product_file = self.exchange_record._get_file_content(binary=False)
         wiz.product_filename = self.exchange_record.exchange_filename
         wiz.product_file_change()

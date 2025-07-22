@@ -15,6 +15,8 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
     def setUpClass(cls):
         super().setUpClass()
         cls.backend = cls._get_backend()
+        company_B = cls.env["res.company"].create({"name": "Company B"})
+        cls.backend.company_id = company_B.id
         cls.exc_type = cls._create_exchange_type(
             name="Test Product import",
             code="test_product_import",
@@ -53,6 +55,7 @@ class TestProcessComponent(SavepointComponentCase, EDIBackendTestMixin):
                 base64.b64decode(wiz.product_file), b"<fake><product></product></fake>"
             )
             self.assertEqual(wiz.product_filename, self.record.exchange_filename)
+            self.assertEqual(wiz.env.company, self.backend.company_id)
             md_onchange.assert_called()
 
     def test_import_product(self):
