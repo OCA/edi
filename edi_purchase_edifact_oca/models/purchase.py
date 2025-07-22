@@ -119,7 +119,7 @@ class PurchaseOrder(models.Model):
         today = datetime.now().date().strftime("%Y%m%d")
         id_number = self.env["res.partner.id_number"]
         buyer_id_number = id_number.search(
-            [("partner_id", "=", self.user_id.company_id.partner_id.id)], limit=1
+            [("partner_id", "=", self.company_id.partner_id.id)], limit=1
         )
         seller_id_number = id_number.search([("partner_id", "=", self.partner_id.id)])
         if not seller_id_number and self.partner_id.parent_id:
@@ -169,7 +169,7 @@ class PurchaseOrder(models.Model):
         header = (
             header[:5]
             + self._edifact_get_name_and_address(
-                self.user_id.partner_id, "BY", buyer_id_number.name
+                self.company_id.partner_id, "BY", buyer_id_number.name
             )
             + self._edifact_get_name_and_address(
                 self.partner_id, "SU", seller_id_number.name
