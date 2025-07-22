@@ -35,7 +35,13 @@ class PurchaseOrderEdifactListener(Component):
             return False
 
         partner = order.partner_id
-        return partner and partner.edifact_purchase_order_out
+        if not partner:
+            return False
+
+        return (
+            partner.edifact_purchase_order_out
+            or partner.parent_id.edifact_purchase_order_out
+        )
 
     def _storage_new_exchange_record_vals(self):
         return {"edi_exchange_state": "new"}
