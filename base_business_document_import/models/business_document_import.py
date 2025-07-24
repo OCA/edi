@@ -670,6 +670,7 @@ class BusinessDocumentImport(models.AbstractModel):
             )
             if sinfo and len(sinfo.product_tmpl_id.product_variant_ids) == 1:
                 return sinfo.product_tmpl_id.product_variant_id
+        # TODO: add test
         raise self.user_error_wrap(
             "_match_product",
             product_dict,
@@ -681,7 +682,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 "Supplier: %(supplier)s\n",
                 barcode=product_dict.get("barcode") or "",
                 product_code=product_dict.get("code") or "",
-                supplier=seller and seller.name or "",
+                supplier=seller and seller.display_name or "",
             ),
         )
 
