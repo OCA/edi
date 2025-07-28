@@ -171,7 +171,9 @@ class ReportVoxelInvoice(models.AbstractModel):
                 {
                     "Type": move_line.tax_line_id.voxel_tax_code,
                     "Rate": str(move_line.tax_line_id.amount),
+                    "Base": str(move_line.tax_base_amount),
                     "Amount": str(abs(move_line.balance)),
+                    "Description": move_line.tax_line_id.name,
                 }
             )
         return sorted(taxes, key=itemgetter("Type", "Rate", "Amount"))
