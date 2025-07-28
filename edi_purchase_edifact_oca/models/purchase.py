@@ -68,9 +68,9 @@ class PurchaseOrder(models.Model):
         recipient = id_number.search([("partner_id", "=", self.partner_id.id)], limit=1)
         # if current supplier does not have `Id number`
         # then check current supplier's parent
-        if not recipient and self.partner_id.parent_id:
+        if not recipient and self.partner_id.commercial_partner_id:
             recipient = id_number.search(
-                [("partner_id", "=", self.partner_id.parent_id.id)], limit=1
+                [("partner_id", "=", self.partner_id.commercial_partner_id.id)], limit=1
             )
         if not sender or not recipient:
             raise UserError(_("Partner is not allowed to use the feature."))
@@ -81,6 +81,22 @@ class PurchaseOrder(models.Model):
         return self.env["base.edifact"].create_interchange(
             sender_edifact, recipient_edifact, self.name, syntax_identifier
         )
+
+    def _edifact_purchase_get_supplier_code(self, product):
+        # Make it hookable and use the product.supplierinfo if a code is set
+        supplierinfo = product.seller_ids.filtered_domain(
+            [("name", "=", self.partner_id.id)]
+        )
+        if not supplierinfo:
+            supplierinfo = product.seller_ids.filtered_domain(
+                [("name", "=", self.partner_id.commercial_partner_id.id)]
+            )
+
+        return supplierinfo[:1].product_code or product.default_code
+
+    def _edifact_purchase_get_barcode(self, product):
+        # Make it hookable for additional modules
+        return product.barcode
 
     def _edifact_purchase_get_address(self, partner):
         # We apply the same logic as:
@@ -122,9 +138,9 @@ class PurchaseOrder(models.Model):
             [("partner_id", "=", self.company_id.partner_id.id)], limit=1
         )
         seller_id_number = id_number.search([("partner_id", "=", self.partner_id.id)])
-        if not seller_id_number and self.partner_id.parent_id:
+        if not seller_id_number and self.partner_id.commercial_partner_id:
             seller_id_number = id_number.search(
-                [("partner_id", "=", self.partner_id.parent_id.id)], limit=1
+                [("partner_id", "=", self.partner_id.commercial_partner_id.id)], limit=1
             )
         message_id = exchange_record.id if exchange_record else ""
         warehouse_name = (
@@ -200,11 +216,15 @@ class PurchaseOrder(models.Model):
             product_type = "EN"
             if self.edifact_version == "d01b":
                 product_type = "SRV"
+
+            supplier_code = self._edifact_purchase_get_supplier_code(product)
+            barcode = self._edifact_purchase_get_barcode(product)
+
             product_seg = [
                 # Line item number
-                ("LIN", number, "", [product.barcode, product_type]),
+                ("LIN", number, "", [barcode, product_type]),
                 # Product identification of Supplier's article number
-                ("PIA", "1", [product.default_code, "SA", "", "91"]),
+                ("PIA", "1", [supplier_code, "SA", "", "91"]),
                 # Product identification of Buyer's part number
                 ("PIA", "1", [product.default_code, "BP", "", "92"]),
                 # Ordered quantity

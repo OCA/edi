@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<odoo noupdate="0">
+<odoo noupdate="1">
     <record id="edi_exchange_type_purchase_order_out" model="edi.exchange.type">
         <field name="backend_id" ref="edi_backend_edifact" />
         <field name="backend_type_id" ref="edi_backend_type_edifact" />
