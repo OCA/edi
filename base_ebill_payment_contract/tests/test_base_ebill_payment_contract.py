@@ -3,7 +3,8 @@
 
 from datetime import date, timedelta
 
-from odoo.tests.common import Form, SingleTransactionCase
+from odoo.tests import Form, SingleTransactionCase
+from odoo.tools import mute_logger
 
 
 class TestBaseEbillPaymentContract(SingleTransactionCase):
@@ -67,4 +68,5 @@ class TestBaseEbillPaymentContract(SingleTransactionCase):
         self.assertTrue(
             self.partner.get_active_contract(self.contract1.transmit_method_id)
         )
-        self.assertFalse(self.partner.get_active_contract(self.method_post))
+        with mute_logger("odoo.addons.base_ebill_payment_contract.models.res_partner"):
+            self.assertFalse(self.partner.get_active_contract(self.method_post))
