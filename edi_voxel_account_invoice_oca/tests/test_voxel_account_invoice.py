@@ -286,8 +286,20 @@ class TestVoxelAccountInvoice(TransactionCase):
 
     def _get_taxes_data(self):
         return [
-            {"Amount": "52.92", "Rate": "15.0", "Type": False},
-            {"Amount": "105.84", "Rate": "30.0", "Type": False},
+            {
+                "Amount": "52.92",
+                "Rate": "15.0",
+                "Type": False,
+                "Base": "352.8",
+                "Description": "Tax 15%",
+            },
+            {
+                "Amount": "105.84",
+                "Rate": "30.0",
+                "Type": False,
+                "Base": "352.8",
+                "Description": "Tax 30.00%",
+            },
         ]
 
     def _get_total_summary_data(self):
