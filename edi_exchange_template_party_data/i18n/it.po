@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-05-27 14:26+0000\n"
+"PO-Revision-Date: 2025-08-08 15:25+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -24,7 +24,7 @@ msgstr "Nome visualizzato"
 #. module: edi_exchange_template_party_data
 #: model:ir.model,name:edi_exchange_template_party_data.model_edi_exchange_template_output
 msgid "EDI Exchange Output Template"
-msgstr ""
+msgstr "Modello output scambio EDI"
 
 #. module: edi_exchange_template_party_data
 #: model:ir.model.fields,field_description:edi_exchange_template_party_data.field_edi_exchange_template_output__id
@@ -34,10 +34,10 @@ msgstr "ID"
 #. module: edi_exchange_template_party_data
 #: model:ir.model.fields,field_description:edi_exchange_template_party_data.field_edi_exchange_template_output____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Ultima modifica il"
 
 #. module: edi_exchange_template_party_data
 #: code:addons/edi_exchange_template_party_data/models/edi_exchange_template_output.py:0
 #, python-format
 msgid "No info provider found for party data"
-msgstr ""
+msgstr "Nessuna informazione trovata per il provider per parte dei dati"
