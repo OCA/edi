@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-05-27 14:26+0000\n"
+"PO-Revision-Date: 2025-08-08 15:25+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -19,7 +19,7 @@ msgstr ""
 #. module: base_business_document_import_phone
 #: model:ir.model,name:base_business_document_import_phone.model_business_document_import
 msgid "Common methods to import business documents"
-msgstr ""
+msgstr "Metodi comuni per l'importazione di documenti di lavoro"
 
 #. module: base_business_document_import_phone
 #: model:ir.model.fields,field_description:base_business_document_import_phone.field_business_document_import__display_name
@@ -34,4 +34,4 @@ msgstr "ID"
 #. module: base_business_document_import_phone
 #: model:ir.model.fields,field_description:base_business_document_import_phone.field_business_document_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Ultima modifica il"
