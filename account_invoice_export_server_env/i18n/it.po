@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-05-27 14:26+0000\n"
+"PO-Revision-Date: 2025-08-08 15:25+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -29,14 +29,14 @@ msgstr "ID"
 #. module: account_invoice_export_server_env
 #: model:ir.model.fields,field_description:account_invoice_export_server_env.field_transmit_method____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Ultima modifica il"
 
 #. module: account_invoice_export_server_env
 #: model:ir.model.fields,field_description:account_invoice_export_server_env.field_transmit_method__server_env_defaults
 msgid "Server Env Defaults"
-msgstr ""
+msgstr "Predefiniti ambiente server"
 
 #. module: account_invoice_export_server_env
 #: model:ir.model,name:account_invoice_export_server_env.model_transmit_method
 msgid "Transmit Method of a document"
-msgstr ""
+msgstr "Metodo trasmissione di un documento"
