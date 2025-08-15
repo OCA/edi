@@ -9,13 +9,17 @@
         <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
             <button name="button_draft" position="before">
+                <field name="can_generate_ubl" invisible="True" />
                 <button
                     type="object"
                     name="attach_ubl_xml_file_button"
-                    attrs="{'invisible': ['|', ('move_type', 'not in', ['out_invoice', 'out_refund']), ('state', '!=', 'posted')]}"
+                    attrs="{'invisible': [('can_generate_ubl', '=', False)]}"
                     string="Generate UBL XML File"
                 />
             </button>
+            <field name="to_check" position="after">
+                <field name="self_billing" />
+            </field>
         </field>
     </record>
 </odoo>

@@ -9,4 +9,8 @@ With this module, you can generate customer invoices/refunds:
 * in PDF format with an embedded UBL XML file
 * as an XML file with an optional embedded PDF file
 
+You can also generate self-billing invoices/debit notes:
+
+* as an XML file with an optional embedded PDF file
+
 This module supports UBL version 2.1 (used by default) and 2.0.
