@@ -72,8 +72,9 @@ class VoxelMixin(models.AbstractModel):
 
     def _get_and_send_voxel_report(self, report_name):
         self.ensure_one()
-        report = self.env.ref(report_name)
-        report_xml = report._render_qweb_xml(self.ids, {})[0]
+        report_xml = self.env["ir.actions.report"]._render_qweb_xml(
+            report_name, self.ids, {}
+        )[0]
         # Remove blank spaces
         tree = etree.fromstring(report_xml, etree.XMLParser(remove_blank_text=True))
         clean_report_xml = etree.tostring(tree, xml_declaration=True, encoding="UTF-8")
