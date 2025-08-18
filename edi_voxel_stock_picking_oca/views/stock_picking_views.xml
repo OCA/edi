@@ -33,7 +33,7 @@
                                     nolabel="1"
                                     readonly="1"
                                 >
-                                    <list>
+                                    <tree>
                                         <field name="date_created" />
                                         <field name="eta" />
                                         <field name="date_done" />
@@ -61,7 +61,7 @@
                                             icon="fa-fighter-jet"
                                             invisible="state != 'pending' or not eta"
                                         />
-                                    </list>
+                                    </tree>
                                 </field>
                             </group>
                         </page>

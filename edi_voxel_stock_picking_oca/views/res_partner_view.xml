@@ -10,6 +10,7 @@
                     name="voxel_picking_report_id"
                     invisible="not is_company or not voxel_enabled"
                     options="{'no_create': True, 'no_open': True}"
+                    groups="edi_voxel_oca.group_voxel_manager"
                 />
             </xpath>
         </field>
