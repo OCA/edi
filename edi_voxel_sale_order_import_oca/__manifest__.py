@@ -7,7 +7,7 @@
     "version": "18.0.1.0.0",
     "category": "Sale",
     "author": "Tecnativa, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/edi-voxel",
+    "website": "https://github.com/OCA/edi",
     "license": "AGPL-3",
     "depends": [
         "edi_voxel_oca",
