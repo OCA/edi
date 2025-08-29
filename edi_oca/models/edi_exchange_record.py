@@ -35,7 +35,7 @@ class EDIExchangeRecord(models.Model):
     )
     direction = fields.Selection(related="type_id.direction")
     backend_id = fields.Many2one(comodel_name="edi.backend", required=True)
-    model = fields.Char(index=True, required=False, readonly=True)
+    model = fields.Char(index=True, required=False, readonly=True, copy=False)
     res_id = fields.Many2oneReference(
         string="Record",
         index=True,
