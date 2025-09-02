@@ -144,6 +144,7 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
             {"name": "test_chan", "parent_id": parent_channel.id}
         )
         self.exchange_type_in.job_channel_id = channel
+        self.exchange_type_in.job_priority = 5
         # re-enable job delayed feature
         delayed = record.with_context(test_queue_job_no_delay=False).with_delay()
         # Silent useless warning
@@ -152,6 +153,7 @@ class EDIRecordTestCase(EDIBackendCommonTestCase):
         self.assertTrue(isinstance(delayed, DelayableRecordset))
         self.assertEqual(delayed.recordset, record)
         self.assertEqual(delayed.delayable.channel, "root.parent_test_chan.test_chan")
+        self.assertEqual(delayed.delayable.priority, 5)
 
     def test_create_child(self):
         vals = {

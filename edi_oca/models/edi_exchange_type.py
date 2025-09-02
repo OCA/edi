@@ -45,6 +45,7 @@ class EDIExchangeType(models.Model):
     job_channel_id = fields.Many2one(
         comodel_name="queue.job.channel",
     )
+    job_priority = fields.Integer()
     name = fields.Char(required=True)
     code = fields.Char(required=True, copy=False)
     direction = fields.Selection(
