@@ -39,7 +39,7 @@ addon | version | maintainers | summary
 [base_facturx](base_facturx/) | 12.0.1.0.0 |  | Base module for Factur-X/ZUGFeRD
 [base_ubl](base_ubl/) | 12.0.1.1.2 |  | Base module for Universal Business Language (UBL)
 [base_ubl_payment](base_ubl_payment/) | 12.0.1.0.1 |  | Payment-related code for Universal Business Language (UBL)
-[edi_oca](edi_oca/) | 12.0.1.23.0 | <a href='https://github.com/simahawk'><img src='https://github.com/simahawk.png' width='32' height='32' style='border-radius:50%;' alt='simahawk'/></a> <a href='https://github.com/etobella'><img src='https://github.com/etobella.png' width='32' height='32' style='border-radius:50%;' alt='etobella'/></a> | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
+[edi_oca](edi_oca/) | 12.0.1.23.1 | <a href='https://github.com/simahawk'><img src='https://github.com/simahawk.png' width='32' height='32' style='border-radius:50%;' alt='simahawk'/></a> <a href='https://github.com/etobella'><img src='https://github.com/etobella.png' width='32' height='32' style='border-radius:50%;' alt='etobella'/></a> | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [purchase_order_ubl](purchase_order_ubl/) | 12.0.1.0.1 |  | Embed UBL XML file inside the PDF purchase order
 [purchase_stock_ubl](purchase_stock_ubl/) | 12.0.1.0.1 |  | Glue module for Purchase Order UBL and Stock/Inventory
 [sale_order_import](sale_order_import/) | 12.0.1.0.1 |  | Import RFQ or sale orders from files
