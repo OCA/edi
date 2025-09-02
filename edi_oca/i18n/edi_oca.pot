@@ -258,7 +258,7 @@ msgid "Backend must match with exchange type's backend!"
 msgstr ""
 
 #. module: edi_oca
-#: code:addons/edi_oca/models/edi_exchange_type.py:240
+#: code:addons/edi_oca/models/edi_exchange_type.py:241
 #, python-format
 msgid "Backend should respect backend type!"
 msgstr ""
@@ -908,6 +908,11 @@ msgstr ""
 #. module: edi_oca
 #: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__job_channel_id
 msgid "Job Channel"
+msgstr ""
+
+#. module: edi_oca
+#: model:ir.model.fields,field_description:edi_oca.field_edi_exchange_type__job_priority
+msgid "Job Priority"
 msgstr ""
 
 #. module: edi_oca
