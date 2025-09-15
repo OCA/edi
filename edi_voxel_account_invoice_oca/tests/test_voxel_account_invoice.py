@@ -252,8 +252,8 @@ class TestVoxelAccountInvoice(TransactionCase):
                     "Total": "352.8",
                 },
                 "taxes": [
-                    {"Rate": "15.0", "Type": False},
-                    {"Rate": "30.0", "Type": False},
+                    {"Rate": "15.0", "Type": False, "Amount": "52.92"},
+                    {"Rate": "30.0", "Type": False, "Amount": "105.84"},
                 ],
                 "discounts": [
                     {
