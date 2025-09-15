@@ -23,7 +23,7 @@ class AccountMove(models.Model):
         if (
             xml_format
             and xml_format != "none"
-            and self.move_type in ("out_invoice", "out_refund")
+            and self.move_type in self._select_move_type_for_xml_in_pdf()
             and self.partner_id
             and self.state != "cancel"
             and self.invoice_line_ids.filtered(lambda x: x.display_type == "product")
@@ -43,3 +43,7 @@ class AccountMove(models.Model):
         """
         self.ensure_one()
         return None
+
+    def _select_move_type_for_xml_in_pdf(self):
+        """Override me if you want to add other move types"""
+        return ("out_invoice", "out_refund")
