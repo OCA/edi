@@ -161,7 +161,17 @@ class ReportVoxelInvoice(models.AbstractModel):
         taxes = []
         for tax in line.tax_ids:
             rate = tax.amount_type != "group" and str(tax.amount) or False
-            taxes.append({"Type": tax.voxel_tax_code, "Rate": rate})
+            totals_dic = line._get_price_total_and_subtotal(taxes=tax)
+            tax_amount = line.currency_id.round(
+                totals_dic["price_total"] - totals_dic["price_subtotal"]
+            )
+            taxes.append(
+                {
+                    "Type": tax.voxel_tax_code,
+                    "Rate": rate,
+                    "Amount": str(tax_amount),
+                }
+            )
         return taxes
 
     def _get_taxes_data(self, invoice):
