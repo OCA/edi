@@ -725,6 +725,27 @@ class AccountMove(models.Model):
         )
         etree.SubElement(line_doc, ns["ram"] + "LineID").text = str(line_number)
 
+        # TODO make it overridable
+        if self.memone_type:
+            line_note = etree.SubElement(line_doc, ns["ram"] + "IncludedNote")
+            json = iline.analytic_distribution
+            str_analytique = "{"
+            if json:
+                keys = iline.analytic_distribution.keys()
+                for key in keys:
+                    analytic_id = self.env["account.analytic.account"].browse(int(key))
+                    if analytic_id.code:
+                        analytic_diff = analytic_id.code
+                    else:
+                        analytic_diff = analytic_id.name
+                    str_analytique = str_analytique + f"{analytic_diff}: {json[key]}, "
+                str_analytique = str_analytique + "}"
+            else:
+                str_analytique = "None"
+            etree.SubElement(
+                line_note, ns["ram"] + "Content"
+            ).text = f"Compte: {iline.account_id.code} & Analytique: {str_analytique}"
+
         trade_product = etree.SubElement(line_item, ns["ram"] + "SpecifiedTradeProduct")
         self._set_iline_product_information(iline, trade_product, ns)
         self._set_iline_product_attributes(iline, trade_product, ns)
@@ -990,7 +1011,7 @@ class AccountMove(models.Model):
     def regular_pdf_invoice_to_facturx_invoice(self, pdf_bytesio):
         self.ensure_one()
         assert pdf_bytesio, "Missing pdf_bytesio"
-        if self.move_type in ("out_invoice", "out_refund"):
+        if self.move_type in self._select_move_type_for_xml_in_pdf():
             facturx_xml_bytes, level = self.generate_facturx_xml()
             pdf_metadata = self._prepare_pdf_metadata()
             lang = (
