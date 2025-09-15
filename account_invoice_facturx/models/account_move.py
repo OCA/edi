@@ -125,6 +125,7 @@ class AccountMove(models.Model):
             urn = "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic"
         elif ns["level"] == "extended":
             urn = "urn:cen.eu:en16931:2017#conformant#" "urn:factur-x.eu:1p0:extended"
+            urn = "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended"
         else:
             urn = f"urn:factur-x.eu:1p0:{ns['level']}"
         ctx_param_id.text = urn
