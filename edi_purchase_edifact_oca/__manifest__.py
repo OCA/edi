@@ -14,6 +14,7 @@
         "base_edifact",
         "stock",
         "edi_storage_oca",
+        "uom_unece",
         "edi_purchase_oca",
         "partner_identification_gln",
         "base_business_document_import",

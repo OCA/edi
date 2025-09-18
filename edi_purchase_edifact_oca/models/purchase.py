@@ -128,7 +128,7 @@ class PurchaseOrder(models.Model):
             # VAT registration number
             ("RFF", ["VA", partner.vat]),
             # Purchasing contact
-            ("CTA", "PD", [partner.name, ""]),
+            ("CTA", "PD", ["", partner.name]),
         ]
 
     def _edifact_purchase_get_header(self, exchange_record=None):
@@ -198,6 +198,17 @@ class PurchaseOrder(models.Model):
 
         return header
 
+    def _edifact_purchase_get_uom(self, uom):
+        # Find an UoM with an UNECE code if possible
+        if uom.unece_code:
+            return uom
+
+        domain = [
+            ("unece_code", "not in", [False, ""]),
+            ("category_id", "=", uom.category_id.id),
+        ]
+        return uom.search(domain, limit=1) or uom
+
     def _edifact_purchase_get_product(self):
         number = 0
         segments = []
@@ -220,6 +231,15 @@ class PurchaseOrder(models.Model):
             supplier_code = self._edifact_purchase_get_supplier_code(product)
             barcode = self._edifact_purchase_get_barcode(product)
 
+            if "package_qty" in line._fields:
+                uom = line.product_uom
+                qty = line.product_qty
+            else:
+                uom = self._edifact_purchase_get_uom(line.product_uom)
+                qty = line.product_uom._compute_quantity(
+                    line.product_qty, uom, round=False
+                )
+
             product_seg = [
                 # Line item number
                 ("LIN", number, "", [barcode, product_type]),
@@ -228,16 +248,11 @@ class PurchaseOrder(models.Model):
                 # Product identification of Buyer's part number
                 ("PIA", "1", [product.default_code, "BP", "", "92"]),
                 # Ordered quantity
-                ("QTY", ["21", line.product_uom_qty, ""]),
+                ("QTY", ["21", qty, uom.unece_code or ""]),
                 # Quantity per pack
-                (
-                    "QTY",
-                    [
-                        "52",
-                        line.package_qty if "package_qty" in line._fields else "",
-                        "",
-                    ],
-                ),
+                ("QTY", ["52", line.package_qty, ""])
+                if "package_qty" in line._fields
+                else (),
                 # Delivery date/time, requested
                 ("DTM", ["2", line.date_planned.strftime("%Y%m%d"), "102"]),
                 # Line item amount
@@ -253,7 +268,7 @@ class PurchaseOrder(models.Model):
                 # Tax information
                 ("TAX", "7", "VAT", "", "", ["", "", "", product_tax]),
             ]
-            segments.extend(product_seg)
+            segments.extend(filter(None, product_seg))
         # Pass tax information to summary
         # TODO: can be used to create TAX, MOA segments
         vals["tax"] = tax
