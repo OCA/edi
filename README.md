@@ -33,7 +33,7 @@ addon | version | maintainers | summary
 [edi_oca](edi_oca/) | 15.0.1.7.5 | <a href='https://github.com/simahawk'><img src='https://github.com/simahawk.png' width='32' height='32' style='border-radius:50%;' alt='simahawk'/></a> <a href='https://github.com/etobella'><img src='https://github.com/etobella.png' width='32' height='32' style='border-radius:50%;' alt='etobella'/></a> | Define backends, exchange types, exchange records, basic automation and views for handling EDI exchanges.
 [edi_stock_oca](edi_stock_oca/) | 15.0.1.0.0 |  | Define EDI Configuration for Stock
 [edi_storage_oca](edi_storage_oca/) | 15.0.1.3.0 |  | Base module to allow exchanging files via storage backend (eg: SFTP).
-[edi_voxel_account_invoice_oca](edi_voxel_account_invoice_oca/) | 15.0.1.0.5 |  | Sends account invoices to Voxel.
+[edi_voxel_account_invoice_oca](edi_voxel_account_invoice_oca/) | 15.0.1.0.6 |  | Sends account invoices to Voxel.
 [edi_voxel_oca](edi_voxel_oca/) | 15.0.1.0.1 |  | Base module for connecting with Voxel
 [edi_voxel_sale_order_import_oca](edi_voxel_sale_order_import_oca/) | 15.0.1.0.1 |  | Import sale order from Voxel.
 [edi_voxel_sale_secondary_unit_oca](edi_voxel_sale_secondary_unit_oca/) | 15.0.1.0.0 | <a href='https://github.com/ernestotejeda'><img src='https://github.com/ernestotejeda.png' width='32' height='32' style='border-radius:50%;' alt='ernestotejeda'/></a> | Map Voxel UoM to Sale Secondary UoM and Use Them
