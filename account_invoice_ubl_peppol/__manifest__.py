@@ -3,7 +3,7 @@
 {
     "name": "Account Invoice UBL PEPPOL",
     "summary": "Generate invoices in PEPPOL 3.0 BIS dialect",
-    "version": "13.0.1.1.0",
+    "version": "12.0.1.0.0",
     "category": "Accounting & Finance",
     "author": "Sunflower IT, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
@@ -16,5 +16,4 @@
         "data/peppol.eas.list.csv",
         "views/res_country.xml",
     ],
-    "installable": True,
 }

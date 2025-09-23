@@ -180,14 +180,16 @@ class BaseUbl(models.AbstractModel):
         name.text = commercial_partner.name
         if partner.lang:
             self._ubl_add_language(partner.lang, party, ns, version=version)
-        self._ubl_add_address(
-            commercial_partner, 'PostalAddress', party, ns, version=version)
+        self._ubl_add_address(partner, 'PostalAddress', party, ns, version=version)
         self._ubl_add_party_tax_scheme(
             commercial_partner, party, ns, version=version)
-        if company:
+        if commercial_partner.is_company or company:
             self._ubl_add_party_legal_entity(
                 commercial_partner, party, ns, version='2.1')
         self._ubl_add_contact(partner, party, ns, version=version)
+
+    def _ubl_get_customer_assigned_id(self, partner):
+        return partner.commercial_partner_id.ref
 
     @api.model
     def _ubl_add_customer_party(
@@ -201,10 +203,11 @@ class BaseUbl(models.AbstractModel):
                 partner = company.partner_id
         customer_party_root = etree.SubElement(
             parent_node, ns['cac'] + node_name)
-        if not company and partner.commercial_partner_id.ref:
+        partner_ref = self._ubl_get_customer_assigned_id(partner)
+        if partner_ref:
             customer_ref = etree.SubElement(
                 customer_party_root, ns['cbc'] + 'SupplierAssignedAccountID')
-            customer_ref.text = partner.commercial_partner_id.ref
+            customer_ref.text = partner_ref
         self._ubl_add_party(
             partner, company, 'Party', customer_party_root, ns,
             version=version)
@@ -285,7 +288,7 @@ class BaseUbl(models.AbstractModel):
     def _ubl_add_line_item(
             self, line_number, name, product, type, quantity, uom, parent_node,
             ns, seller=False, currency=False, price_subtotal=False,
-            qty_precision=3, price_precision=2, version='2.1'):
+            qty_precision=3, price_precision=2, taxes=None, version='2.1'):
         line_item = etree.SubElement(
             parent_node, ns['cac'] + 'LineItem')
         line_item_id = etree.SubElement(line_item, ns['cbc'] + 'ID')
@@ -322,12 +325,18 @@ class BaseUbl(models.AbstractModel):
             base_qty.text = '1'  # What else could it be ?
         self._ubl_add_item(
             name, product, line_item, ns, type=type, seller=seller,
-            version=version)
+            version=version, taxes=taxes)
+
+    def _ubl_get_customer_product_code(self, product, customer):
+        """Inherit and overwrite to return the customer product sku either from
+        product, invoice_line or customer (product.customer_sku,
+        invoice_line.customer_sku, customer.product_sku)"""
+        return ""
 
     @api.model
     def _ubl_add_item(
             self, name, product, parent_node, ns, type='purchase',
-            seller=False, version='2.1'):
+            seller=False, customer=False, taxes=None, version='2.1'):
         """Beware that product may be False (in particular on invoices)"""
         assert type in ('sale', 'purchase'), 'Wrong type param'
         assert name, 'name is a required arg'
@@ -354,6 +363,15 @@ class BaseUbl(models.AbstractModel):
         description.text = name
         name_node = etree.SubElement(item, ns['cbc'] + 'Name')
         name_node.text = product_name or name.split('\n')[0]
+        customer_code = self._ubl_get_customer_product_code(product, customer)
+        if customer_code:
+            buyer_identification = etree.SubElement(
+                item, ns['cac'] + 'BuyersItemIdentification'
+            )
+            buyer_identification_id = etree.SubElement(
+                buyer_identification, ns['cbc'] + 'ID'
+            )
+            buyer_identification_id.text = customer_code
         if seller_code:
             seller_identification = etree.SubElement(
                 item, ns['cac'] + 'SellersItemIdentification')
@@ -371,10 +389,11 @@ class BaseUbl(models.AbstractModel):
             # I'm not 100% sure, but it seems that ClassifiedTaxCategory
             # contains the taxes of the product without taking into
             # account the fiscal position
-            if type == 'sale':
-                taxes = product.taxes_id
-            else:
-                taxes = product.supplier_taxes_id
+            if taxes is None:
+                if type == 'sale':
+                    taxes = product.taxes_id
+                else:
+                    taxes = product.supplier_taxes_id
             if taxes:
                 for tax in taxes.filtered(
                         lambda t: t.company_id == self.env.user.company_id):

@@ -57,7 +57,7 @@
     <menuitem
         id="peppol_eas_list_menu"
         action="peppol_eas_list_action"
-        parent="account.account_invoicing_menu"
+        parent="account.account_account_menu"
         sequence="150"
     />
 </odoo>

@@ -4,15 +4,23 @@
 from lxml import etree
 
 from odoo import api, models
+from odoo.osv import expression
 
 
-class AccountMove(models.Model):
-    _inherit = "account.move"
+class AccountInvoice(models.Model):
+    _inherit = "account.invoice"
+
+    def get_payment_identifier(self):
+        return self.reference
 
     def _account_invoice_ubl_use_peppol(self):
-        """ Returns True when we should use PEPPOL """
+        """Returns True when we should use PEPPOL"""
         domain = self.company_id.get_ubl_domain_peppol()
-        return bool(self.filtered_domain(domain))
+        if not domain:
+            return True
+        return bool(
+            self.search(expression.AND([[("id", "in", self.ids)], domain]), limit=1)
+        )
 
     def generate_ubl_xml_string(self, version="2.1"):
         self.ensure_one()
@@ -20,10 +28,10 @@ class AccountMove(models.Model):
             this = self.with_context(account_invoice_ubl_use_peppol=True)
         else:
             this = self
-        return super(AccountMove, this).generate_ubl_xml_string(version=version)
+        return super(AccountInvoice, this).generate_ubl_xml_string(version=version)
 
     def _ubl_add_header(self, parent_node, ns, version="2.1"):
-        res = super(AccountMove, self)._ubl_add_header(parent_node, ns, version=version)
+        res = super()._ubl_add_header(parent_node, ns, version=version)
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
             return res
 
@@ -43,6 +51,24 @@ class AccountMove(models.Model):
         ubl_version_id.addnext(customization_id)
         return res
 
+    @api.multi
+    def _ubl_add_order_reference(self, parent_node, ns, version="2.1"):
+        res = super()._ubl_add_order_reference(parent_node, ns, version=version)
+        if not self.env.context.get("account_invoice_ubl_use_peppol"):
+            return res
+
+        # use the invoice number as default value for cac:OrderReference as in odoo 17.0
+        order_ref_node_name = ns["cac"] + "OrderReference"
+        order_ref_id_node_name = ns["cbc"] + "ID"
+        order_ref = parent_node.find(order_ref_node_name)
+        if order_ref is None:
+            order_ref = etree.SubElement(parent_node, order_ref_node_name)
+        order_ref_id = order_ref.find(order_ref_id_node_name)
+        if order_ref_id is None:
+            order_ref_id = etree.SubElement(order_ref, order_ref_id_node_name)
+            order_ref_id.text = self.number
+        return res
+
     @api.model
     def _ubl_add_payment_means(
         self,
@@ -54,7 +80,7 @@ class AccountMove(models.Model):
         payment_identifier=None,
         version="2.1",
     ):
-        res = super(AccountMove, self)._ubl_add_payment_means(
+        res = super()._ubl_add_payment_means(
             partner_bank,
             payment_mode,
             date_due,
@@ -91,7 +117,23 @@ class AccountMove(models.Model):
                     ns["cac"] + "FinancialInstitutionBranch"
                 )
                 if institution_branch is not None:
-                    payee_fin_account.remove(institution_branch)
+                    institution = institution_branch.find(
+                        ns["cac"] + "FinancialInstitution"
+                    )
+                    if institution is not None:
+                        institution_branch_id = institution_branch.find(
+                            ns["cbc"] + "ID"
+                        )
+                        if institution_branch_id is None:
+                            # get the bic from FinancialInstitution ID
+                            bic = institution.find(ns["cbc"] + "ID")
+                            if bic is not None:
+                                institution_branch_id = etree.SubElement(
+                                    institution_branch,
+                                    ns["cbc"] + "ID",
+                                )
+                                institution_branch_id.text = bic.text
+                        institution_branch.remove(institution)
 
             # UBL-CR-661: A UBL invoice should not include the PaymentMeansCode listID
             payment_means_code = payment_means.find(ns["cbc"] + "PaymentMeansCode")
@@ -101,7 +143,7 @@ class AccountMove(models.Model):
 
     def _ubl_add_invoice_line_tax_total(self, iline, parent_node, ns, version="2.1"):
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
-            return super(AccountMove, self)._ubl_add_invoice_line_tax_total(
+            return super()._ubl_add_invoice_line_tax_total(
                 iline, parent_node, ns, version=version
             )
 
@@ -111,7 +153,7 @@ class AccountMove(models.Model):
     def _ubl_add_party(
         self, partner, company, node_name, parent_node, ns, version="2.1"
     ):
-        res = super(AccountMove, self)._ubl_add_party(
+        res = super()._ubl_add_party(
             partner, company, node_name, parent_node, ns, version=version
         )
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
@@ -165,7 +207,7 @@ class AccountMove(models.Model):
     def _ubl_add_party_tax_scheme(
         self, commercial_partner, parent_node, ns, version="2.1"
     ):
-        res = super(AccountMove, self)._ubl_add_party_tax_scheme(
+        res = super()._ubl_add_party_tax_scheme(
             commercial_partner, parent_node, ns, version=version
         )
 
@@ -185,7 +227,7 @@ class AccountMove(models.Model):
 
     @api.model
     def _ubl_add_tax_scheme(self, tax_scheme_dict, parent_node, ns, version="2.1"):
-        res = super(AccountMove, self)._ubl_add_tax_scheme(
+        res = super()._ubl_add_tax_scheme(
             tax_scheme_dict, parent_node, ns, version=version
         )
 
@@ -205,7 +247,7 @@ class AccountMove(models.Model):
 
     @api.model
     def _ubl_add_party_legal_entity(self, partner, parent_node, ns, version="2.1"):
-        res = super(AccountMove, self)._ubl_add_party_legal_entity(
+        res = super()._ubl_add_party_legal_entity(
             partner, parent_node, ns, version=version
         )
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
@@ -214,7 +256,6 @@ class AccountMove(models.Model):
         # PartyLegalEntity/CompanyID must be added just after RegistrationName
         party = parent_node
         legal_entity = party.find(ns["cac"] + "PartyLegalEntity")
-        registration_name = legal_entity.find(ns["cbc"] + "RegistrationName")
         endpoint_dict = partner._get_peppol_endpoint_id()
         endpoint_id = endpoint_dict.get("endpoint_id")
         scheme_id = endpoint_dict.get("scheme_id")
@@ -223,8 +264,6 @@ class AccountMove(models.Model):
                 parent_node, ns["cbc"] + "CompanyID", schemeID=scheme_id
             )
             company_id_element.text = endpoint_id
-            party = parent_node
-            legal_entity = party.find(ns["cac"] + "PartyLegalEntity")
             registration_name = legal_entity.find(ns["cbc"] + "RegistrationName")
             registration_name.addnext(company_id_element)
 
@@ -232,7 +271,6 @@ class AccountMove(models.Model):
         #             Party PartyLegalEntity RegistrationAddress
         # UBL-CR-249: A UBL invoice should not include the AccountingCustomerParty
         #             Party PartyLegalEntity RegistrationAddress
-        legal_entity = party.find(ns["cac"] + "PartyLegalEntity")
         if legal_entity is not None:
             address = legal_entity.find(ns["cac"] + "RegistrationAddress")
             if address is not None:
@@ -243,7 +281,7 @@ class AccountMove(models.Model):
     def _ubl_add_tax_category(
         self, tax, parent_node, ns, node_name="TaxCategory", version="2.1"
     ):
-        res = super(AccountMove, self)._ubl_add_tax_category(
+        res = super()._ubl_add_tax_category(
             tax, parent_node, ns, node_name=node_name, version=version
         )
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
@@ -267,7 +305,7 @@ class AccountMove(models.Model):
 
     @api.model
     def _ubl_add_address(self, partner, node_name, parent_node, ns, version="2.1"):
-        res = super(AccountMove, self)._ubl_add_address(
+        res = super()._ubl_add_address(
             partner, node_name, parent_node, ns, version=version
         )
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
@@ -282,7 +320,7 @@ class AccountMove(models.Model):
                 address.remove(subentitycode)
 
     def _ubl_add_invoice_line(self, parent_node, iline, line_number, ns, version="2.1"):
-        res = super(AccountMove, self)._ubl_add_invoice_line(
+        res = super()._ubl_add_invoice_line(
             parent_node, iline, line_number, ns, version=version
         )
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
@@ -308,7 +346,7 @@ class AccountMove(models.Model):
         ns,
         version="2.1",
     ):
-        res = super(AccountMove, self)._ubl_add_tax_subtotal(
+        res = super()._ubl_add_tax_subtotal(
             taxable_amount,
             tax_amount,
             tax,
@@ -334,9 +372,7 @@ class AccountMove(models.Model):
                     tax_category_id.addnext(tax_exemption_reason)
 
     def _ubl_add_tax_total(self, xml_root, ns, version="2.1"):
-        res = super(AccountMove, self)._ubl_add_tax_total(
-            xml_root, ns, version=version,
-        )
+        res = super()._ubl_add_tax_total(xml_root, ns, version=version)
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
             return res
 
@@ -372,17 +408,17 @@ class AccountMove(models.Model):
         product,
         parent_node,
         ns,
-        type_="purchase",
+        type="purchase",
         seller=False,
         taxes=None,
         version="2.1",
     ):
-        res = super(AccountMove, self)._ubl_add_item(
+        res = super()._ubl_add_item(
             name,
             product,
             parent_node,
             ns,
-            type_=type_,
+            type=type,
             seller=seller,
             taxes=taxes,
             version=version,

@@ -6,7 +6,7 @@ import base64
 from lxml import etree
 import logging
 
-from odoo import api, models
+from odoo import api, fields, models
 from odoo.tools import float_is_zero, float_round
 
 logger = logging.getLogger(__name__)
@@ -25,6 +25,9 @@ class AccountInvoice(models.Model):
         doc_id.text = self.number
         issue_date = etree.SubElement(parent_node, ns['cbc'] + 'IssueDate')
         issue_date.text = self.date_invoice.strftime('%Y-%m-%d')
+        if self.date_due and version >= '2.1':
+            due_date = etree.SubElement(parent_node, ns['cbc'] + 'DueDate')
+            due_date.text = fields.Date.to_string(self.date_due)
         type_code = etree.SubElement(
             parent_node, ns['cbc'] + 'InvoiceTypeCode')
         if self.type == 'out_invoice':
@@ -154,7 +157,7 @@ class AccountInvoice(models.Model):
             iline, line_root, ns, version=version)
         self._ubl_add_item(
             iline.name, iline.product_id, line_root, ns, type='sale',
-            version=version)
+            taxes=iline.invoice_line_tax_ids, version=version)
         price_node = etree.SubElement(line_root, ns['cac'] + 'Price')
         price_amount = etree.SubElement(
             price_node, ns['cbc'] + 'PriceAmount', currencyID=cur_name)
@@ -172,7 +175,7 @@ class AccountInvoice(models.Model):
                 unitCode=uom_unece_code)
         else:
             base_qty = etree.SubElement(price_node, ns['cbc'] + 'BaseQuantity')
-        base_qty.text = '%0.*f' % (qty_precision, qty)
+        base_qty.text = '%0.*f' % (qty_precision, 1.0)
 
     def _ubl_add_invoice_line_tax_total(
             self, iline, parent_node, ns, version='2.1'):
