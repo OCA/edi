@@ -14,12 +14,7 @@ class AccountInvoiceDownloadLog(models.Model):
     download_config_id = fields.Many2one(
         "account.invoice.download.config", readonly=True
     )
-    import_config_id = fields.Many2one(
-        related="download_config_id.import_config_id", store=True
-    )
-    partner_id = fields.Many2one(
-        related="download_config_id.import_config_id.partner_id", store=True
-    )
+    partner_id = fields.Many2one(related="download_config_id.partner_id", store=True)
     company_id = fields.Many2one(
         "res.company", related="download_config_id.company_id", store=True
     )

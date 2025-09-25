@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2018-2021 Akretion France (http://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+
+
+<record id="view_partner_property_form" model="ir.ui.view">
+    <field name="name">res.partner.account.invoice.download.config</field>
+    <field name="model">res.partner</field>
+    <field
+            name="inherit_id"
+            ref="account_invoice_import.view_partner_property_form"
+        />
+    <field name="arch" type="xml">
+        <group name="invoice_import_config" position="inside">
+            <div name="download_configs" colspan="2">
+                <button
+                    class="btn-link"
+                    type="object"
+                    name="jump_to_download_config"
+                >
+                    <field
+                        string="Download Configs"
+                        name="download_config_count"
+                        widget="statinfo"
+                    />
+                </button>
+            </div>
+        </group>
+    </field>
+</record>
+
+
+</odoo>

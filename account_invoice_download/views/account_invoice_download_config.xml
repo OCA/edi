@@ -21,18 +21,14 @@
                     attrs="{'invisible': [('active', '=', True)]}"
                 />
                 <group name="main">
-                    <field name="name" />
-                    <field name="company_id" invisible="1" />
-                    <field name="company_id" groups="base.group_multi_company" />
-                    <field
-                        name="import_config_id"
-                        invisible="not context.get('download_config_main_view')"
-                    />
-                    <field
-                        name="partner_id"
-                        invisible="not context.get('download_config_main_view')"
-                    />
-                    <field name="active" invisible="1" />
+                    <group name="main-left">
+                       <field name="partner_id" />
+                        <field name="active" invisible="1" />
+                    </group>
+                    <group name="main-right">
+                        <field name="company_id" invisible="1" />
+                        <field name="company_id" groups="base.group_multi_company" />
+                    </group>
                 </group>
                 <group name="params">
                     <group string="Download Method" name="method">
@@ -88,11 +84,7 @@
         <field name="model">account.invoice.download.config</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name" decoration-bf="1" />
-                <field
-                    name="import_config_id"
-                    invisible="not context.get('download_config_main_view')"
-                />
+                <field name="partner_id" decoration-bf="1" />
                 <field
                     name="company_id"
                     groups="base.group_multi_company"
@@ -125,8 +117,10 @@
         <field name="model">account.invoice.download.config</field>
         <field name="arch" type="xml">
             <search>
-                <field name="name" />
-                <field name="import_config_id" />
+                <field name="partner_id" />
+                <separator />
+                <filter name="manual" string="Manual" domain="[('method', '=', 'manual')]"/>
+                <filter name="auto" string="Automatic" domain="[('method', '=', 'auto')]"/>
                 <separator />
                 <filter
                     string="Archived"
@@ -154,10 +148,17 @@
     </record>
 
     <menuitem
+        id="account_invoice_download_root_menu"
+        name="Vendor Bill Download"
+        parent="account.menu_finance_configuration"
+        sequence="100"
+    />
+
+    <menuitem
         id="account_invoice_download_config_menu"
-        parent="account_invoice_import.account_invoice_import_config_root"
+        parent="account_invoice_download_root_menu"
         action="account_invoice_download_config_action"
-        sequence="20"
+        sequence="10"
     />
 
 </odoo>

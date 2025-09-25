@@ -16,9 +16,7 @@
 <record id="account_invoice_download_log_rule" model="ir.rule">
     <field name="name">Vendor Bills Download Log multi-company</field>
     <field name="model_id" ref="model_account_invoice_download_log" />
-    <field
-            name="domain_force"
-        >['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>
 </record>
 
 

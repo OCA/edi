@@ -31,7 +31,6 @@
                         name="download_config_id"
                         invisible="not context.get('download_log_main_view')"
                     />
-                <field name="import_config_id" />
                 <field name="partner_id" />
                 <field name="company_id" groups="base.group_multi_company" />
                 <field name="result" invisible="1" />
@@ -149,9 +148,9 @@
 
 <menuitem
         id="account_invoice_download_log_menu"
-        parent="account_invoice_import.account_invoice_import_config_root"
+        parent="account_invoice_download_root_menu"
         action="account_invoice_download_log_action"
-        sequence="30"
+        sequence="20"
     />
 
 </odoo>

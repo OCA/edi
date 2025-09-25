@@ -5,12 +5,12 @@
 from odoo import api, fields, models
 
 
-class AccountInvoiceImportConfig(models.Model):
-    _inherit = "account.invoice.import.config"
+class ResPartner(models.Model):
+    _inherit = "res.partner"
 
     download_config_ids = fields.One2many(
         "account.invoice.download.config",
-        "import_config_id",
+        "partner_id",
         string="Download Configurations",
     )
     download_config_count = fields.Integer(compute="_compute_download_config_count")
@@ -18,31 +18,22 @@ class AccountInvoiceImportConfig(models.Model):
     @api.depends("download_config_ids")
     def _compute_download_config_count(self):
         rg_res = self.env["account.invoice.download.config"].read_group(
-            [("import_config_id", "in", self.ids)],
-            ["import_config_id"],
-            ["import_config_id"],
+            [("partner_id", "in", self.ids), ("company_id", "=", self.env.company.id)],
+            ["partner_id"],
+            ["partner_id"],
         )
-        mapped_data = {
-            x["import_config_id"][0]: x["import_config_id_count"] for x in rg_res
-        }
-        for config in self:
-            config.download_config_count = mapped_data.get(config.id, 0)
+        mapped_data = {x["partner_id"][0]: x["partner_id_count"] for x in rg_res}
+        for partner in self:
+            partner.download_config_count = mapped_data.get(partner.id, 0)
 
     def jump_to_download_config(self):
         self.ensure_one()
         action = self.env["ir.actions.actions"]._for_xml_id(
             "account_invoice_download.account_invoice_download_config_action"
         )
-        action.update(
-            {
-                "context": {
-                    "default_name": self.name,
-                    "default_import_config_id": self.id,
-                },
-            }
-        )
+        action["context"] = {"default_partner_id": self.id}
         download_configs = self.env["account.invoice.download.config"].search(
-            [("import_config_id", "=", self.id)]
+            [("partner_id", "=", self.id)]
         )
         if len(download_configs) == 1:
             action.update(

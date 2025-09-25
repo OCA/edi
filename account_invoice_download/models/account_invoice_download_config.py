@@ -18,22 +18,18 @@ class AccountInvoiceDownloadConfig(models.Model):
     _description = "Configuration for the download of Supplier Invoices"
     _check_company_auto = True
 
-    name = fields.Char(required=True)
     active = fields.Boolean(default=True)
     company_id = fields.Many2one(
         "res.company",
         required=True,
         default=lambda self: self.env.company,
     )
-    import_config_id = fields.Many2one(
-        "account.invoice.import.config",
-        string="Invoice Import Config",
-        ondelete="cascade",
-        check_company=True,
-        domain="[('company_id', '=', company_id)]",
-    )
     partner_id = fields.Many2one(
-        related="import_config_id.partner_id", readonly=True, store=True
+        "res.partner",
+        required=True,
+        ondelete="cascade",
+        domain=[("parent_id", "=", False)],
+        check_company=True,
     )
     last_run = fields.Date(
         string="Last Download Date", help="Date of the last successfull download"
@@ -115,7 +111,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                     )
             config.download_start_date = start_date
 
-    @api.depends("name", "backend", "method")
+    @api.depends("partner_id", "backend", "method")
     def name_get(self):
         backend2label = dict(
             self.fields_get("backend", "selection")["backend"]["selection"]
@@ -126,7 +122,7 @@ class AccountInvoiceDownloadConfig(models.Model):
         res = []
         for rec in self:
             name = "%s (%s / %s)" % (
-                rec.name,
+                rec.partner_id.name,
                 backend2label.get(rec.backend, "-"),
                 method2label.get(rec.method, "-"),
             )
@@ -158,11 +154,6 @@ class AccountInvoiceDownloadConfig(models.Model):
         if not self.backend:
             raise UserError(
                 _("No backend configured for download configuration '%s'.") % self.name
-            )
-        if not self.import_config_id:
-            raise UserError(
-                _("No invoice import configuration for download configuration '%s'.")
-                % self.name
             )
         if self.credentials_stored():
             logger.info("Credentials stored for %s, launching download", self.name)
@@ -202,14 +193,9 @@ class AccountInvoiceDownloadConfig(models.Model):
         self.ensure_one()
         amo = self.env["account.move"]
         aiio = self.env["account.invoice.import"]
-        logger.info("Start to run invoice download %s (%s)", self.name, self.backend)
+        logger.info("Start to run invoice download %s", self.display_name)
         if not self.backend:
-            logger.error("Missing backend on invoice download %s", self.name)
-            return ([], False)
-        if not self.import_config_id:
-            logger.error(
-                "Missing invoice import config on invoice download %s", self.name
-            )
+            logger.error("Missing backend on invoice download %s", self.display_name)
             return ([], False)
         logs = {
             "msg": [],
@@ -224,8 +210,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             logs["msg"].append(_("Failed to download invoice. Error: %s.") % e)
             logs["result"] = "failure"
         company_id = self.company_id.id
-        assert self.import_config_id.company_id.id == company_id
-        import_config = self.import_config_id.convert_to_import_config()
+        import_config = self.partner_id._convert_to_import_config(self.company_id)
         existing_refs = {}  # key = invoice reference, value = inv ID
         existing_invs = amo.search_read(
             [
