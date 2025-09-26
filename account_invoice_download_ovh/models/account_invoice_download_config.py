@@ -107,7 +107,7 @@ class AccountInvoiceDownloadConfig(models.Model):
         invoices = []
         logger.info(
             "Start to download OVH invoices with config %s and endpoint %s",
-            self.name,
+            self.display_name,
             self.ovh_endpoint,
         )
         try:
@@ -128,7 +128,9 @@ class AccountInvoiceDownloadConfig(models.Model):
             )
             logs["result"] = "failure"
             return []
-        logger.info("Starting OVH API query /me/bill (d/l config %s)", self.name)
+        logger.info(
+            "Starting OVH API query /me/bill (d/l config %s)", self.display_name
+        )
         params = {}
         if self.download_start_date:
             params = {"date.from": self.download_start_date}
@@ -139,7 +141,7 @@ class AccountInvoiceDownloadConfig(models.Model):
             logger.info(
                 "Starting OVH API query /me/bill/%s (d/l config %s)",
                 oinv_num,
-                self.name,
+                self.display_name,
             )
             res_inv = client.get("/me/bill/%s" % oinv_num)
             logger.debug("Result of /me/bill/%s : %s", oinv_num, json.dumps(res_inv))
@@ -174,63 +176,62 @@ class AccountInvoiceDownloadConfig(models.Model):
                 "date": oinv_date,
                 "amount_untaxed": res_inv["priceWithoutTax"].get("value"),
                 "amount_total": res_inv["priceWithTax"].get("value"),
+                "lines": [],
             }
             self.ovh_invoice_attach_pdf(parsed_inv, res_inv["pdfUrl"])
 
-            if self.import_config_id.invoice_line_method.startswith("nline"):
-                parsed_inv["lines"] = []
+            logger.info(
+                "Starting OVH API query /me/bill/%s/details "
+                "invoice number %s dated %s",
+                oinv_num,
+                parsed_inv["invoice_number"],
+                parsed_inv["date"],
+            )
+            res_ilines = client.get("/me/bill/%s/details" % oinv_num)
+            logger.debug(
+                "Result /me/bill/%s/details: %s", oinv_num, json.dumps(res_ilines)
+            )
+            for line in res_ilines:
                 logger.info(
-                    "Starting OVH API query /me/bill/%s/details "
+                    "Starting OVH API query /me/bill/%s/details/%s "
                     "invoice number %s dated %s",
                     oinv_num,
+                    line,
                     parsed_inv["invoice_number"],
                     parsed_inv["date"],
                 )
-                res_ilines = client.get("/me/bill/%s/details" % oinv_num)
+                res_iline = client.get("/me/bill/%s/details/%s" % (oinv_num, line))
                 logger.debug(
-                    "Result /me/bill/%s/details: %s", oinv_num, json.dumps(res_ilines)
+                    "Result /me/bill/%s/details/%s: %s",
+                    oinv_num,
+                    line,
+                    json.dumps(res_iline),
                 )
-                for line in res_ilines:
-                    logger.info(
-                        "Starting OVH API query /me/bill/%s/details/%s "
-                        "invoice number %s dated %s",
-                        oinv_num,
-                        line,
-                        parsed_inv["invoice_number"],
-                        parsed_inv["date"],
+                line = {
+                    # We don't have accurate product code in the OVH API
+                    # We had a product code in the SoAPI...
+                    # 'product': {'code': 'xxx'},
+                    "name": res_iline["description"],
+                    "qty": int(res_iline["quantity"]),
+                    "price_unit": res_iline["unitPrice"]["value"],
+                    "uom": {"unece_code": "C62"},
+                    "taxes": [
+                        {
+                            "amount_type": "percent",
+                            "amount": 20.0,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                }
+                if res_iline["periodStart"] and res_iline["periodEnd"]:
+                    line.update(
+                        {
+                            "date_start": res_iline["periodStart"],
+                            "date_end": res_iline["periodEnd"],
+                        }
                     )
-                    res_iline = client.get("/me/bill/%s/details/%s" % (oinv_num, line))
-                    logger.debug(
-                        "Result /me/bill/%s/details/%s: %s",
-                        oinv_num,
-                        line,
-                        json.dumps(res_iline),
-                    )
-                    line = {
-                        # We don't have accurate product code in the OVH API
-                        # We had a product code in the SoAPI...
-                        # 'product': {'code': 'xxx'},
-                        "name": res_iline["description"],
-                        "qty": int(res_iline["quantity"]),
-                        "price_unit": res_iline["unitPrice"]["value"],
-                        "uom": {"unece_code": "C62"},
-                        "taxes": [
-                            {
-                                "amount_type": "percent",
-                                "amount": 20.0,
-                                "unece_type_code": "VAT",
-                                "unece_categ_code": "S",
-                            }
-                        ],
-                    }
-                    if res_iline["periodStart"] and res_iline["periodEnd"]:
-                        line.update(
-                            {
-                                "date_start": res_iline["periodStart"],
-                                "date_end": res_iline["periodEnd"],
-                            }
-                        )
-                    parsed_inv["lines"].append(line)
+                parsed_inv["lines"].append(line)
 
             logger.debug("Final parsed_inv=%s", parsed_inv)
             invoices.append(parsed_inv)
