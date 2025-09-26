@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-09-26 12:43+0000\n"
+"PO-Revision-Date: 2025-09-26 15:44+0000\n"
 "Last-Translator: davidbeckercbl <becker@cbl-computer.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
@@ -41,7 +41,7 @@ msgstr "Fehlender UNECE Steuertyp auf Steuer '%(tax_name)s'"
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
-msgstr "Es fehlt der UNECE-Code für die Mengeneinheit '%s'."
+msgstr "Es fehlt der UNECE-Code für die Mengeneinheit '%s'"
 
 #. module: base_ubl
 #. odoo-python
