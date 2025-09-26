@@ -6,39 +6,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2025-09-26 12:43+0000\n"
+"Last-Translator: davidbeckercbl <becker@cbl-computer.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: base_ubl
 #: model:ir.model,name:base_ubl.model_base_ubl
 msgid "Common methods to generate and parse UBL XML files"
 msgstr ""
+"Allgemeine Methoden für die Erstellung und das Parsen von UBL-XML-Dateien"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%(tax_name)s'"
-msgstr ""
+msgstr "Fehlende UNECE Steuerkategorie auf Steuer '%(tax_name)s'"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%(tax_name)s'"
-msgstr ""
+msgstr "Fehlender UNECE Steuertyp auf Steuer '%(tax_name)s'"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
-msgstr ""
+msgstr "Es fehlt der UNECE-Code für die Mengeneinheit '%s'."
 
 #. module: base_ubl
 #. odoo-python
@@ -48,6 +51,8 @@ msgid ""
 "The UBL XML file does not contain the version for validating the content "
 "according to the schema."
 msgstr ""
+"Die UBL XML-Datei enthält keine Version, um den Inhalt anhand des Schemas "
+"validieren zu können."
 
 #. module: base_ubl
 #. odoo-python
@@ -59,3 +64,7 @@ msgid ""
 "is the error, which may give you an idea on the cause of the problem : "
 "%(error)s."
 msgstr ""
+"Die UBL-XML-Datei entspricht nicht dem offiziellen XML-Schema. Die XML-Datei "
+"und die vollständige Fehlermeldung wurden in die Server-Logs geschrieben. "
+"Hier ist der Fehler, der einen Hinweis auf die Fehlerursache geben könnte: "
+"%(error)s."
