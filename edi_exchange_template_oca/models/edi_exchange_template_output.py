@@ -121,18 +121,23 @@ class EDIExchangeOutputTemplate(models.Model):
 
     def _post_process_output(self, output):
         """Post process generated output."""
+        processor = getattr(
+            self,
+            f"_post_process_output_{self.generator}",
+            lambda result: result,
+        )
+        return processor(output)
+
+    def _post_process_output_qweb(self, output):
         if self.output_type == "xml":
-            # TODO: lookup for components to handle this dynamically
             output = xml_purge_nswrapper(output)
             if self.prettify:
                 output = self._prettify_xml(output)
-            elif self.generator == "json":
-                output = self._post_process_json_output(output)
         return output
 
-    def _post_process_json_output(self, output):
+    def _post_process_output_json(self, output):
         return json.dumps(output["payload"])
-    
+
     def _prettify_xml(self, xml_string):
         return etree.tostring(etree.fromstring(xml_string), pretty_print=True)
 
