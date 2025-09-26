@@ -140,8 +140,8 @@ class EDIExchangeTemplateMixin(models.AbstractModel):
             return {}
         validator = getattr(
             self,
-            lambda result: False,
             f"_evaluate_code_snippet_validate_{self.generator}",
+            lambda result: False,
         )
         err_msg = validator(result)
         if err_msg:
