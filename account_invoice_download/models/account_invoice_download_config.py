@@ -153,10 +153,13 @@ class AccountInvoiceDownloadConfig(models.Model):
         self.ensure_one()
         if not self.backend:
             raise UserError(
-                _("No backend configured for download configuration '%s'.") % self.name
+                _("No backend configured for download configuration '%s'.")
+                % self.display_name
             )
         if self.credentials_stored():
-            logger.info("Credentials stored for %s, launching download", self.name)
+            logger.info(
+                "Credentials stored for %s, launching download", self.display_name
+            )
             credentials = self.prepare_credentials()
             invoice_ids, log_id = self.run(credentials)
             if invoice_ids:
@@ -263,7 +266,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 invoice = aiio.with_company(company_id).create_invoice(
                     parsed_inv,
                     import_config=import_config,
-                    origin="Download Bill '%s'" % self.name,
+                    origin="Download Bill '%s'" % self.display_name,
                 )
             except Exception as e:
                 logs["msg"].append(
@@ -303,7 +306,7 @@ class AccountInvoiceDownloadConfig(models.Model):
         )
         logger.info(
             "End of invoice download %s (%s). IDs of created invoices: %s",
-            self.name,
+            self.display_name,
             self.backend,
             invoice_ids,
         )
