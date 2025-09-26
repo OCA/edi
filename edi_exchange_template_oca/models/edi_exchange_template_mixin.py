@@ -149,5 +149,10 @@ class EDIExchangeTemplateMixin(models.AbstractModel):
             return {}
         return result
 
+    def _evaluate_code_snippet_validate_json(self, result):
+        if "payload" not in result.keys():
+            return "JSON code_snippet should return a dict with a 'payload' key"
+        return False
+
     def validate(self, exchange_record):
         pass

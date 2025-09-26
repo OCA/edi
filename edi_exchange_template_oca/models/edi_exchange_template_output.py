@@ -1,6 +1,8 @@
 # Copyright 2020 ACSONE SA
 # @author Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+import json
+
 import lxml.etree as etree
 
 from odoo import fields, models
@@ -16,7 +18,7 @@ class EDIExchangeOutputTemplate(models.Model):
     _description = "EDI Exchange Output Template"
 
     generator = fields.Selection(
-        [("qweb", "Qweb Template"), ("report", "Report")],
+        [("json", "JSON"), ("qweb", "Qweb Template"), ("report", "Report")],
         required=True,
         default="qweb",
     )
@@ -86,6 +88,12 @@ class EDIExchangeOutputTemplate(models.Model):
         res_ids = values.get("res_ids", [])
         return report._render(res_ids, data=values)[0]
 
+    def _generate_json(self, exchange_record, **kw):
+        # We expect to have json data into `payload` key.
+        # See validator `_evaluate_code_snippet_validate_json` in the mixin.
+        result = self._get_render_values(exchange_record, **kw)
+        return result
+
     def _get_render_values(self, exchange_record, **kw):
         """Collect values to render current template."""
         values = {
@@ -118,8 +126,13 @@ class EDIExchangeOutputTemplate(models.Model):
             output = xml_purge_nswrapper(output)
             if self.prettify:
                 output = self._prettify_xml(output)
+            elif self.generator == "json":
+                output = self._post_process_json_output(output)
         return output
 
+    def _post_process_json_output(self, output):
+        return json.dumps(output["payload"])
+    
     def _prettify_xml(self, xml_string):
         return etree.tostring(etree.fromstring(xml_string), pretty_print=True)
 
