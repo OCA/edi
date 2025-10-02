@@ -29,13 +29,13 @@ class AccountInvoiceImport(models.TransientModel):
     _inherit = "account.invoice.import"
 
     @api.model
-    def fallback_parse_pdf_invoice(self, file_data):
+    def fallback_parse_pdf_invoice(self, file_data, company):
         """This method must be inherited by additional modules with
         the same kind of logic as the account_bank_statement_import_*
         modules"""
-        res = super().fallback_parse_pdf_invoice(file_data)
+        res = super().fallback_parse_pdf_invoice(file_data, company)
         if not res:
-            res = self.invoice2data_parse_invoice(file_data)
+            res = self.invoice2data_parse_invoice(file_data, company)
         return res
 
     @api.model
@@ -76,7 +76,7 @@ class AccountInvoiceImport(models.TransientModel):
         return re.sub(r"\D+", "", string)
 
     @api.model
-    def invoice2data_parse_invoice(self, file_data):
+    def invoice2data_parse_invoice(self, file_data, company):
         logger.info("Trying to analyze PDF invoice with invoice2data lib")
         fileobj = NamedTemporaryFile(
             "wb", prefix="odoo-aii-inv2data-pdf-", suffix=".pdf"
@@ -98,7 +98,9 @@ class AccountInvoiceImport(models.TransientModel):
             invoice2data_res = extract_data(fileobj.name, templates=templates)
         except Exception as e:
             fileobj.close()
-            raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
+            raise UserError(
+                _("PDF Invoice parsing failed. Error message: %s") % e
+            ) from e
         if not invoice2data_res:
             if not shutil.which("tesseract"):
                 logger.warning(
@@ -116,7 +118,9 @@ class AccountInvoiceImport(models.TransientModel):
                 )
             except Exception as e:
                 fileobj.close()
-                raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
+                raise UserError(
+                    _("PDF Invoice parsing failed. Error message: %s") % e
+                ) from e
             if not invoice2data_res:
                 fileobj.close()
                 return False

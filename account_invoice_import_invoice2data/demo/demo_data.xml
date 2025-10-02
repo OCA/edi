@@ -20,14 +20,8 @@
     <field name="country_id" ref="base.fr" />
     <field name="website">http://www.free.fr</field>
     <field name="vat">FR60421938861</field>
-</record>
-
-<record id="free_import_config" model="account.invoice.import.config">
-    <field name="name">Free</field>
-    <field name="partner_id" ref="free" />
-    <field name="invoice_line_method">1line_static_product</field>
-    <field name="label">Fiber optic access at the main office</field>
-    <field name="static_product_id" ref="internet_access" />
+    <field name="invoice_import_product_id" ref="internet_access" />
+    <field name="invoice_import_label">Fiber optic access at the main office</field>
 </record>
 
 <record id="product_beeswax_xl" model="product.product">
@@ -64,12 +58,6 @@
             name="supplier_taxes_id"
             eval="[(3, 0, [ref('l10n_generic_coa.1_purchase_tax_template')])]"
         /> -->
-</record>
-
-<record id="azure_import_config" model="account.invoice.import.config">
-    <field name="name">Azure Interior Multiline Auto Product</field>
-    <field name="partner_id" ref="base.res_partner_12" />
-    <field name="invoice_line_method">nline_auto_product</field>
 </record>
 
 </odoo>
