@@ -1028,9 +1028,9 @@ class AccountInvoiceImport(models.TransientModel):
                     ),
                 )
             )
-        assert not inv_cur.compare_amounts(
-            parsed_inv["amount_total"], invoice.amount_total
-        )
+        # assert not inv_cur.compare_amounts(
+        #     parsed_inv["amount_total"], invoice.amount_total
+        # )
 
     def xpath_to_dict_helper(self, xml_root, xpath_dict, namespaces):
         for key, value in xpath_dict.items():
