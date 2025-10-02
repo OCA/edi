@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-29 11:54+0000\n"
-"PO-Revision-Date: 2023-09-02 18:16+0000\n"
-"Last-Translator: Claude R Perrin <claude@alpis.fr>\n"
+"PO-Revision-Date: 2025-10-02 14:42+0000\n"
+"Last-Translator: Marwan Behillil <marwan.behillil@gmail.com>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: account_invoice_import
 #: code:addons/account_invoice_import/models/account_move.py:0
@@ -375,7 +375,7 @@ msgstr "Est un abonné"
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_journal
 msgid "Journal"
-msgstr ""
+msgstr "Journal"
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_move
