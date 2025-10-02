@@ -4,10 +4,12 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import base64
 import unittest.mock
 from random import randint
 
 from odoo import Command, fields
+from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_is_zero
 
@@ -433,3 +435,329 @@ Nina
         price_prec = self.env["decimal.precision"].precision_get("Product Price")
         self.assertTrue(float_is_zero(iline.price_unit, precision_digits=price_prec))
         self.assertTrue(self.company.currency_id.is_zero(iline.price_subtotal))
+
+    def test_res_company_cannot_refund_vat(self):
+        """Test _cannot_refund_vat method"""
+        # Test company with purchase taxes - should return False
+        self.assertFalse(self.company._cannot_refund_vat())
+
+        # Create company without purchase taxes - should return True
+        company_no_vat = self.env["res.company"].create(
+            {
+                "name": "No VAT Company",
+            }
+        )
+        self.assertTrue(company_no_vat._cannot_refund_vat())
+
+    def test_res_partner_convert_to_import_config(self):
+        """Test _convert_to_import_config method"""
+        partner = self.partner_with_email_with_inv_config
+
+        # Test with product configuration
+        config = partner._convert_to_import_config(self.company)
+        self.assertEqual(config["company"], self.company)
+        self.assertEqual(config["product"], partner.invoice_import_product_id)
+        self.assertEqual(config["label"], partner.invoice_import_label)
+        self.assertFalse(config["single_line"])
+
+        # Test with account and tax configuration
+        partner_account_config = self.env["res.partner"].create(
+            {
+                "name": "Account Config Partner",
+                "invoice_import_account_id": self.expense_account.id,
+                "invoice_import_tax_ids": [(6, 0, [self.purchase_tax.id])],
+                "invoice_import_single_line": True,
+            }
+        )
+        config = partner_account_config._convert_to_import_config(self.company)
+        self.assertEqual(config["account"], self.expense_account)
+        self.assertEqual(config["taxes"], self.purchase_tax)
+        self.assertTrue(config["single_line"])
+
+    def test_res_partner_update_imported_invoice(self):
+        """Test update_imported_invoice method"""
+        # Create a draft invoice without partner
+        invoice = self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "company_id": self.company.id,
+                "invoice_line_ids": [
+                    Command.create(
+                        {
+                            "name": "Test line",
+                            "quantity": 1,
+                            "price_unit": 100,
+                            "account_id": self.expense_account.id,
+                        }
+                    )
+                ],
+            }
+        )
+
+        # Create partner linked to this invoice
+        partner = self.env["res.partner"].create(
+            {
+                "name": "Test Supplier",
+                "is_company": True,
+                "supplier_rank": 1,
+                "invoice_import_move_id": invoice.id,
+            }
+        )
+
+        # Test update
+        action = partner.update_imported_invoice()
+
+        # Verify partner was set on invoice
+        self.assertEqual(invoice.partner_id, partner)
+        self.assertFalse(partner.invoice_import_move_id)
+        self.assertEqual(action["res_id"], invoice.id)
+
+    def test_account_move_set_partner_and_update_lines(self):
+        """Test _invoice_import_set_partner_and_update_lines method"""
+        # Create fiscal position with account and tax mapping
+        fp = self.env["account.fiscal.position"].create(
+            {
+                "name": "Test Fiscal Position",
+                "company_id": self.company.id,
+            }
+        )
+
+        # Create alternative account and tax for mapping
+        alt_account = self.env["account.account"].create(
+            {
+                "code": "612ALT",
+                "name": "Alternative expense account",
+                "account_type": "expense",
+                "company_id": self.company.id,
+            }
+        )
+        alt_tax = self.env["account.tax"].create(
+            {
+                "name": "Alternative VAT",
+                "description": "ALT-VAT-buy-5.0",
+                "type_tax_use": "purchase",
+                "amount": 5,
+                "amount_type": "percent",
+                "company_id": self.company.id,
+            }
+        )
+
+        # Add mappings to fiscal position
+        fp.write(
+            {
+                "account_ids": [
+                    Command.create(
+                        {
+                            "account_src_id": self.expense_account.id,
+                            "account_dest_id": alt_account.id,
+                        }
+                    )
+                ],
+                "tax_ids": [
+                    Command.create(
+                        {
+                            "tax_src_id": self.purchase_tax.id,
+                            "tax_dest_id": alt_tax.id,
+                        }
+                    )
+                ],
+            }
+        )
+
+        # Create partner with fiscal position
+        partner = self.env["res.partner"].create(
+            {
+                "name": "FP Partner",
+                "property_account_position_id": fp.id,
+            }
+        )
+
+        # Create invoice without partner
+        invoice = self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "company_id": self.company.id,
+                "invoice_line_ids": [
+                    Command.create(
+                        {
+                            "name": "Test line",
+                            "quantity": 1,
+                            "price_unit": 100,
+                            "account_id": self.expense_account.id,
+                            "tax_ids": [Command.set([self.purchase_tax.id])],
+                        }
+                    )
+                ],
+            }
+        )
+
+        # Test the method
+        invoice._invoice_import_set_partner_and_update_lines(partner)
+
+        # Verify partner was set and fiscal position applied
+        self.assertEqual(invoice.partner_id, partner)
+        self.assertEqual(invoice.fiscal_position_id, fp)
+
+        # Verify line was updated with mapped account and tax
+        line = invoice.invoice_line_ids.filtered(lambda x: x.display_type == "product")
+        self.assertEqual(line.account_id, alt_account)
+        self.assertEqual(line.tax_ids, alt_tax)
+
+    def test_parse_invoice_xml_format(self):
+        """Test XML invoice parsing"""
+        xml_content = b"""<?xml version="1.0" encoding="UTF-8"?>
+        <Invoice>
+            <InvoiceNumber>TEST-XML-001</InvoiceNumber>
+            <TotalAmount>120.00</TotalAmount>
+        </Invoice>"""
+
+        # Test with unsupported XML format (should raise UserError)
+        import_wizard = self.env["account.invoice.import"]
+        with self.assertRaises(UserError):
+            import_wizard.parse_invoice(
+                base64.b64encode(xml_content), "test_invoice.xml", self.company
+            )
+
+    def test_parse_invoice_invalid_xml(self):
+        """Test parsing invalid XML"""
+        invalid_xml = b"<Invalid>XML</unclosed>"
+
+        import_wizard = self.env["account.invoice.import"]
+        with self.assertRaises(UserError):
+            import_wizard.parse_invoice(
+                base64.b64encode(invalid_xml), "invalid.xml", self.company
+            )
+
+    def test_create_invoice_with_currency(self):
+        """Test invoice creation with currency"""
+        # Use existing EUR currency from base module
+        eur_currency = self.env.ref("base.EUR")
+
+        parsed_inv = {
+            "type": "in_invoice",
+            "amount_untaxed": 100.0,
+            "amount_total": 120.0,
+            "date": "2023-10-01",
+            "currency": {"iso": "EUR"},
+            "partner": {"name": "Test Partner"},
+            "lines": [
+                {
+                    "name": "Test Line",
+                    "qty": 1,
+                    "price_unit": 100,
+                }
+            ],
+        }
+
+        import_config = {"company": self.company}
+        invoice = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
+        )
+
+        self.assertEqual(invoice.currency_id, eur_currency)
+
+    def test_invoice_already_exists(self):
+        """Test duplicate invoice detection"""
+        # Create an existing invoice
+        existing_inv = self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "partner_id": self.env.ref("base.res_partner_1").id,
+                "company_id": self.company.id,
+                "ref": "DUPLICATE-001",
+            }
+        )
+
+        parsed_inv = {
+            "type": "in_invoice",
+            "invoice_number": "DUPLICATE-001",
+        }
+
+        import_wizard = self.env["account.invoice.import"]
+        result = import_wizard._invoice_already_exists(
+            parsed_inv, existing_inv.commercial_partner_id, self.company.id
+        )
+
+        self.assertEqual(result, existing_inv)
+
+    def test_adjustment_line_creation(self):
+        """Test adjustment line creation for rounding differences"""
+        parsed_inv = {
+            "type": "in_invoice",
+            "amount_untaxed": 100.01,  # Slight difference to trigger adjustment
+            "amount_total": 120.01,
+            "lines": [
+                {
+                    "name": "Test Line",
+                    "qty": 1,
+                    "price_unit": 100,
+                    "price_subtotal": 100.01,
+                }
+            ],
+        }
+
+        import_config = {"company": self.company}
+        invoice = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
+        )
+
+        # Should have main line + adjustment line
+        self.assertGreater(len(invoice.invoice_line_ids), 1)
+        adjustment_lines = invoice.invoice_line_ids.filtered(
+            lambda line: "Adjustment" in line.name
+        )
+        self.assertTrue(adjustment_lines)
+
+    def test_partner_bank_matching(self):
+        """Test partner bank account matching and creation"""
+        partner = self.env.ref("base.res_partner_1")
+
+        parsed_inv = {
+            "type": "in_invoice",
+            "amount_total": 100.0,
+            "iban": "FR1420041010050500013M02606",
+            "bic": "CCBPFRPPVER",
+            "partner": {"recordset": partner},
+        }
+
+        # Enable auto bank account creation
+        self.company.invoice_import_create_bank_account = True
+
+        import_config = {"company": self.company}
+        invoice = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
+        )
+
+        self.assertTrue(invoice.partner_bank_id)
+        # Bank account stores IBAN with spaces, so check without spaces
+        self.assertEqual(
+            invoice.partner_bank_id.acc_number.replace(" ", ""), parsed_inv["iban"]
+        )
+
+    def test_line_with_uom_and_product(self):
+        """Test invoice line creation with UOM and product matching"""
+        # Use Units UOM which is compatible with the default product UOM category
+        uom_unit = self.env.ref("uom.product_uom_unit")
+
+        parsed_inv = {
+            "type": "in_invoice",
+            "amount_total": 250.0,
+            "lines": [
+                {
+                    "product": {"code": "AII-TEST-PRODUCT"},
+                    "name": "Product with UOM",
+                    "qty": 5,
+                    "price_unit": 50,
+                    "uom": {"name": "Units"},
+                }
+            ],
+        }
+
+        import_config = {"company": self.company}
+        invoice = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
+        )
+
+        line = invoice.invoice_line_ids.filtered(lambda x: x.display_type == "product")
+        self.assertEqual(line.product_id, self.product)
+        self.assertEqual(line.product_uom_id, uom_unit)
