@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2015-2021 Akretion France (https://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='invoicing_settings']" position="after">
+                <h2
+                    attrs="{'invisible': [('has_accounting_entries','=',False)]}"
+                >Vendor Bills Import</h2>
+        <div class="row mt16 o_settings_container" id="account_invoice_import">
+            <div
+                        class="col-xs-12 col-md-12 o_setting_box"
+                        id="account_invoice_import_misc"
+                    >
+                <div class="o_setting_left_pane" />
+                <div class="o_setting_right_pane">
+                                <div class="row">
+                                    <label
+                                    class="col-md-5"
+                                    for="adjustment_debit_account_id"
+                                />
+                                    <field
+                                    name="adjustment_debit_account_id"
+                                    options="{'no_create': True}"
+                                />
+                                </div>
+                                <div class="row">
+                                    <label
+                                    class="col-md-5"
+                                    for="adjustment_credit_account_id"
+                                />
+                                    <field
+                                    name="adjustment_credit_account_id"
+                                    options="{'no_create': True}"
+                                />
+                                </div>
+                                <div class="row">
+                                    <label
+                                    class="col-md-5"
+                                    for="invoice_import_email"
+                                />
+                                    <field name="invoice_import_email" />
+                                </div>
+                            </div>
+                            </div>
+                <div
+                        class="col-xs-12 col-md-12 o_setting_box"
+                        id="account_invoice_import_bank_account"
+                    >
+                    <div class="o_setting_left_pane">
+                            <field name="invoice_import_create_bank_account" />
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <div class="row">
+                            <label
+                                    class="col-md-5"
+                                    for="invoice_import_create_bank_account"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
