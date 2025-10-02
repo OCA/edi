@@ -1,6 +1,8 @@
 # generated from manifests external_dependencies
+dateparser
 dotty-dict
 factur-x
+invoice2data
 phonenumbers
 pydifact
 pytz
