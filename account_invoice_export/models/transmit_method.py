@@ -20,6 +20,13 @@ class TransmitMethod(models.Model):
         default=10,
         help="Timeout in seconds, use 0 (zero) for no timeout.",
     )
+    report_to_export = fields.Many2one(
+        comodel_name="ir.actions.report",
+        default=lambda self: self.env.ref("account.account_invoices_without_payment"),
+        string="Report to send",
+        domain=[("report_type", "=", "qweb-pdf"), ("model", "=", "account.move")],
+        help="Report used to generate the document to send.",
+    )
 
     def get_transmission_http_header(self):
         """Generate the HTTP header needed by the transmission method.

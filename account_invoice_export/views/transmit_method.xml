@@ -29,6 +29,7 @@
                         name="export_connection_timeout"
                         invisible="not send_through_http"
                     />
+                    <field name="report_to_export" invisible="not send_through_http" />
                 </group>
             </xpath>
         </field>

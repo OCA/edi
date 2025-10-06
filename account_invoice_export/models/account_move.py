@@ -121,7 +121,11 @@ class AccountMove(models.Model):
         Use the format expected by the request library
         By default returns the PDF report.
         """
-        report = "account.report_invoice"
+        report = (
+            self.transmit_method_id.report_to_export.report_name
+            if self.transmit_method_id.report_to_export
+            else "account.report_invoice"
+        )
         pdf, _ = self.env["ir.actions.report"]._render(report, [self.id])
         filename = self._get_report_base_filename().replace("/", "_") + ".pdf"
         return {"file": (filename, pdf, "application/pdf")}
