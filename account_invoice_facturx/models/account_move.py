@@ -615,7 +615,7 @@ class AccountMove(models.Model):
             line_total = etree.SubElement(sums, ns["ram"] + "LineTotalAmount")
             line_total.text = "%0.*f" % (
                 ns["cur_prec"],
-                (self.amount_untaxed - ns["allowance_total_amount"]) * ns["sign"],
+                (self.amount_untaxed + ns["allowance_total_amount"]) * ns["sign"],
             )
             # We don't want to generate charge total, because we don't have the
             # notion of charge in Odoo. We only support allowance:
