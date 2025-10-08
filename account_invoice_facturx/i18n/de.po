@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-07-08 15:11+0000\n"
-"Last-Translator: Nils Coenen <nils.coenen@nico-solutions.de>\n"
+"PO-Revision-Date: 2025-10-08 20:42+0000\n"
+"Last-Translator: Peter Schubert <psc@saco.info>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -59,7 +59,7 @@ msgstr ""
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Discount"
-msgstr ""
+msgstr "Rabatt"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_level__en16931
@@ -161,7 +161,7 @@ msgstr "Fehlender UNECE-Code für Zahlungsmethode '%s'"
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "No invoice line label"
-msgstr ""
+msgstr "Keine Rechnungszeilenbezeichnung"
 
 #. module: account_invoice_facturx
 #. odoo-python
@@ -179,19 +179,22 @@ msgstr "Erstattung"
 
 #. module: account_invoice_facturx
 #: model:ir.model,name:account_invoice_facturx.model_ir_actions_report
-#, fuzzy
 msgid "Report Action"
-msgstr "Bericht"
+msgstr "Bericht Aktion"
 
 #. module: account_invoice_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
 msgid "Select the profile used for Factur-X invoice generation"
 msgstr ""
+"Wählen Sie das Profil aus, das für die Erstellung von Factur-X-Rechnungen "
+"verwendet wird"
 
 #. module: account_invoice_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_facturx.view_account_config_settings
 msgid "Select the type used for Factur-X customer refunds"
 msgstr ""
+"Wählen Sie den Typ aus, der für Factur-X-Kundenrückerstattungen verwendet "
+"wird"
 
 #. module: account_invoice_facturx
 #: model:ir.model.fields.selection,name:account_invoice_facturx.selection__res_company__facturx_refund_type__380
