@@ -109,8 +109,8 @@ class AccountMove(models.Model):
         res = requests.post(url, headers=headers, files=file_data, timeout=timeout)
         if res.status_code != 200:
             raise UserError(
-                self.env._("HTTP error %s sending invoice to %s")
-                % (res.status_code, self.transmit_method_id.name)
+                self.env._("HTTP error %s sending invoice to %s. %s")
+                % (res.status_code, self.transmit_method_id.name, res.text)
             )
         self.invoice_exported = self.invoice_export_confirmed = True
         return res.text
