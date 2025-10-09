@@ -339,11 +339,11 @@ class AccountMove(models.Model):
                 tax_lines[tline.tax_line_id]["base"] += tline.tax_base_amount
                 tax_lines[tline.tax_line_id]["amount"] += sign * tline.balance
             elif tline.tax_ids:
-                # In case there are no repartition lines
+                # In case there are no declared (tag) repartition lines
                 for tax in tline.tax_ids:
-                    if not tline.is_refund and tax.invoice_repartition_line_ids:
+                    if not tline.is_refund and tax.invoice_repartition_line_ids.tag_ids:
                         continue
-                    if tline.is_refund and tax.refund_repartition_line_ids:
+                    if tline.is_refund and tax.refund_repartition_line_ids.tag_ids:
                         continue
                     tax_lines.setdefault(
                         tax,
@@ -396,7 +396,7 @@ class AccountMove(models.Model):
                     version=version,
                 )
 
-        if not float_is_zero(exempt, precision_digits=prec):
+        if exempt_taxes:
             self._ubl_add_tax_subtotal(
                 exempt,
                 0,
