@@ -36,7 +36,7 @@ class SaleOrderImport(models.TransientModel):
                 return "rfq"
             else:
                 return self.parse_ubl_sale_order(xml_root)
-        return super().parse_xml_order(xml_root)
+        return super().parse_xml_order(data, detect_doc_type=detect_doc_type)
 
     @api.model
     def parse_ubl_sale_order_line(self, line, ns):
