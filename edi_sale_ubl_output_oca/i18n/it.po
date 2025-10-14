@@ -1,0 +1,96 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_sale_ubl_output_oca
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "1.0"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "12:30:00"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "2.2"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "2010-01-21"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "2010-02-10"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "2010-02-25"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qweb_tmpl_ubl_party
+msgid "7300070011115"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qweb_tmpl_ubl_party
+msgid "7302347231111"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "EUR"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qweb_tmpl_ubl_party
+msgid "Moderna Produkter AB"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "SO1234"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "XYZ123"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "urn:www.cenbii.eu:profile:BIIXYZ:ver1.0"
+msgstr ""
+
+#. module: edi_sale_ubl_output_oca
+#: model_terms:edi.exchange.template.output,template_arch:edi_sale_ubl_output_oca.demo_edi_exc_template_order_response_out
+#: model_terms:ir.ui.view,arch_db:edi_sale_ubl_output_oca.qwb_tmpl_ubl_order_response_out
+msgid "urn:www.cenbii.eu:transaction:biicoretrdmXYZ:ver1.0"
+msgstr ""
