@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0\n"
+"Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,6 +16,7 @@ msgstr ""
 #. module: base_edi
 #: model:ir.module.category,name:base_edi.module_category_edi
 #: model:ir.ui.menu,name:base_edi.menu_edi_root
+#: model:res.groups.privilege,name:base_edi.res_groups_privilege_edi
 msgid "EDI"
 msgstr ""
 
