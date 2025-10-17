@@ -16,15 +16,15 @@ class MailThread(models.AbstractModel):
             self = self.with_context(process_pdf_template=process_pdf_template)
         return super().message_new(msg_dict, custom_values)
 
-    def _message_post_after_hook(self, new_message, message_values):
-        res = super()._message_post_after_hook(new_message, message_values)
+    def _message_post_after_hook(self, message, msg_vals):
+        res = super()._message_post_after_hook(message, msg_vals)
         if self.env.context.get("process_pdf_template", False):
             # Process PDF attachments only if they come from an alias with
             # ‘process_pdf_template’ in default values.
             # One record is already created automatically from the mail alias, all
             # other attachments are processed without the ‘record_ref’ key so that a
             # new record is created for each attachment.
-            attachments = new_message.attachment_ids.filtered(
+            attachments = message.attachment_ids.filtered(
                 lambda x: x.mimetype == "application/pdf"
             )
             ctx = self.env.context.copy()
@@ -36,7 +36,7 @@ class MailThread(models.AbstractModel):
                     "attachment_ids": [(6, 0, attachment.ids)],
                 }
                 if index == 0:
-                    wiz_vals["record_ref"] = f"{self._name},{self.id}"
+                    wiz_vals["record_ref"] = f"{self._name},{self.id}"  # noqa
                 # pylint: disable=W8121
                 pdf_upload_wiz = (
                     self.env["wizard.base.import.pdf.upload"]
