@@ -16,9 +16,18 @@ class PurchaseOrderEdifactListener(Component):
     def on_button_confirm_purchase_order(self, order):
         if not self._should_create_exchange_record(order):
             return None
-        exchange_type = self.env.ref(
-            "edi_purchase_edifact_oca.edi_exchange_type_purchase_order_out"
-        )
+
+        domain = [
+            "|",
+            "|",
+            ("partner_ids", "=", False),
+            ("partner_ids", "=", order.partner_id.id),
+            ("partner_ids", "=", order.partner_id.commercial_partner_id.id),
+        ]
+        exchange_type = self.env["edi.exchange.type"].sudo().search(domain, limit=1)
+        if not exchange_type:
+            return None
+
         record = exchange_type.backend_id.create_record(
             exchange_type.code, self._storage_new_exchange_record_vals()
         )
