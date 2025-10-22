@@ -50,7 +50,9 @@ class PurchaseOrder(models.Model):
 
         header = self._edifact_purchase_get_header(exchange_record)
         product, vals = self._edifact_purchase_get_product()
-        summary = self._edifact_purchase_get_summary(vals, exchange_record)
+        summary = self._edifact_purchase_get_summary(
+            vals, len(header) + len(product), exchange_record
+        )
         lines += header + product + summary
         for segment in lines:
             segment = self._replace_edifact_delimiters(segment)
@@ -169,7 +171,7 @@ class PurchaseOrder(models.Model):
             (
                 "LOC",
                 "18",
-                [warehouse_name, "", "", "", ""],
+                [warehouse_name, "", "", ""],
             ),
         ]
         if self.edifact_version == "d01b":
@@ -275,7 +277,7 @@ class PurchaseOrder(models.Model):
         vals["total_line_item"] = number
         return segments, vals
 
-    def _edifact_purchase_get_summary(self, vals, exchange_record=None):
+    def _edifact_purchase_get_summary(self, vals, counter, exchange_record=None):
         message_id = exchange_record.id if exchange_record else ""
         total_line_item = vals["total_line_item"]
         len_header = 22
@@ -285,6 +287,6 @@ class PurchaseOrder(models.Model):
             ("UNS", "S"),
             # Number of line items in message
             ("CNT", ["2", total_line_item]),
-            ("UNT", len_header + 9 * total_line_item, message_id),
+            ("UNT", counter + 3, message_id),
         ]
         return summary
