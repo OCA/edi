@@ -225,3 +225,76 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         msg = rf"not allowed to modify '{model._description}' \({model._name}\)"
         with self.assertRaisesRegex(AccessError, msg):
             exchange_record.with_user(self.user).write({"external_identifier": "1234"})
+
+    def test_search_pagination_with_inaccessible_middle_records(self):
+        """
+        Regression test:
+        If some records in the first page are filtered out due to access rules,
+        _search must fetch additional records from next pages without truncating them.
+        """
+
+        self.user.write({"groups_id": [(4, self.group.id)]})
+
+        # Two different companies are used to trigger multi-company access filtering
+        company_1 = self.env.ref("base.main_company")
+        company_2 = self.env["res.company"].create({"name": "Other Company"})
+
+        # Three target records:
+        # - consumer_c1 and consumer_c3 belong to the active company and are readable
+        # - consumer_c2 belongs to another company and will be filtered out
+        # by access rules
+        consumer_c1 = self.env["res.partner"].create(
+            {"name": "c1-a", "company_id": company_1.id}
+        )
+        consumer_c2 = self.env["res.partner"].create(
+            {"name": "c2", "company_id": company_2.id}
+        )
+        consumer_c3 = self.env["res.partner"].create(
+            {"name": "c1-b", "company_id": company_1.id}
+        )
+
+        # One EDI records pointing to readable target records
+        self.backend.create_record(
+            "test_csv_output",
+            {"model": consumer_c1._name, "res_id": consumer_c1.id},
+        )
+
+        # One EDI records pointing to records from another company
+        self.backend.create_record(
+            "test_csv_output",
+            {"model": consumer_c2._name, "res_id": consumer_c2.id},
+        )
+
+        # One EDI records pointing to readable target records
+        visible_id_2 = self.backend.create_record(
+            "test_csv_output",
+            {"model": consumer_c3._name, "res_id": consumer_c3.id},
+        ).id
+
+        # Restrict the environment to company_1 only, activating the multi-company rule
+        # that will hide records pointing to consumer_c2
+        env_company_1 = self.env(
+            context=dict(self.env.context, allowed_company_ids=[company_1.id])
+        )
+
+        # Execute the search as a non-superuser:
+        # - super()._search returns the first 2 IDs (1 visible + 1 hidden)
+        # - custom logic removes the 1 hidden
+        # - pagination logic fetches 1 more record from the next page
+        records = (
+            env_company_1["edi.exchange.record"]
+            .with_user(self.user)
+            .search([], limit=2, order="id asc")
+        )
+
+        # The result must NOT be truncated: the search should still return `
+        # limit` records
+        self.assertEqual(
+            len(records),
+            2,
+            "Search results were truncated when inaccessible records were "
+            "present in the first page",
+        )
+
+        # The records fetched from the second page must be present in the final result
+        self.assertIn(visible_id_2, records.ids)
