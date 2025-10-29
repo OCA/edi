@@ -438,3 +438,18 @@ class AccountInvoice(models.Model):
                     node_name="ClassifiedTaxCategory",
                     version=version,
                 )
+
+    @api.multi
+    def _ubl_add_attachments(self, parent_node, ns, version="2.1"):
+        super()._ubl_add_attachments(parent_node, ns, version)
+        # fix filename of pdf, which is in the form
+        # "Invoice-INV/YYYY/####.pdf"
+        doc_ref_node = parent_node.find(ns["cac"] + "AdditionalDocumentReference")
+        if doc_ref_node is None:
+            return
+        doc_ref_id_node = doc_ref_node.find(ns["cbc"] + "ID")
+        filename = doc_ref_id_node.text.replace("Invoice-", "").replace("/", "_")
+        doc_ref_id_node.text = filename
+        attachment_node = doc_ref_node.find(ns["cac"] + "Attachment")
+        binary_node = attachment_node.find(ns["cbc"] + "EmbeddedDocumentBinaryObject")
+        binary_node.attrib["filename"] = filename
