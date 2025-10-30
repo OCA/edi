@@ -7,7 +7,7 @@ import logging
 from lxml import etree
 from stdnum import ean
 
-from odoo import _, api, fields, models
+from odoo import _, api, fields, models, tools
 from odoo.exceptions import UserError
 from odoo.tools import (
     float_compare,
@@ -20,8 +20,21 @@ from odoo.tools.misc import format_date
 
 logger = logging.getLogger(__name__)
 
+LOGLEVELS = {
+    "debug": logging.DEBUG,
+    "info": logging.INFO,
+    "warn": logging.WARN,
+    "error": logging.ERROR,
+    "critical": logging.CRITICAL,
+}
+
 try:
     from facturx import generate_from_file, xml_check_xsd
+    from facturx.facturx import logger as fxlogger
+
+    fxlogger.setLevel(
+        LOGLEVELS.get(tools.config.get("log_level", "info"), logging.INFO)
+    )
 except ImportError:
     logger.debug("Cannot import facturx")
 
