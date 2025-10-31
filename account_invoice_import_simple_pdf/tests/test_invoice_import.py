@@ -68,85 +68,102 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         )
 
         # for the full test with a PDF invoice
-        cls.partner_ak = (
-            cls.env["res.partner"]
-            .with_company(cls.company.id)
-            .create(
-                {
-                    "name": "Akretion France",
-                    "is_company": True,
-                    "country_id": cls.env.ref("base.fr").id,
-                    "simple_pdf_date_format": "dd-mm-y4",
-                    "simple_pdf_date_separator": "slash",
-                    "vat": "FR86792377731",
-                    "invoice_import_label": "My custom line label",
-                    "invoice_import_product_id": cls.product.id,
-                    "simple_pdf_currency_id": cls.env.ref("base.EUR").id,
-                    "simple_pdf_decimal_separator": "dot",
-                    "simple_pdf_thousand_separator": "comma",
-                    "simple_pdf_invoice_number_ids": [
-                        Command.create(
-                            {
-                                "string_type": "fixed",
-                                "fixed_char": "VT/",
-                            },
-                        ),
-                        Command.create(
-                            {
-                                "string_type": "year4",
-                            },
-                        ),
-                        Command.create(
-                            {
-                                "string_type": "fixed",
-                                "fixed_char": "/",
-                            },
-                        ),
-                        Command.create(
-                            {
-                                "string_type": "digit",
-                                "occurrence_min": 4,
-                                "occurrence_max": 4,
-                            },
-                        ),
-                    ],
-                    "simple_pdf_field_ids": [
-                        Command.create(
-                            {
-                                "name": "amount_total",
-                                "extract_rule": "last",
-                            },
-                        ),
-                        Command.create(
-                            {
-                                "name": "amount_untaxed",
-                                "extract_rule": "first",
-                                "start": "Subtotal",
-                            },
-                        ),
-                        Command.create(
-                            {
-                                "name": "date",
-                                "extract_rule": "first",
-                            },
-                        ),
-                        Command.create(
-                            {
-                                "name": "date_due",
-                                "extract_rule": "position_start",
-                                "position": 2,
-                            },
-                        ),
-                        Command.create(
-                            {
-                                "name": "invoice_number",
-                                "extract_rule": "first",
-                            },
-                        ),
-                    ],
-                }
-            )
+        akretion_vat = "FR86792377731"
+        akretion_partner_vals = {
+            "country_id": cls.env.ref("base.fr").id,
+            "simple_pdf_date_format": "dd-mm-y4",
+            "simple_pdf_date_separator": "slash",
+            "invoice_import_label": "My custom line label",
+            "invoice_import_product_id": cls.product.id,
+            "simple_pdf_currency_id": cls.env.ref("base.EUR").id,
+            "simple_pdf_decimal_separator": "dot",
+            "simple_pdf_thousand_separator": "comma",
+            "simple_pdf_invoice_number_ids": [
+                Command.create(
+                    {
+                        "string_type": "fixed",
+                        "fixed_char": "VT/",
+                    },
+                ),
+                Command.create(
+                    {
+                        "string_type": "year4",
+                    },
+                ),
+                Command.create(
+                    {
+                        "string_type": "fixed",
+                        "fixed_char": "/",
+                    },
+                ),
+                Command.create(
+                    {
+                        "string_type": "digit",
+                        "occurrence_min": 4,
+                        "occurrence_max": 4,
+                    },
+                ),
+            ],
+            "simple_pdf_field_ids": [
+                Command.create(
+                    {
+                        "name": "amount_total",
+                        "extract_rule": "last",
+                    },
+                ),
+                Command.create(
+                    {
+                        "name": "amount_untaxed",
+                        "extract_rule": "first",
+                        "start": "Subtotal",
+                    },
+                ),
+                Command.create(
+                    {
+                        "name": "date",
+                        "extract_rule": "first",
+                    },
+                ),
+                Command.create(
+                    {
+                        "name": "date_due",
+                        "extract_rule": "position_start",
+                        "position": 2,
+                    },
+                ),
+                Command.create(
+                    {
+                        "name": "invoice_number",
+                        "extract_rule": "first",
+                    },
+                ),
+            ],
+        }
+
+        partner_akretion = cls.env["res.partner"].search(
+            [
+                ("is_company", "=", True),
+                ("vat", "=", akretion_vat),
+                ("parent_id", "=", False),
+            ],
+            limit=1,
         )
+        if partner_akretion:
+            partner_akretion.with_company(cls.company.id).write(akretion_partner_vals)
+            cls.partner_ak = partner_akretion
+        else:
+            cls.partner_ak = (
+                cls.env["res.partner"]
+                .with_company(cls.company.id)
+                .create(
+                    dict(
+                        akretion_partner_vals,
+                        name="Akretion France",
+                        is_company=True,
+                        vat=akretion_vat,
+                    )
+                )
+            )
 
         cls.ak_filename = "akretion_france-test.pdf"
         with file_open("%s/tests/pdf/%s" % (cls.module, cls.ak_filename), "rb") as f:
