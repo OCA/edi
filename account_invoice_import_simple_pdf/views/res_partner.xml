@@ -22,11 +22,10 @@
                     attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
                     groups="account.group_account_invoice,account.group_account_readonly"
                 >
-                    <group
-                        name="invoice_import_config"
-                        position="move"
-                    /> <!-- TODO make it work -->
-                    <group name="simple_pdf_main">
+                <group
+                        name="simple_pdf_main"
+                        string="Simple PDF Configuration (useless for structured invoices)"
+                    >
                         <group name="simple_pdf_main-left">
                         <field name="simple_pdf_keyword" string="Keywords" />
                         <field name="simple_pdf_pages" widget="radio" />
@@ -76,24 +75,28 @@
                         />
                         <field name="simple_pdf_field_ids" nolabel="1" colspan="2" />
                     </group>
-                    <group name="pdf_simple_test" string="Test File" col="4">
+                    <group name="pdf_simple_test" string="Test File">
+                            <label for="simple_pdf_test_file" />
+                            <div id="pdf_simple_test">
                                 <field
-                            name="simple_pdf_test_file"
-                            filename="simple_pdf_test_filename"
-                        />
+                                name="simple_pdf_test_file"
+                                filename="simple_pdf_test_filename"
+                                class="oe_inline"
+                            />
                                 <button
-                            type="object"
-                            name="pdf_simple_test_run"
-                            string="Run Test"
-                            class="btn-primary"
-                        />
+                                type="object"
+                                name="pdf_simple_test_run"
+                                string="Run Test"
+                                class="btn-primary oe_inline"
+                            />
                                 <button
-                            name="pdf_simple_test_cleanup"
-                            type="object"
-                            string="Cleanup Test Data"
-                            attrs="{'invisible': [('simple_pdf_test_file', '=', False), ('simple_pdf_test_results', '=', False), ('simple_pdf_test_raw_text', '=', False)]}"
-                        />
-
+                                name="pdf_simple_test_cleanup"
+                                type="object"
+                                string="Cleanup Test Data"
+                                attrs="{'invisible': [('simple_pdf_test_file', '=', False), ('simple_pdf_test_results', '=', False), ('simple_pdf_test_raw_text', '=', False)]}"
+                                class="oe_inline"
+                            />
+                            </div>
                             </group>
                             <group name="pdf_simple_test_results" string="Test Results">
                                 <field
@@ -119,5 +122,20 @@
         </field>
     </record>
 
+    <record id="view_partner_property_form_move" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field
+            name="inherit_id"
+            ref="account_invoice_import_simple_pdf.view_partner_property_form"
+        />
+        <field name="arch" type="xml">
+            <group name="simple_pdf_main" position="before">
+                  <group name="invoice_import_config" position="move" />
+            </group>
+            <group name="invoice_import_config" position="attributes">
+                    <attribute name="string" />
+            </group>
+        </field>
+    </record>
 
 </odoo>
