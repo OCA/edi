@@ -932,7 +932,7 @@ class AccountInvoiceImport(models.TransientModel):
             "name": _("Adjustment on %s") % iline.name,
             "quantity": 1,
             "price_unit": diff_amount,
-            "tax_ids": [Command.set([iline.tax_ids.ids])],
+            "tax_ids": [Command.set(iline.tax_ids.ids)],
         }
         return vals
 
