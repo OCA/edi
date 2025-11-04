@@ -51,8 +51,7 @@
 </record>
 
 <record id="mvm_musterhafter" model="res.partner">
-    <field name="name">MVM Musterhafter
-Versicherungsverein Musterstadt a.G.</field>
+    <field name="name">MVM Musterhafter Versicherungsverein Musterstadt a.G.</field>
     <field name="is_company" eval="True" />
     <field name="supplier_rank">1</field>
     <field name="customer_rank">0</field>

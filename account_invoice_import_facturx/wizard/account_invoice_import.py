@@ -42,7 +42,7 @@ class AccountInvoiceImport(models.TransientModel):
                     "//ram:ApplicableSupplyChainTradeAgreement"
                     "/ram:SellerTradeParty"
                     "/ram:SpecifiedTaxRegistration"
-                    "/ram:ID[@schemeID='VA']",  # ZUGFeRD
+                    "/ram:ID[@schemeID='VA']",  # ZUGFeRD 1.x
                 ],
                 "name": [
                     "//ram:ApplicableHeaderTradeAgreement"
@@ -50,7 +50,7 @@ class AccountInvoiceImport(models.TransientModel):
                     "/ram:Name",  # Factur-X
                     "//ram:ApplicableSupplyChainTradeAgreement"
                     "/ram:SellerTradeParty"
-                    "/ram:Name",  # ZUGFeRD
+                    "/ram:Name",  # ZUGFeRD 1.x
                 ],
                 "email": [
                     "//ram:ApplicableHeaderTradeAgreement"
@@ -62,43 +62,67 @@ class AccountInvoiceImport(models.TransientModel):
                     "/ram:SellerTradeParty"
                     "/ram:DefinedTradeContact"
                     "/ram:EmailURIUniversalCommunication"
-                    "/ram:URIID",  # ZUGFeRD
+                    "/ram:URIID",  # ZUGFeRD 1.x
                 ],
                 "country_code": [
                     "//ram:ApplicableHeaderTradeAgreement"
                     "/ram:SellerTradeParty"
                     "/ram:PostalTradeAddress"
                     "/ram:CountryID",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:CountryID",  # ZUGFeRD 1.x
                 ],
                 "zip": [
                     "//ram:ApplicableHeaderTradeAgreement"
                     "/ram:SellerTradeParty"
                     "/ram:PostalTradeAddress"
                     "/ram:PostcodeCode",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:PostcodeCode",  # ZUGFeRD 1.x
                 ],
                 "street": [
                     "//ram:ApplicableHeaderTradeAgreement"
                     "/ram:SellerTradeParty"
                     "/ram:PostalTradeAddress"
                     "/ram:LineOne",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:LineOne",  # ZUGFeRD 1.x
                 ],
                 "street2": [
                     "//ram:ApplicableHeaderTradeAgreement"
                     "/ram:SellerTradeParty"
                     "/ram:PostalTradeAddress"
                     "/ram:LineTwo",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:LineTwo",  # ZUGFeRD 1.x
                 ],
                 "street3": [
                     "//ram:ApplicableHeaderTradeAgreement"
                     "/ram:SellerTradeParty"
                     "/ram:PostalTradeAddress"
                     "/ram:LineThree",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:LineThree",  # ZUGFeRD 1.x
                 ],
                 "city": [
                     "//ram:ApplicableHeaderTradeAgreement"
                     "/ram:SellerTradeParty"
                     "/ram:PostalTradeAddress"
                     "/ram:CityName",  # Factur-X
+                    "//ram:ApplicableSupplyChainTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:PostalTradeAddress"
+                    "/ram:CityName",  # ZUGFeRD 1.x
                 ],
             },
             "company": {
