@@ -724,7 +724,8 @@ class AccountMove(models.Model):
             line_item, ns["ram"] + "AssociatedDocumentLineDocument"
         )
         etree.SubElement(line_doc, ns["ram"] + "LineID").text = str(line_number)
-
+        # Allow to override or extend the tree structure
+        self._cii_add_invoice_line_block_hook(etree, line_doc, iline, line_number, ns)
         trade_product = etree.SubElement(line_item, ns["ram"] + "SpecifiedTradeProduct")
         self._set_iline_product_information(iline, trade_product, ns)
         self._set_iline_product_attributes(iline, trade_product, ns)
@@ -854,6 +855,10 @@ class AccountMove(models.Model):
             iline.price_subtotal * ns["sign"],
         )
 
+    def _cii_add_invoice_line_block_hook(self, etree, line_doc, iline, line_number, ns):
+        """You may override or extend the tree structure"""
+        pass
+
     def _cii_invoice_line_taxes(self, iline, parent_node, ns, allowance=False):
         if iline.tax_ids:
             for tax in iline.tax_ids:
@@ -867,9 +872,8 @@ class AccountMove(models.Model):
 
     def generate_facturx_xml(self):
         self.ensure_one()
-        assert self.move_type in (
-            "out_invoice",
-            "out_refund",
+        assert (
+            self.move_type in self._select_move_type_for_xml_in_pdf()
         ), "only works for customer invoice and refunds"
         dpo = self.env["decimal.precision"]
         level = self.company_id.facturx_level or "en16931"
@@ -990,7 +994,7 @@ class AccountMove(models.Model):
     def regular_pdf_invoice_to_facturx_invoice(self, pdf_bytesio):
         self.ensure_one()
         assert pdf_bytesio, "Missing pdf_bytesio"
-        if self.move_type in ("out_invoice", "out_refund"):
+        if self.move_type in self._select_move_type_for_xml_in_pdf():
             facturx_xml_bytes, level = self.generate_facturx_xml()
             pdf_metadata = self._prepare_pdf_metadata()
             lang = (
