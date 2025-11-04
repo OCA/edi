@@ -18,13 +18,13 @@ class AccountInvoiceImport(models.TransientModel):
     _inherit = ["account.invoice.import", "base.ubl"]
 
     @api.model
-    def parse_xml_invoice(self, xml_root):
+    def parse_xml_invoice(self, xml_root, company):
         if xml_root.tag and xml_root.tag.startswith(
             "{urn:oasis:names:specification:ubl:schema:xsd:Invoice"
         ):
-            return self.parse_ubl_invoice(xml_root)
+            return self.parse_ubl_invoice(xml_root, company)
         else:
-            return super().parse_xml_invoice(xml_root)
+            return super().parse_xml_invoice(xml_root, company)
 
     def get_attachments(self, xml_root, namespaces):
         attach_xpaths = xml_root.xpath(
@@ -122,7 +122,7 @@ class AccountInvoiceImport(models.TransientModel):
         return vals
 
     @api.model
-    def parse_ubl_invoice(self, xml_root):
+    def parse_ubl_invoice(self, xml_root, company):
         """Parse UBL Invoice XML file"""
         namespaces = xml_root.nsmap
         inv_xmlns = namespaces.pop(None)
@@ -251,8 +251,9 @@ class AccountInvoiceImport(models.TransientModel):
             "attachments": attachments,
         }
 
-        self.get_currency_helper(res)
-        currency = res["currency_rec"]
+        currency = self.env["business.document.import"]._match_currency(
+            res, [], company=company, raise_exception=False
+        )
         if currency.compare_amounts(total_line, counters["lines"]):
             logger.warning(
                 "The gloabl LineExtensionAmount (%s) doesn't match the "

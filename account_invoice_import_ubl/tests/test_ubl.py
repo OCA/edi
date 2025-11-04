@@ -2,9 +2,8 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-import base64
 
-from odoo import fields
+from odoo import Command, fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, mute_logger
 
@@ -17,6 +16,36 @@ class TestUbl(TransactionCase):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.company = cls.env.ref("base.main_company")
+        adjustment_credit_account_id = (
+            cls.env["account.account"]
+            .create(
+                {
+                    "company_id": cls.company.id,
+                    "code": "758UBLADJUST",
+                    "name": "Adjustment income account",
+                    "account_type": "income",
+                }
+            )
+            .id
+        )
+        adjustment_debit_account_id = (
+            cls.env["account.account"]
+            .create(
+                {
+                    "company_id": cls.company.id,
+                    "code": "658UBLADJUST",
+                    "name": "Adjustment expense account",
+                    "account_type": "expense",
+                }
+            )
+            .id
+        )
+        cls.company.write(
+            {
+                "adjustment_credit_account_id": adjustment_credit_account_id,
+                "adjustment_debit_account_id": adjustment_debit_account_id,
+            }
+        )
         cls.expense_account = cls.env["account.account"].search(
             [
                 ("company_id", "=", cls.company.id),
@@ -30,29 +59,32 @@ class TestUbl(TransactionCase):
                 ("type_tax_use", "=", "purchase"),
                 ("amount_type", "=", "percent"),
                 ("amount", ">", 5),
+                ("price_include", "=", False),
             ],
             limit=1,
         )
         # When creating a new demo DB, the CoA is installed
-        # AFTER account_invoice_import_facturx, so the search= on field account_id
+        # AFTER account_invoice_import_ubl, so the search= on field account_id
         # in the demo XML file of this module doesn't give any result.
         # That's why we set the account_id field of account.invoice.import.config here
-        demo_import_configs = cls.env["account.invoice.import.config"].search(
+        demo_partner_model_datas = cls.env["ir.model.data"].search(
             [
-                ("company_id", "=", cls.company.id),
-                ("invoice_line_method", "in", ("1line_no_product", "nline_no_product")),
-                ("account_id", "=", False),
+                ("module", "=", "account_invoice_import_ubl"),
+                ("model", "=", "res.partner"),
+                ("res_id", "!=", False),
+                ("name", "!=", False),
             ]
         )
-        demo_import_configs.write({"account_id": cls.expense_account.id})
-        demo_import_configs = cls.env["account.invoice.import.config"].search(
-            [
-                ("company_id", "=", cls.company.id),
-                ("invoice_line_method", "=", "1line_no_product"),
-                ("tax_ids", "=", False),
-            ]
-        )
-        demo_import_configs.write({"tax_ids": [(6, 0, [cls.purchase_tax.id])]})
+        for model_data in demo_partner_model_datas:
+            partner = (
+                cls.env["res.partner"]
+                .browse(int(model_data["res_id"]))
+                .with_company(cls.company.id)
+            )
+            vals = {}
+            if not partner.invoice_import_account_id:
+                vals["invoice_import_account_id"] = cls.expense_account.id
+                partner.write(vals)
 
     @mute_logger(LOGGER, "odoo.models.unlink")
     def test_import_ubl_invoice(self):
@@ -90,16 +122,19 @@ class TestUbl(TransactionCase):
             f.close()
             wiz = aiio.create(
                 {
-                    "invoice_file": base64.b64encode(pdf_file),
-                    "invoice_filename": sample_file,
+                    "company_id": self.company.id,
+                    "invoice_attachment_ids": [
+                        Command.create({"raw": pdf_file, "name": sample_file})
+                    ],
                 }
             )
-            wiz.import_invoice()
+            wiz.import_invoices()
             invoices = amo.search(
                 [
                     ("state", "=", "draft"),
                     ("move_type", "in", ("in_invoice", "in_refund")),
                     ("ref", "=", res_dict["invoice_number"]),
+                    ("company_id", "=", self.company.id),
                 ]
             )
             self.assertEqual(len(invoices), 1)
