@@ -195,13 +195,18 @@ class AccountMove(models.Model):
             buyer_reference.text = buyer_ref
         seller = etree.SubElement(trade_agreement, ns["ram"] + "SellerTradeParty")
         seller_name = etree.SubElement(seller, ns["ram"] + "Name")
-        seller_name.text = company.name
-        self._cii_add_party_identification(company.partner_id, seller, ns)
-        if ns["level"] in PROFILES_EN_UP:
-            self._cii_add_trade_contact_block(
-                self.invoice_user_id.partner_id or company.partner_id, seller, ns
-            )
-        self._cii_add_address_block(company.partner_id, seller, ns)
+        # CUSTOM: SWITCH BETWEEN BUYER AND SELLER HERE
+        cial_partner = self.commercial_partner_id
+        # seller_name.text = company.name
+        seller_name.text = cial_partner.name
+        # self._cii_add_party_identification(company.partner_id, seller, ns)
+        self._cii_add_party_identification(cial_partner, seller, ns)
+        # if ns["level"] in PROFILES_EN_UP:
+        #     self._cii_add_trade_contact_block(
+        #         self.invoice_user_id.partner_id or company.partner_id, seller, ns
+        #     )s
+        # self._cii_add_address_block(company.partner_id, seller, ns)
+        self._cii_add_address_block(cial_partner, seller, ns)
         if company.vat:
             seller_tax_reg = etree.SubElement(
                 seller, ns["ram"] + "SpecifiedTaxRegistration"
@@ -211,35 +216,42 @@ class AccountMove(models.Model):
             )
             seller_tax_reg_id.text = company.vat
         buyer = etree.SubElement(trade_agreement, ns["ram"] + "BuyerTradeParty")
-        if ns["level"] != "minimum" and self.commercial_partner_id.ref:
+        cpny_partner = company.partner_id
+        # if ns["level"] != "minimum" and self.commercial_partner_id.ref:
+        if ns["level"] != "minimum" and cpny_partner.ref:
             buyer_id = etree.SubElement(buyer, ns["ram"] + "ID")
-            buyer_id.text = self.commercial_partner_id.ref
+            # buyer_id.text = self.commercial_partner_id.ref
+            buyer_id.text = cpny_partner.ref
         buyer_name = etree.SubElement(buyer, ns["ram"] + "Name")
-        buyer_name.text = self.commercial_partner_id.name
-        self._cii_add_party_identification(self.commercial_partner_id, buyer, ns)
-        if (
-            ns["level"] in PROFILES_EN_UP
-            and self.commercial_partner_id != self.partner_id
-            and self.partner_id.name
-        ):
-            self._cii_add_trade_contact_block(self.partner_id, buyer, ns)
-        self._cii_add_address_block(self.partner_id, buyer, ns)
-        if self.commercial_partner_id.vat:
+        buyer_name.text = cpny_partner.name
+        # self._cii_add_party_identification(self.commercial_partner_id, buyer, ns)
+        self._cii_add_party_identification(cpny_partner, buyer, ns)
+        # if (
+        #     ns["level"] in PROFILES_EN_UP
+        #     and self.commercial_partner_id != self.partner_id
+        #     and self.partner_id.name
+        # ):
+        #     self._cii_add_trade_contact_block(self.partner_id, buyer, ns)
+        # self._cii_add_address_block(self.partner_id, buyer, ns)
+        self._cii_add_address_block(cpny_partner, buyer, ns)
+        # if self.commercial_partner_id.vat:
+        if cpny_partner.vat:
             buyer_tax_reg = etree.SubElement(
                 buyer, ns["ram"] + "SpecifiedTaxRegistration"
             )
             buyer_tax_reg_id = etree.SubElement(
                 buyer_tax_reg, ns["ram"] + "ID", schemeID="VA"
             )
-            buyer_tax_reg_id.text = self.commercial_partner_id.vat
-        if ns["level"] == "extended" and self.invoice_incoterm_id:
-            delivery_terms = etree.SubElement(
-                trade_agreement, ns["ram"] + "ApplicableTradeDeliveryTerms"
-            )
-            delivery_code = etree.SubElement(
-                delivery_terms, ns["ram"] + "DeliveryTypeCode"
-            )
-            delivery_code.text = self.invoice_incoterm_id.code
+            # buyer_tax_reg_id.text = self.commercial_partner_id.vat
+            buyer_tax_reg_id.text = cpny_partner.vat
+        # if ns["level"] == "extended" and self.invoice_incoterm_id:
+        #     delivery_terms = etree.SubElement(
+        #         trade_agreement, ns["ram"] + "ApplicableTradeDeliveryTerms"
+        #     )
+        #     delivery_code = etree.SubElement(
+        #         delivery_terms, ns["ram"] + "DeliveryTypeCode"
+        #     )
+        #     delivery_code.text = self.invoice_incoterm_id.code
         self._cii_add_buyer_order_reference(trade_agreement, ns)
         self._cii_add_contract_reference(trade_agreement, ns)
 
