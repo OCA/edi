@@ -176,6 +176,11 @@ class AccountMove(models.Model):
                     party_identification, ns["ram"] + "ID", schemeID=scheme_name
                 )
                 party_identification_id.text = party_id_text
+            if commercial_partner.ref:
+                party_trading = etree.SubElement(
+                    party_identification, ns["ram"] + "TradingBusinessName"
+                )
+                party_trading.text = commercial_partner.ref
         return
 
     def _cii_trade_agreement_buyer_ref(self, partner):
@@ -963,7 +968,7 @@ class AccountMove(models.Model):
         try:
             xml_check_xsd(xml_byte, flavor="factur-x", level=ns["level"])
         except Exception as e:
-            raise UserError(str(e)) from e
+            raise UserError(str(e) + "\n\n" + xml_byte.decode("utf-8")) from e
         return (xml_byte, level)
 
     def _prepare_pdf_metadata(self):
