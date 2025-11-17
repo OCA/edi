@@ -119,8 +119,16 @@
             <search>
                 <field name="partner_id" />
                 <separator />
-                <filter name="manual" string="Manual" domain="[('method', '=', 'manual')]"/>
-                <filter name="auto" string="Automatic" domain="[('method', '=', 'auto')]"/>
+                <filter
+                    name="manual"
+                    string="Manual"
+                    domain="[('method', '=', 'manual')]"
+                />
+                <filter
+                    name="auto"
+                    string="Automatic"
+                    domain="[('method', '=', 'auto')]"
+                />
                 <separator />
                 <filter
                     string="Archived"

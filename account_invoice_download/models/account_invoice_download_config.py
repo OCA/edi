@@ -263,7 +263,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 )
                 continue
             try:
-                invoice = aiio.with_company(company_id).create_invoice(
+                invoice = aiio.create_invoice(
                     parsed_inv,
                     import_config=import_config,
                     origin="Download Bill '%s'" % self.display_name,

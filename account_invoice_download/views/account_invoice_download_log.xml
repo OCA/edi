@@ -47,11 +47,12 @@
     <field name="name">account.invoice.download.log.tree</field>
     <field name="model">account.invoice.download.log</field>
     <field name="arch" type="xml">
-        <tree>
+        <tree decoration-danger="result == 'failure'">
             <field name="create_date" string="Date" />
             <field
                     name="partner_id"
                     invisible="not context.get('download_log_main_view')"
+                    optional="hide"
                 />
             <field
                     name="download_config_id"
