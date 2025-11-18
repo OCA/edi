@@ -228,7 +228,6 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv["type"] in ("in_invoice", "in_refund")
                 and journal.type != "purchase"
             ):
-                # TODO convert to warning
                 raise UserError(
                     _(
                         "You are importing a vendor bill/refund in journal '%s' "
@@ -240,7 +239,6 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv["type"] in ("out_invoice", "out_refund")
                 and journal.type != "sale"
             ):
-                # TODO convert to warning
                 raise UserError(
                     _(
                         "You are importing a customer invoice/refund in journal '%s' "
@@ -339,6 +337,9 @@ class AccountInvoiceImport(models.TransientModel):
             self._prepare_line_vals_nline(parsed_inv, import_config, vals, partner)
         else:
             self._prepare_line_vals_1line(parsed_inv, import_config, vals, partner)
+        # if module account_invoice_check_total from OCA/account-invoicing is installed
+        if hasattr(self.env["account.move"], "check_total"):
+            vals["check_total"] = parsed_inv["amount_total"]
         return vals
 
     @api.model
@@ -366,9 +367,6 @@ class AccountInvoiceImport(models.TransientModel):
             taxes = product_taxes.filtered(
                 lambda tax: tax.company_id == import_config["company"]
             )
-            # if not il_vals.get('name'),
-            # name is a computed field so it will be auto-set from product
-            # TODO: test
         else:
             if import_config.get("account"):
                 account = import_config["account"]
@@ -427,6 +425,18 @@ class AccountInvoiceImport(models.TransientModel):
             else:
                 account = import_config["account"]
                 taxes = import_config["taxes"]
+            if not taxes:
+                if parsed_inv["type"] in ("out_invoice", "out_refund"):
+                    type_tax_use = "sale"
+                else:
+                    type_tax_use = "purchase"
+                taxes = bdio._match_taxes(
+                    line.get("taxes"),
+                    parsed_inv["chatter_msg"],
+                    company=import_config["company"],
+                    type_tax_use=type_tax_use,
+                    raise_exception=False,
+                )
 
             fp = partner and partner.property_account_position_id or False
             if fp:
@@ -446,7 +456,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "account_id": account.id,
                 "tax_ids": [Command.set(taxes.ids)],
                 "quantity": line["qty"],
-                "price_unit": line["price_unit"],  # TODO fix for tax incl
+                "price_unit": line["price_unit"],  # TODO add support for tax incl ?
                 "discount": line.get("discount", 0),
             }
 
@@ -685,14 +695,17 @@ class AccountInvoiceImport(models.TransientModel):
         """Handle taxes in pre_processing parsed invoice."""
         # Handle the case where we import an invoice with VAT in a company that
         # cannot deduct VAT
-        if company._cannot_refund_vat():
+        if (
+            parsed_inv["type"] in ("in_invoice", "in_refund")
+            and company._cannot_refund_vat()
+        ):
             parsed_inv["amount_tax"] = 0
             parsed_inv["amount_untaxed"] = parsed_inv["amount_total"]
+            prec_price = self.env["decimal.precision"].precision_get("Product Price")
             for line in parsed_inv.get("lines", []):
                 if line.get("taxes"):
                     if len(line["taxes"]) > 1:
-                        # TODO switch to warning
-                        raise UserError(
+                        parsed_inv["chatter_msg"].append(
                             _(
                                 "You are importing an invoice in company %(company)s that "
                                 "cannot deduct VAT and the imported invoice has "
@@ -704,9 +717,6 @@ class AccountInvoiceImport(models.TransientModel):
                         )
                     vat_rate = line["taxes"][0].get("amount")
                     if not float_is_zero(vat_rate, precision_digits=2):
-                        prec_price = self.env["decimal.precision"].precision_get(
-                            "Product Price"
-                        )
                         price_unit = line["price_unit"] * (1 + vat_rate / 100.0)
                         line["price_unit"] = float_round(
                             price_unit, precision_digits=prec_price
@@ -737,6 +747,7 @@ class AccountInvoiceImport(models.TransientModel):
             raise UserError(_("You must select the vendor bills to import."))
 
         invoice_ids = []
+        warnings = []
         for attach in self.invoice_attachment_ids:
             parsed_inv = self.parse_invoice(attach.datas, attach.name, company)
             if parsed_inv.get("partner"):
@@ -759,61 +770,82 @@ class AccountInvoiceImport(models.TransientModel):
                             existing_inv.name,
                             parsed_inv.get("invoice_number"),
                         )
-                        # TODO show warning pop-up
+                        warnings.append(
+                            _(
+                                "Invoice '%(filename)s' already exists in Odoo: "
+                                "%(existing_inv)s.",
+                                filename=attach.name,
+                                existing_inv=existing_inv.display_name,
+                            )
+                        )
                         continue
 
                     import_config = partner._convert_to_import_config(company)
                 else:
                     import_config = {"company": company}
                 invoice = self.create_invoice(
-                    parsed_inv, import_config, "PDF import"
-                )  # TODO origin
+                    parsed_inv,
+                    import_config,
+                    origin=_("Import of file %s", attach.name),
+                )
                 invoice_ids.append(invoice.id)
 
-        action = self.env["ir.actions.actions"]._for_xml_id(
+        next_action = self.env["ir.actions.actions"]._for_xml_id(
             "account.action_move_in_invoice_type"
         )
         if len(invoice_ids) > 1:
-            action["domain"] = [("id", "in", invoice_ids)]
+            next_action["domain"] = [("id", "in", invoice_ids)]
         elif len(invoice_ids) == 1:
-            action.update(
+            views = [view for view in next_action["views"] if view[1] == "form"]
+            next_action.update(
                 {
                     "view_mode": "form,tree,kanban",
                     "view_id": False,
-                    "views": False,
+                    "views": views,
                     "res_id": invoice_ids[0],
                 }
             )
         else:
+            if warnings:
+                raise UserError("\n".join(warnings))
             raise UserError(_("No invoice created."))
+        action = {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "type": "success",
+                "title": _("Import Vendor Bills"),
+                "message": _("%d vendor bill(s) created", len(invoice_ids)),
+                "next": next_action,
+            },
+        }
+        if warnings:
+            action["params"].update(
+                {
+                    "type": "warning",
+                    "message": "\n".join(warnings),
+                    "sticky": True,
+                }
+            )
         return action
 
-    def create_invoice_action(self, parsed_inv=None, import_config=None, origin=None):
-        """parsed_inv is not a required argument"""
-        self.ensure_one()
-        if parsed_inv is None:
-            parsed_inv = self.get_parsed_invoice()
-        if import_config is None:
-            assert self.import_config_id
-            import_config = self.import_config_id.convert_to_import_config()
-        invoice = self.create_invoice(parsed_inv, import_config, origin)
-        xmlid = "account.action_move_in_invoice_type"
-        action = self.env["ir.actions.act_window"]._for_xml_id(xmlid)
-        action.update(
-            {
-                "view_mode": "form,tree,kanban",
-                "view_id": False,
-                "views": False,
-                "res_id": invoice.id,
-            }
-        )
-        return action
+    @api.model
+    def _prepare_write_import_warnings(self, parsed_inv):
+        vals = None
+        if parsed_inv["chatter_msg"]:
+            warns = "\n".join(
+                [
+                    f"<li>{msg.replace('\n', '<br>')}</li>"
+                    for msg in parsed_inv["chatter_msg"]
+                    if msg
+                ]
+            )
+            vals = {"import_warnings": f"<ul>{warns}</ul>"}
+        return vals
 
     @api.model
     def create_invoice(self, parsed_inv, import_config, origin=None):
         amo = self.env["account.move"]
-        # TODO: logs for partner are present twice in warning banner
-        # ADD no partner handling in pre process ?
         parsed_inv = self._pre_process_parsed_inv(parsed_inv, import_config["company"])
         vals = self._prepare_create_invoice_vals(parsed_inv, import_config)
         logger.debug("Invoice vals for creation: %s", vals)
@@ -821,6 +853,11 @@ class AccountInvoiceImport(models.TransientModel):
         self._post_process_invoice(parsed_inv, import_config, invoice)
         logger.info("Invoice ID %d created", invoice.id)
         self.env["business.document.import"].post_create_or_update(parsed_inv, invoice)
+        # We can't set 'import_warnings' in create() because _post_process_invoice()
+        # may add some important warnings
+        import_warnings_inv_vals = self._prepare_write_import_warnings(parsed_inv)
+        if import_warnings_inv_vals:
+            invoice.write(import_warnings_inv_vals)
         invoice.message_post(
             body=_(
                 "This invoice has been created automatically via file import. "
@@ -994,44 +1031,89 @@ class AccountInvoiceImport(models.TransientModel):
         ):
             initial_amount_tax = invoice.amount_tax
             invoice._check_total_amount(parsed_inv["amount_total"])
-            # TODO don't directly do message_post
-            invoice.message_post(
-                body=_(
-                    "The <strong>total tax amount</strong> has been "
-                    "<strong>forced</strong> to %(forced_amount)s (amount computed by "
-                    "Odoo was: %(initial_amount)s).",
-                    forced_amount=format_amount(
-                        self.env, invoice.amount_tax, invoice.currency_id
-                    ),
-                    initial_amount=format_amount(
-                        self.env, initial_amount_tax, invoice.currency_id
-                    ),
+            # 2 scenarios: forcing tax total was not possible (because
+            # there is no tax at all in invoice lines for example) or
+            # it worked
+            if parsed_inv["currency_rec"].compare_amounts(
+                invoice.amount_total, parsed_inv["amount_total"]
+            ):
+                parsed_inv["chatter_msg"].append(
+                    _(
+                        "<strong>The total amount of the imported invoice is "
+                        "%(real_amount_total)s whereas the total amount computed by "
+                        "Odoo is %(current_amount_total)s</strong>. It is the consequence "
+                        "of a difference between the total tax amount of the invoice "
+                        "(%(real_amount_tax)s) and the total tax amount computed by Odoo "
+                        "(%(current_amount_tax)s). "
+                        "This is often caused by missing taxes in invoice lines due to "
+                        "a failure to find the tax in Odoo that correspond to the tax in "
+                        "the imported invoice or missing configuration of taxes on products "
+                        "or missing configuration of <em>Default Taxes</em> on the partner "
+                        "(if there are no products on invoice lines).",
+                        real_amount_total=format_amount(
+                            self.env, parsed_inv["amount_total"], invoice.currency_id
+                        ),
+                        current_amount_total=format_amount(
+                            self.env, invoice.amount_total, invoice.currency_id
+                        ),
+                        real_amount_tax=format_amount(
+                            self.env,
+                            parsed_inv["amount_total"] - parsed_inv["amount_untaxed"],
+                            invoice.currency_id,
+                        ),
+                        current_amount_tax=format_amount(
+                            self.env, invoice.amount_tax, invoice.currency_id
+                        ),
+                    )
                 )
-            )
-        assert not inv_cur.compare_amounts(
-            parsed_inv["amount_total"], invoice.amount_total
-        )
+
+            else:
+                parsed_inv["chatter_msg"].append(
+                    _(
+                        "The <strong>total tax amount</strong> has been "
+                        "<strong>forced</strong> to %(forced_amount)s (amount computed by "
+                        "Odoo was: %(initial_amount)s).",
+                        forced_amount=format_amount(
+                            self.env, invoice.amount_tax, invoice.currency_id
+                        ),
+                        initial_amount=format_amount(
+                            self.env, initial_amount_tax, invoice.currency_id
+                        ),
+                    )
+                )
 
     def xpath_to_dict_helper(self, xml_root, xpath_dict, namespaces):
         for key, value in xpath_dict.items():
             if isinstance(value, list):
-                isdate = isfloat = False
+                isdate = isfloat = ischar_to_clean = False
                 if "date" in key:
                     isdate = True
                 elif "amount" in key:
                     isfloat = True
+                elif key == "name":
+                    ischar_to_clean = True
                 xpath_dict[key] = self.multi_xpath_helper(
-                    xml_root, value, namespaces, isdate=isdate, isfloat=isfloat
+                    xml_root,
+                    value,
+                    namespaces,
+                    isdate=isdate,
+                    isfloat=isfloat,
+                    ischar_to_clean=ischar_to_clean,
                 )
                 if not xpath_dict[key]:
-                    logger.debug("pb")
+                    logger.debug("No value extracted for %s", key)
             elif isinstance(value, dict):
                 xpath_dict[key] = self.xpath_to_dict_helper(xml_root, value, namespaces)
         return xpath_dict
-        # TODO: think about blocking required fields
 
     def multi_xpath_helper(
-        self, xml_root, xpath_list, namespaces, isdate=False, isfloat=False
+        self,
+        xml_root,
+        xpath_list,
+        namespaces,
+        isdate=False,
+        isfloat=False,
+        ischar_to_clean=False,
     ):
         assert isinstance(xpath_list, list)
         for xpath in xpath_list:
@@ -1049,6 +1131,12 @@ class AccountInvoiceImport(models.TransientModel):
                 elif isfloat:
                     res_float = float(xpath_res[0].text)
                     return res_float
+                elif ischar_to_clean:
+                    res_char = xpath_res[0].text
+                    if res_char and isinstance(res_char, str):
+                        # With the experience, we'll probably have more things to clean
+                        res_char = res_char.replace("\n", " ")
+                    return res_char
                 else:
                     return xpath_res[0].text
         return False
@@ -1068,7 +1156,6 @@ class AccountInvoiceImport(models.TransientModel):
         one even though the actual result is the imported invoice, if the
         message content allows it.
         """
-        # TODO: split this method into smaller ones
         logger.info(
             "New email received. "
             "Date: %s, Message ID: %s. "

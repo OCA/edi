@@ -10,10 +10,22 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
     _name = "account.invoice.import.partner.create"
     _description = "Wizard to create a new partner or update an existing partner"
 
-    move_id = fields.Many2one("account.move", readonly=True, required=True)
+    move_id = fields.Many2one(
+        "account.move", readonly=True, required=True, string="Vendor Bill"
+    )
     import_partner_data = fields.Json()
+    create_or_update = fields.Selection(
+        [
+            ("create", "This partner doesn't already exists in Odoo"),
+            ("update", "This partner already exists in Odoo"),
+        ],
+        required=True,
+        default="create",
+    )
     update_partner_id = fields.Many2one(
-        "res.partner", domain=[("parent_id", "=", False)]
+        "res.partner",
+        domain=[("parent_id", "=", False)],
+        string="Partner to Update",
     )
     partner_vat = fields.Char(string="Partner VAT Number", readonly=True)
     partner_name = fields.Char(readonly=True)
@@ -43,6 +55,7 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
         self.ensure_one()
         assert isinstance(self.import_partner_data, dict)
         assert self.move_id
+        assert self.create_or_update == "create"
         ctx = {
             f"default_{key}": value for key, value in self.import_partner_data.items()
         }
@@ -58,6 +71,7 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
 
     def update_partner(self):
         self.ensure_one()
+        assert self.create_or_update == "update"
         if not self.update_partner_id:
             raise UserError(_("You must select the partner to update."))
         vals = self._prepare_update_partner_vals()
@@ -67,7 +81,7 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
         )
         self.move_id.message_post(
             body=_(
-                "Partner set via the <em>create or update partner</em> wizard: "
+                "Partner has been set via the wizard <em>Create or Update Partner</em>: "
                 "the partner has been updated."
             )
         )
