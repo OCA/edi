@@ -830,19 +830,6 @@ class AccountInvoiceImport(models.TransientModel):
         return action
 
     @api.model
-    def _prepare_write_import_warnings(self, parsed_inv):
-        vals = None
-        if parsed_inv["chatter_msg"]:
-            warn_list = []
-            for msg in parsed_inv["chatter_msg"]:
-                if msg:
-                    msg_html = msg.replace("\n", "<br>")
-                    warn_list.append(f"<li>{msg_html}</li>")
-            warns = "\n".join(warn_list)
-            vals = {"import_warnings": f"<ul>{warns}</ul>"}
-        return vals
-
-    @api.model
     def create_invoice(self, parsed_inv, import_config, origin=None):
         amo = self.env["account.move"]
         parsed_inv = self._pre_process_parsed_inv(parsed_inv, import_config["company"])
@@ -852,11 +839,6 @@ class AccountInvoiceImport(models.TransientModel):
         self._post_process_invoice(parsed_inv, import_config, invoice)
         logger.info("Invoice ID %d created", invoice.id)
         self.env["business.document.import"].post_create_or_update(parsed_inv, invoice)
-        # We can't set 'import_warnings' in create() because _post_process_invoice()
-        # may add some important warnings
-        import_warnings_inv_vals = self._prepare_write_import_warnings(parsed_inv)
-        if import_warnings_inv_vals:
-            invoice.write(import_warnings_inv_vals)
         invoice.message_post(
             body=_(
                 "This invoice has been created automatically via file import. "

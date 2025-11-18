@@ -5,6 +5,8 @@
 import logging
 from urllib.parse import urlparse
 
+from markupsafe import Markup
+
 from odoo import _, api, models
 from odoo.exceptions import UserError
 from odoo.osv import expression
@@ -28,7 +30,7 @@ class BusinessDocumentImport(models.AbstractModel):
         assert error_msg
         if raise_exception:
             raise UserError(error_msg)
-        else:
+        elif error_msg not in chatter_msg:
             chatter_msg.append(error_msg)
 
     def _direct_match(self, data_dict, model, raise_exception=True):
@@ -284,10 +286,10 @@ class BusinessDocumentImport(models.AbstractModel):
                 chatter_msg.append(
                     _(
                         "The %(label)s has been identified by the domain name "
-                        "'%(domain)s' so please check carefully that the "
+                        "'%(email_domain)s' so please check carefully that the "
                         "%(label)s is correct.",
                         label=partner_type_label,
-                        domain=domain,
+                        email_domain=email_domain,
                     )
                 )
                 return partner
@@ -931,7 +933,7 @@ class BusinessDocumentImport(models.AbstractModel):
         """taxes_list must be a list of tax_dict"""
         taxes_recordset = self.env["account.tax"].browse(False)
         for tax_dict in taxes_list:
-            taxes_recordset += self._match_tax(
+            tax = self._match_tax(
                 tax_dict,
                 chatter_msg,
                 type_tax_use=type_tax_use,
@@ -939,6 +941,8 @@ class BusinessDocumentImport(models.AbstractModel):
                 price_include=tax_dict.get("price_include", price_include),
                 raise_exception=raise_exception,
             )
+            if tax:
+                taxes_recordset += tax
         return taxes_recordset
 
     # TODO v18: move company to second position arg and make it regular arg
@@ -1487,14 +1491,17 @@ class BusinessDocumentImport(models.AbstractModel):
                         "datas": data_base64,
                     }
                 )
+        chatter_msg_html = []
         for msg in parsed_dict["chatter_msg"]:
-            record.message_post(body=msg)
-        if hasattr(record, "import_warnings") and parsed_dict.get("chatter_msg"):
-            import_warn = _("Import warnings:")
-            list_msg = "\n".join(
-                [f"<li>{msg}</li>" for msg in parsed_dict["chatter_msg"]]
+            chatter_msg_html.append(msg.replace("\n", "<br>"))
+        for msg in chatter_msg_html:
+            record.message_post(body=Markup(msg))
+        if hasattr(record, "import_warnings") and chatter_msg_html:
+            import_warn = _("Import Warnings:")
+            list_msg = "\n".join([f"<li>{msg}</li>" for msg in chatter_msg_html])
+            import_warnings = Markup(
+                f"<strong>{import_warn}</strong><ul>{list_msg}</ul>"
             )
-            import_warnings = f"<strong>{import_warn}</strong><ul>{list_msg}</ul>"
             record.write({"import_warnings": import_warnings})
         if parsed_dict.get("note"):
             if doc_filename:
