@@ -19,7 +19,8 @@ class ResPartner(models.Model):
         company_dependent=True,
         string="Default Expense Account",
         domain="[('deprecated', '=', False), ('company_id', '=', current_company_id)]",
-        help="The account configured here will go through the mapping of the fiscal position.",
+        help="The account configured here will be updated by the mapping of the "
+        "fiscal position.",
     )
     # only if invoice_import_product_id is not set
     invoice_import_tax_ids = fields.Many2many(
