@@ -833,13 +833,12 @@ class AccountInvoiceImport(models.TransientModel):
     def _prepare_write_import_warnings(self, parsed_inv):
         vals = None
         if parsed_inv["chatter_msg"]:
-            warns = "\n".join(
-                [
-                    f"<li>{msg.replace('\n', '<br>')}</li>"
-                    for msg in parsed_inv["chatter_msg"]
-                    if msg
-                ]
-            )
+            warn_list = []
+            for msg in parsed_inv["chatter_msg"]:
+                if msg:
+                    msg_html = msg.replace("\n", "<br>")
+                    warn_list.append(f"<li>{msg_html}</li>")
+            warns = "\n".join(warn_list)
             vals = {"import_warnings": f"<ul>{warns}</ul>"}
         return vals
 
