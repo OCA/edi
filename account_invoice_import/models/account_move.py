@@ -26,6 +26,9 @@ class AccountMove(models.Model):
         initial_fp = self.fiscal_position_id
         fp = partner.property_account_position_id
         self.write({"partner_id": partner.id})
+        # Writing 'partner_id' triggers the update of payment terms, payment mode,
+        # fiscal_position_id, etc... on the invoice because they are all computed
+        # fields now
         if fp and not initial_fp:
             assert self.fiscal_position_id == fp
             account_map = {}  # key = source account, value = dest account

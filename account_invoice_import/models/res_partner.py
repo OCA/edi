@@ -86,6 +86,7 @@ class ResPartner(models.Model):
         return vals
 
     def update_imported_invoice(self):
+        """Method called by button in partner banner"""
         self.ensure_one()
         invoice_import_move = self.invoice_import_move_id
         assert invoice_import_move
@@ -107,13 +108,11 @@ class ResPartner(models.Model):
                 )
             )
         invoice_import_move._invoice_import_set_partner_and_update_lines(self)
-        # TODO update tax on lines
         invoice_import_move.message_post(
             body=_(
                 "The partner has been created via the <em>create or update partner</em> wizard."
             )
         )
-        # TODO check refund
         action = self.env["ir.actions.actions"]._for_xml_id(
             "account.action_move_in_invoice_type"
         )
