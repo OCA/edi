@@ -16,27 +16,43 @@
                           <field name="arch" type="xml">
                                   <form>
                                           <group name="main">
-                                                  <field name="move_id" invisible="0" />
-                                                  <field name="import_partner_data" />
+                                                  <field name="move_id" invisible="1" />
+                                                  <field
+                        name="import_partner_data"
+                        invisible="1"
+                    />
                                                   <field name="partner_name" />
                                                   <field name="partner_vat" />
+                                                  <field
+                        name="create_or_update"
+                        nolabel="1"
+                        colspan="2"
+                        widget="radio"
+                    />
+                                                  <field
+                        name="update_partner_id"
+                        attrs="{'invisible': [('create_or_update', '!=', 'update')], 'required': [('create_or_update', '=', 'update')]}"
+                    />
+                                          </group>
+                                          <footer>
                                                   <button
                         name="create_partner"
                         type="object"
                         colspan="2"
                         class="btn-primary"
                         string="Create Partner"
+                        attrs="{'invisible': [('create_or_update', '!=', 'create')]}"
                     />
-                                                  <field name="update_partner_id" />
+
                                                   <button
                         name="update_partner"
                         type="object"
                         colspan="2"
                         class="btn-primary"
                         string="Update Partner"
+                        attrs="{'invisible': [('create_or_update', '!=', 'update')]}"
                     />
-                                          </group>
-                                          <footer>
+
                                                   <button
                         special="cancel"
                         string="Cancel"

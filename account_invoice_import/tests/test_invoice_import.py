@@ -61,9 +61,6 @@ class TestInvoiceImport(TransactionCase):
             "unece_type_id": cls.env.ref("account_tax_unece.tax_type_vat").id,
             "unece_categ_id": cls.env.ref("account_tax_unece.tax_categ_s").id,
             "company_id": cls.company.id,
-            # TODO tax armageddon
-            # "account_id": cls.expense_account.id,
-            # "refund_account_id": cls.expense_account.id,
         }
         cls.purchase_tax = cls.env["account.tax"].create(purchase_tax_vals)
         sale_tax_vals = purchase_tax_vals.copy()
