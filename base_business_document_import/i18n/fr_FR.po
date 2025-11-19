@@ -54,6 +54,17 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
+"<p>The UNECE code %(code)s was used to describe the unit of measure but this "
+"UNECE code was not found on an existing unit of measure: you should check "
+"the UNECE codes on the existing unit of measure and, if necessary, create "
+"the missing unit of measure and set the UNECE code on it.</p>"
+msgstr ""
+
+#. module: base_business_document_import
+#. odoo-python
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+#, python-format
+msgid ""
 "Approximate match: account %(account)s has been matched with account "
 "%(matched_account)s"
 msgstr ""
@@ -67,8 +78,8 @@ msgstr "Méthodes courantes d'importation de documents commerciaux"
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
-msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
-msgstr "Impossible de trouver un Incoterm dans Odoo correspondant à '%s'"
+msgid "Could not find any Incoterm in Odoo corresponding to '%s'."
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
@@ -99,16 +110,22 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
-msgid "Missing VAT number on company '%s'"
-msgstr "Numéro de TVA manquant pour la société '%s'"
+msgid "Import warnings:"
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
-msgid "No currency specified, so Odoo used the company currency (%s)"
+msgid "Missing VAT number on company '%s'."
 msgstr ""
-"Pas de devise précisée, donc Odoo a utilisé la devise (%s) de la société"
+
+#. module: base_business_document_import
+#. odoo-python
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+#, python-format
+msgid "No currency specified, so Odoo used the company currency (%s)."
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
@@ -273,16 +290,6 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The analysis of the business document returned '%(code)s' as the unit of "
-"measure UNECE code, but there is no unit of measure with that UNECE code in "
-"Odoo. Please check the configuration of the units of measures in Odoo."
-msgstr ""
-
-#. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-#, python-format
-msgid ""
 "The analysis of the business document returned '%s' as country code. But "
 "there are no country with that code in Odoo."
 msgstr ""
@@ -340,8 +347,8 @@ msgstr ""
 #, python-format
 msgid ""
 "The bank account <b>IBAN %(iban)s</b> has been automatically added on the "
-"supplier <a href=# data-oe-model=res.partner data-oe-id=%(partner_id)d>"
-"%(partner)s</a>"
+"supplier <a href=# data-oe-model=res.partner data-oe-"
+"id=%(partner_id)d>%(partner)s</a>"
 msgstr ""
 
 #. module: base_business_document_import
@@ -406,6 +413,19 @@ msgstr "partenaire"
 #, python-format
 msgid "supplier"
 msgstr "fournisseur"
+
+#, python-format
+#~ msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
+#~ msgstr "Impossible de trouver un Incoterm dans Odoo correspondant à '%s'"
+
+#, python-format
+#~ msgid "Missing VAT number on company '%s'"
+#~ msgstr "Numéro de TVA manquant pour la société '%s'"
+
+#, python-format
+#~ msgid "No currency specified, so Odoo used the company currency (%s)"
+#~ msgstr ""
+#~ "Pas de devise précisée, donc Odoo a utilisé la devise (%s) de la société"
 
 #, python-format
 #~ msgid ""
