@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2025 Akretion France (https://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+
+
+<record id="view_move_form" model="ir.ui.view">
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_move_form" />
+    <field name="arch" type="xml">
+        <div role="alert" position="after">
+            <div
+                    class="alert alert-warning"
+                    role="alert"
+                    attrs="{'invisible': [('show_import_warnings', '=', False)]}"
+                >
+                <field name="import_warnings" />
+            </div>
+        </div>
+        <field name="show_name_warning" position="after">
+            <field name="show_import_warnings" invisible="1" />
+            <field name="import_partner_data" invisible="1" />
+        </field>
+        <field name="partner_id" position="after">
+                <button
+                    name="%(account_invoice_import_partner_create_action)d"
+                    type="action"
+                    attrs="{'invisible': ['|', '|', '|', ('state', '!=', 'draft'), ('move_type', 'not in', ('in_invoice', 'in_refund')), ('import_partner_data', '=', False), ('partner_id', '!=', False)]}"
+                    groups="account.group_account_invoice"
+                    colspan="2"
+                    string="Create or Update Partner"
+                />
+        </field>
+    </field>
+</record>
+
+
+</odoo>

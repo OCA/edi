@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2015-2025 Akretion France (https://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_partner_property_form" model="ir.ui.view">
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form" />
+        <field name="arch" type="xml">
+            <group name="accounting_entries" position="after">
+                <group
+                    name="invoice_import_config"
+                    string="Vendor Bills Import"
+                    groups="account.group_account_readonly,account.group_account_invoice"
+                >
+                    <field name="invoice_import_product_id" />
+                    <field
+                        name="invoice_import_account_id"
+                        attrs="{'invisible': [('invoice_import_product_id', '!=', False)]}"
+                    />
+                    <field
+                        name="invoice_import_tax_ids"
+                        widget="many2many_tags"
+                        attrs="{'invisible': [('invoice_import_product_id', '!=', False)]}"
+                    />
+                    <field name="invoice_import_label" />
+                    <field name="invoice_import_single_line" />
+                    <field name="invoice_import_journal_id" />
+                    <field name="invoice_import_move_id" invisible="1" />
+                    <field name="invoice_import_move_partner_id" invisible="1" />
+                </group>
+            </group>
+            <div role="alert" position="after">
+                <div
+                    class="alert alert-info"
+                    groups="account.group_account_invoice"
+                    role="alert"
+                    attrs="{'invisible': ['|', ('invoice_import_move_id', '=', False), ('invoice_import_move_partner_id', '!=', False)]}"
+                >
+                  <button
+                        string="Set partner"
+                        type="object"
+                        name="update_imported_invoice"
+                        class="oe_link"
+                    /> on imported vendor bill <field name="invoice_import_move_id" />
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

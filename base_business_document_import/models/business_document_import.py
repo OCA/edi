@@ -20,11 +20,16 @@ class BusinessDocumentImport(models.AbstractModel):
     _description = "Common methods to import business documents"
 
     @api.model
-    def user_error_wrap(self, method, data_dict, error_msg):
+    def user_error_wrap(
+        self, method, data_dict, error_msg, chatter_msg, raise_exception
+    ):
         """The method and data_dict arguments are useful when you want to
-        inherit this method to update the error messag_match_currencye"""
+        inherit this method to update the error message"""
         assert error_msg
-        raise UserError(error_msg)
+        if raise_exception:
+            raise UserError(error_msg)
+        else:
+            chatter_msg.append(error_msg)
 
     def _direct_match(self, data_dict, model, raise_exception=True):
         if data_dict.get("recordset"):
@@ -287,6 +292,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 )
                 return partner
 
+    # TODO migration v18: remove arg partner_type
     @api.model
     def _match_partner(  # noqa: C901
         self,
@@ -379,9 +385,7 @@ class BusinessDocumentImport(models.AbstractModel):
         if partner:
             return partner
 
-        if not raise_exception:
-            return None
-        raise self.user_error_wrap(
+        self.user_error_wrap(
             "_match_partner",
             partner_dict,
             _(
@@ -403,7 +407,10 @@ class BusinessDocumentImport(models.AbstractModel):
                 state=partner_dict.get("state_code") or "",
                 country=partner_dict.get("country_code") or "",
             ),
+            chatter_msg,
+            raise_exception,
         )
+        return None
 
     @api.model
     def _hook_match_partner(self, partner_dict, chatter_msg, domain, order):
@@ -524,9 +531,7 @@ class BusinessDocumentImport(models.AbstractModel):
         if partner:
             return partner
 
-        if not raise_exception:
-            return
-        raise self.user_error_wrap(
+        self.user_error_wrap(
             "_match_shipping_partner",
             partner_dict,
             _(
@@ -555,7 +560,10 @@ class BusinessDocumentImport(models.AbstractModel):
                 state=partner_dict.get("state_code") or "",
                 country=partner_dict.get("country_code") or "",
             ),
+            chatter_msg,
+            raise_exception,
         )
+        return None
 
     @api.model
     def _match_partner_bank(
@@ -631,7 +639,9 @@ class BusinessDocumentImport(models.AbstractModel):
             )
 
     @api.model
-    def _match_product(self, product_dict, chatter_msg, seller=False):
+    def _match_product(
+        self, product_dict, chatter_msg, seller=False, raise_exception=True
+    ):
         """Retrieve product.
 
         Matching sequence:
@@ -674,7 +684,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 and len(sinfo.product_tmpl_id.product_variant_ids) == 1
             ):
                 return sinfo.product_tmpl_id.product_variant_ids[0]
-        raise self.user_error_wrap(
+        self.user_error_wrap(
             "_match_product",
             product_dict,
             _(
@@ -687,7 +697,10 @@ class BusinessDocumentImport(models.AbstractModel):
                 product_code=product_dict.get("code") or "",
                 supplier=seller and seller.name or "",
             ),
+            chatter_msg,
+            raise_exception,
         )
+        return None
 
     @api.model
     def _match_product_search(self, product_dict):
@@ -725,8 +738,11 @@ class BusinessDocumentImport(models.AbstractModel):
         company_id = self._context.get("force_company") or self.env.user.company_id.id
         return ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
 
+    # TODO v18: move company to second position arg and make it regular arg
     @api.model
-    def _match_currency(self, currency_dict, chatter_msg):
+    def _match_currency(
+        self, currency_dict, chatter_msg, company=None, raise_exception=True
+    ):
         """Example:
         currency_dict = {
             'iso': 'USD',  # If we have ISO, no need to have more keys
@@ -748,7 +764,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if currency:
                 return currency
             else:
-                raise self.user_error_wrap(
+                self.user_error_wrap(
                     "_match_currency",
                     currency_dict,
                     _(
@@ -757,6 +773,8 @@ class BusinessDocumentImport(models.AbstractModel):
                         "with that code in Odoo."
                     )
                     % currency_iso,
+                    chatter_msg,
+                    raise_exception,
                 )
         if currency_dict.get("symbol"):
             currencies = rco.search([("symbol", "=", currency_dict["symbol"])])
@@ -782,7 +800,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if len(currencies) == 1:
                 return currencies[0]
             else:
-                raise self.user_error_wrap(
+                self.user_error_wrap(
                     "_match_currency",
                     currency_dict,
                     _(
@@ -791,6 +809,8 @@ class BusinessDocumentImport(models.AbstractModel):
                         "several currencies with the symbol/ISO code in Odoo.",
                         code=currency_dict["iso_or_symbol"],
                     ),
+                    chatter_msg,
+                    raise_exception,
                 )
         if currency_dict.get("country_code"):
             country_code = currency_dict["country_code"]
@@ -801,7 +821,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 if country.currency_id:
                     return country.currency_id
                 else:
-                    raise self.user_error_wrap(
+                    self.user_error_wrap(
                         "_match_currency",
                         currency_dict,
                         _(
@@ -812,9 +832,11 @@ class BusinessDocumentImport(models.AbstractModel):
                             code=country_code,
                             name=country.name,
                         ),
+                        chatter_msg,
+                        raise_exception,
                     )
             else:
-                raise self.user_error_wrap(
+                self.user_error_wrap(
                     "_match_currency",
                     currency_dict,
                     _(
@@ -823,20 +845,23 @@ class BusinessDocumentImport(models.AbstractModel):
                         "But there is no country with that code in Odoo."
                     )
                     % country_code,
+                    chatter_msg,
+                    raise_exception,
                 )
-        if self._context.get("force_company"):
-            company = self.env["res.company"].browse(self._context["force_company"])
-        else:
-            company = self.env.company
+        if company is None:
+            if self._context.get("force_company"):
+                company = self.env["res.company"].browse(self._context["force_company"])
+            else:
+                company = self.env.company
         company_cur = company.currency_id
         chatter_msg.append(
-            _("No currency specified, so Odoo used the company currency (%s)")
+            _("No currency specified, so Odoo used the company currency (%s).")
             % company_cur.name
         )
         return company_cur
 
     @api.model
-    def _match_uom(self, uom_dict, chatter_msg, product=False):
+    def _match_uom(self, uom_dict, chatter_msg, product=False, raise_exception=False):
         """Example:
         uom_dict = {
             'unece_code': 'LTR',
@@ -857,40 +882,51 @@ class BusinessDocumentImport(models.AbstractModel):
             uom = uuo.search([("unece_code", "=", uom_dict["unece_code"])], limit=1)
             if uom:
                 return uom
-            else:
-                chatter_msg.append(
-                    _(
-                        "The analysis of the business document returned '%(code)s' "
-                        "as the unit of measure UNECE code, but there is no "
-                        "unit of measure with that UNECE code in Odoo. Please "
-                        "check the configuration of the units of measures in "
-                        "Odoo.",
-                        code=uom_dict["unece_code"],
-                    )
-                )
         if uom_dict.get("name"):
             uom = uuo.search([("name", "=ilike", uom_dict["name"] + "%")], limit=1)
             if uom:
                 return uom
         if product:
             return product.uom_id
-        chatter_msg.append(
-            _(
-                "<p>Odoo couldn't find any unit of measure corresponding to the "
-                "following information extracted from the business document:</p>"
-                "<ul><li>UNECE code: %(code)s</li>"
-                "<li>Name of the unit of measure: %(name)s</li></ul>"
-                "<p>So the unit of measure 'Unit(s)' has been used. <em>You may "
-                "have to change it manually.</em></p>",
-                code=uom_dict.get("unece_code"),
-                name=uom_dict.get("name"),
+        msg = _(
+            "<p>Odoo couldn't find any unit of measure corresponding to the "
+            "following information extracted from the business document:</p>"
+            "<ul><li>UNECE code: %(code)s</li>"
+            "<li>Name of the unit of measure: %(name)s</li></ul>"
+            "<p>So the unit of measure 'Unit(s)' has been used. <em>You may "
+            "have to change it manually.</em></p>",
+            code=uom_dict.get("unece_code"),
+            name=uom_dict.get("name"),
+        )
+        if uom_dict.get("unece_code"):
+            msg += _(
+                "<p>The UNECE code %(code)s was used to describe the unit of measure "
+                "but this UNECE code was not found on an existing unit of measure: "
+                "you should check the UNECE codes on the existing unit of measure and, "
+                "if necessary, create the missing unit of measure and set the UNECE "
+                "code on it.</p>",
+                code=uom_dict["unece_code"],
             )
+
+        self.user_error_wrap(
+            "_match_uom",
+            uom_dict,
+            msg,
+            chatter_msg,
+            raise_exception,
         )
         return self.env.ref("uom.product_uom_unit")
 
+    # TODO v18: move company to second position arg and make it regular arg
     @api.model
     def _match_taxes(
-        self, taxes_list, chatter_msg, type_tax_use="purchase", price_include=False
+        self,
+        taxes_list,
+        chatter_msg,
+        company=None,
+        type_tax_use="purchase",
+        price_include=False,
+        raise_exception=True,
     ):
         """taxes_list must be a list of tax_dict"""
         taxes_recordset = self.env["account.tax"].browse(False)
@@ -899,16 +935,22 @@ class BusinessDocumentImport(models.AbstractModel):
                 tax_dict,
                 chatter_msg,
                 type_tax_use=type_tax_use,
+                company=company,
                 price_include=tax_dict.get("price_include", price_include),
+                raise_exception=raise_exception,
             )
         return taxes_recordset
 
+    # TODO v18: move company to second position arg and make it regular arg
     @api.model
     def _prepare_match_tax_domain(
-        self, tax_dict, type_tax_use="purchase", price_include=False
+        self, tax_dict, company=None, type_tax_use="purchase", price_include=False
     ):
         ato = self.env["account.tax"]
-        company_id = self._context.get("force_company") or self.env.company.id
+        if company is None:
+            company_id = self._context.get("force_company") or self.env.company.id
+        else:
+            company_id = company.id
         domain = [("company_id", "=", company_id)]
         if type_tax_use == "purchase":
             domain.append(("type_tax_use", "=", "purchase"))
@@ -940,6 +982,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 )
         return domain
 
+    # TODO v18: move company to second position arg and make it regular arg
     @api.model
     def _match_tax(
         self,
@@ -947,6 +990,8 @@ class BusinessDocumentImport(models.AbstractModel):
         chatter_msg,
         type_tax_use="purchase",
         price_include=False,
+        company=None,
+        raise_exception=True,
     ):
         """Example:
         tax_dict = {
@@ -963,14 +1008,17 @@ class BusinessDocumentImport(models.AbstractModel):
         if tax:
             return tax
         domain = self._prepare_match_tax_domain(
-            tax_dict, type_tax_use=type_tax_use, price_include=price_include
+            tax_dict,
+            company=company,
+            type_tax_use=type_tax_use,
+            price_include=price_include,
         )
         taxes = ato.search(domain)
         for tax in taxes:
             tax_amount = tax.amount  # 'amount' field : digits=(16, 4)
             if not float_compare(tax_dict["amount"], tax_amount, precision_digits=4):
                 return tax
-        raise self.user_error_wrap(
+        self.user_error_wrap(
             "_match_tax",
             tax_dict,
             _(
@@ -991,7 +1039,10 @@ class BusinessDocumentImport(models.AbstractModel):
                 and "%"
                 or _("(fixed)"),
             ),
+            chatter_msg,
+            raise_exception,
         )
+        return None
 
     def compare_lines(
         self,
@@ -1152,8 +1203,12 @@ class BusinessDocumentImport(models.AbstractModel):
             ]
         return values
 
-    def _prepare_account_speed_dict(self):
-        company_id = self._context.get("force_company") or self.env.company.id
+    # TODO v18 : make company a regular arg instead of a named arg
+    def _prepare_account_speed_dict(self, company=None):
+        if company is None:
+            company_id = self._context.get("force_company") or self.env.company.id
+        else:
+            company_id = company.id
         res = self.env["account.account"].search_read(
             [("company_id", "=", company_id), ("deprecated", "=", False)], ["code"]
         )
@@ -1162,8 +1217,16 @@ class BusinessDocumentImport(models.AbstractModel):
             speed_dict[line["code"].upper()] = line["id"]
         return speed_dict
 
+    # TODO v18: move company to second position arg and make it regular arg
     @api.model
-    def _match_account(self, account_dict, chatter_msg, speed_dict=None):
+    def _match_account(
+        self,
+        account_dict,
+        chatter_msg,
+        company=None,
+        speed_dict=None,
+        raise_exception=True,
+    ):
         """Example:
         account_dict = {
             'code': '411100',
@@ -1175,7 +1238,7 @@ class BusinessDocumentImport(models.AbstractModel):
             account_dict = {}
         aao = self.env["account.account"]
         if speed_dict is None:
-            speed_dict = self._prepare_account_speed_dict()
+            speed_dict = self._prepare_account_speed_dict(company=company)
         self._strip_cleanup_dict(account_dict)
         account = self._direct_match(account_dict, aao)
         if account:
@@ -1205,7 +1268,7 @@ class BusinessDocumentImport(models.AbstractModel):
                         )
                     )
                     return aao.browse(account_id)
-        raise self.user_error_wrap(
+        self.user_error_wrap(
             "_match_account",
             account_dict,
             _(
@@ -1214,10 +1277,16 @@ class BusinessDocumentImport(models.AbstractModel):
                 "Account code: %s"
             )
             % (account_dict.get("code") or ""),
+            chatter_msg,
+            raise_exception,
         )
 
-    def _prepare_analytic_account_speed_dict(self):
-        company_id = self._context.get("force_company") or self.env.company.id
+    # TODO v18: company should be converted from named arg to regular arg
+    def _prepare_analytic_account_speed_dict(self, company=None):
+        if company is None:
+            company_id = self._context.get("force_company") or self.env.company.id
+        else:
+            company_id = company.id
         res = self.env["account.analytic.account"].search_read(
             [("company_id", "=", company_id)], ["code"]
         )
@@ -1227,8 +1296,16 @@ class BusinessDocumentImport(models.AbstractModel):
                 speed_dict[line["code"].upper()] = line["id"]
         return speed_dict
 
+    # TODO v18: move company to second position arg and make it regular arg
     @api.model
-    def _match_analytic_account(self, aaccount_dict, chatter_msg, speed_dict=None):
+    def _match_analytic_account(
+        self,
+        aaccount_dict,
+        chatter_msg,
+        company=None,
+        speed_dict=None,
+        raise_exception=True,
+    ):
         """Example:
         aaccount_dict = {
             'code': '627',
@@ -1240,7 +1317,7 @@ class BusinessDocumentImport(models.AbstractModel):
             aaccount_dict = {}
         aaao = self.env["account.analytic.account"]
         if speed_dict is None:
-            speed_dict = self._prepare_analytic_account_speed_dict()
+            speed_dict = self._prepare_analytic_account_speed_dict(company)
         self._strip_cleanup_dict(aaccount_dict)
         aaccount = self._direct_match(aaccount_dict, aaao)
         if aaccount:
@@ -1249,7 +1326,7 @@ class BusinessDocumentImport(models.AbstractModel):
             aacode = aaccount_dict["code"].upper()
             if aacode in speed_dict:
                 return aaao.browse(speed_dict[aacode])
-        raise self.user_error_wrap(
+        self.user_error_wrap(
             "_match_analytic_account",
             aaccount_dict,
             _(
@@ -1258,10 +1335,15 @@ class BusinessDocumentImport(models.AbstractModel):
                 "Analytic account code: %s"
             )
             % (aaccount_dict.get("code") or ""),
+            chatter_msg,
+            raise_exception,
         )
 
-    def _prepare_journal_speed_dict(self):
-        company_id = self._context.get("force_company") or self.env.company.id
+    def _prepare_journal_speed_dict(self, company=None):
+        if company is None:
+            company_id = self._context.get("force_company") or self.env.company.id
+        else:
+            company_id = company.id
         res = self.env["account.journal"].search_read(
             [("company_id", "=", company_id)], ["code"]
         )
@@ -1270,8 +1352,16 @@ class BusinessDocumentImport(models.AbstractModel):
             speed_dict[line["code"].upper()] = line["id"]
         return speed_dict
 
+    # TODO v18: move company to second position arg and make it regular arg
     @api.model
-    def _match_journal(self, journal_dict, chatter_msg, speed_dict=None):
+    def _match_journal(
+        self,
+        journal_dict,
+        chatter_msg,
+        speed_dict=None,
+        company=None,
+        raise_exception=True,
+    ):
         """Example:
         journal_dict = {
             'code': 'MISC',
@@ -1283,9 +1373,9 @@ class BusinessDocumentImport(models.AbstractModel):
             journal_dict = {}
         ajo = self.env["account.journal"]
         if speed_dict is None:
-            speed_dict = self._prepare_journal_speed_dict()
+            speed_dict = self._prepare_journal_speed_dict(company=company)
         self._strip_cleanup_dict(journal_dict)
-        journal = self._direct_match(journal_dict, ajo)
+        journal = self._direct_match(journal_dict, ajo)  # TODO check company
         if journal:
             return journal
         if journal_dict.get("code"):
@@ -1302,13 +1392,15 @@ class BusinessDocumentImport(models.AbstractModel):
                 "Journal code: %s"
             )
             % (journal_dict.get("code") or ""),
+            chatter_msg,
+            raise_exception,
         )
 
     # Code moved from base_business_document_import_stock
     # Now that the incoterm obj (account.incoterms) is defined in
     # the 'account' module (since Odoo v12) instead of 'stock'
     @api.model
-    def _match_incoterm(self, incoterm_dict, chatter_msg):
+    def _match_incoterm(self, incoterm_dict, chatter_msg, raise_exception=True):
         aio = self.env["account.incoterms"]
         if not incoterm_dict:
             incoterm_dict = {}
@@ -1331,25 +1423,32 @@ class BusinessDocumentImport(models.AbstractModel):
                 self.user_error_wrap(
                     "_match_incoterm",
                     incoterm_dict,
-                    _("Could not find any Incoterm in Odoo corresponding " "to '%s'")
+                    _("Could not find any Incoterm in Odoo corresponding to '%s'.")
                     % incoterm_dict["code"],
+                    chatter_msg,
+                    raise_exception,
                 )
         return False
 
+    # TODO migration v18:
+    # move company to second arg and make it a regular arg (not named arg)
     @api.model
-    def _check_company(self, company_dict, chatter_msg):
+    def _check_company(
+        self, company_dict, chatter_msg, company=None, raise_exception=True
+    ):
         if not company_dict:
             company_dict = {}
         rco = self.env["res.company"]
-        if self._context.get("force_company"):
-            company = rco.browse(self._context["force_company"])
-        else:
-            company = self.env.company
+        if company is None:
+            if self._context.get("force_company"):
+                company = rco.browse(self._context["force_company"])
+            else:
+                company = self.env.company
         if company_dict.get("vat"):
             parsed_company_vat = company_dict["vat"].replace(" ", "").upper()
             if company.partner_id.vat:
                 if company.partner_id.vat != parsed_company_vat:
-                    raise self.user_error_wrap(
+                    self.user_error_wrap(
                         "_check_company",
                         company_dict,
                         _(
@@ -1361,10 +1460,12 @@ class BusinessDocumentImport(models.AbstractModel):
                             company=company.display_name,
                             vat=company.partner_id.vat,
                         ),
+                        chatter_msg,
+                        raise_exception,
                     )
             else:
                 chatter_msg.append(
-                    _("Missing VAT number on company '%s'") % company.display_name
+                    _("Missing VAT number on company '%s'.") % company.display_name
                 )
 
     def get_xml_files_from_pdf(self, pdf_file):
@@ -1388,6 +1489,13 @@ class BusinessDocumentImport(models.AbstractModel):
                 )
         for msg in parsed_dict["chatter_msg"]:
             record.message_post(body=msg)
+        if hasattr(record, "import_warnings") and parsed_dict.get("chatter_msg"):
+            import_warn = _("Import warnings:")
+            list_msg = "\n".join(
+                [f"<li>{msg}</li>" for msg in parsed_dict["chatter_msg"]]
+            )
+            import_warnings = f"<strong>{import_warn}</strong><ul>{list_msg}</ul>"
+            record.write({"import_warnings": import_warnings})
         if parsed_dict.get("note"):
             if doc_filename:
                 msg = _("<b>Notes in file %s:</b>") % doc_filename

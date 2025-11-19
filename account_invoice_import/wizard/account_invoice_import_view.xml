@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2015-2021 Akretion France (https://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="account_invoice_import_form" model="ir.ui.view">
+        <field name="model">account.invoice.import</field>
+        <field name="arch" type="xml">
+            <form string="Import Supplier Invoice or Refund">
+                <div name="help-import">
+                    <p
+                    >Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a draft vendor bills refund for each file.</p><p
+                    >Supported formats:</p>
+                    <ul name="supported_formats_list" />
+                    <p
+                    >If the format you need is not listed above, you should install an additionnal Odoo module that adds support for that format (e.g. <em
+                        >account_invoice_import_facturx</em>, <em
+                        >account_invoice_import_ubl</em>, <em
+                        >account_invoice_import_simple_pdf</em>, etc).</p>
+                </div>
+                <group name="main">
+                    <field name="invoice_attachment_ids" widget="many2many_binary" />
+                    <field name="company_id" groups="base.group_multi_company" />
+                </group>
+                <footer>
+                    <button
+                        name="import_invoices"
+                        type="object"
+                        class="btn-primary"
+                        string="Import"
+                    />
+                    <button special="cancel" string="Cancel" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="account_invoice_import_action" model="ir.actions.act_window">
+        <field name="name">Import Vendor Bills</field>
+        <field name="res_model">account.invoice.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem
+        id="account_invoice_import_menu"
+        parent="account.menu_finance_payables"
+        action="account_invoice_import_action"
+        sequence="15"
+    />
+</odoo>

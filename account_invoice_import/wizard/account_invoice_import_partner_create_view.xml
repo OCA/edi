@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright 2025 Akretion France (https://www.akretion.com/)
+  @author: Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+
+                  <record
+        id="account_invoice_import_partner_create_form"
+        model="ir.ui.view"
+    >
+                          <field
+            name="model"
+        >account.invoice.import.partner.create</field>
+                          <field name="arch" type="xml">
+                                  <form>
+                                          <group name="main">
+                                                  <field name="move_id" invisible="1" />
+                                                  <field
+                        name="import_partner_data"
+                        invisible="1"
+                    />
+                                                  <field name="partner_name" />
+                                                  <field name="partner_vat" />
+                                                  <field
+                        name="create_or_update"
+                        nolabel="1"
+                        colspan="2"
+                        widget="radio"
+                    />
+                                                  <field
+                        name="update_partner_id"
+                        attrs="{'invisible': [('create_or_update', '!=', 'update')], 'required': [('create_or_update', '=', 'update')]}"
+                    />
+                                          </group>
+                                          <footer>
+                                                  <button
+                        name="create_partner"
+                        type="object"
+                        colspan="2"
+                        class="btn-primary"
+                        string="Create Partner"
+                        attrs="{'invisible': [('create_or_update', '!=', 'create')]}"
+                    />
+
+                                                  <button
+                        name="update_partner"
+                        type="object"
+                        colspan="2"
+                        class="btn-primary"
+                        string="Update Partner"
+                        attrs="{'invisible': [('create_or_update', '!=', 'update')]}"
+                    />
+
+                                                  <button
+                        special="cancel"
+                        string="Cancel"
+                        class="btn-default"
+                    />
+                                          </footer>
+                                  </form>
+                          </field>
+                  </record>
+
+                  <record
+        id="account_invoice_import_partner_create_action"
+        model="ir.actions.act_window"
+    >
+                          <field name="name">Create or Update Partner</field>
+        <field name="res_model">account.invoice.import.partner.create</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+</record>
+
+</odoo>
