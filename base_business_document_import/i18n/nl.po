@@ -110,7 +110,7 @@ msgstr "ID {id} van '{model}' bestaat niet."
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
-msgid "Import warnings:"
+msgid "Import Warnings:"
 msgstr ""
 
 #. module: base_business_document_import
@@ -244,8 +244,8 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The %(label)s has been identified by the domain name '%(domain)s' so please "
-"check carefully that the %(label)s is correct."
+"The %(label)s has been identified by the domain name '%(email_domain)s' so "
+"please check carefully that the %(label)s is correct."
 msgstr ""
 
 #. module: base_business_document_import

@@ -121,7 +121,7 @@ msgstr "La ID {id} de '{model}' no existe en Odoo."
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
-msgid "Import warnings:"
+msgid "Import Warnings:"
 msgstr ""
 
 #. module: base_business_document_import
@@ -289,11 +289,9 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid ""
-"The %(label)s has been identified by the domain name '%(domain)s' so please "
-"check carefully that the %(label)s is correct."
+"The %(label)s has been identified by the domain name '%(email_domain)s' so "
+"please check carefully that the %(label)s is correct."
 msgstr ""
-"El %(label)s ha sido identificado por el nombre de dominio '%(domain)s' así "
-"que por favor compruebe cuidadosamente que el %(label)s es correcto."
 
 #. module: base_business_document_import
 #. odoo-python
@@ -479,6 +477,14 @@ msgstr "socio"
 #, python-format
 msgid "supplier"
 msgstr "proveedor"
+
+#, python-format
+#~ msgid ""
+#~ "The %(label)s has been identified by the domain name '%(domain)s' so "
+#~ "please check carefully that the %(label)s is correct."
+#~ msgstr ""
+#~ "El %(label)s ha sido identificado por el nombre de dominio '%(domain)s' "
+#~ "así que por favor compruebe cuidadosamente que el %(label)s es correcto."
 
 #, python-format
 #~ msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
