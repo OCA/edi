@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Import",
-    "version": "16.0.2.0.0",
+    "version": "16.0.2.1.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Import supplier invoices/refunds as PDF or XML files",
