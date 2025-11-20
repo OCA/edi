@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_invoice_download_config_full,Full access on account.invoice.download.config to Account Manager,model_account_invoice_download_config,account.group_account_manager,1,1,1,1
+access_account_invoice_download_log_user,Read+Create access on account.invoice.download.log to Invoice User,model_account_invoice_download_log,account.group_account_invoice,1,0,1,0
+access_account_invoice_download_log_full,Full access on account.invoice.download.log to System grp,model_account_invoice_download_log,base.group_system,1,1,1,1
+access_account_invoice_download_credentials,Full access on account.invoice.download.credentials Wizard,model_account_invoice_download_credentials,account.group_account_invoice,1,1,1,0
