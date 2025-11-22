@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo-addon-account_einvoice_generate>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_download>=16.0dev,<16.1dev',
+        'odoo-addon-account_invoice_download_ovh>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_edifact>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_export>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_export_job>=16.0dev,<16.1dev',
