@@ -17,6 +17,7 @@ setuptools.setup(
         'odoo-addon-account_invoice_facturx>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_facturx_py3o>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_import>=16.0dev,<16.1dev',
+        'odoo-addon-account_invoice_import_facturx>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_import_simple_pdf>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_import_ubl>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_ubl>=16.0dev,<16.1dev',
