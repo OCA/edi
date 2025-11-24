@@ -35,9 +35,9 @@ class AccountMove(models.Model):
             tax_map = {}
             for acc_entry in fp.account_ids:
                 if acc_entry.account_src_id and acc_entry.account_dest_id:
-                    account_map[
-                        acc_entry.account_src_id.id
-                    ] = acc_entry.account_dest_id.id
+                    account_map[acc_entry.account_src_id.id] = (
+                        acc_entry.account_dest_id.id
+                    )
             for tax_entry in fp.tax_ids:
                 tax_map[tax_entry.tax_src_id.id] = tax_entry.tax_dest_id.id or False
             for iline in self.invoice_line_ids.filtered(

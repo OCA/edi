@@ -9,17 +9,17 @@
         <field name="model">account.journal</field>
         <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view" />
         <field name="arch" type="xml">
-                <xpath
+            <xpath
                 expr="//t[@id='account.JournalBodySalePurchase']//widget[@name='account_file_uploader']"
                 position="attributes"
             >
-                        <attribute name="invisible">1</attribute>
-                </xpath>
-                <xpath
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath
                 expr="//t[@id='account.JournalBodySalePurchase']//widget[@name='account_file_uploader']"
                 position="after"
             >
-                    <button
+                <button
                     string="Upload"
                     type="action"
                     name="%(account_invoice_import_action)d"

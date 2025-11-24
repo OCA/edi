@@ -11,14 +11,14 @@
             <form string="Import Supplier Invoice or Refund">
                 <div name="help-import">
                     <p
-                    >Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a draft vendor bills refund for each file.</p><p
-                    >Supported formats:</p>
+                    >Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a draft vendor bills refund for each file.</p>
+                    <p>Supported formats:</p>
                     <ul name="supported_formats_list" />
                     <p
                     >If the format you need is not listed above, you should install an additionnal Odoo module that adds support for that format (e.g. <em
-                        >account_invoice_import_facturx</em>, <em
-                        >account_invoice_import_ubl</em>, <em
-                        >account_invoice_import_simple_pdf</em>, etc).</p>
+                    >account_invoice_import_facturx</em>, <em
+                    >account_invoice_import_ubl</em>, <em
+                    >account_invoice_import_simple_pdf</em>, etc).</p>
                 </div>
                 <group name="main">
                     <field name="invoice_attachment_ids" widget="many2many_binary" />

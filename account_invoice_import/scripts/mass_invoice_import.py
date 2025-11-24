@@ -7,6 +7,7 @@
 Mass import of PDF/XML invoice.
 The module OCA/edi/account_invoice_import must be installed on Odoo.
 """
+
 import argparse
 import base64
 import getpass
