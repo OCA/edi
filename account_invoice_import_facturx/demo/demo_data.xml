@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+<record id="fr_vat_purchase_20" model="account.tax">
+    <field name="name">FR VAT purchase 20.0%</field>
+    <field name="description">FR-VAT-buy-20.0</field>
+    <field name="type_tax_use">purchase</field>
+    <field name="amount">20</field>
+    <field name="amount_type">percent</field>
+    <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
+    <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
+</record>
+
+<record id="jolie_boutique" model="res.partner">
+    <field name="name">Ma jolie boutique</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="street">35 rue de la république</field>
+    <field name="zip">69001</field>
+    <field name="city">Lyon</field>
+    <field name="country_id" ref="base.fr" />
+    <field name="vat">FR11999999998</field>
+    <field name="invoice_import_single_line">1</field>
+    <field
+            name="invoice_import_account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
+    <field
+            name="invoice_import_tax_ids"
+            eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"
+        />
+</record>
+
+<record id="lieferant" model="res.partner">
+    <field name="name">Lieferant GmbH</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="street">Lieferantenstraße 20</field>
+    <field name="zip">80333</field>
+    <field name="city">München</field>
+    <field name="country_id" ref="base.de" />
+    <field
+            name="invoice_import_account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
+</record>
+
+<record id="mvm_musterhafter" model="res.partner">
+    <field name="name">MVM Musterhafter Versicherungsverein Musterstadt a.G.</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="street">Musterstr. 12</field>
+    <field name="zip">12345</field>
+    <field name="city">Musterstadt</field>
+    <field name="country_id" ref="base.de" />
+    <field
+            name="invoice_import_account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
+</record>
+
+<record id="musterlieferant" model="res.partner">
+    <field name="name">MUSTERLIEFERANT GMBH</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="email">max.mustermann@musterlieferant.de</field>
+    <field name="street">BAHNHOFSTRASSE 99</field>
+    <field name="zip">99199</field>
+    <field name="city">MUSTERHAUSEN</field>
+    <field name="country_id" ref="base.de" />
+    <field
+            name="invoice_import_account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
+</record>
+
+<record id="de_vat_purchase_19" model="account.tax">
+    <field name="name">German VAT purchase 19.0%</field>
+    <field name="description">DE-VAT-buy-19.0</field>
+    <field name="type_tax_use">purchase</field>
+    <field name="amount">19</field>
+    <field name="amount_type">percent</field>
+    <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
+    <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
+</record>
+
+<record id="de_vat_purchase_7" model="account.tax">
+    <field name="name">German VAT purchase 7.0%</field>
+    <field name="description">DE-VAT-buy-7.0</field>
+    <field name="type_tax_use">purchase</field>
+    <field name="amount">7</field>
+    <field name="amount_type">percent</field>
+    <field name="unece_type_id" ref="account_tax_unece.tax_type_vat" />
+    <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
+</record>
+
+<record id="tax_type_zf_insurance_tax" model="unece.code.list">
+    <field name="type">tax_type</field>
+    <field name="code">ZF_INSURANCE_TAX</field>
+    <field name="name">Insurance tax</field>
+    <field name="description">ZUGFeRD Code (temporary)</field>
+</record>
+
+<record id="de_insurance_purchase_19" model="account.tax">
+    <field name="name">German Insurance purchase 19.0%</field>
+    <field name="description">DE-INSURANCE-buy-19.0</field>
+    <field name="type_tax_use">purchase</field>
+    <field name="amount">19</field>
+    <field name="amount_type">percent</field>
+    <field name="unece_type_id" ref="tax_type_zf_insurance_tax" />
+    <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
+</record>
+
+<record id="de_insurance_purchase_16_34" model="account.tax">
+    <field name="name">German Insurance purchase 16.34%</field>
+    <field name="description">DE-INSURANCE-buy-16.34</field>
+    <field name="type_tax_use">purchase</field>
+    <field name="amount">16.34</field>
+    <field name="amount_type">percent</field>
+    <field name="unece_type_id" ref="tax_type_zf_insurance_tax" />
+    <field name="unece_categ_id" ref="account_tax_unece.tax_categ_s" />
+    <field name="company_id" ref="base.main_company" />
+</record>
+
+<record id="test_noline" model="res.partner">
+    <field name="name">Test Supplier (noline)</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="country_id" ref="base.fr" />
+    <field name="vat">FR11123456782</field>
+    <field name="invoice_import_single_line">1</field>
+    <field
+            name="invoice_import_account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
+    <field
+            name="invoice_import_tax_ids"
+            eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"
+        />
+</record>
+
+<record id="test_line" model="res.partner">
+    <field name="name">Test Supplier (lines)</field>
+    <field name="is_company" eval="True" />
+    <field name="supplier_rank">1</field>
+    <field name="customer_rank">0</field>
+    <field name="country_id" ref="base.fr" />
+    <field name="vat">FR14987654324</field>
+    <field
+            name="invoice_import_account_id"
+            model="account.account"
+            search="[('account_type', '=', 'expense'), ('company_id', '=', ref('base.main_company'))]"
+        />
+    <field
+            name="invoice_import_tax_ids"
+            eval="[(4, ref('account_invoice_import_facturx.fr_vat_purchase_20'))]"
+        />
+</record>
+
+
+</odoo>
