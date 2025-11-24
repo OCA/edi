@@ -283,6 +283,7 @@ class AccountInvoiceImport(models.TransientModel):
             "company_id": company.id,
             "invoice_origin": parsed_inv.get("origin"),
             "ref": parsed_inv.get("invoice_number"),
+            "narration": parsed_inv.get("narration", ""),
             "invoice_date": parsed_inv.get("date"),
             "invoice_line_ids": [],
         }
