@@ -21,14 +21,14 @@ class BusinessDocumentImport(models.AbstractModel):
         rpo = self.env["res.partner"]
         # 'domain' already contains the company_id criteria
         if partner_dict.get("country_code") and partner_dict.get("phone"):
-            phone_num_e164 = False
+            phone_num_intl = False
             country_code = partner_dict["country_code"].upper()
             try:
                 phone_num = phonenumbers.parse(partner_dict["phone"], country_code)
-                phone_num_e164 = phonenumbers.format_number(
-                    phone_num, phonenumbers.PhoneNumberFormat.E164
+                phone_num_intl = phonenumbers.format_number(
+                    phone_num, phonenumbers.PhoneNumberFormat.INTERNATIONAL
                 )
-                logger.debug("_hook_match_partner phone_num_e164: %s", phone_num_e164)
+                logger.debug("_hook_match_partner phone_num_intl: %s", phone_num_intl)
             except Exception as e:
                 logger.debug(
                     "Could not reformat phone number '%s' with country code '%s'. "
@@ -37,13 +37,13 @@ class BusinessDocumentImport(models.AbstractModel):
                     country_code,
                     e,
                 )
-            if phone_num_e164:
+            if phone_num_intl:
                 partner = rpo.search(
                     domain
                     + [
                         "|",
-                        ("phone", "=", phone_num_e164),
-                        ("mobile", "=", phone_num_e164),
+                        ("phone", "=", phone_num_intl),
+                        ("mobile", "=", phone_num_intl),
                     ],
                     limit=1,
                     order=order,
