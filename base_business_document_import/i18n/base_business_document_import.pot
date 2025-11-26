@@ -46,6 +46,16 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
+"<p>The UNECE code %(code)s was used to describe the unit of measure but this"
+" UNECE code was not found on an existing unit of measure: you should check "
+"the UNECE codes on the existing unit of measure and, if necessary, create "
+"the missing unit of measure and set the UNECE code on it.</p>"
+msgstr ""
+
+#. module: base_business_document_import
+#. odoo-python
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+msgid ""
 "Approximate match: account %(account)s has been matched with account "
 "%(matched_account)s"
 msgstr ""
@@ -86,7 +96,13 @@ msgstr ""
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "Missing VAT number on company '%s'"
+msgid "Import Warnings:"
+msgstr ""
+
+#. module: base_business_document_import
+#. odoo-python
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+msgid "Missing VAT number on company '%s'."
 msgstr ""
 
 #. module: base_business_document_import
@@ -184,8 +200,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The %(label)s has been identified by the domain name '%(domain)s' so please "
-"check carefully that the %(label)s is correct."
+"The %(label)s has been identified by the domain name '%(email_domain)s' so "
+"please check carefully that the %(label)s is correct."
 msgstr ""
 
 #. module: base_business_document_import
@@ -219,15 +235,6 @@ msgid ""
 "The analysis of the business document returned '%(code)s' as the currency "
 "symbol or ISO code. But there are none or several currencies with the "
 "symbol/ISO code in Odoo."
-msgstr ""
-
-#. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid ""
-"The analysis of the business document returned '%(code)s' as the unit of "
-"measure UNECE code, but there is no unit of measure with that UNECE code in "
-"Odoo. Please check the configuration of the units of measures in Odoo."
 msgstr ""
 
 #. module: base_business_document_import
