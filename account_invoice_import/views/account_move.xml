@@ -13,7 +13,7 @@
                 <div
                     class="alert alert-warning"
                     role="alert"
-                    attrs="{'invisible': [('show_import_warnings', '=', False)]}"
+                    invisible="not show_import_warnings"
                 >
                     <field name="import_warnings" />
                 </div>
@@ -26,7 +26,7 @@
                 <button
                     name="%(account_invoice_import_partner_create_action)d"
                     type="action"
-                    attrs="{'invisible': ['|', '|', '|', ('state', '!=', 'draft'), ('move_type', 'not in', ('in_invoice', 'in_refund')), ('import_partner_data', '=', False), ('partner_id', '!=', False)]}"
+                    invisible="state != 'draft' or move_type not in ('in_invoice', 'in_refund') or not import_partner_data or partner_id"
                     groups="account.group_account_invoice"
                     colspan="2"
                     string="Create or Update Partner"

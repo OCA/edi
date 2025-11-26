@@ -2,6 +2,8 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from markupsafe import Markup
+
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 
@@ -18,7 +20,8 @@ class ResPartner(models.Model):
         "account.account",
         company_dependent=True,
         string="Default Expense Account",
-        domain="[('deprecated', '=', False), ('company_id', '=', current_company_id)]",
+        domain="[('deprecated', '=', False), "
+        "('company_ids', 'in', current_company_id)]",
         help="The account configured here will be updated by the mapping of the "
         "fiscal position.",
     )
@@ -26,8 +29,10 @@ class ResPartner(models.Model):
     invoice_import_tax_ids = fields.Many2many(
         "account.tax",
         string="Default Taxes",
-        domain="[('type_tax_use', '=', 'purchase'), ('company_id', '=', current_company_id)]",
-        help="Taxes configured here will go through the mapping of the fiscal position.",
+        domain="[('type_tax_use', '=', 'purchase'), "
+        "('company_id', '=', current_company_id)]",
+        help="Taxes configured here will go through the mapping of the "
+        "fiscal position.",
     )
     # FORCE VALUE fields
     invoice_import_single_line = fields.Boolean(
@@ -81,7 +86,7 @@ class ResPartner(models.Model):
                 vals["taxes"] = taxes
             if (
                 self.invoice_import_account_id
-                and self.invoice_import_account_id.company_id == company
+                and company in self.invoice_import_account_id.company_ids
             ):
                 vals["account"] = self.invoice_import_account_id
         return vals
@@ -93,11 +98,14 @@ class ResPartner(models.Model):
         assert invoice_import_move
         self.write({"invoice_import_move_id": False})
         self.message_post(
-            body=_(
-                "Partner created from imported vendor bill <a href=# data-oe-model=pos.order "
-                "data-oe-id=%(move_id)d>%(move_name)s</a>",
-                move_id=invoice_import_move.id,
-                move_name=invoice_import_move.display_name,
+            body=Markup(
+                _(
+                    "Partner created from imported vendor bill "
+                    "<a href=# data-oe-model=pos.order "
+                    "data-oe-id=%(move_id)d>%(move_name)s</a>",
+                    move_id=invoice_import_move.id,
+                    move_name=invoice_import_move.display_name,
+                )
             )
         )
         if invoice_import_move.partner_id:
@@ -110,8 +118,11 @@ class ResPartner(models.Model):
             )
         invoice_import_move._invoice_import_set_partner_and_update_lines(self)
         invoice_import_move.message_post(
-            body=_(
-                "The partner has been created via the <em>create or update partner</em> wizard."
+            body=Markup(
+                _(
+                    "The partner has been created via the "
+                    "<em>create or update partner</em> wizard."
+                )
             )
         )
         action = self.env["ir.actions.actions"]._for_xml_id(
@@ -121,7 +132,7 @@ class ResPartner(models.Model):
             {
                 "view_id": False,
                 "views": False,
-                "view_mode": "form,tree",
+                "view_mode": "form,list",
                 "res_id": invoice_import_move.id,
             }
         )

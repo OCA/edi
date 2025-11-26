@@ -23,7 +23,7 @@ class TestInvoiceImport(TransactionCase):
                 "code": "612AII",
                 "name": "expense account invoice import",
                 "account_type": "expense",
-                "company_id": cls.company.id,
+                "company_ids": [Command.set([cls.company.id])],
             }
         )
         cls.income_account = cls.env["account.account"].create(
@@ -31,7 +31,7 @@ class TestInvoiceImport(TransactionCase):
                 "code": "707AII",
                 "name": "revenue account invoice import",
                 "account_type": "income",
-                "company_id": cls.company.id,
+                "company_ids": [Command.set([cls.company.id])],
             }
         )
         cls.adj_debit_account = cls.env["account.account"].create(
@@ -39,7 +39,7 @@ class TestInvoiceImport(TransactionCase):
                 "code": "658AII",
                 "name": "Adjustment debit account",
                 "account_type": "expense",
-                "company_id": cls.company.id,
+                "company_ids": [Command.set([cls.company.id])],
             }
         )
         cls.adj_credit_account = cls.env["account.account"].create(
@@ -47,7 +47,7 @@ class TestInvoiceImport(TransactionCase):
                 "code": "758AII",
                 "name": "Adjustment credit account",
                 "account_type": "income",
-                "company_id": cls.company.id,
+                "company_ids": [Command.set([cls.company.id])],
             }
         )
         cls.company.adjustment_debit_account_id = cls.adj_debit_account.id
@@ -169,7 +169,7 @@ class TestInvoiceImport(TransactionCase):
         }
         for import_c in self.all_import_config:
             # hack to have a unique vendor inv ref
-            parsed_inv["invoice_number"] = "INV-%s" % randint(100000, 999999)
+            parsed_inv["invoice_number"] = f"INV-{randint(100000, 999999)}"
             inv = self.env["account.invoice.import"].create_invoice(
                 parsed_inv, import_c
             )
@@ -358,11 +358,11 @@ Nina
 
     def prepare_email_with_attachment(self, sender_email):
         file_name = "unknown_invoice.pdf"
-        file_path = "account_invoice_import/tests/pdf/%s" % file_name
+        file_path = f"account_invoice_import/tests/pdf/{file_name}"
         with file_open(file_path, "rb") as f:
             pdf_file = f.read()
         msg_dict = {
-            "email_from": '"My supplier" <%s>' % sender_email,
+            "email_from": f'"My supplier" <{sender_email}>',
             "to": self.company.invoice_import_email,
             "subject": "Invoice n°1242",
             "body": "Please find enclosed your PDF invoice",

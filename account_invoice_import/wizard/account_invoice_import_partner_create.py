@@ -2,6 +2,8 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from markupsafe import Markup
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -76,13 +78,26 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
             raise UserError(_("You must select the partner to update."))
         vals = self._prepare_update_partner_vals()
         self.update_partner_id.write(vals)
+        # I don't write a link to the imported invoice in the chatter because
+        # it could cause multi-company access-right issues
+        self.update_partner_id.message_post(
+            body=Markup(
+                _(
+                    "Partner updated via the wizard <em>Create or Update Partner</em> "
+                    "of Vendor Bill import."
+                )
+            )
+        )
         self.move_id._invoice_import_set_partner_and_update_lines(
             self.update_partner_id
         )
         self.move_id.message_post(
-            body=_(
-                "Partner has been set via the wizard <em>Create or Update Partner</em>: "
-                "the partner has been updated."
+            body=Markup(
+                _(
+                    "Partner has been set via the wizard "
+                    "<em>Create or Update Partner</em>: "
+                    "the partner has been updated."
+                )
             )
         )
 

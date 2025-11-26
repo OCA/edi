@@ -9,60 +9,43 @@
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="account.res_config_settings_view_form" />
         <field name="arch" type="xml">
-            <xpath expr="//div[@id='invoicing_settings']" position="after">
-                <h2
-                    attrs="{'invisible': [('has_accounting_entries','=',False)]}"
-                >Vendor Bills Import</h2>
-                <div class="row mt16 o_settings_container" id="account_invoice_import">
-                    <div
-                        class="col-xs-12 col-md-12 o_setting_box"
-                        id="account_invoice_import_misc"
+            <xpath expr="//block[@id='account_vendor_bills']" position="after">
+                <block
+                    id="invoice_import"
+                    invisible="not has_accounting_entries"
+                    title="Vendor Bills Import"
+                >
+                    <setting
+                        id="adjustment_debit_account_id"
+                        help="Expense account used for adjustment invoice line"
                     >
-                        <div class="o_setting_left_pane" />
-                        <div class="o_setting_right_pane">
-                            <div class="row">
-                                <label
-                                    class="col-md-5"
-                                    for="adjustment_debit_account_id"
-                                />
-                                <field
-                                    name="adjustment_debit_account_id"
-                                    options="{'no_create': True}"
-                                />
-                            </div>
-                            <div class="row">
-                                <label
-                                    class="col-md-5"
-                                    for="adjustment_credit_account_id"
-                                />
-                                <field
-                                    name="adjustment_credit_account_id"
-                                    options="{'no_create': True}"
-                                />
-                            </div>
-                            <div class="row">
-                                <label class="col-md-5" for="invoice_import_email" />
-                                <field name="invoice_import_email" />
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="col-xs-12 col-md-12 o_setting_box"
-                        id="account_invoice_import_bank_account"
+                        <field
+                            name="adjustment_debit_account_id"
+                            options="{'no_create': True}"
+                        />
+                    </setting>
+                    <setting
+                        id="adjustment_credit_account_id"
+                        help="Income account used for adjustment invoice line"
                     >
-                        <div class="o_setting_left_pane">
-                            <field name="invoice_import_create_bank_account" />
-                        </div>
-                        <div class="o_setting_right_pane">
-                            <div class="row">
-                                <label
-                                    class="col-md-5"
-                                    for="invoice_import_create_bank_account"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <field
+                            name="adjustment_credit_account_id"
+                            options="{'no_create': True}"
+                        />
+                    </setting>
+                    <setting
+                        id="invoice_import_email"
+                        help="This field is used in multi-company setups to import the invoices received by the mail gateway in the appropriate company."
+                    >
+                        <field name="invoice_import_email" />
+                    </setting>
+                    <setting
+                        id="invoice_import_create_bank_account"
+                        help="If enabled, Odoo will auto-create the bank account of suppliers upon vendor bill import."
+                    >
+                        <field name="invoice_import_create_bank_account" />
+                    </setting>
+                </block>
             </xpath>
         </field>
     </record>

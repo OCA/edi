@@ -22,7 +22,8 @@
                     />
                     <field
                         name="update_partner_id"
-                        attrs="{'invisible': [('create_or_update', '!=', 'update')], 'required': [('create_or_update', '=', 'update')]}"
+                        invisible="create_or_update != 'update'"
+                        required="create_or_update == 'update'"
                     />
                 </group>
                 <footer>
@@ -32,7 +33,7 @@
                         colspan="2"
                         class="btn-primary"
                         string="Create Partner"
-                        attrs="{'invisible': [('create_or_update', '!=', 'create')]}"
+                        invisible="create_or_update != 'create'"
                     />
 
                     <button
@@ -41,7 +42,7 @@
                         colspan="2"
                         class="btn-primary"
                         string="Update Partner"
-                        attrs="{'invisible': [('create_or_update', '!=', 'update')]}"
+                        invisible="create_or_update != 'update'"
                     />
 
                     <button special="cancel" string="Cancel" class="btn-default" />

@@ -18,12 +18,12 @@
                     <field name="invoice_import_product_id" />
                     <field
                         name="invoice_import_account_id"
-                        attrs="{'invisible': [('invoice_import_product_id', '!=', False)]}"
+                        invisible="invoice_import_product_id"
                     />
                     <field
                         name="invoice_import_tax_ids"
                         widget="many2many_tags"
-                        attrs="{'invisible': [('invoice_import_product_id', '!=', False)]}"
+                        invisible="invoice_import_product_id"
                     />
                     <field name="invoice_import_label" />
                     <field name="invoice_import_single_line" />
@@ -37,7 +37,7 @@
                     class="alert alert-info"
                     groups="account.group_account_invoice"
                     role="alert"
-                    attrs="{'invisible': ['|', ('invoice_import_move_id', '=', False), ('invoice_import_move_partner_id', '!=', False)]}"
+                    invisible="not invoice_import_move_id or invoice_import_move_partner_id"
                 >
                   <button
                     string="Set partner"
