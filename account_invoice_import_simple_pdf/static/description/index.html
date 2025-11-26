@@ -369,21 +369,34 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:0c6d24d5912c95f01d8873eed851a64fcfa7820a252668a3aff5e18855f88195
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/edi/tree/16.0/account_invoice_import_simple_pdf"><img alt="OCA/edi" src="https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/edi-16-0/edi-16-0-account_invoice_import_simple_pdf"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/edi&amp;target_branch=16.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
-<p>This module is an extension of the module <em>account_invoice_import</em>: it adds support for simple PDF invoices i.e. PDF invoice that don’t have an embedded XML file. This module has been developped to solve the drawbacks of the OCA module <strong>account_invoice_import_invoice2data</strong> ; its advantages are the following:</p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/edi/tree/18.0/account_invoice_import_simple_pdf"><img alt="OCA/edi" src="https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-account_invoice_import_simple_pdf"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/edi&amp;target_branch=18.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p>This module is an extension of the module <em>account_invoice_import</em>: it
+adds support for simple PDF invoices i.e. PDF invoice that don’t have an
+embedded XML file. This module has been developped to solve the
+drawbacks of the OCA module <strong>account_invoice_import_invoice2data</strong> ;
+its advantages are the following:</p>
 <ul class="simple">
-<li>Possibility to add support for a new vendor without developper skills: the accountant can do it!</li>
+<li>Possibility to add support for a new vendor without developper
+skills: the accountant can do it!</li>
 <li>Adding support for a new vendor is faster.</li>
 <li>More tolerance on vendor invoice layout changes.</li>
 <li>Easier to install.</li>
 </ul>
-<p>With this module, you can import all the invoices that you were able to import with the module <em>account_invoice_import_invoice2data</em>. In fact, this module uses the same design when importing a PDF vendor bill:</p>
+<p>With this module, you can import all the invoices that you were able to
+import with the module <em>account_invoice_import_invoice2data</em>. In fact,
+this module uses the same design when importing a PDF vendor bill:</p>
 <ol class="arabic simple">
 <li>raw text extraction of the PDF file,</li>
-<li>identify the partner using the VAT number (if the VAT number is present in the raw text extraction) or some keywords,</li>
-<li>use regular expressions (regex) to extract the data needed to create the vendor bill in Odoo (single line configuration).</li>
+<li>identify the partner using the VAT number (if the VAT number is
+present in the raw text extraction) or some keywords,</li>
+<li>use regular expressions (regex) to extract the data needed to create
+the vendor bill in Odoo (single line configuration).</li>
 </ol>
-<p>The main difference with the OCA module <em>account_invoice_import_invoice2data</em> is that the regular expressions are auto-generated from the configuration made by the user in Odoo. No need to be a regex expert! But you can still write regex to extract some fields for some very specific needs.</p>
+<p>The main difference with the OCA module
+<em>account_invoice_import_invoice2data</em> is that the regular expressions
+are auto-generated from the configuration made by the user in Odoo. No
+need to be a regex expert! But you can still write regex to extract some
+fields for some very specific needs.</p>
 <p>The module can extract the following fields:</p>
 <ul class="simple">
 <li>Total Amount with taxes</li>
@@ -399,10 +412,15 @@ ul.auto-toc {
 <p>In this list, only 3 fields are required:</p>
 <ul class="simple">
 <li>Invoice Date</li>
-<li>2 out of the 3 Amount fields (the 3rd can be deducted from the 2 others: Total Amount = Total Untaxed + Total Tax)</li>
+<li>2 out of the 3 Amount fields (the 3rd can be deducted from the 2
+others: Total Amount = Total Untaxed + Total Tax)</li>
 </ul>
-<p>To take advantage of the fields <em>Start Date</em> and <em>End Date</em>, you need the OCA module <em>account_invoice_start_end_dates</em> from the <a class="reference external" href="https://github.com/OCA/account-closing">account-closing</a> project.</p>
-<p>To know the full story behind the development of this module, read <a class="reference external" href="https://akretion.com/en/blog/new-opensource-pdf-invoice-import-module-for-odoo">Akretion’s blog post</a>.</p>
+<p>To take advantage of the fields <em>Start Date</em> and <em>End Date</em>, you need
+the OCA module <em>account_invoice_start_end_dates</em> from the
+<a class="reference external" href="https://github.com/OCA/account-closing">account-closing</a> project.</p>
+<p>To know the full story behind the development of this module, read
+<a class="reference external" href="https://akretion.com/en/blog/new-opensource-pdf-invoice-import-module-for-odoo">Akretion’s blog
+post</a>.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -426,47 +444,78 @@ ul.auto-toc {
 </div>
 <div class="section" id="installation">
 <h1><a class="toc-backref" href="#toc-entry-1">Installation</a></h1>
-<p>The most important technical component of this module is the tool that converts the PDF to text. Converting PDF to text is not an easy job. As outlined in this <a class="reference external" href="https://dida.do/blog/how-to-extract-text-from-pdf">blog post</a>, different tools can give quite different results. The best results are usually achieved with tools based on a PDF viewer, which exclude pure-python tools. But pure-python tools are easier to install than tools based on a PDF viewer. It is important to understand that, if you change the PDF to text tool, you will certainly have a slightly different text output, which may oblige you to update the field extraction rule, which can be time-consuming if you have already configured many vendors.</p>
+<p>The most important technical component of this module is the tool that
+converts the PDF to text. Converting PDF to text is not an easy job. As
+outlined in this <a class="reference external" href="https://dida.do/blog/how-to-extract-text-from-pdf">blog
+post</a>, different
+tools can give quite different results. The best results are usually
+achieved with tools based on a PDF viewer, which exclude pure-python
+tools. But pure-python tools are easier to install than tools based on a
+PDF viewer. It is important to understand that, if you change the PDF to
+text tool, you will certainly have a slightly different text output,
+which may oblige you to update the field extraction rule, which can be
+time-consuming if you have already configured many vendors.</p>
 <p>The module supports 5 different extraction methods:</p>
 <ol class="arabic simple">
-<li><a class="reference external" href="https://github.com/pymupdf/PyMuPDF">PyMuPDF</a> which is a Python binding for <a class="reference external" href="https://mupdf.com/">MuPDF</a>, a lightweight PDF toolkit/viewer/renderer published under the AGPL licence by the company <a class="reference external" href="https://artifex.com/">Artifex Software</a>.</li>
-<li><a class="reference external" href="https://pypi.org/project/pdftotext/">pdftotext python library</a>, which is a python binding for the pdftotext tool.</li>
-<li><a class="reference external" href="https://en.wikipedia.org/wiki/Pdftotext">pdftotext command line tool</a>, which is based on <a class="reference external" href="https://poppler.freedesktop.org/">poppler</a>, a PDF rendering library used by <a class="reference external" href="https://www.xpdfreader.com/">xpdf</a> and <a class="reference external" href="https://wiki.gnome.org/Apps/Evince/FrequentlyAskedQuestions">Evince</a> (the PDF reader of <a class="reference external" href="https://www.gnome.org/">Gnome</a>).</li>
-<li><a class="reference external" href="https://github.com/py-pdf/pypdf/">pypdf</a>, which is one of the most common PDF lib for Python. pypdf is a pure-python solution, so it’s very easy to install on all OSes.</li>
+<li><a class="reference external" href="https://github.com/pymupdf/PyMuPDF">PyMuPDF</a> which is a Python
+binding for <a class="reference external" href="https://mupdf.com/">MuPDF</a>, a lightweight PDF
+toolkit/viewer/renderer published under the AGPL licence by the
+company <a class="reference external" href="https://artifex.com/">Artifex Software</a>.</li>
+<li><a class="reference external" href="https://pypi.org/project/pdftotext/">pdftotext python library</a>,
+which is a python binding for the pdftotext tool.</li>
+<li><a class="reference external" href="https://en.wikipedia.org/wiki/Pdftotext">pdftotext command line
+tool</a>, which is based on
+<a class="reference external" href="https://poppler.freedesktop.org/">poppler</a>, a PDF rendering
+library used by <a class="reference external" href="https://www.xpdfreader.com/">xpdf</a> and
+<a class="reference external" href="https://wiki.gnome.org/Apps/Evince/FrequentlyAskedQuestions">Evince</a>
+(the PDF reader of <a class="reference external" href="https://www.gnome.org/">Gnome</a>).</li>
+<li><a class="reference external" href="https://github.com/py-pdf/pypdf/">pypdf</a>, which is one of the
+most common PDF lib for Python. pypdf is a pure-python solution, so
+it’s very easy to install on all OSes.</li>
 </ol>
-<p>PyMuPDF and pdftotext both give a very good text output. So far, I can’t say which one is best. pypdf often gives lower-quality text output, but its advantage is that it is a pure-Python librairy, so you will always be able to install it whatever your technical environnement is.</p>
-<p>You can choose one extraction method and only install the tools/libs for that method.</p>
+<p>PyMuPDF and pdftotext both give a very good text output. So far, I can’t
+say which one is best. pypdf often gives lower-quality text output, but
+its advantage is that it is a pure-Python librairy, so you will always
+be able to install it whatever your technical environnement is.</p>
+<p>You can choose one extraction method and only install the tools/libs for
+that method.</p>
 <div class="section" id="install-pymupdf">
 <h2><a class="toc-backref" href="#toc-entry-2">Install PyMuPDF</a></h2>
 <p>Install it via pip:</p>
-<pre class="code literal-block">
+<pre class="literal-block">
 pip3 install --upgrade pymupdf
 </pre>
-<p>Beware that <em>PyMuPDF</em> is not a pure-python library: it uses MuPDF, which is written in C language. If a python wheel for your OS, CPU architecture and Python version is available on pypi (check the <a class="reference external" href="https://pypi.org/project/PyMuPDF/#files">list of PyMuPDF wheels</a> on pypi), it will install smoothly. Otherwize, the installation via pip will require MuPDF and all its development libs to compile the binding.</p>
+<p>Beware that <em>PyMuPDF</em> is not a pure-python library: it uses MuPDF, which
+is written in C language. If a python wheel for your OS, CPU
+architecture and Python version is available on pypi (check the <a class="reference external" href="https://pypi.org/project/PyMuPDF/#files">list of
+PyMuPDF wheels</a> on pypi), it
+will install smoothly. Otherwize, the installation via pip will require
+MuPDF and all its development libs to compile the binding.</p>
 </div>
 <div class="section" id="install-pdftotext-python-lib">
 <h2><a class="toc-backref" href="#toc-entry-3">Install pdftotext python lib</a></h2>
 <p>To install <strong>pdftotext python lib</strong>, run:</p>
-<pre class="code literal-block">
+<pre class="literal-block">
 sudo apt install build-essential libpoppler-cpp-dev pkg-config python3-dev
 </pre>
 <p>and then install the lib via pip:</p>
-<pre class="code literal-block">
+<pre class="literal-block">
 pip3 install --upgrade pdftotext
 </pre>
-<p>On OSes other than Debian/Ubuntu, follow the instructions on the <a class="reference external" href="https://github.com/jalan/pdftotext">project page</a>.</p>
+<p>On OSes other than Debian/Ubuntu, follow the instructions on the
+<a class="reference external" href="https://github.com/jalan/pdftotext">project page</a>.</p>
 </div>
 <div class="section" id="install-pdftotext-command-line">
 <h2><a class="toc-backref" href="#toc-entry-4">Install pdftotext command line</a></h2>
 <p>To install <strong>pdftotext command line</strong>, run:</p>
-<pre class="code literal-block">
+<pre class="literal-block">
 sudo apt install poppler-utils
 </pre>
 </div>
 <div class="section" id="install-pypdf">
 <h2><a class="toc-backref" href="#toc-entry-5">Install pypdf</a></h2>
 <p>To install the <strong>pypdf</strong> python lib, run:</p>
-<pre class="code literal-block">
+<pre class="literal-block">
 pip3 install --upgrade pypdf
 </pre>
 </div>
@@ -474,23 +523,41 @@ pip3 install --upgrade pypdf
 <h2><a class="toc-backref" href="#toc-entry-6">Other requirements</a></h2>
 <p>This module also requires the following Python libraries:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://pypi.org/project/regex/">regex</a> which is backward-compatible with the <em>re</em> module of the Python standard library, but has additional functionalities.</li>
-<li><a class="reference external" href="https://github.com/scrapinghub/dateparser">dateparser</a> which is a powerful date parsing library.</li>
+<li><a class="reference external" href="https://pypi.org/project/regex/">regex</a> which is
+backward-compatible with the <em>re</em> module of the Python standard
+library, but has additional functionalities.</li>
+<li><a class="reference external" href="https://github.com/scrapinghub/dateparser">dateparser</a> which is a
+powerful date parsing library.</li>
 </ul>
-<p>The dateparser lib depends itself on regex. So you can install these Python libraries via pip with the following command:</p>
-<pre class="code literal-block">
+<p>The dateparser lib depends itself on regex. So you can install these
+Python libraries via pip with the following command:</p>
+<pre class="literal-block">
 pip3 install --upgrade dateparser
 </pre>
-<p>The dateparser lib is not compatible with all regex lib versions. As of February 2024, the <a class="reference external" href="https://github.com/scrapinghub/dateparser/blob/master/setup.py#L36">version requirement</a> declared by dateparser for regex is <strong>!=2019.02.19, !=2021.8.27</strong>. So the latest version of dateparser is currenly compatible with the latest version of regex. To know the version of regex installed in your environment, run:</p>
-<pre class="code literal-block">
+<p>The dateparser lib is not compatible with all regex lib versions. As of
+February 2024, the <a class="reference external" href="https://github.com/scrapinghub/dateparser/blob/master/setup.py#L36">version
+requirement</a>
+declared by dateparser for regex is <strong>!=2019.02.19, !=2021.8.27</strong>. So
+the latest version of dateparser is currenly compatible with the latest
+version of regex. To know the version of regex installed in your
+environment, run:</p>
+<pre class="literal-block">
 pip3 show regex
 </pre>
 </div>
 </div>
 <div class="section" id="configuration">
 <h1><a class="toc-backref" href="#toc-entry-7">Configuration</a></h1>
-<p>By default, for the PDF to text conversion, the module tries the different methods in the order mentionned in the INSTALL section: it will first try to use <strong>PyMuPDF</strong>; if it fails (for example because the lib is not properly installed), then it will try to use the <strong>pdftotext python lib</strong>, if that one also fails, it will try to use <strong>pdftotext command line</strong> and, if it also fails, it will eventually try <strong>pypdf</strong>. If none of the 4 methods work, Odoo will display an error message.</p>
-<p>If you want to force Odoo to use a specific text extraction method, go to the menu <em>Configuration &gt; Technical &gt; Parameters &gt; System Parameters</em> and create a new System Parameter:</p>
+<p>By default, for the PDF to text conversion, the module tries the
+different methods in the order mentionned in the INSTALL section: it
+will first try to use <strong>PyMuPDF</strong>; if it fails (for example because the
+lib is not properly installed), then it will try to use the <strong>pdftotext
+python lib</strong>, if that one also fails, it will try to use <strong>pdftotext
+command line</strong> and, if it also fails, it will eventually try <strong>pypdf</strong>.
+If none of the 4 methods work, Odoo will display an error message.</p>
+<p>If you want to force Odoo to use a specific text extraction method, go
+to the menu <em>Configuration &gt; Technical &gt; Parameters &gt; System Parameters</em>
+and create a new System Parameter:</p>
 <ul class="simple">
 <li><em>Key</em>: <strong>invoice_import_simple_pdf.pdf2txt</strong></li>
 <li><em>Value</em>: select the proper value for the method you want to use:<ol class="arabic">
@@ -501,15 +568,18 @@ pip3 show regex
 </ol>
 </li>
 </ul>
-<p>In this configuration, Odoo will only use the selected text extraction method and, if it fails, it will display an error message.</p>
-<p>You will find a full demonstration about how to configure each Vendor and import the PDF invoices in this <a class="reference external" href="https://www.youtube.com/watch?v=edsEuXVyEYE">screencast</a>.</p>
+<p>In this configuration, Odoo will only use the selected text extraction
+method and, if it fails, it will display an error message.</p>
+<p>You will find a full demonstration about how to configure each Vendor
+and import the PDF invoices in this
+<a class="reference external" href="https://www.youtube.com/watch?v=edsEuXVyEYE">screencast</a>.</p>
 </div>
 <div class="section" id="bug-tracker">
 <h1><a class="toc-backref" href="#toc-entry-8">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-<a class="reference external" href="https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_import_simple_pdf%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<a class="reference external" href="https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_import_simple_pdf%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
@@ -537,7 +607,7 @@ mission is to support the collaborative development of Odoo features and
 promote its widespread use.</p>
 <p>Current <a class="reference external" href="https://odoo-community.org/page/maintainer-role">maintainer</a>:</p>
 <p><a class="reference external image-reference" href="https://github.com/alexis-via"><img alt="alexis-via" src="https://github.com/alexis-via.png?size=40px" /></a></p>
-<p>This module is part of the <a class="reference external" href="https://github.com/OCA/edi/tree/16.0/account_invoice_import_simple_pdf">OCA/edi</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/edi/tree/18.0/account_invoice_import_simple_pdf">OCA/edi</a> project on GitHub.</p>
 <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
 </div>
 </div>

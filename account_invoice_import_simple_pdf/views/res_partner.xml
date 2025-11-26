@@ -5,8 +5,6 @@
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
-
     <record id="view_partner_property_form" model="ir.ui.view">
         <field name="model">res.partner</field>
         <field
@@ -19,44 +17,44 @@
                 <page
                     name="invoice_import_simple_pdf"
                     string="Vendor Bills Import"
-                    attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
+                    invisible="parent_id or not is_company"
                     groups="account.group_account_invoice,account.group_account_readonly"
                 >
-                <group
+                    <group
                         name="simple_pdf_main"
                         string="Simple PDF Configuration (useless for structured invoices)"
                     >
                         <group name="simple_pdf_main-left">
-                        <field name="simple_pdf_keyword" string="Keywords" />
-                        <field name="simple_pdf_pages" widget="radio" />
-                        <field
+                            <field name="simple_pdf_keyword" string="Keywords" />
+                            <field name="simple_pdf_pages" widget="radio" />
+                            <field
                                 name="simple_pdf_currency_id"
                                 string="Invoice Currency"
                                 options="{'no_create': True, 'no_create_edit': True}"
                             />
-                </group>
+                        </group>
                         <group name="simple_pdf_main-right">
-                        <field name="simple_pdf_date_format" string="Date Format" />
-                        <field
+                            <field name="simple_pdf_date_format" string="Date Format" />
+                            <field
                                 name="simple_pdf_date_separator"
                                 string="Date Separator"
                             />
-                        <field
+                            <field
                                 name="simple_pdf_decimal_separator"
                                 string="Decimal Separator"
                             />
-                        <field
+                            <field
                                 name="simple_pdf_thousand_separator"
                                 string="Thousand Separator"
                             />
-                        <field name="simple_pdf_test_filename" invisible="1" />
-                    </group>
+                            <field name="simple_pdf_test_filename" invisible="1" />
+                        </group>
                     </group>
                     <group
                         name="invoice_import_simple_pdf_number"
                         string="Invoice Number Format"
                     >
-                            <field
+                        <field
                             name="simple_pdf_invoice_number_ids"
                             nolabel="1"
                             colspan="2"
@@ -70,53 +68,48 @@
                             name="pdf_simple_generate_default_fields"
                             type="object"
                             string="Generate Default Extract Rules"
-                            attrs="{'invisible': [('simple_pdf_field_ids', '!=', [])]}"
+                            invisible="simple_pdf_field_ids"
                             colspan="2"
                         />
                         <field name="simple_pdf_field_ids" nolabel="1" colspan="2" />
                     </group>
                     <group name="pdf_simple_test" string="Test File">
-                            <label for="simple_pdf_test_file" />
-                            <div id="pdf_simple_test">
-                                <field
+                        <label for="simple_pdf_test_file" />
+                        <div id="pdf_simple_test">
+                            <field
                                 name="simple_pdf_test_file"
                                 filename="simple_pdf_test_filename"
                                 class="oe_inline"
                             />
-                                <button
+                            <button
                                 type="object"
                                 name="pdf_simple_test_run"
                                 string="Run Test"
                                 class="btn-primary oe_inline"
                             />
-                                <button
+                            <button
                                 name="pdf_simple_test_cleanup"
                                 type="object"
                                 string="Cleanup Test Data"
-                                attrs="{'invisible': [('simple_pdf_test_file', '=', False), ('simple_pdf_test_results', '=', False), ('simple_pdf_test_raw_text', '=', False)]}"
+                                invisible="not simple_pdf_test_file and not simple_pdf_test_results and not simple_pdf_test_raw_text"
                                 class="oe_inline"
                             />
-                            </div>
-                            </group>
-                            <group name="pdf_simple_test_results" string="Test Results">
-                                <field
-                            nolabel="1"
-                            name="simple_pdf_test_results"
-                            colspan="2"
-                        />
-                        </group>
-                        <group
+                        </div>
+                    </group>
+                    <group name="pdf_simple_test_results" string="Test Results">
+                        <field nolabel="1" name="simple_pdf_test_results" colspan="2" />
+                    </group>
+                    <group
                         name="pdf_simple_test_raw_text"
                         string="Text Extraction from PDF"
-                        attrs="{'invisible': [('simple_pdf_test_raw_text', '=', False)]}"
+                        invisible="not simple_pdf_test_raw_text"
                     >
-                                <field
+                        <field
                             nolabel="1"
                             name="simple_pdf_test_raw_text"
                             colspan="2"
                         />
-                        </group>
-
+                    </group>
                 </page>
             </page>
         </field>
@@ -130,12 +123,11 @@
         />
         <field name="arch" type="xml">
             <group name="simple_pdf_main" position="before">
-                  <group name="invoice_import_config" position="move" />
+                <group name="invoice_import_config" position="move" />
             </group>
             <group name="invoice_import_config" position="attributes">
-                    <attribute name="string" />
+                <attribute name="string" />
             </group>
         </field>
     </record>
-
 </odoo>

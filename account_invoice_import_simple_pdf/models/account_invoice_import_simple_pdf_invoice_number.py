@@ -112,6 +112,6 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
                 years_str = [str(y)[-2:] for y in years]
             else:
                 years_str = [str(y) for y in years]
-            regex_list.append("(?:%s)" % "|".join(years_str))
+            regex_list.append(f"(?:{'|'.join(years_str)})")
         elif self.string_type == "month":
             regex_list.append("(?:01|02|03|04|05|06|07|08|09|10|11|12)")

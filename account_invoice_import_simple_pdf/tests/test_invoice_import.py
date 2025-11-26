@@ -62,9 +62,9 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             limit=1,
         )
         cls.module = "account_invoice_import_simple_pdf"
-        cls.product = cls.env.ref("%s.mobile_phone" % cls.module)
+        cls.product = cls.env.ref(f"{cls.module}.mobile_phone")
         cls.product.with_company(cls.company.id).write(
-            {"supplier_taxes_id": [(6, 0, [purchase_tax.id])]}
+            {"supplier_taxes_id": [Command.set([purchase_tax.id])]}
         )
 
         # for the full test with a PDF invoice
@@ -166,12 +166,12 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             )
 
         cls.ak_filename = "akretion_france-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (cls.module, cls.ak_filename), "rb") as f:
+        with file_open(f"{cls.module}/tests/pdf/{cls.ak_filename}", "rb") as f:
             cls.ak_pdf_file = f.read()
             cls.ak_pdf_file_b64 = base64.b64encode(cls.ak_pdf_file)
 
         cls.bt_filename = "bouygues_telecom-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (cls.module, cls.bt_filename), "rb") as f:
+        with file_open(f"{cls.module}/tests/pdf/{cls.bt_filename}", "rb") as f:
             cls.bt_pdf_file = f.read()
             cls.bt_pdf_file_b64 = base64.b64encode(cls.bt_pdf_file)
 
@@ -259,7 +259,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             },
         }
         for src, config in date_test.items():
-            raw_text = "Debit 15.12\n%s\n12.99 Total" % src
+            raw_text = f"Debit 15.12\n{src}\n12.99 Total"
             if config["date_separator"] == "space":
                 raw_text_list = [
                     raw_text % (space_char, space_char)
@@ -301,7 +301,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         )
         self.partner_config["lang_short"] = "fr"
         for src_string, result in testdict.items():
-            raw_text = "Débit 15,12\n%s\nTotal TTC 12,99" % src_string
+            raw_text = f"Débit 15,12\n{src_string}\nTotal TTC 12,99"
             parsed_inv = {"failed_fields": []}
             self.date_field._get_date(
                 parsed_inv, raw_text, self.partner_config, self.test_info
@@ -413,8 +413,8 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         }
         for src, config in amount_test.items():
             raw_text = (
-                "Invoice Date: 05/12/2019\n%s\nSAS with a capital of 1,234,322.23 USD"
-                % src
+                f"Invoice Date: 05/12/2019\n{src}\n"
+                "SAS with a capital of 1,234,322.23 USD"
             )
             if config["thousand_separator"] == "space" and "%s" in raw_text:
                 raw_text_list = [
@@ -428,7 +428,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                     "simple_pdf_decimal_separator": config["decimal_separator"],
                     "simple_pdf_thousand_separator": config["thousand_separator"],
                     "simple_pdf_currency_id": self.env.ref(
-                        "base.%s" % config["currency"]
+                        f"base.{config['currency']}"
                     ).id,
                 }
             )
@@ -493,10 +493,14 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             ],
         }
         for src, config_list in inv_num_test.items():
-            raw_txt = "Invoice number: %s dated 20/08/2020" % src
+            raw_txt = f"Invoice number: {src} dated 20/08/2020"
             self.partner.simple_pdf_invoice_number_ids.unlink()
             self.partner.write(
-                {"simple_pdf_invoice_number_ids": [(0, 0, x) for x in config_list]}
+                {
+                    "simple_pdf_invoice_number_ids": [
+                        Command.create(x) for x in config_list
+                    ]
+                }
             )
             parsed_inv = {"failed_fields": []}
             self.inv_num_field._get_invoice_number(

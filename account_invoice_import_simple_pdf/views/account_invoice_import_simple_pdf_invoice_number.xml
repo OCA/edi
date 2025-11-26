@@ -5,64 +5,68 @@
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
-
     <record
         id="account_invoice_import_simple_pdf_invoice_number_form"
         model="ir.ui.view"
     >
         <field name="model">account.invoice.import.simple.pdf.invoice.number</field>
         <field name="arch" type="xml">
-                <form>
-                        <group name="main">
-                                <field
+            <form>
+                <group name="main">
+                    <field
                         name="partner_id"
                         invisible="not context.get('account_invoice_import_simple_pdf_invoice_number_main_view')"
                     />
-                                <field name="string_type" />
-                                <field
+                    <field name="string_type" />
+                    <field
                         name="fixed_char"
-                        attrs="{'required': [('string_type', '=', 'fixed')], 'invisible': [('string_type', '!=', 'fixed')]}"
+                        required="string_type == 'fixed'"
+                        invisible="string_type != 'fixed'"
                     />
-                                <field
+                    <field
                         name="occurrence_min"
-                        attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'space'))]}"
+                        required="string_type in ('letter_upper', 'letter_lower', 'digit', 'space')"
+                        invisible="string_type not in ('letter_upper', 'letter_lower', 'digit', 'space')"
                     />
-                                <field
+                    <field
                         name="occurrence_max"
-                        attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'space'))]}"
+                        required="string_type in ('letter_upper', 'letter_lower', 'digit', 'space')"
+                        invisible="string_type not in ('letter_upper', 'letter_lower', 'digit', 'space')"
                     />
-                        </group>
-                </form>
+                </group>
+            </form>
         </field>
-</record>
+    </record>
 
-<record id="account_invoice_import_simple_pdf_invoice_number_tree" model="ir.ui.view">
+    <record
+        id="account_invoice_import_simple_pdf_invoice_number_tree"
+        model="ir.ui.view"
+    >
         <field name="model">account.invoice.import.simple.pdf.invoice.number</field>
         <field name="arch" type="xml">
-                <tree editable="bottom">
-                        <field
+            <list editable="bottom">
+                <field
                     name="partner_id"
-                    invisible="not context.get('account_invoice_import_simple_pdf_invoice_number_main_view')"
+                    column_invisible="not context.get('account_invoice_import_simple_pdf_invoice_number_main_view')"
                 />
-                        <field name="sequence" widget="handle" />
-                                <field name="string_type" />
-                                <field
+                <field name="sequence" widget="handle" />
+                <field name="string_type" />
+                <field
                     name="fixed_char"
-                    attrs="{'required': [('string_type', '=', 'fixed')], 'invisible': [('string_type', '!=', 'fixed')]}"
+                    required="string_type == 'fixed'"
+                    invisible="string_type != 'fixed'"
                 />
-                                <field
+                <field
                     name="occurrence_min"
-                    attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'space'))]}"
+                    required="string_type in ('letter_upper', 'letter_lower', 'digit', 'space')"
+                    invisible="string_type not in ('letter_upper', 'letter_lower', 'digit', 'space')"
                 />
-                                <field
+                <field
                     name="occurrence_max"
-                    attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'space'))]}"
+                    required="string_type in ('letter_upper', 'letter_lower', 'digit', 'space')"
+                    invisible="string_type not in ('letter_upper', 'letter_lower', 'digit', 'space')"
                 />
-                </tree>
+            </list>
         </field>
-</record>
-
-
-
+    </record>
 </odoo>

@@ -60,8 +60,8 @@ class AccountInvoiceImport(models.TransientModel):
                 version = pymupdf.__version__
             elif hasattr(pymupdf, "version") and isinstance(pymupdf.version, tuple):
                 version = pymupdf.version[0]
-            logger.info("Text extraction made with PyMuPDF %s", version)
-            test_info["text_extraction"] = "pymupdf %s" % version
+            logger.info(f"Text extraction made with PyMuPDF {version}")
+            test_info["text_extraction"] = f"pymupdf {version}"
         except Exception as e:
             logger.warning("Text extraction with PyMuPDF failed. Error: %s", e)
         return res
@@ -78,7 +78,7 @@ class AccountInvoiceImport(models.TransientModel):
                     "all": "\n\n".join(pages),
                     "first": pages and pages[0] or "",
                 }
-            test_info["text_extraction"] = "pypdf %s" % pypdf.__version__
+            test_info["text_extraction"] = f"pypdf {pypdf.__version__}"
             logger.info("Text extraction made with pypdf %s", pypdf.__version__)
         except Exception as e:
             logger.warning("Text extraction with pypdf failed. Error: %s", e)
@@ -89,7 +89,8 @@ class AccountInvoiceImport(models.TransientModel):
         res = False
         if not shutil.which("pdftotext"):
             logger.warning(
-                "Could not find the pdftotext utility. Hint: sudo apt install poppler-utils"
+                "Could not find the pdftotext utility. Hint: sudo apt install "
+                "poppler-utils"
             )
             return False
         cmd_args = ["pdftotext"]
@@ -163,8 +164,8 @@ class AccountInvoiceImport(models.TransientModel):
             raise UserError(
                 _(
                     "Odoo could not extract the text from the PDF invoice "
-                    "with the method %s. Refer to the Odoo server logs for more technical "
-                    "information about the cause of the failure."
+                    "with the method %s. Refer to the Odoo server logs for more "
+                    "technical information about the cause of the failure."
                 )
                 % specific_tool
             )
@@ -211,8 +212,8 @@ class AccountInvoiceImport(models.TransientModel):
                     raise UserError(
                         _(
                             "Odoo could not extract the text from the PDF invoice. "
-                            "Refer to the Odoo server logs for more technical information "
-                            "about the cause of the failure."
+                            "Refer to the Odoo server logs for more technical "
+                            "information about the cause of the failure."
                         )
                     )
         for key, text in res.items():
@@ -224,10 +225,10 @@ class AccountInvoiceImport(models.TransientModel):
                 res[key] = regex.sub(test_info["lonely_accents"], "", text)
 
         res["all_no_space"] = regex.sub(
-            "%s+" % test_info["space_pattern"], "", res["all"]
+            f"{test_info['space_pattern']}+", "", res["all"]
         )
         res["first_no_space"] = regex.sub(
-            "%s+" % test_info["space_pattern"], "", res["first"]
+            f"{test_info['space_pattern']}+", "", res["first"]
         )
         return res
 
@@ -271,7 +272,7 @@ class AccountInvoiceImport(models.TransientModel):
                         count=len(keywords),
                         keywords=", ".join(keywords),
                     )
-                    test_results.append("<li>%s</li>" % result_label)
+                    test_results.append(f"<li>{result_label}</li>")
                     break
             for kfield, kfield_label in keyword_fields_dict.items():
                 if partner[kfield] and partner[kfield] in raw_text_no_space:
@@ -280,7 +281,7 @@ class AccountInvoiceImport(models.TransientModel):
                         label=kfield_label,
                         value=partner[kfield],
                     )
-                    test_results.append("<li>%s</li>" % result_label)
+                    test_results.append(f"<li>{result_label}</li>")
                     break
         return partner_id
 
@@ -305,20 +306,21 @@ class AccountInvoiceImport(models.TransientModel):
             8239,
             8287,
         ]
-        return "[%s]" % "".join([chr(x) for x in space_ints])
+        space_ints_str = "".join([chr(x) for x in space_ints])
+        return f"[{space_ints_str}]"
 
     @api.model
     def _get_lonely_accents(self):
         lonely_accents = [
-            "\u00B4",  # acute accent
+            "\u00b4",  # acute accent
             "\u0060",  # grave accent
-            "\u005E",  # circumflex accent
-            "\u00A8",  # diaeresis
-            "\u02CA",  # modifier letter acute accent
-            "\u02CB",  # modifier letter grave accent
-            "\u02C6",  # modifier letter circumflex accent
+            "\u005e",  # circumflex accent
+            "\u00a8",  # diaeresis
+            "\u02ca",  # modifier letter acute accent
+            "\u02cb",  # modifier letter grave accent
+            "\u02c6",  # modifier letter circumflex accent
         ]
-        return "[%s]" % "".join(lonely_accents)
+        return f"[{''.join(lonely_accents)}]"
 
     @api.model
     def _simple_pdf_update_test_info(self, test_info):
@@ -376,7 +378,7 @@ class AccountInvoiceImport(models.TransientModel):
         for field in partner.simple_pdf_field_ids:
             logger.debug("Working on field %s", field.name)
             try:
-                getattr(field, "_get_%s" % field.name)(
+                getattr(field, f"_get_{field.name}")(
                     parsed_inv, raw_text, partner_config, test_info
                 )
             except AttributeError:
@@ -387,13 +389,16 @@ class AccountInvoiceImport(models.TransientModel):
 
         failed_fields = parsed_inv.pop("failed_fields")
         if failed_fields:
+            fields_label = ", ".join(
+                [
+                    f"<strong>{test_info['field_name_sel'][failed_field]}</strong>"
+                    for failed_field in failed_fields
+                ]
+            )
             parsed_inv["chatter_msg"].append(
-                _("<b>Failed</b> to extract the following field(s): %s.")
-                % ", ".join(
-                    [
-                        "<b>%s</b>" % test_info["field_name_sel"][failed_field]
-                        for failed_field in failed_fields
-                    ]
+                _(
+                    f"<strong>Failed</strong> to extract the following "
+                    f"field(s): {fields_label}."
                 )
             )
 

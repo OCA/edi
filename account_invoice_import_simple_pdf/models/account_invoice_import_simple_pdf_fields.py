@@ -218,14 +218,18 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                 test_info[self.name]["start"] = _("Successful cut on '%s'") % start
             else:
                 error_msg = _("String '%s' not found") % start
-                test_info[self.name]["start"] = "<b%s>%s</b>" % (ERROR_STYLE, error_msg)
+                test_info[self.name]["start"] = (
+                    f"<strong{ERROR_STYLE}>{error_msg}</strong>"
+                )
         if end:
             if not restrict_text or (restrict_text and not restrict_text.strip()):
                 error_msg = _(
                     "No text to cut, maybe because start string "
                     "was the very end of the document"
                 )
-                test_info[self.name]["end"] = "<b%s>%s</b>" % (ERROR_STYLE, error_msg)
+                test_info[self.name]["end"] = (
+                    f"<strong{ERROR_STYLE}>{error_msg}</strong>"
+                )
             else:
                 position = restrict_text.find(end)
                 if position >= 0:
@@ -233,9 +237,8 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                     test_info[self.name]["end"] = _("Successful cut on '%s'") % end
                 else:
                     error_msg = _("String '%s' not found") % end
-                    test_info[self.name]["end"] = "<b%s>%s</b>" % (
-                        ERROR_STYLE,
-                        error_msg,
+                    test_info[self.name]["end"] = (
+                        f"<strong{ERROR_STYLE}>{error_msg}</strong>"
                     )
         return restrict_text
 
@@ -275,7 +278,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                 pattern = pattern.replace(src, dest)
 
             if date_separator_char == chr(32):
-                date_separator_regex = ",?%s+" % test_info["space_pattern"]
+                date_separator_regex = f",?{test_info['space_pattern']}+"
             else:
                 date_separator_regex = regex.escape(date_separator_char)
 
@@ -353,13 +356,9 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             pattern = self.regexp
         else:
             if decimal_places:
-                pattern = r"(?:\d{1,3}%s)*\d{1,3}%s\d{%d}" % (
-                    thousand_sep_pattern,
-                    decimal_sep_pattern,
-                    decimal_places,
-                )
+                pattern = rf"(?:\d{{1,3}}{thousand_sep_pattern})*\d{{1,3}}{decimal_sep_pattern}\d{{{decimal_places}}}"  # noqa: E501
             else:
-                pattern = r"(?:\d{1,3}%s)*\d{1,3}" % thousand_sep_pattern
+                pattern = rf"(?:\d{{1,3}}{thousand_sep_pattern})*\d{{1,3}}"
         test_info[self.name] = {"pattern": pattern}
         # don't take if followed by a % ? => means it's a rate
         restrict_text = self.restrict_text(raw_text, test_info)
@@ -369,7 +368,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         # filter out percentage with decimal like VAT rates or discounts
         # for example '5.5 %' or '20.0%'
         restrict_text_filtered = regex.sub(
-            r"\d{1,2}%s\d{1,2}\s?%%" % regex.escape(decimal_sep), "", restrict_text
+            rf"\d{{1,2}}{regex.escape(decimal_sep)}\d{{1,2}}\s?%", "", restrict_text
         )
         # filter out discounts or VAT rates without decimal e.g. 20%
         restrict_text_filtered = regex.sub(r"\d{1,3}\s?%", "", restrict_text_filtered)
@@ -377,7 +376,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         # Yes, this is a hack :)
         # Works in EN and FR... what about other languages ?
         restrict_text_filtered = regex.sub(
-            r"[Cc]apital.{1,30}(?:\d{1,3}%s)*\d{1,3}" % regex.escape(thousand_sep),
+            rf"[Cc]apital.{{1,30}}(?:\d{{1,3}}{regex.escape(thousand_sep)})*\d{{1,3}}",
             "",
             restrict_text_filtered,
         )
