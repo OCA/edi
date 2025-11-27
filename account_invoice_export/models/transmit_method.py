@@ -15,6 +15,11 @@ class TransmitMethod(models.Model):
     destination_url = fields.Char(string="Url")
     destination_user = fields.Char(string="User", copy=False)
     destination_pwd = fields.Char(string="Password", copy=False)
+    export_connection_timeout = fields.Integer(
+        string="Connection timeout",
+        default=10,
+        help="Timeout in seconds, use 0 (zero) for no timeout.",
+    )
 
     def get_transmission_http_header(self):
         """Generate the HTTP header needed by the transmission method.

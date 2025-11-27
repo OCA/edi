@@ -40,6 +40,11 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_export
+#: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__export_connection_timeout
+msgid "Connection timeout"
+msgstr ""
+
+#. module: account_invoice_export
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
 msgid "Draft"
@@ -143,6 +148,11 @@ msgstr ""
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.exception_sending_invoice
 msgid "The failed job has the uuid"
+msgstr ""
+
+#. module: account_invoice_export
+#: model:ir.model.fields,help:account_invoice_export.field_transmit_method__export_connection_timeout
+msgid "Timeout in seconds, use 0 (zero) for no timeout."
 msgstr ""
 
 #. module: account_invoice_export

@@ -17,9 +17,14 @@ msgstr ""
 "X-Generator: Weblate 5.6.2\n"
 
 #. module: account_invoice_export
+#. odoo-python
+#: code:addons/account_invoice_export/models/account_move.py:0
+msgid "%(name)s (Invoice Record ID: %(id)s)"
+msgstr ""
+
+#. module: account_invoice_export
 #: model:ir.model.fields,help:account_invoice_export.field_account_bank_statement_line__send_through_http
 #: model:ir.model.fields,help:account_invoice_export.field_account_move__send_through_http
-#: model:ir.model.fields,help:account_invoice_export.field_account_payment__send_through_http
 #: model:ir.model.fields,help:account_invoice_export.field_transmit_method__send_through_http
 msgid "Adds a Send eBill button on the invoice"
 msgstr "Aggiunge un pulsante Invia e-fattura nella fattura"
@@ -27,7 +32,6 @@ msgstr "Aggiunge un pulsante Invia e-fattura nella fattura"
 #. module: account_invoice_export
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
-#, python-format
 msgid "An error of type {} occured."
 msgstr "Si è verificato un errore di tipo []."
 
@@ -41,6 +45,17 @@ msgstr ""
 "parametri di connessione sottostanti (autorizzazione base)."
 
 #. module: account_invoice_export
+#: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__export_connection_timeout
+msgid "Connection timeout"
+msgstr ""
+
+#. module: account_invoice_export
+#. odoo-python
+#: code:addons/account_invoice_export/models/account_move.py:0
+msgid "Draft"
+msgstr ""
+
+#. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.view_move_form
 msgid "Ebill has already been sent. Are you sure you want to send it again ?"
 msgstr "L'e-fattura è già stata inviata. Si è sicuri di rispedirla?"
@@ -48,7 +63,6 @@ msgstr "L'e-fattura è già stata inviata. Si è sicuri di rispedirla?"
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__send_through_http
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__send_through_http
-#: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__send_through_http
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__send_through_http
 msgid "Enable send eBill"
 msgstr "Abilita invio e-fattura"
@@ -61,9 +75,8 @@ msgstr "Errore nell'invio della fattura a"
 #. module: account_invoice_export
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
-#, python-format
-msgid "HTTP error {status_code} sending invoice to {method_name}"
-msgstr "Errore HTTP {status_code} nell'invio della fattura a {method_name}"
+msgid "HTTP error %s sending invoice to %s"
+msgstr ""
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.transmit_method_form
@@ -77,23 +90,34 @@ msgstr ""
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__invoice_export_confirmed
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__invoice_export_confirmed
-#: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__invoice_export_confirmed
 msgid "Invoice Export Confirmed"
 msgstr "Esportazione fattura confermata"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_bank_statement_line__invoice_exported
 #: model:ir.model.fields,field_description:account_invoice_export.field_account_move__invoice_exported
-#: model:ir.model.fields,field_description:account_invoice_export.field_account_payment__invoice_exported
 msgid "Invoice Exported"
 msgstr "Fattura esportata"
 
 #. module: account_invoice_export
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
-#, python-format
 msgid "Invoice successfuly sent to {}"
 msgstr "Fattura inviata con successo a {}"
+
+#. module: account_invoice_export
+#. odoo-python
+#: code:addons/account_invoice_export/models/account_move.py:0
+msgid "Invoices not in 'Posted' state: %s"
+msgstr ""
+
+#. module: account_invoice_export
+#. odoo-python
+#: code:addons/account_invoice_export/models/account_move.py:0
+msgid ""
+"Invoices with unsupported type (only Customer Invoice or Refund are "
+"allowed): %s"
+msgstr ""
 
 #. module: account_invoice_export
 #: model:ir.model,name:account_invoice_export.model_account_move
@@ -103,7 +127,12 @@ msgstr "Registrazione contabile"
 #. module: account_invoice_export
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
-#, python-format
+msgid "No valid URL configured on transmit method '%s'."
+msgstr ""
+
+#. module: account_invoice_export
+#. odoo-python
+#: code:addons/account_invoice_export/models/account_move.py:0
 msgid "Nothing done, invoice has already been exported before."
 msgstr "Nessuna attività, la fattura è già stata esportata in precedenza."
 
@@ -129,6 +158,11 @@ msgid "The failed job has the uuid"
 msgstr "Il lavoro in errore ha uuid"
 
 #. module: account_invoice_export
+#: model:ir.model.fields,help:account_invoice_export.field_transmit_method__export_connection_timeout
+msgid "Timeout in seconds, use 0 (zero) for no timeout."
+msgstr ""
+
+#. module: account_invoice_export
 #: model:mail.activity.type,name:account_invoice_export.mail_activity_transmit_warning
 msgid "Transmission Error"
 msgstr "Errore di trasmissione"
@@ -141,7 +175,6 @@ msgstr "Metodo trasmissione di un documento"
 #. module: account_invoice_export
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
-#, python-format
 msgid "Transmit method is not configured to send through HTTP"
 msgstr ""
 "Il metodo di trasmissione non è configurato per inviare attraverso HTTP"
@@ -155,3 +188,7 @@ msgstr "URL"
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__destination_user
 msgid "User"
 msgstr "Utente"
+
+#, python-format
+#~ msgid "HTTP error {status_code} sending invoice to {method_name}"
+#~ msgstr "Errore HTTP {status_code} nell'invio della fattura a {method_name}"

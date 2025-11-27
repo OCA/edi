@@ -102,10 +102,11 @@ class AccountMove(models.Model):
                 self.env._("No valid URL configured on transmit method '%s'.")
                 % (self.transmit_method_id.name or "N/A")
             )
+        # Timeout zero will be no time out
+        timeout = self.transmit_method_id.export_connection_timeout or None
         file_data = self._get_file_for_transmission_method()
         headers = self.transmit_method_id.get_transmission_http_header()
-        # TODO: Should be configurable as a parameter
-        res = requests.post(url, headers=headers, files=file_data, timeout=10)
+        res = requests.post(url, headers=headers, files=file_data, timeout=timeout)
         if res.status_code != 200:
             raise UserError(
                 self.env._("HTTP error %s sending invoice to %s")

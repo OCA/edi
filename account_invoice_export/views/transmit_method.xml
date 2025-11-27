@@ -25,6 +25,10 @@
                     <field name="destination_url" invisible="not send_through_http" />
                     <field name="destination_user" invisible="not send_through_http" />
                     <field name="destination_pwd" invisible="not send_through_http" />
+                    <field
+                        name="export_connection_timeout"
+                        invisible="not send_through_http"
+                    />
                 </group>
             </xpath>
         </field>
