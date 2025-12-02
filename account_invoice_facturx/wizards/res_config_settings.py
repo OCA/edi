@@ -9,6 +9,3 @@ class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
     facturx_level = fields.Selection(related="company_id.facturx_level", readonly=False)
-    facturx_refund_type = fields.Selection(
-        related="company_id.facturx_refund_type", readonly=False
-    )

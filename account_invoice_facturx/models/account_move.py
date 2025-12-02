@@ -137,7 +137,7 @@ class AccountMove(models.Model):
         elif ns["level"] == "basic":
             urn = "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic"
         elif ns["level"] == "extended":
-            urn = "urn:cen.eu:en16931:2017#conformant#" "urn:factur-x.eu:1p0:extended"
+            urn = "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended"
         else:
             urn = f"urn:factur-x.eu:1p0:{ns['level']}"
         ctx_param_id.text = urn
@@ -156,7 +156,7 @@ class AccountMove(models.Model):
         if self.move_type == "out_invoice":
             header_doc_typecode.text = "380"
         elif self.move_type == "out_refund":
-            header_doc_typecode.text = ns["refund_type"]
+            header_doc_typecode.text = "381"
         # 2 options allowed in Factur-X :
         # a) invoice and refunds -> 380 ; negative amounts if refunds
         # b) invoice -> 380 refunds -> 381, with positive amounts
@@ -444,52 +444,44 @@ class AccountMove(models.Model):
             trade_tax_percent.text = "%0.*f" % (2, tax["amount"])
 
     def _cii_total_applicable_trade_tax_block(
-        self, tax_recordset, tax_amount, base_amount, parent_node, ns
+        self, tax_dict, tax_vals, parent_node, ns
     ):
         if ns["level"] == "minimum":
             return
-        tax = {}
-        if tax_recordset:
-            tax = ns["tax_speeddict"][tax_recordset.id]
-        self._cii_check_tax_required_info(tax)
         trade_tax = etree.SubElement(parent_node, ns["ram"] + "ApplicableTradeTax")
         amount = etree.SubElement(trade_tax, ns["ram"] + "CalculatedAmount")
-        amount.text = "%0.*f" % (ns["cur_prec"], tax_amount * ns["sign"])
+        amount.text = "%0.*f" % (
+            ns["cur_prec"],
+            tax_vals.get("target_tax_amount_currency", 0),
+        )
         tax_type = etree.SubElement(trade_tax, ns["ram"] + "TypeCode")
-        tax_type.text = tax["unece_type_code"]
+        tax_type.text = tax_dict["unece_type_code"]
 
-        if (
-            tax["unece_categ_code"] != "S"
-            and float_is_zero(tax_amount, precision_digits=ns["cur_prec"])
-            and self.fiscal_position_id
-            and ns["fp_speeddict"][self.fiscal_position_id.id]["note"]
-        ):
+        if tax_dict["unece_categ_code"] != "S" and tax_dict.get("exemption_reason"):
             exemption_reason = etree.SubElement(
                 trade_tax, ns["ram"] + "ExemptionReason"
             )
-            exemption_reason.text = ns["fp_speeddict"][self.fiscal_position_id.id][
-                "note"
-            ]
+            exemption_reason.text = tax_dict["exemption_reason"]
 
         base = etree.SubElement(trade_tax, ns["ram"] + "BasisAmount")
-        base.text = "%0.*f" % (ns["cur_prec"], base_amount * ns["sign"])
-        tax_categ_code = etree.SubElement(trade_tax, ns["ram"] + "CategoryCode")
-        tax_categ_code.text = tax["unece_categ_code"]
-        due_date_type_code = self._get_unece_due_date_type_code() or tax.get(
-            "unece_due_date_code"
+        base.text = "%0.*f" % (
+            ns["cur_prec"],
+            tax_vals.get("target_base_amount_currency", 0),
         )
-        if due_date_type_code:
+        tax_categ_code = etree.SubElement(trade_tax, ns["ram"] + "CategoryCode")
+        tax_categ_code.text = tax_dict["unece_categ_code"]
+        if tax_dict.get("unece_due_date_code"):
             trade_tax_due_date = etree.SubElement(
                 trade_tax, ns["ram"] + "DueDateTypeCode"
             )
-            trade_tax_due_date.text = due_date_type_code
+            trade_tax_due_date.text = tax_dict["unece_due_date_code"]
             # Field tax_exigibility is not required, so no error if missing
-        if tax.get("amount_type") == "percent":
-            percent = etree.SubElement(trade_tax, ns["ram"] + "RateApplicablePercent")
-            percent.text = "%0.*f" % (2, tax["amount"])
+        percent = etree.SubElement(trade_tax, ns["ram"] + "RateApplicablePercent")
+        percent.text = "%0.*f" % (2, tax_dict["amount"])
 
     def _cii_add_trade_settlement_block(self, trade_transaction, allowance_ilines, ns):
         self.ensure_one()
+        tax_obj = self.env["account.tax"]
         trade_settlement = etree.SubElement(
             trade_transaction, ns["ram"] + "ApplicableHeaderTradeSettlement"
         )
@@ -529,36 +521,59 @@ class AccountMove(models.Model):
         ):
             self._cii_add_trade_settlement_payment_means_block(trade_settlement, ns)
 
-        at_least_one_tax = False
-        # move_type == 'out_invoice': tline.amount_currency < 0
-        # move_type == 'out_refund': tline.amount_currency > 0
-        tax_amount_sign = self.move_type == "out_invoice" and -1 or 1
-        for tline in self.line_ids.filtered(lambda x: x.tax_line_id):
-            tax_base_amount = tline.tax_base_amount
-            tax_amount = tline.amount_currency * tax_amount_sign
-            self._cii_total_applicable_trade_tax_block(
-                tline.tax_line_id,
-                tax_amount,
-                tax_base_amount,
-                trade_settlement,
-                ns,
-            )
-            at_least_one_tax = True
-        tax_zero_amount = {}  # key = tax recordset, value = base
-        for line in self.line_ids:
-            for tax in line.tax_ids.filtered(
-                lambda t: float_is_zero(t.amount, precision_digits=ns["cur_prec"])
-            ):
-                tax_zero_amount.setdefault(tax, 0.0)
-                tax_zero_amount[tax] += line.price_subtotal
-        for tax, tax_base_amount in tax_zero_amount.items():
-            self._cii_total_applicable_trade_tax_block(
-                tax, 0, tax_base_amount, trade_settlement, ns
-            )
-            at_least_one_tax = True
+        base_move_lines = self.line_ids.filtered(lambda x: x.display_type == "product")
+        base_lines = [
+            self._prepare_product_base_line_for_taxes_computation(mline)
+            for mline in base_move_lines
+        ]
+        tax_amls = self.line_ids.filtered(lambda x: x.tax_repartition_line_id)
+        tax_lines = [self._prepare_tax_line_for_taxes_computation(x) for x in tax_amls]
+        tax_obj._add_tax_details_in_base_lines(base_lines, self.company_id)
+        tax_obj._round_base_lines_tax_details(
+            base_lines, self.company_id, tax_lines=tax_lines
+        )
+        exemption_reason = False
+        if self.fiscal_position_id:
+            exemption_reason = ns["fp_speeddict"][self.fiscal_position_id.id]["note"]
 
-        if not at_least_one_tax:
-            self._cii_total_applicable_trade_tax_block(None, 0, 0, trade_settlement, ns)
+        def grouping_function(base_line, tax_data):
+            if not tax_data:
+                grouping_key = {
+                    "unece_type_code": "VAT",
+                    "unece_categ_code": "E",
+                    "amount": 0,
+                    "exemption_reason": exemption_reason,
+                }
+            else:
+                tax = tax_data["tax"]
+                tax_dict = ns["tax_speeddict"][tax.id]
+                if tax.unece_type_code == "VAT":
+                    grouping_key = {
+                        "unece_type_code": tax_dict["unece_type_code"],
+                        "unece_categ_code": tax_dict["unece_categ_code"],
+                        "unece_due_date_code": self._get_unece_due_date_type_code()
+                        or tax_dict.get("unece_due_date_code"),
+                        "amount": tax_dict["amount"],
+                        "exemption_reason": exemption_reason,
+                    }
+                else:
+                    grouping_key = {
+                        "tax": tax,  # no grouping
+                        "unece_type_code": tax_dict["unece_type_code"],
+                    }
+            return grouping_key
+
+        base_lines_aggregated_values = tax_obj._aggregate_base_lines_tax_details(
+            base_lines, grouping_function
+        )
+        values_per_grouping_key = tax_obj._aggregate_base_lines_aggregated_values(
+            base_lines_aggregated_values
+        )
+        for tax_dict, tax_vals in values_per_grouping_key.items():
+            if tax_dict["unece_type_code"] == "VAT":
+                self._cii_total_applicable_trade_tax_block(
+                    tax_dict, tax_vals, trade_settlement, ns
+                )
 
         # Global Allowance lines = invoice lines with negative price
         for allowance_iline in allowance_ilines:
@@ -628,7 +643,9 @@ class AccountMove(models.Model):
             line_total = etree.SubElement(sums, ns["ram"] + "LineTotalAmount")
             line_total.text = "%0.*f" % (
                 ns["cur_prec"],
-                (self.amount_untaxed + ns["allowance_total_amount"]) * ns["sign"],
+                self.amount_untaxed
+                + ns["allowance_total_amount"]
+                + ns["no_vat_tax_total_amount"],
             )
             # We don't want to generate charge total, because we don't have the
             # notion of charge in Odoo. We only support allowance:
@@ -645,22 +662,25 @@ class AccountMove(models.Model):
         tax_basis_total_amt = etree.SubElement(sums, ns["ram"] + "TaxBasisTotalAmount")
         tax_basis_total_amt.text = "%0.*f" % (
             ns["cur_prec"],
-            self.amount_untaxed * ns["sign"],
+            self.amount_untaxed + ns["no_vat_tax_total_amount"],
         )
         tax_total = etree.SubElement(
             sums, ns["ram"] + "TaxTotalAmount", currencyID=ns["currency"]
         )
-        tax_total.text = "%0.*f" % (ns["cur_prec"], self.amount_tax * ns["sign"])
+        tax_total.text = "%0.*f" % (
+            ns["cur_prec"],
+            self.amount_tax - ns["no_vat_tax_total_amount"],
+        )
         total = etree.SubElement(sums, ns["ram"] + "GrandTotalAmount")
-        total.text = "%0.*f" % (ns["cur_prec"], self.amount_total * ns["sign"])
+        total.text = "%0.*f" % (ns["cur_prec"], self.amount_total)
         if ns["level"] != "minimum":
             prepaid = etree.SubElement(sums, ns["ram"] + "TotalPrepaidAmount")
             prepaid.text = "%0.*f" % (
                 ns["cur_prec"],
-                (self.amount_total - self.amount_residual) * ns["sign"],
+                self.amount_total - self.amount_residual,
             )
         residual = etree.SubElement(sums, ns["ram"] + "DuePayableAmount")
-        residual.text = "%0.*f" % (ns["cur_prec"], self.amount_residual * ns["sign"])
+        residual.text = "%0.*f" % (ns["cur_prec"], self.amount_residual)
 
     def _set_iline_product_information(self, iline, trade_product, ns):
         if iline.product_id:
@@ -807,7 +827,7 @@ class AccountMove(models.Model):
                 )
                 actual_amount.text = "%0.*f" % (
                     ns["price_prec"],
-                    actual_amount_val * ns["sign"],
+                    actual_amount_val,
                 )
 
         net_price = etree.SubElement(
@@ -837,11 +857,45 @@ class AccountMove(models.Model):
         billed_qty = etree.SubElement(
             line_trade_delivery, ns["ram"] + "BilledQuantity", unitCode=unitCode
         )
-        billed_qty.text = "%0.*f" % (ns["qty_prec"], iline.quantity * ns["sign"])
+        billed_qty.text = "%0.*f" % (ns["qty_prec"], iline.quantity)
         line_trade_settlement = etree.SubElement(
             line_item, ns["ram"] + "SpecifiedLineTradeSettlement"
         )
-        self._cii_invoice_line_taxes(iline, line_trade_settlement, ns)
+        allowance_charge_list = self._cii_invoice_line_taxes(
+            iline, line_trade_settlement, ns
+        )
+        no_vat_tax_amount = sum(
+            [acharge["amount"] for acharge in allowance_charge_list]
+        )
+        ns["no_vat_tax_total_amount"] += no_vat_tax_amount
+        if ns["level"] in PROFILES_EN_UP + ["basic"]:
+            for allowance_charge_vals in allowance_charge_list:
+                line_trade_charge = etree.SubElement(
+                    line_trade_settlement, ns["ram"] + "SpecifiedTradeAllowanceCharge"
+                )
+                line_charge_indicator = etree.SubElement(
+                    line_trade_charge, ns["ram"] + "ChargeIndicator"
+                )
+                line_indicator_value = etree.SubElement(
+                    line_charge_indicator, ns["udt"] + "Indicator"
+                )
+                line_indicator_value.text = "true"
+                line_charge_amount = etree.SubElement(
+                    line_trade_charge, ns["ram"] + "ActualAmount"
+                )
+                line_charge_amount.text = "%0.*f" % (
+                    ns["cur_prec"],
+                    allowance_charge_vals["amount"],
+                )
+                line_charge_reason_code = etree.SubElement(
+                    line_trade_charge, ns["ram"] + "ReasonCode"
+                )
+                line_charge_reason_code.text = allowance_charge_vals["reason_code"]
+                line_charge_reason = etree.SubElement(
+                    line_trade_charge, ns["ram"] + "Reason"
+                )
+                line_charge_reason.text = allowance_charge_vals["reason"]
+
         # Fields start_date and end_date are provided by the OCA
         # module account_invoice_start_end_dates
         if (
@@ -864,19 +918,65 @@ class AccountMove(models.Model):
         subtotal_amount = etree.SubElement(subtotal, ns["ram"] + "LineTotalAmount")
         subtotal_amount.text = "%0.*f" % (
             ns["cur_prec"],
-            iline.price_subtotal * ns["sign"],
+            iline.price_subtotal + no_vat_tax_amount,
         )
 
     def _cii_invoice_line_taxes(self, iline, parent_node, ns, allowance=False):
+        vat_tax_count = 0
+        allowance_charge_list = []
         if iline.tax_ids:
+            base_line = self._prepare_product_base_line_for_taxes_computation(iline)
+            self.env["account.tax"]._add_tax_details_in_base_lines(
+                [base_line], self.company_id
+            )
+            # We can only have a SINGLE VAT tax
+            # Taxes other than VAT must be included in the unit price
             for tax in iline.tax_ids:
-                self._cii_line_applicable_trade_tax_block(
-                    tax, parent_node, ns, allowance=allowance
+                if tax.id in ns["vat_tax_speeddict"]:
+                    self._cii_line_applicable_trade_tax_block(
+                        tax, parent_node, ns, allowance=allowance
+                    )
+                    vat_tax_count += 1
+                else:
+                    if not tax.include_base_amount:
+                        raise UserError(
+                            _(
+                                "On invoice %(invoice)s, the invoice line '%(line)s' "
+                                "has a tax '%(tax)s' which is not a VAT tax and is "
+                                "not configured with the option 'Affect Base of "
+                                "Subsequent Taxes'. This is not supported.",
+                                invoice=self.display_name,
+                                line=iline.display_name,
+                                tax=tax.display_name,
+                            )
+                        )
+                    tax_details = [
+                        tax_dict
+                        for tax_dict in base_line["tax_details"]["taxes_data"]
+                        if tax_dict["tax"] == tax
+                    ][0]
+                    amount = tax_details["raw_tax_amount_currency"]
+                    charge_vals = {
+                        "amount": amount,
+                        "reason": tax.invoice_label or tax.name,
+                        "reason_code": "AEO",  # Collection and recycling
+                    }
+                    allowance_charge_list.append(charge_vals)
+
+        if vat_tax_count > 1:
+            raise UserError(
+                _(
+                    "On invoice %(invoice)s, there are several VAT taxes "
+                    "on invoice line %(line)s. This should not happen.",
+                    invoice=self.display_name,
+                    line=iline.display_name,
                 )
-        else:
+            )
+        if not vat_tax_count:
             self._cii_line_applicable_trade_tax_block(
                 None, parent_node, ns, allowance=allowance
             )
+        return allowance_charge_list
 
     def generate_facturx_xml(self):
         self.ensure_one()
@@ -886,12 +986,13 @@ class AccountMove(models.Model):
         ), "only works for customer invoice and refunds"
         dpo = self.env["decimal.precision"]
         level = self.company_id.facturx_level or "en16931"
-        refund_type = self.company_id.facturx_refund_type or "381"
-        sign = 1
-        if self.move_type == "out_refund" and refund_type == "380":
-            sign = -1
         lang = self.partner_id.lang or self.env.user.lang or "en_US"
         tax_speeddict = self.company_id._get_tax_unece_speeddict()
+        vat_tax_speeddict = {
+            tax_id: tax_vals
+            for (tax_id, tax_vals) in tax_speeddict.items()
+            if tax_vals["unece_type_code"] == "VAT"
+        }
         fp_speeddict = self.company_id._get_fiscal_position_speeddict(lang=lang)
         self = self.with_context(lang=lang)
         nsmap = {
@@ -909,8 +1010,6 @@ class AccountMove(models.Model):
             "qdt": "{urn:un:unece:uncefact:data:standard:QualifiedDataType:100}",
             "udt": "{urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100}",
             "level": level,
-            "refund_type": refund_type,
-            "sign": sign,
             "currency": self.currency_id.name,
             "cur_prec": self.currency_id.decimal_places,
             "price_prec": dpo.precision_get("Product Price"),
@@ -918,8 +1017,10 @@ class AccountMove(models.Model):
             "qty_prec": dpo.precision_get("Product Unit of Measure"),
             "lang": lang,
             "tax_speeddict": tax_speeddict,
+            "vat_tax_speeddict": vat_tax_speeddict,
             "fp_speeddict": fp_speeddict,
             "allowance_total_amount": 0.0,
+            "no_vat_tax_total_amount": 0.0,
         }
 
         root = etree.Element(ns["rsm"] + "CrossIndustryInvoice", nsmap=nsmap)

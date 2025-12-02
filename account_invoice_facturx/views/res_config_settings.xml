@@ -22,14 +22,6 @@
                 >
                     <field name="facturx_level" />
                 </setting>
-                <setting
-                    id="e-invoices-facturx_refund_type"
-                    string="Factur-X Refund Type"
-                    help="Select the type used for Factur-X customer refunds"
-                    invisible="xml_format_in_pdf_invoice != 'factur-x'"
-                >
-                    <field name="facturx_refund_type" />
-                </setting>
             </setting>
         </field>
     </record>

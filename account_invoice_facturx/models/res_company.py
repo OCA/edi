@@ -26,14 +26,6 @@ class ResCompany(models.Model):
         help="Unless if you have a good reason, you should always "
         "select 'EN 16931 (Comfort)', which is the default value.",
     )
-    facturx_refund_type = fields.Selection(
-        [
-            ("380", "Type 380 with negative amounts"),
-            ("381", "Type 381 with positive amounts"),
-        ],
-        string="Factur-X Refund Type",
-        default="381",
-    )
     facturx_logo = fields.Binary(
         compute="_compute_facturx_logo",
         string="Factur-X Logo",

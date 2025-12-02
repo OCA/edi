@@ -5,6 +5,7 @@
 from facturx import get_facturx_level
 from lxml import etree
 
+from odoo import Command
 from odoo.tests.common import TransactionCase
 
 
@@ -38,18 +39,14 @@ class TestFacturXInvoice(TransactionCase):
                 "partner_id": cls.env.ref("base.res_partner_2").id,
                 "currency_id": cls.company.currency_id.id,
                 "invoice_line_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": cls.product1.id,
                             "quantity": 12,
                             "price_unit": 42.42,
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": cls.product2.id,
                             "quantity": 2,
