@@ -4,7 +4,7 @@
 
 from markupsafe import Markup
 
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -97,14 +97,13 @@ class ResPartner(models.Model):
         invoice_import_move = self.invoice_import_move_id
         assert invoice_import_move
         self.write({"invoice_import_move_id": False})
+        # I don't write a link to the invoice in the partner's chatter because
+        # it could cause multi-company issues
         self.message_post(
             body=Markup(
                 _(
-                    "Partner created from imported vendor bill "
-                    "<a href=# data-oe-model=pos.order "
-                    "data-oe-id=%(move_id)d>%(move_name)s</a>",
-                    move_id=invoice_import_move.id,
-                    move_name=invoice_import_move.display_name,
+                    "Partner has been created from the wizard "
+                    "<em>Create or Update Partner</em> of vendor bill import."
                 )
             )
         )
@@ -120,8 +119,11 @@ class ResPartner(models.Model):
         invoice_import_move.message_post(
             body=Markup(
                 _(
-                    "The partner has been created via the "
-                    "<em>create or update partner</em> wizard."
+                    "Partner <a href=# data-oe-model=res.partner "
+                    "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
+                    "created via the wizard <em>Create or update partner</em>.",
+                    partner_id=self.id,
+                    partner_name=self.display_name,
                 )
             )
         )
@@ -137,3 +139,36 @@ class ResPartner(models.Model):
             }
         )
         return action
+
+    @api.model
+    def _invoice_import_partner_update_keys(self):
+        """This method is designed to be inherited to add
+        country-specific partner fields"""
+        keys = ["vat"]
+        return keys
+
+    def _invoice_import_prepare_partner_update_vals(self, import_partner_data):
+        assert isinstance(import_partner_data, dict)
+        update_keys = self._invoice_import_partner_update_keys()
+        vals = {
+            key: value
+            for key, value in import_partner_data.items()
+            if (key in update_keys and value)
+        }
+        return vals
+
+    def _invoice_import_update_partner(self, import_partner_data):
+        self.ensure_one()
+        vals = self._invoice_import_prepare_partner_update_vals(import_partner_data)
+        if vals:
+            self.write(vals)
+            # I don't write a link to the imported invoice in the chatter because
+            # it could cause multi-company access-right issues
+            self.message_post(
+                body=Markup(
+                    _(
+                        "Partner updated via the wizard "
+                        "<em>Create or Update Partner</em> of Vendor Bill import."
+                    )
+                )
+            )
