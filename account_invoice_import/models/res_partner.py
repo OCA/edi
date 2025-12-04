@@ -2,7 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -130,3 +130,34 @@ class ResPartner(models.Model):
             }
         )
         return action
+
+    @api.model
+    def _invoice_import_partner_update_keys(self):
+        """This method is designed to be inherited to add
+        country-specific partner fields"""
+        keys = ["vat"]
+        return keys
+
+    def _invoice_import_prepare_partner_update_vals(self, import_partner_data):
+        assert isinstance(import_partner_data, dict)
+        update_keys = self._invoice_import_partner_update_keys()
+        vals = {
+            key: value
+            for key, value in import_partner_data.items()
+            if (key in update_keys and value)
+        }
+        return vals
+
+    def _invoice_import_update_partner(self, import_partner_data):
+        self.ensure_one()
+        vals = self._invoice_import_prepare_partner_update_vals(import_partner_data)
+        if vals:
+            self.write(vals)
+            # I don't write a link to the imported invoice in the chatter because
+            # it could cause multi-company access-right issues
+            self.message_post(
+                body=_(
+                    "Partner updated via the wizard <em>Create or Update Partner</em> "
+                    "of Vendor Bill import."
+                )
+            )
