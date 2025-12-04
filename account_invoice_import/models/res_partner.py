@@ -92,12 +92,12 @@ class ResPartner(models.Model):
         invoice_import_move = self.invoice_import_move_id
         assert invoice_import_move
         self.write({"invoice_import_move_id": False})
+        # I don't write an href link to the invoice to avoid multi-company access
+        # right issues
         self.message_post(
             body=_(
-                "Partner created from imported vendor bill <a href=# data-oe-model=pos.order "
-                "data-oe-id=%(move_id)d>%(move_name)s</a>",
-                move_id=invoice_import_move.id,
-                move_name=invoice_import_move.display_name,
+                "Partner has been created from the wizard "
+                "<em>Create or Update Partner</em> of vendor bill import."
             )
         )
         if invoice_import_move.partner_id:
@@ -111,7 +111,11 @@ class ResPartner(models.Model):
         invoice_import_move._invoice_import_set_partner_and_update_lines(self)
         invoice_import_move.message_post(
             body=_(
-                "The partner has been created via the <em>create or update partner</em> wizard."
+                "Partner <a href=# data-oe-model=res.partner "
+                "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
+                "created via the wizard <em>Create or update partner</em>.",
+                partner_id=self.id,
+                partner_name=self.display_name,
             )
         )
         action = self.env["ir.actions.actions"]._for_xml_id(

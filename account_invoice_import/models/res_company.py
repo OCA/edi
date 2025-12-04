@@ -38,7 +38,7 @@ class ResCompany(models.Model):
         purchase_tax_count = self.env["account.tax"].search_count(
             [
                 ("company_id", "=", self.id),
-                ("amount_type", "=", "percent"),
+                ("unece_type_code", "=", "VAT"),
                 ("type_tax_use", "=", "purchase"),
             ]
         )
