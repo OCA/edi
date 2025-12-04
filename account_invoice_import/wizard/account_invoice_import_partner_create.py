@@ -76,13 +76,25 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
             raise UserError(_("You must select the partner to update."))
         vals = self._prepare_update_partner_vals()
         self.update_partner_id.write(vals)
+        # I don't write a link to the imported invoice in the chatter because
+        # it could cause multi-company access-right issues
+        self.update_partner_id.message_post(
+            body=_(
+                "Partner updated via the wizard <em>Create or Update Partner</em> "
+                "of Vendor Bill import."
+            )
+        )
         self.move_id._invoice_import_set_partner_and_update_lines(
             self.update_partner_id
         )
         self.move_id.message_post(
             body=_(
-                "Partner has been set via the wizard <em>Create or Update Partner</em>: "
-                "the partner has been updated."
+                "Partner <a href=# data-oe-model=res.partner "
+                "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
+                "set via the wizard <em>Create or Update Partner</em>: "
+                "the partner has been updated.",
+                partner_id=self.update_partner_id.id,
+                partner_name=self.update_partner_id.display_name,
             )
         )
 

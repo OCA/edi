@@ -525,7 +525,7 @@ class AccountInvoiceImport(models.TransientModel):
             import_config["account"] = (
                 self.env["ir.property"]
                 .with_company(import_config["company"].id)
-                ._get("property_account_income_categ_id", "account.account")
+                ._get("property_account_expense_categ_id", "account.account")
             )
         if import_config.get("product"):
             import_config["product"] = import_config["product"].with_company(
@@ -751,6 +751,7 @@ class AccountInvoiceImport(models.TransientModel):
         warnings = []
         for attach in self.invoice_attachment_ids:
             parsed_inv = self.parse_invoice(attach.datas, attach.name, company)
+            import_config = {"company": company}
             if parsed_inv.get("partner"):
                 partner = (
                     self.env["business.document.import"]
@@ -786,14 +787,12 @@ class AccountInvoiceImport(models.TransientModel):
                         continue
 
                     import_config = partner._convert_to_import_config(company)
-                else:
-                    import_config = {"company": company}
-                invoice = self.create_invoice(
-                    parsed_inv,
-                    import_config,
-                    origin=_("Import of file %s", attach.name),
-                )
-                invoice_ids.append(invoice.id)
+            invoice = self.create_invoice(
+                parsed_inv,
+                import_config,
+                origin=_("Import of file %s", attach.name),
+            )
+            invoice_ids.append(invoice.id)
 
         next_action = self.env["ir.actions.actions"]._for_xml_id(
             "account.action_move_in_invoice_type"
