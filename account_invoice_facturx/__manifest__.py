@@ -20,7 +20,6 @@
     "data": [
         "views/res_partner.xml",
         "views/account_move.xml",
-        "views/res_config_settings.xml",
     ],
     "post_init_hook": "set_xml_format_in_pdf_invoice_to_facturx",
     "installable": True,

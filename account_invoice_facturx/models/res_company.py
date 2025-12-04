@@ -13,19 +13,6 @@ class ResCompany(models.Model):
         default="factur-x",
         ondelete={"factur-x": "set null"},
     )
-    facturx_level = fields.Selection(
-        [
-            ("minimum", "Minimum"),
-            ("basicwl", "Basic without lines"),
-            ("basic", "Basic"),
-            ("en16931", "EN 16931 (Comfort)"),
-            ("extended", "Extended"),
-        ],
-        string="Factur-X Level",
-        default="en16931",
-        help="Unless if you have a good reason, you should always "
-        "select 'EN 16931 (Comfort)', which is the default value.",
-    )
     facturx_logo = fields.Binary(
         compute="_compute_facturx_logo",
         string="Factur-X Logo",
@@ -37,21 +24,10 @@ class ResCompany(models.Model):
     # but I continue to provide the field 'facturx_logo'
 
     def _compute_facturx_logo(self):
-        level2logo = {
-            "minimum": "factur-x-minimum.png",
-            "basicwl": "factur-x-basicwl.png",
-            "basic": "factur-x-basic.png",
-            "en16931": "factur-x-en16931.png",
-            "extended": "factur-x-extended.png",
-        }
         for company in self:
             facturx_logo = False
-            if (
-                company.xml_format_in_pdf_invoice == "factur-x"
-                and company.facturx_level
-                and company.facturx_level in level2logo
-            ):
-                fname = level2logo[company.facturx_level]
+            if company.xml_format_in_pdf_invoice == "factur-x":
+                fname = "factur-x-extended.png"
                 fname_path = f"account_invoice_facturx/static/logos/{fname}"
                 with tools.file_open(fname_path, "rb") as flogo:
                     facturx_logo = flogo.read()

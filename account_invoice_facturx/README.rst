@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 ========================
 Account Invoice Factur-X
 ========================
@@ -17,7 +13,7 @@ Account Invoice Factur-X
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
@@ -45,14 +41,14 @@ ZUGFeRD/Factur-X standard is to embed an XML file inside the PDF invoice
 to carry structured information about the invoice. So, with a
 ZUGFeRD/Factur-X PDF invoice:
 
-- no need to change your habbits and those of your customers: you can
-  still send your PDF invoices by email as usual.
-- customers equiped with a modern accouting software will be able to
-  import the invoice automatically as supplier invoice by taking
-  advantage of the embedded XML file,
-- customers with an ancient accounting software will just open the PDF
-  file with their PDF reader and manually encode the document as
-  supplier invoice in their accounting software.
+-  no need to change your habbits and those of your customers: you can
+   still send your PDF invoices by email as usual.
+-  customers equiped with a modern accouting software will be able to
+   import the invoice automatically as supplier invoice by taking
+   advantage of the embedded XML file,
+-  customers with an ancient accounting software will just open the PDF
+   file with their PDF reader and manually encode the document as
+   supplier invoice in their accounting software.
 
 **Table of contents**
 
@@ -70,8 +66,7 @@ module **account_edi_ubl_cii**.
 
 This module requires a recent version of the Python library
 `factur-x <https://github.com/akretion/factur-x>`__ developped by
-Akretion. Note that the factur-x library depends on PyPDF2 for the
-low-level PDF manipulation. To install it, run:
+Akretion. To install it, run:
 
 ::
 
@@ -80,15 +75,10 @@ low-level PDF manipulation. To install it, run:
 Configuration
 =============
 
-In the menu *Invoicing > Configuration > Settings*, check these options:
-
-- *XML Format embedded in PDF invoice*: if you want to generate Factur-X
-  invoices, this option must be set to *Factur-X (CII)*
-- the *Factur-X Level*: unless you have a good reason, you should keep
-  the default value *EN 16931 (Comfort)*
-- *Factur-X Refund Type*: choose the type of the XML invoice for
-  customer refunds (keep the default value if you are not familiar with
-  this setting).
+In the menu *Invoicing > Configuration > Settings*, check the
+configuration parameter *XML Format embedded in PDF invoice*: if you
+want to generate Factur-X invoices, this option must be set to *Factur-X
+(CII)*.
 
 Bug Tracker
 ===========
@@ -111,7 +101,7 @@ Authors
 Contributors
 ------------
 
-- Alexis de Lattre <alexis.delattre@akretion.com>
+-  Alexis de Lattre <alexis.delattre@akretion.com>
 
 Maintainers
 -----------
