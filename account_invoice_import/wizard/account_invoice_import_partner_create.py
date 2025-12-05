@@ -74,21 +74,17 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
         assert self.create_or_update == "update"
         if not self.update_partner_id:
             raise UserError(_("You must select the partner to update."))
-        vals = self._prepare_update_partner_vals()
-        self.update_partner_id.write(vals)
+        self.update_partner_id._invoice_import_update_partner(self.import_partner_data)
         self.move_id._invoice_import_set_partner_and_update_lines(
             self.update_partner_id
         )
         self.move_id.message_post(
             body=_(
-                "Partner has been set via the wizard <em>Create or Update Partner</em>: "
-                "the partner has been updated."
+                "Partner <a href=# data-oe-model=res.partner "
+                "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
+                "set via the wizard <em>Create or Update Partner</em>. "
+                "The partner has been updated.",
+                partner_id=self.update_partner_id.id,
+                partner_name=self.update_partner_id.display_name,
             )
         )
-
-    def _prepare_update_partner_vals(self):
-        self.ensure_one()
-        vals = {}
-        if self.import_partner_data and self.import_partner_data.get("vat"):
-            vals["vat"] = self.import_partner_data["vat"]
-        return vals

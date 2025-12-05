@@ -322,16 +322,11 @@ class BusinessDocumentImport(models.AbstractModel):
         partner = self._direct_match(partner_dict, rpo, raise_exception=raise_exception)
         if partner:
             return partner
-        company_id = self._context.get("force_company") or self.env.company.id
         domain = domain or []
         domain = expression.AND(
             [
                 domain,
-                [
-                    "|",
-                    ("company_id", "=", False),
-                    ("company_id", "=", company_id),
-                ],
+                self._match_company_domain(),
             ]
         )
         order = self._get_match_partner_order(partner_type)
@@ -584,15 +579,16 @@ class BusinessDocumentImport(models.AbstractModel):
                 _("IBAN <b>%s</b> is not valid, so it has been ignored.") % iban
             )
             return False
-        company_id = self._context.get("force_company") or self.env.company.id
         bankaccount = rpbo.search(
-            [
-                "|",
-                ("company_id", "=", False),
-                ("company_id", "=", company_id),
-                ("sanitized_acc_number", "=", iban),
-                ("partner_id", "=", partner.id),
-            ],
+            expression.AND(
+                [
+                    self._match_company_domain(),
+                    [
+                        ("sanitized_acc_number", "=", iban),
+                        ("partner_id", "=", partner.id),
+                    ],
+                ]
+            ),
             limit=1,
         )
         if bankaccount:
@@ -737,8 +733,8 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _match_company_domain(self):
-        company_id = self._context.get("force_company") or self.env.user.company_id.id
-        return ["|", ("company_id", "=", False), ("company_id", "=", company_id)]
+        company_ids = self._context.get("allowed_company_ids") or [self.env.company.id]
+        return [("company_id", "in", company_ids + [False])]
 
     # TODO v18: move company to second position arg and make it regular arg
     @api.model
@@ -851,8 +847,13 @@ class BusinessDocumentImport(models.AbstractModel):
                     raise_exception,
                 )
         if company is None:
-            if self._context.get("force_company"):
-                company = self.env["res.company"].browse(self._context["force_company"])
+            if (
+                self._context.get("allowed_company_ids")
+                and len(self._context["allowed_company_ids"]) == 1
+            ):
+                company = self.env["res.company"].browse(
+                    self._context["allowed_company_ids"][0]
+                )
             else:
                 company = self.env.company
         company_cur = company.currency_id
@@ -952,7 +953,12 @@ class BusinessDocumentImport(models.AbstractModel):
     ):
         ato = self.env["account.tax"]
         if company is None:
-            company_id = self._context.get("force_company") or self.env.company.id
+            company_id = (
+                self._context.get("allowed_company_ids")
+                and len(self._context["allowed_company_ids"]) == 1
+                and self._context["allowed_company_ids"][0]
+                or self.env.company.id
+            )
         else:
             company_id = company.id
         domain = [("company_id", "=", company_id)]
@@ -1210,7 +1216,12 @@ class BusinessDocumentImport(models.AbstractModel):
     # TODO v18 : make company a regular arg instead of a named arg
     def _prepare_account_speed_dict(self, company=None):
         if company is None:
-            company_id = self._context.get("force_company") or self.env.company.id
+            company_id = (
+                self._context.get("allowed_company_ids")
+                and len(self._context["allowed_company_ids"]) == 1
+                and self._context["allowed_company_ids"][0]
+                or self.env.company.id
+            )
         else:
             company_id = company.id
         res = self.env["account.account"].search_read(
@@ -1288,11 +1299,16 @@ class BusinessDocumentImport(models.AbstractModel):
     # TODO v18: company should be converted from named arg to regular arg
     def _prepare_analytic_account_speed_dict(self, company=None):
         if company is None:
-            company_id = self._context.get("force_company") or self.env.company.id
+            company_id = (
+                self._context.get("allowed_company_ids")
+                and len(self._context["allowed_company_ids"]) == 1
+                and self._context["allowed_company_ids"][0]
+                or self.env.company.id
+            )
         else:
             company_id = company.id
         res = self.env["account.analytic.account"].search_read(
-            [("company_id", "=", company_id)], ["code"]
+            [("company_id", "in", [company_id, False])], ["code"]
         )
         speed_dict = {}
         for line in res:
@@ -1321,7 +1337,7 @@ class BusinessDocumentImport(models.AbstractModel):
             aaccount_dict = {}
         aaao = self.env["account.analytic.account"]
         if speed_dict is None:
-            speed_dict = self._prepare_analytic_account_speed_dict(company)
+            speed_dict = self._prepare_analytic_account_speed_dict(company=company)
         self._strip_cleanup_dict(aaccount_dict)
         aaccount = self._direct_match(aaccount_dict, aaao)
         if aaccount:
@@ -1345,7 +1361,12 @@ class BusinessDocumentImport(models.AbstractModel):
 
     def _prepare_journal_speed_dict(self, company=None):
         if company is None:
-            company_id = self._context.get("force_company") or self.env.company.id
+            company_id = (
+                self._context.get("allowed_company_ids")
+                and len(self._context["allowed_company_ids"]) == 1
+                and self._context["allowed_company_ids"][0]
+                or self.env.company.id
+            )
         else:
             company_id = company.id
         res = self.env["account.journal"].search_read(
@@ -1387,7 +1408,7 @@ class BusinessDocumentImport(models.AbstractModel):
             if jcode in speed_dict:
                 return ajo.browse(speed_dict[jcode])
             # case insensitive
-        raise self.user_error_wrap(
+        self.user_error_wrap(
             "_match_journal",
             journal_dict,
             _(
@@ -1444,8 +1465,11 @@ class BusinessDocumentImport(models.AbstractModel):
             company_dict = {}
         rco = self.env["res.company"]
         if company is None:
-            if self._context.get("force_company"):
-                company = rco.browse(self._context["force_company"])
+            if (
+                self._context.get("allowed_company_ids")
+                and len(self._context["allowed_company_ids"]) == 1
+            ):
+                company = rco.browse(self._context["allowed_company_ids"][0])
             else:
                 company = self.env.company
         if company_dict.get("vat"):

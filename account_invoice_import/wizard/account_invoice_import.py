@@ -292,7 +292,7 @@ class AccountInvoiceImport(models.TransientModel):
             partner_type = "supplier"
         partner = None
         if parsed_inv.get("partner"):
-            partner = bdio._match_partner(
+            partner = bdio.with_company(company.id)._match_partner(
                 parsed_inv["partner"],
                 parsed_inv["chatter_msg"],
                 partner_type=partner_type,
@@ -309,7 +309,7 @@ class AccountInvoiceImport(models.TransientModel):
             currency = bdio._match_currency(
                 parsed_inv["currency"],
                 parsed_inv["chatter_msg"],
-                import_config["company"],
+                company=import_config["company"],
                 raise_exception=False,
             )
             vals["currency_id"] = currency.id
@@ -322,7 +322,7 @@ class AccountInvoiceImport(models.TransientModel):
             vals["invoice_payment_term_id"] = False
         # Bank info
         if parsed_inv.get("iban") and vals["move_type"] == "in_invoice" and partner:
-            partner_bank = bdio._match_partner_bank(
+            partner_bank = bdio.with_company(company.id)._match_partner_bank(
                 partner,
                 parsed_inv["iban"],
                 parsed_inv.get("bic"),
@@ -524,7 +524,7 @@ class AccountInvoiceImport(models.TransientModel):
             import_config["account"] = (
                 self.env["ir.property"]
                 .with_company(import_config["company"].id)
-                ._get("property_account_income_categ_id", "account.account")
+                ._get("property_account_expense_categ_id", "account.account")
             )
         if import_config.get("product"):
             import_config["product"] = import_config["product"].with_company(
@@ -750,11 +750,16 @@ class AccountInvoiceImport(models.TransientModel):
         warnings = []
         for attach in self.invoice_attachment_ids:
             parsed_inv = self.parse_invoice(attach.datas, attach.name, company)
+            import_config = {"company": company}
             if parsed_inv.get("partner"):
-                partner = self.env["business.document.import"]._match_partner(
-                    parsed_inv["partner"],
-                    parsed_inv["chatter_msg"],
-                    raise_exception=False,
+                partner = (
+                    self.env["business.document.import"]
+                    .with_company(self.company_id.id)
+                    ._match_partner(
+                        parsed_inv["partner"],
+                        parsed_inv["chatter_msg"],
+                        raise_exception=False,
+                    )
                 )
                 if partner:
                     # To speed-up next match
@@ -781,14 +786,12 @@ class AccountInvoiceImport(models.TransientModel):
                         continue
 
                     import_config = partner._convert_to_import_config(company)
-                else:
-                    import_config = {"company": company}
-                invoice = self.create_invoice(
-                    parsed_inv,
-                    import_config,
-                    origin=_("Import of file %s", attach.name),
-                )
-                invoice_ids.append(invoice.id)
+            invoice = self.create_invoice(
+                parsed_inv,
+                import_config,
+                origin=_("Import of file %s", attach.name),
+            )
+            invoice_ids.append(invoice.id)
 
         next_action = self.env["ir.actions.actions"]._for_xml_id(
             "account.action_move_in_invoice_type"
@@ -878,8 +881,12 @@ class AccountInvoiceImport(models.TransientModel):
         parsed_inv = self.parse_invoice(
             invoice_file_b64, invoice_filename, company, email_from=email_from
         )
-        partner = self.env["business.document.import"]._match_partner(
-            parsed_inv["partner"], parsed_inv["chatter_msg"], raise_exception=False
+        partner = (
+            self.env["business.document.import"]
+            .with_company(company_id)
+            ._match_partner(
+                parsed_inv["partner"], parsed_inv["chatter_msg"], raise_exception=False
+            )
         )
         if partner:
             partner = partner.commercial_partner_id
