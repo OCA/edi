@@ -29,14 +29,14 @@ msgstr "%d fatture fornitore create"
 #, python-format
 msgid ""
 "<strong>The total amount of the imported invoice is %(real_amount_total)s "
-"whereas the total amount computed by Odoo is "
-"%(current_amount_total)s</strong>. It is the consequence of a difference "
-"between the total tax amount of the invoice (%(real_amount_tax)s) and the "
-"total tax amount computed by Odoo (%(current_amount_tax)s). This is often "
-"caused by missing taxes in invoice lines due to a failure to find the tax in"
-" Odoo that correspond to the tax in the imported invoice or missing "
-"configuration of taxes on products or missing configuration of <em>Default "
-"Taxes</em> on the partner (if there are no products on invoice lines)."
+"whereas the total amount computed by Odoo is %(current_amount_total)s</"
+"strong>. It is the consequence of a difference between the total tax amount "
+"of the invoice (%(real_amount_tax)s) and the total tax amount computed by "
+"Odoo (%(current_amount_tax)s). This is often caused by missing taxes in "
+"invoice lines due to a failure to find the tax in Odoo that correspond to "
+"the tax in the imported invoice or missing configuration of taxes on "
+"products or missing configuration of <em>Default Taxes</em> on the partner "
+"(if there are no products on invoice lines)."
 msgstr ""
 "<strong>L'importo totale della fattura importata è %(real_amount_total)s, "
 "mentre l'importo totale calcolato da Odoo è %(current_amount_total)s</"
@@ -238,9 +238,8 @@ msgstr "Se vuota, Odoo userà il primo registro acquisti."
 msgid ""
 "If the format you need is not listed above, you should install an "
 "additionnal Odoo module that adds support for that format (e.g. "
-"<em>account_invoice_import_facturx</em>, "
-"<em>account_invoice_import_ubl</em>, "
-"<em>account_invoice_import_simple_pdf</em>, etc)."
+"<em>account_invoice_import_facturx</em>, <em>account_invoice_import_ubl</"
+"em>, <em>account_invoice_import_simple_pdf</em>, etc)."
 msgstr ""
 "Se il formato di cui si ha bisogno non è elencato sopra, si dovrebbe "
 "installare un modulo Odoo aggiuntivo che aggiunga il supporto per quel "
@@ -300,6 +299,11 @@ msgstr "La fattura %(filename)s esiste già in Odoo: %(existing_inv)s."
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_is_follower
 msgid "Is Follower"
 msgstr "Segue"
+
+#. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_account_journal
+msgid "Journal"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_move
@@ -398,6 +402,26 @@ msgid "Partner"
 msgstr "Partner"
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/res_partner.py:0
+#, python-format
+msgid ""
+"Partner <a href=# data-oe-model=res.partner data-oe-"
+"id=%(partner_id)s>%(partner_name)s</a> has been created via the wizard "
+"<em>Create or update partner</em>."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
+#, python-format
+msgid ""
+"Partner <a href=# data-oe-model=res.partner data-oe-"
+"id=%(partner_id)s>%(partner_name)s</a> has been set via the wizard "
+"<em>Create or Update Partner</em>. The partner has been updated."
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__partner_name
 msgid "Partner Name"
 msgstr "Nome partner"
@@ -412,27 +436,23 @@ msgstr "Partita IVA partner"
 #: code:addons/account_invoice_import/models/res_partner.py:0
 #, python-format
 msgid ""
-"Partner created from imported vendor bill <a href=# data-oe-model=pos.order "
-"data-oe-id=%(move_id)d>%(move_name)s</a>"
+"Partner has been created from the wizard <em>Create or Update Partner</em> "
+"of vendor bill import."
 msgstr ""
-"Partner creato dalla fattura del fornitore importata <a href=# data-oe-"
-"model=pos.order data-oe-id=%(move_id)d>%(move_name)s</a>"
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
-#, python-format
-msgid ""
-"Partner has been set via the wizard <em>Create or Update Partner</em>: the "
-"partner has been updated."
-msgstr ""
-"Il partner è stato impostato tramite la procedura guidata <em>Crea o "
-"aggiorna partner</em>: il partner è stato aggiornato."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__update_partner_id
 msgid "Partner to Update"
 msgstr "Partner da aggiornare"
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/res_partner.py:0
+#, python-format
+msgid ""
+"Partner updated via the wizard <em>Create or Update Partner</em> of Vendor "
+"Bill import."
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_move_id
@@ -487,17 +507,6 @@ msgid ""
 msgstr ""
 "L'account configurato qui verrà aggiornato tramite la mappatura della "
 "posizione fiscale."
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/models/res_partner.py:0
-#, python-format
-msgid ""
-"The partner has been created via the <em>create or update partner</em> "
-"wizard."
-msgstr ""
-"Il partner è stato creato tramite la procedura guidata <em>crea o aggiorna "
-"partner</em>."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -566,15 +575,10 @@ msgid "Update Partner"
 msgstr "Aggiorna partner"
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_journal_dashboard_kanban_view
-msgid "Upload"
-msgstr "Carica"
-
-#. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
-"Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a"
-" draft vendor bills refund for each file."
+"Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a "
+"draft vendor bills refund for each file."
 msgstr ""
 "Carica qui sotto le fatture/i rimborsi del fornitore come file PDF o XML: "
 "Odoo creerà una bozza di rimborso delle fatture del fornitore per ciascun "
@@ -704,3 +708,30 @@ msgstr "sulla fattura fornitore importata"
 #, python-format
 msgid "unspecified"
 msgstr "non indicato"
+
+#, python-format
+#~ msgid ""
+#~ "Partner created from imported vendor bill <a href=# data-oe-model=pos."
+#~ "order data-oe-id=%(move_id)d>%(move_name)s</a>"
+#~ msgstr ""
+#~ "Partner creato dalla fattura del fornitore importata <a href=# data-oe-"
+#~ "model=pos.order data-oe-id=%(move_id)d>%(move_name)s</a>"
+
+#, python-format
+#~ msgid ""
+#~ "Partner has been set via the wizard <em>Create or Update Partner</em>: "
+#~ "the partner has been updated."
+#~ msgstr ""
+#~ "Il partner è stato impostato tramite la procedura guidata <em>Crea o "
+#~ "aggiorna partner</em>: il partner è stato aggiornato."
+
+#, python-format
+#~ msgid ""
+#~ "The partner has been created via the <em>create or update partner</em> "
+#~ "wizard."
+#~ msgstr ""
+#~ "Il partner è stato creato tramite la procedura guidata <em>crea o "
+#~ "aggiorna partner</em>."
+
+#~ msgid "Upload"
+#~ msgstr "Carica"

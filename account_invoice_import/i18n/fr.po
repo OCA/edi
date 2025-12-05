@@ -301,6 +301,11 @@ msgid "Is Follower"
 msgstr "Est abonné"
 
 #. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_account_journal
+msgid "Journal"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_move
 msgid "Journal Entry"
 msgstr "Pièce comptable"
@@ -397,6 +402,26 @@ msgid "Partner"
 msgstr "Partenaire"
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/res_partner.py:0
+#, python-format
+msgid ""
+"Partner <a href=# data-oe-model=res.partner data-oe-"
+"id=%(partner_id)s>%(partner_name)s</a> has been created via the wizard "
+"<em>Create or update partner</em>."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
+#, python-format
+msgid ""
+"Partner <a href=# data-oe-model=res.partner data-oe-"
+"id=%(partner_id)s>%(partner_name)s</a> has been set via the wizard "
+"<em>Create or Update Partner</em>. The partner has been updated."
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__partner_name
 msgid "Partner Name"
 msgstr "Nom du partenaire"
@@ -411,27 +436,23 @@ msgstr "Numéro de TVA du partenaire"
 #: code:addons/account_invoice_import/models/res_partner.py:0
 #, python-format
 msgid ""
-"Partner created from imported vendor bill <a href=# data-oe-model=pos.order "
-"data-oe-id=%(move_id)d>%(move_name)s</a>"
+"Partner has been created from the wizard <em>Create or Update Partner</em> "
+"of vendor bill import."
 msgstr ""
-"Partenaire créé à partir de la facture fournisseur importée <href=# "
-"data-oe-model=pos.order data-oe-id=%(move_id)d>(move_name)s</a>"
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
-#, python-format
-msgid ""
-"Partner has been set via the wizard <em>Create or Update Partner</em>: the "
-"partner has been updated."
-msgstr ""
-"Le partenaire a été renseigné via l'assistant <em>Créer ou mettre à jour un "
-"partenaire</em>: le partenaire a été mis à jour."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__update_partner_id
 msgid "Partner to Update"
 msgstr "Partenaire à mettre à jour"
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/res_partner.py:0
+#, python-format
+msgid ""
+"Partner updated via the wizard <em>Create or Update Partner</em> of Vendor "
+"Bill import."
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_move_id
@@ -460,10 +481,8 @@ msgstr "Formats supportés :"
 #: model:ir.model.fields,help:account_invoice_import.field_res_partner__invoice_import_tax_ids
 #: model:ir.model.fields,help:account_invoice_import.field_res_users__invoice_import_tax_ids
 msgid ""
-"Taxes configured here will be updated by the mapping of the fiscal position."
+"Taxes configured here will go through the mapping of the fiscal position."
 msgstr ""
-"Les taxes configurées ici seront mises à jour par la table de correspondance de la position "
-"fiscale."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -482,18 +501,9 @@ msgstr ""
 msgid ""
 "The account configured here will be updated by the mapping of the fiscal "
 "position."
-msgstr "Le compte configuré ici sera mis à jour par la table de correspondance de la position fiscale."
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/models/res_partner.py:0
-#, python-format
-msgid ""
-"The partner has been created via the <em>create or update partner</em> "
-"wizard."
 msgstr ""
-"Le partenaire a été créé via l'assistant de <em>création ou de mise à jour "
-"de partenaire</em>."
+"Le compte configuré ici sera mis à jour par la table de correspondance de la "
+"position fiscale."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -527,8 +537,8 @@ msgid ""
 "This invoice has been created automatically via file import. Origin: "
 "<strong>%s</strong>."
 msgstr ""
-"Cette facture a été créée automatiquement par import de fichier. "
-"Origine : <strong>%s</strong>."
+"Cette facture a été créée automatiquement par import de fichier. Origine : "
+"<strong>%s</strong>."
 
 #. module: account_invoice_import
 #: model:ir.model.constraint,message:account_invoice_import.constraint_res_company_invoice_import_email_uniq
@@ -562,19 +572,14 @@ msgid "Update Partner"
 msgstr "Mettre à jour le partenaire"
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_journal_dashboard_kanban_view
-msgid "Upload"
-msgstr "Téléverser"
-
-#. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
 "Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a "
 "draft vendor bills refund for each file."
 msgstr ""
-"Téléversez ci-dessous les factures/avoirs fournisseur sous forme de "
-"fichier PDF ou XML : Odoo créera un brouillon de facture/avoir fournisseur "
-"pour chaque fichier."
+"Téléversez ci-dessous les factures/avoirs fournisseur sous forme de fichier "
+"PDF ou XML : Odoo créera un brouillon de facture/avoir fournisseur pour "
+"chaque fichier."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__move_id
@@ -617,8 +622,8 @@ msgid ""
 "You are importing a customer invoice/refund in journal '%s' which is not a "
 "sale journal."
 msgstr ""
-"Vous importez une facture/avoir client dans le journal \"%s\" qui "
-"n'est pas un journal de vente."
+"Vous importez une facture/avoir client dans le journal \"%s\" qui n'est pas "
+"un journal de vente."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -628,8 +633,8 @@ msgid ""
 "You are importing a vendor bill/refund in journal '%s' which is not a "
 "purchase journal."
 msgstr ""
-"Vous importez une facture/avoir fournisseur dans le journal "
-"\"%s\" qui n'est pas un journal d'achat."
+"Vous importez une facture/avoir fournisseur dans le journal \"%s\" qui n'est "
+"pas un journal d'achat."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -652,8 +657,8 @@ msgid ""
 "You must configure the 'Adjustment Credit Account' on the Accounting "
 "Configuration page of company %(company)s."
 msgstr ""
-"Vous devez configurer le \"Compte de revenu d'ajustement\" sur la page "
-"de configuration de la comptabilité de la société %(company)s."
+"Vous devez configurer le \"Compte de revenu d'ajustement\" sur la page de "
+"configuration de la comptabilité de la société %(company)s."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -663,8 +668,8 @@ msgid ""
 "You must configure the 'Adjustment Debit Account' on the Accounting "
 "Configuration page of company %(company)s."
 msgstr ""
-"Vous devez configurer le \"Compte de charge d'ajustement\" sur la page "
-"de configuration de la comptabilité de la société %(company)s."
+"Vous devez configurer le \"Compte de charge d'ajustement\" sur la page de "
+"configuration de la comptabilité de la société %(company)s."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -701,3 +706,37 @@ msgstr "sur la facture fournisseur importée"
 #, python-format
 msgid "unspecified"
 msgstr "non spécifié"
+
+#, python-format
+#~ msgid ""
+#~ "Partner created from imported vendor bill <a href=# data-oe-model=pos."
+#~ "order data-oe-id=%(move_id)d>%(move_name)s</a>"
+#~ msgstr ""
+#~ "Partenaire créé à partir de la facture fournisseur importée <href=# data-"
+#~ "oe-model=pos.order data-oe-id=%(move_id)d>(move_name)s</a>"
+
+#, python-format
+#~ msgid ""
+#~ "Partner has been set via the wizard <em>Create or Update Partner</em>: "
+#~ "the partner has been updated."
+#~ msgstr ""
+#~ "Le partenaire a été renseigné via l'assistant <em>Créer ou mettre à jour "
+#~ "un partenaire</em>: le partenaire a été mis à jour."
+
+#~ msgid ""
+#~ "Taxes configured here will be updated by the mapping of the fiscal "
+#~ "position."
+#~ msgstr ""
+#~ "Les taxes configurées ici seront mises à jour par la table de "
+#~ "correspondance de la position fiscale."
+
+#, python-format
+#~ msgid ""
+#~ "The partner has been created via the <em>create or update partner</em> "
+#~ "wizard."
+#~ msgstr ""
+#~ "Le partenaire a été créé via l'assistant de <em>création ou de mise à "
+#~ "jour de partenaire</em>."
+
+#~ msgid "Upload"
+#~ msgstr "Téléverser"
