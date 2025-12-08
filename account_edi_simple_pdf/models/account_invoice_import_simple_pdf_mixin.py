@@ -47,9 +47,9 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
                 "first": pages and pages[0] or "",
             }
             logger.info("Text extraction made with PyMuPDF %s", fitz.__version__)
-            test_info["text_extraction"] = "pymupdf %s" % fitz.__version__
+            test_info["text_extraction"] = f"pymupdf {fitz.__version__}"
         except Exception as e:
-            logger.warning("Text extraction with PyMuPDF failed. Error: %s", e)
+            logger.debug("Text extraction with PyMuPDF failed. Error: %s", e)
         return res
 
     @api.model
@@ -63,7 +63,7 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
                 "all": "\n\n".join(pages),
                 "first": pages and pages[0] or "",
             }
-        test_info["text_extraction"] = "pypdf %s" % pypdf.__version__
+        test_info["text_extraction"] = f"pypdf {pypdf.__version__}"
         logger.info("Text extraction made with pypdf %s", pypdf.__version__)
         return res
 
@@ -71,8 +71,9 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
     def _simple_pdf_pdftotext_cmd_call(self, fileobj, test_info, first_page=False):
         res = False
         if not shutil.which("pdftotext"):
-            logger.warning(
-                "Could not find the pdftotext utility. Hint: sudo apt install poppler-utils"
+            logger.debug(
+                "Could not find the pdftotext utility. Hint: sudo apt install "
+                "poppler-utils"
             )
             return False
         cmd_args = ["pdftotext"]
@@ -118,7 +119,7 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
             logger.info("Text extraction made with pdftotext lib")
             test_info["text_extraction"] = "pdftotext.lib"
         except Exception as e:
-            logger.warning("Text extraction with pdftotext lib failed. Error: %s", e)
+            logger.debug("Text extraction with pdftotext lib failed. Error: %s", e)
         return res
 
     @api.model
@@ -146,8 +147,8 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
             raise UserError(
                 _(
                     "Odoo could not extract the text from the PDF invoice "
-                    "with the method %s. Refer to the Odoo server logs for more technical "
-                    "information about the cause of the failure."
+                    "with the method %s. Refer to the Odoo server logs for more "
+                    "technical information about the cause of the failure."
                 )
                 % specific_tool
             )
@@ -199,10 +200,10 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
                 res[key] = regex.sub(test_info["lonely_accents"], "", text)
 
         res["all_no_space"] = regex.sub(
-            "%s+" % test_info["space_pattern"], "", res["all"]
+            "{}+".format(test_info["space_pattern"]), "", res["all"]
         )
         res["first_no_space"] = regex.sub(
-            "%s+" % test_info["space_pattern"], "", res["first"]
+            "{}+".format(test_info["space_pattern"]), "", res["first"]
         )
         fileobj.close()
         return res
@@ -248,7 +249,7 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
                         "count": len(keywords),
                         "keywords": ", ".join(keywords),
                     }
-                    test_results.append("<li>%s</li>" % result_label)
+                    test_results.append(f"<li>{result_label}</li>")
                     break
             for kfield, kfield_label in keyword_fields_dict.items():
                 if partner[kfield] and partner[kfield] in raw_text_no_space:
@@ -257,7 +258,7 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
                         label=kfield_label,
                         value=partner[kfield],
                     )
-                    test_results.append("<li>%s</li>" % result_label)
+                    test_results.append(f"<li>{result_label}</li>")
                     break
         return partner_id
 
@@ -282,7 +283,7 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
             8239,
             8287,
         ]
-        return "[%s]" % "".join([chr(x) for x in space_ints])
+        return "[{}]".format("".join([chr(x) for x in space_ints]))
 
     @api.model
     def _get_lonely_accents(self):
@@ -295,7 +296,7 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
             "\u02cb",  # modifier letter grave accent
             "\u02c6",  # modifier letter circumflex accent
         ]
-        return "[%s]" % "".join(lonely_accents)
+        return "[{}]".format("".join(lonely_accents))
 
     @api.model
     def _simple_pdf_update_test_info(self, test_info):
@@ -353,7 +354,7 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
         for field in partner.simple_pdf_field_ids:
             logger.debug("Working on field %s", field.name)
             try:
-                getattr(field, "_get_%s" % field.name)(
+                getattr(field, f"_get_{field.name}")(
                     parsed_inv, raw_text, partner_config, test_info
                 )
             except AttributeError:
@@ -365,12 +366,15 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
         failed_fields = parsed_inv.pop("failed_fields")
         if failed_fields:
             parsed_inv["chatter_msg"].append(
-                _("<b>Failed</b> to extract the following field(s): %s.")
-                % ", ".join(
-                    [
-                        "<b>%s</b>" % test_info["field_name_sel"][failed_field]
-                        for failed_field in failed_fields
-                    ]
+                _("<b>Failed</b> to extract the following field(s): {}.").format(
+                    ", ".join(
+                        [
+                            "<b>{}</b>".format(
+                                test_info["field_name_sel"][failed_field]
+                            )
+                            for failed_field in failed_fields
+                        ]
+                    )
                 )
             )
 

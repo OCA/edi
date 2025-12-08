@@ -13,7 +13,7 @@
                 <page
                     name="account_edi_simple_pdf"
                     string="Vendor Bill Import"
-                    attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
+                    invisible="parent_id or not is_company"
                     groups="account.group_account_readonly,account.group_account_invoice"
                 >
                     <group name="simple_pdf_main">
@@ -57,7 +57,7 @@
                             name="pdf_simple_generate_default_fields"
                             type="object"
                             string="Generate Default Extract Rules"
-                            attrs="{'invisible': [('simple_pdf_field_ids', '!=', [])]}"
+                            invisible="simple_pdf_field_ids"
                             colspan="2"
                         />
                         <label for="simple_pdf_field_ids" colspan="2" />
@@ -79,13 +79,13 @@
                                     name="pdf_simple_test_run"
                                     string="Run Test"
                                     class="btn-primary"
-                                    attrs="{'invisible': [('simple_pdf_test_file', '=', False)]}"
+                                    invisible="not simple_pdf_test_file"
                                 />
                                 <button
                                     name="pdf_simple_test_cleanup"
                                     type="object"
                                     string="Cleanup Test Data"
-                                    attrs="{'invisible': [('simple_pdf_test_file', '=', False), ('simple_pdf_test_results', '=', False), ('simple_pdf_test_raw_text', '=', False)]}"
+                                    invisible="not simple_pdf_test_file and not simple_pdf_test_results and not simple_pdf_test_raw_text"
                                 />
                             </group>
                         </group>

@@ -4,14 +4,14 @@
 
 {
     "name": "Import Simple PDF",
-    "version": "16.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Accounting/Accounting",
     "license": "AGPL-3",
     "summary": "Import simple PDF vendor bills",
     "author": "Akretion,Hunki Enterprises BV,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
     "maintainers": ["hbrunn"],
-    "depends": ["account_edi"],
+    "depends": ["account"],
     "external_dependencies": {
         "python": [
             "regex",

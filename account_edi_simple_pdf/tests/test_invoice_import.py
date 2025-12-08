@@ -5,7 +5,7 @@
 import base64
 
 from odoo import exceptions, fields
-from odoo.tests.common import Form, TransactionCase, tagged
+from odoo.tests import Form, TransactionCase, tagged
 from odoo.tools import file_open, float_compare
 
 
@@ -62,7 +62,7 @@ class TestInvoiceImport(TransactionCase):
             }
         )
         self.module = "account_edi_simple_pdf"
-        self.product = self.env.ref("%s.mobile_phone" % self.module)
+        self.product = self.env.ref(f"{self.module}.mobile_phone")
         self.product.supplier_taxes_id = [(6, 0, [frtax.id])]
 
         # for the full test with a PDF invoice
@@ -158,12 +158,12 @@ class TestInvoiceImport(TransactionCase):
             }
         )
         self.ak_filename = "akretion_france-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (self.module, self.ak_filename), "rb") as f:
+        with file_open(f"{self.module}/tests/pdf/{self.ak_filename}", "rb") as f:
             self.ak_pdf_file = f.read()
             self.ak_pdf_file_b64 = base64.b64encode(self.ak_pdf_file)
 
         self.bt_filename = "bouygues_telecom-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (self.module, self.bt_filename), "rb") as f:
+        with file_open(f"{self.module}/tests/pdf/{self.bt_filename}", "rb") as f:
             self.bt_pdf_file = f.read()
             self.bt_pdf_file_b64 = base64.b64encode(self.bt_pdf_file)
 
@@ -251,7 +251,7 @@ class TestInvoiceImport(TransactionCase):
             },
         }
         for src, config in date_test.items():
-            raw_text = "Debit 15.12\n%s\n12.99 Total" % src
+            raw_text = f"Debit 15.12\n{src}\n12.99 Total"
             if config["date_separator"] == "space":
                 raw_text_list = [
                     raw_text % (space_char, space_char)
@@ -293,7 +293,7 @@ class TestInvoiceImport(TransactionCase):
         )
         self.partner_config["lang_short"] = "fr"
         for src_string, result in testdict.items():
-            raw_text = "Débit 15,12\n%s\nTotal TTC 12,99" % src_string
+            raw_text = f"Débit 15,12\n{src_string}\nTotal TTC 12,99"
             parsed_inv = {"failed_fields": []}
             self.date_field._get_date(
                 parsed_inv, raw_text, self.partner_config, self.test_info
@@ -405,8 +405,8 @@ class TestInvoiceImport(TransactionCase):
         }
         for src, config in amount_test.items():
             raw_text = (
-                "Invoice Date: 05/12/2019\n%s\nSAS with a capital of 1,234,322.23 USD"
-                % src
+                f"Invoice Date: 05/12/2019\n{src}\nSAS with a capital of "
+                "1,234,322.23 USD"
             )
             if config["thousand_separator"] == "space" and "%s" in raw_text:
                 raw_text_list = [
@@ -420,7 +420,7 @@ class TestInvoiceImport(TransactionCase):
                     "simple_pdf_decimal_separator": config["decimal_separator"],
                     "simple_pdf_thousand_separator": config["thousand_separator"],
                     "simple_pdf_currency_id": self.env.ref(
-                        "base.%s" % config["currency"]
+                        f"base.{config['currency']}"
                     ).id,
                 }
             )
@@ -494,7 +494,7 @@ class TestInvoiceImport(TransactionCase):
             ],
         }
         for src, config_list in inv_num_test.items():
-            raw_txt = "Invoice number: %s dated 20/08/2020" % src
+            raw_txt = f"Invoice number: {src} dated 20/08/2020"
             self.partner.simple_pdf_invoice_number_ids.unlink()
             self.partner.write(
                 {"simple_pdf_invoice_number_ids": [(0, 0, x) for x in config_list]}
@@ -543,21 +543,8 @@ class TestInvoiceImport(TransactionCase):
         self.assertEqual(parsed_inv["description"], "desc: 2")
 
     def test_complete_import(self):
-        attachment = self.env["ir.attachment"].create(
-            {
-                "name": self.ak_filename,
-                "datas": self.ak_pdf_file_b64,
-            }
-        )
-        invoices = (
-            self.env["account.move"]
-            .with_context(default_move_type="in_invoice")
-            ._simple_pdf_create_invoice_from_attachment(
-                attachment,
-            )
-        )
-        self.assertEqual(len(invoices), 1)
-        inv = invoices[0]
+        inv = self.env["account.move"].create({"move_type": "in_invoice"})
+        inv._simple_pdf_amend_invoice_from_bytes(self.ak_pdf_file)
         self.assertEqual(fields.Date.to_string(inv.invoice_date), "2022-09-21")
         self.assertEqual(fields.Date.to_string(inv.invoice_date_due), "2022-10-21")
         self.assertEqual(inv.journal_id.type, "purchase")

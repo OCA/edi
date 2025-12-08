@@ -73,8 +73,8 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
                 if rec.occurrence_max < rec.occurrence_min:
                     raise ValidationError(
                         _(
-                            "The maximum occurence (%(occurrence_max)d) must be equal to or "
-                            "above the minimum occurence (%(occurrence_min)d)."
+                            "The maximum occurence (%(occurrence_max)d) must be equal "
+                            "to or above the minimum occurence (%(occurrence_min)d)."
                         )
                         % rec
                     )
@@ -103,9 +103,9 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
             "space",
         ):
             if self.occurrence_min == self.occurrence_max:
-                suffix = "{%d}" % self.occurrence_min
+                suffix = "{%d}" % self.occurrence_min  # noqa: UP031
             else:
-                suffix = "{%d,%d}" % (self.occurrence_min, self.occurrence_max)
+                suffix = "{%d,%d}" % (self.occurrence_min, self.occurrence_max)  # noqa: UP031
 
             regex_list.append(type2regex[self.string_type] + suffix)
         elif self.string_type in ("year2", "year4"):
@@ -117,6 +117,6 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
                 years_str = [str(y)[-2:] for y in years]
             else:
                 years_str = [str(y) for y in years]
-            regex_list.append("(?:%s)" % "|".join(years_str))
+            regex_list.append("(?:%s)" % "|".join(years_str))  # noqa: UP031
         elif self.string_type == "month":
             regex_list.append("(?:01|02|03|04|05|06|07|08|09|10|11|12)")

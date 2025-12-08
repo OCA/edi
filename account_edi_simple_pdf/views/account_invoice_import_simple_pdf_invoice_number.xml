@@ -20,15 +20,18 @@
                     <field name="string_type" />
                     <field
                         name="fixed_char"
-                        attrs="{'required': [('string_type', '=', 'fixed')], 'invisible': [('string_type', '!=', 'fixed')]}"
+                        required="string_type == 'fixed'"
+                        invisible="string_type != 'fixed'"
                     />
                     <field
                         name="occurrence_min"
-                        attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))]}"
+                        required="string_type in ('letter_upper', 'letter_lower', 'digit', 'char', 'space')"
+                        invisible="string_type not in ('letter_upper', 'letter_lower', 'digit', 'char', 'space')"
                     />
                     <field
                         name="occurrence_max"
-                        attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))]}"
+                        required="string_type in ('letter_upper', 'letter_lower', 'digit', 'char', 'space')"
+                        invisible="string_type not in ('letter_upper', 'letter_lower', 'digit', 'char', 'space')"
                     />
                 </group>
             </form>
@@ -41,7 +44,7 @@
     >
         <field name="model">account.invoice.import.simple.pdf.invoice.number</field>
         <field name="arch" type="xml">
-            <tree editable="bottom">
+            <list editable="bottom">
                 <field
                     name="partner_id"
                     invisible="not context.get('account_invoice_import_simple_pdf_invoice_number_main_view')"
@@ -50,17 +53,20 @@
                 <field name="string_type" />
                 <field
                     name="fixed_char"
-                    attrs="{'required': [('string_type', '=', 'fixed')], 'invisible': [('string_type', '!=', 'fixed')]}"
+                    required="string_type == 'fixed'"
+                    invisible="string_type != 'fixed'"
                 />
                 <field
                     name="occurrence_min"
-                    attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))]}"
+                    required="string_type in ('letter_upper', 'letter_lower', 'digit', 'char', 'space')"
+                    invisible="string_type not in ('letter_upper', 'letter_lower', 'digit', 'char', 'space')"
                 />
                 <field
                     name="occurrence_max"
-                    attrs="{'required': [('string_type', 'in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))], 'invisible': [('string_type', 'not in', ('letter_upper', 'letter_lower', 'digit', 'char', 'space'))]}"
+                    required="string_type in ('letter_upper', 'letter_lower', 'digit', 'char', 'space')"
+                    invisible="string_type not in ('letter_upper', 'letter_lower', 'digit', 'char', 'space')"
                 />
-            </tree>
+            </list>
         </field>
     </record>
 </odoo>

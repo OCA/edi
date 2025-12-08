@@ -201,10 +201,11 @@ class ResPartner(models.Model):
         rpo = self.env["res.partner"]
         vals = {}
         test_results = []
-        test_results.append("<small>%s</small><br/>" % _("Errors are in red."))
+        test_results.append("<small>{}</small><br/>".format(_("Errors are in red.")))
         test_results.append(
-            "<small>%s %s</small><br/>"
-            % (_("Test Date:"), format_datetime(self.env, fields.Datetime.now()))
+            "<small>{} {}</small><br/>".format(
+                _("Test Date:"), format_datetime(self.env, fields.Datetime.now())
+            )
         )
         if not self.simple_pdf_test_file:
             raise UserError(_("You must upload a test PDF invoice."))
@@ -213,21 +214,21 @@ class ResPartner(models.Model):
         file_data = base64.b64decode(self.simple_pdf_test_file)
         raw_text_dict = aiio.simple_pdf_text_extraction(file_data, test_info)
         test_results.append(
-            "<small>%s %s</small><br/>"
-            % (
+            "<small>{} {}</small><br/>".format(
                 _("Text extraction system parameter:"),
                 test_info.get("text_extraction_config") or _("none"),
             )
         )
         test_results.append(
-            "<small>%s %s</small><br/>"
-            % (_("Text extraction tool used:"), test_info.get("text_extraction"))
+            "<small>{} {}</small><br/>".format(
+                _("Text extraction tool used:"), test_info.get("text_extraction")
+            )
         )
         if self.simple_pdf_pages == "first":
             vals["simple_pdf_test_raw_text"] = raw_text_dict["first"]
         else:
             vals["simple_pdf_test_raw_text"] = raw_text_dict["all"]
-        test_results.append("<h3>%s</h3><ul>" % _("Searching Partner"))
+        test_results.append("<h3>{}</h3><ul>".format(_("Searching Partner")))
         partner_id = aiio.simple_pdf_match_partner(
             raw_text_dict["all_no_space"], test_results
         )
@@ -238,22 +239,22 @@ class ResPartner(models.Model):
                 partner_ok = True
                 partner_result = _("Current partner found")
             else:
-                partner_result = "%s %s" % (
+                partner_result = "{} {}".format(
                     _("Found another partner:"),
                     partner.display_name,
                 )
         else:
             partner_result = _("No partner found.")
         test_results.append(
-            "<li><b>%s</b> <b%s>%s</b></li></ul>"
-            % (_("Result:"), not partner_ok and ERROR_STYLE or "", partner_result)
+            "<li><b>{}</b> <b{}>{}</b></li></ul>".format(
+                _("Result:"), not partner_ok and ERROR_STYLE or "", partner_result
+            )
         )
         if partner_ok:
             partner_config = self._simple_pdf_partner_config()
-            test_results.append("<h3>%s</h3><ul>" % _("Amount Setup"))
+            test_results.append("<h3>{}</h3><ul>".format(_("Amount Setup")))
             test_results.append(
-                """<li>%s "%s" (%s)</li>"""
-                % (
+                """<li>{} "{}" ({})</li>""".format(
                     _("Decimal Separator:"),
                     partner_config["decimal_sep"],
                     partner_config["char2separator"].get(
@@ -262,8 +263,7 @@ class ResPartner(models.Model):
                 )
             )
             test_results.append(
-                """<li>%s "%s" (%s)</li></ul>"""
-                % (
+                """<li>{} "{}" ({})</li></ul>""".format(
                     _("Thousand Separator:"),
                     partner_config["thousand_sep"],
                     partner_config["char2separator"].get(
@@ -284,17 +284,17 @@ class ResPartner(models.Model):
             }
             for field in self.simple_pdf_field_ids:
                 test_results.append(
-                    "<h3>%s</h3><ul>" % test_info["field_name_sel"][field.name]
+                    "<h3>{}</h3><ul>".format(test_info["field_name_sel"][field.name])
                 )
                 extract_method = test_info["extract_rule_sel"][field.extract_rule]
                 if field.extract_rule.startswith("position_"):
                     extract_method += _(", Position: %d") % field.position
                 test_results.append(
-                    "<li>%s %s</li>" % (_("Extract Rule:"), extract_method)
+                    "<li>{} {}</li>".format(_("Extract Rule:"), extract_method)
                 )
                 for key, value in test_info[field.name].items():
                     if key != "pattern" or self.env.user.has_group("base.group_system"):
-                        test_results.append("<li>%s: %s</li>" % (key2label[key], value))
+                        test_results.append(f"<li>{key2label[key]}: {value}</li>")
 
                 result = parsed_inv.get(field.name)
                 if "date" in field.name and result:
@@ -304,8 +304,7 @@ class ResPartner(models.Model):
                         self.env, result, parsed_inv["currency"]["recordset"]
                     )
                 test_results.append(
-                    "<li><b>%s</b> <b%s>%s</b></li></ul>"
-                    % (
+                    "<li><b>{}</b> <b{}>{}</b></li></ul>".format(
                         _("Result:"),
                         not result and ERROR_STYLE or "",
                         result or _("None"),
@@ -363,7 +362,7 @@ class ResPartner(models.Model):
             thousand_sep = separator2char[self.simple_pdf_thousand_separator]
         elif lang:
             thousand_sep = lang.thousands_sep
-            # Remplace all white space characters (no-break-space, narrow no-break-space)
+            # Replace all white space characters (no-break-space, narrow no-break-space)
             # by regular space
             if regex.match(r"^\s$", thousand_sep):
                 thousand_sep = chr(32)  # regular space
@@ -372,10 +371,10 @@ class ResPartner(models.Model):
         if thousand_sep == decimal_sep:
             raise UserError(
                 _(
-                    "For partner '%(name)s', the decimal separator (%(decimal)s) is the same "
-                    "as the thousand separator (%(thousand)s). Keep in mind that, if not set "
-                    "explicitly, decimal and thousand separator are read from the "
-                    "language of the partner."
+                    "For partner '%(name)s', the decimal separator (%(decimal)s) is "
+                    "the same as the thousand separator (%(thousand)s). Keep in mind "
+                    "that, if not set explicitly, decimal and thousand separator are "
+                    "read from the language of the partner."
                 )
                 % {
                     "name": self.display_name,
