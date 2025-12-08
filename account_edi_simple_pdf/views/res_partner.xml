@@ -5,14 +5,12 @@
   License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
-
     <record id="view_partner_property_form" model="ir.ui.view">
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
             <notebook position="inside">
-                    <page
+                <page
                     name="account_edi_simple_pdf"
                     string="Vendor Bill Import"
                     attrs="{'invisible': ['|', ('parent_id', '!=', False), ('is_company', '=', False)]}"
@@ -20,30 +18,30 @@
                 >
                     <group name="simple_pdf_main">
                         <group name="simple_pdf_main-left">
-                        <field name="simple_pdf_keyword" string="Keywords" />
-                        <field name="simple_pdf_pages" widget="radio" />
-                        <field
+                            <field name="simple_pdf_keyword" string="Keywords" />
+                            <field name="simple_pdf_pages" widget="radio" />
+                            <field
                                 name="simple_pdf_currency_id"
                                 string="Invoice Currency"
                                 options="{'no_create': True, 'no_create_edit': True}"
                             />
-                        <field name="simple_pdf_product_id" />
+                            <field name="simple_pdf_product_id" />
                         </group>
                         <group name="simple_pdf_main-right">
-                        <field name="simple_pdf_date_format" string="Date Format" />
-                        <field
+                            <field name="simple_pdf_date_format" string="Date Format" />
+                            <field
                                 name="simple_pdf_date_separator"
                                 string="Date Separator"
                             />
-                        <field
+                            <field
                                 name="simple_pdf_decimal_separator"
                                 string="Decimal Separator"
                             />
-                        <field
+                            <field
                                 name="simple_pdf_thousand_separator"
                                 string="Thousand Separator"
                             />
-                        <field name="simple_pdf_test_filename" invisible="1" />
+                            <field name="simple_pdf_test_filename" invisible="1" />
                         </group>
                     </group>
                     <group name="invoice_import_simple_pdf_number">
@@ -70,16 +68,12 @@
                         string="Test"
                         groups="base.group_no_one"
                     >
-                            <group name="pdf_simple_test_file" colspan="2">
-                                <field
+                        <group name="pdf_simple_test_file" colspan="2">
+                            <field
                                 name="simple_pdf_test_file"
                                 filename="simple_pdf_test_filename"
                             />
-                                <group
-                                name="pdf_simple_test_buttons"
-                                colspan="2"
-                                col="1"
-                            >
+                            <group name="pdf_simple_test_buttons" colspan="2" col="1">
                                 <button
                                     type="object"
                                     name="pdf_simple_test_run"
@@ -93,30 +87,27 @@
                                     string="Cleanup Test Data"
                                     attrs="{'invisible': [('simple_pdf_test_file', '=', False), ('simple_pdf_test_results', '=', False), ('simple_pdf_test_raw_text', '=', False)]}"
                                 />
-                                </group>
                             </group>
+                        </group>
                         <group name="pdf_simple_test_results" colspan="2">
                             <label for="simple_pdf_test_results" colspan="2" />
-                                <field
+                            <field
                                 nolabel="1"
                                 name="simple_pdf_test_results"
                                 colspan="2"
                             />
                         </group>
                         <group name="pdf_simple_test_raw_text" colspan="2">
-                        <label for="simple_pdf_test_raw_text" colspan="2" />
-                                <field
+                            <label for="simple_pdf_test_raw_text" colspan="2" />
+                            <field
                                 nolabel="1"
                                 name="simple_pdf_test_raw_text"
                                 colspan="2"
                             />
                         </group>
-
                     </group>
                 </page>
             </notebook>
         </field>
     </record>
-
-
 </odoo>

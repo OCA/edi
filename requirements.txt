@@ -1,3 +1,6 @@
 # generated from manifests external_dependencies
+dateparser
 factur-x
 phonenumbers
+pypdf>=3.1.0
+regex

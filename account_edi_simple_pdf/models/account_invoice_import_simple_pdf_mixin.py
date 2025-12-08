@@ -287,13 +287,13 @@ class AccountInvoiceImportSimplePdfMixin(models.AbstractModel):
     @api.model
     def _get_lonely_accents(self):
         lonely_accents = [
-            "\u00B4",  # acute accent
+            "\u00b4",  # acute accent
             "\u0060",  # grave accent
-            "\u005E",  # circumflex accent
-            "\u00A8",  # diaeresis
-            "\u02CA",  # modifier letter acute accent
-            "\u02CB",  # modifier letter grave accent
-            "\u02C6",  # modifier letter circumflex accent
+            "\u005e",  # circumflex accent
+            "\u00a8",  # diaeresis
+            "\u02ca",  # modifier letter acute accent
+            "\u02cb",  # modifier letter grave accent
+            "\u02c6",  # modifier letter circumflex accent
         ]
         return "[%s]" % "".join(lonely_accents)
 
