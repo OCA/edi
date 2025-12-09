@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-08-23 12:06+0000\n"
+"PO-Revision-Date: 2025-12-09 13:43+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -14,13 +14,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: account_invoice_export
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
 msgid "%(name)s (Invoice Record ID: %(id)s)"
-msgstr ""
+msgstr "%(name)s (ID record fattura: %(id)s)"
 
 #. module: account_invoice_export
 #: model:ir.model.fields,help:account_invoice_export.field_account_bank_statement_line__send_through_http
@@ -47,13 +47,13 @@ msgstr ""
 #. module: account_invoice_export
 #: model:ir.model.fields,field_description:account_invoice_export.field_transmit_method__export_connection_timeout
 msgid "Connection timeout"
-msgstr ""
+msgstr "Timeout connessione"
 
 #. module: account_invoice_export
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
 msgid "Draft"
-msgstr ""
+msgstr "Bozza"
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.view_move_form
@@ -76,7 +76,7 @@ msgstr "Errore nell'invio della fattura a"
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
 msgid "HTTP error %s sending invoice to %s"
-msgstr ""
+msgstr "Errore HTTP %s inviando la fattura a %s"
 
 #. module: account_invoice_export
 #: model_terms:ir.ui.view,arch_db:account_invoice_export.transmit_method_form
@@ -109,7 +109,7 @@ msgstr "Fattura inviata con successo a {}"
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
 msgid "Invoices not in 'Posted' state: %s"
-msgstr ""
+msgstr "Fattura non in stato 'Inviata': %s"
 
 #. module: account_invoice_export
 #. odoo-python
@@ -118,6 +118,8 @@ msgid ""
 "Invoices with unsupported type (only Customer Invoice or Refund are "
 "allowed): %s"
 msgstr ""
+"Fatture con tipo non supportato (sono consentite solo Fattura cliente o "
+"Rimborso): %s"
 
 #. module: account_invoice_export
 #: model:ir.model,name:account_invoice_export.model_account_move
@@ -128,7 +130,7 @@ msgstr "Registrazione contabile"
 #. odoo-python
 #: code:addons/account_invoice_export/models/account_move.py:0
 msgid "No valid URL configured on transmit method '%s'."
-msgstr ""
+msgstr "Nessun URL valido configurato sul metodo di trasmissione '%s'."
 
 #. module: account_invoice_export
 #. odoo-python
@@ -160,7 +162,7 @@ msgstr "Il lavoro in errore ha uuid"
 #. module: account_invoice_export
 #: model:ir.model.fields,help:account_invoice_export.field_transmit_method__export_connection_timeout
 msgid "Timeout in seconds, use 0 (zero) for no timeout."
-msgstr ""
+msgstr "Timeout in secondi, utilizzare 0 (zero) per nessun timeout."
 
 #. module: account_invoice_export
 #: model:mail.activity.type,name:account_invoice_export.mail_activity_transmit_warning
