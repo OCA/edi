@@ -29,16 +29,16 @@ Import Simple PDF
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module extends Odoo's vendor bill import mechanism with support for
-simple PDF invoices i.e. PDF invoice that don't have an embedded XML
-file.
+simple PDF invoices, that is PDF invoices that don't have an embedded
+XML file.
 
--  Possibility to add support for a new vendor without developper
-   skills: the accountant can do it!
+-  Possibility to add support for a new vendor without developer skills:
+   the accountant can do it!
 -  Adding support for a new vendor is faster.
 -  More tolerance on vendor invoice layout changes.
 -  Easier to install.
 
-Ihis module uses the following design when importing a PDF vendor bill:
+This module uses the following design when importing a PDF vendor bill:
 
 1. raw text extraction of the PDF file,
 2. identify the partner using the VAT number (if the VAT number is
@@ -58,8 +58,6 @@ The module can extract the following fields:
 -  Total Tax Amount
 -  Invoice Date
 -  Due Date
--  Start Date
--  End Date
 -  Invoice Number
 -  Description (for that field, you have to write a regex)
 
@@ -69,14 +67,25 @@ In this list, only 3 fields are required:
 -  2 out of the 3 Amount fields (the 3rd can be deducted from the 2
    others: Total Amount = Total Untaxed + Total Tax)
 
-To take advantage of the fields *Start Date* and *End Date*, you need
-the OCA module *account_invoice_start_end_dates* from the
-`account-closing <https://github.com/OCA/account-closing>`__ project.
-
 **Table of contents**
 
 .. contents::
    :local:
+
+Use Cases / Context
+===================
+
+This module is largely a copy of account_invoice_import_simple_pdf. It
+was written in a time when the account_invoice_import\* stack wasn't
+available, and Odoo CE provided functionality for importing UBL out of
+the box.
+
+As such, this module is not compatible with the account_invoice_import\*
+stack, if you're using that, use account_invoice_import_simple_pdf
+instead.
+
+Use account_edi_simple_pdf if you're using the EE edi stack, or want to
+import invoices from plain PDFs without importing from any EDI format.
 
 Installation
 ============

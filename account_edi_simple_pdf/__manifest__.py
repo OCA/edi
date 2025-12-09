@@ -29,4 +29,5 @@
     "demo": ["demo/demo_data.xml"],
     "installable": True,
     "application": True,
+    "conflicts": ["account_invoice_import"],
 }
