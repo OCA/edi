@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-11-26 10:42+0000\n"
+"PO-Revision-Date: 2025-12-09 12:43+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -303,7 +303,7 @@ msgstr "Segue"
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_journal
 msgid "Journal"
-msgstr ""
+msgstr "Registro"
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_move
@@ -410,6 +410,9 @@ msgid ""
 "id=%(partner_id)s>%(partner_name)s</a> has been created via the wizard "
 "<em>Create or update partner</em>."
 msgstr ""
+"Il partner <a href=# data-oe-model=res.partner data-oe-"
+"id=%(partner_id)s>%(partner_name)s</a> è stato creato tramite la procedura "
+"guidata <em>Crea o aggiorna partner</em>."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -420,6 +423,10 @@ msgid ""
 "id=%(partner_id)s>%(partner_name)s</a> has been set via the wizard "
 "<em>Create or Update Partner</em>. The partner has been updated."
 msgstr ""
+"Il partner <a href=# data-oe-model=res.partner data-oe-"
+"id=%(partner_id)s>%(partner_name)s</a> è stato impostato tramite la "
+"procedura guidata <em>Crea o aggiorna partner</em>. Il partner è stato "
+"aggiornato."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__partner_name
@@ -439,6 +446,8 @@ msgid ""
 "Partner has been created from the wizard <em>Create or Update Partner</em> "
 "of vendor bill import."
 msgstr ""
+"Il partner è stato creato tramite la procedura guidata <em>Crea o aggiorna "
+"partner</em> dell'importazione delle fatture fornitore."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__update_partner_id
@@ -453,6 +462,8 @@ msgid ""
 "Partner updated via the wizard <em>Create or Update Partner</em> of Vendor "
 "Bill import."
 msgstr ""
+"Partner aggiornato tramite la procedura guidata <em>Crea o aggiorna partner</"
+"em> dell'importazione della fattura fornitore."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_move_id
