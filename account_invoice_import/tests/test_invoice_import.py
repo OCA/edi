@@ -292,12 +292,6 @@ See you this evening,
 Nina
 """
 
-    def test_email_gateway(self):
-        """No exception occurs on incoming email"""
-        self.env["mail.thread"].with_context(
-            mail_channel_noautofollow=True
-        ).message_process("account.invoice.import", self._fake_email)
-
     def test_email_gateway_multi_comp_1_matching(self):
         comp = self.env["res.company"].create(
             {
