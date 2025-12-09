@@ -13,8 +13,7 @@
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import"],
     "external_dependencies": {
-        "python": ["regex", "dateparser", "pypdf>=3.1.0"],
-        "deb": ["libmupdf-dev", "mupdf", "mupdf-tools", "poppler-utils"],
+        "python": ["regex", "dateparser", "pypdf>=3.1.0", "pymupdf"],
     },
     "data": [
         "security/ir.model.access.csv",
