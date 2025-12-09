@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-04-10 09:34+0000\n"
+"PO-Revision-Date: 2025-12-09 13:43+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: base_business_document_import
 #. odoo-python
@@ -58,6 +58,11 @@ msgid ""
 "the UNECE codes on the existing unit of measure and, if necessary, create "
 "the missing unit of measure and set the UNECE code on it.</p>"
 msgstr ""
+"<p>Il codice UNECE %(code)s è stato utilizzato per descrivere l'unità di "
+"misura, ma questo codice UNECE non è stato trovato su un'unità di misura "
+"esistente: si dovrebbe controllare i codici UNECE sull'unità di misura "
+"esistente e, se necessario, creare l'unità di misura mancante e impostarvi "
+"il codice UNECE.</p>"
 
 #. module: base_business_document_import
 #. odoo-python
@@ -110,13 +115,13 @@ msgstr "ID {id} di '{model}' non esiste in Odoo."
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid "Import Warnings:"
-msgstr ""
+msgstr "Avvisi di importazione:"
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid "Missing VAT number on company '%s'."
-msgstr ""
+msgstr "Partita IVA mancante per l'azienda '%s'."
 
 #. module: base_business_document_import
 #. odoo-python
@@ -269,6 +274,9 @@ msgid ""
 "The %(label)s has been identified by the domain name '%(email_domain)s' so "
 "please check carefully that the %(label)s is correct."
 msgstr ""
+"L'etichetta %(label)s è stata identificata dal nome di dominio "
+"'%(email_domain)s', quindi verificare attentamente che %(label)s sia "
+"corretto."
 
 #. module: base_business_document_import
 #. odoo-python
