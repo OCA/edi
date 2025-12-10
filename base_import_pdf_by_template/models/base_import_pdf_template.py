@@ -9,6 +9,7 @@ from odoo import _, api, fields, models
 
 class BaseImportPdfTemplate(models.Model):
     _name = "base.import.pdf.template"
+    _inherit = ["mail.thread"]
     _description = "Base Import Pdf Template"
     _order = "name desc"
 
