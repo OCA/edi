@@ -35,6 +35,11 @@ msgid ""
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__active
 msgid "Active"
 msgstr ""
@@ -55,6 +60,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__attachment_id
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__attachment_id
 msgid "Attachment"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_attachment_count
+msgid "Attachment Count"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -289,6 +299,16 @@ msgid "Fixed value"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template_line__field_relation
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template_line__search_field_relation
 msgid "For relationship fields, the technical name of the target model"
@@ -307,6 +327,11 @@ msgstr ""
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__time_format__-h:-m:-s
 #, python-format
 msgid "H:M:S"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__has_message
+msgid "Has Message"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -343,6 +368,16 @@ msgid "ID"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.view_wizard_base_import_pdf_upload_form
 msgid "Import"
 msgstr ""
@@ -357,6 +392,11 @@ msgstr ""
 #: code:addons/base_import_pdf_by_template/static/src/xml/import_records.xml:0
 #, python-format
 msgid "Import records (with template)"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_is_follower
+msgid "Is Follower"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -444,6 +484,16 @@ msgid "Mapped"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__model
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__model
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__model
@@ -470,6 +520,26 @@ msgstr ""
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__thousand_separator__none
 #, python-format
 msgid "None"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__message_has_error_counter
+msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -636,6 +706,16 @@ msgstr ""
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__value_type__variable
 #, python-format
 msgid "Variable"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__website_message_ids
+msgid "Website communication history"
 msgstr ""
 
 #. module: base_import_pdf_by_template
