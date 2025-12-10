@@ -278,6 +278,47 @@ class AccountInvoice(models.Model):
         return res
 
     @api.model
+    def _ubl_add_delivery(self, delivery_partner, parent_node, ns, version="2.1"):
+        res = super()._ubl_add_delivery(
+            delivery_partner, parent_node, ns, version=version
+        )
+        if not self.env.context.get("account_invoice_ubl_use_peppol"):
+            return res
+
+        delivery = parent_node.find(ns["cac"] + "Delivery")
+        # UBL-CR-378: A UBL invoice should not include the Delivery DeliveryLocation
+        #             Address Country Name
+        delivery_location = delivery.find(ns["cac"] + "DeliveryLocation")
+        address = delivery_location.find(ns["cac"] + "Address")
+        country = address.find(ns["cac"] + "Country")
+        country_name = country.find(ns["cbc"] + "Name")
+        if country_name is not None:
+            country.remove(country_name)
+        # UBL-CR-390: A UBL invoice should not include the DeliveryParty EndpointID
+        delivery_party = delivery.find(ns["cac"] + "DeliveryParty")
+        endpoint_id = delivery_party.find(ns["cbc"] + "EndpointID")
+        if endpoint_id is not None:
+            delivery_party.remove(endpoint_id)
+        # UBL-CR-394: A UBL invoice should not include the DeliveryParty PostalAddress
+        postal_address = delivery_party.find(ns["cac"] + "PostalAddress")
+        if postal_address is not None:
+            delivery_party.remove(postal_address)
+        # UBL-CR-396: A UBL invoice should not include the DeliveryParty PartyTaxScheme
+        party_tax_scheme = delivery_party.find(ns["cac"] + "PartyTaxScheme")
+        if party_tax_scheme is not None:
+            delivery_party.remove(party_tax_scheme)
+        # UBL-CR-397: A UBL invoice should not include the DeliveryParty
+        #             PartyLegalEntity
+        party_legal_entity = delivery_party.find(ns["cac"] + "PartyLegalEntity")
+        if party_legal_entity is not None:
+            delivery_party.remove(party_legal_entity)
+        # UBL-CR-398: A UBL invoice should not include the DeliveryParty Contact
+        contact = delivery_party.find(ns["cac"] + "Contact")
+        if contact is not None:
+            delivery_party.remove(contact)
+        return res
+
+    @api.model
     def _ubl_add_tax_category(
         self, tax, parent_node, ns, node_name="TaxCategory", version="2.1"
     ):
