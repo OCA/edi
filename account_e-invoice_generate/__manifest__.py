@@ -9,7 +9,7 @@
     'license': 'AGPL-3',
     'summary': 'Technical module to generate PDF invoices with '
                'embedded XML file',
-    'author': 'Akretion,Odoo Community Association (OCA)',
+    'author': 'Akretion,Odoo Community Association (OCA), IFE Gesellschaft für Forschung und Entwicklung mbH',
     'website': 'https://github.com/OCA/edi',
     'depends': ['account'],
     'data': [

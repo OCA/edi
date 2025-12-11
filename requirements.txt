@@ -1,2 +1,3 @@
 PyPDF2
 phonenumbers
+factur-x==1.12
