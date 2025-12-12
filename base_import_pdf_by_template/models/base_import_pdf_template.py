@@ -421,7 +421,8 @@ class BaseImportPdfTemplateLine(models.Model):
         # Apply mapping (if any is found, we return that)
         mapped_items = self.mapped_ids.filtered(lambda x: x.origin == value)
         if mapped_items:
-            return fields.first(mapped_items).value
+            mapped_item = fields.first(mapped_items)
+            return mapped_item.value or json.loads(mapped_item.json_value)
         # Search and return the record only if found
         if self.search_field_id:
             record = self._get_record_search_from_value(value)
@@ -452,6 +453,7 @@ class BaseImportPdfTemplateLineMapped(models.Model):
     value = fields.Reference(
         selection="_selection_reference_value",
     )
+    json_value = fields.Text()
 
     @api.model
     def _selection_reference_value(self):
