@@ -130,12 +130,20 @@
                         <page
                             string="Mapped"
                             name="page_mapped_ids"
-                            invisible="value_type == 'fixed' or not field_relation"
+                            invisible="value_type == 'fixed' or (not field_relation and field_ttype != 'json')"
                         >
                             <field name="mapped_ids" nolabel="1">
                                 <tree editable="bottom">
                                     <field name="origin" />
-                                    <field name="value" />
+                                    <field
+                                        name="value"
+                                        column_invisible="parent.field_ttype == 'json'"
+                                    />
+                                    <field
+                                        name="json_value"
+                                        string="Value"
+                                        column_invisible="parent.field_ttype != 'json'"
+                                    />
                                 </tree>
                             </field>
                         </page>
