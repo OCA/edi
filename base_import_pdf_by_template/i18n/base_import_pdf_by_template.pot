@@ -407,6 +407,11 @@ msgid ""
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__json_value
+msgid "Json Value"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__write_uid
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__write_uid
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__write_uid
@@ -692,6 +697,7 @@ msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line_mapped__value
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
 msgid "Value"
 msgstr ""
 
