@@ -140,7 +140,7 @@ msgstr "Fehlende UNECE Steuerkategorie für Steuer '%s'"
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr "Fehlende UNECE Steuertyp für Steuer '%s'"
+msgstr "Fehlendee UNECE Steuertyp für Steuer '%s'"
 
 #. module: account_invoice_facturx
 #. odoo-python
