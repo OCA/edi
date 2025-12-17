@@ -7,7 +7,7 @@ import logging
 from lxml import etree
 from stdnum import ean
 
-from odoo import _, api, fields, models, tools
+from odoo import api, fields, models, tools
 from odoo.exceptions import UserError
 from odoo.tools import (
     float_compare,
@@ -68,11 +68,11 @@ class AccountMove(models.Model):
             address_city.text = partner.city
         if not partner.country_id:
             raise UserError(
-                _(
+                self.env._(
                     "Country is not set on partner '%s'. In the Factur-X "
-                    "standard, the country is required for buyer and seller."
+                    "standard, the country is required for buyer and seller.",
+                    partner.display_name,
                 )
-                % partner.display_name
             )
         address_country = etree.SubElement(address, ns["ram"] + "CountryID")
         address_country.text = partner.country_id.code
@@ -298,7 +298,7 @@ class AccountMove(models.Model):
         else:
             payment_means_code.text = "30"  # use 30 and not 31,
             # for wire transfer, according to Factur-X CIUS
-            payment_means_info.text = _("Wire transfer")
+            payment_means_info.text = self.env._("Wire transfer")
             logger.info(
                 "Missing payment mode on invoice ID %d. "
                 "Using 30 (wire transfer) as UNECE code as fallback "
@@ -359,7 +359,9 @@ class AccountMove(models.Model):
         if self.invoice_payment_term_id:
             trade_payment_term_desc.text = self.invoice_payment_term_id.name
         else:
-            trade_payment_term_desc.text = _("No specific payment term selected")
+            trade_payment_term_desc.text = self.env._(
+                "No specific payment term selected"
+            )
 
         if self.invoice_date_due:
             self._cii_add_date(
@@ -393,11 +395,15 @@ class AccountMove(models.Model):
             )
         if not tax_dict["unece_type_code"]:
             raise UserError(
-                _("Missing UNECE Tax Type on tax '%s'") % tax_dict["display_name"]
+                self.env._(
+                    "Missing UNECE Tax Type on tax '%s'", tax_dict["display_name"]
+                )
             )
         if not tax_dict["unece_categ_code"]:
             raise UserError(
-                _("Missing UNECE Tax Category on tax '%s'") % tax_dict["display_name"]
+                self.env._(
+                    "Missing UNECE Tax Category on tax '%s'", tax_dict["display_name"]
+                )
             )
 
     def _cii_line_applicable_trade_tax_block(
@@ -421,17 +427,15 @@ class AccountMove(models.Model):
             trade_tax_percent = etree.SubElement(
                 trade_tax, ns["ram"] + "RateApplicablePercent"
             )
-            trade_tax_percent.text = "%0.*f" % (2, tax["amount"])
+            trade_tax_percent.text = f"{tax['amount']:.2f}"
 
     def _cii_total_applicable_trade_tax_block(
         self, tax_dict, tax_vals, parent_node, ns
     ):
         trade_tax = etree.SubElement(parent_node, ns["ram"] + "ApplicableTradeTax")
         amount = etree.SubElement(trade_tax, ns["ram"] + "CalculatedAmount")
-        amount.text = "%0.*f" % (
-            ns["cur_prec"],
-            tax_vals.get("target_tax_amount_currency", 0),
-        )
+        target_tax_amount_currency = tax_vals.get("target_tax_amount_currency", 0)
+        amount.text = f"{target_tax_amount_currency:.{ns['cur_prec']}f}"
         tax_type = etree.SubElement(trade_tax, ns["ram"] + "TypeCode")
         tax_type.text = tax_dict["unece_type_code"]
 
@@ -442,10 +446,8 @@ class AccountMove(models.Model):
             exemption_reason.text = tax_dict["exemption_reason"]
 
         base = etree.SubElement(trade_tax, ns["ram"] + "BasisAmount")
-        base.text = "%0.*f" % (
-            ns["cur_prec"],
-            tax_vals.get("target_base_amount_currency", 0),
-        )
+        target_base_amount_currency = tax_vals.get("target_base_amount_currency", 0)
+        base.text = f"{target_base_amount_currency:.{ns['cur_prec']}f}"
         tax_categ_code = etree.SubElement(trade_tax, ns["ram"] + "CategoryCode")
         tax_categ_code.text = tax_dict["unece_categ_code"]
         if tax_dict.get("unece_due_date_code"):
@@ -455,7 +457,7 @@ class AccountMove(models.Model):
             trade_tax_due_date.text = tax_dict["unece_due_date_code"]
             # Field tax_exigibility is not required, so no error if missing
         percent = etree.SubElement(trade_tax, ns["ram"] + "RateApplicablePercent")
-        percent.text = "%0.*f" % (2, tax_dict["amount"])
+        percent.text = f"{tax_dict['amount']:.2f}"
 
     def _cii_add_trade_settlement_block(self, trade_transaction, allowance_ilines, ns):
         self.ensure_one()
@@ -484,8 +486,10 @@ class AccountMove(models.Model):
             and not self.preferred_payment_method_line_id.payment_method_id.unece_code
         ):
             raise UserError(
-                _("Missing UNECE code on payment method '%s'.")
-                % self.preferred_payment_method_line_id.payment_method_id.display_name
+                self.env._(
+                    "Missing UNECE code on payment method '%s'.",
+                    self.preferred_payment_method_line_id.payment_method_id.display_name,
+                )
             )
         if not (
             self.move_type == "out_refund"
@@ -585,25 +589,23 @@ class AccountMove(models.Model):
             calculation_percent = etree.SubElement(
                 allowance_line, ns["ram"] + "CalculationPercent"
             )
-            calculation_percent.text = "%0.*f" % (ns["disc_prec"], iline.discount)
+            calculation_percent.text = f"{iline.discount:.{ns['disc_prec']}f}"
             basis_amount = etree.SubElement(allowance_line, ns["ram"] + "BasisAmount")
-            basis_amount.text = "%0.*f" % (
-                ns["price_prec"],
-                iline.price_unit * iline.quantity * -1,
-            )
+            basis_amount_float = iline.price_unit * iline.quantity * -1
+            basis_amount.text = f"{basis_amount_float:.{ns['price_prec']}f}"
 
         actual_amount = iline.price_subtotal * -1
         ns["allowance_total_amount"] += actual_amount
         actual_amount_node = etree.SubElement(
             allowance_line, ns["ram"] + "ActualAmount"
         )
-        actual_amount_node.text = "%0.*f" % (ns["cur_prec"], actual_amount)
+        actual_amount_node.text = f"{actual_amount:.{ns['cur_prec']}f}"
 
         reason = etree.SubElement(allowance_line, ns["ram"] + "Reason")
         reason.text = (
             iline.name
             or (iline.product_id and iline.product_id.display_name)
-            or _("Discount")
+            or self.env._("Discount")
         )
         self._cii_invoice_line_taxes(iline, allowance_line, ns, allowance=True)
 
@@ -613,43 +615,34 @@ class AccountMove(models.Model):
             ns["ram"] + "SpecifiedTradeSettlementHeaderMonetarySummation",
         )
         line_total = etree.SubElement(sums, ns["ram"] + "LineTotalAmount")
-        line_total.text = "%0.*f" % (
-            ns["cur_prec"],
+        line_total_float = (
             self.amount_untaxed
             + ns["allowance_total_amount"]
-            + ns["no_vat_tax_total_amount"],
+            + ns["no_vat_tax_total_amount"]
         )
+        line_total.text = f"{line_total_float:.{ns['cur_prec']}f}"
         # We don't want to generate charge total, because we don't have the
         # notion of charge in Odoo. We only support allowance:
         # an allowance is an invoice line with a negative price
         # Warning: the allowance amount is positive (but has negative meaning)
         if not self.currency_id.is_zero(ns["allowance_total_amount"]):
             allowance_total = etree.SubElement(sums, ns["ram"] + "AllowanceTotalAmount")
-            allowance_total.text = "%0.*f" % (
-                ns["cur_prec"],
-                ns["allowance_total_amount"],
-            )
+            allowance_total.text = f"{ns['allowance_total_amount']:.{ns['cur_prec']}f}"
         tax_basis_total_amt = etree.SubElement(sums, ns["ram"] + "TaxBasisTotalAmount")
-        tax_basis_total_amt.text = "%0.*f" % (
-            ns["cur_prec"],
-            self.amount_untaxed + ns["no_vat_tax_total_amount"],
-        )
+        tax_basis_total_amt_float = self.amount_untaxed + ns["no_vat_tax_total_amount"]
+        tax_basis_total_amt.text = f"{tax_basis_total_amt_float:.{ns['cur_prec']}f}"
         tax_total = etree.SubElement(
             sums, ns["ram"] + "TaxTotalAmount", currencyID=ns["currency"]
         )
-        tax_total.text = "%0.*f" % (
-            ns["cur_prec"],
-            self.amount_tax - ns["no_vat_tax_total_amount"],
-        )
+        tax_total_float = self.amount_tax - ns["no_vat_tax_total_amount"]
+        tax_total.text = f"{tax_total_float:.{ns['cur_prec']}f}"
         total = etree.SubElement(sums, ns["ram"] + "GrandTotalAmount")
-        total.text = "%0.*f" % (ns["cur_prec"], self.amount_total)
+        total.text = f"{self.amount_total:.{ns['cur_prec']}f}"
         prepaid = etree.SubElement(sums, ns["ram"] + "TotalPrepaidAmount")
-        prepaid.text = "%0.*f" % (
-            ns["cur_prec"],
-            self.amount_total - self.amount_residual,
-        )
+        prepaid_float = self.amount_total - self.amount_residual
+        prepaid.text = f"{prepaid_float:.{ns['cur_prec']}f}"
         residual = etree.SubElement(sums, ns["ram"] + "DuePayableAmount")
-        residual.text = "%0.*f" % (ns["cur_prec"], self.amount_residual)
+        residual.text = f"{self.amount_residual:.{ns['cur_prec']}f}"
 
     def _set_iline_product_information(self, iline, trade_product, ns):
         if iline.product_id:
@@ -665,7 +658,7 @@ class AccountMove(models.Model):
                 )
                 product_code.text = iline.product_id.default_code
         product_name = etree.SubElement(trade_product, ns["ram"] + "Name")
-        product_name.text = iline.name or _("No invoice line label")
+        product_name.text = iline.name or self.env._("No invoice line label")
         if iline.product_id and iline.product_id.description_sale:
             product_desc = etree.SubElement(trade_product, ns["ram"] + "Description")
             product_desc.text = iline.product_id.description_sale
@@ -731,15 +724,15 @@ class AccountMove(models.Model):
         )
         # convert gross price_unit to tax_excluded value
         taxres = iline.tax_ids.compute_all(iline.price_unit)
-        gross_price_val = float_round(
+        gross_price_float = float_round(
             taxres["total_excluded"], precision_digits=ns["price_prec"]
         )
         # Use oline.price_subtotal/qty to compute net unit price to be sure
         # to get a *tax_excluded* net unit price
         if float_is_zero(iline.quantity, precision_digits=ns["qty_prec"]):
-            net_price_val = 0.0
+            net_price_float = 0.0
         else:
-            net_price_val = float_round(
+            net_price_float = float_round(
                 iline.price_subtotal / float(iline.quantity),
                 precision_digits=ns["price_prec"],
             )
@@ -747,7 +740,7 @@ class AccountMove(models.Model):
             line_trade_agreement, ns["ram"] + "GrossPriceProductTradePrice"
         )
         gross_price_amount = etree.SubElement(gross_price, ns["ram"] + "ChargeAmount")
-        gross_price_amount.text = "%0.*f" % (ns["price_prec"], gross_price_val)
+        gross_price_amount.text = f"{gross_price_float:.{ns['price_prec']}f}"
         fc_discount = float_compare(
             iline.discount, 0.0, precision_digits=ns["disc_prec"]
         )
@@ -768,32 +761,27 @@ class AccountMove(models.Model):
             calculation_percent = etree.SubElement(
                 trade_allowance, ns["ram"] + "CalculationPercent"
             )
-            calculation_percent.text = "%0.*f" % (
-                ns["disc_prec"],
-                iline.discount * ac_sign,
+            calculation_percent_float = iline.discount * ac_sign
+            calculation_percent.text = (
+                f"{calculation_percent_float:.{ns['disc_prec']}f}"
             )
             basis_amount = etree.SubElement(trade_allowance, ns["ram"] + "BasisAmount")
-            basis_amount.text = "%0.*f" % (
-                ns["price_prec"],
-                iline.price_unit * iline.quantity,
-            )
+            basis_amount_float = iline.price_unit * iline.quantity
+            basis_amount.text = f"{basis_amount_float:.{ns['price_prec']}f}"
             actual_amount = etree.SubElement(
                 trade_allowance, ns["ram"] + "ActualAmount"
             )
-            actual_amount_val = float_round(
+            actual_amount_float = float_round(
                 ac_sign * ((iline.price_unit * iline.quantity) - iline.price_subtotal),
                 precision_digits=ns["price_prec"],
             )
-            actual_amount.text = "%0.*f" % (
-                ns["price_prec"],
-                actual_amount_val,
-            )
+            actual_amount.text = f"{actual_amount_float:.{ns['price_prec']}f}"
 
         net_price = etree.SubElement(
             line_trade_agreement, ns["ram"] + "NetPriceProductTradePrice"
         )
         net_price_amount = etree.SubElement(net_price, ns["ram"] + "ChargeAmount")
-        net_price_amount.text = "%0.*f" % (ns["price_prec"], net_price_val)
+        net_price_amount.text = f"{net_price_float:.{ns['price_prec']}f}"
         line_trade_delivery = etree.SubElement(
             line_item, ns["ram"] + "SpecifiedLineTradeDelivery"
         )
@@ -816,7 +804,7 @@ class AccountMove(models.Model):
         billed_qty = etree.SubElement(
             line_trade_delivery, ns["ram"] + "BilledQuantity", unitCode=unitCode
         )
-        billed_qty.text = "%0.*f" % (ns["qty_prec"], iline.quantity)
+        billed_qty.text = f"{iline.quantity:.{ns['qty_prec']}f}"
         line_trade_settlement = etree.SubElement(
             line_item, ns["ram"] + "SpecifiedLineTradeSettlement"
         )
@@ -841,9 +829,8 @@ class AccountMove(models.Model):
             line_charge_amount = etree.SubElement(
                 line_trade_charge, ns["ram"] + "ActualAmount"
             )
-            line_charge_amount.text = "%0.*f" % (
-                ns["cur_prec"],
-                allowance_charge_vals["amount"],
+            line_charge_amount.text = (
+                f"{allowance_charge_vals['amount']:.{ns['cur_prec']}f}"
             )
             line_charge_reason_code = etree.SubElement(
                 line_trade_charge, ns["ram"] + "ReasonCode"
@@ -873,10 +860,8 @@ class AccountMove(models.Model):
             ns["ram"] + "SpecifiedTradeSettlementLineMonetarySummation",
         )
         subtotal_amount = etree.SubElement(subtotal, ns["ram"] + "LineTotalAmount")
-        subtotal_amount.text = "%0.*f" % (
-            ns["cur_prec"],
-            iline.price_subtotal + no_vat_tax_amount,
-        )
+        subtotal_amount_float = iline.price_subtotal + no_vat_tax_amount
+        subtotal_amount.text = f"{subtotal_amount_float:.{ns['cur_prec']}f}"
 
     def _cii_invoice_line_taxes(self, iline, parent_node, ns, allowance=False):
         vat_tax_count = 0
@@ -897,7 +882,7 @@ class AccountMove(models.Model):
                 else:
                     if not tax.include_base_amount:
                         raise UserError(
-                            _(
+                            self.env._(
                                 "On invoice %(invoice)s, the invoice line '%(line)s' "
                                 "has a tax '%(tax)s' which is not a VAT tax and is "
                                 "not configured with the option 'Affect Base of "
@@ -922,7 +907,7 @@ class AccountMove(models.Model):
 
         if vat_tax_count > 1:
             raise UserError(
-                _(
+                self.env._(
                     "On invoice %(invoice)s, there are several VAT taxes "
                     "on invoice line %(line)s. This should not happen.",
                     invoice=self.display_name,
@@ -969,7 +954,7 @@ class AccountMove(models.Model):
             "cur_prec": self.currency_id.decimal_places,
             "price_prec": dpo.precision_get("Product Price"),
             "disc_prec": dpo.precision_get("Discount"),
-            "qty_prec": dpo.precision_get("Product Unit of Measure"),
+            "qty_prec": dpo.precision_get("Product Unit"),
             "lang": lang,
             "tax_speeddict": tax_speeddict,
             "vat_tax_speeddict": vat_tax_speeddict,
@@ -1020,13 +1005,17 @@ class AccountMove(models.Model):
 
     def _prepare_pdf_metadata(self):
         self.ensure_one()
-        inv_type = self.move_type == "out_refund" and _("Refund") or _("Invoice")
+        inv_type = (
+            self.move_type == "out_refund"
+            and self.env._("Refund")
+            or self.env._("Invoice")
+        )
         if self.invoice_date:
             invoice_date = format_date(
                 self.env, self.invoice_date, lang_code=self.partner_id.lang
             )
         else:
-            invoice_date = _("(no date)")
+            invoice_date = self.env._("(no date)")
         if self.state == "posted":
             invoice_number = self.name
         else:
@@ -1039,11 +1028,11 @@ class AccountMove(models.Model):
         }
         pdf_metadata = {
             "author": format_vals["company_name"],
-            "keywords": ", ".join([inv_type, _("Factur-X")]),
-            "title": _(
+            "keywords": ", ".join([inv_type, self.env._("Factur-X")]),
+            "title": self.env._(
                 "{company_name}: {invoice_type} {invoice_number} dated {invoice_date}"
             ).format(**format_vals),
-            "subject": _(
+            "subject": self.env._(
                 "Factur-X {invoice_type} {invoice_number} dated {invoice_date} "
                 "issued by {company_name}"
             ).format(**format_vals),
