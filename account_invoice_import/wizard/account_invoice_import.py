@@ -107,6 +107,7 @@ class AccountInvoiceImport(models.TransientModel):
         # 'note': 'Note embedded in the document',
         # 'origin': 'Origin note',
         # 'lines': [{
+        #       # Regular product line:
         #       'product': {
         #           'barcode': '4123456000021',
         #           'code': 'GZ250',
@@ -129,9 +130,16 @@ class AccountInvoiceImport(models.TransientModel):
         #       'date_start': '2015-10-01',
         #       'date_end': '2015-10-31',
         #       # date_start and date_end on lines override the global value
+        #       },
+        #       # Section header line (display_type='line_section'):
+        #       {
+        #           'sectionheader': 'Section Title',  # Creates a section header line
+        #       },
+        #       # Note line (display_type='line_note'):
+        #       {
+        #           'line_note': 'Note text here',  # Creates a note line
         #       }],
         # }
-
         # IMPORT CONFIG
         # {
         # 'company': company recordset,  # required field
@@ -402,6 +410,23 @@ class AccountInvoiceImport(models.TransientModel):
         assert parsed_inv.get("lines")
         bdio = self.env["business.document.import"]
         for line in parsed_inv["lines"]:
+            # Handle special display types first
+            if line.get("line_note"):
+                il_vals = {
+                    "product_id": None,
+                    "name": line.get("line_note"),
+                    "display_type": "line_note",
+                }
+                vals["invoice_line_ids"].append(Command.create(il_vals))
+                continue
+            if line.get("sectionheader"):
+                il_vals = {
+                    "product_id": None,
+                    "name": line.get("sectionheader"),
+                    "display_type": "line_section",
+                }
+                vals["invoice_line_ids"].append(Command.create(il_vals))
+                continue
             product = False
             if line.get("product"):
                 product = bdio._match_product(
@@ -683,9 +708,11 @@ class AccountInvoiceImport(models.TransientModel):
             "Product Unit of Measure"
         )
         for line in parsed_inv.get("lines", []):
-            line["qty"] = float_round(line["qty"], precision_digits=prec_qty)
+            if line.get("sectionheader") or line.get("line_note"):
+                continue
+            line["qty"] = float_round(line.get("qty", 0), precision_digits=prec_qty)
             line["price_unit"] = float_round(
-                line["price_unit"], precision_digits=prec_price
+                line.get("price_unit", 0), precision_digits=prec_price
             )
             line["discount"] = float_round(
                 line.get("discount", 0), precision_digits=prec_disc
