@@ -341,6 +341,12 @@ class AccountInvoice(models.Model):
         if tax_category_id is not None:
             tax_category_id.attrib.pop("schemeID", None)
             tax_category_id.attrib.pop("schemeAgencyID", None)
+        # BR-E-10B and BR-O-10
+        if tax.unece_categ_code in ("E", "O") and node_name == "TaxCategory":
+            tax_category_percent = tax_category.find(ns["cbc"] + "Percent")
+            tax_exemption_reason = etree.Element(ns["cbc"] + "TaxExemptionReason")
+            tax_exemption_reason.text = tax.unece_categ_id.name
+            tax_category_percent.addnext(tax_exemption_reason)
 
         return res
 
@@ -375,42 +381,6 @@ class AccountInvoice(models.Model):
                 if uom_unece_code:
                     invoiced_quantity.attrib["unitCode"] = uom_unece_code
         return res
-
-    @api.model
-    def _ubl_add_tax_subtotal(
-        self,
-        taxable_amount,
-        tax_amount,
-        tax,
-        currency_code,
-        parent_node,
-        ns,
-        version="2.1",
-    ):
-        res = super()._ubl_add_tax_subtotal(
-            taxable_amount,
-            tax_amount,
-            tax,
-            currency_code,
-            parent_node,
-            ns,
-            version=version,
-        )
-        if not self.env.context.get("account_invoice_ubl_use_peppol"):
-            return res
-
-        # BR-O-10
-        if tax.unece_categ_code in ("E", "O"):
-            tax_subtotal = parent_node.find(ns["cac"] + "TaxSubtotal")
-            if tax_subtotal is not None:
-                tax_category = tax_subtotal.find(ns["cac"] + "TaxCategory")
-                if tax_category is not None:
-                    tax_category_id = tax_category.find(ns["cbc"] + "ID")
-                    tax_exemption_reason = etree.Element(
-                        ns["cbc"] + "TaxExemptionReason"
-                    )
-                    tax_exemption_reason.text = tax.unece_categ_id.name
-                    tax_category_id.addnext(tax_exemption_reason)
 
     def _ubl_add_tax_total(self, xml_root, ns, version="2.1"):
         res = super()._ubl_add_tax_total(xml_root, ns, version=version)
