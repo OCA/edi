@@ -8,6 +8,7 @@ setuptools.setup(
     description="Meta package for oca-edi Odoo addons",
     version=version,
     install_requires=[
+        'odoo-addon-account_edi_no_autocreate_partner>=16.0dev,<16.1dev',
         'odoo-addon-account_edi_no_product_name_match>=16.0dev,<16.1dev',
         'odoo-addon-account_edi_ubl_cii_supplier_invoice_number>=16.0dev,<16.1dev',
         'odoo-addon-account_einvoice_generate>=16.0dev,<16.1dev',
