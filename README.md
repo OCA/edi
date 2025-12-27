@@ -22,6 +22,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [account_edi_no_product_name_match](account_edi_no_product_name_match/) | 16.0.1.0.0 |  | Disable product matching by name in Account EDI imports
+[account_edi_ubl_cii_supplier_invoice_number](account_edi_ubl_cii_supplier_invoice_number/) | 16.0.1.0.0 |  | This addon extends the UBL invoice import process to automatically populate the suppliers invoice number based on the value found in the XML file.
 [account_einvoice_generate](account_einvoice_generate/) | 16.0.1.1.0 | <a href='https://github.com/alexis-via'><img src='https://github.com/alexis-via.png' width='32' height='32' style='border-radius:50%;' alt='alexis-via'/></a> | Technical module to generate PDF invoices with embedded XML file
 [account_invoice_download](account_invoice_download/) | 16.0.1.0.0 | <a href='https://github.com/alexis-via'><img src='https://github.com/alexis-via.png' width='32' height='32' style='border-radius:50%;' alt='alexis-via'/></a> | Auto-download supplier invoices and import them
 [account_invoice_download_ovh](account_invoice_download_ovh/) | 16.0.1.0.0 | <a href='https://github.com/alexis-via'><img src='https://github.com/alexis-via.png' width='32' height='32' style='border-radius:50%;' alt='alexis-via'/></a> | Get OVH Invoice via the API
