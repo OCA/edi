@@ -277,6 +277,80 @@ class TestInvoiceImport(TransactionCase):
                 fields.Date.to_string(inv.invoice_date), parsed_inv["date"]
             )
 
+    def test_import_in_invoice_special_display_types(self):
+        parsed_inv = {
+            "type": "in_invoice",
+            "journal": {"code": "XXXP2"},
+            "amount_untaxed": 0.0,
+            "amount_total": 0.0,
+            "date": "2017-08-16",
+            "partner": {"name": "Wood Corner"},
+            "lines": [
+                {"line_note": "This is a line note"},
+                {"sectionheader": "SECTION 1"},
+            ],
+        }
+        import_config = {"company": self.company}
+        parsed_inv["invoice_number"] = "INV-%s" % randint(100000, 999999)
+        inv = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
+        )
+        # We expect two created invoice lines corresponding to the note and section
+        self.assertEqual(len(inv.invoice_line_ids), 2)
+        types = [line.display_type for line in inv.invoice_line_ids]
+        self.assertIn("line_note", types)
+        self.assertIn("line_section", types)
+        # Special display lines should not have a product linked
+        for line in inv.invoice_line_ids:
+            self.assertFalse(line.product_id)
+
+    def test_import_in_invoice_mixed_display_types_with_product(self):
+        parsed_inv = {
+            "type": "in_invoice",
+            "journal": {"code": "XXXP2"},
+            "amount_untaxed": 100.0,
+            "amount_total": 101.0,
+            "date": "2017-08-16",
+            "partner": {"name": "Wood Corner"},
+            "lines": [
+                {"sectionheader": "SECTION 1"},
+                {"line_note": "This is a line note"},
+                {
+                    "product": {"code": "AII-TEST-PRODUCT"},
+                    "name": "Super test product",
+                    "qty": 2,
+                    "price_unit": 50,
+                    "taxes": [
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                },
+            ],
+        }
+        import_config = {"company": self.company}
+        parsed_inv["invoice_number"] = "INV-%s" % randint(100000, 999999)
+        inv = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
+        )
+        # Expect three lines: section, note, and product
+        self.assertEqual(len(inv.invoice_line_ids), 3)
+        types = [line.display_type for line in inv.invoice_line_ids]
+        self.assertIn("line_section", types)
+        self.assertIn("line_note", types)
+        self.assertIn("product", types)
+        # Check product line exists and has correct product and qty
+        prod_lines = [
+            line for line in inv.invoice_line_ids if line.display_type == "product"
+        ]
+        self.assertEqual(len(prod_lines), 1)
+        prod_line = prod_lines[0]
+        self.assertEqual(prod_line.product_id.id, self.product.id)
+        self.assertEqual(prod_line.quantity, 2)
+
     _fake_email = """
 Received: by someone@example.com
 Message-Id: <v0214040cad6a13935723@foo.com>
