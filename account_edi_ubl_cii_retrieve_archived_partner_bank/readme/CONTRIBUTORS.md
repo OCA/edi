@@ -1,0 +1,3 @@
+- Souheil Bejaoui - ACSONE SA/NV <souheil.bejaoui@acsone.eu>
+- Jacques-Etienne Baudoux - BCIM <je@bcim.be>
+
