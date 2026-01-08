@@ -450,7 +450,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
 
     def test_invoice_number_parsing(self):
         inv_num_test = {
-            "INV/2020/05/0042": [
+            "INV/2024/05/0042": [
                 {"string_type": "fixed", "fixed_char": "INV/"},
                 {"string_type": "year4"},
                 {"string_type": "fixed", "fixed_char": "/"},
@@ -458,12 +458,12 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 {"string_type": "fixed", "fixed_char": "/"},
                 {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
             ],
-            "I210042": [
+            "I240042": [
                 {"string_type": "fixed", "fixed_char": "I"},
                 {"string_type": "year2"},
                 {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
             ],
-            "INV2107ZB0042": [
+            "INV2407ZB0042": [
                 {"string_type": "fixed", "fixed_char": "INV"},
                 {"string_type": "year2"},
                 {"string_type": "month"},
@@ -476,7 +476,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             ],
             # If you wonder which company can have such a stupid invoice number,
             # the answer is... Orange ! I won't say what I think about these guys...
-            "04B700L456 21A7- 1J01": [
+            "04B700L456 24A7- 1J01": [
                 {"string_type": "fixed", "fixed_char": "04B700L456"},
                 {"string_type": "space"},
                 {"string_type": "year2"},
