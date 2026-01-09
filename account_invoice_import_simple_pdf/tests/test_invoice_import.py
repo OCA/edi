@@ -5,7 +5,7 @@
 import base64
 
 from odoo import Command, fields
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, freeze_time
 from odoo.tools import file_open, float_compare
 
 
@@ -448,6 +448,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                     )
                 )
 
+    @freeze_time("2021-02-20")
     def test_invoice_number_parsing(self):
         inv_num_test = {
             "INV/2020/05/0042": [
