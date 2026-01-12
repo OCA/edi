@@ -68,10 +68,15 @@ class BaseUbl(models.AbstractModel):
             state.text = partner.state_id.name
             state_code = etree.SubElement(address, ns["cbc"] + "CountrySubentityCode")
             state_code.text = partner.state_id.code
-        if partner.country_id:
-            self._ubl_add_country(partner.country_id, address, ns, version=version)
+        # Fallback on company country if the partner has no country provided
+        country = partner.country_id or self.env.company.partner_id.country_id
+        if country:
+            self._ubl_add_country(country, address, ns, version=version)
         else:
-            logger.warning("UBL: missing country on partner %s", partner.name)
+            logger.warning(
+                "UBL: missing country on partner %s and no fallback on company",
+                partner.name,
+            )
 
     @api.model
     def _ubl_get_contact_id(self, partner):
