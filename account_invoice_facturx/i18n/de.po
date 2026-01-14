@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2019-05-24 15:19+0000\n"
-"Last-Translator: Frederik Kramer <frederik.kramer@initos.com>\n"
+"PO-Revision-Date: 2026-01-14 23:45+0000\n"
+"Last-Translator: strarsis <strarsis@gmail.com>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.6.1\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_move.py:0
@@ -147,7 +147,7 @@ msgstr "Fehlende UNECE Steuerkategorie für Steuer '%s'"
 #: code:addons/account_invoice_facturx/models/account_move.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr "Fehlende UNECE Steuerkategorie für Steuer '%s'"
+msgstr "Fehlender UNECE Steuertyp für Steuer '%s'"
 
 #. module: account_invoice_facturx
 #: code:addons/account_invoice_facturx/models/account_move.py:0
