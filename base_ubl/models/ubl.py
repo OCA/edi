@@ -456,16 +456,15 @@ class BaseUbl(models.AbstractModel):
                 # fallback on the product taxes without taking into account the
                 # fiscal position
             elif type_ == "sale":
-                taxes = product.taxes_id.filtered(
-                    lambda t: t.unece_type_id.code == "VAT"
-                )
+                taxes = product.taxes_id
             else:
-                taxes = product.supplier_taxes_id.filtered(
-                    lambda t: t.unece_type_id.code == "VAT"
-                )
+                taxes = product.supplier_taxes_id
         skip_taxes = self.env.context.get("ubl_add_item__skip_taxes")
         if taxes and not skip_taxes:
             for tax in taxes:
+                if tax.unece_type_id.code != "VAT":
+                    # declare only VAT taxes
+                    continue
                 self._ubl_add_tax_category(
                     tax,
                     item,
