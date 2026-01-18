@@ -18,38 +18,30 @@ class TestInvoiceImport(TransactionCase):
         super().setUpClass()
         cls.company = cls.env.ref("base.main_company")
         cls.company.invoice_import_email = "alexis.delattre@testme.com"
-        cls.expense_account = cls.env["account.account"].create(
-            {
-                "code": "612AII",
-                "name": "expense account invoice import",
-                "account_type": "expense",
-                "company_ids": [Command.set([cls.company.id])],
-            }
-        )
-        cls.income_account = cls.env["account.account"].create(
-            {
-                "code": "707AII",
-                "name": "revenue account invoice import",
-                "account_type": "income",
-                "company_ids": [Command.set([cls.company.id])],
-            }
-        )
-        cls.adj_debit_account = cls.env["account.account"].create(
-            {
-                "code": "658AII",
-                "name": "Adjustment debit account",
-                "account_type": "expense",
-                "company_ids": [Command.set([cls.company.id])],
-            }
-        )
-        cls.adj_credit_account = cls.env["account.account"].create(
-            {
-                "code": "758AII",
-                "name": "Adjustment credit account",
-                "account_type": "income",
-                "company_ids": [Command.set([cls.company.id])],
-            }
-        )
+        cls.expense_account = cls.env["account.account"].create([{
+            "code": "612AII",
+            "name": "expense account invoice import",
+            "account_type": "expense",
+            "company_ids": [Command.set([cls.company.id])],
+        }])
+        cls.income_account = cls.env["account.account"].create([{
+            "code": "707AII",
+            "name": "revenue account invoice import",
+            "account_type": "income",
+            "company_ids": [Command.set([cls.company.id])],
+        }])
+        cls.adj_debit_account = cls.env["account.account"].create([{
+            "code": "658AII",
+            "name": "Adjustment debit account",
+            "account_type": "expense",
+            "company_ids": [Command.set([cls.company.id])],
+        }])
+        cls.adj_credit_account = cls.env["account.account"].create([{
+            "code": "758AII",
+            "name": "Adjustment credit account",
+            "account_type": "income",
+            "company_ids": [Command.set([cls.company.id])],
+        }])
         cls.company.adjustment_debit_account_id = cls.adj_debit_account.id
         cls.company.adjustment_credit_account_id = cls.adj_credit_account.id
         purchase_tax_vals = {
@@ -67,18 +59,16 @@ class TestInvoiceImport(TransactionCase):
         sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
         cls.sale_tax = cls.env["account.tax"].create(sale_tax_vals)
         cls.product = (
-            cls.env["product.product"]
+            cls.env["product.product"] 
             .with_company(cls.company.id)
-            .create(
-                {
-                    "name": "Expense product",
-                    "default_code": "AII-TEST-PRODUCT",
-                    "taxes_id": [(6, 0, [cls.sale_tax.id])],
-                    "supplier_taxes_id": [Command.set([cls.purchase_tax.id])],
-                    "property_account_income_id": cls.income_account.id,
-                    "property_account_expense_id": cls.expense_account.id,
-                }
-            )
+            .create([{
+                "name": "Expense product",
+                "default_code": "AII-TEST-PRODUCT",
+                "taxes_id": [(6, 0, [cls.sale_tax.id])],
+                "supplier_taxes_id": [Command.set([cls.purchase_tax.id])],
+                "property_account_income_id": cls.income_account.id,
+                "property_account_expense_id": cls.expense_account.id,
+            }])
         )
         cls.all_import_config = [
             {
@@ -96,47 +86,52 @@ class TestInvoiceImport(TransactionCase):
             {"company": cls.company},
         ]
 
-        # Define partners as supplier and customer
-        # Wood Corner
-        cls.env.ref("base.res_partner_1").supplier_rank = 1
-        # Deco Addict
-        cls.env.ref("base.res_partner_2").customer_rank = 1
-        cls.pur_journal1 = cls.env["account.journal"].create(
-            {
-                "type": "purchase",
-                "code": "XXXP1",
-                "name": "Test Purchase Journal 1",
-                "sequence": 10,
-                "company_id": cls.company.id,
-            }
-        )
-        cls.pur_journal2 = cls.env["account.journal"].create(
-            {
-                "type": "purchase",
-                "code": "XXXP2",
-                "name": "Test Purchase Journal 2",
-                "sequence": 100,
-                "company_id": cls.company.id,
-            }
-        )
-        cls.partner_with_email = cls.env["res.partner"].create(
-            {
-                "is_company": True,
-                "name": "AgroMilk",
-                "email": "invoicing@agromilk.com",
-                "country_id": cls.env.ref("base.fr").id,
-            }
-        )
-        cls.partner_with_email_with_inv_config = cls.env["res.partner"].create(
-            {
-                "is_company": True,
-                "name": "Anevia",
-                "email": "invoicing@anevia.com",
-                "country_id": cls.env.ref("base.fr").id,
-                "invoice_import_product_id": cls.product.id,
-                "invoice_import_label": "Flamingo 220S",
-            }
-        )
+        # Partners
+        cls.env["res.partner"].create([{
+            "name": "Wood Corner",
+            "is_company": 1,
+            "email": "wood.corner26@example.com",
+            "phone": "(623)-853-7197",
+            "website": "http://www.wood-corner.com",
+            "vat": "US12345672",
+            "supplier_rank": 1, # define as supplier
+        }, {
+            "name": "Deco Addict",
+            "is_company": 1,
+            "email": "deco_addict@yourcompany.example.com",
+            "phone": "(603)-996-3829",
+            "website": "http://www.deco-addict.com",
+            "vat": "US12345673",
+            "customer_rank": 1, # define as customer
+        }])
+        cls.pur_journal1 = cls.env["account.journal"].create([{
+            "type": "purchase",
+            "code": "XXXP1",
+            "name": "Test Purchase Journal 1",
+            "sequence": 10,
+            "company_id": cls.company.id,
+        }])
+        cls.pur_journal2 = cls.env["account.journal"].create([{
+            "type": "purchase",
+            "code": "XXXP2",
+            "name": "Test Purchase Journal 2",
+            "sequence": 100,
+            "company_id": cls.company.id,
+        }])
+        cls.partner_with_email = cls.env["res.partner"].create([{
+            "is_company": True,
+            "name": "AgroMilk",
+            "email": "invoicing@agromilk.com",
+            "country_id": cls.env.ref("base.fr").id,
+        }])
+        cls.partner_with_email_with_inv_config = cls.env["res.partner"].create([{
+            "is_company": True,
+            "name": "Anevia",
+            "email": "invoicing@anevia.com",
+            "country_id": cls.env.ref("base.fr").id,
+            "invoice_import_product_id": cls.product.id,
+            "invoice_import_label": "Flamingo 220S",
+        }])
 
     def test_import_in_invoice(self):
         parsed_inv = {
@@ -150,22 +145,20 @@ class TestInvoiceImport(TransactionCase):
             "date_end": "2017-08-31",
             "partner": {"name": "Wood Corner"},
             "description": "New hi-tech gadget",
-            "lines": [
-                {
-                    "product": {"code": "AII-TEST-PRODUCT"},
-                    "name": "Super test product",
-                    "qty": 2,
-                    "price_unit": 50,
-                    "taxes": [
-                        {
-                            "amount_type": "percent",
-                            "amount": 1.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
-                }
-            ],
+            "lines": [{
+                "product": {"code": "AII-TEST-PRODUCT"},
+                "name": "Super test product",
+                "qty": 2,
+                "price_unit": 50,
+                "taxes": [
+                    {
+                        "amount_type": "percent",
+                        "amount": 1.0,
+                        "unece_type_code": "VAT",
+                        "unece_categ_code": "S",
+                    }
+                ],
+            }],
         }
         for import_c in self.all_import_config:
             # hack to have a unique vendor inv ref
@@ -203,22 +196,20 @@ class TestInvoiceImport(TransactionCase):
             "date": "2023-04-08",
             "date_due": "2023-05-07",
             "partner": {"name": "Wood Corner"},
-            "lines": [
-                {
-                    "product": {"code": "AII-TEST-PRODUCT"},
-                    "name": "Super test product",
-                    "qty": 2,
-                    "price_unit": 50,
-                    "taxes": [
-                        {
-                            "amount_type": "percent",
-                            "amount": 1.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
-                }
-            ],
+            "lines": [{
+                "product": {"code": "AII-TEST-PRODUCT"},
+                "name": "Super test product",
+                "qty": 2,
+                "price_unit": 50,
+                "taxes": [
+                    {
+                        "amount_type": "percent",
+                        "amount": 1.0,
+                        "unece_type_code": "VAT",
+                        "unece_categ_code": "S",
+                    }
+                ],
+            }],
         }
         import_config = {"company": self.company}
         inv = self.env["account.invoice.import"].create_invoice(
@@ -243,25 +234,23 @@ class TestInvoiceImport(TransactionCase):
             "type": "out_invoice",
             "date": "2017-08-16",
             "partner": {"name": "Deco Addict"},
-            "lines": [
-                {
-                    "product": {"code": "AII-TEST-PRODUCT"},
-                    "name": "Super product",
-                    "qty": 3,
-                    "price_unit": 100,
-                    "discount": 10,
-                    "date_start": "2017-08-01",
-                    "date_end": "2017-08-31",
-                    "taxes": [
-                        {  # only needed for method 'nline_no_product'
-                            "amount_type": "percent",
-                            "amount": 1.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
-                }
-            ],
+            "lines": [{
+                "product": {"code": "AII-TEST-PRODUCT"},
+                "name": "Super product",
+                "qty": 3,
+                "price_unit": 100,
+                "discount": 10,
+                "date_start": "2017-08-01",
+                "date_end": "2017-08-31",
+                "taxes": [
+                    {  # only needed for method 'nline_no_product'
+                        "amount_type": "percent",
+                        "amount": 1.0,
+                        "unece_type_code": "VAT",
+                        "unece_categ_code": "S",
+                    }
+                ],
+            }],
         }
         for import_config in self.all_import_config:
             if import_config.get("single_line"):
@@ -293,12 +282,10 @@ Nina
 """
 
     def test_email_gateway_multi_comp_1_matching(self):
-        comp = self.env["res.company"].create(
-            {
-                "name": "Let it fail INC",
-                "invoice_import_email": "project-discussion@example.com",
-            }
-        )
+        comp = self.env["res.company"].create([{
+            "name": "Let it fail INC",
+            "invoice_import_email": "project-discussion@example.com",
+        }])
         logger_name = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
 
         mock_parse = unittest.mock.patch.object(
@@ -371,14 +358,12 @@ Nina
         sender_email = "invoicing@unknownsupplier.com"
         msg_dict = self.prepare_email_with_attachment(sender_email)
         self.env["account.invoice.import"].message_new(msg_dict)
-        move = self.env["account.move"].search(
-            [
-                ("company_id", "=", self.company.id),
-                ("move_type", "=", "in_invoice"),
-                ("invoice_source_email", "like", sender_email),
-                ("state", "=", "draft"),
-            ]
-        )
+        move = self.env["account.move"].search([
+            ("company_id", "=", self.company.id),
+            ("move_type", "=", "in_invoice"),
+            ("invoice_source_email", "like", sender_email),
+            ("state", "=", "draft"),
+        ])
         self.assertEqual(len(move), 1)
         self.assertFalse(move.partner_id)
         self.assertTrue(self.company.currency_id.is_zero(move.amount_total))
@@ -388,14 +373,12 @@ Nina
         sender_email = self.partner_with_email.email
         msg_dict = self.prepare_email_with_attachment(sender_email)
         self.env["account.invoice.import"].message_new(msg_dict)
-        move = self.env["account.move"].search(
-            [
-                ("company_id", "=", self.company.id),
-                ("move_type", "=", "in_invoice"),
-                ("partner_id", "=", self.partner_with_email.id),
-                ("state", "=", "draft"),
-            ]
-        )
+        move = self.env["account.move"].search([
+            ("company_id", "=", self.company.id),
+            ("move_type", "=", "in_invoice"),
+            ("partner_id", "=", self.partner_with_email.id),
+            ("state", "=", "draft"),
+        ])
         self.assertEqual(len(move), 1)
         self.assertTrue(self.company.currency_id.is_zero(move.amount_total))
         self.assertFalse(move.invoice_date)
@@ -405,14 +388,12 @@ Nina
         sender_email = partner.email
         msg_dict = self.prepare_email_with_attachment(sender_email)
         self.env["account.invoice.import"].message_new(msg_dict)
-        move = self.env["account.move"].search(
-            [
-                ("company_id", "=", self.company.id),
-                ("move_type", "=", "in_invoice"),
-                ("partner_id", "=", partner.id),
-                ("state", "=", "draft"),
-            ]
-        )
+        move = self.env["account.move"].search([
+            ("company_id", "=", self.company.id),
+            ("move_type", "=", "in_invoice"),
+            ("partner_id", "=", partner.id),
+            ("state", "=", "draft"),
+        ])
         self.assertEqual(len(move), 1)
         self.assertTrue(self.company.currency_id.is_zero(move.amount_total))
         self.assertFalse(move.invoice_date)
