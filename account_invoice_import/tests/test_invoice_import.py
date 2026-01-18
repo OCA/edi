@@ -96,11 +96,7 @@ class TestInvoiceImport(TransactionCase):
             {"company": cls.company},
         ]
 
-        # Define partners as supplier and customer
-        # Wood Corner
-        cls.env.ref("base.res_partner_1").supplier_rank = 1
-        # Deco Addict
-        cls.env.ref("base.res_partner_2").customer_rank = 1
+        # Define journals & partners
         cls.pur_journal1 = cls.env["account.journal"].create(
             {
                 "type": "purchase",
