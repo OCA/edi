@@ -9,33 +9,34 @@ msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-12 13:36+0000\n"
-"PO-Revision-Date: 2016-11-12 13:36+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"PO-Revision-Date: 2026-01-19 10:50+0000\n"
+"Last-Translator: EvaS595 <eva.saintier@horanet.com>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: sale_order_import
 #: code:addons/sale_order_import/models/sale.py:0
 #: code:addons/sale_order_import/tests/test_sale_order.py:0
 #, python-format
 msgid " Amount w/o tax: %s %s)"
-msgstr ""
+msgstr " Montant HT : %s %s)"
 
 #. module: sale_order_import
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "%d new order line(s) created: %s"
-msgstr ""
+msgstr "%d nouvelle(s) ligne(s) de commande créée(s) : %s"
 
 #. module: sale_order_import
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "%d order line(s) deleted: %s"
-msgstr ""
+msgstr "%d ligne(s) de commande supprimée(s) : %s"
 
 #. module: sale_order_import
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
@@ -43,11 +44,13 @@ msgstr ""
 msgid ""
 "An order of customer '%s' with reference '%s' already exists: %s (state: %s)"
 msgstr ""
+"Une commande du client \"%s\" avec la référence \"%s\" existe déjà : %s "
+"(état : %s)"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__price_source
 msgid "Apply Prices From"
-msgstr ""
+msgstr "Appliquer les prix depuis"
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
@@ -57,7 +60,7 @@ msgstr "Annuler"
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__commercial_partner_id
 msgid "Commercial Entity"
-msgstr ""
+msgstr "Entité commerciale"
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
@@ -68,7 +71,7 @@ msgstr "Créer une nouvelle"
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid "Created automatically via file import (%s)."
-msgstr ""
+msgstr "Créé automatiquement par import de fichier (%s)."
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_uid
@@ -82,29 +85,28 @@ msgstr "Créé le"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__csv_import
-#, fuzzy
 msgid "Csv Import"
-msgstr "Importer"
+msgstr "Import CSV"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__partner_id
 msgid "Customer"
-msgstr ""
+msgstr "Client"
 
 #. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__price_source__order
 msgid "Customer Order"
-msgstr ""
+msgstr "Commande Client"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nom affiché"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__doc_type
 msgid "Document Type"
-msgstr ""
+msgstr "Type de document"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__order_filename
@@ -126,6 +128,13 @@ msgid ""
 "separator ; if it is a decimal value, it should use dot as the decimal "
 "separator."
 msgstr ""
+"S'il s'agit d'un fichier CSV, vous devrez sélectionner manuellement le "
+"client. Le fichier CSV devrait comporter 2 colonnes : la référence du "
+"produit ou EAN13 (1ère colonne) puis la quantité du produit (2ème colonne). "
+"Il devrait n'y avoir aucune ligne d'en-tête et utiliser le point-virgule "
+"comme séparateur de champs. La quantité ne doit pas utiliser de séparateur "
+"de milliers ; s'il s'agit d'une valeur décimale, il faut utiliser le point "
+"comme séparateur de décimales."
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
@@ -133,6 +142,9 @@ msgid ""
 "If it is a PDF file, Odoo will try to find an XML file in the attachments of "
 "the PDF file and then use this XML file to create the quotation."
 msgstr ""
+"S'il s'agit d'un fichier PDF, Odoo essaiera de trouver un fichier XML dans "
+"les pièces jointes du fichier PDF, puis utilisera ce fichier XML pour créer "
+"le devis."
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
@@ -140,6 +152,8 @@ msgid ""
 "If it is an XML file, Odoo will parse it if the module that adds support for "
 "this XML format is installed. For the"
 msgstr ""
+"S'il s'agit d'un fichier XML, Odoo l'analysera si le module qui ajoute la "
+"compatibilité avec ce format XML est installé. Pour le"
 
 #. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__state__import
@@ -151,17 +165,17 @@ msgstr "Importer"
 #: model:ir.actions.act_window,name:sale_order_import.sale_order_import_action
 #: model:ir.ui.menu,name:sale_order_import.sale_order_import_menu
 msgid "Import RFQ or Order"
-msgstr ""
+msgstr "Importer une demande de prix ou une commande"
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid "Import Sale Orders"
-msgstr ""
+msgstr "Importer des bons de commande"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Dernière modification le"
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__write_uid
