@@ -9,32 +9,33 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-22 03:40+0000\n"
-"PO-Revision-Date: 2018-02-22 03:40+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"PO-Revision-Date: 2026-01-19 10:50+0000\n"
+"Last-Translator: EvaS595 <eva.saintier@horanet.com>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "(fixed)"
-msgstr ""
+msgstr "(fixe)"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "<b>Notes in file %s:</b>"
-msgstr ""
+msgstr "<b>Notes du fichier %s :</b>"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "<b>Notes in imported document:</b>"
-msgstr ""
+msgstr "<b>Notes du document importé :</b>"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -45,28 +46,33 @@ msgid ""
 "li><li>Name of the unit of measure: %s</li></ul><p>So the unit of measure "
 "'Unit(s)' has been used. <em>You may have to change it manually.</em></p>"
 msgstr ""
+"<p>Odoo n'a pu déterminer aucune unité de mesure correspondant à "
+"l'information suivante, extraite du document commercial :</p><ul><li>Code "
+"UNECE : %s</li><li>Nom de l'unité de mesure : %s</li></ul><p>Par conséquent, "
+"l'unité de mesure \"Unité(s)\" a été utilisée. <em>Vous pourriez avoir "
+"besoin de la modifier manuellement.</em></p>"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "Approximate match: account %s has been matched with account %s"
-msgstr ""
+msgstr "Correspondance partielle : le compte %s a été associé au compte %s"
 
 #. module: base_business_document_import
 #: model:ir.model,name:base_business_document_import.model_business_document_import
 msgid "Common methods to import business documents"
-msgstr ""
+msgstr "Méthodes communes pour l'import des documents commerciaux"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
-msgstr ""
+msgstr "Aucun Incoterm trouvé dans Odoo correspondant à \"%s\""
 
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nom affiché"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -76,12 +82,16 @@ msgid ""
 "%s on the imported line. We don't support this scenario for the moment, so "
 "<b>the lines haven't been updated</b>."
 msgstr ""
+"Pour le produit \"%s\", l'unité de mesure est %s sur la ligne existante, "
+"mais est %s sur la ligne importée. Nous ne sommes pas compatibles avec ce "
+"scénario pour l'instant, par conséquent <b>les lignes ont été mises à jour</"
+"b>."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "IBAN <b>%s</b> is not valid, so it has been ignored."
-msgstr ""
+msgstr "L'IBAN <b>%s</b> n'est pas valide, il a donc été ignoré."
 
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__id
@@ -91,19 +101,21 @@ msgstr "ID"
 #. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Dernière modification le"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "Missing VAT number on company '%s'"
-msgstr ""
+msgstr "Numéro de TVA manquant sur la société \"%s\""
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "No currency specified, so Odoo used the company currency (%s)"
 msgstr ""
+"Aucune devise spécifiée, par conséquent Odoo a utilisé la devise de la "
+"société (%s)"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -119,6 +131,15 @@ msgid ""
 "State code: %s\n"
 "Country code: %s\n"
 msgstr ""
+"Odoo n'a trouvé aucun %s correspondant aux informations suivantes extraites "
+"du document commercial :\n"
+"Nom : %s\n"
+"Numéro de TVA : %s\n"
+"Référence : %s\n"
+"Courriel : %s\n"
+"Site web : %s\n"
+"Code état : %s\n"
+"Code pays : %s\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -127,6 +148,8 @@ msgid ""
 "Odoo couldn't find any account corresponding to the following information "
 "extracted from the business document: Account code: %s"
 msgstr ""
+"Odoo n'a pu trouver aucun compte correspondant aux informations suivantes "
+"extraites du document commercial : Code du compte : %s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -135,6 +158,8 @@ msgid ""
 "Odoo couldn't find any analytic account corresponding to the following "
 "information extracted from the business document: Analytic account code: %s"
 msgstr ""
+"Odoo n'a pu trouver aucun compte analytique correspondant aux informations "
+"suivantes extraites du document commercial : Code du compte analytique : %s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -143,6 +168,8 @@ msgid ""
 "Odoo couldn't find any journal corresponding to the following information "
 "extracted from the business document: Journal code: %s"
 msgstr ""
+"Odoo n'a pu trouver aucun journal correspondant aux informations suivantes "
+"extraites du document commercial : Code du journal : %s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -153,6 +180,10 @@ msgid ""
 "Product code: %s\n"
 "Supplier: %s\n"
 msgstr ""
+"Odoo n'a pu trouver aucun produit correspondant aux informations suivantes "
+"extraites du document commercial : Code barres : %s\n"
+"Code produit : %s\n"
+"Fournisseur : %s\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -172,6 +203,19 @@ msgid ""
 "State code: %s\n"
 "Country code: %s\n"
 msgstr ""
+"Odoo n'a trouvé aucun destinataire correspondant aux informations suivantes "
+"extraites du document commercial :\n"
+"Nom : %s\n"
+"Numéro de TVA : %s\n"
+"Référence : %s\n"
+"Courriel : %s\n"
+"Site web : %s\n"
+"Rue : %s\n"
+"Rue 2 : %s\n"
+"Ville : %s\n"
+"Code postal : %s\n"
+"Code état : %s\n"
+"Code pays : %s\n"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -184,6 +228,12 @@ msgid ""
 "UNECE Tax Category code: %s\n"
 "Tax amount: %s %s"
 msgstr ""
+"Odoo n'a trouvé aucune taxe avec  \"Application de la taxe\" = \"%s\" et "
+"\"Taxe incluse dans le prix\" = \"%s\" correspondant aux informations "
+"suivantes extraites du document commercial :\n"
+"Code UNECE du type de la taxe : %s\n"
+"Code UNECE de catégorie de la taxe : %s\n"
+"Montant de la taxe : %s%s"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -192,6 +242,8 @@ msgid ""
 "One of the imported lines doesn't have any product, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"Une des lignes importées n'a pas de produit, par conséquent <b>les lignes "
+"ont été mises à jour</b>."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -200,6 +252,8 @@ msgid ""
 "The %s has been identified by the domain name '%s' so please check carefully "
 "that the %s is correct."
 msgstr ""
+"Le %s a été identifié par le nom de domaine \"%s\" veuillez vérifier "
+"attentivement que le %s est correct."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -209,6 +263,9 @@ msgid ""
 "match the VAT number of the company '%s' (%s) in which you are trying to "
 "import this document."
 msgstr ""
+"Le numéro de TVA inscrit dans le document commercial (%s) ne correspond pas "
+"au numéro de TVA de la société \"%s\" (%s) pour laquelle vous essayez "
+"d'importer ce document."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -217,6 +274,8 @@ msgid ""
 "The analysis of the business document returned '%s' as country code. But "
 "there are no country with that code in Odoo."
 msgstr ""
+"L'analyse du document commercial a donné \"%s\" comme code pays. Mais il n'y "
+"a aucun pays avec ce code dans Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -226,6 +285,9 @@ msgid ""
 "find the related currency. But the country '%s' doesn't have any related "
 "currency configured in Odoo."
 msgstr ""
+"L'analyse du document commercial a donné \"%s\" comme code pays pour "
+"retrouver la devise correspondante. Mais le pays \"%s\" n'a aucune devise "
+"configurée dans Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -234,6 +296,9 @@ msgid ""
 "The analysis of the business document returned '%s' as the country code to "
 "find the related currency. But there is no country with that code in Odoo."
 msgstr ""
+"L'analyse du document commercial a donné \"%s\" comme code pays pour "
+"retrouver la devise correspondante. Mais il n'y a aucun pays avec ce code "
+"dans Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -242,6 +307,8 @@ msgid ""
 "The analysis of the business document returned '%s' as the currency ISO "
 "code. But there are no currency with that code in Odoo."
 msgstr ""
+"L'analyse du document commercial a donné \"%s\" comme code ISO de devise. "
+"Mais il n'y a aucune devise avec ce code dans Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -251,6 +318,9 @@ msgid ""
 "or ISO code. But there are none or several currencies with the symbol/ISO "
 "code in Odoo."
 msgstr ""
+"L'analyse du document commercial a donné \"%s\" comme symbole de devise ou "
+"code ISO. Mais il n'y a aucune devise ou plus d'une devise avec ce symbole/"
+"code ISO dans Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -259,6 +329,8 @@ msgid ""
 "The analysis of the business document returned '%s' as the currency symbol. "
 "But there are none or several currencies with that symbol in Odoo."
 msgstr ""
+"L'analyse du document commercial a donné \"%s\" comme symbole de devise. "
+"Mais il n'y a aucune devise ou plus d'une devise avec ce symbole dans Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -268,6 +340,9 @@ msgid ""
 "UNECE code, but there is no unit of measure with that UNECE code in Odoo. "
 "Please check the configuration of the units of measures in Odoo."
 msgstr ""
+"L'analyse du document commercial a donné \"%s\" comme code UNECE d'unité de "
+"mesure, mais il n'y a aucune unité de mesure avec ce code UNECE dans Odoo. "
+"Veuillez vérifier la configuration des unités de mesure dans Odoo."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -278,6 +353,10 @@ msgid ""
 "href=# data-oe-model=res.partner data-oe-id=%d>%s</a> and the option to "
 "automatically create bank accounts upon import is disabled."
 msgstr ""
+"L'analyse du document commercial a donné <b>IBAN %s</b> comme compte "
+"bancaire, mais il n'y a aucun compte bancaire dans Odoo lié au partenaire <a "
+"href=# data-oe-model=res.partner data-oe-id=%d>%s</a> et l'option pour créer "
+"automatiquement des comptes bancaires à partir d'imports est désactivée."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -286,6 +365,8 @@ msgid ""
 "The bank account <b>IBAN %s</b> has been automatically added on the supplier "
 "<a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
 msgstr ""
+"Le compte bancaire <b>IBAN %s</b> a été automatiquement ajouté au "
+"fournisseur <a href=# data-oe-model=res.partner data-oe-id=%d>%s</a>"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
