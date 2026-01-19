@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-22 03:40+0000\n"
-"PO-Revision-Date: 2026-01-19 10:50+0000\n"
+"PO-Revision-Date: 2026-01-19 13:50+0000\n"
 "Last-Translator: EvaS595 <eva.saintier@horanet.com>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
@@ -375,6 +375,8 @@ msgid ""
 "The existing line '%s' doesn't have any product, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"La ligne existante \"%s\" n'a aucun produit, par conséquent <b>les lignes "
+"ont été mises à jour</b>."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -383,6 +385,8 @@ msgid ""
 "The product '%s' is used on several existing lines, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"Le produit \"%s\" est utilisé dans plusieurs lignes existantes, par "
+"conséquent <b>les lignes n'ont pas été mises à jour</b>."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
@@ -391,21 +395,23 @@ msgid ""
 "The product '%s' is used on several imported lines, so <b>the lines haven't "
 "been updated</b>."
 msgstr ""
+"Le produit \"%s\" est utilisé dans plusieurs lignes importées, par "
+"conséquent <b>les lignes n'ont pas été mises à jour</b>."
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "customer"
-msgstr ""
+msgstr "client"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "partner"
-msgstr ""
+msgstr "partenaire"
 
 #. module: base_business_document_import
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "supplier"
-msgstr ""
+msgstr "fournisseur"
