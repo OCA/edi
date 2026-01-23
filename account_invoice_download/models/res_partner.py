@@ -13,7 +13,10 @@ class ResPartner(models.Model):
         "partner_id",
         string="Download Configurations",
     )
-    download_config_count = fields.Integer(compute="_compute_download_config_count")
+    download_config_count = fields.Integer(
+        compute="_compute_download_config_count",
+        groups="account.group_account_invoice,account.group_account_readonly",
+    )
 
     @api.depends("download_config_ids")
     def _compute_download_config_count(self):
