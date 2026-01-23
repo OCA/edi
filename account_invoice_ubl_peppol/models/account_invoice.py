@@ -449,6 +449,15 @@ class AccountInvoice(models.Model):
                     node_name="ClassifiedTaxCategory",
                     version=version,
                 )
+            std_identification = item.find(ns["cac"] + "StandardItemIdentification")
+            if std_identification is not None:
+                std_identification_id = std_identification.find(ns["cbc"] + "ID")
+                if std_identification_id is not None:
+                    # UBL-DT-27: Scheme Agency ID attribute should not be present
+                    std_identification_id.attrib.pop("schemeAgencyID", None)
+                    if std_identification_id.attrib.get("schemeID") == "GTIN":
+                        # convert to the value from the iso 6523 icd list
+                        std_identification_id.attrib["schemeID"] = "0160"
 
     @api.multi
     def _ubl_add_attachments(self, parent_node, ns, version="2.1"):
