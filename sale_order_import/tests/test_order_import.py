@@ -18,13 +18,47 @@ class TestOrderImport(TestCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.partner1 = cls.env["res.partner"].create(
+            {
+                "is_company": True,
+                "name": "Test sale_order_import",
+                "email": "test_partner_so_import@ilovetests.com",
+            }
+        )
+        cls.product1 = cls.env["product.product"].create(
+            {
+                "name": "Test product sale_order_import 1",
+                "default_code": "TEST_SOIMPORT1",
+                "sale_ok": True,
+                "uom_id": cls.env.ref("uom.product_uom_unit").id,
+                "lst_price": 10.13,
+            }
+        )
+        cls.product2 = cls.env["product.product"].create(
+            {
+                "name": "Test product sale_order_import 2",
+                "default_code": "TEST_SOIMPORT2",
+                "sale_ok": True,
+                "uom_id": cls.env.ref("uom.product_uom_unit").id,
+                "lst_price": 10.12,
+            }
+        )
+        cls.product3 = cls.env["product.product"].create(
+            {
+                "name": "Test product sale_order_import 3",
+                "default_code": "TEST_SOIMPORT3",
+                "sale_ok": True,
+                "uom_id": cls.env.ref("uom.product_uom_unit").id,
+                "lst_price": 10.14,
+            }
+        )
         cls.parsed_order = {
-            "partner": {"email": "deco.addict82@example.com"},
+            "partner": {"email": "test_partner_so_import@ilovetests.com"},
             "date": "2018-08-14",
             "order_ref": "TEST1242",
             "lines": [
                 {
-                    "product": {"code": "FURN_8888"},
+                    "product": {"code": "TEST_SOIMPORT1"},
                     "qty": 2,
                     "uom": {"unece_code": "C62"},
                     "price_unit": 12.42,
@@ -45,16 +79,16 @@ class TestOrderImport(TestCommon):
         # Now update the order
         parsed_order_up = dict(
             self.parsed_order,
-            partner={"email": "agrolait@yourcompany.example.com"},
+            partner={"email": "test_partner_so_import@ilovetests.com"},
             lines=[
                 {
-                    "product": {"code": "FURN_8888"},
+                    "product": {"code": "TEST_SOIMPORT1"},
                     "qty": 3,
                     "uom": {"unece_code": "C62"},
                     "price_unit": 12.42,
                 },
                 {
-                    "product": {"code": "FURN_9999"},
+                    "product": {"code": "TEST_SOIMPORT2"},
                     "qty": 1,
                     "uom": {"unece_code": "C62"},
                     "price_unit": 1.42,
@@ -67,10 +101,10 @@ class TestOrderImport(TestCommon):
         # test raise UserError if not price_unit
         parsed_order_up_no_price_unit = dict(
             self.parsed_order,
-            partner={"email": "agrolait@yourcompany.example.com"},
+            partner={"email": "test_partner_so_import@ilovetests.com"},
             lines=[
                 {
-                    "product": {"code": "FURN_7777"},
+                    "product": {"code": "TEST_SOIMPORT3"},
                     "qty": 4,
                     "uom": {"unece_code": "C62"},
                 },
@@ -134,9 +168,9 @@ class TestOrderImport(TestCommon):
                 self.assertEqual(action["view_id"], False)
                 mocked.assert_called()
                 so = self.env["sale.order"].browse(action["res_id"])
-                self.assertEqual(so.partner_id.email, "deco.addict82@example.com")
+                self.assertEqual(so.partner_id, self.partner1)
                 self.assertEqual(so.client_order_ref, "TEST1242")
-                self.assertEqual(so.order_line.product_id.code, "FURN_8888")
+                self.assertEqual(so.order_line.product_id, self.product1)
                 self.assertEqual(so.state, "draft")
 
         # Create another form to update the above sale order
@@ -155,13 +189,13 @@ class TestOrderImport(TestCommon):
                     self.parsed_order,
                     lines=[
                         {
-                            "product": {"code": "FURN_8888"},
+                            "product": {"code": "TEST_SOIMPORT1"},
                             "qty": 3,
                             "uom": {"unece_code": "C62"},
                             "price_unit": 12.42,
                         },
                         {
-                            "product": {"code": "FURN_9999"},
+                            "product": {"code": "TEST_SOIMPORT2"},
                             "qty": 1,
                             "uom": {"unece_code": "C62"},
                             "price_unit": 1.42,
