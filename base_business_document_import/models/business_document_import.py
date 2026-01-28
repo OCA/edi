@@ -443,70 +443,58 @@ class BusinessDocumentImport(models.AbstractModel):
             'city': 'Paris',
             'zip': '69100',
             'country_code': 'FR',
-            }
-        The shipping partner can be any partner, not especially related to the
-        customer/supplier (partner argument)
+        }
         """
-        domain = domain or []
-        if partner_dict.get("street"):
-            if partner_dict.get("street_number"):
-                domain = expression.AND(
-                    [
-                        domain,
-                        [
-                            (
-                                "street",
-                                "in",
-                                [
-                                    "{} {}".format(
-                                        partner_dict.get("street"),
-                                        partner_dict.get("street_number"),
-                                    ),
-                                    "{} {}".format(
-                                        partner_dict.get("street_number"),
-                                        partner_dict.get("street"),
-                                    ),
-                                    "{}, {}".format(
-                                        partner_dict.get("street"),
-                                        partner_dict.get("street_number"),
-                                    ),
-                                    "{}, {}".format(
-                                        partner_dict.get("street_number"),
-                                        partner_dict.get("street"),
-                                    ),
-                                ],
-                            )
-                        ],
-                    ]
-                )
-            else:
-                domain = expression.AND(
-                    [
-                        domain,
-                        [
-                            ("street", "=", partner_dict.get("street")),
-                        ],
-                    ]
-                )
+        rpo = self.env["res.partner"]
+        address_fields = [
+            # non-relational address fields
+            x for x in self._get_address_fields()
+            if not isinstance(rpo[x], models.BaseModel)
+        ]
 
-        if partner_dict.get("street2"):
+        domain = domain or []
+        if partner_dict.get("street_number"):
+            address_fields.remove("street")
             domain = expression.AND(
                 [
                     domain,
                     [
-                        ("street2", "=", partner_dict.get("street2")),
+                        (
+                            "street",
+                            "in",
+                            [
+                                "{} {}".format(
+                                    partner_dict.get("street"),
+                                    partner_dict.get("street_number"),
+                                ),
+                                "{} {}".format(
+                                    partner_dict.get("street_number"),
+                                    partner_dict.get("street"),
+                                ),
+                                "{}, {}".format(
+                                    partner_dict.get("street"),
+                                    partner_dict.get("street_number"),
+                                ),
+                                "{}, {}".format(
+                                    partner_dict.get("street_number"),
+                                    partner_dict.get("street"),
+                                ),
+                            ],
+                        )
                     ],
                 ]
             )
-        if partner_dict.get("city"):
-            domain = expression.AND(
-                [
-                    domain,
+        
+        for field in address_fields:
+            if partner_dict.get(field):
+                domain = expression.AND(
                     [
-                        ("city", "=", partner_dict.get("city")),
-                    ],
-                ]
-            )
+                        domain,
+                        [
+                            (field, "=", partner_dict[field]),
+                        ],
+                    ]
+                )
 
         if type:
             domain_address = expression.AND([domain, [("type", "=", type)]])
@@ -578,6 +566,14 @@ class BusinessDocumentImport(models.AbstractModel):
             raise_exception,
         )
         return None
+
+    @api.model
+    def _get_address_fields(self):
+        """ Extension point, already compatible with `res.partner` inheritance
+            like `partner_address_street3`
+            :return: ['street', 'street2', 'zip', 'city', 'state_id', 'country_id']
+        """
+        return self.env["res.partner"]._address_fields()
 
     @api.model
     def _match_partner_bank(
