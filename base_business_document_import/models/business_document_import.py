@@ -417,8 +417,25 @@ class BusinessDocumentImport(models.AbstractModel):
     def _match_shipping_partner(
         self, partner_dict, partner, chatter_msg, domain=None, raise_exception=True
     ):
+        """
+        The shipping partner can be any partner, not especially related to the
+        customer/supplier (partner argument)
+        """
+        return self._match_partner_address(
+            partner_dict,
+            partner,
+            type="delivery",
+            chatter_msg=chatter_msg,
+            domain=domain or [],
+            raise_exception=raise_exception
+        )
+        
+    @api.model
+    def _match_partner_address(
+        self, partner_dict, partner, type, chatter_msg, domain=None, raise_exception=True
+    ):
         """Example:
-        shipping_dict = {
+        address_dict = {
             'email': 'contact@akretion.com',
             'name': 'Akretion France',
             'street': 'Long Avenue',
@@ -490,46 +507,46 @@ class BusinessDocumentImport(models.AbstractModel):
                     ],
                 ]
             )
-        if partner_dict.get("zip"):
-            domain = expression.AND(
-                [
-                    domain,
-                    [
-                        ("zip", "=", partner_dict.get("zip")),
-                    ],
-                ]
-            )
 
-        domain_delivery = expression.AND([domain, [("type", "=", "delivery")]])
+        if type:
+            domain_address = expression.AND([domain, [("type", "=", type)]])
+        else:
+            domain_address = domain
+        if not domain:
+            return
         partner = self._match_partner(
             partner_dict,
             chatter_msg,
             partner_type=False,
-            domain=domain_delivery,
+            domain=domain_address or domain,
             raise_exception=False,
         )
         if partner:
             return partner
+        # try with simple `search` with vat and email
         if not partner_dict.get("vat") and not partner_dict.get("email"):
-            partner = self.env["res.partner"].search(domain_delivery, limit=1)
-        if partner:
-            return partner
-        partner = self._match_partner(
-            partner_dict,
-            chatter_msg,
-            partner_type=False,
-            domain=domain,
-            raise_exception=False,
-        )
-        if partner:
-            return partner
+            partner = rpo.search(domain_address, limit=1)
+            if partner:
+                return partner
+        # try without address type
+        if domain_address != domain:
+            partner = self._match_partner(
+                partner_dict,
+                chatter_msg,
+                partner_type=False,
+                domain=domain,
+                raise_exception=False,
+            )
+            if partner:
+                return partner
+        # try with simple `search` with vat only
         if not partner_dict.get("vat"):
-            partner = self.env["res.partner"].search(domain, limit=1)
-        if partner:
-            return partner
+            partner = rpo.search(domain, limit=1)
+            if partner:
+                return partner
 
         self.user_error_wrap(
-            "_match_shipping_partner",
+            "_match_partner_address",
             partner_dict,
             self.env._(
                 "Odoo couldn't find any shipping partner corresponding to the "
