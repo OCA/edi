@@ -346,6 +346,11 @@ class AccountInvoiceImport(models.TransientModel):
             self._prepare_line_vals_nline(parsed_inv, import_config, vals, partner)
         else:
             self._prepare_line_vals_1line(parsed_inv, import_config, vals, partner)
+        # Write analytic distribution
+        analytic_distribution = import_config.get("analytic_distribution", False)
+        if analytic_distribution:
+            for line in vals["invoice_line_ids"]:
+                line[2]["analytic_distribution"] = analytic_distribution
         # if module account_invoice_check_total from OCA/account-invoicing is installed
         if hasattr(self.env["account.move"], "check_total"):
             vals["check_total"] = parsed_inv["amount_total"]
