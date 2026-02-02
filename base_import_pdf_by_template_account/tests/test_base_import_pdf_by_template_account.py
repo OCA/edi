@@ -82,7 +82,7 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                 "child_field_id": cls.env.ref(
                     "account.field_account_move__invoice_line_ids"
                 ).id,
-                "auto_detect_pattern": "(B 8 7 5 3 0 4 3 2)",
+                "auto_detect_pattern": "(B87530432)",
                 "header_items": "Producto,Cantidad,Precio,AnalyticDistribution",
                 "line_ids": [
                     (
@@ -140,7 +140,7 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                                 "account.field_account_move_line__quantity"
                             ).id,
                             "column": 1,
-                            "pattern": "\[[A-Z\d]+[_|-][A-Z\d]+\] [a-zA-Záí]* ([0-9]{1,3})",  # noqa: E501
+                            "pattern": "\[[A-Z\d]+[_|-][A-Z\d]+\] [a-zA-Záí ]* ([0-9]{1,3})",  # noqa: E501
                             "value_type": "variable",
                         },
                     ),
