@@ -26,7 +26,7 @@ class BusinessDocumentImport(models.AbstractModel):
         self, method, data_dict, error_msg, chatter_msg, raise_exception
     ):
         """The method and data_dict arguments are useful when you want to
-        inherit this method to update the error messag_match_currencye"""
+        inherit this method to update the error message match_currency"""
         assert error_msg
         if raise_exception:
             raise UserError(error_msg)
@@ -515,6 +515,8 @@ class BusinessDocumentImport(models.AbstractModel):
         )
         if partner:
             return partner
+        else:
+            chatter_msg.pop()
         # try with simple `search` with vat and email
         if not partner_dict.get("vat") and not partner_dict.get("email"):
             partner = rpo.search(domain_address, limit=1)
@@ -531,6 +533,8 @@ class BusinessDocumentImport(models.AbstractModel):
             )
             if partner:
                 return partner
+            else:
+                chatter_msg.pop()
         # try with simple `search` with vat only
         if not partner_dict.get("vat"):
             partner = rpo.search(domain, limit=1)
