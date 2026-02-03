@@ -486,12 +486,16 @@ class BusinessDocumentImport(models.AbstractModel):
             )
         
         for field in address_fields:
-            if partner_dict.get(field):
+            value = partner_dict.get(field)
+            if value:
+                if isinstance(value, str):
+                    value = value.strip()
+                
                 domain = expression.AND(
                     [
                         domain,
                         [
-                            (field, "=", partner_dict[field]),
+                            (field, "=ilike", value),
                         ],
                     ]
                 )
