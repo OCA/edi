@@ -424,15 +424,21 @@ class BusinessDocumentImport(models.AbstractModel):
         return self._match_partner_address(
             partner_dict,
             partner,
-            type="delivery",
+            address_type="delivery",
             chatter_msg=chatter_msg,
             domain=domain or [],
-            raise_exception=raise_exception
+            raise_exception=raise_exception,
         )
-        
+
     @api.model
     def _match_partner_address(
-        self, partner_dict, partner, type, chatter_msg, domain=None, raise_exception=True
+        self,
+        partner_dict,
+        partner,
+        address_type,
+        chatter_msg,
+        domain=None,
+        raise_exception=True,
     ):
         """Example:
         address_dict = {
@@ -448,7 +454,8 @@ class BusinessDocumentImport(models.AbstractModel):
         rpo = self.env["res.partner"]
         address_fields = [
             # non-relational address fields
-            x for x in self._get_address_fields()
+            x
+            for x in self._get_address_fields()
             if not isinstance(rpo[x], models.BaseModel)
         ]
 
@@ -484,13 +491,13 @@ class BusinessDocumentImport(models.AbstractModel):
                     ],
                 ]
             )
-        
+
         for field in address_fields:
             value = partner_dict.get(field)
             if value:
                 if isinstance(value, str):
                     value = value.strip()
-                
+
                 domain = expression.AND(
                     [
                         domain,
@@ -500,8 +507,8 @@ class BusinessDocumentImport(models.AbstractModel):
                     ]
                 )
 
-        if type:
-            domain_address = expression.AND([domain, [("type", "=", type)]])
+        if address_type:
+            domain_address = expression.AND([domain, [("type", "=", address_type)]])
         else:
             domain_address = domain
         if not domain:
@@ -548,6 +555,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 "Odoo couldn't find any shipping partner corresponding to the "
                 "following information extracted from the business document:\n"
                 "Name: %(name)s\n"
+                "Address type: %(address_type)s\n"
                 "VAT number: %(vat)s\n"
                 "Reference: %(ref)s\n"
                 "E-mail: %(email)s\n"
@@ -559,6 +567,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 "State code: %(state)s\n"
                 "Country code: %(country)s\n",
                 name=partner_dict.get("name") or "",
+                address_type=address_type or "",
                 vat=partner_dict.get("vat") or "",
                 ref=partner_dict.get("ref") or "",
                 email=partner_dict.get("email") or "",
@@ -577,9 +586,9 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _get_address_fields(self):
-        """ Extension point, already compatible with `res.partner` inheritance
-            like `partner_address_street3`
-            :return: ['street', 'street2', 'zip', 'city', 'state_id', 'country_id']
+        """Extension point, already compatible with `res.partner` inheritance
+        like `partner_address_street3`
+        :return: ['street', 'street2', 'zip', 'city', 'state_id', 'country_id']
         """
         return self.env["res.partner"]._address_fields()
 

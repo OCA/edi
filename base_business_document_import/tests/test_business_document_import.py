@@ -356,9 +356,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEqual(res, product1)
         # Match by seller
         product_dict = {"code": "TEST1242"}
-        res = bdio._match_product(
-            product_dict, [], seller=partner
-        )
+        res = bdio._match_product(product_dict, [], seller=partner)
         self.assertEqual(res, product1)
         raise_test = True
         try:
