@@ -1553,5 +1553,5 @@ class BusinessDocumentImport(models.AbstractModel):
             else:
                 msg = self.env._("<b>Notes in imported document:</b>")
             record.message_post(  # pylint: disable=translation-required
-                body="{} {}".format(msg, parsed_dict["note"])
+                body=Markup("{} {}".format(msg, parsed_dict["note"]))
             )
