@@ -6,7 +6,7 @@ from markupsafe import Markup
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from odoo.tests import Form
+from odoo.tests.form import Form
 
 logger = logging.getLogger(__name__)
 
@@ -197,70 +197,92 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         """Create record with Form() according to text."""
         text = self.data
         template = self.template_id
-        model = self.env[template.model]
         model = self.parent_id.record_ref or self.env[template.model]
         ctx = template._prepare_ctx_from_model(template.model)
         model_form = Form(model.with_context(**ctx))
-        # Try to set default values (very important if record_ref is already set)
-        # Example use case: Invoice created without a defined partner, the partner
-        # must be set at the beginning, before the lines, so that the values are
-        # appropriate (fiscal position).
+
+        # Set default values and header fields
+        extra_vals = self._set_default_values(model_form, model, ctx)
+        self._set_header_values(model_form, template, text)
+
+        # Process child lines
+        self._process_child_lines(model_form, template, text)
+
+        # Create or update record
+        record = self._create_or_update_record(model_form, model, ctx, extra_vals)
+
+        if self.log_text:
+            record.message_post(body=self.log_text)
+        return record
+
+    def _set_default_values(self, model_form, model, ctx):
+        """Set default values from context and return extra values."""
         extra_vals = {}
         for key in list(ctx.keys()):
             if key.startswith("default_"):
                 field_name = key.replace("default_", "")
                 field_value = ctx[key]
+                # Skip if field doesn't exist in model
+                if field_name not in model._fields:
+                    continue
                 if model._fields[field_name].type == "many2one":
                     field_value = model[field_name].browse(field_value)
                 try:
                     setattr(model_form, field_name, field_value)
                 except Exception:
                     extra_vals[field_name] = ctx[key]
-        # Set the values of the header in Form
+        return extra_vals
+
+    def _set_header_values(self, model_form, template, text):
+        """Set header field values in the form."""
         header_values = template._get_field_header_values(text)
-        for field_name in list(header_values.keys()):
-            field_data = header_values[field_name]
+        for field_name, field_data in header_values.items():
             self.with_context(
                 model_name=template.model, related_model="header"
             )._process_set_value_form(model_form, field_name, field_data)
-        # Repeat the process for lines
+
+    def _process_child_lines(self, model_form, template, text):
+        """Process and add child lines to the form."""
         table_info = template._get_table_info(text)
         lines_values = template._get_field_child_values(table_info)
+
         for line in lines_values:
             child_line = getattr(model_form, template.child_field_name)
             with child_line.new() as line_form:
-                # Fixed values (it is not possible to set context to lines)
-                child_fixed_values = template._get_fixed_fields_from_model(
-                    template.child_model
-                )
-                for field_name in list(child_fixed_values.keys()):
-                    child_field_value = child_fixed_values[field_name]
-                    try:
-                        setattr(line_form, field_name, child_field_value)
-                    except Exception:
-                        self._add_log_error_text(field_name, child_field_value)
-                # set the values of any line
-                for field_name in list(line.keys()):
-                    self.with_context(
-                        model_name=template.child_model, related_model="lines"
-                    )._process_set_value_form(line_form, field_name, line[field_name])
+                self._set_child_fixed_values(line_form, template)
+                self._set_child_line_values(line_form, template, line)
+
+    def _set_child_fixed_values(self, line_form, template):
+        """Set fixed values for child lines."""
+        child_fixed_values = template._get_fixed_fields_from_model(template.child_model)
+        for field_name, child_field_value in child_fixed_values.items():
+            try:
+                setattr(line_form, field_name, child_field_value)
+            except Exception:
+                self._add_log_error_text(field_name, child_field_value)
+
+    def _set_child_line_values(self, line_form, template, line):
+        """Set extracted values for child lines."""
+        for field_name, field_value in line.items():
+            self.with_context(
+                model_name=template.child_model, related_model="lines"
+            )._process_set_value_form(line_form, field_name, field_value)
+
+    def _create_or_update_record(self, model_form, model, ctx, extra_vals):
+        """Create or update the record with form values."""
         try:
-            # Prepare vals (similar to .save()) + apply defaults (in case it has changed
-            # in some onchange for example: warehouse_id from sale orders)
             vals = model_form._get_save_values()
             for f_name in extra_vals:
                 if f_name in vals and not self.parent_id.record_ref:
                     vals.update({f_name: extra_vals[f_name]})
                 elif self.parent_id.record_ref:
                     vals.update({f_name: extra_vals[f_name]})
-            # Create or update
+
             if self.parent_id.record_ref:
                 model.with_context(**ctx).write(vals)
                 record = self.parent_id.record_ref
             else:
                 record = model.with_context(**ctx).create(vals)
+            return record
         except AssertionError as err:
             raise UserError(err) from err
-        if self.log_text:
-            record._message_log(body=self.log_text)
-        return record

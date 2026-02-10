@@ -4,12 +4,12 @@
         <field name="name">base.import.pdf.template.line.tree</field>
         <field name="model">base.import.pdf.template.line</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="related_model" />
                 <field name="field_id" />
                 <field name="search_field_id" />
                 <field name="value_type" />
-            </tree>
+            </list>
         </field>
     </record>
     <record id="base_import_pdf_template_line_view_form" model="ir.ui.view">
@@ -133,7 +133,7 @@
                             invisible="value_type == 'fixed' or (not field_relation and field_ttype != 'json')"
                         >
                             <field name="mapped_ids" nolabel="1">
-                                <tree editable="bottom">
+                                <list editable="bottom">
                                     <field name="origin" />
                                     <field
                                         name="value"
@@ -144,7 +144,7 @@
                                         string="Value"
                                         column_invisible="parent.field_ttype != 'json'"
                                     />
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
