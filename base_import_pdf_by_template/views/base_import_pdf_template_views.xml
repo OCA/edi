@@ -18,12 +18,12 @@
         <field name="name">base.import.pdf.template.tree</field>
         <field name="model">base.import.pdf.template</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="extraction_mode" />
                 <field name="model_id" />
                 <field name="company_id" groups="base.group_multi_company" />
-            </tree>
+            </list>
         </field>
     </record>
     <record id="base_import_pdf_template_view_form" model="ir.ui.view">
@@ -45,7 +45,7 @@
                     <widget
                         name="web_ribbon"
                         title="Archived"
-                        bg_color="bg-danger"
+                        bg_color="text-bg-danger"
                         invisible="active"
                     />
                     <div class="oe_title">
@@ -77,15 +77,12 @@
                         <page string="Lines" name="page_line_ids">
                             <field
                                 name="line_ids"
-                                context="{'tree_view_ref': 'base_import_pdf_by_template.base_import_pdf_template_line_view_tree', 'form_view_ref':'base_import_pdf_by_template.base_import_pdf_template_line_view_form', 'default_model_id': model_id}"
+                                context="{'list_view_ref': 'base_import_pdf_by_template.base_import_pdf_template_line_view_tree', 'form_view_ref':'base_import_pdf_by_template.base_import_pdf_template_line_view_form', 'default_model_id': model_id}"
                             />
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers" />
-                    <field name="message_ids" widget="mail_thread" />
-                </div>
+                <chatter />
             </form>
         </field>
     </record>
@@ -93,7 +90,7 @@
         <field name="name">Templates</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">base.import.pdf.template</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem
         id="menu_base_import_pdf_by_template_root"

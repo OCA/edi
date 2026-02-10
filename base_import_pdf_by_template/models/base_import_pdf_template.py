@@ -4,12 +4,12 @@ import json
 import re
 from datetime import datetime
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class BaseImportPdfTemplate(models.Model):
     _name = "base.import.pdf.template"
-    _inherit = ["mail.thread"]
+    _inherit = "mail.thread"
     _description = "Base Import Pdf Template"
     _order = "name desc"
 
@@ -127,7 +127,7 @@ class BaseImportPdfTemplate(models.Model):
         ctx = dict(self.env.context)
         fixed_fields = self._get_fixed_fields_from_model(model)
         for fixed_key in list(fixed_fields.keys()):
-            ctx_key = "default_%s" % fixed_key
+            ctx_key = f"default_{fixed_key}"
             fixed_value = fixed_fields[fixed_key]
             if isinstance(fixed_value, models.Model):
                 fixed_value = fixed_value.id
@@ -196,7 +196,7 @@ class BaseImportPdfTemplateLine(models.Model):
         ondelete="cascade",
     )
     related_model = fields.Selection(
-        selection=[("header", _("Header")), ("lines", _("Lines"))],
+        selection="_selection_related_model",
         default="header",
         string="Related model",
     )
@@ -240,28 +240,10 @@ class BaseImportPdfTemplateLine(models.Model):
         string="Default value",
     )
     date_format = fields.Selection(
-        selection=[
-            ("*Y-*d-*m", _("YY-dd-MM")),
-            ("*m-*d-*Y", _("MM-dd-YY")),
-            ("*d-*m-*Y", _("dd-MM-YY")),
-            ("*Y/*d/*m", _("YY/dd/MM")),
-            ("*m/*d/*Y", _("MM/dd/YY")),
-            ("*d.*m.*Y", _("dd.MM.YY")),
-            ("*d.*m.*y-short", _("dd.MM.yy")),
-            ("*d/*m/*Y", _("dd/MM/YY")),
-            ("*d/*m/*y-short", _("dd/MM/yy")),
-            ("*B *d, *Y", _("B dd, YY")),
-            ("*b-short *d, *Y", _("b dd, YY")),
-            ("*d *b-short *Y", _("dd b YY")),
-            ("*d *B *Y", _("dd B YY")),
-            ("*d-*b-*y", _("dd-b-yy")),
-            ("*d-*b-short-*Y", _("dd-b-YY")),
-        ],
+        selection="_selection_date_format",
     )
     time_format = fields.Selection(
-        selection=[
-            ("*H:*M:*S", _("H:M:S")),
-        ],
+        selection="_selection_time_format",
     )
     decimal_separator = fields.Selection(
         selection=[
@@ -271,12 +253,7 @@ class BaseImportPdfTemplateLine(models.Model):
         default="dot",
     )
     thousand_separator = fields.Selection(
-        selection=[
-            ("none", _("None")),
-            ("space", _("Space ( )")),
-            ("dot", _("Dot (.)")),
-            ("comma", _("Comma (,)")),
-        ],
+        selection="_selection_thousand_separator",
         default="none",
     )
     log_distinct_value = fields.Boolean(
@@ -285,10 +262,7 @@ class BaseImportPdfTemplateLine(models.Model):
         they are different.""",
     )
     value_type = fields.Selection(
-        selection=[
-            ("fixed", _("Fixed")),
-            ("variable", _("Variable")),
-        ],
+        selection="_selection_value_type",
         default="variable",
         string="Value type",
     )
@@ -319,6 +293,55 @@ class BaseImportPdfTemplateLine(models.Model):
             .search([("transient", "=", False)], order="name asc")
         )
         return [(model.model, model.name) for model in models]
+
+    @api.model
+    def _selection_related_model(self):
+        return [
+            ("header", self.env._("Header")),
+            ("lines", self.env._("Lines")),
+        ]
+
+    @api.model
+    def _selection_date_format(self):
+        return [
+            ("*Y-*d-*m", self.env._("YY-dd-MM")),
+            ("*m-*d-*Y", self.env._("MM-dd-YY")),
+            ("*d-*m-*Y", self.env._("dd-MM-YY")),
+            ("*Y/*d/*m", self.env._("YY/dd/MM")),
+            ("*m/*d/*Y", self.env._("MM/dd/YY")),
+            ("*d.*m.*Y", self.env._("dd.MM.YY")),
+            ("*d.*m.*y-short", self.env._("dd.MM.yy")),
+            ("*d/*m/*Y", self.env._("dd/MM/YY")),
+            ("*d/*m/*y-short", self.env._("dd/MM/yy")),
+            ("*B *d, *Y", self.env._("B dd, YY")),
+            ("*b-short *d, *Y", self.env._("b dd, YY")),
+            ("*d *b-short *Y", self.env._("dd b YY")),
+            ("*d *B *Y", self.env._("dd B YY")),
+            ("*d-*b-*y", self.env._("dd-b-yy")),
+            ("*d-*b-short-*Y", self.env._("dd-b-YY")),
+        ]
+
+    @api.model
+    def _selection_time_format(self):
+        return [
+            ("*H:*M:*S", self.env._("H:M:S")),
+        ]
+
+    @api.model
+    def _selection_thousand_separator(self):
+        return [
+            ("none", self.env._("None")),
+            ("space", self.env._("Space ( )")),
+            ("dot", self.env._("Dot (.)")),
+            ("comma", self.env._("Comma (,)")),
+        ]
+
+    @api.model
+    def _selection_value_type(self):
+        return [
+            ("fixed", self.env._("Fixed")),
+            ("variable", self.env._("Variable")),
+        ]
 
     @api.onchange("value_type")
     def _onchange_value_type(self):

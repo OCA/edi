@@ -34,7 +34,7 @@ class WizardBaseImportPdfMixin(models.AbstractModel):
     def simple_pdf_text_extraction(self, file_data):
         fileobj = NamedTemporaryFile("wb", prefix="odoo-simple-pdf-", suffix=".pdf")
         fileobj.write(file_data)
-        method = "_pdf_text_extraction_%s" % self.extraction_mode
+        method = f"_pdf_text_extraction_{self.extraction_mode}"
         res = False
         if hasattr(self, method):
             res = getattr(self, method)(fileobj)
