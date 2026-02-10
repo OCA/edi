@@ -522,14 +522,12 @@ class BusinessDocumentImport(models.AbstractModel):
         )
         if partner:
             return partner
-        else:
-            chatter_msg.pop()
-        # try with simple `search` with vat and email
+        elif chatter_msg:
+            chatter_msg.pop()  # clean message from _match_partner
         if not partner_dict.get("vat") and not partner_dict.get("email"):
             partner = rpo.search(domain_address, limit=1)
             if partner:
                 return partner
-        # try without address type
         if domain_address != domain:
             partner = self._match_partner(
                 partner_dict,
@@ -540,9 +538,8 @@ class BusinessDocumentImport(models.AbstractModel):
             )
             if partner:
                 return partner
-            else:
-                chatter_msg.pop()
-        # try with simple `search` with vat only
+            elif chatter_msg:
+                chatter_msg.pop()  # clean message from _match_partner
         if not partner_dict.get("vat"):
             partner = rpo.search(domain, limit=1)
             if partner:
@@ -588,9 +585,9 @@ class BusinessDocumentImport(models.AbstractModel):
     def _get_address_fields(self):
         """Extension point, already compatible with `res.partner` inheritance
         like `partner_address_street3`
-        :return: ['street', 'street2', 'zip', 'city', 'state_id', 'country_id']
+        :return: ['street', 'street2', 'zip', 'city', 'state_id', 'country_id', 'email']
         """
-        return self.env["res.partner"]._address_fields()
+        return self.env["res.partner"]._address_fields() + ["email"]
 
     @api.model
     def _match_partner_bank(
