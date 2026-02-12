@@ -75,7 +75,8 @@ class WizardBaseImportPdfUpload(models.TransientModel):
         for line in self.line_ids.filtered("template_id"):
             try:
                 records += line.action_process()
-            except Exception:
+            except Exception as e:
+                logger.info(e)
                 if not self.env.context.get("skip_template_not_found_error"):
                     raise
         action = {
@@ -190,7 +191,8 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         else:
             try:
                 setattr(_form, field_name, value)
-            except Exception:
+            except Exception as e:
+                logger.info(e)
                 self._add_log_error_text(field_name, value)
 
     def _process_form(self):
@@ -207,14 +209,18 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         # appropriate (fiscal position).
         extra_vals = {}
         for key in list(ctx.keys()):
-            if key.startswith("default_"):
+            # It is important to skip this field, when using fetchmail it
+            # is defined as default_ but it does not exist and there
+            # would be an error preventing the record from being created.
+            if key.startswith("default_") and key != "default_fetchmail_server_id":
                 field_name = key.replace("default_", "")
                 field_value = ctx[key]
                 if model._fields[field_name].type == "many2one":
                     field_value = model[field_name].browse(field_value)
                 try:
                     setattr(model_form, field_name, field_value)
-                except Exception:
+                except Exception as e:
+                    logger.info(e)
                     extra_vals[field_name] = ctx[key]
         # Set the values of the header in Form
         header_values = template._get_field_header_values(text)
@@ -237,7 +243,8 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                     child_field_value = child_fixed_values[field_name]
                     try:
                         setattr(line_form, field_name, child_field_value)
-                    except Exception:
+                    except Exception as e:
+                        logger.info(e)
                         self._add_log_error_text(field_name, child_field_value)
                 # set the values of any line
                 for field_name in list(line.keys()):
