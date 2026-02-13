@@ -2,6 +2,8 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from markupsafe import Markup
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -18,7 +20,8 @@ class ResPartner(models.Model):
         "account.account",
         company_dependent=True,
         string="Default Expense Account",
-        domain="[('deprecated', '=', False), ('company_id', '=', current_company_id)]",
+        domain="[('deprecated', '=', False), "
+        "('company_id', '=', current_company_id)]",
         help="The account configured here will be updated by the mapping of the "
         "fiscal position.",
     )
@@ -26,8 +29,10 @@ class ResPartner(models.Model):
     invoice_import_tax_ids = fields.Many2many(
         "account.tax",
         string="Default Taxes",
-        domain="[('type_tax_use', '=', 'purchase'), ('company_id', '=', current_company_id)]",
-        help="Taxes configured here will go through the mapping of the fiscal position.",
+        domain="[('type_tax_use', '=', 'purchase'), "
+        "('company_id', '=', current_company_id)]",
+        help="Taxes configured here will go through the mapping of the "
+        "fiscal position.",
     )
     # FORCE VALUE fields
     invoice_import_single_line = fields.Boolean(
@@ -92,12 +97,14 @@ class ResPartner(models.Model):
         invoice_import_move = self.invoice_import_move_id
         assert invoice_import_move
         self.write({"invoice_import_move_id": False})
-        # I don't write an href link to the invoice to avoid multi-company access
-        # right issues
+        # I don't write a link to the invoice in the partner's chatter because
+        # it could cause multi-company issues
         self.message_post(
-            body=_(
-                "Partner has been created from the wizard "
-                "<em>Create or Update Partner</em> of vendor bill import."
+            body=Markup(
+                _(
+                    "Partner has been created from the wizard "
+                    "<em>Create or Update Partner</em> of vendor bill import."
+                )
             )
         )
         if invoice_import_move.partner_id:
@@ -110,12 +117,14 @@ class ResPartner(models.Model):
             )
         invoice_import_move._invoice_import_set_partner_and_update_lines(self)
         invoice_import_move.message_post(
-            body=_(
-                "Partner <a href=# data-oe-model=res.partner "
-                "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
-                "created via the wizard <em>Create or update partner</em>.",
-                partner_id=self.id,
-                partner_name=self.display_name,
+            body=Markup(
+                _(
+                    "Partner <a href=# data-oe-model=res.partner "
+                    "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
+                    "created via the wizard <em>Create or update partner</em>.",
+                    partner_id=self.id,
+                    partner_name=self.display_name,
+                )
             )
         )
         action = self.env["ir.actions.actions"]._for_xml_id(
@@ -156,8 +165,10 @@ class ResPartner(models.Model):
             # I don't write a link to the imported invoice in the chatter because
             # it could cause multi-company access-right issues
             self.message_post(
-                body=_(
-                    "Partner updated via the wizard <em>Create or Update Partner</em> "
-                    "of Vendor Bill import."
+                body=Markup(
+                    _(
+                        "Partner updated via the wizard "
+                        "<em>Create or Update Partner</em> of Vendor Bill import."
+                    )
                 )
             )

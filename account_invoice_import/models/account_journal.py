@@ -8,7 +8,7 @@ from odoo import Command, models
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
-    def create_document_from_attachment(self, attachment_ids=None):
+    def create_document_from_attachment(self, attachment_ids):
         """Inherit native method used when clicking on the 'Upload' button from the
         Vendor Bill tree view"""
         if self:
