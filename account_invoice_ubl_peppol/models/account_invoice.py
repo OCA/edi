@@ -391,16 +391,16 @@ class AccountInvoice(models.Model):
         # PEPPOL-EN16931-R053: Only one tax total with tax subtotals MUST be provided.
         tax_total_node = xml_root.find(ns["cac"] + "TaxTotal")
         if tax_total_node is not None:
-            tax_subtotal_node = tax_total_node.find(ns["cac"] + "TaxSubtotal")
+            tax_subtotal_nodes = tax_total_node.findall(ns["cac"] + "TaxSubtotal")
 
             # UBL-CR-499: A UBL invoice should not include the TaxTotal
             # TaxSubtotal Percent
-            if tax_subtotal_node is not None:
+            for tax_subtotal_node in tax_subtotal_nodes:
                 tax_perc = tax_subtotal_node.find(ns["cbc"] + "Percent")
                 if tax_perc is not None:
                     tax_subtotal_node.remove(tax_perc)
 
-            if tax_subtotal_node is None and self.company_id.ubl_default_tax:
+            if not tax_subtotal_nodes and self.company_id.ubl_default_tax:
                 cur_name = self.currency_id.name
                 self._ubl_add_tax_subtotal(
                     self.amount_untaxed,
