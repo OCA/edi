@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template
+        id="edi_exchange_outbound_instruction"
+        name="Render GS1 Outbound Instruction"
+    >
+        <warehousing_outbound_instruction:warehousingOutboundInstructionMessage
+            xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+            xmlns:warehousing_outbound_instruction="urn:gs1:ecom:warehousing_outbound_instruction:xsd:3"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
+            <t
+                t-raw="render_edi_template(exchange_record, 'gs1.BusinessHeader', sender=sender, receiver=ls_seller, doc_type='Warehousing Outbound Instruction')"
+            />
+            <t t-set="instruction_info" t-value="info.warehousingOutboundInstruction" />
+            <t
+                t-set="shipment_info"
+                t-value="instruction_info.warehousingOutboundInstructionShipment"
+            />
+            <t t-set="purchase_order" t-value="record.purchase_id" />
+            <warehousingOutboundInstruction>
+                <creationDateTime t-esc="utc_now()" />
+                <documentStatusCode>ORIGINAL</documentStatusCode>
+                <documentActionCode>ADD</documentActionCode>
+                <warehousingOutboundInstructionIdentification>
+                    <entityIdentification
+                        t-esc="record.name"
+                    >WH/OUT/123456789</entityIdentification>
+                </warehousingOutboundInstructionIdentification>
+                <logisticServicesBuyer>
+                    <gln t-esc="ls_buyer.gln_code" />
+                </logisticServicesBuyer>
+                <logisticServicesSeller>
+                    <gln t-esc="ls_seller.gln_code" />
+                </logisticServicesSeller>
+                <warehousingOutboundInstructionShipment>
+                    <note
+                        languageCode="en"
+                        t-if="record.note"
+                        t-esc="record.note"
+                    >Something important to know!</note>
+                    <shipmentIdentification>
+                        <additionalShipmentIdentification
+                            t-esc="shipment_info.shipmentIdentification.additionalShipmentIdentification.value"
+                            t-att="shipment_info.shipmentIdentification.additionalShipmentIdentification.attrs"
+                            additionalShipmentIdentificationTypeCode="GOODS_RECEIVER_ASSIGNED"
+                        >WH/IN/00014</additionalShipmentIdentification>
+                    </shipmentIdentification>
+                    <t t-set="shipper" t-value="shipment_info.shipper" />
+                    <shipper>
+                        <t t-call="edi_gs1.edi_exchange_contact_details">
+                            <t t-set="contact" t-value="shipper" />
+                        </t>
+                    </shipper>
+                    <receiver>
+                        <t t-call="edi_gs1.edi_exchange_contact_details">
+                            <t t-set="contact" t-value="receiver" />
+                        </t>
+                    </receiver>
+                    <shipTo>
+                        <t t-call="edi_gs1.edi_exchange_contact_details">
+                            <t t-set="contact" t-value="shipto" />
+                        </t>
+                    </shipTo>
+                    <deliveryTerms t-if="TODO">
+                        <incotermsCode>???</incotermsCode>
+                        <deliveryTermsLocation>???</deliveryTermsLocation>
+                    </deliveryTerms>
+                    <transactionalReference t-if="TODO">
+                        <entityIdentification>SO00001</entityIdentification>
+                        <creationDateTime
+                        >2020-01-07T21:15:00.000+01:00</creationDateTime>
+                        <transactionalReferenceTypeCode
+                        >VN</transactionalReferenceTypeCode>
+                        <referencedDocumentUrl
+                        >https://possible.url/to/delivery-document</referencedDocumentUrl>
+                    </transactionalReference>
+                    <t t-foreach="shipment_info.packageTotal" t-as="package_total">
+                        <packageTotal>
+                            <packageTypeCode
+                                t-esc="package_total.packageTypeCode"
+                            >AF</packageTypeCode>
+                            <totalPackageQuantity
+                                t-esc="package_total.totalPackageQuantity"
+                            >2</totalPackageQuantity>
+                            <totalGrossWeight
+                                t-if="package_total.totalGrossWeight"
+                                t-att="package_total.totalGrossWeight.attrs"
+                                t-esc="package_total.totalGrossWeight.value"
+                            >6.0</totalGrossWeight>
+                        </packageTotal>
+                    </t>
+                    <handlingInstruction t-if="TODO">
+                        <handlingInstructionCode>11</handlingInstructionCode>
+                    </handlingInstruction>
+                    <warehousingDespatchTypeCode
+                        t-esc="shipment_info.warehousingDespatchTypeCode"
+                    />
+                    <warehousingDeliveryInstructionCode
+                        t-if="TODO"
+                    >PRIORITY_DESPATCH</warehousingDeliveryInstructionCode>
+                    <plannedDespatch t-if="shipment_info.plannedDespatch">
+                        <logisticEventPeriod
+                            t-if="shipment_info.plannedDespatch.logisticEventPeriod"
+                        >
+                            <beginDate
+                                t-if="shipment_info.plannedDespatch.logisticEventPeriod.beginDate"
+                                t-esc="shipment_info.plannedDespatch.logisticEventPeriod.beginDate"
+                            />
+                        </logisticEventPeriod>
+                    </plannedDespatch>
+                    <t t-foreach="shipment_info._shipment_items" t-as="ship_item">
+                        <t
+                            t-set="trade_item"
+                            t-value="ship_item.transactionalTradeItem"
+                        />
+                        <t t-set="avp_list" t-value="ship_item.avpList" />
+                        <warehousingOutboundInstructionShipmentItem>
+                            <lineItemNumber
+                                t-esc="ship_item.lineItemNumber"
+                            >1</lineItemNumber>
+                            <note
+                                t-if="ship_item.note and ship_item.note.value"
+                                t-att="ship_item.note.attrs"
+                                t-esc="ship_item.note.value"
+                            />
+                            <transactionalTradeItem>
+                                <gtin t-esc="trade_item.gtin">11111111111111</gtin>
+                                <additionalTradeItemIdentification
+                                    t-if="trade_item.additionalTradeItemIdentification"
+                                    t-att="trade_item.additionalTradeItemIdentification.attrs"
+                                    t-esc="trade_item.additionalTradeItemIdentification.value"
+                                    additionalTradeItemIdentificationTypeCode="BUYER_ASSIGNED"
+                                >102150001001000010003200010311101101</additionalTradeItemIdentification>
+                                <t
+                                    t-foreach="trade_item.transactionalItemData"
+                                    t-as="trans_item_data"
+                                >
+                                    <transactionalItemData>
+                                        <batchNumber
+                                            t-if="trans_item_data.batchNumber"
+                                            t-esc="trans_item_data.batchNumber"
+                                        />
+                                        <bestBeforeDate
+                                            t-if="trans_item_data.bestBeforeDate"
+                                            t-esc="trans_item_data.bestBeforeDate"
+                                        />
+                                        <countryOfOrigin
+                                            t-if="trans_item_data.countryOfOrigin"
+                                            t-esc="trans_item_data.countryOfOrigin"
+                                        />
+                                        <itemExpirationDate
+                                            t-if="trans_item_data.itemExpirationDate"
+                                            t-esc="trans_item_data.itemExpirationDate"
+                                        />
+                                        <productionDate
+                                            t-if="trans_item_data.productionDate"
+                                            t-esc="trans_item_data.productionDate"
+                                        />
+                                    </transactionalItemData>
+                                </t>
+                            </transactionalTradeItem>
+                            <t
+                                t-foreach="ship_item.inventoryDutyFeeTaxStatus"
+                                t-as="inventory_tax_status"
+                            >
+                                <inventoryDutyFeeTaxStatus>
+                                    <dutyFeeTaxTypeCode
+                                        t-if="inventory_tax_status.dutyFeeTaxTypeCode"
+                                        t-esc="inventory_tax_status.dutyFeeTaxTypeCode"
+                                    />
+                                    <customsWarehouseStatusCode
+                                        t-if="inventory_tax_status.customsWarehouseStatusCode"
+                                        t-esc="inventory_tax_status.customsWarehouseStatusCode"
+                                    />
+                                </inventoryDutyFeeTaxStatus>
+                            </t>
+                            <avpList t-if="avp_list">
+                                <t t-foreach="avp_list" t-as="avp_list_item">
+                                    <eComStringAttributeValuePairList
+                                        t-att="avp_list_item.attrs"
+                                        t-esc="avp_list_item.value"
+                                    >TRUE</eComStringAttributeValuePairList>
+                                </t>
+                            </avpList>
+                            <plannedDespatchQuantity
+                                t-att="ship_item._plannedQty.attrs"
+                                t-esc="ship_item._plannedQty.value"
+                                measurementUnitCode="KGM"
+                            >300.0</plannedDespatchQuantity>
+                        </warehousingOutboundInstructionShipmentItem>
+                    </t>
+                </warehousingOutboundInstructionShipment>
+            </warehousingOutboundInstruction>
+        </warehousing_outbound_instruction:warehousingOutboundInstructionMessage>
+    </template>
+</odoo>

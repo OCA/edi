@@ -72,8 +72,8 @@ class EDIStorageCheckComponentMixin(Component):
 
     # FIXME: this is not used ATM -> should be refactored
     # into an incoming exchange.
-    # The backend will look for records needing an ack
-    # and generate and ack record.
+    # Backend now calls `_exchange_check_ack_needed`
+    # to create ack records when needed
     def _exchange_output_handle_ack(self):
         ack_type = self.exchange_record.type_id.ack_type_id
         filename = ack_type._make_exchange_filename(self.exchange_record)

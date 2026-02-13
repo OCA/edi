@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<application_receipt_acknowledgement:applicationReceiptAcknowledgementMessage
+    xmlns:application_receipt_acknowledgement="urn:gs1:ecom:application_receipt_acknowledgement:xsd:3"
+    xmlns:sh="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:gs1:ecom:application_receipt_acknowledgement:xsd:3 ../Schemas/gs1/ecom/ApplicationReceiptAcknowledgement.xsd"
+>
+    <sh:StandardBusinessDocumentHeader>
+        <sh:HeaderVersion>1.0</sh:HeaderVersion>
+        <sh:Sender>
+            <sh:Identifier Authority="GS1" />
+            <sh:ContactInformation>
+                <sh:Contact>John Doe</sh:Contact>
+                <sh:EmailAddress>John_Doe@purchasing.XYZretailer.com</sh:EmailAddress>
+                <sh:FaxNumber>+1-212-555-1213</sh:FaxNumber>
+                <sh:TelephoneNumber>+1-212-555-2122</sh:TelephoneNumber>
+                <sh:ContactTypeIdentifier>Buyer</sh:ContactTypeIdentifier>
+            </sh:ContactInformation>
+        </sh:Sender>
+        <sh:Receiver>
+            <sh:Identifier Authority="GS1" />
+            <sh:ContactInformation>
+                <sh:Contact>Mary Smith</sh:Contact>
+                <sh:EmailAddress>Mary_Smith@widgets.com</sh:EmailAddress>
+                <sh:FaxNumber>+1-312-555-1214</sh:FaxNumber>
+                <sh:TelephoneNumber>+1-312-555-2125</sh:TelephoneNumber>
+                <sh:ContactTypeIdentifier>Seller</sh:ContactTypeIdentifier>
+            </sh:ContactInformation>
+        </sh:Receiver>
+        <sh:DocumentIdentification>
+            <sh:Standard>GS1</sh:Standard>
+            <sh:TypeVersion>3.4</sh:TypeVersion>
+            <sh:InstanceIdentifier>100002</sh:InstanceIdentifier>
+            <sh:Type />
+            <sh:MultipleType>false</sh:MultipleType>
+            <sh:CreationDateAndTime
+            >2006-01-10T12:00:01.000-05:00</sh:CreationDateAndTime>
+        </sh:DocumentIdentification>
+    </sh:StandardBusinessDocumentHeader>
+    <applicationReceiptAcknowledgement>
+        <creationDateTime>2011-03-11T11:43:00.000-05:00</creationDateTime>
+        <documentStatusCode>ORIGINAL</documentStatusCode>
+        <applicationReceiptAcknowledgementIdentification>
+            <entityIdentification>RA0009</entityIdentification>
+            <contentOwner>
+                <gln>4098765000010</gln>
+            </contentOwner>
+        </applicationReceiptAcknowledgementIdentification>
+        <applicationResponseDocumentLevel>
+            <applicationResponseStatusCode>ERROR</applicationResponseStatusCode>
+            <originalDocumentCreationDateTime
+            >2011-03-11T11:00:00.000-05:00</originalDocumentCreationDateTime>
+            <originalDocumentType>35</originalDocumentType>
+            <originalEntityIdentification>
+                <entityIdentification>PO3352</entityIdentification>
+                <contentOwner>
+                    <gln>5412345000013</gln>
+                </contentOwner>
+            </originalEntityIdentification>
+            <applicationResponseErrorOrWarning>
+                <errorOrWarningCode>INCOMPLETE_MESSAGE</errorOrWarningCode>
+            </applicationResponseErrorOrWarning>
+        </applicationResponseDocumentLevel>
+    </applicationReceiptAcknowledgement>
+</application_receipt_acknowledgement:applicationReceiptAcknowledgementMessage>
