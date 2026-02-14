@@ -1,4 +1,5 @@
 # Copyright 2015-2021 Akretion France (http://www.akretion.com/)
+# Copyright 2026 Michael Tietz (MT Software) <mtietz@mt-software.de>
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -140,17 +141,14 @@ class TestFacturx(TransactionCase):
                 "invoice_date_due": "2014-04-01",
                 "partner_xmlid": "mvm_musterhafter",
             },
-            # Disabled due to a bug in the XML
             # Contains Charge + allowance
-            # 'ZUGFeRD_1p0_COMFORT_Rabatte.pdf': {
-            #    'invoice_number': '471102',
-            #    'amount_untaxed': 193.77,
-            # There is a bug in the total amount of the last line
-            # (55.46 ; right value is 20 x 2.7700 = 55.40)
-            #    'amount_total': 215.14,
-            #    'invoice_date': '2013-06-05',
-            #    'partner_xmlid': 'lieferant',
-            #    },
+            "EN16931_Rabatte_fx.pdf": {
+                "invoice_number": "471102",
+                "amount_untaxed": 193.77,
+                "amount_total": 215.07,
+                "invoice_date": "2025-06-05",
+                "partner_xmlid": "lieferant",
+            },
             # has AllowanceTotalAmount
             "ZUGFeRD_1p0_COMFORT_Rechnungskorrektur.pdf": {
                 "type": "in_refund",
