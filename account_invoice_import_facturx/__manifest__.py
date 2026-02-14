@@ -1,4 +1,5 @@
 # Copyright 2015-2021 Akretion France (http://www.akretion.com/)
+# Copyright 2026 Michael Tietz (MT Software) <mtietz@mt-software.de>
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -13,7 +14,10 @@
     "website": "https://github.com/OCA/edi",
     "depends": ["account_invoice_import", "base_facturx"],
     "external_dependencies": {"python": ["factur-x"]},
-    "data": ["wizard/account_invoice_import_view.xml"],
+    "data": [
+        "wizard/account_invoice_import_view.xml",
+        "views/res_config_settings_views.xml",
+    ],
     "demo": ["demo/demo_data.xml"],
     "installable": True,
 }

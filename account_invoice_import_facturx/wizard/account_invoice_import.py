@@ -362,6 +362,8 @@ class AccountInvoiceImport(models.TransientModel):
             namespaces,
         )
         res = [line_vals]
+        if not self.company_id.invoice_import_facturx_allowance_separate_line:
+            return res
         for ac_element in iline_allowance_charge_xpath:
             acentry = self.parse_facturx_allowance_charge(
                 ac_element,
