@@ -1,4 +1,5 @@
 # Copyright 2015-2021 Akretion France (http://www.akretion.com/)
+# Copyright 2026 Michael Tietz (MT Software) <mtietz@mt-software.de>
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -269,6 +270,7 @@ class AccountInvoiceImport(models.TransientModel):
             acentry["taxes"] = self.parse_facturx_taxes(taxes_xpath, namespaces)
         else:
             acentry["taxes"] = global_taxes
+        acentry["price_subtotal"] = acentry["price_unit"] * acentry["qty"]
         return acentry
 
     @api.model
@@ -292,7 +294,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "/ram:EndDateTime/udt:DateTimeString"
             ],
         }
-        vals = self.xpath_to_dict_helper(iline, xpath_dict, namespaces)
+        line_vals = self.xpath_to_dict_helper(iline, xpath_dict, namespaces)
         price_unit_xpath = iline.xpath(
             "ram:SpecifiedSupplyChainTradeAgreement"
             "/ram:NetPriceProductTradePrice"
@@ -342,7 +344,7 @@ class AccountInvoiceImport(models.TransientModel):
             namespaces,
         )
         taxes = self.parse_facturx_taxes(taxes_xpath, namespaces)
-        vals.update(
+        line_vals.update(
             {
                 "qty": qty,
                 "uom": uom,
@@ -359,18 +361,23 @@ class AccountInvoiceImport(models.TransientModel):
             ],
             namespaces,
         )
-        res = [vals]
+        res = [line_vals]
         for ac_element in iline_allowance_charge_xpath:
             acentry = self.parse_facturx_allowance_charge(
                 ac_element,
                 taxes or global_taxes,
-                vals["name"],
+                line_vals["name"],
                 ac_qty_dict,
                 {},
                 namespaces,
             )
-            counters["lines"] += acentry["price_unit"] * acentry["qty"]
+            acentry_price_subtotal = acentry["price_subtotal"]
+            counters["lines"] += acentry_price_subtotal
             res.append(acentry)
+            price_unit_update = acentry_price_subtotal / line_vals["qty"]
+            price_subtotal_update = acentry_price_subtotal
+            line_vals["price_unit"] -= price_unit_update
+            line_vals["price_subtotal"] -= price_subtotal_update
         return res
 
     @api.model
