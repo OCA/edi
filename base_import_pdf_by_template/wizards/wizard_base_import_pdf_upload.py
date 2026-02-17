@@ -215,7 +215,10 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
             if key.startswith("default_") and key != "default_fetchmail_server_id":
                 field_name = key.replace("default_", "")
                 field_value = ctx[key]
-                if model._fields[field_name].type == "many2one":
+                if (
+                    field_name in model._fields
+                    and model._fields[field_name].type == "many2one"
+                ):
                     field_value = model[field_name].browse(field_value)
                 try:
                     setattr(model_form, field_name, field_value)
