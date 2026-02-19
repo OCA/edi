@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 try:
     from invoice2data.extract.loader import read_templates
-    from invoice2data.main import extract_data, logger as loggeri2data
+    from invoice2data.main import extract_data
+    from invoice2data.main import logger as loggeri2data
 except ImportError:
     logger.debug("Cannot import invoice2data")
 try:

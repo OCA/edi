@@ -1,2 +1,0 @@
-* Alexis de Lattre <alexis.delattre@akretion.com>
-* Marwan Behillil <marwan.behillil@gmail.com>
