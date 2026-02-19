@@ -19,6 +19,8 @@ class TestInvoiceImport(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        # Activate EUR currency
+        cls.env.ref("base.EUR").write({"active": True})
         frtax = cls.env["account.tax"].create(
             {
                 "name": "French VAT purchase 20.0%",
@@ -26,6 +28,7 @@ class TestInvoiceImport(TransactionCase):
                 "amount": 20,
                 "amount_type": "percent",
                 "type_tax_use": "purchase",
+                "unece_type_id": cls.env.ref("account_tax_unece.tax_type_vat").id,
             }
         )
         # Set this tax on Internet access product
@@ -169,7 +172,8 @@ class TestInvoiceImport(TransactionCase):
 
         # Following tests are disabled. Not yet implemented in account_invoice_import
         # self.assertEqual(inv.journal_id.payment_reference, "202309097001")
-        # self.assertEqual(inv.journal_id.incoterm_id, self.env.ref("account.incoterm_DPU")
+        # self.assertEqual(inv.journal_id.incoterm_id,
+        # self.env.ref("account.incoterm_DPU")
 
         self.assertEqual(len(inv.invoice_line_ids), 7)
         iline = inv.invoice_line_ids[0]
@@ -264,7 +268,8 @@ class TestInvoiceImport(TransactionCase):
         # This causes an UnboundLocalError when trying to access undefined variables
         line_data = {"price_total": 120.0}
 
-        # The function will raise UnboundLocalError due to undefined amount_type variable
+        # The function will raise UnboundLocalError due to undefined amount_type
+        # variable
         with self.assertRaises(UnboundLocalError):
             wizard.parse_invoice2data_taxes(line_data)
 
