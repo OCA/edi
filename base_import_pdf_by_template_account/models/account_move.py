@@ -1,4 +1,4 @@
-# Copyright 2024-2025 Tecnativa - Víctor Martínez
+# Copyright 2024-2026 Tecnativa - Víctor Martínez
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models
 
@@ -15,9 +15,6 @@ class AccountMove(models.Model):
         total_templates = template_model.search_count([("model", "=", invoice._name)])
         if total_templates == 0:
             return False
-        invoice.move_type = (
-            "in_invoice" if invoice.journal_id.type == "purchase" else "out_invoice"
-        )
         wizard = self.env["wizard.base.import.pdf.upload"].create(
             {
                 "model": invoice._name,
