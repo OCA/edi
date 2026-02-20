@@ -237,7 +237,8 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
     def test_account_move_edi_decoder(self):
         attachment = self._create_ir_attachment("account_invoice_tecnativa.pdf")
         invoice = self.journal.with_context(
-            default_journal_id=self.journal.id
+            default_journal_id=self.journal.id,
+            default_move_type="in_invoice",
         )._create_document_from_attachment(attachment.id)
         self.assertEqual(len(invoice.attachment_ids), 1)
         self.assertEqual(attachment, invoice.attachment_ids)
