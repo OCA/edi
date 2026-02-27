@@ -2,6 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # Copyright 2022 Camptocamp SA
 # @author: Simone Orsi <simahawk@gmail.com>
+# Copyright 2026 Michael Tietz (MT Software) <mtietz@mt-software.de>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import unittest.mock
@@ -420,3 +421,90 @@ Nina
         price_prec = self.env["decimal.precision"].precision_get("Product Price")
         self.assertTrue(float_is_zero(iline.price_unit, precision_digits=price_prec))
         self.assertTrue(self.company.currency_id.is_zero(iline.price_subtotal))
+
+    def test_import_in_invoice_fiscal_position(self):
+        """The auto-applied fiscal position of the partner maps account and taxes"""
+        partner = self.env["res.partner"].create(
+            {
+                "is_company": True,
+                "name": "AII Fiscal Position Supplier",
+                "country_id": self.env.ref("base.be").id,
+            }
+        )
+        dest_account = self.env["account.account"].create(
+            {
+                "code": "613AII",
+                "name": "Fiscal position expense account invoice import",
+                "account_type": "expense",
+                "company_ids": [Command.set([self.company.id])],
+            }
+        )
+        dest_tax = self.purchase_tax.copy(
+            {"name": "Test 0% VAT", "description": "ZZ-VAT-buy-0.0", "amount": 0}
+        )
+        self.env["account.fiscal.position"].create(
+            {
+                "name": "AII Belgium",
+                "company_id": self.company.id,
+                "auto_apply": True,
+                "country_id": self.env.ref("base.be").id,
+                "sequence": 1,
+                "account_ids": [
+                    Command.create(
+                        {
+                            "account_src_id": self.expense_account.id,
+                            "account_dest_id": dest_account.id,
+                        }
+                    )
+                ],
+                "tax_ids": [
+                    Command.create(
+                        {
+                            "tax_src_id": self.purchase_tax.id,
+                            "tax_dest_id": dest_tax.id,
+                        }
+                    )
+                ],
+            }
+        )
+        parsed_inv = {
+            "type": "in_invoice",
+            "amount_untaxed": 100.0,
+            "amount_total": 100.0,
+            "date": "2017-08-16",
+            "partner": {"name": partner.name},
+            "lines": [
+                {
+                    "product": {"code": "AII-TEST-PRODUCT"},
+                    "name": "Super test product",
+                    "qty": 2,
+                    "price_unit": 50,
+                    "taxes": [
+                        {
+                            "amount_type": "percent",
+                            "amount": 1.0,
+                            "unece_type_code": "VAT",
+                            "unece_categ_code": "S",
+                        }
+                    ],
+                }
+            ],
+        }
+        import_configs = [
+            {
+                "single_line": True,
+                "account": self.expense_account,
+                "taxes": self.purchase_tax,
+                "company": self.company,
+            },
+            {"single_line": False, "product": self.product, "company": self.company},
+        ]
+        for import_config in import_configs:
+            parsed_inv["invoice_number"] = f"INV-{randint(100000, 999999)}"
+            inv = self.env["account.invoice.import"].create_invoice(
+                parsed_inv, import_config
+            )
+            self.assertEqual(inv.partner_id, partner)
+            self.assertEqual(len(inv.invoice_line_ids), 1)
+            self.assertEqual(inv.invoice_line_ids.account_id, dest_account)
+            self.assertEqual(inv.invoice_line_ids.tax_ids, dest_tax)
