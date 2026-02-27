@@ -402,13 +402,19 @@ Nina
         self.assertTrue(float_is_zero(iline.price_unit, precision_digits=price_prec))
         self.assertTrue(self.company.currency_id.is_zero(iline.price_subtotal))
 
-    def test_import_in_invoice_fiscal_position(self):
-        """The auto-applied fiscal position of the partner maps account and taxes"""
+    def test_import_in_invoice_fiscal_position_shrink_line(self):
+        """
+        The auto-applied fiscal position of the partner maps account and taxes.
+        (!) This is only with "shrink lines" on the partner: else, in_invoice should
+            already have correct taxes.
+        """
         partner = self.env["res.partner"].create(
             {
                 "is_company": True,
                 "name": "AII Fiscal Position Supplier",
                 "country_id": self.env.ref("base.be").id,
+                "vat": "FR23334175221",
+                "invoice_import_shrink_lines": "single",
             }
         )
         dest_account = self.env["account.account"].create(
@@ -448,43 +454,29 @@ Nina
             }
         )
         parsed_inv = {
-            "type": "in_invoice",
-            "amount_untaxed": 100.0,
-            "amount_total": 100.0,
-            "date": "2017-08-16",
-            "partner": {"name": partner.name},
-            "lines": [
+            "BT-2": "2017-08-16",
+            "BT-109": 100.0,
+            "BT-112": 100.0,
+            "BG-4": {"vat_identifier": partner.vat},
+            "BG-25": [
                 {
-                    "product": {"code": "AII-TEST-PRODUCT"},
-                    "name": "Super test product",
-                    "qty": 2,
-                    "price_unit": 50,
-                    "taxes": [
-                        {
-                            "amount_type": "percent",
-                            "amount": 1.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
+                    "BT-126": 1,
+                    "BT-129": 2,
+                    "BT-146": 50,
+                    "BT-153": "Super test product",
+                    "BT-156": "AII-TEST-PRODUCT",
                 }
             ],
         }
-        import_configs = [
-            {
-                "single_line": True,
-                "account": self.expense_account,
-                "taxes": self.purchase_tax,
-                "company": self.company,
-            },
-            {"single_line": False, "product": self.product, "company": self.company},
-        ]
-        for import_config in import_configs:
-            parsed_inv["invoice_number"] = f"INV-{randint(100000, 999999)}"
-            inv = self.env["account.invoice.import"].create_invoice(
-                parsed_inv, import_config
-            )
-            self.assertEqual(inv.partner_id, partner)
-            self.assertEqual(len(inv.invoice_line_ids), 1)
-            self.assertEqual(inv.invoice_line_ids.account_id, dest_account)
-            self.assertEqual(inv.invoice_line_ids.tax_ids, dest_tax)
+        import_config = {
+            "account": self.expense_account,
+            "taxes": self.purchase_tax,
+            "company": self.company,
+        }
+        inv = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
+        )
+        self.assertEqual(inv.partner_id, partner)
+        self.assertEqual(len(inv.invoice_line_ids), 1)
+        self.assertEqual(inv.invoice_line_ids.account_id, dest_account)
+        self.assertEqual(inv.invoice_line_ids.tax_ids, dest_tax)
