@@ -115,12 +115,12 @@ msgid "Document Type"
 msgstr "Type de document"
 
 #. module: sale_order_import
-#: model_terms:ir.ui.view,arch_db:sale_order_import.template_skip_error_lines_message
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
 msgid "Error Message"
 msgstr ""
 
 #. module: sale_order_import
-#: model_terms:ir.ui.view,arch_db:sale_order_import.template_skip_error_lines_message
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
 msgid "Errors lines on Import:"
 msgstr ""
 
@@ -425,7 +425,7 @@ msgid ""
 msgstr ""
 
 #. module: sale_order_import
-#: model_terms:ir.ui.view,arch_db:sale_order_import.template_skip_error_lines_message
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
 msgid "Values"
 msgstr ""
 
@@ -448,6 +448,6 @@ msgid ""
 msgstr ""
 
 #. module: sale_order_import
-#: model_terms:ir.ui.view,arch_db:sale_order_import.template_skip_error_lines_message
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
 msgid "line(s)"
 msgstr ""

@@ -112,6 +112,16 @@ msgid "Document Type"
 msgstr "Tipo documento"
 
 #. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Error Message"
+msgstr ""
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Errors lines on Import:"
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__order_filename
 msgid "Filename"
 msgstr "Nome file"
@@ -124,8 +134,8 @@ msgstr "ID"
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
-"If it is a PDF file, Odoo will try to find an XML file in the attachments of"
-" the PDF file and then use this XML file to create the quotation."
+"If it is a PDF file, Odoo will try to find an XML file in the attachments of "
+"the PDF file and then use this XML file to create the quotation."
 msgstr ""
 "Se è un file PDF, Odoo cercherà di trovare un file XML allegato al file PDF "
 "e usarlo per creare il preventivo."
@@ -133,11 +143,17 @@ msgstr ""
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
-"If it is an XML file, Odoo will parse it if the module that adds support for"
-" this XML format is installed. For the"
+"If it is an XML file, Odoo will parse it if the module that adds support for "
+"this XML format is installed. For the"
 msgstr ""
 "Se è un file XML, Odoo lo analizzerà se è installato il modulo che aggiunge "
 "il supporto per questo formato XML. Per il"
+
+#. module: sale_order_import
+#: model:ir.model.fields,help:sale_order_import.field_sale_order_import__skip_error_lines
+msgid ""
+"Ignore and push all error lines to the chatter when importing if enabled."
+msgstr ""
 
 #. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__state__import
@@ -252,11 +268,16 @@ msgid "Shipping Address"
 msgstr "Indirizzo di spedizione"
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__skip_error_lines
+msgid "Skip Error Lines"
+msgstr ""
+
+#. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
 "Some quotations have been found for this customer ; one of them may "
-"correspond to the order or RFQ that you are importing. You can either select"
-" an existing quotation to update or create a new one."
+"correspond to the order or RFQ that you are importing. You can either select "
+"an existing quotation to update or create a new one."
 msgstr ""
 "Sono stati trovati alcuni preventivi per questo cliente; uno di essi può "
 "corrispondere all'ordine o alla RdP che si sta importando. Si può "
@@ -305,8 +326,8 @@ msgstr ""
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid ""
-"The unit price has been updated on the order line with product '%(product)s'"
-" from %(old)s to %(new)s %(currency)s"
+"The unit price has been updated on the order line with product '%(product)s' "
+"from %(old)s to %(new)s %(currency)s"
 msgstr ""
 "Il prezzo unitario è stato aggiornato nella riga ordine con prodotto "
 "'%(product)s' da %(old)s a %(new)s %(currency)s"
@@ -369,15 +390,13 @@ msgstr "Questo ordine non ha righe!"
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
-msgid ""
-"This quotation has been updated automatically via the import of file %s"
+msgid "This quotation has been updated automatically via the import of file %s"
 msgstr ""
 "Il preventivo è stato aggiornato automaticamente con l'importazione del file "
 "%s"
 
 #. module: sale_order_import
 #. odoo-python
-#: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 #, python-format
 msgid ""
@@ -421,11 +440,16 @@ msgstr ""
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
-"Upload below the customer order or request for quotation as XML or PDF file."
-" When you click on the Import button:"
+"Upload below the customer order or request for quotation as XML or PDF file. "
+"When you click on the Import button:"
 msgstr ""
 "Caricare in calce l'ordine cliente o la richiesta di preventivo come file "
 "XML o PDF. Quando si fa clic sul pulsante importazione:"
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "Values"
+msgstr ""
 
 #. module: sale_order_import
 #: model:ir.model.fields.selection,name:sale_order_import.selection__sale_order_import__import_type__xml
@@ -445,3 +469,8 @@ msgid ""
 "format (UBL), you should install the module <em>sale_order_import_ubl</em>."
 msgstr ""
 "formato (UBL), bisogna installare il modulo <em>sale_order_import_ubl</em>."
+
+#. module: sale_order_import
+#: model_terms:ir.ui.view,arch_db:sale_order_import.skip_error_lines_message
+msgid "line(s)"
+msgstr ""
