@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="skip_error_lines_message">
+        <h4 class="text-danger">Errors lines on Import: <t
+                t-out="len(lines)"
+            /> line(s)</h4>
+        <t t-foreach="lines" t-as="line">
+            <div class="alert alert-warning" role="alert">
+                <p style="margin: 0px;">
+                    <strong>Error Message <t t-out="line_index + 1" /> :</strong>
+                    <span t-out="line['error_msg']" />
+                </p>
+                <p style="margin: 0px;">
+                    <strong>Values <t t-out="line_index + 1" /> :</strong>
+                    <t t-set="values" t-value="line['values']" />
+                    <t t-call="sale_order_import.skip_error_line_value_message" />
+                </p>
+            </div>
+        </t>
+    </template>
+
+    <template id="skip_error_line_value_message">
+        <ul>
+            <t t-foreach="values" t-as="key">
+                <li>
+                    <i><t t-out="key" />: </i>
+                    <t t-if="values[key] and isinstance(values[key], dict)">
+                        <t t-call="sale_order_import.skip_error_line_value_message">
+                            <t t-set="values" t-value="values[key]" />
+                        </t>
+                    </t>
+                    <t t-else="" t-out="values[key] or 'None'" />
+                </li>
+            </t>
+        </ul>
+    </template>
+</odoo>

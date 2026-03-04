@@ -62,6 +62,7 @@
                         attrs="{'invisible': [('doc_type', '!=', 'order')], 'required': [('doc_type', '=', 'order')]}"
                     />
                     <field name="confirm_order" />
+                    <field name="skip_error_lines" />
                 </group>
                 <footer>
                     <button
