@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record
+        id="demo_base_import_pdf_template_res_partner"
+        model="base.import.pdf.template"
+    >
+        <field name="name">Partner Template</field>
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="child_field_id" ref="base.field_res_partner__child_ids" />
+        <field name="header_items">Name,Address,Child Country</field>
+        <field name="auto_detect_pattern">Test partner info.*</field>
+    </record>
+    <record
+        id="demo_base_import_pdf_template_res_partner_header_01"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="base.field_res_partner__name" />
+        <field name="pattern">Partner name:[\n] [\n](.*)</field>
+    </record>
+    <record
+        id="demo_base_import_pdf_template_res_partner_header_02"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="base.field_res_partner__country_id" />
+        <field name="search_field_id" ref="base.field_res_country__code" />
+        <field name="pattern">[A-Z].* [(]([A-Z]{1,2})[)][\n]Industry</field>
+    </record>
+    <record
+        id="demo_base_import_pdf_template_res_partner_header_03"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="base.field_res_partner__industry_id" />
+        <field name="search_field_id" ref="base.field_res_partner_industry__name" />
+        <field name="pattern">Industry:[\n] [\n](.*)</field>
+    </record>
+    <record
+        id="demo_base_import_pdf_template_res_partner_header_04"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="base.field_res_partner__user_id" />
+        <field name="value_type">fixed</field>
+        <field name="fixed_value" ref="base.user_admin" />
+    </record>
+    <record
+        id="demo_base_import_pdf_template_res_partner_header_05"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="base.field_res_partner__ref" />
+        <field name="value_type">fixed</field>
+        <field name="fixed_value_char">fixed-ref</field>
+    </record>
+    <record
+        id="demo_base_import_pdf_template_res_partner_line_01"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">lines</field>
+        <field name="field_id" ref="base.field_res_partner__name" />
+        <field name="column">0</field>
+        <field name="pattern">(.*),.*,</field>
+    </record>
+    <record
+        id="demo_base_import_pdf_template_res_partner_line_02"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">lines</field>
+        <field name="field_id" ref="base.field_res_partner__street" />
+        <field name="column">1</field>
+        <field name="pattern">.*,(.*),</field>
+    </record>
+    <record
+        id="demo_base_import_pdf_template_res_partner_line_03"
+        model="base.import.pdf.template.line"
+    >
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">lines</field>
+        <field name="field_id" ref="base.field_res_partner__country_id" />
+        <field name="search_field_id" ref="base.field_res_country__code" />
+        <field name="pattern">.*,.*, [A-Z].*[(]([A-Z]{1,2})[)]</field>
+        <field name="column">2</field>
+        <field name="log_distinct_value" eval="True" />
+    </record>
+</odoo>

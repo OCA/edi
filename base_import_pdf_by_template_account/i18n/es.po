@@ -1,0 +1,62 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* base_import_pdf_by_template_account
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-30 16:22+0000\n"
+"PO-Revision-Date: 2024-10-30 16:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: base_import_pdf_by_template_account
+#: model:ir.actions.act_window,name:base_import_pdf_by_template_account.base_import_pdf_template_account_move_action
+#: model:ir.ui.menu,name:base_import_pdf_by_template_account.menu_base_import_pdf_template_account_move
+msgid "Invoice Templates"
+msgstr "Plantillas de facturas"
+
+#. module: base_import_pdf_by_template_account
+#: model:ir.model,name:base_import_pdf_by_template_account.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: base_import_pdf_by_template_account
+#: model:product.template,name:base_import_pdf_by_template_account.product_boligrafo_product_template
+msgid "Test Boligrafo"
+msgstr ""
+
+#. module: base_import_pdf_by_template_account
+#: model:product.template,name:base_import_pdf_by_template_account.generic_product_product_template
+msgid "Test Generic Product"
+msgstr ""
+
+#. module: base_import_pdf_by_template_account
+#: model:product.template,name:base_import_pdf_by_template_account.product_leds_product_template
+msgid "Test Leds"
+msgstr ""
+
+#. module: base_import_pdf_by_template_account
+#: model:product.template,name:base_import_pdf_by_template_account.product_laminas_product_template
+msgid "Test Laminas"
+msgstr ""
+
+#. module: base_import_pdf_by_template_account
+#: model:product.template,name:base_import_pdf_by_template_account.product_plastificadora_product_template
+msgid "Test Plastificadora"
+msgstr ""
+
+#. module: base_import_pdf_by_template_account
+#: model:product.template,name:base_import_pdf_by_template_account.product_rotulador_product_template
+msgid "Test Rotulador"
+msgstr ""
+
+#. module: base_import_pdf_by_template_account
+#: model:product.template,name:base_import_pdf_by_template_account.product_trituradora_product_template
+msgid "Test Trituradora"
+msgstr ""

@@ -174,7 +174,7 @@ class AccountInvoiceDownloadConfig(models.Model):
                 action.update(
                     {
                         "res_id": log_id,
-                        "view_mode": "form,tree",
+                        "view_mode": "form,list",
                         "views": False,
                     }
                 )
