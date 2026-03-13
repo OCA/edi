@@ -95,9 +95,7 @@ class AccountMove(models.Model):
             email_node = etree.SubElement(
                 trade_contact, ns["ram"] + "EmailURIUniversalCommunication"
             )
-            email_uriid = etree.SubElement(
-                email_node, ns["ram"] + "URIID", schemeID="SMTP"
-            )
+            email_uriid = etree.SubElement(email_node, ns["ram"] + "URIID")
             email_uriid.text = partner.email
 
     @api.model
