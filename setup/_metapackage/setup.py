@@ -36,6 +36,7 @@ setuptools.setup(
         'odoo-addon-despatch_advice_import>=16.0dev,<16.1dev',
         'odoo-addon-despatch_advice_import_ubl>=16.0dev,<16.1dev',
         'odoo-addon-pdf_helper>=16.0dev,<16.1dev',
+        'odoo-addon-purchase_order_ubl>=16.0dev,<16.1dev',
         'odoo-addon-sale_order_import>=16.0dev,<16.1dev',
         'odoo-addon-sale_order_import_edifact>=16.0dev,<16.1dev',
     ],

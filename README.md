@@ -50,6 +50,7 @@ addon | version | maintainers | summary
 [despatch_advice_import](despatch_advice_import/) | 16.0.1.2.1 | <a href='https://github.com/jbaudoux'><img src='https://github.com/jbaudoux.png' width='32' height='32' style='border-radius:50%;' alt='jbaudoux'/></a> | Despatch Advice import
 [despatch_advice_import_ubl](despatch_advice_import_ubl/) | 16.0.1.1.0 |  | Import Despatch Advice files
 [pdf_helper](pdf_helper/) | 16.0.1.1.0 | <a href='https://github.com/simahawk'><img src='https://github.com/simahawk.png' width='32' height='32' style='border-radius:50%;' alt='simahawk'/></a> <a href='https://github.com/alexis-via'><img src='https://github.com/alexis-via.png' width='32' height='32' style='border-radius:50%;' alt='alexis-via'/></a> | Provides helpers to work w/ PDFs
+[purchase_order_ubl](purchase_order_ubl/) | 16.0.1.1.0 |  | Embed UBL XML file inside the PDF purchase order
 [sale_order_import](sale_order_import/) | 16.0.1.5.0 |  | Import RFQ or sale orders from files
 [sale_order_import_edifact](sale_order_import_edifact/) | 16.0.1.1.0 | <a href='https://github.com/rmorant'><img src='https://github.com/rmorant.png' width='32' height='32' style='border-radius:50%;' alt='rmorant'/></a> | EDIFACT/D96A Order
 
