@@ -450,7 +450,7 @@ class AccountInvoiceImport(models.TransientModel):
                 else:
                     type_tax_use = "purchase"
                 taxes = bdio._match_taxes(
-                    line.get("taxes"),
+                    line.get("taxes", {}),
                     parsed_inv["chatter_msg"],
                     company=import_config["company"],
                     type_tax_use=type_tax_use,
