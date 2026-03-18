@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 ACSONE SA/NV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="account_move_form_view" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field
+            name="inherit_id"
+            ref="account_move_line_packaging.account_move_form_view"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_packaging_id']" position="before">
+                <field
+                    name="ubl_unece_unit_code"
+                    optional="hide"
+                    attrs="{'column_invisible': [('parent.move_type', '!=', 'in_invoice')], 'invisible': [('product_id', '=', False)]}"
+                    groups="product.group_stock_packaging"
+                />
+            </xpath>
+            <xpath expr="//field[@name='price_unit']" position="before">
+                <field
+                    name="ubl_price_unit"
+                    attrs="{'column_invisible': [('parent.move_type', '!=', 'in_invoice')]}"
+                    optional="hide"
+                />
+            </xpath>
+        </field>
+    </record>
+
+
+
+</odoo>
