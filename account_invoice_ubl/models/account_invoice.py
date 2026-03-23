@@ -257,11 +257,10 @@ class AccountInvoice(models.Model):
         prec = self.currency_id.decimal_places
         prec = prec if prec <= 2 else 2
         tax_amount_node.text = '%0.*f' % (prec, self.amount_tax)
-        if not float_is_zero(self.amount_tax, precision_digits=prec):
-            for tline in self.tax_line_ids:
-                self._ubl_add_tax_subtotal(
-                    tline.base, tline.amount, tline.tax_id, cur_name,
-                    tax_total_node, ns, version=version)
+        for tline in self.tax_line_ids:
+            self._ubl_add_tax_subtotal(
+                tline.base, tline.amount, tline.tax_id, cur_name,
+                tax_total_node, ns, version=version)
 
     @api.multi
     def generate_invoice_ubl_xml_etree(self, version='2.1'):
