@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <delete model="account.edi.format" id="account_edi_ubl_cii.edi_facturx_1_0_05" />
+</odoo>
