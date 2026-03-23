@@ -49,6 +49,13 @@ class AccountInvoice(models.Model):
         ubl_version_id = parent_node.find(ns["cbc"] + "UBLVersionID")
         ubl_version_id.addnext(profile_id)
         ubl_version_id.addnext(customization_id)
+
+        if self.type == "out_refund":
+            # a credit note must not have a due date.
+            due_date = parent_node.find(ns["cbc"] + "DueDate")
+            if due_date is not None:
+                parent_node.remove(due_date)
+
         return res
 
     @api.multi
@@ -373,8 +380,14 @@ class AccountInvoice(models.Model):
         if not self.env.context.get("account_invoice_ubl_use_peppol"):
             return res
 
-        line_root = parent_node.find(ns["cac"] + "InvoiceLine[last()]")
-        invoiced_quantity = line_root.find(ns["cbc"] + "InvoicedQuantity")
+        if self.type == "out_invoice":
+            line_element_name = "InvoiceLine"
+            qty_element_name = "InvoicedQuantity"
+        elif self.type == "out_refund":
+            line_element_name = "CreditNoteLine"
+            qty_element_name = "CreditedQuantity"
+        line_root = parent_node.find(ns["cac"] + line_element_name + "[last()]")
+        invoiced_quantity = line_root.find(ns["cbc"] + qty_element_name)
         if invoiced_quantity is not None:
             if not invoiced_quantity.attrib.get("unitCode"):
                 uom_unece_code = self.company_id.ubl_default_uom_id.unece_code
