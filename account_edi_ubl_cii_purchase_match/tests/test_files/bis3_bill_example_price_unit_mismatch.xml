@@ -7,13 +7,13 @@
   <cbc:CustomizationID
     >urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
   <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
-  <cbc:ID>FAC/2023/00052</cbc:ID>
+  <cbc:ID>PO0032</cbc:ID>
   <cbc:IssueDate>2023-08-04</cbc:IssueDate>
   <cbc:DueDate>2023-09-04</cbc:DueDate>
   <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
   <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
   <cac:OrderReference>
-    <cbc:ID>FAC/2023/00052</cbc:ID>
+    <cbc:ID>PO0032</cbc:ID>
     <cbc:SalesOrderID>S00012</cbc:SalesOrderID>
   </cac:OrderReference>
   <cac:AdditionalDocumentReference>
@@ -93,7 +93,7 @@
   </cac:Delivery>
   <cac:PaymentMeans>
     <cbc:PaymentMeansCode name="credit transfer">30</cbc:PaymentMeansCode>
-    <cbc:PaymentID>FAC/2023/00052</cbc:PaymentID>
+    <cbc:PaymentID>PO0032</cbc:PaymentID>
     <cac:PayeeFinancialAccount>
       <cbc:ID>LU071241358706500000</cbc:ID>
     </cac:PayeeFinancialAccount>

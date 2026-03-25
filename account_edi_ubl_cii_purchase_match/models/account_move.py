@@ -1,6 +1,8 @@
 # Copyright 2025 ACSONE SA/NV
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import re
+
 from odoo import _, api, fields, models
 
 
@@ -55,3 +57,32 @@ class AccountMove(models.Model):
     def _link_invoice_origin_to_purchase_orders(self, timeout=10):
         # disable standard purchase linking
         return self
+
+    def _get_po_sequence_prefix(self):
+        """return the prefix used by purchase order sequence"""
+        seq = (
+            self.env["ir.sequence"]
+            .sudo()
+            .search([("code", "=", "purchase.order")], limit=1)
+        )
+        if not seq:
+            return "PO"
+        prefix = seq.prefix or ""
+        match = re.match(r"([A-Za-z]+)", prefix)
+        if match:
+            return match.group(1)
+        return "PO"
+
+    def _extract_purchase_references_from_origin(self, invoice_origin=None):
+        invoice_origin = invoice_origin if invoice_origin else self.invoice_origin
+        if not invoice_origin:
+            return []
+        prefix = self._get_po_sequence_prefix()
+        # flake8: noqa: E231
+        pattern = rf"(?:#)?({re.escape(prefix)}[-/\s]?\d+(?:[-/\s]?\d+)*)"
+        matches = re.findall(pattern, invoice_origin, flags=re.IGNORECASE)
+        normalized = []
+        for match in matches:
+            value = re.sub(r"[\s#]", "", match).upper()
+            normalized.append(value)
+        return list(dict.fromkeys(normalized))

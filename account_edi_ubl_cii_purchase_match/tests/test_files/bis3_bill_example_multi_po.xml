@@ -7,13 +7,13 @@
   <cbc:CustomizationID
     >urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
   <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
-  <cbc:ID>PO0032</cbc:ID>
+  <cbc:ID>#PO0001,#PO0002</cbc:ID>
   <cbc:IssueDate>2023-08-04</cbc:IssueDate>
   <cbc:DueDate>2023-09-04</cbc:DueDate>
   <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
   <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
   <cac:OrderReference>
-    <cbc:ID>PO0032</cbc:ID>
+    <cbc:ID>#PO0001,#PO0002</cbc:ID>
     <cbc:SalesOrderID>S00012</cbc:SalesOrderID>
   </cac:OrderReference>
   <cac:AdditionalDocumentReference>
@@ -93,7 +93,7 @@
   </cac:Delivery>
   <cac:PaymentMeans>
     <cbc:PaymentMeansCode name="credit transfer">30</cbc:PaymentMeansCode>
-    <cbc:PaymentID>PO0032</cbc:PaymentID>
+    <cbc:PaymentID>#PO0001,#PO0002</cbc:PaymentID>
     <cac:PayeeFinancialAccount>
       <cbc:ID>LU071241358706500000</cbc:ID>
     </cac:PayeeFinancialAccount>
@@ -128,6 +128,28 @@
       <cbc:Name>Locations et leasing opérationnel</cbc:Name>
       <cac:SellersItemIdentification>
         <cbc:ID>leasing001</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:ClassifiedTaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>16.0</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:ClassifiedTaxCategory>
+    </cac:Item>
+    <cac:Price>
+      <cbc:PriceAmount currencyID="EUR">657.00</cbc:PriceAmount>
+    </cac:Price>
+  </cac:InvoiceLine>
+  <cac:InvoiceLine>
+    <cbc:ID>2</cbc:ID>
+    <cbc:InvoicedQuantity unitCode="C62">1.0</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="EUR">657.00</cbc:LineExtensionAmount>
+    <cac:Item>
+      <cbc:Description>Locations and leasing</cbc:Description>
+      <cbc:Name>Locations et leasing opérationnel</cbc:Name>
+      <cac:SellersItemIdentification>
+        <cbc:ID>leasing002</cbc:ID>
       </cac:SellersItemIdentification>
       <cac:ClassifiedTaxCategory>
         <cbc:ID>S</cbc:ID>

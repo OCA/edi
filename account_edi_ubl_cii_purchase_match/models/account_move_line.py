@@ -1,7 +1,7 @@
 # Copyright 2025 ACSONE SA/NV
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, api, fields, models
+from odoo import Command, _, api, fields, models
 from odoo.tools import float_compare
 
 
@@ -87,29 +87,24 @@ class AccountMoveLine(models.Model):
 
     def action_select_purchase_line(self):
         self.ensure_one()
-        purchase_order = self.purchase_line_id.order_id
+        purchase_orders = self.purchase_line_id.order_id
         partner = self.move_id.partner_id
-        if not purchase_order and self.move_id.invoice_origin:
-            order_ref = self.move_id.invoice_origin
-            purchase_order = self.env["purchase.order"].search(
+        if not purchase_orders and self.move_id.invoice_origin:
+            po_candidates = self.move_id._extract_purchase_references_from_origin()
+            purchase_orders = self.env["purchase.order"].search(
                 [
-                    "|",
-                    ("name", "=", order_ref),
-                    ("partner_ref", "=", order_ref),
+                    ("name", "in", po_candidates),
                     ("state", "in", ("purchase", "done")),
                     ("partner_id", "=", partner.id),
-                ],
-                limit=1,
+                ]
             )
         context = {
             **self.env.context,
             **{
                 "default_move_line_id": self.id,
                 "default_partner_id": partner.id,
-                "default_purchase_order_id": purchase_order.id,
-                "default_purchase_order_line_id": (
-                    self.purchase_line_id.id if purchase_order else False
-                ),
+                "default_purchase_order_ids": [Command.set(purchase_orders.ids)],
+                "default_purchase_order_line_id": self.purchase_line_id.id,
             },
         }
         return {
