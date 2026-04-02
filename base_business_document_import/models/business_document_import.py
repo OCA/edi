@@ -1443,7 +1443,7 @@ class BusinessDocumentImport(models.AbstractModel):
                     "_match_incoterm",
                     incoterm_dict,
                     self.env._(
-                        "Could not find any Incoterm in Odoo corresponding " "to '%s'"
+                        "Could not find any Incoterm in Odoo corresponding to '%s'"
                     )
                     % incoterm_dict["code"],
                     chatter_msg,
