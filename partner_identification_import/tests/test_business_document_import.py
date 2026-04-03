@@ -1,14 +1,14 @@
 # Copyright 2020 Jacques-Etienne Baudoux <je@bcim.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo.tests.common import TransactionCase
 
-from odoo.tests import common
 
-
-class TestBaseBusinessDocumentImport(common.TransactionCase):
+class TestBaseBusinessDocumentImport(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.bdio = cls.env["business.document.import"]
         externalID = "MYEXTID"
         externalSchemeID = "EXTCATEG"
         cls.partner1 = cls.env["res.partner"].create({"name": "Extra ID"})
@@ -30,19 +30,17 @@ class TestBaseBusinessDocumentImport(common.TransactionCase):
         }
 
     def test_match_partner(self):
-        bdio = self.env["business.document.import"]
         warn = []
-        res = bdio._match_partner(self.partner_dict, warn, partner_type=False)
+        res = self.bdio._match_partner(self.partner_dict, warn, partner_type=False)
         self.assertEqual(res, self.partner1)
 
     def test_match_partner_contact(self):
-        bdio = self.env["business.document.import"]
         warn = []
         # Match contact
         self.partner_dict["contact"] = "Contact"
-        res = bdio._match_partner(self.partner_dict, warn, partner_type=False)
+        res = self.bdio._match_partner(self.partner_dict, warn, partner_type=False)
         self.assertEqual(res, self.partner1_contact)
         # Match partner
         self.partner_dict["contact"] = "Contact2"
-        res = bdio._match_partner(self.partner_dict, warn, partner_type=False)
+        res = self.bdio._match_partner(self.partner_dict, warn, partner_type=False)
         self.assertEqual(res, self.partner1)

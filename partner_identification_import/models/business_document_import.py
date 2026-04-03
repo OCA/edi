@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, models
+from odoo.fields import Domain
 
 
 class BusinessDocumentImport(models.AbstractModel):
@@ -17,7 +18,7 @@ class BusinessDocumentImport(models.AbstractModel):
         ]
         if schemeIDs:
             schemes = self.env["res.partner.id_category"].search(
-                [("code", "in", schemeIDs)]
+                Domain("code", "in", schemeIDs)
             )
             unmatched = []
             for ident in partner_dict.get("id_number", []):
@@ -25,20 +26,24 @@ class BusinessDocumentImport(models.AbstractModel):
                     continue
                 categ = schemes.filtered(lambda s, _id=ident: s.code == _id["schemeID"])
                 id_number = self.env["res.partner.id_number"].search(
-                    [
-                        ("category_id", "in", categ.ids),
-                        ("name", "=", ident["value"]),
-                        ("status", "!=", "close"),
-                    ],
+                    Domain.AND(
+                        [
+                            Domain("category_id", "in", categ.ids),
+                            Domain("name", "=", ident["value"]),
+                            Domain("status", "!=", "close"),
+                        ]
+                    ),
                     limit=1,
                 )
                 if id_number:
                     partner = id_number.partner_id
                     # Search for a contact of this partner
-                    domain = [
-                        ("parent_id", "=", partner.id),
-                        ("is_company", "=", False),
-                    ]
+                    domain = Domain.AND(
+                        [
+                            Domain("parent_id", "=", partner.id),
+                            Domain("is_company", "=", False),
+                        ]
+                    )
                     contact = self._match_partner_contact(
                         partner_dict, chatter_msg, domain, order
                     )
@@ -58,9 +63,8 @@ class BusinessDocumentImport(models.AbstractModel):
                     self.env._(
                         "Odoo couldn't find a partner corresponding to the "
                         "following information extracted from the business document:\n"
-                        "{}"
-                    )
-                    .format("or\n")
-                    .join(unmatched),
+                        "%(join_unmatched)s",
+                        join_unmatched="or\n".join(unmatched),
+                    ),
                 )
         return super()._hook_match_partner(partner_dict, chatter_msg, domain, order)
