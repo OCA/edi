@@ -8,7 +8,7 @@ import logging
 
 from lxml import etree
 
-from odoo import _, api, models
+from odoo import api, models
 from odoo.exceptions import UserError
 from odoo.tools import float_is_zero, float_round
 
@@ -211,9 +211,9 @@ class BaseUblGenerate(models.AbstractModel):
         """Please read the docstring of the method _ubl_add_supplier_party"""
         if company:
             if partner:
-                assert (
-                    partner.commercial_partner_id == company.partner_id
-                ), "partner is wrong"
+                assert partner.commercial_partner_id == company.partner_id, (
+                    "partner is wrong"
+                )
             else:
                 partner = company.partner_id
         customer_party_root = etree.SubElement(parent_node, ns["cac"] + node_name)
@@ -259,9 +259,9 @@ class BaseUblGenerate(models.AbstractModel):
         """
         if company:
             if partner:
-                assert (
-                    partner.commercial_partner_id == company.partner_id
-                ), "partner is wrong"
+                assert partner.commercial_partner_id == company.partner_id, (
+                    "partner is wrong"
+                )
             else:
                 partner = company.partner_id
         supplier_party_root = etree.SubElement(parent_node, ns["cac"] + node_name)
@@ -323,7 +323,11 @@ class BaseUblGenerate(models.AbstractModel):
         line_item_id = etree.SubElement(line_item, ns["cbc"] + "ID")
         line_item_id.text = str(line_number)
         if not uom.unece_code:
-            raise UserError(_("Missing UNECE code on unit of measure '%s'") % uom.name)
+            raise UserError(
+                self.env._(
+                    "Missing UNECE code on unit of measure '%(uom)s'", uom=uom.name
+                )
+            )
         quantity_node = etree.SubElement(
             line_item, ns["cbc"] + "Quantity", unitCode=uom.unece_code
         )
@@ -477,11 +481,11 @@ class BaseUblGenerate(models.AbstractModel):
             taxable_amount_node = etree.SubElement(
                 tax_subtotal, ns["cbc"] + "TaxableAmount", currencyID=currency_code
             )
-            taxable_amount_node.text = "%0.*f" % (prec, taxable_amount)
+            taxable_amount_node.text = f"{taxable_amount:.{prec}f}"
         tax_amount_node = etree.SubElement(
             tax_subtotal, ns["cbc"] + "TaxAmount", currencyID=currency_code
         )
-        tax_amount_node.text = "%0.*f" % (prec, tax_amount)
+        tax_amount_node.text = f"{tax_amount:.{prec}f}"
         if tax.amount_type == "percent" and not float_is_zero(
             tax.amount, precision_digits=prec + 3
         ):
@@ -496,7 +500,7 @@ class BaseUblGenerate(models.AbstractModel):
         tax_category = etree.SubElement(parent_node, ns["cac"] + node_name)
         if not tax.unece_categ_id:
             raise UserError(
-                _(
+                self.env._(
                     "Missing UNECE Tax Category on tax '%(tax_name)s'",
                     tax_name=tax.name,
                 )
@@ -517,7 +521,7 @@ class BaseUblGenerate(models.AbstractModel):
     def _ubl_get_tax_scheme_dict_from_tax(self, tax):
         if not tax.unece_type_id:
             raise UserError(
-                _(
+                self.env._(
                     "Missing UNECE Tax Type on tax '%(tax_name)s'",
                     tax_name=tax.name,
                 )
