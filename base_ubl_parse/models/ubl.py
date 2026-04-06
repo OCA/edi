@@ -5,7 +5,7 @@
 
 import logging
 
-from odoo import _, api, models
+from odoo import api, models
 from odoo.exceptions import UserError
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ class BaseUbl(models.AbstractModel):
         version_xpath = xml_root.xpath(f"/{root_name}/cbc:UBLVersionID", namespaces=ns)
         if not version_xpath:
             raise UserError(
-                _(
+                self.env._(
                     "The UBL XML file does not contain the version "
                     "for validating the content according to the schema."
                 )
