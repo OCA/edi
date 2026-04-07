@@ -96,9 +96,7 @@ class AccountMove(models.Model):
             email_node = etree.SubElement(
                 trade_contact, ns["ram"] + "EmailURIUniversalCommunication"
             )
-            email_uriid = etree.SubElement(
-                email_node, ns["ram"] + "URIID", schemeID="SMTP"
-            )
+            email_uriid = etree.SubElement(email_node, ns["ram"] + "URIID")
             email_uriid.text = partner.email
 
     @api.model
@@ -320,23 +318,38 @@ class AccountMove(models.Model):
                 and self.payment_mode_id.fixed_journal_id
             ):
                 partner_bank = self.payment_mode_id.fixed_journal_id.bank_account_id
-            if partner_bank and partner_bank.acc_type == "iban":
-                payment_means_bank_account = etree.SubElement(
-                    payment_means, ns["ram"] + "PayeePartyCreditorFinancialAccount"
+            if not partner_bank or not partner_bank.sanitized_acc_number:
+                raise UserError(
+                    _(
+                        "Missing bank account identifier on invoice '%s'. "
+                        "Factur-X requires either an IBAN or a proprietary "
+                        "account identifier (BT-84) for credit transfer "
+                        "payment means."
+                    )
+                    % (self.display_name or self.name)
                 )
-                iban = etree.SubElement(
+
+            payment_means_bank_account = etree.SubElement(
+                payment_means, ns["ram"] + "PayeePartyCreditorFinancialAccount"
+            )
+            if partner_bank.acc_type == "iban":
+                account_identifier = etree.SubElement(
                     payment_means_bank_account, ns["ram"] + "IBANID"
                 )
-                iban.text = partner_bank.sanitized_acc_number
-                if ns["level"] in PROFILES_EN_UP and partner_bank.bank_bic:
-                    payment_means_bank = etree.SubElement(
-                        payment_means,
-                        ns["ram"] + "PayeeSpecifiedCreditorFinancialInstitution",
-                    )
-                    payment_means_bic = etree.SubElement(
-                        payment_means_bank, ns["ram"] + "BICID"
-                    )
-                    payment_means_bic.text = partner_bank.bank_bic
+            else:
+                account_identifier = etree.SubElement(
+                    payment_means_bank_account, ns["ram"] + "ProprietaryID"
+                )
+            account_identifier.text = partner_bank.sanitized_acc_number
+            if ns["level"] in PROFILES_EN_UP and partner_bank.bank_bic:
+                payment_means_bank = etree.SubElement(
+                    payment_means,
+                    ns["ram"] + "PayeeSpecifiedCreditorFinancialInstitution",
+                )
+                payment_means_bic = etree.SubElement(
+                    payment_means_bank, ns["ram"] + "BICID"
+                )
+                payment_means_bic.text = partner_bank.bank_bic
         # Field mandate_id provided by the OCA module account_banking_mandate
         elif (
             payment_means_code.text in DIRECT_DEBIT_CODES
