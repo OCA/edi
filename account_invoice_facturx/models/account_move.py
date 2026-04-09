@@ -96,7 +96,7 @@ class AccountMove(models.Model):
                 trade_contact, ns["ram"] + "DepartmentName"
             )
             department_name.text = department
-        phone = partner.phone or partner.mobile
+        phone = partner.phone
         if phone:
             phone_node = etree.SubElement(
                 trade_contact, ns["ram"] + "TelephoneUniversalCommunication"
