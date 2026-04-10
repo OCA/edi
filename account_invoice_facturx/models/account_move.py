@@ -268,6 +268,15 @@ class AccountMove(models.Model):
         So it's difficult to have a common datamodel for it"""
         return False
 
+    def _cii_get_delivery_date(self):
+        """Return the delivery/service date to export in Factur-X XML.
+
+        Designed to be inherited by modules that store a dedicated delivery
+        or service date on invoices.
+        """
+        self.ensure_one()
+        return self.invoice_date
+
     def _cii_add_trade_delivery_block(self, trade_transaction, ns):
         self.ensure_one()
         trade_agreement = etree.SubElement(
@@ -281,6 +290,12 @@ class AccountMove(models.Model):
             self._cii_add_address_block(
                 self.partner_shipping_id, shipto_trade_party, ns
             )
+        delivery_date = self._cii_get_delivery_date()
+        if ns["level"] in PROFILES_EN_UP and delivery_date:
+            delivery_event = etree.SubElement(
+                trade_agreement, ns["ram"] + "ActualDeliverySupplyChainEvent"
+            )
+            self._cii_add_date("OccurrenceDateTime", delivery_date, delivery_event, ns)
         return trade_agreement
 
     def _cii_add_trade_settlement_payment_means_block(self, trade_settlement, ns):
