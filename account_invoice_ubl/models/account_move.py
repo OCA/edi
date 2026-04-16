@@ -311,12 +311,18 @@ class AccountMove(models.Model):
         self._ubl_add_legal_monetary_total(xml_root, ns, version=version)
 
         line_number = 0
-        for iline in self.invoice_line_ids:
+        for iline in self._ubl_get_invoice_lines():
             line_number += 1
             self._ubl_add_invoice_line(
                 xml_root, iline, line_number, ns, version=version
             )
         return xml_root
+
+    def _ubl_get_invoice_lines(self):
+        """Return invoice lines to include in UBL XML.
+        This method can be overridden to filter lines.
+        """
+        return self.invoice_line_ids
 
     def generate_ubl_xml_string(self, version="2.1"):
         self.ensure_one()

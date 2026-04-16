@@ -297,6 +297,12 @@ class AccountMove(models.Model):
                     invoiced_quantity.attrib["unitCode"] = uom_unece_code
         return res
 
+    def _ubl_get_invoice_lines(self):
+        """Filter out section and note lines for PEPPOL."""
+        return self.invoice_line_ids.filtered(
+            lambda l: l.display_type not in ("line_section", "line_note")
+        )
+
     @api.model
     def _ubl_add_tax_subtotal(
         self,
