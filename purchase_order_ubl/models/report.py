@@ -17,10 +17,10 @@ class IrActionsReport(models.Model):
             if report_sudo.is_ubl_xml_to_embed_in_purchase_order():
                 records = self.env[report_sudo.model].browse(res_ids)
                 for record in records:
-                    collected_streams[record.id][
-                        "stream"
-                    ] = record.add_xml_in_pdf_buffer(
-                        collected_streams[record.id]["stream"]
+                    collected_streams[record.id]["stream"] = (
+                        record.add_xml_in_pdf_buffer(
+                            collected_streams[record.id]["stream"]
+                        )
                     )
         return collected_streams
 
