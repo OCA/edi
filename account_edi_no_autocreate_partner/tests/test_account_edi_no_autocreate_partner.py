@@ -12,13 +12,16 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 class TestAccountEdiNoAutocreatePartner(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
-        super(TestAccountEdiNoAutocreatePartner, cls).setUpClass()
+        super().setUpClass()
         cls.partner_not_found = cls.env.ref(
             "account_edi_no_autocreate_partner.partner_not_found"
         )
+        cls.env.ref("base.EUR").active = True
 
     def _import_invoice(self, journal):
-        file_path = "account_edi_ubl_cii/tests/test_files/bis3_bill_example.xml"
+        file_path = (
+            "account_edi_no_autocreate_partner/tests/test_files/bis3_bill_example.xml"
+        )
         with file_open(file_path, "rb") as file:
             xml_attachment = self.env["ir.attachment"].create(
                 {

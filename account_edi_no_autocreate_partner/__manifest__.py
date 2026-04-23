@@ -5,7 +5,7 @@
     "name": "Account Edi No Autocreate Partner",
     "summary": """Prevents auto-creation of partners during invoice import by
     assigning unmatched invoices to a protected “Partner Not Found” contact.""",
-    "version": "16.0.1.0.0",
+    "version": "19.0.1.0.0",
     "license": "AGPL-3",
     "author": "ACSONE SA/NV,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
