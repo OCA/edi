@@ -9,3 +9,4 @@ pypdf>=3.1.0
 pytz
 regex
 xmltodict
+lxml==5.2.1
