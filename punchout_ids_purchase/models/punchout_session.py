@@ -154,10 +154,27 @@ class PunchoutSession(models.Model):
         # Create new product if auto_create_products is enabled
         if backend.auto_create_products:
             product_vals = self._parse_ids_order_item(order_item)
-            return Product.sudo().create(product_vals)
+            product = Product.sudo().create(product_vals)
+            self._post_create_product_hook(product, order_item)
+            return product
 
         # Fallback: return a generic product
         return Product.search([("purchase_ok", "=", True)], limit=1)
+
+    def _post_create_product_hook(self, product, raw_data):
+        """Hook fired after a product is auto-created from a punchout
+        cart. Empty in base — override in private/glue modules to
+        enrich the product (image, dimensions, HS code, brand, etc.)
+        from the supplier's REST API. ``raw_data`` is the protocol-
+        specific cart-line element; for IDS it is the parsed
+        ``OrderItem`` lxml objectify element so overrides can pull
+        IDS-specific fields (ArtNo, EAN, Langtext, etc.) without
+        re-parsing.
+
+        Hook fires once per newly-created product, never on existing
+        product matches. Failures inside the hook MUST be caught by
+        the override — the cart-import flow should never break
+        because an enrichment call timed out."""
 
     def _parse_ids_order_item(self, order_item):
         """Parse IDS OrderItem to product creation values."""
