@@ -1,6 +1,7 @@
 # generated from manifests external_dependencies
 dateparser
 factur-x
+lxml
 ovh
 phonenumbers
 pymupdf

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ACSONE SA/NV
+     Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Extend backend form view with cXML-specific fields -->
+    <record model="ir.ui.view" id="punchout_backend_form_view_cxml">
+        <field name="name">punchout.backend.form.cxml</field>
+        <field name="model">punchout.backend</field>
+        <field name="inherit_id" ref="punchout.punchout_backend_form_view" />
+        <field name="arch" type="xml">
+            <!-- Add Test Connection button next to the existing Access
+                 button — only meaningful for cXML, since OCI/IDS have
+                 no setup handshake to round-trip. -->
+            <xpath expr="//button[@name='redirect_to_backend']" position="after">
+                <button
+                    name="action_test_connection"
+                    type="object"
+                    string="Test Connection"
+                    icon="fa-bolt"
+                    invisible="protocol != 'cxml'"
+                />
+            </xpath>
+            <!-- Add cXML credentials group after main group -->
+            <xpath expr="//group[@name='group_main']" position="after">
+                <group
+                    name="group_cxml_credentials"
+                    string="cXML Credentials"
+                    invisible="protocol != 'cxml'"
+                >
+                    <group>
+                        <field name="from_domain" placeholder="NetworkId" />
+                        <field name="from_identity" />
+                        <field name="to_domain" placeholder="NetworkId" />
+                        <field name="to_identity" />
+                    </group>
+                    <group>
+                        <field name="shared_secret" password="True" />
+                        <field name="user_agent" />
+                        <field
+                            name="deployment_mode"
+                            placeholder="test or production"
+                        />
+                    </group>
+                </group>
+                <group
+                    name="group_cxml_settings"
+                    string="cXML Settings"
+                    invisible="protocol != 'cxml'"
+                >
+                    <group>
+                        <field name="cxml_version" />
+                        <field name="dtd_file" filename="dtd_filename" />
+                        <field name="dtd_filename" invisible="1" />
+                    </group>
+                    <group />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
