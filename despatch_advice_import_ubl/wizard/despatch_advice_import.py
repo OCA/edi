@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 class DespatchAdviceImport(models.TransientModel):
-
     _name = "despatch.advice.import"
     _inherit = ["despatch.advice.import", "base.ubl"]
 
@@ -20,7 +19,7 @@ class DespatchAdviceImport(models.TransientModel):
         if xml_root.tag == start_tag + "DespatchAdvice-2}DespatchAdvice":
             return self.parse_ubl_despatch_advice(xml_root)
         else:
-            return super(DespatchAdviceImport, self).parse_xml_despatch_advice(xml_root)
+            return super().parse_xml_despatch_advice(xml_root)
 
     @api.model
     def parse_ubl_despatch_advice(self, xml_root):

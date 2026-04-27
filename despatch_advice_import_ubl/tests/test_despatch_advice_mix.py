@@ -673,7 +673,6 @@ class TestDespatchAdviceMix(TransactionCase):
             cls.despatch_advice_xml2 = f.read()
 
     def test_despatch_advice_import(self):
-
         xml_content1 = self.despatch_advice_xml1.decode("utf-8").format(
             order_id=self.purchase_order.name,
             line_1_id=self.line1.id,
