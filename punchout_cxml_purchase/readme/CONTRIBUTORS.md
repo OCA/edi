@@ -1,0 +1,2 @@
+- Thomas Binsfeld <thomas.binsfeld@acsone.eu>
+- Benjamin Willig <benjamin.willig@acsone.eu>
