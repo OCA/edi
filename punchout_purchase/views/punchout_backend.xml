@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="punchout_backend_form_view" model="ir.ui.view">
+        <field name="name">punchout.backend.form.purchase</field>
+        <field name="model">punchout.backend</field>
+        <field name="inherit_id" ref="punchout.punchout_backend_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_main']" position="after">
+                <group string="Purchase">
+                    <group>
+                        <field name="partner_id" />
+                        <field name="company_id" groups="base.group_multi_company" />
+                    </group>
+                    <group>
+                        <field name="auto_create_products" />
+                        <field
+                            name="product_category_id"
+                            invisible="not auto_create_products"
+                        />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="punchout_backend_tree_view" model="ir.ui.view">
+        <field name="name">punchout.backend.list.purchase</field>
+        <field name="model">punchout.backend</field>
+        <field name="inherit_id" ref="punchout.punchout_backend_tree_view" />
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="partner_id" optional="show" />
+            </field>
+        </field>
+    </record>
+</odoo>

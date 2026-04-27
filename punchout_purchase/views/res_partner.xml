@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_partner_form_punchout" model="ir.ui.view">
+        <field name="name">res.partner.form.punchout</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <!-- "Browse catalog" button on the supplier form, visible
+                 once the partner has any open punchout backend.
+                 Useful for ad-hoc lookup ("I want to find a part from
+                 vendor X but haven't decided what yet"). -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_open_punchout_catalog"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-shopping-cart"
+                    invisible="supplier_rank == 0"
+                >
+                    <span class="o_stat_text">Punchout</span>
+                </button>
+            </xpath>
+            <!-- Product URL Template (deep-link) — surface near the
+                 partner's Sales/Purchases tab. -->
+            <xpath expr="//field[@name='ref']" position="after">
+                <field
+                    name="product_url_template"
+                    placeholder="https://eshop.example.com/parts/{vendor_code}"
+                    invisible="supplier_rank == 0"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

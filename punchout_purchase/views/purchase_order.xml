@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ACSONE SA/NV
+     Copyright 2023 Hunki Enterprises BV
+     Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="purchase_order_form_view_punchout">
+        <field name="name">purchase.order.form.punchout</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <!-- Smart button restricted to base.group_system: regular
+                     purchasers can't read punchout.session (security
+                     locked down by ACSONE for compliance). Showing a
+                     button that throws an access error on click is bad
+                     UX, so hide it for non-admins. -->
+                <button
+                    name="action_view_punchout_session"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-exchange"
+                    invisible="not punchout_session_id and punchout_session_count == 0"
+                    groups="base.group_system"
+                >
+                    <field
+                        name="punchout_session_count"
+                        widget="statinfo"
+                        string="Punchout"
+                    />
+                </button>
+            </xpath>
+            <!-- "Browse supplier catalog" button visible only on draft
+                 POs whose vendor has at least one open punchout backend.
+                 Surfaces the punchout entry-point right where purchasers
+                 are working — no detour through Customizations. -->
+            <xpath expr="//header/button[@name='action_rfq_send'][1]" position="before">
+                <button
+                    name="action_open_punchout_catalog"
+                    type="object"
+                    string="Browse supplier catalog"
+                    icon="fa-shopping-cart"
+                    invisible="state != 'draft'"
+                />
+            </xpath>
+            <!-- Tag each PO line with its source punchout session, so
+                 purchasers can tell at a glance which lines came from
+                 the supplier catalog vs were added manually. The
+                 column is hidden by default; toggle via column-options. -->
+            <xpath
+                expr="//field[@name='order_line']/list/field[@name='product_qty']"
+                position="before"
+            >
+                <!-- Same group restriction as the smart button — regular
+                     users can't read punchout.session, so the column
+                     would render blank for them anyway. -->
+                <field
+                    name="punchout_session_id"
+                    optional="hide"
+                    string="Punchout Session"
+                    groups="base.group_system"
+                />
+            </xpath>
+            <!-- Add 'Browse supplier catalog' next to the standard
+                 'Catalog' link at the bottom of the order_line area —
+                 the most natural place for a purchaser working through
+                 a PO to find it. -->
+            <xpath
+                expr="//field[@name='order_line']/list/control/button[@name='action_add_from_catalog']"
+                position="after"
+            >
+                <button
+                    name="action_open_punchout_catalog"
+                    string="Browse supplier catalog"
+                    type="object"
+                    class="px-4 btn-link"
+                    context="{'order_id': parent.id}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

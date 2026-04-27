@@ -1,0 +1,4 @@
+- Thomas Binsfeld \<thomas.binsfeld@acsone.eu\>
+- Benjamin Willig \<benjamin.willig@acsone.eu\>
+- Holger Brunn \<hbrunn@therp.nl\>
+- Bosd (migration to 18.0)
