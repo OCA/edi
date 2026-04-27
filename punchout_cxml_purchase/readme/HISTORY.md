@@ -13,3 +13,9 @@
 - [IMP] Warn (logger) when a supplier-part code matches multiple
   products for the same partner. Picks the first deterministically
   rather than silently.
+- [ADD] `_post_create_product_hook(product, raw_data)` — empty
+  extension point fired once per newly-created product. Lets private
+  / glue modules enrich the product (image, dimensions, HS code,
+  brand) from the supplier's REST API without monkey-patching.
+  ``raw_data`` carries supplier_part_id + description + unit_price +
+  the raw item_detail lxml element.

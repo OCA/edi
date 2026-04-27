@@ -170,10 +170,35 @@ class PunchoutSession(models.Model):
                     )
                 ]
 
-            return Product.sudo().create(product_vals)
+            product = Product.sudo().create(product_vals)
+            self._post_create_product_hook(
+                product,
+                {
+                    "supplier_part_id": supplier_part_id,
+                    "description": description,
+                    "unit_price": unit_price,
+                    "item_detail": item_detail,
+                },
+            )
+            return product
 
         # Fallback: return a generic product or raise error
         return Product.search([("purchase_ok", "=", True)], limit=1)
+
+    def _post_create_product_hook(self, product, raw_data):
+        """Hook fired after a product is auto-created from a punchout
+        cart. Empty in base — override in private/glue modules to
+        enrich the product (image, dimensions, HS code, brand, etc.)
+        from the supplier's REST API. ``raw_data`` is the protocol-
+        specific cart-line dict; for cXML it carries
+        ``supplier_part_id``, ``description``, ``unit_price`` and the
+        raw ``item_detail`` lxml element so overrides can pull
+        protocol-specific fields without re-parsing.
+
+        Hook fires once per newly-created product, never on existing
+        product matches. Failures inside the hook MUST be caught by
+        the override — the cart-import flow should never break
+        because an enrichment call timed out."""
 
     def _get_uom_for_cxml_item(self, item_detail):
         """Get UoM for cXML item, using the full punchout.uom.mapping chain."""

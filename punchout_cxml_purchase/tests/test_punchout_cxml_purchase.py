@@ -63,6 +63,54 @@ class TestPunchoutCxmlPurchase(TestPunchoutPurchaseCommon):
         self.assertTrue(product.exists())
         self.assertEqual(product.seller_ids.product_code, "SKU-CXML-1")
 
+    def test_post_create_product_hook_called_once_on_create(self):
+        """_post_create_product_hook fires on auto-create; raw_data
+        carries supplier_part_id + description + unit_price + the raw
+        item_detail element so overrides can pull cXML-specific fields
+        without re-parsing."""
+        from unittest.mock import patch
+
+        self.session.response = CXML_CART
+        with patch.object(
+            type(self.session),
+            "_post_create_product_hook",
+            autospec=True,
+        ) as hook:
+            self.session._prepare_purchase_order_lines()
+        self.assertEqual(hook.call_count, 1)
+        _self, product, raw_data = hook.call_args[0]
+        self.assertTrue(product.exists())
+        self.assertEqual(raw_data.get("supplier_part_id"), "SKU-CXML-1")
+        self.assertIn("item_detail", raw_data)
+
+    def test_post_create_product_hook_skipped_on_existing_match(self):
+        from unittest.mock import patch
+
+        self.env["product.product"].create(
+            {
+                "name": "Pre-existing cXML",
+                "type": "consu",
+                "seller_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "partner_id": self.partner.id,
+                            "product_code": "SKU-CXML-1",
+                        },
+                    )
+                ],
+            }
+        )
+        self.session.response = CXML_CART
+        with patch.object(
+            type(self.session),
+            "_post_create_product_hook",
+            autospec=True,
+        ) as hook:
+            self.session._prepare_purchase_order_lines()
+        hook.assert_not_called()
+
     def test_reuses_existing_supplierinfo(self):
         existing = self.env["product.product"].create(
             {
