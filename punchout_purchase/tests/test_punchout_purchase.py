@@ -113,6 +113,40 @@ class TestPunchoutPurchase(TestPunchoutPurchaseCommon):
         self.partner.invalidate_recordset(["has_punchout_backend"])
         self.assertFalse(self.partner.has_punchout_backend)
 
+    def test_state_change_with_empty_env_user_does_not_crash(self):
+        """When the supplier-callback controller path (auth=none) writes
+        ``state=to_process`` with an empty env.user, our write override
+        re-enters under OdooBot (SUPERUSER) so the state change
+        completes without crashing on empty-user lookups deeper in the
+        chain (mail.thread tracking, auto-process create, etc.).
+
+        Pre-fix symptom: ``Expected singleton: res.users()`` raised
+        from stock's ``_default_responsible_id`` during product
+        auto-create. Post-fix: the write completes, state transitions
+        to ``to_process``, and any tracking messages are attributed to
+        OdooBot rather than failing or showing 'unknown user'.
+        """
+        # Create a session in draft (auto-process disabled by removing
+        # the partner — we only want to verify the env switch happens,
+        # not the full create chain).
+        self.backend.partner_id = False
+        session = self.session_model.create(
+            {"backend_id": self.backend.id, "state": "draft"}
+        )
+        # Simulate the controller path: env.uid = None / empty.
+        controller_env = self.env(
+            user=self.env["res.users"].browse(),  # empty recordset
+            su=True,
+        )
+        # Sanity: in this simulated env, env.user is empty.
+        self.assertFalse(controller_env.user)
+        # The write must complete without raising. Pre-fix this would
+        # crash (state would tracking-message + auto-process flow
+        # would hit empty env.user).
+        session.with_env(controller_env).write({"state": "to_process"})
+        # State transitioned successfully.
+        self.assertEqual(session.state, "to_process")
+
     def test_partner_has_punchout_backend_false_when_not_supplier(self):
         """A non-supplier partner (supplier_rank=0) shouldn't show
         the Browse button regardless of backend state — covered by

@@ -29,3 +29,11 @@
   open punchout backend. Previously the button appeared on every
   draft PO; clicking on a non-punchout vendor raised a UserError —
   now the affordance only shows when it's actionable.
+- [FIX] System-user attribution for the supplier-callback path:
+  re-enter ``write()`` under OdooBot (SUPERUSER) when ``env.user``
+  is empty (auth=none controller path). Avoids the
+  ``Expected singleton: res.users()`` crash deep in the
+  product-create chain and attributes the state-tracking message to
+  OdooBot rather than "unknown user". Per-line / per-PO chatter
+  attribution to the punchout-initiating user (``session.user_id``)
+  is preserved via ``with_user(author)`` for the actual writes.

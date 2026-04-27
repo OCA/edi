@@ -87,23 +87,23 @@ class PunchoutSession(models.Model):
                 _("Session must be in 'To Process' state to create a purchase order.")
             )
         # The supplier-callback path is ``auth="none"``; ``env.user``
-        # there can be the public user OR an empty recordset depending
-        # on the Odoo version + how sudo / auth interact. Calling
-        # ``with_user(empty)`` poisons the env (uid resolves to
-        # nothing → ``env.user`` is empty → standard Odoo defaults
-        # like ``stock._default_responsible_id`` crash on
-        # ``self.env.user._is_superuser()``). Always fall back to a
-        # real user: session.user_id (set at create time, the
-        # purchaser who clicked the punchout button) → admin as a
-        # last-ditch safety net.
-        author = (
-            self.user_id
-            or self.env.user
-            or self.env.ref("base.user_admin", raise_if_not_found=False)
-        )
+        # there can be the public user OR an empty recordset
+        # depending on the Odoo version + how sudo / auth interact.
+        # Calling ``with_user(empty)`` is a no-op (returns self
+        # unchanged), and the empty-env then poisons the deeper
+        # product-create chain (``stock._default_responsible_id``
+        # crashes on ``self.env.user._is_superuser()``).
+        # Resolution order:
+        #   1. session.user_id (the human who clicked the punchout
+        #      button — best for audit attribution)
+        #   2. env.user (if non-empty)
+        #   3. OdooBot / SUPERUSER (system fallback, always exists)
+        author = self.user_id or self.env.user
         if not author or not author.id:
-            # Belt-and-braces: SUPERUSER always exists.
-            author = self.env["res.users"].browse(self.env.SUPERUSER_ID)
+            # OdooBot is the right system fallback over a human admin:
+            # signals "system action" in the chatter (no confusion
+            # with manual admin edits) and runs in superuser mode.
+            author = self.env.ref("base.user_root")
         if self.purchase_order_id:
             # Append-to-existing flow (started from a draft PO).
             if self.purchase_order_id.state not in ("draft", "sent"):
@@ -297,10 +297,49 @@ class PunchoutSession(models.Model):
         on a PO with the new lines visible. Skips when the backend
         has no supplier configured (manual-review fallback).
 
-        On failure, surface the error in the session's chatter (always)
-        and on the pre-linked PO's chatter (when set), so the purchaser
-        sees a notification next to the affected record instead of
-        having to dig through server logs."""
+        **System-user attribution** for the state-tracking message
+        and the auto-process create chain: the supplier-callback
+        controller is ``auth="none"``, so ``env.user`` may be empty
+        / public. Standard ``mail.thread`` would attribute the
+        state-tracking message to "unknown" and the deeper product-
+        create chain crashes on
+        ``self.env.user._is_superuser()`` (``Expected singleton:
+        res.users()``). Switch the env to admin **before** calling
+        super so:
+          * the tracking message has a real author (admin → renders
+            as "Administrator" / "OdooBot" depending on the install)
+          * the auto-process flow has ``self.env.user`` = admin,
+            avoiding the empty-singleton crash deep in stock's
+            ``_default_responsible_id``
+        Per-line / per-PO attribution to the punchout-initiating
+        user (``session.user_id``) still happens inside
+        ``action_create_purchase_order`` via ``with_user(author)``
+        for the actual writes — only the system-level entry point
+        is admin.
+
+        On failure, surface the error in the session's chatter and
+        on the pre-linked PO's chatter so the purchaser is notified
+        next to the affected record instead of having to dig through
+        server logs."""
+        # Detect controller-path writes (env.uid is None / empty) and
+        # re-enter under OdooBot's identity. ``not self.env.uid``
+        # covers both the literal-None case and the public-user case
+        # where the public user can't even read its own res.users
+        # record. OdooBot (``base.user_root``, the SUPERUSER) is the
+        # right choice over a human admin: it signals "system action"
+        # in the chatter (avoids confusion with manual admin edits),
+        # and ``with_user(SUPERUSER)`` implicitly enables superuser
+        # mode (per Odoo docstring: "by convention, the superuser is
+        # always in superuser mode") so the deeper product-create
+        # chain bypasses any partner / company ACLs that would
+        # otherwise resolve env.user to an empty recordset.
+        if (
+            vals.get("state") == "to_process"
+            and not self.env.context.get("skip_punchout_auto_process")
+            and (not self.env.uid or not self.env.user)
+        ):
+            odoobot = self.env.ref("base.user_root")
+            return self.with_user(odoobot).write(vals)
         res = super().write(vals)
         if vals.get("state") == "to_process":
             for rec in self:
@@ -330,18 +369,14 @@ class PunchoutSession(models.Model):
         Defensive: this method is called from the failure branch of
         the auto-process flow, which itself runs from an
         ``auth="none"`` controller. ``env.user`` may be empty or the
-        public user. Fall through to admin so the chatter post never
-        crashes — losing the notification entirely is worse than
-        attributing it to admin.
+        public user. Fall through to OdooBot (SUPERUSER) so the
+        chatter post never crashes — losing the notification entirely
+        is worse than attributing it to OdooBot.
         """
         self.ensure_one()
-        author = (
-            self.user_id
-            or self.env.user
-            or self.env.ref("base.user_admin", raise_if_not_found=False)
-        )
+        author = self.user_id or self.env.user
         if not author or not author.id:
-            author = self.env["res.users"].browse(self.env.SUPERUSER_ID)
+            author = self.env.ref("base.user_root")
         body = _(
             "Auto-creation of the purchase order failed. The session "
             "remains in <strong>To Process</strong> — open it and "
