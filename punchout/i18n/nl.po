@@ -1,0 +1,503 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* punchout
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-25 22:13+0000\n"
+"PO-Revision-Date: 2026-04-25 22:13+0000\n"
+"Last-Translator: \n"
+"Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_backend_kanban_view
+msgid "<i class=\"fa fa-sign-in\"/> Access"
+msgstr "<i class=\"fa fa-sign-in\"/> Toegang"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_uom_mapping.py:0
+msgid "A mapping for supplier code %(code)s already exists for this scope."
+msgstr "Er bestaat al een toewijzing voor leverancierscode %(code)s in deze scope."
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_backend_form_view
+msgid "Access"
+msgstr "Toegang"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_needaction
+msgid "Action Needed"
+msgstr "Actie vereist"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__action_process_allowed
+msgid "Action Process Allowed"
+msgstr "Verwerken toegestaan"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "An error occured during the process of the session."
+msgstr "Er is een fout opgetreden tijdens het verwerken van de sessie."
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_attachment_count
+msgid "Attachment Count"
+msgstr "Aantal bijlagen"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__backend_id
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__backend_id
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_search_view
+msgid "Backend"
+msgstr "Backend"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_search_view
+msgid "Backend-scoped"
+msgstr "Backend-specifiek"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_uom_mapping.py:0
+msgid "Backend: %s"
+msgstr "Backend: %s"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__browser_form_post_url
+msgid "Browser form post URL"
+msgstr "Browser-formulier-POST URL"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_backend.py:0
+msgid "Browser form post url is not configured on the backend. %(name)s"
+msgstr "De URL voor het terugsturen van het winkelmandje is niet geconfigureerd op backend %(name)s."
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__buyer_cookie_id
+msgid "Cookie"
+msgstr "Cookie"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__create_uid
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__create_uid
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__create_uid
+msgid "Created by"
+msgstr "Aangemaakt door"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__create_date
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__create_date
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__create_date
+msgid "Created on"
+msgstr "Aangemaakt op"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__description
+msgid "Description"
+msgstr "Omschrijving"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__display_name
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__display_name
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__display_name
+msgid "Display Name"
+msgstr "Weergavenaam"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_session.py:0
+msgid "Done"
+msgstr "Voltooid"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_session.py:0
+msgid "Draft"
+msgstr "Concept"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_session.py:0
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Error"
+msgstr "Fout"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__error_message
+msgid "Error Message"
+msgstr "Foutmelding"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__expiration_date
+msgid "Expiration Date"
+msgstr "Vervaldatum"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_backend__browser_form_post_url
+msgid "Exposed URL where the shopping cart must be sent back to."
+msgstr "Publiek toegankelijke URL waarnaar het winkelmandje moet worden teruggestuurd."
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_follower_ids
+msgid "Followers"
+msgstr "Volgers"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Volgers (Relaties)"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_search_view
+msgid "Global"
+msgstr "Algemeen"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_backend_search_view
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_search_view
+msgid "Group By"
+msgstr "Groeperen op"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__has_message
+msgid "Has Message"
+msgstr "Heeft bericht"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__id
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__id
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__id
+msgid "ID"
+msgstr "ID"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Indien aangevinkt vereisen nieuwe berichten uw aandacht."
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Indien aangevinkt hebben sommige berichten een afleverfout."
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_is_follower
+msgid "Is Follower"
+msgstr "Is volger"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__write_uid
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__write_uid
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__write_uid
+msgid "Last Updated by"
+msgstr "Laatst bijgewerkt door"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__write_date
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__write_date
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__write_date
+msgid "Last Updated on"
+msgstr "Laatst bijgewerkt op"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_backend__uom_mapping_ids
+msgid "Map supplier-specific UoM codes to Odoo UoMs."
+msgstr "Wijs leverancier-specifieke maateenheidcodes toe aan Odoo-maateenheden."
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_form_view
+msgid "Mapping"
+msgstr "Toewijzing"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_uom_mapping__supplier_id
+msgid ""
+"Mapping applies to any backend using this supplier. Ignored when a backend "
+"is set. Leave empty for a global mapping."
+msgstr ""
+"Toewijzing geldt voor elke backend die deze leverancier gebruikt. Wordt "
+"genegeerd zodra een backend is ingesteld. Laat leeg voor een algemene "
+"toewijzing."
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_uom_mapping__backend_id
+msgid ""
+"Mapping only applies to this backend. Leave empty for a supplier-wide or "
+"global mapping."
+msgstr ""
+"Toewijzing geldt alleen voor deze backend. Laat leeg voor een leverancier-"
+"brede of algemene toewijzing."
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__session_duration
+msgid "Maximum session duration"
+msgstr "Maximale sessieduur"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_has_error
+msgid "Message Delivery error"
+msgstr "Bericht afleverfout"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_ids
+msgid "Messages"
+msgstr "Berichten"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__name
+msgid "Name"
+msgstr "Naam"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_session.py:0
+msgid "No punchout backend found to initialize the connection."
+msgstr "Geen punchout-backend gevonden om de verbinding te initialiseren."
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__notes
+msgid "Notes"
+msgstr "Notities"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Aantal acties"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__message_has_error_counter
+msgid "Number of errors"
+msgstr "Aantal fouten"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Aantal berichten dat actie vereist"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_session__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Aantal berichten met afleverfout"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_uom_mapping__notes
+msgid "Optional notes about this mapping."
+msgstr "Optionele notities bij deze toewijzing."
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Process"
+msgstr "Verwerken"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__protocol
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_backend_search_view
+msgid "Protocol"
+msgstr "Protocol"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_session.py:0
+msgid "Protocol %(protocol)s does not implement setup request."
+msgstr "Protocol %(protocol)s ondersteunt geen setup-verzoek."
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_session.py:0
+msgid "Protocol does not implement response storage."
+msgstr "Protocol ondersteunt geen opslag van het antwoord."
+
+#. module: punchout
+#: model:ir.ui.menu,name:punchout.punchout_menu
+msgid "PunchOut"
+msgstr "PunchOut"
+
+#. module: punchout
+#: model:ir.model,name:punchout.model_punchout_backend
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_backend_form_view
+msgid "PunchOut Backend"
+msgstr "PunchOut backend"
+
+#. module: punchout
+#: model:ir.ui.menu,name:punchout.punchout_backend_menu
+msgid "PunchOut Backends"
+msgstr "PunchOut backends"
+
+#. module: punchout
+#: model:ir.actions.act_window,name:punchout.punchout_session_act_window
+#: model:ir.ui.menu,name:punchout.punchout_session_menu
+msgid "PunchOut sessions"
+msgstr "PunchOut-sessies"
+
+#. module: punchout
+#: model:ir.actions.act_window,name:punchout.punchout_backend_act_window
+msgid "Punchout Backends"
+msgstr "Punchout backends"
+
+#. module: punchout
+#: model:ir.model,name:punchout.model_punchout_session
+msgid "Punchout Session"
+msgstr "Punchout-sessie"
+
+#. module: punchout
+#: model:ir.model,name:punchout.model_punchout_uom_mapping
+msgid "Punchout UoM Mapping"
+msgstr "Punchout maateenheid-toewijzing"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Received"
+msgstr "Ontvangen"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__response
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Response"
+msgstr "Antwoord"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__response_date
+msgid "Response Date"
+msgstr "Antwoorddatum"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_form_view
+msgid "Scope"
+msgstr "Scope"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Sent"
+msgstr "Verzonden"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_session_form_view
+msgid "Setup"
+msgstr "Setup"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__setup_request
+msgid "Setup Request"
+msgstr "Setup-verzoek"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__setup_request_response
+msgid "Setup Request Response"
+msgstr "Antwoord op setup-verzoek"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__punchout_url
+msgid "Start URL"
+msgstr "Start-URL"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__state
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__state
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_backend_search_view
+msgid "State"
+msgstr "Status"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__supplier_id
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_search_view
+msgid "Supplier"
+msgstr "Leverancier"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__supplier_code
+msgid "Supplier Code"
+msgstr "Leverancierscode"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_uom_mapping.py:0
+msgid "Supplier code cannot be empty for mapping %(name)s"
+msgstr "Leverancierscode mag niet leeg zijn voor toewijzing %(name)s"
+
+#. module: punchout
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_search_view
+msgid "Supplier-scoped"
+msgstr "Leverancier-specifiek"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_uom_mapping.py:0
+msgid "Supplier: %s"
+msgstr "Leverancier: %s"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_uom_mapping__uom_id
+msgid "The Odoo UoM to use for products with this supplier code."
+msgstr "De Odoo-maateenheid die moet worden gebruikt voor producten met deze leverancierscode."
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_uom_mapping__supplier_code
+msgid "The UoM code used by the supplier in punchout responses."
+msgstr "De maateenheidcode die door de leverancier in punchout-antwoorden wordt gebruikt."
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_backend.py:0
+msgid "The duration of the session must be greater than 0. {name}"
+msgstr "De duur van de sessie moet groter zijn dan 0. {name}"
+
+#. module: punchout
+#: model:ir.model.fields,help:punchout.field_punchout_backend__protocol
+msgid "The punchout protocol used by this backend."
+msgstr "Het punchout-protocol dat door deze backend wordt gebruikt."
+
+#. module: punchout
+#: model:ir.model.constraint,message:punchout.constraint_punchout_backend_name_unique
+msgid "This PunchOut backend already exists."
+msgstr "Deze PunchOut backend bestaat al."
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_session.py:0
+msgid "To Process"
+msgstr "Te verwerken"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__url
+msgid "URL"
+msgstr "URL"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_uom_mapping__uom_id
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_uom_mapping_search_view
+msgid "UoM"
+msgstr "Maateenheid"
+
+#. module: punchout
+#: model:ir.actions.act_window,name:punchout.punchout_uom_mapping_act_window
+#: model:ir.model.fields,field_description:punchout.field_punchout_backend__uom_mapping_ids
+#: model:ir.ui.menu,name:punchout.punchout_uom_mapping_menu
+#: model_terms:ir.ui.view,arch_db:punchout.punchout_backend_form_view
+msgid "UoM Mappings"
+msgstr "Maateenheid-toewijzingen"
+
+#. module: punchout
+#: model:ir.model.fields,field_description:punchout.field_punchout_session__user_id
+msgid "User"
+msgstr "Gebruiker"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_session.py:0
+msgid "You are not allowed to process this request. %(name)s"
+msgstr "U bent niet bevoegd om dit verzoek te verwerken. %(name)s"
+
+#. module: punchout
+#. odoo-python
+#: code:addons/punchout/models/punchout_uom_mapping.py:0
+msgid "global"
+msgstr "algemeen"

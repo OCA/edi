@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!-- Demo Punchout Backend (base, will be extended by protocol modules) -->
+    <record id="demo_punchout_backend" model="punchout.backend">
+        <field name="name">Demo Supplier Catalog</field>
+        <field name="description">Demo punchout backend for testing</field>
+        <field name="protocol">cxml</field>
+        <field name="url">https://demo.supplier.example.com/punchout</field>
+        <field name="browser_form_post_url">/punchout/cxml/receive/</field>
+        <field name="session_duration">7200</field>
+        <field name="state">open</field>
+    </record>
+
+    <!-- Demo UoM Mappings for common supplier-specific codes -->
+    <record id="demo_uom_mapping_pce" model="punchout.uom.mapping">
+        <field name="backend_id" ref="demo_punchout_backend" />
+        <field name="supplier_code">PCE</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">Common supplier code for pieces/units</field>
+    </record>
+
+    <record id="demo_uom_mapping_box" model="punchout.uom.mapping">
+        <field name="backend_id" ref="demo_punchout_backend" />
+        <field name="supplier_code">BOX</field>
+        <field name="uom_id" ref="uom.product_uom_dozen" />
+        <field name="notes">Supplier uses BOX for dozen quantities</field>
+    </record>
+
+    <record id="demo_uom_mapping_kg" model="punchout.uom.mapping">
+        <field name="backend_id" ref="demo_punchout_backend" />
+        <field name="supplier_code">KGM</field>
+        <field name="uom_id" ref="uom.product_uom_kgm" />
+        <field name="notes">UNECE code for kilogram</field>
+    </record>
+</odoo>

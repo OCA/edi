@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ACSONE SA/NV
+     Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!--FORM view-->
+    <record model="ir.ui.view" id="punchout_uom_mapping_form_view">
+        <field name="model">punchout.uom.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Scope">
+                            <field name="backend_id" />
+                            <field name="supplier_id" invisible="backend_id" />
+                        </group>
+                        <group string="Mapping">
+                            <field name="supplier_code" />
+                            <field name="uom_id" />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--TREE view-->
+    <record model="ir.ui.view" id="punchout_uom_mapping_tree_view">
+        <field name="model">punchout.uom.mapping</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field
+                    name="backend_id"
+                    column_invisible="context.get('default_backend_id')"
+                />
+                <field name="supplier_id" optional="show" />
+                <field name="supplier_code" />
+                <field name="uom_id" />
+                <field name="notes" optional="hide" />
+            </list>
+        </field>
+    </record>
+
+    <!--SEARCH view-->
+    <record model="ir.ui.view" id="punchout_uom_mapping_search_view">
+        <field name="model">punchout.uom.mapping</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="supplier_code" />
+                <field name="uom_id" />
+                <field name="backend_id" />
+                <field name="supplier_id" />
+                <filter
+                    name="filter_global"
+                    string="Global"
+                    domain="[('backend_id', '=', False), ('supplier_id', '=', False)]"
+                />
+                <filter
+                    name="filter_supplier_scoped"
+                    string="Supplier-scoped"
+                    domain="[('backend_id', '=', False), ('supplier_id', '!=', False)]"
+                />
+                <filter
+                    name="filter_backend_scoped"
+                    string="Backend-scoped"
+                    domain="[('backend_id', '!=', False)]"
+                />
+                <group string="Group By" name="groupby">
+                    <filter
+                        name="group_by_backend"
+                        string="Backend"
+                        context="{'group_by': 'backend_id'}"
+                    />
+                    <filter
+                        name="group_by_supplier"
+                        string="Supplier"
+                        context="{'group_by': 'supplier_id'}"
+                    />
+                    <filter
+                        name="group_by_uom"
+                        string="UoM"
+                        context="{'group_by': 'uom_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--ACTION-->
+    <record model="ir.actions.act_window" id="punchout_uom_mapping_act_window">
+        <field name="name">UoM Mappings</field>
+        <field name="res_model">punchout.uom.mapping</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!--MENU-->
+    <record model="ir.ui.menu" id="punchout_uom_mapping_menu">
+        <field name="name">UoM Mappings</field>
+        <field name="parent_id" ref="punchout.punchout_menu" />
+        <field name="action" ref="punchout.punchout_uom_mapping_act_window" />
+        <field name="sequence" eval="30" />
+    </record>
+</odoo>
