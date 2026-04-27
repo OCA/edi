@@ -36,6 +36,32 @@ class PurchaseOrder(models.Model):
     punchout_session_count = fields.Integer(
         compute="_compute_punchout_session_ids",
     )
+    has_punchout_backend = fields.Boolean(
+        compute="_compute_has_punchout_backend",
+        help=(
+            "True when the vendor (``partner_id``) has at least one "
+            "open punchout backend. Used to hide the "
+            "Browse Supplier Catalog button on POs whose vendor has "
+            "no punchout configured (clicking would just raise a "
+            "UserError — better to not show the affordance at all)."
+        ),
+    )
+
+    @api.depends("partner_id")
+    def _compute_has_punchout_backend(self):
+        # Group POs by partner so we run one search per distinct
+        # vendor instead of one per PO. Material when a list view
+        # renders dozens of POs.
+        partners = self.mapped("partner_id")
+        if not partners:
+            for rec in self:
+                rec.has_punchout_backend = False
+            return
+        # _find_punchout_backend returns a single record (or empty);
+        # call once per partner.
+        partner_has = {p.id: bool(p._find_punchout_backend()) for p in partners}
+        for rec in self:
+            rec.has_punchout_backend = partner_has.get(rec.partner_id.id, False)
 
     @api.depends("order_line.punchout_session_id", "punchout_session_id")
     def _compute_punchout_session_ids(self):

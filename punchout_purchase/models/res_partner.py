@@ -1,7 +1,7 @@
 # Copyright 2026 Bosd
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -19,6 +19,27 @@ class ResPartner(models.Model):
             "purely a deep-link, no punchout session is initiated."
         ),
     )
+    has_punchout_backend = fields.Boolean(
+        compute="_compute_has_punchout_backend",
+        help=(
+            "True when this partner has at least one open punchout "
+            "backend. Used to hide the Browse Supplier Catalog button "
+            "on partners without a punchout configured (clicking would "
+            "just raise a UserError — better not to show the affordance)."
+        ),
+    )
+
+    @api.depends("supplier_rank")
+    def _compute_has_punchout_backend(self):
+        # supplier_rank acts as the recompute trigger; the actual
+        # answer comes from the punchout.backend table. We re-resolve
+        # via _find_punchout_backend so any future override (multi-
+        # backend wizard, region scoping, …) flows through one place.
+        for rec in self:
+            if rec.supplier_rank and rec.id:
+                rec.has_punchout_backend = bool(rec._find_punchout_backend())
+            else:
+                rec.has_punchout_backend = False
 
     def _find_punchout_backend(self):
         """Return the (single) open punchout backend for this partner.

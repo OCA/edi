@@ -86,11 +86,24 @@ class PunchoutSession(models.Model):
             raise UserError(
                 _("Session must be in 'To Process' state to create a purchase order.")
             )
-        # The supplier-callback path runs sudo'd (often as the public
-        # user), so env.user is meaningless for attribution. Fall back
-        # to env.user only if the session has no user_id (shouldn't
-        # happen in practice — user_id defaults at create time).
-        author = self.user_id or self.env.user
+        # The supplier-callback path is ``auth="none"``; ``env.user``
+        # there can be the public user OR an empty recordset depending
+        # on the Odoo version + how sudo / auth interact. Calling
+        # ``with_user(empty)`` poisons the env (uid resolves to
+        # nothing → ``env.user`` is empty → standard Odoo defaults
+        # like ``stock._default_responsible_id`` crash on
+        # ``self.env.user._is_superuser()``). Always fall back to a
+        # real user: session.user_id (set at create time, the
+        # purchaser who clicked the punchout button) → admin as a
+        # last-ditch safety net.
+        author = (
+            self.user_id
+            or self.env.user
+            or self.env.ref("base.user_admin", raise_if_not_found=False)
+        )
+        if not author or not author.id:
+            # Belt-and-braces: SUPERUSER always exists.
+            author = self.env["res.users"].browse(self.env.SUPERUSER_ID)
         if self.purchase_order_id:
             # Append-to-existing flow (started from a draft PO).
             if self.purchase_order_id.state not in ("draft", "sent"):
@@ -312,18 +325,53 @@ class PunchoutSession(models.Model):
         """Post a chatter message on the session and (when pre-linked)
         on the target PO so the purchaser is notified of the failure
         rather than having to discover it from the session staying in
-        ``to_process``."""
+        ``to_process``.
+
+        Defensive: this method is called from the failure branch of
+        the auto-process flow, which itself runs from an
+        ``auth="none"`` controller. ``env.user`` may be empty or the
+        public user. Fall through to admin so the chatter post never
+        crashes — losing the notification entirely is worse than
+        attributing it to admin.
+        """
         self.ensure_one()
-        author = self.user_id or self.env.user
+        author = (
+            self.user_id
+            or self.env.user
+            or self.env.ref("base.user_admin", raise_if_not_found=False)
+        )
+        if not author or not author.id:
+            author = self.env["res.users"].browse(self.env.SUPERUSER_ID)
         body = _(
             "Auto-creation of the purchase order failed. The session "
             "remains in <strong>To Process</strong> — open it and "
             "click Process to retry once the issue is resolved.<br/>"
             "Error: <code>%(err)s</code>"
         ) % {"err": exc}
-        self.sudo().message_post(body=body)
+        # Both message_posts wrapped in their own try/except — even the
+        # safety-net author resolution can't help if message_post itself
+        # raises (e.g. mail module misconfigured). The session stays in
+        # to_process and the user can still click Process manually.
+        try:
+            self.sudo().with_user(author).message_post(body=body)
+        except Exception as inner_exc:  # noqa: BLE001
+            _logger.warning(
+                "Punchout session %s: failed to post auto-process "
+                "failure chatter on the session: %s",
+                self.display_name,
+                inner_exc,
+            )
         if self.purchase_order_id:
-            self.purchase_order_id.with_user(author).message_post(body=body)
+            try:
+                self.purchase_order_id.sudo().with_user(author).message_post(body=body)
+            except Exception as inner_exc:  # noqa: BLE001
+                _logger.warning(
+                    "Punchout session %s: failed to post auto-process "
+                    "failure chatter on PO %s: %s",
+                    self.display_name,
+                    self.purchase_order_id.display_name,
+                    inner_exc,
+                )
 
     def _prepare_purchase_order_lines(self):
         """Prepare order lines from response. Override in protocol modules."""

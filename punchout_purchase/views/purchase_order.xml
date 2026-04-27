@@ -30,17 +30,25 @@
                     />
                 </button>
             </xpath>
+            <!-- Trigger field for the invisible expression below; not
+                 rendered as a UI element. -->
+            <xpath expr="//header" position="inside">
+                <field name="has_punchout_backend" invisible="1" />
+            </xpath>
             <!-- "Browse supplier catalog" button visible only on draft
                  POs whose vendor has at least one open punchout backend.
                  Surfaces the punchout entry-point right where purchasers
-                 are working — no detour through Customizations. -->
+                 are working — no detour through Customizations. The
+                 ``has_punchout_backend`` gate hides the button on POs
+                 for vendors that aren't wired for punchout (clicking
+                 would just raise a UserError). -->
             <xpath expr="//header/button[@name='action_rfq_send'][1]" position="before">
                 <button
                     name="action_open_punchout_catalog"
                     type="object"
                     string="Browse supplier catalog"
                     icon="fa-shopping-cart"
-                    invisible="state != 'draft'"
+                    invisible="state != 'draft' or not has_punchout_backend"
                 />
             </xpath>
             <!-- Tag each PO line with its source punchout session, so
@@ -64,7 +72,8 @@
             <!-- Add 'Browse supplier catalog' next to the standard
                  'Catalog' link at the bottom of the order_line area —
                  the most natural place for a purchaser working through
-                 a PO to find it. -->
+                 a PO to find it. Same vendor-has-backend gate as the
+                 header button. -->
             <xpath
                 expr="//field[@name='order_line']/list/control/button[@name='action_add_from_catalog']"
                 position="after"
@@ -75,6 +84,7 @@
                     type="object"
                     class="px-4 btn-link"
                     context="{'order_id': parent.id}"
+                    invisible="not parent.has_punchout_backend"
                 />
             </xpath>
         </field>

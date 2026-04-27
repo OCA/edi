@@ -24,3 +24,8 @@
   pricelist resolved to. Odoo stores raw cart numbers as
   `price_unit`, so a silent currency drift is invisible without
   this hint.
+- [FIX] Hide the "Browse supplier catalog" buttons (PO header, PO
+  line area, and vendor form smart button) when the vendor has no
+  open punchout backend. Previously the button appeared on every
+  draft PO; clicking on a non-punchout vendor raised a UserError —
+  now the affordance only shows when it's actionable.

@@ -81,6 +81,49 @@ class TestPunchoutPurchase(TestPunchoutPurchaseCommon):
         with self.assertRaises(UserError):
             po.action_open_punchout_catalog()
 
+    # ---- has_punchout_backend gate (hides UI when no backend) -----------
+
+    def test_po_has_punchout_backend_true_when_open(self):
+        """The PO computed flag drives the Browse Supplier Catalog
+        button's visibility — true when the vendor has at least one
+        open punchout backend."""
+        po = self._draft_po()
+        self.assertTrue(po.has_punchout_backend)
+
+    def test_po_has_punchout_backend_false_when_no_backend(self):
+        """A vendor with no punchout backend at all → flag is False
+        → button hidden in the view."""
+        new_partner = self.env["res.partner"].create(
+            {"name": "Vendor without punchout", "supplier_rank": 1}
+        )
+        po = self._draft_po(partner=new_partner)
+        self.assertFalse(po.has_punchout_backend)
+
+    def test_po_has_punchout_backend_false_when_only_draft_backend(self):
+        """Backend exists but isn't ``open`` → flag is False. Mirrors
+        the action's runtime check: only ``open`` backends count."""
+        self.backend.state = "draft"
+        po = self._draft_po()
+        self.assertFalse(po.has_punchout_backend)
+
+    def test_partner_has_punchout_backend_drives_button(self):
+        """Same gate on the vendor (res.partner) form button."""
+        self.assertTrue(self.partner.has_punchout_backend)
+        self.backend.state = "closed"
+        self.partner.invalidate_recordset(["has_punchout_backend"])
+        self.assertFalse(self.partner.has_punchout_backend)
+
+    def test_partner_has_punchout_backend_false_when_not_supplier(self):
+        """A non-supplier partner (supplier_rank=0) shouldn't show
+        the Browse button regardless of backend state — covered by
+        the ``supplier_rank == 0`` half of the view's invisible
+        expression. Verify the computed flag too for defensive
+        consistency."""
+        customer_only = self.env["res.partner"].create(
+            {"name": "Customer only", "supplier_rank": 0}
+        )
+        self.assertFalse(customer_only.has_punchout_backend)
+
     # ---- session pre-link via context (Browse-from-PO flow) ---------------
 
     def test_create_session_pre_links_target_po(self):
