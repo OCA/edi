@@ -3,7 +3,9 @@
 
 import logging
 
-from odoo import _, api, models
+from lxml import etree
+
+from odoo import api, models
 from odoo.exceptions import UserError
 
 logger = logging.getLogger(__name__)
@@ -22,7 +24,12 @@ class DespatchAdviceImport(models.TransientModel):
             return super().parse_xml_despatch_advice(xml_root)
 
     @api.model
-    def parse_ubl_despatch_advice(self, xml_root):
+    def parse_ubl_despatch_advice(self, xml_root: etree._Element):
+        """Parse a UBL Despatch Advice XML.
+
+        :param xml_root: The root element of the XML document.
+        :return: dictionary containing the parsed information.
+        """
         ns = xml_root.nsmap
         # Get main xmlns
         if None in ns:
@@ -83,7 +90,13 @@ class DespatchAdviceImport(models.TransientModel):
         return res
 
     @api.model
-    def parse_ubl_despatch_advice_line(self, line, ns):
+    def parse_ubl_despatch_advice_line(self, line: etree._Element, ns: dict):
+        """Parse a line of a UBL Despatch Advice XML.
+
+        :param line: The XML element representing the line.
+        :param ns: The namespace dictionary for XPath queries.
+        :return: dictionary containing the parsed information for the line.
+        """
         line_id_el = line.xpath("cbc:ID", namespaces=ns)
         qty_el = line.xpath("cbc:DeliveredQuantity", namespaces=ns)
         qty = float(qty_el[0].text)
@@ -116,7 +129,7 @@ class DespatchAdviceImport(models.TransientModel):
         )
 
         if not order_line_id_el:
-            raise UserError(_("Missing line ID in the Despatch Advice."))
+            raise UserError(self.env._("Missing line ID in the Despatch Advice."))
 
         res_line = {
             "line_id": line_id_el[0].text,
@@ -154,7 +167,13 @@ class DespatchAdviceImport(models.TransientModel):
         return res_line
 
     @api.model
-    def ubl_parse_party(self, party_node, ns):
+    def ubl_parse_party(self, party_node: etree._Element, ns: dict):
+        """Parse a party element of a UBL Despatch Advice XML.
+
+        :param party_node: the XML element representing the party.
+        :param ns: the namespace dictionary for XPath queries.
+        :return: dictionary containing the parsed information for the party.
+        """
         partner_name_el = party_node.xpath("cac:PartyName/cbc:Name", namespaces=ns)
         if not partner_name_el:
             partner_name_el = party_node.xpath(

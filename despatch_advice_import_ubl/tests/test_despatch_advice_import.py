@@ -3,69 +3,28 @@
 
 from base64 import b64decode, b64encode
 
-from odoo import fields
-from odoo.tests.common import TransactionCase
 from odoo.tools import file_open
 
+from odoo.addons.despatch_advice_import.tests.common import (
+    TestDespatchAdviceImportCommon,
+)
 
-class TestDespatchAdviceImport(TransactionCase):
+
+class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
-        cls.supplier = cls.env.ref("base.res_partner_12")
-        cls.supplier.vat = "BE0477472701"
-        cls.env.user.company_id.partner_id.vat = "BE0421801233"
-        cls.product_1 = cls.env["product.product"].create(
-            {
-                "name": "Product 1",
-                "default_code": "1234567",
-                "seller_ids": [
-                    (0, 0, {"partner_id": cls.supplier.id, "product_code": "P1"})
-                ],
-            }
+        cls.maxDiff = None
+        cls.product_1 = cls._create_product("Product 1", "1234567", "P1")
+        cls.product_2 = cls._create_product("Product 2", "2345678", "P2")
+        cls.purchase_order = cls._create_purchase_order(
+            [
+                cls._get_po_line_vals(cls.product_1, 24, 15),
+                cls._get_po_line_vals(cls.product_2, 15, 25),
+            ]
         )
-        cls.product_2 = cls.env["product.product"].create(
-            {
-                "name": "Product 2",
-                "default_code": "2345678",
-                "seller_ids": [
-                    (0, 0, {"partner_id": cls.supplier.id, "product_code": "P2"})
-                ],
-            }
-        )
-        cls.purchase_order = cls.env["purchase.order"].create(
-            {
-                "partner_id": cls.supplier.id,
-                "date_order": fields.Datetime.now(),
-                "date_planned": fields.Datetime.now(),
-            }
-        )
-        cls.line1 = cls.purchase_order.order_line.create(
-            {
-                "order_id": cls.purchase_order.id,
-                "product_id": cls.product_1.id,
-                "name": cls.product_2.name,
-                "date_planned": fields.Datetime.now(),
-                "product_qty": 24,
-                "product_uom": cls.env.ref("uom.product_uom_unit").id,
-                "price_unit": 15,
-            }
-        )
-        cls.line2 = cls.purchase_order.order_line.create(
-            {
-                "order_id": cls.purchase_order.id,
-                "product_id": cls.product_2.id,
-                "name": cls.product_2.name,
-                "date_planned": fields.Datetime.now(),
-                "product_qty": 15,
-                "product_uom": cls.env.ref("uom.product_uom_unit").id,
-                "price_unit": 25,
-            }
-        )
-        cls.DespatchAdviceImport = cls.env["despatch.advice.import"]
-        # cls.ProcurementOrder = cls.env["procurement.order"]
-
+        cls.line1, cls.line2 = cls.purchase_order.order_line
+        cls.purchase_order.button_confirm()
         with file_open(
             "despatch_advice_import_ubl/tests/files/despatch_advice_tmpl.xml", "rb"
         ) as f:
@@ -77,14 +36,9 @@ class TestDespatchAdviceImport(TransactionCase):
             cls.despatch_advice_xml2 = f.read()
 
     def test_xml_convert_to_internal_data_01(self):
-        """
-        Data:
-            An UBL DespatchAdvice with all the information expected by the
-            parser
-        Test case:
-            Convert to xml document to the internal data structure
-        Expected result:
-            All the fields are filled into the internal data structure.
+        """Parse a despatch advice xml file to the internal data structure.
+
+        The orderReference is at the document level.
         """
         xml_content = self.despatch_advice_xml1.decode("utf-8").format(
             picking_name="0810805774",
@@ -137,18 +91,12 @@ class TestDespatchAdviceImport(TransactionCase):
             "ref": str(self.purchase_order.name),
             "supplier": {"vat": "BE0477472701"},
         }
-        self.maxDiff = None
         self.assertEqual(expected, result)
 
     def test_xml_convert_to_internal_data_02(self):
-        """
-        Data:
-            An UBL DespatchAdvice with all the information expected by the
-            parser -- The orderReference is at the orderLineLevel
-        Test case:
-            Convert to xml document to the internal data structure
-        Expected result:
-            All the fields are filled into the internal data structure.
+        """Parse a despatch advice xml file to the internal data structure.
+
+        The orderReference is at the line level.
         """
         xml_content = self.despatch_advice_xml2.decode("utf-8").format(
             picking_name="0810805774",
@@ -201,5 +149,4 @@ class TestDespatchAdviceImport(TransactionCase):
             "ref": "",
             "supplier": {"vat": "BE0477472701"},
         }
-        self.maxDiff = None
         self.assertEqual(expected, result)
