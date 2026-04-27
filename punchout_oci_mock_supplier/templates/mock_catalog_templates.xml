@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <template id="catalog_page" name="OCI Mock Catalog">
+        <html lang="en">
+            <head>
+                <meta charset="utf-8" />
+                <title>OCI Mock Supplier — Catalog</title>
+                <style>
+                    body {
+                        font-family: system-ui, sans-serif;
+                        max-width: 920px;
+                        margin: 2em auto;
+                        padding: 0 1em;
+                    }
+                    h1 { margin-bottom: 0.2em; }
+                    .hook {
+                        font-family: monospace;
+                        font-size: 0.85em;
+                        color: #555;
+                        word-break: break-all;
+                    }
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                        margin-top: 1em;
+                    }
+                    th, td {
+                        border: 1px solid #ccc;
+                        padding: 0.5em;
+                        text-align: left;
+                        vertical-align: top;
+                    }
+                    th { background: #f4f4f4; }
+                    td.numeric {
+                        text-align: right;
+                        font-variant-numeric: tabular-nums;
+                    }
+                    input[type="number"] { width: 5em; }
+                    button {
+                        margin-top: 1em;
+                        padding: 0.5em 1.2em;
+                        font-size: 1em;
+                    }
+                    .warn { color: #b00; }
+                </style>
+            </head>
+            <body>
+                <h1>OCI Mock Supplier</h1>
+                <p>This is a fake supplier catalog bundled with the
+                    <code>punchout_oci_mock_supplier</code>
+                    module to give Odoo runboat instances a self-contained
+                    end-to-end demo. Set quantities below and click
+                    <em>Submit cart</em>; the OCI response will POST back to
+                    Odoo and create a draft purchase order.
+                </p>
+                <p>HOOK_URL:
+                    <span class="hook">
+                    <t t-esc="hook_url or '(missing)'" />
+                </span>
+                </p>
+                <p t-if="not hook_url_safe" class="warn">⚠ HOOK_URL is missing
+                    or points outside this Odoo instance. Submission will be
+                    blocked.</p>
+                <form method="POST" action="/punchout_oci_mock_supplier/checkout">
+                    <input type="hidden" name="hook_url" t-att-value="hook_url" />
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        t-att-value="request.csrf_token()"
+                    />
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Vendor #</th>
+                                <th>Description</th>
+                                <th>UoM</th>
+                                <th>Price</th>
+                                <th>Lead time (d)</th>
+                                <th>Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="products" t-as="p">
+                                <td>
+                                    <t t-esc="p['vendormat']" />
+                                </td>
+                                <td>
+                                    <t t-esc="p['description']" />
+                                    <br />
+                                    <small>
+                                        <t t-esc="p['longtext']" />
+                                    </small>
+                                </td>
+                                <td>
+                                    <t t-esc="p['unit']" />
+                                </td>
+                                <td class="numeric">
+                                    <t t-esc="p['price']" />
+                                </td>
+                                <td class="numeric">
+                                    <t t-esc="p['leadtime']" />
+                                </td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        value="0"
+                                        t-att-name="'qty_' + p['vendormat']"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit">Submit cart →</button>
+                </form>
+            </body>
+        </html>
+    </template>
+
+    <template id="checkout_interstitial" name="OCI Mock Checkout Interstitial">
+        <html lang="en">
+            <head>
+                <meta charset="utf-8" />
+                <title>Posting OCI cart…</title>
+            </head>
+            <body onload="document.getElementById('oci').submit()">
+                <noscript>
+                    <p>JavaScript disabled — click the button to send the cart.</p>
+                </noscript>
+                <form
+                    id="oci"
+                    method="POST"
+                    t-att-action="hook_url"
+                    enctype="application/x-www-form-urlencoded"
+                >
+                    <t t-foreach="oci_fields" t-as="f">
+                        <input
+                            type="hidden"
+                            t-att-name="f['name']"
+                            t-att-value="f['value']"
+                        />
+                    </t>
+                    <button type="submit">Submit (no-JS fallback)</button>
+                </form>
+            </body>
+        </html>
+    </template>
+</odoo>
