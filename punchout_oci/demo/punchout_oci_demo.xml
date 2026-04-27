@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!-- Demo OCI Punchout Backend -->
+    <record id="demo_punchout_backend_oci" model="punchout.backend">
+        <field name="name">Demo OCI Supplier Catalog</field>
+        <field name="description">Demo OCI punchout backend for testing</field>
+        <field name="protocol">oci</field>
+        <field name="url">https://demo.oci-supplier.example.com/punchout</field>
+        <field name="browser_form_post_url">/punchout/oci/receive/</field>
+        <field name="session_duration">7200</field>
+        <field name="state">open</field>
+        <field name="oci_version">5.0</field>
+        <field
+            name="oci_custom_parameters"
+        >username=demo_user&amp;catalog_id=demo</field>
+    </record>
+
+    <!-- Demo UoM Mappings for OCI backend -->
+    <record id="demo_oci_uom_mapping_ea" model="punchout.uom.mapping">
+        <field name="backend_id" ref="demo_punchout_backend_oci" />
+        <field name="supplier_code">EA</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">OCI code for each/unit</field>
+    </record>
+</odoo>
