@@ -21,6 +21,22 @@
                         />
                     </group>
                 </group>
+                <group
+                    string="Auto-Created Product Defaults"
+                    name="group_auto_create_defaults"
+                    invisible="not auto_create_products"
+                >
+                    <group>
+                        <field name="default_product_type" />
+                        <field name="default_is_storable" />
+                    </group>
+                    <group>
+                        <field
+                            name="default_tracking"
+                            invisible="not default_is_storable"
+                        />
+                    </group>
+                </group>
             </xpath>
         </field>
     </record>

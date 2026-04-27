@@ -124,17 +124,14 @@ class PunchoutSession(models.Model):
         # Create new product if auto_create_products is enabled
         if backend.auto_create_products:
             uom = self._get_uom_for_cxml_item(item_detail)
+            # Backend-driven defaults — see
+            # ``punchout.backend._get_auto_create_product_defaults``.
             product_vals = {
                 "name": description,
-                "type": "consu",
-                "purchase_ok": True,
                 "uom_id": uom.id,
                 "uom_po_id": uom.id,
+                **backend._get_auto_create_product_defaults(),
             }
-
-            # Add category if configured
-            if backend.product_category_id:
-                product_vals["categ_id"] = backend.product_category_id.id
 
             # Add supplier info
             if backend.partner_id:

@@ -113,6 +113,66 @@ class TestPunchoutPurchase(TestPunchoutPurchaseCommon):
         self.partner.invalidate_recordset(["has_punchout_backend"])
         self.assertFalse(self.partner.has_punchout_backend)
 
+    # ---- backend product-defaults helper -------------------------------
+
+    @property
+    def _stock_installed(self):
+        """True when the stock module is installed (``is_storable``
+        added to ``product.template``). Tests for storable behaviour
+        skip when not installed — the helper still works without
+        stock, it just doesn't emit those keys."""
+        return "is_storable" in self.env["product.template"]._fields
+
+    def test_auto_create_defaults_default_to_consu_non_storable(self):
+        """Out-of-the-box defaults: type=consu, purchase_ok=True.
+        Backwards-compatible with the previously hardcoded
+        ``type='consu'``."""
+        defaults = self.backend._get_auto_create_product_defaults()
+        self.assertEqual(defaults["type"], "consu")
+        self.assertTrue(defaults["purchase_ok"])
+        # is_storable only emitted when stock is installed (i.e. when
+        # the field exists on product.template).
+        if self._stock_installed:
+            self.assertEqual(defaults.get("is_storable"), False)
+        # tracking is NOT emitted when is_storable=False (avoids
+        # setting tracking on non-storable products).
+        self.assertNotIn("tracking", defaults)
+
+    def test_auto_create_defaults_storable_product(self):
+        """Backend configured for storable products → defaults emit
+        ``is_storable=True`` and ``tracking`` per the backend setting.
+        Skipped when stock isn't installed (no field to set)."""
+        if not self._stock_installed:
+            self.skipTest("stock module not installed")
+        self.backend.write(
+            {
+                "default_product_type": "consu",
+                "default_is_storable": True,
+                "default_tracking": "lot",
+            }
+        )
+        defaults = self.backend._get_auto_create_product_defaults()
+        self.assertEqual(defaults["is_storable"], True)
+        self.assertEqual(defaults["tracking"], "lot")
+
+    def test_auto_create_defaults_service_product(self):
+        """Backend configured for service catalog → type=service.
+        Storable / tracking defaults are still emitted but Odoo will
+        ignore them for service products."""
+        self.backend.default_product_type = "service"
+        defaults = self.backend._get_auto_create_product_defaults()
+        self.assertEqual(defaults["type"], "service")
+
+    def test_auto_create_defaults_includes_category(self):
+        """When ``product_category_id`` is set on the backend, the
+        defaults dict carries it."""
+        category = self.env.ref(
+            "product.product_category_goods", raise_if_not_found=False
+        ) or self.env["product.category"].search([], limit=1)
+        self.backend.product_category_id = category
+        defaults = self.backend._get_auto_create_product_defaults()
+        self.assertEqual(defaults["categ_id"], category.id)
+
     def test_state_change_with_empty_env_user_does_not_crash(self):
         """When the supplier-callback controller path (auth=none) writes
         ``state=to_process`` with an empty env.user, our write override

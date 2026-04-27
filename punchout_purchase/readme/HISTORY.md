@@ -37,3 +37,10 @@
   OdooBot rather than "unknown user". Per-line / per-PO chatter
   attribution to the punchout-initiating user (``session.user_id``)
   is preserved via ``with_user(author)`` for the actual writes.
+- [IMP] Configurable auto-created product defaults on the backend:
+  ``default_product_type`` (Goods / Service), ``default_is_storable``
+  (track inventory) and ``default_tracking`` (none / lot / serial).
+  Replaces the previously hardcoded ``type="consu"`` so spare-parts
+  vendors can default to storable inventory in one config knob.
+  Stock-aware fields (``is_storable``, ``tracking``) are silently
+  ignored when the ``stock`` module isn't installed.

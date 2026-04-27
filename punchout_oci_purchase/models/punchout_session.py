@@ -159,22 +159,23 @@ class PunchoutSession(models.Model):
         # Create new product if auto_create_products is enabled
         if backend.auto_create_products:
             uom = self._get_uom_for_oci_item(product_dict)
+            # Backend-driven defaults (type, is_storable, tracking,
+            # categ_id) — see
+            # ``punchout.backend._get_auto_create_product_defaults``.
+            # Replaces the previously hardcoded ``type="consu"`` so
+            # spare-parts vendors can default to storable inventory
+            # in one config knob.
             product_vals = {
                 "name": description,
-                "type": "consu",
-                "purchase_ok": True,
                 "uom_id": uom.id,
                 "uom_po_id": uom.id,
+                **backend._get_auto_create_product_defaults(),
             }
 
             # Add long description if different from main description
             longtext = product_dict.get("LONGTEXT", "")
             if longtext and longtext != description:
                 product_vals["description_purchase"] = longtext
-
-            # Add category if configured
-            if backend.product_category_id:
-                product_vals["categ_id"] = backend.product_category_id.id
 
             # Add supplier info
             if backend.partner_id:
