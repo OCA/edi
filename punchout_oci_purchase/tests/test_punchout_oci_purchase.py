@@ -79,6 +79,59 @@ class TestPunchoutOciPurchase(TestPunchoutPurchaseCommon):
         self.assertTrue(product.exists())
         self.assertEqual(product.seller_ids.product_code, "OCI-SKU-1")
 
+    def test_post_create_product_hook_called_once_on_create(self):
+        """_post_create_product_hook fires on auto-create only, not on
+        existing-product matches. Verifies the hook signature carries
+        (product, raw_data) and the raw_data dict contains the OCI
+        cart-line keys (e.g., VENDORMAT) so overrides can pull
+        protocol-specific fields without re-parsing the whole cart."""
+        from unittest.mock import patch
+
+        self.session.response = _oci_cart()
+        with patch.object(
+            type(self.session),
+            "_post_create_product_hook",
+            autospec=True,
+        ) as hook:
+            self.session._prepare_purchase_order_lines()
+        self.assertEqual(hook.call_count, 1)
+        # autospec → call_args[0] = (self.session, product, raw_data)
+        _self, product, raw_data = hook.call_args[0]
+        self.assertTrue(product.exists())
+        self.assertEqual(raw_data.get("VENDORMAT"), "OCI-SKU-1")
+
+    def test_post_create_product_hook_skipped_on_existing_match(self):
+        """Hook fires on auto-create only — re-using an existing
+        product (matched via supplierinfo) must NOT fire the hook
+        (otherwise an enrichment override would re-fetch on every
+        cart import for known products, burning API quota)."""
+        from unittest.mock import patch
+
+        self.env["product.product"].create(
+            {
+                "name": "Pre-existing OCI",
+                "type": "consu",
+                "seller_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "partner_id": self.partner.id,
+                            "product_code": "OCI-SKU-1",
+                        },
+                    )
+                ],
+            }
+        )
+        self.session.response = _oci_cart()
+        with patch.object(
+            type(self.session),
+            "_post_create_product_hook",
+            autospec=True,
+        ) as hook:
+            self.session._prepare_purchase_order_lines()
+        hook.assert_not_called()
+
     def test_reuses_existing_supplierinfo(self):
         existing = self.env["product.product"].create(
             {

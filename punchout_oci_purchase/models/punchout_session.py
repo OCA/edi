@@ -210,10 +210,26 @@ class PunchoutSession(models.Model):
                     )
                 ]
 
-            return Product.sudo().create(product_vals)
+            product = Product.sudo().create(product_vals)
+            self._post_create_product_hook(product, product_dict)
+            return product
 
         # Fallback: return a generic product
         return Product.search([("purchase_ok", "=", True)], limit=1)
+
+    def _post_create_product_hook(self, product, raw_data):
+        """Hook fired after a product is auto-created from a punchout
+        cart. Empty in base — override in private/glue modules to
+        enrich the product (image, dimensions, HS code, brand, etc.)
+        from the supplier's REST API. ``raw_data`` is the protocol-
+        specific cart-line dict (OCI ``NEW_ITEM-*`` form data here)
+        so overrides can pull supplier-specific keys (e.g. VENDORMAT)
+        without re-parsing the whole cart.
+
+        Hook fires once per newly-created product, never on existing
+        product matches. Failures inside the hook MUST be caught by
+        the override — the cart-import flow should never break
+        because an enrichment call timed out."""
 
     def _get_uom_for_oci_item(self, product_dict):
         """Get UoM for OCI item, using the full punchout.uom.mapping chain."""
