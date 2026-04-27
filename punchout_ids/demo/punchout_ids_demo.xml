@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!-- Demo IDS Punchout Backend -->
+    <record id="demo_punchout_backend_ids" model="punchout.backend">
+        <field name="name">Demo IDS Supplier Catalog</field>
+        <field
+            name="description"
+        >Demo IDS punchout backend for testing (German standard)</field>
+        <field name="protocol">ids</field>
+        <field name="url">https://demo.ids-supplier.example.com/punchout</field>
+        <field name="browser_form_post_url">/punchout/ids/receive/</field>
+        <field name="session_duration">7200</field>
+        <field name="state">open</field>
+        <field name="ids_version">2.5</field>
+        <field name="ids_name_kunde">Demo Kunde GmbH</field>
+        <field name="ids_kndnr">DEMO001</field>
+        <field name="ids_pw_kunde">demo_password</field>
+    </record>
+
+    <!-- Demo UoM Mappings for IDS backend -->
+    <record id="demo_ids_uom_mapping_stk" model="punchout.uom.mapping">
+        <field name="backend_id" ref="demo_punchout_backend_ids" />
+        <field name="supplier_code">STK</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">German code for Stueck (pieces)</field>
+    </record>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Hunki Enterprises BV
+     Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="punchout_backend_form_view_ids">
+        <field name="name">punchout.backend.form.ids</field>
+        <field name="model">punchout.backend</field>
+        <field name="inherit_id" ref="punchout.punchout_backend_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_main']" position="after">
+                <group
+                    name="group_ids_settings"
+                    string="IDS Settings"
+                    invisible="protocol != 'ids'"
+                >
+                    <group>
+                        <field name="ids_version" />
+                        <field name="ids_name_kunde" />
+                    </group>
+                    <group>
+                        <field name="ids_kndnr" />
+                        <field name="ids_pw_kunde" password="True" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
