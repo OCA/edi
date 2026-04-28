@@ -6,7 +6,7 @@
 # enjolras <yo@miguelrevilla.com>, 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-12 01:43+0000\n"
 "PO-Revision-Date: 2018-03-12 01:43+0000\n"
@@ -19,24 +19,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: purchase_order_import_ubl
-#: model:ir.model,name:purchase_order_import_ubl.model_purchase_order_import
+#: model:ir.model,name:purchase_order_import_ubl.model_purchase_order_import_wizard
 msgid "Purchase Order Import from Files"
 msgstr "Importar pedido de compra desde archivos"
 
 #. module: purchase_order_import_ubl
-#: model:ir.model,name:purchase_order_import_ubl.model_order_response_import
+#: model:ir.model,name:purchase_order_import_ubl.model_order_response_import_wizard
 #, fuzzy
 msgid "Purchase Order Response Import from Files"
 msgstr "Importar pedido de compra desde archivos"
 
 #. module: purchase_order_import_ubl
-#: code:addons/purchase_order_import_ubl/wizard/order_response_import.py:60
+#: code:addons/purchase_order_import_ubl/wizard/order_response_import.py:0
 #, python-format
-msgid "Unknown response code found '%s'"
+msgid "Unknown response code found '%(code)s'"
 msgstr ""
 
 #. module: purchase_order_import_ubl
-#: code:addons/purchase_order_import_ubl/wizard/order_response_import.py:70
+#: code:addons/purchase_order_import_ubl/wizard/order_response_import.py:0
 #, python-format
-msgid "Unsupported line status code found '%s'"
+msgid "Unsupported line status code found '%(code)s'"
 msgstr ""

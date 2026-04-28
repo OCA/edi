@@ -1,106 +1,105 @@
-# -*- coding: utf-8 -*-
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, api
-from odoo.tools import float_is_zero
 import logging
+from typing import Any
+
+from lxml import etree
+
+from odoo import api, models
 
 logger = logging.getLogger(__name__)
 
 
-class PurchaseOrderImport(models.TransientModel):
-    _name = 'purchase.order.import'
-    _inherit = ['purchase.order.import', 'base.ubl']
+class PurchaseOrderImportWizard(models.TransientModel):
+    _name = "purchase.order.import.wizard"
+    _inherit = ["purchase.order.import.wizard", "base.ubl"]
 
     @api.model
-    def parse_xml_quote(self, xml_root):
-        start_tag = '{urn:oasis:names:specification:ubl:schema:xsd:'
-        if xml_root.tag == start_tag + 'Quotation-2}Quotation':
+    def parse_xml_quote(self, xml_root: etree._Element) -> dict[str, Any]:
+        start_tag = "{urn:oasis:names:specification:ubl:schema:xsd:"
+        if xml_root.tag == start_tag + "Quotation-2}Quotation":
             return self.parse_ubl_quote(xml_root)
-        else:
-            return super(PurchaseOrderImport, self).parse_xml_quote(xml_root)
+        return super().parse_xml_quote(xml_root)
 
     @api.model
-    def parse_ubl_quote_line(self, line, ns):
-        qty_prec = self.env['decimal.precision'].precision_get(
-            'Product Unit of Measure')
-        line_item = line.xpath('cac:LineItem', namespaces=ns)[0]
-        # line_id_xpath = line_item.xpath('cbc:ID', namespaces=ns)
-        # line_id = line_id_xpath[0].text
-        qty_xpath = line_item.xpath('cbc:Quantity', namespaces=ns)
+    def parse_ubl_quote_line(self, line: etree._Element, ns: dict) -> dict[str, Any]:
+        line_item = line.xpath("cac:LineItem", namespaces=ns)[0]
+        qty_xpath = line_item.xpath("cbc:Quantity", namespaces=ns)
         qty = float(qty_xpath[0].text)
+        uom_dict = {"unece_code": qty_xpath[0].attrib.get("unitCode")}
+        uom = self.env["business.document.import"]._match_uom(
+            uom_dict.copy(), [], raise_exception=False
+        )
         price_unit = 0.0
         subtotal_without_tax_xpath = line_item.xpath(
-            'cbc:LineExtensionAmount', namespaces=ns)
+            "cbc:LineExtensionAmount", namespaces=ns
+        )
         if subtotal_without_tax_xpath:
             subtotal_without_tax = float(subtotal_without_tax_xpath[0].text)
-            if not float_is_zero(qty, precision_digits=qty_prec):
+            if not uom.is_zero(qty):
                 price_unit = subtotal_without_tax / qty
         else:
-            price_xpath = line_item.xpath(
-                'cac:Price/cbc:PriceAmount', namespaces=ns)
+            price_xpath = line_item.xpath("cac:Price/cbc:PriceAmount", namespaces=ns)
             if price_xpath:
                 price_unit = float(price_xpath[0].text)
-        res_line = {
-            'product': self.ubl_parse_product(line_item, ns),
-            'qty': qty,
-            'uom': {'unece_code': qty_xpath[0].attrib.get('unitCode')},
-            'price_unit': price_unit,
-            }
-        return res_line
+        return {
+            "product": self.ubl_parse_product(line_item, ns),
+            "qty": qty,
+            "uom": uom_dict,
+            "price_unit": price_unit,
+        }
 
     @api.model
-    def parse_ubl_quote(self, xml_root):
-        ns = xml_root.nsmap
+    def parse_ubl_quote(self, xml_root: etree._Element) -> dict[str, Any]:
+        ns = dict(xml_root.nsmap)
         main_xmlns = ns.pop(None)
-        ns['main'] = main_xmlns
-        date_xpath = xml_root.xpath(
-            '/main:Quotation/cbc:IssueDate', namespaces=ns)
+        ns["main"] = main_xmlns
+        date_xpath = xml_root.xpath("/main:Quotation/cbc:IssueDate", namespaces=ns)
         currency_xpath = xml_root.xpath(
-            '/main:Quotation/cbc:PricingCurrencyCode', namespaces=ns)
+            "/main:Quotation/cbc:PricingCurrencyCode", namespaces=ns
+        )
         currency_code = False
         if currency_xpath:
             currency_code = currency_xpath[0].text
         else:
-            currency_xpath = xml_root.xpath(
-                '//cbc:LineExtensionAmount', namespaces=ns)
+            currency_xpath = xml_root.xpath("//cbc:LineExtensionAmount", namespaces=ns)
             if currency_xpath:
-                currency_code = currency_xpath[0].attrib.get('currencyID')
+                currency_code = currency_xpath[0].attrib.get("currencyID")
         supplier_xpath = xml_root.xpath(
-            '/main:Quotation/cac:SellerSupplierParty', namespaces=ns)
+            "/main:Quotation/cac:SellerSupplierParty", namespaces=ns
+        )
         supplier_dict = self.ubl_parse_supplier_party(supplier_xpath[0], ns)
         customer_xpath_party = xml_root.xpath(
-            '/main:Quotation/cac:BuyerCustomerParty/cac:Party', namespaces=ns)
+            "/main:Quotation/cac:BuyerCustomerParty/cac:Party", namespaces=ns
+        )
         company_dict_full = self.ubl_parse_party(customer_xpath_party[0], ns)
         company_dict = {}
-        # We only take the "official references" for company_dict
-        if company_dict_full.get('vat'):
-            company_dict = {'vat': company_dict_full['vat']}
+        # We only take the "official references" for company_dict.
+        if company_dict_full.get("vat"):
+            company_dict = {"vat": company_dict_full["vat"]}
         delivery_term_xpath = xml_root.xpath(
-            "/main:Quotation/cac:DeliveryTerms", namespaces=ns)
+            "/main:Quotation/cac:DeliveryTerms", namespaces=ns
+        )
         if delivery_term_xpath:
             incoterm_dict = self.ubl_parse_incoterm(delivery_term_xpath[0], ns)
         else:
             incoterm_dict = {}
-        note_xpath = xml_root.xpath(
-            '/main:Quotation/cbc:Note', namespaces=ns)
-        lines_xpath = xml_root.xpath(
-            '/main:Quotation/cac:QuotationLine', namespaces=ns)
+        note_xpath = xml_root.xpath("/main:Quotation/cbc:Note", namespaces=ns)
+        lines_xpath = xml_root.xpath("/main:Quotation/cac:QuotationLine", namespaces=ns)
         res_lines = []
         for line in lines_xpath:
             res_lines.append(self.parse_ubl_quote_line(line, ns))
-        # TODO : add charges
         res = {
-            'partner': supplier_dict,
-            'company': company_dict,
-            'currency': {'iso': currency_code},
-            'date': date_xpath[0].text,
-            'incoterm': incoterm_dict,
-            'note': note_xpath and note_xpath[0].text or False,
-            'lines': res_lines,
+            "partner": supplier_dict,
+            "company": company_dict,
+            "currency": {"iso": currency_code},
+            "date": date_xpath[0].text,
+            "incoterm": incoterm_dict,
+            "note": note_xpath and note_xpath[0].text or False,
+            "lines": res_lines,
         }
-        # Stupid hack to remove invalid VAT of sample files
-        if res['partner']['vat'] in ['DK18296799']:
-            res['partner'].pop('vat')
+        # Stupid hack to remove invalid VAT of sample files.
+        if res["partner"]["vat"] in ["DK18296799"]:
+            res["partner"].pop("vat")
         return res
