@@ -1,0 +1,2 @@
+odoo-addon-pdf_xml_attachment @ git+https://github.com/OCA/reporting-engine.git@refs/pull/1157/head#subdirectory=pdf_xml_attachment
+odoo-addon-purchase_order_import @ git+https://github.com/OCA/edi.git@refs/pull/1335/head#subdirectory=purchase_order_import
