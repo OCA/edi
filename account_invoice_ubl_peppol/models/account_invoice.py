@@ -207,7 +207,22 @@ class AccountInvoice(models.Model):
             language = party.find(ns["cac"] + "Language")
             if language is not None:
                 party.remove(language)
+        return res
 
+    @api.model
+    def _ubl_add_customer_party(
+        self, partner, company, node_name, parent_node, ns, version="2.1"):
+        res = super()._ubl_add_customer_party(
+            partner, company, node_name, parent_node, ns, version=version
+        )
+        if not self.env.context.get("account_invoice_ubl_use_peppol"):
+            return res
+        customer_party = parent_node.find(ns["cac"] + node_name)
+        # UBL-CR-263: A UBL invoice should not include the AccountingCustomerParty
+        #             AccountingContact
+        accounting_contact = customer_party.find(ns["cac"] + "AccountingContact")
+        if accounting_contact is not None:
+            customer_party.remove(accounting_contact)
         return res
 
     @api.model
