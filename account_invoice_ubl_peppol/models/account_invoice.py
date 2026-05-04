@@ -168,7 +168,7 @@ class AccountInvoice(models.Model):
         party = parent_node.find(ns["cac"] + node_name)
 
         # PEPPOL-EN16931-R020: EndpointID
-        endpoint_dict = partner._get_peppol_endpoint_id()
+        endpoint_dict = partner.commercial_partner_id._get_peppol_endpoint_id()
         endpoint_id = endpoint_dict.get("endpoint_id")
         scheme_id = endpoint_dict.get("scheme_id")
         if scheme_id and endpoint_id:
