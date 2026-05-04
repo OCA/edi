@@ -3,108 +3,28 @@
 
 import base64
 
-from odoo import _, fields
 from odoo.exceptions import UserError
-from odoo.tests.common import TransactionCase
+
+from .common import TestDespatchAdviceImportCommon
 
 
-class TestDespatchAdviceImport(TransactionCase):
+class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
-        cls.supplier = cls.env.ref("base.res_partner_12")
-        cls.supplier.vat = "BE0477472701"
-        cls.env.user.company_id.partner_id.vat = "BE0421801233"
-        cls.product_1 = cls.env["product.product"].create(
-            {
-                "name": "Product 1",
-                "default_code": "987654321",
-                "seller_ids": [
-                    (0, 0, {"partner_id": cls.supplier.id, "product_code": "P1"})
-                ],
-            }
+        cls.product_1 = cls._create_product("Product 1", "987654321", "P1")
+        cls.product_2 = cls._create_product("Product 2", "987654312", "P2")
+        cls.product_3 = cls._create_product("Product 3", "123456789", "P3")
+        cls.product_4 = cls._create_product("Product 4", "23456718", "P4")
+        cls.purchase_order = cls._create_purchase_order(
+            [
+                cls._get_po_line_vals(cls.product_1, 24, 15),
+                cls._get_po_line_vals(cls.product_2, 5, 25),
+                cls._get_po_line_vals(cls.product_3, 15, 25),
+                cls._get_po_line_vals(cls.product_4, 15, 25),
+            ]
         )
-        cls.product_2 = cls.env["product.product"].create(
-            {
-                "name": "Product 2",
-                "default_code": "987654312",
-                "seller_ids": [
-                    (0, 0, {"partner_id": cls.supplier.id, "product_code": "P2"})
-                ],
-            }
-        )
-        cls.product_3 = cls.env["product.product"].create(
-            {
-                "name": "Product 3",
-                "default_code": "123456789",
-                "seller_ids": [
-                    (0, 0, {"partner_id": cls.supplier.id, "product_code": "P3"})
-                ],
-            }
-        )
-        cls.product_4 = cls.env["product.product"].create(
-            {
-                "name": "Product 4",
-                "default_code": "23456718",
-                "seller_ids": [
-                    (0, 0, {"partner_id": cls.supplier.id, "product_code": "P4"})
-                ],
-            }
-        )
-        cls.purchase_order = cls.env["purchase.order"].create(
-            {
-                "partner_id": cls.supplier.id,
-                "date_order": fields.Datetime.now(),
-                "date_planned": fields.Datetime.now(),
-            }
-        )
-        cls.line1 = cls.purchase_order.order_line.create(
-            {
-                "order_id": cls.purchase_order.id,
-                "product_id": cls.product_1.id,
-                "name": cls.product_1.name,
-                "date_planned": fields.Datetime.now(),
-                "product_qty": 24,
-                "product_uom": cls.env.ref("uom.product_uom_unit").id,
-                "price_unit": 15,
-            }
-        )
-        cls.line2 = cls.purchase_order.order_line.create(
-            {
-                "order_id": cls.purchase_order.id,
-                "product_id": cls.product_2.id,
-                "name": cls.product_2.name,
-                "date_planned": fields.Datetime.now(),
-                "product_qty": 5,
-                "product_uom": cls.env.ref("uom.product_uom_unit").id,
-                "price_unit": 25,
-            }
-        )
-
-        cls.line3 = cls.purchase_order.order_line.create(
-            {
-                "order_id": cls.purchase_order.id,
-                "product_id": cls.product_3.id,
-                "name": cls.product_3.name,
-                "date_planned": fields.Datetime.now(),
-                "product_qty": 15,
-                "product_uom": cls.env.ref("uom.product_uom_unit").id,
-                "price_unit": 25,
-            }
-        )
-
-        cls.line4 = cls.purchase_order.order_line.create(
-            {
-                "order_id": cls.purchase_order.id,
-                "product_id": cls.product_4.id,
-                "name": cls.product_4.name,
-                "date_planned": fields.Datetime.now(),
-                "product_qty": 15,
-                "product_uom": cls.env.ref("uom.product_uom_unit").id,
-                "price_unit": 25,
-            }
-        )
+        cls.line1, cls.line2, cls.line3, cls.line4 = cls.purchase_order.order_line
         cls.purchase_order.button_confirm()
 
         cls.DespatchAdviceImport = cls.env["despatch.advice.import"].create(
@@ -118,7 +38,7 @@ class TestDespatchAdviceImport(TransactionCase):
             "order_line_id": order_line.id,
             "ref": order_line.order_id.name,
             "product_ref": order_line.product_id.default_code,
-            "uom": {"unece_code": order_line.product_uom.unece_code},
+            "uom": {"unece_code": order_line.product_uom_id.unece_code},
         }
 
     def _get_base_data(self):
@@ -132,14 +52,7 @@ class TestDespatchAdviceImport(TransactionCase):
         }
 
     def test_no_purchase_order_name(self):
-        """
-        Data:
-            Data  with unknown PO reference
-        Test Case:
-            Process data
-        Expected result:
-            UserError is raised
-        """
+        """Raise an error when the imported line references an unknown PO."""
         data = self._get_base_data()
         data["ref"] = "123456"
         data["lines"] = [self.order_line_to_data(self.line1)]
@@ -148,13 +61,12 @@ class TestDespatchAdviceImport(TransactionCase):
         with self.assertRaises(UserError) as ue:
             self.DespatchAdviceImport.process_data(data)
         self.assertEqual(
-            ue.exception.name, _("No purchase order found for name 123456.")
+            ue.exception.args[0],
+            self.env._("No purchase order found for name %(name)s.", name="123456"),
         )
 
     def test_process_data_with_backorder_qty(self):
-        """
-        backorder qty
-        """
+        """Split the move and keep the postponed quantity on a backorder."""
         data = self._get_base_data()
         confirmed_qty = self.line1.product_qty - 21
         data["lines"] = [
@@ -179,9 +91,7 @@ class TestDespatchAdviceImport(TransactionCase):
         self.assertEqual(move_backorder.picking_id.backorder_id, assigned.picking_id)
 
     def test_process_data_with_no_backorder_qty(self):
-        """
-        no backorder qty
-        """
+        """Split the move and cancel the remaining quantity without backorder."""
         data = self._get_base_data()
         confirmed_qty = self.line1.product_qty - 21
         data["lines"] = [
@@ -202,9 +112,7 @@ class TestDespatchAdviceImport(TransactionCase):
         self.assertEqual(cancel.product_qty, 21)
 
     def test_process_data_create_backorder(self):
-        """
-        2 back order created, second one is put in the same than the first 1
-        """
+        """Reuse the same backorder picking for postponed quantities on two lines."""
         data = self._get_base_data()
         line1_confirmed_qty = self.line1.product_qty - 3
         line2_confirmed_qty = self.line2.product_qty - 3
@@ -268,7 +176,7 @@ class TestDespatchAdviceImport(TransactionCase):
         )
 
     def test_partial_delivery_with_backorder(self):
-        """ """
+        """Backorder only the postponed part and cancel the leftover remainder."""
         data = self._get_base_data()
         confirmed_qty = self.line1.product_qty - 3
         data["lines"] = [
@@ -306,7 +214,7 @@ class TestDespatchAdviceImport(TransactionCase):
         )
 
     def test_qty_larger_backorder_qty(self):
-        """ """
+        """Cancel the extra remainder when confirmed quantity exceeds backorder qty."""
         data = self._get_base_data()
         confirmed_qty = 6
         data["lines"] = [
@@ -339,7 +247,7 @@ class TestDespatchAdviceImport(TransactionCase):
         )
 
     def test_qty_equal_backorder_qty(self):
-        """ """
+        """Keep equal confirmed and backorder quantities and cancel the rest."""
         data = self._get_base_data()
         confirmed_qty = 3
         data["lines"] = [
@@ -371,9 +279,7 @@ class TestDespatchAdviceImport(TransactionCase):
         self.assertEqual(sum(moves_backorder.mapped("product_qty")), 3)
 
     def test_confirmed_qty_larger_reserved_qty(self):
-        """
-        confirmed qty > reserved qty
-        """
+        """Allow over-delivery when the imported confirmed quantity exceeds reserved."""
         data = self._get_base_data()
         confirmed_qty = self.line1.product_qty + 6
         data["lines"] = [
@@ -389,6 +295,6 @@ class TestDespatchAdviceImport(TransactionCase):
         self.assertTrue(self.purchase_order.picking_ids)
         move_ids = self.line1.move_ids
         self.assertEqual(len(move_ids), 1)
-        self.assertEqual(sum(move_ids.mapped("product_qty")), confirmed_qty)
+        self.assertEqual(sum(move_ids.mapped("product_qty")), self.line1.product_qty)
         assigned = move_ids.filtered(lambda s: s.state == "done")
-        self.assertEqual(assigned.product_qty, confirmed_qty)
+        self.assertEqual(assigned.quantity, confirmed_qty)
