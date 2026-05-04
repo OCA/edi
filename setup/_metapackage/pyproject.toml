@@ -1,6 +1,6 @@
 [project]
 name = "odoo-addons-oca-edi"
-version = "19.0.20260420.4"
+version = "19.0.20260504.0"
 dependencies = [
     "odoo-addon-base_business_document_import==19.0.*",
     "odoo-addon-base_edi==19.0.*",
@@ -8,6 +8,7 @@ dependencies = [
     "odoo-addon-base_ubl_generate==19.0.*",
     "odoo-addon-base_ubl_parse==19.0.*",
     "odoo-addon-partner_identification_import==19.0.*",
+    "odoo-addon-purchase_order_ubl==19.0.*",
 ]
 classifiers=[
     "Programming Language :: Python",
