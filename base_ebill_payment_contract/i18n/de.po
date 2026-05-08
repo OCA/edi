@@ -6,107 +6,109 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-05-08 07:08+0000\n"
+"Last-Translator: Peter Schubert <hello@it-consult.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields.selection,name:base_ebill_payment_contract.selection__ebill_payment_contract__state__cancel
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model,name:base_ebill_payment_contract.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Kontakt"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Erstellt von"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Erstellt am"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__partner_id
 msgid "Customer"
-msgstr ""
+msgstr "Kunde"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Anzeigename"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields.selection,name:base_ebill_payment_contract.selection__ebill_payment_contract__state__draft
 msgid "Draft"
-msgstr ""
+msgstr "Entwurf"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__date_end
 msgid "End date"
-msgstr ""
+msgstr "Enddatum"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__is_valid
 msgid "Is Valid"
-msgstr ""
+msgstr "Ist gültig"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Zuletzt aktualisiert von"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Zuletzt aktualisiert am"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__name
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields.selection,name:base_ebill_payment_contract.selection__ebill_payment_contract__state__open
 msgid "Open"
-msgstr ""
+msgstr "Offen"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__transmit_method_id
 msgid "Service Name"
-msgstr ""
+msgstr "Name des Dienstes"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__date_start
 msgid "Start date"
-msgstr ""
+msgstr "Startdatum"
 
 #. module: base_ebill_payment_contract
 #: model:ir.model.fields,field_description:base_ebill_payment_contract.field_ebill_payment_contract__state
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #. module: base_ebill_payment_contract
 #: model_terms:ir.ui.view,arch_db:base_ebill_payment_contract.ebill_payment_contract_search_view
 msgid "Valid"
-msgstr ""
+msgstr "Gültig"
 
 #. module: base_ebill_payment_contract
 #: model:ir.actions.act_window,name:base_ebill_payment_contract.ebill_payment_contract_act_window
 #: model:ir.model,name:base_ebill_payment_contract.model_ebill_payment_contract
 #: model:ir.ui.menu,name:base_ebill_payment_contract.ebill_payment_contract_menu
 msgid "eBill Payment Contract"
-msgstr ""
+msgstr "Vertrag über die Zahlung von e-Rechnungen"
