@@ -9,7 +9,109 @@
 
 # edi
 
-edi
+---
+
+EDI (Electronic Data Interchange) is the exchange of business documents in a standardized electronic format between companies.
+
+It replaces manual and paper-based document exchange with automated data processing, commonly used in B2B workflows, especially where large volumes of documents are exchanged. It can also be used by smaller companies.
+
+More information:  
+https://en.wikipedia.org/wiki/Electronic_data_interchange
+
+**Use in various industries:**  
+retail/e-commerce, logistics, automotive, healthcare, finance, distribution, manufacturing, public sector (e-invoicing).
+
+---
+
+## ⭐ EDI Features
+
+- Automation of business processes  
+- Digitalization of documents  
+- Exchange of business documents (orders, invoices, delivery notes, order confirmations, shipping notices / advanced shipping notices,  
+  receiving advice / acceptance certificates, etc.).  
+  Note: document names may vary depending on the standard used.
+- Transformation, parsing, and mapping of data between systems  
+- unification of document formats and standards (XML, cXML, JSON, IDoc, EDIFACT, ANSI X12, UBL, etc.).
+
+---
+
+## ⚙️ How it works
+
+EDI can be used as an application, but more commonly it is integrated into an ERP system (e.g. Odoo ERP EDI) or ERP middleware (e.g. SAP CPI, Seeburger).
+
+For a standard installation, please follow the setup instructions:  
+https://www.odoo.com/documentation/master/administration/on_premise.html
+https://www.odoo.com/
+
+To learn the software, we recommend Odoo eLearning or Scale-up (business game). Developers can start with developer tutorials.
+
+Business partners agree on:
+- a standard (EDIFACT / ANSI X12 / UBL)  
+- transport method (AS2 / HTTP/HTTPS, SFTP, VAN, API, email, EDI broker)
+
+→ automation is then configured in ERP systems (Odoo, SAP-OCI, Infor, etc.).
+
+*(This does not mean that a company located in Europe must necessarily use EDIFACT).*
+
+---
+
+## 🧩 Requirements
+
+Requires an Odoo Community environment (Python + PostgreSQL).
+
+Works on any OS supporting Python + PostgreSQL (Linux/macOS/Windows), recommended via Docker or WSL.
+
+For development/testing:
+- Docker (easiest way)
+- Odoo Community source (GitHub install)
+- addons path config
+
+---
+
+## 📦 Standards / Formats
+
+  Common EDI standards are managed by UN/CEFACT and ANSI X12:
+
+- EU EDIFACT: https://unece.org/trade/uncefact/introducing-unedifact  
+- US ANSI X12: https://x12.org  
+- UBL (Universal Business Language = XML + XSD schema): https://www.w3.org/XML/Schema  
+
+---
+
+## 🧱 Module structure
+
+This repository contains a collection of modules (usually 1 folder = 1 module) for Odoo that handle Electronic Data Interchange (EDI) processes such as document generation, parsing, and data transformation.
+
+Modules are organized by role in the EDI workflow:
+
+**📤 Export modules**
+- Generate EDI documents from Odoo business data (e.g. invoices, orders)
+
+**📥 Import modules**
+- Parse and validate incoming EDI documents into Odoo models
+
+**🔧 Base modules**
+- Provide shared logic, models, and helpers used across EDI workflows
+
+Each module is a standard Odoo addon (with its own `__manifest__.py`) and typically focuses on a specific part of the EDI process, such as transforming business data into structured formats (e.g. UBL, EDIFACT, ANSI X12) or importing external documents into Odoo.
+
+This section describes common patterns across modules rather than listing them individually, as modules are continuously added and extended.
+
+---
+
+## 🔗 Related repository
+
+Some shared EDI abstractions and base framework logic are maintained in:
+
+https://github.com/OCA/edi-framework
+
+Odoo module framework provides a unified interface for automated document exchange (invoices, orders, delivery notes, etc.) between Odoo and other systems (e.g. public administration, business partners).
+
+- Structured data is transmitted in standardized formats ensuring compatibility  
+- Flexibility allows integration of different formats and protocols  
+
+EDI framework = foundation (technical layer)  
+This repository = real use-case modules built on top of it  
 
 <!-- /!\ do not modify below this line -->
 
