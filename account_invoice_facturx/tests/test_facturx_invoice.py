@@ -2,13 +2,16 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from datetime import timedelta
 from unittest.mock import patch
 
-from facturx import get_facturx_level
+from facturx import get_facturx_level, xml_check_schematron
 from lxml import etree
 
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
+
+FACTURX_LEVELS = ("minimum", "basicwl", "basic", "en16931", "extended")
 
 RAM_NS = (
     "urn:un:unece:uncefact:data:standard:"
@@ -26,6 +29,28 @@ class TestFacturXInvoice(TransactionCase):
         cls.product1 = cls.env.ref("product.product_product_4")
         cls.product2 = cls.env.ref("product.product_product_1")
         cls.env.user.partner_id.email = "billing@example.com"
+        # Force DE country and checksum-valid VAT identifiers on
+        # seller and buyer so the schematron does not flag BR-CO-26
+        # ("seller identifier required") and the cascading BR-S-02
+        # rules whenever invoice lines use VAT category 'S'. Both
+        # values pass the python-stdnum mod-11 checksum that
+        # base_vat.check_vat enforces. DE123456788 is the canonical
+        # placeholder Odoo itself shows in its validation error
+        # message; DE129273398 is Siemens AG's real public UStId.
+        de_country = cls.env.ref("base.de")
+        cls.company.partner_id.write(
+            {
+                "country_id": de_country.id,
+                "vat": "DE123456788",
+            }
+        )
+        buyer = cls.env.ref("base.res_partner_2")
+        buyer.write(
+            {
+                "country_id": de_country.id,
+                "vat": "DE129273398",
+            }
+        )
         cls.proprietary_bank = cls.env["res.partner.bank"].create(
             {
                 "partner_id": cls.company.partner_id.id,
@@ -166,3 +191,133 @@ class TestFacturXInvoice(TransactionCase):
             with self.assertRaises(UserError):
                 invoice.generate_facturx_xml()
             xml_check_xsd.assert_not_called()
+
+    # ------------------------------------------------------------------
+    # Schematron meta-test (silver bullet)
+    # ------------------------------------------------------------------
+    # Runs the official factur-x schematron over the generated XML for
+    # every profile. The XSD-only check does not catch business-rule
+    # violations such as BR-FX-EN-04 (delivery date) or BR-CO-27
+    # (IBAN/ProprietaryID). The schematron does. Each fixture below
+    # stresses a different combination known to trigger schematron
+    # errors with the current OCA module against factur-x 4.x.
+
+    def _assert_schematron_passes(self, invoice, levels=FACTURX_LEVELS):
+        """Run xml_check_schematron over all requested profiles.
+
+        Collects per-profile failures so that one test run reports
+        every broken profile at once instead of stopping at the first.
+        """
+        failures = []
+        for level in levels:
+            self.company.write({"facturx_level": level})
+            xml_bytes, fx_level = invoice.generate_facturx_xml()
+            self.assertEqual(fx_level, level)
+            try:
+                xml_check_schematron(
+                    xml_bytes, flavor="factur-x", level=level
+                )
+            except Exception as exc:
+                failures.append((level, str(exc)))
+        if failures:
+            report = "\n\n".join(
+                f"--- {lvl.upper()} ---\n{msg}" for lvl, msg in failures
+            )
+            self.fail(
+                f"Schematron failed for {len(failures)} profile(s):\n\n"
+                f"{report}"
+            )
+
+    def test_schematron_default_invoice_de_de(self):
+        """Default fixture (2 lines, no discount, ProprietaryID account).
+
+        Should pass on every profile after the schematron-related
+        fixes are in place. Currently expected to fail at least with
+        BR-FX-EN-04 because the fixture has no delivery_date set and
+        the upstream PR #1320 fix uses invoice_date as fallback only
+        when delivery_date is not available — which it is not for this
+        fixture.
+        """
+        self._assert_schematron_passes(self.invoice)
+
+    def test_schematron_invoice_with_line_discount(self):
+        """Lines with discount > 0 trigger the GrossPrice/AppliedTradeAllowanceCharge
+        block. EN16931 and BASIC schematron mark CalculationPercent and
+        BasisAmount as 'not used' inside that block; only ChargeIndicator
+        and ActualAmount are allowed there. EXTENDED permits them.
+
+        Currently expected to fail on BASIC and EN16931.
+        """
+        # account.move.partner_bank_id is a stored compute with
+        # @api.depends('partner_id', 'company_id') and copy=False.
+        # On out_invoice the compute fills the field from
+        # partner_id.commercial_partner_id.bank_ids, which is empty
+        # for our customer, so it overwrites both copy() and any
+        # default={...} we pass in. We therefore mirror the same
+        # workaround setUpClass already uses for cls.invoice:
+        # re-assign the proprietary bank explicitly after copy() and
+        # again after action_post() (state changes can re-fire the
+        # compute). Without this, the module raises a UserError
+        # before the schematron is ever invoked, masking the actual
+        # discount bug we want to assert against.
+        invoice = self.invoice.copy()
+        invoice.partner_bank_id = self.proprietary_bank
+        for line in invoice.invoice_line_ids:
+            line.discount = 10.0
+        invoice.action_post()
+        invoice.partner_bank_id = self.proprietary_bank
+        self._assert_schematron_passes(invoice)
+
+    def test_subscription_line_period_emits_billing_specified_period(self):
+        """When invoice lines carry deferred_start_date / deferred_end_date
+        (Enterprise feature representing a subscription / service period)
+        the line-level XML must contain a ram:BillingSpecifiedPeriod block
+        with ram:StartDateTime and ram:EndDateTime (BG-26, Invoice line
+        period). Without this mapping the deferred-revenue dates are
+        silently dropped from the Factur-X export, even though the
+        schematron still passes via BT-72 (header delivery date).
+
+        Currently expected to fail because BillingSpecifiedPeriod is not
+        emitted from deferred_*-fields by the module.
+        """
+        if "deferred_start_date" not in self.env["account.move.line"]._fields:
+            self.skipTest(
+                "deferred_start_date / deferred_end_date are not available "
+                "in this database (requires Enterprise account_accountant)."
+            )
+        invoice = self.invoice.copy()
+        invoice.partner_bank_id = self.proprietary_bank
+        # invoice.copy() returns a draft with invoice_date == False;
+        # take the source invoice's posted date as a deterministic
+        # reference for the synthetic service period.
+        invoice.invoice_date = self.invoice.invoice_date
+        start = invoice.invoice_date.replace(day=1)
+        end = start + timedelta(days=29)
+        for line in invoice.invoice_line_ids:
+            line.write(
+                {
+                    "deferred_start_date": start,
+                    "deferred_end_date": end,
+                }
+            )
+        invoice.action_post()
+        invoice.partner_bank_id = self.proprietary_bank
+        # Schematron must still pass; BG-26 is structural enrichment, not
+        # a validation gate (BR-FX-EN-04 is already satisfied via BT-72).
+        self._assert_schematron_passes(invoice)
+        # And the actual XML must contain the period block, one per line.
+        root = self._generate_xml_root(invoice=invoice, level="en16931")
+        period_nodes = root.findall(".//{%s}BillingSpecifiedPeriod" % RAM_NS)
+        self.assertEqual(
+            len(period_nodes),
+            len(invoice.invoice_line_ids),
+            "Expected one BillingSpecifiedPeriod per subscription line "
+            "(%d lines), got %d nodes."
+            % (len(invoice.invoice_line_ids), len(period_nodes)),
+        )
+        # Every period node must carry both Start and End DateTime.
+        for period in period_nodes:
+            start_nodes = period.findall("{%s}StartDateTime" % RAM_NS)
+            end_nodes = period.findall("{%s}EndDateTime" % RAM_NS)
+            self.assertEqual(len(start_nodes), 1)
+            self.assertEqual(len(end_nodes), 1)

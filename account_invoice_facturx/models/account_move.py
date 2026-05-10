@@ -221,15 +221,23 @@ class AccountMove(models.Model):
             and self.partner_id.name
         ):
             self._cii_add_trade_contact_block(self.partner_id, buyer, ns)
-        self._cii_add_address_block(self.partner_id, buyer, ns)
-        if self.commercial_partner_id.vat:
-            buyer_tax_reg = etree.SubElement(
-                buyer, ns["ram"] + "SpecifiedTaxRegistration"
-            )
-            buyer_tax_reg_id = etree.SubElement(
-                buyer_tax_reg, ns["ram"] + "ID", schemeID="VA"
-            )
-            buyer_tax_reg_id.text = self.commercial_partner_id.vat
+        # The MINIMUM profile restricts BuyerTradeParty to Name (and
+        # SpecifiedLegalOrganization). Both ram:PostalTradeAddress and
+        # ram:SpecifiedTaxRegistration are flagged "marked as not used
+        # in the given context" by the factur-x MINIMUM schematron. The
+        # seller side is intentionally not gated here: MINIMUM allows
+        # SellerTradeParty/PostalTradeAddress and the seller's VAT
+        # (BT-31) is mandatory at MINIMUM.
+        if ns["level"] != "minimum":
+            self._cii_add_address_block(self.partner_id, buyer, ns)
+            if self.commercial_partner_id.vat:
+                buyer_tax_reg = etree.SubElement(
+                    buyer, ns["ram"] + "SpecifiedTaxRegistration"
+                )
+                buyer_tax_reg_id = etree.SubElement(
+                    buyer_tax_reg, ns["ram"] + "ID", schemeID="VA"
+                )
+                buyer_tax_reg_id.text = self.commercial_partner_id.vat
         if ns["level"] == "extended" and self.invoice_incoterm_id:
             delivery_terms = etree.SubElement(
                 trade_agreement, ns["ram"] + "ApplicableTradeDeliveryTerms"
@@ -277,6 +285,34 @@ class AccountMove(models.Model):
         self.ensure_one()
         return self.invoice_date
 
+    def _cii_get_line_period(self, iline):
+        """Return ``(start_date, end_date)`` for BG-26 ("Invoice line period").
+
+        Default sources, in order of precedence:
+
+        1. ``deferred_start_date`` / ``deferred_end_date`` on
+           ``account.move.line`` (Odoo Enterprise ``account_accountant``
+           module). Detected at runtime via ``_fields`` so the OCA module
+           does not gain a hard dependency on Enterprise code.
+        2. ``start_date`` / ``end_date`` on ``account.move.line`` (OCA
+           module ``account_invoice_start_end_dates``).
+
+        Returns ``(False, False)`` when no service period is available, in
+        which case the caller must skip emitting ``BillingSpecifiedPeriod``.
+
+        Designed to be inherited by subscription / billing modules that
+        store the service period in dedicated fields.
+        """
+        self.ensure_one()
+        fields = iline._fields
+        if "deferred_start_date" in fields and "deferred_end_date" in fields:
+            if iline.deferred_start_date or iline.deferred_end_date:
+                return iline.deferred_start_date, iline.deferred_end_date
+        if "start_date" in fields and "end_date" in fields:
+            if iline.start_date or iline.end_date:
+                return iline.start_date, iline.end_date
+        return False, False
+
     def _cii_add_trade_delivery_block(self, trade_transaction, ns):
         self.ensure_one()
         trade_agreement = etree.SubElement(
@@ -291,7 +327,18 @@ class AccountMove(models.Model):
                 self.partner_shipping_id, shipto_trade_party, ns
             )
         delivery_date = self._cii_get_delivery_date()
-        if ns["level"] in PROFILES_EN_UP and delivery_date:
+        # PR #1320 added the OccurrenceDateTime emission for EN16931 and
+        # EXTENDED. The BASIC profile also requires either BT-72 (Actual
+        # delivery date), BG-14 (Invoicing period) or BG-26 (Invoice
+        # line period) -- otherwise schematron rule BR-FX-EN-04 fails,
+        # and the bare ApplicableHeaderTradeDelivery wrapper
+        # additionally trips PEPPOL-EN16931-R008 ("Document MUST not
+        # contain empty elements") in BASIC. MINIMUM and BASICWL do not
+        # assert against the empty wrapper, so we keep them unchanged.
+        if (
+            ns["level"] in ("basic", "en16931", "extended")
+            and delivery_date
+        ):
             delivery_event = etree.SubElement(
                 trade_agreement, ns["ram"] + "ActualDeliverySupplyChainEvent"
             )
@@ -790,20 +837,30 @@ class AccountMove(models.Model):
                 else:
                     indicator.text = "true"
                     ac_sign = -1
-                calculation_percent = etree.SubElement(
-                    trade_allowance, ns["ram"] + "CalculationPercent"
-                )
-                calculation_percent.text = "%0.*f" % (
-                    ns["disc_prec"],
-                    iline.discount * ac_sign,
-                )
-                basis_amount = etree.SubElement(
-                    trade_allowance, ns["ram"] + "BasisAmount"
-                )
-                basis_amount.text = "%0.*f" % (
-                    ns["price_prec"],
-                    iline.price_unit * iline.quantity,
-                )
+                # CalculationPercent (BT-X-32) and BasisAmount (BT-X-33)
+                # are only allowed inside the line-level
+                # GrossPriceProductTradePrice/AppliedTradeAllowanceCharge
+                # block in the EXTENDED profile. The EN16931 schematron
+                # marks both elements as "not used in the given context";
+                # BASIC/BASICWL/MINIMUM never reach this branch because
+                # the surrounding GrossPriceProductTradePrice itself is
+                # gated by PROFILES_EN_UP. Only ChargeIndicator and
+                # ActualAmount are required by EN16931 here.
+                if ns["level"] == "extended":
+                    calculation_percent = etree.SubElement(
+                        trade_allowance, ns["ram"] + "CalculationPercent"
+                    )
+                    calculation_percent.text = "%0.*f" % (
+                        ns["disc_prec"],
+                        iline.discount * ac_sign,
+                    )
+                    basis_amount = etree.SubElement(
+                        trade_allowance, ns["ram"] + "BasisAmount"
+                    )
+                    basis_amount.text = "%0.*f" % (
+                        ns["price_prec"],
+                        iline.price_unit * iline.quantity,
+                    )
                 actual_amount = etree.SubElement(
                     trade_allowance, ns["ram"] + "ActualAmount"
                 )
@@ -849,20 +906,25 @@ class AccountMove(models.Model):
             line_item, ns["ram"] + "SpecifiedLineTradeSettlement"
         )
         self._cii_invoice_line_taxes(iline, line_trade_settlement, ns)
-        # Fields start_date and end_date are provided by the OCA
-        # module account_invoice_start_end_dates
-        if (
-            ns["level"] in PROFILES_EN_UP
-            and hasattr(iline, "start_date")
-            and hasattr(iline, "end_date")
-            and iline.start_date
-            and iline.end_date
-        ):
-            bill_period = etree.SubElement(
-                line_trade_settlement, ns["ram"] + "BillingSpecifiedPeriod"
-            )
-            self._cii_add_date("StartDateTime", iline.start_date, bill_period, ns)
-            self._cii_add_date("EndDateTime", iline.end_date, bill_period, ns)
+        # BG-26 "Invoice line period". The actual service period is pulled
+        # via the _cii_get_line_period() hook, which knows about both
+        # Odoo Enterprise (deferred_start_date / deferred_end_date) and
+        # the OCA module account_invoice_start_end_dates (start_date /
+        # end_date), and which downstream subscription modules can
+        # override to plug in their own date fields. BG-26 is restricted
+        # to EN16931 and EXTENDED profiles (PROFILES_EN_UP).
+        if ns["level"] in PROFILES_EN_UP:
+            line_start, line_end = self._cii_get_line_period(iline)
+            if line_start or line_end:
+                bill_period = etree.SubElement(
+                    line_trade_settlement, ns["ram"] + "BillingSpecifiedPeriod"
+                )
+                if line_start:
+                    self._cii_add_date(
+                        "StartDateTime", line_start, bill_period, ns
+                    )
+                if line_end:
+                    self._cii_add_date("EndDateTime", line_end, bill_period, ns)
 
         subtotal = etree.SubElement(
             line_trade_settlement,
