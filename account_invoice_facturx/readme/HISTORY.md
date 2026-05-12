@@ -1,4 +1,4 @@
-## Unreleased
+## 17.0.1.3.0 (2026-05-11)
 
 ### Features
 
@@ -21,6 +21,16 @@
 
 ### Fixes
 
+- `_cii_get_delivery_date()` now reads the standard Odoo
+  `account.move.delivery_date` field and falls back to `invoice_date`
+  only when it is unset. Previously the hook returned `invoice_date`
+  unconditionally, so an explicit delivery date set in the standard
+  Odoo invoice form (or computed by an upstream module such as
+  `account_invoice_delivery_date_from_period`, which derives it from
+  the latest period end of the invoice lines for German UStG / DATEV
+  conformance) was silently dropped from BT-72
+  (`ActualDeliverySupplyChainEvent/OccurrenceDateTime`). All five
+  profiles benefit from the fix.
 - The `BASIC` profile now emits a non-empty
   `ApplicableHeaderTradeDelivery` block with an
   `ActualDeliverySupplyChainEvent/OccurrenceDateTime` child (BT-72),

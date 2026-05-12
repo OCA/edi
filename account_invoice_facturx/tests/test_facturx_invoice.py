@@ -321,3 +321,167 @@ class TestFacturXInvoice(TransactionCase):
             end_nodes = period.findall("{%s}EndDateTime" % RAM_NS)
             self.assertEqual(len(start_nodes), 1)
             self.assertEqual(len(end_nodes), 1)
+
+    def test_delivery_date_auto_set_from_period_carried_to_bt72(self):
+        """End-to-end verkettung: Track 1
+        (`account_invoice_delivery_date_from_period`) auto-fills
+        ``delivery_date`` from the latest line period end, and Track 2
+        (the `_cii_get_delivery_date` fix in this module) carries that
+        value into BT-72.
+
+        This is the only test in the suite that exercises *both*
+        modules together; the isolated tests in each module cover only
+        their own half. Skipped if the period-derivation module is not
+        installed in the database.
+        """
+        if "deferred_start_date" not in self.env["account.move.line"]._fields:
+            self.skipTest(
+                "deferred_start_date / deferred_end_date are not available "
+                "in this database (requires Enterprise account_accountant)."
+            )
+        helper_installed = self.env["ir.module.module"].search(
+            [
+                ("name", "=", "account_invoice_delivery_date_from_period"),
+                ("state", "=", "installed"),
+            ],
+            limit=1,
+        )
+        if not helper_installed:
+            self.skipTest(
+                "account_invoice_delivery_date_from_period is not installed "
+                "in this database; the verkettung Track 1 → Track 2 cannot "
+                "be exercised."
+            )
+        invoice = self.invoice.copy()
+        invoice.partner_bank_id = self.proprietary_bank
+        invoice.invoice_date = self.invoice.invoice_date
+        # Two subscription lines with distinct period ends — the latest
+        # one (period_end_late) must win per UStG § 13 (see ADR
+        # 2026-05-11_adr_delivery-date-aus-periode-ende.md).
+        period_end_early = invoice.invoice_date + timedelta(days=10)
+        period_end_late = invoice.invoice_date + timedelta(days=42)
+        lines = list(invoice.invoice_line_ids)
+        self.assertGreaterEqual(
+            len(lines),
+            2,
+            "Test fixture invariant: source invoice must have at least "
+            "two lines so the max() over period ends is non-trivial.",
+        )
+        lines[0].write(
+            {
+                "deferred_start_date": invoice.invoice_date,
+                "deferred_end_date": period_end_early,
+            }
+        )
+        lines[1].write(
+            {
+                "deferred_start_date": invoice.invoice_date,
+                "deferred_end_date": period_end_late,
+            }
+        )
+        # Critical pre-condition: do NOT set delivery_date manually.
+        # The whole point is that Track 1's _post() override fills it
+        # from the line periods automatically.
+        self.assertFalse(
+            invoice.delivery_date,
+            "Test pre-condition: delivery_date must be empty before "
+            "posting so we can prove Track 1 fills it from periods.",
+        )
+        invoice.action_post()
+        invoice.partner_bank_id = self.proprietary_bank
+        # Track 1 assertion: _post() override picked the latest end date.
+        self.assertEqual(
+            invoice.delivery_date,
+            period_end_late,
+            "Track 1: _post() override must auto-set delivery_date to "
+            "max(deferred_end_date) = %s; got %r."
+            % (period_end_late, invoice.delivery_date),
+        )
+        # Track 2 assertion: that auto-set value reaches BT-72 in the XML.
+        self._assert_schematron_passes(invoice)
+        root = self._generate_xml_root(invoice=invoice, level="en16931")
+        occurrence = root.find(
+            ".//{%s}ActualDeliverySupplyChainEvent/{%s}OccurrenceDateTime"
+            % (RAM_NS, RAM_NS)
+        )
+        self.assertIsNotNone(
+            occurrence,
+            "BT-72 OccurrenceDateTime element is missing from the XML.",
+        )
+        bt72_text = list(occurrence)[0].text
+        self.assertEqual(
+            bt72_text,
+            period_end_late.strftime("%Y%m%d"),
+            "Track 2 (verkettung): BT-72 must carry the auto-set "
+            "delivery_date (%s, format YYYYMMDD = %s); got %r. "
+            "Either Track 1 did not write delivery_date (check that "
+            "account_invoice_delivery_date_from_period._post() ran), "
+            "or Track 2's _cii_get_delivery_date() is dropping "
+            "delivery_date again."
+            % (
+                period_end_late,
+                period_end_late.strftime("%Y%m%d"),
+                bt72_text,
+            ),
+        )
+
+    def test_delivery_date_carried_to_bt72_when_set_explicitly(self):
+        """When ``account.move.delivery_date`` is set to a value other
+        than ``invoice_date`` (e.g. by a subscription module that
+        derives it from line periods, or by the user), BT-72
+        (``ActualDeliverySupplyChainEvent/OccurrenceDateTime``) in the
+        Factur-X XML must carry the ``delivery_date``, NOT the
+        ``invoice_date``.
+
+        Currently expected to fail because ``_cii_get_delivery_date()``
+        returns ``self.invoice_date`` unconditionally and ignores the
+        standard Odoo ``delivery_date`` field.
+        """
+        invoice = self.invoice.copy()
+        invoice.partner_bank_id = self.proprietary_bank
+        # invoice.copy() returns a draft with invoice_date == False;
+        # take the source invoice's posted date as a deterministic
+        # baseline.
+        invoice.invoice_date = self.invoice.invoice_date
+        explicit_delivery = invoice.invoice_date + timedelta(days=15)
+        invoice.delivery_date = explicit_delivery
+        invoice.action_post()
+        invoice.partner_bank_id = self.proprietary_bank
+        # Schematron must still pass; this test is about the SEMANTIC
+        # content of BT-72, not its presence.
+        self._assert_schematron_passes(invoice)
+        # BT-72 lives at
+        # ApplicableHeaderTradeDelivery/ActualDeliverySupplyChainEvent/
+        # OccurrenceDateTime/udt:DateTimeString. The DateTimeString
+        # element is in the UDT namespace; using "*" wildcards lets us
+        # ignore that detail and check the actual text content.
+        root = self._generate_xml_root(invoice=invoice, level="en16931")
+        occurrence = root.find(
+            ".//{%s}ActualDeliverySupplyChainEvent/{%s}OccurrenceDateTime"
+            % (RAM_NS, RAM_NS)
+        )
+        self.assertIsNotNone(
+            occurrence,
+            "BT-72 OccurrenceDateTime element is missing from the XML.",
+        )
+        date_string_elements = list(occurrence)
+        self.assertEqual(
+            len(date_string_elements),
+            1,
+            "Expected exactly one DateTimeString child under "
+            "OccurrenceDateTime; got %d." % len(date_string_elements),
+        )
+        bt72_text = date_string_elements[0].text
+        self.assertEqual(
+            bt72_text,
+            explicit_delivery.strftime("%Y%m%d"),
+            "BT-72 must carry delivery_date (%s, format YYYYMMDD = %s); "
+            "got %r. The hook _cii_get_delivery_date() is likely still "
+            "returning self.invoice_date and ignoring the standard "
+            "Odoo delivery_date field."
+            % (
+                explicit_delivery,
+                explicit_delivery.strftime("%Y%m%d"),
+                bt72_text,
+            ),
+        )

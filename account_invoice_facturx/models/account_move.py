@@ -279,11 +279,20 @@ class AccountMove(models.Model):
     def _cii_get_delivery_date(self):
         """Return the delivery/service date to export in Factur-X XML.
 
-        Designed to be inherited by modules that store a dedicated delivery
-        or service date on invoices.
+        Reads the standard Odoo ``account.move.delivery_date`` field and
+        falls back to ``invoice_date`` when it is unset. The Odoo standard
+        UI exposes ``delivery_date`` explicitly as the date of supply, so
+        when a user (or an upstream module — e.g. a subscription engine,
+        or ``account_invoice_delivery_date_from_period`` deriving it from
+        line periods) populates it, the value MUST land in BT-72
+        (``ActualDeliverySupplyChainEvent/OccurrenceDateTime``) rather
+        than being silently dropped in favour of ``invoice_date``.
+
+        Designed to be further inherited by modules that compute a
+        dedicated delivery / service date on invoices.
         """
         self.ensure_one()
-        return self.invoice_date
+        return self.delivery_date or self.invoice_date
 
     def _cii_get_line_period(self, iline):
         """Return ``(start_date, end_date)`` for BG-26 ("Invoice line period").
