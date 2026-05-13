@@ -69,6 +69,16 @@ msgid "Confirm Order"
 msgstr "Confirmar Pedido"
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_missing_invoice_partner
+msgid "Create Missing Invoice Partner"
+msgstr ""
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_missing_shipping_partner
+msgid "Create Missing Shipping Partner"
+msgstr ""
+
+#. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid "Create New"
 msgstr "Crear nuevo"
@@ -85,9 +95,21 @@ msgid "Created by"
 msgstr "Creado por"
 
 #. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+msgid "Created invoice partner '%s'"
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_date
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+msgid "Created shipping partner '%s'"
+msgstr ""
 
 #. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__partner_id

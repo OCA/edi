@@ -37,8 +37,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 msgid ""
-"An order of customer '%(partner)s' with reference '%(ref)s' already exists: "
-"%(name)s (state: %(state)s)"
+"An order of customer '%(partner)s' with reference '%(ref)s' already exists: %"
+"(name)s (state: %(state)s)"
 msgstr ""
 
 #. module: sale_order_import
@@ -62,6 +62,16 @@ msgid "Confirm Order"
 msgstr ""
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_missing_invoice_partner
+msgid "Create Missing Invoice Partner"
+msgstr ""
+
+#. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_missing_shipping_partner
+msgid "Create Missing Shipping Partner"
+msgstr ""
+
+#. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid "Create New"
 msgstr ""
@@ -78,8 +88,20 @@ msgid "Created by"
 msgstr ""
 
 #. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+msgid "Created invoice partner '%s'"
+msgstr ""
+
+#. module: sale_order_import
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: sale_order_import
+#. odoo-python
+#: code:addons/sale_order_import/wizard/sale_order_import.py:0
+msgid "Created shipping partner '%s'"
 msgstr ""
 
 #. module: sale_order_import
@@ -125,15 +147,15 @@ msgstr ""
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
-"If it is a PDF file, Odoo will try to find an XML file in the attachments of"
-" the PDF file and then use this XML file to create the quotation."
+"If it is a PDF file, Odoo will try to find an XML file in the attachments of "
+"the PDF file and then use this XML file to create the quotation."
 msgstr ""
 
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
-"If it is an XML file, Odoo will parse it if the module that adds support for"
-" this XML format is installed. For the"
+"If it is an XML file, Odoo will parse it if the module that adds support for "
+"this XML format is installed. For the"
 msgstr ""
 
 #. module: sale_order_import
@@ -253,8 +275,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
 "Some quotations have been found for this customer ; one of them may "
-"correspond to the order or RFQ that you are importing. You can either select"
-" an existing quotation to update or create a new one."
+"correspond to the order or RFQ that you are importing. You can either select "
+"an existing quotation to update or create a new one."
 msgstr ""
 
 #. module: sale_order_import
@@ -290,8 +312,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 msgid ""
-"The unit price has been updated on the order line with product '%(product)s'"
-" from %(old)s to %(new)s %(currency)s"
+"The unit price has been updated on the order line with product '%(product)s' "
+"from %(old)s to %(new)s %(currency)s"
 msgstr ""
 
 #. module: sale_order_import
@@ -339,8 +361,7 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-msgid ""
-"This quotation has been updated automatically via the import of file %s"
+msgid "This quotation has been updated automatically via the import of file %s"
 msgstr ""
 
 #. module: sale_order_import
@@ -382,8 +403,8 @@ msgstr ""
 #. module: sale_order_import
 #: model_terms:ir.ui.view,arch_db:sale_order_import.sale_order_import_form
 msgid ""
-"Upload below the customer order or request for quotation as XML or PDF file."
-" When you click on the Import button:"
+"Upload below the customer order or request for quotation as XML or PDF file. "
+"When you click on the Import button:"
 msgstr ""
 
 #. module: sale_order_import

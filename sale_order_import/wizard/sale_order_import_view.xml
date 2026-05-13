@@ -60,6 +60,8 @@
                         required="doc_type == 'order'"
                     />
                     <field name="skip_error_lines" />
+                    <field name="create_missing_invoice_partner" />
+                    <field name="create_missing_shipping_partner" />
                 </group>
                 <footer>
                     <button

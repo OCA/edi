@@ -7,7 +7,7 @@ import base64
 from unittest import mock
 
 from odoo import exceptions
-from odoo.tests import Form
+from odoo.tests import Form, RecordCapturer
 
 from .common import TestCommon
 
@@ -258,3 +258,114 @@ class TestOrderImport(TestCommon):
                         lambda m: messages[0] in m.body and messages[1] in m.body
                     )
                 )
+
+    def test_create_missing_invoice_partner(self):
+        """Tests creation of missing invoice partner when ctx flag is True
+
+        Expected behavior: the import workflow is not halted, and a new invoicing
+        partner is created on the fly.
+        """
+        parsed_order = dict(
+            self.parsed_order,
+            invoice_to={
+                "country_code": "FR",
+                "email": "test@invoice.partner",
+                "name": "Test Invoice Address",
+            },
+        )
+        wiz = self.wiz_model.with_context(create_missing_invoice_partner=True)
+        with RecordCapturer(self.env["res.partner"], []) as rc_partner:
+            order = wiz.create_order(parsed_order, "pricelist")
+        self.assertEqual(len(rc_partner.records), 1)
+        invoice_partner = rc_partner.records
+        self.assertEqual(invoice_partner.type, "invoice")
+        self.assertEqual(invoice_partner.parent_id, self.partner)
+        self.assertEqual(invoice_partner.country_id, self.env.ref("base.fr"))
+        self.assertEqual(invoice_partner.email, "test@invoice.partner")
+        self.assertEqual(invoice_partner.name, "Test Invoice Address")
+        self.assertEqual(order.partner_invoice_id, invoice_partner)
+        self.assertIn("Created invoice partner", order.message_ids[0].body)
+
+    def test_create_missing_invoice_partner_disabled(self):
+        """Tests creation of missing invoice partner when ctx flag is False or not set
+
+        Expected behavior: the import workflow is halted with an error.
+        """
+        parsed_order = dict(
+            self.parsed_order,
+            invoice_to={
+                "country_code": "FR",
+                "email": "test@invoice.partner",
+                "name": "Test Invoice Address",
+            },
+        )
+        wiz = self.wiz_model
+
+        # No context flag
+        ctx = dict(wiz.env.context)
+        ctx.pop("create_missing_invoice_partner", None)
+        wiz = wiz.with_context(ctx)  # pylint: disable=context-overridden
+        with self.assertRaises(exceptions.UserError):
+            wiz.create_order(parsed_order, "pricelist")
+
+        # Context flag set to False
+        wiz = wiz.with_context(create_missing_invoice_partner=False)
+        with self.assertRaises(exceptions.UserError):
+            wiz.create_order(parsed_order, "pricelist")
+
+    def test_create_missing_shipping_partner(self):
+        """Tests creation of missing shipping partner when ctx flag is True
+
+        Expected behavior: the import workflow is not halted, and a new shipping
+        partner is created on the fly.
+        """
+        parsed_order = dict(
+            self.parsed_order,
+            ship_to={
+                "city": "Rome",
+                "country_code": "IT",
+                "street": "Via dei Platani",
+                "zip": "00100",
+            },
+        )
+        wiz = self.wiz_model.with_context(create_missing_shipping_partner=True, test=1)
+        with RecordCapturer(self.env["res.partner"], []) as rc_partner:
+            order = wiz.create_order(parsed_order, "pricelist")
+        self.assertEqual(len(rc_partner.records), 1)
+        shipping_partner = rc_partner.records
+        self.assertEqual(shipping_partner.type, "delivery")
+        self.assertEqual(shipping_partner.parent_id, self.partner)
+        self.assertEqual(shipping_partner.city, "Rome")
+        self.assertEqual(shipping_partner.country_id, self.env.ref("base.it"))
+        self.assertEqual(shipping_partner.street, "Via dei Platani")
+        self.assertEqual(shipping_partner.zip, "00100")
+        self.assertEqual(order.partner_shipping_id, shipping_partner)
+        self.assertIn("Created shipping partner", order.message_ids[0].body)
+
+    def test_create_missing_shipping_partner_disabled(self):
+        """Tests creation of missing shipping partner when ctx flag is False or not set
+
+        Expected behavior: the import workflow is halted with an error.
+        """
+        parsed_order = dict(
+            self.parsed_order,
+            ship_to={
+                "city": "Rome",
+                "country_code": "IT",
+                "street": "Via dei Platani",
+                "zip": "00100",
+            },
+        )
+        wiz = self.wiz_model
+
+        # No context flag
+        ctx = dict(wiz.env.context)
+        ctx.pop("create_missing_shipping_partner", None)
+        wiz = wiz.with_context(ctx)  # pylint: disable=context-overridden
+        with self.assertRaises(exceptions.UserError):
+            wiz.create_order(parsed_order, "pricelist")
+
+        # Context flag set to False
+        wiz = wiz.with_context(create_missing_shipping_partner=False)
+        with self.assertRaises(exceptions.UserError):
+            wiz.create_order(parsed_order, "pricelist")
