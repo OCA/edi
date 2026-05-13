@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-05-13 06:37+0000\n"
+"PO-Revision-Date: 2026-06-10 16:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -52,7 +52,7 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_needaction
 msgid "Action Needed"
-msgstr "Richiesta azione"
+msgstr "Azione richiesta"
 
 #. module: account_invoice_import
 #. odoo-python
@@ -504,14 +504,14 @@ msgstr ""
 #: code:addons/account_invoice_import/models/res_partner.py:0
 #, python-format
 msgid "The vendor bill %(move)s already has a partner %(partner)s."
-msgstr ""
+msgstr "La fattura del fornitore %(move)s ha già un partner %(partner)s."
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "This XML file is not XML-compliant. Error: %s"
-msgstr ""
+msgstr "Questo file XML non è conforme allo standard XML. Errore: %s"
 
 #. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_res_company__invoice_import_email
@@ -520,6 +520,8 @@ msgid ""
 "This field is used in multi-company setups to import the invoices received "
 "by the mail gateway in the appropriate company"
 msgstr ""
+"Questo campo viene utilizzato nelle configurazioni multi-aziendali per "
+"importare le fatture ricevute dal gateway di posta nell'azienda appropriata"
 
 #. module: account_invoice_import
 #. odoo-python
@@ -529,21 +531,23 @@ msgid ""
 "This invoice has been created automatically via file import. Origin: "
 "<strong>%s</strong>."
 msgstr ""
+"Questa fattura è stata creata automaticamente tramite importazione file. "
+"Origine: <strong>%s</strong>."
 
 #. module: account_invoice_import
 #: model:ir.model.constraint,message:account_invoice_import.constraint_res_company_invoice_import_email_uniq
 msgid "This invoice import email already exists!"
-msgstr ""
+msgstr "Questa e-mail di importazione della fattura esiste già!"
 
 #. module: account_invoice_import
 #: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import_partner_create__create_or_update__update
 msgid "This partner already exists in Odoo"
-msgstr ""
+msgstr "Questo partner esiste già in Odoo"
 
 #. module: account_invoice_import
 #: model:ir.model.fields.selection,name:account_invoice_import.selection__account_invoice_import_partner_create__create_or_update__create
 msgid "This partner doesn't already exists in Odoo"
-msgstr ""
+msgstr "Questo partner non esiste in Odoo"
 
 #. module: account_invoice_import
 #. odoo-python
@@ -553,16 +557,18 @@ msgid ""
 "This type of XML invoice is not supported. Did you install the module to "
 "support this type of file?"
 msgstr ""
+"Questo tipo di fattura XML non è supportato. Hai installato il modulo per "
+"supportare questo tipo di file?"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_partner_create_form
 msgid "Update Partner"
-msgstr ""
+msgstr "Aggiorna partner"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_journal_dashboard_kanban_view
 msgid "Upload"
-msgstr ""
+msgstr "Carica"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
@@ -570,37 +576,42 @@ msgid ""
 "Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a"
 " draft vendor bills refund for each file."
 msgstr ""
+"Carica qui sotto le fatture/i rimborsi del fornitore come file PDF o XML: "
+"Odoo creerà una bozza di rimborso delle fatture del fornitore per ciascun "
+"file."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__move_id
 msgid "Vendor Bill"
-msgstr ""
+msgstr "Fattura fornitore"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.res_config_settings_view_form
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "Vendor Bills Import"
-msgstr ""
+msgstr "Importa fattura fornitore"
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__website_message_ids
 msgid "Website Messages"
-msgstr ""
+msgstr "Messaggi sito web"
 
 #. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Cronologia comunicazioni sito web"
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import_partner_create
 msgid "Wizard to create a new partner or update an existing partner"
 msgstr ""
+"Procedura guidata per creare un nuovo partner o aggiornare un partner "
+"esistente"
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import
 msgid "Wizard to import supplier invoices/refunds"
-msgstr ""
+msgstr "Procedura guidata per importare fatture rimborsi"
 
 #. module: account_invoice_import
 #. odoo-python
@@ -610,6 +621,8 @@ msgid ""
 "You are importing a customer invoice/refund in journal '%s' which is not a "
 "sale journal."
 msgstr ""
+"Stai importando una fattura/rimborso cliente nel registro '%s' che non è un "
+"registro di vendita."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -619,6 +632,8 @@ msgid ""
 "You are importing a vendor bill/refund in journal '%s' which is not a "
 "purchase journal."
 msgstr ""
+"Stai importando una fattura/rimborso fornitore nel registro '%s' che non è "
+"un registro acquisti."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -629,6 +644,9 @@ msgid ""
 "and the imported invoice has several VAT taxes on the same line (%(line)s). "
 "We do not support this scenario for the moment."
 msgstr ""
+"Stai importando una fattura nella società %(company)s che non può detrarre "
+"l'IVA e la fattura importata presenta diverse imposte IVA sulla stessa riga "
+"(%(line)s). Al momento non supportiamo questo scenario."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -638,6 +656,8 @@ msgid ""
 "You must configure the 'Adjustment Credit Account' on the Accounting "
 "Configuration page of company %(company)s."
 msgstr ""
+"È necessario configurare il 'Conto di credito di rettifica' nella pagina "
+"configurazione contabilità della società %(company)s."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -647,20 +667,22 @@ msgid ""
 "You must configure the 'Adjustment Debit Account' on the Accounting "
 "Configuration page of company %(company)s."
 msgstr ""
+"È necessario configurare il 'Conto di addebito di rettifica' nella pagina "
+"configurazione contabilità della società %(company)s."
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
 #, python-format
 msgid "You must select the partner to update."
-msgstr ""
+msgstr "È necessario selezionare il partner da aggiornare."
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "You must select the vendor bills to import."
-msgstr ""
+msgstr "È necessario selezionare le fatture del fornitore da importare."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -669,15 +691,16 @@ msgstr ""
 msgid ""
 "email sent by <b>{email_from}</b> on {date} with subject <b>{subject}</b>"
 msgstr ""
+"E-mail inviata da <b>{email_from}</b> il {date} con oggetto <b>{subject}</b>"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "on imported vendor bill"
-msgstr ""
+msgstr "sulla fattura fornitore importata"
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "unspecified"
-msgstr ""
+msgstr "non indicato"
