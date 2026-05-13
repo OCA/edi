@@ -6,13 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-05-13 08:29+0000\n"
+"Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
@@ -96,13 +98,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 msgid "DD Month YY"
-msgstr ""
+msgstr "DD Månad ÅÅ"
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 msgid "DD Month YYYY"
-msgstr ""
+msgstr "DD Månad ÅÅÅÅ"
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
@@ -436,13 +438,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 msgid "Month DD YY"
-msgstr ""
+msgstr "Månad DD ÅÅ"
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 msgid "Month DD YYYY"
-msgstr ""
+msgstr "Månad DD ÅÅÅÅ"
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
