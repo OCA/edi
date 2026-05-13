@@ -74,7 +74,7 @@ For development/testing:
 
 - EU EDIFACT: https://unece.org/trade/uncefact/introducing-unedifact  
 - US ANSI X12: https://x12.org  
-- UBL (Universal Business Language = XML + XSD schema): https://www.w3.org/XML/Schema  
+- UBL (Universal Business Language = XML + XSD schema): https://www.w3.org/XML/Schema , https://www.oasis-open.org/ubl
 
 ---
 
@@ -101,7 +101,7 @@ This section describes common patterns across modules rather than listing them i
 
 ## 🔗 Related repository
 
-Some shared EDI abstractions and base framework logic are maintained in:
+Shared EDI base framework logic are maintained in:
 
 https://github.com/OCA/edi-framework
 
