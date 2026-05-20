@@ -4,11 +4,10 @@
 
 {
     "name": "Base Business Document Import Phone",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "category": "Hidden",
     "license": "AGPL-3",
-    "summary": "Use phone numbers to match partners upon import of "
-    "business documents",
+    "summary": "Use phone numbers to match partners upon import of business documents",
     "author": "Akretion,Odoo Community Association (OCA)",
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",

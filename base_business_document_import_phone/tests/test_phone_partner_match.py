@@ -11,23 +11,29 @@ class TestPhonePartnerMatch(TransactionCase):
         bdoo = self.env["business.document.import"]
         partner = rpo.create(
             {
-                "name": "Alexis de Lattre",
+                "name": "Test partner",
                 "country_id": self.env.ref("base.fr").id,
                 "phone": "01 41 98 12 42",
-                "mobile": "+33699887766",
                 "supplier_rank": 10,
             }
         )
         partner._onchange_phone_validation()
         self.assertEqual(partner.phone, "+33 1 41 98 12 42")
-        partner._onchange_mobile_validation()
-        self.assertEqual(partner.mobile, "+33 6 99 88 77 66")
         partner_dict = {
             "country_code": "FR",
             "phone": "01.41.98.12.42",
         }
         res = bdoo._match_partner(partner_dict, [])
         self.assertEqual(res, partner)
+        partner = rpo.create(
+            {
+                "name": "Test partner mobile",
+                "country_id": self.env.ref("base.fr").id,
+                "phone": "+33699887766",
+                "supplier_rank": 10,
+            }
+        )
+        partner._onchange_phone_validation()
         partner_dict = {
             "country_code": "FR",
             "phone": "(0)6-99-88-77-66",

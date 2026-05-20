@@ -41,9 +41,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 partner = rpo.search(
                     domain
                     + [
-                        "|",
                         ("phone", "=", phone_num_intl),
-                        ("mobile", "=", phone_num_intl),
                     ],
                     limit=1,
                     order=order,

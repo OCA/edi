@@ -210,7 +210,6 @@ class BusinessDocumentImport(models.AbstractModel):
                         domain,
                         Domain.OR(
                             [
-                                Domain("mobile", "=", partner_dict["phone"]),
                                 Domain("phone", "=", partner_dict["phone"]),
                             ]
                         ),
