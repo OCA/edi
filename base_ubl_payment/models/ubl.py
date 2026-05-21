@@ -99,3 +99,4 @@ class BaseUbl(models.AbstractModel):
                         financial_inst, ns["cbc"] + "ID", schemeName="BIC"
                     )
                     financial_inst_id.text = partner_bank.bank_bic
+        return pay_means
