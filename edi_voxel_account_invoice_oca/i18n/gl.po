@@ -6,177 +6,179 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-05-23 09:46+0000\n"
+"Last-Translator: Pablo Castelo <pablocv@gmx.es>\n"
 "Language-Team: none\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
 msgid "Cancel sending"
-msgstr ""
+msgstr "Cancelar envío"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "Cancelled Voxel reports"
-msgstr ""
+msgstr "Envíos a Voxel cancelados"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model,name:edi_voxel_account_invoice_oca.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Compañías"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model,name:edi_voxel_account_invoice_oca.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Opcións de Configuración"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model,name:edi_voxel_account_invoice_oca.model_report_edi_voxel_account_invoice_oca_template_voxel_invoice
 msgid "Edi Voxel Account Invoice Report"
-msgstr ""
+msgstr "Reporte de Factura para Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.actions.server,name:edi_voxel_account_invoice_oca.ir_cron_check_invoice_export_status_ir_actions_server
 #: model:ir.cron,cron_name:edi_voxel_account_invoice_oca.ir_cron_check_invoice_export_status
 #: model:ir.cron,name:edi_voxel_account_invoice_oca.ir_cron_check_invoice_export_status
 msgid "Edi Voxel: Update invoice export status"
-msgstr ""
+msgstr "Edi Voxel: Actualizar estado da exportación de facturas"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,help:edi_voxel_account_invoice_oca.field_account_move__voxel_state
 msgid "Indicates the status of sending report to Voxel"
-msgstr ""
+msgstr "Indica o estado do envío do informe a Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_res_company__voxel_invoice_login_id
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_res_config_settings__voxel_invoice_login_id
 msgid "Invoice login"
-msgstr ""
+msgstr "Login para Facturas"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_bank_statement_line__voxel_job_ids
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_job_ids
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_payment__voxel_job_ids
 msgid "Jobs"
-msgstr ""
+msgstr "Traballos"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model,name:edi_voxel_account_invoice_oca.model_account_move
 msgid "Journal Entry"
-msgstr ""
+msgstr "Entrada Diaria"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__processing_error
 msgid "Processing Error"
-msgstr ""
+msgstr "Erro de procesamento"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
 msgid "Requeue"
-msgstr ""
+msgstr "Volver poñer en cola"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
 msgid "Send now"
-msgstr ""
+msgstr "Enviar agora"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
 msgid "Send to Voxel"
-msgstr ""
+msgstr "Enviar a Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "The last Voxel report processing with errors"
-msgstr ""
+msgstr "Último procesamento de reporte con erros"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "The last attemp to sent to Voxel has failed"
-msgstr ""
+msgstr "O úlimo intento de envío a Voxel fallou"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
 msgid "Voxel"
-msgstr ""
+msgstr "Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_bank_statement_line__voxel_enabled
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_enabled
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_payment__voxel_enabled
 msgid "Voxel Enabled"
-msgstr ""
+msgstr "Voxel habilitado"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_filename
 msgid "Voxel Filename"
-msgstr ""
+msgstr "Nome de arquivo Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
 msgid "Voxel Jobs"
-msgstr ""
+msgstr "Traballos Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_move_form
 msgid "Voxel XML report"
-msgstr ""
+msgstr "Reporte XML Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "Voxel cancelled"
-msgstr ""
+msgstr "Envíos a Voxel cancelados"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "Voxel filters"
-msgstr ""
+msgstr "Filtros de Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.actions.report,name:edi_voxel_account_invoice_oca.report_voxel_invoice
 msgid "Voxel invoice"
-msgstr ""
+msgstr "Factura Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "Voxel report accepted"
-msgstr ""
+msgstr "Informe Voxel aceptado"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "Voxel report failed"
-msgstr ""
+msgstr "Envíos a Voxel errados"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "Voxel report in process"
-msgstr ""
+msgstr "Reportes voxel en proceso"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "Voxel report not sent"
-msgstr ""
+msgstr "Non envíadas a Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_account_invoice_oca.view_account_invoice_filter
 msgid "Voxel report processing error"
-msgstr ""
+msgstr "Reporte Voxel con erro de procesamento"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_state
 msgid "Voxel send state"
-msgstr ""
+msgstr "Estado do envío Voxel"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.model.fields,field_description:edi_voxel_account_invoice_oca.field_account_move__voxel_xml_report
 msgid "XML Report"
-msgstr ""
+msgstr "Informe XML"
 
 #. module: edi_voxel_account_invoice_oca
 #: model:ir.actions.report,print_report_name:edi_voxel_account_invoice_oca.report_voxel_invoice
 msgid "object._get_voxel_filename()"
-msgstr ""
+msgstr "object._get_voxel_filename()"
