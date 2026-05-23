@@ -6,42 +6,44 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-05-23 05:06+0000\n"
+"Last-Translator: Pablo Castelo <pablocv@gmx.es>\n"
 "Language-Team: none\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: base_ubl
 #: model:ir.model,name:base_ubl.model_base_ubl
 msgid "Common methods to generate and parse UBL XML files"
-msgstr ""
+msgstr "Métodos habituais para xerar e analizar arquivos XML UBL"
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%s'"
-msgstr ""
+msgstr "Falta a categoría fiscal da UNECE (CEPE) no imposto \"%s\""
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%s'"
-msgstr ""
+msgstr "Falta o tipo de imposto da UNECE (CEPE) no imposto '%s'"
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
-msgstr ""
+msgstr "Falta o código UNECE na unidade de medida '%s'"
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing company!"
-msgstr ""
+msgstr "Falta a compañía!"
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
@@ -50,6 +52,8 @@ msgid ""
 "The UBL XML file does not contain the version for validating the content "
 "according to the schema."
 msgstr ""
+"O arquivo UBL XML non contén a versión para validar o contido segundo o "
+"esquema."
 
 #. module: base_ubl
 #: code:addons/base_ubl/models/ubl.py:0
@@ -59,3 +63,6 @@ msgid ""
 "The XML file and the full error have been written in the server logs. Here "
 "is the error, which may give you an idea on the cause of the problem : %s."
 msgstr ""
+"O arquivo XML UBL non é válido para a definición oficial do esquema XML. O "
+"arquivo XML e o erro completo escribíronse nos rexistros do servidor. Aquí "
+"está o erro, que pode darlle unha idea sobre a causa do problema : %s."
