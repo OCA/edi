@@ -6,80 +6,82 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-05-23 09:46+0000\n"
+"Last-Translator: Pablo Castelo <pablocv@gmx.es>\n"
 "Language-Team: none\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__cajas
 msgid "Boxes"
-msgstr ""
+msgstr "Caixas"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__contenedores
 msgid "Containers"
-msgstr ""
+msgstr "Contedores"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__horas
 msgid "Hours"
-msgstr ""
+msgstr "Horas"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__kgs
 msgid "Kgs"
-msgstr ""
+msgstr "Kgs"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__lbs
 msgid "Lbs"
-msgstr ""
+msgstr "Lbs"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__lts
 msgid "Liters"
-msgstr ""
+msgstr "Lts"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__metros
 msgid "Meters"
-msgstr ""
+msgstr "Metros"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__otros
 msgid "Others"
-msgstr ""
+msgstr "Outros"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__bultos
 msgid "Packages"
-msgstr ""
+msgstr "Vultos"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__palets
 msgid "Pallets"
-msgstr ""
+msgstr "Palets"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model,name:edi_voxel_secondary_unit_oca.model_product_secondary_unit
 msgid "Product Secondary Unit"
-msgstr ""
+msgstr "Unidade secundaria do produto"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__metroscuadrados
 msgid "Square meters"
-msgstr ""
+msgstr "Metros Cadrados"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields.selection,name:edi_voxel_secondary_unit_oca.selection__product_secondary_unit__voxel_code__unidades
 msgid "Units"
-msgstr ""
+msgstr "Unidades"
 
 #. module: edi_voxel_secondary_unit_oca
 #: model:ir.model.fields,field_description:edi_voxel_secondary_unit_oca.field_product_secondary_unit__voxel_code
 msgid "Voxel Code"
-msgstr ""
+msgstr "Código Voxel"
