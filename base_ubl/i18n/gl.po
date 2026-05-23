@@ -6,39 +6,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-05-23 15:40+0000\n"
+"Last-Translator: Pablo Castelo <pablocv@gmx.es>\n"
 "Language-Team: none\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: base_ubl
 #: model:ir.model,name:base_ubl.model_base_ubl
 msgid "Common methods to generate and parse UBL XML files"
-msgstr ""
+msgstr "Métodos habituais para xerar e analizar arquivos XML UBL"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%(tax_name)s'"
-msgstr ""
+msgstr "Falta a categoría fiscal da UNECE (CEPE) no imposto '%(tax_name)s'"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%(tax_name)s'"
-msgstr ""
+msgstr "Falta o tipo de imposto UNECE no imposto '%(tax_name)s'"
 
 #. module: base_ubl
 #. odoo-python
 #: code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
-msgstr ""
+msgstr "Falta o código UNECE na unidade de medida '%s'"
 
 #. module: base_ubl
 #. odoo-python
@@ -48,6 +50,8 @@ msgid ""
 "The UBL XML file does not contain the version for validating the content "
 "according to the schema."
 msgstr ""
+"O arquivo UBL XML non contén a versión para validar o contido segundo o "
+"esquema."
 
 #. module: base_ubl
 #. odoo-python
@@ -59,3 +63,6 @@ msgid ""
 "is the error, which may give you an idea on the cause of the problem : "
 "%(error)s."
 msgstr ""
+"O arquivo UBL XML non é válido fronte á definición de esquema XML oficial. O "
+"arquivo XML e o erro completo escribíronse nos rexistros do servidor. Aquí "
+"está o erro, que pode darlle unha idea da causa do problema: %(error)s."
