@@ -6,19 +6,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-05-23 09:46+0000\n"
+"Last-Translator: Pablo Castelo <pablocv@gmx.es>\n"
 "Language-Team: none\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
 #, python-format
 msgid "'%s' is not recognised as an XML file"
-msgstr ""
+msgstr "'%s' non é recoñecido como un arquivo XML"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
@@ -27,6 +29,8 @@ msgid ""
 "<br/><span style='font-weight: bold;'>The following errors were "
 "found:</span><br/><ul>%s</ul>"
 msgstr ""
+"<br/><span style='font-weight: bold;'>Os seguintes erros foron atopados:</"
+"span><br/><ul>%s</ul>"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
@@ -37,6 +41,10 @@ msgid ""
 "%(product_data)s\n"
 "Results: %(product_uom_count)s"
 msgstr ""
+"Non podo atopar unha unidade de medida adecuada para estes datos:\n"
+"\n"
+"%(product_data)s\n"
+"Resultados: %(product_uom_count)s"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
@@ -47,6 +55,10 @@ msgid ""
 "%(data)s\n"
 "Results: %(partner_count)s"
 msgstr ""
+"Non podo atopar un cliente adecuado para estes datos:\n"
+"\n"
+"%(data)s\n"
+"Results: %(partner_count)s"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
@@ -57,16 +69,20 @@ msgid ""
 "%(product_data)s\n"
 "Results: %(product_count)s"
 msgstr ""
+"Non podo atopar un produto adecuado para estes datos:\n"
+"\n"
+"%(product_data)s\n"
+"Results: %(product_count)s"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model,name:edi_voxel_sale_order_import_oca.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Compañías"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model,name:edi_voxel_sale_order_import_oca.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Configuración"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
@@ -75,6 +91,8 @@ msgid ""
 "Couldn't find any <b>Company</b> corresponding to the following information "
 "extracted from the Voxel document:<br/><ul>%s</ul>"
 msgstr ""
+"Non se puido atopar ningunha <b>Compañía</b> correspondente á seguinte "
+"información extraida do documento Voxel:<br/><ul>%s</ul>"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
@@ -83,6 +101,8 @@ msgid ""
 "Couldn't find any <b>Delivery Address</b> corresponding to the following "
 "information extracted from the Voxel document:<br/><ul>%s</ul>"
 msgstr ""
+"Non se puido atopar ningunha <b>Dirección de entrega</b> correspondente á "
+"seguinte información extraida do documento Voxel:<br/><ul>%s</ul>"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
@@ -91,24 +111,26 @@ msgid ""
 "Couldn't find any <b>Tax</b> corresponding to the following information "
 "extracted from the Voxel document:<br/><ul>%s</ul>"
 msgstr ""
+"Non se puido atopar ningún <b>Imposto</b> correspondente á seguinte "
+"información extraida do documento Voxel:<br/><ul>%s</ul>"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
 #, python-format
 msgid "Created automatically via voxel import (%s)."
-msgstr ""
+msgstr "Creado automaticamente por importación desde Voxel (%s)."
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.actions.server,name:edi_voxel_sale_order_import_oca.ir_cron_get_voxel_sale_order_ir_actions_server
 #: model:ir.cron,cron_name:edi_voxel_sale_order_import_oca.ir_cron_get_voxel_sale_order
 #: model:ir.cron,name:edi_voxel_sale_order_import_oca.ir_cron_get_voxel_sale_order
 msgid "Edi Voxel: Get voxel sale order"
-msgstr ""
+msgstr "Edi Voxel: Obter pedido de Voxel"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import_oca.field_sale_order__voxel_enabled
 msgid "Enable Voxel"
-msgstr ""
+msgstr "Habilitar voxel"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
@@ -119,62 +141,62 @@ msgstr ""
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,help:edi_voxel_sale_order_import_oca.field_sale_order__voxel_state
 msgid "Indicates the status of sending report to Voxel"
-msgstr ""
+msgstr "Indica o estado de envío de informe a Voxel"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import_oca.field_sale_order__voxel_job_ids
 msgid "Jobs"
-msgstr ""
+msgstr "Traballos"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import_oca.field_sale_order__processing_error
 msgid "Processing Error"
-msgstr ""
+msgstr "Erro de procesamento"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import_oca.field_res_company__voxel_sale_order_login_id
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import_oca.field_res_config_settings__voxel_sale_order_login_id
 msgid "Sale Order login"
-msgstr ""
+msgstr "Login para Pedidos"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model,name:edi_voxel_sale_order_import_oca.model_sale_order
 msgid "Sales Order"
-msgstr ""
+msgstr "Pedido de venda"
 
 #. module: edi_voxel_sale_order_import_oca
 #: code:addons/edi_voxel_sale_order_import_oca/models/sale_order.py:0
 #, python-format
 msgid "This XML file is not XML-compliant"
-msgstr ""
+msgstr "Este arquivo non é compatible co formato XML"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_sale_order_import_oca.view_order_form
 msgid "Voxel"
-msgstr ""
+msgstr "Voxel"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import_oca.field_sale_order__voxel_filename
 msgid "Voxel Filename"
-msgstr ""
+msgstr "Nome de arquivo Voxel"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model_terms:ir.ui.view,arch_db:edi_voxel_sale_order_import_oca.sale_order_view_search_inherit_quotation
 msgid "Voxel Quotations"
-msgstr ""
+msgstr "Orzamentos Voxel"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.actions.act_window,name:edi_voxel_sale_order_import_oca.action_voxel_queue_job
 #: model:ir.ui.menu,name:edi_voxel_sale_order_import_oca.menu_voxel_queue_job
 msgid "Voxel order Jobs"
-msgstr ""
+msgstr "Traballos Voxel"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import_oca.field_sale_order__voxel_state
 msgid "Voxel send state"
-msgstr ""
+msgstr "Estado de envío Voxel"
 
 #. module: edi_voxel_sale_order_import_oca
 #: model:ir.model.fields,field_description:edi_voxel_sale_order_import_oca.field_sale_order__voxel_xml_report
 msgid "XML Report"
-msgstr ""
+msgstr "Informe XML"
