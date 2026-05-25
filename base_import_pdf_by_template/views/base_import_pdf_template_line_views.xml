@@ -110,12 +110,8 @@
                         <!-- Fixed value !-->
                         <field name="field_ttype" invisible="1" />
                         <field
-                            name="date_format"
+                            name="date_time_format"
                             invisible="field_ttype not in ('date', 'datetime')"
-                        />
-                        <field
-                            name="time_format"
-                            invisible="field_ttype != 'datetime'"
                         />
                         <field
                             name="decimal_separator"
@@ -126,6 +122,52 @@
                             invisible="field_ttype not in ('float', 'monetary')"
                         />
                     </group>
+                    <div
+                        class="row"
+                        invisible="field_ttype not in ('date', 'datetime')"
+                    >
+                        <div class="col-md-8 row">
+                            <div class="col-12">
+                                <div
+                                    class="o_horizontal_separator mb-3 mt-4 text-uppercase fw-bolder small"
+                                >Legends for supported Date and Time Formats</div>
+                            </div>
+                            <div class="col-sm">
+                                <div>%a - Abbreviated day of the week.</div>
+                                <div>%A - Full day of the week.</div>
+                                <div>%b - Abbreviated month name.</div>
+                                <div>%B - Full month name."</div>
+                                <div>%d - Day of the month [01,31]."</div>
+                                <div>%j - Day of the year [001,366]."</div>
+                                <div>%H - Hour (24-hour clock) [00,23]."</div>
+                                <div>%I - Hour (12-hour clock) [01,12]."</div>
+                            </div>
+                            <div class="col-sm">
+                                <div>%M - Minute [00,59]."</div>
+                                <div>%p - Equivalent of either AM or PM."</div>
+                                <div>%S - Seconds [00,61]."</div>
+                                <div>%w - Day of the week number [0(Sunday),6]."</div>
+                                <div>%y - Year without century [00,99]."</div>
+                                <div>%Y - Year with century."</div>
+                                <div>%m - Month number [01,12]."</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-info">
+                            <div
+                                class="o_horizontal_separator mb-3 mt-4 text-uppercase fw-bolder small"
+                            >Examples</div>
+                            <div>1. %b, %B         ==&gt; Dec, December</div>
+                            <div>2. %a ,%A         ==&gt; Fri, Friday</div>
+                            <div>3. %y, %Y         ==&gt; 08, 2008</div>
+                            <div>4. %d, %m         ==&gt; 05, 12</div>
+                            <div>5. %H:%M:%S      ==&gt; 18:25:20</div>
+                            <div>6. %I:%M:%S %p  ==&gt; 06:25:20 PM</div>
+                            <div>7. %j              ==&gt; 340</div>
+                            <div>8. %S              ==&gt; 20</div>
+                            <div
+                            >9. %w              ==&gt; 5 ( Friday is the 6th day)</div>
+                        </div>
+                    </div>
                     <notebook>
                         <page
                             string="Mapped"
