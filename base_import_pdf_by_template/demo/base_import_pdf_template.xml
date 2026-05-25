@@ -7,7 +7,6 @@
         <field name="name">Partner Template</field>
         <field name="model_id" ref="base.model_res_partner" />
         <field name="child_field_id" ref="base.field_res_partner__child_ids" />
-        <field name="header_items">Name,Address,Child Country</field>
         <field name="auto_detect_pattern">Test partner info.*</field>
     </record>
     <record
@@ -66,7 +65,7 @@
         <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
         <field name="related_model">lines</field>
         <field name="field_id" ref="base.field_res_partner__name" />
-        <field name="column">0</field>
+        <field name="sequence">0</field>
         <field name="pattern">(.*),.*,</field>
     </record>
     <record
@@ -76,7 +75,7 @@
         <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
         <field name="related_model">lines</field>
         <field name="field_id" ref="base.field_res_partner__street" />
-        <field name="column">1</field>
+        <field name="sequence">1</field>
         <field name="pattern">.*,(.*),</field>
     </record>
     <record
@@ -88,7 +87,7 @@
         <field name="field_id" ref="base.field_res_partner__country_id" />
         <field name="search_field_id" ref="base.field_res_country__code" />
         <field name="pattern">.*,.*, [A-Z].*[(]([A-Z]{1,2})[)]</field>
-        <field name="column">2</field>
+        <field name="sequence">2</field>
         <field name="log_distinct_value" eval="True" />
     </record>
 </odoo>

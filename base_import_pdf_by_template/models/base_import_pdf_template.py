@@ -43,7 +43,6 @@ class BaseImportPdfTemplate(models.Model):
         help="""It will be necessary to set a patter that only finds something
         in the documents for this template.""",
     )
-    header_items = fields.Char(help="Header columns separated by commas")
     company_id = fields.Many2one(comodel_name="res.company", string="Company")
     line_ids = fields.One2many(
         comodel_name="base.import.pdf.template.line",
@@ -89,8 +88,11 @@ class BaseImportPdfTemplate(models.Model):
     def _get_table_info(self, text):
         """Convert table data to a readable dict."""
         res = False
-        if text and self.header_items:
-            res = {"header": self.header_items, "data": []}
+        if text and self.line_ids:
+            lines = self.line_ids.filtered(
+                lambda x: x.related_model == "lines" and x.value_type != "fixed"
+            )
+            res = {"header": lines.mapped("field_name"), "data": []}
             data = self._get_table_info_data(text)
             res["data"].extend(data)
         return res
@@ -104,13 +106,15 @@ class BaseImportPdfTemplate(models.Model):
             and x.value_type != "fixed"
             and x.pattern
         )
+        sequence = 0
         for child_line in child_lines:
             data_column = []
             matches = re.finditer(child_line.pattern, text, re.MULTILINE)
             for _matchNum, match in enumerate(matches, start=1):
                 match_group = match.groups(0)[0]
                 data_column.append(match_group.strip())
-            data_map_column[int(child_line.column)] = data_column
+            data_map_column[sequence] = data_column
+            sequence += 1
         # Convert data column to lines (table lines "split" in pages not supported)
         data_keys = list(data_map_column.keys())
         data_key_0 = data_keys[0]
@@ -159,18 +163,17 @@ class BaseImportPdfTemplate(models.Model):
     def _get_field_values_from_table_item(self, item):
         res = False
         child_lines = self.line_ids.filtered(
-            lambda x: x.related_model == "lines"
-            and x.value_type != "fixed"
-            and x.column
+            lambda x: x.related_model == "lines" and x.value_type != "fixed"
         )
         if item and child_lines:
             item_lenght = len(item) - 1
             res = {}
+            sequence = 0
             for child_line in child_lines:
-                column = int(child_line.column)
-                if item_lenght >= column and item[column]:
-                    value = child_line._process_value(item[column])
+                if item_lenght >= sequence and item[sequence]:
+                    value = child_line._process_value(item[sequence])
                     res[child_line.field_name] = value
+                sequence += 1
         return res
 
     def _get_field_values(self, related_model, text):
@@ -187,8 +190,9 @@ class BaseImportPdfTemplate(models.Model):
 class BaseImportPdfTemplateLine(models.Model):
     _name = "base.import.pdf.template.line"
     _description = "Base Import Pdf Template Line"
-    _order = "model asc, id"
+    _order = "sequence, id"
 
+    sequence = fields.Integer(default=10)
     template_id = fields.Many2one(
         comodel_name="base.import.pdf.template",
         string="Template",
@@ -211,7 +215,6 @@ class BaseImportPdfTemplateLine(models.Model):
     field_name = fields.Char(related="field_id.name")
     field_ttype = fields.Selection(related="field_id.ttype")
     field_relation = fields.Char(related="field_id.relation")
-    column = fields.Char()
     pattern = fields.Char()
     search_field_id = fields.Many2one(
         comodel_name="ir.model.fields",
