@@ -55,6 +55,18 @@ class AccountMoveLine(models.Model):
                 differences.append(
                     _("- Invoiced quantity exceeds the ordered quantity.")
                 )
+            if (
+                po_line.product_id.purchase_method == "receive"
+                and float_compare(
+                    po_line.qty_received,
+                    po_line.qty_invoiced,
+                    precision_rounding=po_line.product_uom.rounding or 0.01,
+                )
+                < 0
+            ):
+                differences.append(
+                    _("- Invoiced quantity exceeds the received quantity.")
+                )
             if differences:
                 rec.purchase_line_mismatch = True
                 rec.purchase_line_mismatch_details = "\n".join(differences)

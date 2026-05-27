@@ -1,3 +1,7 @@
+.. image:: https://odoo-community.org/readme-banner-image
+   :target: https://odoo-community.org/get-involved?utm_source=readme
+   :alt: Odoo Community Association
+
 ==================================
 Account Edi Ubl Cii Purchase Match
 ==================================
@@ -13,7 +17,7 @@ Account Edi Ubl Cii Purchase Match
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
@@ -172,6 +176,14 @@ This module is maintained by the OCA.
 OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
+
+.. |maintainer-sbejaoui| image:: https://github.com/sbejaoui.png?size=40px
+    :target: https://github.com/sbejaoui
+    :alt: sbejaoui
+
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
+
+|maintainer-sbejaoui| 
 
 This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/16.0/account_edi_ubl_cii_purchase_match>`_ project on GitHub.
 

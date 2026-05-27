@@ -13,6 +13,9 @@ class TestAccountEdiUblCiiPurchaseMatch(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
         super().setUpClass()
+        cls.env["ir.config_parameter"].sudo().set_param(
+            "account_edi.product_name_match", True
+        )
         cls.env["ir.sequence"].search(
             [("code", "=", "purchase.order")], limit=1
         ).prefix = "PO"

@@ -125,7 +125,7 @@
     <cbc:LineExtensionAmount currencyID="EUR">1000</cbc:LineExtensionAmount>
     <cac:Item>
       <cbc:Description>Locations and leasing</cbc:Description>
-      <cbc:Name>Locations et leasing opérationnel</cbc:Name>
+      <cbc:Name>Locations and leasing</cbc:Name>
       <cac:SellersItemIdentification>
         <cbc:ID>leasing001</cbc:ID>
       </cac:SellersItemIdentification>
