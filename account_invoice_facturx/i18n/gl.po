@@ -108,7 +108,7 @@ msgid ""
 "Factur-X {invoice_type} {invoice_number} dated {invoice_date} issued by "
 "{company_name}"
 msgstr ""
-"Factur-X {invoice_type} {invoice_number} con data {invoice_dáche} emitida "
+"Factur-X {invoice_type} {invoice_number} con data {invoice_date} emitida "
 "por {company_name}"
 
 #. module: account_invoice_facturx
@@ -218,4 +218,4 @@ msgstr "Formato XML integrado en factura PDF"
 #, python-format
 msgid "{company_name}: {invoice_type} {invoice_number} dated {invoice_date}"
 msgstr ""
-"{company_name}: {invoice_type} {invoice_number} con data {invoice_dáche}"
+"{company_name}: {invoice_type} {invoice_number} con data {invoice_date}"

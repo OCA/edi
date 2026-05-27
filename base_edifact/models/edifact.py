@@ -203,7 +203,10 @@ class BasePydifact(models.AbstractModel):
         # Set default code based on SA if given
         if pia is not None and pia[1][0]:
             res["code"] = pia[1][0]
-        code = seg[2][0] if len(list(seg)) > 2 else False
+        try:
+            code = seg[2][0]
+        except IndexError:
+            code = False
         if code:
             field = "code" if seg[2][1] == "SRV" else "barcode"
             res[field] = code

@@ -114,7 +114,7 @@ msgstr "O IBAN <b>%s</b> non é válido, polo que se ignorou."
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 #, python-format
 msgid "ID {id} of '{model}' doesn't exist in Odoo."
-msgstr "A ID {ide} de '{model}' non existe en Odoo."
+msgstr "A ID {id} de '{model}' non existe en Odoo."
 
 #. module: base_business_document_import
 #. odoo-python
