@@ -661,7 +661,12 @@ class AccountInvoiceImport(models.TransientModel):
         # Support the 2 refund methods; if method a) is used, we convert to
         # method b)
         if not parsed_inv.get("type"):
-            parsed_inv["type"] = "in_invoice"  # default value
+            # Use context hint if available (e.g., when called from vendor refunds view)
+            default_move_type = self.env.context.get("default_move_type")
+            if default_move_type in ("in_refund", "out_invoice", "out_refund"):
+                parsed_inv["type"] = default_move_type
+            else:
+                parsed_inv["type"] = "in_invoice"  # default value
         if (
             parsed_inv["type"] == "in_invoice"
             and "amount_total" in parsed_inv
@@ -817,9 +822,12 @@ class AccountInvoiceImport(models.TransientModel):
             )
             invoice_ids.append(invoice.id)
 
-        next_action = self.env["ir.actions.actions"]._for_xml_id(
-            "account.action_move_in_invoice_type"
-        )
+        default_move_type = self.env.context.get("default_move_type", "in_invoice")
+        if default_move_type == "in_refund":
+            action_xml_id = "account.action_move_in_refund_type"
+        else:
+            action_xml_id = "account.action_move_in_invoice_type"
+        next_action = self.env["ir.actions.actions"]._for_xml_id(action_xml_id)
         if len(invoice_ids) > 1:
             next_action["domain"] = [("id", "in", invoice_ids)]
         elif len(invoice_ids) == 1:
