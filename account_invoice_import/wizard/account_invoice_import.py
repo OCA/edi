@@ -353,7 +353,7 @@ class AccountInvoiceImport(models.TransientModel):
                 line[2]["analytic_distribution"] = analytic_distribution
         # if module account_invoice_check_total from OCA/account-invoicing is installed
         if hasattr(self.env["account.move"], "check_total"):
-            vals["check_total"] = parsed_inv["amount_total"]
+            vals["check_total"] = parsed_inv.get("amount_total", 0.0)
         return vals
 
     @api.model
