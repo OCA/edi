@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo-addon-account_edi_no_autocreate_partner>=16.0dev,<16.1dev',
         'odoo-addon-account_edi_no_product_name_match>=16.0dev,<16.1dev',
         'odoo-addon-account_edi_ubl_cii_additional_document>=16.0dev,<16.1dev',
+        'odoo-addon-account_edi_ubl_cii_check_total>=16.0dev,<16.1dev',
         'odoo-addon-account_edi_ubl_cii_invoice_line_name_enhance>=16.0dev,<16.1dev',
         'odoo-addon-account_edi_ubl_cii_supplier_invoice_number>=16.0dev,<16.1dev',
         'odoo-addon-account_einvoice_generate>=16.0dev,<16.1dev',
