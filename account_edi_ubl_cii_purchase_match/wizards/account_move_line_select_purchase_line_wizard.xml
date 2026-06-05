@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 ACSONE SA/NV
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record
+        model="ir.ui.view"
+        id="account_move_line_select_purchase_line_wizard_form_view"
+    >
+        <field name="model">account.move.line.select.purchase.line.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <p>
+                    <field name="description" />
+                </p>
+                <group string="Invoice line">
+                    <group>
+                        <field name="move_line_quantity" />
+                    </group>
+                    <group>
+                        <field name="move_line_price_unit" string="Unit Price" />
+                    </group>
+                    <group>
+                        <field name="move_line_price_subtotal" string="Subtotal" />
+                    </group>
+                </group>
+                <group>
+                    <field name="move_line_id" invisible="1" />
+                    <field name="partner_id" invisible="1" />
+                    <field name="product_domain" invisible="1" />
+                    <field
+                        name="purchase_order_ids"
+                        required="1"
+                        widget="many2many_tags"
+                    />
+                    <field name="product_id" required="1" />
+                    <field name="purchase_order_line_id" required="1" />
+                </group>
+                <group string="Purchase Line">
+                    <group>
+                        <field name="po_line_product_uom_qty" />
+                        <field name="po_line_qty_received" />
+                    </group>
+                    <group>
+                        <field name="po_line_price_unit" string="Unit Price" />
+                        <field name="po_line_qty_invoiced" />
+                    </group>
+                    <group>
+                        <field name="po_line_price_subtotal" string="Subtotal" />
+                    </group>
+                </group>
+                <footer>
+                    <button
+                        name="select_purchase_line"
+                        string="Select The Purchase Line"
+                        class="btn-primary"
+                        type="object"
+                    />
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+
+</odoo>
