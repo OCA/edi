@@ -17,6 +17,7 @@ setuptools.setup(
         'odoo-addon-account_edi_ubl_cii_purchase_match>=16.0dev,<16.1dev',
         'odoo-addon-account_edi_ubl_cii_retrieve_tax>=16.0dev,<16.1dev',
         'odoo-addon-account_edi_ubl_cii_supplier_invoice_number>=16.0dev,<16.1dev',
+        'odoo-addon-account_edi_ubl_move_line_uom_and_packaging_unece>=16.0dev,<16.1dev',
         'odoo-addon-account_einvoice_generate>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_download>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_download_ovh>=16.0dev,<16.1dev',
