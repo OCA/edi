@@ -124,6 +124,12 @@ class AccountInvoiceImport(models.TransientModel):
                     "/ram:PostalTradeAddress"
                     "/ram:CityName",  # ZUGFeRD 1.x
                 ],
+                "einvoice_address": [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:SellerTradeParty"
+                    "/ram:URIUniversalCommunication"
+                    "/ram:URIID[@schemeID='0225']",  # Factur-X
+                ],
             },
             "company": {
                 "vat": [
@@ -135,6 +141,12 @@ class AccountInvoiceImport(models.TransientModel):
                     "/ram:BuyerTradeParty"
                     "/ram:SpecifiedTaxRegistration"
                     "/ram:ID[@schemeID='VA']",  # ZUGFeRD
+                ],
+                "einvoice_address": [
+                    "//ram:ApplicableHeaderTradeAgreement"
+                    "/ram:BuyerTradeParty"
+                    "/ram:URIUniversalCommunication"
+                    "/ram:URIID[@schemeID='0225']",  # Factur-X
                 ],
             },
             "invoice_number": [
