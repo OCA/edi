@@ -6,18 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-06-08 10:51+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_edi_ubl_move_line_uom_and_packaging_unece
 #: model:ir.model,name:account_edi_ubl_move_line_uom_and_packaging_unece.model_account_move_line
 msgid "Journal Item"
-msgstr ""
+msgstr "Movimento contabile"
 
 #. module: account_edi_ubl_move_line_uom_and_packaging_unece
 #: model:ir.model.fields,help:account_edi_ubl_move_line_uom_and_packaging_unece.field_account_move_line__ubl_unece_unit_code
@@ -26,6 +28,10 @@ msgid ""
 "purchase reconciliation to identify the corresponding packaging when a "
 "purchase order line is manually selected."
 msgstr ""
+"Campo tecnico che memorizza il codice unità UNECE dall'importazione UBL. "
+"Utilizzato durante la riconciliazione degli acquisti per identificare "
+"l'imballaggio corrispondente quando una riga dell'ordine di acquisto viene "
+"selezionata manualmente."
 
 #. module: account_edi_ubl_move_line_uom_and_packaging_unece
 #: model:ir.model.fields,help:account_edi_ubl_move_line_uom_and_packaging_unece.field_account_move_line__ubl_billed_quantity
@@ -34,28 +40,32 @@ msgid ""
 "purchase reconciliation, it allows restoring the original supplier quantity "
 "when the quantity has been altered by packaging selection."
 msgstr ""
+"Campo tecnico in cui è archiviata la quantità fatturata dall'importazione "
+"UBL. Durante la riconciliazione degli acquisti, consente di ripristinare la "
+"quantità originaria del fornitore quando la quantità è stata modificata "
+"dalla selezione dell'imballaggio."
 
 #. module: account_edi_ubl_move_line_uom_and_packaging_unece
 #: model:ir.model.fields,help:account_edi_ubl_move_line_uom_and_packaging_unece.field_account_move_line__ubl_price_unit
 msgid "Technical field storing the unit price from the UBL import."
-msgstr ""
+msgstr "Campo tecnico che memorizza il prezzo unitario dall'importazione UBL."
 
 #. module: account_edi_ubl_move_line_uom_and_packaging_unece
 #: model:ir.model,name:account_edi_ubl_move_line_uom_and_packaging_unece.model_account_edi_xml_ubl_20
 msgid "UBL 2.0"
-msgstr ""
+msgstr "UBL 2.0"
 
 #. module: account_edi_ubl_move_line_uom_and_packaging_unece
 #: model:ir.model.fields,field_description:account_edi_ubl_move_line_uom_and_packaging_unece.field_account_move_line__ubl_price_unit
 msgid "UBL P.U"
-msgstr ""
+msgstr "UBL P.U"
 
 #. module: account_edi_ubl_move_line_uom_and_packaging_unece
 #: model:ir.model.fields,field_description:account_edi_ubl_move_line_uom_and_packaging_unece.field_account_move_line__ubl_billed_quantity
 msgid "Ubl Billed Quantity"
-msgstr ""
+msgstr "Quantità fatturata UBL"
 
 #. module: account_edi_ubl_move_line_uom_and_packaging_unece
 #: model:ir.model.fields,field_description:account_edi_ubl_move_line_uom_and_packaging_unece.field_account_move_line__ubl_unece_unit_code
 msgid "Unece Unit Code"
-msgstr ""
+msgstr "Codice unità UNECE"
