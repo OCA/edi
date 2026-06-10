@@ -21,13 +21,13 @@ Electronic invoices with UBL/CII - UNECE payments
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/18.0/account_edi_ubl_cii_payment_unece
+    :target: https://github.com/OCA/edi/tree/16.0/account_edi_ubl_cii_payment_unece
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-account_edi_ubl_cii_payment_unece
+    :target: https://translation.odoo-community.org/projects/edi-16-0/edi-16-0-account_edi_ubl_cii_payment_unece
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=16.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -37,12 +37,10 @@ Integrate UNECE Payment Means (module ``account_payment_unece`` from
 project <https://github.com/OCA/community-data-files/>`__) with Odoo
 standard UBL/CII electronic invoices (module ``account_edi_ubl_cii``).
 
-When using for example SEPA direct debit, your can configure the
-corresponding UNECE code on the payment method and this will be declared
-properly in the electronic invoice. Also, when receiving an invoice
-declared with a payment means SEPA direct debit, you can configure an
-outbound payment means with that UNECE code and the created invoice will
-have that payment means set so that you know you don't have to pay it.
+When receiving an invoice declared with a payment means SEPA direct
+debit, you can configure an outbound payment means with that UNECE code
+and the created invoice will have that payment means set so that you
+know you don't have to pay it.
 
 **Table of contents**
 
@@ -55,7 +53,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_edi_ubl_cii_payment_unece%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_edi_ubl_cii_payment_unece%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -73,6 +71,7 @@ Contributors
 
 - Jacques-Etienne Baudoux <je@bcim.be>
 - Sébastien Alix <sebastien.alix@akretion.com>
+- Souheil Bejaoui <souheil.bejaoui@acsone.eu>
 
 Maintainers
 -----------
@@ -87,6 +86,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/18.0/account_edi_ubl_cii_payment_unece>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/16.0/account_edi_ubl_cii_payment_unece>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

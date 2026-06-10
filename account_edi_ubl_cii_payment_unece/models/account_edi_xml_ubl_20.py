@@ -5,17 +5,16 @@
 from odoo import models
 
 
-class AccountEdiXmlCii(models.AbstractModel):
+class AccountEdiXmlUbl_20(models.AbstractModel):
 
-    _inherit = "account.edi.xml.cii"
+    _inherit = "account.edi.xml.ubl_20"
 
     def _import_fill_invoice_form(self, journal, tree, invoice, qty_factor):
         res = super()._import_fill_invoice_form(journal, tree, invoice, qty_factor)
         payment_mean_code = None
-        for node in tree.findall(
-            ".//{*}SpecifiedTradeSettlementPaymentMeans/{*}TypeCode"
-        ):
-            if payment_mean_code := node.text:
+        for node in tree.findall("./{*}PaymentMeans/{*}PaymentMeansCode"):
+            if note := node.text:
+                payment_mean_code = note
                 break
         if not payment_mean_code:
             return res
