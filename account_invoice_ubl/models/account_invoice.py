@@ -248,6 +248,27 @@ class AccountInvoice(models.Model):
                     iline.price_subtotal, res_tax["amount"], tax, cur_name,
                     tax_total_node, ns, version=version)
 
+    def _get_tax_subtotals(self):
+        # tax subtotals should be grouped by tax category, tax type and tax
+        # amount.
+        tax_subtotals = []
+        tax_subtotals_by_tax_properties = {}
+        for tax_line in self.tax_line_ids:
+            tax = tax_line.tax_id
+            tax_properties = (tax.unece_categ_id, tax.amount_type, tax.amount)
+            tax_subtotal = tax_subtotals_by_tax_properties.get(tax_properties)
+            if tax_subtotal is None:
+                tax_subtotal = {
+                    "base": 0,
+                    "amount": 0,
+                    "tax_id": tax,
+                }
+                tax_subtotals.append(tax_subtotal)
+                tax_subtotals_by_tax_properties[tax_properties] = tax_subtotal
+            tax_subtotal["base"] += tax_line.base
+            tax_subtotal["amount"] += tax_line.amount
+        return tax_subtotals
+
     def _ubl_add_tax_total(self, xml_root, ns, version='2.1'):
         self.ensure_one()
         cur_name = self.currency_id.name
@@ -257,10 +278,11 @@ class AccountInvoice(models.Model):
         prec = self.currency_id.decimal_places
         prec = prec if prec <= 2 else 2
         tax_amount_node.text = '%0.*f' % (prec, self.amount_tax)
-        for tline in self.tax_line_ids:
+        for tax_subtotal in self._get_tax_subtotals():
             self._ubl_add_tax_subtotal(
-                tline.base, tline.amount, tline.tax_id, cur_name,
-                tax_total_node, ns, version=version)
+                tax_subtotal["base"], tax_subtotal["amount"],
+                tax_subtotal["tax_id"], cur_name, tax_total_node, ns,
+                version=version)
 
     @api.multi
     def generate_invoice_ubl_xml_etree(self, version='2.1'):
