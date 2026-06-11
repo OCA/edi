@@ -3,17 +3,27 @@
 
 {
     "name": "Purchase Order Import",
-    "version": "10.0.2.0.0",
+    "version": "18.0.1.0.0",
     "category": "Purchase Management",
     "license": "AGPL-3",
     "summary": "Update RFQ via the import of quotations from suppliers",
     "author": "Akretion,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
-    "depends": ["purchase", "base_business_document_import_stock", "onchange_helper"],
+    "depends": [
+        # Odoo
+        "purchase_stock",
+        # OCA/community-data-files
+        "uom_unece",
+        # OCA/edi
+        "base_business_document_import",
+        # OCA/reporting-engine
+        "pdf_xml_attachment",
+    ],
     "data": [
-        "wizard/order_response_import_view.xml",
+        "security/ir.model.access.csv",
         "wizard/purchase_order_import_view.xml",
-        "views/purchase.xml",
+        "wizard/purchase_order_response_import_view.xml",
+        "views/purchase_order.xml",
     ],
     "installable": True,
 }

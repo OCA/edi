@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_create,perm_read,perm_write,perm_unlink
+access_purchase_order_import,Access PO import wizard,purchase_order_import.model_purchase_order_import,purchase.group_purchase_user,1,1,1,1
+access_purchase_order_import_response,Access PO response import wizard,purchase_order_import.model_purchase_order_response_import,purchase.group_purchase_user,1,1,1,1
