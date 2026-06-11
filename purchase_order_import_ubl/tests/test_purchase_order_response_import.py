@@ -3,15 +3,14 @@
 
 from odoo.tools import file_open
 
-from odoo.addons.purchase_order_import.tests.test_order_response_import import (
-    TestOrderResponseImportCommon,
+from odoo.addons.purchase_order_import.tests.test_purchase_order_response_import import (  # noqa: E501
+    TestPurchaseOrderResponseImportCommon,
 )
-from odoo.addons.purchase_order_import.wizard.order_response_import import (
+from odoo.addons.purchase_order_import.wizard.purchase_order_response_import import (
     LINE_STATUS_ACCEPTED,
     ORDER_RESPONSE_STATUS_ACK,
 )
-
-from ..wizard.order_response_import import (
+from odoo.addons.purchase_order_import_ubl.wizard.purchase_order_response_import import (  # noqa: E501
     _ORDER_LINE_STATUS_TO_STATUS,
     _ORDER_RESPONSE_CODE_TO_STATUS,
 )
@@ -21,15 +20,15 @@ _STATUS_TO_RESPONSE_CODE = {p[1]: p[0] for p in _ORDER_RESPONSE_CODE_TO_STATUS.i
 _STATUS_TO_LINE_STATUS = {p[1]: p[0] for p in _ORDER_LINE_STATUS_TO_STATUS.items()}
 
 
-class TestOrderResponseImport(TestOrderResponseImportCommon):
+class TestPurchaseOrderResponseImport(TestPurchaseOrderResponseImportCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         with file_open(
-            "purchase_order_import_ubl/tests/files/order_response_tmpl.xml",
+            "purchase_order_import_ubl/tests/samples/purchase_order_response_tmpl.xml",
             "rb",
         ) as f:
-            cls.order_response_xml = f.read()
+            cls.order_response_xml = f.read().decode()
 
     def test_01(self):
         """
@@ -52,7 +51,7 @@ class TestOrderResponseImport(TestOrderResponseImportCommon):
             line_2_qty=self.line2.product_qty,
             line_2_backorder_qty=0,
             line_2_status_code=_STATUS_TO_LINE_STATUS[LINE_STATUS_ACCEPTED],
-        )
+        ).encode()
         result = self.OrderResponseImport.parse_order_response(xml_content, "test.xml")
         attachments = result.pop("attachments")
         self.assertTrue(attachments.get("test.xml"))

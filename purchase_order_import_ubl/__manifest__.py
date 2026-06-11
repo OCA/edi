@@ -3,13 +3,18 @@
 
 {
     "name": "Quotation Order UBL Import",
-    "version": "10.0.2.0.2",
+    "version": "18.0.1.0.0",
     "category": "Purchase Management",
     "license": "AGPL-3",
     "summary": "Import UBL XML quotation files",
     "author": "Akretion,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
-    "depends": ["purchase_order_import", "base_ubl"],
-    "demo": ["demo/demo_data.xml"],
+    "depends": [
+        # OCA/edi
+        "base_ubl_parse",
+        "purchase_order_import",
+        # OCA/reporting-engine
+        "pdf_xml_attachment",
+    ],
     "installable": True,
 }

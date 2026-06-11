@@ -6,7 +6,7 @@ import logging
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
-from odoo.addons.purchase_order_import.wizard.order_response_import import (
+from odoo.addons.purchase_order_import.wizard.purchase_order_response_import import (
     LINE_STATUS_ACCEPTED,
     LINE_STATUS_AMEND,
     LINE_STATUS_REJECTED,
@@ -33,9 +33,9 @@ _ORDER_LINE_STATUS_TO_STATUS = {
 }
 
 
-class OrderResponseImport(models.TransientModel):
-    _name = "order.response.import"
-    _inherit = ["order.response.import", "base.ubl"]
+class PurchaseOrderResponseImport(models.TransientModel):
+    _name = "purchase.order.response.import"
+    _inherit = ["purchase.order.response.import", "base.ubl"]
 
     @api.model
     def parse_xml_order_document(self, xml_root):

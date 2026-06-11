@@ -47,8 +47,7 @@
             <cac:Contact>
                 <cbc:Telephone>12345</cbc:Telephone>
                 <cbc:Telefax>12345</cbc:Telefax>
-                <cbc:ElectronicMail
-                >orderahbelux@my-supplier-company.com</cbc:ElectronicMail>
+                <cbc:ElectronicMail>orderahbelux@my-supplier-company.com</cbc:ElectronicMail>
             </cac:Contact>
         </cac:Party>
     </cac:SellerSupplierParty>
@@ -66,7 +65,7 @@
                 <cbc:LocaleCode>en_US</cbc:LocaleCode>
             </cac:Language>
             <cac:PostalAddress>
-                <cbc:StreetName>Rue , 17</cbc:StreetName>
+                <cbc:StreetName>Rue, 17</cbc:StreetName>
                 <cbc:CityName>Villers-le-Bouillet</cbc:CityName>
                 <cbc:PostalZone>4530</cbc:PostalZone>
                 <cac:Country>
@@ -106,8 +105,7 @@
             <cbc:Note>line_1 Note1</cbc:Note>
             <cbc:Note>line_1 Note2</cbc:Note>
             <cbc:Quantity unitCode="C62">{line_1_qty}</cbc:Quantity>
-            <cbc:MaximumBackorderQuantity
-            >{line_1_backorder_qty}</cbc:MaximumBackorderQuantity>
+            <cbc:MaximumBackorderQuantity>{line_1_backorder_qty}</cbc:MaximumBackorderQuantity>
             <cbc:LineStatusCode>{line_1_status_code}</cbc:LineStatusCode>
             <cbc:LineExtensionAmount currencyID="EUR">228.2</cbc:LineExtensionAmount>
             <cac:Price>
@@ -129,8 +127,7 @@
             <cbc:Note>line_2 Note1</cbc:Note>
             <cbc:Note>line_2 Note2</cbc:Note>
             <cbc:Quantity unitCode="C62">{line_2_qty}</cbc:Quantity>
-            <cbc:MaximumBackorderQuantity
-            >{line_2_backorder_qty}</cbc:MaximumBackorderQuantity>
+            <cbc:MaximumBackorderQuantity>{line_2_backorder_qty}</cbc:MaximumBackorderQuantity>
             <cbc:LineStatusCode>{line_2_status_code}</cbc:LineStatusCode>
             <cbc:LineExtensionAmount currencyID="EUR">1117.07</cbc:LineExtensionAmount>
             <cac:Price>
