@@ -7,10 +7,9 @@ from odoo import fields, models
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-    supplier_ack_dt = fields.Datetime(
+    supplier_ack_received_on = fields.Datetime(
         "Supplier Acknowledgement Date",
-        help="Date and time of the acknowledgement by the supplier. "
-        "This field is filled by Odoo when processing a "
-        "OrderResponse document.",
         index=True,
+        help="Date and time of the acknowledgement by the supplier."
+        " This field is filled by Odoo when processing a OrderResponse document.",
     )

@@ -11,27 +11,40 @@
             <form string="Import Quotations Files from Suppliers">
                 <group name="help-import">
                     <div>
-                        <p
-                        >Upload below the quotation that you received from your supplier for this RFQ as XML or PDF file. When you click on the Update RFQ button:</p>
+                        <p>
+                            Upload below the quotation that you received from your supplier for this RFQ as XML or PDF file.
+                            When you click on the Update RFQ button:
+                        </p>
                         <ol>
-                            <li
-                            >If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed. For the <a
+                            <li>
+                                If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed.
+                                For the <a
                                 href="http://ubl.xml.org/"
                                 target="_blank"
-                            >Universal Business Language</a> format (UBL), you should install the module <em
-                            >purchase_order_import_ubl</em>.</li>
-                            <li
-                            >If it is a PDF file, Odoo will try to find an XML file in the attachments of the PDF file and then use this XML file.</li>
+                            > Universal Business Language</a> format (UBL),
+                                you should install the module <em
+                            >purchase_order_import_ubl</em>.
+                            </li>
+                            <li>
+                                If it is a PDF file, Odoo will try to find an XML file in the attachments of the PDF file and then use this XML file.
+                            </li>
                         </ol>
-                        <p
-                        >Then, Odoo will compare the imported quotation and the current RFQ:</p>
+                        <p>
+                            Then, Odoo will compare the imported quotation and the current RFQ:
+                        </p>
                         <ul>
-                            <li
-                            >for lines that are present both in the imported quotation and in the RFQ, Odoo will update the unit prices (and also the quantities, depending on the chosen option),</li>
-                            <li
-                            >for the lines that are present only in the quotation (shipping costs for example), Odoo will add them to the RFQ,</li>
-                            <li
-                            >for the lines that are present only in the RFQ, Odoo will put a warning message in the chatter (it won't delete them automatically).</li>
+                            <li>
+                                for lines that are present both in the imported quotation and in the RFQ,
+                                Odoo will update the unit prices (and also the quantities, depending on the chosen option)
+                            </li>
+                            <li>
+                                for the lines that are present only in the quotation (shipping costs for example),
+                                Odoo will add them to the RFQ
+                            </li>
+                            <li>
+                                for the lines that are present only in the RFQ,
+                                Odoo will put a warning message in the chatter (it won't delete them automatically)
+                            </li>
                         </ul>
                     </div>
                 </group>
@@ -55,7 +68,8 @@
     </record>
 
     <record id="purchase_order_import_action" model="ir.actions.act_window">
-        <field name="name">Import Quotation</field>
+        <field name="name">Import Purchase Quotation</field>
+        <field name="path">import-purchase-quotation</field>
         <field name="res_model">purchase.order.import</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
