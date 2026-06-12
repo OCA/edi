@@ -45,7 +45,7 @@ class TestOrderImport(TestCommon):
         # Now update the order
         parsed_order_up = dict(
             self.parsed_order,
-            partner={"email": "agrolait@yourcompany.example.com"},
+            partner={"email": self.partner.email},
             lines=[
                 {
                     "product": {"code": "FURN_8888"},
@@ -67,7 +67,7 @@ class TestOrderImport(TestCommon):
         # test raise UserError if not price_unit
         parsed_order_up_no_price_unit = dict(
             self.parsed_order,
-            partner={"email": "agrolait@yourcompany.example.com"},
+            partner={"email": self.partner.email},
             lines=[
                 {
                     "product": {"code": "FURN_7777"},
@@ -200,7 +200,7 @@ class TestOrderImport(TestCommon):
         # Prepare test data
         parsed_order = dict(
             self.parsed_order,
-            partner={"email": "agrolait@yourcompany.example.com"},
+            partner={"email": self.partner.email},
             lines=[
                 {
                     "product": {"code": "errored"},  # No product exists with this code

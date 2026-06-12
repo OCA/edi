@@ -12,6 +12,9 @@ class TestCommon(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.env["res.config.settings"].create(
+            {"group_product_pricelist": True}
+        ).set_values()
         cls.wiz_model = cls.env["sale.order.import"]
         curr = cls.env.ref("base.USD")
         curr.active = True
@@ -25,9 +28,34 @@ class TestCommon(TransactionCase):
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "SO Test",
-                "property_product_pricelist": cls.pricelist.id,
                 "email": "so.import.test@example.com",
             }
+        )
+        cls.partner.property_product_pricelist = cls.pricelist
+        cls.env["product.template"].create(
+            [
+                {
+                    "name": "Test Product 8888",
+                    "default_code": "FURN_8888",
+                    "list_price": 12.42,
+                    "type": "consu",
+                    "uom_id": cls.env.ref("uom.product_uom_unit").id,
+                },
+                {
+                    "name": "Test Product 9999",
+                    "default_code": "FURN_9999",
+                    "list_price": 1.42,
+                    "type": "consu",
+                    "uom_id": cls.env.ref("uom.product_uom_unit").id,
+                },
+                {
+                    "name": "Test Product 7777",
+                    "default_code": "FURN_7777",
+                    "list_price": 3.0,
+                    "type": "consu",
+                    "uom_id": cls.env.ref("uom.product_uom_unit").id,
+                },
+            ]
         )
 
     def read_test_file(self, filename, mode="r", as_b64=False):
