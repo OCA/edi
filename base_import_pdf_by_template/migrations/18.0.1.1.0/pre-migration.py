@@ -9,15 +9,15 @@ def migrate(env, version):
     openupgrade.logged_query(
         env.cr,
         """
-         ALTER TABLE base_import_pdf_template_line
-         ADD COLUMN IF NOT EXISTS sequence INTEGER
-         """,
+        ALTER TABLE base_import_pdf_template_line
+        ADD COLUMN IF NOT EXISTS sequence INTEGER
+        """,
     )
     openupgrade.logged_query(
         env.cr,
         """
-         UPDATE base_import_pdf_template_line
-         SET sequence = column::integer
-         WHERE column IS NOT NULL
-         """,
+        UPDATE base_import_pdf_template_line
+        SET sequence = "column"::integer
+        WHERE "column" IS NOT NULL
+        """,
     )
