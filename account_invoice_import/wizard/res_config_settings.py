@@ -11,14 +11,14 @@ class AccountConfigSettings(models.TransientModel):
     adjustment_credit_account_id = fields.Many2one(
         related="company_id.adjustment_credit_account_id",
         readonly=False,
-        domain="[('deprecated', '=', False), ('company_ids', 'in', company_id), "
-        "('account_type', '=like', 'income%')]",
+        check_company=True,
+        domain="[('internal_group', '=', 'income')]",
     )
     adjustment_debit_account_id = fields.Many2one(
         related="company_id.adjustment_debit_account_id",
         readonly=False,
-        domain="[('deprecated', '=', False), ('company_ids', 'in', company_id), "
-        "('account_type', '=like', 'expense%')]",
+        check_company=True,
+        domain="[('internal_group', '=', 'expense')]",
     )
     invoice_import_email = fields.Char(
         related="company_id.invoice_import_email", readonly=False

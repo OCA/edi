@@ -9,7 +9,7 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="account.view_partner_property_form" />
         <field name="arch" type="xml">
-            <group name="accounting_entries" position="after">
+            <xpath expr="//page[@name='accounting']/group" position="inside">
                 <group
                     name="invoice_import_config"
                     string="Vendor Bills Import"
@@ -31,7 +31,7 @@
                     <field name="invoice_import_move_id" invisible="1" />
                     <field name="invoice_import_move_partner_id" invisible="1" />
                 </group>
-            </group>
+            </xpath>
             <div role="alert" position="after">
                 <div
                     class="alert alert-info"

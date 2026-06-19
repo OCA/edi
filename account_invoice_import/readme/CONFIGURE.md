@@ -1,11 +1,12 @@
-Go to the form view of the suppliers and configure it with the following
+Go to the form view of the suppliers and configure them with the following
 parameters:
 
 - Individual/Company: *Company*
 - the *VAT Number* (this field is used by default when searching the
   supplier in the Odoo partner database)
-- in the *Accounting* tab, create one or several *Invoice Import
-  Configurations*.
+- in the *Accounting* tab, configure the *Vendor Bills Import* fields:
+  default product, default expense account, default taxes, forced invoice
+  line description, single-line import, and forced purchase journal.
 
 You can configure a mail gateway to import invoices from an email:
 
@@ -15,8 +16,10 @@ You can configure a mail gateway to import invoices from an email:
 - In the section *Actions to perform on incoming mails*, set the field
   *Create a new record* to *Wizard to import supplier invoices/refunds*
   (model *account.invoice.import*).
-- If you are in a multi-company setup, you also have to go to the menu
-  *Invoicing \> Configuration \> Settings*: in the section *Invoice
-  Import*, enter the email of the mailbox used to import invoices in the
-  field *Mail Gateway: Destination E-mail* (it will be used to import
-  the invoice in the proper company).
+- Go to the menu *Invoicing \> Configuration \> Settings*: in the
+  section *Vendor Bills Import*, configure the adjustment accounts used
+  for rounding differences. You can also enable supplier bank account
+  auto-creation.
+- If you are in a multi-company setup, enter the email of the mailbox
+  used to import invoices in the field *Mail Gateway: Destination
+  E-mail*; it will be used to import the invoice in the proper company.

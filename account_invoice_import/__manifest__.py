@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Import",
-    "version": "18.0.1.1.0",
+    "version": "19.0.1.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Import supplier invoices/refunds as PDF or XML files",
@@ -12,9 +12,12 @@
     "maintainers": ["alexis-via"],
     "website": "https://github.com/OCA/edi",
     "depends": [
+        # Odoo/core
         "account",
-        "base_iban",
+        # OCA/edi
         "base_business_document_import",
+        # OCA/reporting-engine
+        "pdf_xml_attachment",
     ],
     "data": [
         "security/ir.model.access.csv",

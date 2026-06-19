@@ -4,8 +4,8 @@
 
 from markupsafe import Markup
 
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
+from odoo.exceptions import UserError, ValidationError
 
 
 class ResPartner(models.Model):
@@ -20,8 +20,8 @@ class ResPartner(models.Model):
         "account.account",
         company_dependent=True,
         string="Default Expense Account",
-        domain="[('deprecated', '=', False), "
-        "('company_ids', 'in', current_company_id)]",
+        check_company=True,
+        domain="[('internal_group', '=', 'expense')]",
         help="The account configured here will be updated by the mapping of the "
         "fiscal position.",
     )
@@ -95,13 +95,16 @@ class ResPartner(models.Model):
         """Method called by button in partner banner"""
         self.ensure_one()
         invoice_import_move = self.invoice_import_move_id
-        assert invoice_import_move
+        if not invoice_import_move:
+            raise UserError(
+                self.env._("There is no vendor bill linked to this partner.")
+            )
         self.write({"invoice_import_move_id": False})
         # I don't write a link to the invoice in the partner's chatter because
         # it could cause multi-company issues
         self.message_post(
             body=Markup(
-                _(
+                self.env._(
                     "Partner has been created from the wizard "
                     "<em>Create or Update Partner</em> of vendor bill import."
                 )
@@ -109,7 +112,7 @@ class ResPartner(models.Model):
         )
         if invoice_import_move.partner_id:
             raise UserError(
-                _(
+                self.env._(
                     "The vendor bill %(move)s already has a partner %(partner)s.",
                     move=invoice_import_move.display_name,
                     partner=invoice_import_move.partner_id.display_name,
@@ -118,7 +121,7 @@ class ResPartner(models.Model):
         invoice_import_move._invoice_import_set_partner_and_update_lines(self)
         invoice_import_move.message_post(
             body=Markup(
-                _(
+                self.env._(
                     "Partner <a href=# data-oe-model=res.partner "
                     "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
                     "created via the wizard <em>Create or update partner</em>.",
@@ -148,7 +151,8 @@ class ResPartner(models.Model):
         return keys
 
     def _invoice_import_prepare_partner_update_vals(self, import_partner_data):
-        assert isinstance(import_partner_data, dict)
+        if not isinstance(import_partner_data, dict):
+            raise ValidationError(self.env._("The imported partner data is invalid."))
         update_keys = self._invoice_import_partner_update_keys()
         vals = {
             key: value
@@ -166,7 +170,7 @@ class ResPartner(models.Model):
             # it could cause multi-company access-right issues
             self.message_post(
                 body=Markup(
-                    _(
+                    self.env._(
                         "Partner updated via the wizard "
                         "<em>Create or Update Partner</em> of Vendor Bill import."
                     )

@@ -4,7 +4,7 @@
 
 from markupsafe import Markup
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -35,13 +35,17 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
     @api.model
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
-        if self._context.get("active_model") == "account.move" and self._context.get(
-            "active_id"
-        ):
-            res["move_id"] = self._context["active_id"]
+        context = self.env.context
+        if context.get("active_model") == "account.move" and context.get("active_id"):
+            res["move_id"] = context["active_id"]
             move = self.env["account.move"].browse(res["move_id"])
             import_partner_data = move.import_partner_data
-            assert import_partner_data
+            if not import_partner_data:
+                raise UserError(
+                    self.env._(
+                        "The vendor bill does not contain imported partner data."
+                    )
+                )
             res["import_partner_data"] = import_partner_data
             if import_partner_data.get("vat"):
                 res["partner_vat"] = import_partner_data["vat"]
@@ -55,16 +59,21 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
 
     def create_partner(self):
         self.ensure_one()
-        assert isinstance(self.import_partner_data, dict)
-        assert self.move_id
-        assert self.create_or_update == "create"
+        if not isinstance(self.import_partner_data, dict):
+            raise UserError(self.env._("The imported partner data is invalid."))
+        if not self.move_id:
+            raise UserError(self.env._("The vendor bill is missing."))
+        if self.create_or_update != "create":
+            raise UserError(
+                self.env._("The wizard is not configured to create a partner.")
+            )
         ctx = {
             f"default_{key}": value for key, value in self.import_partner_data.items()
         }
         ctx["default_invoice_import_move_id"] = self.move_id.id
         action = {
             "type": "ir.actions.act_window",
-            "name": _("Create New Partner"),
+            "name": self.env._("Create New Partner"),
             "res_model": "res.partner",
             "view_mode": "form",
             "context": ctx,
@@ -73,16 +82,19 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
 
     def update_partner(self):
         self.ensure_one()
-        assert self.create_or_update == "update"
+        if self.create_or_update != "update":
+            raise UserError(
+                self.env._("The wizard is not configured to update a partner.")
+            )
         if not self.update_partner_id:
-            raise UserError(_("You must select the partner to update."))
+            raise UserError(self.env._("You must select the partner to update."))
         self.update_partner_id._invoice_import_update_partner(self.import_partner_data)
         self.move_id._invoice_import_set_partner_and_update_lines(
             self.update_partner_id
         )
         self.move_id.message_post(
             body=Markup(
-                _(
+                self.env._(
                     "Partner <a href=# data-oe-model=res.partner "
                     "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
                     "set via the wizard <em>Create or Update Partner</em>. "

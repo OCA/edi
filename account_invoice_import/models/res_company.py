@@ -25,13 +25,10 @@ class ResCompany(models.Model):
         string="Auto-create Bank Account of Supplier"
     )
 
-    _sql_constraints = [
-        (
-            "invoice_import_email_uniq",
-            "unique(invoice_import_email)",
-            "This invoice import email already exists!",
-        )
-    ]
+    _invoice_import_email_uniq = models.Constraint(
+        "UNIQUE(invoice_import_email)",
+        "This invoice import email already exists!",
+    )
 
     def _cannot_refund_vat(self):
         self.ensure_one()

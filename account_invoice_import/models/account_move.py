@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import Command, api, fields, models
+from odoo.exceptions import ValidationError
 from odoo.tools import is_html_empty
 
 
@@ -30,7 +31,15 @@ class AccountMove(models.Model):
         # fiscal_position_id, etc... on the invoice because they are all computed
         # fields now
         if fp and not initial_fp:
-            assert self.fiscal_position_id == fp
+            if self.fiscal_position_id != fp:
+                raise ValidationError(
+                    self.env._(
+                        "The fiscal position %(fiscal_position)s was not applied "
+                        "on vendor bill %(move)s.",
+                        fiscal_position=fp.display_name,
+                        move=self.display_name,
+                    )
+                )
             account_map = {}  # key = source account, value = dest account
             tax_map = {}
             for acc_entry in fp.account_ids:

@@ -21,19 +21,19 @@ Account Invoice Import
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/18.0/account_invoice_import
+    :target: https://github.com/OCA/edi/tree/19.0/account_invoice_import
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-account_invoice_import
+    :target: https://translation.odoo-community.org/projects/edi-19-0/edi-19-0-account_invoice_import
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=19.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-This module has been started by lazy accounting users who hate enter
-they vendor bills manually in Odoo. Almost all companies have several
+This module has been started by lazy accounting users who hate entering
+their vendor bills manually in Odoo. Almost all companies have several
 vendor bills to enter regularly in the system from the same vendors:
 phone bill, electricity bill, Internet access, train tickets, etc. Most
 of these invoices are available as PDF. If we are able to automatically
@@ -44,30 +44,30 @@ know the full story behind the development of this module, read this
 post <http://www.akretion.com/blog/akretions-christmas-present-for-the-odoo-community>`__.
 
 In order to reliably extract the required information from the invoice,
-two international standards exists to describe an Invoice in XML:
+two international standards exist to describe an invoice in XML:
 
 - `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`__
-  (Cross-Industry Invoice) developped by
+  (Cross-Industry Invoice) developed by
   `UN/CEFACT <http://www.unece.org/cefact>`__ (United Nations Centre for
   Trade Facilitation and Electronic Business),
-- `UBL <http://ubl.xml.org/>`__ (Universal Business Language) which is
-  an ISO standard (`ISO/IEC
-  19845 <http://www.iso.org/iso/catalogue_detail.htm?csnumber=66370>`__)
-  developped by `OASIS <https://www.oasis-open.org/>`__ (Organization
-  for the Advancement of Structured Information Standards).
+- `UBL <https://www.oasis-open.org/committees/ubl/>`__ (Universal
+  Business Language) which is an ISO standard (`ISO/IEC
+  19845 <https://www.iso.org/standard/66370.html>`__) developed by
+  `OASIS <https://www.oasis-open.org/>`__ (Organization for the
+  Advancement of Structured Information Standards).
 
 Some e-invoice standards such as
-`Factur-X <http://fnfe-mpe.org/factur-x/>`__ propose to embed the XML
+`Factur-X <https://fnfe-mpe.org/factur-x/>`__ propose to embed the XML
 description of the invoice inside the PDF invoice. Other people think
-that the futur is pure-XML invoices: a European initiative called
-`PEPPOL <https://peppol.eu/>`__ aims at setting up an open network to
+that the future is pure-XML invoices: a European initiative called
+`Peppol <https://peppol.org/>`__ aims at setting up an open network to
 exchange e-invoices as UBL XML. We don't know yet which standard and
 which practice will prevail on electronic invoicing in the future, but
 we hope that lazy accountants won't have to manually encode their vendor
 bills in the near future. This module is here to help achieve this goal!
 
-This module doesn't do anything useful by itself ; it requires other
-modules to work: each modules adds a specific invoice format.
+This module doesn't do anything useful by itself; it requires other
+modules to work: each module adds a specific invoice format.
 
 Here is how the module works:
 
@@ -81,11 +81,12 @@ Here is how the module works:
 - otherwise, Odoo will use the *invoice2data* Python library to try to
   interpret the text of the PDF (requires the module
   *account_invoice_import_invoice2data*),
-- if there is already some draft supplier invoice for this supplier,
-  Odoo will propose to select one to update or create a new draft
-  invoice,
-- otherwise, Odoo will directly create a new draft supplier invoice and
-  attach the PDF to it.
+- if the partner is matched, Odoo will use the partner's vendor bill
+  import settings or reuse the accounting configuration from the latest
+  posted invoice of that partner,
+- otherwise, Odoo will create a new draft supplier invoice without a
+  partner and propose to create or update the partner from the imported
+  data.
 
 This module also works with supplier refunds.
 
@@ -97,14 +98,16 @@ This module also works with supplier refunds.
 Configuration
 =============
 
-Go to the form view of the suppliers and configure it with the following
-parameters:
+Go to the form view of the suppliers and configure them with the
+following parameters:
 
 - Individual/Company: *Company*
 - the *VAT Number* (this field is used by default when searching the
   supplier in the Odoo partner database)
-- in the *Accounting* tab, create one or several *Invoice Import
-  Configurations*.
+- in the *Accounting* tab, configure the *Vendor Bills Import* fields:
+  default product, default expense account, default taxes, forced
+  invoice line description, single-line import, and forced purchase
+  journal.
 
 You can configure a mail gateway to import invoices from an email:
 
@@ -114,25 +117,26 @@ You can configure a mail gateway to import invoices from an email:
 - In the section *Actions to perform on incoming mails*, set the field
   *Create a new record* to *Wizard to import supplier invoices/refunds*
   (model *account.invoice.import*).
-- If you are in a multi-company setup, you also have to go to the menu
-  *Invoicing > Configuration > Settings*: in the section *Invoice
-  Import*, enter the email of the mailbox used to import invoices in the
-  field *Mail Gateway: Destination E-mail* (it will be used to import
-  the invoice in the proper company).
+- Go to the menu *Invoicing > Configuration > Settings*: in the section
+  *Vendor Bills Import*, configure the adjustment accounts used for
+  rounding differences. You can also enable supplier bank account
+  auto-creation.
+- If you are in a multi-company setup, enter the email of the mailbox
+  used to import invoices in the field *Mail Gateway: Destination
+  E-mail*; it will be used to import the invoice in the proper company.
 
 Usage
 =====
 
-Go to the menu *Invoicing > Vendors > Import Vendor Bill* and follow the
-instructions of the wizard. You can also start the wizard from the
+Go to the menu *Invoicing > Vendors > Import Vendor Bills* and follow
+the instructions of the wizard. You can also start the wizard from the
 *Accounting Dashboard*: on the purchase journal, click on the *Upload*
 button.
 
-This module also supports the scenario where you have a draft vendor
-bill (generated from a purchase order for instance) and you have to
-update it to comply with the real invoice sent by the vendor: on the
-form view of the draft vendor bill, click on the button *Import Invoice
-File* and follow the instructions of the wizard.
+When a vendor cannot be matched automatically, the imported vendor bill
+is created without a partner. Use the *Create or Update Partner* button
+on the draft vendor bill to create a new partner or update an existing
+one from the imported data.
 
 If you have a large volume of invoices to import, you may be interested
 by the script **mass_invoice_import.py** which is available in the
@@ -149,19 +153,13 @@ the invoices saved are automatically uploaded in Odoo. For that, have a
 look at the sample script **inotify-sample.sh** available in the same
 subdirectory. Edit this sample script to adapt it to your needs.
 
-Known issues / Roadmap
-======================
-
-- Remove dependency on *base_iban* and develop a separate glue module
-  between this module and *base_iban*
-
 Bug Tracker
 ===========
 
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_import%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_import%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -204,6 +202,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-alexis-via| 
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/18.0/account_invoice_import>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/19.0/account_invoice_import>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
