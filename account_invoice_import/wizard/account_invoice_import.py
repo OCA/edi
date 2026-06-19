@@ -1021,7 +1021,7 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv["amount_untaxed"] - invoice.amount_untaxed
             )
             logger.info(
-                "Amount untaxed difference found " "(source: %s, odoo:%s, diff:%s)",
+                "Amount untaxed difference found (source: %s, odoo:%s, diff:%s)",
                 parsed_inv["amount_untaxed"],
                 invoice.amount_untaxed,
                 diff_amount,
@@ -1167,10 +1167,7 @@ class AccountInvoiceImport(models.TransientModel):
         message content allows it.
         """
         logger.info(
-            "New email received. "
-            "Date: %s, Message ID: %s. "
-            "Executing "
-            "with user ID %d",
+            "New email received. Date: %s, Message ID: %s. Executing with user ID %d",
             msg_dict.get("date"),
             msg_dict.get("message_id"),
             self.env.user.id,
