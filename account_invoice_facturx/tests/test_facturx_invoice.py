@@ -3,12 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import timedelta
-from unittest.mock import patch
 
 from facturx import get_facturx_level, xml_check_schematron
 from lxml import etree
 
-from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
 FACTURX_LEVELS = ("minimum", "basicwl", "basic", "en16931", "extended")
@@ -180,17 +178,37 @@ class TestFacturXInvoice(TransactionCase):
         )
         self.assertFalse(iban_nodes, "IBANID should not be generated for non-IBAN bank")
 
-    def test_credit_transfer_requires_account_identifier(self):
+    def test_credit_transfer_without_account_skips_payment_means(self):
+        """BT-84 (payee account identifier) is optional in EN16931
+        (cardinality 0..1). When the invoice has no recipient bank
+        account, the module must NOT raise and must NOT emit a
+        credit-transfer ``SpecifiedTradeSettlementPaymentMeans`` block
+        (which would trip BR-50 / BR-61 / BR-CO-27). The whole optional
+        BG-16 group is skipped and the document stays schematron-valid
+        on every profile.
+        """
         invoice = self.invoice.copy(default={"partner_bank_id": False})
         invoice.action_post()
+        # partner_bank_id is a stored compute that can re-fire on post;
+        # make sure the no-bank precondition actually holds.
+        invoice.partner_bank_id = False
+        self.assertFalse(invoice.partner_bank_id)
 
-        self.company.write({"facturx_level": "en16931"})
-        with patch(
-            "odoo.addons.account_invoice_facturx.models.account_move.xml_check_xsd"
-        ) as xml_check_xsd:
-            with self.assertRaises(UserError):
-                invoice.generate_facturx_xml()
-            xml_check_xsd.assert_not_called()
+        # Must not raise and must stay schematron-valid on all profiles.
+        self._assert_schematron_passes(invoice)
+
+        # No payee creditor financial account (BT-84) must be emitted.
+        root = self._generate_xml_root(invoice=invoice, level="en16931")
+        payee_accounts = root.xpath(
+            "//ram:SpecifiedTradeSettlementPaymentMeans/"
+            "ram:PayeePartyCreditorFinancialAccount",
+            namespaces=NSMAP,
+        )
+        self.assertFalse(
+            payee_accounts,
+            "No PayeePartyCreditorFinancialAccount (BT-84) must be "
+            "emitted when the invoice has no recipient bank account.",
+        )
 
     # ------------------------------------------------------------------
     # Schematron meta-test (silver bullet)
@@ -249,17 +267,16 @@ class TestFacturXInvoice(TransactionCase):
         Currently expected to fail on BASIC and EN16931.
         """
         # account.move.partner_bank_id is a stored compute with
-        # @api.depends('partner_id', 'company_id') and copy=False.
-        # On out_invoice the compute fills the field from
-        # partner_id.commercial_partner_id.bank_ids, which is empty
-        # for our customer, so it overwrites both copy() and any
-        # default={...} we pass in. We therefore mirror the same
-        # workaround setUpClass already uses for cls.invoice:
+        # @api.depends('partner_id', 'company_id') and copy=False, so it
+        # gets recomputed (to empty, for our bank-less customer) on
+        # copy() and can re-fire on state changes. We mirror the same
+        # workaround setUpClass already uses for cls.invoice and
         # re-assign the proprietary bank explicitly after copy() and
-        # again after action_post() (state changes can re-fire the
-        # compute). Without this, the module raises a UserError
-        # before the schematron is ever invoked, masking the actual
-        # discount bug we want to assert against.
+        # again after action_post(). This keeps a realistic, complete
+        # invoice (with BT-84) so this test isolates the discount /
+        # AppliedTradeAllowanceCharge behaviour rather than the separate
+        # no-bank code path (covered by
+        # test_credit_transfer_without_account_skips_payment_means).
         invoice = self.invoice.copy()
         invoice.partner_bank_id = self.proprietary_bank
         for line in invoice.invoice_line_ids:

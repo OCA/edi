@@ -354,52 +354,82 @@ class AccountMove(models.Model):
             self._cii_add_date("OccurrenceDateTime", delivery_date, delivery_event, ns)
         return trade_agreement
 
+    def _cii_get_payee_partner_bank(self):
+        """Resolve the recipient (payee) bank account for BT-84.
+
+        Designed to be inherited. Returns the ``res.partner.bank`` the
+        customer should pay to: the invoice ``partner_bank_id`` field
+        ("Recipient Bank"), falling back to the bank account of the
+        payment mode's fixed journal when the OCA module
+        ``account_payment_mode`` pins one. Returns an empty recordset
+        when no account is available.
+        """
+        self.ensure_one()
+        partner_bank = self.partner_bank_id
+        if (
+            not partner_bank
+            and self.payment_mode_id
+            and self.payment_mode_id.bank_account_link == "fixed"
+            and self.payment_mode_id.fixed_journal_id
+        ):
+            partner_bank = self.payment_mode_id.fixed_journal_id.bank_account_id
+        return partner_bank
+
     def _cii_add_trade_settlement_payment_means_block(self, trade_settlement, ns):
-        payment_means = etree.SubElement(
-            trade_settlement, ns["ram"] + "SpecifiedTradeSettlementPaymentMeans"
-        )
-        payment_means_code = etree.SubElement(payment_means, ns["ram"] + "TypeCode")
-        if ns["level"] in PROFILES_EN_UP:
-            payment_means_info = etree.SubElement(
-                payment_means, ns["ram"] + "Information"
-            )
+        # Resolve the payment means type code (BT-81) and the optional
+        # human readable information (BT-82) *before* creating any XML
+        # node, so we can decide whether the whole (optional, 0..1)
+        # SpecifiedTradeSettlementPaymentMeans block — the EN16931 BG-16
+        # "PAYMENT INSTRUCTIONS" group — should be emitted at all.
         if self.payment_mode_id:
-            payment_means_code.text = self.payment_mode_id.payment_method_id.unece_code
-            if ns["level"] in PROFILES_EN_UP:
-                payment_means_info.text = (
-                    self.payment_mode_id.note or self.payment_mode_id.name
-                )
+            type_code = self.payment_mode_id.payment_method_id.unece_code
+            info_text = self.payment_mode_id.note or self.payment_mode_id.name
         else:
-            payment_means_code.text = "30"  # use 30 and not 31,
+            type_code = "30"  # use 30 and not 31,
             # for wire transfer, according to Factur-X CIUS
-            if ns["level"] in PROFILES_EN_UP:
-                payment_means_info.text = _("Wire transfer")
+            info_text = _("Wire transfer")
             logger.warning(
                 "Missing payment mode on invoice ID %d. "
                 "Using 30 (wire transfer) as UNECE code as fallback "
                 "for payment mean",
                 self.id,
             )
-        if payment_means_code.text in CREDIT_TRF_CODES:
-            partner_bank = self.partner_bank_id
-            if (
-                not partner_bank
-                and self.payment_mode_id
-                and self.payment_mode_id.bank_account_link == "fixed"
-                and self.payment_mode_id.fixed_journal_id
-            ):
-                partner_bank = self.payment_mode_id.fixed_journal_id.bank_account_id
-            if not partner_bank or not partner_bank.sanitized_acc_number:
-                raise UserError(
-                    _(
-                        "Missing bank account identifier on invoice '%s'. "
-                        "Factur-X requires either an IBAN or a proprietary "
-                        "account identifier (BT-84) for credit transfer "
-                        "payment means."
-                    )
-                    % (self.display_name or self.name)
-                )
 
+        partner_bank = self.env["res.partner.bank"]
+        if type_code in CREDIT_TRF_CODES:
+            partner_bank = self._cii_get_payee_partner_bank()
+            if not partner_bank or not partner_bank.sanitized_acc_number:
+                # BT-84 (Payment account identifier) is optional in
+                # EN16931 (cardinality 0..1). It only becomes mandatory
+                # *once* a credit transfer payment means is declared:
+                # the schematron rules BR-50, BR-61 and BR-CO-27 are all
+                # anchored on a SpecifiedTradeSettlementPaymentMeans with
+                # TypeCode 30/58 (and, for BR-50/BR-61, its
+                # PayeePartyCreditorFinancialAccount child). When the
+                # invoice carries no recipient bank account we therefore
+                # skip the entire optional BG-16 block instead of raising
+                # — this keeps the document schematron-valid without
+                # forcing a payee IBAN/account we simply do not have.
+                logger.warning(
+                    "No recipient bank account on invoice ID %d "
+                    "(partner_bank_id / 'Recipient Bank' is empty); "
+                    "skipping the Factur-X payment means block. BT-84 is "
+                    "optional, so the invoice stays valid.",
+                    self.id,
+                )
+                return
+
+        payment_means = etree.SubElement(
+            trade_settlement, ns["ram"] + "SpecifiedTradeSettlementPaymentMeans"
+        )
+        payment_means_code = etree.SubElement(payment_means, ns["ram"] + "TypeCode")
+        payment_means_code.text = type_code
+        if ns["level"] in PROFILES_EN_UP:
+            payment_means_info = etree.SubElement(
+                payment_means, ns["ram"] + "Information"
+            )
+            payment_means_info.text = info_text
+        if type_code in CREDIT_TRF_CODES:
             payment_means_bank_account = etree.SubElement(
                 payment_means, ns["ram"] + "PayeePartyCreditorFinancialAccount"
             )
@@ -423,7 +453,7 @@ class AccountMove(models.Model):
                 payment_means_bic.text = partner_bank.bank_bic
         # Field mandate_id provided by the OCA module account_banking_mandate
         elif (
-            payment_means_code.text in DIRECT_DEBIT_CODES
+            type_code in DIRECT_DEBIT_CODES
             and hasattr(self, "mandate_id")
             and self.mandate_id.partner_bank_id
             and self.mandate_id.partner_bank_id.acc_type == "iban"

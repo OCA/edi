@@ -1,3 +1,26 @@
+## 17.0.1.4.0 (2026-06-20)
+
+### Fixes
+
+- The customer-invoice generator no longer raises a `UserError` when the
+  invoice has no recipient bank account ("Recipient Bank" /
+  `partner_bank_id` is empty). The payment-instructions group `BG-16`
+  ("PAYMENT INSTRUCTIONS", with the credit-transfer sub-group `BG-17`) is
+  optional (cardinality 0..1), so BT-84 (Payment account identifier) is
+  only required *once* a credit-transfer payment means is declared
+  (`BT-81` = `30`/`58`): the normative rules BR-50 / BR-61 then require an
+  IBAN or proprietary account id on the `PayeePartyCreditorFinancialAccount`
+  element. (In the bundled factur-x schematron the missing-account case is
+  concretely caught by the CII-specific `BR-CO-27`, anchored on the
+  `SpecifiedTradeSettlementPaymentMeans` element itself; that rule is
+  non-normative and is being removed from the official EN 16931 artefacts.)
+  When no payee account is available the whole optional `BG-16` block is
+  now skipped instead, so the document stays valid against both the XSD and
+  the schematron without forcing a payee IBAN/account that does not exist.
+  Direct-debit and credit-transfer-with-account behaviour is unchanged. A
+  new extension hook `_cii_get_payee_partner_bank()` resolves the payee
+  account and can be inherited.
+
 ## 17.0.1.3.0 (2026-05-11)
 
 ### Features
