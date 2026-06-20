@@ -1024,7 +1024,7 @@ class AccountInvoiceImport(models.TransientModel):
             "price_unit": diff_amount * sign,
         }
         # no taxes nor product on such a global adjustment line
-        if import_config["invoice_line_method"] == "nline_no_product":
+        if import_config["invoice_line_method"] in ("nline_no_product", "1line_no_product"):
             il_vals["account_id"] = import_config["account"].id
         elif import_config["invoice_line_method"] == "nline_static_product":
             accounts = import_config["product"].product_tmpl_id.get_product_accounts(

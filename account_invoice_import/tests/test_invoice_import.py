@@ -8,6 +8,7 @@ import logging
 from unittest import mock
 
 from odoo import fields
+from odoo.exceptions import UserError
 from odoo.tests.common import SavepointCase
 from odoo.tools import file_open, float_is_zero
 
@@ -495,3 +496,62 @@ Nina
         price_prec = self.env["decimal.precision"].precision_get("Product Price")
         self.assertTrue(float_is_zero(iline.price_unit, precision_digits=price_prec))
         self.assertTrue(self.company.currency_id.is_zero(iline.price_subtotal))
+
+    # ------------------------------------------------------------------
+    # _prepare_global_adjustment_line: account resolution per import method
+    # ------------------------------------------------------------------
+    def _adjustment_line(self, diff_amount, import_config):
+        invoice = self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "partner_id": self.partner_with_email.id,
+                "invoice_date": fields.Date.today(),
+                "journal_id": self.pur_journal1.id,
+            }
+        )
+        return self.env["account.invoice.import"]._prepare_global_adjustment_line(
+            diff_amount, invoice, import_config
+        )
+
+    def test_global_adjustment_1line_no_product(self):
+        # The fix: 1line_no_product must use the import config account, like
+        # nline_no_product (it previously fell through with no account_id).
+        cfg = {"invoice_line_method": "1line_no_product", "account": self.expense_account}
+        for diff, qty in ((5.0, 1), (-5.0, -1)):
+            il_vals = self._adjustment_line(diff, cfg)
+            self.assertEqual(il_vals["account_id"], self.expense_account.id)
+            self.assertEqual(il_vals["quantity"], qty)
+            self.assertEqual(il_vals["price_unit"], abs(diff))
+
+    def test_global_adjustment_nline_no_product(self):
+        # Regression: nline_no_product keeps using the import config account.
+        cfg = {"invoice_line_method": "nline_no_product", "account": self.income_account}
+        il_vals = self._adjustment_line(7.0, cfg)
+        self.assertEqual(il_vals["account_id"], self.income_account.id)
+
+    def test_global_adjustment_nline_static_product(self):
+        # nline_static_product uses the product's expense account on a vendor bill.
+        cfg = {"invoice_line_method": "nline_static_product", "product": self.product}
+        il_vals = self._adjustment_line(3.0, cfg)
+        self.assertEqual(il_vals["account_id"], self.expense_account.id)
+
+    def test_global_adjustment_nline_auto_product(self):
+        # nline_auto_product falls back to the company adjustment debit/credit
+        # account depending on the sign of the difference.
+        cfg = {"invoice_line_method": "nline_auto_product"}
+        self.assertEqual(
+            self._adjustment_line(4.0, cfg)["account_id"],
+            self.company.adjustment_debit_account_id.id,
+        )
+        self.assertEqual(
+            self._adjustment_line(-4.0, cfg)["account_id"],
+            self.company.adjustment_credit_account_id.id,
+        )
+
+    def test_global_adjustment_nline_auto_product_missing_account(self):
+        # nline_auto_product raises a clear error when the company adjustment
+        # account is not configured.
+        self.company.adjustment_debit_account_id = False
+        cfg = {"invoice_line_method": "nline_auto_product"}
+        with self.assertRaises(UserError):
+            self._adjustment_line(9.0, cfg)
