@@ -1,0 +1,2 @@
+- Jacques-Etienne Baudoux \<<je@bcim.be>\>
+- Sébastien Alix \<<sebastien.alix@akretion.com>\>

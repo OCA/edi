@@ -6,46 +6,48 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-05-13 06:37+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
 msgid "<span string=\" days\" class=\"oe_inline\"/>"
-msgstr ""
+msgstr "<span string=\" giorni\" class=\"oe_inline\"/>"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__active
 msgid "Active"
-msgstr ""
+msgstr "Attiva"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_search
 msgid "Archived"
-msgstr ""
+msgstr "In archivio"
 
 #. module: account_invoice_download
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__method__auto
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_search
 msgid "Automatic"
-msgstr ""
+msgstr "Automatico"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__backend
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__backend
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__backward_days
 msgid "Backward Days"
-msgstr ""
+msgstr "Giorni precedenti"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__backward_days
@@ -56,131 +58,137 @@ msgid ""
 "Odoo will download all invoices that are after the last download date minus "
 "5 days."
 msgstr ""
+"Per impostazione predefinita, Odoo scaricherà tutte le fatture successive "
+"alla data dell'ultimo scaricamento. Tuttavia, potrebbe accadere che le "
+"fatture siano disponibili online per lo scaricamento diversi giorni dopo la "
+"loro generazione. Pertanto, impostando questo parametro su 5, Odoo "
+"scaricherà tutte le fatture successive alla data dell'ultimo scaricamento "
+"meno 5 giorni."
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_credentials_form
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__company_id
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__company_id
 msgid "Company"
-msgstr ""
+msgstr "Azienda"
 
 #. module: account_invoice_download
 #: model:ir.model,name:account_invoice_download.model_account_invoice_download_config
 msgid "Configuration for the download of Supplier Invoices"
-msgstr ""
+msgstr "Configurazione per scaricare le fatture del fornitore"
 
 #. module: account_invoice_download
 #: model:ir.model,name:account_invoice_download.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Contatto"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__create_uid
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__create_uid
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creato da"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__create_date
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__create_date
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creato il"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_form
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_tree
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__last_run
 msgid "Date of the last successfull download"
-msgstr ""
+msgstr "Data dell'ultimo scaricamento effettuato"
 
 #. module: account_invoice_download
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__days
 msgid "Day(s)"
-msgstr ""
+msgstr "Giorno(i)"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__display_name
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__display_name
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nome visualizzato"
 
 #. module: account_invoice_download
 #: model:ir.actions.act_window,name:account_invoice_download.account_invoice_download_config_action
 #: model:ir.ui.menu,name:account_invoice_download.account_invoice_download_config_menu
 msgid "Download Bills"
-msgstr ""
+msgstr "Scarica fatture"
 
 #. module: account_invoice_download
 #: model:ir.actions.act_window,name:account_invoice_download.account_invoice_download_credentials_action
 msgid "Download Bills Authentication"
-msgstr ""
+msgstr "Autenticazione scaricamento fatture"
 
 #. module: account_invoice_download
 #: model:ir.actions.act_window,name:account_invoice_download.account_invoice_download_log_action
 #: model:ir.ui.menu,name:account_invoice_download.account_invoice_download_log_menu
 msgid "Download Bills Logs"
-msgstr ""
+msgstr "Registri scaricamento fatture"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__download_config_id
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Download Config"
-msgstr ""
+msgstr "Configurazione scaricamento"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_res_partner__download_config_count
 #: model:ir.model.fields,field_description:account_invoice_download.field_res_users__download_config_count
 msgid "Download Config Count"
-msgstr ""
+msgstr "Conteggio configurazioni scaricamento"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.view_partner_property_form
 msgid "Download Config(s)"
-msgstr ""
+msgstr "Configurazione(i) scaricamento"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_res_partner__download_config_ids
 #: model:ir.model.fields,field_description:account_invoice_download.field_res_users__download_config_ids
 msgid "Download Configurations"
-msgstr ""
+msgstr "Configurazioni scaricamento"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
 msgid "Download Every"
-msgstr ""
+msgstr "Scarica ogni"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__interval_type
 msgid "Download Frequency"
-msgstr ""
+msgstr "Frequenza scaricamento"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__method
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
 msgid "Download Method"
-msgstr ""
+msgstr "Metodo scaricamento"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
 msgid "Download Parameters"
-msgstr ""
+msgstr "Parametri scaricamento"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__download_start_date
 msgid "Download Start Date"
-msgstr ""
+msgstr "Data inizio scaricamento"
 
 #. module: account_invoice_download
 #. odoo-python
@@ -190,38 +198,40 @@ msgid ""
 "Failed to create invoice. Error: %(error)s. (parsed_inv=%(parsed_inv)s "
 "import_config=%(import_config)s)"
 msgstr ""
+"Creazione fattura fallita. Errore: %(error)s. (parsed_inv=%(parsed_inv)s "
+"import_config=%(import_config)s)"
 
 #. module: account_invoice_download
 #. odoo-python
 #: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "Failed to download invoice. Error: %s."
-msgstr ""
+msgstr "Scaricamento fattura fallito. Errore: %s."
 
 #. module: account_invoice_download
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_log__result__failure
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_form
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Failure"
-msgstr ""
+msgstr "Guasto"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__interval_number
 msgid "Frequency"
-msgstr ""
+msgstr "Frequenza"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_search
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Group By"
-msgstr ""
+msgstr "Raggruppa per"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__id
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__id
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__password
@@ -229,21 +239,24 @@ msgid ""
 "If you don't want to store the password in Odoo's database, leave this field"
 " empty and you will get a wizard to ask you the password on every download."
 msgstr ""
+"Se non si vuole memorizzare la password nel database di Odoo, lasciare vuoto "
+"questo campo e verrà visualizzata una procedura guidata che chiederà la "
+"password a ogni scaricamento."
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__download_config_id
 msgid "Invoice Download Config"
-msgstr ""
+msgstr "Configurazione scaricamento fattura"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_credentials_form
 msgid "Invoice Download Credentials"
-msgstr ""
+msgstr "Credenziali scaricamento fattura"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__invoice_ids_str
 msgid "Invoice Ids Str"
-msgstr ""
+msgstr "Stringa ID fattura"
 
 #. module: account_invoice_download
 #. odoo-python
@@ -253,133 +266,134 @@ msgid ""
 "Invoice number '%(invoice_number)s' dated %(date)s created (ID "
 "%(invoice_id)d)."
 msgstr ""
+"Creata fattura numero %(invoice_number)s datata %(date)s (ID %(invoice_id)d)."
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__last_run
 msgid "Last Download Date"
-msgstr ""
+msgstr "Ultima data scaricamento"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config____last_update
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials____last_update
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Ultima modifica il"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__write_uid
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__write_uid
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultimo aggiornamento di"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__write_date
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__write_date
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultimo aggiornamento il"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__log_id
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__login
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__login
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__log_ids
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
 msgid "Logs"
-msgstr ""
+msgstr "Log"
 
 #. module: account_invoice_download
 #: model:ir.model,name:account_invoice_download.model_account_invoice_download_log
 msgid "Logs for the download of Supplier Invoices"
-msgstr ""
+msgstr "Log per gli scaricamenti delle fatture fornitore"
 
 #. module: account_invoice_download
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__method__manual
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_search
 msgid "Manual"
-msgstr ""
+msgstr "Manuale"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__message
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_form
 msgid "Message"
-msgstr ""
+msgstr "Messaggio"
 
 #. module: account_invoice_download
 #. odoo-python
 #: code:addons/account_invoice_download/wizard/account_invoice_download_credentials.py:0
 #, python-format
 msgid "Missing Invoice Download Config."
-msgstr ""
+msgstr "Configurazione scaricamento fattura mancante."
 
 #. module: account_invoice_download
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__months
 msgid "Month(s)"
-msgstr ""
+msgstr "Mese(i)"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__next_run
 msgid "Next Download Date"
-msgstr ""
+msgstr "Data scaricamento successivo"
 
 #. module: account_invoice_download
 #. odoo-python
 #: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "No backend configured for download configuration '%s'."
-msgstr ""
+msgstr "Nessun backend configurato per la configurazione scaricamento '%s'."
 
 #. module: account_invoice_download
 #. odoo-python
 #: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
 #, python-format
 msgid "No invoice downloaded."
-msgstr ""
+msgstr "Nessuna fattura scaricata."
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__invoice_count
 msgid "Number of Invoices Downloaded"
-msgstr ""
+msgstr "Numero di fatture scaricate"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__partner_id
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__partner_id
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Partner or Download Config"
-msgstr ""
+msgstr "Partner o configurazione scaricamento"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_config__password
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_credentials__password
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__result
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Result"
-msgstr ""
+msgstr "Risultato"
 
 #. module: account_invoice_download
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_form
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_config_tree
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_credentials_form
 msgid "Run Now"
-msgstr ""
+msgstr "Esegui adesso"
 
 #. module: account_invoice_download
 #. odoo-python
@@ -389,23 +403,25 @@ msgid ""
 "Skipping invoice %(invoice)s dated %(date)s because it already exists in "
 "Odoo (ID %(invoice_id)s)."
 msgstr ""
+"Saltata la Fattura %(invoice)s datata %(date)s perché esiste già in Odoo (ID "
+"%(invoice_id)s)."
 
 #. module: account_invoice_download
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_log__result__success
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_form
 #: model_terms:ir.ui.view,arch_db:account_invoice_download.account_invoice_download_log_search
 msgid "Success"
-msgstr ""
+msgstr "Successo"
 
 #. module: account_invoice_download
 #: model:ir.model.constraint,message:account_invoice_download.constraint_account_invoice_download_config_backward_days_positive
 msgid "The backward days must be positive"
-msgstr ""
+msgstr "Giorni precedenti deve essere un numero positivo"
 
 #. module: account_invoice_download
 #: model:ir.model.constraint,message:account_invoice_download.constraint_account_invoice_download_config_interval_number_positive
 msgid "The frequency must be strictly positive"
-msgstr ""
+msgstr "La frequenza deve essere maggiore di zero"
 
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_credentials__invoice_ids_str
@@ -413,29 +429,31 @@ msgid ""
 "This field is a technical hack to be able to return the action with the "
 "created invoices"
 msgstr ""
+"Questo campo è un trucco tecnico per poter restituire l'azione con la "
+"fattura creata"
 
 #. module: account_invoice_download
 #: model:ir.ui.menu,name:account_invoice_download.account_invoice_download_root_menu
 msgid "Vendor Bill Download"
-msgstr ""
+msgstr "Scaricamento fattura fornitore"
 
 #. module: account_invoice_download
 #: model:ir.actions.server,name:account_invoice_download.account_invoice_download_cron_ir_actions_server
 #: model:ir.cron,cron_name:account_invoice_download.account_invoice_download_cron
 msgid "Vendor Bills Auto-Download"
-msgstr ""
+msgstr "Scaricamento automatico fatture fornitore"
 
 #. module: account_invoice_download
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__weeks
 msgid "Week(s)"
-msgstr ""
+msgstr "Settimana(e)"
 
 #. module: account_invoice_download
 #: model:ir.model,name:account_invoice_download.model_account_invoice_download_credentials
 msgid "Wizard to ask credentials to download invoice"
-msgstr ""
+msgstr "Procedura guidata per chiedere le credenziali per scaricare la fattura"
 
 #. module: account_invoice_download
 #: model:ir.model.fields.selection,name:account_invoice_download.selection__account_invoice_download_config__interval_type__years
 msgid "Year(s)"
-msgstr ""
+msgstr "Anno(i)"

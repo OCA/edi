@@ -1,6 +1,7 @@
 # Copyright 2020 Jacques-Etienne Baudoux <je@bcim.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo.exceptions import UserError
 from odoo.tests import common
 
 
@@ -46,3 +47,14 @@ class TestBaseBusinessDocumentImport(common.TransactionCase):
         self.partner_dict["contact"] = "Contact2"
         res = bdio._match_partner(self.partner_dict, warn, partner_type=False)
         self.assertEqual(res, self.partner1)
+
+    def test_hook_match_partner_user_error(self):
+        with self.assertRaisesRegex(
+            UserError, "ID Number: foo\nID Number Category: EXTCATEG"
+        ):
+            self.env["business.document.import"]._hook_match_partner(
+                partner_dict={"id_number": [{"value": "foo", "schemeID": "EXTCATEG"}]},
+                chatter_msg=[],
+                domain=[],
+                order=None,
+            )

@@ -4,6 +4,7 @@
 from base64 import b64encode
 from os import path
 
+from odoo import Command
 from odoo.tests import new_test_user
 from odoo.tests.common import users
 from odoo.tools import mute_logger
@@ -46,9 +47,7 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                 "name": "Test Rotulador",
                 "default_code": "ROTULADOR",
                 "seller_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "partner_id": cls.partner_tecnativa.id,
                             "product_code": "CONS_0001",
@@ -60,19 +59,19 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
         # We change the values of existing products so that they are not found and
         # make the test "simpler".
         cls.env.ref("base_import_pdf_by_template_account.product_boligrafo").write(
-            {"seller_ids": [(5, 0, 0)]}
+            {"seller_ids": [Command.clear()]}
         )
         cls.env.ref("base_import_pdf_by_template_account.product_leds").write(
-            {"seller_ids": [(5, 0, 0)]}
+            {"seller_ids": [Command.clear()]}
         )
         cls.env.ref("base_import_pdf_by_template_account.product_plastificadora").write(
-            {"seller_ids": [(5, 0, 0)]}
+            {"seller_ids": [Command.clear()]}
         )
         cls.env.ref("base_import_pdf_by_template_account.product_laminas").write(
-            {"seller_ids": [(5, 0, 0)]}
+            {"seller_ids": [Command.clear()]}
         )
         cls.env.ref("base_import_pdf_by_template_account.product_trituradora").write(
-            {"seller_ids": [(5, 0, 0)]}
+            {"seller_ids": [Command.clear()]}
         )
         # pylint: disable=W1401
         cls.template = cls.env[
@@ -85,12 +84,10 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                     "account.field_account_move__invoice_line_ids"
                 ).id,
                 "auto_detect_pattern": "(B87530432)",
-                "header_items": "Producto,Cantidad,Precio,AnalyticDistribution",
                 "line_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
+                            "sequence": 10,
                             "related_model": "header",
                             "field_id": cls.env.ref(
                                 "account.field_account_move__partner_id"
@@ -99,10 +96,9 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                             "fixed_value": f"res.partner,{cls.partner_tecnativa.id}",
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
+                            "sequence": 20,
                             "related_model": "header",
                             "field_id": cls.env.ref(
                                 "account.field_account_move__move_type"
@@ -113,15 +109,13 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                             ).id,
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
+                            "sequence": 30,
                             "related_model": "lines",
                             "field_id": cls.env.ref(
                                 "account.field_account_move_line__product_id"
                             ).id,
-                            "column": 0,
                             "pattern": r"\[([A-Z\d]+[_|-][A-Z\d]+)\]",
                             "value_type": "variable",
                             "search_field_id": cls.env.ref(
@@ -133,42 +127,36 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                             "default_value": f"product.product,{generic_product.id}",
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
+                            "sequence": 40,
                             "related_model": "lines",
                             "field_id": cls.env.ref(
                                 "account.field_account_move_line__quantity"
                             ).id,
-                            "column": 1,
                             "pattern": r"\[[A-Z\d]+[_|-][A-Z\d]+\] [a-zA-Záí ]* ([0-9]{1,3})",  # noqa: E501
                             "value_type": "variable",
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
+                            "sequence": 50,
                             "related_model": "lines",
                             "field_id": cls.env.ref(
                                 "account.field_account_move_line__price_unit"
                             ).id,
-                            "column": 2,
                             "pattern": r"\[[A-Z\d]+[_|-][A-Z\d]+\] [a-zA-Záí]* [0-9]{1,3} ([0-9]{1,3}.[0-9]{2})",  # noqa: E501
                             "value_type": "variable",
                             "log_distinct_value": True,
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
+                            "sequence": 60,
                             "related_model": "lines",
                             "field_id": cls.env.ref(
                                 "account.field_account_move_line__analytic_distribution"
                             ).id,
-                            "column": 3,
                             "value_type": "fixed",
                             "fixed_value_text": (
                                 f'{{"{cls.analytic_account.id}": ' "100.0}"

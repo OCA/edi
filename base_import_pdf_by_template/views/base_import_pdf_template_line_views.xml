@@ -5,6 +5,7 @@
         <field name="model">base.import.pdf.template.line</field>
         <field name="arch" type="xml">
             <list>
+                <field name="sequence" widget="handle" />
                 <field name="related_model" />
                 <field name="field_id" />
                 <field name="search_field_id" />
@@ -31,7 +32,6 @@
                             options="{'no_create': True}"
                         />
                         <field name="field_relation" invisible="1" />
-                        <field name="column" invisible="related_model != 'lines'" />
                         <field
                             name="pattern"
                             invisible="value_type == 'fixed'"

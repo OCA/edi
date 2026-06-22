@@ -113,11 +113,6 @@ msgid "Child Model"
 msgstr ""
 
 #. module: base_import_pdf_by_template
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__column
-msgid "Column"
-msgstr ""
-
-#. module: base_import_pdf_by_template
 #. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 #: model:ir.model.fields.selection,name:base_import_pdf_by_template.selection__base_import_pdf_template_line__decimal_separator__comma
@@ -325,16 +320,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 msgid "Header"
-msgstr ""
-
-#. module: base_import_pdf_by_template
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__header_items
-msgid "Header Items"
-msgstr ""
-
-#. module: base_import_pdf_by_template
-#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__header_items
-msgid "Header columns separated by commas"
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -609,6 +594,11 @@ msgstr ""
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__search_subfield_name
 msgid "Search subfield name"
+msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__sequence
+msgid "Sequence"
 msgstr ""
 
 #. module: base_import_pdf_by_template

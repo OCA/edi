@@ -4,6 +4,7 @@
 # @author: Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import copy
 import logging
 import mimetypes
 from base64 import b64decode, b64encode
@@ -59,6 +60,12 @@ class SaleOrderImport(models.TransientModel):
     sale_id = fields.Many2one("sale.order", string="Quotation to Update")
     # Confirm order after creating Sale Order
     confirm_order = fields.Boolean(default=False)
+    skip_error_lines = fields.Boolean(
+        help="Ignore and push all error lines to the chatter when importing if enabled."
+    )
+    # Allow creating invoice/shipping partners on import
+    create_missing_invoice_partner = fields.Boolean(default=False)
+    create_missing_shipping_partner = fields.Boolean(default=False)
 
     @api.onchange("order_file")
     def order_file_change(self):
@@ -193,6 +200,11 @@ class SaleOrderImport(models.TransientModel):
     #     'name': 'Camptocamp',
     #     'email': 'luc@camptocamp.com',
     #     },
+    # 'invoice_to': {  # Same structure and fields as 'partner'; completely optional
+    #     'vat': 'FR25499247138',
+    #     'name': 'Camptocamp',
+    #     'email': 'luc@camptocamp.com',
+    #     },
     # 'ship_to': {
     #    'partner': partner_dict,
     #    'address': {
@@ -257,31 +269,60 @@ class SaleOrderImport(models.TransientModel):
         so_vals = soo.play_onchanges(so_vals, ["partner_id"])
         so_vals["order_line"] = []
         if parsed_order.get("ship_to"):
-            shipping_partner = bdio._match_shipping_partner(
-                parsed_order["ship_to"], partner, parsed_order["chatter_msg"]
-            )
+            try:
+                shipping_partner = bdio._match_shipping_partner(
+                    parsed_order["ship_to"], partner, parsed_order["chatter_msg"]
+                )
+            except UserError:
+                if not self._can_create_missing_shipping_partner():
+                    raise
+                shipping_partner = self._create_missing_shipping_partner(
+                    parsed_order["ship_to"], partner, parsed_order["chatter_msg"]
+                )
             so_vals["partner_shipping_id"] = shipping_partner.id
 
         if parsed_order.get("delivery_detail"):
             so_vals.update(parsed_order.get("delivery_detail"))
 
         if parsed_order.get("invoice_to"):
-            invoicing_partner = bdio._match_partner(
-                parsed_order["invoice_to"], parsed_order["chatter_msg"], partner_type=""
-            )
+            try:
+                invoicing_partner = bdio._match_partner(
+                    parsed_order["invoice_to"],
+                    parsed_order["chatter_msg"],
+                    partner_type="",
+                )
+            except UserError:
+                if not self._can_create_missing_invoice_partner():
+                    raise
+                invoicing_partner = self._create_missing_invoice_partner(
+                    parsed_order["invoice_to"], partner, parsed_order["chatter_msg"]
+                )
             so_vals["partner_invoice_id"] = invoicing_partner.id
         if parsed_order.get("date"):
             so_vals["date_order"] = parsed_order["date"]
+        error_lines = []
         for line in parsed_order["lines"]:
-            # partner=False because we don't want to use product.supplierinfo
-            product = bdio._match_product(
-                line["product"], parsed_order["chatter_msg"], seller=False
-            )
-            uom = bdio._match_uom(line.get("uom"), parsed_order["chatter_msg"], product)
-            line_vals = self._prepare_create_order_line(
-                product, uom, so_vals, line, price_source
-            )
-            so_vals["order_line"].append((0, 0, line_vals))
+            try:
+                # partner=False because we don't want to use product.supplierinfo
+                product = bdio._match_product(
+                    line["product"], parsed_order["chatter_msg"], seller=False
+                )
+                uom = bdio._match_uom(
+                    line.get("uom"), parsed_order["chatter_msg"], product
+                )
+                line_vals = self._prepare_create_order_line(
+                    product, uom, so_vals, line, price_source
+                )
+                so_vals["order_line"].append((0, 0, line_vals))
+            except UserError as exc:
+                if not self.skip_error_lines:
+                    raise exc
+                error_line = dict(values=line, error_msg=exc.args[0])
+                error_lines.append(error_line)
+
+        # Push to the chatter all errored lines if any
+        if error_lines:
+            parsed_order["error_lines"] = error_lines
 
         defaults = self.env.context.get("sale_order_import__default_vals", {}).get(
             "order", {}
@@ -383,9 +424,16 @@ class SaleOrderImport(models.TransientModel):
         commercial_partner = partner.commercial_partner_id
         partner_shipping_id = False
         if parsed_order.get("ship_to"):
-            partner_shipping_id = bdio._match_shipping_partner(
-                parsed_order["ship_to"], partner, []
-            ).id
+            try:
+                partner_shipping_id = bdio._match_shipping_partner(
+                    parsed_order["ship_to"], partner, []
+                ).id
+            except UserError:
+                if not self._can_create_missing_shipping_partner():
+                    raise
+                partner_shipping_id = self._create_missing_shipping_partner(
+                    parsed_order["ship_to"], partner, []
+                ).id
         existing_quotations = self.env["sale.order"].search(
             self._search_existing_order_domain(
                 parsed_order, commercial_partner, [("state", "in", ("draft", "sent"))]
@@ -422,6 +470,7 @@ class SaleOrderImport(models.TransientModel):
     def create_order_return_action(self, parsed_order, order_filename):
         self.ensure_one()
         order = self.create_order(parsed_order, self.price_source, order_filename)
+        self._post_error_lines_message(parsed_order, order)
         order.message_post(
             body=self.env._("Created automatically via file import (%s).")
             % self.order_filename
@@ -448,9 +497,16 @@ class SaleOrderImport(models.TransientModel):
         )
         vals = {"partner_id": partner.id}
         if parsed_order.get("ship_to"):
-            shipping_partner = bdio._match_shipping_partner(
-                parsed_order["ship_to"], partner, parsed_order["chatter_msg"]
-            )
+            try:
+                shipping_partner = bdio._match_shipping_partner(
+                    parsed_order["ship_to"], partner, parsed_order["chatter_msg"]
+                )
+            except UserError:
+                if not self._can_create_missing_shipping_partner():
+                    raise
+                shipping_partner = self._create_missing_shipping_partner(
+                    parsed_order["ship_to"], partner, parsed_order["chatter_msg"]
+                )
             vals["partner_shipping_id"] = shipping_partner.id
         if parsed_order.get("order_ref"):
             vals["client_order_ref"] = parsed_order["order_ref"]
@@ -681,3 +737,136 @@ class SaleOrderImport(models.TransientModel):
             }
         )
         return action
+
+    def _post_error_lines_message(self, parsed_order, order):
+        order.ensure_one()
+        if not self.skip_error_lines or not parsed_order.get("error_lines", False):
+            return
+
+        error_lines = parsed_order.get("error_lines")
+        order.message_post_with_source(
+            "sale_order_import.skip_error_lines_message",
+            render_values={
+                "lines": error_lines,
+            },
+            subtype_id=self.env.ref("mail.mt_note").id,
+        )
+
+    def _can_create_missing_invoice_partner(self) -> bool:
+        """Checks if the current importer allows invoice address creation
+
+        When called upon a record, checks field "create_missing_invoice_partner".
+        When called upon an empty recordset (eg: as a model method), checks context's
+        key "create_missing_invoice_partner".
+
+        Hook method, can be overridden by inheriting modules.
+        """
+        if self:
+            return self.create_missing_invoice_partner
+        return bool(self.env.context.get("create_missing_invoice_partner"))
+
+    def _create_missing_invoice_partner(
+        self, invoice_partner_data: dict, partner: models.BaseModel, chatter_msg: list
+    ) -> models.BaseModel:
+        """Creates a new invoice partner for the current import"""
+        invoice_partner_vals = self._create_missing_invoice_partner_values(
+            invoice_partner_data, partner, chatter_msg
+        )
+        clean_invoice_partner_vals = self._create_missing_partner_vals_cleanup(
+            invoice_partner_vals
+        )
+        invoice_partner = self.env["res.partner"].create([clean_invoice_partner_vals])
+        chatter_msg.append(
+            self.env._("Created invoice partner '%s'", invoice_partner.display_name)
+        )
+        return invoice_partner
+
+    def _create_missing_invoice_partner_values(
+        self, invoice_partner_data: dict, partner: models.BaseModel, chatter_msg: list
+    ) -> dict:
+        """Prepares a new invoice partner's values for the current import"""
+        # Create a deep copy of the invoice partner data to avoid modifying the original
+        # dictionary, both keys and values
+        vals = copy.deepcopy(invoice_partner_data)
+        vals.update({"type": "invoice", "parent_id": partner.id})
+        if country_code := vals.get("country_code"):
+            country = self.env["res.country"].search(
+                [("code", "=", country_code)], limit=1
+            )
+            if country:
+                vals["country_id"] = country.id
+        if (state_code := vals.get("state_code")) and vals.get("country_id"):
+            state = self.env["res.country.state"].search(
+                [("code", "=", state_code), ("country_id", "=", vals["country_id"])],
+                limit=1,
+            )
+            if state:
+                vals["state_id"] = state.id
+        return vals
+
+    def _can_create_missing_shipping_partner(self) -> bool:
+        """Checks if the current importer allows shipping address creation
+
+        When called upon a record, checks field "create_missing_shipping_partner".
+        When called upon an empty recordset (eg: as a model method), checks context's
+        key "create_missing_shipping_partner".
+
+        Hook method, can be overridden by inheriting modules.
+        """
+        if self:
+            return self.create_missing_shipping_partner
+        return bool(self.env.context.get("create_missing_shipping_partner"))
+
+    def _create_missing_shipping_partner(
+        self, shipping_partner_data: dict, partner: models.BaseModel, chatter_msg: list
+    ) -> models.BaseModel:
+        """Creates a new shipping partner for the current import"""
+        shipping_partner_vals = self._create_missing_shipping_partner_values(
+            shipping_partner_data, partner, chatter_msg
+        )
+        clean_shipping_partner_vals = self._create_missing_partner_vals_cleanup(
+            shipping_partner_vals
+        )
+        shipping_partner = self.env["res.partner"].create([clean_shipping_partner_vals])
+        chatter_msg.append(
+            self.env._("Created shipping partner '%s'", shipping_partner.display_name)
+        )
+        return shipping_partner
+
+    def _create_missing_shipping_partner_values(
+        self, shipping_partner_data: dict, partner: models.BaseModel, chatter_msg: list
+    ) -> dict:
+        """Prepares a new shipping partner's values for the current import"""
+        # Create a deep copy of the shipping partner data to avoid modifying the
+        # original dictionary, both keys and values
+        vals = copy.deepcopy(shipping_partner_data)
+        vals.update({"type": "delivery", "parent_id": partner.id})
+        if country_code := vals.get("country_code"):
+            country = self.env["res.country"].search(
+                [("code", "=", country_code)], limit=1
+            )
+            if country:
+                vals["country_id"] = country.id
+        if (state_code := vals.get("state_code")) and vals.get("country_id"):
+            state = self.env["res.country.state"].search(
+                [("code", "=", state_code), ("country_id", "=", vals["country_id"])],
+                limit=1,
+            )
+            if state:
+                vals["state_id"] = state.id
+        return vals
+
+    def _create_missing_partner_vals_cleanup(self, vals: dict) -> dict:
+        """Creates a copy of ``vals`` while removing keys that are not partner fields
+
+        A new dictionary is created as a copy of ``vals`` where keys are removed if
+        they are not ``res.partner`` fields. This allows preserving the old dictionary
+        for comparison with the new one in inheriting modules.
+
+        :param vals: the original values' dictionary to clean up
+        """
+        return {
+            k: copy.deepcopy(v)  # ``deepcopy()`` prevents issues w/ X2many fields cmds
+            for k, v in vals.items()
+            if k in self.env["res.partner"]._fields
+        }

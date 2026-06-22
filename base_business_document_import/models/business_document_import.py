@@ -540,7 +540,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 return partner
             elif chatter_msg:
                 chatter_msg.pop()  # clean message from _match_partner
-        if not partner_dict.get("vat"):
+        if not partner_dict.get("vat") and domain and domain != expression.TRUE_DOMAIN:
             partner = rpo.search(domain, limit=1)
             if partner:
                 return partner
