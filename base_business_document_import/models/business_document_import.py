@@ -12,8 +12,6 @@ from odoo.exceptions import UserError
 from odoo.fields import Domain
 from odoo.tools import float_compare
 
-from odoo.addons.base_iban.models.res_partner_bank import validate_iban
-
 logger = logging.getLogger(__name__)
 
 
@@ -585,16 +583,6 @@ class BusinessDocumentImport(models.AbstractModel):
         iban = iban.replace(" ", "").upper()
         rpbo = self.env["res.partner.bank"]
         rbo = self.env["res.bank"]
-        try:
-            validate_iban(iban)
-        except Exception:
-            chatter_msg.append(
-                self.env._(
-                    "IBAN <b>%(iban)s</b> is not valid, so it has been ignored.",
-                    iban=iban,
-                )
-            )
-            return False
         bankaccount = rpbo.search(
             Domain.AND(
                 [
