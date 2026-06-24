@@ -1,0 +1,371 @@
+# Copyright 2018 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
+# Copyright 2022 Camptocamp SA
+# @author: Simone Orsi <simahawk@gmail.com>
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+import base64
+from unittest import mock
+
+from odoo import exceptions
+from odoo.tests import Form, RecordCapturer
+
+from .common import TestCommon
+
+
+class TestOrderImport(TestCommon):
+    """Test order create/update."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.parsed_order = {
+            "partner": {"email": "so.import.test@example.com"},
+            "date": "2018-08-14",
+            "order_ref": "TEST1242",
+            "lines": [
+                {
+                    "product": {"code": "FURN_8888"},
+                    "qty": 2,
+                    "uom": {"unece_code": "C62"},
+                    "price_unit": 12.42,
+                }
+            ],
+            "chatter_msg": [],
+            "doc_type": "rfq",
+        }
+
+    def test_order_import(self):
+        order = self.wiz_model.create_order(self.parsed_order, "pricelist")
+        self.assertEqual(order.client_order_ref, self.parsed_order["order_ref"])
+        self.assertEqual(
+            order.order_line[0].product_id.default_code,
+            self.parsed_order["lines"][0]["product"]["code"],
+        )
+        self.assertEqual(int(order.order_line[0].product_uom_qty), 2)
+        # Now update the order
+        parsed_order_up = dict(
+            self.parsed_order,
+            partner={"email": self.partner.email},
+            lines=[
+                {
+                    "product": {"code": "FURN_8888"},
+                    "qty": 3,
+                    "uom": {"unece_code": "C62"},
+                    "price_unit": 12.42,
+                },
+                {
+                    "product": {"code": "FURN_9999"},
+                    "qty": 1,
+                    "uom": {"unece_code": "C62"},
+                    "price_unit": 1.42,
+                },
+            ],
+        )
+        self.wiz_model.update_order_lines(parsed_order_up, order, "pricelist")
+        self.assertEqual(len(order.order_line), 2)
+        self.assertEqual(int(order.order_line[0].product_uom_qty), 3)
+        # test raise UserError if not price_unit
+        parsed_order_up_no_price_unit = dict(
+            self.parsed_order,
+            partner={"email": self.partner.email},
+            lines=[
+                {
+                    "product": {"code": "FURN_7777"},
+                    "qty": 4,
+                    "uom": {"unece_code": "C62"},
+                },
+            ],
+        )
+        parsed_order_up_no_price_unit["doc_type"] = "order"
+        parsed_order_up_no_price_unit["price_source"] = "order"
+        expected_msg = (
+            "No price is defined in the file. Please double check "
+            "file or select Pricelist as the source for prices."
+        )
+        with self.assertRaisesRegex(exceptions.UserError, expected_msg):
+            self.wiz_model.update_order_lines(
+                parsed_order_up_no_price_unit, order, "order"
+            )
+
+    def test_order_import_default_so_vals(self):
+        default = {"client_order_ref": "OVERRIDE"}
+        order = self.wiz_model.with_context(
+            sale_order_import__default_vals=dict(order=default)
+        ).create_order(self.parsed_order, "pricelist")
+        self.assertEqual(order.client_order_ref, "OVERRIDE")
+
+    def test_with_order_buttons(self):
+        # Prepare test data
+        order_file_data = base64.b64encode(
+            b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        )
+        order_filename = "test_order.xml"
+        mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
+        # Create a new form
+        with Form(
+            self.wiz_model.with_context(
+                default_order_filename=order_filename,
+            )
+        ) as form:
+            with mock_parse_order as mocked:
+                # Return 'rfq' for doc_type
+                mocked.return_value = "rfq"
+                # Set values for the required fields
+                form.import_type = "xml"
+                form.order_file = order_file_data
+                mocked.assert_called()
+                # Test the button with the simulated values
+                mocked.return_value = self.parsed_order
+                action = form.save().import_order_button()
+                self.assertEqual(action["xml_id"], "sale.action_quotations")
+                self.assertEqual(action["view_mode"], "form,list,calendar,graph")
+                self.assertEqual(action["view_id"], False)
+                mocked.assert_called()
+                so = self.env["sale.order"].browse(action["res_id"])
+                self.assertEqual(so.partner_id.email, "so.import.test@example.com")
+                self.assertEqual(so.client_order_ref, "TEST1242")
+                self.assertEqual(so.order_line.product_id.code, "FURN_8888")
+                self.assertEqual(so.state, "draft")
+
+        # Create another form to update the above sale order
+        with Form(
+            self.wiz_model.with_context(
+                default_order_filename=order_filename,
+            )
+        ) as form:
+            with mock_parse_order as mocked:
+                # Return 'rfq' for doc_type
+                mocked.return_value = "rfq"
+                # Set the required fields
+                form.import_type = "xml"
+                form.order_file = order_file_data
+                parsed_order_up = dict(
+                    self.parsed_order,
+                    lines=[
+                        {
+                            "product": {"code": "FURN_8888"},
+                            "qty": 3,
+                            "uom": {"unece_code": "C62"},
+                            "price_unit": 12.42,
+                        },
+                        {
+                            "product": {"code": "FURN_9999"},
+                            "qty": 1,
+                            "uom": {"unece_code": "C62"},
+                            "price_unit": 1.42,
+                        },
+                    ],
+                )
+                mocked.return_value = parsed_order_up
+                action = form.save().import_order_button()
+                form = form.save()
+                self.assertEqual(
+                    action["xml_id"], "sale_order_import.sale_order_import_action"
+                )
+                self.assertEqual(form.state, "update")
+                self.assertEqual(form.sale_id, so)
+                form.update_order_button()
+
+        self.assertEqual(len(so.order_line), 2)
+        self.assertEqual(so.order_line[0].product_uom_qty, 3)
+
+    def test_confirm_order(self):
+        # Prepare test data
+        order_file_data = base64.b64encode(
+            b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        )
+        order_filename = "test_order.xml"
+        mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
+        # Create a new form
+        with Form(
+            self.wiz_model.with_context(
+                default_order_filename=order_filename,
+                default_confirm_order=True,
+            )
+        ) as form:
+            with mock_parse_order as mocked:
+                # Return 'rfq' for doc_type
+                mocked.return_value = "rfq"
+                # Set values for the required fields
+                form.import_type = "xml"
+                form.order_file = order_file_data
+                # Test the button with the simulated values
+                mocked.return_value = self.parsed_order
+                action = form.save().import_order_button()
+                so = self.env["sale.order"].browse(action["res_id"])
+                # Check the state of the order
+                self.assertEqual(so.state, "sale")
+
+    def test_order_import_log_errored_line(self):
+        # Prepare test data
+        parsed_order = dict(
+            self.parsed_order,
+            partner={"email": self.partner.email},
+            lines=[
+                {
+                    "product": {"code": "errored"},  # No product exists with this code
+                    "qty": 3,
+                    "uom": {"unece_code": "C62"},
+                    "price_unit": 12.42,
+                },
+                {
+                    "product": {"code": "FURN_9999"},
+                    "qty": 1,
+                    "uom": {"unece_code": "C62"},
+                    "price_unit": 1.42,
+                },
+            ],
+        )
+        order_file_data = base64.b64encode(
+            b"<?xml version='1.0' encoding='utf-8'?><root><foo>baz</foo></root>"
+        )
+        order_filename = "test_order.xml"
+        mock_parse_order = mock.patch.object(type(self.wiz_model), "parse_xml_order")
+        # Create a new form
+        with Form(
+            self.wiz_model.with_context(
+                default_order_filename=order_filename,
+                default_confirm_order=True,
+                default_skip_error_lines=True,
+            )
+        ) as form:
+            with mock_parse_order as mocked:
+                # Return 'rfq' for doc_type
+                mocked.return_value = "rfq"
+                # Set values for the required fields
+                form.import_type = "xml"
+                form.order_file = order_file_data
+                # Test the button with the simulated values
+                mocked.return_value = parsed_order
+                action = form.save().import_order_button()
+                so = self.env["sale.order"].browse(action["res_id"])
+                # Check the order
+                self.assertEqual(so.state, "sale")
+                self.assertEqual(so.client_order_ref, parsed_order["order_ref"])
+                self.assertEqual(len(so.order_line), 1)
+                self.assertEqual(
+                    so.order_line.product_id.default_code,
+                    parsed_order["lines"][1]["product"]["code"],
+                )
+                # Check the error lines message
+                messages = [
+                    "Errors lines on Import: 1 line(s)",
+                    "Odoo couldn't find any product corresponding to the following"
+                    " information extracted from the business document",
+                ]
+                self.assertTrue(
+                    so.message_ids.filtered(
+                        lambda m: messages[0] in m.body and messages[1] in m.body
+                    )
+                )
+
+    def test_create_missing_invoice_partner(self):
+        """Tests creation of missing invoice partner when ctx flag is True
+
+        Expected behavior: the import workflow is not halted, and a new invoicing
+        partner is created on the fly.
+        """
+        parsed_order = dict(
+            self.parsed_order,
+            invoice_to={
+                "country_code": "FR",
+                "email": "test@invoice.partner",
+                "name": "Test Invoice Address",
+            },
+        )
+        wiz = self.wiz_model.with_context(create_missing_invoice_partner=True)
+        with RecordCapturer(self.env["res.partner"], []) as rc_partner:
+            order = wiz.create_order(parsed_order, "pricelist")
+        self.assertEqual(len(rc_partner.records), 1)
+        invoice_partner = rc_partner.records
+        self.assertEqual(invoice_partner.type, "invoice")
+        self.assertEqual(invoice_partner.parent_id, self.partner)
+        self.assertEqual(invoice_partner.country_id, self.env.ref("base.fr"))
+        self.assertEqual(invoice_partner.email, "test@invoice.partner")
+        self.assertEqual(invoice_partner.name, "Test Invoice Address")
+        self.assertEqual(order.partner_invoice_id, invoice_partner)
+        self.assertIn("Created invoice partner", order.message_ids[0].body)
+
+    def test_create_missing_invoice_partner_disabled(self):
+        """Tests creation of missing invoice partner when ctx flag is False or not set
+
+        Expected behavior: the import workflow is halted with an error.
+        """
+        parsed_order = dict(
+            self.parsed_order,
+            invoice_to={
+                "country_code": "FR",
+                "email": "test@invoice.partner",
+                "name": "Test Invoice Address",
+            },
+        )
+        wiz = self.wiz_model
+
+        # No context flag
+        ctx = dict(wiz.env.context)
+        ctx.pop("create_missing_invoice_partner", None)
+        wiz = wiz.with_context(ctx)  # pylint: disable=context-overridden
+        with self.assertRaises(exceptions.UserError):
+            wiz.create_order(parsed_order, "pricelist")
+
+        # Context flag set to False
+        wiz = wiz.with_context(create_missing_invoice_partner=False)
+        with self.assertRaises(exceptions.UserError):
+            wiz.create_order(parsed_order, "pricelist")
+
+    def test_create_missing_shipping_partner(self):
+        """Tests creation of missing shipping partner when ctx flag is True
+
+        Expected behavior: the import workflow is not halted, and a new shipping
+        partner is created on the fly.
+        """
+        parsed_order = dict(
+            self.parsed_order,
+            ship_to={
+                "city": "Rome",
+                "country_code": "IT",
+                "street": "Via dei Platani",
+                "zip": "00100",
+            },
+        )
+        wiz = self.wiz_model.with_context(create_missing_shipping_partner=True, test=1)
+        with RecordCapturer(self.env["res.partner"], []) as rc_partner:
+            order = wiz.create_order(parsed_order, "pricelist")
+        self.assertEqual(len(rc_partner.records), 1)
+        shipping_partner = rc_partner.records
+        self.assertEqual(shipping_partner.type, "delivery")
+        self.assertEqual(shipping_partner.parent_id, self.partner)
+        self.assertEqual(shipping_partner.city, "Rome")
+        self.assertEqual(shipping_partner.country_id, self.env.ref("base.it"))
+        self.assertEqual(shipping_partner.street, "Via dei Platani")
+        self.assertEqual(shipping_partner.zip, "00100")
+        self.assertEqual(order.partner_shipping_id, shipping_partner)
+        self.assertIn("Created shipping partner", order.message_ids[0].body)
+
+    def test_create_missing_shipping_partner_disabled(self):
+        """Tests creation of missing shipping partner when ctx flag is False or not set
+
+        Expected behavior: the import workflow is halted with an error.
+        """
+        parsed_order = dict(
+            self.parsed_order,
+            ship_to={
+                "city": "Rome",
+                "country_code": "IT",
+                "street": "Via dei Platani",
+                "zip": "00100",
+            },
+        )
+        wiz = self.wiz_model
+
+        # No context flag
+        ctx = dict(wiz.env.context)
+        ctx.pop("create_missing_shipping_partner", None)
+        wiz = wiz.with_context(ctx)  # pylint: disable=context-overridden
+        with self.assertRaises(exceptions.UserError):
+            wiz.create_order(parsed_order, "pricelist")
+
+        # Context flag set to False
+        wiz = wiz.with_context(create_missing_shipping_partner=False)
+        with self.assertRaises(exceptions.UserError):
+            wiz.create_order(parsed_order, "pricelist")
