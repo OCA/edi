@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="edi_local_line_view_tree" model="ir.ui.view">
+        <field name="name">edi.local.line.view.tree</field>
+        <field name="model">edi.local.line</field>
+        <field name="arch" type="xml">
+            <tree default_order="sequence">
+                <field name="type" column_invisible="1" />
+                <field name="sequence" widget="handle" />
+                <field name="type_header" />
+                <field name="name" />
+                <field name="description" optional="show" />
+                <field name="start" readonly="0" />
+                <field name="size" />
+                <field name="end" />
+                <field name="decimal" optional="hide" />
+                <field name="type_data" />
+                <field name="is_required" widget="boolean_toggle" optional="hide" />
+                <field name="check_override" widget="boolean_toggle" optional="hide" />
+                <field name="value" widget="ace" optional="show" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="edi_local_line_view_form" model="ir.ui.view">
+        <field name="name">edi.local.line.view.form</field>
+        <field name="model">edi.local.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="type" invisible="1" />
+                        <field name="type_header" />
+                        <field name="name" />
+                        <field name="type_data" />
+                        <field name="is_required" widget="boolean_toggle" />
+                        <field name="check_override" widget="boolean_toggle" />
+                        <field name="fill_value" widget="boolean_toggle" />
+                        <field name="value_fill" invisible="not fill_value" />
+                    </group>
+                    <group>
+                        <field name="description" />
+                        <field name="start" readonly="0" />
+                        <field name="size" />
+                        <field name="end" />
+                        <field name="trunc_value" widget="boolean_toggle" />
+                        <field name="decimal" invisible="not type_data == 'numeric'" />
+                        <field
+                            name="orientation_fill_value"
+                            invisible="not fill_value"
+                        />
+                    </group>
+                </group>
+                <div>
+                    <label for="value" />
+                    <field name="value" widget="ace" />
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

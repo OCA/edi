@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="edi_local_type_header_gen" model="edi.local.header">
+        <field name="sequence">0</field>
+        <field name="code">gen</field>
+        <field name="name">General</field>
+    </record>
+</odoo>

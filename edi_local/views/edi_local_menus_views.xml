@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem
+        id="settings_edi_local"
+        name="EDI"
+        parent="base.menu_custom"
+        sequence="500"
+    >
+        <menuitem
+            id="edi_local_header_tree_action_menu"
+            action="edi_local_header_tree_action"
+            sequence="1"
+        />
+        <menuitem
+            id="edi_local_tree_action_menu"
+            action="edi_local_tree_action"
+            sequence="2"
+        />
+    </menuitem>
+</odoo>

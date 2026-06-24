@@ -1,0 +1,963 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* edi_local
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-03 02:27+0000\n"
+"PO-Revision-Date: 2026-04-03 02:27+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"\n"
+"                                            The files were not generated.\n"
+"                                            For more details, please review the notes.\n"
+"                                            "
+msgstr ""
+"\n"
+"Los archivos no se generaron.\n"
+"Para más detalles, revise las notas.\n"
+""
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"\n"
+"                                Some files were imported.\n"
+"                                For more details, see the notes.\n"
+"                                "
+msgstr ""
+"\n"
+"Se importaron algunos archivos.\n"
+"Para más detalles, revise las notas.\n"
+""
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"\n"
+"                                The files were not imported.\n"
+"                                For more details, please see the notes.\n"
+"                                "
+msgstr ""
+"\n"
+"Los archivos no se importaron.\n"
+"Para más detalles, revise las notas.\n"
+""
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__dir_import_file
+msgid ""
+"\n"
+"            Define the local directory from which the files to be imported will be read.\n"
+"            These will be added to the attachments if they already exist.\n"
+"        "
+msgstr ""
+"\n"
+"Define el directorio local desde el cual se leerán los archivos a importar.\n"
+"Estos se añadirán a los adjuntos si ya existen.\n"
+""
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"# Available variables:\n"
+"#  - env: environment on which the action is triggered\n"
+"#  - record:\n"
+"#        When the type is 'out': it's the record on which the action is triggered.\n"
+"#        When the type is 'in': it's the value of the element retrieved from the\n"
+"#                                    file, usually a string.\n"
+"#  - model: model of the record on which the action is triggered; is a void recordset\n"
+"#  - time, datetime, dateutil, timezone: useful Python libraries\n"
+"#  - float_compare: utility function to compare floats based on specific precision\n"
+"#  - UserError: exception class for raising user-facing warning messages\n"
+"#  - result: Variable in which the final result is stored\n"
+msgstr ""
+"# Variables disponibles:\n"
+"#  - env: entorno sobre el que se dispara la acción\n"
+"#  - record:\n"
+"#        Cuando el tipo es 'out': es el registro sobre el que se dispara la acción.\n"
+"#        Cuando el tipo es 'in': es el valor del elemento recuperado del\n"
+"#                                    archivo, normalmente una cadena.\n"
+"#  - model: modelo del registro sobre el que se dispara la acción; es un recordset vacío\n"
+"#  - time, datetime, dateutil, timezone: bibliotecas útiles de Python\n"
+"#  - float_compare: función utilitaria para comparar flotantes según una precisión específica\n"
+"#  - UserError: clase de excepción para lanzar mensajes de advertencia al usuario\n"
+"#  - result: variable en la que se almacena el resultado final\n"
+""
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid ""
+"%(error)s%(file)s %(leap_line)sType: %(type)s %(leap_line)sValue: %(value)s "
+"%(leap_line)sField: %(field_name)s %(leap_line)sExpression: %(expression)s "
+"%(leap_line)sRecord [%(model_name)s]: %(record_name)s %(leap_line)sError: "
+"%(message)s"
+msgstr "%(error)s%(file)s %(leap_line)sTipo: %(type)s %(leap_line)sValor: %(value)s %(leap_line)sCampo: %(field_name)s %(leap_line)sExpresión: %(expression)s %(leap_line)sRegistro [%(model_name)s]: %(record_name)s %(leap_line)sError: %(message)s"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid "%(leap_line)sFile: %(file_name)s"
+msgstr "%(leap_line)sArchivo: %(file_name)s"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__description
+msgid "A description of the value the field accepts."
+msgstr "Una descripción del valor que acepta el campo."
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_needaction
+msgid "Action Needed"
+msgstr "Necesita Acción"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decoración de Actividad de Excepción"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_state
+msgid "Activity State"
+msgstr "Estado de la Actividad"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Tipo de Icono de Actividad"
+
+#. module: edi_local
+#: model:res.groups,name:edi_local.group_admin_edi_local
+msgid "Administrator"
+msgstr "Administrador"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__after_header
+msgid "After Header"
+msgstr "Después de la cabecera"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "All files were generated successfully."
+msgstr "Todos los archivos se generaron correctamente."
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "All files were imported successfully."
+msgstr "Todos los archivos se importaron correctamente."
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__type_data__alphanumeric
+msgid "Alphanumeric"
+msgstr "Alfanumérico"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid "An error occurred while generating the files:"
+msgstr "Se produjo un error al generar los archivos:"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__domain
+msgid "Apply on"
+msgstr "Aplicar en"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__attachment_ids
+msgid "Attachment"
+msgstr "Adjunto"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_attachment_count
+msgid "Attachment Count"
+msgstr "Conteo de Archivos Adjuntos"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__available_variables
+msgid "Available Variables"
+msgstr "Variables disponibles"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__orientation_fill_value__center
+msgid "Center"
+msgstr "Centro"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__check_override
+msgid "Check Override"
+msgstr "Comprobar solapamiento"
+
+#. module: edi_local
+#: model_terms:ir.ui.view,arch_db:edi_local.edi_local_view_form
+msgid ""
+"Check all lines without generating the                         final file or"
+" taking any action after the evaluations."
+msgstr "Comprueba todas las líneas sin generar el archivo final ni ejecutar ninguna acción después de las evaluaciones."
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__code
+msgid "Code"
+msgstr "Código"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__create_uid
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__create_uid
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__create_date
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__create_date
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__type_data__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__decimal
+msgid "Decimal"
+msgstr "Decimal"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "Define a filename"
+msgstr "Defina un nombre de archivo"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "Define lines before generating a file"
+msgstr "Defina líneas antes de generar un archivo"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__after_header
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__type_header
+msgid ""
+"Defines after which header the lines are generated, if not specified it is "
+"generated at the end of everything"
+msgstr "Define después de qué cabecera se generan las líneas; si no se especifica, se generan al final de todo."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__type_data
+msgid ""
+"Defines the data type of the value\n"
+"Alphanumeric: Only letters and numbers are allowed. Example: Alpha12pha345\n"
+"Numeric: Only numbers are allowed. Example: 12345\n"
+"Date: Only dates are allowed. Example: 20251112\n"
+"General: Any value is allowed. Example: Alpha1_2pha345-*_"
+msgstr ""
+"Define el tipo de dato del valor\n"
+"Alfanumérico: solo se permiten letras y números. Ejemplo: Alpha12pha345\n"
+"Numérico: solo se permiten números. Ejemplo: 12345\n"
+"Fecha: solo se permiten fechas. Ejemplo: 20251112\n"
+"General: se permite cualquier valor. Ejemplo: Alpha1_2pha345-*_"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__size
+msgid "Defines the field size. Example: 5 positions"
+msgstr "Define el tamaño del campo. Ejemplo: 5 posiciones"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__dir_file
+msgid "Defines the local directory where the generated files will be stored."
+msgstr "Define el directorio local donde se almacenarán los archivos generados."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__decimal
+msgid ""
+"Defines the number of decimal places in the number. These decimal places are"
+" taken into account in the length (start + size)"
+msgstr "Define el número de decimales del número. Estos decimales se tienen en cuenta en la longitud (inicio + tamaño)."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__orientation_fill_value
+msgid "Defines the orientation in which the filling will be carried out."
+msgstr "Define la orientación en la que se realizará el relleno."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__start
+msgid ""
+"Defines the position from which counting will begin based on the size value."
+" By default, this is the last position of the previous line in the same "
+"header."
+msgstr "Define la posición desde la que comenzará el conteo según el valor del tamaño. Por defecto, es la última posición de la línea anterior dentro de la misma cabecera."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__value_fill
+msgid "Defines the value to be filled, by default it is a space."
+msgstr "Define el valor con el que se rellenará; por defecto es un espacio."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__override_file
+msgid "Defines whether existing files are deleted when regenerating."
+msgstr "Define si se eliminan los archivos existentes al regenerar."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__fill_value
+msgid ""
+"Defines whether the value size is filled with a specific character; if the "
+"default character is not defined, it is filled with a space."
+msgstr "Define si el tamaño del valor se rellena con un carácter específico; si no se define el carácter predeterminado, se rellena con un espacio."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__check_override
+msgid ""
+"Defines whether to validate overlapping positions (start + size).\n"
+"                Example use: If two fields must use the same value when importing\n"
+"                a file, then this field is defined as True to prevent an overlap\n"
+"                error from being thrown during the process; this use case is\n"
+"                typically during import.\n"
+"                The default is true.\n"
+"                "
+msgstr ""
+"Define si se deben validar las posiciones solapadas (inicio + tamaño).\n"
+"                Ejemplo de uso: si dos campos deben utilizar el mismo valor al importar\n"
+"                un archivo, este campo se define como verdadero para evitar que se lance\n"
+"                un error de solapamiento durante el proceso; este caso de uso es\n"
+"                habitual durante la importación.\n"
+"                El valor predeterminado es verdadero.\n"
+"                "
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__description
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__dir_file
+msgid "Dir File"
+msgstr "Directorio de archivos"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__dir_import_file
+msgid "Dir Import File"
+msgstr "Directorio de importación de archivos"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__display_name
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__display_name
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"Documents of type %(document_type)s were not imported because the function "
+"with structure  %(func_structure)s does not exist."
+msgstr "Los documentos de tipo %(document_type)s no se importaron porque no existe la función con estructura %(func_structure)s."
+
+#. module: edi_local
+#: model:ir.ui.menu,name:edi_local.settings_edi_local
+msgid "EDI"
+msgstr "EDI"
+
+#. module: edi_local
+#: model:ir.model,name:edi_local.model_edi_local_mixin
+msgid "EDI Local Mixin"
+msgstr "Mixin de EDI local"
+
+#. module: edi_local
+#: model:ir.model,name:edi_local.model_edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__edi_local_id
+#: model:ir.module.category,name:edi_local.module_category_edi_local
+msgid "Edi Local"
+msgstr "EDI local"
+
+#. module: edi_local
+#: model:ir.model,name:edi_local.model_edi_local_header
+msgid "Edi Local Header"
+msgstr "Cabecera de EDI local"
+
+#. module: edi_local
+#: model:ir.actions.server,name:edi_local.ir_cron_edi_local_generate_file_ir_actions_server
+msgid "Edi Local: Generate files"
+msgstr "EDI local: Generar archivos"
+
+#. module: edi_local
+#: model:ir.actions.server,name:edi_local.ir_cron_edi_local_import_file_ir_actions_server
+msgid "Edi Local: Import files"
+msgstr "EDI local: Importar archivos"
+
+#. module: edi_local
+#: model:ir.actions.act_window,name:edi_local.edi_local_tree_action
+#: model:ir.ui.menu,name:edi_local.edi_local_tree_action_menu
+msgid "Edi local"
+msgstr "EDI local"
+
+#. module: edi_local
+#: model:ir.actions.act_window,name:edi_local.edi_local_header_tree_action
+#: model:ir.ui.menu,name:edi_local.edi_local_header_tree_action_menu
+msgid "Edi local header"
+msgstr "Cabecera de EDI local"
+
+#. module: edi_local
+#: model:ir.model,name:edi_local.model_edi_local_line
+msgid "Edi local line"
+msgstr "Línea de EDI local"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__enabled
+msgid "Enabled"
+msgstr "Habilitado"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__end
+msgid "End"
+msgstr "Fin"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__field_id
+msgid "Field"
+msgstr "Campo"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__file_type
+msgid "File Type"
+msgstr "Tipo de Archivo"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__sequence_id
+msgid "Filename"
+msgstr "Nombre fichero"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__files_generated
+msgid "Files Generated"
+msgstr "Archivos generados"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__fill_value
+msgid "Fill Value"
+msgstr "Valor de relleno"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores/as"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Socios)"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Icono de fuente impresionante, por ejemplo fa-tasks"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__type_data__general
+msgid "General"
+msgstr "General"
+
+#. module: edi_local
+#: model_terms:ir.ui.view,arch_db:edi_local.edi_local_view_form
+msgid "Generate file"
+msgstr "Generar archivo"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__has_message
+msgid "Has Message"
+msgstr "Tiene Mensaje"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__type__header
+msgid "Header"
+msgstr "Cabecera"
+
+#. module: edi_local
+#: model_terms:ir.ui.view,arch_db:edi_local.edi_local_view_form
+msgid "Headers"
+msgstr "Encabezados"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"I do not generate documents of type %(document_type)s because the function "
+"with structure  %(func_structure)s does not exist."
+msgstr "No se generan documentos de tipo %(document_type)s porque no existe la función con estructura %(func_structure)s."
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__id
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__id
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_exception_icon
+msgid "Icon"
+msgstr "Icono"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Icono para indicar una actividad por excepción."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado, nuevos mensajes necesitan su atención."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si está marcada, algunos mensajes tienen error de entrega."
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local_line__trunc_value
+msgid ""
+"If this option is selected, it defines that if the value does not meet the "
+"defined size, then it will be cut to that size."
+msgstr "Si se selecciona esta opción y el valor no cumple con el tamaño definido, se truncará a ese tamaño."
+
+#. module: edi_local
+#: model_terms:ir.ui.view,arch_db:edi_local.edi_local_view_form
+msgid "Import file"
+msgstr "Importar archivo"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local__type__in
+msgid "In"
+msgstr "En"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_is_follower
+msgid "Is Follower"
+msgstr "Es Seguidor/a"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__is_required
+msgid "Is Required"
+msgstr "Es obligatorio"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid ""
+"It is not a valid number with %(partial_integer)s whole digits and "
+"%(partial_decimal)s decimal places."
+msgstr "No es un número válido con %(partial_integer)s dígitos enteros y %(partial_decimal)s decimales."
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__write_uid
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__write_uid
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__write_date
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__write_date
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__orientation_fill_value__left
+msgid "Left"
+msgstr "Izquierda"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__line_ids
+msgid "Line"
+msgstr "Línea"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__type__line
+#: model_terms:ir.ui.view,arch_db:edi_local.edi_local_view_form
+msgid "Lines"
+msgstr "Líneas"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__local_line_ids
+msgid "Local Line"
+msgstr "Línea local"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_has_error
+msgid "Message Delivery error"
+msgstr "Error en Entrega de Mensaje"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__model_id
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__model_id
+msgid "Model"
+msgstr "Modelo"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__model_name
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__model_name
+msgid "Model Name"
+msgstr "Nombre del modelo"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Fecha Límite de Mi Actividad"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__name
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__name
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "Siguiente evento en el calendario de actividades."
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Fecha Límite para la siguiente Actividad"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de la Siguiente Actividad"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_type_id
+msgid "Next Activity Type"
+msgstr "Tipo Siguiente Actividad"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid "No defined"
+msgstr "No definido"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"No file was detected. You must upload a file to proceed with the import."
+msgstr "No se detectó ningún archivo. Debe subir un archivo para continuar con la importación."
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "No files to read were detected in the directory %(directory)s."
+msgstr "No se detectaron archivos para leer en el directorio %(directory)s."
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de Acciones"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__message_has_error_counter
+msgid "Number of errors"
+msgstr "Número de errores"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Número de mensajes que requieren una acción"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensaje con error de entrega"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__type_data__numeric
+msgid "Numeric"
+msgstr "Numérico"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_mixin.py:0
+#, python-format
+msgid "Open"
+msgstr "Abierto"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "Open %(edi_local_name)s"
+msgstr "Abrir %(edi_local_name)s"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__orientation_fill_value
+msgid "Orientation Fill Value"
+msgstr "Orientación del valor de relleno"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local__type__out
+msgid "Out"
+msgstr "Salida"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__override_file
+msgid "Override File"
+msgstr "Sobrescribir archivo"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid "Please define the variable `result` with the final result."
+msgstr "Defina la variable `result` con el resultado final."
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario Responsable"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local_line__orientation_fill_value__right
+msgid "Right"
+msgstr "Derecha"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_header__sequence
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__size
+msgid "Size"
+msgstr "Tamaño"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__start
+msgid "Start"
+msgstr "Iniciar"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "Estados basados en actividades\\nRetrasada: La fecha límite ya ha pasado\\nHoy: La fecha límite de la actividad es hoy\\nFuturas: Actividades futuras."
+
+#. module: edi_local
+#: model_terms:ir.ui.view,arch_db:edi_local.edi_local_view_form
+msgid "Test generate file"
+msgstr "Probar generación de archivo"
+
+#. module: edi_local
+#: model_terms:ir.ui.view,arch_db:edi_local.edi_local_view_form
+msgid "Test read file"
+msgstr "Probar lectura de archivo"
+
+#. module: edi_local
+#: model:ir.model.fields.selection,name:edi_local.selection__edi_local__file_type__txt
+msgid "Text"
+msgstr "Texto"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "The %(model_name)s not were generated: %(not_generated)s"
+msgstr "No se generaron los %(model_name)s: %(not_generated)s"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "The %(model_name)s were generated: %(generated)s<br/><br/>"
+msgstr "Se generaron los %(model_name)s: %(generated)s<br/><br/>"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_header.py:0
+#, python-format
+msgid "The code must be unique."
+msgstr "El código debe ser único."
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "The defined directory (%(dir_valid)s) cannot be accessible."
+msgstr "No se puede acceder al directorio definido (%(dir_valid)s)."
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "The defined directory (%(dir_valid)s) does not exist."
+msgstr "El directorio definido (%(dir_valid)s) no existe."
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "The defined directory (%(dir_valid)s) is not accessible."
+msgstr "El directorio definido (%(dir_valid)s) no es accesible."
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"The document (%(document_name)s) extension is not the allowed one "
+".%(file_type)s."
+msgstr "La extensión del documento (%(document_name)s) no es la permitida .%(file_type)s."
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid "The following files were generated:"
+msgstr "Se generaron los siguientes archivos:"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"The following files were retrieved from directory %(directory)s: "
+"%(attachments)s"
+msgstr "Se recuperaron los siguientes archivos del directorio %(directory)s: %(attachments)s"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid ""
+"The start %(start)s and %(end)s values overlap with the %(line_name)s line.\n"
+"Overlap: Start: %(start_overlap)s End: %(end_overlap)s"
+msgstr "Los valores de inicio %(start)s y fin %(end)s se solapan con la línea %(line_name)s.\\nSolapamiento: Inicio: %(start_overlap)s Fin: %(end_overlap)s"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid "The value is longer than the allowed size (%(size)s). "
+msgstr "El valor es más largo que el tamaño permitido (%(size)s). "
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local.py:0
+#, python-format
+msgid ""
+"There are no records with the conditions defined in the Apply on field."
+msgstr "No hay registros con las condiciones definidas en el campo Aplicar en."
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid ""
+"This is not a valid value for a date in YYYYMMDD format. Example: 20250902"
+msgstr "Este no es un valor válido para una fecha con formato YYYYMMDD. Ejemplo: 20250902"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid ""
+"This is not a valid value for an alphanumeric character. Example: CAB159ED"
+msgstr "Este no es un valor alfanumérico válido. Ejemplo: CAB159ED"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__trunc_value
+msgid "Trunc Value"
+msgstr "Truncar valor"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local__type
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__type_data
+msgid "Type Data"
+msgstr "Tipo de dato"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__type_header
+msgid "Type Header"
+msgstr "Tipo de cabecera"
+
+#. module: edi_local
+#: model:ir.model.fields,help:edi_local.field_edi_local__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Tipo (o clase) de actividad excepcional registrada."
+
+#. module: edi_local
+#: model:res.groups,name:edi_local.group_user_edi_local
+msgid "User"
+msgstr "Usuario"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__value
+msgid "Value"
+msgstr "Valor"
+
+#. module: edi_local
+#: model:ir.model.fields,field_description:edi_local.field_edi_local_line__value_fill
+msgid "Value Fill"
+msgstr "Valor de relleno"
+
+#. module: edi_local
+#. odoo-python
+#: code:addons/edi_local/models/edi_local_line.py:0
+#, python-format
+msgid "[%(header)s] The field %(field)s (%(description)s) is required"
+msgstr "[%(header)s] El campo %(field)s (%(description)s) es obligatorio"

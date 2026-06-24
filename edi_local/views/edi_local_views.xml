@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="edi_local_view_tree" model="ir.ui.view">
+        <field name="name">edi.local.view.tree</field>
+        <field name="model">edi.local</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="enabled" decoration-danger="not enabled">
+                <field name="name" />
+                <field name="type" />
+                <field name="model_id" />
+                <field name="file_type" />
+                <field name="description" optional="hide" />
+                <field name="enabled" widget="boolean_toggle" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="edi_local_view_form" model="ir.ui.view">
+        <field name="name">edi.local.view.form</field>
+        <field name="model">edi.local</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="generate_file"
+                        type="object"
+                        string="Generate file"
+                        class="oe_highlight"
+                        invisible="not enabled or not type == 'out'"
+                    />
+                    <button
+                        name="generate_file"
+                        type="object"
+                        string="Test generate file"
+                        class="oe_highlight"
+                        context="{'test_generate_file': True}"
+                        help="Check all lines without generating the
+                        final file or taking any action after the evaluations."
+                        invisible="not type == 'out'"
+                    />
+                    <button
+                        name="read_import_file"
+                        type="object"
+                        string="Test read file"
+                        class="oe_highlight"
+                        context="{'test_read_import_file': True}"
+                        invisible="not type == 'in'"
+                    />
+                    <button
+                        name="read_import_file"
+                        type="object"
+                        string="Import file"
+                        class="oe_highlight"
+                        invisible="not enabled or not type == 'in'"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="model_name" invisible="1" />
+                            <field name="name" />
+                            <field name="type" />
+                            <field name="enabled" widget="boolean_toggle" />
+                            <field
+                                name="model_id"
+                                options='{"no_open": True, "no_create": True}'
+                            />
+                            <field
+                                name="domain"
+                                widget="domain"
+                                options="{'model': 'model_name', 'in_dialog': True}"
+                                invisible="not type == 'out'"
+                            />
+                            <field name="file_type" />
+                            <field name="sequence_id" invisible="not type == 'out'" />
+                            <field
+                                name="dir_file"
+                                invisible="not type == 'out'"
+                                required="type == 'out'"
+                            />
+                            <field
+                                name="dir_import_file"
+                                invisible="not type == 'in'"
+                            />
+                            <field
+                                name="override_file"
+                                widget="boolean_toggle"
+                                invisible="not type == 'out'"
+                            />
+                            <field name="files_generated" readonly="1" invisible="1" />
+
+                            <field
+                                name="attachment_ids"
+                                widget="many2many_binary"
+                                invisible="not type == 'in'"
+                            />
+                        </group>
+                        <label for="description" />
+                        <field name="description" />
+                    </group>
+                    <notebook>
+                        <page
+                            name="edi_local_headers"
+                            string="Headers"
+                            invisible="not model_id"
+                        >
+                            <div
+                                class="oe_edit_only alert alert-info"
+                                role="alert"
+                                invisible="not available_variables"
+                            >
+                                <field name="available_variables" readonly="1" />
+                            </div>
+                            <field
+                                name="local_line_ids"
+                                context="{
+                                'default_type': 'header',
+                                'form_view_ref': 'edi_local.edi_local_line_view_form',
+                                'form_tree_ref': 'edi_local.edi_local_line_view_tree',
+                                }"
+                            />
+                        </page>
+                        <page
+                            name="edi_local_lines"
+                            string="Lines"
+                            invisible="not model_id"
+                        >
+                            <div
+                                class="oe_edit_only alert alert-info"
+                                role="alert"
+                                invisible="not available_variables"
+                            >
+                                <field name="available_variables" readonly="1" />
+                            </div>
+                            <div>
+                                <label for="field_id" />
+                                <field
+                                    name="field_id"
+                                    options='{"no_open": True, "no_create": True}'
+                                />
+                                <label for="after_header" />
+                                <field name="after_header" />
+                            </div>
+                            <field
+                                name="line_ids"
+                                invisible="not field_id"
+                                context="{'default_type': 'line'}"
+                            />
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Chatter -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="edi_local_tree_action" model="ir.actions.act_window">
+        <field name="name">Edi local</field>
+        <field name="res_model">edi.local</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="edi_local.edi_local_view_tree" />
+    </record>
+
+</odoo>
