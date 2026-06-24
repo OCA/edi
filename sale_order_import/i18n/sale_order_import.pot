@@ -78,7 +78,7 @@ msgstr ""
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
-msgid "Created automatically via file import (%s)."
+msgid "Created automatically via file import (%(filename)s)."
 msgstr ""
 
 #. module: sale_order_import
@@ -114,6 +114,7 @@ msgid "Customer Order"
 msgstr ""
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order__display_name
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__display_name
 msgid "Display Name"
 msgstr ""
@@ -139,6 +140,7 @@ msgid "Filename"
 msgstr ""
 
 #. module: sale_order_import
+#: model:ir.model.fields,field_description:sale_order_import.field_sale_order__id
 #: model:ir.model.fields,field_description:sale_order_import.field_sale_order_import__id
 msgid "ID"
 msgstr ""
@@ -339,16 +341,16 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 msgid ""
-"This file '%(filename)s' is not recognized as a %(type)s file. Please check "
-"the file and its extension."
+"This file '%(filename)s' is not recognised as a XML nor PDF file. Please "
+"check the file and it's extension."
 msgstr ""
 
 #. module: sale_order_import
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 msgid ""
-"This file '%s' is not recognised as a XML nor PDF file. Please check the "
-"file and it's extension."
+"This file '%(filename)s' is not recognized as a %(type)s file. Please check "
+"the file and its extension."
 msgstr ""
 
 #. module: sale_order_import
@@ -361,7 +363,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/sale_order_import/wizard/sale_order_import.py:0
 msgid ""
-"This quotation has been updated automatically via the import of file %s"
+"This quotation has been updated automatically via the import of file "
+"%(filename)s"
 msgstr ""
 
 #. module: sale_order_import
