@@ -31,8 +31,10 @@
             ]"
         />
         <field name="domain">[('model', '=', 'account.move')]</field>
-        <field name="context">{'default_model_id': ref('account.model_account_move')}
-        </field>
+        <field
+            name="context"
+            eval="{'default_model_id': ref('account.model_account_move')}"
+        />
     </record>
     <menuitem
         id="menu_base_import_pdf_template_account_move"
