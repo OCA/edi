@@ -63,6 +63,7 @@ class TestBaseUblParse(TransactionCase):
             "state_code": False,
             "country_code": "BE",
             "ref": False,
+            "einvoice_address": False,
         }
         self.assertEqual(parsed, expected)
 
@@ -84,6 +85,7 @@ class TestBaseUblParse(TransactionCase):
             "street2": "Suite 123",
             "street_number": "1",
             "vat": "DK12345",
+            "einvoice_address": False,
             "website": False,
             "zip": "54321",
         }
@@ -106,6 +108,7 @@ class TestBaseUblParse(TransactionCase):
             "street2": "Suite 123",
             "street_number": "1",
             "vat": "DK12345",
+            "einvoice_address": False,
             "website": False,
             "zip": "54321",
         }
@@ -143,6 +146,7 @@ class TestBaseUblParse(TransactionCase):
             "street2": "2nd floor",
             "street_number": "5",
             "vat": False,
+            "einvoice_address": False,
             "website": False,
             "zip": "11000",
         }

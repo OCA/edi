@@ -124,7 +124,23 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def parse_ubl_invoice(self, xml_root, company):
         """Parse UBL Invoice XML file"""
-        namespaces = xml_root.nsmap
+        namespaces = {
+            None: "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
+            "cac": (
+                "urn:oasis:names:specification:ubl:schema:xsd:"
+                "CommonAggregateComponents-2"
+            ),
+            "cbc": (
+                "urn:oasis:names:specification:ubl:schema:xsd:"
+                "CommonBasicComponents-2"
+            ),
+            "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+            "ccts": "urn:un:unece:uncefact:documentation:2",
+            "qdt": "urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2",
+            "udt": (
+                "urn:oasis:names:specification:ubl:schema:xsd:" "UnqualifiedDataTypes-2"
+            ),
+        }
         inv_xmlns = namespaces.pop(None)
         namespaces["inv"] = inv_xmlns
         logger.debug("XML file namespaces=%s", namespaces)
@@ -169,7 +185,10 @@ class AccountInvoiceImport(models.TransientModel):
         company_dict = {}
         # We only take the "official references" for company_dict
         if company_dict_full.get("vat"):
-            company_dict = {"vat": company_dict_full["vat"]}
+            company_dict = {
+                "vat": company_dict_full["vat"],
+                "einvoice_address": company_dict_full.get("einvoice_address"),
+            }
         date_xpath = xml_root.xpath("/inv:Invoice/cbc:IssueDate", namespaces=namespaces)
         date_dt = datetime.strptime(date_xpath[0].text, "%Y-%m-%d")
         date_due_xpath = xml_root.xpath("//cbc:PaymentDueDate", namespaces=namespaces)
