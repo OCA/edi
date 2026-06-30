@@ -1,3 +1,7 @@
+.. image:: https://odoo-community.org/readme-banner-image
+   :target: https://odoo-community.org/get-involved?utm_source=readme
+   :alt: Odoo Community Association
+
 =====================
 Purchase Order Import
 =====================
@@ -13,17 +17,17 @@ Purchase Order Import
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/18.0/purchase_order_import
+    :target: https://github.com/OCA/edi/tree/19.0/purchase_order_import
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-purchase_order_import
+    :target: https://translation.odoo-community.org/projects/edi-19-0/edi-19-0-purchase_order_import
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=19.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -32,12 +36,12 @@ This module adds support for the import of electronic quotations. This
 module provides the base methods to import electronic quotations ; it
 requires additional modules to support specific order formats:
 
--  module *purchase_order_import_ubl*: adds support for
-   ``Universal Business Language (UBL) <http://ubl.xml.org/>``\ \_
-   quotations as:
+- module *purchase_order_import_ubl*: adds support for
+  ``Universal Business Language (UBL) <http://ubl.xml.org/>``\ \_
+  quotations as:
 
-   -  XML file,
-   -  PDF file with an embedded XML file.
+  - XML file,
+  - PDF file with an embedded XML file.
 
 **Table of contents**
 
@@ -51,25 +55,24 @@ This module adds a button *Import Quotation File* on Requests for
 Quotation. This button starts a wizard that will propose you to select
 the quotation file. The wizard will also propose you an update option:
 
--  only update the prices of the draft purchase order from the quotation
-   file (default option),
--  update prices and quantities of the draft purchase order from the
-   quotation file.
+- only update the prices of the draft purchase order from the quotation
+  file (default option),
+- update prices and quantities of the draft purchase order from the
+  quotation file.
 
 When you click on the button *Update RFQ*:
 
--  if Odoo has a line in the quotation file that is not in the draft
-   purchase order, it will create a new purchase order line,
--  if Odoo has a line in the draft purchase order that is not in the
-   quotation file, it will write a warning in the chatter of the
-   purchase order (it will not delete the purchase order line),
--  for all the lines that are both in the draft purchase order and in
-   the quotation file, the purchase order line will be updated if
-   needed.
--  if the incoterm of the quotation file is not the same as the incoterm
-   of the draft purchase order, Odoo will update the incoterm of the
-   purchase order.
--  the imported quotation file is attached to the purchase order.
+- if Odoo has a line in the quotation file that is not in the draft
+  purchase order, it will create a new purchase order line,
+- if Odoo has a line in the draft purchase order that is not in the
+  quotation file, it will write a warning in the chatter of the purchase
+  order (it will not delete the purchase order line),
+- for all the lines that are both in the draft purchase order and in the
+  quotation file, the purchase order line will be updated if needed.
+- if the incoterm of the quotation file is not the same as the incoterm
+  of the draft purchase order, Odoo will update the incoterm of the
+  purchase order.
+- the imported quotation file is attached to the purchase order.
 
 Once the quotation file is imported, you should read the messages in the
 chatter of the purchase order because it may contain important
@@ -81,7 +84,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20purchase_order_import%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20purchase_order_import%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -96,8 +99,8 @@ Authors
 Contributors
 ------------
 
--  Alexis de Lattre alexis.delattre@akretion.com
--  Silvio Gregorini silvio.gregorini@camptocamp.com
+- Alexis de Lattre alexis.delattre@akretion.com
+- Silvio Gregorini silvio.gregorini@camptocamp.com
 
 Maintainers
 -----------
@@ -112,6 +115,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/18.0/purchase_order_import>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/19.0/purchase_order_import>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
