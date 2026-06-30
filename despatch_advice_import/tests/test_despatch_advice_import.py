@@ -75,7 +75,9 @@ class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
             self.order_line_to_data(self.line3),
             self.order_line_to_data(self.line4),
         ]
-        self.DespatchAdviceImport.process_data(data)
+        self.DespatchAdviceImport.with_context(
+            despatch_advice_import__picking_validation=True
+        ).process_data(data)
 
         self.assertTrue(self.purchase_order.picking_ids)
         move_ids = self.line1.move_ids
@@ -100,7 +102,9 @@ class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
             self.order_line_to_data(self.line3),
             self.order_line_to_data(self.line4),
         ]
-        self.DespatchAdviceImport.process_data(data)
+        self.DespatchAdviceImport.with_context(
+            despatch_advice_import__picking_validation=True
+        ).process_data(data)
 
         self.assertTrue(self.purchase_order.picking_ids)
         move_ids = self.line1.move_ids
@@ -131,7 +135,9 @@ class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
             self.order_line_to_data(self.line4),
         ]
 
-        self.DespatchAdviceImport.process_data(data)
+        self.DespatchAdviceImport.with_context(
+            despatch_advice_import__picking_validation=True
+        ).process_data(data)
         self.assertEqual(self.purchase_order.state, "purchase")
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         # line1
@@ -189,7 +195,9 @@ class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
             self.order_line_to_data(self.line3),
             self.order_line_to_data(self.line4),
         ]
-        self.DespatchAdviceImport.process_data(data)
+        self.DespatchAdviceImport.with_context(
+            despatch_advice_import__picking_validation=True
+        ).process_data(data)
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         move_ids = self.line1.move_ids
 
@@ -223,7 +231,9 @@ class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
             self.order_line_to_data(self.line3, qty=confirmed_qty, backorder_qty=3),
             self.order_line_to_data(self.line4),
         ]
-        self.DespatchAdviceImport.process_data(data)
+        self.DespatchAdviceImport.with_context(
+            despatch_advice_import__picking_validation=True
+        ).process_data(data)
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         move_ids = self.line3.move_ids
         self.assertEqual(len(move_ids), 3)
@@ -260,7 +270,9 @@ class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
                 backorder_qty=3,
             ),
         ]
-        self.DespatchAdviceImport.process_data(data)
+        self.DespatchAdviceImport.with_context(
+            despatch_advice_import__picking_validation=True
+        ).process_data(data)
         self.assertEqual(len(self.purchase_order.picking_ids), 2)
         move_ids = self.line4.move_ids
         self.assertEqual(sum(move_ids.mapped("product_qty")), self.line4.product_qty)
@@ -289,7 +301,8 @@ class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
             self.order_line_to_data(self.line4),
         ]
         self.DespatchAdviceImport.with_context(
-            allow_validate_over_qty=True
+            allow_validate_over_qty=True,
+            despatch_advice_import__picking_validation=True,
         ).process_data(data)
 
         self.assertTrue(self.purchase_order.picking_ids)
@@ -298,3 +311,22 @@ class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
         self.assertEqual(sum(move_ids.mapped("product_qty")), self.line1.product_qty)
         assigned = move_ids.filtered(lambda s: s.state == "done")
         self.assertEqual(assigned.quantity, confirmed_qty)
+
+    def test_process_data_without_picking_validation(self):
+        """Leave the picking open when picking validation is not opted in."""
+        data = self._get_base_data()
+        data["lines"] = [
+            self.order_line_to_data(self.line1),
+            self.order_line_to_data(self.line2),
+            self.order_line_to_data(self.line3),
+            self.order_line_to_data(self.line4),
+        ]
+        self.DespatchAdviceImport.process_data(data)
+
+        self.assertEqual(len(self.purchase_order.picking_ids), 1)
+        picking = self.purchase_order.picking_ids
+        self.assertEqual(picking.state, "assigned")
+        move_ids = picking.move_ids
+        self.assertTrue(move_ids)
+        self.assertTrue(all(state == "assigned" for state in move_ids.mapped("state")))
+        self.assertFalse(any(move_ids.mapped("picked")))

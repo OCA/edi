@@ -267,7 +267,8 @@ class DespatchAdviceImport(models.TransientModel):
                 self._process_rejected(stock_moves, parsed_order_document)
             else:
                 self._process_conditional(stock_moves, parsed_order_document, line_info)
-        self._process_picking_done(lines[0].move_ids[0])
+        if self.env.context.get("despatch_advice_import__picking_validation"):
+            self._process_picking_done(lines[0].move_ids[0])
 
     def _process_picking_done(self, move: models.Model):
         """Validate the receipt once all line-level changes are applied.
@@ -336,9 +337,10 @@ class DespatchAdviceImport(models.TransientModel):
         )
         stock_moves._action_confirm()
         stock_moves._action_assign()
-        for move in stock_moves:
-            move._set_quantity_done(forced_qty or move.product_uom_qty)
-            move.picked = True
+        if self.env.context.get("despatch_advice_import__picking_validation"):
+            for move in stock_moves:
+                move._set_quantity_done(forced_qty or move.product_uom_qty)
+                move.picked = True
 
     def _split_move(self, move: models.Model, qty_to_split):
         """Split a move and return the newly created split-off moves.
@@ -408,16 +410,18 @@ class DespatchAdviceImport(models.TransientModel):
         for move in moves:
             if move.product_uom.compare(qty, move.product_uom_qty) >= 0:
                 # This move is fully confirmed for the current delivery.
-                move._set_quantity_done(move.product_uom_qty)
-                move.picked = True
+                if self.env.context.get("despatch_advice_import__picking_validation"):
+                    move._set_quantity_done(move.product_uom_qty)
+                    move.picked = True
                 qty -= move.product_uom_qty
                 continue
             if qty and move.product_uom.compare(qty, move.product_uom_qty) < 0:
                 # Only part of this move is delivered now, so we split the
                 # remaining quantity into a new move for later handling.
                 split_moves = self._split_move(move, move.product_uom_qty - qty)
-                move._set_quantity_done(move.product_uom_qty)
-                move.picked = True
+                if self.env.context.get("despatch_advice_import__picking_validation"):
+                    move._set_quantity_done(move.product_uom_qty)
+                    move.picked = True
                 move = split_moves[:1]
                 qty = 0.0
             if not backorder_qty:
