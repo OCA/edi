@@ -335,7 +335,13 @@ class DespatchAdviceImport(models.TransientModel):
         parsed_order_document["chatter_msg"].append(
             self.env._("Delivery confirmed by the supplier.")
         )
-        stock_moves._action_confirm()
+        # merge=False: stock.move._merge_moves() looks for merge candidates
+        # across the whole picking, not just stock_moves. Without this, an
+        # exact-match line processed after another line was split on the
+        # same picking (see _process_conditional/_split_move) would silently
+        # re-merge that split back into one move, discarding the announced
+        # backorder quantity.
+        stock_moves._action_confirm(merge=False)
         stock_moves._action_assign()
         if self.env.context.get("despatch_advice_import__picking_validation"):
             for move in stock_moves:
