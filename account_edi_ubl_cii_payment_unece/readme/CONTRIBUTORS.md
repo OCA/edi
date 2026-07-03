@@ -1,0 +1,3 @@
+- Jacques-Etienne Baudoux \<<je@bcim.be>\>
+- Sébastien Alix \<<sebastien.alix@akretion.com>\>
+- Souheil Bejaoui \<<souheil.bejaoui@acsone.eu>\>

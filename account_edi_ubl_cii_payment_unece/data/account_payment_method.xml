@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Akretion (https://www.akretion.com).
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <record id="direct_debit" model="account.payment.method">
+        <field name="name">Direct Debit to suppliers</field>
+        <field name="code">direct_debit</field>
+        <field name="payment_type">outbound</field>
+        <field name="unece_id" ref="account_payment_unece.payment_means_49" />
+    </record>
+
+    <record id="direct_debit_sepa_" model="account.payment.method">
+        <field name="name">SEPA Direct Debit to suppliers</field>
+        <field name="code">direct_debit_sepa</field>
+        <field name="payment_type">outbound</field>
+        <field name="unece_id" ref="account_payment_unece.payment_means_59" />
+    </record>
+</odoo>
