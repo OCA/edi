@@ -14,12 +14,18 @@ class TestPurchaseOrderResponseImportCommon(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.supplier = cls.env.ref("base.res_partner_12")
-        cls.supplier.vat = "BE0477472701"
+        cls.supplier = cls.env["res.partner"].create(
+            {
+                "name": "Order Response Supplier",
+                "supplier_rank": 1,
+                "vat": "BE0477472701",
+            }
+        )
         cls.env.company.partner_id.vat = "BE0421801233"
         cls.currency_euro = cls.env.ref("base.EUR")
         cls.currency_usd = cls.env.ref("base.USD")
         (cls.currency_euro + cls.currency_usd).action_unarchive()
+        cls.product_uom_unit = cls.env.ref("uom.product_uom_unit")
         cls.product_1 = cls.env["product.product"].create(
             {
                 "name": "Product 1",
@@ -55,7 +61,7 @@ class TestPurchaseOrderResponseImportCommon(BaseCommon):
                 "name": cls.product_2.name,
                 "date_planned": fields.Datetime.now(),
                 "product_qty": 10,
-                "product_uom": cls.env.ref("uom.product_uom_unit").id,
+                "product_uom_id": cls.product_uom_unit.id,
                 "price_unit": 15,
             }
         )
@@ -66,7 +72,7 @@ class TestPurchaseOrderResponseImportCommon(BaseCommon):
                 "name": cls.product_2.name,
                 "date_planned": fields.Datetime.now(),
                 "product_qty": 5,
-                "product_uom": cls.env.ref("uom.product_uom_unit").id,
+                "product_uom_id": cls.product_uom_unit.id,
                 "price_unit": 25,
             }
         )
@@ -86,5 +92,5 @@ class TestPurchaseOrderResponseImportCommon(BaseCommon):
             "qty": qty if qty is not None else order_line.product_qty,
             "note": note,
             "line_id": str(order_line.id),
-            "uom": {"unece_code": order_line.product_uom.unece_code},
+            "uom": {"unece_code": order_line.product_uom_id.unece_code},
         }

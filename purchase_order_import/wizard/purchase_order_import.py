@@ -10,7 +10,7 @@ from lxml import etree
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools import config, float_is_zero
+from odoo.tools import config
 
 logger = logging.getLogger(__name__)
 
@@ -123,9 +123,9 @@ class PurchaseOrderImport(models.TransientModel):
         else:
             raise UserError(
                 self.env._(
-                    "This file '%s' is not recognised as XML nor PDF file. "
+                    "This file '%(filename)s' is not recognised as XML nor PDF file. "
                     "Please check the file and it's extension.",
-                    quote_filename,
+                    filename=quote_filename,
                 )
             )
         logger.debug("Result of quotation parsing: %s", parsed_quote)
@@ -153,11 +153,12 @@ class PurchaseOrderImport(models.TransientModel):
         if incoterm and incoterm != order.incoterm_id:
             parsed_quote["chatter_msg"].append(
                 self.env._(
-                    "The incoterm has been updated from %s to %s upon import "
-                    "of the quotation file '%s'",
-                    order.incoterm_id.code,
-                    incoterm.code,
-                    self.quote_filename,
+                    "The incoterm has been updated from %(old_incoterm)s to "
+                    "%(new_incoterm)s upon import of the quotation file "
+                    "'%(filename)s'",
+                    old_incoterm=order.incoterm_id.code,
+                    new_incoterm=incoterm.code,
+                    filename=self.quote_filename,
                 )
             )
             vals["incoterm_id"] = incoterm.id
@@ -166,20 +167,18 @@ class PurchaseOrderImport(models.TransientModel):
     def update_order_lines(self, parsed_quote, order):
         polo = self.env["purchase.order.line"]
         chatter = parsed_quote["chatter_msg"]
-        dpo = self.env["decimal.precision"]
         bdio = self.env["business.document.import"]
-        qty_prec = dpo.precision_get("Product Unit of Measure")
         existing_lines = []
         for oline in order.order_line:
             price_unit = 0.0
-            if not float_is_zero(oline.product_qty, precision_digits=qty_prec):
+            if not oline.product_uom_id.is_zero(oline.product_qty):
                 price_unit = oline.price_subtotal / float(oline.product_qty)
             existing_lines.append(
                 {
                     "product": oline.product_id,
                     "name": oline.name,
                     "qty": oline.product_qty,
-                    "uom": oline.product_uom,
+                    "uom": oline.product_uom_id,
                     "price_unit": price_unit,
                     "line": oline,
                 }
@@ -199,11 +198,12 @@ class PurchaseOrderImport(models.TransientModel):
                 chatter.append(
                     self.env._(
                         "The unit price has been updated on the RFQ line with "
-                        "product '%s' from %s to %s %s.",
-                        oline.product_id.display_name,
-                        cdict["price_unit"][0],
-                        cdict["price_unit"][1],
-                        order.currency_id.name,
+                        "product '%(product)s' from %(old_price)s to "
+                        "%(new_price)s %(currency)s.",
+                        product=oline.product_id.display_name,
+                        old_price=cdict["price_unit"][0],
+                        new_price=cdict["price_unit"][1],
+                        currency=order.currency_id.name,
                     )
                 )
                 write_vals["price_unit"] = cdict["price_unit"][1]  # TODO
@@ -211,11 +211,12 @@ class PurchaseOrderImport(models.TransientModel):
                 chatter.append(
                     self.env._(
                         "The quantity has been updated on the RFQ line with "
-                        "product '%s' from %s to %s %s.",
-                        oline.product_id.display_name,
-                        cdict["qty"][0],
-                        cdict["qty"][1],
-                        oline.product_uom.name,
+                        "product '%(product)s' from %(old_qty)s to "
+                        "%(new_qty)s %(uom)s.",
+                        product=oline.product_id.display_name,
+                        old_qty=cdict["qty"][0],
+                        new_qty=cdict["qty"][1],
+                        uom=oline.product_uom_id.name,
                     )
                 )
                 write_vals["product_qty"] = cdict["qty"][1]
@@ -223,14 +224,15 @@ class PurchaseOrderImport(models.TransientModel):
                 oline.write(write_vals)
         if compare_res["to_remove"]:  # we don't delete the lines, only warn
             warn_label = [
-                f"{ln.product_qty} {ln.product_uom.name} x {ln.product_id.name}"
+                f"{ln.product_qty} {ln.product_uom_id.name} x {ln.product_id.name}"
                 for ln in compare_res["to_remove"]
             ]
             chatter.append(
                 self.env._(
-                    "%d order line(s) are not in the imported quotation: %s",
-                    len(compare_res["to_remove"]),
-                    ", ".join(warn_label),
+                    "%(line_count)d order line(s) are not in the imported "
+                    "quotation: %(lines)s",
+                    line_count=len(compare_res["to_remove"]),
+                    lines=", ".join(warn_label),
                 )
             )
         if compare_res["to_add"]:
@@ -243,14 +245,14 @@ class PurchaseOrderImport(models.TransientModel):
                 new_line = polo.create(line_vals)
                 to_create_label.append(
                     f"{new_line.product_qty}"
-                    f" {new_line.product_uom.name}"
+                    f" {new_line.product_uom_id.name}"
                     f" x {new_line.name}"
                 )
             chatter.append(
                 self.env._(
-                    "%d new order line(s) created: %s",
-                    len(compare_res["to_add"]),
-                    ", ".join(to_create_label),
+                    "%(line_count)d new order line(s) created: %(lines)s",
+                    line_count=len(compare_res["to_add"]),
+                    lines=", ".join(to_create_label),
                 )
             )
         return True
@@ -260,6 +262,8 @@ class PurchaseOrderImport(models.TransientModel):
         return {
             "product_id": product.id,
             "price_unit": import_line["price_unit"],
+            "product_qty": import_line.get("qty") or 1.0,
+            "product_uom_id": uom.id,
         }
 
     def update_rfq_button(self):
@@ -280,19 +284,19 @@ class PurchaseOrderImport(models.TransientModel):
         if partner.commercial_partner_id != order.partner_id.commercial_partner_id:
             raise UserError(
                 self.env._(
-                    "The supplier of the imported quotation (%s) is different "
-                    "from the supplier of the RFQ (%s).",
-                    partner.commercial_partner_id.name,
-                    order.partner_id.commercial_partner_id.name,
+                    "The supplier of the imported quotation (%(supplier)s) is "
+                    "different from the supplier of the RFQ (%(order_supplier)s).",
+                    supplier=partner.commercial_partner_id.name,
+                    order_supplier=order.partner_id.commercial_partner_id.name,
                 )
             )
         if currency != order.currency_id:
             raise UserError(
                 self.env._(
-                    "The currency of the imported quotation (%s) is different "
-                    "from the currency of the RFQ (%s)",
-                    currency.name,
-                    order.currency_id.name,
+                    "The currency of the imported quotation (%(currency)s) is "
+                    "different from the currency of the RFQ (%(order_currency)s)",
+                    currency=currency.name,
+                    order_currency=order.currency_id.name,
                 )
             )
         vals = self._prepare_update_order_vals(parsed_quote, order)
@@ -310,8 +314,8 @@ class PurchaseOrderImport(models.TransientModel):
         order.message_post(
             body=self.env._(
                 "This RFQ has been updated automatically via the import of "
-                "quotation file %s",
-                self.quote_filename,
+                "quotation file %(filename)s",
+                filename=self.quote_filename,
             )
         )
         return True

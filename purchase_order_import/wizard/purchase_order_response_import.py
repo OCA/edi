@@ -130,9 +130,9 @@ class PurchaseOrderResponseImport(models.TransientModel):
         else:
             raise UserError(
                 self.env._(
-                    "This file '%s' is not recognised as XML nor PDF file. "
+                    "This file '%(filename)s' is not recognised as XML nor PDF file. "
                     "Please check the file and it's extension.",
-                    filename,
+                    filename=filename,
                 )
             )
         logger.debug("Result of OrderResponse parsing: ", parsed_order_document)
@@ -168,7 +168,10 @@ class PurchaseOrderResponseImport(models.TransientModel):
             self.env["business.document.import"].user_error_wrap(
                 method="process_data",
                 data_dict=parsed_order_document,
-                error_msg=self.env._("No purchase order found for name %s.", po_name),
+                error_msg=self.env._(
+                    "No purchase order found for name %(po_name)s.",
+                    po_name=po_name,
+                ),
                 chatter_msg=[],
                 raise_exception=True,
             )
@@ -187,11 +190,11 @@ class PurchaseOrderResponseImport(models.TransientModel):
                 method="process_data",
                 data_dict=parsed_order_document,
                 error_msg=self.env._(
-                    "The supplier of the imported OrderResponse (%s) "
+                    "The supplier of the imported OrderResponse (%(supplier)s) "
                     "is different from the supplier of the purchase order "
-                    "(%s).",
-                    partner.commercial_partner_id.name,
-                    order.partner_id.commercial_partner_id.name,
+                    "(%(order_supplier)s).",
+                    supplier=partner.commercial_partner_id.name,
+                    order_supplier=order.partner_id.commercial_partner_id.name,
                 ),
                 chatter_msg=[],
                 raise_exception=True,
@@ -201,11 +204,11 @@ class PurchaseOrderResponseImport(models.TransientModel):
                 method="process_data",
                 data_dict=parsed_order_document,
                 error_msg=self.env._(
-                    "The currency of the imported OrderResponse (%s) "
+                    "The currency of the imported OrderResponse (%(currency)s) "
                     "is different from the currency of the purchase order "
-                    "(%s).",
-                    currency.name,
-                    order.currency_id.name,
+                    "(%(order_currency)s).",
+                    currency=currency.name,
+                    order_currency=order.currency_id.name,
                 ),
                 chatter_msg=[],
                 raise_exception=True,
@@ -224,7 +227,7 @@ class PurchaseOrderResponseImport(models.TransientModel):
             bdio.user_error_wrap(
                 method="process_data",
                 data_dict=parsed_order_document,
-                error_msg=self.env._("Unknown status '%s'.", status),
+                error_msg=self.env._("Unknown status '%(status)s'.", status=status),
                 chatter_msg=[],
                 raise_exception=True,
             )
@@ -238,8 +241,8 @@ class PurchaseOrderResponseImport(models.TransientModel):
         order.message_post(
             body=self.env._(
                 "This purchase order has been updated automatically"
-                " via the import of OrderResponse file %s.",
-                self.filename,
+                " via the import of OrderResponse file %(filename)s.",
+                filename=self.filename,
             )
         )
         return order.get_formview_action()
@@ -288,10 +291,10 @@ class PurchaseOrderResponseImport(models.TransientModel):
                     "Unable to conditionally confirm the purchase order. \n"
                     "Line IDS into the parsed document differs from the "
                     "expected list of order line ids: \n "
-                    "received: %s\n"
-                    "expected: %s\n",
-                    [ln["line_id"] for ln in lines],
-                    purchase_order.order_line.ids,
+                    "received: %(received_line_ids)s\n"
+                    "expected: %(expected_line_ids)s\n",
+                    received_line_ids=[ln["line_id"] for ln in lines],
+                    expected_line_ids=purchase_order.order_line.ids,
                 ),
                 chatter_msg=chatter,
                 raise_exception=True,
@@ -311,10 +314,10 @@ class PurchaseOrderResponseImport(models.TransientModel):
                     data_dict=parsed_order_document,
                     error_msg=self.env._(
                         "More than one move found for PO line.\n"
-                        "Move IDs: %s\n"
-                        "Line Info: %s",
-                        move.ids,
-                        line_info,
+                        "Move IDs: %(move_ids)s\n"
+                        "Line Info: %(line_info)s",
+                        move_ids=move.ids,
+                        line_info=line_info,
                     ),
                     chatter_msg=chatter,
                     raise_exception=True,
@@ -338,8 +341,8 @@ class PurchaseOrderResponseImport(models.TransientModel):
                     if backorder_qty:
                         note = note + "\n" if note else ""
                         note += self.env._(
-                            "%s items should be delivered into a next delivery.",
-                            backorder_qty,
+                            "%(qty)s items should be delivered into a next delivery.",
+                            qty=backorder_qty,
                         )
                         move.description_picking = note
 
@@ -407,7 +410,7 @@ class PurchaseOrderResponseImport(models.TransientModel):
                 self.env._(
                     "Some operations have already started! "
                     "Please validate or reset operations on "
-                    "picking %s to ensure delivery slip to be computed.",
-                    picking.name,
+                    "picking %(picking)s to ensure delivery slip to be computed.",
+                    picking=picking.name,
                 )
             )
