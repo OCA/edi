@@ -22,8 +22,11 @@ class AccountMove(models.Model):
 
         def format_invoice_list(invoices):
             return "\n- " + "\n- ".join(
-                self.env._("%(name)s (Invoice Record ID: %(id)s)")
-                % {"name": inv.name or self.env._("Draft"), "id": inv.id}
+                self.env._(
+                    "%(name)s (Invoice Record ID: %(id)s)",
+                    name=inv.name or self.env._("Draft"),
+                    id=inv.id,
+                )
                 for inv in invoices
             )
 
@@ -33,8 +36,10 @@ class AccountMove(models.Model):
         not_posted_invoices = self.filtered(lambda inv: inv.state != "posted")
         if not_posted_invoices:
             errors.append(
-                self.env._("Invoices not in 'Posted' state: %s")
-                % format_invoice_list(not_posted_invoices)
+                self.env._(
+                    "Invoices not in 'Posted' state: %(invoices)s",
+                    invoices=format_invoice_list(not_posted_invoices),
+                )
             )
 
         # Check for unsupported invoice types
@@ -45,9 +50,9 @@ class AccountMove(models.Model):
             errors.append(
                 self.env._(
                     "Invoices with unsupported type "
-                    "(only Customer Invoice or Refund are allowed): %s"
+                    "(only Customer Invoice or Refund are allowed): %(invoices)s",
+                    invoices=format_invoice_list(unsupported_type_invoices),
                 )
-                % format_invoice_list(unsupported_type_invoices)
             )
 
         if errors:
@@ -109,8 +114,11 @@ class AccountMove(models.Model):
         res = requests.post(url, headers=headers, files=file_data, timeout=timeout)
         if res.status_code != 200:
             raise UserError(
-                self.env._("HTTP error %s sending invoice to %s")
-                % (res.status_code, self.transmit_method_id.name)
+                self.env._(
+                    "HTTP error %(status_code)s sending invoice to %(transmit_method)s",
+                    status_code=res.status_code,
+                    transmit_method=self.transmit_method_id.name,
+                )
             )
         self.invoice_exported = self.invoice_export_confirmed = True
         return res.text
@@ -144,8 +152,9 @@ class AccountMove(models.Model):
             )
         error_log = values.get("error_detail")
         if not error_log:
-            error_log = self.env._("An error of type {} occured.").format(
-                values.get("error_type")
+            error_log = self.env._(
+                "An error of type %(error_type)s occured.",
+                error_type=values.get("error_type"),
             )
         activity.note += f"<div class='mt16'><p>{error_log}</p></div>"
 
@@ -156,7 +165,8 @@ class AccountMove(models.Model):
             feedback="It worked on a later try",
         )
         self.message_post(
-            body=self.env._("Invoice successfuly sent to {}").format(
-                self.transmit_method_id.name
+            body=self.env._(
+                "Invoice successfuly sent to %(transmit_method)s",
+                transmit_method=self.transmit_method_id.name,
             )
         )
