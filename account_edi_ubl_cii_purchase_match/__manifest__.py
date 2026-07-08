@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "author": "ACSONE SA/NV,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
-    "depends": ["account_edi_ubl_cii", "purchase"],
+    "depends": ["account_edi_ubl_cii", "purchase", "web_notify"],
     "data": [
         "security/account_move_line_select_purchase_line_wizard.xml",
         "wizards/account_move_line_select_purchase_line_wizard.xml",
