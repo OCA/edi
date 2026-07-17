@@ -417,11 +417,10 @@ class BaseUbl(models.AbstractModel):
         prec = self.env['decimal.precision'].precision_get('Account')
         prec = prec if prec <= 2 else 2
         tax_subtotal = etree.SubElement(parent_node, ns['cac'] + 'TaxSubtotal')
-        if not float_is_zero(taxable_amount, precision_digits=prec):
-            taxable_amount_node = etree.SubElement(
-                tax_subtotal, ns['cbc'] + 'TaxableAmount',
-                currencyID=currency_code)
-            taxable_amount_node.text = '%0.*f' % (prec, taxable_amount)
+        taxable_amount_node = etree.SubElement(
+            tax_subtotal, ns['cbc'] + 'TaxableAmount',
+            currencyID=currency_code)
+        taxable_amount_node.text = '%0.*f' % (prec, taxable_amount)
         tax_amount_node = etree.SubElement(
             tax_subtotal, ns['cbc'] + 'TaxAmount', currencyID=currency_code)
         tax_amount_node.text = '%0.*f' % (prec, tax_amount)
