@@ -217,7 +217,5 @@ class TestInvoice2dataDBTemplates(TransactionCase):
             return_value=[],
         ):
             collected = Wizard._invoice2data_collect_templates()
-        names = [
-            tpl["template_name"] for tpl in collected if "template_name" in tpl
-        ]
+        names = [tpl["template_name"] for tpl in collected if "template_name" in tpl]
         self.assertIn("acme.purchase.wizardtest", names)

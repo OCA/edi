@@ -242,9 +242,10 @@ class Invoice2dataTemplate(models.Model):
                         "regex": spec.get("regex", ""),
                     }
                 )
-                if isinstance(spec.get("replace"), (list, tuple)) and len(
-                    spec["replace"]
-                ) >= 2:
+                if (
+                    isinstance(spec.get("replace"), (list, tuple))
+                    and len(spec["replace"]) >= 2
+                ):
                     row_vals["replace_pattern"] = spec["replace"][0]
                     row_vals["replace_repl"] = spec["replace"][1]
             rows.append((0, 0, row_vals))

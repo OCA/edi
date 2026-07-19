@@ -15,8 +15,14 @@ from odoo.exceptions import ValidationError
 logger = logging.getLogger(__name__)
 
 
-def _field_selection():
-    """Best-effort selection list from the lib's canonical schema."""
+def _field_selection(self):
+    """Best-effort selection list from the lib's canonical schema.
+
+    Odoo invokes selection callables with ``self`` bound, so the parameter
+    is required even though we do not use it -- adding it stops the
+    ``TypeError: _field_selection() takes 0 positional arguments but 1 was
+    given`` raised at load time.
+    """
     try:
         from invoice2data.extract import schema
     except ImportError:

@@ -1,2 +1,1 @@
-from . import invoice2data_template
-from . import invoice2data_template_field
+from . import invoice2data_template, invoice2data_template_field

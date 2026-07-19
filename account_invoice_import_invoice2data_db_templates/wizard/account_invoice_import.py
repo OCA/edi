@@ -80,9 +80,7 @@ class AccountInvoiceImport(models.TransientModel):
         )
         if not exclude_built_in:
             templates += read_templates()
-        templates += self.env["invoice2data.template"].get_templates(
-            "purchase_invoice"
-        )
+        templates += self.env["invoice2data.template"].get_templates("purchase_invoice")
         return templates
 
     def _invoice2data_try_tesseract(self, path, templates):
