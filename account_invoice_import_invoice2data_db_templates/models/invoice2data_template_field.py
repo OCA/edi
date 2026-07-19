@@ -93,13 +93,19 @@ class Invoice2dataTemplateField(models.Model):
         for line in self:
             if line.parser in {"regex", "lines"} and not line.regex:
                 raise ValidationError(
-                    _("Field '%s' uses parser '%s' but has no regex set.")
-                    % (line.name, line.parser)
+                    _(
+                        "Field '%(field)s' uses parser '%(parser)s' but has "
+                        "no regex set."
+                    )
+                    % {"field": line.name, "parser": line.parser}
                 )
             if line.parser == "static" and not line.static_value:
                 raise ValidationError(
-                    _("Field '%s' uses parser 'static' but has no value set.")
-                    % line.name
+                    _(
+                        "Field '%(field)s' uses parser 'static' but has no "
+                        "value set."
+                    )
+                    % {"field": line.name}
                 )
 
     def _to_field_dict(self):
