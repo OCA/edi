@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <record id="group_invoice2data_template_manager" model="res.groups">
+        <field name="name">Manage invoice2data templates</field>
+        <field name="category_id" ref="base.module_category_accounting_accounting" />
+        <field name="implied_ids" eval="[(4, ref('account.group_account_invoice'))]" />
+        <field
+            name="comment"
+        >Author and edit DB-stored invoice2data templates used by the invoice import wizard.</field>
+    </record>
+</odoo>

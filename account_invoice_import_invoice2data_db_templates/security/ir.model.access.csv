@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_invoice2data_template_user,invoice2data.template user,model_invoice2data_template,account.group_account_invoice,1,0,0,0
+access_invoice2data_template_manager,invoice2data.template manager,model_invoice2data_template,group_invoice2data_template_manager,1,1,1,1
+access_invoice2data_template_field_user,invoice2data.template.field user,model_invoice2data_template_field,account.group_account_invoice,1,0,0,0
+access_invoice2data_template_field_manager,invoice2data.template.field manager,model_invoice2data_template_field,group_invoice2data_template_manager,1,1,1,1
