@@ -96,10 +96,7 @@ class Invoice2dataTemplateField(models.Model):
                 )
             if line.parser == "static" and not line.static_value:
                 raise ValidationError(
-                    _(
-                        "Field '%(field)s' uses parser 'static' but has no "
-                        "value set."
-                    )
+                    _("Field '%(field)s' uses parser 'static' but has no " "value set.")
                     % {"field": line.name}
                 )
 

@@ -9,11 +9,13 @@ from odoo.tests.common import TransactionCase
 
 
 class TestInvoice2dataDBTemplates(TransactionCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.Template = cls.env["invoice2data.template"]
-        cls.Field = cls.env["invoice2data.template.field"]
+    def setUp(self):
+        # Odoo 14's ``TransactionCase.setUpClass`` does not yet set ``cls.env``
+        # -- only ``SavepointCase`` does. Bind the recordsets in ``setUp``
+        # (instance-level) so the tests run on 14.0.
+        super().setUp()
+        self.Template = self.env["invoice2data.template"]
+        self.Field = self.env["invoice2data.template.field"]
 
     # === JSON authoring path ===
 
@@ -201,7 +203,5 @@ class TestInvoice2dataDBTemplates(TransactionCase):
             return_value=[],
         ):
             collected = Wizard._invoice2data_collect_templates()
-        names = [
-            tpl["template_name"] for tpl in collected if "template_name" in tpl
-        ]
+        names = [tpl["template_name"] for tpl in collected if "template_name" in tpl]
         self.assertIn("acme.purchase.wizardtest", names)
