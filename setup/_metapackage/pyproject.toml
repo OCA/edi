@@ -1,12 +1,13 @@
 [project]
 name = "odoo-addons-oca-edi"
-version = "19.0.20260723.0"
+version = "19.0.20260723.1"
 dependencies = [
     "odoo-addon-base_business_document_import==19.0.*",
     "odoo-addon-base_edi==19.0.*",
     "odoo-addon-base_ubl==19.0.*",
     "odoo-addon-base_ubl_generate==19.0.*",
     "odoo-addon-base_ubl_parse==19.0.*",
+    "odoo-addon-despatch_advice_import==19.0.*",
     "odoo-addon-partner_identification_import==19.0.*",
     "odoo-addon-purchase_order_import==19.0.*",
     "odoo-addon-purchase_order_ubl==19.0.*",
