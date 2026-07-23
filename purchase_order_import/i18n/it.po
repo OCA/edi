@@ -79,15 +79,16 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid ""
-"If it is a PDF file, Odoo will try to find an XML file in the attachments of"
-" the PDF file and then use this XML file."
+"If it is a PDF file, Odoo will try to find an XML file in the attachments of "
+"the PDF file and then use this XML file."
 msgstr ""
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid ""
-"If it is an XML file, Odoo will parse it if the module that adds support for this XML format is installed.\n"
+"If it is an XML file, Odoo will parse it if the module that adds support for "
+"this XML format is installed.\n"
 "                                For the"
 msgstr ""
 
@@ -143,6 +144,18 @@ msgstr ""
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "Missing document filename"
+msgstr ""
+
+#. module: purchase_order_import
+#. odoo-python
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
+msgid "Missing quote file"
+msgstr ""
+
+#. module: purchase_order_import
+#. odoo-python
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
+msgid "Missing quote filename"
 msgstr ""
 
 #. module: purchase_order_import
@@ -223,8 +236,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
-"Some operations have already started! Please validate or reset operations on"
-" picking %s to ensure delivery slip to be computed."
+"Some operations have already started! Please validate or reset operations on "
+"picking %s to ensure delivery slip to be computed."
 msgstr ""
 
 #. module: purchase_order_import
@@ -260,8 +273,10 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid ""
 "The order line is accepted with change: the picking operation is modified\n"
-"                                (split to stock move). If a backorder qty is provided, a backorder is created.\n"
-"                                Otherwise, the stock move for the missing quantities is cancelled."
+"                                (split to stock move). If a backorder qty is "
+"provided, a backorder is created.\n"
+"                                Otherwise, the stock move for the missing "
+"quantities is cancelled."
 msgstr ""
 
 #. module: purchase_order_import
@@ -297,8 +312,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid ""
-"The unit price has been updated on the RFQ line with product '%s' from %s to"
-" %s %s."
+"The unit price has been updated on the RFQ line with product '%s' from %s to "
+"%s %s."
 msgstr ""
 
 #. module: purchase_order_import
@@ -359,16 +374,16 @@ msgstr ""
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
-"This type of XML Order Document is not supported. Did you install the module"
-" to support this XML format?"
+"This type of XML Order Document is not supported. Did you install the module "
+"to support this XML format?"
 msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
-"This type of XML Order Response is not supported. Did you install the module"
-" to support this XML format?"
+"This type of XML Order Response is not supported. Did you install the module "
+"to support this XML format?"
 msgstr ""
 
 #. module: purchase_order_import
@@ -389,7 +404,8 @@ msgstr ""
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
 "Unable to conditionally confirm the purchase order. \n"
-"Line IDS into the parsed document differs from the expected list of order line ids: \n"
+"Line IDS into the parsed document differs from the expected list of order "
+"line ids: \n"
 " received: %s\n"
 "expected: %s\n"
 msgstr ""
@@ -440,7 +456,8 @@ msgstr ""
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 msgid ""
-"Upload below the quotation that you received from your supplier for this RFQ as XML or PDF file.\n"
+"Upload below the quotation that you received from your supplier for this RFQ "
+"as XML or PDF file.\n"
 "                            When you click on the Update RFQ button:"
 msgstr ""
 
@@ -464,27 +481,32 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 msgid ""
 "for lines that are present both in the imported quotation and in the RFQ,\n"
-"                                Odoo will update the unit prices (and also the quantities, depending on the chosen option)"
+"                                Odoo will update the unit prices (and also "
+"the quantities, depending on the chosen option)"
 msgstr ""
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid ""
-"for lines that are present both in the imported quotation and in the RFQ, Odoo will update\n"
-"                                the unit prices (and also the quantities, depending on the chosen option)"
+"for lines that are present both in the imported quotation and in the RFQ, "
+"Odoo will update\n"
+"                                the unit prices (and also the quantities, "
+"depending on the chosen option)"
 msgstr ""
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 msgid ""
 "for the lines that are present only in the RFQ,\n"
-"                                Odoo will put a warning message in the chatter (it won't delete them automatically)"
+"                                Odoo will put a warning message in the "
+"chatter (it won't delete them automatically)"
 msgstr ""
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 msgid ""
-"for the lines that are present only in the quotation (shipping costs for example),\n"
+"for the lines that are present only in the quotation (shipping costs for "
+"example),\n"
 "                                Odoo will add them to the RFQ"
 msgstr ""
 
@@ -492,14 +514,16 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid ""
 "format (UBL),\n"
-"                                you should install the module <em>order_response_import_ubl</em>."
+"                                you should install the module "
+"<em>order_response_import_ubl</em>."
 msgstr ""
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 msgid ""
 "format (UBL),\n"
-"                                you should install the module <em>purchase_order_import_ubl</em>."
+"                                you should install the module "
+"<em>purchase_order_import_ubl</em>."
 msgstr ""
 
 #. module: purchase_order_import
@@ -510,8 +534,10 @@ msgstr ""
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid ""
-"if the status code is Conditionally accepted: confirm the PO and create the picking and\n"
-"                                update the picking operations according to the amendments specified into the document"
+"if the status code is Conditionally accepted: confirm the PO and create the "
+"picking and\n"
+"                                update the picking operations according to "
+"the amendments specified into the document"
 msgstr ""
 
 #. module: purchase_order_import
