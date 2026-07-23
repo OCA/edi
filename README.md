@@ -46,7 +46,7 @@ addon | version | maintainers | summary
 [base_ubl_generate](base_ubl_generate/) | 18.0.1.0.1 |  | Base module to generate UBL files (Universal Business Language)
 [base_ubl_parse](base_ubl_parse/) | 18.0.1.1.0 |  | Base module to parse UBL files (Universal Business Language)
 [partner_identification_import](partner_identification_import/) | 18.0.1.0.1 |  | Provides partner matching on extra ID
-[purchase_order_import](purchase_order_import/) | 18.0.1.0.0 |  | Update RFQ via the import of quotations from suppliers
+[purchase_order_import](purchase_order_import/) | 18.0.1.1.0 |  | Update RFQ via the import of quotations from suppliers
 [purchase_order_ubl](purchase_order_ubl/) | 18.0.1.0.0 |  | Embed UBL XML file inside the PDF purchase order
 [sale_order_customer_free_ref](sale_order_customer_free_ref/) | 18.0.1.0.0 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
 [sale_order_import](sale_order_import/) | 18.0.1.2.0 |  | Import RFQ or sale orders from files
