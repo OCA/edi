@@ -2,6 +2,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
+from typing import Any
+
+from lxml import etree
 
 from odoo import api, models
 from odoo.tools import float_is_zero
@@ -14,21 +17,18 @@ class PurchaseOrderImport(models.TransientModel):
     _inherit = ["purchase.order.import", "base.ubl"]
 
     @api.model
-    def parse_xml_quote(self, xml_root):
+    def parse_xml_quote(self, xml_root: etree._Element) -> dict[str, Any]:
         start_tag = "{urn:oasis:names:specification:ubl:schema:xsd:"
         if xml_root.tag == start_tag + "Quotation-2}Quotation":
             return self.parse_ubl_quote(xml_root)
-        else:
-            return super().parse_xml_quote(xml_root)
+        return super().parse_xml_quote(xml_root)
 
     @api.model
-    def parse_ubl_quote_line(self, line, ns):
+    def parse_ubl_quote_line(self, line: etree._Element, ns: dict) -> dict[str, Any]:
         qty_prec = self.env["decimal.precision"].precision_get(
             "Product Unit of Measure"
         )
         line_item = line.xpath("cac:LineItem", namespaces=ns)[0]
-        # line_id_xpath = line_item.xpath('cbc:ID', namespaces=ns)
-        # line_id = line_id_xpath[0].text
         qty_xpath = line_item.xpath("cbc:Quantity", namespaces=ns)
         qty = float(qty_xpath[0].text)
         price_unit = 0.0
@@ -43,17 +43,16 @@ class PurchaseOrderImport(models.TransientModel):
             price_xpath = line_item.xpath("cac:Price/cbc:PriceAmount", namespaces=ns)
             if price_xpath:
                 price_unit = float(price_xpath[0].text)
-        res_line = {
+        return {
             "product": self.ubl_parse_product(line_item, ns),
             "qty": qty,
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
             "price_unit": price_unit,
         }
-        return res_line
 
     @api.model
-    def parse_ubl_quote(self, xml_root):
-        ns = xml_root.nsmap
+    def parse_ubl_quote(self, xml_root: etree._Element) -> dict[str, Any]:
+        ns = dict(xml_root.nsmap)
         main_xmlns = ns.pop(None)
         ns["main"] = main_xmlns
         date_xpath = xml_root.xpath("/main:Quotation/cbc:IssueDate", namespaces=ns)

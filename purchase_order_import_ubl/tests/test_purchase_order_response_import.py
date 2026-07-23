@@ -10,20 +10,24 @@ from odoo.addons.purchase_order_import.wizard.purchase_order_response_import imp
     LINE_STATUS_ACCEPTED,
     ORDER_RESPONSE_STATUS_ACK,
 )
-from odoo.addons.purchase_order_import_ubl.wizard.purchase_order_response_import import (  # noqa: E501
-    _ORDER_LINE_STATUS_TO_STATUS,
-    _ORDER_RESPONSE_CODE_TO_STATUS,
-)
-
-_STATUS_TO_RESPONSE_CODE = {p[1]: p[0] for p in _ORDER_RESPONSE_CODE_TO_STATUS.items()}
-
-_STATUS_TO_LINE_STATUS = {p[1]: p[0] for p in _ORDER_LINE_STATUS_TO_STATUS.items()}
 
 
 class TestPurchaseOrderResponseImport(TestPurchaseOrderResponseImportCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.status_to_response_code = {
+            status: code
+            for code, status in (
+                cls.OrderResponseImport._order_response_code_to_status.items()
+            )
+        }
+        cls.status_to_line_status = {
+            status: code
+            for code, status in (
+                cls.OrderResponseImport._order_line_status_to_status.items()
+            )
+        }
         with file_open(
             "purchase_order_import_ubl/tests/samples/purchase_order_response_tmpl.xml",
             "rb",
@@ -41,16 +45,16 @@ class TestPurchaseOrderResponseImport(TestPurchaseOrderResponseImportCommon):
             All the fields are filled into the internal data structure.
         """
         xml_content = self.order_response_xml.format(
-            order_response_code=_STATUS_TO_RESPONSE_CODE[ORDER_RESPONSE_STATUS_ACK],
+            order_response_code=self.status_to_response_code[ORDER_RESPONSE_STATUS_ACK],
             order_id=self.purchase_order.name,
             line_1_id=self.line1.id,
             line_1_qty=self.line1.product_qty,
             line_1_backorder_qty=0,
-            line_1_status_code=_STATUS_TO_LINE_STATUS[LINE_STATUS_ACCEPTED],
+            line_1_status_code=self.status_to_line_status[LINE_STATUS_ACCEPTED],
             line_2_id=self.line2.id,
             line_2_qty=self.line2.product_qty,
             line_2_backorder_qty=0,
-            line_2_status_code=_STATUS_TO_LINE_STATUS[LINE_STATUS_ACCEPTED],
+            line_2_status_code=self.status_to_line_status[LINE_STATUS_ACCEPTED],
         ).encode()
         result = self.OrderResponseImport.parse_order_response(xml_content, "test.xml")
         attachments = result.pop("attachments")

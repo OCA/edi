@@ -2,75 +2,71 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
+from typing import Any
 
-from odoo import _, api, models
+from lxml import etree
+
+from odoo import api, models
 from odoo.exceptions import UserError
 
-from odoo.addons.purchase_order_import.wizard.purchase_order_response_import import (
-    LINE_STATUS_ACCEPTED,
-    LINE_STATUS_AMEND,
-    LINE_STATUS_REJECTED,
-    ORDER_RESPONSE_STATUS_ACCEPTED,
-    ORDER_RESPONSE_STATUS_ACK,
-    ORDER_RESPONSE_STATUS_CONDITIONAL,
-    ORDER_RESPONSE_STATUS_REJECTED,
-)
-
 logger = logging.getLogger(__name__)
-
-
-_ORDER_RESPONSE_CODE_TO_STATUS = {
-    "AB": ORDER_RESPONSE_STATUS_ACK,
-    "AP": ORDER_RESPONSE_STATUS_ACCEPTED,
-    "RE": ORDER_RESPONSE_STATUS_REJECTED,
-    "CA": ORDER_RESPONSE_STATUS_CONDITIONAL,
-}
-
-_ORDER_LINE_STATUS_TO_STATUS = {
-    "5": LINE_STATUS_ACCEPTED,
-    "7": LINE_STATUS_REJECTED,
-    "3": LINE_STATUS_AMEND,
-}
 
 
 class PurchaseOrderResponseImport(models.TransientModel):
     _name = "purchase.order.response.import"
     _inherit = ["purchase.order.response.import", "base.ubl"]
 
+    _order_response_code_to_status = {
+        "AB": "acknowledgement",
+        "AP": "accepted",
+        "RE": "rejected",
+        "CA": "conditionally_accepted",
+    }
+    _order_line_status_to_status = {
+        "5": "accepted",
+        "7": "rejected",
+        "3": "amend",
+    }
+
     @api.model
-    def parse_xml_order_document(self, xml_root):
+    def parse_xml_order_document(self, xml_root: etree._Element) -> dict[str, Any]:
         start_tag = "{urn:oasis:names:specification:ubl:schema:xsd:"
         if xml_root.tag == start_tag + "OrderResponse-2}OrderResponse":
             return self.parse_ubl_order_response(xml_root)
-        else:
-            return super().parse_xml_order_document(xml_root)
+        return super().parse_xml_order_document(xml_root)
 
     @api.model
-    def parse_note_path(self, note_xpath):
+    def parse_note_path(self, note_xpath: list[etree._Element]) -> str:
         return "\n".join([n.text for n in note_xpath or [] if n.text])
 
     @api.model
-    def parse_response_code(self, xml_root, ns):
+    def parse_response_code(self, xml_root: etree._Element, ns: dict) -> str:
         code_xpath = xml_root.xpath(
             "/main:OrderResponse/cbc:OrderResponseCode", namespaces=ns
         )
         code = code_xpath and len(code_xpath) and code_xpath[0].text
-        status = _ORDER_RESPONSE_CODE_TO_STATUS.get(code)
+        status = self._order_response_code_to_status.get(code)
         if not status:
-            raise UserError(_("Unknown response code found '%s'") % code)
+            raise UserError(
+                self.env._("Unknown response code found '%(code)s'", code=code)
+            )
         return status
 
     @api.model
-    def parse_line_status_code(self, line, ns):
+    def parse_line_status_code(self, line: etree._Element, ns: dict) -> str:
         code_xpath = line.xpath("cbc:LineStatusCode", namespaces=ns)
         code = code_xpath and len(code_xpath) and code_xpath[0].text
-        status = _ORDER_LINE_STATUS_TO_STATUS.get(code)
+        status = self._order_line_status_to_status.get(code)
         if not status:
-            raise UserError(_("Unsupported line status code found '%s'") % code)
+            raise UserError(
+                self.env._("Unsupported line status code found '%(code)s'", code=code)
+            )
         return status
 
     @api.model
-    def parse_ubl_order_response_line(self, line, ns):
+    def parse_ubl_order_response_line(
+        self, line: etree._Element, ns: dict
+    ) -> dict[str, Any]:
         line_item = line.xpath("cac:LineItem", namespaces=ns)[0]
         line_id_xpath = line_item.xpath("cbc:ID", namespaces=ns)
         qty_xpath = line_item.xpath("cbc:Quantity", namespaces=ns)
@@ -83,7 +79,7 @@ class PurchaseOrderResponseImport(models.TransientModel):
         if backorder_qty_xpath and len(backorder_qty_xpath):
             backorder_qty = float(backorder_qty_xpath[0].text)
 
-        res_line = {
+        return {
             "line_id": line_id_xpath[0].text,
             "qty": qty,
             "uom": {"unece_code": qty_xpath[0].attrib.get("unitCode")},
@@ -91,7 +87,6 @@ class PurchaseOrderResponseImport(models.TransientModel):
             "status": self.parse_line_status_code(line_item, ns),
             "backorder_qty": backorder_qty,
         }
-        return res_line
 
     # Format of parsed order response
     # {
@@ -117,8 +112,8 @@ class PurchaseOrderResponseImport(models.TransientModel):
     #                                 # in a next shipping
     #    }]
     @api.model
-    def parse_ubl_order_response(self, xml_root):
-        ns = xml_root.nsmap
+    def parse_ubl_order_response(self, xml_root: etree._Element) -> dict[str, Any]:
+        ns = dict(xml_root.nsmap)
         main_xmlns = ns.pop(None)
         ns["main"] = main_xmlns
         date_xpath = xml_root.xpath("/main:OrderResponse/cbc:IssueDate", namespaces=ns)
