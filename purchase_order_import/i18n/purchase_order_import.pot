@@ -4,10 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0+e\n"
+"Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 09:52+0000\n"
-"PO-Revision-Date: 2026-06-15 09:52+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,19 +16,20 @@ msgstr ""
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
-msgid "%d new order line(s) created: %s"
+msgid "%(line_count)d new order line(s) created: %(lines)s"
 msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
-msgid "%d order line(s) are not in the imported quotation: %s"
+msgid ""
+"%(line_count)d order line(s) are not in the imported quotation: %(lines)s"
 msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
-msgid "%s items should be delivered into a next delivery."
+msgid "%(qty)s items should be delivered into a next delivery."
 msgstr ""
 
 #. module: purchase_order_import
@@ -59,6 +58,7 @@ msgid ""
 msgstr ""
 
 #. module: purchase_order_import
+#: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order__display_name
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__display_name
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__display_name
 msgid "Display Name"
@@ -71,6 +71,7 @@ msgid "Filename"
 msgstr ""
 
 #. module: purchase_order_import
+#: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order__id
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__id
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__id
 msgid "ID"
@@ -148,11 +149,23 @@ msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
+msgid "Missing quote file"
+msgstr ""
+
+#. module: purchase_order_import
+#. odoo-python
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
+msgid "Missing quote filename"
+msgstr ""
+
+#. module: purchase_order_import
+#. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
 "More than one move found for PO line.\n"
-"Move IDs: %s\n"
-"Line Info: %s"
+"Move IDs: %(move_ids)s\n"
+"Line Info: %(line_info)s"
 msgstr ""
 
 #. module: purchase_order_import
@@ -164,7 +177,7 @@ msgstr ""
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
-msgid "No purchase order found for name %s."
+msgid "No purchase order found for name %(po_name)s."
 msgstr ""
 
 #. module: purchase_order_import
@@ -225,7 +238,7 @@ msgstr ""
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
 "Some operations have already started! Please validate or reset operations on"
-" picking %s to ensure delivery slip to be computed."
+" picking %(picking)s to ensure delivery slip to be computed."
 msgstr ""
 
 #. module: purchase_order_import
@@ -237,24 +250,24 @@ msgstr ""
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
-"The currency of the imported OrderResponse (%s) is different from the "
-"currency of the purchase order (%s)."
+"The currency of the imported OrderResponse (%(currency)s) is different from "
+"the currency of the purchase order (%(order_currency)s)."
 msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid ""
-"The currency of the imported quotation (%s) is different from the currency "
-"of the RFQ (%s)"
+"The currency of the imported quotation (%(currency)s) is different from the "
+"currency of the RFQ (%(order_currency)s)"
 msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid ""
-"The incoterm has been updated from %s to %s upon import of the quotation "
-"file '%s'"
+"The incoterm has been updated from %(old_incoterm)s to %(new_incoterm)s upon"
+" import of the quotation file '%(filename)s'"
 msgstr ""
 
 #. module: purchase_order_import
@@ -274,32 +287,32 @@ msgstr ""
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid ""
-"The quantity has been updated on the RFQ line with product '%s' from %s to "
-"%s %s."
+"The quantity has been updated on the RFQ line with product '%(product)s' "
+"from %(old_qty)s to %(new_qty)s %(uom)s."
 msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
-"The supplier of the imported OrderResponse (%s) is different from the "
-"supplier of the purchase order (%s)."
+"The supplier of the imported OrderResponse (%(supplier)s) is different from "
+"the supplier of the purchase order (%(order_supplier)s)."
 msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid ""
-"The supplier of the imported quotation (%s) is different from the supplier "
-"of the RFQ (%s)."
+"The supplier of the imported quotation (%(supplier)s) is different from the "
+"supplier of the RFQ (%(order_supplier)s)."
 msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid ""
-"The unit price has been updated on the RFQ line with product '%s' from %s to"
-" %s %s."
+"The unit price has been updated on the RFQ line with product '%(product)s' "
+"from %(old_price)s to %(new_price)s %(currency)s."
 msgstr ""
 
 #. module: purchase_order_import
@@ -323,7 +336,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid ""
-"This RFQ has been updated automatically via the import of quotation file %s"
+"This RFQ has been updated automatically via the import of quotation file "
+"%(filename)s"
 msgstr ""
 
 #. module: purchase_order_import
@@ -338,8 +352,8 @@ msgstr ""
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
-"This file '%s' is not recognised as XML nor PDF file. Please check the file "
-"and it's extension."
+"This file '%(filename)s' is not recognised as XML nor PDF file. Please check"
+" the file and it's extension."
 msgstr ""
 
 #. module: purchase_order_import
@@ -347,7 +361,7 @@ msgstr ""
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
 "This purchase order has been updated automatically via the import of "
-"OrderResponse file %s."
+"OrderResponse file %(filename)s."
 msgstr ""
 
 #. module: purchase_order_import
@@ -391,8 +405,8 @@ msgstr ""
 msgid ""
 "Unable to conditionally confirm the purchase order. \n"
 "Line IDS into the parsed document differs from the expected list of order line ids: \n"
-" received: %s\n"
-"expected: %s\n"
+" received: %(received_line_ids)s\n"
+"expected: %(expected_line_ids)s\n"
 msgstr ""
 
 #. module: purchase_order_import
@@ -404,7 +418,7 @@ msgstr ""
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
-msgid "Unknown status '%s'."
+msgid "Unknown status '%(status)s'."
 msgstr ""
 
 #. module: purchase_order_import
