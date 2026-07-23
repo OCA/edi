@@ -146,6 +146,18 @@ msgstr ""
 
 #. module: purchase_order_import
 #. odoo-python
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
+msgid "Missing quote file"
+msgstr ""
+
+#. module: purchase_order_import
+#. odoo-python
+#: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
+msgid "Missing quote filename"
+msgstr ""
+
+#. module: purchase_order_import
+#. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid ""
 "More than one move found for PO line.\n"
