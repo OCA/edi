@@ -101,8 +101,10 @@ class PurchaseOrderImport(models.TransientModel):
 
     @api.model
     def parse_quote(self, quote_file, quote_filename):
-        assert quote_file, "Missing quote file"
-        assert quote_filename, "Missing quote filename"
+        if not quote_file:
+            raise UserError(self.env._("Missing quote file"))
+        if not quote_filename:
+            raise UserError(self.env._("Missing quote filename"))
         filetype = mimetypes.guess_type(quote_filename)[0]
         logger.debug("Quote file mimetype: %s", filetype)
         if filetype in ["application/xml", "text/xml"]:
