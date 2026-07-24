@@ -1,0 +1,213 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_invoice_ubl_email_attachment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2019-11-12 17:34+0000\n"
+"Last-Translator: Bole <bole@dajmi5.com>\n"
+"Language-Team: none\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.8\n"
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,help:account_invoice_ubl_peppol.field_res_company__ubl_default_tax
+#: model:ir.model.fields,help:account_invoice_ubl_peppol.field_res_config_settings__ubl_default_tax
+msgid ""
+"According to PEPPOL BR-CO-18, an invoice must always have a tax subtotal, "
+"but for example non-profits are exempt from charging VAT. With this option "
+"you can choose a default tax to use."
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__active
+msgid "Active"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.peppol_eas_list_form
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.peppol_eas_list_search
+msgid "Archived"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__code
+msgid "Code"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model,name:account_invoice_ubl_peppol.model_res_company
+msgid "Companies"
+msgstr "Tvrtke"
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model,name:account_invoice_ubl_peppol.model_res_config_settings
+msgid "Config Settings"
+msgstr "Postavke"
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model,name:account_invoice_ubl_peppol.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model,name:account_invoice_ubl_peppol.model_res_country
+msgid "Country"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_company__ubl_default_uom_id
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_config_settings__ubl_default_uom_id
+msgid "Default UoM"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_company__ubl_default_tax
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_config_settings__ubl_default_tax
+msgid "Default tax"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_country__peppol_eas_code
+msgid "EAS code"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.view_account_config_settings
+msgid "For example: [('partner_id.country_id.code', 'in', ['NL', 'BE'])]"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__id
+msgid "ID"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model,name:account_invoice_ubl_peppol.model_account_move
+msgid "Journal Entries"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_peppol_eas_list__name
+msgid "Name"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.peppol_eas_list_search
+msgid "Name or Code"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: code:addons/account_invoice_ubl_peppol/models/res_company.py:0
+#, python-format
+msgid "Not a valid domain: {}: {}"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.actions.act_window,name:account_invoice_ubl_peppol.peppol_eas_list_action
+#: model:ir.ui.menu,name:account_invoice_ubl_peppol.peppol_eas_list_menu
+msgid "PEPPOL EAS codes"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model,name:account_invoice_ubl_peppol.model_peppol_eas_list
+msgid "PEPPOL EAS list"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_company__ubl_domain_peppol
+#: model:ir.model.fields,field_description:account_invoice_ubl_peppol.field_res_config_settings__ubl_domain_peppol
+msgid "PEPPOL domain"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.view_account_config_settings
+msgid "Specify a default UOM to use for invoice lines with no UOM."
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.view_account_config_settings
+msgid "Specify a default tax to use for invoice lines with no tax."
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model_terms:ir.ui.view,arch_db:account_invoice_ubl_peppol.view_account_config_settings
+msgid ""
+"Specify a domain to determine which UBL invoices should be generated in "
+"PEPPOL dialect."
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.constraint,message:account_invoice_ubl_peppol.constraint_peppol_eas_list_code_uniq
+msgid "This EAS code already exists"
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,help:account_invoice_ubl_peppol.field_res_company__ubl_domain_peppol
+#: model:ir.model.fields,help:account_invoice_ubl_peppol.field_res_config_settings__ubl_domain_peppol
+msgid ""
+"Use this domain to determine which UBL invoices should have PEPPOL dialect."
+msgstr ""
+
+#. module: account_invoice_ubl_peppol
+#: model:ir.model.fields,help:account_invoice_ubl_peppol.field_res_company__ubl_default_uom_id
+#: model:ir.model.fields,help:account_invoice_ubl_peppol.field_res_config_settings__ubl_default_uom_id
+msgid "Use this unit if an invoice line has no unit or product unit"
+msgstr ""
+
+#~ msgid "Email Templates"
+#~ msgstr "Predlošci mailova"
+
+#~ msgid ""
+#~ "If active, the UBL Invoice XML file will be included in the attachments "
+#~ "when sending the invoice by email."
+#~ msgstr ""
+#~ "Ako je označeno, UBL XML račun će biti uključen u priloge prilikom slanja "
+#~ "email poruke."
+
+#~ msgid "Include UBL XML in Invoice Email"
+#~ msgstr "Uključi UBL XML datoteku u email za račune"
+
+#~ msgid ""
+#~ "Include the UBL XML in the attachments when sending the invoice by email."
+#~ msgstr "Uključi UBL XML datoteku u priloge prilikom slanja računa mailom."
+
+#~ msgid "Invoice"
+#~ msgstr "Račun"
