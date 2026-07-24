@@ -223,6 +223,22 @@ class AccountInvoice(models.Model):
         accounting_contact = customer_party.find(ns["cac"] + "AccountingContact")
         if accounting_contact is not None:
             customer_party.remove(accounting_contact)
+        # BR-07: An Invoice shall contain the Buyer name (BT-44).
+        # this means that cac:AccountingCustomerParty/cac:Party/
+        # cac:PartyLegalEntity/cbc:RegistrationName must exist.
+        # in case partner is not a company, _ubl_add_party() (in base_ubl)
+        # does not call _ubl_add_party_legal_entity().
+        party = customer_party.find(ns["cac"] + "Party")
+        party_legal_entity = party.find(ns["cac"] + "PartyLegalEntity")
+        if party_legal_entity is None:
+            self._ubl_add_party_legal_entity(
+                partner.commercial_partner_id, party, ns, version
+            )
+            # the problem now is that it must be before cac:Contact and not
+            # after, so we move it.
+            party_legal_entity = party.find(ns["cac"] + "PartyLegalEntity")
+            contact = party.find(ns["cac"] + "Contact")
+            contact.addprevious(party_legal_entity)
         return res
 
     @api.model
