@@ -62,8 +62,8 @@ msgid ""
 "Approximate match: account %(account)s has been matched with account "
 "%(matched_account)s"
 msgstr ""
-"Ungefähre Übereinstimmung: Das Konto %(account) wurde mit dem Konto %"
-"(matched_account) abgeglichen"
+"Ungefähre Übereinstimmung: Das Konto %(account)s wurde mit dem Konto "
+"%(matched_account)s abgeglichen"
 
 #. module: base_business_document_import
 #: model:ir.model,name:base_business_document_import.model_business_document_import
