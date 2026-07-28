@@ -405,7 +405,7 @@ class BaseImportPdfTemplateLine(models.Model):
         # We need to replace -short because it is not respected in databases with
         # different capitalization. (example: *d/*m/*Y and *d/*m/*y)
         date_format = self.date_format.replace("*", "%").replace("-short", "")
-        if self.field_ttype == "datetime":
+        if self.field_ttype == "datetime" and self.time_format:
             time_format = self.time_format.replace("*", "%")
             date_format += " " + time_format
         datetime_object = datetime.strptime(value, date_format)
