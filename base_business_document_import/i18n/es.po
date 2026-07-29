@@ -25,8 +25,8 @@ msgstr "(fijado)"
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "<b>Notes in file %s:</b>"
-msgstr "<b>Notas en el archivo %s:</b>"
+msgid "<b>Notes in file %(filename)s:</b>"
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
@@ -39,8 +39,8 @@ msgstr "<b>Notas en el documento importado:</b>"
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
 "<p>Odoo couldn't find any unit of measure corresponding to the following "
-"information extracted from the business document:</p><ul><li>UNECE code: "
-"%(code)s</li><li>Name of the unit of measure: %(name)s</li></ul><p>So the "
+"information extracted from the business document:</p><ul><li>UNECE code: %"
+"(code)s</li><li>Name of the unit of measure: %(name)s</li></ul><p>So the "
 "unit of measure 'Unit(s)' has been used. <em>You may have to change it "
 "manually.</em></p>"
 msgstr ""
@@ -64,11 +64,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"Approximate match: account %(account)s has been matched with account "
-"%(matched_account)s"
+"Approximate match: account %(account)s has been matched with account %"
+"(matched_account)s"
 msgstr ""
-"Coincidencia aproximada: la cuenta %(account)s ha coincidido con la cuenta "
-"%(matched_account)s"
+"Coincidencia aproximada: la cuenta %(account)s ha coincidido con la cuenta %"
+"(matched_account)s"
 
 #. module: base_business_document_import
 #: model:ir.model,name:base_business_document_import.model_business_document_import
@@ -78,8 +78,13 @@ msgstr "Métodos habituales para importar documentos comerciales"
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
-msgstr "No se pudo encontrar ningún Incotérmino en Odoo que corresponda a '%s'"
+msgid "Could not find any Incoterm in Odoo corresponding to '%(code)s'"
+msgstr ""
+
+#. module: base_business_document_import
+#: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__display_name
+msgid "Display Name"
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
@@ -96,16 +101,15 @@ msgstr ""
 "actualizado</b>."
 
 #. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "IBAN <b>%s</b> is not valid, so it has been ignored."
-msgstr "El IBAN <b>%s</b> no es válido, por lo que se ha ignorado."
+#: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__id
+msgid "ID"
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "ID {id} of '{model}' doesn't exist in Odoo."
-msgstr "La ID {id} de '{model}' no existe en Odoo."
+msgid "ID %(id)s of '%(model)s' doesn't exist in Odoo."
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
@@ -122,10 +126,8 @@ msgstr ""
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "No currency specified, so Odoo used the company currency (%s)"
+msgid "No currency specified, so Odoo used the company currency (%(currency)s)"
 msgstr ""
-"No se especificó la moneda, por lo que Odoo utilizó la moneda de la compañía "
-"(%s)"
 
 #. module: base_business_document_import
 #. odoo-python
@@ -247,9 +249,9 @@ msgid ""
 "UNECE Due Date code: %(tax_due_date)s\n"
 "Tax amount: %(amount)s %(amount_type)s"
 msgstr ""
-"Odoo no pudo encontrar ningún impuesto con 'Aplicación de impuestos' = "
-"'%(tax)s' e 'Impuesto incluido en el precio' = '%(price)s' que corresponden "
-"a la siguiente información extraída del documento comercial:\n"
+"Odoo no pudo encontrar ningún impuesto con 'Aplicación de impuestos' = '%"
+"(tax)s' e 'Impuesto incluido en el precio' = '%(price)s' que corresponden a "
+"la siguiente información extraída del documento comercial:\n"
 "Código de tipo de impuesto CEPE: %(tax_type)s\n"
 "Código de categoría fiscal de la CEPE: %(tax_cat)s\n"
 "Código de fecha de vencimiento de la CEPE: %(tax_due_date)s\n"
@@ -277,31 +279,45 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The VAT number of the customer written in the business document "
-"(%(parsed_vat)s) doesn't match the VAT number of the company "
-"'%(company)s' (%(vat)s) in which you are trying to import this document."
+"The VAT number of the customer written in the business document (%"
+"(parsed_vat)s) doesn't match the VAT number of the company '%(company)s' (%"
+"(vat)s) in which you are trying to import this document."
 msgstr ""
-"El número de IVA del cliente escrito en el documento comercial "
-"(%(parsed_vat)s) no coincide con el número de IVA de la empresa "
-"'%(company)s' (%(vat)s) en la que intenta importar esto documento."
+"El número de IVA del cliente escrito en el documento comercial (%"
+"(parsed_vat)s) no coincide con el número de IVA de la empresa '%(company)s' "
+"(%(vat)s) en la que intenta importar esto documento."
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "The XMLID '%s' doesn't exist in Odoo."
-msgstr "El XMLID '%s' no existe en Odoo."
+msgid "The XMLID '%(xmlid)s' doesn't exist in Odoo."
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
 "The analysis of the business document returned '%(code)s' as the country "
-"code to find the related currency. But the country '%(name)s' doesn't have "
+"code to find the related currency. But the country '%(name)s'doesn't have "
 "any related currency configured in Odoo."
 msgstr ""
-"El análisis del documento comercial arrojó '%(code)s' como el código de país "
-"para encontrar la moneda relacionada. Pero el país '%(name)s' no tiene "
-"ninguna moneda relacionada configurada en Odoo."
+
+#. module: base_business_document_import
+#. odoo-python
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+msgid ""
+"The analysis of the business document returned '%(code)s' as the country "
+"code to find the related currency. But there is no country with that code in "
+"Odoo."
+msgstr ""
+
+#. module: base_business_document_import
+#. odoo-python
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+msgid ""
+"The analysis of the business document returned '%(code)s' as the currency "
+"ISO code. But there are no currency with that code in Odoo."
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
@@ -319,42 +335,17 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The analysis of the business document returned '%s' as country code. But "
-"there are no country with that code in Odoo."
+"The analysis of the business document returned '%(country_code)s' as country "
+"code. But there are no country with that code in Odoo."
 msgstr ""
-"El análisis del documento de negocio devolvió '%s' como código de país. Pero "
-"no hay ningún país con ese código en Odoo."
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The analysis of the business document returned '%s' as the country code to "
-"find the related currency. But there is no country with that code in Odoo."
+"The analysis of the business document returned '%(symbol)s' as the currency "
+"symbol. But there are none or several currencies with that symbol in Odoo."
 msgstr ""
-"El análisis del documento comercial arrojó '%s' como código de país para "
-"encontrar la moneda relacionada. Pero no hay ningún país con ese código en "
-"Odoo."
-
-#. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid ""
-"The analysis of the business document returned '%s' as the currency ISO "
-"code. But there are no currency with that code in Odoo."
-msgstr ""
-"El análisis del documento comercial devolvió '%s' como el código ISO de "
-"divisa. Pero no hay divisa con ese código en Odoo."
-
-#. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid ""
-"The analysis of the business document returned '%s' as the currency symbol. "
-"But there are none or several currencies with that symbol in Odoo."
-msgstr ""
-"El análisis del documento comercial arrojó '%s' como símbolo de divisa. Pero "
-"no hay ninguna o varias divisas con ese símbolo en Odoo."
 
 #. module: base_business_document_import
 #. odoo-python
@@ -376,52 +367,44 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
 "The bank account <b>IBAN %(iban)s</b> has been automatically added on the "
-"supplier <a href=# data-oe-model=res.partner data-oe-"
-"id=%(partner_id)d>%(partner)s</a>"
+"supplier <a href=# data-oe-model=res.partner data-oe-id=%(partner_id)d>%"
+"(partner)s</a>"
 msgstr ""
 "La cuenta bancaria <b>IBAN %(iban)s</b> se ha añadido automáticamente al "
-"proveedor <a href=# data-oe-model=res.partner data-oe-"
-"id=%(partner_id)d>%(partner)s</a>"
+"proveedor <a href=# data-oe-model=res.partner data-oe-id=%(partner_id)d>%"
+"(partner)s</a>"
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The existing line '%s' doesn't have any product, so <b>the lines haven't "
-"been updated</b>."
+"The existing line '%(name)s' doesn't have any product, so <b>the lines "
+"haven't been updated</b>."
 msgstr ""
-"La línea existente '%s' no tiene ningún producto, por lo que <b>las líneas "
-"no se han actualizado</b>."
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The product '%s' is used on several existing lines, so <b>the lines haven't "
-"been updated</b>."
+"The product '%(product)s' is used on several existing lines, so <b>the lines "
+"haven't been updated</b>."
 msgstr ""
-"El producto '%s' se utiliza en varias líneas existentes, por lo que <b>las "
-"líneas no se han actualizado</b>."
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The product '%s' is used on several imported lines, so <b>the lines haven't "
-"been updated</b>."
+"The product '%(product)s' is used on several imported lines, so <b>the lines "
+"haven't been updated</b>."
 msgstr ""
-"El producto '%s' se utiliza en varias líneas importadas, por lo que <b>las "
-"líneas no se han actualizado</b>."
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The record '{record}' is an instance of '{record_model}', not of "
-"'{target_model}'."
+"The record '%(record)s' is an instance of '%(record_model)s', not of '%"
+"(target_model)s'."
 msgstr ""
-"El registro '{record}' es una instancia de '{record_model}', no de "
-"'{target_model}'."
 
 #. module: base_business_document_import
 #. odoo-python
@@ -440,6 +423,94 @@ msgstr "socio"
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid "supplier"
 msgstr "proveedor"
+
+#~ msgid "<b>Notes in file %s:</b>"
+#~ msgstr "<b>Notas en el archivo %s:</b>"
+
+#~ msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
+#~ msgstr ""
+#~ "No se pudo encontrar ningún Incotérmino en Odoo que corresponda a '%s'"
+
+#~ msgid "IBAN <b>%s</b> is not valid, so it has been ignored."
+#~ msgstr "El IBAN <b>%s</b> no es válido, por lo que se ha ignorado."
+
+#~ msgid "ID {id} of '{model}' doesn't exist in Odoo."
+#~ msgstr "La ID {id} de '{model}' no existe en Odoo."
+
+#~ msgid "No currency specified, so Odoo used the company currency (%s)"
+#~ msgstr ""
+#~ "No se especificó la moneda, por lo que Odoo utilizó la moneda de la "
+#~ "compañía (%s)"
+
+#~ msgid "The XMLID '%s' doesn't exist in Odoo."
+#~ msgstr "El XMLID '%s' no existe en Odoo."
+
+#~ msgid ""
+#~ "The analysis of the business document returned '%(code)s' as the country "
+#~ "code to find the related currency. But the country '%(name)s' doesn't "
+#~ "have any related currency configured in Odoo."
+#~ msgstr ""
+#~ "El análisis del documento comercial arrojó '%(code)s' como el código de "
+#~ "país para encontrar la moneda relacionada. Pero el país '%(name)s' no "
+#~ "tiene ninguna moneda relacionada configurada en Odoo."
+
+#~ msgid ""
+#~ "The analysis of the business document returned '%s' as country code. But "
+#~ "there are no country with that code in Odoo."
+#~ msgstr ""
+#~ "El análisis del documento de negocio devolvió '%s' como código de país. "
+#~ "Pero no hay ningún país con ese código en Odoo."
+
+#~ msgid ""
+#~ "The analysis of the business document returned '%s' as the country code "
+#~ "to find the related currency. But there is no country with that code in "
+#~ "Odoo."
+#~ msgstr ""
+#~ "El análisis del documento comercial arrojó '%s' como código de país para "
+#~ "encontrar la moneda relacionada. Pero no hay ningún país con ese código "
+#~ "en Odoo."
+
+#~ msgid ""
+#~ "The analysis of the business document returned '%s' as the currency ISO "
+#~ "code. But there are no currency with that code in Odoo."
+#~ msgstr ""
+#~ "El análisis del documento comercial devolvió '%s' como el código ISO de "
+#~ "divisa. Pero no hay divisa con ese código en Odoo."
+
+#~ msgid ""
+#~ "The analysis of the business document returned '%s' as the currency "
+#~ "symbol. But there are none or several currencies with that symbol in Odoo."
+#~ msgstr ""
+#~ "El análisis del documento comercial arrojó '%s' como símbolo de divisa. "
+#~ "Pero no hay ninguna o varias divisas con ese símbolo en Odoo."
+
+#~ msgid ""
+#~ "The existing line '%s' doesn't have any product, so <b>the lines haven't "
+#~ "been updated</b>."
+#~ msgstr ""
+#~ "La línea existente '%s' no tiene ningún producto, por lo que <b>las "
+#~ "líneas no se han actualizado</b>."
+
+#~ msgid ""
+#~ "The product '%s' is used on several existing lines, so <b>the lines "
+#~ "haven't been updated</b>."
+#~ msgstr ""
+#~ "El producto '%s' se utiliza en varias líneas existentes, por lo que "
+#~ "<b>las líneas no se han actualizado</b>."
+
+#~ msgid ""
+#~ "The product '%s' is used on several imported lines, so <b>the lines "
+#~ "haven't been updated</b>."
+#~ msgstr ""
+#~ "El producto '%s' se utiliza en varias líneas importadas, por lo que "
+#~ "<b>las líneas no se han actualizado</b>."
+
+#~ msgid ""
+#~ "The record '{record}' is an instance of '{record_model}', not of "
+#~ "'{target_model}'."
+#~ msgstr ""
+#~ "El registro '{record}' es una instancia de '{record_model}', no de "
+#~ "'{target_model}'."
 
 #, python-format
 #~ msgid "Missing VAT number on company '%s'"

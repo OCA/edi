@@ -11,8 +11,8 @@ msgstr ""
 "POT-Creation-Date: 2018-02-22 03:40+0000\n"
 "PO-Revision-Date: 2018-02-22 03:40+0000\n"
 "Last-Translator: Lukáš Spurný <lukasspurny8@gmail.com>, 2018\n"
-"Language-Team: Czech (Czech Republic) (https://www.transifex.com/oca/"
-"teams/23907/cs_CZ/)\n"
+"Language-Team: Czech (Czech Republic) (https://www.transifex.com/oca/teams/"
+"23907/cs_CZ/)\n"
 "Language: cs_CZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,8 +28,8 @@ msgstr "(Úprávy)"
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "<b>Notes in file %s:</b>"
-msgstr "Poznámky v souboru %s:"
+msgid "<b>Notes in file %(filename)s:</b>"
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
@@ -42,8 +42,8 @@ msgstr "Poznámky v importovaném dokumentu:"
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
 "<p>Odoo couldn't find any unit of measure corresponding to the following "
-"information extracted from the business document:</p><ul><li>UNECE code: "
-"%(code)s</li><li>Name of the unit of measure: %(name)s</li></ul><p>So the "
+"information extracted from the business document:</p><ul><li>UNECE code: %"
+"(code)s</li><li>Name of the unit of measure: %(name)s</li></ul><p>So the "
 "unit of measure 'Unit(s)' has been used. <em>You may have to change it "
 "manually.</em></p>"
 msgstr ""
@@ -62,8 +62,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"Approximate match: account %(account)s has been matched with account "
-"%(matched_account)s"
+"Approximate match: account %(account)s has been matched with account %"
+"(matched_account)s"
 msgstr ""
 
 #. module: base_business_document_import
@@ -74,8 +74,13 @@ msgstr "Společné metody importu obchodních dokumentů"
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "Could not find any Incoterm in Odoo corresponding to '%s'"
+msgid "Could not find any Incoterm in Odoo corresponding to '%(code)s'"
 msgstr ""
+
+#. module: base_business_document_import
+#: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__display_name
+msgid "Display Name"
+msgstr "Zobrazovaný název"
 
 #. module: base_business_document_import
 #. odoo-python
@@ -88,15 +93,14 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "IBAN <b>%s</b> is not valid, so it has been ignored."
-msgstr "IBAN %s není platný, takže byl ignorován."
+#: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__id
+msgid "ID"
+msgstr "ID"
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "ID {id} of '{model}' doesn't exist in Odoo."
+msgid "ID %(id)s of '%(model)s' doesn't exist in Odoo."
 msgstr ""
 
 #. module: base_business_document_import
@@ -114,8 +118,8 @@ msgstr ""
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "No currency specified, so Odoo used the company currency (%s)"
-msgstr "Není uvedena žádná měna, takže Odoo použil měnu společnosti (%s)"
+msgid "No currency specified, so Odoo used the company currency (%(currency)s)"
+msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
@@ -222,15 +226,15 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The VAT number of the customer written in the business document "
-"(%(parsed_vat)s) doesn't match the VAT number of the company "
-"'%(company)s' (%(vat)s) in which you are trying to import this document."
+"The VAT number of the customer written in the business document (%"
+"(parsed_vat)s) doesn't match the VAT number of the company '%(company)s' (%"
+"(vat)s) in which you are trying to import this document."
 msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "The XMLID '%s' doesn't exist in Odoo."
+msgid "The XMLID '%(xmlid)s' doesn't exist in Odoo."
 msgstr ""
 
 #. module: base_business_document_import
@@ -238,8 +242,25 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
 "The analysis of the business document returned '%(code)s' as the country "
-"code to find the related currency. But the country '%(name)s' doesn't have "
+"code to find the related currency. But the country '%(name)s'doesn't have "
 "any related currency configured in Odoo."
+msgstr ""
+
+#. module: base_business_document_import
+#. odoo-python
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+msgid ""
+"The analysis of the business document returned '%(code)s' as the country "
+"code to find the related currency. But there is no country with that code in "
+"Odoo."
+msgstr ""
+
+#. module: base_business_document_import
+#. odoo-python
+#: code:addons/base_business_document_import/models/business_document_import.py:0
+msgid ""
+"The analysis of the business document returned '%(code)s' as the currency "
+"ISO code. But there are no currency with that code in Odoo."
 msgstr ""
 
 #. module: base_business_document_import
@@ -255,35 +276,17 @@ msgstr ""
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The analysis of the business document returned '%s' as country code. But "
-"there are no country with that code in Odoo."
+"The analysis of the business document returned '%(country_code)s' as country "
+"code. But there are no country with that code in Odoo."
 msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The analysis of the business document returned '%s' as the country code to "
-"find the related currency. But there is no country with that code in Odoo."
+"The analysis of the business document returned '%(symbol)s' as the currency "
+"symbol. But there are none or several currencies with that symbol in Odoo."
 msgstr ""
-
-#. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid ""
-"The analysis of the business document returned '%s' as the currency ISO "
-"code. But there are no currency with that code in Odoo."
-msgstr ""
-
-#. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid ""
-"The analysis of the business document returned '%s' as the currency symbol. "
-"But there are none or several currencies with that symbol in Odoo."
-msgstr ""
-"Analýza obchodního dokladu vrátila jako symbol měny symbol '%s'. Ale v Odoo "
-"neexistuje žádný nebo několik měn s tímto symbolem."
 
 #. module: base_business_document_import
 #. odoo-python
@@ -300,45 +303,40 @@ msgstr ""
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
 "The bank account <b>IBAN %(iban)s</b> has been automatically added on the "
-"supplier <a href=# data-oe-model=res.partner data-oe-"
-"id=%(partner_id)d>%(partner)s</a>"
+"supplier <a href=# data-oe-model=res.partner data-oe-id=%(partner_id)d>%"
+"(partner)s</a>"
 msgstr ""
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The existing line '%s' doesn't have any product, so <b>the lines haven't "
-"been updated</b>."
+"The existing line '%(name)s' doesn't have any product, so <b>the lines "
+"haven't been updated</b>."
 msgstr ""
-"Existující řádek '%s' nemá žádný produkt, takže 1 řádky nebyly aktualizovány."
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The product '%s' is used on several existing lines, so <b>the lines haven't "
-"been updated</b>."
+"The product '%(product)s' is used on several existing lines, so <b>the lines "
+"haven't been updated</b>."
 msgstr ""
-"Produkt '%s' se používá na několika existujících linkách, takže řádky nebyly "
-"aktualizovány."
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The product '%s' is used on several imported lines, so <b>the lines haven't "
-"been updated</b>."
+"The product '%(product)s' is used on several imported lines, so <b>the lines "
+"haven't been updated</b>."
 msgstr ""
-"Produkt '%s' se používá na několika importovaných řádcích, takže 1 řádky "
-"nebyly aktualizovány."
 
 #. module: base_business_document_import
 #. odoo-python
 #: code:addons/base_business_document_import/models/business_document_import.py:0
 msgid ""
-"The record '{record}' is an instance of '{record_model}', not of "
-"'{target_model}'."
+"The record '%(record)s' is an instance of '%(record_model)s', not of '%"
+"(target_model)s'."
 msgstr ""
 
 #. module: base_business_document_import
@@ -359,6 +357,43 @@ msgstr "partner"
 msgid "supplier"
 msgstr "dodavatele"
 
+#~ msgid "<b>Notes in file %s:</b>"
+#~ msgstr "Poznámky v souboru %s:"
+
+#~ msgid "IBAN <b>%s</b> is not valid, so it has been ignored."
+#~ msgstr "IBAN %s není platný, takže byl ignorován."
+
+#~ msgid "No currency specified, so Odoo used the company currency (%s)"
+#~ msgstr "Není uvedena žádná měna, takže Odoo použil měnu společnosti (%s)"
+
+#~ msgid ""
+#~ "The analysis of the business document returned '%s' as the currency "
+#~ "symbol. But there are none or several currencies with that symbol in Odoo."
+#~ msgstr ""
+#~ "Analýza obchodního dokladu vrátila jako symbol měny symbol '%s'. Ale v "
+#~ "Odoo neexistuje žádný nebo několik měn s tímto symbolem."
+
+#~ msgid ""
+#~ "The existing line '%s' doesn't have any product, so <b>the lines haven't "
+#~ "been updated</b>."
+#~ msgstr ""
+#~ "Existující řádek '%s' nemá žádný produkt, takže 1 řádky nebyly "
+#~ "aktualizovány."
+
+#~ msgid ""
+#~ "The product '%s' is used on several existing lines, so <b>the lines "
+#~ "haven't been updated</b>."
+#~ msgstr ""
+#~ "Produkt '%s' se používá na několika existujících linkách, takže řádky "
+#~ "nebyly aktualizovány."
+
+#~ msgid ""
+#~ "The product '%s' is used on several imported lines, so <b>the lines "
+#~ "haven't been updated</b>."
+#~ msgstr ""
+#~ "Produkt '%s' se používá na několika importovaných řádcích, takže 1 řádky "
+#~ "nebyly aktualizovány."
+
 #, python-format
 #~ msgid ""
 #~ "<p>Odoo couldn't find any unit of measure corresponding to the following "
@@ -375,9 +410,6 @@ msgstr "dodavatele"
 #~ msgid "Approximate match: account %s has been matched with account %s"
 #~ msgstr "Přibližná shoda: účet %s byl přiřazen účtu %s"
 
-#~ msgid "Display Name"
-#~ msgstr "Zobrazovaný název"
-
 #, python-format
 #~ msgid ""
 #~ "For product '%s', the unit of measure is %s on the existing line, but it "
@@ -387,9 +419,6 @@ msgstr "dodavatele"
 #~ "U produktu '%s' je měrnou jednotkou %s na existujícím řádku, ale na "
 #~ "importované řádce je %s. Momentálně nepodporujeme tento scénář, takže 1 "
 #~ "řádky nebyly aktualizovány."
-
-#~ msgid "ID"
-#~ msgstr "ID"
 
 #~ msgid "Last Modified on"
 #~ msgstr "Poslední změna dne"
