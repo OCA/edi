@@ -87,12 +87,6 @@ msgid ""
 msgstr ""
 
 #. module: base_business_document_import
-#. odoo-python
-#: code:addons/base_business_document_import/models/business_document_import.py:0
-msgid "IBAN <b>%(iban)s</b> is not valid, so it has been ignored."
-msgstr ""
-
-#. module: base_business_document_import
 #: model:ir.model.fields,field_description:base_business_document_import.field_business_document_import__id
 msgid "ID"
 msgstr ""
