@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.fields import Domain
+from odoo.orm.domains import DomainNot
 
 
 class EbillPaymentContract(models.Model):
@@ -54,16 +56,13 @@ class EbillPaymentContract(models.Model):
 
     def _search_is_valid(self, operator, value):
         now = fields.Date.today()
-        domain = [
-            ("state", "=", "open"),
-            ("date_start", "<=", now),
-            "|",
-            ("date_end", "=", False),
-            ("date_end", ">=", now),
-        ]
-        valid_contract = self.search(domain)
-        if (operator == "=" and value) or (operator == "!=" and not value):
-            new_operator = "in"
-        else:
-            new_operator = "not in"
-        return [("id", new_operator, valid_contract.ids)]
+        domain = (
+            Domain("state", "=", "open")
+            & Domain("date_start", "<=", now)
+            & (Domain("date_end", "=", False) | Domain("date_end", ">=", now))
+        )
+        # Boolean search methods are only ever invoked with operator "in"/
+        # "not in" and value {True} (see odoo/orm/domains.py:
+        # _optimize_boolean_in), so this can be returned directly without a
+        # self.search() round trip to materialize an id list first.
+        return domain if operator == "in" else DomainNot(domain)

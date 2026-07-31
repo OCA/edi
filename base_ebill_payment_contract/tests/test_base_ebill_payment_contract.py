@@ -11,11 +11,17 @@ class TestBaseEbillPaymentContract(SingleTransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.contract1 = cls.env.ref(
-            "base_ebill_payment_contract.ebill_payment_contract_demo_1"
-        )
-        cls.partner = cls.contract1.partner_id
         cls.method_post = cls.env.ref("account_invoice_transmit_method.post")
+        cls.partner = cls.env["res.partner"].create({"name": "Test Partner"})
+        cls.contract1 = cls.env["ebill.payment.contract"].create(
+            {
+                "transmit_method_id": cls.env.ref(
+                    "account_invoice_transmit_method.mail"
+                ).id,
+                "state": "draft",
+                "partner_id": cls.partner.id,
+            }
+        )
 
     def test_contract_validity(self):
         self.contract1.state = "open"
@@ -70,3 +76,36 @@ class TestBaseEbillPaymentContract(SingleTransactionCase):
         )
         with mute_logger("odoo.addons.base_ebill_payment_contract.models.res_partner"):
             self.assertFalse(self.partner.get_active_contract(self.method_post))
+
+    def test_search_is_valid(self):
+        valid_contract = self.env["ebill.payment.contract"].create(
+            {
+                "transmit_method_id": self.contract1.transmit_method_id.id,
+                "partner_id": self.partner.id,
+                "state": "open",
+                "date_start": date.today() - timedelta(days=1),
+                "date_end": date.today() + timedelta(days=1),
+            }
+        )
+        invalid_contract = self.env["ebill.payment.contract"].create(
+            {
+                "transmit_method_id": self.contract1.transmit_method_id.id,
+                "partner_id": self.partner.id,
+                "state": "draft",
+                "date_start": date.today() - timedelta(days=1),
+                "date_end": date.today() + timedelta(days=1),
+            }
+        )
+        both = valid_contract | invalid_contract
+        self.assertEqual(
+            self.env["ebill.payment.contract"].search(
+                [("id", "in", both.ids), ("is_valid", "=", True)]
+            ),
+            valid_contract,
+        )
+        self.assertEqual(
+            self.env["ebill.payment.contract"].search(
+                [("id", "in", both.ids), ("is_valid", "=", False)]
+            ),
+            invalid_contract,
+        )
