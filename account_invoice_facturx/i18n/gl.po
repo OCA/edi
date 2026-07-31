@@ -204,4 +204,4 @@ msgstr "Formato XML incluído en factura PDF"
 #, python-format
 msgid "{company_name}: {invoice_type} {invoice_number} dated {invoice_date}"
 msgstr ""
-"{company_name}: {invoice_type} {invoice_number} con data {invoice_dáche}"
+"{company_name}: {invoice_type} {invoice_number} con data {invoice_date}"
