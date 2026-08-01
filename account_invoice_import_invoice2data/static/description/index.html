@@ -382,14 +382,15 @@ ul.auto-toc {
 <li><a class="reference internal" href="#configuration" id="toc-entry-3">Configuration</a></li>
 <li><a class="reference internal" href="#known-issues-roadmap" id="toc-entry-4">Known issues / Roadmap</a></li>
 <li><a class="reference internal" href="#changelog" id="toc-entry-5">Changelog</a><ul>
-<li><a class="reference internal" href="#section-1" id="toc-entry-6">14.0.2.2.0 (2023-03-03)</a></li>
+<li><a class="reference internal" href="#section-1" id="toc-entry-6">14.0.2.5.0 (2026-08-02)</a></li>
+<li><a class="reference internal" href="#section-2" id="toc-entry-7">14.0.2.2.0 (2023-03-03)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-7">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-8">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-9">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-10">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-11">Maintainers</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-8">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-9">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-10">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-11">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-12">Maintainers</a></li>
 </ul>
 </li>
 </ul>
@@ -558,7 +559,22 @@ The invoice2data library does not have a strict standard on field names. This ma
 <div class="section" id="changelog">
 <h1><a class="toc-backref" href="#toc-entry-5">Changelog</a></h1>
 <div class="section" id="section-1">
-<h2><a class="toc-backref" href="#toc-entry-6">14.0.2.2.0 (2023-03-03)</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-6">14.0.2.5.0 (2026-08-02)</a></h2>
+<ul class="simple">
+<li>[FIX] Restore compatibility with invoice2data &gt;= 1.0. The pre-1.0 API
+path <tt class="docutils literal">invoice2data.main</tt> was removed upstream; import from
+<tt class="docutils literal">invoice2data</tt> directly.</li>
+<li>[IMP] Surface actionable errors: on a matched-but-incomplete template,
+the wizard now shows the template name + the specific fields that
+could not be parsed (via <tt class="docutils literal">raise_on_error=True</tt> and the new typed
+exceptions <tt class="docutils literal">NoTemplateFoundError</tt> / <tt class="docutils literal">RequiredFieldsMissingError</tt> /
+<tt class="docutils literal">TemplateSyntaxError</tt>).</li>
+<li>[IMP] Log which template matched (<tt class="docutils literal">template_name</tt>, added in
+invoice2data 1.0) alongside the extracted result.</li>
+</ul>
+</div>
+<div class="section" id="section-2">
+<h2><a class="toc-backref" href="#toc-entry-7">14.0.2.2.0 (2023-03-03)</a></h2>
 <ul class="simple">
 <li>[ADD] Support for invoicelines.
 (<a class="reference external" href="https://github.com/OCA/edi/issues/568">#74</a>)</li>
@@ -566,7 +582,7 @@ The invoice2data library does not have a strict standard on field names. This ma
 </div>
 </div>
 <div class="section" id="bug-tracker">
-<h1><a class="toc-backref" href="#toc-entry-7">Bug Tracker</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-8">Bug Tracker</a></h1>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -574,21 +590,21 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h1><a class="toc-backref" href="#toc-entry-8">Credits</a></h1>
+<h1><a class="toc-backref" href="#toc-entry-9">Credits</a></h1>
 <div class="section" id="authors">
-<h2><a class="toc-backref" href="#toc-entry-9">Authors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-10">Authors</a></h2>
 <ul class="simple">
 <li>Akretion</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h2><a class="toc-backref" href="#toc-entry-10">Contributors</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-11">Contributors</a></h2>
 <ul class="simple">
 <li>Alexis de Lattre &lt;<a class="reference external" href="mailto:alexis.delattre&#64;akretion.com">alexis.delattre&#64;akretion.com</a>&gt;</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h2><a class="toc-backref" href="#toc-entry-11">Maintainers</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-12">Maintainers</a></h2>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />

@@ -2,7 +2,7 @@
 dateparser
 factur-x
 factur-x<=3.1
-invoice2data
+invoice2data>=1.0
 ovh
 phonenumbers
 pypdf>=3.1.0,<5.0

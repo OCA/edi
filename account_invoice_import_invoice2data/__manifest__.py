@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Import Invoice2data",
-    "version": "14.0.2.4.0",
+    "version": "14.0.2.5.0",
     "category": "Accounting/Accounting",
     "license": "AGPL-3",
     "summary": "Import supplier invoices using the invoice2data lib",
@@ -14,7 +14,9 @@
     "depends": ["account_invoice_import"],
     "external_dependencies": {
         "python": [
-            "invoice2data",
+            # 1.0 dropped ``invoice2data.main`` and added typed exceptions +
+            # ``raise_on_error``; the wizard now depends on both.
+            "invoice2data>=1.0",
             "dateparser",
         ],
         "deb": ["poppler-utils"],

@@ -15,14 +15,23 @@ from odoo.exceptions import UserError
 logger = logging.getLogger(__name__)
 
 try:
+    from invoice2data import extract_data
+    from invoice2data.exceptions import (
+        NoTemplateFoundError,
+        RequiredFieldsMissingError,
+        TemplateSyntaxError,
+    )
     from invoice2data.extract.loader import read_templates
-    from invoice2data.main import extract_data, logger as loggeri2data
 except ImportError:
     logger.debug("Cannot import invoice2data")
 try:
     from invoice2data.input import tesseract
 except ImportError:
     logger.debug("Cannot import tesseract")
+
+# Propagate the wizard's log level to every invoice2data sub-logger (they all
+# live under the "invoice2data" namespace since 1.0's __main__ / api split).
+loggeri2data = logging.getLogger("invoice2data")
 
 
 class AccountInvoiceImport(models.TransientModel):
@@ -95,10 +104,40 @@ class AccountInvoiceImport(models.TransientModel):
             templates += read_templates()
         logger.debug("Calling invoice2data.extract_data with templates=%s", templates)
         try:
-            invoice2data_res = extract_data(fileobj.name, templates=templates)
+            invoice2data_res = extract_data(
+                fileobj.name, templates=templates, raise_on_error=True
+            )
+        except RequiredFieldsMissingError as e:
+            # Template matched but couldn't parse a required field -- give the
+            # accountant the specific field names + which template they're
+            # debugging (opt-in behaviour added in invoice2data 1.0, #190).
+            fileobj.close()
+            raise UserError(
+                _(
+                    "PDF Invoice parsing failed: template %(template)s "
+                    "matched but could not parse required field(s): %(fields)s"
+                )
+                % {
+                    "template": e.template_name or _("<unknown>"),
+                    "fields": ", ".join(sorted(e.fields)),
+                }
+            ) from e
+        except TemplateSyntaxError as e:
+            # Bug in the template author's YAML -- fail loudly so an admin can
+            # fix it, don't mask as a generic import failure.
+            fileobj.close()
+            raise UserError(
+                _("Invalid invoice2data template: %s") % e
+            ) from e
+        except NoTemplateFoundError:
+            # Expected outcome for scanned or unfamiliar invoices -- fall
+            # through to the tesseract branch below.
+            invoice2data_res = False
         except Exception as e:
             fileobj.close()
-            raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
+            raise UserError(
+                _("PDF Invoice parsing failed. Error message: %s") % e
+            ) from e
         if not invoice2data_res:
             if not shutil.which("tesseract"):
                 logger.warning(
@@ -116,11 +155,17 @@ class AccountInvoiceImport(models.TransientModel):
                 )
             except Exception as e:
                 fileobj.close()
-                raise UserError(_("PDF Invoice parsing failed. Error message: %s") % e)
+                raise UserError(
+                    _("PDF Invoice parsing failed. Error message: %s") % e
+                ) from e
             if not invoice2data_res:
                 fileobj.close()
                 return False
-        logger.info("Result of invoice2data PDF extraction: %s", invoice2data_res)
+        logger.info(
+            "invoice2data matched %s: %s",
+            invoice2data_res.get("template_name", "<unknown template>"),
+            invoice2data_res,
+        )
         fileobj.close()
         return self.invoice2data_to_parsed_inv(invoice2data_res)
 
