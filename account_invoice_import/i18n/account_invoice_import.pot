@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0\n"
+"Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -155,6 +155,11 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__display_name
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_journal__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -201,6 +206,11 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__id
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_journal__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_move__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_company__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_config_settings__id
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__id
 msgid "ID"
 msgstr ""
 
@@ -332,6 +342,12 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 msgid "No invoice created."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "No invoice file was provided."
 msgstr ""
 
 #. module: account_invoice_import
@@ -478,6 +494,12 @@ msgid "The XML file '%(filename)s' is not XML-compliant. Error: %(err)s"
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "The XPath argument must be a list."
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_res_partner__invoice_import_account_id
 #: model:ir.model.fields,help:account_invoice_import.field_res_users__invoice_import_account_id
 msgid ""
@@ -487,8 +509,85 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
+#: code:addons/account_invoice_import/models/account_move.py:0
+msgid ""
+"The fiscal position %(fiscal_position)s was not applied on vendor bill "
+"%(move)s."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/res_partner.py:0
+#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
+msgid "The imported partner data is invalid."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "The invoice file content must be provided as bytes."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "The invoice filename must be provided as text."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "The parsed invoice does not contain invoice lines."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "The parsed invoice has not been pre-processed."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid ""
+"The untaxed amount of the imported invoice (%(imported)s) still differs from"
+" the untaxed amount computed by Odoo (%(computed)s) after adjustment."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
 #: code:addons/account_invoice_import/models/res_partner.py:0
 msgid "The vendor bill %(move)s already has a partner %(partner)s."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
+msgid "The vendor bill does not contain imported partner data."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
+msgid "The vendor bill is missing."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
+msgid "The wizard is not configured to create a partner."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
+msgid "The wizard is not configured to update a partner."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/res_partner.py:0
+msgid "There is no vendor bill linked to this partner."
 msgstr ""
 
 #. module: account_invoice_import
@@ -576,16 +675,16 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 msgid ""
-"You are importing a customer invoice/refund in journal '%s' which is not a "
-"sale journal."
+"You are importing a customer invoice/refund in journal '%(journal)s' which "
+"is not a sale journal."
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 msgid ""
-"You are importing a vendor bill/refund in journal '%s' which is not a "
-"purchase journal."
+"You are importing a vendor bill/refund in journal '%(journal)s' which is not"
+" a purchase journal."
 msgstr ""
 
 #. module: account_invoice_import
