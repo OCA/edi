@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_edi_local_manager,edi_local.edi_local,model_edi_local,edi_local.group_admin_edi_local,1,1,1,1
+access_edi_local_line_manager,edi_local.edi_local.line,model_edi_local_line,edi_local.group_admin_edi_local,1,1,1,1
+access_edi_local_header_manager,edi_local.edi_local.header,model_edi_local_header,edi_local.group_admin_edi_local,1,1,1,1
+
+access_edi_local_user,edi_local.edi_local,model_edi_local,edi_local.group_user_edi_local,1,0,0,0
+access_edi_local_line_user,edi_local.edi_local.line,model_edi_local_line,edi_local.group_user_edi_local,1,0,0,0
+access_edi_local_header_user,edi_local.edi_local.header,model_edi_local_header,edi_local.group_user_edi_local,1,0,0,0

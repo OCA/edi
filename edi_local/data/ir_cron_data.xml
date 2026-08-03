@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="ir_cron_edi_local_generate_file" model="ir.cron">
+        <field name="name">Edi Local: Generate files</field>
+        <field name="model_id" ref="model_edi_local" />
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="False" />
+        <field name="doall" eval="False" />
+        <field name="code">model.generate_file_cron()</field>
+        <field name="state">code</field>
+    </record>
+
+    <record id="ir_cron_edi_local_import_file" model="ir.cron">
+        <field name="name">Edi Local: Import files</field>
+        <field name="model_id" ref="model_edi_local" />
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="False" />
+        <field name="doall" eval="False" />
+        <field name="code">model.import_file_cron()</field>
+        <field name="state">code</field>
+    </record>
+</odoo>
