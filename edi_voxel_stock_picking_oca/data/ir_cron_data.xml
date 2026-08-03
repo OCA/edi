@@ -6,7 +6,7 @@
         <field name="name">Edi Voxel: Update stock picking export status</field>
         <field name="model_id" ref="stock.model_stock_picking" />
         <field name="state">code</field>
-        <field name="code">model.update_voxel_export_status_cron()</field>
+        <field name="code">model._cron_update_voxel_export_status()</field>
         <field name="user_id" ref="base.user_root" />
         <field name="interval_number">10</field>
         <field name="interval_type">minutes</field>
