@@ -1,8 +1,9 @@
 [project]
 name = "odoo-addons-oca-edi"
-version = "19.0.20260803.0"
+version = "19.0.20260803.1"
 dependencies = [
     "odoo-addon-account_invoice_export==19.0.*",
+    "odoo-addon-account_invoice_import==19.0.*",
     "odoo-addon-base_business_document_import==19.0.*",
     "odoo-addon-base_business_document_import_iban==19.0.*",
     "odoo-addon-base_edi==19.0.*",
