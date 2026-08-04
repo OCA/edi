@@ -1,0 +1,75 @@
+## 17.0.1.4.0 (2026-06-20)
+
+### Fixes
+
+- The customer-invoice generator no longer raises a `UserError` when the
+  invoice has no recipient bank account ("Recipient Bank" /
+  `partner_bank_id` is empty). The payment-instructions group `BG-16`
+  ("PAYMENT INSTRUCTIONS", with the credit-transfer sub-group `BG-17`) is
+  optional (cardinality 0..1), so BT-84 (Payment account identifier) is
+  only required *once* a credit-transfer payment means is declared
+  (`BT-81` = `30`/`58`): the normative rules BR-50 / BR-61 then require an
+  IBAN or proprietary account id on the `PayeePartyCreditorFinancialAccount`
+  element. (In the bundled factur-x schematron the missing-account case is
+  concretely caught by the CII-specific `BR-CO-27`, anchored on the
+  `SpecifiedTradeSettlementPaymentMeans` element itself; that rule is
+  non-normative and is being removed from the official EN 16931 artefacts.)
+  When no payee account is available the whole optional `BG-16` block is
+  now skipped instead, so the document stays valid against both the XSD and
+  the schematron without forcing a payee IBAN/account that does not exist.
+  Direct-debit and credit-transfer-with-account behaviour is unchanged. A
+  new extension hook `_cii_get_payee_partner_bank()` resolves the payee
+  account and can be inherited.
+
+## 17.0.1.3.0 (2026-05-11)
+
+### Features
+
+- Add `_cii_get_line_period(iline)` extension hook on `account.move`,
+  used to populate the line-level `BillingSpecifiedPeriod` block (BG-26,
+  "Invoice line period") for the `EN16931` and `EXTENDED` profiles. The
+  default implementation transparently picks up either
+  `deferred_start_date` / `deferred_end_date` from Odoo Enterprise's
+  `account_accountant` module (detected at runtime via `_fields`, no
+  hard dependency added) or `start_date` / `end_date` from the OCA
+  module `account_invoice_start_end_dates`. Subscription and recurring
+  billing modules can override the hook to inject their own date
+  fields without patching the line generator.
+- Add a Schematron-based test suite that exercises all five Factur-X
+  profiles (`MINIMUM`, `BASICWL`, `BASIC`, `EN16931`, `EXTENDED`)
+  through the bundled `factur-x` library. Two scenarios (default
+  invoice, invoice with line-level discount) plus the BG-26
+  subscription scenario above ensure that the produced XML stays
+  schematron-clean across all profiles.
+
+### Fixes
+
+- `_cii_get_delivery_date()` now reads the standard Odoo
+  `account.move.delivery_date` field and falls back to `invoice_date`
+  only when it is unset. Previously the hook returned `invoice_date`
+  unconditionally, so an explicit delivery date set in the standard
+  Odoo invoice form (or computed by an upstream module such as
+  `account_invoice_delivery_date_from_period`, which derives it from
+  the latest period end of the invoice lines for German UStG / DATEV
+  conformance) was silently dropped from BT-72
+  (`ActualDeliverySupplyChainEvent/OccurrenceDateTime`). All five
+  profiles benefit from the fix.
+- The `BASIC` profile now emits a non-empty
+  `ApplicableHeaderTradeDelivery` block with an
+  `ActualDeliverySupplyChainEvent/OccurrenceDateTime` child (BT-72),
+  fixing both `PEPPOL-EN16931-R008` ("document MUST not contain empty
+  elements") and `BR-FX-EN-04` ("Each invoice must contain a delivery
+  date or invoicing period"). The delivery date is read through the
+  existing `_cii_get_delivery_date()` hook so the source field is not
+  re-decided here.
+- The `MINIMUM` profile no longer emits
+  `BuyerTradeParty/PostalTradeAddress` and
+  `BuyerTradeParty/SpecifiedTaxRegistration`. Those elements are marked
+  as "not used" by the `MINIMUM` schematron, while the corresponding
+  `SellerTradeParty` blocks are kept because `MINIMUM` does require BT-31
+  (Seller VAT identifier).
+- The line-level `GrossPriceProductTradePrice/AppliedTradeAllowanceCharge`
+  block no longer emits `CalculationPercent` and `BasisAmount` in the
+  `EN16931` profile. Those two children are explicitly marked as "not
+  used" by the EN 16931 schematron and were causing two failures per
+  discounted line. The `EXTENDED` profile keeps emitting them.
