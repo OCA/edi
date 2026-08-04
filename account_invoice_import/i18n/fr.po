@@ -7,14 +7,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-18 14:09+0000\n"
-"PO-Revision-Date: 2025-11-18 14:10+0000\n"
-"Last-Translator: Alexis de Lattre <alexis.delattre@akretion.com>\n"
+"PO-Revision-Date: 2026-08-04 22:46+0000\n"
+"Last-Translator: Marwan Behillil <marwan.behillil@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_invoice_import
 #. odoo-python
@@ -303,7 +304,7 @@ msgstr "Est abonné"
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_journal
 msgid "Journal"
-msgstr ""
+msgstr "Journal"
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_move
