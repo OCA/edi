@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 ===========================
 Base Import Pdf by Template
 ===========================
@@ -17,7 +13,7 @@ Base Import Pdf by Template
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
@@ -109,6 +105,15 @@ is to have the document defined with a specific structure.
      This will create lines with prices obtained from the system but
      create log on chatter to see the differences obtained from PDF.
 
+1. Process PDF templates from mail alias.
+
+..
+
+   - Create a mail alias
+   - Set the key "process_pdf_template": True in "Default values"
+
+The record will be created with PDF values
+
 Check demo data to further information.
 
 Usage
@@ -191,6 +196,7 @@ Contributors
 
   - Víctor Martínez
   - Pedro M. Baeza
+  - Sergio Teruel
 
 Maintainers
 -----------
