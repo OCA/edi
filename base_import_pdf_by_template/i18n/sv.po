@@ -184,6 +184,11 @@ msgid "Dot (.)"
 msgstr ""
 
 #. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_mail_thread
+msgid "Email Thread"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #. odoo-python
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 msgid "Error to set %(field_name)s with value %(value)s"
