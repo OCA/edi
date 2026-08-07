@@ -342,6 +342,32 @@ class TestOrderImport(TestCommon):
         self.assertEqual(order.partner_shipping_id, shipping_partner)
         self.assertIn("Created shipping partner", order.message_ids[0].body)
 
+    def test_order_import_pricelist_rule_showing_discount(self):
+        """Tests order import against a pricelist rule that shows its
+        discount to the customer (percentage-based, with the Discounts
+        feature enabled).
+
+        Expected behavior: the order is created normally and the line's
+        currency matches the pricelist's currency.
+        """
+        self.env["res.config.settings"].create(
+            {"group_discount_per_so_line": True}
+        ).set_values()
+        product = self.env["product.product"].search(
+            [("default_code", "=", "FURN_8888")], limit=1
+        )
+        self.env["product.pricelist.item"].create(
+            {
+                "pricelist_id": self.pricelist.id,
+                "applied_on": "0_product_variant",
+                "product_id": product.id,
+                "compute_price": "percentage",
+                "percent_price": 10,
+            }
+        )
+        order = self.wiz_model.create_order(self.parsed_order, "pricelist")
+        self.assertEqual(order.order_line.currency_id, self.pricelist.currency_id)
+
     def test_create_missing_shipping_partner_disabled(self):
         """Tests creation of missing shipping partner when ctx flag is False or not set
 
