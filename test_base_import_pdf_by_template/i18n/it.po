@@ -6,7 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-07 09:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -40,21 +39,3 @@ msgstr "Test amaca"
 #: model:product.template,name:test_base_import_pdf_by_template.product_mochila_product_template
 msgid "Test Mochila"
 msgstr "Test cartella"
-
-#~ msgid "Test Boligrafo"
-#~ msgstr "Test penna"
-
-#~ msgid "Test Leds"
-#~ msgstr "Test led"
-
-#~ msgid "Test Lmaninas"
-#~ msgstr "Test fogli"
-
-#~ msgid "Test Plastificadora"
-#~ msgstr "Test laminatore"
-
-#~ msgid "Test Rotulador"
-#~ msgstr "Test marcatore"
-
-#~ msgid "Test Trituradora"
-#~ msgstr "Test trituratore"
