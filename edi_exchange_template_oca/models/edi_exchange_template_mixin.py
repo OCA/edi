@@ -138,12 +138,21 @@ class EDIExchangeTemplateMixin(models.AbstractModel):
         if not isinstance(result, dict):
             _logger.error("code_snippet should return a dict into `result`")
             return {}
+        validator = getattr(
+            self,
+            f"_evaluate_code_snippet_validate_{self.generator}",
+            lambda result: False,
+        )
+        err_msg = validator(result)
+        if err_msg:
+            _logger.error("code_snippet validation error: %s", err_msg)
+            return {}
         return result
 
-    def _get_validator(self, exchange_record):
-        # TODO: lookup for validator (
-        # can be to validate received file or generated file)
-        pass
+    def _evaluate_code_snippet_validate_json(self, result):
+        if "payload" not in result.keys():
+            return "JSON code_snippet should return a dict with a 'payload' key"
+        return False
 
     def validate(self, exchange_record):
         pass

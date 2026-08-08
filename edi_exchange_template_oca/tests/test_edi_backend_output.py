@@ -1,6 +1,7 @@
 # Copyright 2020 ACSONE SA/NV (<http://acsone.eu>)
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 import base64
+import json
 
 from lxml import etree
 
@@ -120,6 +121,39 @@ result = {"res_ids": record.ids}
             "type_id": cls.type_out2.id,
         }
         cls.record3 = cls.backend.create_record("test_type_out3", vals)
+
+        cls.type_out_json = cls._create_exchange_type(
+            name="Template output JSON",
+            direction="output",
+            code="test_type_out_json",
+            exchange_file_ext="txt",
+            exchange_filename_pattern="{record.ref}-{type.code}-{dt}",
+        )
+        model = cls.env["edi.exchange.template.output"]
+        cls.tmpl_out_json = model.create(
+            {
+                "generator": "json",
+                "name": "Out JSON",
+                "backend_type_id": cls.backend.backend_type_id.id,
+                "code": "test_type_out_json",
+                "type_id": cls.type_out_json.id,
+                "output_type": "json",
+                "code_snippet": """
+result = {
+    'payload': {
+            "name": record.name,
+            "ref": record.ref
+    }
+}
+                """,
+            }
+        )
+        vals = {
+            "model": cls.partner._name,
+            "res_id": cls.partner.id,
+            "type_id": cls.tmpl_out_json.id,
+        }
+        cls.record_json = cls.backend.create_record("test_type_out_json", vals)
         return res
 
 
@@ -135,6 +169,9 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         self.assertEqual(
             self.backend._get_output_template(self.record2, code=self.tmpl_out1.code),
             self.tmpl_out1,
+        )
+        self.assertEqual(
+            self.backend._get_output_template(self.record_json), self.tmpl_out_json
         )
 
     def test_generate_file(self):
@@ -152,6 +189,10 @@ class TestEDIBackendOutput(TestEDIBackendOutputBase):
         self.assertEqual(doc.getchildren()[1].tag, "Custom")
         self.assertEqual(doc.getchildren()[1].text, "2")
         self.assertEqual(doc.getchildren()[1].attrib, {"bit": "custom_var"})
+        self.backend.exchange_generate(self.record_json)
+        expected = json.dumps({"name": self.partner.name, "ref": self.partner.ref})
+        file_content = self.record_json._get_file_content()
+        self.assertEqual(file_content.strip(), expected)
 
     def test_prettify(self):
         self.tmpl_out2.template_id.arch = (
