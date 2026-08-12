@@ -9,7 +9,7 @@ from odoo import models
 logger = logging.getLogger(__name__)
 
 try:
-    from facturx import generate_facturx_from_file
+    from facturx import generate_from_file
 except ImportError:
     logger.debug("Cannot import facturx")
 
@@ -33,11 +33,12 @@ class Py3oReport(models.TransientModel):
             if invoice._xml_format_in_pdf_invoice() == "factur-x":
                 facturx_xml_str, level = invoice.generate_facturx_xml()
                 pdf_metadata = invoice._prepare_pdf_metadata()
-                generate_facturx_from_file(
+                generate_from_file(
                     result_path,
                     facturx_xml_str,
+                    flavor="factur-x",
+                    level=level,
                     check_xsd=False,
-                    facturx_level=level,
                     pdf_metadata=pdf_metadata,
                 )
         return super()._postprocess_report(model_instance, result_path)
