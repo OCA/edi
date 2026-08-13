@@ -29,6 +29,16 @@ class CommonAccountEdiUnece(AccountTestInvoicingCommon):
         )
         cls.partner = cls.env["res.partner"].create({"name": "TEST"})
 
+    def _create_other_company_payment_mode(self, payment_method):
+        return self.env["account.payment.mode"].create(
+            {
+                "name": "other company outbound Credit ACME Bank 2",
+                "bank_account_link": "variable",
+                "payment_method_id": payment_method.id,
+                "company_id": self.company_data_2["company"].id,
+            }
+        )
+
     def _import_invoice_xml_file(self, journal, file_path):
         with file_open(file_path, "rb") as file:
             xml_attachment = self.env["ir.attachment"].create(
