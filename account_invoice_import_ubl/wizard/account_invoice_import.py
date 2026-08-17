@@ -169,7 +169,10 @@ class AccountInvoiceImport(models.TransientModel):
         company_dict = {}
         # We only take the "official references" for company_dict
         if company_dict_full.get("vat"):
-            company_dict = {"vat": company_dict_full["vat"]}
+            company_dict = {
+                "vat": company_dict_full["vat"],
+                "einvoice_address": company_dict_full.get("einvoice_address"),
+            }
         date_xpath = xml_root.xpath("/inv:Invoice/cbc:IssueDate", namespaces=namespaces)
         date_dt = datetime.strptime(date_xpath[0].text, "%Y-%m-%d")
         date_due_xpath = xml_root.xpath("//cbc:PaymentDueDate", namespaces=namespaces)
