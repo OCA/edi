@@ -1,5 +1,6 @@
 # Copyright 2015-2021 Akretion France (http://www.akretion.com/)
 # Copyright 2020-2021 Therp BV (https://therp.nl)
+# Copyright 2026 Michael Tietz (MT Software) <mtietz@mt-software.de>
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
@@ -364,6 +365,24 @@ class AccountInvoiceImport(models.TransientModel):
             vals["check_total"] = parsed_inv["amount_total"]
         return vals
 
+    def _get_fiscal_position(self, import_config, partner, partner_shipping=None):
+        return (
+            self.env["account.fiscal.position"]
+            .with_company(import_config["company"])
+            ._get_fiscal_position(partner, partner_shipping)
+        )
+
+    def _map_account_and_taxes(self, import_config, partner, account, taxes):
+        res = account, taxes
+        if not partner:
+            return res
+        fiscal_position = self._get_fiscal_position(import_config, partner)
+        if not fiscal_position:
+            return res
+        new_account = fiscal_position.map_account(account)
+        new_taxes = fiscal_position.map_tax(taxes)
+        return new_account, new_taxes
+
     @api.model
     def _prepare_line_vals_1line(self, parsed_inv, import_config, vals, partner):
         il_vals = {
@@ -394,10 +413,9 @@ class AccountInvoiceImport(models.TransientModel):
                 account = import_config["account"]
             if import_config.get("taxes"):
                 taxes = import_config["taxes"]
-        fp = partner and partner.property_account_position_id or False
-        if fp:
-            account = fp.map_account(account)
-            taxes = fp.map_tax(taxes)
+        account, taxes = self._map_account_and_taxes(
+            import_config, partner, account, taxes
+        )
         il_vals.update(
             {
                 "account_id": account.id,
@@ -459,11 +477,9 @@ class AccountInvoiceImport(models.TransientModel):
                     type_tax_use=type_tax_use,
                     raise_exception=False,
                 )
-
-            fp = partner and partner.property_account_position_id or False
-            if fp:
-                account = fp.map_account(account)
-                taxes = fp.map_tax(taxes)
+            account, taxes = self._map_account_and_taxes(
+                import_config, partner, account, taxes
+            )
             uom = bdio._match_uom(
                 line.get("uom"),
                 parsed_inv["chatter_msg"],
