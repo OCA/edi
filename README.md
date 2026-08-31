@@ -41,7 +41,7 @@ addon | version | maintainers | summary
 [base_edi](base_edi/) | 18.0.1.0.2 | <a href='https://github.com/simahawk'><img src='https://github.com/simahawk.png' width='32' height='32' style='border-radius:50%;' alt='simahawk'/></a> | Base module to aggregate EDI features.
 [base_facturx](base_facturx/) | 18.0.1.0.0 | <a href='https://github.com/alexis-via'><img src='https://github.com/alexis-via.png' width='32' height='32' style='border-radius:50%;' alt='alexis-via'/></a> | Base module for Factur-X/ZUGFeRD
 [base_import_pdf_by_template](base_import_pdf_by_template/) | 18.0.1.1.2 | <a href='https://github.com/victoralmau'><img src='https://github.com/victoralmau.png' width='32' height='32' style='border-radius:50%;' alt='victoralmau'/></a> | Base Import Pdf by Template
-[base_import_pdf_by_template_account](base_import_pdf_by_template_account/) | 18.0.1.0.2 | <a href='https://github.com/victoralmau'><img src='https://github.com/victoralmau.png' width='32' height='32' style='border-radius:50%;' alt='victoralmau'/></a> | Base Import Pdf by Template Account
+[base_import_pdf_by_template_account](base_import_pdf_by_template_account/) | 18.0.1.0.3 | <a href='https://github.com/victoralmau'><img src='https://github.com/victoralmau.png' width='32' height='32' style='border-radius:50%;' alt='victoralmau'/></a> | Base Import Pdf by Template Account
 [base_ubl](base_ubl/) | 18.0.1.0.0 |  | Base module for Universal Business Language (UBL)
 [base_ubl_generate](base_ubl_generate/) | 18.0.1.0.1 |  | Base module to generate UBL files (Universal Business Language)
 [base_ubl_parse](base_ubl_parse/) | 18.0.1.1.0 |  | Base module to parse UBL files (Universal Business Language)
