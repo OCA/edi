@@ -116,7 +116,7 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                             "field_id": cls.env.ref(
                                 "account.field_account_move_line__product_id"
                             ).id,
-                            "pattern": r"\[([A-Z\d]+[_|-][A-Z\d]+)\]",
+                            "pattern": r"\[([A-Z\d]+[_-][A-Z\d]+)\]",
                             "value_type": "variable",
                             "search_field_id": cls.env.ref(
                                 "product.field_product_product__seller_ids"
@@ -134,7 +134,7 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                             "field_id": cls.env.ref(
                                 "account.field_account_move_line__quantity"
                             ).id,
-                            "pattern": r"\[[A-Z\d]+[_|-][A-Z\d]+\] [a-zA-Záí ]* ([0-9]{1,3})",  # noqa: E501
+                            "pattern": r"\[[A-Z\d]+[_-][A-Z\d]+\](?:\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)+\s+(\d+(?:[.,]\d+)?)",  # noqa: E501
                             "value_type": "variable",
                         },
                     ),
@@ -145,7 +145,7 @@ class TestBaseImportPdfByTemplateAccount(BaseCommon):
                             "field_id": cls.env.ref(
                                 "account.field_account_move_line__price_unit"
                             ).id,
-                            "pattern": r"\[[A-Z\d]+[_|-][A-Z\d]+\] [a-zA-Záí]* [0-9]{1,3} ([0-9]{1,3}.[0-9]{2})",  # noqa: E501
+                            "pattern": r"\[[A-Z\d]+[_-][A-Z\d]+\](?:\s+[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)+\s+\d+(?:[.,]\d+)?\s+(\d+\.\d{2})",  # noqa: E501
                             "value_type": "variable",
                             "log_distinct_value": True,
                         },
