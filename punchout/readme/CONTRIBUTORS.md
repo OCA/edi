@@ -1,0 +1,2 @@
+- Thomas Binsfeld <thomas.binsfeld@acsone.eu> (ACSONE SA/NV)
+- Benjamin Willig <benjamin.willig@acsone.eu> (ACSONE SA/NV)

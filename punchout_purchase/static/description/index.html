@@ -1,0 +1,648 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils: https://docutils.sourceforge.io/" />
+<title>Punchout Purchase</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
+
+See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+.subscript {
+  vertical-align: sub;
+  font-size: smaller }
+
+.superscript {
+  vertical-align: super;
+  font-size: smaller }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left, table.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right, table.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+.align-top    {
+  vertical-align: top }
+
+.align-middle {
+  vertical-align: middle }
+
+.align-bottom {
+  vertical-align: bottom }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: gray; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic, pre.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="punchout-purchase">
+<h1 class="title">Punchout Purchase</h1>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! This file is generated by oca-gen-addon-readme !!
+!! changes will be overwritten.                   !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! source digest: sha256:15af0519727d83aea8ef63f2775d260e201c314b7dd725c9baac1ae526718ad5
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/edi/tree/18.0/punchout_purchase"><img alt="OCA/edi" src="https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-punchout_purchase"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/edi&amp;target_branch=18.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p>This module adds purchase order creation from Punchout shopping carts.</p>
+<p>When a user browses a supplier’s punchout catalog and returns with a
+shopping cart, this module allows creating a purchase order directly
+from the cart data.</p>
+<p>Features:</p>
+<ul class="simple">
+<li>Link punchout sessions to purchase orders</li>
+<li>Automatic product creation from cart items</li>
+<li>Smart buttons to navigate between sessions and orders</li>
+</ul>
+<p><strong>Table of contents</strong></p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#usage" id="toc-entry-1">Usage</a><ul>
+<li><a class="reference internal" href="#browse-supplier-catalog-from-a-draft-po" id="toc-entry-2">Browse Supplier Catalog from a draft PO</a></li>
+<li><a class="reference internal" href="#browse-supplier-catalog-from-a-vendor-record" id="toc-entry-3">Browse Supplier Catalog from a vendor record</a></li>
+<li><a class="reference internal" href="#open-at-supplier-per-product-deep-link" id="toc-entry-4">Open at supplier (per-product deep-link)</a></li>
+<li><a class="reference internal" href="#auto-process-on-cart-receipt" id="toc-entry-5">Auto-process on cart receipt</a></li>
+<li><a class="reference internal" href="#uom-mismatch-warnings" id="toc-entry-6">UoM mismatch warnings</a></li>
+<li><a class="reference internal" href="#currency-mismatch-warning" id="toc-entry-7">Currency mismatch warning</a></li>
+<li><a class="reference internal" href="#tax-handling" id="toc-entry-8">Tax handling</a></li>
+<li><a class="reference internal" href="#permissions" id="toc-entry-9">Permissions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#known-issues-roadmap" id="toc-entry-10">Known issues / Roadmap</a><ul>
+<li><a class="reference internal" href="#cart-pre-fill-supplier-never-sees-existing-po-lines" id="toc-entry-11">Cart pre-fill — supplier never sees existing PO lines</a><ul>
+<li><a class="reference internal" href="#why-it-matters" id="toc-entry-12">Why it matters</a></li>
+<li><a class="reference internal" href="#mitigation-today" id="toc-entry-13">Mitigation today</a></li>
+<li><a class="reference internal" href="#real-fix-deferred" id="toc-entry-14">Real fix (deferred)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#browse-from-po-wizard-for-multi-backend-partners" id="toc-entry-15">“Browse from PO” wizard for multi-backend partners</a></li>
+<li><a class="reference internal" href="#open-at-supplier-multi-supplier-wizard" id="toc-entry-16">“Open at supplier” multi-supplier wizard</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#changelog" id="toc-entry-17">Changelog</a><ul>
+<li><a class="reference internal" href="#section-1" id="toc-entry-18">18.0.1.0.0 (2026)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-19">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-20">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-21">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-22">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-23">Maintainers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="usage">
+<h1><a class="toc-backref" href="#toc-entry-1">Usage</a></h1>
+<p>This module adds three purchaser-facing entry points on top of the base
+<tt class="docutils literal">punchout</tt> flow.</p>
+<div class="section" id="browse-supplier-catalog-from-a-draft-po">
+<h2><a class="toc-backref" href="#toc-entry-2">Browse Supplier Catalog from a draft PO</a></h2>
+<p>On a draft purchase order whose vendor has at least one <strong>Open</strong>
+punchout backend, a <strong>Browse Supplier Catalog</strong> button appears in the
+header (and as a link next to the standard <em>Catalog</em> link in the
+order-line area).</p>
+<p>Clicking it opens a punchout session pre-linked to the current PO. When
+the supplier returns the cart, the lines are <em>appended</em> to the PO
+instead of creating a new one.</p>
+<blockquote>
+⚠️ <strong>Limitation:</strong> existing manual lines on the PO are <strong>not</strong> sent
+to the supplier. The supplier’s site shows an empty cart. This is a
+protocol limitation (cart pre-fill needs OCI 5+ or cXML SetupRequest
+with current-cart payload). See <tt class="docutils literal">ROADMAP.md</tt>.</blockquote>
+</div>
+<div class="section" id="browse-supplier-catalog-from-a-vendor-record">
+<h2><a class="toc-backref" href="#toc-entry-3">Browse Supplier Catalog from a vendor record</a></h2>
+<p>The vendor (<tt class="docutils literal">res.partner</tt>) form gets the same <strong>Browse Supplier
+Catalog</strong> button when at least one Open punchout backend is configured
+for it. This path always creates a <em>new</em> PO from the returning cart.</p>
+</div>
+<div class="section" id="open-at-supplier-per-product-deep-link">
+<h2><a class="toc-backref" href="#toc-entry-4">Open at supplier (per-product deep-link)</a></h2>
+<p>Configure a <tt class="docutils literal">product_url_template</tt> on the vendor — a URL with a
+<tt class="docutils literal">{vendor_code}</tt> placeholder, e.g.
+<tt class="docutils literal"><span class="pre">https://supplier.example.com/parts/{vendor_code}</span></tt>.</p>
+<p>Then on any product that has a <tt class="docutils literal">seller_ids</tt> line for that vendor:</p>
+<ul class="simple">
+<li>The product template form gets an <strong>Open at supplier</strong> button.</li>
+<li>Each row in the <em>Vendors</em> list gets an <strong>Open at supplier</strong> link per
+supplier — useful when a product has multiple vendors.</li>
+</ul>
+<p>Both substitute the seller’s <tt class="docutils literal">product_code</tt> into the template and open
+the result in a new tab.</p>
+</div>
+<div class="section" id="auto-process-on-cart-receipt">
+<h2><a class="toc-backref" href="#toc-entry-5">Auto-process on cart receipt</a></h2>
+<p>When the supplier returns a cart and the backend has a <tt class="docutils literal">partner_id</tt>,
+the session is auto-processed: the PO is created (or appended to the
+pre-linked one) and the user lands on it directly. Failures are reported
+in the chatter of both the session and the pre-linked PO; the session
+stays in <em>To Process</em> so the purchaser can retry by clicking <em>Process</em>.</p>
+</div>
+<div class="section" id="uom-mismatch-warnings">
+<h2><a class="toc-backref" href="#toc-entry-6">UoM mismatch warnings</a></h2>
+<p>If a returned cart line uses a UoM that differs from the product’s
+primary UoM, a chatter message lists the discrepancies on the PO so the
+purchaser can verify before confirming. Same-category UoMs are converted
+automatically by Odoo; cross-category or unmapped supplier UoMs may have
+been silently coerced and warrant a manual check.</p>
+</div>
+<div class="section" id="currency-mismatch-warning">
+<h2><a class="toc-backref" href="#toc-entry-7">Currency mismatch warning</a></h2>
+<p>If the cart’s supplier prices are denominated in a currency different
+from the resolved PO currency, a chatter message flags the PO. Odoo
+stores the raw cart price as the line’s <tt class="docutils literal">price_unit</tt> without
+conversion, so each line is a foreign-currency value masquerading as the
+PO currency. Pick the right pricelist on the vendor before kicking off
+the punchout, or convert the lines manually before confirming.</p>
+</div>
+<div class="section" id="tax-handling">
+<h2><a class="toc-backref" href="#toc-entry-8">Tax handling</a></h2>
+<p>The cart’s <tt class="docutils literal">price_unit</tt> lands on the PO line tax-excluded by
+convention — no Odoo-side conversion happens. Suppliers vary (OCI’s
+<tt class="docutils literal"><span class="pre">NEW_ITEM-PRICE</span></tt> and cXML’s <tt class="docutils literal">UnitPrice/Money</tt> are tax-excluded for
+every supplier we’ve tested, but the protocols don’t <em>require</em> it). If
+your supplier sends tax-included prices, configure their fiscal position
+so taxes are computed accordingly, and validate against a known-good
+order before going live.</p>
+</div>
+<div class="section" id="permissions">
+<h2><a class="toc-backref" href="#toc-entry-9">Permissions</a></h2>
+<p>The Punchout smart button on the PO and the <em>Punchout Session</em> column on
+order lines are visible only to users in <tt class="docutils literal">base.group_system</tt>
+(Administration / Settings). Regular purchasers cannot read
+<tt class="docutils literal">punchout.session</tt> records, so showing the controls would just produce
+access errors.</p>
+</div>
+</div>
+<div class="section" id="known-issues-roadmap">
+<h1><a class="toc-backref" href="#toc-entry-10">Known issues / Roadmap</a></h1>
+<div class="section" id="cart-pre-fill-supplier-never-sees-existing-po-lines">
+<h2><a class="toc-backref" href="#toc-entry-11">Cart pre-fill — supplier never sees existing PO lines</a></h2>
+<p>The “Browse supplier catalog” button on a draft purchase order opens the
+supplier’s site, the user shops, and the returning cart’s lines are
+appended to the PO. <strong>Existing lines on that PO are not sent to the
+supplier</strong> — the supplier always sees their own (initially empty) cart
+on their site.</p>
+<div class="section" id="why-it-matters">
+<h3><a class="toc-backref" href="#toc-entry-12">Why it matters</a></h3>
+<p>A purchaser starts a draft PO, manually adds Product A (e.g. an
+internal-catalog part with no supplier match). Then they click “Browse
+supplier catalog”, add Product B on the supplier’s site, and submit the
+cart. Result on the Odoo side:</p>
+<pre class="literal-block">
+PO has 2 lines: A (manual), B (from punchout)
+</pre>
+<p>The supplier only knows about B. When the user confirms the PO and sends
+it (RFQ email, EDI), the supplier receives B. Product A is on the Odoo
+PO but <strong>isn’t actually being procured from this supplier</strong> — and the
+user has no clear visual signal that the two line origins differ.</p>
+</div>
+<div class="section" id="mitigation-today">
+<h3><a class="toc-backref" href="#toc-entry-13">Mitigation today</a></h3>
+<ul class="simple">
+<li><tt class="docutils literal">purchase.order.line.punchout_session_id</tt> records the session each
+line came from (or is empty for manual lines). Toggle the column
+visible via column-options on the PO line list.</li>
+</ul>
+</div>
+<div class="section" id="real-fix-deferred">
+<h3><a class="toc-backref" href="#toc-entry-14">Real fix (deferred)</a></h3>
+<p>Both <strong>OCI 5.0 extended modes</strong> (<tt class="docutils literal">BACKGROUNDSEARCH</tt>, <tt class="docutils literal">SOURCING</tt>) and
+<strong>cXML</strong> (<tt class="docutils literal">SetupRequest</tt> with current cart payload) let the buyer send
+the existing cart contents to the supplier as part of the punchout
+setup, so the supplier can pre-fill their cart with what the buyer
+already has. Implementing either:</p>
+<ul class="simple">
+<li>For OCI: probably a new method that builds an extended-mode setup
+payload including existing line refs (vendor codes only — supplier
+can’t match arbitrary internal products).</li>
+<li>For cXML: extend the <tt class="docutils literal">PunchOutSetupRequest</tt> template to include the
+current cart as <tt class="docutils literal">&lt;ItemIn&gt;</tt> elements.</li>
+</ul>
+<p>Both require coordination with the specific supplier’s spec — TVH’s OCI
+4.0 SELECT spec doesn’t expose cart-pre-fill, and TVH’s cXML spec is
+request-only (“can be provided upon request” per their EMEA doc page
+10). Pick this up when those specs are in hand.</p>
+</div>
+</div>
+<div class="section" id="browse-from-po-wizard-for-multi-backend-partners">
+<h2><a class="toc-backref" href="#toc-entry-15">“Browse from PO” wizard for multi-backend partners</a></h2>
+<p><tt class="docutils literal">res.partner._find_punchout_backend()</tt> picks the first open backend
+for a partner. If a supplier exposes multiple backends (e.g. industrial
+and agricultural catalogs at TVH/Bepco), the user gets an arbitrary one.
+A simple wizard listing all open backends for the partner and letting
+the user pick is the right follow-up.</p>
+<p><strong>Status:</strong> intentionally deferred. In the field a purchaser is
+typically pinned to one catalog (either an industrial buyer <em>or</em> an
+agricultural buyer at TVH, never both), so the multi-backend case rarely
+materialises and the chooser-on-every-click would just add a click for
+the common single-backend path. Revisit when a real deployment needs it.</p>
+</div>
+<div class="section" id="open-at-supplier-multi-supplier-wizard">
+<h2><a class="toc-backref" href="#toc-entry-16">“Open at supplier” multi-supplier wizard</a></h2>
+<p><tt class="docutils literal">product.template.action_open_supplier_product</tt> opens the first
+matching supplierinfo’s URL. Multi-supplier products would benefit from
+a chooser (“which supplier did you want to look this up at?”). Same
+wizard pattern as the multi-backend case above.</p>
+</div>
+</div>
+<div class="section" id="changelog">
+<h1><a class="toc-backref" href="#toc-entry-17">Changelog</a></h1>
+<div class="section" id="section-1">
+<h2><a class="toc-backref" href="#toc-entry-18">18.0.1.0.0 (2026)</a></h2>
+<ul class="simple">
+<li>[MIG] Migration to Odoo 18.0.</li>
+<li>[FIX] Surface <tt class="docutils literal">partner_id</tt>, <tt class="docutils literal">company_id</tt>, <tt class="docutils literal">product_category_id</tt>
+and <tt class="docutils literal">auto_create_products</tt> on the backend form view (the model
+carried these fields but the form never showed them).</li>
+<li>[IMP] Punchout smart button on PO now counts every distinct session
+that contributed lines (not just the originating one) and opens a list
+view when more than one is involved.</li>
+<li>[FIX] PO and chatter messages produced by the supplier-callback
+auto-process are attributed to the session’s <tt class="docutils literal">user_id</tt> (the
+purchaser who initiated the punchout) instead of the sudo user.</li>
+<li>[FIX] Hide the Punchout smart button and PO-line “Punchout Session”
+column for users without <tt class="docutils literal">base.group_system</tt>, so non-admins don’t
+see a button that throws an access error on click.</li>
+<li>[IMP] When auto-process fails, post the exception as a chatter message
+on the session (and on the pre-linked PO when set), so the purchaser
+is notified next to the affected record instead of having to read
+server logs.</li>
+<li>[ADD] <tt class="docutils literal">USAGE.md</tt> documenting all the new entry points (Browse
+Supplier Catalog, Open at supplier, auto-process, UoM warnings).</li>
+<li>[IMP] Currency-mismatch chatter warning on the PO when the cart’s
+supplier prices are in a different currency than the PO’s pricelist
+resolved to. Odoo stores raw cart numbers as <tt class="docutils literal">price_unit</tt>, so a
+silent currency drift is invisible without this hint.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="bug-tracker">
+<h1><a class="toc-backref" href="#toc-entry-19">Bug Tracker</a></h1>
+<p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
+In case of trouble, please check there if your issue has already been reported.
+If you spotted it first, help us to smash it by providing a detailed and welcomed
+<a class="reference external" href="https://github.com/OCA/edi/issues/new?body=module:%20punchout_purchase%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<p>Do not contact contributors directly about support or help with technical issues.</p>
+</div>
+<div class="section" id="credits">
+<h1><a class="toc-backref" href="#toc-entry-20">Credits</a></h1>
+<div class="section" id="authors">
+<h2><a class="toc-backref" href="#toc-entry-21">Authors</a></h2>
+<ul class="simple">
+<li>ACSONE SA/NV</li>
+<li>Hunki Enterprises BV</li>
+</ul>
+</div>
+<div class="section" id="contributors">
+<h2><a class="toc-backref" href="#toc-entry-22">Contributors</a></h2>
+<ul class="simple">
+<li>Thomas Binsfeld &lt;<a class="reference external" href="mailto:thomas.binsfeld&#64;acsone.eu">thomas.binsfeld&#64;acsone.eu</a>&gt;</li>
+<li>Benjamin Willig &lt;<a class="reference external" href="mailto:benjamin.willig&#64;acsone.eu">benjamin.willig&#64;acsone.eu</a>&gt;</li>
+<li>Holger Brunn &lt;<a class="reference external" href="mailto:hbrunn&#64;therp.nl">hbrunn&#64;therp.nl</a>&gt;</li>
+<li>Bosd (migration to 18.0)</li>
+</ul>
+</div>
+<div class="section" id="maintainers">
+<h2><a class="toc-backref" href="#toc-entry-23">Maintainers</a></h2>
+<p>This module is maintained by the OCA.</p>
+<a class="reference external image-reference" href="https://odoo-community.org">
+<img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />
+</a>
+<p>OCA, or the Odoo Community Association, is a nonprofit organization whose
+mission is to support the collaborative development of Odoo features and
+promote its widespread use.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/edi/tree/18.0/punchout_purchase">OCA/edi</a> project on GitHub.</p>
+<p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!-- Extend demo backend with purchase-specific settings -->
+    <record id="punchout.demo_punchout_backend" model="punchout.backend">
+        <field name="partner_id" ref="base.res_partner_1" />
+        <field name="auto_create_products" eval="True" />
+    </record>
+</odoo>
