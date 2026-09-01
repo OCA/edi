@@ -90,7 +90,7 @@
                             <field
                                 name="keywords"
                                 widget="many2many_tags"
-                                options="{'no_quick_create': False, 'color_field': False, 'create': true}"
+                                options="{'no_quick_create': False, 'create': true}"
                                 placeholder="Type a keyword and Enter. Used by invoice2data to pick this template."
                             />
                             <field
