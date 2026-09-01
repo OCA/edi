@@ -71,11 +71,29 @@ class Invoice2dataTemplate(models.Model):
             "`priority:` semantics."
         ),
     )
-    keywords = fields.Text(
+    keywords = fields.Many2many(
+        comodel_name="invoice2data.template.keyword",
+        relation="invoice2data_template_keyword_rel",
+        column1="template_id",
+        column2="keyword_id",
         required=True,
-        help="One keyword per line; passed as the template's `keywords:` list.",
+        help=(
+            "Passed as the template's `keywords:` list. Tags autocomplete "
+            "against previously-typed keywords; type-and-enter to create a "
+            "new one."
+        ),
     )
-    exclude_keywords = fields.Text(help="Optional; one keyword per line.")
+    exclude_keywords = fields.Many2many(
+        comodel_name="invoice2data.template.keyword",
+        relation="invoice2data_template_exclude_keyword_rel",
+        column1="template_id",
+        column2="keyword_id",
+        string="Exclude keywords",
+        help=(
+            "Optional. Passed as the template's `exclude_keywords:` list; "
+            "any match here blocks the template even if `keywords` match."
+        ),
+    )
     template = fields.Text(
         help=(
             "Authoritative JSON for the template (full invoice2data schema). "
@@ -123,13 +141,9 @@ class Invoice2dataTemplate(models.Model):
         self.ensure_one()
         data = {
             "issuer": self.name,
-            "keywords": [
-                k.strip() for k in (self.keywords or "").splitlines() if k.strip()
-            ],
+            "keywords": [kw.name for kw in self.keywords if kw.name],
             "exclude_keywords": [
-                k.strip()
-                for k in (self.exclude_keywords or "").splitlines()
-                if k.strip()
+                kw.name for kw in self.exclude_keywords if kw.name
             ],
             "priority": self.priority,
             "fields": {},
