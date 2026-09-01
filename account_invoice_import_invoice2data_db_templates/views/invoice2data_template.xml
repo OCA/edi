@@ -120,31 +120,34 @@
                                 placeholder="Paste a full invoice2data JSON template here. Takes precedence over the Fields tab."
                             />
                         </page>
+                        <page name="preview" string="Preview text">
+                            <field
+                                name="preview_text"
+                                readonly="1"
+                                nolabel="1"
+                                widget="text"
+                                placeholder="Run 'Preview text' to see what the OCR / pdftotext extractor pulls from the attached PDF."
+                            />
+                        </page>
                         <page name="results" string="Test results">
-                            <group>
-                                <field
-                                    name="preview_text"
-                                    readonly="1"
-                                    nolabel="1"
-                                    widget="text"
-                                />
-                            </group>
-                            <group>
-                                <field
-                                    name="last_test_warnings"
-                                    readonly="1"
-                                    nolabel="1"
-                                    widget="text"
-                                    class="alert alert-warning"
-                                    attrs="{'invisible': [('last_test_warnings', '=', False)]}"
-                                />
-                                <field
-                                    name="last_test_result"
-                                    readonly="1"
-                                    nolabel="1"
-                                    widget="text"
-                                />
-                            </group>
+                            <!-- Full-width warning banner at the top of the page,
+                                 not inside a <group> (which would constrain it
+                                 to one column of a two-column layout). -->
+                            <field
+                                name="last_test_warnings"
+                                readonly="1"
+                                nolabel="1"
+                                widget="text"
+                                class="alert alert-warning"
+                                attrs="{'invisible': [('last_test_warnings', '=', False)]}"
+                            />
+                            <field
+                                name="last_test_result"
+                                readonly="1"
+                                nolabel="1"
+                                widget="text"
+                                placeholder="Run 'Test' to extract data from the attached PDF using this template + the disk / DB pool."
+                            />
                         </page>
                     </notebook>
                 </sheet>
