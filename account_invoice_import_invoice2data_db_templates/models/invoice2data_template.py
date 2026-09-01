@@ -142,9 +142,7 @@ class Invoice2dataTemplate(models.Model):
         data = {
             "issuer": self.name,
             "keywords": [kw.name for kw in self.keywords if kw.name],
-            "exclude_keywords": [
-                kw.name for kw in self.exclude_keywords if kw.name
-            ],
+            "exclude_keywords": [kw.name for kw in self.exclude_keywords if kw.name],
             "priority": self.priority,
             "fields": {},
         }

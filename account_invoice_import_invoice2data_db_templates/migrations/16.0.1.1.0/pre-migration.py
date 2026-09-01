@@ -12,7 +12,6 @@ rename them here and copy their content in ``post-migration``.
 
 import logging
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -20,18 +19,14 @@ def migrate(cr, version):
     if not version:
         # Fresh install; nothing to migrate.
         return
-    cr.execute(
-        """
+    cr.execute("""
         ALTER TABLE invoice2data_template
         RENAME COLUMN keywords TO keywords_text_deprecated
-        """
-    )
-    cr.execute(
-        """
+        """)
+    cr.execute("""
         ALTER TABLE invoice2data_template
         RENAME COLUMN exclude_keywords TO exclude_keywords_text_deprecated
-        """
-    )
+        """)
     _logger.info(
         "invoice2data_template: renamed Text keyword columns for m2m migration"
     )

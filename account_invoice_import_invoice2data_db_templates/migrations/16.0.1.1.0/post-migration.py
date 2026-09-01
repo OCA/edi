@@ -14,7 +14,6 @@ stale data.
 
 import logging
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -47,12 +46,10 @@ def migrate(cr, version):
     from odoo import api, SUPERUSER_ID
 
     env = api.Environment(cr, SUPERUSER_ID, {})
-    cr.execute(
-        """
+    cr.execute("""
         SELECT id, keywords_text_deprecated, exclude_keywords_text_deprecated
         FROM invoice2data_template
-        """
-    )
+        """)
     rows = cr.fetchall()
     cache = {}
     total_kw = total_ex = 0

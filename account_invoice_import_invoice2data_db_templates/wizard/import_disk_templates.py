@@ -21,7 +21,6 @@ import re
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -73,8 +72,7 @@ class Invoice2dataTemplateImportDiskWizard(models.TransientModel):
             pattern = re.compile(self.name_regex) if self.name_regex else None
         except re.error as exc:
             raise UserError(
-                _("Invalid regex %(rx)r: %(err)s")
-                % {"rx": self.name_regex, "err": exc}
+                _("Invalid regex %(rx)r: %(err)s") % {"rx": self.name_regex, "err": exc}
             ) from exc
 
         disk_templates = read_templates()
@@ -102,9 +100,7 @@ class Invoice2dataTemplateImportDiskWizard(models.TransientModel):
                 continue
 
             try:
-                vals = self._vals_from_disk_template(
-                    disk_tpl, Keyword, keyword_cache
-                )
+                vals = self._vals_from_disk_template(disk_tpl, Keyword, keyword_cache)
             except Exception as exc:  # noqa: BLE001 -- report per-template
                 errors.append("%s: %s" % (name, exc))
                 _logger.warning(
