@@ -2,10 +2,24 @@
 <odoo noupdate="1">
     <record id="group_invoice2data_template_manager" model="res.groups">
         <field name="name">Manage invoice2data templates</field>
-        <field name="category_id" ref="base.module_category_accounting_accounting" />
-        <field name="implied_ids" eval="[(4, ref('account.group_account_invoice'))]" />
+        <field
+            name="implied_ids"
+            eval="[(4, ref('account.group_account_invoice'))]"
+        />
         <field
             name="comment"
-        >Author and edit DB-stored invoice2data templates used by the invoice import wizard.</field>
+        >Author and edit DB-stored invoice2data templates used by the invoice import wizard. Technical toggle; auto-granted to System admins.</field>
+    </record>
+
+    <!-- Auto-grant template-manager rights to System administrators so a fresh
+         admin sees the Create button without hunting through checkbox lists.
+         Category deliberately omitted on the group above so it lands in the
+         user form's "Other" section (visible in developer mode) rather than as
+         a dropdown option under Accounting. -->
+    <record id="base.group_system" model="res.groups">
+        <field
+            name="implied_ids"
+            eval="[(4, ref('group_invoice2data_template_manager'))]"
+        />
     </record>
 </odoo>

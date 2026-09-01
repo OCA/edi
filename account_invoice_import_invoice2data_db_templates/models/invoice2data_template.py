@@ -201,6 +201,16 @@ class Invoice2dataTemplate(models.Model):
         if not result:
             warnings.append(_("invoice2data did not match this PDF."))
         else:
+            matched = result.get("template_name") or ""
+            if self.name and matched and matched != self.name:
+                warnings.append(
+                    _(
+                        "These results come from template %(matched)r, not "
+                        "%(self)r. Your template did not match this PDF; the "
+                        "shown fields are what the winning template extracted."
+                    )
+                    % {"matched": matched, "self": self.name}
+                )
             for field in ("amount", "date", "invoice_number", "issuer"):
                 if not result.get(field):
                     warnings.append(_("Required field missing: %s") % field)
@@ -226,7 +236,7 @@ class Invoice2dataTemplate(models.Model):
                 _("Attach a sample PDF to the chatter before suggesting fields.")
             )
         text = self._extract_text(attachment)
-        draft = suggested_template(text, name=self.name or "draft")
+        draft = suggested_template(text)
         existing = {row.name for row in self.field_ids}
         rows = []
         for fname, spec in (draft.get("fields") or {}).items():
