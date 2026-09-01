@@ -61,6 +61,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             ],
             limit=1,
         )
+        cls.module = "account_invoice_import_simple_pdf"
         cls.product = cls.env["product.product"].create(
             {
                 "name": "Mobile phone",
