@@ -242,11 +242,12 @@ class BaseImportPdfTemplateLine(models.Model):
         selection="_selection_reference_value",
         string="Default value",
     )
-    date_format = fields.Selection(
-        selection="_selection_date_format",
-    )
-    time_format = fields.Selection(
-        selection="_selection_time_format",
+    date_time_format = fields.Char(
+        string="Date/Time Format",
+        help=(
+            "Specify the date and time format to use when displaying values. "
+            "The format must use Python strftime notation."
+        ),
     )
     decimal_separator = fields.Selection(
         selection=[
@@ -302,32 +303,6 @@ class BaseImportPdfTemplateLine(models.Model):
         return [
             ("header", self.env._("Header")),
             ("lines", self.env._("Lines")),
-        ]
-
-    @api.model
-    def _selection_date_format(self):
-        return [
-            ("*Y-*d-*m", self.env._("YY-dd-MM")),
-            ("*m-*d-*Y", self.env._("MM-dd-YY")),
-            ("*d-*m-*Y", self.env._("dd-MM-YY")),
-            ("*Y/*d/*m", self.env._("YY/dd/MM")),
-            ("*m/*d/*Y", self.env._("MM/dd/YY")),
-            ("*d.*m.*Y", self.env._("dd.MM.YY")),
-            ("*d.*m.*y-short", self.env._("dd.MM.yy")),
-            ("*d/*m/*Y", self.env._("dd/MM/YY")),
-            ("*d/*m/*y-short", self.env._("dd/MM/yy")),
-            ("*B *d, *Y", self.env._("B dd, YY")),
-            ("*b-short *d, *Y", self.env._("b dd, YY")),
-            ("*d *b-short *Y", self.env._("dd b YY")),
-            ("*d *B *Y", self.env._("dd B YY")),
-            ("*d-*b-*y", self.env._("dd-b-yy")),
-            ("*d-*b-short-*Y", self.env._("dd-b-YY")),
-        ]
-
-    @api.model
-    def _selection_time_format(self):
-        return [
-            ("*H:*M:*S", self.env._("H:M:S")),
         ]
 
     @api.model
@@ -400,15 +375,9 @@ class BaseImportPdfTemplateLine(models.Model):
         return text
 
     def _process_datetime_value(self, value):
-        if self.field_ttype not in ("date", "datetime") or not self.date_format:
+        if self.field_ttype not in ("date", "datetime") or not self.date_time_format:
             return value
-        # We need to replace -short because it is not respected in databases with
-        # different capitalization. (example: *d/*m/*Y and *d/*m/*y)
-        date_format = self.date_format.replace("*", "%").replace("-short", "")
-        if self.field_ttype == "datetime" and self.time_format:
-            time_format = self.time_format.replace("*", "%")
-            date_format += " " + time_format
-        datetime_object = datetime.strptime(value, date_format)
+        datetime_object = datetime.strptime(value, self.date_time_format)
         value = datetime_object.strftime("%Y-%m-%d %H:%M:%S")
         return value
 
