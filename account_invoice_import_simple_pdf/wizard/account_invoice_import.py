@@ -7,9 +7,9 @@ import shutil
 import subprocess
 from tempfile import NamedTemporaryFile
 
-from odoo import _, api, models
+from odoo import api, models
 from odoo.exceptions import UserError
-from odoo.osv import expression
+from odoo.fields import Domain
 
 logger = logging.getLogger(__name__)
 try:
@@ -154,20 +154,20 @@ class AccountInvoiceImport(models.TransientModel):
             res = self._simple_pdf_text_extraction_pypdf(fileobj, test_info)
         else:
             raise UserError(
-                _(
+                self.env._(
                     "System Parameter 'invoice_import_simple_pdf.pdf2txt' "
-                    "has an invalid value '%s'."
+                    "has an invalid value '%(specific_tool)s'.",
+                    specific_tool=specific_tool,
                 )
-                % specific_tool
             )
         if not res:
             raise UserError(
-                _(
+                self.env._(
                     "Odoo could not extract the text from the PDF invoice "
-                    "with the method %s. Refer to the Odoo server logs for more "
-                    "technical information about the cause of the failure."
+                    "with the method %(specific_tool)s. Refer to the Odoo server logs "
+                    "for more technical information about the cause of the failure.",
+                    specific_tool=specific_tool,
                 )
-                % specific_tool
             )
         return res
 
@@ -210,7 +210,7 @@ class AccountInvoiceImport(models.TransientModel):
                     res = self._simple_pdf_text_extraction_pypdf(fileobj, test_info)
                 if not res:
                     raise UserError(
-                        _(
+                        self.env._(
                             "Odoo could not extract the text from the PDF invoice. "
                             "Refer to the Odoo server logs for more technical "
                             "information about the cause of the failure."
@@ -235,7 +235,7 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _simple_pdf_keyword_fields(self):
         return {
-            "vat": _("VAT number"),
+            "vat": self.env._("VAT number"),
         }
 
     @api.model
@@ -251,14 +251,18 @@ class AccountInvoiceImport(models.TransientModel):
         keyword_fields_list = list(keyword_fields_dict.keys())
         domain_or_list = [[(field, "!=", False)] for field in keyword_fields_list]
         domain_or_list.append([("simple_pdf_keyword", "!=", False)])
-        field_domain = expression.OR(domain_or_list)
+        field_domain = Domain.AND(
+            [
+                Domain.OR(domain_or_list),
+                [
+                    ("parent_id", "=", False),
+                    ("is_company", "=", True),
+                    ("id", "!=", self.env.company.partner_id.id),
+                ],
+            ]
+        )
         partners = rpo.search_read(
-            field_domain
-            + [
-                ("parent_id", "=", False),
-                ("is_company", "=", True),
-                ("id", "!=", self.env.company.partner_id.id),
-            ],
+            field_domain,
             ["simple_pdf_keyword"] + keyword_fields_list,
         )
         for partner in partners:
@@ -267,7 +271,7 @@ class AccountInvoiceImport(models.TransientModel):
                 found_res = [keyword in raw_text_no_space for keyword in keywords]
                 if all(found_res):
                     partner_id = partner["id"]
-                    result_label = _(
+                    result_label = self.env._(
                         "Successful match on %(count)s keywords (%(keywords)s)",
                         count=len(keywords),
                         keywords=", ".join(keywords),
@@ -277,7 +281,8 @@ class AccountInvoiceImport(models.TransientModel):
             for kfield, kfield_label in keyword_fields_dict.items():
                 if partner[kfield] and partner[kfield] in raw_text_no_space:
                     partner_id = partner["id"]
-                    result_label = _("Successful match on {label} '{value}'").format(
+                    result_label = self.env._(
+                        "Successful match on %(label)s '%(value)s'",
                         label=kfield_label,
                         value=partner[kfield],
                     )
@@ -383,8 +388,11 @@ class AccountInvoiceImport(models.TransientModel):
                 )
             except AttributeError:
                 raise UserError(
-                    _("Missing parse method for field '%s'. This should never happen.")
-                    % field.name
+                    self.env._(
+                        "Missing parse method for field '%(field_name)s'. "
+                        "This should never happen.",
+                        field_name=field.name,
+                    )
                 ) from None
 
         failed_fields = parsed_inv.pop("failed_fields")
@@ -396,9 +404,10 @@ class AccountInvoiceImport(models.TransientModel):
                 ]
             )
             parsed_inv["chatter_msg"].append(
-                _(
-                    f"<strong>Failed</strong> to extract the following "
-                    f"field(s): {fields_label}."
+                self.env._(
+                    "<strong>Failed</strong> to extract the following field(s): "
+                    "%(fields_label)s.",
+                    fields_label=fields_label,
                 )
             )
 

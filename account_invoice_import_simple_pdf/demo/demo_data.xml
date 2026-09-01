@@ -2,7 +2,7 @@
 <odoo noupdate="1">
     <record id="mobile_phone" model="product.product">
         <field name="name">Mobile phone</field>
-        <field name="categ_id" ref="product.product_category_5" />
+        <field name="categ_id" ref="product.product_category_services" />
         <field name="sale_ok" eval="False" />
         <field name="purchase_ok" eval="True" />
         <field name="type">service</field>

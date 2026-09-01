@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.misc import format_date
 
@@ -91,25 +91,21 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
     def _date_separator_sel(self):
         return self.env["res.partner"]._simple_pdf_date_separator_sel()
 
-    _sql_constraints = [
-        (
-            "position_specific_positive",
-            "CHECK(position > 0)",
-            "The position must be strictly positive.",
-        ),
-        (
-            "partner_field_unique",
-            "unique(partner_id, name)",
-            "There is already an entry for that field.",
-        ),
-    ]
+    _position_specific_positive = models.Constraint(
+        "CHECK(position > 0)",
+        "The position must be strictly positive.",
+    )
+    _partner_field_unique = models.Constraint(
+        "unique(partner_id, name)",
+        "There is already an entry for that field.",
+    )
 
     @api.constrains("name", "regexp")
     def _check_field_config(self):
         for field in self:
             if field.name == "description" and not field.regexp:
                 raise ValidationError(
-                    _(
+                    self.env._(
                         "You must set a Specific Regular Expression on "
                         "the 'Description' field."
                     )
@@ -136,7 +132,10 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         if not data_list:
             if raise_if_none:
                 raise UserError(
-                    _("No valid data extracted for field '%s'.") % self.name
+                    self.env._(
+                        "No valid data extracted for field '%(field_name)s'.",
+                        field_name=self.name,
+                    )
                 )
             else:
                 return None
@@ -155,7 +154,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             return data_list_sorted[0]
         elif self.extract_rule in ("position_min", "position_max"):
             if len(data_list) < self.position:
-                error_msg = _(
+                error_msg = self.env._(
                     "Partner '%(partner_name)s' is configured with an extract rule "
                     "'%(extract_rule)s' with position %(position)s for field "
                     "'%(field_name)s' but the list of extracted valid data only "
@@ -182,7 +181,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             return data_list[-1]
         elif self.extract_rule in ("position_start", "position_end"):
             if len(data_list) < self.position:
-                error_msg = _(
+                error_msg = self.env._(
                     "Partner '%(partner_name)s' is configured with an extract rule "
                     "'%(extract_rule)s' with position %(position)s for field "
                     "'%(field_name)s' but the list of extracted "
@@ -204,7 +203,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                 position -= 1
             return data_list[position * sign]
         else:
-            raise UserError(_("Bad configuration"))
+            raise UserError(self.env._("Bad configuration"))
 
     def restrict_text(self, raw_text, test_info):
         self.ensure_one()
@@ -215,15 +214,17 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             position = restrict_text.find(start)
             if position >= 0:
                 restrict_text = restrict_text[position + len(start) :]
-                test_info[self.name]["start"] = _("Successful cut on '%s'") % start
+                test_info[self.name]["start"] = self.env._(
+                    "Successful cut on '%(start)s'", start=start
+                )
             else:
-                error_msg = _("String '%s' not found") % start
+                error_msg = self.env._("String '%(start)s' not found", start=start)
                 test_info[self.name]["start"] = (
                     f"<strong{ERROR_STYLE}>{error_msg}</strong>"
                 )
         if end:
             if not restrict_text or (restrict_text and not restrict_text.strip()):
-                error_msg = _(
+                error_msg = self.env._(
                     "No text to cut, maybe because start string "
                     "was the very end of the document"
                 )
@@ -234,9 +235,11 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                 position = restrict_text.find(end)
                 if position >= 0:
                     restrict_text = restrict_text[:position]
-                    test_info[self.name]["end"] = _("Successful cut on '%s'") % end
+                    test_info[self.name]["end"] = self.env._(
+                        "Successful cut on '%(end)s'", end=end
+                    )
                 else:
-                    error_msg = _("String '%s' not found") % end
+                    error_msg = self.env._("String '%(end)s' not found", end=end)
                     test_info[self.name]["end"] = (
                         f"<strong{ERROR_STYLE}>{error_msg}</strong>"
                     )
@@ -248,7 +251,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         field_name = test_info["field_name_sel"][self.name]
         if not date_format:
             raise UserError(
-                _(
+                self.env._(
                     "No date format configured on partner '%(partner_name)s' "
                     "nor on the field '%(field_name)s'.",
                     partner_name=partner_name,
@@ -258,7 +261,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         date_separator = self.date_separator or partner_config["date_separator"]
         if not date_separator:
             raise UserError(
-                _(
+                self.env._(
                     "No date separator configured on partner '%(partner_name)s' "
                     "nor on the field '%(field_name)s'.",
                     partner_name=partner_name,

@@ -61,8 +61,15 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             ],
             limit=1,
         )
-        cls.module = "account_invoice_import_simple_pdf"
-        cls.product = cls.env.ref(f"{cls.module}.mobile_phone")
+        cls.product = cls.env["product.product"].create(
+            {
+                "name": "Mobile phone",
+                "sale_ok": False,
+                "purchase_ok": True,
+                "type": "service",
+            }
+        )
+        purchase_tax.unece_type_code = "VAT"
         cls.product.with_company(cls.company.id).write(
             {"supplier_taxes_id": [Command.set([purchase_tax.id])]}
         )

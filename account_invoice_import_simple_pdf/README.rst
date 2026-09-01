@@ -21,13 +21,13 @@ Account Invoice Import Simple PDF
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github
-    :target: https://github.com/OCA/edi/tree/18.0/account_invoice_import_simple_pdf
+    :target: https://github.com/OCA/edi/tree/19.0/account_invoice_import_simple_pdf
     :alt: OCA/edi
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/edi-18-0/edi-18-0-account_invoice_import_simple_pdf
+    :target: https://translation.odoo-community.org/projects/edi-19-0/edi-19-0-account_invoice_import_simple_pdf
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/edi&target_branch=19.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -38,11 +38,11 @@ embedded XML file. This module has been developped to solve the
 drawbacks of the OCA module **account_invoice_import_invoice2data** ;
 its advantages are the following:
 
-- Possibility to add support for a new vendor without developper skills:
-  the accountant can do it!
-- Adding support for a new vendor is faster.
-- More tolerance on vendor invoice layout changes.
-- Easier to install.
+-  Possibility to add support for a new vendor without developper
+   skills: the accountant can do it!
+-  Adding support for a new vendor is faster.
+-  More tolerance on vendor invoice layout changes.
+-  Easier to install.
 
 With this module, you can import all the invoices that you were able to
 import with the module *account_invoice_import_invoice2data*. In fact,
@@ -62,21 +62,21 @@ fields for some very specific needs.
 
 The module can extract the following fields:
 
-- Total Amount with taxes
-- Total Untaxed Amount
-- Total Tax Amount
-- Invoice Date
-- Due Date
-- Start Date
-- End Date
-- Invoice Number
-- Description (for that field, you have to write a regex)
+-  Total Amount with taxes
+-  Total Untaxed Amount
+-  Total Tax Amount
+-  Invoice Date
+-  Due Date
+-  Start Date
+-  End Date
+-  Invoice Number
+-  Description (for that field, you have to write a regex)
 
 In this list, only 3 fields are required:
 
-- Invoice Date
-- 2 out of the 3 Amount fields (the 3rd can be deducted from the 2
-  others: Total Amount = Total Untaxed + Total Tax)
+-  Invoice Date
+-  2 out of the 3 Amount fields (the 3rd can be deducted from the 2
+   others: Total Amount = Total Untaxed + Total Tax)
 
 To take advantage of the fields *Start Date* and *End Date*, you need
 the OCA module *account_invoice_start_end_dates* from the
@@ -189,11 +189,11 @@ Other requirements
 
 This module also requires the following Python libraries:
 
-- `regex <https://pypi.org/project/regex/>`__ which is
-  backward-compatible with the *re* module of the Python standard
-  library, but has additional functionalities.
-- `dateparser <https://github.com/scrapinghub/dateparser>`__ which is a
-  powerful date parsing library.
+-  `regex <https://pypi.org/project/regex/>`__ which is
+   backward-compatible with the *re* module of the Python standard
+   library, but has additional functionalities.
+-  `dateparser <https://github.com/scrapinghub/dateparser>`__ which is a
+   powerful date parsing library.
 
 The dateparser lib depends itself on regex. So you can install these
 Python libraries via pip with the following command:
@@ -229,13 +229,13 @@ If you want to force Odoo to use a specific text extraction method, go
 to the menu *Configuration > Technical > Parameters > System Parameters*
 and create a new System Parameter:
 
-- *Key*: **invoice_import_simple_pdf.pdf2txt**
-- *Value*: select the proper value for the method you want to use:
+-  *Key*: **invoice_import_simple_pdf.pdf2txt**
+-  *Value*: select the proper value for the method you want to use:
 
-  1. pymupdf
-  2. pdftotext.lib
-  3. pdftotext.cmd
-  4. pypdf
+   1. pymupdf
+   2. pdftotext.lib
+   3. pdftotext.cmd
+   4. pypdf
 
 In this configuration, Odoo will only use the selected text extraction
 method and, if it fails, it will display an error message.
@@ -250,7 +250,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/edi/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_import_simple_pdf%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/edi/issues/new?body=module:%20account_invoice_import_simple_pdf%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -265,7 +265,7 @@ Authors
 Contributors
 ------------
 
-- Alexis de Lattre <alexis.delattre@akretion.com>
+-  Alexis de Lattre <alexis.delattre@akretion.com>
 
 Maintainers
 -----------
@@ -288,6 +288,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-alexis-via| 
 
-This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/18.0/account_invoice_import_simple_pdf>`_ project on GitHub.
+This module is part of the `OCA/edi <https://github.com/OCA/edi/tree/19.0/account_invoice_import_simple_pdf>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

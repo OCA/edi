@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
@@ -36,18 +36,14 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
         readonly=False,
     )
 
-    _sql_constraints = [
-        (
-            "occurrence_min_positive",
-            "CHECK(occurrence_min > 0)",
-            "The minimum occurence must be strictly positive.",
-        ),
-        (
-            "occurrence_max_positive",
-            "CHECK(occurrence_max > 0)",
-            "The maximum occurence must be strictly positive.",
-        ),
-    ]
+    _occurrence_min_positive = models.Constraint(
+        "CHECK(occurrence_min > 0)",
+        "The minimum occurence must be strictly positive.",
+    )
+    _occurrence_max_positive = models.Constraint(
+        "CHECK(occurrence_max > 0)",
+        "The maximum occurence must be strictly positive.",
+    )
 
     @api.model
     def _string_type_sel(self):
@@ -68,11 +64,11 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
             if rec.string_type == "fixed":
                 fixed_char_stripped = rec.fixed_char and rec.fixed_char.strip()
                 if not fixed_char_stripped:
-                    raise ValidationError(_("Missing fixed char."))
+                    raise ValidationError(self.env._("Missing fixed char."))
             elif rec.string_type in ("letter_upper", "letter_lower", "digit", "space"):
                 if rec.occurrence_max < rec.occurrence_min:
                     raise ValidationError(
-                        _(
+                        self.env._(
                             "The maximum occurence (%(occurrence_max)s) must be equal "
                             "to or above the minimum occurence (%(occurrence_min)s).",
                             occurrence_max=rec.occurrence_max,
@@ -98,9 +94,9 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
             regex_list.append(regex.escape(self.fixed_char.strip()))
         elif self.string_type in ("letter_upper", "letter_lower", "digit", "space"):
             if self.occurrence_min == self.occurrence_max:
-                suffix = "{%d}" % self.occurrence_min
+                suffix = f"{{{self.occurrence_min}}}"
             else:
-                suffix = "{%d,%d}" % (self.occurrence_min, self.occurrence_max)
+                suffix = f"{{{self.occurrence_min},{self.occurrence_max}}}"
 
             regex_list.append(type2regex[self.string_type] + suffix)
         elif self.string_type in ("year2", "year4"):

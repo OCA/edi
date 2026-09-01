@@ -5,7 +5,7 @@
 import base64
 import logging
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.misc import format_amount, format_date, format_datetime
 
@@ -28,24 +28,24 @@ class ResPartner(models.Model):
     @api.model
     def _simple_pdf_date_format_sel(self):
         return [
-            ("dd-mm-y4", _("DD MM YYYY")),
-            ("dd-month-y4", _("DD Month YYYY")),
-            ("month-dd-y4", _("Month DD YYYY")),
-            ("mm-dd-y4", _("MM DD YYYY")),
-            ("y4-mm-dd", _("YYYY MM DD")),
-            ("dd-mm-y2", _("DD MM YY")),
-            ("dd-month-y2", _("DD Month YY")),
-            ("month-dd-y2", _("Month DD YY")),
-            ("mm-dd-y2", _("MM DD YY")),
+            ("dd-mm-y4", self.env._("DD MM YYYY")),
+            ("dd-month-y4", self.env._("DD Month YYYY")),
+            ("month-dd-y4", self.env._("Month DD YYYY")),
+            ("mm-dd-y4", self.env._("MM DD YYYY")),
+            ("y4-mm-dd", self.env._("YYYY MM DD")),
+            ("dd-mm-y2", self.env._("DD MM YY")),
+            ("dd-month-y2", self.env._("DD Month YY")),
+            ("month-dd-y2", self.env._("Month DD YY")),
+            ("mm-dd-y2", self.env._("MM DD YY")),
         ]
 
     @api.model
     def _simple_pdf_date_separator_sel(self):
         return [
             ("slash", "/"),
-            ("dash", _("dash")),
-            ("dot", _("dot")),
-            ("space", _("space")),
+            ("dash", self.env._("dash")),
+            ("dot", self.env._("dot")),
+            ("space", self.env._("space")),
         ]
 
     simple_pdf_keyword = fields.Char(
@@ -144,11 +144,11 @@ class ResPartner(models.Model):
                 == partner.simple_pdf_thousand_separator
             ):
                 raise ValidationError(
-                    _(
-                        "For partner '%s', the decimal separator cannot be "
-                        "the same as the thousand separator."
+                    self.env._(
+                        "For partner '%(partner_name)s', the decimal separator cannot "
+                        "be the same as the thousand separator.",
+                        partner_name=partner.display_name,
                     )
-                    % partner.display_name
                 )
 
     @api.depends("simple_pdf_decimal_separator")
@@ -188,8 +188,11 @@ class ResPartner(models.Model):
         self.ensure_one()
         if not self.simple_pdf_invoice_number_ids:
             raise UserError(
-                _("Missing invoice number format configuration on partner '%s'.")
-                % self.display_name
+                self.env._(
+                    "Missing invoice number format configuration on partner "
+                    "'%(partner_name)s'.",
+                    partner_name=self.display_name,
+                )
             )
         regex = []
         for entry in self.simple_pdf_invoice_number_ids:
@@ -231,34 +234,40 @@ class ResPartner(models.Model):
         rpo = self.env["res.partner"]
         vals = {}
         test_results = []
-        label = _("Errors are in red.")
+        label = self.env._("Errors are in red.")
         test_results.append(f"<small>{label}</small><br/>")
         label = " ".join(
-            [_("Test Date:"), format_datetime(self.env, fields.Datetime.now())]
+            [
+                self.env._("Test Date:"),
+                format_datetime(self.env, fields.Datetime.now()),
+            ]
         )
         test_results.append(f"<small>{label}</small><br/>")
         if not self.simple_pdf_test_file:
-            raise UserError(_("You must upload a test PDF invoice."))
+            raise UserError(self.env._("You must upload a test PDF invoice."))
         test_info = {"test_mode": True}
         aiio._simple_pdf_update_test_info(test_info)
         file_data = base64.b64decode(self.simple_pdf_test_file)
         raw_text_dict = aiio.simple_pdf_text_extraction(file_data, test_info)
         label = " ".join(
             [
-                _("Text extraction system parameter:"),
-                test_info.get("text_extraction_config") or _("none"),
+                self.env._("Text extraction system parameter:"),
+                test_info.get("text_extraction_config") or self.env._("none"),
             ]
         )
         test_results.append(f"<small>{label}</small><br/>")
         label = " ".join(
-            [_("Text extraction tool used:"), test_info.get("text_extraction")]
+            [
+                self.env._("Text extraction tool used:"),
+                test_info.get("text_extraction"),
+            ]
         )
         test_results.append(f"<small>{label}</small><br/>")
         if self.simple_pdf_pages == "first":
             vals["simple_pdf_test_raw_text"] = raw_text_dict["first"]
         else:
             vals["simple_pdf_test_raw_text"] = raw_text_dict["all"]
-        label = _("Searching Partner")
+        label = self.env._("Searching Partner")
         test_results.append(f"<h3>{label}</h3><ul>")
         partner_id = aiio.simple_pdf_match_partner(
             raw_text_dict["all_no_space"], test_results
@@ -268,17 +277,17 @@ class ResPartner(models.Model):
             partner = rpo.browse(partner_id)
             if partner_id == self.id:
                 partner_ok = True
-                partner_result = _("Current partner found")
+                partner_result = self.env._("Current partner found")
             else:
                 partner_result = " ".join(
                     [
-                        _("Found another partner:"),
+                        self.env._("Found another partner:"),
                         partner.display_name,
                     ]
                 )
         else:
-            partner_result = _("No partner found.")
-        label = _("Result:")
+            partner_result = self.env._("No partner found.")
+        label = self.env._("Result:")
         style = not partner_ok and ERROR_STYLE or ""
         test_results.append(
             f"<li><strong>{label}</strong> "
@@ -286,33 +295,33 @@ class ResPartner(models.Model):
         )
         if partner_ok:
             partner_config = self._simple_pdf_partner_config()
-            label = _("Amount Setup")
+            label = self.env._("Amount Setup")
             test_results.append(f"<h3>{label}</h3><ul>")
-            label = _("Decimal Separator:")
+            label = self.env._("Decimal Separator:")
             helper = partner_config["char2separator"].get(
-                partner_config["decimal_sep"], _("unknown")
+                partner_config["decimal_sep"], self.env._("unknown")
             )
             test_results.append(
-                f"""<li>{label} "{partner_config['decimal_sep']}" ({helper})</li>"""
+                f"""<li>{label} "{partner_config["decimal_sep"]}" ({helper})</li>"""
             )
-            label = _("Thousand Separator:")
+            label = self.env._("Thousand Separator:")
             helper = partner_config["char2separator"].get(
-                partner_config["thousand_sep"], _("unknown")
+                partner_config["thousand_sep"], self.env._("unknown")
             )
             test_results.append(
-                f"""<li>{label} "{partner_config['thousand_sep']}" """
+                f"""<li>{label} "{partner_config["thousand_sep"]}" """
                 f"({helper})</li></ul>"
             )
             parsed_inv = aiio.simple_pdf_parse_invoice(file_data, test_info)
             key2label = {
-                "pattern": _("Regular Expression"),
-                "date_format": _("Date Format"),
-                "res_regex": _("Raw List"),
-                "valid_list": _("Valid-data Filtered List"),
-                "sorted_list": _("Ordered List"),
-                "error_msg": _("Error message"),
-                "start": _("Start String"),
-                "end": _("End String"),
+                "pattern": self.env._("Regular Expression"),
+                "date_format": self.env._("Date Format"),
+                "res_regex": self.env._("Raw List"),
+                "valid_list": self.env._("Valid-data Filtered List"),
+                "sorted_list": self.env._("Ordered List"),
+                "error_msg": self.env._("Error message"),
+                "start": self.env._("Start String"),
+                "end": self.env._("End String"),
             }
             for field in self.simple_pdf_field_ids:
                 test_results.append(
@@ -320,8 +329,10 @@ class ResPartner(models.Model):
                 )
                 extract_method = test_info["extract_rule_sel"][field.extract_rule]
                 if field.extract_rule.startswith("position_"):
-                    extract_method += _(", Position: %d") % field.position
-                label = _("Extract Rule:")
+                    extract_method += self.env._(
+                        ", Position: %(position)d", position=field.position
+                    )
+                label = self.env._("Extract Rule:")
                 test_results.append(f"<li>{label} {extract_method}</li>")
                 for key, value in test_info[field.name].items():
                     if key != "pattern" or self.env.user.has_group("base.group_system"):
@@ -334,9 +345,9 @@ class ResPartner(models.Model):
                     result = format_amount(
                         self.env, result, parsed_inv["currency"]["recordset"]
                     )
-                label = _("Result:")
+                label = self.env._("Result:")
                 style = not result and ERROR_STYLE or ""
-                result_label = result or _("None")
+                result_label = result or self.env._("None")
                 test_results.append(
                     f"<li><strong>{label}</strong> "
                     f"<strong{style}>{result_label}</strong></li></ul>"
@@ -382,12 +393,13 @@ class ResPartner(models.Model):
             decimal_sep = lang.decimal_point
         else:
             raise UserError(
-                _(
-                    "Could not get the decimal separator for partner '%s': "
+                self.env._(
+                    "Could not get the decimal separator for partner "
+                    "'%(partner_name)s': "
                     "the fields 'Language' and 'Decimal Separator' are "
-                    "both empty for this partner."
+                    "both empty for this partner.",
+                    partner_name=self.display_name,
                 )
-                % self.display_name
             )
         if self.simple_pdf_thousand_separator:
             thousand_sep = separator2char[self.simple_pdf_thousand_separator]
@@ -401,7 +413,7 @@ class ResPartner(models.Model):
             thousand_sep = ""
         if thousand_sep == decimal_sep:
             raise UserError(
-                _(
+                self.env._(
                     "For partner '%(partner_name)s', the decimal separator "
                     "(%(decimal_sep)s) is the same as "
                     "the thousand separator (%(thousand_sep)s). Keep in mind that, "
@@ -435,23 +447,26 @@ class ResPartner(models.Model):
         amount_fields_count = amount_total_count + amount_untaxed_count + amount_tax
         if "date" not in field_list:
             raise UserError(
-                _(
+                self.env._(
                     "You must configure a field extraction rule for "
-                    "field 'Date' for partner '%s'."
+                    "field 'Date' for partner '%(partner_name)s'.",
+                    partner_name=self.display_name,
                 )
-                % self.display_name
             )
         if amount_fields_count == 0:
             raise UserError(
-                _("There is no amount field configured for partner '%s'.")
-                % self.display_name
+                self.env._(
+                    "There is no amount field configured for partner "
+                    "'%(partner_name)s'.",
+                    partner_name=self.display_name,
+                )
             )
         if amount_fields_count == 1 and amount_total_count == 0:
             raise UserError(
-                _(
-                    "For partner '%s', only one amount field is configured "
-                    "but it is not 'Amount Total'."
+                self.env._(
+                    "For partner '%(partner_name)s', only one amount field is "
+                    "configured but it is not 'Amount Total'.",
+                    partner_name=self.display_name,
                 )
-                % self.display_name
             )
         return partner_config
