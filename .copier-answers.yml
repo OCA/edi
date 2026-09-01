@@ -18,7 +18,7 @@ odoo_version: 18.0
 org_name: Odoo Community Association (OCA)
 org_slug: OCA
 rebel_module_groups: []
-repo_description: edi
+repo_description: Modules for EDI in Odoo
 repo_name: edi
 repo_slug: edi
 repo_website: https://github.com/OCA/edi
