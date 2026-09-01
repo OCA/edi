@@ -30,6 +30,47 @@ except ImportError:  # pragma: no cover
     logger.debug("invoice2data not importable; install invoice2data >= 1.0")
 
 
+class _CapturingHandler(logging.Handler):
+    """Collect log records for later inspection by ``_diagnose_captured``."""
+
+    def __init__(self):
+        super().__init__(level=logging.DEBUG)
+        self.records = []
+
+    def emit(self, record):
+        self.records.append(record)
+
+
+def _diagnose_captured(handler):
+    """Extract (matched_template_names, incomplete_reasons) from captured logs.
+
+    invoice2data emits well-known message shapes we can cheaply parse:
+
+    * ``Template: X | Keywords matched.`` - one per template whose keywords
+      passed. Set of names surfaced so the author sees which templates the
+      library considered before choosing (or failing).
+    * ``Template X matched under Y but extraction was incomplete: <reason>``
+      - each partial-extraction reason, most useful when the author's own
+      template matched keywords but its regexes didn't fill required fields.
+    """
+    matched = set()
+    incomplete = []
+    for record in handler.records:
+        msg = record.getMessage()
+        if "| Keywords matched" in msg:
+            # 'Template: <name> | Keywords matched. No exclude keywords found.'
+            head = msg.split("|", 1)[0]
+            name = head.replace("Template:", "").strip()
+            if name:
+                matched.add(name)
+        elif "extraction was incomplete" in msg:
+            # 'Template X matched under Y but extraction was incomplete: ...'
+            _, _, reason = msg.partition("extraction was incomplete:")
+            reason = reason.strip() or msg
+            incomplete.append(reason)
+    return matched, incomplete
+
+
 class Invoice2dataTemplate(models.Model):
     """A DB-stored invoice2data template.
 
@@ -105,6 +146,15 @@ class Invoice2dataTemplate(models.Model):
         inverse_name="template_id",
         copy=True,
     )
+    required_fields = fields.Char(
+        help=(
+            "Comma-separated list of field names invoice2data must extract "
+            "for a match to count as successful. Empty = use the library "
+            "default ('date, amount, invoice_number, issuer', for invoice "
+            "documents). Set to a bare comma to accept ANY extraction "
+            "(useful for non-invoice document types such as waybills)."
+        ),
+    )
     last_test_result = fields.Text(readonly=True)
     last_test_warnings = fields.Text(readonly=True)
     preview_text = fields.Text(readonly=True)
@@ -146,6 +196,15 @@ class Invoice2dataTemplate(models.Model):
             "priority": self.priority,
             "fields": {},
         }
+        if self.required_fields is not None and self.required_fields != "":
+            # Split on comma; empty tokens are dropped. A single bare comma
+            # yields [] which the lib treats as 'no required fields' -- useful
+            # for non-invoice document types (waybills, delivery notes).
+            data["required_fields"] = [
+                token.strip()
+                for token in self.required_fields.split(",")
+                if token.strip()
+            ]
         for line in self.field_ids:
             data["fields"][line.name] = line._to_field_dict()
         return data
@@ -208,7 +267,25 @@ class Invoice2dataTemplate(models.Model):
         self._run_test(include_disk=False, isolated=True)
 
     def _run_test(self, include_disk, isolated):
-        """Shared body for the Test / Test isolated buttons."""
+        """Shared body for the Test / Test isolated buttons.
+
+        Distinguishes three outcomes the invoice2data library conflates into
+        an empty ``extract_data`` return:
+
+        * No keyword-match: no template's keywords survived on this PDF's
+          extracted text.
+        * Keyword-match but incomplete extraction: at least one template
+          matched keywords, but its field grid did not fill the required
+          fields (defaults to date/amount/invoice_number/issuer, or the
+          template's own ``required_fields`` override).
+        * Successful extraction: emitted as normal.
+
+        The diagnosis comes from capturing invoice2data's own log records
+        during the ``extract_data`` call, then parsing them for well-known
+        message shapes. Without this the author sees only "no match" and
+        cannot tell whether it's their keywords, their regexes, or a
+        different template that intercepted the PDF.
+        """
         self.ensure_one()
         try:
             from invoice2data import extract_data
@@ -236,28 +313,75 @@ class Invoice2dataTemplate(models.Model):
                 templates = pool._to_invoice_templates()
                 if include_disk:
                     templates = read_templates() + templates
+            text = self._extract_text(attachment)
             path = self._attachment_to_tempfile(attachment)
-            result = extract_data(path, templates=templates)
+            captured = _CapturingHandler()
+            i2d_root = logging.getLogger("invoice2data")
+            i2d_root.addHandler(captured)
+            prior_level = i2d_root.level
+            i2d_root.setLevel(logging.DEBUG)
+            try:
+                result = extract_data(path, templates=templates)
+            finally:
+                i2d_root.removeHandler(captured)
+                i2d_root.setLevel(prior_level)
         except Exception as exc:  # noqa: BLE001 -- surface via the form
             self.last_test_warnings = str(exc)
             self.last_test_result = ""
             return
+
+        # Header: cheap facts the author always wants.
+        warnings.append(
+            _("Templates in pool: %(pool)d | Extracted text: %(chars)d chars")
+            % {"pool": len(templates), "chars": len(text or "")}
+        )
+        matched_names, incomplete_reasons = _diagnose_captured(captured)
+        if matched_names:
+            warnings.append(
+                _("Templates whose keywords matched: %(n)d (%(names)s)")
+                % {
+                    "n": len(matched_names),
+                    "names": ", ".join(sorted(matched_names)[:10])
+                    + (", ..." if len(matched_names) > 10 else ""),
+                }
+            )
+        else:
+            warnings.append(
+                _(
+                    "No template's keywords matched the extracted text. Check "
+                    "your Keywords tags against the Preview text tab."
+                )
+            )
+
         if not result:
-            warnings.append(_("invoice2data did not match this PDF."))
+            # Keyword match but no complete extraction anywhere.
+            if incomplete_reasons:
+                for line in incomplete_reasons:
+                    warnings.append(_("Incomplete extraction: %s") % line)
+                warnings.append(
+                    _(
+                        "No template completed extraction. Add regexes to the "
+                        "Fields tab (or paste JSON) so the required fields "
+                        "come out. For non-invoice documents, set "
+                        "'Required fields' to a bare comma to disable the "
+                        "check entirely."
+                    )
+                )
         else:
             matched = result.get("template_name") or ""
             if self.name and matched and matched != self.name:
                 warnings.append(
                     _(
                         "These results come from template %(matched)r, not "
-                        "%(self)r. Your template did not match this PDF; the "
-                        "shown fields are what the winning template extracted."
+                        "%(self)r. Your template did not complete extraction; "
+                        "the shown fields are what the winning template "
+                        "extracted."
                     )
                     % {"matched": matched, "self": self.name}
                 )
             for field in ("amount", "date", "invoice_number", "issuer"):
                 if not result.get(field):
-                    warnings.append(_("Required field missing: %s") % field)
+                    warnings.append(_("Extracted result missing: %s") % field)
         self.last_test_result = json.dumps(result, indent=2, default=str)
         self.last_test_warnings = "\n".join(warnings) if warnings else ""
 

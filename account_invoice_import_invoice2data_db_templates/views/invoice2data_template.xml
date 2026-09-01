@@ -84,6 +84,10 @@
                         <group name="left">
                             <field name="template_type" />
                             <field name="priority" />
+                            <field
+                                name="required_fields"
+                                placeholder="Leave blank for invoice defaults. Set to a bare comma to disable the check."
+                            />
                             <field name="active" invisible="1" />
                         </group>
                         <group name="right">
