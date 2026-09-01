@@ -174,8 +174,29 @@ class Invoice2dataTemplate(models.Model):
             )
         self.preview_text = self._extract_text(attachment)
 
+    _INCLUDE_DISK_PARAM = (
+        "account_invoice_import_invoice2data_db_templates.include_disk_templates"
+    )
+
     def action_test(self):
-        """Run a full extract_data() against the latest chatter attachment."""
+        """Run extract_data() against the disk + DB pool (per system setting)."""
+        include_disk = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param(self._INCLUDE_DISK_PARAM, default="True")
+        )
+        self._run_test(include_disk=include_disk.lower() != "false", isolated=False)
+
+    def action_test_isolated(self):
+        """Run extract_data() against ONLY this template.
+
+        Debug-mode-only button in the header, for template authors iterating
+        on a PDF that a disk template (or a sibling DB template) intercepts.
+        """
+        self._run_test(include_disk=False, isolated=True)
+
+    def _run_test(self, include_disk, isolated):
+        """Shared body for the Test / Test isolated buttons."""
         self.ensure_one()
         try:
             from invoice2data import extract_data
@@ -191,7 +212,18 @@ class Invoice2dataTemplate(models.Model):
             )
         warnings = []
         try:
-            templates = read_templates() + self._to_invoice_templates()
+            if isolated:
+                templates = self._to_invoice_templates()
+            else:
+                pool = self.search(
+                    [
+                        ("template_type", "=", self.template_type),
+                        ("active", "=", True),
+                    ]
+                )
+                templates = pool._to_invoice_templates()
+                if include_disk:
+                    templates = read_templates() + templates
             path = self._attachment_to_tempfile(attachment)
             result = extract_data(path, templates=templates)
         except Exception as exc:  # noqa: BLE001 -- surface via the form

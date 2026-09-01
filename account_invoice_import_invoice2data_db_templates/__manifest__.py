@@ -22,6 +22,7 @@
     "data": [
         "security/invoice2data_template_groups.xml",
         "security/ir.model.access.csv",
+        "data/ir_config_parameter.xml",
         "views/invoice2data_template.xml",
     ],
     "installable": True,

@@ -53,7 +53,14 @@
                         type="object"
                         string="Test"
                         class="oe_highlight"
-                        help="Run a full extract_data() against the attached PDF using this template + the disk-loaded ones."
+                        help="Run a full extract_data() against the attached PDF using this template + the disk-loaded ones (or DB-only if the system setting excludes disk templates)."
+                    />
+                    <button
+                        name="action_test_isolated"
+                        type="object"
+                        string="Test isolated"
+                        groups="base.group_no_one"
+                        help="Developer-mode only. Run extract_data() against ONLY this template, ignoring disk templates AND sibling DB templates. Useful when something else keeps winning."
                     />
                     <button
                         name="action_suggest_fields"

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <!-- When False, the 'Test' button on invoice2data.template runs against
+         DB templates only (all active DB rows), skipping the bundled
+         disk-loaded templates. Useful when the disk pool is intercepting
+         a PDF a template author is trying to iterate on. The 'Test isolated'
+         header button (debug-mode only) forces self-only regardless of this
+         setting. -->
+    <record id="ir_config_include_disk_templates" model="ir.config_parameter">
+        <field
+            name="key"
+        >account_invoice_import_invoice2data_db_templates.include_disk_templates</field>
+        <field name="value">True</field>
+    </record>
+</odoo>
