@@ -11,7 +11,8 @@ class MailThread(models.AbstractModel):
     _inherit = "mail.thread"
 
     def message_new(self, msg_dict, custom_values=None):
-        process_pdf_template = custom_values.pop("process_pdf_template", None)
+        # custom_values is None when the mail is not routed through an alias
+        process_pdf_template = (custom_values or {}).pop("process_pdf_template", None)
         if process_pdf_template:
             self = self.with_context(process_pdf_template=process_pdf_template)
         return super().message_new(msg_dict, custom_values)
