@@ -6,7 +6,7 @@ from tempfile import NamedTemporaryFile
 
 import pypdf
 
-from odoo import _, fields, models
+from odoo import fields, models
 from odoo.exceptions import UserError
 
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ class WizardBaseImportPdfMixin(models.AbstractModel):
             res = getattr(self, method)(fileobj)
         fileobj.close()
         if not res:
-            raise UserError(_("Odoo could not extract the text from the PDF."))
+            raise UserError(self.env._("Odoo could not extract the text from the PDF."))
         return res
 
     def _fallback_parse_pdf(self, file_data):
