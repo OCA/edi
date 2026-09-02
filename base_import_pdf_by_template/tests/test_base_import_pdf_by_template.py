@@ -4,6 +4,7 @@
 from base64 import b64encode
 from os import path
 
+from odoo import Command
 from odoo.exceptions import UserError
 from odoo.tests import Form, new_test_user
 
@@ -11,23 +12,124 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestBaseImportPdfByTemplate(BaseCommon):
+    """The template is built here instead of reusing the demo one because tests
+    are run without demo data."""
+
+    @classmethod
+    def _field(cls, model, name):
+        return cls.env["ir.model.fields"]._get(model, name)
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.user = new_test_user(cls.env, login="test-user")
-        cls.country_line = cls.env.ref(
-            "base_import_pdf_by_template.demo_base_import_pdf_template_res_partner_line_03"
-        )
+        # Archive any other res.partner template (e.g. the demo one) so that the
+        # auto-detection can only match the one created below.
+        cls.env["base.import.pdf.template"].search(
+            [("model", "=", "res.partner")]
+        ).active = False
         country_es = cls.env.ref("base.es")
-        cls.country_line.default_value = f"{country_es._name},{country_es.id}"
-        user_line = cls.env.ref(
-            "base_import_pdf_by_template.demo_base_import_pdf_template_res_partner_header_04"
-        )
-        user_line.fixed_value = f"{cls.user._name},{cls.user.id}"
-        cls.template = cls.env.ref(
-            "base_import_pdf_by_template.demo_base_import_pdf_template_res_partner"
-        )
         cls.env["res.partner.industry"].create({"name": "Food"})
+        type_other = cls.env["ir.model.fields.selection"].search(
+            [
+                ("field_id", "=", cls._field("res.partner", "type").id),
+                ("value", "=", "other"),
+            ]
+        )
+        cls.template = cls.env["base.import.pdf.template"].create(
+            {
+                "name": "Partner Template",
+                "model_id": cls.env["ir.model"]._get("res.partner").id,
+                "child_field_id": cls._field("res.partner", "child_ids").id,
+                "auto_detect_pattern": "Test partner info.*",
+                "line_ids": [
+                    Command.create(
+                        {
+                            "related_model": "header",
+                            "field_id": cls._field("res.partner", "name").id,
+                            "pattern": r"Partner name:[\n] [\n](.*)",
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "related_model": "header",
+                            "field_id": cls._field("res.partner", "country_id").id,
+                            "search_field_id": cls._field("res.country", "code").id,
+                            "pattern": r"[A-Z].* [(]([A-Z]{1,2})[)][\n]Industry",
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "related_model": "header",
+                            "field_id": cls._field("res.partner", "industry_id").id,
+                            "search_field_id": cls._field(
+                                "res.partner.industry", "name"
+                            ).id,
+                            "pattern": r"Industry:[\n] [\n](.*)",
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "related_model": "header",
+                            "field_id": cls._field("res.partner", "user_id").id,
+                            "value_type": "fixed",
+                            "fixed_value": f"{cls.user._name},{cls.user.id}",
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "related_model": "header",
+                            "field_id": cls._field("res.partner", "ref").id,
+                            "value_type": "fixed",
+                            "fixed_value_char": "fixed-ref",
+                        }
+                    ),
+                    # Children must be created as addresses: in a "contact" the
+                    # address fields are invisible in the res.partner form view.
+                    Command.create(
+                        {
+                            "related_model": "lines",
+                            "field_id": cls._field("res.partner", "type").id,
+                            "value_type": "fixed",
+                            "fixed_value_selection": type_other.id,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "related_model": "lines",
+                            "field_id": cls._field("res.partner", "name").id,
+                            "sequence": 0,
+                            "pattern": r"(.*),.*,",
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "related_model": "lines",
+                            "field_id": cls._field("res.partner", "street").id,
+                            "sequence": 1,
+                            "pattern": r".*,(.*),",
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "related_model": "lines",
+                            "field_id": cls._field("res.partner", "country_id").id,
+                            "search_field_id": cls._field("res.country", "code").id,
+                            "sequence": 2,
+                            "pattern": r".*,.*, [A-Z].*[(]([A-Z]{1,2})[)]",
+                            "log_distinct_value": True,
+                            "default_value": f"{country_es._name},{country_es.id}",
+                        }
+                    ),
+                ],
+            }
+        )
+        cls.name_line = cls.template.line_ids.filtered(
+            lambda x: x.related_model == "header" and x.field_name == "name"
+        )
+        cls.country_line = cls.template.line_ids.filtered(
+            lambda x: x.related_model == "lines" and x.field_name == "country_id"
+        )
 
     def _data_file(self, filename, encoding=None):
         filename = "data/" + filename
@@ -84,6 +186,7 @@ class TestBaseImportPdfByTemplate(BaseCommon):
         self.assertEqual(record.user_id, self.user)
         self.assertEqual(record.ref, "fixed-ref")
         self.assertEqual(len(record.child_ids), 3)
+        self.assertEqual(set(record.child_ids.mapped("type")), {"other"})
         child_1 = record.child_ids.filtered(lambda x: x.name == "Child 1")
         self.assertEqual(child_1.street, "Address 1")
         self.assertEqual(child_1.country_id.code, "ES")
@@ -130,12 +233,14 @@ class TestBaseImportPdfByTemplate(BaseCommon):
         child_3 = record.child_ids.filtered(lambda x: x.name == "Child 3")
         self.assertEqual(child_3.street, "Address 3")
         self.assertEqual(child_3.country_id.code, "ES")
-        self.assertTrue(record.message_ids)  # Error message to set ref to childs
+        # The fixed values defined for the header are not applied to the child
+        # lines, so no error is logged (the main model and the child one are the
+        # same in this template).
+        self.assertFalse(any(record.child_ids.mapped("ref")))
+        self.assertFalse(record.message_ids)
 
     def test_wizard_base_import_pdf_by_template_error(self):
-        self.env.ref(
-            "base_import_pdf_by_template.demo_base_import_pdf_template_res_partner_header_01"
-        ).write({"pattern": "TEST"})
+        self.name_line.write({"pattern": "TEST"})
         attachment = self._create_ir_attachment("res-partner.pdf")
         wizard = self._create_wizard_base_import_pdf_upload(attachment)
         with self.assertRaises(UserError):

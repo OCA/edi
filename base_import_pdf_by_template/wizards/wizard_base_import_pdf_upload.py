@@ -3,10 +3,9 @@
 import psycopg2
 from markupsafe import Markup
 
-from odoo import SUPERUSER_ID, _, api, fields, models
+from odoo import SUPERUSER_ID, api, fields, models
 from odoo.exceptions import UserError
 from odoo.modules.registry import Registry
-from odoo.tests.form import Form
 
 
 class WizardBaseImportPdfUpload(models.TransientModel):
@@ -51,7 +50,7 @@ class WizardBaseImportPdfUpload(models.TransientModel):
     @api.model
     def _create_ir_logging(self, message, func):
         self.env.flush_all()
-        db_name = self._cr.dbname
+        db_name = self.env.cr.dbname
         # Use a new cursor to avoid rollback that could be caused by an upper method
         try:
             db_registry = Registry(db_name)
@@ -76,7 +75,7 @@ class WizardBaseImportPdfUpload(models.TransientModel):
     def action_process(self):
         """Creamos las lineas, auto-detección + procesar cada línea."""
         if not self.allowed_template_ids:
-            raise UserError(_("There is no template that can be applied"))
+            raise UserError(self.env._("There is no template that can be applied"))
         lines = []
         for attachment in self.attachment_ids:
             lines.append((0, 0, {"attachment_id": attachment.id}))
@@ -87,11 +86,11 @@ class WizardBaseImportPdfUpload(models.TransientModel):
             "skip_template_not_found_error"
         ):
             raise UserError(
-                _(
-                    "No template has been auto-detected from %s, it may be "
-                    "necessary to create a new one."
+                self.env._(
+                    "No template has been auto-detected from %(file_name)s, it may be "
+                    "necessary to create a new one.",
+                    file_name=lines_without_template[:1].attachment_id.name,
                 )
-                % fields.first(lines_without_template).attachment_id.name
             )
         # Process + return records
         records = self.env[self.model]
@@ -118,9 +117,9 @@ class WizardBaseImportPdfUpload(models.TransientModel):
         else:
             action.update(
                 {
-                    "name": _("Generated Documents"),
-                    "views": [(False, "tree"), (False, "form")],
-                    "view_mode": "tree,form",
+                    "name": self.env._("Generated Documents"),
+                    "views": [(False, "list"), (False, "form")],
+                    "view_mode": "list,form",
                     "domain": [("id", "in", records.ids)],
                 }
             )
@@ -155,7 +154,8 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                 item.template_id = (
                     item.parent_id.allowed_template_ids._auto_detect_from_text(text)
                 )
-            except Exception:  # pylint: disable=W8138 - never fail
+            # Auto-detection is a best-effort process, it must never fail
+            except Exception:  # pylint: disable=W8138
                 pass
 
     def action_process(self):
@@ -168,10 +168,11 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         return record
 
     def _add_log_error_text(self, field_name, value):
-        text = _("Error to set %(field_name)s with value %(value)s") % {
-            "field_name": field_name,
-            "value": value,
-        }
+        text = self.env._(
+            "Error to set %(field_name)s with value %(value)s",
+            field_name=field_name,
+            value=value,
+        )
         self._add_log_text(text)
 
     def _add_log_text(self, text):
@@ -202,14 +203,13 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                 new_value_data = (
                     value.display_name if isinstance(value, models.Model) else value
                 )
-                text = _(
+                text = self.env._(
                     """%(item_name)s has been set with %(new_value)s instead of
-                    %(old_value)s"""
-                ) % {
-                    "item_name": getattr(_form, "name"),  # noqa: B009
-                    "old_value": old_value_data,
-                    "new_value": new_value_data,
-                }
+                    %(old_value)s""",
+                    item_name=getattr(_form, "name"),  # noqa: B009
+                    old_value=old_value_data,
+                    new_value=new_value_data,
+                )
                 self._add_log_text(text)
         else:
             try:
@@ -220,6 +220,11 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
 
     def _process_form(self):
         """Create record with Form() according to text."""
+        # Imported here on purpose: importing the test framework at module level
+        # logs an error on every server start (see odoo/tests/common.py).
+        # pylint: disable=import-outside-toplevel
+        from odoo.tests.form import Form
+
         text = self.data
         template = self.template_id
         model = self.parent_id.record_ref or self.env[template.model]
@@ -283,7 +288,9 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
 
     def _set_child_fixed_values(self, line_form, template):
         """Set fixed values for child lines."""
-        child_fixed_values = template._get_fixed_fields_from_model(template.child_model)
+        child_fixed_values = template._get_fixed_fields_from_model(
+            template.child_model, "lines"
+        )
         for field_name, child_field_value in child_fixed_values.items():
             try:
                 setattr(line_form, field_name, child_field_value)

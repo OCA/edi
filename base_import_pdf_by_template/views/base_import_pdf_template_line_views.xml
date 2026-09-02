@@ -20,7 +20,6 @@
             <form>
                 <sheet>
                     <group name="main_group">
-                        <field name="model" invisible="1" />
                         <field
                             name="related_model"
                             widget="radio"
@@ -31,7 +30,6 @@
                             invisible="not related_model"
                             options="{'no_create': True}"
                         />
-                        <field name="field_relation" invisible="1" />
                         <field
                             name="pattern"
                             invisible="value_type == 'fixed'"
@@ -47,8 +45,6 @@
                             name="search_field_id"
                             invisible="not field_id or value_type == 'fixed'"
                         />
-                        <field name="search_field_ttype" invisible="1" />
-                        <field name="search_field_relation" invisible="1" />
                         <field
                             name="search_subfield_id"
                             invisible="search_field_ttype != 'one2many'"
@@ -108,7 +104,6 @@
                             invisible="value_type != 'fixed' or not field_relation"
                         />
                         <!-- Fixed value !-->
-                        <field name="field_ttype" invisible="1" />
                         <field
                             name="date_time_format"
                             invisible="field_ttype not in ('date', 'datetime')"

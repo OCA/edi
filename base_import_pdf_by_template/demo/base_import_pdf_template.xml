@@ -79,6 +79,22 @@
         <field name="pattern">.*,(.*),</field>
     </record>
     <record
+        id="demo_base_import_pdf_template_res_partner_line_00"
+        model="base.import.pdf.template.line"
+    >
+        <!-- Children must be created as addresses: in a "contact" the address
+             fields are invisible in the res.partner form view (and synced with the
+             parent ones), so they cannot be written through Form(). -->
+        <field name="template_id" ref="demo_base_import_pdf_template_res_partner" />
+        <field name="related_model">lines</field>
+        <field name="field_id" ref="base.field_res_partner__type" />
+        <field name="value_type">fixed</field>
+        <field
+            name="fixed_value_selection"
+            ref="base.selection__res_partner__type__other"
+        />
+    </record>
+    <record
         id="demo_base_import_pdf_template_res_partner_line_03"
         model="base.import.pdf.template.line"
     >

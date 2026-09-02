@@ -65,7 +65,7 @@ class BaseImportPdfTemplate(models.Model):
         action = self.env["ir.actions.act_window"]._for_xml_id(
             "base_import_pdf_by_template.action_wizard_base_import_pdf_preview"
         )
-        ctx = self._context.copy()
+        ctx = dict(self.env.context)
         ctx.update({"default_extraction_mode": self.extraction_mode})
         action["context"] = ctx
         return action
@@ -127,9 +127,9 @@ class BaseImportPdfTemplate(models.Model):
             data.append(line_data)
         return data
 
-    def _prepare_ctx_from_model(self, model):
+    def _prepare_ctx_from_model(self, model, related_model="header"):
         ctx = dict(self.env.context)
-        fixed_fields = self._get_fixed_fields_from_model(model)
+        fixed_fields = self._get_fixed_fields_from_model(model, related_model)
         for fixed_key in list(fixed_fields.keys()):
             ctx_key = f"default_{fixed_key}"
             fixed_value = fixed_fields[fixed_key]
@@ -138,10 +138,15 @@ class BaseImportPdfTemplate(models.Model):
             ctx.update({ctx_key: fixed_value})
         return ctx
 
-    def _get_fixed_fields_from_model(self, model):
+    def _get_fixed_fields_from_model(self, model, related_model="header"):
         res = {}
+        # Filtering by related_model is required: when the main model and the child
+        # one are the same (e.g. res.partner), filtering only by model would apply
+        # the header fixed values to the child lines too (and vice versa).
         fixed_fields = self.line_ids.filtered(
-            lambda x: x.model == model and x.value_type == "fixed"
+            lambda x: x.model == model
+            and x.related_model == related_model
+            and x.value_type == "fixed"
         )
         for fixed_field in fixed_fields:
             res[fixed_field.field_name] = fixed_field._get_fixed_value()
@@ -416,7 +421,7 @@ class BaseImportPdfTemplateLine(models.Model):
         # Apply mapping (if any is found, we return that)
         mapped_items = self.mapped_ids.filtered(lambda x: x.origin == value)
         if mapped_items:
-            mapped_item = fields.first(mapped_items)
+            mapped_item = mapped_items[:1]
             return mapped_item.value or json.loads(mapped_item.json_value)
         # Search and return the record only if found
         if self.search_field_id:
