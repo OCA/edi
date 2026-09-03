@@ -1,5 +1,6 @@
 # Copyright 2020 Jacques-Etienne Baudoux <je@bcim.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
 
@@ -44,3 +45,10 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.partner_dict["contact"] = "Contact2"
         res = self.bdio._match_partner(self.partner_dict, warn, partner_type=False)
         self.assertEqual(res, self.partner1)
+
+    def test_match_partner_unknown_id_number(self):
+        warn = []
+        self.partner_dict["id_number"][0]["value"] = "UNKNOWN"
+        with self.assertRaises(UserError) as cm:
+            self.bdio._match_partner(self.partner_dict, warn, partner_type=False)
+        self.assertIn("UNKNOWN", str(cm.exception))
