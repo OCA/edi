@@ -33,27 +33,27 @@ msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%H - Hour (24-hour clock) [00,23].\""
+msgid "%H - Hour (24-hour clock) [00,23]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%I - Hour (12-hour clock) [01,12].\""
+msgid "%I - Hour (12-hour clock) [01,12]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%M - Minute [00,59].\""
+msgid "%M - Minute [00,59]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%S - Seconds [00,61].\""
+msgid "%S - Seconds [00,61]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%Y - Year with century.\""
+msgid "%Y - Year with century."
 msgstr ""
 
 #. module: base_import_pdf_by_template
@@ -68,32 +68,32 @@ msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%d - Day of the month [01,31].\""
+msgid "%d - Day of the month [01,31]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%j - Day of the year [001,366].\""
+msgid "%j - Day of the year [001,366]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%m - Month number [01,12].\""
+msgid "%m - Month number [01,12]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%p - Equivalent of either AM or PM.\""
+msgid "%p - Equivalent of either AM or PM."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%w - Day of the week number [0(Sunday),6].\""
+msgid "%w - Day of the week number [0(Sunday),6]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
-msgid "%y - Year without century [00,99].\""
+msgid "%y - Year without century [00,99]."
 msgstr ""
 
 #. module: base_import_pdf_by_template
