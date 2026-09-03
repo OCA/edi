@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="guided_suggest_wizard_form" model="ir.ui.view">
+        <field name="name">invoice2data.template.field.walk.wizard.form</field>
+        <field name="model">invoice2data.template.field.walk.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Guided suggest">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Guided suggest for <field
+                                name="template_name"
+                                readonly="1"
+                                class="oe_inline"
+                            /></h2>
+                        <div
+                            class="text-muted"
+                        >Review each proposed field. <b>Keep</b> accepts the row as-is; <b>Edit</b> means you tweaked the regex and want that version applied; <b>Skip</b> leaves the template untouched for that field. Rows the template already has are pre-selected to Skip so you don't accidentally overwrite manual work.</div>
+                    </div>
+                    <group>
+                        <field name="source" />
+                    </group>
+                    <field name="line_ids" nolabel="1">
+                        <tree editable="bottom" create="false">
+                            <field name="sequence" widget="handle" />
+                            <field name="field_name" />
+                            <field name="captured_value" />
+                            <field name="proposed_regex" />
+                            <field
+                                name="already_in_template"
+                                optional="show"
+                                widget="boolean_toggle"
+                                readonly="1"
+                            />
+                            <field name="decision" widget="radio" />
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button
+                        name="action_apply"
+                        type="object"
+                        string="Apply"
+                        class="oe_highlight"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

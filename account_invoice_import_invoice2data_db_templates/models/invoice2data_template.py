@@ -440,6 +440,41 @@ class Invoice2dataTemplate(models.Model):
             "target": "new",
         }
 
+    def action_guided_suggest(self):
+        """Open the Guided-suggest wizard for this template.
+
+        Runs `suggested_template` under the hood and shows each proposed
+        field in an editable tree with Keep / Edit / Skip radios — the
+        Odoo equivalent of the CLI's ``_interactive_template`` flow.
+        """
+        self.ensure_one()
+        wizard = self.env["invoice2data.template.field.walk.wizard"]._from_template(
+            self, source="deterministic"
+        )
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Guided suggest: %s") % self.name,
+            "res_model": "invoice2data.template.field.walk.wizard",
+            "res_id": wizard.id,
+            "view_mode": "form",
+            "target": "new",
+        }
+
+    def action_guided_suggest_ai(self):
+        """Same as action_guided_suggest but drafts via the AI-1 generator."""
+        self.ensure_one()
+        wizard = self.env["invoice2data.template.field.walk.wizard"]._from_template(
+            self, source="ai"
+        )
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Guided suggest (AI): %s") % self.name,
+            "res_model": "invoice2data.template.field.walk.wizard",
+            "res_id": wizard.id,
+            "view_mode": "form",
+            "target": "new",
+        }
+
     def action_refresh_candidates(self):
         """Populate ``candidates_summary`` from find_candidates/find_labeled_fields.
 
