@@ -76,6 +76,13 @@
                         help="Open a wizard that shows each proposed field with Keep / Edit / Skip so you can pick and edit before applying. Recommended for non-technical users."
                     />
                     <button
+                        name="action_pdf_click_suggest"
+                        type="object"
+                        string="Click to suggest"
+                        groups="base.group_no_one"
+                        help="Developer-mode. Enter coords into the harness to resolve a click / drag on the sample PDF via pdfium; the OWL PDF viewer that replaces coord entry lands in a follow-up PR."
+                    />
+                    <button
                         name="action_suggest_fields_ai"
                         type="object"
                         string="Suggest fields (AI)"

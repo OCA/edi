@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "Account Invoice Import Invoice2data DB Templates",
-    "version": "16.0.1.6.0",
+    "version": "16.0.1.7.0",
     "category": "Accounting/Accounting",
     "license": "AGPL-3",
     "summary": (
@@ -23,9 +23,11 @@
         "security/invoice2data_template_groups.xml",
         "security/ir.model.access.csv",
         "data/ir_config_parameter.xml",
+        "data/invoice2data_field_key.xml",
         "wizard/import_disk_templates.xml",
         "wizard/preview_extraction.xml",
         "wizard/guided_suggest.xml",
+        "wizard/pdf_click_suggest.xml",
         "views/invoice2data_template.xml",
     ],
     "installable": True,

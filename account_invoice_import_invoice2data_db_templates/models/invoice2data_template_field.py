@@ -88,6 +88,41 @@ class Invoice2dataTemplateField(models.Model):
         ),
     )
 
+    # Click-to-suggest bookkeeping (design brief Q4): Odoo-only, does NOT
+    # export into the YAML template. Lets the wizard reopen the click
+    # position later ("show me where") and lets Test assert that the
+    # captured value on the current sample still matches the value seen
+    # when the rule was authored.
+    hint_page = fields.Integer(
+        string="Hint page",
+        help=(
+            "0-based page index of the click / drag on the sample PDF. "
+            "Together with x/y (and w/h for a drag) it lets the builder "
+            "reopen the exact position later."
+        ),
+    )
+    hint_x = fields.Float(string="Hint x (pt)")
+    hint_y = fields.Float(string="Hint y (pt)")
+    hint_w = fields.Float(
+        string="Hint w (pt)",
+        help="Drag-rectangle width in points; zero for click-only rules.",
+    )
+    hint_h = fields.Float(string="Hint h (pt)")
+    sample_line = fields.Char(
+        help=(
+            "The bbox line text the click landed on. Kept for repro "
+            "('open the click position again') and for a fuzzy re-anchor "
+            "when the regex fails to re-match after a small layout change."
+        ),
+    )
+    sample_value = fields.Char(
+        help=(
+            "What this rule's regex captured on the sample PDF at authoring "
+            "time. The Test button flags a regression if the current "
+            "extraction returns a different value."
+        ),
+    )
+
     @api.constrains("parser", "regex", "static_value")
     def _check_parser_args(self):
         for line in self:

@@ -440,6 +440,24 @@ class Invoice2dataTemplate(models.Model):
             "target": "new",
         }
 
+    def action_pdf_click_suggest(self):
+        """Open the click-to-suggest harness (server pipeline; coord entry).
+
+        The OWL PDF viewer that turns clicks into (x, y) input lives in a
+        follow-up PR — see ``the internal design brief
+        Until then, this wizard lets you type coordinates for testing.
+        """
+        self.ensure_one()
+        wizard = self.env["invoice2data.template.pdf.click.wizard"]._from_template(self)
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Click to suggest: %s") % self.name,
+            "res_model": "invoice2data.template.pdf.click.wizard",
+            "res_id": wizard.id,
+            "view_mode": "form",
+            "target": "new",
+        }
+
     def action_guided_suggest(self):
         """Open the Guided-suggest wizard for this template.
 
