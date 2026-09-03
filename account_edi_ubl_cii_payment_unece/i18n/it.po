@@ -28,8 +28,8 @@ msgstr "Addebito diretto ai fornitori"
 
 #. module: account_edi_ubl_cii_payment_unece
 #: model:ir.model,name:account_edi_ubl_cii_payment_unece.model_account_edi_xml_cii
-msgid "Factur-x/XRechnung CII 2.2.0"
-msgstr "Factur-x/XRechnung CII 2.2.0"
+msgid "Factur-x/ZUGFeRD CII 2.2.0"
+msgstr ""
 
 #. module: account_edi_ubl_cii_payment_unece
 #: model:ir.model,name:account_edi_ubl_cii_payment_unece.model_account_payment_method
@@ -45,3 +45,6 @@ msgstr "Addebito diretto SEPA ai fornitori"
 #: model:ir.model,name:account_edi_ubl_cii_payment_unece.model_account_edi_xml_ubl_bis3
 msgid "UBL BIS Billing 3.0.12"
 msgstr "UBL BIS Billing 3.0.12"
+
+#~ msgid "Factur-x/XRechnung CII 2.2.0"
+#~ msgstr "Factur-x/XRechnung CII 2.2.0"
