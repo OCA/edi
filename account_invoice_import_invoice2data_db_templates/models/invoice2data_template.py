@@ -164,6 +164,35 @@ class Invoice2dataTemplate(models.Model):
             "(useful for non-invoice document types such as waybills)."
         ),
     )
+    input_module = fields.Selection(
+        selection=[
+            ("pdfium", "pdfium (default; bundled, fastest)"),
+            ("pdftotext", "pdftotext (poppler; slower, sometimes better text)"),
+            ("pdfminer", "pdfminer"),
+            ("pdfplumber", "pdfplumber"),
+            ("text", "text (skip PDF layer; input is already plain text)"),
+            ("tesseract", "tesseract (OCR)"),
+            ("ocrmypdf", "ocrmypdf (adds text layer, then reads it)"),
+            ("gvision", "Google Cloud Vision (cloud OCR)"),
+            ("docTR", "docTR (local DL-OCR)"),
+            ("paddleocr", "PaddleOCR (local DL-OCR)"),
+        ],
+        help=(
+            "Force this backend for the template's PDF-to-text step. Leave "
+            "blank to use the site-wide cascade default (`pdfium` first). "
+            "Set explicitly when a vendor's PDF fails to parse under the "
+            "default backend — e.g. some line-item tables come out cleanly "
+            "under `pdftotext` (slower) but not `pdfium`."
+        ),
+    )
+    candidates_summary = fields.Text(
+        readonly=True,
+        help=(
+            "Populated by 'Refresh candidates'. Lists the typed values and "
+            "label matches invoice2data's authoring API found in the attached "
+            "PDF's extracted text, and which canonical field each maps to."
+        ),
+    )
     last_test_result = fields.Text(readonly=True)
     last_test_warnings = fields.Text(readonly=True)
     preview_text = fields.Text(readonly=True)
@@ -214,6 +243,13 @@ class Invoice2dataTemplate(models.Model):
                 for token in self.required_fields.split(",")
                 if token.strip()
             ]
+        if self.input_module:
+            # Per-template backend pin (already supported by the core lib).
+            # The wizard's click-to-suggest work sets this automatically
+            # (the design brief's cross-backend-drift guard); the template author can
+            # also set it manually for a vendor whose PDF only parses under
+            # a specific backend.
+            data["input_module"] = self.input_module
         for line in self.field_ids:
             data["fields"][line.name] = line._to_field_dict()
         return data
@@ -403,6 +439,112 @@ class Invoice2dataTemplate(models.Model):
             "view_mode": "form",
             "target": "new",
         }
+
+    def action_refresh_candidates(self):
+        """Populate ``candidates_summary`` from find_candidates/find_labeled_fields.
+
+        Surfaces the WHY behind 'Suggest fields': template authors can see
+        that a VAT was recognised via a Dutch 'BTW:' label, or that an
+        amount candidate exists but wasn't picked as `amount` because a
+        larger amount elsewhere in the document beat it.
+        """
+        self.ensure_one()
+        try:
+            from invoice2data.extract.candidates import find_candidates
+            from invoice2data.extract.labels import find_labeled_fields
+        except ImportError as exc:
+            raise UserError(
+                _("invoice2data >= 1.0 required for candidates: %s") % exc
+            ) from exc
+        attachment = self._latest_attachment()
+        if not attachment:
+            raise UserError(
+                _("Attach a sample PDF to the chatter before refreshing candidates.")
+            )
+        text = self._extract_text(attachment)
+        lines = []
+        cands = find_candidates(text)
+        lines.append(_("Typed candidates (%d):") % len(cands))
+        for c in cands:
+            lines.append(
+                "  %-6s @ %5d-%5d  parsed=%s  raw=%r"
+                % (c.kind, c.start, c.end, c.parsed, c.value)
+            )
+        labels = find_labeled_fields(text)
+        lines.append("")
+        lines.append(_("Labeled fields (%d):") % len(labels))
+        for field_name, match in labels.items():
+            lines.append(
+                "  %-20s <- %-30s  value=%r"
+                % (field_name, match.label, match.value_pattern)
+            )
+        if not cands and not labels:
+            lines.append(_("(none — no typed candidates or labels detected)"))
+        self.candidates_summary = "\n".join(lines)
+
+    def action_suggest_fields_ai(self):
+        """Draft a template via the invoice2data AI-1 generator.
+
+        Requires the ``[ai]`` extra + a configured provider (Gemini,
+        Mistral, DeepSeek, Ollama, or any OpenAI-compat endpoint). Falls
+        back to a UserError with install instructions when the extra
+        isn't installed — no silent failure.
+        """
+        self.ensure_one()
+        try:
+            from invoice2data.ai.template_generator import generate_template
+        except ImportError as exc:
+            raise UserError(
+                _(
+                    "The AI extra is not installed. On the server:\n"
+                    "  pip install 'invoice2data[ai]'\n"
+                    "Then configure a provider via env, e.g.:\n"
+                    "  export INVOICE2DATA_AI_PROVIDER=openai-compat\n"
+                    "  export INVOICE2DATA_AI_BASE_URL=http://localhost:11434/v1\n"
+                    "  export INVOICE2DATA_AI_MODEL=llama3.2\n"
+                    "Error: %s"
+                )
+                % exc
+            ) from exc
+        attachment = self._latest_attachment()
+        if not attachment:
+            raise UserError(
+                _("Attach a sample PDF to the chatter before running AI suggest.")
+            )
+        text = self._extract_text(attachment)
+        try:
+            draft = generate_template(text)
+        except Exception as exc:  # noqa: BLE001 -- LLM/provider errors surface
+            raise UserError(
+                _(
+                    "AI template generation failed. Check the server log and "
+                    "your provider configuration. Error: %s"
+                )
+                % exc
+            ) from exc
+        existing = {row.name for row in self.field_ids}
+        rows = []
+        for fname, spec in (draft.get("fields") or {}).items():
+            if fname in existing:
+                continue
+            row_vals = {"name": fname}
+            if isinstance(spec, str):
+                row_vals.update({"parser": "regex", "regex": spec})
+            elif isinstance(spec, dict):
+                row_vals.update(
+                    {
+                        "parser": spec.get("parser", "regex"),
+                        "regex": spec.get("regex", ""),
+                    }
+                )
+            rows.append((0, 0, row_vals))
+        if rows:
+            self.write({"field_ids": rows})
+        self.last_test_warnings = _(
+            "AI draft applied (%d new field(s)). Review the Fields tab, then "
+            "click Test to validate. Provider = invoice2data.ai (configured "
+            "via INVOICE2DATA_AI_* env vars)."
+        ) % len(rows)
 
     def action_suggest_fields(self):
         """Pre-fill ``field_ids`` from the lib's authoring helpers.
