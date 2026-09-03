@@ -265,7 +265,9 @@ class Invoice2dataTemplate(models.Model):
             .sudo()
             .get_param(self._INCLUDE_DISK_PARAM, default="True")
         )
-        self._run_test(include_disk=include_disk.lower() != "false", isolated=False)
+        return self._run_test(
+            include_disk=include_disk.lower() != "false", isolated=False
+        )
 
     def action_test_isolated(self):
         """Run extract_data() against ONLY this template.
@@ -273,7 +275,7 @@ class Invoice2dataTemplate(models.Model):
         Debug-mode-only button in the header, for template authors iterating
         on a PDF that a disk template (or a sibling DB template) intercepts.
         """
-        self._run_test(include_disk=False, isolated=True)
+        return self._run_test(include_disk=False, isolated=True)
 
     def _run_test(self, include_disk, isolated):
         """Shared body for the Test / Test isolated buttons.
@@ -387,6 +389,20 @@ class Invoice2dataTemplate(models.Model):
             )
         self.last_test_result = json.dumps(result, indent=2, default=str)
         self.last_test_warnings = "\n".join(warnings)
+        # Open the extraction preview wizard so the author sees the
+        # extraction rendered as an invoice, not just as JSON.
+        mode = "isolated" if isolated else ("full" if include_disk else "db_only")
+        preview = self.env["invoice2data.template.preview"]._from_extraction(
+            self, result or {}, mode, warnings
+        )
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Extraction preview: %s") % self.name,
+            "res_model": "invoice2data.template.preview",
+            "res_id": preview.id,
+            "view_mode": "form",
+            "target": "new",
+        }
 
     def action_suggest_fields(self):
         """Pre-fill ``field_ids`` from the lib's authoring helpers.
