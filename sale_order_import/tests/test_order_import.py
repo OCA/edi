@@ -271,6 +271,7 @@ class TestOrderImport(TestCommon):
                 "country_code": "FR",
                 "email": "test@invoice.partner",
                 "name": "Test Invoice Address",
+                "street": "123 Main St",
             },
         )
         wiz = self.wiz_model.with_context(create_missing_invoice_partner=True)
@@ -283,6 +284,7 @@ class TestOrderImport(TestCommon):
         self.assertEqual(invoice_partner.country_id, self.env.ref("base.fr"))
         self.assertEqual(invoice_partner.email, "test@invoice.partner")
         self.assertEqual(invoice_partner.name, "Test Invoice Address")
+        self.assertEqual(invoice_partner.street, "123 Main St")
         self.assertEqual(order.partner_invoice_id, invoice_partner)
         self.assertIn("Created invoice partner", order.message_ids[0].body)
 
@@ -297,6 +299,7 @@ class TestOrderImport(TestCommon):
                 "country_code": "FR",
                 "email": "test@invoice.partner",
                 "name": "Test Invoice Address",
+                "street": "123 Main St",
             },
         )
         wiz = self.wiz_model
