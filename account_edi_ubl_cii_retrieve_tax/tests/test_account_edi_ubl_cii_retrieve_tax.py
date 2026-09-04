@@ -36,7 +36,7 @@ class TestAccountEdiUblCiiRetrieveTax(AccountTestInvoicingCommon):
         )
         cls.tax_33_code_k_no_reason = cls.env["account.tax"].create(
             {
-                "name": "21% K",
+                "name": "21% K (no reason)",
                 "type_tax_use": "purchase",
                 "amount_type": "percent",
                 "amount": 33,
@@ -78,7 +78,8 @@ class TestAccountEdiUblCiiRetrieveTax(AccountTestInvoicingCommon):
     def test_0(self):
         """
         default behavior
-        If no ubl_cii_tax_category_code, take the first tax that match the amount and type
+        If no ubl_cii_tax_category_code, take the first tax that match the
+        amount and type
         """
         self.tax_33_code_s.ubl_cii_tax_category_code = False
         bill = self._import_invoice(self.company_data["default_journal_purchase"])
