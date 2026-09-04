@@ -1,0 +1,1 @@
+In the menu *Invoicing \> Configuration \> Settings*, check the configuration parameter *XML Format embedded in PDF invoice*: if you want to generate Factur-X invoices, this option must be set to *Factur-X (CII)*.
