@@ -22,6 +22,7 @@ class AccountEdiXmlCii(models.AbstractModel):
         # Look for a matching payment mode
         payment_mode = self.env["account.payment.mode"].search(
             [
+                ("company_id", "=", invoice.company_id.id),
                 ("payment_type", "=", "outbound"),
                 ("payment_method_id.unece_code", "=", payment_mean_code),
             ],

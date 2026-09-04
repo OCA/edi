@@ -24,3 +24,20 @@ class TestAccountEdiUBLBIS3(CommonAccountEdiUnece):
         payment_method = invoice.payment_mode_id.payment_method_id
         self.assertEqual(payment_method.unece_id, unece)
         self.assertEqual(payment_method, self.outbound_payment_method)
+
+    def test_import_ubl_bis3_uses_payment_mode_from_invoice_company(self):
+        """test import only uses payment mode from invoice company"""
+        unece = self.env.ref("account_payment_unece.payment_means_31")
+        self.outbound_payment_method.unece_id = unece
+        other_company_payment_mode = self._create_other_company_payment_mode(
+            self.outbound_payment_method
+        )
+        file_path = (
+            "account_edi_ubl_cii_payment_unece/"
+            "tests/test_files/test_import_invoice_ubl_bis3.xml"
+        )
+        invoice = self._import_invoice_xml_file(
+            self.company_data["default_journal_purchase"], file_path
+        )
+        self.assertNotEqual(invoice.payment_mode_id, other_company_payment_mode)
+        self.assertEqual(invoice.payment_mode_id, self.outbound_payment_mode)
