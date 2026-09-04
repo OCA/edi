@@ -24,23 +24,95 @@ class AccountMove(models.Model):
             "and their related purchase order lines."
         ),
     )
+    purchase_quantity_mismatch = fields.Boolean(
+        compute="_compute_purchase_mismatch",
+        help=(
+            "Checked when this invoice has at least one line with a quantity mismatch "
+            "against its related purchase order line."
+        ),
+    )
+    purchase_quantity_mismatch_count = fields.Integer(
+        compute="_compute_purchase_mismatch",
+        help="Number of invoice lines with quantity mismatches.",
+    )
+    purchase_quantity_mismatch_summary = fields.Char(
+        compute="_compute_purchase_mismatch",
+        help="Short summary of quantity mismatches.",
+    )
+    purchase_other_mismatch = fields.Boolean(
+        compute="_compute_purchase_mismatch",
+        help=(
+            "Checked when this invoice has at least one line with a non-quantity "
+            "mismatch against its related purchase order line."
+        ),
+    )
+    purchase_other_mismatch_count = fields.Integer(
+        compute="_compute_purchase_mismatch",
+        help="Number of invoice lines with non-quantity mismatches.",
+    )
+    purchase_other_mismatch_summary = fields.Char(
+        compute="_compute_purchase_mismatch",
+        help="Short summary of non-quantity mismatches.",
+    )
 
     @api.depends(
         "invoice_line_ids.purchase_line_mismatch",
-        "invoice_line_ids.purchase_line_mismatch_details",
+        "invoice_line_ids.purchase_line_mismatch_summary",
+        "invoice_line_ids.purchase_line_quantity_mismatch",
+        "invoice_line_ids.purchase_line_other_mismatch",
         "invoice_line_ids.product_id",
         "invoice_line_ids.name",
     )
     def _compute_purchase_mismatch(self):
         for rec in self:
             mismatch_lines = rec.invoice_line_ids.filtered("purchase_line_mismatch")
+            quantity_mismatch_lines = rec.invoice_line_ids.filtered(
+                "purchase_line_quantity_mismatch"
+            )
+            other_mismatch_lines = rec.invoice_line_ids.filtered(
+                "purchase_line_other_mismatch"
+            )
 
             if not mismatch_lines:
                 rec.purchase_mismatch = False
                 rec.purchase_mismatch_details = False
+                rec.purchase_quantity_mismatch = False
+                rec.purchase_quantity_mismatch_count = 0
+                rec.purchase_quantity_mismatch_summary = False
+                rec.purchase_other_mismatch = False
+                rec.purchase_other_mismatch_count = 0
+                rec.purchase_other_mismatch_summary = False
                 continue
 
             rec.purchase_mismatch = True
+            rec.purchase_quantity_mismatch = bool(quantity_mismatch_lines)
+            rec.purchase_quantity_mismatch_count = len(quantity_mismatch_lines)
+            rec.purchase_other_mismatch = bool(other_mismatch_lines)
+            rec.purchase_other_mismatch_count = len(other_mismatch_lines)
+            if len(quantity_mismatch_lines) == 1:
+                rec.purchase_quantity_mismatch_summary = _(
+                    "One invoice line has a quantity mismatch with its related "
+                    "purchase order line."
+                )
+            elif quantity_mismatch_lines:
+                rec.purchase_quantity_mismatch_summary = _(
+                    "%s invoice lines have quantity mismatches with their related "
+                    "purchase order lines."
+                ) % len(quantity_mismatch_lines)
+            else:
+                rec.purchase_quantity_mismatch_summary = False
+            if len(other_mismatch_lines) == 1:
+                rec.purchase_other_mismatch_summary = _(
+                    "One invoice line has a price mismatch with its related purchase "
+                    "order line."
+                )
+            elif other_mismatch_lines:
+                rec.purchase_other_mismatch_summary = _(
+                    "%s invoice lines have price mismatches with their related "
+                    "purchase order lines."
+                ) % len(other_mismatch_lines)
+            else:
+                rec.purchase_other_mismatch_summary = False
 
             purchase_mismatch_details = _(
                 "The following differences were detected between this invoice and its "
@@ -51,7 +123,7 @@ class AccountMove(models.Model):
                     line.product_id.display_name or line.name or _("No product")
                 )
                 purchase_mismatch_details += product_label + "\n"
-                purchase_mismatch_details += line.purchase_line_mismatch_details + "\n"
+                purchase_mismatch_details += line.purchase_line_mismatch_summary + "\n"
             rec.purchase_mismatch_details = purchase_mismatch_details
 
     def _link_invoice_origin_to_purchase_orders(self, timeout=10):

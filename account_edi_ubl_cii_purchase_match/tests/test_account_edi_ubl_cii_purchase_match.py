@@ -276,36 +276,74 @@ class TestAccountEdiUblCiiPurchaseMatch(AccountTestInvoicingCommon):
     def test_12(self):
         """test purchase price unit mismatch warning"""
         self.product.default_code = "leasing001"
+        self.product.purchase_method = "purchase"
         bill = self._import_invoice(
             self.company_data["default_journal_purchase"],
             file_path="account_edi_ubl_cii_purchase_match/tests/test_files/"
             "bis3_bill_example_price_unit_mismatch.xml",
         )
         self.assertTrue(bill.purchase_mismatch)
+        self.assertFalse(bill.purchase_quantity_mismatch)
+        self.assertEqual(bill.purchase_quantity_mismatch_count, 0)
+        self.assertTrue(bill.purchase_other_mismatch)
+        self.assertEqual(bill.purchase_other_mismatch_count, 1)
+        self.assertIn("price mismatch", bill.purchase_other_mismatch_summary)
+        self.assertEqual(
+            bill.invoice_line_ids.purchase_line_mismatch_summary, "Price mismatch"
+        )
         self.assertIn(
-            "Unit price differs from the purchase order line",
-            bill.purchase_mismatch_details,
+            "Invoice unit price is",
+            bill.invoice_line_ids.purchase_line_other_mismatch_details,
+        )
+        self.assertIn(
+            "purchase order unit price is",
+            bill.invoice_line_ids.purchase_line_other_mismatch_details,
+        )
+        self.assertIn("Price mismatch", bill.purchase_mismatch_details)
+        self.assertTrue(
+            bill.invoice_line_ids.action_show_purchase_line_mismatch_details()
         )
         bill.action_post()
         self.assertFalse(bill.purchase_mismatch)
         self.assertFalse(bill.purchase_mismatch_details)
+        self.assertFalse(bill.purchase_quantity_mismatch)
+        self.assertFalse(bill.purchase_other_mismatch)
 
     def test_13(self):
         """test purchase invoiced qty mismatch warning"""
         self.product.default_code = "leasing001"
+        self.po_line.price_unit = 1000
         bill = self._import_invoice(
             self.company_data["default_journal_purchase"],
             file_path="account_edi_ubl_cii_purchase_match/tests/test_files/"
             "bis3_bill_example_invoiced_qty_mismatch.xml",
         )
         self.assertTrue(bill.purchase_mismatch)
+        self.assertTrue(bill.purchase_quantity_mismatch)
+        self.assertEqual(bill.purchase_quantity_mismatch_count, 1)
+        self.assertIn("quantity mismatch", bill.purchase_quantity_mismatch_summary)
+        self.assertFalse(bill.purchase_other_mismatch)
+        self.assertEqual(bill.purchase_other_mismatch_count, 0)
+        self.assertEqual(
+            bill.invoice_line_ids.purchase_line_mismatch_summary, "Quantity mismatch"
+        )
         self.assertIn(
-            "Invoiced quantity exceeds the ordered quantity",
-            bill.purchase_mismatch_details,
+            "Total invoiced quantity is",
+            bill.invoice_line_ids.purchase_line_quantity_mismatch_details,
+        )
+        self.assertIn(
+            "ordered quantity is",
+            bill.invoice_line_ids.purchase_line_quantity_mismatch_details,
+        )
+        self.assertIn("Quantity mismatch", bill.purchase_mismatch_details)
+        self.assertTrue(
+            bill.invoice_line_ids.action_show_purchase_line_mismatch_details()
         )
         bill.action_post()
         self.assertFalse(bill.purchase_mismatch)
         self.assertFalse(bill.purchase_mismatch_details)
+        self.assertFalse(bill.purchase_quantity_mismatch)
+        self.assertFalse(bill.purchase_other_mismatch)
 
     def _extract_refs(self, invoice_origin):
         return self.env["account.move"]._extract_purchase_references_from_origin(
