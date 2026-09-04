@@ -522,17 +522,23 @@ class SaleOrderImport(models.TransientModel):
         or a dict (in case of the creation of a new sale order)"""
         solo = self.env["sale.order.line"]
         vals = {}
-        # Ensure the company is loaded before we play onchanges.
-        # Yes, `company_id` is related to `order_id.company_id`
-        # but when we call `play_onchanges` it will be empty
-        # w/out this precaution.
+        # Ensure the company and currency are loaded before we play onchanges.
+        # Yes, `company_id`/`currency_id` are related to `order_id.company_id`/
+        # `order_id.currency_id`, but when we call `play_onchanges` they will
+        # be empty w/out this precaution: `currency_id` is a readonly compute
+        # field with no inverse, so `play_onchanges` on `sale.order` drops it
+        # from `so_vals`, and `play_onchanges` on `sale.order.line` then
+        # falls back to `default_get`, which bakes an explicit `False` into
+        # the line's cache instead of letting it compute from `order_id`.
         company_id = self._prepare_order_line_get_company_id(order)
+        currency_id = self._prepare_order_line_get_currency_id(order)
         vals.update(
             {
                 "product_id": product.id,
                 "product_uom_qty": import_line["qty"],
                 "product_uom_id": uom.id,
                 "company_id": company_id,
+                "currency_id": currency_id,
             }
         )
         assert price_source, "price_source must be defined"
@@ -575,6 +581,20 @@ class SaleOrderImport(models.TransientModel):
         elif isinstance(order, dict):
             company_id = order.get("company_id") or company_id
         return company_id
+
+    def _prepare_order_line_get_currency_id(self, order):
+        currency_id = self.env.company.currency_id.id
+        if isinstance(order, models.Model):
+            currency_id = order.currency_id.id
+        elif isinstance(order, dict):
+            pricelist_id = order.get("pricelist_id")
+            if pricelist_id:
+                currency_id = (
+                    self.env["product.pricelist"].browse(pricelist_id).currency_id.id
+                )
+            else:
+                currency_id = order.get("currency_id", currency_id)
+        return currency_id
 
     # TODO: add tests
     @api.model
