@@ -1,0 +1,5 @@
+# generated from manifests external_dependencies
+dateparser
+pymupdf
+pypdf>=3.1.0
+regex
