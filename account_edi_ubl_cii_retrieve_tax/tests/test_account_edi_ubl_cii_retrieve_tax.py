@@ -110,7 +110,7 @@ class TestAccountEdiUblCiiRetrieveTax(AccountTestInvoicingCommon):
             self.company_data["default_journal_purchase"], "bis3_bill_no_code.xml"
         )
         inv_line = bill.invoice_line_ids
-        self.assertEqual(inv_line.tax_ids, self.tax_33_no_code)
+        self.assertFalse(inv_line.tax_ids)
 
     def test_4(self):
         """

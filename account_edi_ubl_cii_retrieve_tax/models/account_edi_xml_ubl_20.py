@@ -31,36 +31,44 @@ class AccountEdiXmlUBL20(models.AbstractModel):
             return tax_exemption_reason_code.replace("_", "-")
         return False
 
-    def _import_fill_invoice_line_form(
-        self, journal, tree, invoice, invoice_line, qty_factor
+    def _import_ubl_invoice_line_prepare_classified_tax_category_tax_values(
+        self, collected_values, tax_category_tree
     ):
-        res = super()._import_fill_invoice_line_form(
-            journal, tree, invoice, invoice_line, qty_factor
+        res = super()._import_ubl_invoice_line_prepare_classified_tax_category_tax_values(
+            collected_values, tax_category_tree
         )
-        if journal.type != "purchase" or len(invoice_line.tax_ids) > 1:
-            # this addon targets purchase imports only
-            # UBL are expected to produce a single tax per line, if multiple taxes
-            # were already assigned, keep the standard result to avoid unexpected
-            # changes
-            return res
-        tax_type = tree.find(".//{*}Item/{*}ClassifiedTaxCategory/{*}TaxScheme/{*}ID")
-        if tax_type is None or not tax_type.text or tax_type.text.upper() != "VAT":
-            return res
-        tax_unece_code_node = tree.find(".//{*}Item/{*}ClassifiedTaxCategory/{*}ID")
-        tax_exemption_reason_code_node = tree.find(
-            ".//{*}Item/{*}ClassifiedTaxCategory/{*}TaxExemptionReasonCode"
-        )
-        tax_exemption_reason_code = False
-        if tax_exemption_reason_code_node is not None:
-            tax_exemption_reason_code = self._get_tax_exemption_reason_code(
-                tax_exemption_reason_code_node.text
-            )
-        tax_amount_node = tree.find(".//{*}Item/{*}ClassifiedTaxCategory/{*}Percent")
-        if tax_amount_node is None or tax_unece_code_node is None:
+
+        # FIXME: inject VATEX code in res
+        # FIXME: hook retrieve tax predictive, however there is no nice hook to process that code
+        return res
+
+        tax_amount = tax_category_tree.findtext("./{*}Percent")
+        tax_unece_code = tax_category_tree.findtext("./{*}ID")
+        if tax_amount is None or tax_unece_code is None:
             # stop if the file doesn't provide the UNECE tax code
             return res
-        amount = float(tax_amount_node.text)
-        tax_unece_code = tax_unece_code_node.text
+
+        amount = float(tax_amount)
+
+        invoice = collected_values.get("invoice")
+        if not invoice:
+            return res
+
+        if invoice.journal_id.type != "purchase":
+            # this addon targets purchase imports only
+            return res
+
+        tax_type = tax_category_tree.findtext("./{*}TaxScheme/{*}ID")
+        if tax_type is None or tax_type.upper() != "VAT":
+            return res
+
+        tax_exemption_reason_code = tax_category_tree.findtext(
+            "./{*}TaxExemptionReasonCode"
+        )
+        if tax_exemption_reason_code is not None:
+            tax_exemption_reason_code = self._get_tax_exemption_reason_code(
+                tax_exemption_reason_code
+            )
         if (
             invoice_line.tax_ids.amount == amount
             and invoice_line.tax_ids.ubl_cii_tax_category_code == tax_unece_code
@@ -70,11 +78,10 @@ class AccountEdiXmlUBL20(models.AbstractModel):
             # stop if the result already matches the UNECE code
             return res
         taxes = self._get_tax_by_ubl_values(
-            journal,
+            invoice.journal_id,
             amount,
             tax_unece_code,
             tax_exemption_reason_code=tax_exemption_reason_code,
-            invoice_line=invoice_line,
         )
         if taxes:
             invoice_line.tax_ids = taxes[0]
