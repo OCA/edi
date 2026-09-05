@@ -19,28 +19,29 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             {"name": "COGIP", "ref": "COGIP", "website": "http://example.com/"}
         )
         bdio = self.env["business.document.import"]
+
         # match on domain extracted from email with warning
         partner_dict = {"email": "alexis.delattre@example.com"}
         warn = []
         res = bdio._match_partner(partner_dict, warn, partner_type=False)
         self.assertEqual(res, partner1)
         self.assertTrue(warn)
+
+        # match a supplier
+        partner4 = self.env["res.partner"].create(
+            {"name": "Ready Mat", "supplier_rank": 1}
+        )
         partner_dict = {"name": "ready mat "}
-        partner_ready_mat = self.env.ref("base.res_partner_4")
-        partner_ready_mat.supplier_rank = 1  # to be considered as a supplier
         res = bdio._match_partner(partner_dict, [], partner_type="supplier")
-        self.assertEqual(res, partner_ready_mat)
+        self.assertEqual(res, partner4)
+
         partner_dict = {"ref": "COGIP"}
         res = bdio._match_partner(partner_dict, [], partner_type=False)
         self.assertEqual(res, partner1)
 
     def test_direct_match_recordset(self):
         partner = self.env["res.partner"].create(
-            {
-                "name": "Alexis Delattre",
-                "email": "alexis.delattre@example.com",
-                "ref": "C1242",
-            }
+            {"name": "Alexis Delattre"},
         )
         partner_dict = {
             "recordset": partner,
@@ -232,7 +233,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
                 "type": "contact",
             }
         )
-        cpartner3 = rpo.create(
+        partner3 = rpo.create(
             {
                 "parent_id": partner1.id,
                 "name": "Flo",
@@ -255,7 +256,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             "country_code": "fr",
         }
         res = bdio._match_shipping_partner(shipping_dict, None, [])
-        self.assertEqual(res, cpartner3)
+        self.assertEqual(res, partner3)
         shipping_dict["zip"] = "92500"
         with self.assertRaises(UserError):
             bdio._match_shipping_partner(shipping_dict, None, [])
@@ -316,16 +317,24 @@ class TestBaseBusinessDocumentImport(TransactionCase):
     def test_match_product(self):
         bdio = self.env["business.document.import"]
         ppo = self.env["product.product"]
+        partner = self.env["res.partner"].create(
+            {
+                "is_company": True,
+                "name": "Deco Addict",
+                "country_id": self.env.ref("base.us").id,
+            }
+        )
         product1 = ppo.create(
             {
                 "name": "Test Product",
+                "default_code": "FURN_7777_bdi",
                 "barcode": "9782203121102",
                 "seller_ids": [
                     (
                         0,
                         0,
                         {
-                            "partner_id": self.env.ref("base.res_partner_2").id,
+                            "partner_id": partner.id,
                             "product_code": "TEST1242",
                         },
                     ),
@@ -334,9 +343,9 @@ class TestBaseBusinessDocumentImport(TransactionCase):
             }
         )
         # Match by code
-        product_dict = {"code": "FURN_7777 "}
+        product_dict = {"code": "FURN_7777_bdi "}
         res = bdio._match_product(product_dict, [])
-        self.assertEqual(res, self.env.ref("product.product_delivery_01"))
+        self.assertEqual(res, product1)
         # Match by barcode
         product_dict = {"barcode": "9782203121102"}
         res = bdio._match_product(product_dict, [])
@@ -347,9 +356,7 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         self.assertEqual(res, product1)
         # Match by seller
         product_dict = {"code": "TEST1242"}
-        res = bdio._match_product(
-            product_dict, [], seller=self.env.ref("base.res_partner_2")
-        )
+        res = bdio._match_product(product_dict, [], seller=partner)
         self.assertEqual(res, product1)
         raise_test = True
         try:
@@ -375,7 +382,14 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         res = bdio._match_uom(uom_dict, [])
         self.assertEqual(res, self.env.ref("uom.product_uom_lb"))
         uom_dict = {}
-        product = self.env.ref("product.product_product_1")
+        category = self.env["product.category"].create({"name": "Services"})
+        product = self.env["product.product"].create(
+            {
+                "name": "Virtual Interior Design",
+                "categ_id": category.id,
+                "uom_id": self.env.ref("uom.product_uom_hour").id,
+            }
+        )
         res = bdio._match_uom(uom_dict, [], product=product)
         self.assertEqual(res, product.uom_id)
 

@@ -423,7 +423,7 @@ class AccountInvoiceImport(models.TransientModel):
         assert parsed_inv.get("lines")
         bdio = self.env["business.document.import"]
         for line in parsed_inv["lines"]:
-            product = False
+            product, account, taxes = False, False, False
             if line.get("product"):
                 product = bdio._match_product(
                     line["product"],
@@ -444,21 +444,22 @@ class AccountInvoiceImport(models.TransientModel):
                 taxes = product_taxes.filtered(
                     lambda tax: tax.company_id == import_config["company"]
                 )
-            else:
-                account = import_config["account"]
-                taxes = import_config["taxes"]
             if not taxes:
                 if parsed_inv["type"] in ("out_invoice", "out_refund"):
                     type_tax_use = "sale"
                 else:
                     type_tax_use = "purchase"
                 taxes = bdio._match_taxes(
-                    line.get("taxes"),
+                    line.get("taxes", {}),
                     parsed_inv["chatter_msg"],
                     company=import_config["company"],
                     type_tax_use=type_tax_use,
                     raise_exception=False,
                 )
+            if not account and "account" in import_config:
+                account = import_config["account"]
+            if not taxes and "taxes" in import_config:
+                taxes = import_config["taxes"]
 
             fp = partner and partner.property_account_position_id or False
             if fp:
