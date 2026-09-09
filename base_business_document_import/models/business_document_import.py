@@ -26,7 +26,7 @@ class BusinessDocumentImport(models.AbstractModel):
         self, method, data_dict, error_msg, chatter_msg, raise_exception
     ):
         """The method and data_dict arguments are useful when you want to
-        inherit this method to update the error messag_match_currencye"""
+        inherit this method to update the error message match_currency"""
         assert error_msg
         if raise_exception:
             raise UserError(error_msg)
@@ -417,8 +417,31 @@ class BusinessDocumentImport(models.AbstractModel):
     def _match_shipping_partner(
         self, partner_dict, partner, chatter_msg, domain=None, raise_exception=True
     ):
+        """
+        The shipping partner can be any partner, not especially related to the
+        customer/supplier (partner argument)
+        """
+        return self._match_partner_address(
+            partner_dict,
+            partner,
+            address_type="delivery",
+            chatter_msg=chatter_msg,
+            domain=domain or [],
+            raise_exception=raise_exception,
+        )
+
+    @api.model
+    def _match_partner_address(
+        self,
+        partner_dict,
+        partner,
+        address_type,
+        chatter_msg,
+        domain=None,
+        raise_exception=True,
+    ):
         """Example:
-        shipping_dict = {
+        address_dict = {
             'email': 'contact@akretion.com',
             'name': 'Akretion France',
             'street': 'Long Avenue',
@@ -426,119 +449,110 @@ class BusinessDocumentImport(models.AbstractModel):
             'city': 'Paris',
             'zip': '69100',
             'country_code': 'FR',
-            }
-        The shipping partner can be any partner, not especially related to the
-        customer/supplier (partner argument)
+        }
         """
+        rpo = self.env["res.partner"]
+        address_fields = [
+            # non-relational address fields
+            x
+            for x in self._get_address_fields()
+            if not isinstance(rpo[x], models.BaseModel)
+        ]
+
         domain = domain or []
-        if partner_dict.get("street"):
-            if partner_dict.get("street_number"):
-                domain = expression.AND(
-                    [
-                        domain,
-                        [
-                            (
-                                "street",
-                                "in",
-                                [
-                                    "{} {}".format(
-                                        partner_dict.get("street"),
-                                        partner_dict.get("street_number"),
-                                    ),
-                                    "{} {}".format(
-                                        partner_dict.get("street_number"),
-                                        partner_dict.get("street"),
-                                    ),
-                                    "{}, {}".format(
-                                        partner_dict.get("street"),
-                                        partner_dict.get("street_number"),
-                                    ),
-                                    "{}, {}".format(
-                                        partner_dict.get("street_number"),
-                                        partner_dict.get("street"),
-                                    ),
-                                ],
-                            )
-                        ],
-                    ]
-                )
-            else:
-                domain = expression.AND(
-                    [
-                        domain,
-                        [
-                            ("street", "=", partner_dict.get("street")),
-                        ],
-                    ]
-                )
-
-        if partner_dict.get("street2"):
+        if partner_dict.get("street_number"):
+            address_fields.remove("street")
             domain = expression.AND(
                 [
                     domain,
                     [
-                        ("street2", "=", partner_dict.get("street2")),
-                    ],
-                ]
-            )
-        if partner_dict.get("city"):
-            domain = expression.AND(
-                [
-                    domain,
-                    [
-                        ("city", "=", partner_dict.get("city")),
-                    ],
-                ]
-            )
-        if partner_dict.get("zip"):
-            domain = expression.AND(
-                [
-                    domain,
-                    [
-                        ("zip", "=", partner_dict.get("zip")),
+                        (
+                            "street",
+                            "in",
+                            [
+                                "{} {}".format(
+                                    partner_dict.get("street"),
+                                    partner_dict.get("street_number"),
+                                ),
+                                "{} {}".format(
+                                    partner_dict.get("street_number"),
+                                    partner_dict.get("street"),
+                                ),
+                                "{}, {}".format(
+                                    partner_dict.get("street"),
+                                    partner_dict.get("street_number"),
+                                ),
+                                "{}, {}".format(
+                                    partner_dict.get("street_number"),
+                                    partner_dict.get("street"),
+                                ),
+                            ],
+                        )
                     ],
                 ]
             )
 
-        domain_delivery = expression.AND([domain, [("type", "=", "delivery")]])
+        for field in address_fields:
+            value = partner_dict.get(field)
+            if value:
+                if isinstance(value, str):
+                    value = value.strip()
+
+                domain = expression.AND(
+                    [
+                        domain,
+                        [
+                            (field, "=ilike", value),
+                        ],
+                    ]
+                )
+
+        if address_type:
+            domain_address = expression.AND([domain, [("type", "=", address_type)]])
+        else:
+            domain_address = domain
+        if not domain:
+            return
         partner = self._match_partner(
             partner_dict,
             chatter_msg,
             partner_type=False,
-            domain=domain_delivery,
+            domain=domain_address or domain,
             raise_exception=False,
         )
         if partner:
             return partner
+        elif chatter_msg:
+            chatter_msg.pop()  # clean message from _match_partner
         if not partner_dict.get("vat") and not partner_dict.get("email"):
-            partner = self.env["res.partner"].search(domain_delivery, limit=1)
-        if partner:
-            return partner
-        partner = self._match_partner(
-            partner_dict,
-            chatter_msg,
-            partner_type=False,
-            domain=domain,
-            raise_exception=False,
-        )
-        if partner:
-            return partner
-
-        # Fallback, only if we have a proper domain here: if we get ``domain = []``,
-        # then we'd be searching for the whole DB for a partner and retrieve a random
-        # one, which makes no sense
+            partner = rpo.search(domain_address, limit=1)
+            if partner:
+                return partner
+        if domain_address != domain:
+            partner = self._match_partner(
+                partner_dict,
+                chatter_msg,
+                partner_type=False,
+                domain=domain,
+                raise_exception=False,
+            )
+            if partner:
+                return partner
+            elif chatter_msg:
+                chatter_msg.pop()  # clean message from _match_partner
         if not partner_dict.get("vat") and domain and domain != expression.TRUE_DOMAIN:
-            partner = self.env["res.partner"].search(domain, limit=1)
-        if partner:
-            return partner
+            partner = rpo.search(domain, limit=1)
+            if partner:
+                return partner
 
         self.user_error_wrap(
-            "_match_shipping_partner",
+            "_match_partner_address",
             partner_dict,
             self.env._(
                 "Odoo couldn't find any shipping partner corresponding to the "
                 "following information extracted from the business document:\n"
                 "Name: %(name)s\n"
+                "Address type: %(address_type)s\n"
                 "VAT number: %(vat)s\n"
                 "Reference: %(ref)s\n"
                 "E-mail: %(email)s\n"
@@ -550,6 +564,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 "State code: %(state)s\n"
                 "Country code: %(country)s\n",
                 name=partner_dict.get("name") or "",
+                address_type=address_type or "",
                 vat=partner_dict.get("vat") or "",
                 ref=partner_dict.get("ref") or "",
                 email=partner_dict.get("email") or "",
@@ -565,6 +580,14 @@ class BusinessDocumentImport(models.AbstractModel):
             raise_exception,
         )
         return None
+
+    @api.model
+    def _get_address_fields(self):
+        """Extension point, already compatible with `res.partner` inheritance
+        like `partner_address_street3`
+        :return: ['street', 'street2', 'zip', 'city', 'state_id', 'country_id', 'email']
+        """
+        return self.env["res.partner"]._address_fields() + ["email"]
 
     @api.model
     def _match_partner_bank(
@@ -1527,5 +1550,5 @@ class BusinessDocumentImport(models.AbstractModel):
             else:
                 msg = self.env._("<b>Notes in imported document:</b>")
             record.message_post(  # pylint: disable=translation-required
-                body="{} {}".format(msg, parsed_dict["note"])
+                body=Markup("{} {}".format(msg, parsed_dict["note"]))
             )
