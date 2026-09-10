@@ -9,6 +9,7 @@ from lxml import etree
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
 
 logger = logging.getLogger(__name__)
 
@@ -72,9 +73,25 @@ class AccountInvoiceImport(models.TransientModel):
         price_subtotal = float(price_subtotal_xpath[0].text)
         if not price_subtotal:
             return False
+        price_unit = None
         if price_unit_xpath:
             price_unit = float(price_unit_xpath[0].text)
-        else:
+            # BT-149 (cbc:BaseQuantity): BT-146 may be quoted for a quantity
+            # other than one, in which case the unit price is the ratio.
+            base_qty_xpath = iline.xpath(
+                "cac:Price/cbc:BaseQuantity", namespaces=namespaces
+            )
+            if base_qty_xpath and float(base_qty_xpath[0].text):
+                price_unit /= float(base_qty_xpath[0].text)
+            # Some issuers send a unit price that does not reproduce the net
+            # amount of the line: a plain 0.00, or a price that ignores a line
+            # level allowance. BT-131 (cbc:LineExtensionAmount) is the
+            # authoritative amount, so recompute the unit price from it rather
+            # than import a line whose amount is wrong and leave
+            # _post_process_invoice() to patch it with an adjustment line.
+            if not float_is_zero(price_unit * qty - price_subtotal, precision_digits=2):
+                price_unit = None
+        if price_unit is None:
             price_unit = price_subtotal / qty
         counters["lines"] += price_subtotal
         taxes_xpath = iline.xpath(
