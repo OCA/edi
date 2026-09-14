@@ -2,6 +2,7 @@
 dateparser
 dotty-dict
 factur-x
+invoice2data
 ovh
 phonenumbers
 pydifact
