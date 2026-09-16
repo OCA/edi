@@ -204,6 +204,44 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
             .search_count([("id", "=", exchange_record.id)]),
         )
 
+    def test_rule_read_group(self):
+        no_rule_record = self.env["edi.exchange.consumer.test"].create(
+            {"name": "no_rule"}
+        )
+        record_1 = self.create_record()
+        record_2 = self.backend.create_record(
+            "test_csv_output",
+            {"model": no_rule_record._name, "res_id": no_rule_record.id},
+        )
+        record_3 = self.backend.create_record(
+            "test_csv_output",
+            {"model": no_rule_record._name, "res_id": no_rule_record.id},
+        )
+        self.user.write({"groups_id": [(4, self.group.id)]})
+        groups = (
+            self.env["edi.exchange.record"]
+            .with_user(self.user)
+            .read_group(
+                [("id", "in", (record_1 + record_2 + record_3).ids)],
+                ["backend_id"],
+                ["backend_id"],
+            )
+        )
+        self.assertEqual(1, len(groups))
+        self.assertEqual(1, groups[0]["backend_id_count"])
+
+    def test_superuser_read_group(self):
+        record_1 = self.create_record()
+        record_2 = self.create_record()
+        record_3 = self.create_record()
+        groups = self.env["edi.exchange.record"].read_group(
+            [("id", "in", (record_1 + record_2 + record_3).ids)],
+            ["backend_id"],
+            ["backend_id"],
+        )
+        self.assertEqual(1, len(groups))
+        self.assertEqual(3, groups[0]["backend_id_count"])
+
     @mute_logger("odoo.addons.base.models.ir_model")
     def test_no_group_no_write(self):
         exchange_record = self.create_record()

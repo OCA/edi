@@ -561,6 +561,25 @@ class EDIExchangeRecord(models.Model):
         result = [x for x in orig_ids if x in result]
         return len(result) if count else list(result)
 
+    @api.model
+    def read_group(
+        self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True
+    ):
+        if not self.env.is_superuser():
+            # Grouped counts are computed by SQL and never pass through
+            # _search: keep only the exchanges whose related record the user
+            # can read, as the list does.
+            domain = [("id", "in", self._search(domain))]
+        return super().read_group(
+            domain,
+            fields,
+            groupby,
+            offset=offset,
+            limit=limit,
+            orderby=orderby,
+            lazy=lazy,
+        )
+
     def read(self, fields=None, load="_classic_read"):
         """Override to explicitely call check_access_rule, that is not called
         by the ORM. It instead directly fetches ir.rules and apply them."""
