@@ -482,17 +482,25 @@ class EDIExchangeRecord(models.Model):
         count=False,
         access_rights_uid=None,
     ):
+        if self.env.is_superuser():
+            # restrictions do not apply for the superuser
+            return super()._search(
+                args,
+                offset=offset,
+                limit=limit,
+                order=order,
+                count=count,
+                access_rights_uid=access_rights_uid,
+            )
+        # Offset and limit apply to the accessible exchanges, once the access
+        # to their related records is checked: paginating before the check
+        # omits or repeats exchanges across pages.
         ids = super()._search(
             args,
-            offset=offset,
-            limit=limit,
             order=order,
             count=False,
             access_rights_uid=access_rights_uid,
         )
-        if self.env.is_superuser():
-            # restrictions do not apply for the superuser
-            return len(ids) if count else ids
 
         # TODO highlight orphaned EDI records in UI:
         #  - self.model + self.res_id are set
@@ -503,7 +511,7 @@ class EDIExchangeRecord(models.Model):
             return 0 if count else []
         orig_ids = ids
         ids = set(ids)
-        result = []
+        allowed_ids = set()
         model_data = defaultdict(
             lambda: defaultdict(set)
         )  # {res_model: {res_id: set(ids)}}
@@ -518,7 +526,7 @@ class EDIExchangeRecord(models.Model):
             )
             for eid, res_id, model in self._cr.fetchall():
                 if not model:
-                    result.append(eid)
+                    allowed_ids.add(eid)
                     continue
                 model_data[model][res_id].add(eid)
 
@@ -545,22 +553,11 @@ class EDIExchangeRecord(models.Model):
                 # Group "Settings" can list exchanges where record is deleted
                 allowed.extend(missing.ids)
             for target_id in allowed:
-                result += list(targets[target_id])
-        if len(orig_ids) == limit and len(result) < len(orig_ids):
-            result.extend(
-                self._search(
-                    args,
-                    offset=offset + len(orig_ids),
-                    limit=limit,
-                    order=order,
-                    count=count,
-                    access_rights_uid=access_rights_uid,
-                )[: limit - len(result)]
-            )
-        if set(orig_ids) == set(result):
-            # Nothing was filtered out: keep the ordering of the original search
-            result = orig_ids
-        return len(result) if count else list(result)
+                allowed_ids.update(targets[target_id])
+        # Restore original ordering
+        result = [x for x in orig_ids if x in allowed_ids]
+        end = offset + limit if limit else None
+        return len(result) if count else result[offset:end]
 
     def read(self, fields=None, load="_classic_read"):
         """Override to explicitely call check_access_rule, that is not called

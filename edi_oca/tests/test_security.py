@@ -297,3 +297,63 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
             )
             .ids,
         )
+
+    def test_rule_search_pages(self):
+        no_rule_record = self.env["edi.exchange.consumer.test"].create(
+            {"name": "no_rule"}
+        )
+        records = self.env["edi.exchange.record"]
+        visible_records = self.env["edi.exchange.record"]
+        for consumer_record in [
+            no_rule_record,
+            self.consumer_record,
+            no_rule_record,
+            self.consumer_record,
+            self.consumer_record,
+            no_rule_record,
+            self.consumer_record,
+            self.consumer_record,
+            no_rule_record,
+        ]:
+            record = self.backend.create_record(
+                "test_csv_output",
+                {"model": consumer_record._name, "res_id": consumer_record.id},
+            )
+            records += record
+            if consumer_record == self.consumer_record:
+                visible_records += record
+        self.user.write({"groups_id": [(4, self.group.id)]})
+        model = self.env["edi.exchange.record"].with_user(self.user)
+        domain = [("id", "in", records.ids)]
+        visible_ids = visible_records.ids
+        self.assertEqual(5, model.search_count(domain))
+        self.assertEqual(visible_ids[:2], model.search(domain, limit=2, order="id").ids)
+        self.assertEqual(
+            visible_ids[2:4], model.search(domain, offset=2, limit=2, order="id").ids
+        )
+        self.assertEqual(
+            visible_ids[4:], model.search(domain, offset=4, limit=2, order="id").ids
+        )
+        self.assertEqual(
+            visible_ids[2:], model.search(domain, offset=2, order="id").ids
+        )
+        self.assertEqual(
+            [visible_ids[4], visible_ids[3]],
+            model.search(domain, limit=2, order="id desc").ids,
+        )
+
+    def test_superuser_search_pages(self):
+        record_1 = self.create_record()
+        record_2 = self.create_record()
+        record_3 = self.create_record()
+        self.assertEqual(
+            [record_2.id, record_3.id],
+            self.env["edi.exchange.record"]
+            .search(
+                [("id", "in", (record_1 + record_2 + record_3).ids)],
+                offset=1,
+                limit=2,
+                order="id",
+            )
+            .ids,
+        )
