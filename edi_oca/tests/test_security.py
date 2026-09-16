@@ -282,3 +282,18 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
 
         # The records fetched from the second page must be present in the final result
         self.assertIn(visible_id_2, records.ids)
+
+    def test_group_search_order(self):
+        record_1 = self.create_record()
+        record_2 = self.create_record()
+        record_3 = self.create_record()
+        self.user.write({"groups_id": [(4, self.group.id)]})
+        self.assertEqual(
+            [record_3.id, record_2.id, record_1.id],
+            self.env["edi.exchange.record"]
+            .with_user(self.user)
+            .search(
+                [("id", "in", (record_1 + record_2 + record_3).ids)], order="id desc"
+            )
+            .ids,
+        )

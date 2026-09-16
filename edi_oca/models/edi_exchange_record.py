@@ -557,6 +557,9 @@ class EDIExchangeRecord(models.Model):
                     access_rights_uid=access_rights_uid,
                 )[: limit - len(result)]
             )
+        if set(orig_ids) == set(result):
+            # Nothing was filtered out: keep the ordering of the original search
+            result = orig_ids
         return len(result) if count else list(result)
 
     def read(self, fields=None, load="_classic_read"):
