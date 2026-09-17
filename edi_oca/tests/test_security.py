@@ -235,23 +235,13 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
 
         self.user.write({"groups_id": [(4, self.group.id)]})
 
-        # Two different companies are used to trigger multi-company access filtering
-        company_1 = self.env.ref("base.main_company")
-        company_2 = self.env["res.company"].create({"name": "Other Company"})
-
         # Three target records:
-        # - consumer_c1 and consumer_c3 belong to the active company and are readable
-        # - consumer_c2 belongs to another company and will be filtered out
-        # by access rules
-        consumer_c1 = self.env["res.partner"].create(
-            {"name": "c1-a", "company_id": company_1.id}
-        )
-        consumer_c2 = self.env["res.partner"].create(
-            {"name": "c2", "company_id": company_2.id}
-        )
-        consumer_c3 = self.env["res.partner"].create(
-            {"name": "c1-b", "company_id": company_1.id}
-        )
+        # - consumer_c1 and consumer_c3 are readable: the rule of the group shows
+        #   the consumer records named "test"
+        # - consumer_c2 has another name and will be filtered out by the rule
+        consumer_c1 = self.env["edi.exchange.consumer.test"].create({"name": "test"})
+        consumer_c2 = self.env["edi.exchange.consumer.test"].create({"name": "c2"})
+        consumer_c3 = self.env["edi.exchange.consumer.test"].create({"name": "test"})
 
         # One EDI records pointing to readable target records
         self.backend.create_record(
@@ -259,7 +249,7 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
             {"model": consumer_c1._name, "res_id": consumer_c1.id},
         )
 
-        # One EDI records pointing to records from another company
+        # One EDI records pointing to a record the rule hides
         self.backend.create_record(
             "test_csv_output",
             {"model": consumer_c2._name, "res_id": consumer_c2.id},
@@ -271,18 +261,12 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
             {"model": consumer_c3._name, "res_id": consumer_c3.id},
         ).id
 
-        # Restrict the environment to company_1 only, activating the multi-company rule
-        # that will hide records pointing to consumer_c2
-        env_company_1 = self.env(
-            context=dict(self.env.context, allowed_company_ids=[company_1.id])
-        )
-
         # Execute the search as a non-superuser:
         # - super()._search returns the first 2 IDs (1 visible + 1 hidden)
         # - custom logic removes the 1 hidden
         # - pagination logic fetches 1 more record from the next page
         records = (
-            env_company_1["edi.exchange.record"]
+            self.env["edi.exchange.record"]
             .with_user(self.user)
             .search([], limit=2, order="id asc")
         )
