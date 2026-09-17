@@ -898,6 +898,13 @@ class AccountInvoiceImport(models.TransientModel):
         return invoice
 
     @api.model
+    def create_invoice_rpc(self, parsed_inv, company_id, origin=None):
+        company = self.env["res.company"].browse(company_id)
+        import_config = {"company": company}
+        invoice = self.create_invoice(parsed_inv, import_config, origin=origin)
+        return invoice.id
+
+    @api.model
     def create_invoice_webservice(
         self,
         invoice_file_b64,

@@ -938,7 +938,7 @@ class BusinessDocumentImport(models.AbstractModel):
     ):
         """taxes_list must be a list of tax_dict"""
         taxes_recordset = self.env["account.tax"].browse()
-        for tax_dict in taxes_list:
+        for tax_dict in taxes_list or []:
             tax = self._match_tax(
                 tax_dict,
                 chatter_msg,
