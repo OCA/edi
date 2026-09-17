@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="product_supplierinfo_tree_view_punchout" model="ir.ui.view">
+        <field name="name">product.supplierinfo.list.punchout</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_tree_view" />
+        <field name="arch" type="xml">
+            <!-- Per-row "Open at supplier" link, visible only when the
+                 vendor has a URL template + this row has a vendor code.
+                 Adding it as a column on the seller_ids list (Purchase
+                 tab on product.template) means one click per supplier
+                 with zero ambiguity over "which vendor opens?". -->
+            <xpath expr="//list" position="inside">
+                <button
+                    name="action_open_supplier_url"
+                    type="object"
+                    icon="fa-external-link"
+                    string="Open"
+                    invisible="not partner_id or not product_code"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

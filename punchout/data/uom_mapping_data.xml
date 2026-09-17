@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!--
+    Global default UoM mappings — applied when a supplier ships a code that
+    doesn't match a backend- or supplier-scoped mapping and isn't a
+    recognised UNECE code. Users can safely override or delete these at any
+    time; the noupdate="1" flag preserves customizations on module upgrade.
+
+    UNECE codes (C62, KGM, MTR, LTR, EA, PCE, …) are resolved automatically
+    via the uom_unece module and do not need explicit entries here.
+    -->
+
+    <!-- Pieces / Units (German and common abbreviations) -->
+    <record id="uom_mapping_stueck" model="punchout.uom.mapping">
+        <field name="supplier_code">STUECK</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">German: Stück (piece)</field>
+    </record>
+    <record id="uom_mapping_st" model="punchout.uom.mapping">
+        <field name="supplier_code">ST</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">German abbreviation for Stück</field>
+    </record>
+    <record id="uom_mapping_stk" model="punchout.uom.mapping">
+        <field name="supplier_code">STK</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">German abbreviation for Stück</field>
+    </record>
+    <record id="uom_mapping_pc" model="punchout.uom.mapping">
+        <field name="supplier_code">PC</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">Common abbreviation for piece</field>
+    </record>
+    <record id="uom_mapping_pcs" model="punchout.uom.mapping">
+        <field name="supplier_code">PCS</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">Common abbreviation for pieces</field>
+    </record>
+    <record id="uom_mapping_each" model="punchout.uom.mapping">
+        <field name="supplier_code">EACH</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+        <field name="notes">English word form for each/piece</field>
+    </record>
+
+    <!-- Weight (short forms; UNECE covers KGM) -->
+    <record id="uom_mapping_kg" model="punchout.uom.mapping">
+        <field name="supplier_code">KG</field>
+        <field name="uom_id" ref="uom.product_uom_kgm" />
+        <field name="notes">Short form for kilogram</field>
+    </record>
+
+    <!-- Length (short forms; UNECE covers MTR) -->
+    <record id="uom_mapping_m" model="punchout.uom.mapping">
+        <field name="supplier_code">M</field>
+        <field name="uom_id" ref="uom.product_uom_meter" />
+        <field name="notes">Short form for metre</field>
+    </record>
+
+    <!-- Volume (short forms; UNECE covers LTR) -->
+    <record id="uom_mapping_l" model="punchout.uom.mapping">
+        <field name="supplier_code">L</field>
+        <field name="uom_id" ref="uom.product_uom_litre" />
+        <field name="notes">Short form for litre</field>
+    </record>
+</odoo>

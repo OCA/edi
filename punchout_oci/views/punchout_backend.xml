@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 Hunki Enterprises BV
+     Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="punchout_backend_form_view_oci">
+        <field name="name">punchout.backend.form.oci</field>
+        <field name="model">punchout.backend</field>
+        <field name="inherit_id" ref="punchout.punchout_backend_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_main']" position="after">
+                <group
+                    name="group_oci_settings"
+                    string="OCI Settings"
+                    invisible="protocol != 'oci'"
+                >
+                    <group>
+                        <field name="oci_version" />
+                        <field name="oci_custom_parameters" password="True" />
+                    </group>
+                    <group />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

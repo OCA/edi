@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!--
+    Demo backend wired to the in-Odoo mock supplier catalog. With this
+    installed (e.g. on runboat), open the punchout backend list, click
+    "Access" on this record, walk a cart in the catalog page, and a draft
+    purchase order is created.
+    -->
+    <record id="demo_punchout_backend_oci_mock" model="punchout.backend">
+        <field name="name">Demo OCI Mock Supplier (in-Odoo, end-to-end)</field>
+        <field
+            name="description"
+        >Self-contained OCI demo — opens a fake catalog hosted by this Odoo and rounds the cart back through the OCI receive controller.</field>
+        <field name="protocol">oci</field>
+        <field name="url">/punchout_oci_mock_supplier/catalog</field>
+        <field name="browser_form_post_url">/punchout/oci/receive/</field>
+        <field name="state">open</field>
+        <field name="oci_version">5.0</field>
+        <!-- Pre-set a supplier so the cart-to-PO flow works without
+             extra configuration. Azure Interior is shipped by Odoo
+             demo data. -->
+        <field name="partner_id" ref="base.res_partner_12" />
+        <field name="auto_create_products" eval="True" />
+    </record>
+</odoo>

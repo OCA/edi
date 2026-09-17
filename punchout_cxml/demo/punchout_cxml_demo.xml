@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!-- Extend demo backend with cXML-specific credentials -->
+    <record id="punchout.demo_punchout_backend" model="punchout.backend">
+        <field name="from_domain">NetworkId</field>
+        <field name="from_identity">DemoBuyerOrg</field>
+        <field name="to_domain">DUNS</field>
+        <field name="to_identity">123456789</field>
+        <field name="shared_secret">demo_shared_secret_value</field>
+        <field name="user_agent">Odoo Punchout Demo/18.0</field>
+        <field name="deployment_mode">test</field>
+        <field name="cxml_version">1.2.008</field>
+    </record>
+</odoo>

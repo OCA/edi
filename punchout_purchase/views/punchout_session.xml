@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 ACSONE SA/NV
+     Copyright 2023 Hunki Enterprises BV
+     Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="punchout_session_form_view_purchase">
+        <field name="name">punchout.session.form.purchase</field>
+        <field name="model">punchout.session</field>
+        <field name="inherit_id" ref="punchout.punchout_session_form_view" />
+        <field name="arch" type="xml">
+            <!-- Add Create PO button in header -->
+            <xpath expr="//button[@name='action_process']" position="after">
+                <button
+                    name="action_create_purchase_order"
+                    type="object"
+                    string="Create PO"
+                    class="btn-primary"
+                    icon="fa-shopping-cart"
+                    invisible="state != 'to_process' or purchase_order_id"
+                />
+            </xpath>
+            <!-- Add smart button for PO -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_view_purchase_order"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-shopping-cart"
+                    invisible="not purchase_order_count"
+                >
+                    <field
+                        name="purchase_order_count"
+                        widget="statinfo"
+                        string="Purchase Order"
+                    />
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

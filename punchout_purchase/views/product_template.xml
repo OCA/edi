@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="product_template_form_view_punchout" model="ir.ui.view">
+        <field name="name">product.template.form.punchout</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <!-- "Open at supplier" button — opens the supplier's
+                 product detail page in a new tab using the partner's
+                 ``product_url_template``. No punchout session created;
+                 this is a pure deep-link for sourcing decisions,
+                 datasheet lookup, and finding alternatives. -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_open_supplier_product"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-external-link"
+                >
+                    <span class="o_stat_text">Open at supplier</span>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

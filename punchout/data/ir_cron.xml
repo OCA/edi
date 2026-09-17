@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Bosd
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <record id="ir_cron_gc_punchout_sessions" model="ir.cron">
+        <field name="name">Punchout: garbage-collect old sessions</field>
+        <field name="model_id" ref="model_punchout_session" />
+        <field name="state">code</field>
+        <field name="code">model._gc_punchout_sessions()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True" />
+    </record>
+</odoo>

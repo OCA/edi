@@ -1,0 +1,2 @@
+- Holger Brunn \<hbrunn@therp.nl\>
+- Bosd (migration to 18.0)
