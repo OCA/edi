@@ -225,3 +225,135 @@ class TestEDIExchangeRecordSecurity(EDIBackendCommonTestCase):
         msg = rf"not allowed to modify '{model._description}' \({model._name}\)"
         with self.assertRaisesRegex(AccessError, msg):
             exchange_record.with_user(self.user).write({"external_identifier": "1234"})
+
+    def test_search_pagination_with_inaccessible_middle_records(self):
+        """
+        Regression test:
+        If some records in the first page are filtered out due to access rules,
+        _search must fetch additional records from next pages without truncating them.
+        """
+
+        self.user.write({"groups_id": [(4, self.group.id)]})
+
+        # Three target records:
+        # - consumer_c1 and consumer_c3 are readable: the rule of the group shows
+        #   the consumer records named "test"
+        # - consumer_c2 has another name and will be filtered out by the rule
+        consumer_c1 = self.env["edi.exchange.consumer.test"].create({"name": "test"})
+        consumer_c2 = self.env["edi.exchange.consumer.test"].create({"name": "c2"})
+        consumer_c3 = self.env["edi.exchange.consumer.test"].create({"name": "test"})
+
+        # One EDI records pointing to readable target records
+        self.backend.create_record(
+            "test_csv_output",
+            {"model": consumer_c1._name, "res_id": consumer_c1.id},
+        )
+
+        # One EDI records pointing to a record the rule hides
+        self.backend.create_record(
+            "test_csv_output",
+            {"model": consumer_c2._name, "res_id": consumer_c2.id},
+        )
+
+        # One EDI records pointing to readable target records
+        visible_id_2 = self.backend.create_record(
+            "test_csv_output",
+            {"model": consumer_c3._name, "res_id": consumer_c3.id},
+        ).id
+
+        # Execute the search as a non-superuser:
+        # - super()._search returns the first 2 IDs (1 visible + 1 hidden)
+        # - custom logic removes the 1 hidden
+        # - pagination logic fetches 1 more record from the next page
+        records = (
+            self.env["edi.exchange.record"]
+            .with_user(self.user)
+            .search([], limit=2, order="id asc")
+        )
+
+        # The result must NOT be truncated: the search should still return `
+        # limit` records
+        self.assertEqual(
+            len(records),
+            2,
+            "Search results were truncated when inaccessible records were "
+            "present in the first page",
+        )
+
+        # The records fetched from the second page must be present in the final result
+        self.assertIn(visible_id_2, records.ids)
+
+    def test_group_search_order(self):
+        record_1 = self.create_record()
+        record_2 = self.create_record()
+        record_3 = self.create_record()
+        self.user.write({"groups_id": [(4, self.group.id)]})
+        self.assertEqual(
+            [record_3.id, record_2.id, record_1.id],
+            self.env["edi.exchange.record"]
+            .with_user(self.user)
+            .search(
+                [("id", "in", (record_1 + record_2 + record_3).ids)], order="id desc"
+            )
+            .ids,
+        )
+
+    def test_rule_search_pages(self):
+        no_rule_record = self.env["edi.exchange.consumer.test"].create(
+            {"name": "no_rule"}
+        )
+        records = self.env["edi.exchange.record"]
+        visible_records = self.env["edi.exchange.record"]
+        for consumer_record in [
+            no_rule_record,
+            self.consumer_record,
+            no_rule_record,
+            self.consumer_record,
+            self.consumer_record,
+            no_rule_record,
+            self.consumer_record,
+            self.consumer_record,
+            no_rule_record,
+        ]:
+            record = self.backend.create_record(
+                "test_csv_output",
+                {"model": consumer_record._name, "res_id": consumer_record.id},
+            )
+            records += record
+            if consumer_record == self.consumer_record:
+                visible_records += record
+        self.user.write({"groups_id": [(4, self.group.id)]})
+        model = self.env["edi.exchange.record"].with_user(self.user)
+        domain = [("id", "in", records.ids)]
+        visible_ids = visible_records.ids
+        self.assertEqual(5, model.search_count(domain))
+        self.assertEqual(visible_ids[:2], model.search(domain, limit=2, order="id").ids)
+        self.assertEqual(
+            visible_ids[2:4], model.search(domain, offset=2, limit=2, order="id").ids
+        )
+        self.assertEqual(
+            visible_ids[4:], model.search(domain, offset=4, limit=2, order="id").ids
+        )
+        self.assertEqual(
+            visible_ids[2:], model.search(domain, offset=2, order="id").ids
+        )
+        self.assertEqual(
+            [visible_ids[4], visible_ids[3]],
+            model.search(domain, limit=2, order="id desc").ids,
+        )
+
+    def test_superuser_search_pages(self):
+        record_1 = self.create_record()
+        record_2 = self.create_record()
+        record_3 = self.create_record()
+        self.assertEqual(
+            [record_2.id, record_3.id],
+            self.env["edi.exchange.record"]
+            .search(
+                [("id", "in", (record_1 + record_2 + record_3).ids)],
+                offset=1,
+                limit=2,
+                order="id",
+            )
+            .ids,
+        )
