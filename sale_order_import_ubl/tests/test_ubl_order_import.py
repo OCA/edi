@@ -81,6 +81,7 @@ class TestUblOrderImport(TransactionCase):
         so = self.env["sale.order"].browse(action["res_id"])
         invoice_partner = so.partner_invoice_id
         self.assertEqual(rc_partner.records, invoice_partner)
+
         self.assertRecordValues(
             invoice_partner,
             [
@@ -93,7 +94,6 @@ class TestUblOrderImport(TransactionCase):
                     "parent_id": so.partner_id.id,
                     "phone": False,
                     "ref": False,
-                    "street": "Invoice Street",
                     "street2": "Invoice floor",
                     "type": "invoice",
                     "vat": False,
@@ -102,6 +102,9 @@ class TestUblOrderImport(TransactionCase):
                 }
             ],
         )
+        # NB: we test the ``street`` field separately because its behavior may change
+        # according to whether ``sale_order_import_address_extended`` is installed
+        self.assertTrue(invoice_partner.street.startswith("Invoice Street"))
 
     @mute_logger("odoo.addons.sale_order_import.wizard.sale_order_import")
     def test_ubl_order_import_create_missing_shipping_partner(self):
@@ -121,6 +124,7 @@ class TestUblOrderImport(TransactionCase):
         so = self.env["sale.order"].browse(action["res_id"])
         shipping_partner = so.partner_shipping_id
         self.assertEqual(rc_partner.records, shipping_partner)
+
         self.assertRecordValues(
             shipping_partner,
             [
@@ -132,7 +136,6 @@ class TestUblOrderImport(TransactionCase):
                     "name": "Swedish trucking",
                     "parent_id": so.partner_id.id,
                     "phone": "987098709",
-                    "street": "Delivery Street",
                     "street2": "Delivery floor",
                     "type": "delivery",
                     "vat": False,
@@ -141,3 +144,6 @@ class TestUblOrderImport(TransactionCase):
                 }
             ],
         )
+        # NB: we test the ``street`` field separately because its behavior may change
+        # according to whether ``sale_order_import_address_extended`` is installed
+        self.assertTrue(shipping_partner.street.startswith("Delivery Street"))
