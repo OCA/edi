@@ -251,8 +251,15 @@ class AccountInvoiceImport(models.TransientModel):
         if reason:
             acentry["name"] = reason
         # ChargeIndicator and ActualAmount are required field
-        acentry["price_unit"] = self.multi_xpath_helper(
-            acline, ["ram:ActualAmount"], namespaces, isfloat=True
+        # BT-92 and BT-136 are defined as positive amounts, the direction being
+        # carried by ram:ChargeIndicator alone. Some issuers send a negative
+        # ActualAmount for an allowance: taking it as-is negates the amount
+        # twice and turns the allowance into a charge.
+        acentry["price_unit"] = abs(
+            self.multi_xpath_helper(
+                acline, ["ram:ActualAmount"], namespaces, isfloat=True
+            )
+            or 0.0
         )
         ch_indic = self.multi_xpath_helper(
             acline, ["ram:ChargeIndicator/udt:Indicator"], namespaces
@@ -372,6 +379,7 @@ class AccountInvoiceImport(models.TransientModel):
             namespaces,
         )
         res = [vals]
+        ac_total = 0.0
         for ac_element in iline_allowance_charge_xpath:
             acentry = self.parse_facturx_allowance_charge(
                 ac_element,
@@ -381,8 +389,18 @@ class AccountInvoiceImport(models.TransientModel):
                 {},
                 namespaces,
             )
-            counters["lines"] += acentry["price_unit"] * acentry["qty"]
+            acentry["price_subtotal"] = acentry["price_unit"] * acentry["qty"]
+            ac_total += acentry["price_subtotal"]
             res.append(acentry)
+        if ac_total:
+            # BT-131 (LineTotalAmount) is already net of the line level
+            # allowances and charges, so the product line must carry the gross
+            # amount for the sum of the lines returned here to add up to
+            # BT-131. Otherwise every allowance is counted twice and the
+            # difference ends up on a global adjustment line.
+            gross = price_subtotal - ac_total
+            vals["price_unit"] = gross / qty
+            vals["price_subtotal"] = gross
         return res
 
     @api.model

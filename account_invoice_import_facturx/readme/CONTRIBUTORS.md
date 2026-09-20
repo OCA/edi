@@ -1,1 +1,3 @@
 - Alexis de Lattre \<<alexis.delattre@akretion.com>\>
+- [teamDSI](https://www.team-dsi.fr):
+  - Antoine Morit \<<amorit@team-dsi.fr>\>
