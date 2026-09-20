@@ -64,8 +64,20 @@ class AccountInvoiceImport(models.TransientModel):
                     unece_uom = "C62"
                 uom = {"unece_code": unece_uom}
         product_dict = self.ubl_parse_product(iline, namespaces)
-        name_xpath = iline.xpath("cac:Item/cbc:Description", namespaces=namespaces)
-        name = name_xpath and name_xpath[0].text or "-"
+        # BT-153 (cac:Item/cbc:Name) is the item name and is mandatory in
+        # EN 16931, whereas BT-154 (cac:Item/cbc:Description) is optional and
+        # free-form. Some issuers leave the description empty (all the lines
+        # were then labelled "-") and others put an internal identifier in it,
+        # such as a UUID, while the readable label sits in cbc:Name. So read
+        # BT-153 first and only fall back on BT-154.
+        name = False
+        for name_tag in ("cac:Item/cbc:Name", "cac:Item/cbc:Description"):
+            name_xpath = iline.xpath(name_tag, namespaces=namespaces)
+            if name_xpath and name_xpath[0].text and name_xpath[0].text.strip():
+                name = name_xpath[0].text.strip()
+                break
+        if not name:
+            name = "-"
         price_subtotal_xpath = iline.xpath(
             "cbc:LineExtensionAmount", namespaces=namespaces
         )
