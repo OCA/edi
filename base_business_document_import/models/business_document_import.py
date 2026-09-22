@@ -741,7 +741,7 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _match_company_domain(self):
-        company_ids = self._context.get("allowed_company_ids") or [self.env.company.id]
+        company_ids = [self.env.company.id]
         return [("company_id", "in", company_ids + [False])]
 
     @api.model
