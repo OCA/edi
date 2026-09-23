@@ -56,6 +56,9 @@ class BaseUbl(models.AbstractModel):
         contact_phone_xpath = party_node.xpath(
             "cac:Contact/cbc:Telephone", namespaces=ns
         )
+        einvoice_addr_xpath = party_node.xpath(
+            "cbc:EndpointID[@schemeID='0225']", namespaces=ns
+        )
         partner_dict = {
             "vat": vat_xpath and vat_xpath[0].text or False,
             "name": partner_name_xpath and partner_name_xpath[0].text or False,
@@ -63,6 +66,9 @@ class BaseUbl(models.AbstractModel):
             "contact": contact_name_xpath and contact_name_xpath[0].text or False,
             "email": contact_email_xpath and contact_email_xpath[0].text or False,
             "phone": contact_phone_xpath and contact_phone_xpath[0].text or False,
+            "einvoice_address": einvoice_addr_xpath
+            and einvoice_addr_xpath[0].text
+            or False,
         }
         id_nodes = party_node.xpath("cac:PartyIdentification/cbc:ID", namespaces=ns)
         id_numbers = []

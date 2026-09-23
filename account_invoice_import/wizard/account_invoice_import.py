@@ -437,28 +437,32 @@ class AccountInvoiceImport(models.TransientModel):
                 product = product.with_company(import_config["company"].id)
                 if parsed_inv["type"] in ("out_invoice", "out_refund"):
                     account = product._get_product_accounts()["income"]
-                    product_taxes = product.taxes_id
                 else:
                     account = product._get_product_accounts()["expense"]
+            else:
+                account = import_config["account"]
+
+            if parsed_inv["type"] in ("out_invoice", "out_refund"):
+                type_tax_use = "sale"
+            else:
+                type_tax_use = "purchase"
+            taxes = bdio._match_taxes(
+                line.get("taxes"),
+                parsed_inv["chatter_msg"],
+                company=import_config["company"],
+                type_tax_use=type_tax_use,
+                raise_exception=False,
+            )
+            if not taxes and product:
+                if parsed_inv["type"] in ("out_invoice", "out_refund"):
+                    product_taxes = product.taxes_id
+                else:
                     product_taxes = product.supplier_taxes_id
+
                 taxes = product_taxes.filtered(
                     lambda tax: tax.company_id == import_config["company"]
                 )
             if not taxes:
-                if parsed_inv["type"] in ("out_invoice", "out_refund"):
-                    type_tax_use = "sale"
-                else:
-                    type_tax_use = "purchase"
-                taxes = bdio._match_taxes(
-                    line.get("taxes", {}),
-                    parsed_inv["chatter_msg"],
-                    company=import_config["company"],
-                    type_tax_use=type_tax_use,
-                    raise_exception=False,
-                )
-            if not account and "account" in import_config:
-                account = import_config["account"]
-            if not taxes and "taxes" in import_config:
                 taxes = import_config["taxes"]
 
             fp = partner and partner.property_account_position_id or False
@@ -471,6 +475,20 @@ class AccountInvoiceImport(models.TransientModel):
                 product=product,
                 raise_exception=False,
             )
+            if product and product.uom_id.category_id != uom.category_id:
+                parsed_inv["chatter_msg"].append(
+                    self.env._(
+                        "Matched UoM is <strong>%(matched_uom)s</strong>, but this "
+                        "UoM doesn't belong to the same category as UoM "
+                        "<strong>%(product_uom)s</strong> configured on product "
+                        "<em>%(product)s</em>. So Odoo has set the UoM of the product "
+                        "(%(product_uom)s).",
+                        matched_uom=uom.display_name,
+                        product_uom=product.uom_id.display_name,
+                        product=product.display_name,
+                    )
+                )
+                uom = product.uom_id
 
             il_vals = {
                 "display_type": "product",
@@ -720,13 +738,14 @@ class AccountInvoiceImport(models.TransientModel):
             )
 
     @api.model
-    def _pre_process_parsed_inv_taxes(self, parsed_inv, company):
+    def _pre_process_parsed_inv_taxes(
+        self, parsed_inv, company, force_no_vat_deduction=False
+    ):
         """Handle taxes in pre_processing parsed invoice."""
         # Handle the case where we import an invoice with VAT in a company that
         # cannot deduct VAT
-        if (
-            parsed_inv["type"] in ("in_invoice", "in_refund")
-            and company._cannot_refund_vat()
+        if parsed_inv["type"] in ("in_invoice", "in_refund") and (
+            company._cannot_refund_vat() or force_no_vat_deduction
         ):
             parsed_inv["amount_tax"] = 0
             parsed_inv["amount_untaxed"] = parsed_inv["amount_total"]

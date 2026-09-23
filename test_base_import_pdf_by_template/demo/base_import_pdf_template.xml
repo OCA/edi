@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="partner_decathlon" model="res.partner">
+        <field name="name">Decathlon</field>
+    </record>
+    <record id="generic_product" model="product.product">
+        <field name="name">Test Generic Product</field>
+        <field name="default_code">GENERIC</field>
+    </record>
+    <!-- Product Data !-->
+    <record id="supplierinfo_decathlon_4449130" model="product.supplierinfo">
+        <field name="partner_id" ref="partner_decathlon" />
+        <field name="product_code">4449130</field>
+    </record>
+    <record id="product_mochila" model="product.product">
+        <field name="name">Test Mochila</field>
+        <field name="default_code">MOCHILA</field>
+        <field name="purchase_ok" eval="True" />
+        <field
+            name="seller_ids"
+            eval="[(6, 0, [ref('supplierinfo_decathlon_4449130')])]"
+        />
+    </record>
+    <record id="supplierinfo_decathlon_5284409" model="product.supplierinfo">
+        <field name="partner_id" ref="partner_decathlon" />
+        <field name="product_code">5284409</field>
+    </record>
+    <record id="product_aislante" model="product.product">
+        <field name="name">Test Aislante</field>
+        <field name="default_code">AISLANTE</field>
+        <field name="purchase_ok" eval="True" />
+        <field
+            name="seller_ids"
+            eval="[(6, 0, [ref('supplierinfo_decathlon_5284409')])]"
+        />
+    </record>
+    <record id="supplierinfo_decathlon_4225123" model="product.supplierinfo">
+        <field name="partner_id" ref="partner_decathlon" />
+        <field name="product_code">4225123</field>
+    </record>
+    <record id="product_hamaca" model="product.product">
+        <field name="name">Test Hamaca</field>
+        <field name="default_code">HAMACA</field>
+        <field name="purchase_ok" eval="True" />
+        <field
+            name="seller_ids"
+            eval="[(6, 0, [ref('supplierinfo_decathlon_4225123')])]"
+        />
+    </record>
+    <record id="supplierinfo_decathlon_4006580" model="product.supplierinfo">
+        <field name="partner_id" ref="partner_decathlon" />
+        <field name="product_code">4006580</field>
+    </record>
+    <record id="product_botiquin" model="product.product">
+        <field name="name">Test Botiquin</field>
+        <field name="default_code">BOTIQUIN</field>
+        <field name="purchase_ok" eval="True" />
+        <field
+            name="seller_ids"
+            eval="[(6, 0, [ref('supplierinfo_decathlon_4006580')])]"
+        />
+    </record>
+    <!-- Purchase order Template Data !-->
+    <record id="po_decathlon" model="base.import.pdf.template">
+        <field name="name">Purchase Orders Decathlon</field>
+        <field name="model_id" ref="purchase.model_purchase_order" />
+        <field name="child_field_id" ref="purchase.field_purchase_order__order_line" />
+        <field name="auto_detect_pattern">(ESA79935607)</field>
+    </record>
+    <record id="po_decathlon_line_partner_id" model="base.import.pdf.template.line">
+        <field name="template_id" ref="po_decathlon" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="purchase.field_purchase_order__partner_id" />
+        <field name="value_type">fixed</field>
+        <field name="fixed_value" ref="partner_decathlon" />
+    </record>
+    <record id="po_decathlon_line_partner_ref" model="base.import.pdf.template.line">
+        <field name="template_id" ref="po_decathlon" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="purchase.field_purchase_order__partner_ref" />
+        <field name="pattern">ES[0-9]{10}</field>
+        <field name="value_type">variable</field>
+    </record>
+    <record id="po_decathlon_line_origin" model="base.import.pdf.template.line">
+        <field name="template_id" ref="po_decathlon" />
+        <field name="related_model">header</field>
+        <field name="field_id" ref="purchase.field_purchase_order__origin" />
+        <field name="value_type">fixed</field>
+        <field name="fixed_value_char">fixed-origin</field>
+    </record>
+    <record id="po_decathlon_line_product_id" model="base.import.pdf.template.line">
+        <field name="template_id" ref="po_decathlon" />
+        <field name="related_model">lines</field>
+        <field name="field_id" ref="purchase.field_purchase_order_line__product_id" />
+        <field name="sequence">0</field>
+        <field name="pattern">([0-9]{7}) [0-7]{1}</field>
+        <field name="value_type">variable</field>
+        <field name="search_field_id" ref="product.field_product_product__seller_ids" />
+        <field
+            name="search_subfield_id"
+            ref="product.field_product_supplierinfo__product_code"
+        />
+        <!-- <field name="default_value">product.product,cls.env.ref('test_base_import_pdf_by_template.generic_product').id</field>     -->
+    </record>
+    <record id="po_decathlon_line_product_qty" model="base.import.pdf.template.line">
+        <field name="template_id" ref="po_decathlon" />
+        <field name="related_model">lines</field>
+        <field name="field_id" ref="purchase.field_purchase_order_line__product_qty" />
+        <field name="sequence">1</field>
+        <field name="pattern">[0-9]{7} ([0-7]{1})</field>
+        <field name="value_type">variable</field>
+    </record>
+    <record id="po_decathlon_line_price_unit" model="base.import.pdf.template.line">
+        <field name="template_id" ref="po_decathlon" />
+        <field name="related_model">lines</field>
+        <field name="field_id" ref="purchase.field_purchase_order_line__price_unit" />
+        <field name="sequence">2</field>
+        <field name="pattern">[0-9]{7} [0-9]{1} ([0-9]{2}.[0-9]{2})</field>
+        <field name="value_type">variable</field>
+        <field name="log_distinct_value" eval="True" />
+    </record>
+</odoo>

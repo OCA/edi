@@ -422,24 +422,31 @@ class SaleOrderImport(models.TransientModel):
             parsed_order["partner"], [], partner_type="customer"
         )
         commercial_partner = partner.commercial_partner_id
-        partner_shipping_id = False
-        if parsed_order.get("ship_to"):
-            try:
-                partner_shipping_id = bdio._match_shipping_partner(
-                    parsed_order["ship_to"], partner, []
-                ).id
-            except UserError:
-                if not self._can_create_missing_shipping_partner():
-                    raise
-                partner_shipping_id = self._create_missing_shipping_partner(
-                    parsed_order["ship_to"], partner, []
-                ).id
         existing_quotations = self.env["sale.order"].search(
             self._search_existing_order_domain(
                 parsed_order, commercial_partner, [("state", "in", ("draft", "sent"))]
             )
         )
         if existing_quotations:
+            # Update the shipping partner if necessary
+            # NB: run this part of code only if a quotation exists already to prevent
+            # duplication of shipping partners in case the wizard tries to create a new
+            # one: if this snippet is executed *before* the ``if`` condition and a
+            # record is created, then a new one might be created again with the exact
+            # same data if no quotation exists and ``self.create_order_return_action()``
+            # is executed instead, leading to duplicated ``res.partner`` records
+            partner_shipping_id = False
+            if parsed_order.get("ship_to"):
+                try:
+                    partner_shipping_id = bdio._match_shipping_partner(
+                        parsed_order["ship_to"], partner, []
+                    ).id
+                except UserError:
+                    if not self._can_create_missing_shipping_partner():
+                        raise
+                    partner_shipping_id = self._create_missing_shipping_partner(
+                        parsed_order["ship_to"], partner, []
+                    ).id
             default_sale_id = False
             if len(existing_quotations) == 1:
                 default_sale_id = existing_quotations[0].id

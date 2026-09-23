@@ -25,7 +25,7 @@ msgstr ""
 
 #. module: account_edi_ubl_cii_payment_unece
 #: model:ir.model,name:account_edi_ubl_cii_payment_unece.model_account_edi_xml_cii
-msgid "Factur-x/XRechnung CII 2.2.0"
+msgid "Factur-x/ZUGFeRD CII 2.2.0"
 msgstr ""
 
 #. module: account_edi_ubl_cii_payment_unece

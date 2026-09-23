@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 15.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 13:19+0000\n"
-"PO-Revision-Date: 2024-10-08 16:06+0000\n"
+"PO-Revision-Date: 2026-09-03 08:46+0000\n"
 "Last-Translator: Víctor Martínez <victor.martinez@tecnativa.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: base_import_pdf_by_template
 #. odoo-python
@@ -24,6 +24,126 @@ msgid ""
 "%(item_name)s has been set with %(new_value)s instead of\n"
 "                    %(old_value)s"
 msgstr ""
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%A - Full day of the week."
+msgstr "%A - Día de la semana escrito completo."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%B - Full month name.\""
+msgstr "%B - Nombre completo del mes."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%H - Hour (24-hour clock) [00,23]."
+msgstr "%H - Hora (reloj 24-horas) [00,23]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%I - Hour (12-hour clock) [01,12]."
+msgstr "%I - Hora (reloj 12-horas) [01,12]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%M - Minute [00,59]."
+msgstr "%M - Minuto [00,59]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%S - Seconds [00,61]."
+msgstr "%S - Segundos [00,61]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%Y - Year with century."
+msgstr "%Y - Año con siglo."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%a - Abbreviated day of the week."
+msgstr "%a - Día de la semana abreviado."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%b - Abbreviated month name."
+msgstr "%b - Nombre abreviado del mes."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%d - Day of the month [01,31]."
+msgstr "%d - Día del mes [01,31]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%j - Day of the year [001,366]."
+msgstr "%j - Día del año [001,366]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%m - Month number [01,12]."
+msgstr "%m - Número del mes [01,12]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%p - Equivalent of either AM or PM."
+msgstr "%p - Equivalente a AM o a PM."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%w - Day of the week number [0(Sunday),6]."
+msgstr "%w - Número de día de la semana [0(Domingo),6]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "%y - Year without century [00,99]."
+msgstr "%y - Año sin el siglo [00,99]."
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "1. %b, %B         ==&gt; Dec, December"
+msgstr "1. %b, %B         ==&gt; Dic, Diciembre"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "2. %a ,%A         ==&gt; Fri, Friday"
+msgstr "2. %a ,%A         ==&gt; Vie, Viernes"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "3. %y, %Y         ==&gt; 08, 2008"
+msgstr "3. %y, %Y         ==&gt; 08, 2008"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "4. %d, %m         ==&gt; 05, 12"
+msgstr "4. %d, %m         ==&gt; 05, 12"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "5. %H:%M:%S      ==&gt; 18:25:20"
+msgstr "5. %H:%M:%S      ==&gt; 18:25:20"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "6. %I:%M:%S %p  ==&gt; 06:25:20 PM"
+msgstr "6. %I:%M:%S %p  ==&gt; 06:25:20 PM"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "7. %j              ==&gt; 340"
+msgstr "7. %j              ==&gt; 340"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "8. %S              ==&gt; 20"
+msgstr "8. %S              ==&gt; 20"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "9. %w              ==&gt; 5 ( Friday is the 6th day)"
+msgstr "9. %w              ==&gt; 5 (Viernes es el 6º día)"
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_view_form
@@ -42,7 +162,7 @@ msgstr ""
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Acción necesaria"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__active
@@ -70,18 +190,12 @@ msgstr "Adjunto"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Número de archivos adjuntos"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__auto_detect_pattern
 msgid "Auto detect pattern"
 msgstr "Patrón de auto-detección"
-
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "B dd, YY"
-msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model:ir.ui.menu,name:base_import_pdf_by_template.menu_base_import_pdf_by_template_root
@@ -154,12 +268,12 @@ msgstr "Creado el"
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__data
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload_line__data
 msgid "Data"
-msgstr ""
+msgstr "Datos"
 
 #. module: base_import_pdf_by_template
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__date_format
-msgid "Date Format"
-msgstr "Formato de fecha"
+#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__date_time_format
+msgid "Date/Time Format"
+msgstr "Formato Fecha/Hora"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__decimal_separator
@@ -189,10 +303,20 @@ msgid "Dot (.)"
 msgstr "Punto (.)"
 
 #. module: base_import_pdf_by_template
+#: model:ir.model,name:base_import_pdf_by_template.model_mail_thread
+msgid "Email Thread"
+msgstr ""
+
+#. module: base_import_pdf_by_template
 #. odoo-python
 #: code:addons/base_import_pdf_by_template/wizards/wizard_base_import_pdf_upload.py:0
 msgid "Error to set %(field_name)s with value %(value)s"
 msgstr "Error al definir %(field_name)s con el valor %(value)s"
+
+#. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "Examples"
+msgstr "Ejemplos"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_mixin__extraction_mode
@@ -230,7 +354,7 @@ msgstr "Archivo"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__file_name
 msgid "File Name"
-msgstr ""
+msgstr "Nombre del archivo"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__attachment_ids
@@ -292,12 +416,12 @@ msgstr "Valor fijo"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_follower_ids
 msgid "Followers"
-msgstr ""
+msgstr "Seguidores"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Seguidores (Contactos)"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template_line__field_relation
@@ -312,15 +436,9 @@ msgid "Generated Documents"
 msgstr "Documentos generados"
 
 #. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "H:M:S"
-msgstr "H:M:S"
-
-#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__has_message
 msgid "Has Message"
-msgstr ""
+msgstr "Tiene un mensaje"
 
 #. module: base_import_pdf_by_template
 #. odoo-python
@@ -346,12 +464,12 @@ msgstr "ID"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Si está marcada, hay nuevos mensajes que requieren su atención."
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__message_has_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Si está marcada, algunos mensajes tienen error de envío."
 
 #. module: base_import_pdf_by_template
 #: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.view_wizard_base_import_pdf_upload_form
@@ -372,7 +490,7 @@ msgstr "Importar registros (con plantilla)"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "Es un seguidor"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__auto_detect_pattern
@@ -409,6 +527,11 @@ msgid "Last Updated on"
 msgstr "Última actualización"
 
 #. module: base_import_pdf_by_template
+#: model_terms:ir.ui.view,arch_db:base_import_pdf_by_template.base_import_pdf_template_line_view_form
+msgid "Legends for supported Date and Time Formats"
+msgstr "Leyenda para formatos soportados de fecha y hora"
+
+#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__line_ids
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_upload__line_ids
 msgid "Line"
@@ -437,18 +560,6 @@ msgid "Log distint value?"
 msgstr "¿Guardar registro si el valor es distinto?"
 
 #. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "MM-dd-YY"
-msgstr "MM-dd-YY"
-
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "MM/dd/YY"
-msgstr "MM/dd/YY"
-
-#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__model_id
 msgid "Main Model"
 msgstr "Modelo principal"
@@ -462,12 +573,12 @@ msgstr "Mapeado"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Error de envío de mensaje"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Mensajes"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__model
@@ -500,22 +611,22 @@ msgstr "Nada"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Número de acciones"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "Número de errores"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr ""
+msgstr "Número de mensajes que requieren una acción"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Número de mensajes con error de envío"
 
 #. module: base_import_pdf_by_template
 #. odoo-python
@@ -609,13 +720,20 @@ msgstr ""
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__sequence
 msgid "Sequence"
-msgstr ""
+msgstr "Secuencia"
 
 #. module: base_import_pdf_by_template
 #. odoo-python
 #: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
 msgid "Space ( )"
 msgstr "Espacio ( )"
+
+#. module: base_import_pdf_by_template
+#: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template_line__date_time_format
+msgid ""
+"Specify the date and time format to use when displaying values. The format "
+"must use Python strftime notation."
+msgstr ""
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__table_info
@@ -652,11 +770,6 @@ msgid "Thousand Separator"
 msgstr "Separador de miles"
 
 #. module: base_import_pdf_by_template
-#: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template_line__time_format
-msgid "Time Format"
-msgstr "Formato de tiempo"
-
-#. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_wizard_base_import_pdf_preview__total_pages
 msgid "Total pages"
 msgstr "Total páginas"
@@ -686,12 +799,12 @@ msgstr "Variable"
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,field_description:base_import_pdf_by_template.field_base_import_pdf_template__website_message_ids
 msgid "Website Messages"
-msgstr ""
+msgstr "Mensajes del sitio web"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model.fields,help:base_import_pdf_by_template.field_base_import_pdf_template__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Historial de comunicación del sitio web"
 
 #. module: base_import_pdf_by_template
 #: model:ir.model,name:base_import_pdf_by_template.model_wizard_base_import_pdf_mixin
@@ -713,77 +826,29 @@ msgstr ""
 msgid "Wizard Base Import Pdf upload Line"
 msgstr ""
 
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "YY-dd-MM"
-msgstr "YY-dd-MM"
+#~ msgid "Date Format"
+#~ msgstr "Formato de fecha"
 
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "YY/dd/MM"
-msgstr "YY/dd/MM"
+#~ msgid "H:M:S"
+#~ msgstr "H:M:S"
 
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "b dd, YY"
-msgstr ""
+#~ msgid "MM-dd-YY"
+#~ msgstr "MM-dd-YY"
 
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd B YY"
-msgstr ""
+#~ msgid "MM/dd/YY"
+#~ msgstr "MM/dd/YY"
 
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd b YY"
-msgstr ""
+#~ msgid "Time Format"
+#~ msgstr "Formato de tiempo"
 
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd-MM-YY"
-msgstr ""
+#~ msgid "YY-dd-MM"
+#~ msgstr "YY-dd-MM"
 
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd-b-YY"
-msgstr ""
+#~ msgid "YY/dd/MM"
+#~ msgstr "YY/dd/MM"
 
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd-b-yy"
-msgstr ""
-
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd.MM.YY"
-msgstr "dd.MM.YY"
-
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd.MM.yy"
-msgstr ""
-
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd/MM/YY"
-msgstr ""
-
-#. module: base_import_pdf_by_template
-#. odoo-python
-#: code:addons/base_import_pdf_by_template/models/base_import_pdf_template.py:0
-msgid "dd/MM/yy"
-msgstr ""
+#~ msgid "dd.MM.YY"
+#~ msgstr "dd.MM.YY"
 
 #~ msgid "Column"
 #~ msgstr "Columna"

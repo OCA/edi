@@ -319,6 +319,16 @@ msgid "Mail Gateway: Destination E-mail"
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid ""
+"Matched UoM is <strong>%(matched_uom)s</strong>, but this UoM doesn't belong"
+" to the same category as UoM <strong>%(product_uom)s</strong> configured on "
+"product <em>%(product)s</em>. So Odoo has set the UoM of the product "
+"(%(product_uom)s)."
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_error
 msgid "Message Delivery error"
 msgstr ""

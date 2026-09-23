@@ -7,10 +7,10 @@
 import base64
 
 from odoo import fields
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import RecordCapturer, TransactionCase
 from odoo.tools import mute_logger
 
-from .common import get_test_data
+from .common import _get_file_content, get_test_data
 
 
 class TestUblOrderImport(TransactionCase):
@@ -62,3 +62,82 @@ class TestUblOrderImport(TransactionCase):
                 self.assertEqual(
                     sorted(so.order_line.mapped("product_id").ids), expected_ids
                 )
+
+    @mute_logger("odoo.addons.sale_order_import.wizard.sale_order_import")
+    def test_ubl_order_import_create_missing_invoice_partner(self):
+        """Tests the creation of invoicing address when importing SO UBL files"""
+        filename = "UBL-Order-2.1-Example-CreateInvoicePartner.xml"
+        xml_file = _get_file_content(filename)
+        wiz = self.env["sale.order.import"].create(
+            {
+                "import_type": "xml",
+                "order_file": base64.b64encode(xml_file),
+                "order_filename": filename,
+                "create_missing_invoice_partner": True,
+            }
+        )
+        with RecordCapturer(self.env["res.partner"], []) as rc_partner:
+            action = wiz.import_order_button()
+        so = self.env["sale.order"].browse(action["res_id"])
+        invoice_partner = so.partner_invoice_id
+        self.assertEqual(rc_partner.records, invoice_partner)
+        self.assertRecordValues(
+            invoice_partner,
+            [
+                {
+                    "city": "Stockholm",
+                    "country_code": "SE",
+                    "country_id": self.env.ref("base.se").id,
+                    "email": "test-invoice-partner@test.se",
+                    "name": "Invoicing Address Name",
+                    "parent_id": so.partner_id.id,
+                    "phone": False,
+                    "ref": False,
+                    "street": "Invoice Street",
+                    "street2": "Invoice floor",
+                    "type": "invoice",
+                    "vat": False,
+                    "website": False,
+                    "zip": "11000",
+                }
+            ],
+        )
+
+    @mute_logger("odoo.addons.sale_order_import.wizard.sale_order_import")
+    def test_ubl_order_import_create_missing_shipping_partner(self):
+        """Tests the creation of delivery address when importing SO UBL files"""
+        filename = "UBL-Order-2.1-Example-CreateShippingPartner.xml"
+        xml_file = _get_file_content(filename)
+        wiz = self.env["sale.order.import"].create(
+            {
+                "import_type": "xml",
+                "order_file": base64.b64encode(xml_file),
+                "order_filename": filename,
+                "create_missing_shipping_partner": True,
+            }
+        )
+        with RecordCapturer(self.env["res.partner"], []) as rc_partner:
+            action = wiz.import_order_button()
+        so = self.env["sale.order"].browse(action["res_id"])
+        shipping_partner = so.partner_shipping_id
+        self.assertEqual(rc_partner.records, shipping_partner)
+        self.assertRecordValues(
+            shipping_partner,
+            [
+                {
+                    "city": "Stockholm",
+                    "country_code": "SE",
+                    "country_id": self.env.ref("base.se").id,
+                    "email": "bill@svetruck.se",
+                    "name": "Swedish trucking",
+                    "parent_id": so.partner_id.id,
+                    "phone": "987098709",
+                    "street": "Delivery Street",
+                    "street2": "Delivery floor",
+                    "type": "delivery",
+                    "vat": False,
+                    "website": False,
+                    "zip": "11000",
+                }
+            ],
+        )
