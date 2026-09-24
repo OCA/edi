@@ -559,6 +559,34 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         self.assertEqual(float_compare(iline.price_unit, 1509, precision_digits=2), 0)
         inv.unlink()
 
+    def test_complete_import_without_date(self):
+        """Invoice import must succeed and leave invoice_date unset
+        when no date field is configured for the partner."""
+        self.partner_ak.simple_pdf_field_ids.filtered(
+            lambda f: f.name == "date"
+        ).unlink()
+        wiz = self.env["account.invoice.import"].create(
+            {
+                "invoice_attachment_ids": [
+                    Command.create(
+                        {"datas": self.ak_pdf_file_b64, "name": self.ak_filename}
+                    )
+                ],
+                "company_id": self.company.id,
+            }
+        )
+        wiz.import_invoices()
+        invoices = self.env["account.move"].search(
+            [
+                ("partner_id", "=", self.partner_ak.id),
+                ("state", "=", "draft"),
+                ("move_type", "=", "in_invoice"),
+                ("company_id", "=", self.company.id),
+            ]
+        )
+        self.assertTrue(invoices)
+        self.assertFalse(invoices[0].invoice_date)
+
     def _complete_import_specific_method(self, method):
         icpo = self.env["ir.config_parameter"]
         key = "invoice_import_simple_pdf.pdf2txt"
