@@ -178,6 +178,9 @@ class BaseUbl(models.AbstractModel):
             party_legal_entity, ns["cbc"] + "RegistrationName"
         )
         registration_name.text = commercial_partner.name
+        if commercial_partner.company_registry:
+            company_id = etree.SubElement(party_legal_entity, ns["cbc"] + "CompanyID")
+            company_id.text = commercial_partner.company_registry
         self._ubl_add_address(
             commercial_partner,
             "RegistrationAddress",
@@ -188,7 +191,7 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def _ubl_add_party(
-        self, partner, company, node_name, parent_node, ns, version="2.1"
+        self, partner, company, node_name, parent_node, ns, vat=True, version="2.1"
     ):
         commercial_partner = partner.commercial_partner_id
         party = etree.SubElement(parent_node, ns["cac"] + node_name)
@@ -204,7 +207,11 @@ class BaseUbl(models.AbstractModel):
         if partner.lang:
             self._ubl_add_language(partner.lang, party, ns, version=version)
         self._ubl_add_address(partner, "PostalAddress", party, ns, version=version)
-        self._ubl_add_party_tax_scheme(commercial_partner, party, ns, version=version)
+        if vat:
+            # Do not declare VAT tax scheme if the document has no VAT
+            self._ubl_add_party_tax_scheme(
+                commercial_partner, party, ns, version=version
+            )
         if commercial_partner.is_company or company:
             self._ubl_add_party_legal_entity(
                 commercial_partner, party, ns, version="2.1"
@@ -216,7 +223,7 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def _ubl_add_customer_party(
-        self, partner, company, node_name, parent_node, ns, version="2.1"
+        self, partner, company, node_name, parent_node, ns, vat=True, version="2.1"
     ):
         """Please read the docstring of the method _ubl_add_supplier_party"""
         if company:
@@ -234,7 +241,7 @@ class BaseUbl(models.AbstractModel):
             )
             customer_ref.text = partner_ref
         self._ubl_add_party(
-            partner, company, "Party", customer_party_root, ns, version=version
+            partner, company, "Party", customer_party_root, ns, vat=vat, version=version
         )
         # TODO: rewrite support for AccountingContact + add DeliveryContact
         # Additional optional args
@@ -250,7 +257,7 @@ class BaseUbl(models.AbstractModel):
 
     @api.model
     def _ubl_add_supplier_party(
-        self, partner, company, node_name, parent_node, ns, version="2.1"
+        self, partner, company, node_name, parent_node, ns, vat=True, version="2.1"
     ):
         """The company argument has been added to properly handle the
         'ref' field.
@@ -282,19 +289,27 @@ class BaseUbl(models.AbstractModel):
             )
             supplier_ref.text = partner_ref
         self._ubl_add_party(
-            partner, company, "Party", supplier_party_root, ns, version=version
+            partner, company, "Party", supplier_party_root, ns, vat=vat, version=version
         )
         return supplier_party_root
 
     @api.model
-    def _ubl_add_delivery(self, delivery_partner, parent_node, ns, version="2.1"):
+    def _ubl_add_delivery(
+        self, delivery_partner, parent_node, ns, vat=True, version="2.1"
+    ):
         delivery = etree.SubElement(parent_node, ns["cac"] + "Delivery")
         delivery_location = etree.SubElement(delivery, ns["cac"] + "DeliveryLocation")
         self._ubl_add_address(
             delivery_partner, "Address", delivery_location, ns, version=version
         )
         self._ubl_add_party(
-            delivery_partner, False, "DeliveryParty", delivery, ns, version=version
+            delivery_partner,
+            False,
+            "DeliveryParty",
+            delivery,
+            ns,
+            vat=vat,
+            version=version,
         )
 
     @api.model
@@ -496,11 +511,10 @@ class BaseUbl(models.AbstractModel):
     ):
         prec = self.env["decimal.precision"].precision_get("Account")
         tax_subtotal = etree.SubElement(parent_node, ns["cac"] + "TaxSubtotal")
-        if not float_is_zero(taxable_amount, precision_digits=prec):
-            taxable_amount_node = etree.SubElement(
-                tax_subtotal, ns["cbc"] + "TaxableAmount", currencyID=currency_code
-            )
-            taxable_amount_node.text = "%0.*f" % (prec, taxable_amount)
+        taxable_amount_node = etree.SubElement(
+            tax_subtotal, ns["cbc"] + "TaxableAmount", currencyID=currency_code
+        )
+        taxable_amount_node.text = "%0.*f" % (prec, taxable_amount)
         tax_amount_node = etree.SubElement(
             tax_subtotal, ns["cbc"] + "TaxAmount", currencyID=currency_code
         )
@@ -528,18 +542,47 @@ class BaseUbl(models.AbstractModel):
             tax_category, ns["cbc"] + "ID", schemeID="UN/ECE 5305", schemeAgencyID="6"
         )
         tax_category_id.text = tax.unece_categ_code
-        tax_name = etree.SubElement(tax_category, ns["cbc"] + "Name")
-        tax_name.text = tax.name
-        tax_percent = etree.SubElement(tax_category, ns["cbc"] + "Percent")
-        if tax.amount_type == "percent":
-            tax_percent.text = str(tax.amount)
-        else:
-            tax_percent.text = "0"
-        if tax.unece_categ_code == "E":
-            tax_exmption_reason = etree.SubElement(
+        if tax.unece_categ_code != "O":
+            tax_percent = etree.SubElement(tax_category, ns["cbc"] + "Percent")
+            if tax.amount_type == "percent":
+                tax_percent.text = str(tax.amount)
+            else:
+                tax_percent.text = "0"
+        if (
+            hasattr(tax, "ubl_cii_tax_exemption_reason_code")
+            and tax.ubl_cii_tax_exemption_reason_code
+        ):
+            tax_exemption_reason = etree.SubElement(
+                tax_category, ns["cbc"] + "TaxExemptionReasonCode"
+            )
+            tax_exemption_reason.text = tax.ubl_cii_tax_exemption_reason_code.replace(
+                "_", "-"
+            )
+        elif tax.unece_categ_code == "AE":
+            tax_exemption_reason = etree.SubElement(
                 tax_category, ns["cbc"] + "TaxExemptionReason"
             )
-            tax_exmption_reason.text = "Exempt"
+            tax_exemption_reason.text = "Reverse Charge"
+        elif tax.unece_categ_code == "E":
+            tax_exemption_reason = etree.SubElement(
+                tax_category, ns["cbc"] + "TaxExemptionReason"
+            )
+            tax_exemption_reason.text = "Exempt"
+        elif tax.unece_categ_code == "G":
+            tax_exemption_reason = etree.SubElement(
+                tax_category, ns["cbc"] + "TaxExemptionReason"
+            )
+            tax_exemption_reason.text = "Export"
+        elif tax.unece_categ_code == "K":
+            tax_exemption_reason = etree.SubElement(
+                tax_category, ns["cbc"] + "TaxExemptionReason"
+            )
+            tax_exemption_reason.text = "Intracommunity"
+        elif tax.unece_categ_code == "O":
+            tax_exemption_reason = etree.SubElement(
+                tax_category, ns["cbc"] + "TaxExemptionReason"
+            )
+            tax_exemption_reason.text = "Transaction outside the scope of VAT"
         tax_scheme_dict = self._ubl_get_tax_scheme_dict_from_tax(tax)
         self._ubl_add_tax_scheme(tax_scheme_dict, tax_category, ns, version=version)
 
