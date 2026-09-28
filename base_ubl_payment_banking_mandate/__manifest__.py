@@ -3,7 +3,7 @@
 
 {
     "name": "Base UBL Payment Banking Mandate",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.1.0",
     "category": "Hidden",
     "license": "AGPL-3",
     "summary": "Add banking mandate in ubl payment",

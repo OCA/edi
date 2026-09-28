@@ -3,7 +3,7 @@
 
 {
     "name": "Base UBL Payment",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.1.0",
     "category": "Hidden",
     "license": "AGPL-3",
     "summary": "Payment-related code for Universal Business Language (UBL)",

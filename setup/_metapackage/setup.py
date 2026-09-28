@@ -42,6 +42,7 @@ setuptools.setup(
         'odoo-addon-base_facturx>=16.0dev,<16.1dev',
         'odoo-addon-base_ubl>=16.0dev,<16.1dev',
         'odoo-addon-base_ubl_payment>=16.0dev,<16.1dev',
+        'odoo-addon-base_ubl_payment_banking_mandate>=16.0dev,<16.1dev',
         'odoo-addon-base_wamas_ubl>=16.0dev,<16.1dev',
         'odoo-addon-despatch_advice_import>=16.0dev,<16.1dev',
         'odoo-addon-despatch_advice_import_ubl>=16.0dev,<16.1dev',
