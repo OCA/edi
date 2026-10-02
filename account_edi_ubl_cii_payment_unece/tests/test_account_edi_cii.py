@@ -1,5 +1,6 @@
 # Copyright 2026  Akretion (https://www.akretion.com).
 # @author Sébastien Alix <sebastien.alix@akretion.com>
+# Copyright 2026 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
 
 import base64
@@ -10,8 +11,21 @@ from .common import CommonAccountEdiUnece
 
 
 class TestAccountEdiCII(CommonAccountEdiUnece):
-    def test_export_facturx(self):
-        """Test export of UNECE payment mean code to FacturX XML file."""
+    def test_export_facturx_with_dict_to_xml(self):
+        """Test export of UNECE payment mean to FacturX XML file with helpers."""
+        self.env["ir.config_parameter"].sudo().set_param(
+            "account_edi_ubl_cii.use_new_dict_to_xml_helpers", True
+        )
+        self._export_facturx()
+
+    def test_export_facturx_without_dict_to_xml(self):
+        """Test export of UNECE payment mean to FacturX XML file without helpers."""
+        self.env["ir.config_parameter"].sudo().set_param(
+            "account_edi_ubl_cii.use_new_dict_to_xml_helpers", False
+        )
+        self._export_facturx()
+
+    def _export_facturx(self):
         # Configure company
         self.env.company.write(
             {
