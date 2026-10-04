@@ -12,9 +12,10 @@
                                 readonly="1"
                                 class="oe_inline"
                             /></h2>
-                        <div
-                            class="text-muted"
-                        >Review each proposed field. <b>Keep</b> accepts the row as-is; <b>Edit</b> means you tweaked the regex and want that version applied; <b>Skip</b> leaves the template untouched for that field. Rows the template already has are pre-selected to Skip so you don't accidentally overwrite manual work.</div>
+                        <div class="text-muted">Review each proposed field. <b
+                            >Keep</b> accepts the row as-is; <b
+                            >Edit</b> means you tweaked the regex and want that version applied; <b
+                            >Skip</b> leaves the template untouched for that field. Rows the template already has are pre-selected to Skip so you don't accidentally overwrite manual work.</div>
                     </div>
                     <group>
                         <field name="source" />

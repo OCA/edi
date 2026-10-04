@@ -17,7 +17,7 @@ banner) and return an act_window that opens this wizard in a modal.
 import logging
 from datetime import date, datetime
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -246,6 +246,7 @@ class Invoice2dataTemplatePreviewLine(models.TransientModel):
         "invoice2data.template.preview", required=True, ondelete="cascade"
     )
     sequence = fields.Integer(default=10)
+    # pylint: disable=attribute-string-redundant
     name = fields.Char(string="Description", readonly=True)
     product = fields.Char(string="Product / code", readonly=True)
     qty = fields.Float(string="Qty", readonly=True)

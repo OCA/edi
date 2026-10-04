@@ -12,9 +12,10 @@
                                 readonly="1"
                                 class="oe_inline"
                             /></h2>
-                        <div
-                            class="alert alert-info"
-                        ><b>First-slice harness.</b> Enter a page and (x, y) in points (72 dpi, top-left origin). A non-zero width and height turn a click into a drag rectangle → <code>area</code> field. Click <b>Preview</b> to see what the resolver proposes. The clickable PDF viewer lives in a follow-up PR.</div>
+                        <div class="alert alert-info"><b
+                            >First-slice harness.</b> Enter a page and (x, y) in points (72 dpi, top-left origin). A non-zero width and height turn a click into a drag rectangle → <code
+                            >area</code> field. Click <b
+                            >Preview</b> to see what the resolver proposes. The clickable PDF viewer lives in a follow-up PR.</div>
                     </div>
                     <group>
                         <group string="Where">
@@ -26,10 +27,7 @@
                         </group>
                         <group string="Cross-backend">
                             <field name="pdftotext_status" readonly="1" />
-                            <field
-                                name="field_key_id"
-                                options="{'no_create': True}"
-                            />
+                            <field name="field_key_id" options="{'no_create': True}" />
                         </group>
                     </group>
                     <group string="Proposal">

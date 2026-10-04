@@ -1,6 +1,6 @@
 # Copyright 2026 bosd
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-"""pypdfium2 helpers for click-to-suggest and drag-rectangle-to-area.
+r"""pypdfium2 helpers for click-to-suggest and drag-rectangle-to-area.
 
 Server-side resolution of a click / drag rectangle to
 ``(canonical_field, spec, captured_value)``, per the design brief doc at
@@ -203,11 +203,7 @@ def _propose_from_line(pdf_path, page_idx, line, char_offset, hint):
             value,
             line,
             hint,
-            (
-                _full_text(pdf_path, page_idx.__class__)
-                if False
-                else _pdfium_full_text(pdf_path)
-            ),
+            _pdfium_full_text(pdf_path),
         )
 
     cands = find_candidates(line)

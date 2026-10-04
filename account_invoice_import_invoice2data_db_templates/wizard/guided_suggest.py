@@ -71,9 +71,7 @@ class GuidedSuggestWizard(models.TransientModel):
 
                 draft = generate_template(text)
             else:
-                from invoice2data.extract.template_builder import (
-                    suggested_template,
-                )
+                from invoice2data.extract.template_builder import suggested_template
 
                 draft = suggested_template(text)
         except ImportError as exc:
@@ -204,10 +202,7 @@ def _spec_to_regex_and_preview(spec, text):
     on ``text``.
     """
     try:
-        from invoice2data.extract.template_builder import (
-            field_regex,
-            preview_field,
-        )
+        from invoice2data.extract.template_builder import field_regex, preview_field
 
         regex = field_regex(spec)
         captured = preview_field(spec, text)
