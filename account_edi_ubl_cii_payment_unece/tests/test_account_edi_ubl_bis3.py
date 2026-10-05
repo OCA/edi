@@ -1,5 +1,6 @@
 # Copyright 2026  Akretion (https://www.akretion.com).
 # @author Sébastien Alix <sebastien.alix@akretion.com>
+# Copyright 2026 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
 
 import base64
@@ -20,6 +21,14 @@ class TestAccountEdiUBLBIS3(CommonAccountEdiUnece):
             {
                 "country_id": self.env.ref("base.be").id,
                 "invoice_edi_format": "ubl_bis3",
+                "peppol_endpoint": "0000000000",
+            }
+        )
+        seller = self.env.company.partner_id
+        seller.write(
+            {
+                "country_id": self.env.ref("base.be").id,
+                "peppol_endpoint": "0000000001",
             }
         )
         # Create invoice
