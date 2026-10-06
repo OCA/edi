@@ -34,6 +34,7 @@ setuptools.setup(
         'odoo-addon-account_invoice_import_simple_pdf>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_import_ubl>=16.0dev,<16.1dev',
         'odoo-addon-account_invoice_ubl>=16.0dev,<16.1dev',
+        'odoo-addon-account_invoice_ubl_payment_mandate>=16.0dev,<16.1dev',
         'odoo-addon-base_business_document_import>=16.0dev,<16.1dev',
         'odoo-addon-base_business_document_import_phone>=16.0dev,<16.1dev',
         'odoo-addon-base_ebill_payment_contract>=16.0dev,<16.1dev',
