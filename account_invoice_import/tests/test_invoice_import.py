@@ -2,6 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # Copyright 2022 Camptocamp SA
 # @author: Simone Orsi <simahawk@gmail.com>
+# Copyright 2026 Michael Tietz (MT Software) <mtietz@mt-software.de>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import unittest.mock
@@ -420,3 +421,81 @@ Nina
         price_prec = self.env["decimal.precision"].precision_get("Product Price")
         self.assertTrue(float_is_zero(iline.price_unit, precision_digits=price_prec))
         self.assertTrue(self.company.currency_id.is_zero(iline.price_subtotal))
+
+    def _create_upload_attachments(self):
+        native_attachment = self.env["ir.attachment"].create(
+            {
+                "name": "native_invoice.xml",
+                "raw": b"<?xml version='1.0'?><NativeInvoice/>",
+                "mimetype": "application/xml",
+            }
+        )
+        with file_open(
+            "account_invoice_import/tests/pdf/unknown_invoice.pdf", "rb"
+        ) as f:
+            oca_attachment = self.env["ir.attachment"].create(
+                {
+                    "name": "unknown_invoice.pdf",
+                    "raw": f.read(),
+                    "mimetype": "application/pdf",
+                }
+            )
+        return native_attachment, oca_attachment
+
+    def _mock_edi_decoder(self, native_attachment):
+        """Pretend that Odoo has a native decoder for native_attachment only"""
+
+        def get_edi_decoder(file_data, *args, **kwargs):
+            name = file_data.get("name") or file_data.get("filename")
+            if name == native_attachment.name:
+                return lambda *args, **kwargs: True
+            return None
+
+        return unittest.mock.patch.object(
+            type(self.env["account.move"]),
+            "_get_edi_decoder",
+            side_effect=get_edi_decoder,
+        )
+
+    def _search_journal_moves(self):
+        return self.env["account.move"].search(
+            [("journal_id", "=", self.pur_journal1.id)]
+        )
+
+    def test_upload_native_and_oca_attachments(self):
+        native_attachment, oca_attachment = self._create_upload_attachments()
+        with self._mock_edi_decoder(native_attachment):
+            action = self.pur_journal1.create_document_from_attachment(
+                [native_attachment.id, oca_attachment.id]
+            )
+        moves = self._search_journal_moves()
+        # One move per attachment: the native one is not imported again by OCA
+        self.assertEqual(len(moves), 2)
+        native_move = moves.filtered(lambda move: move.id == native_attachment.res_id)
+        self.assertEqual(native_attachment.res_model, "account.move")
+        self.assertTrue(native_move)
+        next_action = action["params"]["next"]
+        self.assertEqual(next_action["domain"], [("id", "in", moves.ids)])
+
+    def test_upload_native_attachment_only(self):
+        native_attachment, __ = self._create_upload_attachments()
+        with self._mock_edi_decoder(native_attachment):
+            action = self.pur_journal1.create_document_from_attachment(
+                [native_attachment.id]
+            )
+        moves = self._search_journal_moves()
+        self.assertEqual(len(moves), 1)
+        self.assertEqual(action["type"], "ir.actions.act_window")
+        self.assertEqual(action["res_id"], moves.id)
+
+    def test_upload_oca_attachment_only(self):
+        native_attachment, oca_attachment = self._create_upload_attachments()
+        with self._mock_edi_decoder(native_attachment):
+            action = self.pur_journal1.create_document_from_attachment(
+                [oca_attachment.id]
+            )
+        moves = self._search_journal_moves()
+        self.assertEqual(len(moves), 1)
+        self.assertFalse(moves.partner_id)
+        self.assertEqual(action["tag"], "display_notification")
+        self.assertEqual(action["params"]["next"]["res_id"], moves.id)
