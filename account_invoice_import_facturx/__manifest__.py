@@ -15,5 +15,5 @@
     "external_dependencies": {"python": ["factur-x"]},
     "data": ["wizard/account_invoice_import_view.xml"],
     "demo": ["demo/demo_data.xml"],
-    "installable": True,
+    "installable": False,
 }

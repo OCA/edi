@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import Command, api, fields, models
+from odoo.exceptions import UserError
 from odoo.tools import is_html_empty
 
 
@@ -23,6 +24,24 @@ class AccountMove(models.Model):
 
     def _invoice_import_set_partner_and_update_lines(self, partner):
         self.ensure_one()
+        if self.is_purchase_document() and self.ref:
+            existing_inv = self.search(
+                [
+                    ("company_id", "=", self.company_id.id),
+                    ("commercial_partner_id", "=", partner.commercial_partner_id.id),
+                    ("ref", "=ilike", self.ref),
+                    ("move_type", "=", self.move_type),
+                ],
+                limit=1,
+            )
+            if existing_inv:
+                raise UserError(
+                    self.env._(
+                        "The invoice on which you are trying to update the partner "
+                        "already exists: %s.",
+                        existing_inv.display_name,
+                    )
+                )
         initial_fp = self.fiscal_position_id
         fp = partner.property_account_position_id
         self.write({"partner_id": partner.id})

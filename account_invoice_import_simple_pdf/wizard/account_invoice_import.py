@@ -7,7 +7,7 @@ import shutil
 import subprocess
 from tempfile import NamedTemporaryFile
 
-from odoo import _, api, models
+from odoo import api, models
 from odoo.exceptions import UserError
 from odoo.osv import expression
 
@@ -34,13 +34,23 @@ class AccountInvoiceImport(models.TransientModel):
     _inherit = "account.invoice.import"
 
     @api.model
-    def fallback_parse_pdf_invoice(self, file_data, company):
+    def fallback_parse_pdf_invoice(self, file_data, import_config):
         """This method must be inherited by additional modules with
         the same kind of logic as the account_bank_statement_import_*
         modules"""
-        res = super().fallback_parse_pdf_invoice(file_data, company)
+        res = super().fallback_parse_pdf_invoice(file_data, import_config)
         if not res:
-            res = self.simple_pdf_parse_invoice(file_data)
+            try:
+                res = self.simple_pdf_parse_invoice_en16931(file_data, import_config)
+            except Exception as err:
+                msg = self.env._("Simple PDF import error: %s", err)
+                import_config["global_warnings"].append(msg)
+                action_msg = self.env._(
+                    "Simple PDF import error on invoice '%(filename)s': %(err)s",
+                    filename=import_config.get("filename"),
+                    err=err,
+                )
+                import_config["action_warnings"].append(action_msg)
         return res
 
     @api.model
@@ -154,20 +164,20 @@ class AccountInvoiceImport(models.TransientModel):
             res = self._simple_pdf_text_extraction_pypdf(fileobj, test_info)
         else:
             raise UserError(
-                _(
+                self.env._(
                     "System Parameter 'invoice_import_simple_pdf.pdf2txt' "
-                    "has an invalid value '%s'."
+                    "has an invalid value '%s'.",
+                    specific_tool,
                 )
-                % specific_tool
             )
         if not res:
             raise UserError(
-                _(
+                self.env._(
                     "Odoo could not extract the text from the PDF invoice "
                     "with the method %s. Refer to the Odoo server logs for more "
-                    "technical information about the cause of the failure."
+                    "technical information about the cause of the failure.",
+                    specific_tool,
                 )
-                % specific_tool
             )
         return res
 
@@ -210,7 +220,7 @@ class AccountInvoiceImport(models.TransientModel):
                     res = self._simple_pdf_text_extraction_pypdf(fileobj, test_info)
                 if not res:
                     raise UserError(
-                        _(
+                        self.env._(
                             "Odoo could not extract the text from the PDF invoice. "
                             "Refer to the Odoo server logs for more technical "
                             "information about the cause of the failure."
@@ -235,7 +245,7 @@ class AccountInvoiceImport(models.TransientModel):
     @api.model
     def _simple_pdf_keyword_fields(self):
         return {
-            "vat": _("VAT number"),
+            "vat": self.env._("VAT number"),
         }
 
     @api.model
@@ -267,7 +277,7 @@ class AccountInvoiceImport(models.TransientModel):
                 found_res = [keyword in raw_text_no_space for keyword in keywords]
                 if all(found_res):
                     partner_id = partner["id"]
-                    result_label = _(
+                    result_label = self.env._(
                         "Successful match on %(count)s keywords (%(keywords)s)",
                         count=len(keywords),
                         keywords=", ".join(keywords),
@@ -277,7 +287,8 @@ class AccountInvoiceImport(models.TransientModel):
             for kfield, kfield_label in keyword_fields_dict.items():
                 if partner[kfield] and partner[kfield] in raw_text_no_space:
                     partner_id = partner["id"]
-                    result_label = _("Successful match on {label} '{value}'").format(
+                    result_label = self.env._(
+                        "Successful match on %(label)s '%(value)s'",
                         label=kfield_label,
                         value=partner[kfield],
                     )
@@ -346,61 +357,92 @@ class AccountInvoiceImport(models.TransientModel):
         )
 
     @api.model
-    def simple_pdf_parse_invoice(self, file_data, test_info=None):
-        if test_info is None:
-            test_info = {"test_mode": False}
-        self._simple_pdf_update_test_info(test_info)
+    def simple_pdf_parse_invoice(self, file_data, import_config):
+        self._update_import_config(import_config)
+        if not import_config.get("simple_pdf_test_info"):
+            import_config["simple_pdf_test_info"] = {"test_mode": False}
+        self._simple_pdf_update_test_info(import_config["simple_pdf_test_info"])
         rpo = self.env["res.partner"]
         logger.info("Trying to analyze PDF invoice with simple pdf module")
-        raw_text_dict = self.simple_pdf_text_extraction(file_data, test_info)
+        raw_text_dict = self.simple_pdf_text_extraction(
+            file_data, import_config["simple_pdf_test_info"]
+        )
         partner_id = self.simple_pdf_match_partner(raw_text_dict["all_no_space"])
         if not partner_id:
-            parsed_inv = {"chatter_msg": ["Simple PDF Import: count not find Vendor."]}
-            return parsed_inv
+            import_config["global_warnings"].append(
+                self.env._("Simple PDF import: could not find Vendor.")
+            )
+            simplepdf_inv = {}
+            return simplepdf_inv
         partner = rpo.browse(partner_id)
         raw_text = (
             partner.simple_pdf_pages == "first"
             and raw_text_dict["first"]
             or raw_text_dict["all"]
         )
-        logger.info(
-            "Simple pdf import found partner %s ID %d", partner.display_name, partner_id
-        )
-        partner_config = partner._simple_pdf_partner_config()
-        parsed_inv = {
-            "partner": {"recordset": partner},
-            "currency": {"recordset": partner_config["currency"]},
-            "failed_fields": [],
-            "chatter_msg": [],
-        }
+        msg = f"Simple pdf import found partner {partner.display_name} ID {partner_id}"
+        self._info_log(import_config, msg)
+        # add keys "simple_pdf_partner", "partner" and "simple_pdf_failed_fields"
+        # in import_config
+        partner._simple_pdf_update_import_config(import_config)
+        simplepdf_inv = {}
 
         # Check field config
         for field in partner.simple_pdf_field_ids:
             logger.debug("Working on field %s", field.name)
             try:
                 getattr(field, f"_get_{field.name}")(
-                    parsed_inv, raw_text, partner_config, test_info
+                    raw_text, simplepdf_inv, import_config
                 )
             except AttributeError:
                 raise UserError(
-                    _("Missing parse method for field '%s'. This should never happen.")
-                    % field.name
+                    self.env._(
+                        "Missing parse method for field '%s'. "
+                        "This should never happen.",
+                        field.name,
+                    )
                 ) from None
 
-        failed_fields = parsed_inv.pop("failed_fields")
+        failed_fields = import_config.get("simple_pdf_failed_fields")
         if failed_fields:
+            test_info = import_config["simple_pdf_test_info"]
             fields_label = ", ".join(
                 [
                     f"<strong>{test_info['field_name_sel'][failed_field]}</strong>"
                     for failed_field in failed_fields
                 ]
             )
-            parsed_inv["chatter_msg"].append(
-                _(
-                    f"<strong>Failed</strong> to extract the following "
-                    f"field(s): {fields_label}."
+            import_config["global_warnings"].append(
+                self.env._(
+                    "<strong>Failed</strong> to extract the following " "field(s): %s.",
+                    fields_label,
                 )
             )
 
-        logger.info("simple pdf parsed_inv=%s", parsed_inv)
-        return parsed_inv
+        self._info_log(import_config, f"Simple PDF parsing result: {simplepdf_inv}")
+        return simplepdf_inv
+
+    @api.model
+    def _field_name2en16931(self):
+        field_name2en16931 = {
+            "amount_total": "BT-112",
+            "amount_untaxed": "BT-109",
+            "amount_tax": "BT-110",
+            "date": "BT-2",
+            "date_due": "BT-9",
+            "date_start": "BT-73",
+            "date_end": "BT-74",
+            "invoice_number": "BT-1",
+            "description": "BT-11-0",
+        }
+        return field_name2en16931
+
+    def simple_pdf_parse_invoice_en16931(self, file_data, import_config):
+        self._update_import_config(import_config)
+        simplepdf_inv = self.simple_pdf_parse_invoice(file_data, import_config)
+        field_name2en16931 = self._field_name2en16931()
+        data_dict = {
+            field_name2en16931[key]: value for key, value in simplepdf_inv.items()
+        }
+        data_dict["BT-3"] = "380"
+        return data_dict
