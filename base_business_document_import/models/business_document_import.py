@@ -1506,14 +1506,20 @@ class BusinessDocumentImport(models.AbstractModel):
     @api.model
     def post_create_or_update(self, parsed_dict, record, doc_filename=None):
         if parsed_dict.get("attachments"):
+            attachments = self.env["ir.attachment"]
             for filename, data_base64 in parsed_dict["attachments"].items():
-                self.env["ir.attachment"].create(
+                attachments |= self.env["ir.attachment"].create(
                     {
                         "name": filename,
                         "res_id": record.id,
                         "res_model": str(record._name),
                         "datas": data_base64,
                     }
+                )
+
+            if hasattr(record, "_message_set_main_attachment_id"):
+                record.sudo()._message_set_main_attachment_id(
+                    [(4, attach.id) for attach in attachments]
                 )
         chatter_msg_html = []
         for msg in parsed_dict["chatter_msg"]:
