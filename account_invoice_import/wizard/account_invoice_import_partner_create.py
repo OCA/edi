@@ -45,12 +45,24 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
             res["import_partner_data"] = import_partner_data
             if import_partner_data.get("vat"):
                 res["partner_vat"] = import_partner_data["vat"]
+                # Partner may have been created in the meantime
+                existing_partner = self.env["res.partner"].search(
+                    [
+                        ("company_id", "in", (False, move.company_id.id)),
+                        ("vat", "=", import_partner_data["vat"]),
+                    ],
+                    limit=1,
+                )
+                if existing_partner:
+                    update_partner_id = existing_partner.commercial_partner_id.id
+                    res.update(
+                        {
+                            "update_partner_id": update_partner_id,
+                            "create_or_update": "update",
+                        }
+                    )
             if import_partner_data.get("name"):
                 res["partner_name"] = import_partner_data["name"]
-            # Partner may have been created in the meantime
-            res["update_partner_id"] = self.env[
-                "business.document.import"
-            ]._match_partner(import_partner_data, [], raise_exception=False)
         return res
 
     def create_partner(self):
