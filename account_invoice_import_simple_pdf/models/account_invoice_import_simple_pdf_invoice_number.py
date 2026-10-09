@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
@@ -68,11 +68,11 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
             if rec.string_type == "fixed":
                 fixed_char_stripped = rec.fixed_char and rec.fixed_char.strip()
                 if not fixed_char_stripped:
-                    raise ValidationError(_("Missing fixed char."))
+                    raise ValidationError(self.env._("Missing fixed char."))
             elif rec.string_type in ("letter_upper", "letter_lower", "digit", "space"):
                 if rec.occurrence_max < rec.occurrence_min:
                     raise ValidationError(
-                        _(
+                        self.env._(
                             "The maximum occurence (%(occurrence_max)s) must be equal "
                             "to or above the minimum occurence (%(occurrence_min)s).",
                             occurrence_max=rec.occurrence_max,
