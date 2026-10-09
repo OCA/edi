@@ -1,11 +1,9 @@
 Go to the form view of the suppliers and configure it with the following
 parameters:
 
-- Individual/Company: *Company*
 - the *VAT Number* (this field is used by default when searching the
   supplier in the Odoo partner database)
-- in the *Accounting* tab, create one or several *Invoice Import
-  Configurations*.
+- in the *Accounting* tab, set the *Invoice Import Configuration*.
 
 You can configure a mail gateway to import invoices from an email:
 
