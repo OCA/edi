@@ -10,11 +10,7 @@
         <field name="inherit_id" ref="account.res_config_settings_view_form" />
         <field name="arch" type="xml">
             <xpath expr="//block[@id='account_vendor_bills']" position="after">
-                <block
-                    id="invoice_import"
-                    invisible="not has_accounting_entries"
-                    title="Vendor Bills Import"
-                >
+                <block id="invoice_import" title="Vendor Bills Import">
                     <setting
                         id="adjustment_debit_account_id"
                         help="Expense account used for adjustment invoice line"
