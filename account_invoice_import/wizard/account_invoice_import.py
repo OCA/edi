@@ -423,7 +423,7 @@ class AccountInvoiceImport(models.TransientModel):
         assert parsed_inv.get("lines")
         bdio = self.env["business.document.import"]
         for line in parsed_inv["lines"]:
-            product = False
+            product, account, taxes = False, False, False
             if line.get("product"):
                 product = bdio._match_product(
                     line["product"],
