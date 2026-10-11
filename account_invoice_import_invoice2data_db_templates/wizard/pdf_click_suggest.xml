@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="pdf_click_suggest_wizard_form" model="ir.ui.view">
+        <field name="name">invoice2data.template.pdf.click.wizard.form</field>
+        <field name="model">invoice2data.template.pdf.click.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Click to suggest (harness)">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Click to suggest — <field
+                                name="template_name"
+                                readonly="1"
+                                class="oe_inline"
+                            /></h2>
+                        <div class="alert alert-info"><b
+                            >First-slice harness.</b> Enter a page and (x, y) in points (72 dpi, top-left origin). A non-zero width and height turn a click into a drag rectangle → <code
+                            >area</code> field. Click <b
+                            >Preview</b> to see what the resolver proposes. The clickable PDF viewer lives in a follow-up PR.</div>
+                    </div>
+                    <group>
+                        <group string="Where">
+                            <field name="page" />
+                            <field name="x_pt" />
+                            <field name="y_pt" />
+                            <field name="w_pt" />
+                            <field name="h_pt" />
+                        </group>
+                        <group string="Cross-backend">
+                            <field name="pdftotext_status" readonly="1" />
+                            <field name="field_key_id" options="{'no_create': True}" />
+                        </group>
+                    </group>
+                    <group string="Proposal">
+                        <field name="proposal_field" readonly="1" />
+                        <field name="proposal_value" readonly="1" />
+                        <field name="proposal_line" readonly="1" widget="text" />
+                        <field
+                            name="proposal_spec"
+                            readonly="1"
+                            widget="ace"
+                            options="{'mode': 'json'}"
+                        />
+                        <field
+                            name="proposal_note"
+                            readonly="1"
+                            attrs="{'invisible': [('proposal_note', '=', False)]}"
+                            class="alert alert-warning"
+                        />
+                    </group>
+                </sheet>
+                <footer>
+                    <button
+                        name="action_preview"
+                        type="object"
+                        string="Preview"
+                        class="btn-secondary"
+                    />
+                    <button
+                        name="action_apply"
+                        type="object"
+                        string="Apply as new field"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('proposal_field', '=', False)]}"
+                    />
+                    <button string="Close" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

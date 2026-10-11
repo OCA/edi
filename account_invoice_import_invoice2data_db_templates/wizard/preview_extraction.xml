@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="invoice2data_template_preview_form" model="ir.ui.view">
+        <field name="name">invoice2data.template.preview.form</field>
+        <field name="model">invoice2data.template.preview</field>
+        <field name="arch" type="xml">
+            <form string="Extraction preview" create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>
+                            <field name="template_name" readonly="1" />
+                        </h2>
+                        <div>
+                            <span
+                            >Preview of the invoice that would be created if invoice2data ran on this PDF today.</span>
+                            <span
+                                attrs="{'invisible': [('winning_template_name', '=', False)]}"
+                            >
+                                Winning template: <field
+                                    name="winning_template_name"
+                                    readonly="1"
+                                    class="oe_inline"
+                                /> · Mode: <field
+                                    name="mode"
+                                    readonly="1"
+                                    class="oe_inline"
+                                />
+                            </span>
+                        </div>
+                    </div>
+                    <group>
+                        <group string="Vendor / partner">
+                            <field name="partner_id" readonly="1" />
+                            <field name="partner_name" readonly="1" />
+                            <field name="partner_vat" readonly="1" />
+                            <field name="partner_email" readonly="1" />
+                            <field name="partner_street" readonly="1" />
+                            <field name="partner_zip" readonly="1" />
+                            <field name="partner_city" readonly="1" />
+                            <field name="partner_country_code" readonly="1" />
+                        </group>
+                        <group string="Invoice header">
+                            <field name="invoice_ref" readonly="1" />
+                            <field name="invoice_date" readonly="1" />
+                            <field name="invoice_date_due" readonly="1" />
+                            <field name="payment_reference" readonly="1" />
+                            <field name="currency_id" readonly="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="lines" string="Invoice lines">
+                            <field name="line_ids" nolabel="1">
+                                <tree editable="false" create="false">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="name" />
+                                    <field name="product" />
+                                    <field name="qty" />
+                                    <field name="uom" />
+                                    <field name="price_unit" />
+                                    <field name="price_subtotal" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="tax_lines" string="Tax lines">
+                            <field name="tax_line_ids" nolabel="1">
+                                <tree editable="false" create="false">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="name" />
+                                    <field name="unece_categ_code" />
+                                    <field name="base" />
+                                    <field name="amount" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="diagnostics" string="Diagnostics">
+                            <group>
+                                <field
+                                    name="missing_fields"
+                                    readonly="1"
+                                    attrs="{'invisible': [('missing_fields', '=', False)]}"
+                                    class="alert alert-info"
+                                />
+                                <field
+                                    name="warnings"
+                                    readonly="1"
+                                    widget="text"
+                                    attrs="{'invisible': [('warnings', '=', False)]}"
+                                />
+                            </group>
+                        </page>
+                        <page name="raw" string="Raw JSON">
+                            <field
+                                name="raw_json"
+                                nolabel="1"
+                                readonly="1"
+                                widget="ace"
+                                options="{'mode': 'json'}"
+                                attrs="{'invisible': [('raw_json', '=', False)]}"
+                            />
+                            <div
+                                attrs="{'invisible': [('raw_json', '!=', False)]}"
+                            >invoice2data did not return an extraction — see the Diagnostics tab and the template's Test results tab for why.</div>
+                        </page>
+                    </notebook>
+                    <group string="Totals" col="4">
+                        <field name="amount_untaxed" readonly="1" />
+                        <field name="amount_tax" readonly="1" />
+                        <field
+                            name="amount_total"
+                            readonly="1"
+                            class="oe_subtotal_footer_separator"
+                        />
+                        <field name="currency_id" invisible="1" />
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

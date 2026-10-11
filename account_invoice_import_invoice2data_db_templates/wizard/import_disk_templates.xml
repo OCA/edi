@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="import_disk_templates_wizard_form" model="ir.ui.view">
+        <field name="name">invoice2data.template.import.disk.wizard.form</field>
+        <field name="model">invoice2data.template.import.disk.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import disk templates">
+                <sheet>
+                    <group>
+                        <field name="name_regex" />
+                        <field name="mode" />
+                        <field name="dry_run" />
+                    </group>
+                    <field
+                        name="result_summary"
+                        readonly="1"
+                        nolabel="1"
+                        widget="text"
+                        attrs="{'invisible': [('result_summary', '=', False)]}"
+                    />
+                </sheet>
+                <footer>
+                    <button
+                        name="action_import"
+                        type="object"
+                        string="Import"
+                        class="oe_highlight"
+                    />
+                    <button string="Close" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="import_disk_templates_wizard_action" model="ir.actions.act_window">
+        <field name="name">Import disk templates</field>
+        <field name="res_model">invoice2data.template.import.disk.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="import_disk_templates_menu"
+        name="Import disk templates"
+        parent="account.menu_finance_configuration"
+        action="import_disk_templates_wizard_action"
+        sequence="81"
+    />
+</odoo>
