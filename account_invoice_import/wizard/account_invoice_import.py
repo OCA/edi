@@ -432,7 +432,8 @@ class AccountInvoiceImport(models.TransientModel):
                     note = f"<li>{note_dict['BT-22']}</li>"
                 narration_list.append(note)
         if narration_list:
-            narration = f"<ul>{'\n'.join(narration_list)}</ul>"
+            narration_str = "\n".join(narration_list)
+            narration = f"<ul>{narration_str}</ul>"
             if import_config["invoice_type"] == "in":
                 label = self.env._("Notes extracted from the electronic invoice:")
                 narration = f"<p>{label}</p>{narration}"
