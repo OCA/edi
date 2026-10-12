@@ -1040,7 +1040,7 @@ class AccountInvoiceImport(models.TransientModel):
                         import_inv_total_amount=format_amount(
                             self.env,
                             parsed_inv["BT-112"],
-                            import_config["currency"],
+                            import_config["invoice_currency"],
                         ),
                     )
                 )
