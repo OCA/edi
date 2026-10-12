@@ -347,14 +347,16 @@ class AccountInvoiceImport(models.TransientModel):
                             import_config,
                             lvals,
                         )
-                        vals["invoice_line_ids"].append(Command.create(alvals))
+                        if alvals["price_unit"]:
+                            vals["invoice_line_ids"].append(Command.create(alvals))
                 bg28_line = 0
                 for charge_dict in line_dict.get("BG-28") or []:
                     bg28_line += 1
                     clvals = self._prepare_line_vals_bg28(
                         bg28_line, charge_dict, parsed_inv, import_config, lvals
                     )
-                    vals["invoice_line_ids"].append(Command.create(clvals))
+                    if clvals["price_unit"]:
+                        vals["invoice_line_ids"].append(Command.create(clvals))
             # BG-20 = global allowances / BG-21 = global charges
             bg20_line = 0
             for allowance_dict in parsed_inv.get("BG-20") or []:
@@ -366,7 +368,8 @@ class AccountInvoiceImport(models.TransientModel):
                     import_config,
                     vals,
                 )
-                vals["invoice_line_ids"].append(Command.create(lvals))
+                if lvals["price_unit"]:
+                    vals["invoice_line_ids"].append(Command.create(lvals))
             bg21_line = 0
             for charge_dict in parsed_inv.get("BG-21") or []:
                 bg21_line += 1
@@ -377,7 +380,8 @@ class AccountInvoiceImport(models.TransientModel):
                     import_config,
                     vals,
                 )
-                vals["invoice_line_ids"].append(Command.create(lvals))
+                if lvals["price_unit"]:
+                    vals["invoice_line_ids"].append(Command.create(lvals))
         elif (
             parsed_inv.get("BG-23")
             and import_config.get("shrink_lines") == "per_vat_rate"
