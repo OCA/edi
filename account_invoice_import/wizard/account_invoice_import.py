@@ -33,6 +33,7 @@ except (OSError, ImportError) as err:
 try:
     from facturx import (
         get_data_dict_copy_for_logs,
+        get_flavor,
         is_credit_note,
         parse_ubl_cii_xml,
         untdid_get_label,
@@ -76,8 +77,14 @@ class AccountInvoiceImport(models.TransientModel):
         self._update_import_config(import_config)
         parsed_inv = False
         try:
+            flavor = get_flavor(xml_root)
+            import_config["xml_flavor"] = flavor
             parsed_inv = parse_ubl_cii_xml(
-                xml_root, float_as="float", date_as="date", bytes_as="bytes"
+                xml_root,
+                flavor=flavor,
+                float_as="float",
+                date_as="date",
+                bytes_as="bytes",
             )
         except Exception as err:
             logger.info(
@@ -1144,6 +1151,7 @@ class AccountInvoiceImport(models.TransientModel):
     # 'invoice_currency': currency recordset,  # set by ...
     # FIELDS below are set during the processing of the import
     # 'existing_invoice_matched': True  # only if "if_already_exists" = "match"
+    # 'xml_flavor': 'ubl-2.1-invoice'  # set by get_flavor() from factur-x lib
     # }
 
     @api.model
@@ -1974,8 +1982,8 @@ class AccountInvoiceImport(models.TransientModel):
             if bank_account:
                 msg = (
                     f"Matched on bank account {bank_account.display_name} "
-                    "of partner {commercial_partner.display_name} "
-                    "(allow_out_payment={bank_account.allow_out_payment})"
+                    f"of partner {commercial_partner.display_name} "
+                    f"(allow_out_payment={bank_account.allow_out_payment})"
                 )
                 if not bank_account.allow_out_payment:
                     import_config["global_warnings"].append(
