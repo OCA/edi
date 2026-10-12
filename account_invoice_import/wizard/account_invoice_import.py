@@ -156,6 +156,8 @@ class AccountInvoiceImport(models.TransientModel):
                             source_email = f"{partner_dict['name']} <{source_email}>"
                         vals["invoice_source_email"] = source_email
                         break
+            if not vals.get("invoice_source_email"):
+                vals["invoice_source_email"] = partner_dict.get('name')
             partner_data = {
                 "is_company": True,
                 "country_id": False,
