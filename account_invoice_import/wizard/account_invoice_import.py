@@ -157,7 +157,7 @@ class AccountInvoiceImport(models.TransientModel):
                         vals["invoice_source_email"] = source_email
                         break
             if not vals.get("invoice_source_email"):
-                vals["invoice_source_email"] = partner_dict.get('name')
+                vals["invoice_source_email"] = partner_dict.get("name")
             partner_data = {
                 "is_company": True,
                 "country_id": False,
@@ -997,6 +997,45 @@ class AccountInvoiceImport(models.TransientModel):
             self._info_log(import_config, msg)
         return existing_inv
 
+    def _process_invoice_already_exists(self, existing_inv, parsed_inv, import_config):
+        if import_config.get("if_already_exists") == "raise":
+            raise UserError(
+                self.env._(
+                    "Invoice already exists in Odoo: %(existing_inv)s",
+                    existing_inv=existing_inv.display_name,
+                )
+            )
+        elif import_config.get("if_already_exists") == "match":
+            if import_config[
+                "invoice_currency"
+            ] == existing_inv.currency_id and not import_config[
+                "invoice_currency"
+            ].compare_amounts(parsed_inv["BT-112"], existing_inv.amount_total):
+                import_config["existing_invoice_matched"] = True
+                return existing_inv
+            else:
+                raise UserError(
+                    self.env._(
+                        "The invoice to import already exists (%(existing_inv)s) "
+                        "but it's total amount (%(existing_inv_total_amount)s) "
+                        "doesn't match the total amount of the invoice to import "
+                        "(%(import_inv_total_amount)s).",
+                        existing_inv=existing_inv.display_name,
+                        existing_inv_total_amount=format_amount(
+                            self.env,
+                            existing_inv.amount_total,
+                            existing_inv.currency_id,
+                        ),
+                        import_inv_total_amount=format_amount(
+                            self.env,
+                            parsed_inv["BT-112"],
+                            import_config["currency"],
+                        ),
+                    )
+                )
+        else:
+            return False
+
     @api.model
     def _prepare_speedy(self):
         """speedy is a data structure embedded into import_config
@@ -1083,6 +1122,10 @@ class AccountInvoiceImport(models.TransientModel):
     # 'invoice_extra_vals': {},  # extra values for invoice create()
     # 'vat_tax2rec': {},  # (A)  sale or purchase tax properties to recordset
     # (sale or purchase tax depend on 'invoice_type')
+    # 'speedy: {  # (A)
+    #     'currency_code2id': {}, 'country_code2id': {}, 'incoterms_code2id': {},
+    #     'installed_langs': {}, 'uom_unece2rec': {}, 'untdid_5153_code2label': {},
+    #     },
     # 'updated': True,  # technical key just to avoid double processing
     # of _update_import_config()
     # FIELDS below are set by _commercial_partner_update_import_config()
@@ -1093,12 +1136,10 @@ class AccountInvoiceImport(models.TransientModel):
     # 'label': 'Force invoice line description',
     # 'product': product recordset,
     # 'previous_invoice': invoice recordset,  # used
-    # FIELDS below are set by ????
+    # FIELD below is set by _invoice_currency_update_import_config()
     # 'invoice_currency': currency recordset,  # set by ...
-    # 'speedy: {  # (A)
-    #     'currency_code2id': {}, 'country_code2id': {}, 'incoterms_code2id': {},
-    #     'installed_langs': {}, 'uom_unece2rec': {}, 'untdid_5153_code2label': {},
-    #     },
+    # FIELDS below are set during the processing of the import
+    # 'existing_invoice_matched': True  # only if "if_already_exists" = "match"
     # }
 
     @api.model
@@ -1375,44 +1416,9 @@ class AccountInvoiceImport(models.TransientModel):
         self._check_import_company(parsed_inv, import_config)
         existing_inv = self._invoice_already_exists(parsed_inv, import_config)
         if existing_inv:
-            if import_config.get("if_already_exists") == "raise":
-                raise UserError(
-                    self.env._(
-                        "Invoice already exists in Odoo: %(existing_inv)s",
-                        existing_inv=existing_inv.display_name,
-                    )
-                )
-            elif import_config.get("if_already_exists") == "match":
-                if import_config[
-                    "currency"
-                ] == existing_inv.currency_id and not import_config[
-                    "currency"
-                ].compare_amounts(parsed_inv["BT-112"], existing_inv.amount_total):
-                    return existing_inv
-                else:
-                    raise UserError(
-                        self.env._(
-                            "The invoice to import already exists (%(existing_inv)s) "
-                            "but it's total amount (%(existing_inv_total_amount)s) "
-                            "doesn't match the total amount of the invoice to import "
-                            "(%(import_inv_total_amount)s).",
-                            existing_inv=existing_inv.display_name,
-                            existing_inv_total_amount=format_amount(
-                                self.env,
-                                existing_inv.amount_total,
-                                existing_inv.currency_id,
-                            ),
-                            import_inv_total_amount=format_amount(
-                                self.env,
-                                parsed_inv["BT-112"],
-                                import_config["currency"],
-                            ),
-                        )
-                    )
-
-            else:
-                return False
-
+            return self._process_invoice_already_exists(
+                existing_inv, parsed_inv, import_config
+            )
         vals = self._prepare_create_invoice_vals(parsed_inv, import_config)
         logger.debug("Invoice vals for creation: %s", vals)
         invoice = amo.create(vals)
