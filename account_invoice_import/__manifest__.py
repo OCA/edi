@@ -18,7 +18,11 @@
         "account_payment_unece",
         "uom_unece",
     ],
-    "excludes": ["account_invoice_import_ubl", "account_invoice_import_facturx"],
+    # account_invoice_import_ubl and account_invoice_import_facturx
+    # should be uninstalled now. But, in order to ease the
+    # transition, we don't declare them in "excludes", to avoid
+    # an error on the first upgrade
+    # "excludes": ["account_invoice_import_ubl", "account_invoice_import_facturx"],
     "external_dependencies": {"python": ["factur-x>=7.5"]},
     "data": [
         "security/ir.model.access.csv",
