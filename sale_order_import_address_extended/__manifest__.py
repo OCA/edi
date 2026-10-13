@@ -3,7 +3,7 @@
 
 {
     "name": "Sale Order Import with Extended Addresses",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "category": "Sales Management",
     "license": "AGPL-3",
     "summary": "Glue module to use sale orders' import with extended addresses",

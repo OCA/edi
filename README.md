@@ -52,9 +52,10 @@ addon | version | maintainers | summary
 [purchase_order_ubl](purchase_order_ubl/) | 18.0.1.0.0 |  | Embed UBL XML file inside the PDF purchase order
 [sale_order_customer_free_ref](sale_order_customer_free_ref/) | 18.0.1.0.0 |  | Splits the Customer Reference on sale orders into two fields. An Id and a Free reference. The existing field is transformed into a computed one.
 [sale_order_import](sale_order_import/) | 18.0.1.2.1 |  | Import RFQ or sale orders from files
+[sale_order_import_address_extended](sale_order_import_address_extended/) | 18.0.1.0.1 |  | Glue module to use sale orders' import with extended addresses
 [sale_order_import_packaging](sale_order_import_packaging/) | 18.0.1.0.0 |  | Import the packaging on the sale order line
 [sale_order_import_partner_identification](sale_order_import_partner_identification/) | 18.0.1.0.0 |  | Glue module to use sale orders' import with partners' ID numbers
-[sale_order_import_ubl](sale_order_import_ubl/) | 18.0.1.0.2 |  | Import UBL XML sale order files
+[sale_order_import_ubl](sale_order_import_ubl/) | 18.0.1.0.3 |  | Import UBL XML sale order files
 [sale_order_import_ubl_customer_free_ref](sale_order_import_ubl_customer_free_ref/) | 18.0.1.0.0 |  | Extract CustomerReference from sale UBL
 [sale_order_import_ubl_line_customer_ref](sale_order_import_ubl_line_customer_ref/) | 18.0.1.0.0 |  | Extract specific customer reference for each order line
 [sale_order_import_ubl_requested_delivery](sale_order_import_ubl_requested_delivery/) | 18.0.1.0.0 |  | Extract RequestedDeliveryPeriod from sale UBL
