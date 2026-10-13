@@ -20,7 +20,8 @@ def migrate(env, version):
             SELECT jsonb_object_agg(
                 key,
                 CASE
-                    WHEN value = 'true'::jsonb THEN '"single"'::jsonb
+                    WHEN value IN ('true'::jsonb, '1'::jsonb)
+                    THEN '"single"'::jsonb
                     ELSE value
                 END
             )
