@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-18 14:09+0000\n"
-"PO-Revision-Date: 2026-08-04 22:46+0000\n"
-"Last-Translator: Marwan Behillil <marwan.behillil@gmail.com>\n"
+"PO-Revision-Date: 2026-10-14 14:04+0000\n"
+"Last-Translator: risto42 <richard.palo@free.fr>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -411,6 +411,9 @@ msgid ""
 "id=%(partner_id)s>%(partner_name)s</a> has been created via the wizard "
 "<em>Create or update partner</em>."
 msgstr ""
+"Le partenaire <a href=# data-oe-model=res.partner data-oe-id=%(partner_id)s>%"
+"(partner_name)s</a> a été créé par l'assistant <em>Créer ou mettre à jour un "
+"partenaire</em>."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -421,6 +424,9 @@ msgid ""
 "id=%(partner_id)s>%(partner_name)s</a> has been set via the wizard "
 "<em>Create or Update Partner</em>. The partner has been updated."
 msgstr ""
+"Le partenaire <a href=# data-oe-model=res.partner data-oe-id=%(partner_id)s>%"
+"(partner_name)s</a> a été renseigné par l'assistant <em>Créer ou mettre à "
+"jour un partenaire</em>, et mis à jour."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__partner_name
@@ -440,6 +446,8 @@ msgid ""
 "Partner has been created from the wizard <em>Create or Update Partner</em> "
 "of vendor bill import."
 msgstr ""
+"Partenaire créé par l'assistant <em>Créer ou mettre à jour un partenaire</"
+"em> de l'import des factures fournisseur."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__update_partner_id
@@ -454,6 +462,8 @@ msgid ""
 "Partner updated via the wizard <em>Create or Update Partner</em> of Vendor "
 "Bill import."
 msgstr ""
+"Partenaire mis à jour par l'assistant <em>Créer ou mettre à jour un "
+"partenaire</em> de l'import des factures fournisseur."
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_move_id
@@ -484,6 +494,8 @@ msgstr "Formats supportés :"
 msgid ""
 "Taxes configured here will go through the mapping of the fiscal position."
 msgstr ""
+"Les taxes configurées ici passeront par la table de correspondance de la "
+"position fiscale."
 
 #. module: account_invoice_import
 #. odoo-python
