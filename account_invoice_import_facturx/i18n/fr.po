@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-12 13:36+0000\n"
-"PO-Revision-Date: 2016-11-12 13:36+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2016\n"
+"PO-Revision-Date: 2026-10-14 14:04+0000\n"
+"Last-Translator: risto42 <richard.palo@free.fr>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
@@ -49,7 +50,7 @@ msgstr ""
 #. module: account_invoice_import_facturx
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_facturx.account_invoice_import_form
 msgid "Factur-X"
-msgstr ""
+msgstr "Factur-X"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:311
@@ -58,42 +59,44 @@ msgid ""
 "For the moment, in the Factur-X import, we only support type code 380 and "
 "381. (TypeCode is %s)"
 msgstr ""
+"Pour l'instant, l'import Factur-X ne prend en charge que les codes de type "
+"380 et 381. (Le TypeCode est %s)"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:441
 #, python-format
 msgid "Global"
-msgstr ""
+msgstr "Pied de facture"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:455
 #, python-format
 msgid "Logistics Service"
-msgstr ""
+msgstr "Prestation logistique"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:181
 #, python-format
 msgid "Misc Allowance"
-msgstr ""
+msgstr "Remise diverse"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:188
 #, python-format
 msgid "Misc Charge"
-msgstr ""
+msgstr "Frais divers"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:498
 #, python-format
 msgid "Misc Global Allowance"
-msgstr ""
+msgstr "Remise diverse de pied de facture"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:476
 #, python-format
 msgid "Misc Global Charge"
-msgstr ""
+msgstr "Frais divers de pied de facture"
 
 #. module: account_invoice_import_facturx
 #: code:addons/account_invoice_import_facturx/wizard/account_invoice_import.py:370
