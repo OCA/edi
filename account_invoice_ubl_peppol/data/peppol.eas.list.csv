@@ -1,0 +1,77 @@
+id,code,name
+account_invoice_ubl_peppol.code_0002,0002,System Information et Repertoire des Entreprise et des Etablissements: SIRENE
+account_invoice_ubl_peppol.code_0007,0007,Organisationsnummer (Swedish legal entities)
+account_invoice_ubl_peppol.code_0009,0009,SIRET-CODE
+account_invoice_ubl_peppol.code_0037,0037,LY-tunnus
+account_invoice_ubl_peppol.code_0060,0060,Data Universal Numbering System (D-U-N-S Number)
+account_invoice_ubl_peppol.code_0088,0088,EAN Location Code
+account_invoice_ubl_peppol.code_0096,0096,DANISH CHAMBER OF COMMERCE Scheme (EDIRA compliant)
+account_invoice_ubl_peppol.code_0097,0097,"FTI - Ediforum Italia, (EDIRA compliant)"
+account_invoice_ubl_peppol.code_0106,0106,"""Vereniging van Kamers van Koophandel en Fabrieken in Nederland (Association of
+            Chambers of Commerce and Industry in the Netherlands), Scheme (EDIRA compliant)"""
+account_invoice_ubl_peppol.code_0130,0130,Directorates of the European Commission
+account_invoice_ubl_peppol.code_0135,0135,SIA Object Identifiers
+account_invoice_ubl_peppol.code_0142,0142,SECETI Object Identifiers
+account_invoice_ubl_peppol.code_0151,0151,Australian Business Number (ABN) Scheme
+account_invoice_ubl_peppol.code_0183,0183,"Numéro d'identification suisse des enterprises (IDE), Swiss Unique Business
+            Identification Number (UIDB)"
+account_invoice_ubl_peppol.code_0184,0184,DIGSTORG
+account_invoice_ubl_peppol.code_0190,0190,Dutch Originator's Identification Number
+account_invoice_ubl_peppol.code_0191,0191,Centre of Registers and Information Systems of the Ministry of Justice
+account_invoice_ubl_peppol.code_0192,0192,Enhetsregisteret ved Bronnoysundregisterne
+account_invoice_ubl_peppol.code_0193,0193,UBL.BE party identifier
+account_invoice_ubl_peppol.code_0195,0195,Singapore UEN identifier
+account_invoice_ubl_peppol.code_0196,0196,Kennitala - Iceland legal id for individuals and legal entities
+account_invoice_ubl_peppol.code_0198,0198,ERSTORG
+account_invoice_ubl_peppol.code_0199,0199,Legal Entity Identifier (LEI)
+account_invoice_ubl_peppol.code_0200,0200,Legal entity code (Lithuania)
+account_invoice_ubl_peppol.code_0201,0201,Codice Univoco Unità Organizzativa iPA
+account_invoice_ubl_peppol.code_0202,0202,Indirizzo di Posta Elettronica Certificata
+account_invoice_ubl_peppol.code_0204,0204,Leitweg-ID
+account_invoice_ubl_peppol.code_0208,0208,Numero d'entreprise / ondernemingsnummer / Unternehmensnummer
+account_invoice_ubl_peppol.code_0209,0209,GS1 identification keys
+account_invoice_ubl_peppol.code_9901,9901,Danish Ministry of the Interior and Health
+account_invoice_ubl_peppol.code_9906,9906,Ufficio responsabile gestione partite IVA
+account_invoice_ubl_peppol.code_9907,9907,TAX Authority
+account_invoice_ubl_peppol.code_9910,9910,Hungary VAT number
+account_invoice_ubl_peppol.code_9913,9913,Business Registers Network
+account_invoice_ubl_peppol.code_9914,9914,Österreichische Umsatzsteuer-Identifikationsnummer
+account_invoice_ubl_peppol.code_9915,9915,"""Österreichisches Verwaltungs bzw. Organisationskennzeichen"""
+account_invoice_ubl_peppol.code_9918,9918,"""SOCIETY FOR WORLDWIDE INTERBANK FINANCIAL, TELECOMMUNICATION S.W.I.F.T"""
+account_invoice_ubl_peppol.code_9919,9919,Kennziffer des Unternehmensregisters
+account_invoice_ubl_peppol.code_9920,9920,Agencia Española de Administración Tributaria
+account_invoice_ubl_peppol.code_9922,9922,Andorra VAT number
+account_invoice_ubl_peppol.code_9923,9923,Albania VAT number
+account_invoice_ubl_peppol.code_9924,9924,Bosnia and Herzegovina VAT number
+account_invoice_ubl_peppol.code_9925,9925,Belgium VAT number
+account_invoice_ubl_peppol.code_9926,9926,Bulgaria VAT number
+account_invoice_ubl_peppol.code_9927,9927,Switzerland VAT number
+account_invoice_ubl_peppol.code_9928,9928,Cyprus VAT number
+account_invoice_ubl_peppol.code_9929,9929,Czech Republic VAT number
+account_invoice_ubl_peppol.code_9930,9930,Germany VAT number
+account_invoice_ubl_peppol.code_9931,9931,Estonia VAT number
+account_invoice_ubl_peppol.code_9932,9932,United Kingdom VAT number
+account_invoice_ubl_peppol.code_9933,9933,Greece VAT number
+account_invoice_ubl_peppol.code_9934,9934,Croatia VAT number
+account_invoice_ubl_peppol.code_9935,9935,Ireland VAT number
+account_invoice_ubl_peppol.code_9936,9936,Liechtenstein VAT number
+account_invoice_ubl_peppol.code_9937,9937,Lithuania VAT number
+account_invoice_ubl_peppol.code_9938,9938,Luxemburg VAT number
+account_invoice_ubl_peppol.code_9939,9939,Latvia VAT number
+account_invoice_ubl_peppol.code_9940,9940,Monaco VAT number
+account_invoice_ubl_peppol.code_9941,9941,Montenegro VAT number
+account_invoice_ubl_peppol.code_9942,9942,"Macedonia, the former Yugoslav Republic of VAT number"
+account_invoice_ubl_peppol.code_9943,9943,Malta VAT number
+account_invoice_ubl_peppol.code_9944,9944,Netherlands VAT number
+account_invoice_ubl_peppol.code_9945,9945,Poland VAT number
+account_invoice_ubl_peppol.code_9946,9946,Portugal VAT number
+account_invoice_ubl_peppol.code_9947,9947,Romania VAT number
+account_invoice_ubl_peppol.code_9948,9948,Serbia VAT number
+account_invoice_ubl_peppol.code_9949,9949,Slovenia VAT number
+account_invoice_ubl_peppol.code_9950,9950,Slovakia VAT number
+account_invoice_ubl_peppol.code_9951,9951,San Marino VAT number
+account_invoice_ubl_peppol.code_9952,9952,Turkey VAT number
+account_invoice_ubl_peppol.code_9953,9953,Holy See (Vatican City State) VAT number
+account_invoice_ubl_peppol.code_9955,9955,Swedish VAT number
+account_invoice_ubl_peppol.code_9956,9956,Belgian Crossroad Bank of Enterprises
+account_invoice_ubl_peppol.code_9957,9957,French VAT number
