@@ -9,7 +9,7 @@ from odoo.tools import is_html_empty
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    import_warnings = fields.Html(readonly=True)
+    import_warnings = fields.Html(readonly=True, copy=False)
     show_import_warnings = fields.Boolean(compute="_compute_show_import_warnings")
     import_partner_data = fields.Json()
 
