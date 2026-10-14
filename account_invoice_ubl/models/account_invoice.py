@@ -133,8 +133,8 @@ class AccountInvoice(models.Model):
             tax_incl = any(t.price_include for t in iline.invoice_line_tax_ids)
             if tax_incl:
                 # To prevent rounding issue, we must declare tax excluded price
-                # for the total quantity
-                qty = iline.quantity
+                # for the total quantity. The quantity must always be positive.
+                qty = abs(iline.quantity)
             taxes = iline.invoice_line_tax_ids.compute_all(
                 price, self.currency_id, qty, product=iline.product_id,
                 partner=self.partner_id)
@@ -145,19 +145,19 @@ class AccountInvoice(models.Model):
         price_precision = price_precision if price_precision <= 2 else 2
         return price, price_precision, qty
 
-    def _ubl_get_invoice_line_discount(self, iline, base_price, base_qty):
+    def _ubl_get_invoice_line_discount(self, iline, qty, base_price, base_qty):
         # Formula: Net amount = Invoiced quantity * (Item net price/item price
         #   base quantity) + Sum of invoice line charge amount - sum of invoice
         #   line allowance amount
-        discount = iline.quantity / base_qty * base_price - iline.price_subtotal
+        discount = qty / base_qty * base_price - iline.price_subtotal
         dpo = self.env["decimal.precision"]
         price_precision = dpo.precision_get("Product Price")
         price_precision = price_precision if price_precision <= 2 else 2
         discount = float_round(discount, precision_digits=price_precision)
         return discount, price_precision
 
-    def _ubl_add_invoice_line_discount(self, xml_root, iline, base_price, base_qty, ns, version='2.1'):
-        discount, prec = self._ubl_get_invoice_line_discount(iline, base_price, base_qty)
+    def _ubl_add_invoice_line_discount(self, xml_root, iline, qty, base_price, base_qty, ns, version='2.1'):
+        discount, prec = self._ubl_get_invoice_line_discount(iline, qty, base_price, base_qty)
         if float_is_zero(discount, precision_digits=prec):
             return
         charge_node = etree.SubElement(xml_root, ns["cac"] + "AllowanceCharge")
@@ -202,15 +202,22 @@ class AccountInvoice(models.Model):
         else:
             quantity = etree.SubElement(
                 line_root, ns['cbc'] + qty_element_name)
+        # line quantity (InvoicedQuantity) and line subtotal
+        # (LineExtensionAmount) may be negative, but base price (PriceAmount)
+        # and base quantity (BaseQuantity) must be positive. automatically
+        # ensure this.
         qty = iline.quantity
-        quantity.text = '%0.*f' % (qty_precision, qty)
         base_price, price_precision, base_qty = self._ubl_get_invoice_line_price_unit(iline)
+        if base_price < 0:
+            qty = -qty
+            base_price = -base_price
+        quantity.text = '%0.*f' % (qty_precision, qty)
         line_amount = etree.SubElement(
             line_root, ns['cbc'] + 'LineExtensionAmount',
             currencyID=cur_name)
         line_amount.text = '%0.*f' % (account_precision, iline.price_subtotal)
         self._ubl_add_invoice_line_discount(
-            line_root, iline, base_price, base_qty, ns, version=version)
+            line_root, iline, qty, base_price, base_qty, ns, version=version)
         self._ubl_add_item(
             iline.name, iline.product_id, line_root, ns, type='sale',
             taxes=iline.invoice_line_tax_ids, version=version)
