@@ -442,6 +442,7 @@ class AccountInvoiceImport(models.TransientModel):
                 )
             if not product and import_config.get("product"):
                 product = import_config["product"]
+            account, taxes = None, None
             if product:
                 product = product.with_company(import_config["company"].id)
                 if parsed_inv["type"] in ("out_invoice", "out_refund"):
@@ -453,9 +454,6 @@ class AccountInvoiceImport(models.TransientModel):
                 taxes = product_taxes.filtered(
                     lambda tax: tax.company_id == import_config["company"]
                 )
-            else:
-                account = import_config["account"]
-                taxes = import_config["taxes"]
             if not taxes:
                 if parsed_inv["type"] in ("out_invoice", "out_refund"):
                     type_tax_use = "sale"
@@ -468,6 +466,11 @@ class AccountInvoiceImport(models.TransientModel):
                     type_tax_use=type_tax_use,
                     raise_exception=False,
                 )
+            # default to `import_config`
+            if not account and "account" in import_config:
+                account = import_config["account"]
+            if not taxes and "taxes" in import_config:
+                taxes = import_config["taxes"]
 
             fp = partner and partner.property_account_position_id or False
             if fp:
