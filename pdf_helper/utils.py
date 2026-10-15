@@ -15,6 +15,7 @@ _logger = logging.getLogger(__name__)
 try:
     import pypdf
 except ImportError:
+    pypdf = None
     _logger.debug("Cannot import pypdf")
 
 

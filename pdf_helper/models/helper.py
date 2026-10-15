@@ -1,15 +1,20 @@
 # Copyright 2022 Camptocamp SA
 # @author: Simone Orsi <simahawk@gmail.com>
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
-import logging
 
-from pypdf.errors import PdfReadError
+import logging
 
 from odoo import models
 
 from ..utils import PDFParser
 
 _logger = logging.getLogger(__name__)
+
+try:
+    import pypdf
+except ImportError:
+    pypdf = None
+    _logger.debug("Cannot import pypdf")
 
 
 class PDFHelper(models.AbstractModel):
@@ -30,4 +35,4 @@ class PDFHelper(models.AbstractModel):
             return {}
 
     def _pdf_get_xml_files_swallable_exceptions(self):
-        return (KeyError, PdfReadError)
+        return (KeyError, pypdf.errors.PdfReadError)
