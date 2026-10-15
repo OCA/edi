@@ -1,2 +1,4 @@
 - Alexis de Lattre \<<alexis.delattre@akretion.com>\>
 - Andrea Stirpe \<<a.stirpe@onestein.nl>\>
+- [teamDSI](https://www.team-dsi.fr):
+  - Antoine Morit \<<amorit@team-dsi.fr>\>
