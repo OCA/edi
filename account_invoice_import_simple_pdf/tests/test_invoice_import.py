@@ -8,6 +8,8 @@ from odoo import fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_compare
 
+from ..models.account_invoice_import_simple_pdf_invoice_number import MAX_PAST_YEARS
+
 
 class TestInvoiceImport(TransactionCase):
     def setUp(self):
@@ -448,8 +450,13 @@ class TestInvoiceImport(TransactionCase):
                 )
 
     def test_invoice_number_parsing(self):
+        # Don't hardcode dates, or it will fail if it's older than ``MAX_PAST_YEARS``
+        # years ago (this test broke in 2026 because the hardcoded year was 2020)
+        test_date = fields.Date.add(
+            fields.Date.context_today(self.env["base"]), years=-MAX_PAST_YEARS, days=1
+        )
         inv_num_test = {
-            "INV/2020/05/0042": [
+            f"INV/{test_date:%Y}/{test_date:%m}/0042": [
                 {"string_type": "fixed", "fixed_char": "INV/"},
                 {"string_type": "year4"},
                 {"string_type": "fixed", "fixed_char": "/"},
@@ -501,7 +508,7 @@ class TestInvoiceImport(TransactionCase):
             ],
         }
         for src, config_list in inv_num_test.items():
-            raw_txt = "Invoice number: %s dated 20/08/2020" % src
+            raw_txt = f"Invoice number: {src} dated {test_date:%d/%m/%Y}"
             self.partner.simple_pdf_invoice_number_ids.unlink()
             self.partner.write(
                 {"simple_pdf_invoice_number_ids": [(0, 0, x) for x in config_list]}
