@@ -46,48 +46,37 @@ post <http://www.akretion.com/blog/akretions-christmas-present-for-the-odoo-comm
 In order to reliably extract the required information from the invoice,
 two international standards exists to describe an Invoice in XML:
 
-- `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`__
-  (Cross-Industry Invoice) developped by
-  `UN/CEFACT <http://www.unece.org/cefact>`__ (United Nations Centre for
-  Trade Facilitation and Electronic Business),
-- `UBL <http://ubl.xml.org/>`__ (Universal Business Language) which is
-  an ISO standard (`ISO/IEC
-  19845 <http://www.iso.org/iso/catalogue_detail.htm?csnumber=66370>`__)
-  developped by `OASIS <https://www.oasis-open.org/>`__ (Organization
-  for the Advancement of Structured Information Standards).
+-  `CII <http://tfig.unece.org/contents/cross-industry-invoice-cii.htm>`__
+   (Cross-Industry Invoice) developped by
+   `UN/CEFACT <http://www.unece.org/cefact>`__ (United Nations Centre
+   for Trade Facilitation and Electronic Business),
+-  `UBL <http://ubl.xml.org/>`__ (Universal Business Language) which is
+   an ISO standard (`ISO/IEC
+   19845 <http://www.iso.org/iso/catalogue_detail.htm?csnumber=66370>`__)
+   developped by `OASIS <https://www.oasis-open.org/>`__ (Organization
+   for the Advancement of Structured Information Standards).
 
-Some e-invoice standards such as
-`Factur-X <http://fnfe-mpe.org/factur-x/>`__ propose to embed the XML
-description of the invoice inside the PDF invoice. Other people think
-that the futur is pure-XML invoices: a European initiative called
-`PEPPOL <https://peppol.eu/>`__ aims at setting up an open network to
-exchange e-invoices as UBL XML. We don't know yet which standard and
-which practice will prevail on electronic invoicing in the future, but
-we hope that lazy accountants won't have to manually encode their vendor
-bills in the near future. This module is here to help achieve this goal!
+The `Factur-X <http://fnfe-mpe.org/factur-x/>`__ invoice standard embeds
+a CII XML file inside the PDF invoice: this is the concept of hybrid
+invoice.
 
-This module doesn't do anything useful by itself ; it requires other
-modules to work: each modules adds a specific invoice format.
+This module has native support for UBL XML, CII XML and Factur-X. You
+can install additional modules (for example
+account_invoice_import_simple_pdf) to support other invoice formats.
 
 Here is how the module works:
 
-- the user starts a wizard and uploads the PDF or XML invoice,
-- if it is an XML file, Odoo will parse it to create the invoice
-  (requires additional modules for specific XML formats, such as the
-  module *account_invoice_import_ubl* for the UBL format),
-- if it is a PDF file with an embedded XML file in Factur-X/CII format,
-  Odoo will extract the embedded XML file and parse it to create the
-  invoice (requires the module *account_invoice_import_facturx*),
-- otherwise, Odoo will use the *invoice2data* Python library to try to
-  interpret the text of the PDF (requires the module
-  *account_invoice_import_invoice2data*),
-- if there is already some draft supplier invoice for this supplier,
-  Odoo will propose to select one to update or create a new draft
-  invoice,
-- otherwise, Odoo will directly create a new draft supplier invoice and
-  attach the PDF to it.
+-  the user starts a wizard and uploads the PDF or XML invoice,
+-  if it is an XML file, Odoo will parse it to create the invoice
+-  if it is a PDF file with an embedded XML file in Factur-X/CII format,
+   Odoo will extract the embedded XML file and parse it to create the
+   invoice,
+-  if there is already a draft supplier invoice for this supplier with
+   the same invoice number, Odoo will display a warning,
+-  otherwise, Odoo will create a new draft vendor bill and attach the
+   PDF or XML invoice file to it.
 
-This module also works with supplier refunds.
+This module also works with vendor refunds.
 
 **Table of contents**
 
@@ -100,25 +89,23 @@ Configuration
 Go to the form view of the suppliers and configure it with the following
 parameters:
 
-- Individual/Company: *Company*
-- the *VAT Number* (this field is used by default when searching the
-  supplier in the Odoo partner database)
-- in the *Accounting* tab, create one or several *Invoice Import
-  Configurations*.
+-  the *VAT Number* (this field is used by default when searching the
+   supplier in the Odoo partner database)
+-  in the *Accounting* tab, set the *Invoice Import Configuration*.
 
 You can configure a mail gateway to import invoices from an email:
 
-- Go to the menu *Settings > Technical > Email > Incoming Mail Servers*
-  and setup the access (POP or IMAP) to the mailbox that will be used to
-  receive the invoices,
-- In the section *Actions to perform on incoming mails*, set the field
-  *Create a new record* to *Wizard to import supplier invoices/refunds*
-  (model *account.invoice.import*).
-- If you are in a multi-company setup, you also have to go to the menu
-  *Invoicing > Configuration > Settings*: in the section *Invoice
-  Import*, enter the email of the mailbox used to import invoices in the
-  field *Mail Gateway: Destination E-mail* (it will be used to import
-  the invoice in the proper company).
+-  Go to the menu *Settings > Technical > Email > Incoming Mail Servers*
+   and setup the access (POP or IMAP) to the mailbox that will be used
+   to receive the invoices,
+-  In the section *Actions to perform on incoming mails*, set the field
+   *Create a new record* to *Wizard to import supplier invoices/refunds*
+   (model *account.invoice.import*).
+-  If you are in a multi-company setup, you also have to go to the menu
+   *Invoicing > Configuration > Settings*: in the section *Invoice
+   Import*, enter the email of the mailbox used to import invoices in
+   the field *Mail Gateway: Destination E-mail* (it will be used to
+   import the invoice in the proper company).
 
 Usage
 =====
@@ -128,32 +115,13 @@ instructions of the wizard. You can also start the wizard from the
 *Accounting Dashboard*: on the purchase journal, click on the *Upload*
 button.
 
-This module also supports the scenario where you have a draft vendor
-bill (generated from a purchase order for instance) and you have to
-update it to comply with the real invoice sent by the vendor: on the
-form view of the draft vendor bill, click on the button *Import Invoice
-File* and follow the instructions of the wizard.
-
-If you have a large volume of invoices to import, you may be interested
-by the script **mass_invoice_import.py** which is available in the
-*scripts* subdirectory of this module. If you run:
-
-::
-
-   ./mass_invoice_import.py --help
-
-you will have detailed instructions on how to use the script.
-
-A particular use case of this script is to have a directory where all
-the invoices saved are automatically uploaded in Odoo. For that, have a
-look at the sample script **inotify-sample.sh** available in the same
-subdirectory. Edit this sample script to adapt it to your needs.
+You can upload several invoice file at the same time.
 
 Known issues / Roadmap
 ======================
 
-- Remove dependency on *base_iban* and develop a separate glue module
-  between this module and *base_iban*
+-  Remove dependency on *base_iban* and develop a separate glue module
+   between this module and *base_iban*
 
 Bug Tracker
 ===========
@@ -176,12 +144,12 @@ Authors
 Contributors
 ------------
 
-- Alexis de Lattre <alexis.delattre@akretion.com>
-- Andrea Stirpe <a.stirpe@onestein.nl>
-- Nicolas JEUDY <https://github.com/njeudy>
-- Yannick Vaucher <yannick.vaucher@camptocamp.com>
-- Ronald Portier <ronald@therp.nl>
-- Simone Orsi <simone.orsi@camptocamp.com>
+-  Alexis de Lattre <alexis.delattre@akretion.com>
+-  Andrea Stirpe <a.stirpe@onestein.nl>
+-  Nicolas JEUDY <https://github.com/njeudy>
+-  Yannick Vaucher <yannick.vaucher@camptocamp.com>
+-  Ronald Portier <ronald@therp.nl>
+-  Simone Orsi <simone.orsi@camptocamp.com>
 
 Maintainers
 -----------

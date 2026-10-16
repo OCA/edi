@@ -14,5 +14,5 @@
     "depends": ["account_invoice_import", "base_ubl_parse"],
     "data": ["wizard/account_invoice_import_view.xml"],
     "demo": ["demo/demo_data.xml"],
-    "installable": True,
+    "installable": False,
 }

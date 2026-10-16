@@ -73,7 +73,7 @@ class TestInvoiceImport(TransactionCase):
                 {
                     "name": "Expense product",
                     "default_code": "AII-TEST-PRODUCT",
-                    "taxes_id": [(6, 0, [cls.sale_tax.id])],
+                    "taxes_id": [Command.set([cls.sale_tax.id])],
                     "supplier_taxes_id": [Command.set([cls.purchase_tax.id])],
                     "property_account_income_id": cls.income_account.id,
                     "property_account_expense_id": cls.expense_account.id,
@@ -82,12 +82,12 @@ class TestInvoiceImport(TransactionCase):
         )
         cls.all_import_config = [
             {
-                "single_line": True,
+                "shrink_lines": "single",
                 "account": cls.expense_account,
                 "taxes": cls.purchase_tax,
                 "company": cls.company,
             },
-            {"single_line": False, "product": cls.product, "company": cls.company},
+            {"shrink_lines": False, "product": cls.product, "company": cls.company},
             {
                 "account": cls.expense_account,
                 "company": cls.company,

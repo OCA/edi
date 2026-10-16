@@ -46,9 +46,12 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 "partner_id": cls.partner.id,
             }
         )
-
-        cls.partner_config = cls.partner._simple_pdf_partner_config()
         cls.test_info = {"test_mode": True}
+        cls.import_config = {
+            "company": cls.company,
+            "simple_pdf_test_info": cls.test_info,
+        }
+        cls.partner._simple_pdf_update_import_config(cls.import_config)
         cls.env["account.invoice.import"]._simple_pdf_update_test_info(cls.test_info)
         cls.space_chars = list(cls.test_info["space_pattern"][1:-1])
         purchase_tax = cls.env["account.tax"].search(
@@ -267,7 +270,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 ]
             else:
                 raw_text_list = [raw_text]
-            parsed_inv = {"failed_fields": []}
+            parsed_inv = {}
             self.date_field.write(
                 {
                     "date_format": config["date_format"],
@@ -276,11 +279,9 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             )
             lang_list = config["lang"] == "any" and ["fr", "en"] or [config["lang"]]
             for lang in lang_list:
-                self.partner_config["lang_short"] = lang
+                self.import_config["simple_pdf_partner"]["lang_short"] = lang
                 for raw_txt in raw_text_list:
-                    self.date_field._get_date(
-                        parsed_inv, raw_txt, self.partner_config, self.test_info
-                    )
+                    self.date_field._get_date(raw_txt, parsed_inv, self.import_config)
                     res_date = parsed_inv["date"]
                     self.assertEqual(fields.Date.to_string(res_date), "2021-07-14")
 
@@ -299,13 +300,11 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 "date_separator": "space",
             }
         )
-        self.partner_config["lang_short"] = "fr"
+        self.import_config["simple_pdf_partner"]["lang_short"] = "fr"
         for src_string, result in testdict.items():
             raw_text = f"Débit 15,12\n{src_string}\nTotal TTC 12,99"
-            parsed_inv = {"failed_fields": []}
-            self.date_field._get_date(
-                parsed_inv, raw_text, self.partner_config, self.test_info
-            )
+            parsed_inv = {}
+            self.date_field._get_date(raw_text, parsed_inv, self.import_config)
             self.assertEqual(fields.Date.to_string(parsed_inv["date"]), result)
 
     def test_restrict_text(self):
@@ -422,7 +421,6 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 ]
             else:
                 raw_text_list = [raw_text]
-            parsed_inv = {"failed_fields": []}
             self.partner.write(
                 {
                     "simple_pdf_decimal_separator": config["decimal_separator"],
@@ -432,18 +430,19 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                     ).id,
                 }
             )
-            partner_config = self.partner._simple_pdf_partner_config()
-            if partner_config["currency"].decimal_places == 0:
+            self.partner._simple_pdf_update_import_config(self.import_config)
+            if self.import_config["invoice_currency"].decimal_places == 0:
                 self.amount_field.write({"extract_rule": "last"})
             else:
                 self.amount_field.write({"extract_rule": "first"})
             for raw_txt in raw_text_list:
+                parsed_inv = {}
                 self.amount_field._get_amount_total(
-                    parsed_inv, raw_txt, partner_config, self.test_info
+                    raw_txt, parsed_inv, self.import_config
                 )
                 res_amount = parsed_inv["amount_total"]
                 self.assertFalse(
-                    partner_config["currency"].compare_amounts(
+                    self.import_config["invoice_currency"].compare_amounts(
                         res_amount, config["result"]
                     )
                 )
@@ -503,9 +502,9 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                     ]
                 }
             )
-            parsed_inv = {"failed_fields": []}
+            parsed_inv = {}
             self.inv_num_field._get_invoice_number(
-                parsed_inv, raw_txt, self.partner_config, self.test_info
+                raw_txt, parsed_inv, self.import_config
             )
             self.assertEqual(src, parsed_inv["invoice_number"])
 
@@ -528,7 +527,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 "company_id": self.company.id,
             }
         )
-        wiz.import_invoices()
+        wiz.import_invoices_button()
         # Check result of invoice creation
         invoices = self.env["account.move"].search(
             [
