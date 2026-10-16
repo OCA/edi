@@ -201,7 +201,6 @@ class AccountInvoiceImport(models.TransientModel):
                             ),
                             ("country_id", "=", partner_data["country_id"]),
                         ],
-                        ["id"],
                         limit=1,
                     )
                 )
