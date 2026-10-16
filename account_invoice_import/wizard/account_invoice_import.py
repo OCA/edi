@@ -1222,6 +1222,13 @@ class AccountInvoiceImport(models.TransientModel):
             for tax in self.env["account.tax"].search(tax_domain, order="amount desc")
         }
 
+        # useful for DBs that have 1 customer partner record
+        # and 1 supplier partner record for the same legal entity
+        if import_config["invoice_type"] == "in":
+            partner_match_order = "supplier_rank DESC, complete_name ASC, id DESC"
+        else:
+            partner_match_order = "customer_rank desc, complete_name ASC, id DESC"
+
         import_config.update(
             {
                 "create_bank_account": company.invoice_import_create_bank_account,
@@ -1231,6 +1238,7 @@ class AccountInvoiceImport(models.TransientModel):
                 "line_warnings": defaultdict(list),
                 "start_end_dates_installed": start_end_dates_installed,
                 "vat_tax2rec": vat_tax2rec,
+                "partner_match_order": partner_match_order,
             }
         )
         # we may have a partner key in import config when create_invoice() is called
@@ -1791,6 +1799,7 @@ class AccountInvoiceImport(models.TransientModel):
                         ("company_id", "in", (import_config["company"].id, False)),
                     ],
                     limit=1,
+                    order=import_config["partner_match_order"],
                 )
                 if partner:
                     msg = f"Partner '{partner.display_name}' matched via VAT number"
@@ -1805,6 +1814,7 @@ class AccountInvoiceImport(models.TransientModel):
                         ("company_id", "in", (import_config["company"].id, False)),
                     ],
                     limit=1,
+                    order=import_config["partner_match_order"],
                 )
                 if partner:
                     msg = f"Partner '{partner.display_name}' matched via email"
