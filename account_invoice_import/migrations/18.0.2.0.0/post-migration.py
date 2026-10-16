@@ -21,7 +21,7 @@ def migrate(env, version):
                 key,
                 CASE
                     WHEN value IN ('true'::jsonb, '1'::jsonb)
-                    THEN '"single"'::jsonb
+                    THEN '"per_vat_rate"'::jsonb
                     ELSE value
                 END
             )
