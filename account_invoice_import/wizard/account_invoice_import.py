@@ -1546,28 +1546,26 @@ class AccountInvoiceImport(models.TransientModel):
         company = invoice.company_id
         # TODO : if a product or account is forced,
         # I think we should use this account (and product) ?
-        if diff_amount_cmp > 0:
-            if not company.adjustment_debit_account_id:
-                raise UserError(
-                    self.env._(
-                        "You must configure the 'Adjustment Debit Account' "
-                        "on the Accounting Configuration page of company %(company)s.",
-                        company=company.display_name,
-                    )
+        is_debit = bool(
+            # when diff_amount > 0 (parsed_subtotal > odoo_subtotal)
+            # debit: in_invoice or out_refund
+            # credit: out_invoice or in_refund
+            diff_amount_cmp * invoice.direction_sign > 0
+        )
+        account = (
+            company.adjustment_debit_account_id
+            if is_debit
+            else company.adjustment_credit_account_id
+        )
+        if not account:
+            raise UserError(
+                self.env._(
+                    "You must configure the 'Adjustment %(name)s Account' "
+                    "on the Accounting Configuration page of company %(company)s.",
+                    name=self.env._("Debit") if is_debit else self.env._("Credit"),
+                    company=company.display_name,
                 )
-            account = company.adjustment_debit_account_id
-            sign = 1
-        else:
-            if not company.adjustment_credit_account_id:
-                raise UserError(
-                    self.env._(
-                        "You must configure the 'Adjustment Credit Account' "
-                        "on the Accounting Configuration page of company %(company)s.",
-                        company=company.display_name,
-                    )
-                )
-            account = company.adjustment_credit_account_id
-            sign = -1
+            )
         if invoice.fiscal_position_id:
             account = invoice.fiscal_position_id.map_account(account)
 
@@ -1576,8 +1574,8 @@ class AccountInvoiceImport(models.TransientModel):
             "display_type": "product",
             "name": self.env._("Adjustment"),
             "account_id": account.id,
-            "quantity": sign,
-            "price_unit": diff_amount * sign,
+            "quantity": 1 if diff_amount_cmp > 0 else -1,
+            "price_unit": abs(diff_amount),
         }
         logger.debug("Prepared global adjustment invoice line %s", lvals)
         return lvals
@@ -1596,8 +1594,6 @@ class AccountInvoiceImport(models.TransientModel):
 
     @api.model
     def _post_process_invoice(self, parsed_inv, import_config, invoice):
-        if import_config.get("invoice_type") == "out":
-            return
         amlo = self.env["account.move.line"]
         inv_cur = invoice.currency_id
         # If untaxed amount is wrong, create adjustment lines
@@ -1607,12 +1603,11 @@ class AccountInvoiceImport(models.TransientModel):
         ):
             # Try to find the line that has a problem
             for i in range(len(parsed_inv["BG-25"])):
-                if "price_subtotal" not in parsed_inv["BG-25"][i]:
+                if "BT-131" not in parsed_inv["BG-25"][i]:
                     continue
-                # TODO continue... at the moment, it will quit here
                 iline = invoice.invoice_line_ids[i]
                 odoo_subtotal = iline.price_subtotal
-                parsed_subtotal = parsed_inv["lines"][i]["price_subtotal"]
+                parsed_subtotal = parsed_inv["BG-25"][i]["BT-131"]
                 diff_amount = inv_cur.round(parsed_subtotal - odoo_subtotal)
                 if not inv_cur.is_zero(diff_amount):
                     logger.info(
@@ -1664,51 +1659,51 @@ class AccountInvoiceImport(models.TransientModel):
             if invoice.currency_id.compare_amounts(
                 invoice.amount_total, parsed_inv["BT-112"]
             ):
-                import_config["global_warnings"].append(
-                    self.env._(
-                        "<strong>The total amount of the imported invoice is "
-                        "%(real_amount_total)s whereas the total amount computed by "
-                        "Odoo is %(current_amount_total)s</strong>. It is the "
-                        "consequence of a difference between the total tax amount of "
-                        "the invoice (%(real_amount_tax)s) and the total tax amount "
-                        "computed by Odoo (%(current_amount_tax)s). "
-                        "This is often caused by missing taxes in invoice lines due to "
-                        "a failure to find the tax in Odoo that correspond to the tax "
-                        "in the imported invoice or missing configuration of taxes "
-                        "on products or missing configuration of "
-                        "<em>Default Taxes</em> on the partner "
-                        "(if there are no products on invoice lines).",
-                        real_amount_total=format_amount(
-                            self.env, parsed_inv["BT-112"], invoice.currency_id
-                        ),
-                        current_amount_total=format_amount(
-                            self.env, invoice.amount_total, invoice.currency_id
-                        ),
-                        real_amount_tax=format_amount(
-                            self.env,
-                            parsed_inv["BT-112"] - parsed_inv["BT-109"],
-                            invoice.currency_id,
-                        ),
-                        current_amount_tax=format_amount(
-                            self.env, invoice.amount_tax, invoice.currency_id
-                        ),
-                    )
+                msg = self.env._(
+                    "<strong>The total amount of the imported invoice is "
+                    "%(real_amount_total)s whereas the total amount computed by "
+                    "Odoo is %(current_amount_total)s</strong>. It is the "
+                    "consequence of a difference between the total tax amount of "
+                    "the invoice (%(real_amount_tax)s) and the total tax amount "
+                    "computed by Odoo (%(current_amount_tax)s). "
+                    "This is often caused by missing taxes in invoice lines due to "
+                    "a failure to find the tax in Odoo that correspond to the tax "
+                    "in the imported invoice or missing configuration of taxes "
+                    "on products or missing configuration of "
+                    "<em>Default Taxes</em> on the partner "
+                    "(if there are no products on invoice lines).",
+                    real_amount_total=format_amount(
+                        self.env, parsed_inv["BT-112"], invoice.currency_id
+                    ),
+                    current_amount_total=format_amount(
+                        self.env, invoice.amount_total, invoice.currency_id
+                    ),
+                    real_amount_tax=format_amount(
+                        self.env,
+                        parsed_inv["BT-112"] - parsed_inv["BT-109"],
+                        invoice.currency_id,
+                    ),
+                    current_amount_tax=format_amount(
+                        self.env, invoice.amount_tax, invoice.currency_id
+                    ),
                 )
+                self._warning_log(import_config, msg)
+                import_config["global_warnings"].append(msg)
 
             else:
-                import_config["global_warnings"].append(
-                    self.env._(
-                        "The <strong>total tax amount</strong> has been "
-                        "<strong>forced</strong> to %(forced_amount)s (amount "
-                        "computed by Odoo was: %(initial_amount)s).",
-                        forced_amount=format_amount(
-                            self.env, invoice.amount_tax, invoice.currency_id
-                        ),
-                        initial_amount=format_amount(
-                            self.env, initial_amount_tax, invoice.currency_id
-                        ),
-                    )
+                msg = self.env._(
+                    "The <strong>total tax amount</strong> has been "
+                    "<strong>forced</strong> to %(forced_amount)s (amount "
+                    "computed by Odoo was: %(initial_amount)s).",
+                    forced_amount=format_amount(
+                        self.env, invoice.amount_tax, invoice.currency_id
+                    ),
+                    initial_amount=format_amount(
+                        self.env, initial_amount_tax, invoice.currency_id
+                    ),
                 )
+                self._warning_log(import_config, msg)
+                import_config["global_warnings"].append(msg)
 
     @api.model
     def message_new(self, msg_dict, custom_values=None):
