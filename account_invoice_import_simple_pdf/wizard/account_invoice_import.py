@@ -44,6 +44,13 @@ class AccountInvoiceImport(models.TransientModel):
         return res
 
     @api.model
+    def _prepare_create_invoice_vals(self, parsed_inv, import_config):
+        vals = super()._prepare_create_invoice_vals(parsed_inv, import_config)
+        if "invoice_date" in vals and not vals["invoice_date"]:
+            del vals["invoice_date"]
+        return vals
+
+    @api.model
     def _simple_pdf_text_extraction_pymupdf(self, fileobj, test_info):
         res = False
         version = None
