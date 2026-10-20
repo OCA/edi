@@ -45,12 +45,6 @@ Currently it provides:
 .. contents::
    :local:
 
-Known issues / Roadmap
-======================
-
-- implement new generic features around this
-- integrate existing modules with this
-
 Bug Tracker
 ===========
 
