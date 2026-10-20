@@ -21,5 +21,5 @@ class AccountJournal(models.Model):
                 "invoice_attachment_ids": [Command.set(attachment_ids)],
             }
         )
-        action = wiz.import_invoices()
+        action = wiz.import_invoices_button()
         return action

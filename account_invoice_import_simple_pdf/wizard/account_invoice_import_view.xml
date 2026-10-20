@@ -14,7 +14,7 @@
         <field name="arch" type="xml">
             <ul name="supported_formats_list" position="inside">
                 <li><strong
-                >regular PDF</strong> file without any embedded XML file via a pre-configuration in Odoo.</li>
+                >regular PDF</strong> file without any embedded XML file via a pre-configuration in Odoo for each partner.</li>
             </ul>
         </field>
     </record>

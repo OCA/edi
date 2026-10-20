@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.misc import format_date
 
@@ -109,7 +109,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         for field in self:
             if field.name == "description" and not field.regexp:
                 raise ValidationError(
-                    _(
+                    self.env._(
                         "You must set a Specific Regular Expression on "
                         "the 'Description' field."
                     )
@@ -136,7 +136,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         if not data_list:
             if raise_if_none:
                 raise UserError(
-                    _("No valid data extracted for field '%s'.") % self.name
+                    self.env._("No valid data extracted for field '%s'.", self.name)
                 )
             else:
                 return None
@@ -155,7 +155,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             return data_list_sorted[0]
         elif self.extract_rule in ("position_min", "position_max"):
             if len(data_list) < self.position:
-                error_msg = _(
+                error_msg = self.env._(
                     "Partner '%(partner_name)s' is configured with an extract rule "
                     "'%(extract_rule)s' with position %(position)s for field "
                     "'%(field_name)s' but the list of extracted valid data only "
@@ -182,7 +182,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             return data_list[-1]
         elif self.extract_rule in ("position_start", "position_end"):
             if len(data_list) < self.position:
-                error_msg = _(
+                error_msg = self.env._(
                     "Partner '%(partner_name)s' is configured with an extract rule "
                     "'%(extract_rule)s' with position %(position)s for field "
                     "'%(field_name)s' but the list of extracted "
@@ -204,7 +204,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                 position -= 1
             return data_list[position * sign]
         else:
-            raise UserError(_("Bad configuration"))
+            raise UserError(self.env._("Bad configuration"))
 
     def restrict_text(self, raw_text, test_info):
         self.ensure_one()
@@ -215,15 +215,17 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             position = restrict_text.find(start)
             if position >= 0:
                 restrict_text = restrict_text[position + len(start) :]
-                test_info[self.name]["start"] = _("Successful cut on '%s'") % start
+                test_info[self.name]["start"] = self.env._(
+                    "Successful cut on '%s'", start
+                )
             else:
-                error_msg = _("String '%s' not found") % start
+                error_msg = self.env._("String '%s' not found", start)
                 test_info[self.name]["start"] = (
                     f"<strong{ERROR_STYLE}>{error_msg}</strong>"
                 )
         if end:
             if not restrict_text or (restrict_text and not restrict_text.strip()):
-                error_msg = _(
+                error_msg = self.env._(
                     "No text to cut, maybe because start string "
                     "was the very end of the document"
                 )
@@ -234,21 +236,25 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
                 position = restrict_text.find(end)
                 if position >= 0:
                     restrict_text = restrict_text[:position]
-                    test_info[self.name]["end"] = _("Successful cut on '%s'") % end
+                    test_info[self.name]["end"] = self.env._(
+                        "Successful cut on '%s'", end
+                    )
                 else:
-                    error_msg = _("String '%s' not found") % end
+                    error_msg = self.env._("String '%s' not found", end)
                     test_info[self.name]["end"] = (
                         f"<strong{ERROR_STYLE}>{error_msg}</strong>"
                     )
         return restrict_text
 
-    def _get_date(self, parsed_inv, raw_text, partner_config, test_info):
+    def _get_date(self, raw_text, simplepdf_inv, import_config):
+        partner_config = import_config["simple_pdf_partner"]
+        test_info = import_config["simple_pdf_test_info"]
         date_format = self.date_format or partner_config["date_format"]
         partner_name = partner_config["display_name"]
         field_name = test_info["field_name_sel"][self.name]
         if not date_format:
             raise UserError(
-                _(
+                self.env._(
                     "No date format configured on partner '%(partner_name)s' "
                     "nor on the field '%(field_name)s'.",
                     partner_name=partner_name,
@@ -258,7 +264,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         date_separator = self.date_separator or partner_config["date_separator"]
         if not date_separator:
             raise UserError(
-                _(
+                self.env._(
                     "No date separator configured on partner '%(partner_name)s' "
                     "nor on the field '%(field_name)s'.",
                     partner_name=partner_name,
@@ -328,9 +334,9 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             valid_dates_dt, test_info, raise_if_none=raise_if_none
         )
         if date_dt:
-            parsed_inv[self.name] = date_dt
+            simplepdf_inv[self.name] = date_dt
         else:
-            parsed_inv["failed_fields"].append(self.name)
+            import_config["simple_pdf_failed_fields"].append(self.name)
 
     def _get_date_due(self, *args):
         return self._get_date(*args)
@@ -341,7 +347,9 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
     def _get_date_end(self, *args):
         return self._get_date(*args)
 
-    def _get_amount_total(self, parsed_inv, raw_text, partner_config, test_info):
+    def _get_amount_total(self, raw_text, simplepdf_inv, import_config):
+        partner_config = import_config["simple_pdf_partner"]
+        test_info = import_config["simple_pdf_test_info"]
         thousand_sep = partner_config["thousand_sep"]
         if not thousand_sep:
             thousand_sep_pattern = ""
@@ -351,7 +359,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             thousand_sep_pattern = regex.escape(thousand_sep)
         decimal_sep = partner_config["decimal_sep"]
         decimal_sep_pattern = regex.escape(decimal_sep)
-        decimal_places = partner_config["currency"].decimal_places
+        decimal_places = import_config["invoice_currency"].decimal_places
         if self.regexp:
             pattern = self.regexp
         else:
@@ -403,7 +411,7 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
         amount = self.get_value_from_list(
             valid_amounts, test_info, raise_if_none=raise_if_none
         )
-        parsed_inv[self.name] = amount
+        simplepdf_inv[self.name] = amount
 
     def _get_amount_untaxed(self, *args):
         return self._get_amount_total(*args)
@@ -411,8 +419,9 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
     def _get_amount_tax(self, *args):
         return self._get_amount_total(*args)
 
-    def _get_invoice_number(self, parsed_inv, raw_text, partner_config, test_info):
-        partner = partner_config["recordset"]
+    def _get_invoice_number(self, raw_text, simplepdf_inv, import_config):
+        partner = import_config["partner"]
+        test_info = import_config["simple_pdf_test_info"]
         pattern = self.regexp or partner._prepare_simple_pdf_invoice_number_regex()
         test_info[self.name] = {"pattern": pattern}
         restrict_text = self.restrict_text(raw_text, test_info)
@@ -421,12 +430,13 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
 
         inv_number = self.get_value_from_list(res_regex, test_info, raise_if_none=False)
         if inv_number:
-            parsed_inv[self.name] = inv_number.strip()
+            simplepdf_inv[self.name] = inv_number.strip()
         else:
-            parsed_inv["failed_fields"].append(self.name)
+            import_config["simple_pdf_failed_fields"].append(self.name)
 
-    def _get_description(self, parsed_inv, raw_text, partner_config, test_info):
+    def _get_description(self, raw_text, simplepdf_inv, import_config):
         self.ensure_one()
+        test_info = import_config["simple_pdf_test_info"]
         pattern = self.regexp
         test_info[self.name] = {"pattern": pattern}
         restrict_text = self.restrict_text(raw_text, test_info)
@@ -436,6 +446,6 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             res_regex, test_info, raise_if_none=False
         )
         if description:
-            parsed_inv[self.name] = description.strip()
+            simplepdf_inv[self.name] = description.strip()
         else:
-            parsed_inv["failed_fields"].append(self.name)
+            import_config["simple_pdf_failed_fields"].append(self.name)
