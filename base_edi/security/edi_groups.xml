@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record model="res.groups.privilege" id="res_groups_privilege_edi">
+    <record id="res_groups_privilege_edi" model="res.groups.privilege">
         <field name="name">EDI</field>
-        <field name="sequence">10</field>
+        <field name="sequence" eval="10" />
         <field name="category_id" ref="module_category_edi" />
     </record>
 
