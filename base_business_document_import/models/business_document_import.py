@@ -665,7 +665,7 @@ class BusinessDocumentImport(models.AbstractModel):
         product = self._match_product_search(product_dict)
         if product:
             return product
-        elif seller:
+        elif seller and product_dict.get("code"):
             # WARNING: Won't work for multi-variant products
             # because product.supplierinfo is attached to product template
             sinfo = self.env["product.supplierinfo"].search(
@@ -682,22 +682,24 @@ class BusinessDocumentImport(models.AbstractModel):
                 and len(sinfo.product_tmpl_id.product_variant_ids) == 1
             ):
                 return sinfo.product_tmpl_id.product_variant_ids[0]
-        self.user_error_wrap(
-            "_match_product",
-            product_dict,
-            _(
-                "Odoo couldn't find any product corresponding to the "
-                "following information extracted from the business document:\n"
-                "Barcode: %(barcode)s\n"
-                "Product code: %(product_code)s\n"
-                "Supplier: %(supplier)s\n",
-                barcode=product_dict.get("barcode") or "",
-                product_code=product_dict.get("code") or "",
-                supplier=seller and seller.name or "",
-            ),
-            chatter_msg,
-            raise_exception,
-        )
+        # don't display the warning if product_dict had no values
+        if any(product_dict.values()):
+            self.user_error_wrap(
+                "_match_product",
+                product_dict,
+                _(
+                    "Odoo couldn't find any product corresponding to the "
+                    "following information extracted from the business document:\n"
+                    "Barcode: %(barcode)s\n"
+                    "Product code: %(product_code)s\n"
+                    "Supplier: %(supplier)s\n",
+                    barcode=product_dict.get("barcode") or "",
+                    product_code=product_dict.get("code") or "",
+                    supplier=seller and seller.name or "",
+                ),
+                chatter_msg,
+                raise_exception,
+            )
         return None
 
     @api.model
