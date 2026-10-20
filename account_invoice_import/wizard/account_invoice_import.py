@@ -1870,23 +1870,43 @@ class AccountInvoiceImport(models.TransientModel):
                 + [
                     ("product_code", "=", line_dict["BT-155"]),
                     ("partner_id", "=", import_config["commercial_partner"].id),
+                    "|",
+                    ("product_id", "!=", False),
+                    ("product_tmpl_id", "!=", False),
                 ],
                 limit=1,
             )
             if sinfo:
-                msg = (
-                    f"{msg_prefix} product {product.display_name} matched "
-                    "via seller product identifier (BT-155)"
-                )
                 if sinfo.product_id:
+                    product = sinfo.product_id
+                    msg = (
+                        f"{msg_prefix} product {product.display_name} matched "
+                        "via seller product identifier (BT-155)"
+                    )
                     self._info_log(import_config, msg)
-                    return sinfo.product_id
-                if (
-                    sinfo.product_tmpl_id
-                    and len(sinfo.product_tmpl_id.product_variant_ids) == 1
-                ):
-                    self._info_log(import_config, msg)
-                    return sinfo.product_tmpl_id.product_variant_ids
+                    return product
+                else:
+                    product_template = sinfo.product_tmpl_id
+                    assert product_template
+                    if len(product_template.product_variant_ids) == 1:
+                        product = sinfo.product_tmpl_id.product_variant_ids
+                        msg = (
+                            f"{msg_prefix} product {product.display_name} matched "
+                            "via seller product identifier (BT-155)"
+                        )
+                        self._info_log(import_config, msg)
+                        return product
+                    elif len(product_template.product_variant_ids) > 1:
+                        product = product_template.product_variant_ids[0]
+                        msg = (
+                            f"{msg_prefix} product template "
+                            "{product_template.display_name} matched "
+                            "via seller product identifier (BT-155), but this "
+                            "product template is multi-variant. First variant "
+                            "{product.display_name} selected."
+                        )
+                        self._warning_log(import_config, msg)
+                        return product
             else:
                 msg = (
                     f"{msg_prefix} no product with code '{line_dict['BT-155']}' "
