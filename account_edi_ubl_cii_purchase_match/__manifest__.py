@@ -5,7 +5,7 @@
     "name": "Account Edi Ubl Cii Purchase Match",
     "summary": """Extend UBL vendor bill import to automatically match and link bill
     lines to purchase order lines using the OrderReference and product label.""",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.1.0",
     "license": "AGPL-3",
     "author": "ACSONE SA/NV,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/edi",
