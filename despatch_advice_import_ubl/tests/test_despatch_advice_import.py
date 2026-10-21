@@ -1,0 +1,152 @@
+# Copyright 2020 ACSONE SA/NV
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
+from base64 import b64decode, b64encode
+
+from odoo.tools import file_open
+
+from odoo.addons.despatch_advice_import.tests.common import (
+    TestDespatchAdviceImportCommon,
+)
+
+
+class TestDespatchAdviceImport(TestDespatchAdviceImportCommon):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.maxDiff = None
+        cls.product_1 = cls._create_product("Product 1", "1234567", "P1")
+        cls.product_2 = cls._create_product("Product 2", "2345678", "P2")
+        cls.purchase_order = cls._create_purchase_order(
+            [
+                cls._get_po_line_vals(cls.product_1, 24, 15),
+                cls._get_po_line_vals(cls.product_2, 15, 25),
+            ]
+        )
+        cls.line1, cls.line2 = cls.purchase_order.order_line
+        cls.purchase_order.button_confirm()
+        with file_open(
+            "despatch_advice_import_ubl/tests/files/despatch_advice_tmpl.xml", "rb"
+        ) as f:
+            cls.despatch_advice_xml1 = f.read()
+
+        with file_open(
+            "despatch_advice_import_ubl/tests/files/despatch_advice_2.xml", "rb"
+        ) as f:
+            cls.despatch_advice_xml2 = f.read()
+
+    def test_xml_convert_to_internal_data_01(self):
+        """Parse a despatch advice xml file to the internal data structure.
+
+        The orderReference is at the document level.
+        """
+        xml_content = self.despatch_advice_xml1.decode("utf-8").format(
+            picking_name="0810805774",
+            order_id=self.purchase_order.name,
+            line_1_id=self.line1.id,
+            line_1_qty=self.line1.product_qty,
+            line_1_product_ref=self.product_1.default_code,
+            line_1_backorder_qty=12,
+            line_2_id=self.line2.id,
+            line_2_qty=self.line2.product_qty,
+            line_2_product_ref=self.product_2.default_code,
+            line_2_backorder_qty=0,
+        )
+        xml_content = b64encode(xml_content.encode("utf-8"))
+        default = {"despatch_advice_type_code": "delivery"}
+        result = self.DespatchAdviceImport.with_context(
+            despatch_advice_import__default_vals=dict(despatch_advice=default)
+        ).parse_despatch_advice(b64decode(xml_content), "test.xml")
+        attachments = result.pop("attachments")
+        self.assertTrue(attachments.get("test.xml"))
+        expected = {
+            "chatter_msg": [],
+            "company": {"vat": "BE0421801233"},
+            "date": "2020-11-16",
+            "despatch_advice_type_code": "delivery",
+            "estimated_delivery_date": "2020-11-17",
+            "id": "0810805774",
+            "lines": [
+                {
+                    "backorder_qty": 12.0,
+                    "line_id": str(self.line1.id),
+                    "order_line_id": str(self.line1.id),
+                    "product_lot": "1234890",
+                    "product_ref": str(self.product_1.default_code),
+                    "qty": self.line1.product_qty,
+                    "ref": str(self.purchase_order.name),
+                    "uom": {"unece_code": "BG"},
+                },
+                {
+                    "backorder_qty": 0,
+                    "line_id": str(self.line2.id),
+                    "order_line_id": str(self.line2.id),
+                    "product_lot": "876540",
+                    "product_ref": str(self.product_2.default_code),
+                    "qty": self.line2.product_qty,
+                    "ref": str(self.purchase_order.name),
+                    "uom": {"unece_code": "C62"},
+                },
+            ],
+            "ref": str(self.purchase_order.name),
+            "supplier": {"vat": "BE0477472701"},
+        }
+        self.assertEqual(expected, result)
+
+    def test_xml_convert_to_internal_data_02(self):
+        """Parse a despatch advice xml file to the internal data structure.
+
+        The orderReference is at the line level.
+        """
+        xml_content = self.despatch_advice_xml2.decode("utf-8").format(
+            picking_name="0810805774",
+            line_1_id=self.line1.id,
+            line_1_order_id=self.purchase_order.name,
+            line_1_qty=self.line1.product_qty,
+            line_1_product_ref=self.product_1.default_code,
+            line_1_backorder_qty=12,
+            line_2_id=self.line2.id,
+            line_2_order_id=self.purchase_order.name,
+            line_2_qty=self.line2.product_qty,
+            line_2_product_ref=self.product_2.default_code,
+            line_2_backorder_qty=0,
+        )
+        xml_content = b64encode(xml_content.encode("utf-8"))
+        result = self.DespatchAdviceImport.parse_despatch_advice(
+            b64decode(xml_content), "test2.xml"
+        )
+        attachments = result.pop("attachments")
+        self.assertTrue(attachments.get("test2.xml"))
+        expected = {
+            "chatter_msg": [],
+            "company": {"vat": "BE0421801233"},
+            "date": "2020-11-16",
+            "despatch_advice_type_code": "scheduled",
+            "estimated_delivery_date": "2020-11-17",
+            "id": "0810805774",
+            "lines": [
+                {
+                    "backorder_qty": 12.0,
+                    "line_id": str(self.line1.id),
+                    "order_line_id": str(self.line1.id),
+                    "product_lot": "1234890",
+                    "product_ref": str(self.product_1.default_code),
+                    "qty": self.line1.product_qty,
+                    "ref": str(self.purchase_order.name),
+                    "uom": {"unece_code": "BG"},
+                },
+                {
+                    "backorder_qty": 0,
+                    "line_id": str(self.line2.id),
+                    "order_line_id": str(self.line2.id),
+                    "product_lot": "876540",
+                    "product_ref": str(self.product_2.default_code),
+                    "qty": self.line2.product_qty,
+                    "ref": str(self.purchase_order.name),
+                    "uom": {"unece_code": "C62"},
+                },
+            ],
+            "ref": "",
+            "supplier": {"vat": "BE0477472701"},
+        }
+        self.assertEqual(expected, result)

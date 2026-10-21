@@ -1,0 +1,26 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* despatch_advice_import_ubl
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: despatch_advice_import_ubl
+#: model:ir.model,name:despatch_advice_import_ubl.model_despatch_advice_import
+msgid "Despatch Advice Import from Files"
+msgstr ""
+
+#. module: despatch_advice_import_ubl
+#. odoo-python
+#: code:addons/despatch_advice_import_ubl/wizard/despatch_advice_import.py:0
+#, python-format
+msgid "Missing line ID in the Despatch Advice."
+msgstr ""
