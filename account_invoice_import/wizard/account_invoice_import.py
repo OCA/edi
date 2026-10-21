@@ -1623,10 +1623,35 @@ class AccountInvoiceImport(models.TransientModel):
             "name": self.env._("Adjustment") + (f" on {name}" if name else ""),
             "account_id": account.id,
             "quantity": (1 if cur.compare_amounts(price_unit, 0) > 0 else -1),
-            "price_unit": abs(price_unit),
+            "price_unit": abs(
+                self._get_adjustment_line_price_unit(price_unit, taxes, cur)
+            ),
             "tax_ids": [Command.set(taxes.ids)],
         }
         return lvals
+
+    def _get_adjustment_line_price_unit(self, price_unit, taxes, currency):
+        """
+        Return `price_unit` of the adjustment line,
+         being aware of taxes' 'price_include'.
+        """
+        if not taxes.filtered("price_include"):
+            return price_unit
+        # Assumption: if 1 tax of a line is "price_include", all other are too.
+        if not all(price_include for price_include in taxes.mapped("price_include")):
+            raise UserError(
+                self.env._(
+                    "One invoice line has several taxes with different configurations "
+                    "for 'Included in Price' tax parameter. This is not supported "
+                    "when creating a global adjustment line.\n"
+                    "Taxes in the line: %(taxes)s.",
+                    taxes=", ".join(taxes.mapped("name")),
+                )
+            )
+        # Make of 'price_unit' a tax-included amount
+        return taxes.compute_all(
+            price_unit, currency=currency, handle_price_include=False
+        )["total_included"]
 
     @api.model
     def _get_adjustment_account(self, diff_amount, invoice):
