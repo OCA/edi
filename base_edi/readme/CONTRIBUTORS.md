@@ -1,0 +1,4 @@
+- Simone Orsi \<<simahawk@gmail.com>\>
+- John Herholz \<<j.longneck@gmail.com>\>
+- [Dixmit](www.dixmit.com)
+  - Enric Tobella

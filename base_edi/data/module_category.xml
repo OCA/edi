@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="module_category_edi" model="ir.module.category">
+        <field name="name">EDI</field>
+        <field name="sequence" eval="50" />
+    </record>
+</odoo>
