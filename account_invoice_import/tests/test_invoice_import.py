@@ -64,6 +64,14 @@ class TestInvoiceImport(TransactionCase):
             "company_id": cls.company.id,
         }
         cls.purchase_tax = cls.env["account.tax"].create(purchase_tax_vals)
+        cls.purchase_tax_2 = cls.env["account.tax"].create(
+            dict(
+                purchase_tax_vals,
+                name="Test 2% VAT",
+                description="ZZ-VAT-buy-2.0",
+                amount=2,
+            )
+        )
         sale_tax_vals = purchase_tax_vals.copy()
         sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
         cls.sale_tax = cls.env["account.tax"].create(sale_tax_vals)
@@ -185,13 +193,15 @@ class TestInvoiceImport(TransactionCase):
             )
             self.assertEqual(inv.journal_id.id, import_c["purchase_journal"].id)
 
-    def test_import_in_invoice_with_global_adjustment(self):
+    def test_import_in_invoice_with_global_adjustments(self):
         parsed_inv = {
             "BT-3": "380",
             "BT-1": "TESTAIIGLOBAL",
             "BT-5": self.company.currency_id.name,
+            # lines: 50 (1% VAT) + 50 (2% VAT) = 100.00 => 0.05 to adjust
             "BT-109": 100.05,
-            "BT-112": 101.0,
+            # VAT: 50.02 * 1% + 50.03 * 2% = 0.50 + 1.00
+            "BT-112": 101.55,
             "BT-2": "2023-04-08",
             "BT-9": "2023-05-07",
             "BG-4": {"name": "Wood Corner"},
@@ -200,11 +210,20 @@ class TestInvoiceImport(TransactionCase):
                     "BT-126": "1",
                     "BT-156": "AII-TEST-PRODUCT",
                     "BT-153": "Super test product",
-                    "BT-129": 2,
+                    "BT-129": 1,
                     "BT-146": 50,
                     "BT-152": 1.0,
                     "BT-151": "S",
-                }
+                },
+                {
+                    "BT-126": "2",
+                    "BT-156": "AII-TEST-PRODUCT",
+                    "BT-153": "Super test product",
+                    "BT-129": 1,
+                    "BT-146": 50,
+                    "BT-152": 2.0,  # other vat rate => 2nd adjustment line
+                    "BT-151": "S",
+                },
             ],
         }
         import_config = {"company": self.company}
@@ -218,14 +237,19 @@ class TestInvoiceImport(TransactionCase):
         self.assertFalse(
             inv.currency_id.compare_amounts(inv.amount_total, parsed_inv["BT-112"])
         )
-        # Check that we have an adjustment line
-        self.assertEqual(len(inv.invoice_line_ids), 2)
+        # 2 product lines + 2 adjustment lines (1 per tax, prorata of VAT amount)
+        self.assertEqual(len(inv.invoice_line_ids), 4)
+        adj_lines = inv.invoice_line_ids.filtered(lambda x: not x.product_id)
+        self.assertEqual(adj_lines.tax_ids, self.purchase_tax | self.purchase_tax_2)
+        self.assertAlmostEqual(sum(adj_lines.mapped("price_subtotal")), 0.05)
 
     def test_import_out_invoice(self):
         parsed_inv = {
             "BT-2": "2017-08-16",
             "BT-5": self.company.currency_id.name,
             "BG-7": {"name": "Deco Addict"},
+            "BT-109": 270,
+            "BT-112": 272.70,
             "BG-25": [
                 {
                     "BT-126": "1",
