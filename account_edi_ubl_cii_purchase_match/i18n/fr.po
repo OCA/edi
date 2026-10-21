@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 15:10+0000\n"
-"PO-Revision-Date: 2026-05-27 15:10+0000\n"
+"POT-Creation-Date: 2026-07-08 08:13+0000\n"
+"PO-Revision-Date: 2026-07-08 08:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,23 +18,38 @@ msgstr ""
 #. module: account_edi_ubl_cii_purchase_match
 #. odoo-python
 #: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
 #, python-format
-msgid "- Invoiced quantity exceeds the ordered quantity."
-msgstr "- La quantité facturée dépasse la quantité commandée."
+msgid "%(product)s: %(message)s"
+msgstr "%(product)s : %(message)s"
 
 #. module: account_edi_ubl_cii_purchase_match
 #. odoo-python
-#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
 #, python-format
-msgid "- Invoiced quantity exceeds the received quantity."
-msgstr "- La quantité facturée dépasse la quantité reçue."
+msgid ""
+"%s invoice lines have price mismatches with their related purchase order "
+"lines."
+msgstr ""
+"%s lignes de facture présentent des écarts de prix avec leurs lignes de "
+"commande associées."
 
 #. module: account_edi_ubl_cii_purchase_match
 #. odoo-python
-#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
 #, python-format
-msgid "- Unit price differs from the purchase order line."
-msgstr "- Le prix unitaire diffère de celui de la ligne de commande."
+msgid ""
+"%s invoice lines have quantity mismatches with their related purchase order "
+"lines."
+msgstr ""
+"%s lignes de facture présentent des écarts de quantité avec leurs lignes de "
+"commande associées."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_form_view
+msgid "Alert"
+msgstr "Alerte"
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line_select_purchase_line_wizard__po_line_qty_invoiced
@@ -54,8 +69,30 @@ msgid ""
 "Checked when this invoice has at least one line that does not fully match "
 "its related purchase order line."
 msgstr ""
-"Coché lorsque cette facture comporte au moins une ligne ne correspondant pas "
-"entièrement à sa ligne de commande d'achat associée."
+"Coché lorsque cette facture comporte au moins une ligne ne correspondant pas"
+" entièrement à sa ligne de commande d'achat associée."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_other_mismatch
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move__purchase_other_mismatch
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_other_mismatch
+msgid ""
+"Checked when this invoice has at least one line with a non-quantity mismatch"
+" against its related purchase order line."
+msgstr ""
+"Coché lorsque cette facture comporte au moins une ligne avec un écart autre "
+"que de quantité par rapport à sa ligne de commande associée."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_quantity_mismatch
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move__purchase_quantity_mismatch
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_quantity_mismatch
+msgid ""
+"Checked when this invoice has at least one line with a quantity mismatch "
+"against its related purchase order line."
+msgstr ""
+"Coché lorsque cette facture comporte au moins une ligne avec un écart de "
+"quantité par rapport à sa ligne de commande associée."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_mismatch
@@ -65,6 +102,24 @@ msgid ""
 msgstr ""
 "Coché lorsque cette ligne de facture ne correspond pas entièrement à sa "
 "ligne de commande d'achat associée."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_other_mismatch
+msgid ""
+"Checked when this invoice line has a non-quantity mismatch with its related "
+"purchase order line."
+msgstr ""
+"Coché lorsque cette ligne de facture présente un écart autre que de quantité "
+"avec sa ligne de commande associée."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_quantity_mismatch
+msgid ""
+"Checked when this invoice line has a quantity mismatch with its related "
+"purchase order line."
+msgstr ""
+"Coché lorsque cette ligne de facture présente un écart de quantité avec sa "
+"ligne de commande associée."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.purchase_order_line_form_view
@@ -103,13 +158,22 @@ msgstr ""
 "lignes de commande d'achat associées."
 
 #. module: account_edi_ubl_cii_purchase_match
-#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_mismatch_details
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_other_mismatch_details
 msgid ""
-"Human-readable description of the differences between this invoice line and "
-"the related purchase order line."
+"Human-readable description of the non-quantity differences between this "
+"invoice line and the related purchase order line."
 msgstr ""
-"Description lisible des différences entre cette ligne de facture et la ligne "
-"de commande d'achat associée."
+"Description lisible des écarts autres que de quantité entre cette ligne de "
+"facture et la ligne de commande associée."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_quantity_mismatch_details
+msgid ""
+"Human-readable description of the quantity differences between this invoice "
+"line and the related purchase order line."
+msgstr ""
+"Description lisible des écarts de quantité entre cette ligne de facture et "
+"la ligne de commande associée."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line_select_purchase_line_wizard__id
@@ -125,6 +189,17 @@ msgstr "Facture"
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_line_select_purchase_line_wizard_form_view
 msgid "Invoice line"
 msgstr "Ligne de facture"
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#, python-format
+msgid ""
+"Invoice unit price is %(invoice_price)s; purchase order unit price is "
+"%(po_price)s."
+msgstr ""
+"Le prix unitaire facturé est de %(invoice_price)s ; le prix unitaire de la "
+"commande est de %(po_price)s."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model,name:account_edi_ubl_cii_purchase_match.model_account_move
@@ -179,9 +254,45 @@ msgstr "Prix unitaire de la ligne d'écriture"
 #. module: account_edi_ubl_cii_purchase_match
 #. odoo-python
 #: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
 #, python-format
 msgid "No product"
 msgstr "Aucun produit"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_other_mismatch_count
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move__purchase_other_mismatch_count
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_other_mismatch_count
+msgid "Number of invoice lines with non-quantity mismatches."
+msgstr "Nombre de lignes de facture avec des écarts autres que de quantité."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_quantity_mismatch_count
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move__purchase_quantity_mismatch_count
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_quantity_mismatch_count
+msgid "Number of invoice lines with quantity mismatches."
+msgstr "Nombre de lignes de facture avec des écarts de quantité."
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
+#, python-format
+msgid ""
+"One invoice line has a price mismatch with its related purchase order line."
+msgstr ""
+"Une ligne de facture présente un écart de prix avec sa ligne de commande "
+"associée."
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
+#, python-format
+msgid ""
+"One invoice line has a quantity mismatch with its related purchase order "
+"line."
+msgstr ""
+"Une ligne de facture présente un écart de quantité avec sa ligne de commande "
+"associée."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line_select_purchase_line_wizard__po_line_product_uom_qty
@@ -202,6 +313,15 @@ msgstr "Prix unitaire de la ligne de commande"
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line_select_purchase_line_wizard__partner_id
 msgid "Partner"
 msgstr "Partenaire"
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_form_view
+#, python-format
+msgid "Price mismatch"
+msgstr "Écart de prix"
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line_select_purchase_line_wizard__product_id
@@ -225,9 +345,29 @@ msgid "Purchase Line Mismatch"
 msgstr "Incohérence ligne d'achat"
 
 #. module: account_edi_ubl_cii_purchase_match
-#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_mismatch_details
-msgid "Purchase Line Mismatch Details"
-msgstr "Détails de l'incohérence ligne d'achat"
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_mismatch_summary
+msgid "Purchase Line Mismatch Summary"
+msgstr "Résumé de l'incohérence de ligne d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_other_mismatch
+msgid "Purchase Line Other Mismatch"
+msgstr "Autre incohérence de ligne d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_other_mismatch_details
+msgid "Purchase Line Other Mismatch Details"
+msgstr "Détails de l'autre incohérence de ligne d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_quantity_mismatch
+msgid "Purchase Line Quantity Mismatch"
+msgstr "Incohérence de quantité de ligne d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_quantity_mismatch_details
+msgid "Purchase Line Quantity Mismatch Details"
+msgstr "Détails de l'incohérence de quantité de ligne d'achat"
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_mismatch
@@ -249,9 +389,75 @@ msgid "Purchase Order"
 msgstr "Commande d'achat"
 
 #. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_other_mismatch
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move__purchase_other_mismatch
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_other_mismatch
+msgid "Purchase Other Mismatch"
+msgstr "Autre incohérence d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_other_mismatch_count
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move__purchase_other_mismatch_count
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_other_mismatch_count
+msgid "Purchase Other Mismatch Count"
+msgstr "Nombre d'autres incohérences d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_other_mismatch_summary
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move__purchase_other_mismatch_summary
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_other_mismatch_summary
+msgid "Purchase Other Mismatch Summary"
+msgstr "Résumé des autres incohérences d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_quantity_mismatch
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move__purchase_quantity_mismatch
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_quantity_mismatch
+msgid "Purchase Quantity Mismatch"
+msgstr "Incohérence de quantité d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_quantity_mismatch_count
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move__purchase_quantity_mismatch_count
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_quantity_mismatch_count
+msgid "Purchase Quantity Mismatch Count"
+msgstr "Nombre d'incohérences de quantité d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_quantity_mismatch_summary
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move__purchase_quantity_mismatch_summary
+#: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_quantity_mismatch_summary
+msgid "Purchase Quantity Mismatch Summary"
+msgstr "Résumé des incohérences de quantité d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_form_view
+#, python-format
+msgid "Purchase mismatch details"
+msgstr "Détails des incohérences d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line_select_purchase_line_wizard__move_line_quantity
 msgid "Quantity"
 msgstr "Quantité"
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#, python-format
+msgid "Quantity and price mismatch"
+msgstr "Écart de quantité et de prix"
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_form_view
+#, python-format
+msgid "Quantity mismatch"
+msgstr "Écart de quantité"
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line_select_purchase_line_wizard__po_line_qty_received
@@ -267,6 +473,25 @@ msgstr "Sélectionner une ligne d'achat"
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_line_select_purchase_line_wizard_form_view
 msgid "Select The Purchase Line"
 msgstr "Sélectionner la ligne d'achat"
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move_line__purchase_line_mismatch_summary
+msgid "Short description of the purchase order matching issue."
+msgstr "Description courte du problème de rapprochement avec la commande."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_other_mismatch_summary
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move__purchase_other_mismatch_summary
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_other_mismatch_summary
+msgid "Short summary of non-quantity mismatches."
+msgstr "Résumé court des écarts autres que de quantité."
+
+#. module: account_edi_ubl_cii_purchase_match
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_quantity_mismatch_summary
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move__purchase_quantity_mismatch_summary
+#: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_quantity_mismatch_summary
+msgid "Short summary of quantity mismatches."
+msgstr "Résumé court des écarts de quantité."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_line_select_purchase_line_wizard_form_view
@@ -298,6 +523,28 @@ msgstr ""
 "La quantité facultative exprimée par cette ligne, par exemple le nombre de "
 "produits vendus. La quantité n'est pas une obligation légale, mais elle est "
 "très utile pour certains rapports."
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#, python-format
+msgid ""
+"Total invoiced quantity is %(invoiced_qty)s; ordered quantity is "
+"%(ordered_qty)s."
+msgstr ""
+"La quantité totale facturée est de %(invoiced_qty)s ; la quantité commandée "
+"est de %(ordered_qty)s."
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#, python-format
+msgid ""
+"Total invoiced quantity is %(invoiced_qty)s; received quantity is "
+"%(received_qty)s."
+msgstr ""
+"La quantité totale facturée est de %(invoiced_qty)s ; la quantité reçue est "
+"de %(received_qty)s."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model,name:account_edi_ubl_cii_purchase_match.model_account_edi_xml_ubl_20
