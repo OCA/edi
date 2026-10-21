@@ -1540,18 +1540,111 @@ class AccountInvoiceImport(models.TransientModel):
         return " ".join(chatter_msg)
 
     @api.model
-    def _prepare_global_adjustment_line(self, diff_amount, invoice, import_config):
+    def _prepare_global_adjustment_lines(self, diff_amount, invoice, import_config):
+        """
+        EN16931 requires a VAT category on each line for customer invoices, so if there
+        are several taxes in the invoices, we do 1 adjustment line per tax (prorata)
+        """
+        product_lines = invoice.invoice_line_ids.filtered(
+            lambda x: x.display_type == "product"
+        )
+
+        # no tax or single tax
+        if len(product_lines.tax_ids) <= 1:
+            return self._prepare_adjustment_line(
+                diff_amount, invoice=invoice, taxes=product_lines.tax_ids
+            )
+
+        # Several taxes => 1 adjustment line per tax (required for EN16931)
+        # Compute prorata per tax -> future 'price_unit' of each adjustment lines
         cur = invoice.currency_id
-        diff_amount_cmp = cur.compare_amounts(diff_amount, 0)
+        amount_per_tax = defaultdict(float)
+        AccountTax = self.env["account.tax"]
+        # This 1st loop sums the base amount per taxe in the invoice
+        for iline in product_lines:
+            base_line = invoice._prepare_product_base_line_for_taxes_computation(iline)
+            AccountTax._add_tax_details_in_base_line(base_line, invoice.company_id)
+            for tax_data in base_line["tax_details"]["taxes_data"]:
+                amount_per_tax[tax_data["tax"]] += tax_data["tax_amount"]
+        # This 2nd loop calculates the amount of adjustment lines
+        prorata_per_tax = {}
+        for tax, tax_amount in amount_per_tax.items():
+            prorata = cur.round(diff_amount * tax_amount / invoice.amount_tax)
+            if not cur.is_zero(prorata):
+                prorata_per_tax[tax] = prorata
+
+        # Rounding issues
+        if not prorata_per_tax:
+            # If all proratas were too small => fallback to single global line scenario
+            return self._prepare_adjustment_line(
+                diff_amount, invoice=invoice, taxes=product_lines.tax_ids
+            )
+        total_prorata = sum(prorata_per_tax.values())
+        remaining = cur.round(diff_amount - total_prorata)
+        if not cur.is_zero(remaining):
+            # If prorata rounding left something, charge the highest prorata
+            biggest_tax = max(prorata_per_tax, key=prorata_per_tax.get)
+            prorata_per_tax[biggest_tax] += remaining
+        assert diff_amount == sum(prorata_per_tax.values())
+
+        return [
+            self._prepare_adjustment_line(
+                tax_prorata, invoice=invoice, taxes=tax, name=tax.name
+            )
+            for tax, tax_prorata in prorata_per_tax.items()
+            if not cur.is_zero(tax_prorata)
+        ]
+
+    def _prepare_adjustment_line(
+        self,
+        price_unit,
+        iline=None,
+        invoice=None,
+        taxes=None,
+        name=None,
+    ):
+        """
+        :arg `iline`: given for product adjustment line
+        :arg `invoice`: given for global adjustment line (per tax)
+        """
+        assert iline or invoice
+        invoice = iline and iline.move_id or invoice
+        account = (
+            iline
+            and iline.account_id  # line-adjustment
+            or self._get_adjustment_account(price_unit, invoice)  # global line
+        )
+        taxes = iline and iline.tax_ids or taxes
+        assert account, taxes
+        cur = invoice.currency_id
+        lvals = {
+            "move_id": invoice.id,
+            "display_type": "product",
+            "name": self.env._("Adjustment") + (f" on {name}" if name else ""),
+            "account_id": account.id,
+            "quantity": (1 if cur.compare_amounts(price_unit, 0) > 0 else -1),
+            "price_unit": abs(price_unit),
+            "tax_ids": [Command.set(taxes.ids)],
+        }
+        return lvals
+
+    @api.model
+    def _get_adjustment_account(self, diff_amount, invoice):
+        """
+        Return Debit or Credit adjustment account depending
+        on `invoice_type` and `amount_diff`
+        """
+        cur = invoice.currency_id
         company = invoice.company_id
-        # TODO : if a product or account is forced,
-        # I think we should use this account (and product) ?
+        diff_amount_cmp = cur.compare_amounts(diff_amount, 0)
         is_debit = bool(
             # when diff_amount > 0 (parsed_subtotal > odoo_subtotal)
             # debit: in_invoice or out_refund
             # credit: out_invoice or in_refund
             diff_amount_cmp * invoice.direction_sign > 0
         )
+        # TODO : if a product or account is forced,
+        # I think we should use this account (and product) ?
         account = (
             company.adjustment_debit_account_id
             if is_debit
@@ -1568,29 +1661,7 @@ class AccountInvoiceImport(models.TransientModel):
             )
         if invoice.fiscal_position_id:
             account = invoice.fiscal_position_id.map_account(account)
-
-        lvals = {
-            "move_id": invoice.id,
-            "display_type": "product",
-            "name": self.env._("Adjustment"),
-            "account_id": account.id,
-            "quantity": 1 if diff_amount_cmp > 0 else -1,
-            "price_unit": abs(diff_amount),
-        }
-        logger.debug("Prepared global adjustment invoice line %s", lvals)
-        return lvals
-
-    def _prepare_adjustment_line(self, iline, diff_amount):
-        vals = {
-            "move_id": iline.move_id.id,
-            "display_type": "product",
-            "account_id": iline.account_id.id,
-            "name": self.env._("Adjustment on %s") % iline.name,
-            "quantity": 1,
-            "price_unit": diff_amount,
-            "tax_ids": [Command.set(iline.tax_ids.ids)],
-        }
-        return vals
+        return account
 
     @api.model
     def _post_process_invoice(self, parsed_inv, import_config, invoice):
@@ -1619,7 +1690,9 @@ class AccountInvoiceImport(models.TransientModel):
                         diff_amount,
                     )
                     # Add the adjustment line
-                    vals = self._prepare_adjustment_line(iline, diff_amount)
+                    vals = self._prepare_adjustment_line(
+                        diff_amount, iline=iline, name=iline.name
+                    )
                     adj_line = amlo.create(vals)
                     logger.info("Adjustment invoice line created ID %d", adj_line.id)
         # Fallback: create global adjustment line
@@ -1639,11 +1712,11 @@ class AccountInvoiceImport(models.TransientModel):
                 f"diff {format_amount(self.env, diff_amount, invoice.currency_id)}"
             )
             self._info_log(import_config, msg)
-            lvals = self._prepare_global_adjustment_line(
+            lvals_list = self._prepare_global_adjustment_lines(
                 diff_amount, invoice, import_config
             )
-            mline = amlo.create(lvals)
-            logger.info("Global adjustment invoice line created ID %d", mline.id)
+            mlines = amlo.create(lvals_list)
+            logger.info("Global adjustment invoice lines created IDs %s", mlines.ids)
         assert not invoice.currency_id.compare_amounts(
             parsed_inv["BT-109"], invoice.amount_untaxed
         )
