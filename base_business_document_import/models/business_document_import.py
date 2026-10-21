@@ -283,15 +283,15 @@ class BusinessDocumentImport(models.AbstractModel):
                 )
             if partner:
                 partner_type_label = partner_dict["type_label"]
-                chatter_msg.append(
-                    self.env._(
-                        "The %(label)s has been identified by the domain name "
-                        "'%(email_domain)s' so please check carefully that the "
-                        "%(label)s is correct.",
-                        label=partner_type_label,
-                        email_domain=email_domain,
-                    )
+                msg = self.env._(
+                    "The %(label)s has been identified by the domain name "
+                    "'%(email_domain)s' so please check carefully that the "
+                    "%(label)s is correct.",
+                    label=partner_type_label,
+                    email_domain=email_domain,
                 )
+                if msg not in chatter_msg:
+                    chatter_msg.append(msg)
                 return partner
 
     # TODO: maybe we should remove partner_type in future versions
@@ -417,20 +417,44 @@ class BusinessDocumentImport(models.AbstractModel):
     def _match_shipping_partner(
         self, partner_dict, partner, chatter_msg, domain=None, raise_exception=True
     ):
+        """
+        The shipping partner can be any partner, not especially related to the
+        customer/supplier (partner argument)
+        """
+        return self._match_partner_address(
+            partner_dict,
+            parent_partner=partner,
+            address_type="delivery",
+            chatter_msg=chatter_msg,
+            domain=domain or [],
+            raise_exception=raise_exception,
+        )
+
+    @api.model
+    def _match_partner_address(
+        self,
+        partner_dict,
+        parent_partner,
+        address_type,
+        chatter_msg,
+        domain=None,
+        raise_exception=True,
+    ):
         """Example:
-        shipping_dict = {
+        partner_dict = {
             'email': 'contact@akretion.com',
             'name': 'Akretion France',
             'street': 'Long Avenue',
             'street2': 'Building 2A',
+            'street3': 'BP157',
             'city': 'Paris',
             'zip': '69100',
             'country_code': 'FR',
-            }
-        The shipping partner can be any partner, not especially related to the
-        customer/supplier (partner argument)
+        }
         """
+        self._strip_cleanup_dict(partner_dict)
         domain = domain or []
+
         if partner_dict.get("street"):
             if partner_dict.get("street_number"):
                 domain = expression.AND(
@@ -471,13 +495,21 @@ class BusinessDocumentImport(models.AbstractModel):
                         ],
                     ]
                 )
-
         if partner_dict.get("street2"):
             domain = expression.AND(
                 [
                     domain,
                     [
                         ("street2", "=", partner_dict.get("street2")),
+                    ],
+                ]
+            )
+        if partner_dict.get("street3") and hasattr(self.env["res.partner"], "street3"):
+            domain = expression.AND(
+                [
+                    domain,
+                    [
+                        ("street3", "=", partner_dict.get("street3")),
                     ],
                 ]
             )
@@ -500,18 +532,27 @@ class BusinessDocumentImport(models.AbstractModel):
                 ]
             )
 
-        domain_delivery = expression.AND([domain, [("type", "=", "delivery")]])
+        domain_address = expression.AND([domain, [("type", "=", address_type)]])
+        if parent_partner:
+            domain_descendant = expression.OR(
+                [
+                    [("id", "=", parent_partner.id)],
+                    [("parent_id", "=", parent_partner.id)],
+                ]
+            )
+            domain_address = expression.AND([domain_address, domain_descendant])
+
         partner = self._match_partner(
             partner_dict,
             chatter_msg,
             partner_type=False,
-            domain=domain_delivery,
+            domain=domain_address,
             raise_exception=False,
         )
         if partner:
             return partner
         if not partner_dict.get("vat") and not partner_dict.get("email"):
-            partner = self.env["res.partner"].search(domain_delivery, limit=1)
+            partner = self.env["res.partner"].search(domain_address, limit=1)
         if partner:
             return partner
         partner = self._match_partner(
@@ -532,11 +573,14 @@ class BusinessDocumentImport(models.AbstractModel):
         if partner:
             return partner
 
+        address_type_word = dict(
+            self.env["res.partner"]._fields["type"]._description_selection(self.env)
+        ).get(address_type)
         self.user_error_wrap(
-            "_match_shipping_partner",
+            "_match_partner_address",
             partner_dict,
             self.env._(
-                "Odoo couldn't find any shipping partner corresponding to the "
+                "Odoo couldn't find any %(address_type)s partner corresponding to the "
                 "following information extracted from the business document:\n"
                 "Name: %(name)s\n"
                 "VAT number: %(vat)s\n"
@@ -549,6 +593,7 @@ class BusinessDocumentImport(models.AbstractModel):
                 "ZIP: %(zip)s\n"
                 "State code: %(state)s\n"
                 "Country code: %(country)s\n",
+                address_type=address_type_word or "",
                 name=partner_dict.get("name") or "",
                 vat=partner_dict.get("vat") or "",
                 ref=partner_dict.get("ref") or "",
@@ -1529,5 +1574,5 @@ class BusinessDocumentImport(models.AbstractModel):
             else:
                 msg = self.env._("<b>Notes in imported document:</b>")
             record.message_post(  # pylint: disable=translation-required
-                body="{} {}".format(msg, parsed_dict["note"])
+                body=Markup("{} {}".format(msg, parsed_dict["note"]))
             )
