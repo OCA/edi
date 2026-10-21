@@ -10,6 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2026-07-08 08:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -17,34 +18,28 @@ msgstr ""
 
 #. module: account_edi_ubl_cii_purchase_match
 #. odoo-python
-#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
-#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
+#, python-format
+msgid ""
+"%(count)s invoice lines have price mismatches with their related purchase "
+"order lines."
+msgstr ""
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
+#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
+#, python-format
+msgid ""
+"%(count)s invoice lines have quantity mismatches with their related purchase "
+"order lines."
+msgstr ""
+
+#. module: account_edi_ubl_cii_purchase_match
+#. odoo-python
 #: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
 #, python-format
 msgid "%(product)s: %(message)s"
 msgstr "%(product)s : %(message)s"
-
-#. module: account_edi_ubl_cii_purchase_match
-#. odoo-python
-#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
-#, python-format
-msgid ""
-"%s invoice lines have price mismatches with their related purchase order "
-"lines."
-msgstr ""
-"%s lignes de facture présentent des écarts de prix avec leurs lignes de "
-"commande associées."
-
-#. module: account_edi_ubl_cii_purchase_match
-#. odoo-python
-#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
-#, python-format
-msgid ""
-"%s invoice lines have quantity mismatches with their related purchase order "
-"lines."
-msgstr ""
-"%s lignes de facture présentent des écarts de quantité avec leurs lignes de "
-"commande associées."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_form_view
@@ -69,16 +64,16 @@ msgid ""
 "Checked when this invoice has at least one line that does not fully match "
 "its related purchase order line."
 msgstr ""
-"Coché lorsque cette facture comporte au moins une ligne ne correspondant pas"
-" entièrement à sa ligne de commande d'achat associée."
+"Coché lorsque cette facture comporte au moins une ligne ne correspondant pas "
+"entièrement à sa ligne de commande d'achat associée."
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_bank_statement_line__purchase_other_mismatch
 #: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_move__purchase_other_mismatch
 #: model:ir.model.fields,help:account_edi_ubl_cii_purchase_match.field_account_payment__purchase_other_mismatch
 msgid ""
-"Checked when this invoice has at least one line with a non-quantity mismatch"
-" against its related purchase order line."
+"Checked when this invoice has at least one line with a non-quantity mismatch "
+"against its related purchase order line."
 msgstr ""
 "Coché lorsque cette facture comporte au moins une ligne avec un écart autre "
 "que de quantité par rapport à sa ligne de commande associée."
@@ -317,7 +312,6 @@ msgstr "Partenaire"
 #. module: account_edi_ubl_cii_purchase_match
 #. odoo-python
 #: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
-#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_form_view
 #, python-format
 msgid "Price mismatch"
@@ -453,7 +447,6 @@ msgstr "Écart de quantité et de prix"
 #. module: account_edi_ubl_cii_purchase_match
 #. odoo-python
 #: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
-#: code:addons/account_edi_ubl_cii_purchase_match/models/account_move_line.py:0
 #: model_terms:ir.ui.view,arch_db:account_edi_ubl_cii_purchase_match.account_move_form_view
 #, python-format
 msgid "Quantity mismatch"
@@ -508,8 +501,8 @@ msgstr "Référence produit fournisseur"
 #: code:addons/account_edi_ubl_cii_purchase_match/models/account_move.py:0
 #, python-format
 msgid ""
-"The following differences were detected between this invoice and its related"
-" purchase order lines:\n"
+"The following differences were detected between this invoice and its related "
+"purchase order lines:\n"
 msgstr ""
 "Les différences suivantes ont été détectées entre cette facture et ses "
 "lignes de commande d'achat associées :\n"
@@ -560,3 +553,19 @@ msgstr "Prix unitaire"
 #: model:ir.model,name:account_edi_ubl_cii_purchase_match.model_account_move_line_select_purchase_line_wizard
 msgid "account move line select purchase line wizard"
 msgstr "assistant de sélection de ligne d'achat pour ligne d'écriture"
+
+#, python-format
+#~ msgid ""
+#~ "%s invoice lines have price mismatches with their related purchase order "
+#~ "lines."
+#~ msgstr ""
+#~ "%s lignes de facture présentent des écarts de prix avec leurs lignes de "
+#~ "commande associées."
+
+#, python-format
+#~ msgid ""
+#~ "%s invoice lines have quantity mismatches with their related purchase "
+#~ "order lines."
+#~ msgstr ""
+#~ "%s lignes de facture présentent des écarts de quantité avec leurs lignes "
+#~ "de commande associées."
