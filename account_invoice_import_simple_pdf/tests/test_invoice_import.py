@@ -307,6 +307,25 @@ class TestInvoiceImport(TransactionCase):
             )
             self.assertEqual(fields.Date.to_string(parsed_inv["date"]), result)
 
+    def test_date_parsing_language_fallback(self):
+        self.partner.lang = "en_US"
+        self.date_field.write(
+            {
+                "date_format": "dd-month-y2",
+                "date_separator": "space",
+            }
+        )
+        partner_config = self.partner._simple_pdf_partner_config()
+        test_info = {"test_mode": True}
+        self.env["account.invoice.import"]._simple_pdf_update_test_info(test_info)
+        parsed_inv = {"failed_fields": []}
+
+        self.date_field._get_date(
+            parsed_inv, "Facture du 3 févr. 26", partner_config, test_info
+        )
+
+        self.assertEqual(fields.Date.to_string(parsed_inv["date"]), "2026-02-03")
+
     def test_restrict_text(self):
         cut_test = {
             "T1 ici et là POUET là et par là POUET": {
