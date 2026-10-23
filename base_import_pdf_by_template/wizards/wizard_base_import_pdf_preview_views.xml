@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Tecnativa - Víctor Martínez
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_wizard_base_import_pdf_preview_form" model="ir.ui.view">
+        <field name="model">wizard.base.import.pdf.preview</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="extraction_mode" widget="radio" />
+                    <field name="file_name" invisible="1" />
+                    <field
+                        name="data_file"
+                        options="{'accepted_file_extensions': '.pdf'}"
+                        filename="file_name"
+                    />
+                    <field name="total_pages" invisible="total_pages == 0" />
+                </group>
+                <notebook>
+                    <page name="raw_data" string="RAW data">
+                        <field name="data" nolabel="1" />
+                    </page>
+                    <page
+                        name="technical_data"
+                        string="Technical information"
+                        groups="base.group_no_one"
+                        invisible="not data"
+                    >
+                        <group>
+                            <field name="header_values" />
+                            <field name="table_info" />
+                            <field name="lines_values" />
+                        </group>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+    <record id="action_wizard_base_import_pdf_preview" model="ir.actions.act_window">
+        <field name="name">Preview PDF</field>
+        <field name="res_model">wizard.base.import.pdf.preview</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
