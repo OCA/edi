@@ -288,6 +288,10 @@ class AccountInvoiceImportSimplePdfFields(models.Model):
             date_dt = dateparser.parse(
                 date_raw, date_formats=[date_formatdt], languages=languages
             )
+            if not date_dt and languages:
+                date_dt = dateparser.parse(
+                    date_raw, date_formats=[date_formatdt], languages=None
+                )
             if date_dt:
                 valid_dates_dt.append(date_dt)
             else:

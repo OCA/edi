@@ -4,6 +4,8 @@
 
 import base64
 
+from freezegun import freeze_time
+
 from odoo import fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_compare
@@ -307,6 +309,25 @@ class TestInvoiceImport(TransactionCase):
             )
             self.assertEqual(fields.Date.to_string(parsed_inv["date"]), result)
 
+    def test_date_parsing_language_fallback(self):
+        self.partner.lang = "en_US"
+        self.date_field.write(
+            {
+                "date_format": "dd-month-y2",
+                "date_separator": "space",
+            }
+        )
+        partner_config = self.partner._simple_pdf_partner_config()
+        test_info = {"test_mode": True}
+        self.env["account.invoice.import"]._simple_pdf_update_test_info(test_info)
+        parsed_inv = {"failed_fields": []}
+
+        self.date_field._get_date(
+            parsed_inv, "Facture du 3 févr. 26", partner_config, test_info
+        )
+
+        self.assertEqual(fields.Date.to_string(parsed_inv["date"]), "2026-02-03")
+
     def test_restrict_text(self):
         cut_test = {
             "T1 ici et là POUET là et par là POUET": {
@@ -447,6 +468,7 @@ class TestInvoiceImport(TransactionCase):
                     )
                 )
 
+    @freeze_time("2021-02-20")
     def test_invoice_number_parsing(self):
         inv_num_test = {
             "INV/2020/05/0042": [
@@ -460,6 +482,19 @@ class TestInvoiceImport(TransactionCase):
             "I210042": [
                 {"string_type": "fixed", "fixed_char": "I"},
                 {"string_type": "year2"},
+                {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
+            ],
+            "ATS-20210122181307737": [
+                {"string_type": "fixed", "fixed_char": "ATS-"},
+                {"string_type": "year4"},
+                {"string_type": "month"},
+                {"string_type": "day"},
+                {"string_type": "digit", "occurrence_min": 9, "occurrence_max": 9},
+            ],
+            "C1061235": [
+                {"string_type": "fixed", "fixed_char": "C"},
+                {"string_type": "year1"},
+                {"string_type": "month"},
                 {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
             ],
             "INV2107ZB0042": [

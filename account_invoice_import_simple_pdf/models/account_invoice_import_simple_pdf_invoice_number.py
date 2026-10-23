@@ -45,15 +45,17 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
     @api.model
     def _string_type_sel(self):
         return [
-            ("fixed", "Fixed"),
-            ("year2", "Year on 2 digits"),
-            ("year4", "Year on 4 digits"),
-            ("month", "Month (2 digits)"),
-            ("digit", "Digit(s)"),
-            ("letter_upper", "Upper Letter"),
-            ("letter_lower", "Lower Letter"),
-            ("char", "Any Character"),
-            ("space", "Space"),
+            ("fixed", _("Fixed")),
+            ("year2", _("Year on 2 digits")),
+            ("year4", _("Year on 4 digits")),
+            ("year1", _("Year on 1 digit")),
+            ("month", _("Month (2 digits)")),
+            ("day", _("Day on 2 digits")),
+            ("digit", _("Digit(s)")),
+            ("letter_upper", _("Upper Letter")),
+            ("letter_lower", _("Lower Letter")),
+            ("char", _("Any Character")),
+            ("space", _("Space")),
         ]
 
     @api.constrains("string_type", "fixed_char", "occurrence_min", "occurrence_max")
@@ -108,15 +110,19 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
                 suffix = "{%d,%d}" % (self.occurrence_min, self.occurrence_max)
 
             regex_list.append(type2regex[self.string_type] + suffix)
-        elif self.string_type in ("year2", "year4"):
+        elif self.string_type in ("year1", "year2", "year4"):
             # match on current and previous year only
             current_year = fields.Date.context_today(self).year
 
             years = [current_year - y for y in range(MAX_PAST_YEARS + 1)]
             if self.string_type == "year2":
                 years_str = [str(y)[-2:] for y in years]
+            elif self.string_type == "year1":
+                years_str = [str(y)[-1:] for y in years]
             else:
                 years_str = [str(y) for y in years]
             regex_list.append("(?:%s)" % "|".join(years_str))
         elif self.string_type == "month":
             regex_list.append("(?:01|02|03|04|05|06|07|08|09|10|11|12)")
+        elif self.string_type == "day":
+            regex_list.append("(?:0[1-9]|1[0-9]|2[0-9]|3[01])")
