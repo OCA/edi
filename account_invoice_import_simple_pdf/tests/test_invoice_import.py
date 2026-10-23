@@ -4,6 +4,8 @@
 
 import base64
 
+from freezegun import freeze_time
+
 from odoo import fields
 from odoo.tests.common import TransactionCase
 from odoo.tools import file_open, float_compare
@@ -466,6 +468,7 @@ class TestInvoiceImport(TransactionCase):
                     )
                 )
 
+    @freeze_time("2021-02-20")
     def test_invoice_number_parsing(self):
         inv_num_test = {
             "INV/2020/05/0042": [
@@ -481,14 +484,14 @@ class TestInvoiceImport(TransactionCase):
                 {"string_type": "year2"},
                 {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
             ],
-            "ATS-20230522181307737": [
+            "ATS-20210122181307737": [
                 {"string_type": "fixed", "fixed_char": "ATS-"},
                 {"string_type": "year4"},
                 {"string_type": "month"},
                 {"string_type": "day"},
                 {"string_type": "digit", "occurrence_min": 9, "occurrence_max": 9},
             ],
-            "C3061235": [
+            "C1061235": [
                 {"string_type": "fixed", "fixed_char": "C"},
                 {"string_type": "year1"},
                 {"string_type": "month"},
