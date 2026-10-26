@@ -194,7 +194,7 @@ class ProductImport(models.TransientModel):
         else:
             currency = (import_company or self.env.company).currency_id
 
-        product_vals = {
+        imported_product = {
             "active": parsed_product.get("active", True),
             "default_code": parsed_product["code"],
             "barcode": parsed_product["barcode"],
@@ -205,6 +205,19 @@ class ProductImport(models.TransientModel):
             "uom_po_id": uom.id,
             "company_id": product_company_id,
         }
+        if product:
+            product_vals = {"recordset": product}
+            # Update only values which have changed
+            for fld in imported_product:
+                current_val = product[fld]
+                if fld.endswith("_id"):
+                    current_val = current_val.id
+                if imported_product[fld] != current_val:
+                    product_vals[fld] = imported_product[fld]
+        else:
+            product_vals = imported_product
+
+        # product.supplierinfo
         seller_info = {
             "name": seller and seller.id or False,
             "product_code": parsed_product["product_code"],
@@ -214,20 +227,16 @@ class ProductImport(models.TransientModel):
             "company_id": import_company.id,
             "delay": parsed_product.get("sale_delay", 0),
         }
-        product_vals["seller_ids"] = self._prepare_supplierinfo(seller_info, product)
-        if product:
-            product_vals["recordset"] = product
-
+        seller_ids = self._prepare_supplierinfo(seller_info, product)
+        if seller_ids:
+            product_vals["seller_ids"] = seller_ids
         return product_vals
 
     @api.model
     def _save_product(self, product_vals, chatter_msg):
         """Create / Update a product."""
         product = product_vals.pop("recordset", None)
-        if product:
-            product.update(product_vals)
-            logger.debug("Product %s updated", product.default_code)
-        else:
+        if not product:
             product_active = product_vals.pop("active")
             product = self.env["product.product"].create(product_vals)
             if not product_active:
@@ -235,8 +244,17 @@ class ProductImport(models.TransientModel):
                 # all characteristics into product.template
                 product.flush()
                 product.action_archive()
-            logger.debug("Product %s created", product.default_code)
+            log_action = "created"
+        elif product_vals:
+            product.update(product_vals)
+            log_action = "updated"
+        else:
+            log_action = "not changed"
 
+        chatter_msg.append(
+            f"Product {log_action} {product.default_code} ({product.id})"
+        )
+        logger.debug("Product %s %s", product.default_code, log_action)
         # Archive product template, if product is archived
         if product.active != product.product_tmpl_id.active:
             product.product_tmpl_id.toggle_active()
@@ -256,9 +274,6 @@ class ProductImport(models.TransientModel):
             )
             if product_vals:
                 product = self._save_product(product_vals, chatter_msg=chatter_msg)
-                chatter_msg.append(
-                    f"Product created/updated {product.default_code} ({product.id})"
-                )
         return True
 
     @api.model
