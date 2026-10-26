@@ -191,7 +191,7 @@ class TestProductImport(TestCommon):
         # product.product
         product_obj = self.env["product.product"].with_context(active_test=False)
         existing = product_obj.search([], order="id")
-        parsed_catalog = {**PARSED_CATALOG2, "chatter_msg": []}
+        parsed_catalog2 = {**PARSED_CATALOG2, "chatter_msg": []}
 
         wiz = self.wiz_model.create(
             {"product_file": b"====", "product_filename": "test_import.xml"}
@@ -202,7 +202,7 @@ class TestProductImport(TestCommon):
             wiz.import_button()
 
         # 2nd import
-        with self._mock("parse_product_catalogue", return_value=parsed_catalog):
+        with self._mock("parse_product_catalogue", return_value=parsed_catalog2):
             wiz.import_button()
         products = product_obj.search([], order="id") - existing
         self.assertEqual(len(products), 3)
@@ -317,6 +317,76 @@ class TestProductImport(TestCommon):
                 product.seller_ids.product_tmpl_id, product.product_tmpl_id
             )
             self.assertFalse(product.seller_ids.product_id)
+
+    def test_prepare_values(self):
+        # Check that only changed values are written to the existing product
+
+        # product.product
+        product_obj = self.env["product.product"].with_context(active_test=False)
+        existing = product_obj.search([], order="id")
+        parsed_catalog2 = {**PARSED_CATALOG2, "chatter_msg": []}
+
+        wiz = self.wiz_model.create(
+            {"product_file": b"====", "product_filename": "test_import.xml"}
+        )
+
+        # Initial import
+        with self._mock("parse_product_catalogue", return_value=self.parsed_catalog):
+            wiz.import_button()
+
+        # 2nd import - 1 product changed
+        catalogue = parsed_catalog2
+        company_id = wiz._get_company_id(catalogue)
+        seller = wiz.with_company(company_id)._get_seller(catalogue)
+        chatter_msg = catalogue["chatter_msg"]
+        [parsed_product] = catalogue["products"]
+        product_vals = wiz._prepare_product(
+            parsed_product,
+            seller=seller,
+            company_id=company_id,
+            chatter_msg=chatter_msg,
+        )
+        product = product_obj.search([("default_code", "=", "MNTR011")])
+        seller_data = product_vals["seller_ids"][0][2]
+        expected = {
+            "active": False,
+            "name": parsed_product["name"],
+            "description": parsed_product["description"],
+            "recordset": product,
+            "seller_ids": [(1, product.seller_ids.id, seller_data)],
+        }
+        self.assertEqual(product_vals, expected)
+
+        # Save
+        saved = wiz._save_product(product_vals, chatter_msg=chatter_msg)
+        self.assertEqual(saved, product)
+
+        # 3rd import - reimport initial catalogue - still only 1 product changed
+        catalogue = self.parsed_catalog
+        prepared_vals = []
+        for parsed_product in catalogue["products"]:
+            vals = wiz._prepare_product(
+                parsed_product,
+                seller=seller,
+                company_id=company_id,
+                chatter_msg=chatter_msg,
+            )
+            prepared_vals.append(vals)
+
+        seller_data = prepared_vals[1]["seller_ids"][0][2]
+        parsed_product = catalogue["products"][1]
+        expected = {
+            "active": True,
+            "name": parsed_product["name"],
+            "description": parsed_product["description"],
+            "recordset": product,
+            "seller_ids": [(1, product.seller_ids.id, seller_data)],
+        }
+        self.assertEqual(prepared_vals, [{}, expected, {}])
+
+        # Save
+        saved = wiz._save_product(prepared_vals[1], chatter_msg=chatter_msg)
+        self.assertEqual(saved, product)
 
     def test_import_button(self):
         form = self.wiz_form

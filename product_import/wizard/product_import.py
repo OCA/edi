@@ -194,7 +194,7 @@ class ProductImport(models.TransientModel):
         else:
             currency = (import_company or self.env.company).currency_id
 
-        product_vals = {
+        imported_product = {
             "active": parsed_product.get("active", True),
             "default_code": parsed_product["code"],
             "barcode": parsed_product["barcode"],
@@ -205,6 +205,19 @@ class ProductImport(models.TransientModel):
             "uom_po_id": uom.id,
             "company_id": product_company_id,
         }
+        if product:
+            product_vals = {}
+            # Update only values which have changed
+            for fld in imported_product:
+                current_val = product[fld]
+                if fld.endswith("_id"):
+                    current_val = current_val.id
+                if imported_product[fld] != current_val:
+                    product_vals[fld] = imported_product[fld]
+        else:
+            product_vals = imported_product
+
+        # product.supplierinfo
         seller_info = {
             "name": seller and seller.id or False,
             "product_code": parsed_product["product_code"],
@@ -214,10 +227,11 @@ class ProductImport(models.TransientModel):
             "company_id": import_company.id,
             "delay": parsed_product.get("sale_delay", 0),
         }
-        product_vals["seller_ids"] = self._prepare_supplierinfo(seller_info, product)
-        if product:
+        seller_ids = self._prepare_supplierinfo(seller_info, product)
+        if seller_ids:
+            product_vals["seller_ids"] = seller_ids
+        if product_vals and product:
             product_vals["recordset"] = product
-
         return product_vals
 
     @api.model
