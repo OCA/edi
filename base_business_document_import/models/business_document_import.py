@@ -1117,7 +1117,7 @@ class BusinessDocumentImport(models.AbstractModel):
         """
         dpo = self.env["decimal.precision"]
         if qty_precision is None:
-            qty_precision = dpo.precision_get("Product Unit of Measure")
+            qty_precision = dpo.precision_get("Product Unit")
         if price_precision is None:
             price_precision = dpo.precision_get("Product Price")
         existing_lines_dict = {}
