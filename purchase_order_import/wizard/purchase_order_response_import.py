@@ -274,9 +274,7 @@ class PurchaseOrderResponseImport(models.TransientModel):
 
     @api.model
     def _process_conditional(self, purchase_order, parsed_order_document):
-        precision = self.env["decimal.precision"].precision_get(
-            "Product Unit of Measure"
-        )
+        precision = self.env["decimal.precision"].precision_get("Product Unit")
         chatter = parsed_order_document["chatter_msg"] = (
             parsed_order_document["chatter_msg"] or []
         )
