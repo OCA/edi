@@ -711,9 +711,7 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv[entry] = parsed_inv["currency_rec"].round(parsed_inv[entry])
         prec_price = self.env["decimal.precision"].precision_get("Product Price")
         prec_disc = self.env["decimal.precision"].precision_get("Discount")
-        prec_qty = self.env["decimal.precision"].precision_get(
-            "Product Unit of Measure"
-        )
+        prec_qty = self.env["decimal.precision"].precision_get("Product Unit")
         for line in parsed_inv.get("lines", []):
             line["qty"] = float_round(line["qty"], precision_digits=prec_qty)
             line["price_unit"] = float_round(
