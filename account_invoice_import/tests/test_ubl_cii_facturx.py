@@ -51,26 +51,103 @@ class TestFacturx(TransactionCase):
             ],
             limit=1,
         )
+        taxes_to_create = [
+            # (rate, categ),
+            (20, "S"),
+            (10, "S"),
+            (5.5, "S"),
+            (2.1, "S"),
+            (0, "K"),
+            (0, "E"),
+        ]
+        for rate, categ in taxes_to_create:
+            tax = cls.env["account.tax"].search(
+                [
+                    ("company_id", "=", cls.company.id),
+                    ("type_tax_use", "=", "purchase"),
+                    ("amount_type", "=", "percent"),
+                    ("amount", ">", rate - 0.01),
+                    ("amount", "<", rate + 0.01),
+                    ("unece_type_code", "=", "VAT"),
+                    ("unece_categ_code", "=", categ),
+                ],
+                limit=1,
+            )
+            if not tax:
+                cls.env["account.tax"].create(
+                    {
+                        "company_id": cls.company.id,
+                        "name": f"TVA {rate}% ({categ})",
+                        "type_tax_use": "purchase",
+                        "amount_type": "percent",
+                        "amount": rate,
+                        "unece_type_id": cls.env.ref(
+                            "account_tax_unece.tax_type_vat"
+                        ).id,
+                        "unece_categ_id": cls.env.ref(
+                            f"account_tax_unece.tax_categ_{categ.lower()}"
+                        ).id,
+                    }
+                )
         cls.purchase_tax = cls.env["account.tax"].search(
             [
                 ("company_id", "=", cls.company.id),
                 ("type_tax_use", "=", "purchase"),
                 ("amount_type", "=", "percent"),
-                ("amount", ">", 5),
+                ("amount", ">", 14),
+                ("unece_type_code", "=", "VAT"),
+                ("unece_categ_code", "=", "S"),
             ],
             limit=1,
         )
+
+        fr_country_id = cls.env.ref("base.fr").id
         cls.jolie_boutique_partner = cls.env["res.partner"].create(
             {
                 "name": "Ma jolie boutique",
                 "is_company": True,
-                "country_id": cls.env.ref("base.fr").id,
+                "country_id": fr_country_id,
                 "vat": "FR11999999998",
                 "invoice_import_shrink_lines": "single",
                 "invoice_import_account_id": cls.expense_account.id,
                 "invoice_import_tax_ids": [Command.set(cls.purchase_tax.ids)],
             }
         )
+        free_vat = "FR60421938861"
+        cls.free = cls.env["res.partner"].search([("vat", "=", free_vat)], limit=1)
+        if not cls.free:
+            cls.free = cls.env["res.partner"].create(
+                {
+                    "name": "FREE",
+                    "is_company": True,
+                    "country_id": fr_country_id,
+                    "vat": free_vat,
+                }
+            )
+        ovh_vat = "FR22424761419"
+        cls.ovh = cls.env["res.partner"].search([("vat", "=", ovh_vat)], limit=1)
+        if not cls.ovh:
+            cls.ovh = cls.env["res.partner"].create(
+                {
+                    "name": "OVH",
+                    "is_company": True,
+                    "country_id": fr_country_id,
+                    "vat": ovh_vat,
+                }
+            )
+        afnor_vendor_vat = "FR88100000009"
+        cls.afnor_vendor = cls.env["res.partner"].search(
+            [("vat", "=", afnor_vendor_vat)], limit=1
+        )
+        if not cls.afnor_vendor:
+            cls.afnor_vendor = cls.env["res.partner"].create(
+                {
+                    "name": "VENDOR AFNOR SAMPLE",
+                    "is_company": True,
+                    "country_id": fr_country_id,
+                    "vat": afnor_vendor_vat,
+                }
+            )
 
     # avoid warning logs pypdf._reader: incorrect startxref pointer(1)
     @mute_logger("pypdf._reader")
@@ -97,19 +174,38 @@ class TestFacturx(TransactionCase):
                 "invoice_date": "2017-11-13",
                 "partner_id": self.jolie_boutique_partner.id,
             },
+            "facture_ubl-free_akretion.xml": {
+                "invoice_number": "NUMERO-FACTURE-TEST",
+                "amount_untaxed": 37.49,
+                "amount_total": 44.98,
+                "invoice_date": "2026-10-05",
+                "partner_id": self.free.id,
+            },
+            "facture_ubl-ovh_akretion.xml": {
+                "invoice_number": "FR_NUM_FAC_TEST",
+                "amount_untaxed": 7.69,
+                "amount_total": 9.23,
+                "invoice_date": "2026-10-05",
+                "partner_id": self.ovh.id,
+            },
+            "facture_ubl-afnor_sample_extended.xml": {
+                "invoice_number": "F202500001",
+                "amount_untaxed": 110.00,
+                "amount_total": 118.70,
+                "invoice_date": "2025-02-01",
+                "partner_id": self.afnor_vendor.id,
+            },
         }
         amo = self.env["account.move"]
         cur = self.env.ref("base.EUR")
         for inv_file, res_dict in sample_files.items():
-            f = file_open(
-                "account_invoice_import_facturx/tests/files/" + inv_file, "rb"
-            )
-            pdf_file = f.read()
+            f = file_open("account_invoice_import/tests/test_files/" + inv_file, "rb")
+            inv_bin = f.read()
             f.close()
             wiz = self.env["account.invoice.import"].create(
                 {
                     "invoice_attachment_ids": [
-                        Command.create({"raw": pdf_file, "name": inv_file})
+                        Command.create({"raw": inv_bin, "name": inv_file})
                     ],
                     "company_id": self.company.id,
                     "debug_disable_company_check": True,
