@@ -139,6 +139,7 @@ class TestInvoiceImport(TransactionCase):
         parsed_inv = {
             "BT-1": "FAC2017/002",
             "BT-3": "380",
+            "BT-5": self.company.currency_id.name,
             "BT-109": 100.0,
             "BT-112": 101.0,
             "BT-2": "2017-08-16",
@@ -188,6 +189,7 @@ class TestInvoiceImport(TransactionCase):
         parsed_inv = {
             "BT-3": "380",
             "BT-1": "TESTAIIGLOBAL",
+            "BT-5": self.company.currency_id.name,
             "BT-109": 100.05,
             "BT-112": 101.0,
             "BT-2": "2023-04-08",
@@ -222,6 +224,7 @@ class TestInvoiceImport(TransactionCase):
     def test_import_out_invoice(self):
         parsed_inv = {
             "BT-2": "2017-08-16",
+            "BT-5": self.company.currency_id.name,
             "BG-7": {"name": "Deco Addict"},
             "BG-25": [
                 {
@@ -455,6 +458,7 @@ Nina
         )
         parsed_inv = {
             "BT-2": "2017-08-16",
+            "BT-5": self.company.currency_id.name,
             "BT-109": 100.0,
             "BT-112": 100.0,
             "BG-4": {"vat_identifier": partner.vat},
