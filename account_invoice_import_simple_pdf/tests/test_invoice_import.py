@@ -448,6 +448,32 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                     )
                 )
 
+    def test_amount_parsing_custom_regexp(self):
+        # a custom regexp may match amounts with fewer decimals than the currency
+        amount_test = [
+            ("Total 302.60 USD", r"\d+(?:\.\d+)?(?= USD)", "dot", "USD", 302.6),
+            ("Total 302.6 USD", r"\d+(?:\.\d+)?(?= USD)", "dot", "USD", 302.6),
+            ("Total 302 USD", r"\d+(?:\.\d+)?(?= USD)", "dot", "USD", 302.0),
+            ("Total 302,6 EUR", r"\d+(?:,\d+)?(?= EUR)", "comma", "EUR", 302.6),
+        ]
+        for raw_text, pattern, decimal_separator, currency, result in amount_test:
+            self.partner.write(
+                {
+                    "simple_pdf_decimal_separator": decimal_separator,
+                    "simple_pdf_thousand_separator": "none",
+                    "simple_pdf_currency_id": self.env.ref(f"base.{currency}").id,
+                }
+            )
+            self.amount_field.regexp = pattern
+            parsed_inv = {"failed_fields": []}
+            self.amount_field._get_amount_total(
+                parsed_inv,
+                raw_text,
+                self.partner._simple_pdf_partner_config(),
+                self.test_info,
+            )
+            self.assertEqual(parsed_inv.get("amount_total"), result, raw_text)
+
     @freeze_time("2021-02-20")
     def test_invoice_number_parsing(self):
         inv_num_test = {
