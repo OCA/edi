@@ -32,6 +32,34 @@
                     string="Create or Update Partner"
                 />
             </field>
+            <xpath
+                expr="//field[@name='invoice_line_ids']/list/field[@name='sequence']"
+                position="after"
+            >
+                <field
+                    name="import_invoice_line_identifier"
+                    string="Ext. ID"
+                    column_invisible="parent.move_type not in ('in_invoice', 'in_refund')"
+                    optional="show"
+                />
+            </xpath>
+            <xpath
+                expr="//field[@name='invoice_line_ids']/form/sheet//field[@name='product_id']"
+                position="before"
+            >
+                <field
+                    name="import_invoice_line_identifier"
+                    string="External ID"
+                    invisible="display_type != 'product' or parent.move_type not in ('in_invoice', 'in_refund')"
+                />
+            </xpath>
+            <group name="accounting_info_group" position="inside">
+                <field
+                    name="import_check_total"
+                    invisible="not imported or state != 'draft' or move_type not in ('in_invoice', 'in_refund')"
+                />
+                <field name="imported" invisible="1" />
+            </group>
         </field>
     </record>
 </odoo>

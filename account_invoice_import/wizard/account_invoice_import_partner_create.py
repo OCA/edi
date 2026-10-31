@@ -4,7 +4,7 @@
 
 from markupsafe import Markup
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -45,12 +45,24 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
             res["import_partner_data"] = import_partner_data
             if import_partner_data.get("vat"):
                 res["partner_vat"] = import_partner_data["vat"]
+                # Partner may have been created in the meantime
+                existing_partner = self.env["res.partner"].search(
+                    [
+                        ("company_id", "in", (False, move.company_id.id)),
+                        ("vat", "=", import_partner_data["vat"]),
+                    ],
+                    limit=1,
+                )
+                if existing_partner:
+                    update_partner_id = existing_partner.commercial_partner_id.id
+                    res.update(
+                        {
+                            "update_partner_id": update_partner_id,
+                            "create_or_update": "update",
+                        }
+                    )
             if import_partner_data.get("name"):
                 res["partner_name"] = import_partner_data["name"]
-            # Partner may have been created in the meantime
-            res["update_partner_id"] = self.env[
-                "business.document.import"
-            ]._match_partner(import_partner_data, [], raise_exception=False)
         return res
 
     def create_partner(self):
@@ -64,7 +76,7 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
         ctx["default_invoice_import_move_id"] = self.move_id.id
         action = {
             "type": "ir.actions.act_window",
-            "name": _("Create New Partner"),
+            "name": self.env._("Create New Partner"),
             "res_model": "res.partner",
             "view_mode": "form",
             "context": ctx,
@@ -75,14 +87,14 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
         self.ensure_one()
         assert self.create_or_update == "update"
         if not self.update_partner_id:
-            raise UserError(_("You must select the partner to update."))
+            raise UserError(self.env._("You must select the partner to update."))
         self.update_partner_id._invoice_import_update_partner(self.import_partner_data)
         self.move_id._invoice_import_set_partner_and_update_lines(
             self.update_partner_id
         )
         self.move_id.message_post(
             body=Markup(
-                _(
+                self.env._(
                     "Partner <a href=# data-oe-model=res.partner "
                     "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
                     "set via the wizard <em>Create or Update Partner</em>. "

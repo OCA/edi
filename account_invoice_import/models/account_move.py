@@ -3,7 +3,9 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import Command, api, fields, models
+from odoo.exceptions import UserError
 from odoo.tools import is_html_empty
+from odoo.tools.misc import format_amount
 
 
 class AccountMove(models.Model):
@@ -12,6 +14,16 @@ class AccountMove(models.Model):
     import_warnings = fields.Html(readonly=True, copy=False)
     show_import_warnings = fields.Boolean(compute="_compute_show_import_warnings")
     import_partner_data = fields.Json()
+    # the difference with the module account_invoice_check_total
+    # from OCA/account-invoicing is that this one is only used for imports
+    # It don't have to be set when manually encoding an invoice
+    # It is not readonly because, if there was an error in parsing,
+    # the user needs to be able to fix the amount. Only used of vendor bills/refunds
+    import_check_total = fields.Monetary(
+        string="Import Verification Total",
+        copy=False,
+    )
+    imported = fields.Boolean(readonly=True, copy=False)
 
     @api.depends("state", "import_warnings")
     def _compute_show_import_warnings(self):
@@ -21,8 +33,50 @@ class AccountMove(models.Model):
                 show = True
             move.show_import_warnings = show
 
+    def _post(self, soft=True):
+        for move in self:
+            if (
+                move.imported
+                and move.is_purchase_document()
+                and move.currency_id.compare_amounts(
+                    move.import_check_total, move.amount_total
+                )
+            ):
+                raise UserError(
+                    self.env._(
+                        "The total amount of the vendor bill/refund in Odoo "
+                        "(%(amount_total)s) is different from the total amount "
+                        "read on the imported invoice (%(import_check_total)s).",
+                        amount_total=format_amount(
+                            self.env, move.amount_total, move.currency_id
+                        ),
+                        import_check_total=format_amount(
+                            self.env, move.import_check_total, move.currency_id
+                        ),
+                    )
+                )
+        return super()._post(soft=soft)
+
     def _invoice_import_set_partner_and_update_lines(self, partner):
         self.ensure_one()
+        if self.is_purchase_document() and self.ref:
+            existing_inv = self.search(
+                [
+                    ("company_id", "=", self.company_id.id),
+                    ("commercial_partner_id", "=", partner.commercial_partner_id.id),
+                    ("ref", "=ilike", self.ref),
+                    ("move_type", "=", self.move_type),
+                ],
+                limit=1,
+            )
+            if existing_inv:
+                raise UserError(
+                    self.env._(
+                        "The invoice on which you are trying to update the partner "
+                        "already exists: %s.",
+                        existing_inv.display_name,
+                    )
+                )
         initial_fp = self.fiscal_position_id
         fp = partner.property_account_position_id
         self.write({"partner_id": partner.id})

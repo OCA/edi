@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Import",
-    "version": "18.0.1.4.1",
+    "version": "18.0.2.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Import supplier invoices/refunds as PDF or XML files",
@@ -14,8 +14,16 @@
     "depends": [
         "account",
         "base_iban",
-        "base_business_document_import",
+        "account_tax_unece",
+        "account_payment_unece",
+        "uom_unece",
     ],
+    # account_invoice_import_ubl and account_invoice_import_facturx
+    # should be uninstalled now. But, in order to ease the
+    # transition, we don't declare them in "excludes", to avoid
+    # an error on the first upgrade
+    # "excludes": ["account_invoice_import_ubl", "account_invoice_import_facturx"],
+    "external_dependencies": {"python": ["factur-x>=7.9"]},
     "data": [
         "security/ir.model.access.csv",
         "views/res_config_settings.xml",
