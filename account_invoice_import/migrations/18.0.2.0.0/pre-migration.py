@@ -11,4 +11,5 @@ _column_renames = {
 
 @openupgrade.migrate()
 def migrate(env, version):
-    openupgrade.rename_columns(env.cr, _column_renames)
+    if openupgrade.column_exists(env.cr, "res_partner", "invoice_import_single_line"):
+        openupgrade.rename_columns(env.cr, _column_renames)
