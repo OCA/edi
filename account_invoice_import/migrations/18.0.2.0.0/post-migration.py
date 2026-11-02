@@ -12,6 +12,10 @@ from openupgradelib import openupgrade
 
 @openupgrade.migrate()
 def migrate(env, version):
+    if not openupgrade.column_exists(
+        env.cr, "res_partner", "invoice_import_single_line"
+    ):
+        return
     openupgrade.logged_query(
         env.cr,
         f"""
