@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="base_import_pdf_template_line_view_tree" model="ir.ui.view">
+        <field name="name">base.import.pdf.template.line.tree</field>
+        <field name="model">base.import.pdf.template.line</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle" />
+                <field name="related_model" />
+                <field name="field_id" />
+                <field name="search_field_id" />
+                <field name="value_type" />
+            </list>
+        </field>
+    </record>
+    <record id="base_import_pdf_template_line_view_form" model="ir.ui.view">
+        <field name="name">base.import.pdf.template.line.form</field>
+        <field name="model">base.import.pdf.template.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group name="main_group">
+                        <field
+                            name="related_model"
+                            widget="radio"
+                            options="{'horizontal': True}"
+                        />
+                        <field
+                            name="field_id"
+                            invisible="not related_model"
+                            options="{'no_create': True}"
+                        />
+                        <field
+                            name="pattern"
+                            invisible="value_type == 'fixed'"
+                            required="value_type != 'fixed'"
+                        />
+                        <field
+                            name="value_type"
+                            widget="radio"
+                            options="{'horizontal': True}"
+                            invisible="not field_id"
+                        />
+                        <field
+                            name="search_field_id"
+                            invisible="not field_id or value_type == 'fixed'"
+                        />
+                        <field
+                            name="search_subfield_id"
+                            invisible="search_field_ttype != 'one2many'"
+                        />
+                        <field
+                            name="default_value"
+                            string="Fixed value"
+                            invisible="value_type == 'fixed' or not field_relation"
+                        />
+                        <field
+                            name="log_distinct_value"
+                            invisible="not field_id or value_type == 'fixed'"
+                        />
+                        <!-- Fixed value !-->
+                        <field
+                            name="fixed_value_char"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'char'"
+                        />
+                        <field
+                            name="fixed_value_date"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'date'"
+                        />
+                        <field
+                            name="fixed_value_datetime"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'datetime'"
+                        />
+                        <field
+                            name="fixed_value_float"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'float'"
+                        />
+                        <field
+                            name="fixed_value_html"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'html'"
+                        />
+                        <field
+                            name="fixed_value_integer"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'integer'"
+                        />
+                        <field
+                            name="fixed_value_selection"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype != 'selection'"
+                        />
+                        <field
+                            name="fixed_value_text"
+                            string="Fixed value"
+                            invisible="value_type != 'fixed' or field_ttype not in ('text', 'json')"
+                        />
+                        <field
+                            name="fixed_value"
+                            invisible="value_type != 'fixed' or not field_relation"
+                        />
+                        <!-- Fixed value !-->
+                        <field
+                            name="date_time_format"
+                            invisible="field_ttype not in ('date', 'datetime')"
+                        />
+                        <field
+                            name="decimal_separator"
+                            invisible="field_ttype not in ('float', 'monetary')"
+                        />
+                        <field
+                            name="thousand_separator"
+                            invisible="field_ttype not in ('float', 'monetary')"
+                        />
+                    </group>
+                    <div
+                        class="row"
+                        invisible="field_ttype not in ('date', 'datetime')"
+                    >
+                        <div class="col-md-8 row">
+                            <div class="col-12">
+                                <div
+                                    class="o_horizontal_separator mb-3 mt-4 text-uppercase fw-bolder small"
+                                >Legends for supported Date and Time Formats</div>
+                            </div>
+                            <div class="col-sm">
+                                <div>%a - Abbreviated day of the week.</div>
+                                <div>%A - Full day of the week.</div>
+                                <div>%b - Abbreviated month name.</div>
+                                <div>%B - Full month name."</div>
+                                <div>%d - Day of the month [01,31]."</div>
+                                <div>%j - Day of the year [001,366]."</div>
+                                <div>%H - Hour (24-hour clock) [00,23]."</div>
+                                <div>%I - Hour (12-hour clock) [01,12]."</div>
+                            </div>
+                            <div class="col-sm">
+                                <div>%M - Minute [00,59]."</div>
+                                <div>%p - Equivalent of either AM or PM."</div>
+                                <div>%S - Seconds [00,61]."</div>
+                                <div>%w - Day of the week number [0(Sunday),6]."</div>
+                                <div>%y - Year without century [00,99]."</div>
+                                <div>%Y - Year with century."</div>
+                                <div>%m - Month number [01,12]."</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-info">
+                            <div
+                                class="o_horizontal_separator mb-3 mt-4 text-uppercase fw-bolder small"
+                            >Examples</div>
+                            <div>1. %b, %B         ==&gt; Dec, December</div>
+                            <div>2. %a ,%A         ==&gt; Fri, Friday</div>
+                            <div>3. %y, %Y         ==&gt; 08, 2008</div>
+                            <div>4. %d, %m         ==&gt; 05, 12</div>
+                            <div>5. %H:%M:%S      ==&gt; 18:25:20</div>
+                            <div>6. %I:%M:%S %p  ==&gt; 06:25:20 PM</div>
+                            <div>7. %j              ==&gt; 340</div>
+                            <div>8. %S              ==&gt; 20</div>
+                            <div
+                            >9. %w              ==&gt; 5 ( Friday is the 6th day)</div>
+                        </div>
+                    </div>
+                    <notebook>
+                        <page
+                            string="Mapped"
+                            name="page_mapped_ids"
+                            invisible="value_type == 'fixed' or (not field_relation and field_ttype != 'json')"
+                        >
+                            <field name="mapped_ids" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="origin" />
+                                    <field
+                                        name="value"
+                                        column_invisible="parent.field_ttype == 'json'"
+                                    />
+                                    <field
+                                        name="json_value"
+                                        string="Value"
+                                        column_invisible="parent.field_ttype != 'json'"
+                                    />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
