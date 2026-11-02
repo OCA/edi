@@ -9,6 +9,14 @@ class BusinessDocumentImport(models.AbstractModel):
 
     @api.model
     def _hook_match_partner(self, partner_dict, chatter_msg, domain, order):
+        # OVERRIDE: if a partner is retrieved by ID number, return it early
+        pargs = (partner_dict, chatter_msg, domain, order)
+        partner = self._hook_match_partner_by_id_number(*pargs)
+        return partner or super()._hook_match_partner(*pargs)
+
+    def _hook_match_partner_by_id_number(
+        self, partner_dict, chatter_msg, domain, order
+    ):
         # Loop on all the partner_dict["id_number"] and search for a partner
         # having one.  If the schemeID matches an existing Id Number Category,
         # then a match is required.
@@ -65,4 +73,4 @@ class BusinessDocumentImport(models.AbstractModel):
                     chatter_msg=chatter_msg,
                     raise_exception=True,
                 )
-        return super()._hook_match_partner(partner_dict, chatter_msg, domain, order)
+        return None
