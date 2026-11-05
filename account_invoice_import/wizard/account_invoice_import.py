@@ -696,7 +696,8 @@ class AccountInvoiceImport(models.TransientModel):
             lvals["name"] = import_config["label"]
         else:
             name_list = [line_dict.get("BT-153"), line_dict.get("BT-154")]
-            lvals["name"] = "\n".join([x for x in name_list if x])
+            # set() is useful when BT-153 = BT-154 (seen on real invoices !)
+            lvals["name"] = "\n".join([x for x in set(name_list) if x])
         if (
             import_config["start_end_dates_installed"]
             and line_dict.get("BT-134")
