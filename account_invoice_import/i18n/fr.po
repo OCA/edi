@@ -526,6 +526,18 @@ msgid "Notes extracted from the electronic invoice:"
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid ""
+"No total amount could be extracted from the file: the invoice is created "
+"empty and is not flagged as imported, so its total amount will not be "
+"checked at posting."
+msgstr ""
+"Aucun montant total n'a pu être extrait du fichier : la facture est créée "
+"vide et n'est pas marquée comme importée, son montant total ne sera donc "
+"pas contrôlé à la validation."
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_needaction_counter
 msgid "Number of Actions"
 msgstr "Nombre d'actions"
