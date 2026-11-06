@@ -363,6 +363,10 @@ Nina
         self.assertFalse(move.partner_id)
         self.assertTrue(self.company.currency_id.is_zero(move.amount_total))
         self.assertFalse(move.invoice_date)
+        # no total amount could be extracted from the file, so the invoice is
+        # not flagged as imported and its total won't be checked at posting
+        self.assertFalse(move.imported)
+        self.assertFalse(move.import_check_total)
 
     def test_email_partner_no_invoice_config(self):
         sender_email = self.partner_with_email.email
