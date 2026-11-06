@@ -4,6 +4,7 @@ factur-x
 factur-x>=7.9
 ovh
 phonenumbers
+pydifact
 pymupdf
 pypdf
 pypdf>=3.1.0
