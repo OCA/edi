@@ -6,49 +6,51 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2026-11-08 22:46+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid "%d new order line(s) created: %s"
-msgstr ""
+msgstr "%d nuove righe d'ordine create: %s"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid "%d order line(s) are not in the imported quotation: %s"
-msgstr ""
+msgstr "%d righe d'ordine non sono presenti nel preventivo importato: %s"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "%s items should be delivered into a next delivery."
-msgstr ""
+msgstr "%s articoli dovrebbero essere consegnati in una consegna successiva."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__create_uid
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creato da"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__create_date
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creato il"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,help:purchase_order_import.field_purchase_order__supplier_ack_received_on
@@ -56,24 +58,26 @@ msgid ""
 "Date and time of the acknowledgement by the supplier. This field is filled "
 "by Odoo when processing a OrderResponse document."
 msgstr ""
+"Data e ora di presa visione da parte del fornitore. Questo campo viene "
+"compilato da Odoo durante l'elaborazione di un documento OrderResponse."
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__display_name
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nome visualizzato"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__quote_filename
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__filename
 msgid "Filename"
-msgstr ""
+msgstr "Nome file"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__id
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
@@ -82,6 +86,8 @@ msgid ""
 "If it is a PDF file, Odoo will try to find an XML file in the attachments of "
 "the PDF file and then use this XML file."
 msgstr ""
+"Se si tratta di un file PDF, Odoo cercherà un file XML negli allegati del "
+"file PDF e utilizzerà questo file XML."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
@@ -91,72 +97,75 @@ msgid ""
 "this XML format is installed.\n"
 "                                For the"
 msgstr ""
+"Se si tratta di un file XML, Odoo lo analizzerà se è installato il modulo "
+"che aggiunge il supporto per questo formato XML.\n"
+"                                Per il"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "Import OrderResponse File from Supplier"
-msgstr ""
+msgstr "Importa file OrderResponse dal fornitore"
 
 #. module: purchase_order_import
 #: model:ir.actions.act_window,name:purchase_order_import.purchase_order_import_action
 msgid "Import Purchase Quotation"
-msgstr ""
+msgstr "Importa preventivo d'acquisto"
 
 #. module: purchase_order_import
 #: model:ir.actions.act_window,name:purchase_order_import.purchase_order_response_import_action
 msgid "Import Purchase Response"
-msgstr ""
+msgstr "Importa risposta d'acquisto"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_form
 msgid "Import Quotation File"
-msgstr ""
+msgstr "Importa file preventivo"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 msgid "Import Quotations Files from Suppliers"
-msgstr ""
+msgstr "Importa file preventivi dai fornitori"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "Import document"
-msgstr ""
+msgstr "Importa documento"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__write_uid
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Ultimo aggiornamento di"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__write_date
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Ultimo aggiornamento il"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "Missing document file"
-msgstr ""
+msgstr "File documento mancante"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "Missing document filename"
-msgstr ""
+msgstr "Nome file documento mancante"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid "Missing quote file"
-msgstr ""
+msgstr "File preventivo mancante"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid "Missing quote filename"
-msgstr ""
+msgstr "Nome file preventivo mancante"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -166,71 +175,74 @@ msgid ""
 "Move IDs: %s\n"
 "Line Info: %s"
 msgstr ""
+"Più di un movimento trovato per la riga OdA.\n"
+"ID movimenti: %s\n"
+"Informazioni riga: %s"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "No backorder planned by the supplier."
-msgstr ""
+msgstr "Nessun ordine residuo pianificato dal fornitore."
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "No purchase order found for name %s."
-msgstr ""
+msgstr "Nessun ordine di acquisto trovato per il nome %s."
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "PO cancelled by the supplier."
-msgstr ""
+msgstr "OdA annullato dal fornitore."
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "PO confirmed by the supplier."
-msgstr ""
+msgstr "OdA confermato dal fornitore."
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "PO confirmed with amendment by the supplier."
-msgstr ""
+msgstr "OdA confermato con modifiche dal fornitore."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "Possible line amendments:"
-msgstr ""
+msgstr "Possibili modifiche alle righe:"
 
 #. module: purchase_order_import
 #: model:ir.model.fields.selection,name:purchase_order_import.selection__purchase_order_import__update_option__price
 msgid "Price"
-msgstr ""
+msgstr "Prezzo"
 
 #. module: purchase_order_import
 #: model:ir.model.fields.selection,name:purchase_order_import.selection__purchase_order_import__update_option__all
 msgid "Price and Quantity"
-msgstr ""
+msgstr "Prezzo e quantità"
 
 #. module: purchase_order_import
 #: model:ir.model,name:purchase_order_import.model_purchase_order
 msgid "Purchase Order"
-msgstr ""
+msgstr "Ordine di acquisto"
 
 #. module: purchase_order_import
 #: model:ir.model,name:purchase_order_import.model_purchase_order_import
 msgid "Purchase Order Import from Files"
-msgstr ""
+msgstr "Importazione ordine di acquisto da file"
 
 #. module: purchase_order_import
 #: model:ir.model,name:purchase_order_import.model_purchase_order_response_import
 msgid "Purchase Order Response Import from Files"
-msgstr ""
+msgstr "Importazione risposta ordine di acquisto da file"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__purchase_id
 msgid "RFQ to Update"
-msgstr ""
+msgstr "RdP da aggiornare"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -239,11 +251,13 @@ msgid ""
 "Some operations have already started! Please validate or reset operations on "
 "picking %s to ensure delivery slip to be computed."
 msgstr ""
+"Alcune operazioni sono già iniziate! Convalidare o reimpostare le operazioni "
+"sul prelievo %s per garantire il calcolo della bolla di consegna."
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order__supplier_ack_received_on
 msgid "Supplier Acknowledgement Date"
-msgstr ""
+msgstr "Data di presa visione del fornitore"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -252,6 +266,8 @@ msgid ""
 "The currency of the imported OrderResponse (%s) is different from the "
 "currency of the purchase order (%s)."
 msgstr ""
+"La valuta del documento OrderResponse importato (%s) è diversa dalla valuta "
+"dell'ordine di acquisto (%s)."
 
 #. module: purchase_order_import
 #. odoo-python
@@ -260,6 +276,7 @@ msgid ""
 "The currency of the imported quotation (%s) is different from the currency "
 "of the RFQ (%s)"
 msgstr ""
+"La valuta del preventivo importato (%s) è diversa dalla valuta della RdP (%s)"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -268,6 +285,8 @@ msgid ""
 "The incoterm has been updated from %s to %s upon import of the quotation "
 "file '%s'"
 msgstr ""
+"L'incoterm è stato aggiornato da %s a %s all'importazione del file di "
+"preventivo '%s'"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
@@ -278,11 +297,18 @@ msgid ""
 "                                Otherwise, the stock move for the missing "
 "quantities is cancelled."
 msgstr ""
+"La riga d'ordine è accettata con modifiche: l'operazione di prelievo viene "
+"modificata\n"
+"                                (divisa nel movimento di magazzino). Se "
+"viene fornita una quantità per l'ordine residuo, viene creato un ordine "
+"residuo.\n"
+"                                Altrimenti, il movimento di magazzino per le "
+"quantità mancanti viene annullato."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "The order line is refused: The picking operation is cancelled"
-msgstr ""
+msgstr "La riga d'ordine è rifiutata: l'operazione di prelievo viene annullata"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -291,6 +317,8 @@ msgid ""
 "The quantity has been updated on the RFQ line with product '%s' from %s to "
 "%s %s."
 msgstr ""
+"La quantità è stata aggiornata sulla riga della RdP con il prodotto '%s' da "
+"%s a %s %s."
 
 #. module: purchase_order_import
 #. odoo-python
@@ -299,6 +327,8 @@ msgid ""
 "The supplier of the imported OrderResponse (%s) is different from the "
 "supplier of the purchase order (%s)."
 msgstr ""
+"Il fornitore del documento OrderResponse importato (%s) è diverso dal "
+"fornitore dell'ordine di acquisto (%s)."
 
 #. module: purchase_order_import
 #. odoo-python
@@ -307,6 +337,8 @@ msgid ""
 "The supplier of the imported quotation (%s) is different from the supplier "
 "of the RFQ (%s)."
 msgstr ""
+"Il fornitore del preventivo importato (%s) è diverso dal fornitore della RdP "
+"(%s)."
 
 #. module: purchase_order_import
 #. odoo-python
@@ -315,23 +347,25 @@ msgid ""
 "The unit price has been updated on the RFQ line with product '%s' from %s to "
 "%s %s."
 msgstr ""
+"Il prezzo unitario è stato aggiornato sulla riga della RdP con il prodotto "
+"'%s' da %s a %s %s."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 msgid "Then, Odoo will compare the imported quotation and the current RFQ:"
-msgstr ""
+msgstr "Quindi, Odoo confronterà il preventivo importato e la RdP attuale:"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "Then, Odoo will process the related purchase order as follows:"
-msgstr ""
+msgstr "Quindi, Odoo elaborerà il relativo ordine di acquisto come segue:"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "There are no embedded XML file in this PDF file."
-msgstr ""
+msgstr "Non ci sono file XML incorporati in questo file PDF."
 
 #. module: purchase_order_import
 #. odoo-python
@@ -339,13 +373,15 @@ msgstr ""
 msgid ""
 "This RFQ has been updated automatically via the import of quotation file %s"
 msgstr ""
+"Questa RdP è stata aggiornata automaticamente tramite l'importazione del "
+"file di preventivo %s"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "This XML file is not XML-compliant"
-msgstr ""
+msgstr "Questo file XML non è conforme allo standard XML"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -355,6 +391,8 @@ msgid ""
 "This file '%s' is not recognised as XML nor PDF file. Please check the file "
 "and it's extension."
 msgstr ""
+"Il file '%s' non è riconosciuto come file XML né PDF. Controllare il file e "
+"la sua estensione."
 
 #. module: purchase_order_import
 #. odoo-python
@@ -363,12 +401,14 @@ msgid ""
 "This purchase order has been updated automatically via the import of "
 "OrderResponse file %s."
 msgstr ""
+"Questo ordine di acquisto è stato aggiornato automaticamente tramite "
+"l'importazione del file OrderResponse %s."
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid "This quotation doesn't have any line !"
-msgstr ""
+msgstr "Questo preventivo non ha alcuna riga!"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -377,6 +417,8 @@ msgid ""
 "This type of XML Order Document is not supported. Did you install the module "
 "to support this XML format?"
 msgstr ""
+"Questo tipo di documento d'ordine XML non è supportato. È stato installato "
+"il modulo per supportare questo formato XML?"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -385,6 +427,8 @@ msgid ""
 "This type of XML Order Response is not supported. Did you install the module "
 "to support this XML format?"
 msgstr ""
+"Questo tipo di risposta d'ordine XML non è supportato. È stato installato il "
+"modulo per supportare questo formato XML?"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -393,11 +437,13 @@ msgid ""
 "This type of XML quotation is not supported. Did you install the module to "
 "support this XML format?"
 msgstr ""
+"Questo tipo di preventivo XML non è supportato. È stato installato il modulo "
+"per supportare questo formato XML?"
 
 #. module: purchase_order_import
 #: model:ir.ui.menu,name:purchase_order_import.purchase_order_response_import_importer_menu
 msgid "UBL OrderResponse Importer"
-msgstr ""
+msgstr "Importatore OrderResponse UBL"
 
 #. module: purchase_order_import
 #. odoo-python
@@ -409,28 +455,33 @@ msgid ""
 " received: %s\n"
 "expected: %s\n"
 msgstr ""
+"Impossibile confermare con riserva l'ordine di acquisto. \n"
+"Gli ID riga nel documento analizzato differiscono dall'elenco previsto di ID "
+"riga d'ordine: \n"
+" ricevuti: %s\n"
+"previsti: %s\n"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "Universal Business Language"
-msgstr ""
+msgstr "Linguaggio commerciale universale"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_response_import.py:0
 msgid "Unknown status '%s'."
-msgstr ""
+msgstr "Stato sconosciuto '%s'."
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__update_option
 msgid "Update Option"
-msgstr ""
+msgstr "Opzione di aggiornamento"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
 msgid "Update RFQ"
-msgstr ""
+msgstr "Aggiorna RdP"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,help:purchase_order_import.field_purchase_order_import__quote_file
@@ -438,6 +489,8 @@ msgid ""
 "Upload a quotation file that you received from your supplier. Supported "
 "formats: XML and PDF (PDF with an embeded XML file)."
 msgstr ""
+"Caricare un file di preventivo ricevuto dal fornitore. Formati supportati: "
+"XML e PDF (PDF con un file XML incorporato)."
 
 #. module: purchase_order_import
 #: model:ir.model.fields,help:purchase_order_import.field_purchase_order_response_import__document
@@ -445,6 +498,8 @@ msgid ""
 "Upload an Order response file that you received from your supplier. "
 "Supported formats: XML and PDF (PDF with an embeded XML file)."
 msgstr ""
+"Caricare un file di risposta d'ordine ricevuto dal fornitore. Formati "
+"supportati: XML e PDF (PDF con un file XML incorporato)."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
@@ -452,6 +507,8 @@ msgid ""
 "Upload below the OrderResponse you received from your supplier.\n"
 "                            When you click on the import button:"
 msgstr ""
+"Caricare qui sotto il file OrderResponse ricevuto dal fornitore.\n"
+"                            Quando si fa clic sul pulsante di importazione:"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
@@ -460,22 +517,25 @@ msgid ""
 "as XML or PDF file.\n"
 "                            When you click on the Update RFQ button:"
 msgstr ""
+"Caricare qui sotto il preventivo ricevuto dal fornitore per questa RdP come "
+"file XML o PDF.\n"
+"                            Quando si fa clic sul pulsante Aggiorna RdP:"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_response_import__document
 msgid "XML or PDF Order response"
-msgstr ""
+msgstr "Risposta d'ordine XML o PDF"
 
 #. module: purchase_order_import
 #: model:ir.model.fields,field_description:purchase_order_import.field_purchase_order_import__quote_file
 msgid "XML or PDF Quotation"
-msgstr ""
+msgstr "Preventivo XML o PDF"
 
 #. module: purchase_order_import
 #. odoo-python
 #: code:addons/purchase_order_import/wizard/purchase_order_import.py:0
 msgid "You must select a quotation to update."
-msgstr ""
+msgstr "È necessario selezionare un preventivo da aggiornare."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
@@ -484,6 +544,9 @@ msgid ""
 "                                Odoo will update the unit prices (and also "
 "the quantities, depending on the chosen option)"
 msgstr ""
+"per le righe presenti sia nel preventivo importato che nella RdP,\n"
+"                                Odoo aggiornerà i prezzi unitari (e anche le "
+"quantità, a seconda dell'opzione scelta)"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
@@ -493,6 +556,10 @@ msgid ""
 "                                the unit prices (and also the quantities, "
 "depending on the chosen option)"
 msgstr ""
+"per le righe presenti sia nel preventivo importato che nella RdP, Odoo "
+"aggiornerà\n"
+"                                i prezzi unitari (e anche le quantità, a "
+"seconda dell'opzione scelta)"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
@@ -501,6 +568,9 @@ msgid ""
 "                                Odoo will put a warning message in the "
 "chatter (it won't delete them automatically)"
 msgstr ""
+"per le righe presenti solo nella RdP,\n"
+"                                Odoo inserirà un messaggio di avviso nel "
+"chatter (non le eliminerà automaticamente)"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
@@ -509,6 +579,8 @@ msgid ""
 "example),\n"
 "                                Odoo will add them to the RFQ"
 msgstr ""
+"per le righe presenti solo nel preventivo (spese di spedizione ad esempio),\n"
+"                                Odoo le aggiungerà alla RdP"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
@@ -517,6 +589,9 @@ msgid ""
 "                                you should install the module "
 "<em>order_response_import_ubl</em>."
 msgstr ""
+"formato (UBL),\n"
+"                                è necessario installare il modulo <em>"
+"order_response_import_ubl</em>."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_import_form
@@ -525,11 +600,14 @@ msgid ""
 "                                you should install the module "
 "<em>purchase_order_import_ubl</em>."
 msgstr ""
+"formato (UBL),\n"
+"                                è necessario installare il modulo <em>"
+"purchase_order_import_ubl</em>."
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "if the status code is Accepted: confirm the PO and create the picking"
-msgstr ""
+msgstr "se il codice di stato è Accettato: conferma l'OdA e crea il prelievo"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
@@ -539,11 +617,15 @@ msgid ""
 "                                update the picking operations according to "
 "the amendments specified into the document"
 msgstr ""
+"se il codice di stato è Accettato con riserva: conferma l'OdA, crea il "
+"prelievo e\n"
+"                                aggiorna le operazioni di prelievo in base "
+"alle modifiche specificate nel documento"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
 msgid "if the status code is Rejected: cancel the PO"
-msgstr ""
+msgstr "se il codice di stato è Rifiutato: annulla l'OdA"
 
 #. module: purchase_order_import
 #: model_terms:ir.ui.view,arch_db:purchase_order_import.purchase_order_response_import_form
@@ -551,3 +633,5 @@ msgid ""
 "if the status code is acknowledgement: update the acknowledge datetime on "
 "the PO"
 msgstr ""
+"se il codice di stato è Presa visione: aggiorna la data e l'ora di presa "
+"visione sull'OdA"
