@@ -150,6 +150,8 @@ class AccountInvoiceImport(models.TransientModel):
         elif "BT-109" not in parsed_inv and "BT-110" not in parsed_inv:
             # For invoices that never have taxes
             parsed_inv["BT-109"] = parsed_inv["BT-112"]
+        if self.env.context.get("default_move_type") in ("in_refund", "out_refund"):
+            parsed_inv["BT-3"] = "381"
 
     @api.model
     def _prepare_create_invoice_no_partner(self, parsed_inv, import_config, vals):  # noqa: C901
@@ -1382,9 +1384,12 @@ class AccountInvoiceImport(models.TransientModel):
                 invoice_ids.append(invoice.id)
             action_warnings += import_config.get("action_warnings")
 
-        next_action = self.env["ir.actions.actions"]._for_xml_id(
-            "account.action_move_in_invoice_type"
-        )
+        default_move_type = self.env.context.get("default_move_type", "in_invoice")
+        if default_move_type == "in_refund":
+            action_xml_id = "account.action_move_in_refund_type"
+        else:
+            action_xml_id = "account.action_move_in_invoice_type"
+        next_action = self.env["ir.actions.actions"]._for_xml_id(action_xml_id)
         if len(invoice_ids) > 1:
             next_action["domain"] = [("id", "in", invoice_ids)]
         elif len(invoice_ids) == 1:
