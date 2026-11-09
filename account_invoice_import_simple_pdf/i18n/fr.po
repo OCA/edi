@@ -868,15 +868,6 @@ msgstr "AAAA MM JJ"
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
-#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
-msgid ""
-"You must configure a field extraction rule for field 'Date' for partner '%s'."
-msgstr ""
-"Vous devez configurer une règle d’extraction de champ pour le champ 'Date' "
-"pour le partenaire '%s'."
-
-#. module: account_invoice_import_simple_pdf
-#. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 msgid "You must set a Specific Regular Expression on the 'Description' field."
 msgstr ""
@@ -933,6 +924,13 @@ msgstr "espace"
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 msgid "unknown"
 msgstr "inconnu"
+
+#~ msgid ""
+#~ "You must configure a field extraction rule for field 'Date' for partner "
+#~ "'%s'."
+#~ msgstr ""
+#~ "Vous devez configurer une règle d’extraction de champ pour le champ "
+#~ "'Date' pour le partenaire '%s'."
 
 #, python-format
 #~ msgid "<b>Failed</b> to extract the following field(s): %s."
