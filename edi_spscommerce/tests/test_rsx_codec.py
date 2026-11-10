@@ -109,6 +109,8 @@ class TestRsxTemplates(AccountTestInvoicingCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # The test user needs the sales group to create sale orders.
+        cls.env.user.group_ids += cls.env.ref("sales_team.group_sale_salesman")
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Store 1",
@@ -169,13 +171,11 @@ class TestRsxTemplates(AccountTestInvoicingCommon):
         self.assertEqual(header["Address"][0]["AddressTypeCode"], "ST")
         self.assertEqual(header["Address"][0]["City"], "Springfield")
         order_level = shipment["OrderLevel"][0]
-        self.assertEqual(
-            order_level["OrderHeader"]["PurchaseOrderNumber"], "PO-900"
-        )
+        self.assertEqual(order_level["OrderHeader"]["PurchaseOrderNumber"], "PO-900")
         line = order_level["ItemLevel"][0]["ShipmentLine"]
         self.assertEqual(line["VendorPartNumber"], "SKU-1")
         self.assertEqual(line["GTIN"], "1234567890123")
-        self.assertEqual(line["ShipQty"], "0.0")
+        self.assertEqual(line["ShipQty"], "10.0")
 
     def test_invoices_template_renders_move(self):
         move = self.env["account.move"].create(
@@ -194,6 +194,8 @@ class TestRsxTemplates(AccountTestInvoicingCommon):
                 ],
             }
         )
+        # Keep the total deterministic: the test DB may add default taxes.
+        move.invoice_line_ids.tax_ids = [Command.clear()]
         output = self._render(
             "edi_spscommerce.qweb_sps_invoices",
             {
@@ -211,6 +213,19 @@ class TestRsxTemplates(AccountTestInvoicingCommon):
         self.assertEqual(header["Address"][0]["City"], "Springfield")
         line = invoice["LineItem"][0]["InvoiceLine"]
         self.assertEqual(line["VendorPartNumber"], "SKU-1")
-        self.assertEqual(line["InvoiceQty"], "10")
+        self.assertEqual(line["InvoiceQty"], "10.0")
         self.assertEqual(line["PurchasePrice"], "12.5")
         self.assertEqual(invoice["Summary"]["TotalAmount"], "125.0")
+
+
+class TestSpsBackendConfig(TransactionCase):
+    def test_test_mode_resolves_sps_test_dirs(self):
+        """The shipped SPS backend reads testout/testin in test mode."""
+        backend = self.env.ref("edi_spscommerce.edi_backend_sps")
+        self.assertTrue(backend.test_mode_supported)
+        backend.test_mode = True
+        self.assertEqual(backend.get_conn_parameter("input_dir_pending"), "testout")
+        self.assertEqual(backend.get_conn_parameter("output_dir_pending"), "testin")
+        backend.test_mode = False
+        self.assertEqual(backend.get_conn_parameter("input_dir_pending"), "out")
+        self.assertEqual(backend.get_conn_parameter("output_dir_pending"), "in")
