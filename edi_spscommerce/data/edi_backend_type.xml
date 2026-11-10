@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="edi_backend_type_sps" model="edi.backend.type">
+        <field name="name">SPS Commerce</field>
+        <field name="code">sps</field>
+    </record>
+</odoo>
