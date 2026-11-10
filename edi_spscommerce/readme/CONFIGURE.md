@@ -62,12 +62,12 @@ until an inbound ack (997/855) arrives.
 The directory names carry the environment — same SFTP account, live
 files in ``out``/``in``, test files in ``testout``/``testin`` — set on
 the backend's Storage page (``input_dir_pending``/``output_dir_pending``
-+ their ``test_*`` counterparts from ``edi_storage_test_mode_oca``).
++ their ``test_*`` counterparts from ``edi_storage_oca_test_mode``).
 Test mode is supported because the ``sps`` backend type ships with
-``test_mode_supported`` (``edi_test_mode_oca``); enable the
+``test_mode_supported`` (``edi_core_oca_test_mode``); enable the
 **Test mode** checkbox and ``get_conn_parameter()`` returns the live
 or test folder accordingly — configured values are never rewritten.
-``data/neutralize.sql`` in ``edi_test_mode_oca`` sets test mode on all
+``data/neutralize.sql`` in ``edi_core_oca_test_mode`` sets test mode on all
 backends for copied databases. To point test mode at a different SFTP
 account entirely, set ``test_storage_id`` instead.
 
