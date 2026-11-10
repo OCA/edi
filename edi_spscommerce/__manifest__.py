@@ -14,6 +14,8 @@
         "edi_core_oca",
         "edi_storage_oca",
         "edi_exchange_template_oca",
+        "edi_test_mode_oca",
+        "edi_storage_test_mode_oca",
         "sale_stock",
         "account",
     ],

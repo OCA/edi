@@ -23,8 +23,9 @@ class EdiSpsHandler(models.AbstractModel):
 
     Transport has two modes, selected automatically per exchange record:
 
-    - **Storage (SPS SFTP)**: when ``exchange_record.backend_id.storage_id``
-      is set, ``receive``/``send``/``check`` delegate to
+    - **Storage (SPS SFTP)**: when the backend's effective storage
+      (``get_conn_parameter("storage_id")``, i.e. ``test_storage_id`` in
+      test mode) is set, ``receive``/``send``/``check`` delegate to
       ``edi.oca.storage.handler`` which reads/writes files under the
       backend's ``*_dir_*`` directories (SPS layout: ``out``/``testout``
       inbound, ``in``/``testin`` outbound, ``archive`` for processed).
@@ -264,12 +265,13 @@ class EdiSpsHandler(models.AbstractModel):
     def send(self, exchange_record):
         """Deliver the payload: storage transport first, local dir fallback.
 
-        With ``backend_id.storage_id`` set, delegates to
+        With an effective storage set (``get_conn_parameter("storage_id")``
+        — ``test_storage_id`` in test mode), delegates to
         ``edi.oca.storage.handler.send`` which uploads to
         ``output_dir_pending`` on the remote filesystem. Otherwise writes
         the payload to ``rsx.outbound_dir`` (manual fallback).
         """
-        if exchange_record.backend_id.storage_id:
+        if exchange_record.backend_id.get_conn_parameter("storage_id"):
             return super().send(exchange_record)
         rsx_conf = self._rsx_settings(exchange_record)
         out_dir = rsx_conf.get("outbound_dir") or "./edi-sps-out"
@@ -290,7 +292,7 @@ class EdiSpsHandler(models.AbstractModel):
 
     def check(self, exchange_record):
         """Poll remote done/error dirs — only meaningful with a storage."""
-        if not exchange_record.backend_id.storage_id:
+        if not exchange_record.backend_id.get_conn_parameter("storage_id"):
             return False
         return super().check(exchange_record)
 
