@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="sps_type_shipments_out" model="edi.exchange.type">
+        <field name="name">SPS RSX Shipments Outbound (ASN)</field>
+        <field name="code">sps_shipments_out</field>
+        <field name="direction">output</field>
+        <field name="backend_id" ref="edi_backend_sps" />
+        <field name="backend_type_id" ref="edi_backend_type_sps" />
+        <field name="generate_model_id" ref="model_edi_sps_handler" />
+        <field name="send_model_id" ref="model_edi_sps_handler" />
+        <field name="output_validate_model_id" ref="model_edi_sps_handler" />
+        <field name="output_template_id" ref="sps_template_shipments" />
+        <!-- Outbound prefix "SH" for shipment notices + unique "{dt}".
+             No check_model_id: SPS deletes "in" files during processing,
+             so output_sent is terminal until an inbound ack arrives. -->
+        <field name="exchange_filename_pattern">SH-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <field name="advanced_settings_edit"><![CDATA[
+rsx:
+  document: "shipments"
+  sender_id: "PROSLAT"
+  receiver_id: "CUSTOMER"
+  outbound_dir: "/tmp/edi-sps-out"
+]]></field>
+    </record>
+
+    <!-- Form button on validated delivery orders to create/send a
+         Shipments (ASN) exchange record manually. -->
+    <record id="rule_stock_picking_shipments" model="edi.exchange.type.rule">
+        <field name="name">Send SPS Shipments (ASN)</field>
+        <field name="type_id" ref="sps_type_shipments_out" />
+        <field name="model_id" ref="stock.model_stock_picking" />
+        <field name="kind">form_btn</field>
+        <field name="form_btn_label">Send SPS ASN</field>
+        <field name="form_btn_tooltip">Generate and send an SPS RSX Shipments notice for this delivery</field>
+        <field name="enable_domain">[('state', '=', 'done')]</field>
+    </record>
+</odoo>
