@@ -1,0 +1,793 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils: https://docutils.sourceforge.io/" />
+<title>EDI SPS Commerce</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
+
+See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+.subscript {
+  vertical-align: sub;
+  font-size: smaller }
+
+.superscript {
+  vertical-align: super;
+  font-size: smaller }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left, table.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right, table.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+.align-top    {
+  vertical-align: top }
+
+.align-middle {
+  vertical-align: middle }
+
+.align-bottom {
+  vertical-align: bottom }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: gray; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic, pre.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document">
+
+
+<a class="reference external image-reference" href="https://odoo-community.org/get-involved?utm_source=readme">
+<img alt="Odoo Community Association" src="https://odoo-community.org/readme-banner-image" />
+</a>
+<div class="section" id="edi-sps-commerce">
+<h1>EDI SPS Commerce</h1>
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! This file is generated by oca-gen-addon-readme !!
+!! changes will be overwritten.                   !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! source digest: sha256:309af0a976c2a537e1226bbf904aca73d5c983907114810fdcaf556fbb633407
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Alpha" src="https://img.shields.io/badge/maturity-Alpha-red.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/license-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/edi/tree/19.0/edi_spscommerce"><img alt="OCA/edi" src="https://img.shields.io/badge/github-OCA%2Fedi-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/edi-19-0/edi-19-0-edi_spscommerce"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/edi&amp;target_branch=19.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p>EDI integration with <strong>SPS Commerce</strong> via their canonical <strong>RSX XML</strong>
+format (namespace <tt class="docutils literal"><span class="pre">http://www.spscommerce.com/RSX</span></tt>, schema v7.7.0), on
+top of the <strong>OCA EDI framework</strong> (<tt class="docutils literal">edi_core_oca</tt>), targeting Odoo
+19.0.</p>
+<p>RSX is SPS’s proprietary normalized schema: one document type covers
+every trading partner — SPS maps each partner’s native X12/EDIFACT/API
+behind it, so we integrate once instead of per-partner segment maps.</p>
+<p>Documents covered:</p>
+<ul class="simple">
+<li><strong>Orders inbound</strong> — RSX <tt class="docutils literal">Orders</tt> → draft <tt class="docutils literal">sale.order</tt></li>
+<li><strong>Shipments outbound (ASN)</strong> — <tt class="docutils literal">stock.picking</tt> → RSX <tt class="docutils literal">Shipments</tt></li>
+<li><strong>Invoices outbound</strong> — <tt class="docutils literal">account.move</tt> → RSX <tt class="docutils literal">Invoices</tt></li>
+</ul>
+<p>All three share one group vocabulary (Address, Dates, References, Notes,
+PaymentTerms, Taxes, ChargesAllowances, CarrierInformation, part-number
+id block). Inbound payloads are parsed by <tt class="docutils literal">services/rsx.py</tt>
+(<tt class="docutils literal">xmltodict</tt>) into schema-shaped dicts; outbound payloads are rendered
+by QWeb <tt class="docutils literal">edi.exchange.template.output</tt> templates that consume the
+business records directly.</p>
+<p>Transport is pluggable per exchange record:</p>
+<ul class="simple">
+<li><strong>SPS-hosted SFTP</strong> (<tt class="docutils literal">sftp.spscommerce.com</tt>) via <tt class="docutils literal">edi_storage_oca</tt>
+— inbound files polled from <tt class="docutils literal">out</tt>/<tt class="docutils literal">testout</tt>, outbound uploaded to
+<tt class="docutils literal">in</tt>/<tt class="docutils literal">testin</tt>;</li>
+<li><strong>Manual drop (fallback)</strong> — import wizard for inbound, local
+directory for outbound.</li>
+</ul>
+<p>This module is a POC in active development: the mappings cover the core
+fields and defer the long schema tail (carrier detail, pack levels,
+charges/allowances, taxes detail) to the partner implementation guide.</p>
+<p><em>Not affiliated with or endorsed by SPS Commerce.</em></p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This is an alpha version, the data model and design can change at any time without warning.
+Only for development or testing purpose, do not use in production.
+<a class="reference external" href="https://odoo-community.org/page/development-status">More details on development status</a></p>
+</div>
+<p><strong>Table of contents</strong></p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a><ul>
+<li><a class="reference internal" href="#dependencies" id="toc-entry-2">Dependencies</a></li>
+<li><a class="reference internal" href="#shipped-configuration" id="toc-entry-3">Shipped configuration</a></li>
+<li><a class="reference internal" href="#sps-sftp-map" id="toc-entry-4">SPS SFTP map</a></li>
+<li><a class="reference internal" href="#test-mode" id="toc-entry-5">Test mode</a></li>
+<li><a class="reference internal" href="#partner-and-product-matching" id="toc-entry-6">Partner and product matching</a></li>
+<li><a class="reference internal" href="#customizing-a-partner" id="toc-entry-7">Customizing a partner</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage" id="toc-entry-8">Usage</a><ul>
+<li><a class="reference internal" href="#inbound-orders-manual-drop-no-storage" id="toc-entry-9">Inbound Orders — manual drop (no storage)</a></li>
+<li><a class="reference internal" href="#inbound-orders-via-sps-sftp" id="toc-entry-10">Inbound Orders — via SPS SFTP</a></li>
+<li><a class="reference internal" href="#outbound-shipments-asn" id="toc-entry-11">Outbound Shipments (ASN)</a></li>
+<li><a class="reference internal" href="#outbound-invoices" id="toc-entry-12">Outbound Invoices</a></li>
+<li><a class="reference internal" href="#extension-points" id="toc-entry-13">Extension points</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#known-issues-roadmap" id="toc-entry-14">Known issues / Roadmap</a><ul>
+<li><a class="reference internal" href="#decisions" id="toc-entry-15">Decisions</a></li>
+<li><a class="reference internal" href="#open-questions" id="toc-entry-16">Open questions</a></li>
+<li><a class="reference internal" href="#plan" id="toc-entry-17">Plan</a></li>
+<li><a class="reference internal" href="#tasks" id="toc-entry-18">Tasks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-19">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-20">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-21">Authors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-22">Maintainers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="configuration">
+<h2><a class="toc-backref" href="#toc-entry-1">Configuration</a></h2>
+<div class="section" id="dependencies">
+<h3><a class="toc-backref" href="#toc-entry-2">Dependencies</a></h3>
+<p>Odoo modules:</p>
+<ul class="simple">
+<li><tt class="docutils literal">edi_core_oca</tt> — exchange framework (backends, exchange types,
+records).</li>
+<li><tt class="docutils literal">edi_storage_oca</tt> — storage-backed transport (pulls <tt class="docutils literal">fs_storage</tt>).</li>
+<li><tt class="docutils literal">edi_exchange_template_oca</tt> — QWeb output templates.</li>
+<li><tt class="docutils literal">sale_stock</tt>, <tt class="docutils literal">account</tt> — sales/delivery orders and invoices.</li>
+</ul>
+<p>Python packages:</p>
+<ul class="simple">
+<li><tt class="docutils literal">xmltodict</tt> — inbound parser (manifest <tt class="docutils literal">external_dependencies</tt>).</li>
+<li><tt class="docutils literal">fsspec</tt> + <tt class="docutils literal">paramiko</tt> — for the SFTP transport (via
+<tt class="docutils literal">fs_storage</tt>; <tt class="docutils literal">paramiko</tt> must be installed manually).</li>
+</ul>
+</div>
+<div class="section" id="shipped-configuration">
+<h3><a class="toc-backref" href="#toc-entry-3">Shipped configuration</a></h3>
+<ul>
+<li><p class="first"><strong>Backend type</strong> <tt class="docutils literal">sps</tt>.</p>
+</li>
+<li><p class="first"><strong>Backend</strong> <tt class="docutils literal">SPS Commerce Backend</tt> with the SPS directory layout:</p>
+<pre class="literal-block">
+::
+</pre>
+<blockquote>
+<p>input_dir_pending   = out        # SPS → you (live)
+input_dir_done      = archive    # you clean “out” yourself
+input_dir_error     = archive
+output_dir_pending  = in         # you → SPS (live)
+output_dir_done     = (empty)    # SPS deletes “in” files; unused
+output_dir_error    = (empty)</p>
+</blockquote>
+</li>
+<li><p class="first"><strong>Exchange types</strong> (all handler roles → <tt class="docutils literal">edi.sps.handler</tt>):</p>
+</li>
+</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="14%" />
+<col width="36%" />
+<col width="21%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Code</th>
+<th class="head">Direction</th>
+<th class="head">Document</th>
+<th class="head">Filename</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal">sps_orders_in</tt></td>
+<td>input</td>
+<td><tt class="docutils literal">rsx.document: orders</tt></td>
+<td><tt class="docutils literal">^PO</tt></td>
+</tr>
+<tr><td><tt class="docutils literal">sps_shipments_out</tt></td>
+<td>output</td>
+<td><tt class="docutils literal">rsx.document: shipments</tt></td>
+<td><tt class="docutils literal"><span class="pre">SH-{dt}.xml</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal">sps_invoices_out</tt></td>
+<td>output</td>
+<td><tt class="docutils literal">rsx.document: invoices</tt></td>
+<td><tt class="docutils literal"><span class="pre">IN-{dt}.xml</span></tt></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><strong>Output templates</strong> <tt class="docutils literal">sps_shipments</tt> / <tt class="docutils literal">sps_invoices</tt>
+(<tt class="docutils literal">edi.exchange.template.output</tt> records + QWeb views, incl. shared
+fragments <tt class="docutils literal">sps_meta</tt>/<tt class="docutils literal">sps_address</tt>/<tt class="docutils literal">sps_item_ids</tt>), bound via
+<tt class="docutils literal">output_template_id</tt> on the outbound types.</li>
+<li><strong>Exchange type rules</strong>: <em>Send SPS ASN</em> button on done pickings, <em>Send
+SPS Invoice</em> button on posted customer invoices.</li>
+</ul>
+<p>Exchange-type advanced settings (<tt class="docutils literal">rsx:</tt> block):</p>
+<ul class="simple">
+<li><tt class="docutils literal">document</tt> — expected RSX root (orders/shipments/invoices).</li>
+<li><tt class="docutils literal">sender_id</tt> / <tt class="docutils literal">receiver_id</tt> — RSX Meta envelope ids.</li>
+<li><tt class="docutils literal">outbound_dir</tt> — local dir for the no-storage fallback.</li>
+<li><tt class="docutils literal">xsd_validate</tt> — (planned) XSD validation toggle; schemas are
+user-supplied, not shipped.</li>
+</ul>
+</div>
+<div class="section" id="sps-sftp-map">
+<h3><a class="toc-backref" href="#toc-entry-4">SPS SFTP map</a></h3>
+<p>SPS hosts the endpoint at <tt class="docutils literal">sftp.spscommerce.com</tt> with fixed directory
+pairs — <tt class="docutils literal">out</tt>/<tt class="docutils literal">testout</tt> inbound, <tt class="docutils literal">in</tt>/<tt class="docutils literal">testin</tt> outbound. Create
+<tt class="docutils literal">archive</tt> on the SPS account first (rename fails otherwise); we must
+clean <tt class="docutils literal">out</tt> ourselves. SPS deletes <tt class="docutils literal">in</tt> files during processing, so
+outbound types have no <tt class="docutils literal">check</tt> handler: <tt class="docutils literal">output_sent</tt> is terminal
+until an inbound ack (997/855) arrives.</p>
+</div>
+<div class="section" id="test-mode">
+<h3><a class="toc-backref" href="#toc-entry-5">Test mode</a></h3>
+<p>The directory names carry the environment — same SFTP account, live
+files in <tt class="docutils literal">out</tt>/<tt class="docutils literal">in</tt>, test files in <tt class="docutils literal">testout</tt>/<tt class="docutils literal">testin</tt>. All four
+are configurable fields on the backend (<tt class="docutils literal">sps_*_dir_pending</tt>, visible
+on the Storage page for <tt class="docutils literal">sps</tt> backends; the generic pending-dir fields
+are hidden there since they’re bypassed). Set <strong>Test mode</strong>
+(<tt class="docutils literal">edi.backend.test_mode</tt> from <tt class="docutils literal">edi_core_oca</tt>):
+<tt class="docutils literal">backend.get_conn_parameter()</tt> returns the live or test folder
+accordingly — configured values are never rewritten.
+<tt class="docutils literal">data/neutralize.sql</tt> in <tt class="docutils literal">edi_core_oca</tt> sets test mode on all
+backends for copied databases.</p>
+</div>
+<div class="section" id="partner-and-product-matching">
+<h3><a class="toc-backref" href="#toc-entry-6">Partner and product matching</a></h3>
+<ul class="simple">
+<li><strong>Partner</strong>: <tt class="docutils literal">res.partner.ref</tt> = the SPS trading-partner id
+(<tt class="docutils literal">OrderHeader.TradingPartnerId</tt>, falling back to the Meta sender
+ids). The id is also what outbound templates emit in
+<tt class="docutils literal">TradingPartnerId</tt>.</li>
+<li><strong>Product</strong>: <tt class="docutils literal">OrderLine.VendorPartNumber</tt>/<tt class="docutils literal">ApplicationId</tt> →
+<tt class="docutils literal">default_code</tt>; <tt class="docutils literal">BuyerPartNumber</tt> → <tt class="docutils literal">product.customer.code</tt> when
+installed; <tt class="docutils literal">GTIN</tt>/<tt class="docutils literal">EAN</tt>/<tt class="docutils literal">ConsumerPackageCode</tt> → <tt class="docutils literal">barcode</tt>.</li>
+<li><strong>UOM</strong>: RSX carries X12 355 codes; a mapping table to <tt class="docutils literal">uom.uom</tt> is
+planned — today quantities import in the product’s UoM.</li>
+</ul>
+</div>
+<div class="section" id="customizing-a-partner">
+<h3><a class="toc-backref" href="#toc-entry-7">Customizing a partner</a></h3>
+<p>Each SPS relationship still has a mandatory-subset profile. Point the
+partner’s own exchange type at a copy of the shipped
+<tt class="docutils literal">edi.exchange.template.output</tt> (or extend it via <tt class="docutils literal">code_snippet</tt>) —
+no code changes needed.</p>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#toc-entry-8">Usage</a></h2>
+<div class="section" id="inbound-orders-manual-drop-no-storage">
+<h3><a class="toc-backref" href="#toc-entry-9">Inbound Orders — manual drop (no storage)</a></h3>
+<ol class="arabic simple">
+<li>Open <strong>EDI → Exchanges → Import SPS RSX</strong>.</li>
+<li>Pick the exchange type, upload the RSX <tt class="docutils literal">Orders</tt> file.</li>
+<li>The wizard creates an <tt class="docutils literal">edi.exchange.record</tt> in <tt class="docutils literal">input_pending</tt>
+and runs receive → validate → process immediately.</li>
+</ol>
+<p>Expected result: one draft <tt class="docutils literal">sale.order</tt> per <tt class="docutils literal">&lt;Order&gt;</tt> —
+<tt class="docutils literal">PurchaseOrderNumber</tt> → <tt class="docutils literal">client_order_ref</tt>, <tt class="docutils literal">Dates[002]</tt> →
+<tt class="docutils literal">commitment_date</tt>, one line per <tt class="docutils literal">LineItem</tt>. The exchange record is
+linked as the order’s EDI origin. <tt class="docutils literal">TsetPurposeCode</tt> other than <tt class="docutils literal">00</tt>
+(original) raises — cancel/change documents are handled manually for
+now.</p>
+</div>
+<div class="section" id="inbound-orders-via-sps-sftp">
+<h3><a class="toc-backref" href="#toc-entry-10">Inbound Orders — via SPS SFTP</a></h3>
+<ol class="arabic simple">
+<li>SPS drops a <tt class="docutils literal">PO*</tt> file into <tt class="docutils literal">out</tt>/<tt class="docutils literal">testout</tt>.</li>
+<li>The storage poller creates an <tt class="docutils literal">input_pending</tt> record; the input
+sync cron receives, validates, and processes it; processed files move
+to <tt class="docutils literal">archive</tt>.</li>
+</ol>
+</div>
+<div class="section" id="outbound-shipments-asn">
+<h3><a class="toc-backref" href="#toc-entry-11">Outbound Shipments (ASN)</a></h3>
+<ul class="simple">
+<li><strong>Manual</strong>: open a done delivery order → <strong>Send SPS ASN</strong>.</li>
+<li><strong>Automatic</strong>: <tt class="docutils literal">stock.picking.button_validate</tt> queues a Shipments
+exchange for done pickings when the partner is enabled on the type.</li>
+<li><strong>Retrigger</strong>: call <tt class="docutils literal">picking._edi_sps_queue_shipments(force=True)</tt>
+(server action / shell) — skips pickings with an existing record
+unless <tt class="docutils literal">force</tt>.</li>
+</ul>
+<p>The picking is rendered by the <tt class="docutils literal">sps_shipments</tt> template and uploaded
+to <tt class="docutils literal">output_dir_pending</tt> (SPS: <tt class="docutils literal">in</tt>/<tt class="docutils literal">testin</tt>) as <tt class="docutils literal"><span class="pre">SH-&lt;dt&gt;.xml</span></tt>,
+or written to <tt class="docutils literal">rsx.outbound_dir</tt> without storage.</p>
+</div>
+<div class="section" id="outbound-invoices">
+<h3><a class="toc-backref" href="#toc-entry-12">Outbound Invoices</a></h3>
+<p>Open a posted customer invoice (or credit note) → <strong>Send SPS Invoice</strong>.
+The move is rendered by <tt class="docutils literal">sps_invoices</tt> (<tt class="docutils literal">DI</tt> for invoices, <tt class="docutils literal">CR</tt>
+for credit notes) and delivered the same way.</p>
+</div>
+<div class="section" id="extension-points">
+<h3><a class="toc-backref" href="#toc-entry-13">Extension points</a></h3>
+<ul class="simple">
+<li><tt class="docutils literal">services/rsx.py</tt> — inbound codec: <tt class="docutils literal">parse</tt>/<tt class="docutils literal">parse_orders</tt> +
+<tt class="docutils literal">FORCE_LIST</tt> for repeatable groups.</li>
+<li><tt class="docutils literal">edi.exchange.template.output</tt> — outbound documents; copy a shipped
+template per partner profile, or use <tt class="docutils literal">code_snippet</tt> for extra render
+values.</li>
+<li><tt class="docutils literal">edi.sps.handler</tt> — handler roles; partner/product matching in
+<tt class="docutils literal">_find_partner</tt>/<tt class="docutils literal">_find_product</tt>.</li>
+<li><tt class="docutils literal">edi.exchange.type.advanced_settings_edit</tt> — <tt class="docutils literal">rsx.*</tt> config.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="known-issues-roadmap">
+<h2><a class="toc-backref" href="#toc-entry-14">Known issues / Roadmap</a></h2>
+<p><strong>Status:</strong> in progress</p>
+<div class="section" id="decisions">
+<h3><a class="toc-backref" href="#toc-entry-15">Decisions</a></h3>
+<ul class="simple">
+<li>SPS <strong>RSX XML</strong> (schema v7.7.0) is the payload format — normalized
+across partners by SPS; proprietary to SPS but standard connector
+practice (cf. <tt class="docutils literal">account_avatax</tt>, <tt class="docutils literal">delivery_sendcloud</tt>).<ul>
+<li>Rejected: extending the raw-X12 codec in <tt class="docutils literal">edi_x12_poc</tt> —
+per-partner segment maps duplicate work SPS already did.</li>
+<li>Rejected: <tt class="docutils literal">base_business_document_import</tt>/UBL — the wire format is
+fixed by SPS.</li>
+</ul>
+</li>
+<li>Module name <tt class="docutils literal">edi_spscommerce</tt>.<ul>
+<li>Rejected: <tt class="docutils literal">edi_rsx</tt> — RSX is SPS’s proprietary namespace; a
+generic name would overstate portability.</li>
+</ul>
+</li>
+<li>Transport: <strong>SPS-hosted SFTP</strong> (<tt class="docutils literal">sftp.spscommerce.com</tt>) via
+<tt class="docutils literal">edi_storage_oca</tt> — <tt class="docutils literal">out</tt>/<tt class="docutils literal">testout</tt> in, <tt class="docutils literal">in</tt>/<tt class="docutils literal">testin</tt> out,
+<tt class="docutils literal">archive</tt> for processed; no outbound <tt class="docutils literal">check</tt> (SPS deletes <tt class="docutils literal">in</tt>
+files, <tt class="docutils literal">output_sent</tt> terminal until an inbound ack).<ul>
+<li>Rejected: SPS REST API/AS2 — would need <tt class="docutils literal">edi_webservice_oca</tt> and
+loses the file-based audit trail.</li>
+</ul>
+</li>
+<li>Inbound codec <tt class="docutils literal">services/rsx.py</tt> via <tt class="docutils literal">xmltodict</tt> — schema-shaped
+dicts (RSX element names verbatim), <tt class="docutils literal">FORCE_LIST</tt> for <tt class="docutils literal"><span class="pre">[0..*]</span></tt>
+groups; the handler does RSX→Odoo translation.</li>
+<li>Outbound generation via <strong>QWeb</strong> <tt class="docutils literal">edi.exchange.template.output</tt> —
+templates consume <tt class="docutils literal">record</tt> directly (mapping lives in data;
+per-partner overrides need no code). Handler injects only <tt class="docutils literal">meta</tt>.<ul>
+<li><em>2026-11 — supersedes programmatic ``etree`` builders.</em></li>
+<li><em>2026-11 — record-direct templates supersede ``_edi_sps_*_values``
+dict builders — one mapping surface.</em></li>
+</ul>
+</li>
+<li><strong>Batching</strong>: <tt class="docutils literal"><span class="pre">&lt;Order&gt;/&lt;Shipment&gt;/&lt;Invoice&gt;[1..*]</span></tt> — plan to split
+one file into one exchange record per document (error isolation).<ul>
+<li>Rejected: one record per file — a bad document would block the
+batch.</li>
+</ul>
+</li>
+<li>Inbound Orders create <strong>draft</strong> <tt class="docutils literal">sale.order</tt>; <tt class="docutils literal">TsetPurposeCode</tt>
+drives create/cancel/change (only <tt class="docutils literal">00</tt> implemented).</li>
+<li>XSD validation behind <tt class="docutils literal">rsx.xsd_validate</tt> for the test phase; schemas
+are user-supplied, not shipped.</li>
+<li>OCA publication: license <strong>LGPL-3</strong>; no vendored SPS materials (tests
+use hand-written fixtures); nominative use of the name; confirm the
+SPS agreement doesn’t mark RSX confidential before publishing.</li>
+</ul>
+</div>
+<div class="section" id="open-questions">
+<h3><a class="toc-backref" href="#toc-entry-16">Open questions</a></h3>
+<ul class="simple">
+<li>Which address types does the partner send (<tt class="docutils literal">ST</tt>+<tt class="docutils literal">BY</tt> only, or
+separate <tt class="docutils literal">BT</tt>)? Drives partner-matching fallback order.</li>
+<li>Do we get <tt class="docutils literal">TsetPurposeCode</tt> 01/04/05 (cancel/change) or originals
+only?</li>
+<li>ASN depth: <tt class="docutils literal">PackLevel</tt>/SSCC required, or <tt class="docutils literal">OrderLevel→ItemLevel</tt>
+enough?</li>
+<li>Invoice trigger: post of <tt class="docutils literal">account.move</tt>, or batch end-of-day?</li>
+<li>RSX filename convention: same <tt class="docutils literal">PO</tt>/<tt class="docutils literal">SH</tt>/<tt class="docutils literal">IN</tt> prefixes +
+<tt class="docutils literal">.xml</tt>?</li>
+</ul>
+</div>
+<div class="section" id="plan">
+<h3><a class="toc-backref" href="#toc-entry-17">Plan</a></h3>
+<ul class="simple">
+<li>Iteration 1 (done): module scaffold, inbound codec, outbound QWeb
+templates + skeleton mappings, SFTP/manual transports, tests.</li>
+<li>Iteration 2: Orders full mapping (ship-to/GLN matching, payment terms,
+UOM table, currency, notes, dropship refs); split-per-document
+receive.</li>
+<li>Iteration 3: Shipments full mapping (carrier/SCAC, tracking,
+PackLevel/SSCC); Invoices (terms, taxes, charges/allowances).</li>
+<li>Iteration 4: partner profile config; verify vs SPS
+<tt class="docutils literal">testin</tt>/<tt class="docutils literal">testout</tt>.</li>
+<li>Iteration 5: inbound acks (997/855), cancel/change order handling.</li>
+</ul>
+</div>
+<div class="section" id="tasks">
+<h3><a class="toc-backref" href="#toc-entry-18">Tasks</a></h3>
+<ul class="simple">
+<li>☒ Scaffold <tt class="docutils literal">edi_spscommerce</tt> (manifest, handler, backend type, three
+exchange types, access rules, import wizard, tests)</li>
+<li>☒ Codec <tt class="docutils literal">services/rsx.py</tt> — xmltodict parse (verified against the
+real <tt class="docutils literal">Orders.xml</tt> sample)</li>
+<li>☒ Outbound generation via <tt class="docutils literal">edi_exchange_template_oca</tt> — QWeb views
+consuming <tt class="docutils literal">record</tt> + template records on the outbound types
+(skeleton mappings)</li>
+<li>☒ Split design doc into <tt class="docutils literal">readme/</tt> fragments (this doc)</li>
+<li>☐ Split-per-document receive (one exchange record per <tt class="docutils literal">&lt;Order&gt;</tt>)</li>
+<li>☐ <tt class="docutils literal">x_sps_*</tt> fields — <tt class="docutils literal">x_sps_location</tt> (partner GLN/location id),
+<tt class="docutils literal">x_sps_customer_ref</tt> / <tt class="docutils literal">x_sps_line_ref</tt> on sale orders</li>
+<li>☐ Orders → <tt class="docutils literal">sale.order</tt> full mapping (ship-to match/create, UOM
+table, payment terms, currency, notes, dropship refs)</li>
+<li>☐ UOM map: X12 355 codes → <tt class="docutils literal">uom.uom</tt> (module data + lookup)</li>
+<li>☐ <tt class="docutils literal">TsetPurposeCode</tt> 01/04/05 — cancel/change order handling</li>
+<li>☐ Shipments full mapping (carrier/SCAC, tracking, PackLevel/SSCC,
+Dates, References)</li>
+<li>☐ Invoices full mapping (payment terms, taxes, charges/allowances,
+BOL/PRO)</li>
+<li>☐ Partner profile config (trading-partner id, code maps, per-partner
+mandatory fields)</li>
+<li>☐ Implement <tt class="docutils literal">rsx.xsd_validate</tt> (user-supplied schema path)</li>
+<li>☐ Inbound acks — 997/855 exchange types</li>
+<li>☐ Confirm with SPS: address types sent, purpose codes used,
+PackLevel/SSCC requirement, invoice trigger, RSX filename convention</li>
+<li>☐ Verify against SPS <tt class="docutils literal">testin</tt>/<tt class="docutils literal">testout</tt></li>
+<li>☐ Confirm SPS agreement permits OCA publication</li>
+<li>☐ Regenerate <tt class="docutils literal">README.rst</tt>/<tt class="docutils literal">static/description</tt> with
+oca-gen-addon-readme before publishing</li>
+</ul>
+</div>
+</div>
+<div class="section" id="bug-tracker">
+<h2><a class="toc-backref" href="#toc-entry-19">Bug Tracker</a></h2>
+<p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/edi/issues">GitHub Issues</a>.
+In case of trouble, please check there if your issue has already been reported.
+If you spotted it first, help us to smash it by providing a detailed and welcomed
+<a class="reference external" href="https://github.com/OCA/edi/issues/new?body=module:%20edi_spscommerce%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<p>Do not contact contributors directly about support or help with technical issues.</p>
+</div>
+<div class="section" id="credits">
+<h2><a class="toc-backref" href="#toc-entry-20">Credits</a></h2>
+<div class="section" id="authors">
+<h3><a class="toc-backref" href="#toc-entry-21">Authors</a></h3>
+<ul class="simple">
+<li>Gray Matter Logic</li>
+</ul>
+</div>
+<div class="section" id="maintainers">
+<h3><a class="toc-backref" href="#toc-entry-22">Maintainers</a></h3>
+<p>This module is maintained by the OCA.</p>
+<a class="reference external image-reference" href="https://odoo-community.org">
+<img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />
+</a>
+<p>OCA, or the Odoo Community Association, is a nonprofit organization whose
+mission is to support the collaborative development of Odoo features and
+promote its widespread use.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/edi/tree/19.0/edi_spscommerce">OCA/edi</a> project on GitHub.</p>
+<p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
