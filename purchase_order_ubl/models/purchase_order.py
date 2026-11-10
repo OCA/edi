@@ -81,7 +81,7 @@ class PurchaseOrder(models.Model):
     def _ubl_add_order_line(self, parent_node, oline, line_number, ns, version="2.1"):
         line_root = etree.SubElement(parent_node, ns["cac"] + "OrderLine")
         dpo = self.env["decimal.precision"]
-        qty_precision = dpo.precision_get("Product Unit of Measure")
+        qty_precision = dpo.precision_get("Product Unit")
         price_precision = dpo.precision_get("Product Price")
         self._ubl_add_line_item(
             line_number,
