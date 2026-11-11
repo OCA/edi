@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-11-11 00:49+0000\n"
+"PO-Revision-Date: 2026-11-11 12:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -208,7 +208,7 @@ msgstr "Registrazione contabile"
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model,name:account_edi_ubl_cii_purchase_match.model_account_move_line
 msgid "Journal Item"
-msgstr "Voce contabile"
+msgstr "Movimento contabile"
 
 #. module: account_edi_ubl_cii_purchase_match
 #: model:ir.model.fields,field_description:account_edi_ubl_cii_purchase_match.field_account_move_line_select_purchase_line_wizard__description
