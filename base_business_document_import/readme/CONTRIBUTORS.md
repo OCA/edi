@@ -3,3 +3,4 @@
 - Jacques-Etienne Baudoux \<<je@bcim.be>\>
 - Phuc (Tran Thanh) \<<phuc@trobz.com>\>
 - Simone Orsi \<<simone.orsi@camptocamp.com>\>
+- Michel Guiheneuf \<<mgu@apik.cloud>\>
