@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="sps_type_order_acks_in" model="edi.exchange.type">
+        <field name="name">SPS RSX Order Acks Inbound</field>
+        <field name="code">sps_order_acks_in</field>
+        <field name="direction">input</field>
+        <field name="backend_id" ref="edi_backend_sps" />
+        <field name="backend_type_id" ref="edi_backend_type_sps" />
+        <field name="receive_model_id" ref="model_edi_sps_handler" />
+        <field name="process_model_id" ref="model_edi_sps_handler" />
+        <field name="input_validate_model_id" ref="model_edi_sps_handler" />
+        <!-- TODO: confirm the RSX ack filename convention with SPS —
+             "^ACK" is a guess; adjust or clear to match everything. -->
+        <field name="exchange_filename_pattern">^ACK</field>
+        <field
+            name="advanced_settings_edit"
+        ><![CDATA[
+rsx:
+  document: "order_acks"
+  xsd_validate: false
+  # xsd_path: "/path/to/OrderAcks.xsd"
+]]></field>
+    </record>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_edi_sps_import_wizard_user,edi.sps.import.wizard user,model_edi_sps_import_wizard,base.group_user,1,1,1,1
+access_edi_sps_uom_map_user,edi.sps.uom.map user,model_edi_sps_uom_map,base.group_user,1,0,0,0
+access_edi_sps_uom_map_manager,edi.sps.uom.map manager,model_edi_sps_uom_map,base_edi.group_edi_manager,1,1,1,1
+access_edi_sps_payment_term_map_user,edi.sps.payment.term.map user,model_edi_sps_payment_term_map,base.group_user,1,0,0,0
+access_edi_sps_payment_term_map_manager,edi.sps.payment.term.map manager,model_edi_sps_payment_term_map,base_edi.group_edi_manager,1,1,1,1
