@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="sps_type_invoices_out" model="edi.exchange.type">
+        <field name="name">SPS RSX Invoices Outbound</field>
+        <field name="code">sps_invoices_out</field>
+        <field name="direction">output</field>
+        <field name="backend_id" ref="edi_backend_sps" />
+        <field name="backend_type_id" ref="edi_backend_type_sps" />
+        <field name="generate_model_id" ref="model_edi_sps_handler" />
+        <field name="send_model_id" ref="model_edi_sps_handler" />
+        <field name="output_validate_model_id" ref="model_edi_sps_handler" />
+        <field name="output_template_id" ref="sps_template_invoices" />
+        <field name="exchange_filename_pattern">IN-{dt}</field>
+        <field name="exchange_file_ext">xml</field>
+        <field
+            name="advanced_settings_edit"
+        ><![CDATA[
+rsx:
+  document: "invoices"
+  xsd_validate: false
+  # xsd_path: "/path/to/Invoices.xsd"
+  sender_id: "PROSLAT"
+  receiver_id: "CUSTOMER"
+  outbound_dir: "/tmp/edi-sps-out"
+]]></field>
+    </record>
+
+    <!-- Form button on posted customer invoices to create/send an
+         Invoices exchange record manually. -->
+    <record id="rule_account_move_invoices" model="edi.exchange.type.rule">
+        <field name="name">Send SPS Invoice</field>
+        <field name="type_id" ref="sps_type_invoices_out" />
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="kind">form_btn</field>
+        <field name="form_btn_label">Send SPS Invoice</field>
+        <field
+            name="form_btn_tooltip"
+        >Generate and send an SPS RSX Invoice for this document</field>
+        <field
+            name="enable_domain"
+        >[('move_type', 'in', ('out_invoice', 'out_refund')), ('state', '=', 'posted')]</field>
+    </record>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <!-- SPS Commerce backend. Transport is SFTP on the SPS-hosted endpoint
+         (sftp.spscommerce.com) via ``storage_id`` -> ``fs.storage``.
+         Live/test directory names are the generic *_dir_* fields on the
+         backend (out/in live, testout/testin in test mode). Inbound
+         processed files move to "archive" (must be created on the SPS
+         account). Output done/error dirs are unused: SPS deletes "in"
+         files during processing. Without storage, the handler falls back
+         to manual drop (inbound) and a local outbound directory. -->
+    <record id="edi_backend_sps" model="edi.backend">
+        <field name="name">SPS Commerce Backend</field>
+        <field name="backend_type_id" ref="edi_backend_type_sps" />
+        <field name="input_dir_pending">out</field>
+        <field name="output_dir_pending">in</field>
+        <field name="input_dir_done">archive</field>
+        <field name="input_dir_error">archive</field>
+    </record>
+</odoo>

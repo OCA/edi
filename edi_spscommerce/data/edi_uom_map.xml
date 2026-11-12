@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <!-- X12 355 codes shipped by SPS in OrderQtyUOM -> uom.uom.
+             Extend this list per partner as needed. -->
+    <record id="uom_map_ea" model="edi.sps.uom.map">
+        <field name="code">EA</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+    </record>
+    <record id="uom_map_un" model="edi.sps.uom.map">
+        <field name="code">UN</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+    </record>
+    <record id="uom_map_pc" model="edi.sps.uom.map">
+        <field name="code">PC</field>
+        <field name="uom_id" ref="uom.product_uom_unit" />
+    </record>
+    <record id="uom_map_dz" model="edi.sps.uom.map">
+        <field name="code">DZ</field>
+        <field name="uom_id" ref="uom.product_uom_dozen" />
+    </record>
+    <record id="uom_map_kg" model="edi.sps.uom.map">
+        <field name="code">KG</field>
+        <field name="uom_id" ref="uom.product_uom_kgm" />
+    </record>
+    <record id="uom_map_lb" model="edi.sps.uom.map">
+        <field name="code">LB</field>
+        <field name="uom_id" ref="uom.product_uom_lb" />
+    </record>
+    <record id="uom_map_oz" model="edi.sps.uom.map">
+        <field name="code">OZ</field>
+        <field name="uom_id" ref="uom.product_uom_oz" />
+    </record>
+    <record id="uom_map_gr" model="edi.sps.uom.map">
+        <field name="code">GR</field>
+        <field name="uom_id" ref="uom.product_uom_gram" />
+    </record>
+    <record id="uom_map_ft" model="edi.sps.uom.map">
+        <field name="code">FT</field>
+        <field name="uom_id" ref="uom.product_uom_foot" />
+    </record>
+    <record id="uom_map_in" model="edi.sps.uom.map">
+        <field name="code">IN</field>
+        <field name="uom_id" ref="uom.product_uom_inch" />
+    </record>
+    <record id="uom_map_mr" model="edi.sps.uom.map">
+        <field name="code">MR</field>
+        <field name="uom_id" ref="uom.product_uom_meter" />
+    </record>
+    <record id="uom_map_mm" model="edi.sps.uom.map">
+        <field name="code">MM</field>
+        <field name="uom_id" ref="uom.product_uom_millimeter" />
+    </record>
+    <record id="uom_map_cm" model="edi.sps.uom.map">
+        <field name="code">CM</field>
+        <field name="uom_id" ref="uom.product_uom_cm" />
+    </record>
+    <record id="uom_map_yd" model="edi.sps.uom.map">
+        <field name="code">YD</field>
+        <field name="uom_id" ref="uom.product_uom_yard" />
+    </record>
+    <record id="uom_map_sf" model="edi.sps.uom.map">
+        <field name="code">SF</field>
+        <field name="uom_id" ref="uom.product_uom_square_foot" />
+    </record>
+    <record id="uom_map_sm" model="edi.sps.uom.map">
+        <field name="code">SM</field>
+        <field name="uom_id" ref="uom.product_uom_square_meter" />
+    </record>
+    <record id="uom_map_cf" model="edi.sps.uom.map">
+        <field name="code">CF</field>
+        <field name="uom_id" ref="uom.product_uom_cubic_foot" />
+    </record>
+    <record id="uom_map_lt" model="edi.sps.uom.map">
+        <field name="code">LT</field>
+        <field name="uom_id" ref="uom.product_uom_litre" />
+    </record>
+    <record id="uom_map_ml" model="edi.sps.uom.map">
+        <field name="code">ML</field>
+        <field name="uom_id" ref="uom.product_uom_milliliter" />
+    </record>
+    <record id="uom_map_ga" model="edi.sps.uom.map">
+        <field name="code">GA</field>
+        <field name="uom_id" ref="uom.product_uom_gal" />
+    </record>
+    <record id="uom_map_qt" model="edi.sps.uom.map">
+        <field name="code">QT</field>
+        <field name="uom_id" ref="uom.product_uom_qt" />
+    </record>
+    <record id="uom_map_hr" model="edi.sps.uom.map">
+        <field name="code">HR</field>
+        <field name="uom_id" ref="uom.product_uom_hour" />
+    </record>
+    <record id="uom_map_mp" model="edi.sps.uom.map">
+        <field name="code">MP</field>
+        <field name="uom_id" ref="uom.product_uom_ton" />
+    </record>
+    <record id="uom_map_da" model="edi.sps.uom.map">
+        <field name="code">DA</field>
+        <field name="uom_id" ref="uom.product_uom_day" />
+    </record>
+</odoo>

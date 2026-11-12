@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_edi_sps_import_wizard_form" model="ir.ui.view">
+        <field name="name">edi.sps.import.wizard.form</field>
+        <field name="model">edi.sps.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import SPS RSX file">
+                <group>
+                    <field name="exchange_type_id" />
+                    <field name="exchange_filename" />
+                    <field name="exchange_file" filename="exchange_filename" />
+                </group>
+                <footer>
+                    <button
+                        name="action_import"
+                        type="object"
+                        string="Import &amp; Process"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_edi_sps_import" model="ir.actions.act_window">
+        <field name="name">Import SPS RSX file</field>
+        <field name="res_model">edi.sps.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_edi_sps_import"
+        parent="edi_core_oca.menu_edi_exchange_record_root"
+        name="Import SPS RSX"
+        sequence="60"
+        action="action_edi_sps_import"
+    />
+</odoo>
