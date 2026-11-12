@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_base_import_pdf_template_user,base.import.pdf.template,model_base_import_pdf_template,base.group_user,1,0,0,0
+access_base_import_pdf_template_admin,base.import.pdf.template,model_base_import_pdf_template,base.group_no_one,1,1,1,1
+access_base_import_pdf_template_line_user,base.import.pdf.template.line,model_base_import_pdf_template_line,base.group_user,1,0,0,0
+access_base_import_pdf_template_line_admin,base.import.pdf.template.line,model_base_import_pdf_template_line,base.group_no_one,1,1,1,1
+access_base_import_pdf_template_line_mapped_user,base.import.pdf.template.line.mapped,model_base_import_pdf_template_line_mapped,base.group_user,1,0,0,0
+access_base_import_pdf_template_line_mapped_admin,base.import.pdf.template.line.mapped,model_base_import_pdf_template_line_mapped,base.group_no_one,1,1,1,1
+access_wizard_base_import_pdf_preview,wizard.base.import.pdf.preview,model_wizard_base_import_pdf_preview,base.group_no_one,1,1,1,1
+access_wizard_base_import_pdf_upload,wizard.base.import.pdf.upload,model_wizard_base_import_pdf_upload,base.group_user,1,1,1,1
+access_wizard_base_import_pdf_upload_line,wizard.base.import.pdf.upload.line,model_wizard_base_import_pdf_upload_line,base.group_user,1,1,1,1
