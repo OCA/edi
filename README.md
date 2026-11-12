@@ -32,7 +32,6 @@ addon | version | maintainers | summary
 [base_ubl_generate](base_ubl_generate/) | 19.0.1.0.0 |  | Base module to generate UBL files (Universal Business Language)
 [base_ubl_parse](base_ubl_parse/) | 19.0.1.0.0 |  | Base module to parse UBL files (Universal Business Language)
 [despatch_advice_import](despatch_advice_import/) | 19.0.1.0.0 | <a href='https://github.com/jbaudoux'><img src='https://github.com/jbaudoux.png' width='32' height='32' style='border-radius:50%;' alt='jbaudoux'/></a> | Despatch Advice import
-[edi_spscommerce](edi_spscommerce/) | 19.0.1.0.0 |  | SPS Commerce RSX XML: inbound Orders, outbound Shipments and Invoices on OCA EDI framework
 [partner_identification_import](partner_identification_import/) | 19.0.1.0.1 |  | Provides partner matching on extra ID
 [purchase_order_import](purchase_order_import/) | 19.0.1.0.1 |  | Update RFQ via the import of quotations from suppliers
 [purchase_order_ubl](purchase_order_ubl/) | 19.0.1.0.0 |  | Embed UBL XML file inside the PDF purchase order
