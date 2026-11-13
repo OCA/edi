@@ -10,7 +10,7 @@ from random import randint
 
 from odoo import Command, fields
 from odoo.tests.common import TransactionCase
-from odoo.tools import file_open, float_is_zero
+from odoo.tools import file_open, float_is_zero, mute_logger
 
 
 class TestInvoiceImport(TransactionCase):
@@ -143,6 +143,17 @@ class TestInvoiceImport(TransactionCase):
             }
         )
 
+    def _create_invoice_muted(self, parsed_inv, import_config):
+        """
+        A helper method to create invoice while preventing the normal
+        'WARNING' logs to make the tests fail in automated pipeline
+        """
+        logger = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
+        with mute_logger(logger):
+            return self.env["account.invoice.import"].create_invoice(
+                parsed_inv, import_config
+            )
+
     def test_import_in_invoice(self):
         parsed_inv = {
             "BT-1": "FAC2017/002",
@@ -171,9 +182,7 @@ class TestInvoiceImport(TransactionCase):
             # hack to have a unique vendor inv ref
             parsed_inv["BT-1"] = f"INV-{randint(100000, 999999)}"
             import_c["purchase_journal"] = self.pur_journal2
-            inv = self.env["account.invoice.import"].create_invoice(
-                parsed_inv, import_c
-            )
+            inv = self._create_invoice_muted(parsed_inv, import_c)
             self.assertEqual(inv.move_type, "in_invoice")
             self.assertEqual(inv.ref, parsed_inv["BT-1"])
             self.assertEqual(inv.company_id.id, self.company.id)
@@ -227,9 +236,7 @@ class TestInvoiceImport(TransactionCase):
             ],
         }
         import_config = {"company": self.company}
-        inv = self.env["account.invoice.import"].create_invoice(
-            parsed_inv, import_config
-        )
+        inv = self._create_invoice_muted(parsed_inv, import_config)
         self.assertEqual(inv.move_type, "in_invoice")
         self.assertFalse(
             inv.currency_id.compare_amounts(inv.amount_untaxed, parsed_inv["BT-109"])
@@ -270,9 +277,7 @@ class TestInvoiceImport(TransactionCase):
             import_config["invoice_type"] = "out"
             if import_config.get("shrink_lines"):
                 continue
-            inv = self.env["account.invoice.import"].create_invoice(
-                parsed_inv, import_config
-            )
+            inv = self._create_invoice_muted(parsed_inv, import_config)
             self.assertFalse(
                 inv.currency_id.compare_amounts(inv.amount_untaxed, 270.00)
             )
@@ -501,9 +506,7 @@ Nina
             "taxes": self.purchase_tax,
             "company": self.company,
         }
-        inv = self.env["account.invoice.import"].create_invoice(
-            parsed_inv, import_config
-        )
+        inv = self._create_invoice_muted(parsed_inv, import_config)
         self.assertEqual(inv.partner_id, partner)
         self.assertEqual(len(inv.invoice_line_ids), 1)
         self.assertEqual(inv.invoice_line_ids.account_id, dest_account)
