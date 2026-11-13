@@ -2,6 +2,8 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from markupsafe import Markup
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -43,12 +45,24 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
             res["import_partner_data"] = import_partner_data
             if import_partner_data.get("vat"):
                 res["partner_vat"] = import_partner_data["vat"]
+                # Partner may have been created in the meantime
+                existing_partner = self.env["res.partner"].search(
+                    [
+                        ("company_id", "in", (False, move.company_id.id)),
+                        ("vat", "=", import_partner_data["vat"]),
+                    ],
+                    limit=1,
+                )
+                if existing_partner:
+                    update_partner_id = existing_partner.commercial_partner_id.id
+                    res.update(
+                        {
+                            "update_partner_id": update_partner_id,
+                            "create_or_update": "update",
+                        }
+                    )
             if import_partner_data.get("name"):
                 res["partner_name"] = import_partner_data["name"]
-            # Partner may have been created in the meantime
-            res["update_partner_id"] = self.env[
-                "business.document.import"
-            ]._match_partner(import_partner_data, [], raise_exception=False)
         return res
 
     def create_partner(self):
@@ -79,12 +93,14 @@ class AccountInvoiceImportPartnerCreate(models.TransientModel):
             self.update_partner_id
         )
         self.move_id.message_post(
-            body=_(
-                "Partner <a href=# data-oe-model=res.partner "
-                "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
-                "set via the wizard <em>Create or Update Partner</em>. "
-                "The partner has been updated.",
-                partner_id=self.update_partner_id.id,
-                partner_name=self.update_partner_id.display_name,
+            body=Markup(
+                _(
+                    "Partner <a href=# data-oe-model=res.partner "
+                    "data-oe-id=%(partner_id)s>%(partner_name)s</a> has been "
+                    "set via the wizard <em>Create or Update Partner</em>. "
+                    "The partner has been updated.",
+                    partner_id=self.update_partner_id.id,
+                    partner_name=self.update_partner_id.display_name,
+                )
             )
         )
