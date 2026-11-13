@@ -2,6 +2,7 @@
 dateparser
 dotty-dict
 factur-x
+factur-x>=7.9
 ovh
 phonenumbers
 pydifact

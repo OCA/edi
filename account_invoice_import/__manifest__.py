@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Import",
-    "version": "16.0.2.6.0",
+    "version": "16.0.3.0.0",
     "category": "Accounting & Finance",
     "license": "AGPL-3",
     "summary": "Import supplier invoices/refunds as PDF or XML files",
@@ -14,8 +14,12 @@
     "depends": [
         "account",
         "base_iban",
-        "base_business_document_import",
+        "account_tax_unece",
+        "account_payment_unece",
+        "uom_unece",
+        "account_payment_partner",
     ],
+    "external_dependencies": {"python": ["factur-x>=7.9"]},
     "data": [
         "security/ir.model.access.csv",
         "views/res_config_settings.xml",

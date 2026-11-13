@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Invoice
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+>
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+    <cbc:CustomizationID
+    >urn:cen.eu:en16931:2017#conformant#urn.cpro.gouv.fr:1p0:extended-ctc-fr</cbc:CustomizationID>
+    <cbc:ProfileID>S1</cbc:ProfileID>
+    <cbc:ID>NUMERO-FACTURE-TEST</cbc:ID>
+    <!-- numéro bidon -->
+    <cbc:IssueDate>2026-10-05</cbc:IssueDate>
+    <cbc:DueDate>2026-10-08</cbc:DueDate>
+    <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+    <cbc:Note
+    >#AAB# Les reglements avant echeance ne donne pas droit a escompte.</cbc:Note>
+    <cbc:Note
+    >#PMT# Pour les professionnels, application d&apos;une indemnite forfaitaire pour frais de recouvrement de 40 euros</cbc:Note>
+    <cbc:Note
+    >#PMD# Tout retard de paiement engendre l&apos;application d\une penalite egale aux pris de l&apos;offre mensuelle prorata temporis du nombre de jours de retard dans la limite de 10,50euros</cbc:Note>
+    <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="0225">421938861</cbc:EndpointID>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="0002">421938861</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>FREE</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>8 rue de la ville l&apos;Eveque</cbc:StreetName>
+                <cbc:CityName>PARIS</cbc:CityName>
+                <cbc:PostalZone>75008</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>FR</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>FR60421938861</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>FREE SAS</cbc:RegistrationName>
+                <cbc:CompanyID schemeID="0002">421938861</cbc:CompanyID>
+                <cbc:CompanyLegalForm
+                >SAS au capital de 3.441.812 EUR</cbc:CompanyLegalForm>
+            </cac:PartyLegalEntity>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:AccountingCustomerParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="0225">792377731</cbc:EndpointID>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="0002">792377731</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Akretion</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>27 RUE HENRI ROLLAND</cbc:StreetName>
+                <cbc:CityName>VILLEURBANNE</cbc:CityName>
+                <cbc:PostalZone>69100</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>FR</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>FR86792377731</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>Akretion</cbc:RegistrationName>
+                <cbc:CompanyID schemeID="0002">792377731</cbc:CompanyID>
+            </cac:PartyLegalEntity>
+        </cac:Party>
+    </cac:AccountingCustomerParty>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode>58</cbc:PaymentMeansCode>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>FR2812345678901281455430A98</cbc:ID>
+            <!-- IBAN bidon -->
+            <cbc:Name>Akretion</cbc:Name>
+            <cac:FinancialInstitutionBranch>
+                <cbc:ID>QNTOFRP1</cbc:ID>
+            </cac:FinancialInstitutionBranch>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentTerms>
+        <cbc:Note>Ech</cbc:Note>
+    </cac:PaymentTerms>
+    <cac:TaxTotal>
+        <cbc:TaxAmount currencyID="EUR">7.49</cbc:TaxAmount>
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="EUR">37.49</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="EUR">7.49</cbc:TaxAmount>
+            <cac:TaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <cac:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="EUR">37.49</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="EUR">37.49</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="EUR">44.98</cbc:TaxInclusiveAmount>
+        <cbc:AllowanceTotalAmount currencyID="EUR">0.00</cbc:AllowanceTotalAmount>
+        <cbc:ChargeTotalAmount currencyID="EUR">0.00</cbc:ChargeTotalAmount>
+        <cbc:PayableAmount currencyID="EUR">44.98</cbc:PayableAmount>
+    </cac:LegalMonetaryTotal>
+    <cac:InvoiceLine>
+        <cbc:ID>1</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">33.33</cbc:LineExtensionAmount>
+        <cac:Item>
+            <cbc:Name>Abonnement Freebox Delta S du 1er au 30 Septembre 2026</cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">33.33</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>2</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">4.16</cbc:LineExtensionAmount>
+        <cac:Item>
+            <cbc:Name>Backup internet Freebox du 1er au 30 Septembre 2026</cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">4.16</cbc:PriceAmount>
+            <cbc:BaseQuantity unitCode="C62">1</cbc:BaseQuantity>
+        </cac:Price>
+    </cac:InvoiceLine>
+</Invoice>

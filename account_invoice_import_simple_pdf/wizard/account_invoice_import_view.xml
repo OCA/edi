@@ -12,8 +12,8 @@
     <field name="inherit_id" ref="account_invoice_import.account_invoice_import_form" />
     <field name="arch" type="xml">
         <ul name="supported_formats_list" position="inside">
-                <li><b
-                    >regular PDF</b> file without any embedded XML file via a pre-configuration in Odoo.</li>
+                <li><strong
+                    >regular PDF</strong> file without any embedded XML file via a pre-configuration in Odoo for each partner.</li>
         </ul>
     </field>
 </record>

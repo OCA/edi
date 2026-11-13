@@ -46,9 +46,12 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 "partner_id": cls.partner.id,
             }
         )
-
-        cls.partner_config = cls.partner._simple_pdf_partner_config()
         cls.test_info = {"test_mode": True}
+        cls.import_config = {
+            "company": cls.company,
+            "simple_pdf_test_info": cls.test_info,
+        }
+        cls.partner._simple_pdf_update_import_config(cls.import_config)
         cls.env["account.invoice.import"]._simple_pdf_update_test_info(cls.test_info)
         cls.space_chars = list(cls.test_info["space_pattern"][1:-1])
         purchase_tax = cls.env["account.tax"].search(
@@ -62,9 +65,9 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             limit=1,
         )
         cls.module = "account_invoice_import_simple_pdf"
-        cls.product = cls.env.ref("%s.mobile_phone" % cls.module)
+        cls.product = cls.env.ref(f"{cls.module}.mobile_phone")
         cls.product.with_company(cls.company.id).write(
-            {"supplier_taxes_id": [(6, 0, [purchase_tax.id])]}
+            {"supplier_taxes_id": [Command.set([purchase_tax.id])]}
         )
 
         # for the full test with a PDF invoice
@@ -166,12 +169,12 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             )
 
         cls.ak_filename = "akretion_france-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (cls.module, cls.ak_filename), "rb") as f:
+        with file_open(f"{cls.module}/tests/pdf/{cls.ak_filename}", "rb") as f:
             cls.ak_pdf_file = f.read()
             cls.ak_pdf_file_b64 = base64.b64encode(cls.ak_pdf_file)
 
         cls.bt_filename = "bouygues_telecom-test.pdf"
-        with file_open("%s/tests/pdf/%s" % (cls.module, cls.bt_filename), "rb") as f:
+        with file_open(f"{cls.module}/tests/pdf/{cls.bt_filename}", "rb") as f:
             cls.bt_pdf_file = f.read()
             cls.bt_pdf_file_b64 = base64.b64encode(cls.bt_pdf_file)
 
@@ -259,7 +262,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             },
         }
         for src, config in date_test.items():
-            raw_text = "Debit 15.12\n%s\n12.99 Total" % src
+            raw_text = f"Debit 15.12\n{src}\n12.99 Total"
             if config["date_separator"] == "space":
                 raw_text_list = [
                     raw_text % (space_char, space_char)
@@ -267,7 +270,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 ]
             else:
                 raw_text_list = [raw_text]
-            parsed_inv = {"failed_fields": []}
+            parsed_inv = {}
             self.date_field.write(
                 {
                     "date_format": config["date_format"],
@@ -276,11 +279,9 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             )
             lang_list = config["lang"] == "any" and ["fr", "en"] or [config["lang"]]
             for lang in lang_list:
-                self.partner_config["lang_short"] = lang
+                self.import_config["simple_pdf_partner"]["lang_short"] = lang
                 for raw_txt in raw_text_list:
-                    self.date_field._get_date(
-                        parsed_inv, raw_txt, self.partner_config, self.test_info
-                    )
+                    self.date_field._get_date(raw_txt, parsed_inv, self.import_config)
                     res_date = parsed_inv["date"]
                     self.assertEqual(fields.Date.to_string(res_date), "2021-07-14")
 
@@ -299,13 +300,11 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 "date_separator": "space",
             }
         )
-        self.partner_config["lang_short"] = "fr"
+        self.import_config["simple_pdf_partner"]["lang_short"] = "fr"
         for src_string, result in testdict.items():
-            raw_text = "Débit 15,12\n%s\nTotal TTC 12,99" % src_string
-            parsed_inv = {"failed_fields": []}
-            self.date_field._get_date(
-                parsed_inv, raw_text, self.partner_config, self.test_info
-            )
+            raw_text = f"Débit 15,12\n{src_string}\nTotal TTC 12,99"
+            parsed_inv = {}
+            self.date_field._get_date(raw_text, parsed_inv, self.import_config)
             self.assertEqual(fields.Date.to_string(parsed_inv["date"]), result)
 
     def test_restrict_text(self):
@@ -413,8 +412,8 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         }
         for src, config in amount_test.items():
             raw_text = (
-                "Invoice Date: 05/12/2019\n%s\nSAS with a capital of 1,234,322.23 USD"
-                % src
+                f"Invoice Date: 05/12/2019\n{src}\n"
+                "SAS with a capital of 1,234,322.23 USD"
             )
             if config["thousand_separator"] == "space" and "%s" in raw_text:
                 raw_text_list = [
@@ -422,35 +421,35 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 ]
             else:
                 raw_text_list = [raw_text]
-            parsed_inv = {"failed_fields": []}
             self.partner.write(
                 {
                     "simple_pdf_decimal_separator": config["decimal_separator"],
                     "simple_pdf_thousand_separator": config["thousand_separator"],
                     "simple_pdf_currency_id": self.env.ref(
-                        "base.%s" % config["currency"]
+                        f"base.{config['currency']}"
                     ).id,
                 }
             )
-            partner_config = self.partner._simple_pdf_partner_config()
-            if partner_config["currency"].decimal_places == 0:
+            self.partner._simple_pdf_update_import_config(self.import_config)
+            if self.import_config["invoice_currency"].decimal_places == 0:
                 self.amount_field.write({"extract_rule": "last"})
             else:
                 self.amount_field.write({"extract_rule": "first"})
             for raw_txt in raw_text_list:
+                parsed_inv = {}
                 self.amount_field._get_amount_total(
-                    parsed_inv, raw_txt, partner_config, self.test_info
+                    raw_txt, parsed_inv, self.import_config
                 )
                 res_amount = parsed_inv["amount_total"]
                 self.assertFalse(
-                    partner_config["currency"].compare_amounts(
+                    self.import_config["invoice_currency"].compare_amounts(
                         res_amount, config["result"]
                     )
                 )
 
     def test_invoice_number_parsing(self):
         inv_num_test = {
-            "INV/2024/05/0042": [
+            "INV/2020/05/0042": [
                 {"string_type": "fixed", "fixed_char": "INV/"},
                 {"string_type": "year4"},
                 {"string_type": "fixed", "fixed_char": "/"},
@@ -458,12 +457,12 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 {"string_type": "fixed", "fixed_char": "/"},
                 {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
             ],
-            "I240042": [
+            "I210042": [
                 {"string_type": "fixed", "fixed_char": "I"},
                 {"string_type": "year2"},
                 {"string_type": "digit", "occurrence_min": 4, "occurrence_max": 5},
             ],
-            "INV2407ZB0042": [
+            "INV2107ZB0042": [
                 {"string_type": "fixed", "fixed_char": "INV"},
                 {"string_type": "year2"},
                 {"string_type": "month"},
@@ -476,7 +475,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             ],
             # If you wonder which company can have such a stupid invoice number,
             # the answer is... Orange ! I won't say what I think about these guys...
-            "04B700L456 24A7- 1J01": [
+            "04B700L456 21A7- 1J01": [
                 {"string_type": "fixed", "fixed_char": "04B700L456"},
                 {"string_type": "space"},
                 {"string_type": "year2"},
@@ -493,14 +492,18 @@ class TestInvoiceImportSimplePdf(TransactionCase):
             ],
         }
         for src, config_list in inv_num_test.items():
-            raw_txt = "Invoice number: %s dated 20/08/2020" % src
+            raw_txt = f"Invoice number: {src} dated 20/08/2020"
             self.partner.simple_pdf_invoice_number_ids.unlink()
             self.partner.write(
-                {"simple_pdf_invoice_number_ids": [(0, 0, x) for x in config_list]}
+                {
+                    "simple_pdf_invoice_number_ids": [
+                        Command.create(x) for x in config_list
+                    ]
+                }
             )
-            parsed_inv = {"failed_fields": []}
+            parsed_inv = {}
             self.inv_num_field._get_invoice_number(
-                parsed_inv, raw_txt, self.partner_config, self.test_info
+                raw_txt, parsed_inv, self.import_config
             )
             self.assertEqual(src, parsed_inv["invoice_number"])
 
@@ -523,7 +526,7 @@ class TestInvoiceImportSimplePdf(TransactionCase):
                 "company_id": self.company.id,
             }
         )
-        wiz.import_invoices()
+        wiz.import_invoices_button()
         # Check result of invoice creation
         invoices = self.env["account.move"].search(
             [
@@ -553,6 +556,34 @@ class TestInvoiceImportSimplePdf(TransactionCase):
         self.assertEqual(float_compare(iline.quantity, 1.0, precision_digits=2), 0)
         self.assertEqual(float_compare(iline.price_unit, 1509, precision_digits=2), 0)
         inv.unlink()
+
+    def test_complete_import_without_date(self):
+        """Invoice import must succeed and leave invoice_date unset
+        when no date field is configured for the partner."""
+        self.partner_ak.simple_pdf_field_ids.filtered(
+            lambda f: f.name == "date"
+        ).unlink()
+        wiz = self.env["account.invoice.import"].create(
+            {
+                "invoice_attachment_ids": [
+                    Command.create(
+                        {"datas": self.ak_pdf_file_b64, "name": self.ak_filename}
+                    )
+                ],
+                "company_id": self.company.id,
+            }
+        )
+        wiz.import_invoices_button()
+        invoices = self.env["account.move"].search(
+            [
+                ("partner_id", "=", self.partner_ak.id),
+                ("state", "=", "draft"),
+                ("move_type", "=", "in_invoice"),
+                ("company_id", "=", self.company.id),
+            ]
+        )
+        self.assertTrue(invoices)
+        self.assertFalse(invoices[0].invoice_date)
 
     def _complete_import_specific_method(self, method):
         icpo = self.env["ir.config_parameter"]

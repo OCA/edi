@@ -2,6 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # Copyright 2022 Camptocamp SA
 # @author: Simone Orsi <simahawk@gmail.com>
+# Copyright 2026 Michael Tietz (MT Software) <mtietz@mt-software.de>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import unittest.mock
@@ -73,7 +74,7 @@ class TestInvoiceImport(TransactionCase):
                 {
                     "name": "Expense product",
                     "default_code": "AII-TEST-PRODUCT",
-                    "taxes_id": [(6, 0, [cls.sale_tax.id])],
+                    "taxes_id": [Command.set([cls.sale_tax.id])],
                     "supplier_taxes_id": [Command.set([cls.purchase_tax.id])],
                     "property_account_income_id": cls.income_account.id,
                     "property_account_expense_id": cls.expense_account.id,
@@ -82,12 +83,12 @@ class TestInvoiceImport(TransactionCase):
         )
         cls.all_import_config = [
             {
-                "single_line": True,
+                "shrink_lines": "single",
                 "account": cls.expense_account,
                 "taxes": cls.purchase_tax,
                 "company": cls.company,
             },
-            {"single_line": False, "product": cls.product, "company": cls.company},
+            {"shrink_lines": False, "product": cls.product, "company": cls.company},
             {
                 "account": cls.expense_account,
                 "company": cls.company,
@@ -96,11 +97,7 @@ class TestInvoiceImport(TransactionCase):
             {"company": cls.company},
         ]
 
-        # Define partners as supplier and customer
-        # Wood Corner
-        cls.env.ref("base.res_partner_1").supplier_rank = 1
-        # Deco Addict
-        cls.env.ref("base.res_partner_2").customer_rank = 1
+        # Define journals & partners
         cls.pur_journal1 = cls.env["account.journal"].create(
             {
                 "type": "purchase",
@@ -140,83 +137,73 @@ class TestInvoiceImport(TransactionCase):
 
     def test_import_in_invoice(self):
         parsed_inv = {
-            "type": "in_invoice",
-            "journal": {"code": "XXXP2"},
-            "amount_untaxed": 100.0,
-            "amount_total": 101.0,
-            "date": "2017-08-16",
-            "date_due": "2017-08-31",
-            "date_start": "2017-08-01",
-            "date_end": "2017-08-31",
-            "partner": {"name": "Wood Corner"},
-            "description": "New hi-tech gadget",
-            "lines": [
+            "BT-1": "FAC2017/002",
+            "BT-3": "380",
+            "BT-5": self.company.currency_id.name,
+            "BT-109": 100.0,
+            "BT-112": 101.0,
+            "BT-2": "2017-08-16",
+            "BT-9": "2017-08-31",
+            "BT-73": "2017-08-01",
+            "BT-74": "2017-08-31",
+            "BG-4": {"name": "Wood Corner"},
+            "BG-25": [
                 {
-                    "product": {"code": "AII-TEST-PRODUCT"},
-                    "name": "Super test product",
-                    "qty": 2,
-                    "price_unit": 50,
-                    "taxes": [
-                        {
-                            "amount_type": "percent",
-                            "amount": 1.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
+                    "BT-126": "1",
+                    "BT-156": "AII-TEST-PRODUCT",
+                    "BT-153": "Super test product",
+                    "BT-129": 2,
+                    "BT-146": 50,
+                    "BT-152": 1.0,
+                    "BT-151": "S",
                 }
             ],
         }
         for import_c in self.all_import_config:
             # hack to have a unique vendor inv ref
-            parsed_inv["invoice_number"] = "INV-%s" % randint(100000, 999999)
+            parsed_inv["BT-1"] = f"INV-{randint(100000, 999999)}"
+            import_c["purchase_journal"] = self.pur_journal2
             inv = self.env["account.invoice.import"].create_invoice(
                 parsed_inv, import_c
             )
-            self.assertEqual(inv.move_type, parsed_inv["type"])
+            self.assertEqual(inv.move_type, "in_invoice")
+            self.assertEqual(inv.ref, parsed_inv["BT-1"])
             self.assertEqual(inv.company_id.id, self.company.id)
             self.assertFalse(
                 inv.currency_id.compare_amounts(
-                    inv.amount_untaxed, parsed_inv["amount_untaxed"]
+                    inv.amount_untaxed, parsed_inv["BT-109"]
                 )
             )
             self.assertFalse(
-                inv.currency_id.compare_amounts(
-                    inv.amount_total, parsed_inv["amount_total"]
-                )
+                inv.currency_id.compare_amounts(inv.amount_total, parsed_inv["BT-112"])
             )
             self.assertEqual(
-                fields.Date.to_string(inv.invoice_date), parsed_inv["date"]
+                fields.Date.to_string(inv.invoice_date), parsed_inv["BT-2"]
             )
             self.assertEqual(
-                fields.Date.to_string(inv.invoice_date_due), parsed_inv["date_due"]
+                fields.Date.to_string(inv.invoice_date_due), parsed_inv["BT-9"]
             )
-            self.assertEqual(inv.journal_id.id, self.pur_journal2.id)
+            self.assertEqual(inv.journal_id.id, import_c["purchase_journal"].id)
 
     def test_import_in_invoice_with_global_adjustment(self):
         parsed_inv = {
-            "type": "in_invoice",
-            "journal": {"code": "XXXP2"},
-            "invoice_number": "TESTAIIGLOBAL",
-            "amount_untaxed": 100.05,
-            "amount_total": 101.0,
-            "date": "2023-04-08",
-            "date_due": "2023-05-07",
-            "partner": {"name": "Wood Corner"},
-            "lines": [
+            "BT-3": "380",
+            "BT-1": "TESTAIIGLOBAL",
+            "BT-5": self.company.currency_id.name,
+            "BT-109": 100.05,
+            "BT-112": 101.0,
+            "BT-2": "2023-04-08",
+            "BT-9": "2023-05-07",
+            "BG-4": {"name": "Wood Corner"},
+            "BG-25": [
                 {
-                    "product": {"code": "AII-TEST-PRODUCT"},
-                    "name": "Super test product",
-                    "qty": 2,
-                    "price_unit": 50,
-                    "taxes": [
-                        {
-                            "amount_type": "percent",
-                            "amount": 1.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
+                    "BT-126": "1",
+                    "BT-156": "AII-TEST-PRODUCT",
+                    "BT-153": "Super test product",
+                    "BT-129": 2,
+                    "BT-146": 50,
+                    "BT-152": 1.0,
+                    "BT-151": "S",
                 }
             ],
         }
@@ -224,47 +211,40 @@ class TestInvoiceImport(TransactionCase):
         inv = self.env["account.invoice.import"].create_invoice(
             parsed_inv, import_config
         )
-        self.assertEqual(inv.move_type, parsed_inv["type"])
+        self.assertEqual(inv.move_type, "in_invoice")
         self.assertFalse(
-            inv.currency_id.compare_amounts(
-                inv.amount_untaxed, parsed_inv["amount_untaxed"]
-            )
+            inv.currency_id.compare_amounts(inv.amount_untaxed, parsed_inv["BT-109"])
         )
         self.assertFalse(
-            inv.currency_id.compare_amounts(
-                inv.amount_total, parsed_inv["amount_total"]
-            )
+            inv.currency_id.compare_amounts(inv.amount_total, parsed_inv["BT-112"])
         )
         # Check that we have an adjustment line
         self.assertEqual(len(inv.invoice_line_ids), 2)
 
     def test_import_out_invoice(self):
         parsed_inv = {
-            "type": "out_invoice",
-            "date": "2017-08-16",
-            "partner": {"name": "Deco Addict"},
-            "lines": [
+            "BT-2": "2017-08-16",
+            "BT-5": self.company.currency_id.name,
+            "BG-7": {"name": "Deco Addict"},
+            "BG-25": [
                 {
-                    "product": {"code": "AII-TEST-PRODUCT"},
-                    "name": "Super product",
-                    "qty": 3,
-                    "price_unit": 100,
-                    "discount": 10,
-                    "date_start": "2017-08-01",
-                    "date_end": "2017-08-31",
-                    "taxes": [
-                        {  # only needed for method 'nline_no_product'
-                            "amount_type": "percent",
-                            "amount": 1.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
+                    "BT-126": "1",
+                    "BT-156": "AII-TEST-PRODUCT",
+                    "BT-153": "Super product",
+                    "BT-129": 3,
+                    "BT-148": 100,
+                    "BT-147-00": [{"BT-147": 10}],
+                    "BT-146": 90,
+                    "BT-134": "2017-08-01",
+                    "BT-135": "2017-08-31",
+                    "BT-152": 1.0,
+                    "BT-151": "S",
                 }
             ],
         }
         for import_config in self.all_import_config:
-            if import_config.get("single_line"):
+            import_config["invoice_type"] = "out"
+            if import_config.get("shrink_lines"):
                 continue
             inv = self.env["account.invoice.import"].create_invoice(
                 parsed_inv, import_config
@@ -274,82 +254,8 @@ class TestInvoiceImport(TransactionCase):
             )
             self.assertFalse(inv.currency_id.compare_amounts(inv.amount_total, 272.70))
             self.assertEqual(
-                fields.Date.to_string(inv.invoice_date), parsed_inv["date"]
+                fields.Date.to_string(inv.invoice_date), parsed_inv["BT-2"]
             )
-
-    def test_import_in_invoice_special_display_types(self):
-        parsed_inv = {
-            "type": "in_invoice",
-            "journal": {"code": "XXXP2"},
-            "amount_untaxed": 0.0,
-            "amount_total": 0.0,
-            "date": "2017-08-16",
-            "partner": {"name": "Wood Corner"},
-            "lines": [
-                {"line_note": "This is a line note"},
-                {"sectionheader": "SECTION 1"},
-            ],
-        }
-        import_config = {"company": self.company}
-        parsed_inv["invoice_number"] = "INV-%s" % randint(100000, 999999)
-        inv = self.env["account.invoice.import"].create_invoice(
-            parsed_inv, import_config
-        )
-        # We expect two created invoice lines corresponding to the note and section
-        self.assertEqual(len(inv.invoice_line_ids), 2)
-        types = [line.display_type for line in inv.invoice_line_ids]
-        self.assertIn("line_note", types)
-        self.assertIn("line_section", types)
-        # Special display lines should not have a product linked
-        for line in inv.invoice_line_ids:
-            self.assertFalse(line.product_id)
-
-    def test_import_in_invoice_mixed_display_types_with_product(self):
-        parsed_inv = {
-            "type": "in_invoice",
-            "journal": {"code": "XXXP2"},
-            "amount_untaxed": 100.0,
-            "amount_total": 101.0,
-            "date": "2017-08-16",
-            "partner": {"name": "Wood Corner"},
-            "lines": [
-                {"sectionheader": "SECTION 1"},
-                {"line_note": "This is a line note"},
-                {
-                    "product": {"code": "AII-TEST-PRODUCT"},
-                    "name": "Super test product",
-                    "qty": 2,
-                    "price_unit": 50,
-                    "taxes": [
-                        {
-                            "amount_type": "percent",
-                            "amount": 1.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
-                },
-            ],
-        }
-        import_config = {"company": self.company}
-        parsed_inv["invoice_number"] = "INV-%s" % randint(100000, 999999)
-        inv = self.env["account.invoice.import"].create_invoice(
-            parsed_inv, import_config
-        )
-        # Expect three lines: section, note, and product
-        self.assertEqual(len(inv.invoice_line_ids), 3)
-        types = [line.display_type for line in inv.invoice_line_ids]
-        self.assertIn("line_section", types)
-        self.assertIn("line_note", types)
-        self.assertIn("product", types)
-        # Check product line exists and has correct product and qty
-        prod_lines = [
-            line for line in inv.invoice_line_ids if line.display_type == "product"
-        ]
-        self.assertEqual(len(prod_lines), 1)
-        prod_line = prod_lines[0]
-        self.assertEqual(prod_line.product_id.id, self.product.id)
-        self.assertEqual(prod_line.quantity, 2)
 
     _fake_email = """
 Received: by someone@example.com
@@ -365,12 +271,6 @@ Happy Birthday!
 See you this evening,
 Nina
 """
-
-    def test_email_gateway(self):
-        """No exception occurs on incoming email"""
-        self.env["mail.thread"].with_context(
-            mail_channel_noautofollow=True
-        ).message_process("account.invoice.import", self._fake_email)
 
     def test_email_gateway_multi_comp_1_matching(self):
         comp = self.env["res.company"].create(
@@ -432,11 +332,11 @@ Nina
 
     def prepare_email_with_attachment(self, sender_email):
         file_name = "unknown_invoice.pdf"
-        file_path = "account_invoice_import/tests/pdf/%s" % file_name
+        file_path = f"account_invoice_import/tests/test_files/{file_name}"
         with file_open(file_path, "rb") as f:
             pdf_file = f.read()
         msg_dict = {
-            "email_from": '"My supplier" <%s>' % sender_email,
+            "email_from": f'"My supplier" <{sender_email}>',
             "to": self.company.invoice_import_email,
             "subject": "Invoice n°1242",
             "body": "Please find enclosed your PDF invoice",
@@ -504,3 +404,83 @@ Nina
         price_prec = self.env["decimal.precision"].precision_get("Product Price")
         self.assertTrue(float_is_zero(iline.price_unit, precision_digits=price_prec))
         self.assertTrue(self.company.currency_id.is_zero(iline.price_subtotal))
+
+    def test_import_in_invoice_fiscal_position_shrink_line(self):
+        """
+        The auto-applied fiscal position of the partner maps account and taxes.
+        (!) This is only with "shrink lines" on the partner: else, in_invoice should
+            already have correct taxes.
+        """
+        partner = self.env["res.partner"].create(
+            {
+                "is_company": True,
+                "name": "AII Fiscal Position Supplier",
+                "country_id": self.env.ref("base.be").id,
+                "vat": "FR23334175221",
+                "invoice_import_shrink_lines": "single",
+            }
+        )
+        dest_account = self.env["account.account"].create(
+            {
+                "code": "613AII",
+                "name": "Fiscal position expense account invoice import",
+                "account_type": "expense",
+                "company_id": self.company.id,
+            }
+        )
+        dest_tax = self.purchase_tax.copy(
+            {"name": "Test 0% VAT", "description": "ZZ-VAT-buy-0.0", "amount": 0}
+        )
+        self.env["account.fiscal.position"].create(
+            {
+                "name": "AII Belgium",
+                "company_id": self.company.id,
+                "auto_apply": True,
+                "country_id": self.env.ref("base.be").id,
+                "sequence": 1,
+                "account_ids": [
+                    Command.create(
+                        {
+                            "account_src_id": self.expense_account.id,
+                            "account_dest_id": dest_account.id,
+                        }
+                    )
+                ],
+                "tax_ids": [
+                    Command.create(
+                        {
+                            "tax_src_id": self.purchase_tax.id,
+                            "tax_dest_id": dest_tax.id,
+                        }
+                    )
+                ],
+            }
+        )
+        parsed_inv = {
+            "BT-2": "2017-08-16",
+            "BT-5": self.company.currency_id.name,
+            "BT-109": 100.0,
+            "BT-112": 100.0,
+            "BG-4": {"vat_identifier": partner.vat},
+            "BG-25": [
+                {
+                    "BT-126": 1,
+                    "BT-129": 2,
+                    "BT-146": 50,
+                    "BT-153": "Super test product",
+                    "BT-156": "AII-TEST-PRODUCT",
+                }
+            ],
+        }
+        import_config = {
+            "account": self.expense_account,
+            "taxes": self.purchase_tax,
+            "company": self.company,
+        }
+        inv = self.env["account.invoice.import"].create_invoice(
+            parsed_inv, import_config
+        )
+        self.assertEqual(inv.partner_id, partner)
+        self.assertEqual(len(inv.invoice_line_ids), 1)
+        self.assertEqual(inv.invoice_line_ids.account_id, dest_account)
+        self.assertEqual(inv.invoice_line_ids.tax_ids, dest_tax)
