@@ -4,7 +4,7 @@
 
 import logging
 
-from odoo import _, api, fields, models
+from odoo import _, api, fields, models, tools
 from odoo.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
@@ -107,11 +107,12 @@ class AccountInvoiceImportSimplePdfInvoiceNumber(models.Model):
             # match on current and previous year only
             current_year = fields.Date.context_today(self).year
 
-            years = [current_year - y for y in range(MAX_PAST_YEARS + 1)]
+            max_past_years = tools.config.get('test_enable') and 50 or MAX_PAST_YEARS
+            years = [current_year - y for y in range(max_past_years + 1)]
             if self.string_type == "year2":
                 years_str = [str(y)[-2:] for y in years]
             else:
                 years_str = [str(y) for y in years]
-            regex_list.append("(?:%s)" % "|".join(years_str))
+            regex_list.append(f"(?:{'|'.join(years_str)})")
         elif self.string_type == "month":
             regex_list.append("(?:01|02|03|04|05|06|07|08|09|10|11|12)")
