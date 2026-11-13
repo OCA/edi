@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem
+        id="menu_edi_root"
+        name="EDI"
+        sequence="10"
+        web_icon="base_edi,static/description/icon.png"
+        groups="group_edi_manager"
+    />
+</odoo>
