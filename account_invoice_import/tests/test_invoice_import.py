@@ -10,7 +10,7 @@ from random import randint
 
 from odoo import Command, fields
 from odoo.tests.common import TransactionCase
-from odoo.tools import file_open, float_is_zero
+from odoo.tools import file_open, float_is_zero, mute_logger
 
 
 class TestInvoiceImport(TransactionCase):
@@ -64,6 +64,14 @@ class TestInvoiceImport(TransactionCase):
             "company_id": cls.company.id,
         }
         cls.purchase_tax = cls.env["account.tax"].create(purchase_tax_vals)
+        cls.purchase_tax_2 = cls.env["account.tax"].create(
+            dict(
+                purchase_tax_vals,
+                name="Test 2% VAT",
+                description="ZZ-VAT-buy-2.0",
+                amount=2,
+            )
+        )
         sale_tax_vals = purchase_tax_vals.copy()
         sale_tax_vals.update({"description": "ZZ-VAT-sale-1.0", "type_tax_use": "sale"})
         cls.sale_tax = cls.env["account.tax"].create(sale_tax_vals)
@@ -135,6 +143,17 @@ class TestInvoiceImport(TransactionCase):
             }
         )
 
+    def _create_invoice_muted(self, parsed_inv, import_config):
+        """
+        A helper method to create invoice while preventing the normal
+        'WARNING' logs to make the tests fail in automated pipeline
+        """
+        logger = "odoo.addons.account_invoice_import.wizard.account_invoice_import"
+        with mute_logger(logger):
+            return self.env["account.invoice.import"].create_invoice(
+                parsed_inv, import_config
+            )
+
     def test_import_in_invoice(self):
         parsed_inv = {
             "BT-1": "FAC2017/002",
@@ -163,9 +182,7 @@ class TestInvoiceImport(TransactionCase):
             # hack to have a unique vendor inv ref
             parsed_inv["BT-1"] = f"INV-{randint(100000, 999999)}"
             import_c["purchase_journal"] = self.pur_journal2
-            inv = self.env["account.invoice.import"].create_invoice(
-                parsed_inv, import_c
-            )
+            inv = self._create_invoice_muted(parsed_inv, import_c)
             self.assertEqual(inv.move_type, "in_invoice")
             self.assertEqual(inv.ref, parsed_inv["BT-1"])
             self.assertEqual(inv.company_id.id, self.company.id)
@@ -185,13 +202,15 @@ class TestInvoiceImport(TransactionCase):
             )
             self.assertEqual(inv.journal_id.id, import_c["purchase_journal"].id)
 
-    def test_import_in_invoice_with_global_adjustment(self):
+    def test_import_in_invoice_with_global_adjustments(self):
         parsed_inv = {
             "BT-3": "380",
             "BT-1": "TESTAIIGLOBAL",
             "BT-5": self.company.currency_id.name,
+            # lines: 50 (1% VAT) + 50 (2% VAT) = 100.00 => 0.05 to adjust
             "BT-109": 100.05,
-            "BT-112": 101.0,
+            # VAT: 50.02 * 1% + 50.03 * 2% = 0.50 + 1.00
+            "BT-112": 101.55,
             "BT-2": "2023-04-08",
             "BT-9": "2023-05-07",
             "BG-4": {"name": "Wood Corner"},
@@ -200,17 +219,24 @@ class TestInvoiceImport(TransactionCase):
                     "BT-126": "1",
                     "BT-156": "AII-TEST-PRODUCT",
                     "BT-153": "Super test product",
-                    "BT-129": 2,
+                    "BT-129": 1,
                     "BT-146": 50,
                     "BT-152": 1.0,
                     "BT-151": "S",
-                }
+                },
+                {
+                    "BT-126": "2",
+                    "BT-156": "AII-TEST-PRODUCT",
+                    "BT-153": "Super test product",
+                    "BT-129": 1,
+                    "BT-146": 50,
+                    "BT-152": 2.0,  # other vat rate => 2nd adjustment line
+                    "BT-151": "S",
+                },
             ],
         }
         import_config = {"company": self.company}
-        inv = self.env["account.invoice.import"].create_invoice(
-            parsed_inv, import_config
-        )
+        inv = self._create_invoice_muted(parsed_inv, import_config)
         self.assertEqual(inv.move_type, "in_invoice")
         self.assertFalse(
             inv.currency_id.compare_amounts(inv.amount_untaxed, parsed_inv["BT-109"])
@@ -218,14 +244,19 @@ class TestInvoiceImport(TransactionCase):
         self.assertFalse(
             inv.currency_id.compare_amounts(inv.amount_total, parsed_inv["BT-112"])
         )
-        # Check that we have an adjustment line
-        self.assertEqual(len(inv.invoice_line_ids), 2)
+        # 2 product lines + 2 adjustment lines (1 per tax, prorata of VAT amount)
+        self.assertEqual(len(inv.invoice_line_ids), 4)
+        adj_lines = inv.invoice_line_ids.filtered(lambda x: not x.product_id)
+        self.assertEqual(adj_lines.tax_ids, self.purchase_tax | self.purchase_tax_2)
+        self.assertAlmostEqual(sum(adj_lines.mapped("price_subtotal")), 0.05)
 
     def test_import_out_invoice(self):
         parsed_inv = {
             "BT-2": "2017-08-16",
             "BT-5": self.company.currency_id.name,
             "BG-7": {"name": "Deco Addict"},
+            "BT-109": 270,
+            "BT-112": 272.70,
             "BG-25": [
                 {
                     "BT-126": "1",
@@ -246,9 +277,7 @@ class TestInvoiceImport(TransactionCase):
             import_config["invoice_type"] = "out"
             if import_config.get("shrink_lines"):
                 continue
-            inv = self.env["account.invoice.import"].create_invoice(
-                parsed_inv, import_config
-            )
+            inv = self._create_invoice_muted(parsed_inv, import_config)
             self.assertFalse(
                 inv.currency_id.compare_amounts(inv.amount_untaxed, 270.00)
             )
@@ -477,9 +506,7 @@ Nina
             "taxes": self.purchase_tax,
             "company": self.company,
         }
-        inv = self.env["account.invoice.import"].create_invoice(
-            parsed_inv, import_config
-        )
+        inv = self._create_invoice_muted(parsed_inv, import_config)
         self.assertEqual(inv.partner_id, partner)
         self.assertEqual(len(inv.invoice_line_ids), 1)
         self.assertEqual(inv.invoice_line_ids.account_id, dest_account)

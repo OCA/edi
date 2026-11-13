@@ -1540,64 +1540,156 @@ class AccountInvoiceImport(models.TransientModel):
         return " ".join(chatter_msg)
 
     @api.model
-    def _prepare_global_adjustment_line(self, diff_amount, invoice, import_config):
-        cur = invoice.currency_id
-        diff_amount_cmp = cur.compare_amounts(diff_amount, 0)
-        company = invoice.company_id
-        # TODO : if a product or account is forced,
-        # I think we should use this account (and product) ?
-        if diff_amount_cmp > 0:
-            if not company.adjustment_debit_account_id:
-                raise UserError(
-                    self.env._(
-                        "You must configure the 'Adjustment Debit Account' "
-                        "on the Accounting Configuration page of company %(company)s.",
-                        company=company.display_name,
-                    )
-                )
-            account = company.adjustment_debit_account_id
-            sign = 1
-        else:
-            if not company.adjustment_credit_account_id:
-                raise UserError(
-                    self.env._(
-                        "You must configure the 'Adjustment Credit Account' "
-                        "on the Accounting Configuration page of company %(company)s.",
-                        company=company.display_name,
-                    )
-                )
-            account = company.adjustment_credit_account_id
-            sign = -1
-        if invoice.fiscal_position_id:
-            account = invoice.fiscal_position_id.map_account(account)
+    def _prepare_global_adjustment_lines(self, diff_amount, invoice, import_config):
+        """
+        EN16931 requires a VAT category on each line for customer invoices, so if there
+        are several taxes in the invoices, we do 1 adjustment line per tax (prorata)
+        """
+        product_lines = invoice.invoice_line_ids.filtered(
+            lambda x: x.display_type == "product"
+        )
 
+        # no tax or single tax
+        if len(product_lines.tax_ids) <= 1:
+            return self._prepare_adjustment_line(
+                diff_amount, invoice=invoice, taxes=product_lines.tax_ids
+            )
+
+        # Several taxes => 1 adjustment line per tax (required for EN16931)
+        # Compute prorata per tax -> future 'price_unit' of each adjustment lines
+        cur = invoice.currency_id
+        amount_per_tax = defaultdict(float)
+        AccountTax = self.env["account.tax"]
+        # This 1st loop sums the base amount per taxe in the invoice
+        for iline in product_lines:
+            base_line = invoice._prepare_product_base_line_for_taxes_computation(iline)
+            AccountTax._add_tax_details_in_base_line(base_line, invoice.company_id)
+            for tax_data in base_line["tax_details"]["taxes_data"]:
+                amount_per_tax[tax_data["tax"]] += tax_data["tax_amount"]
+        # This 2nd loop calculates the amount of adjustment lines
+        prorata_per_tax = {}
+        for tax, tax_amount in amount_per_tax.items():
+            prorata = cur.round(diff_amount * tax_amount / invoice.amount_tax)
+            if not cur.is_zero(prorata):
+                prorata_per_tax[tax] = prorata
+
+        # Rounding issues
+        if not prorata_per_tax:
+            # If all proratas were too small => fallback to single global line scenario
+            return self._prepare_adjustment_line(
+                diff_amount, invoice=invoice, taxes=product_lines.tax_ids
+            )
+        total_prorata = sum(prorata_per_tax.values())
+        remaining = cur.round(diff_amount - total_prorata)
+        if not cur.is_zero(remaining):
+            # If prorata rounding left something, charge the highest prorata
+            biggest_tax = max(prorata_per_tax, key=prorata_per_tax.get)
+            prorata_per_tax[biggest_tax] += remaining
+        assert diff_amount == sum(prorata_per_tax.values())
+
+        return [
+            self._prepare_adjustment_line(
+                tax_prorata, invoice=invoice, taxes=tax, name=tax.name
+            )
+            for tax, tax_prorata in prorata_per_tax.items()
+            if not cur.is_zero(tax_prorata)
+        ]
+
+    def _prepare_adjustment_line(
+        self,
+        price_unit,
+        iline=None,
+        invoice=None,
+        taxes=None,
+        name=None,
+    ):
+        """
+        :arg `iline`: given for product adjustment line
+        :arg `invoice`: given for global adjustment line (per tax)
+        """
+        assert iline or invoice
+        invoice = iline and iline.move_id or invoice
+        account = (
+            iline
+            and iline.account_id  # line-adjustment
+            or self._get_adjustment_account(price_unit, invoice)  # global line
+        )
+        taxes = iline and iline.tax_ids or taxes
+        assert account, taxes
+        cur = invoice.currency_id
         lvals = {
             "move_id": invoice.id,
             "display_type": "product",
-            "name": self.env._("Adjustment"),
+            "name": self.env._("Adjustment") + (f" on {name}" if name else ""),
             "account_id": account.id,
-            "quantity": sign,
-            "price_unit": diff_amount * sign,
+            "quantity": (1 if cur.compare_amounts(price_unit, 0) > 0 else -1),
+            "price_unit": abs(
+                self._get_adjustment_line_price_unit(price_unit, taxes, cur)
+            ),
+            "tax_ids": [Command.set(taxes.ids)],
         }
-        logger.debug("Prepared global adjustment invoice line %s", lvals)
         return lvals
 
-    def _prepare_adjustment_line(self, iline, diff_amount):
-        vals = {
-            "move_id": iline.move_id.id,
-            "display_type": "product",
-            "account_id": iline.account_id.id,
-            "name": self.env._("Adjustment on %s") % iline.name,
-            "quantity": 1,
-            "price_unit": diff_amount,
-            "tax_ids": [Command.set(iline.tax_ids.ids)],
-        }
-        return vals
+    def _get_adjustment_line_price_unit(self, price_unit, taxes, currency):
+        """
+        Return `price_unit` of the adjustment line,
+         being aware of taxes' 'price_include'.
+        """
+        if not taxes.filtered("price_include"):
+            return price_unit
+        # Assumption: if 1 tax of a line is "price_include", all other are too.
+        if not all(price_include for price_include in taxes.mapped("price_include")):
+            raise UserError(
+                self.env._(
+                    "One invoice line has several taxes with different configurations "
+                    "for 'Included in Price' tax parameter. This is not supported "
+                    "when creating a global adjustment line.\n"
+                    "Taxes in the line: %(taxes)s.",
+                    taxes=", ".join(taxes.mapped("name")),
+                )
+            )
+        # Make of 'price_unit' a tax-included amount
+        return taxes.compute_all(
+            price_unit, currency=currency, handle_price_include=False
+        )["total_included"]
+
+    @api.model
+    def _get_adjustment_account(self, diff_amount, invoice):
+        """
+        Return Debit or Credit adjustment account depending
+        on `invoice_type` and `amount_diff`
+        """
+        cur = invoice.currency_id
+        company = invoice.company_id
+        diff_amount_cmp = cur.compare_amounts(diff_amount, 0)
+        is_debit = bool(
+            # when diff_amount > 0 (parsed_subtotal > odoo_subtotal)
+            # debit: in_invoice or out_refund
+            # credit: out_invoice or in_refund
+            diff_amount_cmp * invoice.direction_sign > 0
+        )
+        # TODO : if a product or account is forced,
+        # I think we should use this account (and product) ?
+        account = (
+            company.adjustment_debit_account_id
+            if is_debit
+            else company.adjustment_credit_account_id
+        )
+        if not account:
+            raise UserError(
+                self.env._(
+                    "You must configure the 'Adjustment %(name)s Account' "
+                    "on the Accounting Configuration page of company %(company)s.",
+                    name=self.env._("Debit") if is_debit else self.env._("Credit"),
+                    company=company.display_name,
+                )
+            )
+        if invoice.fiscal_position_id:
+            account = invoice.fiscal_position_id.map_account(account)
+        return account
 
     @api.model
     def _post_process_invoice(self, parsed_inv, import_config, invoice):
-        if import_config.get("invoice_type") == "out":
-            return
         amlo = self.env["account.move.line"]
         inv_cur = invoice.currency_id
         # If untaxed amount is wrong, create adjustment lines
@@ -1607,12 +1699,11 @@ class AccountInvoiceImport(models.TransientModel):
         ):
             # Try to find the line that has a problem
             for i in range(len(parsed_inv["BG-25"])):
-                if "price_subtotal" not in parsed_inv["BG-25"][i]:
+                if "BT-131" not in parsed_inv["BG-25"][i]:
                     continue
-                # TODO continue... at the moment, it will quit here
                 iline = invoice.invoice_line_ids[i]
                 odoo_subtotal = iline.price_subtotal
-                parsed_subtotal = parsed_inv["lines"][i]["price_subtotal"]
+                parsed_subtotal = parsed_inv["BG-25"][i]["BT-131"]
                 diff_amount = inv_cur.round(parsed_subtotal - odoo_subtotal)
                 if not inv_cur.is_zero(diff_amount):
                     logger.info(
@@ -1624,7 +1715,9 @@ class AccountInvoiceImport(models.TransientModel):
                         diff_amount,
                     )
                     # Add the adjustment line
-                    vals = self._prepare_adjustment_line(iline, diff_amount)
+                    vals = self._prepare_adjustment_line(
+                        diff_amount, iline=iline, name=iline.name
+                    )
                     adj_line = amlo.create(vals)
                     logger.info("Adjustment invoice line created ID %d", adj_line.id)
         # Fallback: create global adjustment line
@@ -1644,11 +1737,11 @@ class AccountInvoiceImport(models.TransientModel):
                 f"diff {format_amount(self.env, diff_amount, invoice.currency_id)}"
             )
             self._info_log(import_config, msg)
-            lvals = self._prepare_global_adjustment_line(
+            lvals_list = self._prepare_global_adjustment_lines(
                 diff_amount, invoice, import_config
             )
-            mline = amlo.create(lvals)
-            logger.info("Global adjustment invoice line created ID %d", mline.id)
+            mlines = amlo.create(lvals_list)
+            logger.info("Global adjustment invoice lines created IDs %s", mlines.ids)
         assert not invoice.currency_id.compare_amounts(
             parsed_inv["BT-109"], invoice.amount_untaxed
         )
@@ -1664,51 +1757,51 @@ class AccountInvoiceImport(models.TransientModel):
             if invoice.currency_id.compare_amounts(
                 invoice.amount_total, parsed_inv["BT-112"]
             ):
-                import_config["global_warnings"].append(
-                    self.env._(
-                        "<strong>The total amount of the imported invoice is "
-                        "%(real_amount_total)s whereas the total amount computed by "
-                        "Odoo is %(current_amount_total)s</strong>. It is the "
-                        "consequence of a difference between the total tax amount of "
-                        "the invoice (%(real_amount_tax)s) and the total tax amount "
-                        "computed by Odoo (%(current_amount_tax)s). "
-                        "This is often caused by missing taxes in invoice lines due to "
-                        "a failure to find the tax in Odoo that correspond to the tax "
-                        "in the imported invoice or missing configuration of taxes "
-                        "on products or missing configuration of "
-                        "<em>Default Taxes</em> on the partner "
-                        "(if there are no products on invoice lines).",
-                        real_amount_total=format_amount(
-                            self.env, parsed_inv["BT-112"], invoice.currency_id
-                        ),
-                        current_amount_total=format_amount(
-                            self.env, invoice.amount_total, invoice.currency_id
-                        ),
-                        real_amount_tax=format_amount(
-                            self.env,
-                            parsed_inv["BT-112"] - parsed_inv["BT-109"],
-                            invoice.currency_id,
-                        ),
-                        current_amount_tax=format_amount(
-                            self.env, invoice.amount_tax, invoice.currency_id
-                        ),
-                    )
+                msg = self.env._(
+                    "<strong>The total amount of the imported invoice is "
+                    "%(real_amount_total)s whereas the total amount computed by "
+                    "Odoo is %(current_amount_total)s</strong>. It is the "
+                    "consequence of a difference between the total tax amount of "
+                    "the invoice (%(real_amount_tax)s) and the total tax amount "
+                    "computed by Odoo (%(current_amount_tax)s). "
+                    "This is often caused by missing taxes in invoice lines due to "
+                    "a failure to find the tax in Odoo that correspond to the tax "
+                    "in the imported invoice or missing configuration of taxes "
+                    "on products or missing configuration of "
+                    "<em>Default Taxes</em> on the partner "
+                    "(if there are no products on invoice lines).",
+                    real_amount_total=format_amount(
+                        self.env, parsed_inv["BT-112"], invoice.currency_id
+                    ),
+                    current_amount_total=format_amount(
+                        self.env, invoice.amount_total, invoice.currency_id
+                    ),
+                    real_amount_tax=format_amount(
+                        self.env,
+                        parsed_inv["BT-112"] - parsed_inv["BT-109"],
+                        invoice.currency_id,
+                    ),
+                    current_amount_tax=format_amount(
+                        self.env, invoice.amount_tax, invoice.currency_id
+                    ),
                 )
+                self._warning_log(import_config, msg)
+                import_config["global_warnings"].append(msg)
 
             else:
-                import_config["global_warnings"].append(
-                    self.env._(
-                        "The <strong>total tax amount</strong> has been "
-                        "<strong>forced</strong> to %(forced_amount)s (amount "
-                        "computed by Odoo was: %(initial_amount)s).",
-                        forced_amount=format_amount(
-                            self.env, invoice.amount_tax, invoice.currency_id
-                        ),
-                        initial_amount=format_amount(
-                            self.env, initial_amount_tax, invoice.currency_id
-                        ),
-                    )
+                msg = self.env._(
+                    "The <strong>total tax amount</strong> has been "
+                    "<strong>forced</strong> to %(forced_amount)s (amount "
+                    "computed by Odoo was: %(initial_amount)s).",
+                    forced_amount=format_amount(
+                        self.env, invoice.amount_tax, invoice.currency_id
+                    ),
+                    initial_amount=format_amount(
+                        self.env, initial_amount_tax, invoice.currency_id
+                    ),
                 )
+                self._warning_log(import_config, msg)
+                import_config["global_warnings"].append(msg)
 
     @api.model
     def message_new(self, msg_dict, custom_values=None):
