@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="invoice2data_template_tree" model="ir.ui.view">
+        <field name="name">invoice2data.template.tree</field>
+        <field name="model">invoice2data.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="template_type" />
+                <field name="priority" />
+                <field name="active" widget="boolean_toggle" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="invoice2data_template_search" model="ir.ui.view">
+        <field name="name">invoice2data.template.search</field>
+        <field name="model">invoice2data.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="template_type" />
+                <filter
+                    string="Archived"
+                    name="archived"
+                    domain="[('active', '=', False)]"
+                />
+                <group string="Group By">
+                    <filter
+                        string="Type"
+                        name="group_type"
+                        context="{'group_by': 'template_type'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="invoice2data_template_form" model="ir.ui.view">
+        <field name="name">invoice2data.template.form</field>
+        <field name="model">invoice2data.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_preview"
+                        type="object"
+                        string="Preview text"
+                        help="Run invoice2data's text extractor on the latest attached PDF."
+                    />
+                    <button
+                        name="action_test"
+                        type="object"
+                        string="Test"
+                        class="oe_highlight"
+                        help="Run a full extract_data() against the attached PDF using this template + the disk-loaded ones (or DB-only if the system setting excludes disk templates)."
+                    />
+                    <button
+                        name="action_test_isolated"
+                        type="object"
+                        string="Test isolated"
+                        groups="base.group_no_one"
+                        help="Developer-mode only. Run extract_data() against ONLY this template, ignoring disk templates AND sibling DB templates. Useful when something else keeps winning."
+                    />
+                    <button
+                        name="action_suggest_fields"
+                        type="object"
+                        string="Suggest fields"
+                        help="Bulk one-shot: use invoice2data's helpers to pre-fill the field grid. Applies all proposals directly."
+                    />
+                    <button
+                        name="action_guided_suggest"
+                        type="object"
+                        string="Guided suggest"
+                        class="oe_highlight"
+                        help="Open a wizard that shows each proposed field with Keep / Edit / Skip so you can pick and edit before applying. Recommended for non-technical users."
+                    />
+                    <button
+                        name="action_pdf_click_suggest"
+                        type="object"
+                        string="Click to suggest"
+                        groups="base.group_no_one"
+                        help="Developer-mode. Enter coords into the harness to resolve a click / drag on the sample PDF via pdfium; the OWL PDF viewer that replaces coord entry lands in a follow-up PR."
+                    />
+                    <button
+                        name="action_suggest_fields_ai"
+                        type="object"
+                        string="Suggest fields (AI)"
+                        help="Draft fields via the invoice2data AI-1 generator. Requires `pip install invoice2data[ai]` and a provider configured through INVOICE2DATA_AI_* env vars (Ollama for local, Mistral/DeepSeek/Gemini for cloud)."
+                    />
+                    <button
+                        name="action_refresh_candidates"
+                        type="object"
+                        string="Refresh candidates"
+                        help="Populate the Candidates tab with the raw find_candidates / find_labeled_fields output — surfaces the WHY behind each Suggest fields row."
+                    />
+                </header>
+                <sheet>
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        attrs="{'invisible': [('active', '=', True)]}"
+                    />
+                    <div class="oe_title">
+                        <label for="name" string="Template Name" />
+                        <h1><field name="name" placeholder="acme.invoice" /></h1>
+                    </div>
+                    <group>
+                        <group name="left">
+                            <field name="template_type" />
+                            <field name="priority" />
+                            <field
+                                name="required_fields"
+                                placeholder="Leave blank for invoice defaults. Set to a bare comma to disable the check."
+                            />
+                            <field
+                                name="input_module"
+                                placeholder="Site default (pdfium first, then cascade)"
+                            />
+                            <field name="active" invisible="1" />
+                        </group>
+                        <group name="right">
+                            <field
+                                name="keywords"
+                                widget="many2many_tags"
+                                options="{'no_quick_create': False, 'create': true}"
+                                placeholder="Type a keyword and Enter. Used by invoice2data to pick this template."
+                            />
+                            <field
+                                name="exclude_keywords"
+                                widget="many2many_tags"
+                                options="{'no_quick_create': False, 'create': true}"
+                                placeholder="Optional. Type a keyword and Enter. A match here blocks the template."
+                            />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="fields" string="Fields">
+                            <field name="field_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="name" />
+                                    <field name="parser" />
+                                    <field
+                                        name="regex"
+                                        attrs="{'invisible': [('parser', '=', 'static')]}"
+                                    />
+                                    <field
+                                        name="static_value"
+                                        attrs="{'invisible': [('parser', '!=', 'static')]}"
+                                    />
+                                    <field name="type" />
+                                    <field name="replace_pattern" optional="hide" />
+                                    <field name="replace_repl" optional="hide" />
+                                    <field name="extract_number" optional="hide" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="json" string="JSON (advanced)">
+                            <field
+                                name="template"
+                                widget="ace"
+                                options="{'mode': 'json'}"
+                                placeholder="Paste a full invoice2data JSON template here. Takes precedence over the Fields tab."
+                            />
+                        </page>
+                        <page name="candidates" string="Candidates">
+                            <div class="text-muted">Click <b
+                                >Refresh candidates</b> in the header to (re)populate this list from the attached PDF. It shows every typed candidate and label match invoice2data's authoring API found — helpful for understanding why a field was proposed (or not) by <b
+                                >Suggest fields</b>.</div>
+                            <field
+                                name="candidates_summary"
+                                readonly="1"
+                                nolabel="1"
+                                widget="text"
+                                placeholder="(empty — click Refresh candidates)"
+                            />
+                        </page>
+                        <page name="preview" string="Preview text">
+                            <field
+                                name="preview_text"
+                                readonly="1"
+                                nolabel="1"
+                                widget="text"
+                                placeholder="Run 'Preview text' to see what the OCR / pdftotext extractor pulls from the attached PDF."
+                            />
+                        </page>
+                        <page name="results" string="Test results">
+                            <!-- Full-width warning banner at the top of the page,
+                                 not inside a <group> (which would constrain it
+                                 to one column of a two-column layout). -->
+                            <field
+                                name="last_test_warnings"
+                                readonly="1"
+                                nolabel="1"
+                                widget="text"
+                                class="alert alert-warning"
+                                attrs="{'invisible': [('last_test_warnings', '=', False)]}"
+                            />
+                            <field
+                                name="last_test_result"
+                                readonly="1"
+                                nolabel="1"
+                                widget="text"
+                                placeholder="Run 'Test' to extract data from the attached PDF using this template + the disk / DB pool."
+                            />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="invoice2data_template_action" model="ir.actions.act_window">
+        <field name="name">Invoice2data Templates</field>
+        <field name="res_model">invoice2data.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="invoice2data_template_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Author a DB template.</p>
+            <p>
+                DB-stored invoice2data templates live alongside the disk-loaded
+                ones. Attach a sample PDF to the chatter and use the
+                <em>Suggest fields</em> / <em>Test</em> buttons to iterate.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="invoice2data_template_menu"
+        parent="account.menu_finance_configuration"
+        action="invoice2data_template_action"
+        sequence="80"
+    />
+</odoo>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <!-- Seed allow-list of canonical fields the click-to-suggest picker offers.
+         l10n glue modules extend this by declaring additional
+         <record model="invoice2data.field.key"> entries with locale-specific
+         keys (SIREN, OIN, KvK, etc.); no library change needed. -->
+
+    <!-- Invoice header -->
+    <record id="field_key_invoice_number" model="invoice2data.field.key">
+        <field name="name">invoice_number</field>
+        <field name="label">Invoice number / reference</field>
+        <field name="kind">header</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="field_key_date" model="invoice2data.field.key">
+        <field name="name">date</field>
+        <field name="label">Invoice date</field>
+        <field name="kind">header</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="field_key_date_due" model="invoice2data.field.key">
+        <field name="name">date_due</field>
+        <field name="label">Due date</field>
+        <field name="kind">header</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="field_key_currency" model="invoice2data.field.key">
+        <field name="name">currency</field>
+        <field name="kind">header</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="field_key_payment_reference" model="invoice2data.field.key">
+        <field name="name">payment_reference</field>
+        <field name="kind">header</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- Amount / tax -->
+    <record id="field_key_amount" model="invoice2data.field.key">
+        <field name="name">amount</field>
+        <field name="label">Total amount (incl. tax)</field>
+        <field name="kind">amount</field>
+        <field name="sequence">100</field>
+    </record>
+    <record id="field_key_amount_untaxed" model="invoice2data.field.key">
+        <field name="name">amount_untaxed</field>
+        <field name="label">Untaxed amount</field>
+        <field name="kind">amount</field>
+        <field name="sequence">110</field>
+    </record>
+    <record id="field_key_amount_tax" model="invoice2data.field.key">
+        <field name="name">amount_tax</field>
+        <field name="label">Tax amount</field>
+        <field name="kind">amount</field>
+        <field name="sequence">120</field>
+    </record>
+
+    <!-- Partner / vendor -->
+    <record id="field_key_partner_name" model="invoice2data.field.key">
+        <field name="name">partner_name</field>
+        <field name="kind">partner</field>
+        <field name="sequence">200</field>
+    </record>
+    <record id="field_key_issuer" model="invoice2data.field.key">
+        <field name="name">issuer</field>
+        <field name="kind">partner</field>
+        <field name="sequence">210</field>
+    </record>
+    <record id="field_key_partner_email" model="invoice2data.field.key">
+        <field name="name">partner_email</field>
+        <field name="kind">partner</field>
+        <field name="sequence">220</field>
+    </record>
+    <record id="field_key_partner_street" model="invoice2data.field.key">
+        <field name="name">partner_street</field>
+        <field name="kind">partner</field>
+        <field name="sequence">230</field>
+    </record>
+    <record id="field_key_partner_zip" model="invoice2data.field.key">
+        <field name="name">partner_zip</field>
+        <field name="kind">partner</field>
+        <field name="sequence">240</field>
+    </record>
+    <record id="field_key_partner_city" model="invoice2data.field.key">
+        <field name="name">partner_city</field>
+        <field name="kind">partner</field>
+        <field name="sequence">250</field>
+    </record>
+    <record id="field_key_country_code" model="invoice2data.field.key">
+        <field name="name">country_code</field>
+        <field name="kind">partner</field>
+        <field name="sequence">260</field>
+    </record>
+
+    <!-- Identifiers -->
+    <record id="field_key_vat" model="invoice2data.field.key">
+        <field name="name">vat</field>
+        <field name="label">VAT / BTW / USt-IdNr</field>
+        <field name="kind">identifier</field>
+        <field name="sequence">300</field>
+    </record>
+    <record id="field_key_iban" model="invoice2data.field.key">
+        <field name="name">iban</field>
+        <field name="label">IBAN</field>
+        <field name="kind">identifier</field>
+        <field name="sequence">310</field>
+    </record>
+    <record id="field_key_bic" model="invoice2data.field.key">
+        <field name="name">bic</field>
+        <field name="label">BIC / SWIFT</field>
+        <field name="kind">identifier</field>
+        <field name="sequence">320</field>
+    </record>
+</odoo>
