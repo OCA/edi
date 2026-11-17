@@ -365,11 +365,6 @@ msgid "Import Partner Data"
 msgstr "Données importées du partenaire"
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
-msgid "Import Supplier Invoice or Refund"
-msgstr "Importer une facture ou un avoir d'un fournisseur"
-
-#. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_action
@@ -931,6 +926,9 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "on imported vendor bill"
 msgstr "sur la facture fournisseur importée"
+
+#~ msgid "Import Supplier Invoice or Refund"
+#~ msgstr "Importer une facture ou un avoir d'un fournisseur"
 
 #~ msgid "%d vendor bill(s) created"
 #~ msgstr "%d facture(s) fournisseur(s) créée(s)"

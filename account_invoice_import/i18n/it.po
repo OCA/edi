@@ -381,11 +381,6 @@ msgid "Import Partner Data"
 msgstr "Imposta dati partner"
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
-msgid "Import Supplier Invoice or Refund"
-msgstr "Imposta fattura o rimborso fornitore"
-
-#. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_action
@@ -915,8 +910,8 @@ msgstr "Cronologia comunicazioni sito web"
 #: model:ir.model.fields,help:account_invoice_import.field_account_move_line__import_invoice_line_identifier
 msgid "When importing a vendor bill, this field stores BT-126"
 msgstr ""
-"Quando si importa una fattura fornitore, questo campo memorizza il valore BT-"
-"126"
+"Quando si importa una fattura fornitore, questo campo memorizza il valore "
+"BT-126"
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import_partner_create
@@ -1002,6 +997,9 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "on imported vendor bill"
 msgstr "sulla fattura fornitore importata"
+
+#~ msgid "Import Supplier Invoice or Refund"
+#~ msgstr "Imposta fattura o rimborso fornitore"
 
 #~ msgid "%d vendor bill(s) created"
 #~ msgstr "%d fatture fornitore create"
