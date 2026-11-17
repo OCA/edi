@@ -16,8 +16,9 @@ from babel import Locale
 from lxml import etree
 from markupsafe import Markup
 from stdnum.iban import is_valid as iban_is_valid
+from stdnum.vatin import is_valid as vat_is_valid
 
-from odoo import Command, api, fields, models
+from odoo import Command, api, fields, models, tools
 from odoo.exceptions import UserError
 from odoo.tools import config, float_is_zero, float_round
 from odoo.tools.misc import format_amount, formatLang
@@ -696,7 +697,8 @@ class AccountInvoiceImport(models.TransientModel):
             lvals["name"] = import_config["label"]
         else:
             name_list = [line_dict.get("BT-153"), line_dict.get("BT-154")]
-            lvals["name"] = "\n".join([x for x in name_list if x])
+            # set() is useful when BT-153 = BT-154 (seen on real invoices !)
+            lvals["name"] = "\n".join([x for x in set(name_list) if x])
         if (
             import_config["start_end_dates_installed"]
             and line_dict.get("BT-134")
@@ -1424,10 +1426,6 @@ class AccountInvoiceImport(models.TransientModel):
         return action
 
     def _check_import_company(self, parsed_inv, import_config):
-        if import_config.get("debug_disable_company_check") or self.env.context.get(
-            "edi_skip_company_check"
-        ):
-            return True
         company_dict = self._get_company_dict(parsed_inv, import_config)
         if not company_dict:
             return True
@@ -1437,6 +1435,15 @@ class AccountInvoiceImport(models.TransientModel):
             invoice_vat = (
                 "".join(x for x in raw_vat if not x.isspace()).upper() or False
             )
+            if not vat_is_valid(invoice_vat):
+                msg = (
+                    f"The invoice to import contains VAT number {invoice_vat} "
+                    "which is not valid: Odoo didn't check that the invoice "
+                    "is imported in the right company based on the company's "
+                    "VAT number"
+                )
+                self._warning_log(import_config, msg)
+                return True
             import_company_vat = company.partner_id.vat
             if import_company_vat:
                 if import_company_vat != invoice_vat:
@@ -1492,7 +1499,16 @@ class AccountInvoiceImport(models.TransientModel):
             import_config["commercial_partner"] = commercial_partner
             commercial_partner._commercial_partner_update_import_config(import_config)
         #  self._pre_process_parsed_inv(parsed_inv, import_config)
-        self._check_import_company(parsed_inv, import_config)
+        if not import_config.get(
+            "debug_disable_company_check"
+        ) and not self.env.context.get("edi_skip_company_check"):
+            self._check_import_company(parsed_inv, import_config)
+        else:
+            msg = "Company check has been disabled"
+            if tools.config.get("test_enable"):
+                self._info_log(import_config, msg)
+            else:
+                self._warning_log(import_config, msg)
         existing_inv = self._invoice_already_exists(parsed_inv, import_config)
         if existing_inv:
             return self._process_invoice_already_exists(

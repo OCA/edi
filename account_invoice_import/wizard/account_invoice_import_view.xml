@@ -8,7 +8,7 @@
     <record id="account_invoice_import_form" model="ir.ui.view">
         <field name="model">account.invoice.import</field>
         <field name="arch" type="xml">
-            <form string="Import Supplier Invoice or Refund">
+            <form>
                 <div name="help-import">
                     <p
                     >Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a draft vendor bill/refund for each file.</p>
