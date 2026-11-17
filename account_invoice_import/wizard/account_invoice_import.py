@@ -16,6 +16,7 @@ from babel import Locale
 from lxml import etree
 from markupsafe import Markup
 from stdnum.iban import is_valid as iban_is_valid
+from stdnum.vatin import is_valid as vat_is_valid
 
 from odoo import Command, _, api, fields, models
 from odoo.exceptions import UserError
@@ -1433,6 +1434,15 @@ class AccountInvoiceImport(models.TransientModel):
             invoice_vat = (
                 "".join(x for x in raw_vat if not x.isspace()).upper() or False
             )
+            if not vat_is_valid(invoice_vat):
+                msg = (
+                    f"The invoice to import contains VAT number {invoice_vat} "
+                    "which is not valid: Odoo didn't check that the invoice "
+                    "is imported in the right company based on the company's "
+                    "VAT number"
+                )
+                self._warning_log(import_config, msg)
+                return True
             import_company_vat = company.partner_id.vat
             if import_company_vat:
                 if import_company_vat != invoice_vat:
