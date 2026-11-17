@@ -2,11 +2,6 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-# In post migration script:
-# - we can access the registry
-# - the new fields are created
-# - the old fields are still readable
-
 from openupgradelib import openupgrade
 
 
