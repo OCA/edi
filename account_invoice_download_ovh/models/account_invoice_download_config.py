@@ -2,7 +2,6 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import base64
 import json
 import logging
 
@@ -80,27 +79,31 @@ class AccountInvoiceDownloadConfig(models.Model):
     def ovh_invoice_attach_pdf(self, parsed_inv, pdf_invoice_url):
         logger.info(
             "Starting to download PDF of OVH invoice %s dated %s",
-            parsed_inv["invoice_number"],
-            parsed_inv["date"],
+            parsed_inv["BT-1"],
+            parsed_inv["BT-2"],
         )
         logger.debug("OVH invoice download url: %s", pdf_invoice_url)
         rpdf = requests.get(pdf_invoice_url, timeout=OVH_INVOICE_DL_TIMEOUT)
         logger.info("OVH invoice PDF download HTTP code: %s", rpdf.status_code)
-        res = False
         if rpdf.status_code == 200:
-            res = base64.encodebytes(rpdf.content)
             logger.info(
                 "Successfull download of the PDF of the OVH invoice %s",
-                parsed_inv["invoice_number"],
+                parsed_inv["BT-1"],
             )
+            filename = f"OVH_invoice_{parsed_inv['BT-1']}.pdf"
+            parsed_inv["BG-24"] = [
+                {
+                    "BT-125": rpdf.content,
+                    "BT-125-1": "application/pdf",
+                    "BT-125-2": filename,
+                }
+            ]
         else:
             logger.warning(
                 "Could not download the PDF of the OVH invoice %s. HTTP error %d",
-                parsed_inv["invoice_number"],
+                parsed_inv["BT-1"],
                 rpdf.status_code,
             )
-        filename = f"OVH_invoice_{parsed_inv['invoice_number']}.pdf"
-        parsed_inv["attachments"] = {filename: res}
         return
 
     def ovh_download(self, credentials, logs):
@@ -171,12 +174,12 @@ class AccountInvoiceDownloadConfig(models.Model):
 
             currency_code = res_inv["priceWithoutTax"]["currencyCode"]
             parsed_inv = {
-                "invoice_number": oinv_num,
-                "currency": {"iso": currency_code},
-                "date": oinv_date,
-                "amount_untaxed": res_inv["priceWithoutTax"].get("value"),
-                "amount_total": res_inv["priceWithTax"].get("value"),
-                "lines": [],
+                "BT-1": oinv_num,
+                "BT-5": currency_code,
+                "BT-2": oinv_date,
+                "BT-109": res_inv["priceWithoutTax"].get("value"),
+                "BT-112": res_inv["priceWithTax"].get("value"),
+                "BG-25": [],
             }
             self.ovh_invoice_attach_pdf(parsed_inv, res_inv["pdfUrl"])
 
@@ -184,21 +187,21 @@ class AccountInvoiceDownloadConfig(models.Model):
                 "Starting OVH API query /me/bill/%s/details "
                 "invoice number %s dated %s",
                 oinv_num,
-                parsed_inv["invoice_number"],
-                parsed_inv["date"],
+                parsed_inv["BT-1"],
+                parsed_inv["BT-2"],
             )
             res_ilines = client.get(f"/me/bill/{oinv_num}/details")
             logger.debug(
                 "Result /me/bill/%s/details: %s", oinv_num, json.dumps(res_ilines)
             )
-            for line in res_ilines:
+            for line_nr, line in enumerate(res_ilines):
                 logger.info(
                     "Starting OVH API query /me/bill/%s/details/%s "
                     "invoice number %s dated %s",
                     oinv_num,
                     line,
-                    parsed_inv["invoice_number"],
-                    parsed_inv["date"],
+                    parsed_inv["BT-1"],
+                    parsed_inv["BT-2"],
                 )
                 res_iline = client.get(f"/me/bill/{oinv_num}/details/{line}")
                 logger.debug(
@@ -211,27 +214,22 @@ class AccountInvoiceDownloadConfig(models.Model):
                     # We don't have accurate product code in the OVH API
                     # We had a product code in the SoAPI...
                     # 'product': {'code': 'xxx'},
-                    "name": res_iline["description"],
-                    "qty": int(res_iline["quantity"]),
-                    "price_unit": res_iline["unitPrice"]["value"],
-                    "uom": {"unece_code": "C62"},
-                    "taxes": [
-                        {
-                            "amount_type": "percent",
-                            "amount": 20.0,
-                            "unece_type_code": "VAT",
-                            "unece_categ_code": "S",
-                        }
-                    ],
+                    "BT-126": line_nr + 1,
+                    "BT-153": res_iline["description"],
+                    "BT-129": int(res_iline["quantity"]),
+                    "BT-146": res_iline["unitPrice"]["value"],
+                    "BT-130": "C62",
+                    "BT-152": 20.0,
+                    "BT-151": "S",
                 }
                 if res_iline["periodStart"] and res_iline["periodEnd"]:
                     line.update(
                         {
-                            "date_start": res_iline["periodStart"],
-                            "date_end": res_iline["periodEnd"],
+                            "BT-134": res_iline["periodStart"],
+                            "BT-135": res_iline["periodEnd"],
                         }
                     )
-                parsed_inv["lines"].append(line)
+                parsed_inv["BG-25"].append(line)
 
             logger.debug("Final parsed_inv=%s", parsed_inv)
             invoices.append(parsed_inv)
