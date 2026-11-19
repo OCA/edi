@@ -152,9 +152,9 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv["BT-109"] = parsed_inv["BT-112"]
 
     @api.model
-    def _prepare_create_invoice_no_partner(
+    def _prepare_create_invoice_no_partner(  # noqa: C901
         self, parsed_inv, import_config, vals
-    ):  # noqa: C901
+    ):
         if import_config.get("email_from"):
             vals["invoice_source_email"] = import_config["email_from"]
         partner_dict = self._get_partner_dict(parsed_inv, import_config)
@@ -601,9 +601,9 @@ class AccountInvoiceImport(models.TransientModel):
                 lvals["end_date"] = parsed_inv["BT-74"]
 
     @api.model
-    def _prepare_line_vals_bg25(
+    def _prepare_line_vals_bg25(  # noqa: C901
         self, line_dict, parsed_inv, import_config, vals
-    ):  # noqa: C901
+    ):
         line_ident = line_dict["BT-126"]
         product = self._match_product(line_dict, parsed_inv, import_config)
         if not product and import_config.get("product"):
