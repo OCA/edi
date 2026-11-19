@@ -1002,7 +1002,9 @@ class AccountInvoiceImport(models.TransientModel):
         invoice_number = parsed_inv.get("BT-1")
         if not invoice_number:
             return False
-        is_refund = is_credit_note(parsed_inv)
+        is_refund = False
+        if parsed_inv.get("BT-3"):
+            is_refund = is_credit_note(parsed_inv)
         domain = [
             ("company_id", "=", import_config["company"].id),
         ]
