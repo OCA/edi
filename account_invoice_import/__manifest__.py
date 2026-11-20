@@ -19,7 +19,7 @@
         "uom_unece",
         "account_payment_partner",
     ],
-    "external_dependencies": {"python": ["factur-x>=7.9"]},
+    "external_dependencies": {"python": ["factur-x>=7.10"]},
     "data": [
         "security/ir.model.access.csv",
         "views/res_config_settings.xml",
