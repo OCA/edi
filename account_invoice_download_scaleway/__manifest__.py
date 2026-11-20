@@ -4,7 +4,7 @@
 
 {
     "name": "Account Invoice Download Scaleway",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.1.0",
     "category": "Accounting",
     "license": "AGPL-3",
     "summary": "Get Scaleway Invoices via the API",
