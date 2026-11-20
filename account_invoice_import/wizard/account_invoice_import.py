@@ -10,7 +10,6 @@ import mimetypes
 from collections import defaultdict
 from email.utils import parseaddr
 from io import BytesIO
-from textwrap import shorten
 
 from babel import Locale
 from lxml import etree
@@ -375,27 +374,6 @@ class AccountInvoiceImport(models.TransientModel):
                     line_dict, parsed_inv, import_config, vals
                 )
                 vals["invoice_line_ids"].append(Command.create(lvals))
-                if lvals["discount"] is None:
-                    bg27_line = 0
-                    for allowance_dict in line_dict.get("BG-27") or []:
-                        bg27_line += 1
-                        alvals = self._prepare_line_vals_bg27(
-                            bg27_line,
-                            allowance_dict,
-                            parsed_inv,
-                            import_config,
-                            lvals,
-                        )
-                        if alvals["price_unit"]:
-                            vals["invoice_line_ids"].append(Command.create(alvals))
-                bg28_line = 0
-                for charge_dict in line_dict.get("BG-28") or []:
-                    bg28_line += 1
-                    clvals = self._prepare_line_vals_bg28(
-                        bg28_line, charge_dict, parsed_inv, import_config, lvals
-                    )
-                    if clvals["price_unit"]:
-                        vals["invoice_line_ids"].append(Command.create(clvals))
             # BG-20 = global allowances / BG-21 = global charges
             bg20_line = 0
             for allowance_dict in parsed_inv.get("BG-20") or []:
@@ -622,7 +600,7 @@ class AccountInvoiceImport(models.TransientModel):
                 lvals["end_date"] = parsed_inv["BT-74"]
 
     @api.model
-    def _prepare_line_vals_bg25(self, line_dict, parsed_inv, import_config, vals):
+    def _prepare_line_vals_bg25(self, line_dict, parsed_inv, import_config, vals):  # noqa: C901
         line_ident = line_dict["BT-126"]
         product = self._match_product(line_dict, parsed_inv, import_config)
         if not product and import_config.get("product"):
@@ -666,20 +644,29 @@ class AccountInvoiceImport(models.TransientModel):
                 uom = product.uom_id
             else:
                 uom = self.env.ref("uom.product_uom_unit")
-        price_unit = line_dict["BT-146"]
-        if line_dict.get("BT-149"):
-            price_unit /= line_dict["BT-149"]
-        # Special treatment for single line-level allowance with a percent
-        discount = None
-        if len(line_dict.get("BG-27", [])) == 1 and line_dict["BG-27"][0].get("rate"):
-            discount = line_dict["BG-27"][0]["rate"]
-            allowance_base = line_dict["BG-27"][0].get("base_amount")
-            if allowance_base:
-                line_base = line_dict["BT-129"] * price_unit
-                if import_config["invoice_currency"].compare_amounts(
-                    allowance_base, line_base
-                ):
-                    discount = None
+        total_bg28 = sum([line["amount"] for line in line_dict.get("BG-28", [])])
+        gross_price_unit = line_dict.get("BT-148", line_dict["BT-146"]) / line_dict.get(
+            "BT-149", 1
+        )
+        price_unit = gross_price_unit + total_bg28 / (line_dict["BT-129"] or 1)
+        discount = False
+        if line_dict.get("BT-131"):
+            bt131 = line_dict["BT-131"]
+        else:
+            total_bg27 = sum(
+                [abs(line["amount"]) for line in line_dict.get("BG-27", [])]
+            )
+            bt131 = (
+                line_dict["BT-146"] * line_dict["BT-129"] / line_dict.get("BT-149", 1)
+                + total_bg28
+                - total_bg27
+            )
+        discount_prec = import_config["speedy"]["discount_prec"]
+        if price_unit and line_dict["BT-129"]:
+            discount = float_round(
+                100 * (1 - (bt131 / (price_unit * line_dict["BT-129"]))),
+                precision_digits=discount_prec,
+            )
         lvals = {
             "display_type": "product",
             "import_invoice_line_identifier": line_ident,
@@ -699,6 +686,54 @@ class AccountInvoiceImport(models.TransientModel):
             name_list = [line_dict.get("BT-153"), line_dict.get("BT-154")]
             # set() is useful when BT-153 = BT-154 (seen on real invoices !)
             lvals["name"] = "\n".join([x for x in set(name_list) if x])
+        additional_labels = []
+        if total_bg28:
+            additional_labels.append(
+                " ".join(
+                    [
+                        self.env._("Price unit w/o extra charges:"),
+                        format_amount(
+                            self.env,
+                            gross_price_unit,
+                            import_config["invoice_currency"],
+                        ),
+                    ]
+                )
+            )
+        if line_dict.get("BT-147-00"):
+            disc_labels = [
+                format_amount(
+                    self.env,
+                    bt147_entry["BT-147"] * -1,
+                    import_config["invoice_currency"],
+                )
+                for bt147_entry in line_dict["BT-147-00"]
+                if bt147_entry.get("BT-147")
+            ]
+            if disc_labels:
+                title = (
+                    len(disc_labels) == 1
+                    and self.env._("Discount:")
+                    or self.env._("Discounts:")
+                )
+                additional_labels.append(" ".join([title, ", ".join(disc_labels)]))
+        for allowance_line in line_dict.get("BG-27") or []:
+            additional_labels.append(
+                self._prepare_label_common_bg27_bg28(
+                    "allowance", allowance_line, parsed_inv, import_config
+                )
+            )
+        for charge_line in line_dict.get("BG-28") or []:
+            additional_labels.append(
+                self._prepare_label_common_bg27_bg28(
+                    "charge", charge_line, parsed_inv, import_config
+                )
+            )
+
+        additional_labels = [label for label in additional_labels if label]
+        if additional_labels:
+            lvals["name"] = "\n".join([lvals["name"], "\n".join(additional_labels)])
+
         if (
             import_config["start_end_dates_installed"]
             and line_dict.get("BT-134")
@@ -709,99 +744,70 @@ class AccountInvoiceImport(models.TransientModel):
         self._prepare_line_set_global_start_end_dates(lvals, parsed_inv, import_config)
         return lvals
 
-    def _prepare_line_vals_bg27(
-        self, bg27_line, allowance_dict, parsed_inv, import_config, lvals
+    def _prepare_label_common_bg27_bg28(
+        self, line_type, line_dict, parsed_inv, import_config
     ):
-        allowance_vals = dict(lvals)
-        untdid = "5189"
-        line_ident = f"{lvals['import_invoice_line_identifier']}-BG27-{bg27_line}"
-        allowance_vals.update(
-            {
-                "import_invoice_line_identifier": line_ident,
-                "name": self.env._(
-                    "Allowance on %s", shorten(lvals.get("name", ""), 50)
-                ),
-                "price_unit": allowance_dict["amount"] * -1,
-            }
-        )
-        self._prepare_line_common_bg27_bg28(
-            allowance_dict, untdid, parsed_inv, import_config, allowance_vals
-        )
-        return allowance_vals
-
-    def _prepare_line_vals_bg28(
-        self, bg28_line, charge_dict, parsed_inv, import_config, lvals
-    ):
-        charge_vals = dict(lvals)  # copies product, account, taxes, ...
-        untdid = "7161"
-        line_ident = f"{lvals['import_invoice_line_identifier']}-BG28-{bg28_line}"
-        charge_vals.update(
-            {
-                "import_invoice_line_identifier": line_ident,
-                "name": self.env._(
-                    "Extra charge on %s", shorten(lvals.get("name", ""), 50)
-                ),
-                "price_unit": charge_dict["amount"],
-            }
-        )
-        self._prepare_line_common_bg27_bg28(
-            charge_dict, untdid, parsed_inv, import_config, charge_vals
-        )
-        return charge_vals
-
-    def _prepare_line_common_bg27_bg28(
-        self, common_dict, untdid, parsed_inv, import_config, common_vals
-    ):
-        name_list = [common_vals["name"]]
-        untdid_5153_code2label = import_config["speedy"]["untdid_5153_code2label"]
-        if common_dict.get("reason"):
-            name_list.append(self.env._("Reason: %s", common_dict["reason"]))
-        if common_dict.get("reason_code"):
-            reason_code_label = untdid_get_label(untdid, common_dict["reason_code"])
-            if reason_code_label:
-                name_list.append(self.env._("Coded reason: %s", reason_code_label))
-            else:
-                name_list.append(
-                    self.env._(
-                        "Unknown reason code '%(code)s' (not in UNTDID %(untdid)s)",
-                        code=common_dict["reason_code"],
-                        untdid=untdid,
-                    )
+        assert line_type in ("allowance", "charge")
+        if not line_dict.get("amount"):
+            return None
+        if line_type == "allowance":
+            title = self.env._("Extra Discount:")
+            untdid = "5189"
+            sign = -1
+        elif line_type == "charge":
+            title = self.env._("Extra Charge:")
+            untdid = "7161"
+            sign = 1
+        if line_dict.get("reason"):
+            reason_label = line_dict["reason"]
+        elif line_dict.get("reason_code"):
+            reason_label = untdid_get_label(untdid, line_dict["reason_code"])
+            if not reason_label:
+                reason_label = self.env._(
+                    "Unknown reason code '%(code)s' (not in UNTDID %(untdid)s)",
+                    code=line_dict["reason_code"],
+                    untdid=untdid,
                 )
-        elif common_dict.get("non_vat_tax_code"):
-            if common_dict["non_vat_tax_code"] in untdid_5153_code2label:
-                name_list.append(
-                    self.env._(
-                        "Reason: Non-VAT Tax '%s'",
-                        untdid_5153_code2label[common_dict["non_vat_tax_code"]],
-                    )
+        elif line_dict.get("non_vat_tax_code"):
+            reason_label = untdid_get_label("5153", line_dict["non_vat_tax_code"])
+            if not reason_label:
+                reason_label = self.env._(
+                    "Non-VAT Tax with code '%s' (not in UNTDID 5153)",
+                    line_dict["non_vat_tax_code"],
                 )
-            else:
-                name_list.append(
-                    self.env._(
-                        "Reason: Non-VAT Tax with code '%s' (not in UNTDID 5153)",
-                        common_dict["non_vat_tax_code"],
-                    )
+        else:  # should never happen
+            reason_label = self.env._("no reason specified")
+        labels = [(title, reason_label)]
+        if line_dict.get("base_amount"):
+            labels.append(
+                (
+                    self.env._("Base:"),
+                    format_amount(
+                        self.env,
+                        line_dict["base_amount"],
+                        import_config["invoice_currency"],
+                    ),
                 )
-        name_last_line = []
-        if common_dict.get("base_amount"):
-            base_fmt = format_amount(
-                self.env, common_dict["base_amount"], import_config["invoice_currency"]
             )
-            name_last_line.append(self.env._("Base: %s", base_fmt))
-        if common_dict.get("rate"):
-            rate_fmt = formatLang(self.env, common_dict["rate"], digits=2)
-            name_last_line.append(self.env._("Rate: %s %%", rate_fmt))
-        if name_last_line:
-            name_list.append(" - ".join(name_last_line))
-
-        common_vals.update(
-            {
-                "quantity": 1,
-                "discount": None,
-                "name": "\n".join(name_list),
-            }
-        )
+        if line_dict.get("rate"):
+            labels.append(
+                (self.env._("Rate:"), f"{formatLang(self.env, line_dict['rate'])} %")
+            )
+        if line_dict.get("amount"):
+            # I added abs() because some non-compliant suppliers set BT-136 as negative
+            # instead of positive
+            labels.append(
+                (
+                    self.env._("Amount:"),
+                    format_amount(
+                        self.env,
+                        abs(line_dict["amount"]) * sign,
+                        import_config["invoice_currency"],
+                    ),
+                )
+            )
+        label = " - ".join([" ".join(list(x)) for x in labels])
+        return label
 
     def _prepare_line_vals_bg20(
         self, line_ident, allowance_dict, parsed_inv, import_config, vals
@@ -1001,7 +1007,9 @@ class AccountInvoiceImport(models.TransientModel):
         invoice_number = parsed_inv.get("BT-1")
         if not invoice_number:
             return False
-        is_refund = is_credit_note(parsed_inv)
+        is_refund = False
+        if parsed_inv.get("BT-3"):
+            is_refund = is_credit_note(parsed_inv)
         domain = [
             ("company_id", "=", import_config["company"].id),
         ]
@@ -1130,18 +1138,13 @@ class AccountInvoiceImport(models.TransientModel):
             uom.unece_code: uom
             for uom in self.env["uom.uom"].search([("unece_code", "!=", False)])
         }
-        untdid_5153_code2label = {
-            unece["code"]: unece["name"]
-            for unece in self.env["unece.code.list"].search_read(
-                [("type", "=", "tax_type")], ["name", "code"]
-            )
-        }
         incoterms_code2id = {
             inc["code"]: inc["id"]
             for inc in self.env["account.incoterms"]
             .with_context(active_test=False)
             .search_read([], ["code"])
         }
+        disc_prec = self.env["decimal.precision"].precision_get("Discount")
         speedy = {
             "currency_code2id": currency_code2id,
             "country_code2id": country_code2id,
@@ -1149,7 +1152,7 @@ class AccountInvoiceImport(models.TransientModel):
             "incoterms_code2id": incoterms_code2id,
             "installed_langs": installed_langs,
             "uom_unece2rec": uom_unece2rec,
-            "untdid_5153_code2label": untdid_5153_code2label,
+            "discount_prec": disc_prec,
         }
         return speedy
 
@@ -1196,7 +1199,7 @@ class AccountInvoiceImport(models.TransientModel):
     # (sale or purchase tax depend on 'invoice_type')
     # 'speedy: {  # (A)
     #     'currency_code2id': {}, 'country_code2id': {}, 'incoterms_code2id': {},
-    #     'installed_langs': {}, 'uom_unece2rec': {}, 'untdid_5153_code2label': {},
+    #     'installed_langs': {}, 'uom_unece2rec': {},
     #     },
     # 'updated': True,  # technical key just to avoid double processing
     # of _update_import_config()

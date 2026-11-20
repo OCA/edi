@@ -2,6 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import base64
 import logging
 
 import requests
@@ -45,8 +46,8 @@ class AccountInvoiceDownloadConfig(models.Model):
     def _scaleway_invoice_attach_pdf(self, parsed_inv, invoice_id, headers):
         logger.info(
             "Starting to download PDF of Scaleway invoice %s dated %s",
-            parsed_inv["invoice_number"],
-            parsed_inv["date"],
+            parsed_inv["BT-1"],
+            parsed_inv["BT-2"],
         )
         pdf_invoice_url = f"{URL_BASE}/invoices/{invoice_id}/download"
         logger.debug("Scaleway invoice download url: %s", pdf_invoice_url)
@@ -56,14 +57,20 @@ class AccountInvoiceDownloadConfig(models.Model):
             rpdf_json = rpdf.json()
             logger.info(
                 "Successfull download of the PDF of the Scaleway invoice %s",
-                parsed_inv["invoice_number"],
+                parsed_inv["BT-1"],
             )
             filename = rpdf_json["name"]
-            parsed_inv["attachments"] = {filename: rpdf_json["content"]}
+            parsed_inv["BG-24"] = [
+                {
+                    "BT-125": base64.b64decode(rpdf_json["content"]),
+                    "BT-125-1": "application/pdf",
+                    "BT-125-2": filename,
+                }
+            ]
         else:
             logger.warning(
                 "Could not download the PDF of the Scaleway invoice %s. HTTP error %d",
-                parsed_inv["invoice_number"],
+                parsed_inv["BT-1"],
                 rpdf.status_code,
             )
 
@@ -108,12 +115,12 @@ class AccountInvoiceDownloadConfig(models.Model):
             assert total["currency_code"] == currency_code
             amount_total_str = f"{total['units']}.{total['nanos']}"
             parsed_inv = {
-                "invoice_number": inv["number"],
-                "currency": {"iso": currency_code},
-                "date": inv["issued_date"][:10],
-                "date_due": inv["due_date"][:10],
-                "amount_untaxed": float(amount_untaxed_str),
-                "amount_total": float(amount_total_str),
+                "BT-1": inv["number"],
+                "BT-5": currency_code,
+                "BT-2": inv["issued_date"][:10],
+                "BT-9": inv["due_date"][:10],
+                "BT-109": float(amount_untaxed_str),
+                "BT-112": float(amount_total_str),
             }
             if inv.get("invoice_type") == "periodic" and inv.get("start_date"):
                 start_date_str = inv["start_date"][:10]
@@ -121,8 +128,8 @@ class AccountInvoiceDownloadConfig(models.Model):
                 end_date_dt = start_date_dt + relativedelta(months=1, days=-1)
                 parsed_inv.update(
                     {
-                        "date_start": start_date_dt,
-                        "date_end": end_date_dt,
+                        "BT-73": start_date_dt,
+                        "BT-74": end_date_dt,
                     }
                 )
             self._scaleway_invoice_attach_pdf(parsed_inv, inv["id"], headers)

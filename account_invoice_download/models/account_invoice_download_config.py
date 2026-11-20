@@ -2,6 +2,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import base64
 import logging
 
 from dateutil.relativedelta import relativedelta
@@ -209,7 +210,11 @@ class AccountInvoiceDownloadConfig(models.Model):
             logs["msg"].append(_("Failed to download invoice. Error: %s.") % e)
             logs["result"] = "failure"
         company_id = self.company_id.id
-        import_config = self.partner_id._convert_to_import_config(self.company_id)
+        import_config = {
+            "company": self.company_id,
+            "origin": self.env._("Download Bill '%s'", self.display_name),
+            "partner": self.partner_id,
+        }
         existing_refs = {}  # key = invoice reference, value = inv ID
         existing_invs = amo.search_read(
             [
@@ -228,42 +233,36 @@ class AccountInvoiceDownloadConfig(models.Model):
                 parsed_inv = inv_struc
             elif isinstance(inv_struc, tuple):
                 invoice_file_b64, filename = inv_struc
-                parsed_inv = aiio.parse_invoice(invoice_file_b64, filename)
+                invoice_file_bin = base64.b64decode(invoice_file_b64)
+                parsed_inv = aiio.parse_invoice(
+                    invoice_file_bin, filename, import_config
+                )
             else:
                 logger.error(
                     "Technical error that should never happen: inv_struc is a %s",
                     type(inv_struc),
                 )
                 continue
-            # Get partner from invoice import config, not from invoice
-            parsed_inv["partner"] = {"recordset": self.partner_id}
-            if (
-                parsed_inv.get("invoice_number")
-                and parsed_inv["invoice_number"] in existing_refs
-            ):
+            if parsed_inv.get("BT-1") and parsed_inv["BT-1"] in existing_refs:
                 logger.info(
                     "Skipping invoice %s dated %s because it already exists "
                     "in Odoo (ID %d)",
-                    parsed_inv["invoice_number"],
-                    parsed_inv.get("date"),
-                    existing_refs[parsed_inv["invoice_number"]],
+                    parsed_inv["BT-1"],
+                    parsed_inv.get("BT-2"),
+                    existing_refs[parsed_inv["BT-1"]],
                 )
                 logs["msg"].append(
                     _(
                         "Skipping invoice %(invoice)s dated %(date)s because it "
                         "already exists in Odoo (ID %(invoice_id)s).",
-                        invoice=parsed_inv["invoice_number"],
-                        date=format_date(self.env, parsed_inv.get("date")),
-                        invoice_id=existing_refs[parsed_inv["invoice_number"]],
+                        invoice=parsed_inv["BT-1"],
+                        date=format_date(self.env, parsed_inv.get("BT-2")),
+                        invoice_id=existing_refs[parsed_inv["BT-1"]],
                     )
                 )
                 continue
             try:
-                invoice = aiio.create_invoice(
-                    parsed_inv,
-                    import_config=import_config,
-                    origin=_("Download Bill '%s'") % self.display_name,
-                )
+                invoice = aiio.create_invoice(parsed_inv, import_config)
             except Exception as e:
                 logs["msg"].append(
                     _(
@@ -281,9 +280,9 @@ class AccountInvoiceDownloadConfig(models.Model):
                 _(
                     "Invoice number '%(invoice_number)s' dated %(date)s "
                     "created (ID %(invoice_id)d).",
-                    invoice_number=parsed_inv.get("invoice_number", "-"),
-                    date=parsed_inv.get("date")
-                    and format_date(self.env, parsed_inv["date"])
+                    invoice_number=parsed_inv.get("BT-1", "-"),
+                    date=parsed_inv.get("BT-2")
+                    and format_date(self.env, parsed_inv["BT-2"])
                     or "-",
                     invoice_id=invoice.id,
                 )
