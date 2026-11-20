@@ -87,7 +87,7 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Allowance on %s"
+msgid "Amount:"
 msgstr ""
 
 #. module: account_invoice_import
@@ -117,6 +117,12 @@ msgid ""
 "Bank account '%(acc_number)s' hasn't been created automatically because the "
 "vendor's country is in the SEPA zone and the bank account number is "
 "<strong>not a valid IBAN</strong>."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Base:"
 msgstr ""
 
 #. module: account_invoice_import
@@ -235,6 +241,18 @@ msgid "Disable Company Check"
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Discount:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Discounts:"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__display_name
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__display_name
 msgid "Display Name"
@@ -264,7 +282,13 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Extra charge on %s"
+msgid "Extra Charge:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Extra Discount:"
 msgstr ""
 
 #. module: account_invoice_import
@@ -510,6 +534,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Non-VAT Tax with code '%s' (not in UNTDID 5153)"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 msgid "Notes extracted from the electronic invoice:"
 msgstr ""
 
@@ -615,25 +645,19 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Price unit w/o extra charges:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Rate:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 msgid "Rate: %s %%"
-msgstr ""
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Reason: %s"
-msgstr ""
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Reason: Non-VAT Tax '%s'"
-msgstr ""
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Reason: Non-VAT Tax with code '%s' (not in UNTDID 5153)"
 msgstr ""
 
 #. module: account_invoice_import
@@ -898,6 +922,12 @@ msgstr ""
 msgid ""
 "email sent by <strong>%(email_from)s</strong> on %(date)s with subject "
 "<strong>%(subject)s</strong>"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "no reason specified"
 msgstr ""
 
 #. module: account_invoice_import

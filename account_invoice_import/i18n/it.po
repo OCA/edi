@@ -94,8 +94,8 @@ msgstr "Adeguamento su %s"
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Allowance on %s"
-msgstr "Sconto su %s"
+msgid "Amount:"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_attachment_count
@@ -131,6 +131,12 @@ msgstr ""
 "Il conto bancario '%(acc_number)s' non è stato creato automaticamente perché "
 "la nazione del fornitore è nell'area SEPA e il numero di conto bancario "
 "<strong>non è un IBAN valido</strong>."
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Base:"
+msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
@@ -250,6 +256,18 @@ msgid "Disable Company Check"
 msgstr "Disabilita controllo azienda"
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Discount:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Discounts:"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__display_name
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__display_name
 msgid "Display Name"
@@ -279,8 +297,14 @@ msgstr "ID esterno"
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Extra charge on %s"
-msgstr "Supplemento su %s"
+msgid "Extra Charge:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Extra Discount:"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_follower_ids
@@ -546,6 +570,12 @@ msgstr "Nessuna fattura creata."
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Non-VAT Tax with code '%s' (not in UNTDID 5153)"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 msgid "Notes extracted from the electronic invoice:"
 msgstr "Note estratte dalla fattura elettronica:"
 
@@ -663,26 +693,20 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Price unit w/o extra charges:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "Rate:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 msgid "Rate: %s %%"
 msgstr "Aliquota: %s %%"
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Reason: %s"
-msgstr "Motivo: %s"
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Reason: Non-VAT Tax '%s'"
-msgstr "Motivo: imposta non IVA '%s'"
-
-#. module: account_invoice_import
-#. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-msgid "Reason: Non-VAT Tax with code '%s' (not in UNTDID 5153)"
-msgstr "Motivo: imposta non IVA con codice '%s' (non in UNTDID 5153)"
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_move_id
@@ -994,9 +1018,30 @@ msgstr ""
 "<strong>%(subject)s</strong>"
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+msgid "no reason specified"
+msgstr ""
+
+#. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
 msgid "on imported vendor bill"
 msgstr "sulla fattura fornitore importata"
+
+#~ msgid "Allowance on %s"
+#~ msgstr "Sconto su %s"
+
+#~ msgid "Extra charge on %s"
+#~ msgstr "Supplemento su %s"
+
+#~ msgid "Reason: %s"
+#~ msgstr "Motivo: %s"
+
+#~ msgid "Reason: Non-VAT Tax '%s'"
+#~ msgstr "Motivo: imposta non IVA '%s'"
+
+#~ msgid "Reason: Non-VAT Tax with code '%s' (not in UNTDID 5153)"
+#~ msgstr "Motivo: imposta non IVA con codice '%s' (non in UNTDID 5153)"
 
 #~ msgid "Import Supplier Invoice or Refund"
 #~ msgstr "Imposta fattura o rimborso fornitore"
