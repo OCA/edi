@@ -20,28 +20,28 @@ msgstr ""
 
 #. module: base_ubl
 #. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
+#: code:addons/base_ubl/models/ubl.py:0 code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Category on tax '%(tax_name)s'"
 msgstr ""
 
 #. module: base_ubl
 #. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
+#: code:addons/base_ubl/models/ubl.py:0 code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE Tax Type on tax '%(tax_name)s'"
 msgstr ""
 
 #. module: base_ubl
 #. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
+#: code:addons/base_ubl/models/ubl.py:0 code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid "Missing UNECE code on unit of measure '%s'"
 msgstr ""
 
 #. module: base_ubl
 #. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
+#: code:addons/base_ubl/models/ubl.py:0 code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid ""
 "The UBL XML file does not contain the version for validating the content "
@@ -50,7 +50,7 @@ msgstr ""
 
 #. module: base_ubl
 #. odoo-python
-#: code:addons/base_ubl/models/ubl.py:0
+#: code:addons/base_ubl/models/ubl.py:0 code:addons/base_ubl/models/ubl.py:0
 #, python-format
 msgid ""
 "The UBL XML file is not valid against the official XML Schema Definition. "
