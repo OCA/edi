@@ -116,6 +116,13 @@ msgid "Display Name"
 msgstr ""
 
 #. module: account_invoice_download
+#. odoo-python
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
+#, python-format
+msgid "Download Bill '%s'"
+msgstr ""
+
+#. module: account_invoice_download
 #: model:ir.actions.act_window,name:account_invoice_download.account_invoice_download_config_action
 #: model:ir.ui.menu,name:account_invoice_download.account_invoice_download_config_menu
 msgid "Download Bills"
