@@ -16,7 +16,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "%s vendor bill(s) created"
 msgstr ""
@@ -33,7 +32,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -61,7 +59,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Adjustment"
 msgstr ""
@@ -81,14 +78,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Adjustment on %s"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Amount:"
@@ -108,7 +103,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
 "Bank account '%(acc_number)s' hasn't been created automatically because the "
@@ -118,7 +112,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -130,14 +123,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Base:"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Base: %s"
@@ -151,7 +142,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Coded reason: %s"
@@ -179,7 +169,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
 #, python-format
 msgid "Create New Partner"
@@ -216,14 +205,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Currency %s is inactive in Odoo: you should activate it."
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -252,7 +239,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Detailed import logs below:"
 msgstr ""
@@ -265,14 +251,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Discount:"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Discounts:"
@@ -286,7 +270,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Electronic invoice import warnings:"
@@ -305,14 +288,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Extra Charge:"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Extra Discount:"
@@ -405,7 +386,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_action
 #: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_menu
 #, python-format
@@ -429,7 +409,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Import of file %s"
 msgstr ""
@@ -444,7 +423,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Invoice '%(filename)s' already exists in Odoo: %(existing_inv)s."
 msgstr ""
@@ -452,14 +430,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Invoice Line External ID:"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Invoice already exists in Odoo: %(existing_inv)s"
@@ -517,7 +493,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
 "Matched unit of measure (UoM) is <strong>%(matched_uom)s</strong>, but this "
@@ -529,7 +504,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
 "Matched with bank account <strong>%(bank_account)s</strong>, but this bank "
@@ -538,7 +512,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -559,14 +532,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Missing company in the import configuration."
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -578,7 +549,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "No invoice created."
 msgstr ""
@@ -586,14 +556,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Non-VAT Tax with code '%s' (not in UNTDID 5153)"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Notes extracted from the electronic invoice:"
@@ -622,7 +590,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
 "Odoo failed to read the XML invoice '%(filename)s'. Did you install the Odoo"
@@ -636,7 +603,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Origin:"
@@ -656,7 +622,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/models/res_partner.py:0
-#: code:addons/account_invoice_import/models/res_partner.py:0
 #, python-format
 msgid ""
 "Partner <a href=# data-oe-model=res.partner data-oe-"
@@ -666,7 +631,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
 #, python-format
 msgid ""
@@ -688,7 +652,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/models/res_partner.py:0
-#: code:addons/account_invoice_import/models/res_partner.py:0
 #, python-format
 msgid ""
 "Partner has been created from the wizard <em>Create or Update Partner</em> "
@@ -703,7 +666,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/models/res_partner.py:0
-#: code:addons/account_invoice_import/models/res_partner.py:0
 #, python-format
 msgid ""
 "Partner updated via the wizard <em>Create or Update Partner</em> of Vendor "
@@ -713,7 +675,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Price unit w/o extra charges:"
 msgstr ""
@@ -721,14 +682,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Rate:"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Rate: %s %%"
@@ -783,7 +742,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
 "The <strong>total tax amount</strong> has been <strong>forced</strong> to "
@@ -792,7 +750,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "The XML file '%(filename)s' is not XML-compliant. Error: %(err)s"
@@ -809,7 +766,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
 "The electronic invoice states the bank account number "
@@ -821,7 +777,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/models/account_move.py:0
-#: code:addons/account_invoice_import/models/account_move.py:0
 #, python-format
 msgid ""
 "The invoice on which you are trying to update the partner already exists: "
@@ -830,7 +785,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -842,7 +796,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/models/account_move.py:0
-#: code:addons/account_invoice_import/models/account_move.py:0
 #, python-format
 msgid ""
 "The total amount of the vendor bill/refund in Odoo (%(amount_total)s) is "
@@ -852,7 +805,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/models/res_partner.py:0
 #: code:addons/account_invoice_import/models/res_partner.py:0
 #, python-format
 msgid "The vendor bill %(move)s already has a partner %(partner)s."
@@ -868,7 +820,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "This invoice has been created automatically via file import."
@@ -892,7 +843,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
 "Trying to import invoice in company %(company)s that has VAT number "
@@ -902,8 +852,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
@@ -961,7 +909,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Wrong value for 'if_already_exists' key in import_config (%s)."
 msgstr ""
@@ -969,14 +916,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Wrong value for 'invoice_type' key in import configuration (%s)"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -988,7 +933,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
 "You must configure the 'Adjustment Credit Account' on the Accounting "
@@ -997,7 +941,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -1008,7 +951,6 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import_partner_create.py:0
 #, python-format
 msgid "You must select the partner to update."
 msgstr ""
@@ -1016,14 +958,12 @@ msgstr ""
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "You must select the vendor bills to import."
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
@@ -1033,7 +973,6 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "no reason specified"
