@@ -52,8 +52,8 @@ msgstr "Giorni precedenti"
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__backward_days
 msgid ""
-"By default, Odoo will download all invoices that are after the last download"
-" date. But it may happen that invoices are available online for download "
+"By default, Odoo will download all invoices that are after the last download "
+"date. But it may happen that invoices are available online for download "
 "several days after their generation. So, if you set this parameter to 5, "
 "Odoo will download all invoices that are after the last download date minus "
 "5 days."
@@ -123,6 +123,13 @@ msgstr "Giorno(i)"
 #: model:ir.model.fields,field_description:account_invoice_download.field_account_invoice_download_log__display_name
 msgid "Display Name"
 msgstr "Nome visualizzato"
+
+#. module: account_invoice_download
+#. odoo-python
+#: code:addons/account_invoice_download/models/account_invoice_download_config.py:0
+#, python-format
+msgid "Download Bill '%s'"
+msgstr ""
 
 #. module: account_invoice_download
 #: model:ir.actions.act_window,name:account_invoice_download.account_invoice_download_config_action
@@ -236,8 +243,8 @@ msgstr "ID"
 #. module: account_invoice_download
 #: model:ir.model.fields,help:account_invoice_download.field_account_invoice_download_config__password
 msgid ""
-"If you don't want to store the password in Odoo's database, leave this field"
-" empty and you will get a wizard to ask you the password on every download."
+"If you don't want to store the password in Odoo's database, leave this field "
+"empty and you will get a wizard to ask you the password on every download."
 msgstr ""
 "Se non si vuole memorizzare la password nel database di Odoo, lasciare vuoto "
 "questo campo e verrà visualizzata una procedura guidata che chiederà la "
