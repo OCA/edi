@@ -27,17 +27,15 @@ msgstr ", posizione: %d"
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
 #, python-format
-msgid "<b>Failed</b> to extract the following field(s): %s."
-msgstr "<b>Fallita</b> l'estrazione dei seguenti campi: %s."
+msgid "<strong>Failed</strong> to extract the following field(s): %s."
+msgstr ""
 
 #. module: account_invoice_import_simple_pdf
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.account_invoice_import_form
 msgid ""
-"<b>regular PDF</b> file without any embedded XML file via a pre-"
-"configuration in Odoo."
+"<strong>regular PDF</strong> file without any embedded XML file via a pre-"
+"configuration in Odoo for each partner."
 msgstr ""
-"File <b>PDF regolare</b> senza file XML inclusi tramite preconfigurazione in "
-"Odoo."
 
 #. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields.selection,name:account_invoice_import_simple_pdf.selection__res_partner__simple_pdf_pages__all
@@ -254,8 +252,8 @@ msgstr "Carattere fisso"
 #, python-format
 msgid ""
 "For partner '%(partner_name)s', the decimal separator (%(decimal_sep)s) is "
-"the same as the thousand separator (%(thousand_sep)s). Keep in mind that, if"
-" not set explicitly, decimal and thousand separator are read from the "
+"the same as the thousand separator (%(thousand_sep)s). Keep in mind that, if "
+"not set explicitly, decimal and thousand separator are read from the "
 "language of the partner."
 msgstr ""
 "Per il partner '%(partner_name)s', il separatore decimale (%(decimal_sep)s) "
@@ -334,8 +332,8 @@ msgstr ""
 #: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_thousand_separator
 #: model:ir.model.fields,help:account_invoice_import_simple_pdf.field_res_users__simple_pdf_thousand_separator
 msgid ""
-"If empty, Odoo will use the thousand separator configured on the language of"
-" the partner."
+"If empty, Odoo will use the thousand separator configured on the language of "
+"the partner."
 msgstr ""
 "Se vuoto, Odoo utilizzerà il separatore delle migliaia configurato nella "
 "lingua del partner."
@@ -574,8 +572,8 @@ msgstr "Nessuno"
 #, python-format
 msgid ""
 "Odoo could not extract the text from the PDF invoice with the method %s. "
-"Refer to the Odoo server logs for more technical information about the cause"
-" of the failure."
+"Refer to the Odoo server logs for more technical information about the cause "
+"of the failure."
 msgstr ""
 "Odoo non è riuscito a estrarre il testo dalla fattura PDF con il metodo %s. "
 "Consultare i log del server Odoo per ulteriori informazioni tecniche sulla "
@@ -608,12 +606,11 @@ msgstr "Analisi pagina"
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
-#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #, python-format
 msgid ""
 "Partner '%(partner_name)s' is configured with an extract rule "
-"'%(extract_rule)s' with position %(position)s for field '%(field_name)s' but"
-" the list of extracted valid data only has %(entries_count)s entries."
+"'%(extract_rule)s' with position %(position)s for field '%(field_name)s' but "
+"the list of extracted valid data only has %(entries_count)s entries."
 msgstr ""
 "Il partner '%(partner_name)s' è configurato con una regola di estrazione "
 "'%(extract_rule)s' con posizione %(position)s per il campo '%(field_name)s', "
@@ -641,7 +638,6 @@ msgstr "Espressione regolare"
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
-#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid "Result:"
 msgstr "Risultato:"
@@ -668,6 +664,27 @@ msgstr "Sequenza"
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.view_partner_property_form
 msgid "Simple PDF Configuration (useless for structured invoices)"
 msgstr "Configurazione PDF semplice (inutile per fatture strutturate)"
+
+#. module: account_invoice_import_simple_pdf
+#. odoo-python
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Simple PDF import error on invoice '%(filename)s': %(err)s"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#. odoo-python
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Simple PDF import error: %s"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#. odoo-python
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Simple PDF import: could not find Vendor."
+msgstr ""
 
 #. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_keyword
@@ -726,14 +743,12 @@ msgstr "Stringa inizio"
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
-#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #, python-format
 msgid "String '%s' not found"
 msgstr "Stringa '%s' non trovata"
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
-#: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #, python-format
 msgid "Successful cut on '%s'"
@@ -750,8 +765,8 @@ msgstr "Corrispondenza esatta su %(count)s parole chiavi (%(keywords)s)"
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
 #, python-format
-msgid "Successful match on {label} '{value}'"
-msgstr "Corrispondenze corrette su {label} '{value}'"
+msgid "Successful match on %(label)s '%(value)s'"
+msgstr ""
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
@@ -931,17 +946,6 @@ msgstr "YYYY MM DD"
 
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
-#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
-#, python-format
-msgid ""
-"You must configure a field extraction rule for field 'Date' for partner "
-"'%s'."
-msgstr ""
-"Bisogna configurare una regola estrazione campo per il campo 'Data' per il "
-"partner '%s'."
-
-#. module: account_invoice_import_simple_pdf
-#. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/account_invoice_import_simple_pdf_fields.py:0
 #, python-format
 msgid "You must set a Specific Regular Expression on the 'Description' field."
@@ -1002,7 +1006,29 @@ msgstr "spazio"
 #. module: account_invoice_import_simple_pdf
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
-#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid "unknown"
 msgstr "sconosciuto"
+
+#, python-format
+#~ msgid "<b>Failed</b> to extract the following field(s): %s."
+#~ msgstr "<b>Fallita</b> l'estrazione dei seguenti campi: %s."
+
+#~ msgid ""
+#~ "<b>regular PDF</b> file without any embedded XML file via a pre-"
+#~ "configuration in Odoo."
+#~ msgstr ""
+#~ "File <b>PDF regolare</b> senza file XML inclusi tramite preconfigurazione "
+#~ "in Odoo."
+
+#, python-format
+#~ msgid "Successful match on {label} '{value}'"
+#~ msgstr "Corrispondenze corrette su {label} '{value}'"
+
+#, python-format
+#~ msgid ""
+#~ "You must configure a field extraction rule for field 'Date' for partner "
+#~ "'%s'."
+#~ msgstr ""
+#~ "Bisogna configurare una regola estrazione campo per il campo 'Data' per "
+#~ "il partner '%s'."
