@@ -20,7 +20,17 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "%d vendor bill(s) created"
+msgid "%s vendor bill(s) created"
+msgstr ""
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "<strong>CII</strong> (Cross Industry Invoice) XML,"
+msgstr ""
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "<strong>Factur-X</strong> (PDF invoice with embedded CII XML file),"
 msgstr ""
 
 #. module: account_invoice_import
@@ -29,14 +39,19 @@ msgstr ""
 #, python-format
 msgid ""
 "<strong>The total amount of the imported invoice is %(real_amount_total)s "
-"whereas the total amount computed by Odoo is "
-"%(current_amount_total)s</strong>. It is the consequence of a difference "
-"between the total tax amount of the invoice (%(real_amount_tax)s) and the "
-"total tax amount computed by Odoo (%(current_amount_tax)s). This is often "
-"caused by missing taxes in invoice lines due to a failure to find the tax in"
-" Odoo that correspond to the tax in the imported invoice or missing "
-"configuration of taxes on products or missing configuration of <em>Default "
-"Taxes</em> on the partner (if there are no products on invoice lines)."
+"whereas the total amount computed by Odoo is %(current_amount_total)s</"
+"strong>. It is the consequence of a difference between the total tax amount "
+"of the invoice (%(real_amount_tax)s) and the total tax amount computed by "
+"Odoo (%(current_amount_tax)s). This is often caused by missing taxes in "
+"invoice lines due to a failure to find the tax in Odoo that correspond to "
+"the tax in the imported invoice or missing configuration of taxes on "
+"products or missing configuration of <em>Default Taxes</em> on the partner "
+"(if there are no products on invoice lines)."
+msgstr ""
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
+msgid "<strong>UBL</strong> (Universal Business Language) XML,"
 msgstr ""
 
 #. module: account_invoice_import
@@ -71,6 +86,13 @@ msgid "Adjustment on %s"
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Amount:"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
@@ -82,10 +104,51 @@ msgid "Auto-create Bank Account of Supplier"
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Bank account '%(acc_number)s' hasn't been created automatically because the "
+"vendor's country (%(vendor_country_code)s) is different from the country of "
+"the IBAN."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Bank account '%(acc_number)s' hasn't been created automatically because the "
+"vendor's country is in the SEPA zone and the bank account number is "
+"<strong>not a valid IBAN</strong>."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Base:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Base: %s"
+msgstr ""
+
+#. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_partner_create_form
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Coded reason: %s"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_res_company
@@ -143,6 +206,22 @@ msgid "Created on"
 msgstr "Creado o"
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Currency %s is inactive in Odoo: you should activate it."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Currency ISO code '%(invoice_currency_code)s' not found in Odoo: using "
+"company currency '%(company_currency_code)s'."
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_account_id
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_users__invoice_import_account_id
 msgid "Default Expense Account"
@@ -161,10 +240,67 @@ msgid "Default Taxes"
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Detailed import logs below:"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__debug_disable_company_check
+msgid "Disable Company Check"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Discount:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Discounts:"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__display_name
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import_partner_create__display_name
 msgid "Display Name"
 msgstr "Nome mostrado"
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Electronic invoice import warnings:"
+msgstr ""
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.view_move_form
+msgid "Ext. ID"
+msgstr ""
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.view_move_form
+msgid "External ID"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Extra Charge:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Extra Discount:"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_follower_ids
@@ -188,12 +324,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_journal_id
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_users__invoice_import_journal_id
 msgid "Force Purchase Journal"
-msgstr ""
-
-#. module: account_invoice_import
-#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_single_line
-#: model:ir.model.fields,field_description:account_invoice_import.field_res_users__invoice_import_single_line
-msgid "Force Single Invoice Line"
 msgstr ""
 
 #. module: account_invoice_import
@@ -224,19 +354,29 @@ msgid "If empty, Odoo will use the first purchase journal."
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_invoice_import__debug_disable_company_check
+msgid ""
+"If enabled, it will disable the check that the buyer company correspond to "
+"the company of the wizard. It is useful for debug purposes to test the "
+"import of a vendor bill in a test database."
+msgstr ""
+
+#. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
 "If the format you need is not listed above, you should install an "
-"additionnal Odoo module that adds support for that format (e.g. "
-"<em>account_invoice_import_facturx</em>, "
-"<em>account_invoice_import_ubl</em>, "
-"<em>account_invoice_import_simple_pdf</em>, etc)."
+"additionnal Odoo module that adds support for that format."
 msgstr ""
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid "Import"
 msgstr "Importar"
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_move_line__import_invoice_line_identifier
+msgid "Import Identifier"
+msgstr ""
 
 #. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_bank_statement_line__import_partner_data
@@ -247,17 +387,19 @@ msgid "Import Partner Data"
 msgstr ""
 
 #. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
-msgid "Import Supplier Invoice or Refund"
-msgstr ""
-
-#. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #: model:ir.actions.act_window,name:account_invoice_import.account_invoice_import_action
 #: model:ir.ui.menu,name:account_invoice_import.account_invoice_import_menu
 #, python-format
 msgid "Import Vendor Bills"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_bank_statement_line__import_check_total
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_move__import_check_total
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_payment__import_check_total
+msgid "Import Verification Total"
 msgstr ""
 
 #. module: account_invoice_import
@@ -275,10 +417,31 @@ msgid "Import of file %s"
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_bank_statement_line__imported
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_move__imported
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_payment__imported
+msgid "Imported"
+msgstr ""
+
+#. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Invoice '%(filename)s' already exists in Odoo: %(existing_inv)s."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Invoice Line External ID:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Invoice already exists in Odoo: %(existing_inv)s"
 msgstr ""
 
 #. module: account_invoice_import
@@ -294,6 +457,11 @@ msgstr ""
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_move
 msgid "Journal Entry"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model,name:account_invoice_import.model_account_move_line
+msgid "Journal Item"
 msgstr ""
 
 #. module: account_invoice_import
@@ -326,6 +494,35 @@ msgid "Main Attachment"
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Matched unit of measure (UoM) is <strong>%(matched_uom)s</strong>, but this "
+"UoM doesn't belong to the same category as UoM <strong>%(product_uom)s</"
+"strong> configured on product <em>%(product)s</em>. So Odoo has set the UoM "
+"of the product (%(product_uom)s)."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Matched with bank account <strong>%(bank_account)s</strong>, but this bank "
+"account is <strong>archived</strong>. You should re-activate it."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"Matched with bank account <strong>%(bank_account)s</strong>, but this bank "
+"account is not allowed yet for outgoing payments."
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__message_has_error
 msgid "Message Delivery error"
 msgstr ""
@@ -339,6 +536,23 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid "Missing company in the import configuration."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid ""
+"New bank account <strong>%(bank_account)s</strong> created. You must check "
+"that this bank account really belongs to the vendor and then allow it for "
+"outgoing payments."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "No invoice created."
 msgstr ""
 
@@ -346,7 +560,14 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "No journal with type %(journal_type)s in company %(company)s."
+msgid "Non-VAT Tax with code '%s' (not in UNTDID 5153)"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Notes extracted from the electronic invoice:"
 msgstr ""
 
 #. module: account_invoice_import
@@ -373,7 +594,21 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "Only the date format 102 is supported."
+msgid ""
+"Odoo failed to read the XML invoice '%(filename)s'. Did you install the Odoo "
+"module to support this type of file?"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__res_partner__invoice_import_shrink_lines__per_vat_rate
+msgid "One Line per VAT rate"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Origin:"
 msgstr ""
 
 #. module: account_invoice_import
@@ -441,6 +676,27 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Price unit w/o extra charges:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Rate:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Rate: %s %%"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_move_id
 #: model:ir.model.fields,field_description:account_invoice_import.field_res_users__invoice_import_move_id
 msgid "Related Imported Vendor Bill"
@@ -452,10 +708,26 @@ msgid "Set partner"
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_account_invoice_import__show_debug_disable_company_check
+msgid "Show Debug Disable Company Check"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_bank_statement_line__show_import_warnings
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_move__show_import_warnings
 #: model:ir.model.fields,field_description:account_invoice_import.field_account_payment__show_import_warnings
 msgid "Show Import Warnings"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_partner__invoice_import_shrink_lines
+#: model:ir.model.fields,field_description:account_invoice_import.field_res_users__invoice_import_shrink_lines
+msgid "Shrink Invoice Lines"
+msgstr ""
+
+#. module: account_invoice_import
+#: model:ir.model.fields.selection,name:account_invoice_import.selection__res_partner__invoice_import_shrink_lines__single
+msgid "Single Line"
 msgstr ""
 
 #. module: account_invoice_import
@@ -480,6 +752,13 @@ msgid ""
 msgstr ""
 
 #. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "The XML file '%(filename)s' is not XML-compliant. Error: %(err)s"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model.fields,help:account_invoice_import.field_res_partner__invoice_import_account_id
 #: model:ir.model.fields,help:account_invoice_import.field_res_users__invoice_import_account_id
 msgid ""
@@ -489,16 +768,48 @@ msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
-#: code:addons/account_invoice_import/models/res_partner.py:0
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "The vendor bill %(move)s already has a partner %(partner)s."
+msgid ""
+"The electronic invoice states the bank account number "
+"<strong>%(bank_account_number)s</strong>, but this bank account doesn't "
+"exist in Odoo for partner <em>%(commercial_partner)s</em> and the option to "
+"auto-create bank accounts upon invoice import is not enabled."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/account_move.py:0
+#, python-format
+msgid ""
+"The invoice on which you are trying to update the partner already exists: %s."
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "This XML file is not XML-compliant. Error: %s"
+msgid ""
+"The invoice to import already exists (%(existing_inv)s) but it's total "
+"amount (%(existing_inv_total_amount)s) doesn't match the total amount of the "
+"invoice to import (%(import_inv_total_amount)s)."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/account_move.py:0
+#, python-format
+msgid ""
+"The total amount of the vendor bill/refund in Odoo (%(amount_total)s) is "
+"different from the total amount read on the imported invoice "
+"(%(import_check_total)s)."
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/models/res_partner.py:0
+#, python-format
+msgid "The vendor bill %(move)s already has a partner %(partner)s."
 msgstr ""
 
 #. module: account_invoice_import
@@ -513,9 +824,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid ""
-"This invoice has been created automatically via file import. Origin: "
-"<strong>%s</strong>."
+msgid "This invoice has been created automatically via file import."
 msgstr ""
 
 #. module: account_invoice_import
@@ -538,8 +847,16 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
-"This type of XML invoice is not supported. Did you install the module to "
-"support this type of file?"
+"Trying to import invoice in company %(company)s that has VAT number "
+"'%(import_company_vat)s' but the invoice to import contains VAT number "
+"'%(invoice_vat)s'"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Unknown reason code '%(code)s' (not in UNTDID %(untdid)s)"
 msgstr ""
 
 #. module: account_invoice_import
@@ -550,8 +867,8 @@ msgstr ""
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
 msgid ""
-"Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a"
-" draft vendor bills refund for each file."
+"Upload below the vendor bills/refunds as PDF or XML file: Odoo will create a "
+"draft vendor bill/refund for each file."
 msgstr ""
 
 #. module: account_invoice_import
@@ -576,6 +893,11 @@ msgid "Website communication history"
 msgstr ""
 
 #. module: account_invoice_import
+#: model:ir.model.fields,help:account_invoice_import.field_account_move_line__import_invoice_line_identifier
+msgid "When importing a vendor bill, this field stores BT-126"
+msgstr ""
+
+#. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import_partner_create
 msgid "Wizard to create a new partner or update an existing partner"
 msgstr ""
@@ -589,18 +911,14 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid ""
-"You are importing a customer invoice/refund in journal '%s' which is not a "
-"sale journal."
+msgid "Wrong value for 'if_already_exists' key in import_config (%s)."
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid ""
-"You are importing a vendor bill/refund in journal '%s' which is not a "
-"purchase journal."
+msgid "Wrong value for 'invoice_type' key in import configuration (%s)"
 msgstr ""
 
 #. module: account_invoice_import
@@ -650,17 +968,18 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid ""
-"email sent by <b>{email_from}</b> on {date} with subject <b>{subject}</b>"
-msgstr ""
-
-#. module: account_invoice_import
-#: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
-msgid "on imported vendor bill"
+"email sent by <strong>%(email_from)s</strong> on %(date)s with subject "
+"<strong>%(subject)s</strong>"
 msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
-msgid "unspecified"
+msgid "no reason specified"
+msgstr ""
+
+#. module: account_invoice_import
+#: model_terms:ir.ui.view,arch_db:account_invoice_import.view_partner_property_form
+msgid "on imported vendor bill"
 msgstr ""
