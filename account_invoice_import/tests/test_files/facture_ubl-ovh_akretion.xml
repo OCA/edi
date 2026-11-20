@@ -1,0 +1,467 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<Invoice
+    xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2"
+    xmlns:stat="urn:oasis:names:specification:ubl:schema:xsd:DocumentStatusCode-1.0"
+    xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2"
+    xmlns:ccts="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+>
+    <cbc:CustomizationID>urn:cen.eu:en16931:2017</cbc:CustomizationID>
+    <cbc:ProfileID>S2</cbc:ProfileID>
+    <cbc:ID>FR_NUM_FAC_TEST</cbc:ID>
+    <cbc:IssueDate>2026-10-05</cbc:IssueDate>
+    <cbc:DueDate>2026-10-05</cbc:DueDate>
+    <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+    <cbc:Note>#AAB#Pas d’escompte.</cbc:Note>
+    <cbc:Note
+    >#PMD#Le montant de 9,23 € (sera / a été prélevé) le 05/10/2026 sur votre moyen de paiement par défaut.</cbc:Note>
+    <cbc:Note
+    >#PMT#Une indemnité forfaitaire de 40 euros pour frais de recouvrement sera également appliquée, conformément à l'article L. 441-10 du Code de commerce.</cbc:Note>
+    <cbc:Note>#SUR#Service fourni par voie électronique.</cbc:Note>
+    <cbc:Note>#ACB#SUBSCRIPTION</cbc:Note>
+    <cbc:Note>#AAI#Référence du compte client OVH xxxxxx-ovh</cbc:Note>
+    <cbc:Note>#BAR#B2B</cbc:Note>
+    <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+    <cac:InvoicePeriod>
+        <cbc:StartDate>2026-10-01</cbc:StartDate>
+        <cbc:EndDate>2026-10-31</cbc:EndDate>
+        <cbc:DescriptionCode>3</cbc:DescriptionCode>
+    </cac:InvoicePeriod>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="0002">424761419</cbc:EndpointID>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="0009">42476141900045</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PostalAddress>
+                <cbc:StreetName>2 rue Kellermann</cbc:StreetName>
+                <cbc:CityName>ROUBAIX</cbc:CityName>
+                <cbc:PostalZone>59100</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>FR</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>FR22424761419</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>OVH SAS</cbc:RegistrationName>
+                <cbc:CompanyID schemeID="0002">424761419</cbc:CompanyID>
+            </cac:PartyLegalEntity>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:AccountingCustomerParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="0225">792377731</cbc:EndpointID>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="0009">79237773100023</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PostalAddress>
+                <cbc:StreetName>27 RUE HENRI ROLLAND</cbc:StreetName>
+                <cbc:CityName>VILLEURBANNE</cbc:CityName>
+                <cbc:PostalZone>69100</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>FR</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>FR86792377731</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>AKRETION FRANCE</cbc:RegistrationName>
+                <cbc:CompanyID schemeID="0002">792377731</cbc:CompanyID>
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>Agent Secret</cbc:Name>
+                <cbc:Telephone>+33612421242</cbc:Telephone>
+                <cbc:ElectronicMail>pouetpouet@akretion.com</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingCustomerParty>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode name="Moyen de paiement convenu">57</cbc:PaymentMeansCode>
+    </cac:PaymentMeans>
+    <cac:TaxTotal>
+        <cbc:TaxAmount currencyID="EUR">1.54</cbc:TaxAmount>
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="EUR">7.69</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="EUR">1.54</cbc:TaxAmount>
+            <cac:TaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <cac:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="EUR">7.69</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="EUR">7.69</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="EUR">9.23</cbc:TaxInclusiveAmount>
+        <cbc:AllowanceTotalAmount currencyID="EUR">0</cbc:AllowanceTotalAmount>
+        <cbc:PrepaidAmount currencyID="EUR">9.23</cbc:PrepaidAmount>
+        <cbc:PayableAmount currencyID="EUR">0</cbc:PayableAmount>
+    </cac:LegalMonetaryTotal>
+    <cac:InvoiceLine>
+        <cbc:ID>485711192</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">0</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:AllowanceCharge>
+            <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+            <cbc:AllowanceChargeReason>VOIP - ALIAS</cbc:AllowanceChargeReason>
+            <cbc:Amount currencyID="EUR">0</cbc:Amount>
+        </cac:AllowanceCharge>
+        <cac:Item>
+            <cbc:Description>0033912421242</cbc:Description>
+            <cbc:Name>Un numéro porté</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">0</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711194</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">1</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:Item>
+            <cbc:Description>0033482531242</cbc:Description>
+            <cbc:Name>1 numéro géographique supplémentaire - 1 mois</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">1</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711195</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">1</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:Item>
+            <cbc:Description>0033482534212</cbc:Description>
+            <cbc:Name>1 numéro géographique supplémentaire - 1 mois</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">1</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711197</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">1</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:Item>
+            <cbc:Description>0033482534242</cbc:Description>
+            <cbc:Name>1 numéro géographique supplémentaire - 1 mois</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">1</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711200</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">0</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:AllowanceCharge>
+            <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+            <cbc:AllowanceChargeReason>VOIP - BILLINGACCOUNT</cbc:AllowanceChargeReason>
+            <cbc:Amount currencyID="EUR">0</cbc:Amount>
+        </cac:AllowanceCharge>
+        <cac:Item>
+            <cbc:Description>my_group</cbc:Description>
+            <cbc:Name>Groupe</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - BILLINGACCOUNT</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">0</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711201</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">0</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:AllowanceCharge>
+            <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+            <cbc:AllowanceChargeReason>VOIP - ALIAS</cbc:AllowanceChargeReason>
+            <cbc:Amount currencyID="EUR">0</cbc:Amount>
+        </cac:AllowanceCharge>
+        <cac:Item>
+            <cbc:Description>0033478124242</cbc:Description>
+            <cbc:Name>Un numéro porté xdsl</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">0</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711202</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">0.7</cbc:LineExtensionAmount>
+        <cac:Item>
+            <cbc:Description>*</cbc:Description>
+            <cbc:Name>Support Business - 10%</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >ONSITE - SUPPORT</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">0.7</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711203</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">0.99</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:Item>
+            <cbc:Description>0033482539999</cbc:Description>
+            <cbc:Name
+            >Forfait inclus vers les fixes en France et 40 pays et à la seconde vers les mobiles en France</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - LINE</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">0.99</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711204</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">1</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:Item>
+            <cbc:Description>0033482538888</cbc:Description>
+            <cbc:Name>1 numéro géographique supplémentaire - 1 mois</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">1</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711205</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">1</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:Item>
+            <cbc:Description>0033482537777</cbc:Description>
+            <cbc:Name>1 numéro géographique supplémentaire - 1 mois</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">1</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711206</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">1</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:Item>
+            <cbc:Description>0033482536666</cbc:Description>
+            <cbc:Name>1 numéro géographique supplémentaire - 1 mois</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">1</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+    <cac:InvoiceLine>
+        <cbc:ID>485711207</cbc:ID>
+        <cbc:InvoicedQuantity unitCode="C62">1</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID="EUR">0</cbc:LineExtensionAmount>
+        <cac:InvoicePeriod>
+            <cbc:StartDate>2026-10-01</cbc:StartDate>
+            <cbc:EndDate>2026-10-31</cbc:EndDate>
+        </cac:InvoicePeriod>
+        <cac:AllowanceCharge>
+            <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+            <cbc:AllowanceChargeReason>VOIP - ALIAS</cbc:AllowanceChargeReason>
+            <cbc:Amount currencyID="EUR">0</cbc:Amount>
+        </cac:AllowanceCharge>
+        <cac:Item>
+            <cbc:Description>0033478055555</cbc:Description>
+            <cbc:Name>Un numéro porté</cbc:Name>
+            <cac:CommodityClassification>
+                <cbc:ItemClassificationCode
+                    listID="ZZZ"
+                >VOIP - ALIAS</cbc:ItemClassificationCode>
+            </cac:CommodityClassification>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>S</cbc:ID>
+                <cbc:Percent>20</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+        <cac:Price>
+            <cbc:PriceAmount currencyID="EUR">0</cbc:PriceAmount>
+        </cac:Price>
+    </cac:InvoiceLine>
+</Invoice>
