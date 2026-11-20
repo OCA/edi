@@ -24,14 +24,14 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
 #, python-format
-msgid "<b>Failed</b> to extract the following field(s): %s."
+msgid "<strong>Failed</strong> to extract the following field(s): %s."
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
 #: model_terms:ir.ui.view,arch_db:account_invoice_import_simple_pdf.account_invoice_import_form
 msgid ""
-"<b>regular PDF</b> file without any embedded XML file via a pre-"
-"configuration in Odoo."
+"<strong>regular PDF</strong> file without any embedded XML file via a pre-"
+"configuration in Odoo for each partner."
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
@@ -623,6 +623,27 @@ msgid "Simple PDF Configuration (useless for structured invoices)"
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
+#. odoo-python
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Simple PDF import error on invoice '%(filename)s': %(err)s"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#. odoo-python
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Simple PDF import error: %s"
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
+#. odoo-python
+#: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Simple PDF import: could not find Vendor."
+msgstr ""
+
+#. module: account_invoice_import_simple_pdf
 #: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_partner__simple_pdf_keyword
 #: model:ir.model.fields,field_description:account_invoice_import_simple_pdf.field_res_users__simple_pdf_keyword
 msgid "Simple Pdf Keyword"
@@ -703,7 +724,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import_simple_pdf/wizard/account_invoice_import.py:0
 #, python-format
-msgid "Successful match on {label} '{value}'"
+msgid "Successful match on %(label)s '%(value)s'"
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
@@ -876,15 +897,6 @@ msgstr ""
 #: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
 #, python-format
 msgid "YYYY MM DD"
-msgstr ""
-
-#. module: account_invoice_import_simple_pdf
-#. odoo-python
-#: code:addons/account_invoice_import_simple_pdf/models/res_partner.py:0
-#, python-format
-msgid ""
-"You must configure a field extraction rule for field 'Date' for partner "
-"'%s'."
 msgstr ""
 
 #. module: account_invoice_import_simple_pdf
