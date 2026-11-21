@@ -25,6 +25,28 @@ class TestUblCheckXmlSchema(TransactionCase):
         </Invoice>
         """
 
+    def test_ubl_check_xml_schema_valid_real_xsd(self):
+        xml = b"""<Invoice
+            xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+            xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+            xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+            <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+            <cbc:ID>F123</cbc:ID>
+            <cbc:IssueDate>2026-11-21</cbc:IssueDate>
+            <cac:AccountingSupplierParty><cac:Party/></cac:AccountingSupplierParty>
+            <cac:AccountingCustomerParty><cac:Party/></cac:AccountingCustomerParty>
+            <cac:LegalMonetaryTotal>
+                <cbc:PayableAmount currencyID="EUR">10.00</cbc:PayableAmount>
+            </cac:LegalMonetaryTotal>
+            <cac:InvoiceLine>
+                <cbc:ID>1</cbc:ID>
+                <cbc:LineExtensionAmount currencyID="EUR"
+                    >10.00</cbc:LineExtensionAmount>
+                <cac:Item/>
+            </cac:InvoiceLine>
+        </Invoice>"""
+        self.assertTrue(self.base_ubl._ubl_check_xml_schema(xml, "Invoice", "2.1"))
+
     def test_ubl_check_xml_schema_valid(self):
         with mock.patch(
             "odoo.addons.base_ubl.models.ubl.etree.XMLSchema",
