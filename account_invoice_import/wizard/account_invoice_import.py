@@ -1089,7 +1089,11 @@ class AccountInvoiceImport(models.TransientModel):
                 parsed_inv["BT-112"], existing_inv.amount_total
             ):
                 import_config["existing_invoice_matched"] = True
-                return existing_inv
+                return (
+                    existing_inv.id
+                    if import_config.get("webservice_mode")
+                    else existing_inv
+                )
             else:
                 raise UserError(
                     _(
