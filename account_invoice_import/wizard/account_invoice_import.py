@@ -307,28 +307,45 @@ class AccountInvoiceImport(models.TransientModel):
         refund = False
         if parsed_inv.get("BT-3"):
             refund = is_credit_note(parsed_inv)
+        # When the file is not in a supported format, the parser returns an
+        # empty dict and _fallback_update_parsed_inv() sets BT-112 to 0: the
+        # invoice is created empty. In this case, we don't flag the invoice as
+        # imported, because we don't want the control on import_check_total to
+        # apply to an invoice for which we were not even able to read the total
+        # amount (it would block its posting once the user has completed it).
+        import_success = bool(parsed_inv.get("BT-112"))
+        if not import_success:
+            import_config["global_warnings"].append(
+                self.env._(
+                    "No total amount could be extracted from the file: the "
+                    "invoice is created empty and is not flagged as imported, "
+                    "so its total amount will not be checked at posting."
+                )
+            )
         vals = {
             "company_id": company.id,
             "invoice_origin": import_config.get("origin"),
             "invoice_date": parsed_inv.get("BT-2"),
             "invoice_line_ids": [],
             "currency_id": import_config["invoice_currency"].id,
-            "imported": True,
+            "imported": import_success,
         }
         if import_config["invoice_type"] == "in":
             vals.update(
                 {
                     "move_type": refund and "in_refund" or "in_invoice",
                     "ref": parsed_inv.get("BT-1"),
-                    "import_check_total": parsed_inv["BT-112"],
                 }
             )
-            # if the module account_invoice_check_total from OCA/account-invoicing
-            # is installed (we now also have our own mecanism for that with the
-            # field import_check_total, but that only applies to imported
-            # invoices, not to manually encoded invoices
-            if hasattr(self.env["account.move"], "check_total"):
-                vals["check_total"] = parsed_inv["BT-112"]
+            if import_success:
+                vals["import_check_total"] = parsed_inv["BT-112"]
+                # if the module account_invoice_check_total from
+                # OCA/account-invoicing is installed (we now also have our own
+                # mecanism for that with the field import_check_total, but that
+                # only applies to imported invoices, not to manually encoded
+                # invoices
+                if hasattr(self.env["account.move"], "check_total"):
+                    vals["check_total"] = parsed_inv["BT-112"]
         else:
             vals["move_type"] = refund and "out_refund" or "out_invoice"
             if parsed_inv.get("BT-1"):
