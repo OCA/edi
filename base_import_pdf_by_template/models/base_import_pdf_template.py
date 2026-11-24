@@ -101,9 +101,9 @@ class BaseImportPdfTemplate(models.Model):
         data = []
         data_map_column = {}
         child_lines = self.line_ids.filtered(
-            lambda x: x.related_model == "lines"
-            and x.value_type != "fixed"
-            and x.pattern
+            lambda x: (
+                x.related_model == "lines" and x.value_type != "fixed" and x.pattern
+            )
         )
         sequence = 0
         for child_line in child_lines:
@@ -143,9 +143,11 @@ class BaseImportPdfTemplate(models.Model):
         # one are the same (e.g. res.partner), filtering only by model would apply
         # the header fixed values to the child lines too (and vice versa).
         fixed_fields = self.line_ids.filtered(
-            lambda x: x.model == model
-            and x.related_model == related_model
-            and x.value_type == "fixed"
+            lambda x: (
+                x.model == model
+                and x.related_model == related_model
+                and x.value_type == "fixed"
+            )
         )
         for fixed_field in fixed_fields:
             res[fixed_field.field_name] = fixed_field._get_fixed_value()

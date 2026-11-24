@@ -186,9 +186,11 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         model_name = self.env.context.get("model_name")
         related_model = self.env.context.get("related_model")
         template_line = self.template_id.line_ids.filtered(
-            lambda x: x.model == model_name
-            and x.field_name == field_name
-            and x.related_model == related_model
+            lambda x: (
+                x.model == model_name
+                and x.field_name == field_name
+                and x.related_model == related_model
+            )
         )
         if not template_line:
             return
@@ -309,9 +311,11 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         try:
             vals = model_form._get_save_values()
             for f_name in extra_vals:
-                if f_name in vals and not self.parent_id.record_ref:
-                    vals.update({f_name: extra_vals[f_name]})
-                elif self.parent_id.record_ref:
+                if (
+                    f_name in vals
+                    and not self.parent_id.record_ref
+                    or self.parent_id.record_ref
+                ):
                     vals.update({f_name: extra_vals[f_name]})
 
             if self.parent_id.record_ref:
