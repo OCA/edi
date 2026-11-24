@@ -40,6 +40,15 @@ class TestUblCheckXmlSchema(TransactionCase):
         with self.assertRaises(UserError):
             self.base_ubl._ubl_check_xml_schema(self.invalid_xml, "Invoice", "2.1")
 
+    @mute_logger("odoo.addons.base_ubl.models.ubl")
+    def test_ubl_check_xml_schema_25(self):
+        for doc in ("Invoice", "ApplicationResponse", "DocumentStatus"):
+            with self.assertRaises(UserError):
+                self.base_ubl._ubl_check_xml_schema(self.invalid_xml, doc, "2.5")
+        # Second call exercises the compiled XMLSchema cache
+        with self.assertRaises(UserError):
+            self.base_ubl._ubl_check_xml_schema(self.invalid_xml, "Invoice", "2.5")
+
     def test_ubl_get_nsmap_namespace(self):
         nsmap, ns = self.base_ubl._ubl_get_nsmap_namespace("Invoice")
         self.assertIn("cac", nsmap)

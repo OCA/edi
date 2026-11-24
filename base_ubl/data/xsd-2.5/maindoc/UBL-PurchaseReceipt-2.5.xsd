@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Library:           OASIS Universal Business Language (UBL) 2.5 OS
+                     http://docs.oasis-open.org/ubl/os-UBL-2.5/
+  Release Date:      12 August 2026
+  Module:            xsd/maindoc/UBL-PurchaseReceipt-2.5.xsd
+  Generated on:      2026-08-15 15:15z
+  Copyright (c) OASIS Open 2026. All Rights Reserved.
+-->
+<xsd:schema xmlns="urn:oasis:names:specification:ubl:schema:xsd:PurchaseReceipt-2"
+            xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+            xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+            xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:ccts="urn:un:unece:uncefact:documentation:2"
+            targetNamespace="urn:oasis:names:specification:ubl:schema:xsd:PurchaseReceipt-2"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="2.5">
+   <!-- ===== Imports ===== -->
+   <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+               schemaLocation="../common/UBL-CommonAggregateComponents-2.5.xsd"/>
+   <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+               schemaLocation="../common/UBL-CommonBasicComponents-2.5.xsd"/>
+   <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
+               schemaLocation="../common/UBL-CommonExtensionComponents-2.5.xsd"/>
+   <!-- ===== Element Declarations ===== -->
+   <xsd:element name="PurchaseReceipt" type="PurchaseReceiptType">
+      <xsd:annotation>
+         <xsd:documentation>A receipt for a purchase made with cash or cash equivalents.</xsd:documentation>
+      </xsd:annotation>
+   </xsd:element>
+   <!-- ===== Type Definitions ===== -->
+   <!-- ===== Aggregate Business Information Entity Type Definitions ===== -->
+   <xsd:complexType name="PurchaseReceiptType">
+      <xsd:annotation>
+         <xsd:documentation>
+            <ccts:Component>
+               <ccts:ComponentType>ABIE</ccts:ComponentType>
+               <ccts:DictionaryEntryName>Purchase Receipt. Details</ccts:DictionaryEntryName>
+               <ccts:Definition>A receipt for a purchase made with cash or cash equivalents.</ccts:Definition>
+               <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+            </ccts:Component>
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element ref="ext:UBLExtensions" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>A container for extensions foreign to the document.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+        <xsd:element ref="cbc:UBLVersionID" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. UBL Version Identifier. Identifier</ccts:DictionaryEntryName>
+                     <ccts:Definition>Identifies the earliest version of the UBL 2 schema for this document type that defines all of the elements that might be encountered in the current instance.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>UBL Version Identifier</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                     <ccts:DataType>Identifier. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:CustomizationID" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Customization Identifier. Identifier</ccts:DictionaryEntryName>
+                     <ccts:Definition>Identifies a user-defined customization of UBL for a specific use.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Customization Identifier</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                     <ccts:DataType>Identifier. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:ProfileID" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Profile Identifier. Identifier</ccts:DictionaryEntryName>
+                     <ccts:Definition>Identifies a user-defined profile of the customization of UBL being used.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Profile Identifier</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                     <ccts:DataType>Identifier. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:ProfileExecutionID" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Profile Execution Identifier. Identifier</ccts:DictionaryEntryName>
+                     <ccts:Definition>Identifies an instance of executing a profile, to associate all transactions in a collaboration.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Profile Execution Identifier</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                     <ccts:DataType>Identifier. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:ID" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Identifier</ccts:DictionaryEntryName>
+                     <ccts:Definition>An identifier for this purchase receipt, assigned by the seller.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Identifier</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                     <ccts:DataType>Identifier. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:UUID" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. UUID. Identifier</ccts:DictionaryEntryName>
+                     <ccts:Definition>A universally unique identifier for an instance of this document.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>UUID</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Identifier</ccts:RepresentationTerm>
+                     <ccts:DataType>Identifier. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:IssueDate" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Issue Date. Date</ccts:DictionaryEntryName>
+                     <ccts:Definition>The date when the purchase receipt was issued.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Issue Date</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Date</ccts:RepresentationTerm>
+                     <ccts:DataType>Date. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:IssueTime" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Issue Time. Time</ccts:DictionaryEntryName>
+                     <ccts:Definition>The time of day when the purchase receipt was issued.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Issue Time</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Time</ccts:RepresentationTerm>
+                     <ccts:DataType>Time. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:TransactionDate" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Transaction Date. Date</ccts:DictionaryEntryName>
+                     <ccts:Definition>The date when the purchase transaction was initiated.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Transaction Date</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Date</ccts:RepresentationTerm>
+                     <ccts:DataType>Date. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:TransactionTime" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Transaction Time. Time</ccts:DictionaryEntryName>
+                     <ccts:Definition>The time of day when the purchase transaction was initiated.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Transaction Time</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Time</ccts:RepresentationTerm>
+                     <ccts:DataType>Time. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:PurchaseDate" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Purchase Date. Date</ccts:DictionaryEntryName>
+                     <ccts:Definition>The date when the purchase took place.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Purchase Date</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Date</ccts:RepresentationTerm>
+                     <ccts:DataType>Date. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:PurchaseTime" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Purchase Time. Time</ccts:DictionaryEntryName>
+                     <ccts:Definition>The time of day when the purchase took place.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Purchase Time</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Time</ccts:RepresentationTerm>
+                     <ccts:DataType>Time. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:Note" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Note. Text</ccts:DictionaryEntryName>
+                     <ccts:Definition>Free-form text pertinent to this document, conveying information that is not contained explicitly in other structures.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Note</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Text</ccts:RepresentationTerm>
+                     <ccts:DataType>Text. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cbc:DocumentCurrencyCode" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>BBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Document_ Currency Code. Code</ccts:DictionaryEntryName>
+                     <ccts:Definition>A code signifying the default currency for this document.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Document</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Currency Code</ccts:PropertyTerm>
+                     <ccts:RepresentationTerm>Code</ccts:RepresentationTerm>
+                     <ccts:DataTypeQualifier>Currency</ccts:DataTypeQualifier>
+                     <ccts:DataType>Currency_ Code. Type</ccts:DataType>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:PurchaseReference" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Purchase Reference</ccts:DictionaryEntryName>
+                     <ccts:Definition>A reference to an object, such as a subscription number, telephone number, meter, vehicle, person, etc., to which this purchase relates.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Purchase Reference</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Purchase Reference</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Purchase Reference</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:SalesDocumentReference" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Sales_ Document Reference. Document Reference</ccts:DictionaryEntryName>
+                     <ccts:Definition>A reference to the sales document to which this purchase receipt is related.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Sales</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Document Reference</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Document Reference</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Document Reference</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:AdditionalDocumentReference"
+                      minOccurs="0"
+                      maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Additional_ Document Reference. Document Reference</ccts:DictionaryEntryName>
+                     <ccts:Definition>A reference to an additional document associated with this purchase receipt.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Additional</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Document Reference</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Document Reference</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Document Reference</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:Signature" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Signature</ccts:DictionaryEntryName>
+                     <ccts:Definition>A signature applied to this document.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Signature</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Signature</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Signature</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:AccountingSupplierParty" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Accounting_ Supplier Party. Supplier Party</ccts:DictionaryEntryName>
+                     <ccts:Definition>The accounting supplier party.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Accounting</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Supplier Party</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Supplier Party</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Supplier Party</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:AccountingCustomerParty" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Accounting_ Customer Party. Customer Party</ccts:DictionaryEntryName>
+                     <ccts:Definition>The accounting customer party.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Accounting</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Customer Party</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Customer Party</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Customer Party</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:CashierContact" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Cashier_ Contact. Contact</ccts:DictionaryEntryName>
+                     <ccts:Definition>The cashier who handled the purchase at the point of sales.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Cashier</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Contact</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Contact</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Contact</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:CashRegister" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Cash Register</ccts:DictionaryEntryName>
+                     <ccts:Definition>The cash register that was used for this purchase.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Cash Register</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Cash Register</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Cash Register</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:PointOfSaleLocation" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Point Of Sale_ Location. Location</ccts:DictionaryEntryName>
+                     <ccts:Definition>The location of the point of sale where this purchase took place.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Point Of Sale</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Location</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Location</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Location</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:PointOfSaleContact" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Point Of Sale_ Contact. Contact</ccts:DictionaryEntryName>
+                     <ccts:Definition>The contact person at the point of sale where this purchase took place.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Point Of Sale</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Contact</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Contact</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Contact</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:Delivery" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Delivery</ccts:DictionaryEntryName>
+                     <ccts:Definition>The delivery associated with this purchase.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Delivery</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Delivery</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Delivery</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:Payment" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Payment</ccts:DictionaryEntryName>
+                     <ccts:Definition>One or more payments for this purchase.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Payment</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Payment</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Payment</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:PaymentMeans" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Payment Means</ccts:DictionaryEntryName>
+                     <ccts:Definition>One or more payment means used to pay for this purchase, with their associated payments.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Payment Means</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Payment Means</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Payment Means</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:AllowanceCharge" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Allowance Charge</ccts:DictionaryEntryName>
+                     <ccts:Definition>A discount or charge that applies to a price component.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Allowance Charge</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Allowance Charge</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Allowance Charge</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:TaxExchangeRate" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Tax_ Exchange Rate. Exchange Rate</ccts:DictionaryEntryName>
+                     <ccts:Definition>The exchange rate between the document currency and the tax currency.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Tax</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Exchange Rate</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Exchange Rate</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Exchange Rate</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:PricingExchangeRate" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Pricing_ Exchange Rate. Exchange Rate</ccts:DictionaryEntryName>
+                     <ccts:Definition>The exchange rate between the document currency and the pricing currency.</ccts:Definition>
+                     <ccts:Cardinality>0..1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Pricing</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Exchange Rate</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Exchange Rate</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Exchange Rate</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:TaxTotal" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Tax Total</ccts:DictionaryEntryName>
+                     <ccts:Definition>The total amount of a specific type of tax.</ccts:Definition>
+                     <ccts:Cardinality>0..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Tax Total</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Tax Total</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Tax Total</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:LegalMonetaryTotal" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Legal_ Monetary Total. Monetary Total</ccts:DictionaryEntryName>
+                     <ccts:Definition>The total amount payable on the Invoice, including Allowances, Charges, and Taxes.</ccts:Definition>
+                     <ccts:Cardinality>1</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTermQualifier>Legal</ccts:PropertyTermQualifier>
+                     <ccts:PropertyTerm>Monetary Total</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Monetary Total</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Monetary Total</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element ref="cac:PurchaseReceiptLine" minOccurs="1" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>
+                  <ccts:Component>
+                     <ccts:ComponentType>ASBIE</ccts:ComponentType>
+                     <ccts:DictionaryEntryName>Purchase Receipt. Purchase Receipt Line</ccts:DictionaryEntryName>
+                     <ccts:Definition>One or more line items that describe this purchase.</ccts:Definition>
+                     <ccts:Cardinality>1..n</ccts:Cardinality>
+                     <ccts:ObjectClass>Purchase Receipt</ccts:ObjectClass>
+                     <ccts:PropertyTerm>Purchase Receipt Line</ccts:PropertyTerm>
+                     <ccts:AssociatedObjectClass>Purchase Receipt Line</ccts:AssociatedObjectClass>
+                     <ccts:RepresentationTerm>Purchase Receipt Line</ccts:RepresentationTerm>
+                  </ccts:Component>
+               </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>
+<!-- ===== Copyright Notice ===== -->
+<!--
+  OASIS takes no position regarding the validity or scope of any
+  intellectual property or other rights that might be claimed to pertain
+  to the implementation or use of the technology described in this
+  document or the extent to which any license under such rights
+  might or might not be available; neither does it represent that it has
+  made any effort to identify any such rights. Information on OASIS's
+  procedures with respect to rights in OASIS specifications can be
+  found at the OASIS website. Copies of claims of rights made
+  available for publication and any assurances of licenses to be made
+  available, or the result of an attempt made to obtain a general
+  license or permission for the use of such proprietary rights by
+  implementors or users of this specification, can be obtained from
+  the OASIS Executive Director.
+
+  OASIS invites any interested party to bring to its attention any
+  copyrights, patents or patent applications, or other proprietary
+  rights which may cover technology that may be required to
+  implement this specification. Please address the information to the
+  OASIS Executive Director.
+
+  This document and translations of it may be copied and furnished to
+  others, and derivative works that comment on or otherwise explain
+  it or assist in its implementation may be prepared, copied,
+  published and distributed, in whole or in part, without restriction of
+  any kind, provided that the above copyright notice and this
+  paragraph are included on all such copies and derivative works.
+  However, this document itself may not be modified in any way,
+  such as by removing the copyright notice or references to OASIS,
+  except as needed for the purpose of developing OASIS
+  specifications, in which case the procedures for copyrights defined
+  in the OASIS Intellectual Property Rights document must be
+  followed, or as required to translate it into languages other than
+  English.
+
+  The limited permissions granted above are perpetual and will not be
+  revoked by OASIS or its successors or assigns.
+
+  This document and the information contained herein is provided on
+  an "AS IS" basis and OASIS DISCLAIMS ALL WARRANTIES,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY
+  WARRANTY THAT THE USE OF THE INFORMATION HEREIN
+  WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED
+  WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A
+  PARTICULAR PURPOSE.
+-->
