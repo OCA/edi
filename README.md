@@ -28,6 +28,7 @@ addon | version | maintainers | summary
 [base_business_document_import_iban](base_business_document_import_iban/) | 19.0.1.0.0 | <a href='https://github.com/yankinmax'><img src='https://github.com/yankinmax.png' width='32' height='32' style='border-radius:50%;' alt='yankinmax'/></a> | Validate IBAN bank accounts in business document imports
 [base_ebill_payment_contract](base_ebill_payment_contract/) | 19.0.1.0.0 | <a href='https://github.com/TDu'><img src='https://github.com/TDu.png' width='32' height='32' style='border-radius:50%;' alt='TDu'/></a> | Base for managing e-billing contracts
 [base_edi](base_edi/) | 19.0.1.0.0 | <a href='https://github.com/simahawk'><img src='https://github.com/simahawk.png' width='32' height='32' style='border-radius:50%;' alt='simahawk'/></a> | Base module to aggregate EDI features.
+[base_import_pdf_by_template](base_import_pdf_by_template/) | 19.0.1.0.0 | <a href='https://github.com/victoralmau'><img src='https://github.com/victoralmau.png' width='32' height='32' style='border-radius:50%;' alt='victoralmau'/></a> | Base Import Pdf by Template
 [base_ubl](base_ubl/) | 19.0.1.0.0 |  | Base module for Universal Business Language (UBL)
 [base_ubl_generate](base_ubl_generate/) | 19.0.1.0.0 |  | Base module to generate UBL files (Universal Business Language)
 [base_ubl_parse](base_ubl_parse/) | 19.0.1.0.0 |  | Base module to parse UBL files (Universal Business Language)
