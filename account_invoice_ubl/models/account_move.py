@@ -307,6 +307,9 @@ class AccountMove(models.Model):
             line_root,
             ns,
             type_="sale",
+            seller=None,
+            customer=self.partner_id,
+            taxes=iline.tax_ids.filtered(lambda t: t.unece_type_id.code == "VAT"),
             version=version,
         )
         price_node = etree.SubElement(line_root, ns["cac"] + "Price")
@@ -340,10 +343,19 @@ class AccountMove(models.Model):
                 tax_lines[tline.tax_line_id]["amount"] += sign * tline.balance
             elif tline.tax_ids:
                 # In case there are no declared (tag) repartition lines
+                # or the subtotal is 0
                 for tax in tline.tax_ids:
-                    if not tline.is_refund and tax.invoice_repartition_line_ids.tag_ids:
+                    if (
+                        not tline.is_refund
+                        and (tax.invoice_repartition_line_ids.tag_ids or tax.amount)
+                        and tline.price_subtotal
+                    ):
                         continue
-                    if tline.is_refund and tax.refund_repartition_line_ids.tag_ids:
+                    if (
+                        tline.is_refund
+                        and (tax.refund_repartition_line_ids.tag_ids or tax.amount)
+                        and tline.price_subtotal
+                    ):
                         continue
                     tax_lines.setdefault(
                         tax,
@@ -372,7 +384,7 @@ class AccountMove(models.Model):
                 charge_reason_node = etree.SubElement(
                     charge_node, ns["cbc"] + "AllowanceChargeReason"
                 )
-                charge_reason_node.text = "Miscellaneous"
+                charge_reason_node.text = tax.description
                 charge_amount_node = etree.SubElement(
                     charge_node, ns["cbc"] + "Amount", currencyID=cur_name
                 )
@@ -406,16 +418,6 @@ class AccountMove(models.Model):
                 ns,
                 version=version,
             )
-            if len(exempt_taxes) > 1:
-                # xpath cac:TaxCategory/cbc:Name
-                exempt_node = tax_total_node[-1]
-                exempt_node = [
-                    e for e in list(exempt_node) if e.tag == ns["cac"] + "TaxCategory"
-                ][0]
-                exempt_node = [
-                    e for e in list(exempt_node) if e.tag == ns["cbc"] + "Name"
-                ][0]
-                exempt_node.text = " + ".join([e.name for e in exempt_taxes])
 
     def generate_invoice_ubl_xml_etree(self, version="2.1"):
         self.ensure_one()
@@ -431,25 +433,54 @@ class AccountMove(models.Model):
         self._ubl_add_order_reference(xml_root, ns, version=version)
         self._ubl_add_contract_document_reference(xml_root, ns, version=version)
         self._ubl_add_attachments(xml_root, ns, version=version)
-        self._ubl_add_supplier_party(
-            False,
-            self.company_id,
-            "AccountingSupplierParty",
-            xml_root,
-            ns,
-            version=version,
+        has_vat = any(
+            tax.unece_type_id.code == "VAT" and tax.unece_categ_id.code != "O"
+            for tax in self.line_ids.tax_ids
         )
-        self._ubl_add_customer_party(
-            self.partner_id,
-            False,
-            "AccountingCustomerParty",
-            xml_root,
-            ns,
-            version=version,
-        )
-        # the field 'partner_shipping_id' is defined in the 'sale' module
-        if hasattr(self, "partner_shipping_id") and self.partner_shipping_id:
-            self._ubl_add_delivery(self.partner_shipping_id, xml_root, ns)
+        if self.move_type in ("out_invoice", "out_refund"):
+            self._ubl_add_supplier_party(
+                False,
+                self.company_id,
+                "AccountingSupplierParty",
+                xml_root,
+                ns,
+                vat=has_vat,
+                version=version,
+            )
+            self._ubl_add_customer_party(
+                self.partner_id,
+                False,
+                "AccountingCustomerParty",
+                xml_root,
+                ns,
+                vat=has_vat,
+                version=version,
+            )
+        else:
+            self._ubl_add_supplier_party(
+                self.partner_id,
+                False,
+                "AccountingSupplierParty",
+                xml_root,
+                ns,
+                vat=has_vat,
+                version=version,
+            )
+            self._ubl_add_customer_party(
+                False,
+                self.company_id,
+                "AccountingCustomerParty",
+                xml_root,
+                ns,
+                vat=has_vat,
+                version=version,
+            )
+
+        if self.move_type in ("out_invoice", "out_refund"):
+            # the field 'partner_shipping_id' is defined in the 'sale' module
+            if hasattr(self, "partner_shipping_id") and self.partner_shipping_id:
+                self._ubl_add_delivery(self.partner_shipping_id, xml_root, ns)
+
         if self.move_type == "out_invoice":
             # Put paymentmeans block even when invoice is paid ?
             payment_identifier = self.get_payment_identifier()
