@@ -1,6 +1,7 @@
 # © 2016-2017 Akretion (Alexis de Lattre <alexis.delattre@akretion.com>)
 # Copyright 2019 Onestein (<https://www.onestein.eu>)
 # Copyright 2020 Jacques-Etienne Baudoux (BCIM) <je@bcim.be>
+# Copyright 2026 Acysos S.L.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
@@ -13,6 +14,7 @@ from odoo.exceptions import UserError
 from odoo.tools import file_open
 
 logger = logging.getLogger(__name__)
+_UBL_XSD_CACHE = {}
 
 
 class BaseUbl(models.AbstractModel):
@@ -23,8 +25,13 @@ class BaseUbl(models.AbstractModel):
     def _ubl_check_xml_schema(self, xml_string, document, version="2.1"):
         """Validate the XML file against the XSD"""
         xsd_file = f"base_ubl/data/xsd-{version}/maindoc/UBL-{document}-{version}.xsd"
-        xsd_etree_obj = etree.parse(file_open(xsd_file))
-        official_schema = etree.XMLSchema(xsd_etree_obj)
+        cache_key = (xsd_file, etree.XMLSchema)
+        official_schema = _UBL_XSD_CACHE.get(cache_key)
+        if official_schema is None:
+            with file_open(xsd_file, "rb") as xsd_stream:
+                xsd_etree_obj = etree.parse(xsd_stream)
+            official_schema = etree.XMLSchema(xsd_etree_obj)
+            _UBL_XSD_CACHE[cache_key] = official_schema
         try:
             t = etree.parse(BytesIO(xml_string))
             official_schema.assertValid(t)
