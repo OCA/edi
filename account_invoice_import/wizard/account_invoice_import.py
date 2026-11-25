@@ -464,6 +464,16 @@ class AccountInvoiceImport(models.TransientModel):
             import_config["invoice_extra_vals"], dict
         ):
             vals.update(import_config["invoice_extra_vals"])
+        incoterms_code2id = import_config["speedy"]["incoterms_code2id"]
+        # datas with "EXT-FR-FE-" prefix are not France-specific.
+        # They are going to enter EN16931 soon and then they'll have
+        # they final name BT-xyz (in CII, EXT-FR-FE-185 is also called BT-X-145
+        # and EXT-FR-FE-186 is also called BT-X-564)
+        incoterm_code = (
+            parsed_inv.get("EXT-FR-FE-185") and parsed_inv["EXT-FR-FE-185"].upper()
+        )
+        if incoterm_code and incoterm_code in incoterms_code2id:
+            vals["invoice_incoterm_id"] = incoterms_code2id[incoterm_code]
         return vals
 
     def _prepare_import_warnings(self, import_config):
@@ -600,10 +610,41 @@ class AccountInvoiceImport(models.TransientModel):
                 lvals["start_date"] = parsed_inv["BT-73"]
                 lvals["end_date"] = parsed_inv["BT-74"]
 
+    def _prepare_layout_line_vals_bg25(
+        self, line_dict, parsed_inv, import_config, vals
+    ):
+        # datas with "EXT-FR-FE-" prefix are not France-specific.
+        # They are going to enter EN16931 soon and then they'll have
+        # they final name BT-xyz (in CII, EXT-FR-FE-163 is also called BT-X-8)
+        line_type = line_dict.get("EXT-FR-FE-163")
+        assert line_type in ("GROUP", "INFORMATION")
+        line_type2display_type = {
+            "GROUP": "line_section",
+            "INFORMATION": "line_note",
+        }
+        name_list = [line_dict.get("BT-153"), line_dict.get("BT-154")]
+        # set() is useful when BT-153 = BT-154 (seen on real invoices !)
+        name = "\n".join([x for x in set(name_list) if x])
+        lvals = {
+            "import_invoice_line_identifier": line_dict.get("BT-126"),
+            "name": name,
+            "display_type": line_type2display_type[line_type],
+        }
+        self._prepare_line_add_notes(lvals, line_dict, parsed_inv, import_config)
+        return lvals
+
     @api.model
     def _prepare_line_vals_bg25(  # noqa: C901
         self, line_dict, parsed_inv, import_config, vals
     ):
+        # datas with "EXT-FR-FE-" prefix are not France-specific.
+        # They are going to enter EN16931 soon and then they'll have
+        # they final name BT-xyz (in CII, EXT-FR-FE-163 is also called BT-X-8)
+        line_type = line_dict.get("EXT-FR-FE-163")
+        if line_type in ("GROUP", "INFORMATION"):
+            return self._prepare_layout_line_vals_bg25(
+                line_dict, parsed_inv, import_config, vals
+            )
         line_ident = line_dict["BT-126"]
         product = self._match_product(line_dict, parsed_inv, import_config)
         if not product and import_config.get("product"):
@@ -690,6 +731,26 @@ class AccountInvoiceImport(models.TransientModel):
             # set() is useful when BT-153 = BT-154 (seen on real invoices !)
             lvals["name"] = "\n".join([x for x in set(name_list) if x])
         additional_labels = []
+        for attrib_dict in line_dict.get("BG-32") or []:
+            attrib_name = attrib_dict.get("BT-160")
+            attrib_value = attrib_dict.get("BT-161")
+            if attrib_name and attrib_value:
+                additional_labels.append(
+                    _(
+                        "%(attrib_name)s: %(attrib_value)s",
+                        attrib_name=attrib_name,
+                        attrib_value=attrib_value,
+                    )
+                )
+        if not lvals["product_id"]:
+            if line_dict.get("BT-157"):
+                additional_labels.append(_("Barcode: %s", line_dict["BT-157"]))
+            if line_dict.get("BT-155"):
+                additional_labels.append(_("Product Code: %s", line_dict["BT-155"]))
+            if line_dict.get("BT-156"):
+                additional_labels.append(
+                    _("Buyer's Product Code: %s", line_dict["BT-156"])
+                )
         if total_bg28:
             additional_labels.append(
                 " ".join(
@@ -732,7 +793,7 @@ class AccountInvoiceImport(models.TransientModel):
         additional_labels = [label for label in additional_labels if label]
         if additional_labels:
             lvals["name"] = "\n".join([lvals["name"], "\n".join(additional_labels)])
-
+        self._prepare_line_add_notes(lvals, line_dict, parsed_inv, import_config)
         if (
             import_config["start_end_dates_installed"]
             and line_dict.get("BT-134")
@@ -742,6 +803,29 @@ class AccountInvoiceImport(models.TransientModel):
             lvals["end_date"] = line_dict["BT-135"]
         self._prepare_line_set_global_start_end_dates(lvals, parsed_inv, import_config)
         return lvals
+
+    def _prepare_line_add_notes(self, lvals, line_dict, parsed_inv, import_config):
+        additional_lines = []
+        for note_dict in line_dict.get("BT-127-00") or []:
+            if note_dict.get("BT-127"):
+                note = False
+                # datas with "EXT-FR-FE-" prefix are not France-specific.
+                # They are going to enter EN16931 soon and then they'll have
+                # they final name BT-xyz (in CII, EXT-FR-FE-183 is also called BT-X-10)
+                if note_dict.get("EXT-FR-FE-183"):
+                    note_categ = untdid_get_label("4451", note_dict["EXT-FR-FE-183"])
+                    if note_categ:
+                        note = _(
+                            "Note (%(note_categ)s): %(note_content)s",
+                            note_categ=note_categ,
+                            note_content=note_dict["BT-127"],
+                        )
+                if not note:
+                    note_prefix = _("Note:")
+                    note = f"{note_prefix} {note_dict['BT-127']}"
+                additional_lines.append(note)
+        if additional_lines:
+            lvals["name"] = "\n".join([lvals["name"], "\n".join(additional_lines)])
 
     def _prepare_label_common_bg27_bg28(
         self, line_type, line_dict, parsed_inv, import_config
