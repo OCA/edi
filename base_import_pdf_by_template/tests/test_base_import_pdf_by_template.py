@@ -1,17 +1,18 @@
 # Copyright 2024 Tecnativa - Víctor Martínez
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from base64 import b64encode
 from os import path
 
 from odoo import Command
 from odoo.exceptions import UserError
 from odoo.tests import Form, new_test_user
+from odoo.tools import BinaryBytes
 
 from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestBaseImportPdfByTemplate(BaseCommon):
+    _test_user_groups = None
     """The template is built here instead of reusing the demo one because tests
     are run without demo data."""
 
@@ -138,13 +139,13 @@ class TestBaseImportPdfByTemplate(BaseCommon):
             data = file.read()
             if encoding:
                 data = data.encode(encoding)
-            return b64encode(data)
+            return data
 
     def _create_ir_attachment(self, filename):
         return self.env["ir.attachment"].create(
             {
                 "name": filename,
-                "datas": self._data_file(filename),
+                "raw": self._data_file(filename),
             }
         )
 
@@ -170,7 +171,7 @@ class TestBaseImportPdfByTemplate(BaseCommon):
                 default_template_id=self.template
             )
         )
-        wizard_form.data_file = self._data_file("res-partner.pdf")
+        wizard_form.data_file = BinaryBytes(self._data_file("res-partner.pdf"))
         self.assertEqual(wizard_form.total_pages, 1)
         self.assertIn("Test partner info", wizard_form.data)
 
@@ -211,8 +212,8 @@ class TestBaseImportPdfByTemplate(BaseCommon):
 
     def test_wizard_base_import_pdf_by_template_02(self):
         self.country_line.log_distinct_value = False
-        # Change PT country code to check default_value
-        self.env.ref("base.pt").code = "OLD-PT"
+        # Use an unassigned two-letter code so PT triggers the default value.
+        self.env.ref("base.pt").code = "ZZ"
         attachment = self._create_ir_attachment("res-partner.pdf")
         wizard = self._create_wizard_base_import_pdf_upload(attachment)
         res = wizard.action_process()

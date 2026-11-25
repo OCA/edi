@@ -5,7 +5,7 @@
             class="'o_base_import_pdf_by_template_menu dropdown-item'"
             onSelected.bind="openWizardBaseImportPdfUpload"
         >
-            <i class="fa fa-fw fa-upload me-1" />Import records (with template)
+            <i class="oi oi-fw me-1" data-icon="upload" />Import records (with template)
         </DropdownItem>
     </t>
 </templates>

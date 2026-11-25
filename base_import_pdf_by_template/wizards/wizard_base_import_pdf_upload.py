@@ -154,8 +154,8 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                     item.parent_id.allowed_template_ids._auto_detect_from_text(text)
                 )
             # Auto-detection is a best-effort process, it must never fail
-            except Exception:  # pylint: disable=W8138
-                pass
+            except Exception as e:  # pylint: disable=W8138 # noqa: BLE001
+                item.parent_id._create_ir_logging(e, "_compute_template_id")
 
     def action_process(self):
         """Parse the file again, this time with the corresponding extraction mode."""
@@ -215,7 +215,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         else:
             try:
                 setattr(_form, field_name, value)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 self.parent_id._create_ir_logging(e, "_process_set_value_form")
                 self._add_log_error_text(field_name, value)
 
@@ -263,7 +263,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
                     field_value = model[field_name].browse(field_value)
                 try:
                     setattr(model_form, field_name, field_value)
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     self.parent_id._create_ir_logging(e, "_set_default_values")
                     extra_vals[field_name] = ctx[key]
         return extra_vals
@@ -295,7 +295,7 @@ class WizardBaseImportPdfUploadLine(models.TransientModel):
         for field_name, child_field_value in child_fixed_values.items():
             try:
                 setattr(line_form, field_name, child_field_value)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 self._add_log_error_text(field_name, child_field_value)
                 self.parent_id._create_ir_logging(e, "_set_child_fixed_values")
 

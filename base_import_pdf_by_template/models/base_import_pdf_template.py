@@ -105,15 +105,13 @@ class BaseImportPdfTemplate(models.Model):
                 x.related_model == "lines" and x.value_type != "fixed" and x.pattern
             )
         )
-        sequence = 0
-        for child_line in child_lines:
+        for sequence, child_line in enumerate(child_lines):
             data_column = []
             matches = re.finditer(child_line.pattern, text, re.MULTILINE)
-            for _matchNum, match in enumerate(matches, start=1):
+            for _, match in enumerate(matches):
                 match_group = match.groups(0)[0]
                 data_column.append(match_group.strip())
             data_map_column[sequence] = data_column
-            sequence += 1
         # Convert data column to lines (table lines "split" in pages not supported)
         data_keys = list(data_map_column.keys())
         data_key_0 = data_keys[0]
@@ -174,12 +172,11 @@ class BaseImportPdfTemplate(models.Model):
         if item and child_lines:
             item_lenght = len(item) - 1
             res = {}
-            sequence = 0
-            for child_line in child_lines:
+
+            for sequence, child_line in enumerate(child_lines):
                 if item_lenght >= sequence and item[sequence]:
                     value = child_line._process_value(item[sequence])
                     res[child_line.field_name] = value
-                sequence += 1
         return res
 
     def _get_field_values(self, related_model, text):
@@ -381,7 +378,7 @@ class BaseImportPdfTemplateLine(models.Model):
     def _process_datetime_value(self, value):
         if self.field_ttype not in ("date", "datetime") or not self.date_time_format:
             return value
-        datetime_object = datetime.strptime(value, self.date_time_format)
+        datetime_object = datetime.strptime(value, self.date_time_format)  # noqa: DTZ007
         value = datetime_object.strftime("%Y-%m-%d %H:%M:%S")
         return value
 

@@ -1,10 +1,10 @@
 # Copyright 2024 Tecnativa - Víctor Martínez
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-import base64
 import logging
 from tempfile import NamedTemporaryFile
 
 import pypdf
+from pypdf.errors import PyPdfError
 
 from odoo import fields, models
 from odoo.exceptions import UserError
@@ -27,18 +27,20 @@ class WizardBaseImportPdfMixin(models.AbstractModel):
             for pdf_page in reader.pages:
                 res.append(pdf_page.extract_text())
             logger.info("Text extraction made with pypdf")
-        except Exception as e:
+        except PyPdfError as e:
             logger.warning("Text extraction with pypdf failed. Error: %s", e)
         return res
 
     def simple_pdf_text_extraction(self, file_data):
-        fileobj = NamedTemporaryFile("wb", prefix="odoo-simple-pdf-", suffix=".pdf")
-        fileobj.write(file_data)
-        method = f"_pdf_text_extraction_{self.extraction_mode}"
-        res = False
-        if hasattr(self, method):
-            res = getattr(self, method)(fileobj)
-        fileobj.close()
+        with NamedTemporaryFile(
+            "wb", prefix="odoo-simple-pdf-", suffix=".pdf"
+        ) as fileobj:
+            fileobj.write(file_data)
+            fileobj.flush()
+            method = f"_pdf_text_extraction_{self.extraction_mode}"
+            res = False
+            if hasattr(self, method):
+                res = getattr(self, method)(fileobj)
         if not res:
             raise UserError(self.env._("Odoo could not extract the text from the PDF."))
         return res
@@ -47,7 +49,7 @@ class WizardBaseImportPdfMixin(models.AbstractModel):
         return self.simple_pdf_text_extraction(file_data)
 
     def _parse_pdf(self, data=False):
-        file_data = base64.b64decode(data or self.attachment_id.datas)
+        file_data = (data or self.attachment_id.raw).content
         parsed_item = self._fallback_parse_pdf(file_data)
         return parsed_item or {}
 
@@ -58,7 +60,7 @@ class WizardBaseImportPdfMixin(models.AbstractModel):
         extraction_modes = dict(
             self._fields["extraction_mode"]._description_selection(self.env)
         )
-        file_data = base64.b64decode(self.attachment_id.datas)
+        file_data = self.attachment_id.raw.content
         for extraction_mode in list(extraction_modes.keys()):
             self.extraction_mode = extraction_mode
             res[extraction_mode] = self._fallback_parse_pdf(file_data)

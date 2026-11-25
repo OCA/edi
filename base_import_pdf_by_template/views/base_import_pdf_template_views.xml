@@ -36,7 +36,7 @@
                         <button
                             class="oe_stat_button"
                             name="button_preview"
-                            icon="fa-search-plus"
+                            icon="zoom_in"
                             string="Preview"
                             type="object"
                             target="new"
