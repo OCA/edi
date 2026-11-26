@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
+import re
 from urllib.parse import urlparse
 
 from markupsafe import Markup
@@ -1455,6 +1456,16 @@ class BusinessDocumentImport(models.AbstractModel):
                 )
         return False
 
+    @api.model
+    def _normalize_vat_for_company_check(self, vat, company):
+        vat = re.sub(r"[\s.\-]", "", vat or "").upper()
+        country_code = company.partner_id.country_id.code
+        if country_code:
+            prefix = "EL" if country_code == "GR" else country_code
+            if vat.startswith(prefix):
+                vat = vat[len(prefix) :]
+        return vat
+
     # TODO migration v18:
     # move company to second arg and make it a regular arg (not named arg)
     @api.model
@@ -1475,7 +1486,17 @@ class BusinessDocumentImport(models.AbstractModel):
         if company_dict.get("vat"):
             parsed_company_vat = company_dict["vat"].replace(" ", "").upper()
             if company.partner_id.vat:
-                if company.partner_id.vat != parsed_company_vat:
+                company_vat = self._normalize_vat_for_company_check(
+                    company.partner_id.vat, company
+                )
+                document_vat = self._normalize_vat_for_company_check(
+                    parsed_company_vat, company
+                )
+                if company_vat and document_vat:
+                    vat_mismatch = company_vat != document_vat
+                else:
+                    vat_mismatch = company.partner_id.vat != parsed_company_vat
+                if vat_mismatch:
                     self.user_error_wrap(
                         "_check_company",
                         company_dict,

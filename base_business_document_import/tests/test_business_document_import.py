@@ -481,3 +481,90 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         res = bdio._match_account({"code": "898999"}, chatter)
         self.assertEqual(acc, res)
         self.assertEqual(len(chatter), 1)
+
+    def _prepare_company(self, vat):
+        company = self.env.company
+        company.partner_id.write({"country_id": self.env.ref("base.es").id, "vat": vat})
+        return company
+
+    def test01_check_company_document_vat_without_prefix(self):
+        company = self._prepare_company("ESB12345674")
+        chatter_msg = []
+        self.env["business.document.import"]._check_company(
+            {"vat": "B12345674"}, chatter_msg, company=company
+        )
+        self.assertEqual(chatter_msg, [])
+
+    def test02_check_company_company_vat_without_prefix(self):
+        company = self._prepare_company("B12345674")
+        chatter_msg = []
+        self.env["business.document.import"]._check_company(
+            {"vat": "ESB12345674"}, chatter_msg, company=company
+        )
+        self.assertEqual(chatter_msg, [])
+
+    def test03_check_company_document_vat_separators_lowercase(self):
+        company = self._prepare_company("ESB12345674")
+        chatter_msg = []
+        self.env["business.document.import"]._check_company(
+            {"vat": "es b-12.345.674"}, chatter_msg, company=company
+        )
+        self.assertEqual(chatter_msg, [])
+
+    def test04_check_company_other_country_prefix_blocks(self):
+        company = self._prepare_company("ESB12345674")
+        with self.assertRaises(UserError) as error:
+            self.env["business.document.import"]._check_company(
+                {"vat": "FRB12345674"}, [], company=company
+            )
+        self.assertIn("FRB12345674", str(error.exception))
+
+    def test05_check_company_different_vat_blocks(self):
+        company = self._prepare_company("ESB12345674")
+        bdio = self.env["business.document.import"]
+        for vat in ("B99999997", "ESB99999997"):
+            with self.assertRaises(UserError) as error:
+                bdio._check_company({"vat": vat}, [], company=company)
+            self.assertIn(vat, str(error.exception))
+
+    def test06_check_company_mismatch_without_raise(self):
+        company = self._prepare_company("ESB12345674")
+        chatter_msg = []
+        self.env["business.document.import"]._check_company(
+            {"vat": "B99999997"},
+            chatter_msg,
+            company=company,
+            raise_exception=False,
+        )
+        self.assertEqual(len(chatter_msg), 1)
+
+    def test07_check_company_vat_empty_after_normalize_blocks(self):
+        company = self._prepare_company("ESB12345674")
+        with self.assertRaises(UserError) as error:
+            self.env["business.document.import"]._check_company(
+                {"vat": "ES"}, [], company=company
+            )
+        self.assertIn("ESB12345674", str(error.exception))
+
+    def test08_normalize_vat_company_without_country(self):
+        company = self.env["res.company"].create({"name": "Company without country"})
+        self.assertFalse(company.partner_id.country_id)
+        bdio = self.env["business.document.import"]
+        self.assertEqual(
+            bdio._normalize_vat_for_company_check("es b-12.345.674", company),
+            "ESB12345674",
+        )
+
+    def test09_normalize_vat_greek_company(self):
+        company = self.env["res.company"].create(
+            {"name": "Greek company", "country_id": self.env.ref("base.gr").id}
+        )
+        bdio = self.env["business.document.import"]
+        self.assertEqual(
+            bdio._normalize_vat_for_company_check("EL123456783", company),
+            "123456783",
+        )
+        self.assertEqual(
+            bdio._normalize_vat_for_company_check("GR123456783", company),
+            "GR123456783",
+        )
