@@ -20,6 +20,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid "%(attrib_name)s: %(attrib_value)s"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "%s vendor bill(s) created"
 msgstr "%s fattura/e fornitore create"
 
@@ -143,6 +150,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid "Barcode: %s"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "Base:"
 msgstr "Imponibile:"
 
@@ -152,6 +166,13 @@ msgstr "Imponibile:"
 #, python-format
 msgid "Base: %s"
 msgstr "Imponibile: %s"
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Buyer's Product Code: %s"
+msgstr ""
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
@@ -527,9 +548,9 @@ msgid ""
 "of the product (%(product_uom)s)."
 msgstr ""
 "L’unità di misura (UdM) corrispondente è <strong>%(matched_uom)s</strong>, "
-"ma questa UdM non appartiene alla stessa categoria dell’UdM <strong>%"
-"(product_uom)s</strong> configurata sul prodotto <em>%(product)s</em>. Odoo "
-"ha quindi impostato l’UdM del prodotto (%(product_uom)s)."
+"ma questa UdM non appartiene alla stessa categoria dell’UdM "
+"<strong>%(product_uom)s</strong> configurata sul prodotto <em>%(product)s</"
+"em>. Odoo ha quindi impostato l’UdM del prodotto (%(product_uom)s)."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -598,6 +619,20 @@ msgstr "Nessuna fattura creata."
 #, python-format
 msgid "Non-VAT Tax with code '%s' (not in UNTDID 5153)"
 msgstr "Imposta non IVA con codice '%s' (non presente in UNTDID 5153)"
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Note (%(note_categ)s): %(note_content)s"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Note:"
+msgstr ""
 
 #. module: account_invoice_import
 #. odoo-python
@@ -735,6 +770,13 @@ msgstr "Prezzo unitario senza spese aggiuntive:"
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid "Product Code: %s"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "Rate:"
 msgstr "Aliquota:"
 
@@ -833,11 +875,11 @@ msgid ""
 "exist in Odoo for partner <em>%(commercial_partner)s</em> and the option to "
 "auto-create bank accounts upon invoice import is not enabled."
 msgstr ""
-"La fattura elettronica indica il numero di conto bancario <strong>%"
-"(bank_account_number)s</strong>, ma questo conto bancario non esiste in Odoo "
-"per il partner <em>%(commercial_partner)s</em> e l’opzione per creare "
-"automaticamente i conti bancari durante l’importazione delle fatture non è "
-"attivata."
+"La fattura elettronica indica il numero di conto bancario "
+"<strong>%(bank_account_number)s</strong>, ma questo conto bancario non "
+"esiste in Odoo per il partner <em>%(commercial_partner)s</em> e l’opzione "
+"per creare automaticamente i conti bancari durante l’importazione delle "
+"fatture non è attivata."
 
 #. module: account_invoice_import
 #. odoo-python
@@ -871,8 +913,8 @@ msgid ""
 "different from the total amount read on the imported invoice "
 "(%(import_check_total)s)."
 msgstr ""
-"L’importo totale della fattura/nota di credito fornitore in Odoo (%"
-"(amount_total)s) è diverso dall’importo totale rilevato nella fattura "
+"L’importo totale della fattura/nota di credito fornitore in Odoo "
+"(%(amount_total)s) è diverso dall’importo totale rilevato nella fattura "
 "importata (%(import_check_total)s)."
 
 #. module: account_invoice_import
@@ -977,8 +1019,8 @@ msgstr "Cronologia comunicazioni sito web"
 #: model:ir.model.fields,help:account_invoice_import.field_account_move_line__import_invoice_line_identifier
 msgid "When importing a vendor bill, this field stores BT-126"
 msgstr ""
-"Durante l’importazione di una fattura fornitore, questo campo memorizza BT-"
-"126"
+"Durante l’importazione di una fattura fornitore, questo campo memorizza "
+"BT-126"
 
 #. module: account_invoice_import
 #: model:ir.model,name:account_invoice_import.model_account_invoice_import_partner_create

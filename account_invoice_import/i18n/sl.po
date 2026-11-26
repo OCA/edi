@@ -23,6 +23,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid "%(attrib_name)s: %(attrib_value)s"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "%s vendor bill(s) created"
 msgstr ""
 
@@ -130,6 +137,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid "Barcode: %s"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "Base:"
 msgstr ""
 
@@ -138,6 +152,13 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Base: %s"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Buyer's Product Code: %s"
 msgstr ""
 
 #. module: account_invoice_import
@@ -570,6 +591,20 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
+msgid "Note (%(note_categ)s): %(note_content)s"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Note:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
 msgid "Notes extracted from the electronic invoice:"
 msgstr ""
 
@@ -683,6 +718,13 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Price unit w/o extra charges:"
+msgstr ""
+
+#. module: account_invoice_import
+#. odoo-python
+#: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
+#, python-format
+msgid "Product Code: %s"
 msgstr ""
 
 #. module: account_invoice_import
