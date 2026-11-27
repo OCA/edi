@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-11-23 14:46+0000\n"
+"PO-Revision-Date: 2026-11-27 13:46+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "%(attrib_name)s: %(attrib_value)s"
-msgstr ""
+msgstr "%(attrib_name)s: %(attrib_value)s"
 
 #. module: account_invoice_import
 #. odoo-python
@@ -151,7 +151,7 @@ msgstr ""
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Barcode: %s"
-msgstr ""
+msgstr "Codice a barre: %s"
 
 #. module: account_invoice_import
 #. odoo-python
@@ -172,7 +172,7 @@ msgstr "Imponibile: %s"
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Buyer's Product Code: %s"
-msgstr ""
+msgstr "Codice prodotto acquisitore: %s"
 
 #. module: account_invoice_import
 #: model_terms:ir.ui.view,arch_db:account_invoice_import.account_invoice_import_form
@@ -625,14 +625,14 @@ msgstr "Imposta non IVA con codice '%s' (non presente in UNTDID 5153)"
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Note (%(note_categ)s): %(note_content)s"
-msgstr ""
+msgstr "Nota (%(note_categ)s): %(note_content)s"
 
 #. module: account_invoice_import
 #. odoo-python
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Note:"
-msgstr ""
+msgstr "Nota:"
 
 #. module: account_invoice_import
 #. odoo-python
@@ -771,7 +771,7 @@ msgstr "Prezzo unitario senza spese aggiuntive:"
 #: code:addons/account_invoice_import/wizard/account_invoice_import.py:0
 #, python-format
 msgid "Product Code: %s"
-msgstr ""
+msgstr "Codice prodotto: %s"
 
 #. module: account_invoice_import
 #. odoo-python
