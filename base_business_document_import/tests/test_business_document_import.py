@@ -3,6 +3,7 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import base64
 import logging
 
 from odoo.exceptions import UserError
@@ -481,3 +482,24 @@ class TestBaseBusinessDocumentImport(TransactionCase):
         res = bdio._match_account({"code": "898999"}, chatter)
         self.assertEqual(acc, res)
         self.assertEqual(len(chatter), 1)
+
+    def test_post_create_or_update_main_attachment(self):
+        partner = self.env["res.partner"].create({"name": "Main attachment test"})
+        xml_b64 = base64.b64encode(b"<?xml version='1.0'?><Invoice/>")
+        pdf_b64 = base64.b64encode(b"%PDF-1.4\n%%EOF\n")
+        parsed_dict = {
+            "attachments": {"invoice.xml": xml_b64, "invoice.pdf": pdf_b64},
+            "chatter_msg": [],
+        }
+        self.env["business.document.import"].post_create_or_update(parsed_dict, partner)
+        self.assertEqual(partner.message_main_attachment_id.name, "invoice.pdf")
+
+    def test_post_create_or_update_main_attachment_xml_only(self):
+        partner = self.env["res.partner"].create({"name": "Main attachment test"})
+        xml_b64 = base64.b64encode(b"<?xml version='1.0'?><Invoice/>")
+        parsed_dict = {
+            "attachments": {"invoice.xml": xml_b64},
+            "chatter_msg": [],
+        }
+        self.env["business.document.import"].post_create_or_update(parsed_dict, partner)
+        self.assertFalse(partner.message_main_attachment_id)
