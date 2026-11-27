@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Copyright 2026 Akretion France (https://www.akretion.com/)
+  @author Alexis de Lattre <alexis.delattre@akretion.com>
+  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="account_payment_method_form" model="ir.ui.view">
+        <field name="model">account.payment.method</field>
+        <field
+            name="inherit_id"
+            ref="account_payment_method_base.account_payment_method_form"
+        />
+        <field name="arch" type="xml">
+            <group name="main" position="inside">
+                <field name="unece_code" />
+            </group>
+        </field>
+    </record>
+    <record id="account_payment_method_list" model="ir.ui.view">
+        <field name="model">account.payment.method</field>
+        <field
+            name="inherit_id"
+            ref="account_payment_method_base.account_payment_method_list"
+        />
+        <field name="arch" type="xml">
+            <list position="inside">
+                <field name="unece_code" optional="show" />
+            </list>
+        </field>
+    </record>
+</odoo>
